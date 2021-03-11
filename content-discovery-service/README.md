@@ -37,21 +37,21 @@ $ npm run start:hb
 ```
 
 6. Navigate to the `Launch` or `Workspaces` view in the Home UI. 
-   You should see the [apps](content-discovery-service/public/apps.json) and [workspaces](content-discovery-service/public/workspaces.json) as described in their respective files.
+   You should see the [apps](public/apps.json) and [workspaces](public/workspaces.json) as described in their respective files.
 
 ## How it works
 
 The Content Discovery Service in this example provides three different sets of content over HTTP GET.
-- [A Desktop Owner Settings file](content-discovery-service/public/dos.json)
-- [A list of applications](content-discovery-service/public/apps.json)
-- [A list of workspaces](content-discovery-service/public/apps.json)
+- [A Desktop Owner Settings file](public/dos.json)
+- [A list of applications](public/apps.json)
+- [A list of workspaces](public/apps.json)
 
 When Home starts up, it will first look at the Desktop Owner Settings file configured in step 3 for a overridden `appDirectoryUrl` and `workspacesUrl`. 
 If Home finds these configuration settings, it will request data from the URLs configured instead of its default endpoints.
 
-In this example, the [Desktop Owner Settings file](content-discovery-service/public/dos.json) has its `appDirectoryUrl` configured to the 
-previously mentioned [list of applications](content-discovery-service/public/apps.json) and its `workspacesUrl` configured to the 
-[list of workspaces](content-discovery-service/public/workspaces.json). Hence, all of the content that Home renders is sourced from our
+In this example, the [Desktop Owner Settings file](public/dos.json) has its `appDirectoryUrl` configured to the 
+previously mentioned [list of applications](public/apps.json) and its `workspacesUrl` configured to the 
+[list of workspaces](public/workspaces.json). Hence, all of the content that Home renders is sourced from our
 Content Discovery Service.
 
 ## Documentation
