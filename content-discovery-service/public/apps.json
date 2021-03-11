@@ -1,0 +1,58 @@
+[
+  {
+    "name": "google",
+    "appId": "google",
+    "title": "Google",
+    "manifest": "https://home.openfin.co/assets/demo/google.json",
+    "manifestType": "view",
+    "description": "You know, for search."
+  },
+  {
+    "name": "cnn",
+    "appId": "cnn",
+    "title": "CNN",
+    "manifest": "https://home.openfin.co/assets/demo/cnn.json",
+    "manifestType": "view",
+    "description": "Get the latest unbiased news."
+  },
+  {
+    "name": "fox",
+    "appId": "fox",
+    "title": "Fox",
+    "manifest": "https://home.openfin.co/assets/demo/fox.json",
+    "manifestType": "view",
+    "description": "Get the latest unbiased news."
+  },
+  {
+    "name": "reddit",
+    "appId": "reddit",
+    "title": "Reddit",
+    "manifest": "https://home.openfin.co/assets/demo/reddit.json",
+    "manifestType": "view",
+    "description": "The wild west."
+  },
+  {
+    "name": "nfl",
+    "appId": "nfl",
+    "title": "NFL",
+    "manifest": "https://home.openfin.co/assets/demo/nfl.json",
+    "manifestType": "view",
+    "description": "Nothing like good ol' football."
+  },
+  {
+    "name": "chatconn",
+    "appId": "chatconn",
+    "title": "Chat Connector",
+    "manifest": "https://connector.openfin.co/app.json",
+    "manifestType": "manifest",
+    "description": "Integrate with all your favorite chat apps."
+  },
+  {
+    "name": "gsuite",
+    "appId": "gsuite",
+    "title": "Google Suite",
+    "manifest": "https://home.openfin.co/assets/demo/gsuite.json",
+    "manifestType": "snapshot",
+    "description": "Do all the Googley things."
+  }
+]

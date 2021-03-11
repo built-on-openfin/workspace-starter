@@ -1,0 +1,58 @@
+[
+  {
+    "workspaceId": "comms",
+    "title": "Communication",
+    "snapshot": {
+      "windows": [
+        {
+          "defaultCentered": true,
+          "defaultHeight": 800,
+          "defaultWidth": 1000,
+          "state": "maximized",
+          "backgroundColor": "#111214",
+          "layout": {
+            "content": [
+              {
+                "type": "row",
+                "isClosable": true,
+                "reorderEnabled": true,
+                "content": [
+                  {
+                    "type": "stack",
+                    "width": 50,
+                    "content": [
+                      {
+                        "type": "component",
+                        "componentName": "view",
+                        "componentState": {
+                          "url": "https://mail.google.com",
+                          "componentName": "view"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "stack",
+                    "width": 50,
+                    "content": [
+                      {
+                        "type": "component",
+                        "componentName": "view",
+                        "componentState": {
+                          "url": "https://app.slack.com/client",
+                          "componentName": "view"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "description": "Communicate to your hearts desire.",
+    "tooltip": "Communicate to your hearts desire."
+  }
+]
