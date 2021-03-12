@@ -8,8 +8,8 @@
     "start": "node ./build/index.js",
     "dos": "REG IMPORT openfin.reg && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
     "start:hb": "openfin -l -c https://home-staging.openfin.co/app.json",
-    "kill:fin": "cmd.exe /c 'taskkill /F /IM OpenFin.exe /T'",
-    "kill:rvm": "cmd.exe /c 'taskkill /F /IM OpenFinRVM.exe /T'"
+    "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
+    "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"
   },
   "author": "",
   "license": "ISC",
