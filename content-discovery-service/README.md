@@ -30,7 +30,7 @@ $ npm run dos
 $ npm run start
 ```
 
-1. Start the Home and Browser application.
+5. Start the Home and Browser application.
 
 ```bash
 $ npm run start:hb
