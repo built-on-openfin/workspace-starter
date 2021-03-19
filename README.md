@@ -1,4 +1,4 @@
-# Home and Browser Examples
+# Workspace Starter
 
 This repository contains a collection of example integrations with OpenFin's Home and Browser product. 
 
