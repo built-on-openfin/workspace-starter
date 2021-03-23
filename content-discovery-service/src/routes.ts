@@ -12,6 +12,7 @@ const corsMiddleware: express.Handler = (req, res, next) => {
     const origin = req.get('origin');
     if (allowedCorsDomains.includes(origin)) {
         res.header("Access-Control-Allow-Origin", origin);
+        res.header("Access-Control-Allow-Credentials", "true");
     }
     next();
 };
