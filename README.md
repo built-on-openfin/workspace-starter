@@ -1,5 +1,11 @@
 <img src="./assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Starter" />
 
+# Try the Openfin Workspace right now
+
+```sh
+$ npm install && npm start
+```
+
 ## What is the OpenFin Workspace?
 
 The OpenFin Workspace is an environment designed for getting work done by connecting a lot of disconneted applications and information together through intuitive flows and intelligent connections.
