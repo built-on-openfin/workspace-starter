@@ -1,13 +1,17 @@
-# OpenFin Search Provider Example
+<img src="../../assets/OpenFin-Workspace-Starter--2.png" width="100%" alt="OpenFin Workspace Starter -- Add An Application To Browser" />
 
-An example of how OpenFin applications can integrate with Home and Browser using the [OpenFin Search API](https://www.npmjs.com/package/@openfin/search-api).
+# Add Searchable Content to Home in OpenFin Workspace
+
+Home uses a **search provider service** configured using the [OpenFin Search API](https://www.npmjs.com/package/@openfin/search-api) to understand the Apps and content it can interact with.
+
+This micro application is a simple example of plugging your own content or app.
 
 ## Getting Started
 
 1. Install dependencies.
 
 ```bash
-$ npm i
+$ npm install
 ```
 
 2. Build the project.

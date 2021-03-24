@@ -1,13 +1,17 @@
-# Content Discovery Service Example
+<img src="../../assets/OpenFin-Workspace-Starter--1.png" width="100%" alt="OpenFin Workspace Starter -- Add An Application To Browser" />
 
-An example of plugging your own content, such as Apps and Workspaces, into OpenFin Home and Browser via a simple REST API.
+# Add an Application to Browser in OpenFin Workspace
+
+The Browser uses a **content discovery service** to understand the Apps and content it can interact with.
+
+This micro application is a simple example of plugging your own content or app.
 
 ## Getting Started
 
 1. Install dependencies.
 
 ```bash
-$ npm i
+$ npm install
 ```
 
 2. Build the project.
@@ -16,7 +20,7 @@ $ npm i
 $ npm run build
 ```
 
-3. Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings). 
+3. Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility that will add the Windows registry key for you.
    (WARNING: This will kill all open OpenFin processes)
 
@@ -36,7 +40,7 @@ $ npm run start
 $ npm run start:hb
 ```
 
-6. Navigate to the `Launch` or `Workspaces` view in the Home UI. 
+6. Navigate to the `Launch` or `Workspaces` view in the Home UI.
    You should see the [apps](public/apps.json) and [workspaces](public/workspaces.json) as described in their respective files.
 
 ## How it works
@@ -46,11 +50,11 @@ The Content Discovery Service in this example provides three different sets of c
 - [A list of applications](public/apps.json)
 - [A list of workspaces](public/apps.json)
 
-When Home starts up, it will first look at the Desktop Owner Settings file configured in step 3 for a overridden `appDirectoryUrl` and `workspacesUrl`. 
+When Home starts up, it will first look at the Desktop Owner Settings file configured in step 3 for a overridden `appDirectoryUrl` and `workspacesUrl`.
 If Home finds these configuration settings, it will request data from the URLs configured instead of its default endpoints.
 
-In this example, the [Desktop Owner Settings file](public/dos.json) has its `appDirectoryUrl` configured to the 
-previously mentioned [list of applications](public/apps.json) and its `workspacesUrl` configured to the 
+In this example, the [Desktop Owner Settings file](public/dos.json) has its `appDirectoryUrl` configured to the
+previously mentioned [list of applications](public/apps.json) and its `workspacesUrl` configured to the
 [list of workspaces](public/workspaces.json). Hence, all of the content that Home renders is sourced from our
 Content Discovery Service.
 

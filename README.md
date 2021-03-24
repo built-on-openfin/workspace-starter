@@ -1,24 +1,20 @@
-# Workspace Starter
+<img src="./assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Starter" />
 
-This repository contains a collection of example integrations with OpenFin's Home and Browser product. 
+## What is the OpenFin Workspace?
 
-# Prerequisites
+The OpenFin Workspace is an environment designed for getting work done by connecting a lot of disconneted applications and information together through intuitive flows and intelligent connections.
 
-To run an example in this repository make sure these common prerequisites are met. 
+The workspace comes with **Home**, **Browser**, and **Notification Center** built-in and ready to talk to the rest of the tools you use to get work done.
 
-- Windows OS Required
-- Install [Node.js](https://nodejs.org/en/) 
+## What you can do with this repository
 
-# Examples
+1. [Learn how to open your application in Browser](./how-to/1--add-an-application-to-browser)
+2. [Learn how to make content searchable in Home](./how-to/2--add-searchable-content-in-home)
+3. [Learn how to create action items in the Notification Center](/how-to/3--create-a-new-notification)
 
-Below is a list of short descriptions for each respective example. Clicking the header of the short description will link you directly to the respective example.
+## What you need to get started
 
-## [Create a Content Discovery Service](content-discovery-service)
+OpenFin Workspace is currently **only supported on Windows**, and you'll need a recent version of Node installed to launch the examples included this repository.
 
-A content discovery service feeds content such as Apps and Workspaces into the Home UI via a simple REST API.
-
-## [Create a Search Provider](search-provider)
-
-A search provider allows other OpenFin applications running on a desktop to feed content such as Apps and Workspaces into the Home UI through application interoperability. 
-
-Search providers can also execute custom workflows when said content is actioned by a user (clicked, hotkey pressed, ect.).
+- [Windows](https://www.microsoft.com/en-us/windows/) <img src="./assets/Windows10.png" height="16" align="absmiddle" />
+- [Node](https://nodejs.org/en/) <img src="./assets/node.png" height="16" align="absmiddle" />
