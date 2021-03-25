@@ -11,6 +11,7 @@ The workspace comes with **Home**, **Browser**, and **Notification Center** buil
 1. [Learn how to open your application in Browser](./how-to/1--add-an-application-to-browser)
 2. [Learn how to make content searchable in Home](./how-to/2--add-searchable-content-in-home)
 3. [Learn how to create action items in the Notification Center](/how-to/3--create-a-new-notification)
+4. [Learn how to self host OpenFin Workspace](/how-to/4--self-host-workspace)
 
 ## What you need to get started
 
