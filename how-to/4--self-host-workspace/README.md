@@ -52,3 +52,12 @@ reach out to OpenFin support and they will provide a custom bundle with the path
 Another thing to keep in mind, OpenFin app manifests cannot contain relative paths. It is up to you
 to change the URLs within the manifest to point at your self hosted server manually, or add a route
 to your server which automates this process (Like in this example).
+
+## Caveats and alternatives
+
+By self hosting, you are locked down to a very specific version of OpenFin Workspace.
+In order to get the latest and greatest of OpenFin Workspace, you will have to request a new bundle from OpenFin.
+You will also have to request a new bundle if a hotfix or patch needs to be applied to the frontend assets.
+
+An alternative to self hosting is using a [reverse proxy](https://www.nginx.com/resources/glossary/reverse-proxy-server/#:~:text=A%20reverse%20proxy%20server%20is,traffic%20between%20clients%20and%20servers.). With a reverse proxy, requests from end user's machines
+will never leave your network. Only your reverse proxy server will leave your network, in order to request assets from OpenFin's CDN. This method secures end user's machines while still supporting easy updates to OpenFin Workspace version.
