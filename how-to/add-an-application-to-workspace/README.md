@@ -4,7 +4,7 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 # Launch your Content in OpenFin Workspace
 
-OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access through Home and Browser.
+OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access.
 
 This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
