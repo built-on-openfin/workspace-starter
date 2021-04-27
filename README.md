@@ -13,6 +13,7 @@ This repository contains a growing list of examples demonstrating how to configu
 ### Examples:
 
 - [Learn how to open your application in Browser](./how-to/add-an-application-to-workspace)
+- [Learn how to add searchable content in Home](./how-to/add-searchable-content-in-home)
 
 ## Before you get started
 
