@@ -2,14 +2,15 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Add an Application to OpenFin Workspace
+# Launch your Content in OpenFin Workspace
 
-OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access through Home and Browser.
+OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access.
 
-This micro application is a simple example of plugging in your own content or app.
+This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+
 ## Getting Started
 
-1. Install dependencies.
+1. Install dependencies. Note that these examples assume you are in the subdirectory for the example.
 
 ```bash
 $ npm install
@@ -22,17 +23,19 @@ $ npm run build
 ```
 
 3. Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility that will add the Windows registry key for you.
-   (WARNING: This will kill all open OpenFin processes)
+   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+   settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
+
+   (WARNING: This script kills all open OpenFin processes.)
 
 ```bash
 $ npm run dos
 ```
 
-4. Start the Content Discovery Service server.
+4. Start the Content Discovery Service server in a new window.
 
 ```bash
-$ npm run start
+$ start npm run start
 ```
 
 5. Start Workspace.

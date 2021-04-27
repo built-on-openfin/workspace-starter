@@ -20,6 +20,4 @@ Read more about our [recommended development environment](https://developers.ope
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-## ⚠️ Attention
 
-If you already have OpenFin configured on your desktop, executing the code provided by the examples in this repo can overwrite your Desktop Owner Settings. We recommend not using these examples under those conditions.
