@@ -19,3 +19,7 @@ This repository contains a growing list of examples demonstrating how to configu
 Read more about our [recommended development environment in our docs](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment).
 
 OpenFin Workspace is currently **only supported on Windows**.
+
+## ⚠️ Attention
+
+If you already have OpenFin configured on your desktop, executing the code provided by the examples this repo can overwrite your Desktop Owner Settings. We recommend not using these examples under those conditions.
