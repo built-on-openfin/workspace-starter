@@ -1,20 +1,25 @@
 <img src="./assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Starter" />
 
-## What is the OpenFin Workspace?
+## OpenFin Workspace
 
-The OpenFin Workspace is an environment designed for getting work done by connecting a lot of disconneted applications and information together through intuitive flows and intelligent connections.
+The OpenFin Workspace is a full featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, and a notification system to surface important moments while they're still important.
 
-The workspace comes with **Home**, **Browser**, and **Notification Center** built-in and ready to talk to the rest of the tools you use to get work done.
+[Learn more @ openfin.co/workspace](https://www.openfin.co/workspace/)
 
 ## What you can do with this repository
 
-1. [Learn how to open your application in Browser](./how-to/1--add-an-application-to-browser)
-2. [Learn how to make content searchable in Home](./how-to/2--add-searchable-content-in-home)
-3. [Learn how to create action items in the Notification Center](/how-to/3--create-a-new-notification)
+This repository contains a growing list of examples demonstrating how to configure core Workspace functionality for your applications and platform.
 
-## What you need to get started
+### Examples:
 
-OpenFin Workspace is currently **only supported on Windows**, and you'll need a recent version of Node installed to launch the examples included this repository.
+- [Learn how to open your application in Browser](./how-to/add-an-application-to-workspace)
 
-- [Windows](https://www.microsoft.com/en-us/windows/) <img src="./assets/Windows10.png" height="16" align="absmiddle" />
-- [Node](https://nodejs.org/en/) <img src="./assets/node.png" height="16" align="absmiddle" />
+## Before you get started
+
+Read more about our [recommended development environment in our docs](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment).
+
+OpenFin Workspace is currently **only supported on Windows**.
+
+## ⚠️ Attention
+
+If you already have OpenFin configured on your desktop, executing the code provided by the examples this repo can overwrite your Desktop Owner Settings. We recommend not using these examples under those conditions.

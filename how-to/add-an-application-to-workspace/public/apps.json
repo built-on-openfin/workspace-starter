@@ -1,0 +1,35 @@
+[
+  {
+    "name": "expero-company-news",
+    "title": "Gateway - Company News",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "icon": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ]
+  },
+  {
+    "name": "expero-description",
+    "title": "Gateway - Description",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/description.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "icon": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ]
+  },
+  {
+    "name": "expero-stock-quote",
+    "title": "Gateway - Stock Quote",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/stock-quote.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "icon": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ]
+  }
+]
