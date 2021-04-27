@@ -6,10 +6,11 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access through Home and Browser.
 
-This micro application is a simple example of plugging in your own content or app.
+This micro application is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+
 ## Getting Started
 
-1. Install dependencies.
+1. Install dependencies. Note that these examples assume you are in the example directory.
 
 ```bash
 $ npm install
@@ -22,7 +23,9 @@ $ npm run build
 ```
 
 3. Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility that will add the Windows registry key for you.
+   This example includes a utility (desktop-owner-settings.bat) that will add the Windows registry key for you pointing to a local desktop owner 
+   settings file so you can test these settings. 
+
    (WARNING: This will kill all open OpenFin processes)
 
 ```bash
@@ -32,7 +35,7 @@ $ npm run dos
 4. Start the Content Discovery Service server.
 
 ```bash
-$ npm run start
+$ start npm run start
 ```
 
 5. Start Workspace.
