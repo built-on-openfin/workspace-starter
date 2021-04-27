@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./build/index.js",
-    "dos": "REG IMPORT openfin.reg && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
+    "dos": "desktop-owner-settings.bat && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
     "start:workspace": "openfin -l -c https://home.openfin.co/app.json",
     "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
     "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"

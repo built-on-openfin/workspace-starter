@@ -1,4 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_CURRENT_USER\Software\OpenFin\RVM\Settings]
-"DesktopOwnerSettings"="http://localhost:8080/dos.json"
