@@ -10,7 +10,7 @@ This application you are about to install is a simple example of plugging in you
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the example directory.
+1. Install dependencies. Note that these examples assume you are in the subdirectory for the example.
 
 ```bash
 $ npm install
