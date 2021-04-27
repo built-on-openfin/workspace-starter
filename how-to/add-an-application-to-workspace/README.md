@@ -2,7 +2,7 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Add an Application to OpenFin Workspace
+# Launch your Content in OpenFin Workspace
 
 OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access through Home and Browser.
 
@@ -32,7 +32,7 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the Content Discovery Service server.
+4. Start the Content Discovery Service server in a new window.
 
 ```bash
 $ start npm run start
