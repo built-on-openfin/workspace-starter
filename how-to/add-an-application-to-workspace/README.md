@@ -23,7 +23,7 @@ $ npm run build
 ```
 
 3. Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (desktop-owner-settings.bat) that will add the Windows registry key for you pointing to a local desktop owner 
+   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this will prompt to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (WARNING: This will kill all open OpenFin processes)
