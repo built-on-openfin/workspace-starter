@@ -60,4 +60,4 @@ previously mentioned [list of applications](public/apps.json) and its `workspace
 [list of workspaces](public/workspaces.json). Hence, all of the content that Home renders is sourced from OpenFin's
 Content Discovery Service.
 
-### Read more about [configuring content in Workspace](https://developers.openfin.co/of-docs/docs/add-your-content-to-workspace). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
