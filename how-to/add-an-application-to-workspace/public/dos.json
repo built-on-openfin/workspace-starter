@@ -1,6 +1,6 @@
 {
   "desktopSettings": {
-    "openfinSystemApplications": {
+    "systemApps": {
       "home": {
         "customConfig": {
           "appDirectoryUrl": "http://localhost:8080/apps.json",
