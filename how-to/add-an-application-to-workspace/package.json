@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "OpenFin Workspace Example Application -- Adding your application the Content Discovery Service",
   "main": "index.js",
+  "engines": {
+    "node": "12"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node ./build/index.js",
