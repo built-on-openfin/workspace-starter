@@ -8,7 +8,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What you can do with this repository
 
-This repository contains a growing list of examples demonstrating how to configure core Workspace functionality for your applications and platform.
+This repository contains an example showing how to configure core Workspace functionality for your application.
 
 ### Examples:
 
