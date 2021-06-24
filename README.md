@@ -20,4 +20,48 @@ Read more about our [recommended development environment](https://developers.ope
 
 OpenFin Workspace is currently **only supported on Windows**.
 
+## Minimum RVM Version
 
+To customize OpenFin Workspace you use DesktopOwnerSettings. This requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
+
+* Go to *%localappdata%/OpenFin* in windows explorer
+* Right-click on OpenFinRVM and select *Properties*
+* Click on the *Details* tab and see your version number
+
+Depending on your version the following rules will apply:
+
+| RVM Version         | Supports Custom Workspace Settings | Setting Required          |
+|---------------------|------------------------------------|---------------------------|
+| v6.0.0.3 & below    |                 No                 | N/A                       |
+| v6.1.0.1 - v6.3.1.3 |                 Yes                | openfinSystemApplications |
+| v6.4.1.1 & above    |                 Yes                | systemApps                |
+
+
+### Example Desktop Owner Setting for OpenFinRVM v6.1.0.1 - v6.3.1.3
+
+```json
+{
+  "desktopSettings": {
+    "openfinSystemApplications": {
+      "home": {
+        "customConfig": {
+        }
+      }
+    }
+  }
+}
+```
+### Example Desktop Owner Setting for OpenFinRVM v6.4.1.1 & Above
+
+```json
+{
+  "desktopSettings": {
+    "systemApps": {
+      "home": {
+        "customConfig": {
+        }
+      }
+    }
+  }
+}
+```
