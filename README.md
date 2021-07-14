@@ -10,7 +10,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 This repository contains an example showing how to configure core Workspace functionality for your application.
 
-### Examples:
+### Examples
 
 - [Learn how to launch your content in Workspace](./how-to/add-an-application-to-workspace)
 
@@ -24,9 +24,9 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 To customize OpenFin Workspace you use DesktopOwnerSettings. This requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
 
-* Go to *%localappdata%/OpenFin* in windows explorer
-* Right-click on OpenFinRVM and select *Properties*
-* Click on the *Details* tab and see your version number
+- Go to *%localappdata%/OpenFin* in windows explorer
+- Right-click on OpenFinRVM and select *Properties*
+- Click on the *Details* tab and see your version number
 
 Depending on your version the following rules will apply:
 
@@ -36,14 +36,13 @@ Depending on your version the following rules will apply:
 | v6.1.0.1 - v6.3.1.3 |                 Yes                | openfinSystemApplications |
 | v6.4.1.1 & above    |                 Yes                | systemApps                |
 
-
 ### Example Desktop Owner Setting for OpenFinRVM v6.1.0.1 - v6.3.1.3
 
 ```json
 {
   "desktopSettings": {
     "openfinSystemApplications": {
-      "home": {
+      "workspace": {
         "customConfig": {
         }
       }
@@ -51,13 +50,14 @@ Depending on your version the following rules will apply:
   }
 }
 ```
+
 ### Example Desktop Owner Setting for OpenFinRVM v6.4.1.1 & Above
 
 ```json
 {
   "desktopSettings": {
     "systemApps": {
-      "home": {
+      "workspace": {
         "customConfig": {
         }
       }
@@ -65,3 +65,5 @@ Depending on your version the following rules will apply:
   }
 }
 ```
+
+Read more about these settings in [Workspace documentation](https://developers.openfin.co/of-docs/docs/workspace-override-options)
