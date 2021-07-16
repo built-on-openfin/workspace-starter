@@ -31,5 +31,42 @@
         "icon": "https://openfin-iex.experolabs.com/favicon.ico"
       }
     ]
+  },
+  {
+    "appId": "notifications-generator",
+    "name": "notifications-studio",
+    "title": "Notifications Studio",
+    "manifestType": "manifest",
+    "version": null,
+    "intents": [],
+    "publisher": "openfin",
+    "description": "Notifications Studio: Test sending Notifications",
+    "manifest": "https://cdn.openfin.co/studio/notification/app.json",
+    "contactEmail": "contact@company.com",
+    "customConfig": [],
+    "supportEmail": "support@company.com",
+    "icons": [
+      {
+        "icon": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"
+      }
+    ],
+    "tags": [],
+    "images": [],
+    "internal": false,
+    "enableLayout": false,
+    "suppressReporting": false,
+    "isCertified": true,
+    "suppressRuntimeAnalytics": false,
+    "enableDosCapture": false,
+    "active": true
+  },
+  {
+    "appId": "Notepad",
+    "title": "Notepad",
+    "manifestType": "external",
+    "publisher": "openfin",
+    "manifest": "notepad.exe",
+    "icons": [
+     ]
   }
 ]

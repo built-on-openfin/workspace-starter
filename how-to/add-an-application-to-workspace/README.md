@@ -41,7 +41,7 @@ $ start npm run start
 5. Start Workspace.
 
 ```bash
-$ npm run start:workspace
+$ npm run workspace
 ```
 
 6. Navigate to the `Launch` or `Workspaces` view in the Home UI.
@@ -62,5 +62,11 @@ In this example, the [Desktop Owner Settings file](public/dos.json) has its `app
 previously mentioned [list of applications](public/apps.json) and its `workspacesUrl` configured to the
 [list of workspaces](public/workspaces.json). Hence, all of the content that Home renders is sourced from OpenFin's
 Content Discovery Service.
+
+The Content Discovery Service contains an example of entries that:
+
+* Load views into OpenFin Browser
+* Launch an OpenFin Application using it's manifest file
+* Launch a native application
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 

@@ -7,15 +7,14 @@
     "build": "tsc",
     "start": "node ./build/index.js",
     "dos": "desktop-owner-settings.bat && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
-    "start:workspace": "openfin -l -c https://home.openfin.co/app.json",
+    "workspace": "start fins://system-apps/workspace",
     "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
-    "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"
+    "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"   
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "openfin-cli": "^3.0.2"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
