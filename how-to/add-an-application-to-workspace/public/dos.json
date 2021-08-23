@@ -1,7 +1,7 @@
 {
   "desktopSettings": {
     "systemApps": {
-      "home": {
+      "workspace": {
         "customConfig": {
           "appDirectoryUrl": "http://localhost:8080/apps.json",
           "workspacesUrl": "http://localhost:8080/workspaces.json",
