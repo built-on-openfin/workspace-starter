@@ -6,6 +6,7 @@ import {
     ContentStoreProvider,
 } from "@openfin/workspace/shapes";
 import { launchApp } from "@openfin/workspace";
+import * as faker from "faker";
 
 const getNavigation = async (): Promise<
     [ContentStoreNavigationSection?, ContentStoreNavigationSection?]
@@ -38,8 +39,21 @@ const getFooter = async (): Promise<ContentStoreFooter> => {
     };
 };
 
+const app: App = {
+    appId: faker.datatype.uuid(),
+    title: faker.lorem.word(),
+    manifestType: "view",
+    manifest: `https://www.google.com/search?q=${faker.lorem.word()}`,
+    icons: [{ src: faker.image.city() }],
+    contactEmail: faker.internet.email(),
+    supportEmail: faker.internet.email(),
+    publisher: faker.lorem.word(),
+    tags: [],
+    images: [],
+    intents: [],
+};
 const getApps = async (): Promise<App[]> => {
-    return [];
+    return [app];
 };
 
 const contentStoreProvider: ContentStoreProvider = {
