@@ -1,10 +1,9 @@
 {
     "devtools_port": 9090,
     "startup_app": {
-        "name": "OpenfinPOC",
-        "description": "OpenFin POC",
+        "name": "Client API Studio",
         "url": "http://localhost:9000/index.html",
-        "uuid": "OpenfinPOC",
+        "uuid": "client-api-studio",
         "autoShow": true
     },
     "runtime": {
@@ -13,7 +12,7 @@
     },
     "shortcut": {
         "company": "OpenFin",
-        "description": "Openfin POC",
-        "name": "Openfin POC"
+        "name": "Client API Studio",
+        "icon": "http://localhost:9000/favicon.ico"
     }
 }
