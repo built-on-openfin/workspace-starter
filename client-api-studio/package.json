@@ -1,5 +1,5 @@
 {
-    "name": "content-store",
+    "name": "client-api-studio",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
