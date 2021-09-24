@@ -6,64 +6,40 @@ import {
     ContentStoreProvider,
 } from "@openfin/workspace/shapes";
 import { launchApp } from "@openfin/workspace";
+import {
+    apps,
+    navigationSections,
+    landingPage,
+    footer,
+} from "./content-store-data";
 import * as faker from "faker";
 
 const getNavigation = async (): Promise<
     [ContentStoreNavigationSection?, ContentStoreNavigationSection?]
 > => {
-    return [];
+    return navigationSections;
 };
 
 const getLandingPage = async (): Promise<ContentStoreLandingPage> => {
-    return {
-        topRow: {
-            title: "Top Row",
-            items: [],
-        },
-        middleRow: {
-            title: "Middle Row",
-            apps: [],
-        },
-        bottomRow: {
-            title: "Bottom Row",
-            items: [],
-        },
-    };
+    return landingPage;
 };
 
 const getFooter = async (): Promise<ContentStoreFooter> => {
-    return {
-        logo: { src: "" },
-        links: [],
-        text: "Footer",
-    };
+    return footer;
 };
 
-const app: App = {
-    appId: faker.datatype.uuid(),
-    title: faker.lorem.word(),
-    manifestType: "view",
-    manifest: `https://www.google.com/search?q=${faker.lorem.word()}`,
-    icons: [{ src: faker.image.city() }],
-    contactEmail: faker.internet.email(),
-    supportEmail: faker.internet.email(),
-    publisher: faker.lorem.word(),
-    tags: [],
-    images: [],
-    intents: [],
-};
 const getApps = async (): Promise<App[]> => {
-    return [app];
+    return apps;
 };
 
-const contentStoreProvider: ContentStoreProvider = {
-    id: "new-store",
-    title: "New Store",
+const getContentStoreProvider = (): ContentStoreProvider => ({
+    id: faker.datatype.uuid(),
+    title: faker.lorem.words(2),
     getNavigation,
     getLandingPage,
     getFooter,
     getApps,
     launchApp,
-};
+});
 
-export default contentStoreProvider;
+export default getContentStoreProvider;
