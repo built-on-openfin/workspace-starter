@@ -1,9 +1,9 @@
 import {
-    ContentStoreLandingPage,
-    ContentStoreNavigationSection,
-    ContentStoreFooter,
+    StorefrontLandingPage,
+    StorefrontNavigationSection,
+    StorefrontFooter,
     App,
-    ContentStoreProvider,
+    StorefrontProvider,
 } from "@openfin/workspace/shapes";
 import { launchApp } from "@openfin/workspace";
 import {
@@ -11,20 +11,20 @@ import {
     navigationSections,
     landingPage,
     footer,
-} from "./content-store-data";
+} from "./storefront-data";
 import * as faker from "faker";
 
 const getNavigation = async (): Promise<
-    [ContentStoreNavigationSection?, ContentStoreNavigationSection?]
+    [StorefrontNavigationSection?, StorefrontNavigationSection?]
 > => {
     return navigationSections;
 };
 
-const getLandingPage = async (): Promise<ContentStoreLandingPage> => {
+const getLandingPage = async (): Promise<StorefrontLandingPage> => {
     return landingPage;
 };
 
-const getFooter = async (): Promise<ContentStoreFooter> => {
+const getFooter = async (): Promise<StorefrontFooter> => {
     return footer;
 };
 
@@ -32,7 +32,7 @@ const getApps = async (): Promise<App[]> => {
     return apps;
 };
 
-const getContentStoreProvider = (): ContentStoreProvider => ({
+const getStorefrontProvider = (): StorefrontProvider => ({
     id: faker.datatype.uuid(),
     title: faker.lorem.words(2),
     getNavigation,
@@ -42,4 +42,4 @@ const getContentStoreProvider = (): ContentStoreProvider => ({
     launchApp,
 });
 
-export default getContentStoreProvider;
+export default getStorefrontProvider;

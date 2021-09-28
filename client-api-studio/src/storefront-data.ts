@@ -1,10 +1,10 @@
 import * as faker from "faker";
 import {
     App,
-    ContentStoreFooter,
-    ContentStoreLandingPage,
-    ContentStoreNavigationSection,
-    ContentStoreTemplate,
+    StorefrontFooter,
+    StorefrontLandingPage,
+    StorefrontNavigationSection,
+    StorefrontTemplate,
 } from "@openfin/workspace/shapes";
 
 const getRandomImage = () =>
@@ -48,7 +48,7 @@ export const apps = [
 const getNavigationItem = () => ({
     id: faker.datatype.uuid(),
     title: faker.lorem.word(),
-    templateId: "appGrid" as ContentStoreTemplate.AppGrid,
+    templateId: "appGrid" as StorefrontTemplate.AppGrid,
     templateData: {
         apps: faker.random.arrayElements(apps, 6),
     },
@@ -82,8 +82,8 @@ const detailedNavigationItems = [
 ];
 
 export const navigationSections: [
-    ContentStoreNavigationSection,
-    ContentStoreNavigationSection
+    StorefrontNavigationSection,
+    StorefrontNavigationSection
 ] = [
     {
         id: faker.datatype.uuid(),
@@ -97,7 +97,7 @@ export const navigationSections: [
     },
 ];
 
-const getLandingPage = (): ContentStoreLandingPage => ({
+const getLandingPage = (): StorefrontLandingPage => ({
     hero: {
         title: faker.lorem.word(),
         description: faker.lorem.sentences(),
@@ -122,7 +122,7 @@ const getLandingPage = (): ContentStoreLandingPage => ({
 
 export const landingPage = getLandingPage();
 
-const getFooter = (): ContentStoreFooter => ({
+const getFooter = (): StorefrontFooter => ({
     logo: { src: faker.image.abstract(), size: "32" },
     text: faker.lorem.sentence(),
     links: [
