@@ -1,0 +1,83 @@
+{
+    "windows": [
+      {
+        "height": 1000,
+        "width": 1600,
+        "center": true,
+        "workstacks": [
+          {
+            "name": "News Example"
+          }
+        ],
+        "layout": {
+          "content": [
+            {
+              "type": "row",
+              "content": [
+                {
+                  "type": "column",
+                  "width": 100,
+                  "content": [
+                    {
+                      "type": "row",
+                      "height": 50,
+                      "content": [
+                        {
+                          "type": "stack",
+                          "width": 100,
+                          "height": 100,
+                          "content": [
+                            {
+                              "type": "component",
+                              "componentName": "view",
+                              "componentState": {
+                                "url": "https://www.bbc.co.uk",
+                                "componentName": "view",
+                                "interop": {
+                                }
+                              },
+                              "title": "BBC News"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "height": 50,
+                      "content": [
+                        {
+                          "type": "column",
+                          "width": 100,
+                          "content": [
+                            {
+                              "type": "stack",
+                              "width": 100,
+                              "height": 100,
+                              "content": [
+                                {
+                                  "type": "component",
+                                  "componentName": "view",
+                                  "componentState": {
+                                    "url": "https://www.skynews.com",
+                                    "componentName": "view",
+                                    "interop": {
+                                    }
+                                  },
+                                  "title": "Sky News"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }

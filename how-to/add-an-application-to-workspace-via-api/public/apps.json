@@ -104,10 +104,10 @@
     "appId": "Notepad",
     "name": "Notepad",
     "title": "Notepad",
+    "description": "Open Notepad and start taking some quick notes.",
     "manifestType": "external",
     "publisher": "openfin",
     "manifest": "notepad.exe",
-    "icons": [
-     ]
+    "icons": []
   }
 ]
