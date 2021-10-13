@@ -2,43 +2,35 @@ import { DispatchedSearchResult, ResultDispatchListener, SearchListener, SearchL
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { UUID as WorkspaceUUID } from "./workspace";
-
-async function getRestEntries(url:string, credentials?:"omit" | "same-origin" | "include") : Promise<any[]>{
-    const options = credentials !== undefined ? { credentials } : undefined;
-    if(url === undefined) {
-        return [];
-    }
-    const response = await fetch(url, options);
-    return response.json();
-}
+import { getApps } from "./apps";
 
 async function getResults() : Promise<SearchResult[]> {
     let settings = await getSettings();
-    let fdc3Results = await getRestEntries(settings?.searchProvider?.fdc3SourceUrl, settings?.searchProvider?.includeCredentialOnSourceRequest);
+    let apps = await getApps();
 
-    if(Array.isArray(fdc3Results)){
+    if(Array.isArray(apps)){
         let results: SearchResult[] = [];
         let defaultAction = settings.searchProvider.defaultAction;
 
-        for(let i = 0; i < fdc3Results.length; i++) {
-            if(fdc3Results[i].description !== undefined) {
+        for(let i = 0; i < apps.length; i++) {
+            if(apps[i].description !== undefined) {
                 let entry: SearchResultSimpleText = {
-                    key: fdc3Results[i].appId,
-                    title: fdc3Results[i].title,
+                    key: apps[i].appId,
+                    title: apps[i].title,
                     actions: [{ name: defaultAction }],
-                    data: fdc3Results[i],
-                    description: fdc3Results[i].description,
-                    shortDescription: fdc3Results[i].description,
+                    data: apps[i],
+                    description: apps[i].description,
+                    shortDescription: apps[i].description,
                     template: TemplateNames.SimpleText,
-                    templateContent: fdc3Results[i].description,
+                    templateContent: apps[i].description,
                 };
                 results.push(entry);
             } else {
                 let entry: SearchResultPlain = {
-                    key: fdc3Results[i].appId,
-                    title: fdc3Results[i].title,
+                    key: apps[i].appId,
+                    title: apps[i].title,
                     actions: [{ name: defaultAction }],
-                    data: fdc3Results[i],
+                    data: apps[i],
                     template: TemplateNames.Plain
                 };
                 results.push(entry);
@@ -53,8 +45,8 @@ async function getResults() : Promise<SearchResult[]> {
 export async function init() {
     console.log("Initialising search.");
     let settings = await getSettings();
-    if(settings.searchProvider === undefined || settings.searchProvider.fdc3SourceUrl === undefined || settings.searchProvider.name === undefined || settings.searchProvider.title === undefined) {
-        console.warn("searchProvider: not configured in the customSettings of your manifest correctly. Ensure you have the searchProvider object defined in customSettings with the following defined: fdc3SourceUrl, name, title");
+    if(settings.searchProvider === undefined || settings.searchProvider.name === undefined || settings.searchProvider.title === undefined) {
+        console.warn("searchProvider: not configured in the customSettings of your manifest correctly. Ensure you have the searchProvider object defined in customSettings with the following defined: name, title");
         return;
     }
     const topics = settings?.searchProvider?.topics || ["all", "apps"];

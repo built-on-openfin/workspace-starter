@@ -10,7 +10,7 @@ This application you are about to install is a simple example of plugging in you
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the subdirectory for the example.
+1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
 $ npm install
@@ -87,14 +87,14 @@ The bootstrapper has two main responsibilities:
 1. Import [workspace.ts](client/src/workspace.ts) and ensure that OpenFin Workspace is running
 2. Import [search.ts](client/src/search.ts) and ensure that a search provider is registered against home in order to provide a list of applications.
 
-The **search provider**([search.ts](client/src/search.ts)) imports [OpenFin's Search NPM Module](https://www.npmjs.com/package/@openfin/search-api) to have access to the relevant functions, [workspace.ts](client/src/workspace.ts) for getting the right UUID to register the search provider against, [settings.ts](client/src/settings.ts) to read settings (such as the name and title to use and what rest endpoint to fetch from) and [launch.ts](client/src/launch.ts) to launch the entry the user has selected from OpenFin Home.
+The **search provider**([search.ts](client/src/search.ts)) imports [OpenFin's Search NPM Module](https://www.npmjs.com/package/@openfin/search-api) to have access to the relevant functions, [workspace.ts](client/src/workspace.ts) for getting the right UUID to register the search provider against, [settings.ts](client/src/settings.ts) to read settings (such as the name, title and topics to use), [apps.ts](client/src/apps.ts) to fetch a list of applications (the search provider maps these into search results) and [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home.
 
 The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
 
 ```javascript
  "customSettings": {
         "searchProvider": {
-            "fdc3SourceUrl": "http://localhost:8080/apps.json",
+            "appsSourceUrl": "http://localhost:8080/apps.json",
             "includeCredentialOnSourceRequest": "include",
             "name":"cds-directory",
             "title":"CDS Directory",
@@ -106,7 +106,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 ```
 These are settings you can experiment with (e.g. if you already have your own CDS for apps you can update the url and restart the Workspace Platform).
 
-The search provider will read the fdc3 directory rest endpoint and map it to an array of SearchResult objects.
+The search provider will ask the [apps.ts](client/src/apps.ts) file for a list of applications and it will read the apps directory rest endpoint and return it. The search provider then maps the apps to an array of SearchResult objects.
 
 When a user selects a result in OpenFin Home, it is returned to the search provider and the search provider uses [launch.ts](client/src/launch.ts) to launch the result.
 

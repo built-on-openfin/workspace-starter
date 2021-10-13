@@ -31,7 +31,7 @@
     },
     "customSettings": {
         "searchProvider": {
-            "fdc3SourceUrl": "http://localhost:8080/apps.json",
+            "appsSourceUrl": "http://localhost:8080/apps.json",
             "includeCredentialOnSourceRequest": "include",
             "name":"cds-directory",
             "title":"CDS Directory",

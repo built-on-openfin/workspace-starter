@@ -1,5 +1,5 @@
 interface SearchProvider {
-    fdc3SourceUrl: string,
+    appsSourceUrl: string,
     includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
     name: string,
     title: string,
