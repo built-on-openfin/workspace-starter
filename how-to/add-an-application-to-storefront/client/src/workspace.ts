@@ -12,7 +12,7 @@ async function isWorkspaceRunning() {
 async function launchOpenFinWorkspace() {
     console.log("Launching Workspace.");
     return fin.System.launchManifest(
-        "fins://system-apps/workspace"
+        "fins://cdn.openfin.co/workspace/dev/app.json"
     );
 }
 

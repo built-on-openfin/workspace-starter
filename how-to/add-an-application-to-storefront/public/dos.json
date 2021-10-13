@@ -6,6 +6,11 @@
           "appDirectoryUrl": "http://localhost:8080/empty-apps.json",
           "style": {
             "iconUrl": "http://localhost:8080/favicon.ico"
+          },
+          "flags": {
+            "WorkspaceStorefrontEnabled": true,
+            "WorkspaceHomeEnabled": true,
+            "WorkspaceDockEnabled": true
           }
         }
       }
