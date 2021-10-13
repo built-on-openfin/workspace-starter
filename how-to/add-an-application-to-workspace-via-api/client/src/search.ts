@@ -57,7 +57,7 @@ export async function init() {
         console.warn("searchProvider: not configured in the customSettings of your manifest correctly. Ensure you have the searchProvider object defined in customSettings with the following defined: fdc3SourceUrl, name, title");
         return;
     }
-    const topics = settings?.searchProvider?.topics || ["all", "launch"];
+    const topics = settings?.searchProvider?.topics || ["all", "apps"];
     let searchTopicClients: SearchTopicClient[] = [];
 
     for(let i = 0; i < topics.length; i++) {
@@ -65,7 +65,7 @@ export async function init() {
         searchTopicClients.push(searchTopicClient);
     }
 
-    const queryMinLength = settings.searchProvider.queryMinLength || 3;
+    const queryMinLength = settings?.searchProvider?.queryMinLength || 3;
 
     const onSearch: SearchListener = async (request: SearchListenerRequest, response: SearchListenerResponse) => {
         // These results are pulled in by the search requester.
