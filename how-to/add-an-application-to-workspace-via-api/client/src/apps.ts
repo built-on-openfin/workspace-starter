@@ -14,7 +14,7 @@ export async function getApps(): Promise<App[]> {
     console.log("Requesting apps.");
     try {
         let settings = await getSettings();
-        let apps = await getRestEntries(settings?.searchProvider?.appsSourceUrl, settings?.searchProvider?.includeCredentialOnSourceRequest);
+        let apps = await getRestEntries(settings?.appProvider?.appsSourceUrl, settings?.appProvider?.includeCredentialOnSourceRequest);
         return apps;
     } catch (err) {
         console.error("Error retrieving apps. Returning empty list.", err);

@@ -93,9 +93,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 
 ```javascript
  "customSettings": {
-        "searchProvider": {
+        "appProvider": {
             "appsSourceUrl": "http://localhost:8080/apps.json",
-            "includeCredentialOnSourceRequest": "include",
+            "includeCredentialOnSourceRequest": "include"
+        },
+        "searchProvider": {
             "name":"cds-directory",
             "title":"CDS Directory",
             "topics":["all","apps"],

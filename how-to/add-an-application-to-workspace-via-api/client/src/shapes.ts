@@ -1,6 +1,4 @@
 interface SearchProvider {
-    appsSourceUrl: string,
-    includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
     name: string,
     title: string,
     topics: string[],
@@ -8,6 +6,11 @@ interface SearchProvider {
     queryMinLength: number
 }
 
+interface AppProvider {
+    appsSourceUrl: string,
+    includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include"
+}
 export interface CustomSettings {
+    appProvider?: AppProvider,
     searchProvider?: SearchProvider
 }

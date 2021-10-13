@@ -1,43 +1,42 @@
 {
-    "devtools_port": 9090,
-    "licenseKey": "request-a-key",
-    "runtime": {
-      "arguments": "--v=1 --inspect",
-      "version": "19.89.61.8"
+  "devtools_port": 9090,
+  "licenseKey": "request-a-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version": "19.89.61.8"
+  },
+  "platform": {
+    "uuid": "local-workspace-platform",
+    "applicationIcon": "http://localhost:8080/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "http://localhost:8080/platform/provider.html",
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "http://localhost:8080/favicon.ico",
+    "name": "Local Workspace Platform",
+    "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "appProvider": {
+      "appsSourceUrl": "http://localhost:8080/apps.json",
+      "includeCredentialOnSourceRequest": "include"
     },
-    "platform": {
-      "uuid": "local-workspace-platform",
-      "applicationIcon": "http://localhost:8080/favicon.ico",
-      "autoShow": false,
-      "providerUrl": "http://localhost:8080/platform/provider.html",
-      "permissions": {
-        "System": {
-          "launchExternalProcess": true
-        }
-       }
-    },
-    "snapshot": {
-      "windows": []
-    },
-    "shortcut": {
-        "company": "OpenFin",
-        "description": "An way of showing examples of what OpenFin can do.",
-        "icon": "http://localhost:8080/favicon.ico",
-        "name": "Local Workspace Platform",
-        "target": [
-            "desktop",
-            "start-menu"
-        ]
-    },
-    "customSettings": {
-        "searchProvider": {
-            "appsSourceUrl": "http://localhost:8080/apps.json",
-            "includeCredentialOnSourceRequest": "include",
-            "name":"cds-directory",
-            "title":"CDS Directory",
-            "topics":["all","apps"],
-            "defaultAction": "open",
-            "queryMinLength": 3
-        }
+    "searchProvider": {
+      "name": "cds-directory",
+      "title": "CDS Directory",
+      "topics": ["all", "apps"],
+      "defaultAction": "open",
+      "queryMinLength": 3
     }
   }
+}
