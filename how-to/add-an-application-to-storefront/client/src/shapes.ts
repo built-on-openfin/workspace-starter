@@ -11,11 +11,11 @@ interface SearchProvider {
 interface AppProvider {
     appsSourceUrl: string,
     includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
-    cacheDurationInMinutes?: number
+    cacheDurationInMinutes?: number,
+    appAssetTag?: string
 }
 
 interface StorefrontSettingsNavigationItem {
-    id:string,
     title:string,
     tags:string[]
 }
@@ -48,7 +48,6 @@ interface StorefrontProvider {
         bottomRow: StorefrontSettingsLandingPageRow
     },
     navigation:  {
-        id: string,
         title: string, 
         items: StorefrontSettingsNavigationItem[] 
     }[],

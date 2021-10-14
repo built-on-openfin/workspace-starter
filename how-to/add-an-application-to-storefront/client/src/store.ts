@@ -40,6 +40,14 @@ export async function hide() {
   return Storefront.show();
 }
 
+function getId(title:string, tags:string []) {
+    const search = ' ';
+    const replaceWith = '-';
+    let result = title.replaceAll(search, replaceWith);
+    result += "-" + tags.join('-');
+    return result.toLowerCase();
+}
+
 async function getStoreProvider(): Promise<StorefrontProvider> {
   console.log("Getting the store provider.");
   let settings = await getSettings();
@@ -88,7 +96,7 @@ async function getNavigation(): Promise<
       break;
     }
     let navigationSection: StorefrontNavigationSection = {
-      id: settings.storefrontProvider.navigation[i].id,
+      id: settings.storefrontProvider.navigation[i].title.toLowerCase().replaceAll(" ", "-"),
       title: settings.storefrontProvider.navigation[i].title,
       items: (await getNavigationItems(
         settings.storefrontProvider.navigation[i].items,
@@ -120,7 +128,6 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   if (settings?.storefrontProvider?.landingPage?.hero !== undefined) {
     let hero = settings.storefrontProvider.landingPage.hero;
     let cta = await getNavigationItem(
-      hero.cta.id,
       hero.cta.title,
       hero.cta.tags
     );
@@ -185,12 +192,11 @@ async function getFooter(): Promise<StorefrontFooter> {
 }
 
 async function getNavigationItem(
-  id: string,
   title: string,
   tags: string[]
 ): Promise<StorefrontNavigationItem> {
   let navigationItem: StorefrontNavigationItem = {
-    id,
+    id: getId(title, tags),
     title,
     templateId: "appGrid" as StorefrontTemplate.AppGrid,
     templateData: {
@@ -208,14 +214,13 @@ async function getNavigationItem(
 }
 
 async function getNavigationItems(
-  items: { id: string; title: string; tags: string[] }[],
+  items: { title: string; tags: string[] }[],
   limit: number
 ) {
   let navigationItems: StorefrontNavigationItem[] = [];
 
   for (let i = 0; i < items.length; i++) {
     let navigationItem = await getNavigationItem(
-      items[i].id,
       items[i].title,
       items[i].tags
     );
@@ -233,7 +238,6 @@ async function getLandingPageRow(
 
   for (let i = 0; i < definition.items.length; i++) {
     let navigationItem = await getNavigationItem(
-      definition.items[i].id,
       definition.items[i].title,
       definition.items[i].tags
     );

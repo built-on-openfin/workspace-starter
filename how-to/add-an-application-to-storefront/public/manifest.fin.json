@@ -3,7 +3,7 @@
   "licenseKey": "request-a-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "19.89.61.8"
+    "version": "21.93.64.11"
   },
   "platform": {
     "uuid": "local-workspace-platform",
@@ -12,7 +12,8 @@
     "providerUrl": "http://localhost:8080/platform/provider.html",
     "permissions": {
       "System": {
-        "launchExternalProcess": true
+        "launchExternalProcess": true,
+        "downloadAsset": true
       }
     }
   },
@@ -26,6 +27,15 @@
     "name": "Local Workspace Platform",
     "target": ["desktop", "start-menu"]
   },
+  "appAssets": [
+    {
+        "alias": "winform-interop-example",
+        "version": "1.0.0",
+        "src": "http://localhost:8080/assets/native-interop-example.zip",
+        "target": "OpenFin.Interop.Win.Sample.exe",
+        "forceDownload": false
+    }
+],
   "customSettings": {
     "bootstrap": {
       "search": true,
@@ -34,7 +44,8 @@
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/apps.json",
       "includeCredentialOnSourceRequest": "include",
-      "cacheDurationInMinutes": 1
+      "cacheDurationInMinutes": 1,
+      "appAssetTag": "appasset"
     },
     "searchProvider": {
       "name": "cds-directory",
@@ -51,7 +62,6 @@
           "title": "Custom Hero Title",
           "description": "This is a demonstration of the hero section that you can configure for your store.",
           "cta": {
-            "id": "cta-1",
             "title": "Hero Apps!",
             "tags": ["hero"]
           },
@@ -63,7 +73,6 @@
           "title": "Custom Top Row Content",
           "items": [
             {
-              "id": "toprow-1",
               "title": "Expero",
               "description": "A collection of example views from Expero showing the power of interop and context sharing.",
               "image": {
@@ -72,7 +81,6 @@
               "tags": ["expero"]
             },
             {
-              "id": "toprow-2",
               "title": "Dev Tools",
               "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
               "image": {
@@ -81,7 +89,6 @@
               "tags": ["dev-tools"]
             },
             {
-              "id": "toprow-3",
               "title": "Learning Resource",
               "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
               "image": {
@@ -99,7 +106,6 @@
           "title": "Quick Access",
           "items": [
             {
-              "id": "bottomrow-1",
               "title": "Views",
               "description": "A collection of views made available through our catalog.",
               "image": {
@@ -108,7 +114,6 @@
               "tags": ["view"]
             },
             {
-              "id": "bottomrow-2",
               "title": "Web Apps",
               "description": "A collection of web apps built using OpenFin.",
               "image": {
@@ -117,7 +122,6 @@
               "tags": ["manifest"]
             },
             {
-              "id": "bottomrow-3",
               "title": "Native Apps",
               "description": "A collection of native apps made available through our catalog.",
               "image": {
@@ -130,39 +134,32 @@
       },
       "navigation": [
         {
-          "id": "navigation-1",
           "title": "Applications",
           "items": [
             {
-              "id": "navigation-1-item-1",
               "title": "All Apps",
               "tags": ["all"]
             },
-            { "id": "navigation-1-item-2", "title": "Views", "tags": ["view"] },
-            { "id": "navigation-1-item-3", "title": "Pages", "tags": ["page"] },
+            { "title": "Views", "tags": ["view"] },
+            { "title": "Pages", "tags": ["page"] },
             {
-              "id": "navigation-1-item-4",
               "title": "Manifest",
               "tags": ["manifest"]
             },
             {
-              "id": "navigation-1-item-5",
               "title": "Native",
               "tags": ["native"]
             }
           ]
         },
         {
-          "id": "navigation-2",
           "title": "Context Sharing",
           "items": [
             {
-              "id": "navigation-2-item-1",
               "title": "FDC3 API",
               "tags": ["fdc3"]
             },
             {
-              "id": "navigation-2-item-2",
               "title": "Interop API",
               "tags": ["interop"]
             }
