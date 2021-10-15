@@ -26,7 +26,8 @@ $ npm run build
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (WARNING: This script kills all open OpenFin processes.)
+  
+   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```bash
 $ npm run dos
@@ -49,6 +50,12 @@ $ npm run client
 
 ![](workspace-cds-via-api.gif)
 
+---
+**NOTE ABOUT THE APP**
+
+This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
+
+---
 ## How it works
 
 The Server in this example provides two sets of content over HTTP GET.
@@ -106,6 +113,25 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
         }
     }
 ```
+
+| Property | Description |
+| --- | --- |
+| **appProvider** | Config related to where the apps should be fetched from |
+| appsSourceUrl | Where should we fetch the apps from |
+| includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
+| **searchProvider** | Config related to the search provider setup to list things in Home and the Browser Add New View |
+| name | What your search provider should be called |
+| title | The title that should be given (if these are displayed) |
+| topics | What topics should we register against? If undefined then we assume all (the main Home Search UI) and apps (to register in OpenFin Browser's Add New Search).  |
+| defaultAction | What text should be shown as a possible action of clicking on a result? |
+| queryMinLength | How many characters should be typed before filtering the list? |
+
+---
+**NOTE ABOUT THE CONFIG**
+
+This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your app.
+
+---
 These are settings you can experiment with (e.g. if you already have your own CDS for apps you can update the url and restart the Workspace Platform).
 
 The search provider will ask the [apps.ts](client/src/apps.ts) file for a list of applications and it will read the apps directory rest endpoint and return it. The search provider then maps the apps to an array of SearchResult objects.
@@ -115,4 +141,9 @@ When a user selects a result in OpenFin Home, it is returned to the search provi
 The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to call fin.System.launchExternalProcess and have the relevant permission. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace module.
 
 ![](workspace-cds-via-api-launch.gif)
+
+### A note about this example
+
+This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
+
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
