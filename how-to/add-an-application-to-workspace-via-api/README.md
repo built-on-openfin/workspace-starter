@@ -2,7 +2,7 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Launch your Content in OpenFin Workspace
+# Add your content to OpenFin Workspace (Home & Browser) via an api
 
 OpenFin Workspace empowers you to feed content & apps to OpenFin Home via our API. This gives you the choice of fetching your list of applications from a *Content Discovery Service* or somewhere else.
 

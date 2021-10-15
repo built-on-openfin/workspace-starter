@@ -2,7 +2,7 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Launch your Content in OpenFin Workspace
+# Add your content to OpenFin Workspace (Storefront, Home and Browser)
 
 OpenFin Workspace empowers you to feed content & apps to OpenFin Home via our API. This gives you the choice of fetching your list of applications from a *Content Discovery Service* or somewhere else. You can re-use this data source to also populate OpenFin Storefront. OpenFin StoreFront lets you discover and launch your content.
 

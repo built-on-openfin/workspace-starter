@@ -2,17 +2,22 @@
 
 ## OpenFin Workspace
 
-The OpenFin Workspace is a full-featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, and a notification system to surface important moments while they're still important.
+The OpenFin Workspace is a full-featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, a store to aid in the discovery of content and a notification system to surface important moments while they're still important.
 
 [Learn more about openfin.co/workspace](https://www.openfin.co/workspace/)
 
 ## What you can do with this repository
 
-This repository contains an example showing how to configure core Workspace functionality for your application.
+This repository contains examples showing how to configure core Workspace functionality for your application.
 
 ### Examples
 
-- [Learn how to launch your content in Workspace](./how-to/add-an-application-to-workspace)
+  | Example         | Description |
+|---------------------|------------------------------------
+| [Learn how to add your content to OpenFin Workspace (Home & Browser)](./how-to/add-an-application-to-workspace)|This example gets you up and running with OpenFin workspace by hosting a few static json files and configuring Desktop Owner Settings (dos) to load them.                 
+| [Learn how to add your content to OpenFin Workspace (Home & Browser) via an api](./how-to/add-an-application-to-workspace-via-api) |This example is an extension of the previous example. The main difference being that Desktop Owner Settings no longer points to a list of applications. You now have a Workspace Platform Application that reads the JSON file (your application may wish to authenticate the user before doing so) and then provides those applications to OpenFin Home using an API.                
+| [Learn how to add your content to OpenFin Workspace (Home, Browser & Storefront)](.howto/add-an-application-to-storefront)   | This example is an extension of the previous example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store.                
+
 
 ## Before you get started
 

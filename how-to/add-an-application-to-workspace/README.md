@@ -2,7 +2,7 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Launch your Content in OpenFin Workspace
+# Add your content to OpenFin Workspace (Home & Browser)
 
 OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access.
 
