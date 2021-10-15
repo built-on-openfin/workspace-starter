@@ -12,7 +12,7 @@ import {
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
-import { StorefrontSettingsLandingPageRow } from "./shapes";
+import { StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
 
 export async function init() {
   console.log("Initialising the storefront provier.");
@@ -40,7 +40,15 @@ export async function hide() {
   return Storefront.show();
 }
 
-function getId(title:string, tags:string []) {
+/**
+* This function is used when a navigation item or section hasn't been configured with an ID. This is to simplify configuration for this demo.
+* In a real application you would need an idempotent and unique ID (think GUID) that doesn't change for that navigation item/section regardless of how
+* many times it is regenerated (e.g. more items can be added to the item/section but the ID stays the same). 
+* As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has 
+* a different ID then the store will not be able to find a match and it won't be able to render the navigation item.
+* A real application would not use this approach (as an update to the tag list would result in a new ID which would fail if the config was fetched from a server and not a manifest)
+*/
+function getId(title:string, tags:string [] = []) {
     const search = ' ';
     const replaceWith = '-';
     let result = title.replaceAll(search, replaceWith);
@@ -78,6 +86,8 @@ async function getNavigation(): Promise<
   [StorefrontNavigationSection?, StorefrontNavigationSection?]
 > {
   console.log("Showing the store navigation.");
+  const navigationSectionItemLimit = 5;
+  const navigationSectionLimit = 2;
   let settings = await getSettings();
   let navigationSections: [
     StorefrontNavigationSection?,
@@ -89,18 +99,18 @@ async function getNavigation(): Promise<
   }
 
   for (let i = 0; i < settings.storefrontProvider.navigation.length; i++) {
-    if (navigationSections.length === 2) {
+    if (navigationSections.length === navigationSectionLimit) {
       console.log(
         "More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken."
       );
       break;
     }
     let navigationSection: StorefrontNavigationSection = {
-      id: settings.storefrontProvider.navigation[i].title.toLowerCase().replaceAll(" ", "-"),
+      id: settings.storefrontProvider.navigation[i].id ?? getId(settings.storefrontProvider.navigation[i].title),
       title: settings.storefrontProvider.navigation[i].title,
       items: (await getNavigationItems(
         settings.storefrontProvider.navigation[i].items,
-        5
+        navigationSectionItemLimit
       )) as [
         StorefrontNavigationItem,
         StorefrontNavigationItem?,
@@ -124,10 +134,14 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   };
 
   let settings = await getSettings();
+  const storeFrontDetailedNavigationItemBottomRowLimit = 3; 
+  const storeFrontDetailedNavigationItemTopRowLimit = 4; 
+  const middleRowAppLimit = 6;
 
   if (settings?.storefrontProvider?.landingPage?.hero !== undefined) {
     let hero = settings.storefrontProvider.landingPage.hero;
     let cta = await getNavigationItem(
+      hero.cta.id,
       hero.cta.title,
       hero.cta.tags
     );
@@ -142,7 +156,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   if (settings?.storefrontProvider?.landingPage?.topRow !== undefined) {
     landingPage.topRow = await getLandingPageRow(
       settings?.storefrontProvider?.landingPage?.topRow,
-      4
+      storeFrontDetailedNavigationItemTopRowLimit
     );
   } else {
     console.error("You need to have a topRow defined in your landing page.");
@@ -150,7 +164,11 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 
   if (settings?.storefrontProvider?.landingPage?.middleRow !== undefined) {
     let middleRow = settings.storefrontProvider.landingPage.middleRow;
-    let middleRowApps = (await getAppsByTag(middleRow.tags)).slice(0, 6) as [
+    let middleRowApps = await getAppsByTag(middleRow.tags);
+    if(middleRowApps.length > middleRowAppLimit) {
+        console.warn(`Too many apps (${ middleRowApps.length }) have been returned by the middle row tag definition ${ middleRow.tags.join(' ')}. Only ${ middleRowAppLimit} will be shown.`);
+    }
+    let validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
       App?,
       App?,
       App?,
@@ -160,7 +178,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
     ];
     landingPage.middleRow = {
       title: middleRow.title,
-      apps: middleRowApps,
+      apps: validatedMiddleRowApps,
     };
   } else {
     console.error("You need to have a middleRow defined in your landing page.");
@@ -169,7 +187,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   if (settings?.storefrontProvider?.landingPage?.bottomRow !== undefined) {
     landingPage.bottomRow = await getLandingPageRow(
       settings.storefrontProvider.landingPage.bottomRow,
-      3
+      storeFrontDetailedNavigationItemBottomRowLimit
     );
   } else {
     console.error("You need to have a bottomRow defined in your landing page.");
@@ -191,12 +209,25 @@ async function getFooter(): Promise<StorefrontFooter> {
   }
 }
 
+/**
+ * This section generates a navigation item for Storefront based on some configuration.
+ * @param id 
+ * This id should be unique and idempotent and isn't changed regardless of how often the same navigation item is regenerated. 
+ * The reason for this is because it is used for routing in Storefront. If a user navigated from a link and the id changes when the item 
+ * is re-requested by storefront then it will not be able to render the contents.
+ * @param title 
+ * @param tags 
+ * Tags are used as a way of filtering out which apps should be assigned to a StorefrontNavigationItem. 
+ * This allows apps to be tagged on the server and the store would automatically update the apps assigned to a particular section.
+ * @returns StorefrontNavigationItem 
+ */
 async function getNavigationItem(
+  id: string,
   title: string,
   tags: string[]
 ): Promise<StorefrontNavigationItem> {
   let navigationItem: StorefrontNavigationItem = {
-    id: getId(title, tags),
+    id: id ?? getId(title, tags),
     title,
     templateId: "appGrid" as StorefrontTemplate.AppGrid,
     templateData: {
@@ -214,19 +245,23 @@ async function getNavigationItem(
 }
 
 async function getNavigationItems(
-  items: { title: string; tags: string[] }[],
+  items: StorefrontSettingsNavigationItem [],
   limit: number
 ) {
   let navigationItems: StorefrontNavigationItem[] = [];
 
   for (let i = 0; i < items.length; i++) {
     let navigationItem = await getNavigationItem(
+      items[i].id,
       items[i].title,
       items[i].tags
     );
     navigationItems.push(navigationItem);
   }
 
+  if(navigationItems.length > limit) {
+      console.warn(`You have defined too many navigations items (${ navigationItems.length }). Please limit it to ${ limit } as we will only take the first ${limit}`);
+  }
   return navigationItems.slice(0, limit);
 }
 
@@ -238,8 +273,9 @@ async function getLandingPageRow(
 
   for (let i = 0; i < definition.items.length; i++) {
     let navigationItem = await getNavigationItem(
-      definition.items[i].title,
-      definition.items[i].tags
+        definition.items[i].id,
+        definition.items[i].title,
+        definition.items[i].tags
     );
     let item: StorefrontDetailedNavigationItem = {
       description: definition.items[i].description,
@@ -247,6 +283,10 @@ async function getLandingPageRow(
       ...navigationItem,
     };
     items.push(item);
+  }
+
+  if(items.length > limit) {
+      console.warn(`You have defined too many storefront detailed navigation items (${items.length}). Please keep it to the limit of ${limit} as only the first ${limit} will be returned.`);
   }
 
   let detailedNavigationItems = items.slice(0, limit) as any;
