@@ -75,6 +75,12 @@ The [list of applications](public/apps.json) contains a number of examples:
 
 These applications are read and transformed in order to be sent to our API.
 
+---
+**NOTE ABOUT THE APP**
+
+This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
+
+---
 ### How this example works
 
 You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
@@ -310,5 +316,17 @@ The [store.ts](client/src/store.ts) file is driven by the config in the manifest
 ### A note about this example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
+
+---
+**FAQ**
+
+- The store isn't launching or the store button isn't showing on the home ui?
+  
+  - ensure that you have run the dos command and killed all OpenFin applications before launching the UI (the flag enabling the store might not be set).
+ 
+   - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
+   - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
+
+---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
