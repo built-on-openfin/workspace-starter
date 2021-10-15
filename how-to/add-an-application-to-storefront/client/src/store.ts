@@ -19,7 +19,7 @@ import {
 } from "./shapes";
 
 export async function init() {
-  console.log("Initialising the storefront provier.");
+  console.log("Initialising the storefront provider.");
   let provider = await getStoreProvider();
   if (provider !== null) {
     try {

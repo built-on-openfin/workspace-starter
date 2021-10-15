@@ -16,7 +16,8 @@ This repository contains examples showing how to configure core Workspace functi
 |---------------------|------------------------------------
 | [Learn how to add your content to OpenFin Workspace (Home & Browser)](./how-to/add-an-application-to-workspace)|This example gets you up and running with OpenFin workspace by hosting a few static json files and configuring Desktop Owner Settings (dos) to load them.                 
 | [Learn how to add your content to OpenFin Workspace (Home & Browser) via an api](./how-to/add-an-application-to-workspace-via-api) |This example is an extension of the previous example. The main difference being that Desktop Owner Settings no longer points to a list of applications. You now have a Workspace Platform Application that reads the JSON file (your application may wish to authenticate the user before doing so) and then provides those applications to OpenFin Home using an API.                
-| [Learn how to add your content to OpenFin Workspace (Home, Browser & Storefront)](.howto/add-an-application-to-storefront)   | This example is an extension of the previous example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store.                
+| [Learn how to add your content to OpenFin Workspace (Home, Browser & Storefront)](.howto/add-an-application-to-storefront)   | This example is an extension of the previous example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store.
+| [Learn how to add your content to OpenFin Workspace (Storefront) - Basic Example](.howto/add-an-application-to-storefront-basic)   | This is a basic example where the apps and store configuration is hard-coded. The example app is visible and has 3 buttons to register the store, show the store and hide the store.
 
 
 ## Before you get started
