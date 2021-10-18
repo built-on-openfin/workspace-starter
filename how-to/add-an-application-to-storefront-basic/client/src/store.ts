@@ -14,6 +14,8 @@ import {
   developerContent,
 } from "./apps";
 
+let storeCount = 0;
+
 export async function init() {
   console.log("Initialising the storefront provider.");
   let provider = await getStoreProvider();
@@ -40,9 +42,10 @@ export async function hide() {
 
 async function getStoreProvider(): Promise<StorefrontProvider> {
   console.log("Getting the store provider.");
+  storeCount++;
   return {
-    id: "my-basic-store",
-    title: "Basic Store",
+    id: "my-basic-store-" + storeCount,
+    title: "Basic Store "  + storeCount,
     getNavigation: getNavigation.bind(this),
     getLandingPage: getLandingPage.bind(this),
     getFooter: getFooter.bind(this),
