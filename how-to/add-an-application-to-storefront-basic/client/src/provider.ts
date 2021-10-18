@@ -8,6 +8,8 @@ async function init() {
 
   registerStore.onclick = async ()=> {
     await register();
+    showStore.style.display = "unset";
+    hideStore.style.display = "unset";
   };
 
   showStore.onclick = async ()=> {
