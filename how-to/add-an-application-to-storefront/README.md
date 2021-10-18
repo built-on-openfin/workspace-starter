@@ -44,8 +44,8 @@ $ start npm run start
 $ npm run client
 ```
 
-6. Type any character into the search box to show the default list of Applications.
-   The [apps](public/apps.json) are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
+6. Type any character into the search box to show the default list of applications.
+   The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
 ![](workspace-cds-via-api.gif)
 
