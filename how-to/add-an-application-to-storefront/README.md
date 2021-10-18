@@ -49,8 +49,8 @@ $ npm run client
 
 ![](workspace-cds-via-api.gif)
 
-6. Click the Storefront button on Home to launch the Store and see your applications listed.
-   The [apps](public/apps.json) are displayed as described in their respective files alongside a Store configuration setting defined in your [manifest](public/manifest.fin.json).
+6. Click the Storefront button on Home to launch the Storefront and see your applications listed.
+   The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ## How it works
 
