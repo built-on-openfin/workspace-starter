@@ -310,9 +310,9 @@ This is because the `id` represents the route that the user navigates to. So, if
 ---
 
 
-These are settings you can experiment with (e.g. if you already have your own CDS for apps you can update the url and restart the Workspace Platform).
+These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the Workspace Platform).
 
-The search provider will ask the [apps.ts](client/src/apps.ts) file for a list of applications and it will read the apps directory rest endpoint and return it. The search provider then maps the apps to an array of SearchResult objects. The apps file will check to see if it has permission to launch external processes or download app assets and filter out entries as appropriate (it will log a warning of the apps filtered out and in a real app you could move this logic to the launch action to then notify the user they can't launch that app on this machine).
+The search provider checks the [apps.ts](client/src/apps.ts) file for a list of applications and then it reads the apps directory REST endpoint and returns it. The search provider then maps the apps to an array of SearchResult objects. The apps file checks to see if it has permission to launch external processes or download app assets and filter out entries as appropriate. It logs a warning of the apps filtered out and in a real app you could move this logic to the launch action to then notify the user they can't launch that app on this machine.
 
 When a user selects a result in OpenFin Home, it is returned to the search provider and the search provider uses [launch.ts](client/src/launch.ts) to launch the result.
 
