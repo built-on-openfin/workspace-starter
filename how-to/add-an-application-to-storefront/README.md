@@ -98,7 +98,14 @@ The bootstrapper has two main responsibilities:
 4. Import [search.ts](client/src/search.ts) and ensure that a search provider is registered against home in order to provide a list of applications (if enabled).
 5. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
 
-The **search provider**([search.ts](client/src/search.ts)) imports [OpenFin's Search NPM Module](https://www.npmjs.com/package/@openfin/search-api) to have access to the relevant functions, [workspace.ts](client/src/workspace.ts) for getting the right UUID to register the search provider against, [settings.ts](client/src/settings.ts) to read settings (such as the name, title and topics to use), [apps.ts](client/src/apps.ts) to fetch a list of applications (the search provider maps these into search results) and [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home.
+The **search provider**([search.ts](client/src/search.ts)) imports the following:
+
+-  [OpenFin's Search NPM Module](https://www.npmjs.com/package/@openfin/search-api) to have access to the relevant functions
+- [workspace.ts](client/src/workspace.ts) for getting the right UUID to register the search provider against
+- [settings.ts](client/src/settings.ts) to read settings (such as the name, title and topics to use)
+- [apps.ts](client/src/apps.ts) to fetch a list of applications (the search provider maps these into search results
+- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
+
 
 The **store provider**([store.ts](client/src/store.ts)) imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions, [settings.ts](client/src/settings.ts) to read settings (such as the how to configure the store), [apps.ts](client/src/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections and [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Store.
 
