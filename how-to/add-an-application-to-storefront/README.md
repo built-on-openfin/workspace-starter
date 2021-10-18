@@ -107,7 +107,11 @@ The **search provider**([search.ts](client/src/search.ts)) imports the following
 - [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
 
 
-The **store provider**([store.ts](client/src/store.ts)) imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions, [settings.ts](client/src/settings.ts) to read settings (such as the how to configure the store), [apps.ts](client/src/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections and [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Store.
+The **store provider**([store.ts](client/src/store.ts)) imports the following:
+- [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
+- [settings.ts](client/src/settings.ts) to read settings (such as the how to configure the store)
+- [apps.ts](client/src/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections
+- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Store
 
 The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
 
