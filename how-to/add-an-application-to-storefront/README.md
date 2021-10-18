@@ -93,7 +93,7 @@ The custom platform provider [provider.ts](client/src/provider.ts) imports the [
 
 The bootstrapper has two main responsibilities:
 
-1. Import [settings.ts](client/src/settings.ts) to see what should be bootstrapped (Should it setup Store and Home).
+1. Import [settings.ts](client/src/settings.ts) to see what should be bootstrapped. (That is, should it setup Store and Home?)
 3. Import [workspace.ts](client/src/workspace.ts) and ensure that OpenFin Workspace is running.
 4. Import [search.ts](client/src/search.ts) and ensure that a search provider is registered against home in order to provide a list of applications (if enabled).
 5. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
