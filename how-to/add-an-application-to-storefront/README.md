@@ -26,7 +26,7 @@ $ npm run build
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**)
+   (**WARNING**: This script kills all open OpenFin processes. **Do not do this in production to close apps, as force killing processes could kill an application while it's trying to save state or perform an action**)
 
 ```bash
 $ npm run dos
