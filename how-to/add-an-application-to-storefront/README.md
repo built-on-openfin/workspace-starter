@@ -297,15 +297,15 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | footer.links | What links do you want to show in the footer (opens up using the default web browser. |
 
 ---
-**NOTE ABOUT THE CONFIG**
+**NOTE ABOUT THE MANIFEST**
 
-This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your Store.
+This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your store.
 
-The config for the storefront does not include an "id" for the cta, items and navigation sections. 
+The manifest for the storefront does not include an `id` for the `cta`, `items` and `navigation` sections. 
 
-This is to reduce noise of the config and to prevent issues if an item/section is copy/pasted. The code has a fallback that uses the title or title + tags to form an id. This works for the demo as the manifest file is storing the config. If the config was ever fetched from a server then you would want to have a unique (e.g. GUID) and idempotent ID returned. 
+This is to reduce noise in the example manifest and to prevent issues if an item or section is copied and pasted. The code has a fallback that uses the title or title plus tags to form an `id`. This works for the demo, as the manifest file is storing the configuration. If the configuration were ever fetched from a server, then it should return a unique (e.g., GUID) and idempotent ID. 
 
-This is because the id represents the route that the user navigates to. So if an id for a navigation item was "x" and the user clicked on the link then the store would call the getNavigation or getLandingPage function you defined and look for a matching id of "x". If you regenerate the id for a navigation item e.g. it becomes "y" then the store will not be able to render your page as there are no items with the id of "x". 
+This is because the `id` represents the route that the user navigates to. So, if an` id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function you defined and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x". 
 
 ---
 
