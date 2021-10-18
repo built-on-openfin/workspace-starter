@@ -46,9 +46,9 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
   return {
     id: "my-basic-store-" + storeCount,
     title: "Basic Store "  + storeCount,
-    getNavigation: getNavigation.bind(this),
-    getLandingPage: getLandingPage.bind(this),
-    getFooter: getFooter.bind(this),
+    getNavigation: getNavigation,
+    getLandingPage: getLandingPage,
+    getFooter: getFooter,
     getApps,
     launchApp: launchApp,
   };
