@@ -69,7 +69,7 @@ In this example, the [Desktop Owner Settings file](public/dos.json) has its `app
 The [list of applications](public/apps.json) contains a number of examples:
 
 * Load views into OpenFin Browser
-* Launch an OpenFin Application using it's manifest file
+* Launch an OpenFin application using its manifest file
 * Launch a native application
 * Launch a page using the snapshot manifest type
 
