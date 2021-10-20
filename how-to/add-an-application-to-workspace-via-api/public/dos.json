@@ -1,0 +1,14 @@
+{
+  "desktopSettings": {
+    "systemApps": {
+      "workspace": {
+        "customConfig": {
+          "appDirectoryUrl": "http://localhost:8080/empty-apps.json",
+          "style": {
+            "iconUrl": "http://localhost:8080/favicon.ico"
+          }
+        }
+      }
+    }
+  }
+}

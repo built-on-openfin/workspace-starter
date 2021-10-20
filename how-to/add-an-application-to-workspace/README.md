@@ -2,7 +2,7 @@
 
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Launch your Content in OpenFin Workspace
+# Add your content to OpenFin Workspace (Home & Browser)
 
 OpenFin Workspace uses a **Content Discovery Service** to know which content and apps it can access.
 
@@ -26,7 +26,7 @@ $ npm run build
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (WARNING: This script kills all open OpenFin processes.)
+   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**)
 
 ```bash
 $ npm run dos
@@ -69,4 +69,7 @@ The Content Discovery Service contains an example of entries that:
 * Launch an OpenFin Application using it's manifest file
 * Launch a native application
 
+### A note about this example
+
+This is an example of how to use dos to configure OpenFin Workspace. It's purpose is to provide an example. This is not a production server/setup and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
