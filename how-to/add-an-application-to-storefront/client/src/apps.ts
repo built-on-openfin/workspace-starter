@@ -59,6 +59,7 @@ async function getRestEntries(url:string, credentials?:"omit" | "same-origin" | 
             cachedApps = undefined;
         }, setTimeoutInMs);
     }
+    return cachedApps;
 }
 
 export async function getApps(): Promise<App[]> {
