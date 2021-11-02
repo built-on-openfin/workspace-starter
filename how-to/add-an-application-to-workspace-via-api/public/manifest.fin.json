@@ -36,7 +36,8 @@
       "title": "CDS Directory",
       "topics": ["all", "apps"],
       "defaultAction": "open",
-      "queryMinLength": 3
+      "queryMinLength": 3,
+      "queryAgainst":["title"]
     }
   }
 }

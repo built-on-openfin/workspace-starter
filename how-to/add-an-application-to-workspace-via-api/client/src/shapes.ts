@@ -3,7 +3,8 @@ interface SearchProvider {
     title: string,
     topics: string[],
     defaultAction: string,
-    queryMinLength: number
+    queryMinLength: number,
+    queryAgainst: string[];
 }
 
 interface AppProvider {
