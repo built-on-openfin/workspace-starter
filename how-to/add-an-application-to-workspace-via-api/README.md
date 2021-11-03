@@ -109,7 +109,8 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
             "title":"CDS Directory",
             "topics":["all","apps"],
             "defaultAction": "open",
-            "queryMinLength": 3
+            "queryMinLength": 3,
+            "queryAgainst": ["title"]
         }
     }
 ```
@@ -125,6 +126,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | topics | What topics should we register against? If undefined then we assume all (the main Home Search UI) and apps (to register in OpenFin Browser's Add New Search).  |
 | defaultAction | What text should be shown as a possible action of clicking on a result? |
 | queryMinLength | How many characters should be typed before filtering the list? |
+| queryAgainst | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
 
 ---
 **NOTE ABOUT THE CONFIG**

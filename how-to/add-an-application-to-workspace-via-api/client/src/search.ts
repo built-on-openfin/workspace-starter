@@ -58,21 +58,55 @@ export async function init() {
     }
 
     const queryMinLength = settings?.searchProvider?.queryMinLength || 3;
+    const queryAgainst = settings?.searchProvider?.queryAgainst || ["title"];
 
     const onSearch: SearchListener = async (request: SearchListenerRequest, response: SearchListenerResponse) => {
         // These results are pulled in by the search requester.
         let results = await getResults();
 
-        if(request.query.indexOf("/") === 0) {
+        let query = request.query.toLowerCase();
+        if(query.indexOf("/") === 0) {
             return [];
         }
 
-        if(request.query.length < queryMinLength) {
+        if(query.length < queryMinLength) {
             return results;
         }
 
-        return results.filter(entry => {
-            return entry.title.toLowerCase().indexOf(request.query.toLowerCase()) > -1;
+        return results.filter(entry => {   
+            let matchFound = queryAgainst.some(target => {
+                let path = target.split('.');
+                if(path.length === 1) {
+                    let targetValue = entry[path[0]];
+                    
+                    if(targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+                        return targetValue.toLowerCase().indexOf(query) > -1;
+                    }
+                } else if(path.length === 2) {
+                    let target = entry[path[0]];
+                    let targetValue: string | string[];
+                    if(target !== undefined && target !== null) {
+                        targetValue = target[path[1]];
+                    }
+
+                    if(targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+                        return targetValue.toLowerCase().indexOf(query) > -1;
+                    }
+
+                    if(targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
+                        if(targetValue.length > 0 && typeof targetValue[0] === "string" && targetValue.some(target => target.toLowerCase().indexOf(query) === 0)) {
+                            return true;
+                        } else if(targetValue.length !== 0) {
+                            console.warn("Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " + target);
+                        }
+                    }
+                  } else {
+                      console.warn("The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings.");
+                  }
+                  return false;
+            });
+
+            return matchFound;
         });
     };
 
