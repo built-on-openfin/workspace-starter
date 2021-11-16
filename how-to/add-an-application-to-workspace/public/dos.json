@@ -3,6 +3,7 @@
     "systemApps": {
       "workspace": {
         "customConfig": {
+          "version": "3.0.0",
           "appDirectoryUrl": "http://localhost:8080/apps.json",
           "workspacesUrl": "http://localhost:8080/workspaces.json",
           "style": {
