@@ -70,7 +70,7 @@ You can now import Home from @openfin/workspace to register your application aga
   await Home.register(cliProvider);
 ``` 
   
-We have an example ([how-to/register-with-home](../register-with-home/readme.md)) that shows how to register against Home, query a rest endpoint that matches the appDirectoryUrl format and map that to a collection of search results to display in Home.
+We have an example ([how-to/register-with-home](../register-with-home/)) that shows how to register against Home, query a rest endpoint that matches the appDirectoryUrl format and map that to a collection of search results to display in Home.
 
 ## I used DesktopOwnerSettings to configure a share url. How do I do that now?
   
@@ -90,7 +90,7 @@ This DesktopOwnerSetting is no longer supported in version 4. Please reach out t
 
 ## I used the @openfin/search-api npm module to populate Home with my apps. How do I do that now?
 
-We have examples of using the search api to populate a list of applications in our version 3 branch. The example: ([how-to/register-with-home](../register-with-home/readme.md)) is an updated version of the **how-to/add-an-application-to-workspace-via-api** example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
+We have examples of using the search api to populate a list of applications in our version 3 branch. The example: ([how-to/register-with-home](../register-with-home/)) is an updated version of the **how-to/add-an-application-to-workspace-via-api** example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
 
 ## Will the views that I developed need changing with version 4?
 
