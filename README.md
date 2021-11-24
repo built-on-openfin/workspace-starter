@@ -14,7 +14,7 @@ This repository contains examples showing how to configure core Workspace functi
 
   | Example         | Description |
 |---------------------|------------------------------------
-| [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is difference between version 1-3 and version 4 and points to examples on how to manage those differences.                
+| [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is the difference between version 1-3 and version 4 and points to examples on how to manage those differences.                
 | [How To Register With Home](./how-to/register-with-home) | You have a Workspace Platform Application that reads a rest endpoint file (your application may wish to authenticate the user before doing so) and then provides those applications to OpenFin Home using an API.                
 | [How To Register With Home - Basic](./how-to/register-with-home-basic) | You have a basic Workspace Platform Application that has a hardcoded list of apps and provides those apps to OpenFin Home using an API. The example app is visible and has 3 buttons to register/deregister against Home, show Home and hide Home.            
 | [How To Register With Store)](./how-to/register-with-store)   | This example is an extension of the registering with Home example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store in addition to Home.
