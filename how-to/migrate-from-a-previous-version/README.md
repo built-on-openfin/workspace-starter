@@ -47,7 +47,7 @@ You can now import Home from @openfin/workspace to register your application aga
 
   await Home.register(cliProvider);
 ```
-The how to samples provide a basic how to example ([how-to/register-with-home-basic](../register-with-home-basic/readme.md)) as well as a more complex example ([how-to/register-with-home](../register-with-home/readme.md)).
+The how to samples provide a basic how to example ([how-to/register-with-home-basic](../register-with-home-basic/)) as well as a more complex example ([how-to/register-with-home](../register-with-home/)).
 
 ## I used DesktopOwnerSettings to configure the apps. How do I do that now?
 
