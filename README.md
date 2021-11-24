@@ -8,16 +8,17 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What you can do with this repository
 
-This repository contains examples showing how to configure core Workspace functionality for your application.
+This repository contains examples showing how to configure core Workspace functionality for your application using our workspace API.
 
 ### Examples
 
   | Example         | Description |
 |---------------------|------------------------------------
-| [Learn how to add your content to OpenFin Workspace (Home & Browser)](./how-to/add-an-application-to-workspace)|This example gets you up and running with OpenFin workspace by hosting a few static JSON files and configuring Desktop Owner Settings (DOS) to load them.                 
-| [Learn how to add your content to OpenFin Workspace (Home & Browser) via an api](./how-to/add-an-application-to-workspace-via-api) |This example is an extension of the previous example. The main difference being that Desktop Owner Settings no longer points to a list of applications. You now have a Workspace Platform Application that reads the JSON file (your application may wish to authenticate the user before doing so) and then provides those applications to OpenFin Home using an API.                
-| [Learn how to add your content to OpenFin Workspace (Home, Browser & Storefront)](./how-to/add-an-application-to-storefront)   | This example is an extension of the previous example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store.
-| [Learn how to add your content to OpenFin Workspace (Storefront) - Basic Example](./how-to/add-an-application-to-storefront-basic)   | This is a basic example where the apps and store configuration is hard-coded. The example app is visible and has 3 buttons to register the store, show the store and hide the store.
+| [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is difference between version 1-3 and version 4 and points to examples on how to manage those differences.                
+| [How To Register With Home](./how-to/register-with-home) | You have a Workspace Platform Application that reads a rest endpoint file (your application may wish to authenticate the user before doing so) and then provides those applications to OpenFin Home using an API.                
+| [How To Register With Home - Basic](./how-to/register-with-home-basic) | You have a basic Workspace Platform Application that has a hardcoded list of apps and provides those apps to OpenFin Home using an API. The example app is visible and has 3 buttons to register/deregister against Home, show Home and hide Home.            
+| [How To Register With Store)](./how-to/register-with-store)   | This example is an extension of the registering with Home example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store in addition to Home.
+| [How To Register With Store - Basic](./how-to/register-with-store-basic)   | This is a basic example where the apps and store configuration is hard-coded. The example app is visible and has 3 buttons to register/deregister the store, show the store and hide the store.
 
 
 ## Before you get started
@@ -28,7 +29,7 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 ## Minimum RVM Version
 
-To customize OpenFin Workspace you use DesktopOwnerSettings. This requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
+You no longer need DesktopOwnerSettings to configure OpenFin Workspace. There may be settings that a Desktop Owner may wish to configure (such as version) and this requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
 
 - Go to *%localappdata%/OpenFin* in windows explorer
 - Right-click on OpenFinRVM and select *Properties*
@@ -49,6 +50,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
+        "version": "4.0.0",
         "customConfig": {
         }
       }
@@ -64,6 +66,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
+        "version": "4.0.0",
         "customConfig": {
         }
       }
