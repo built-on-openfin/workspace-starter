@@ -8,6 +8,16 @@ OpenFin Workspace empowers you to take advantage of our store component by using
 
 This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
+---
+**Running the Sample**
+
+To run this sample you can:
+
+* Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/workspace-starter-register-with-store" target="_blank">Github Workspace Starter Register With Store</a>
+
+---
+
 ## Getting Started
 
 1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
