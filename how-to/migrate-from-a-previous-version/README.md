@@ -26,15 +26,16 @@ With the addition of the CLI Provider concept, OpenFin has deprecated Workspace 
 
 ## I used DesktopOwnerSettings to configure the logo. How do I do that now?
 
-Instead of configuring the logo through DesktopOwnerSettings:
+The logo setting is still supported for Desktop Owners and is used to specify the default logo for Home, Browser, the Dock and TaskBar Icons:
 
 ```javascript
 "style": {
             "iconUrl": "https://yourserver/favicon-16x16.png"
          }
 ```
+The new API approach will let you register your logo for Home without the need for DesktopOwnerSettings (configuring the logo for Browser etc will be available in a future release).
 
-You can now import Home from @openfin/workspace to register your application against Home. The icon setting lets you specify your logo without needing DesktopOwnerSettings.
+You can import Home from @openfin/workspace to register your application against Home. The icon setting lets you specify your logo.
 
 ```javascript
  const cliProvider: CLIProvider = {
