@@ -29,7 +29,7 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 ## Minimum RVM Version
 
-You no longer need DesktopOwnerSettings to configure OpenFin Workspace. There may be settings that a Desktop Owner may wish to configure (such as version) and this requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
+A desktop owner settings file is no longer required to configure OpenFin Workspace. However, there may be settings that a Desktop Owner may wish to configure (such as version) and this requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
 
 - Go to *%localappdata%/OpenFin* in windows explorer
 - Right-click on OpenFinRVM and select *Properties*
