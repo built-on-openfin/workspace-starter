@@ -4,7 +4,7 @@
     "name": "basic-interop-view",
     "title": "Basic Interop View",
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/views/basic-interop-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/views/github-basic-interop-view.json",
     "manifestType": "view",
     "icons": [
       { "src": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/images/icon-blue.png" }
@@ -23,7 +23,7 @@
     "name": "basic-fdc3-view",
     "title": "Basic FDC3 View",
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/views/basic-fdc3-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/views/github-basic-fdc3-view.json",
     "manifestType": "view",
     "icons": [
       { "src": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-store/public/images/icon-blue.png" }
