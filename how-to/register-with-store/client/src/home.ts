@@ -4,9 +4,11 @@ import {
   CLISearchListenerRequest,
   CLIFilter,
   CLISearchResult,
+  CLITemplate,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLIDispatchedSearchResult
+  CLIDispatchedSearchResult,
+  CLIFilterOptionType
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launch } from "./launch";
@@ -18,7 +20,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
     let uniqueTags = [...new Set(tags.sort())];
     let tagFilter: CLIFilter = {
       title: "Tags",
-      type: "MultiSelect" as any,
+      type: CLIFilterOptionType.MultiSelect,
       options: [],
     };
 
@@ -58,7 +60,7 @@ async function getResults(
           data: apps[i],
           description: apps[i].description,
           shortDescription: apps[i].description,
-          template: "SimpleText",
+          template: CLITemplate.SimpleText,
           templateContent: apps[i].description,
         };
         initialResults.push(entry);
@@ -68,7 +70,7 @@ async function getResults(
           title: apps[i].title,
           actions: [{ name: "launch-app", hotkey: "enter" }],
           data: apps[i],
-          template: "Plain",
+          template:  CLITemplate.Plain,
         };
         initialResults.push(entry);
       }

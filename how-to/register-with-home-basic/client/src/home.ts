@@ -1,5 +1,5 @@
 
-import { Home, CLIProvider, CLISearchListenerRequest, CLIFilter, CLISearchResult, CLISearchListenerResponse, CLISearchResponse, CLIDispatchedSearchResult, launchApp  } from "@openfin/workspace";
+import { Home, CLIProvider, CLISearchListenerRequest, CLITemplate, CLISearchResult, CLISearchListenerResponse, CLISearchResponse, CLIDispatchedSearchResult, launchApp  } from "@openfin/workspace";
 import { getApps } from "./apps";
 
 const providerId = "register-with-home-basic";
@@ -21,7 +21,7 @@ async function getResults(query?: string) : Promise<CLISearchResponse> {
                     data: apps[i],
                     description: apps[i].description,
                     shortDescription: apps[i].description,
-                    template: "SimpleText",
+                    template: CLITemplate.SimpleText,
                     templateContent: apps[i].description,
                 };
                 initialResults.push(entry);
@@ -31,7 +31,7 @@ async function getResults(query?: string) : Promise<CLISearchResponse> {
                     title: apps[i].title,
                     actions: [{ name: "launch-app", hotkey: 'enter' }],
                     data: apps[i],
-                    template: "Plain"
+                    template: CLITemplate.Plain
                 };
                 initialResults.push(entry);
             }

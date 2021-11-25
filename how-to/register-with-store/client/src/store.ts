@@ -1,5 +1,5 @@
-import { Storefront } from "@openfin/workspace";
 import {
+  Storefront,
   StorefrontLandingPage,
   StorefrontNavigationSection,
   StorefrontFooter,
@@ -8,7 +8,7 @@ import {
   StorefrontTemplate,
   StorefrontNavigationItem,
   StorefrontDetailedNavigationItem,
-} from "@openfin/workspace/client-api/src/shapes";
+} from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
@@ -344,7 +344,7 @@ async function getNavigationItem(
   let navigationItem: StorefrontNavigationItem = {
     id: id ?? getId(title, tags),
     title,
-    templateId: "appGrid" as StorefrontTemplate.AppGrid,
+    templateId: StorefrontTemplate.AppGrid,
     templateData: {
       apps: [],
     },

@@ -1,5 +1,6 @@
-import { Storefront, launchApp } from "@openfin/workspace";
 import {
+  Storefront, 
+  launchApp,
   StorefrontLandingPage,
   StorefrontNavigationSection,
   StorefrontFooter,
@@ -74,7 +75,7 @@ async function getNavigation(): Promise<
         {
           id: "view",
           title: "Views",
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [experoApp],
           },
@@ -82,7 +83,7 @@ async function getNavigation(): Promise<
         {
           id: "page",
           title: "Pages",
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [developerContent],
           },
@@ -90,7 +91,7 @@ async function getNavigation(): Promise<
         {
           id: "manifest",
           title: "Web Apps",
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [notificationStudio, processManager],
           },
@@ -113,7 +114,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
       cta: {
         id: "hero-1",
         title: "Hero Apps!",
-        templateId: "appGrid" as StorefrontTemplate.AppGrid,
+        templateId: StorefrontTemplate.AppGrid,
         templateData: {
           apps: [notificationStudio, processManager],
         },
@@ -133,7 +134,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           image: {
             src: "http://localhost:8080/images/coding-1-unsplash.jpg",
           },
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [experoApp],
           },
@@ -146,7 +147,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           image: {
             src: "http://localhost:8080/images/coding-2-unsplash.jpg",
           },
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [notificationStudio, processManager],
           },
@@ -169,7 +170,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           image: {
             src: "http://localhost:8080/images/coding-4-unsplash.jpg",
           },
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [experoApp],
           },
@@ -181,7 +182,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           image: {
             src: "http://localhost:8080/images/coding-5-unsplash.jpg",
           },
-          templateId: "appGrid" as StorefrontTemplate.AppGrid,
+          templateId: StorefrontTemplate.AppGrid,
           templateData: {
             apps: [notificationStudio, processManager],
           },
