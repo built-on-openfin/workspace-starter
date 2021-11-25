@@ -202,7 +202,7 @@ async function getFooter(): Promise<StorefrontFooter> {
     links: [
       {
         title: "Github",
-        url: "https://github.com/openfin/workspace-starter",
+        url: "https://github.com/built-on-openfin/workspace-starter",
       },
       {
         title: "YouTube",
