@@ -374,4 +374,4 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 ---
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

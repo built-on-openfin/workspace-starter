@@ -91,18 +91,81 @@ This DesktopOwnerSetting is no longer supported in version 4. Please reach out t
 
 ## I used the @openfin/search-api npm module to populate Home with my apps. How do I do that now?
 
-We have examples of using the search api to populate a list of applications in our version 3 branch. The example: ([how-to/register-with-home](../register-with-home/)) is an updated version of the **how-to/add-an-application-to-workspace-via-api** example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
+We have examples of using the search api to populate a list of applications in our version 3 branch. The example: [how-to/register-with-home](../register-with-home/) is an updated version of the version 3 <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/how-to/add-an-application-to-workspace-via-api" target="_blank">how-to/add-an-application-to-workspace-via-api</a> example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
 
 ## Will the views that I developed need changing with version 4?
 
-No, views will continue to behave in the same way.
+No. Views will continue to behave in the same way.
 
 ## Will I lose my saved pages/workspaces?
 
-No, your pages and workspaces will still be listed in Home.
+No. Your pages and workspaces will still be listed in Home.
 
 ## I am still on version 3, have the examples gone?
 
-No, there is a version 3 branch configured to help teams who are still on version 3.
+No. There is a version 3 branch configured to help teams who are still on version 3: <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/</a>
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
+## I am not ready to move to OpenFin Workspace v4, how do I stick with version 3?
+
+To stay on version v3 you can do the following:
+
+##### Use Version 3 Examples 
+
+Clone the <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">version 3 branch</a> and run the npm run dos command on any of the how-to samples. You will need to have the local server running to serve the dos.json file.
+
+##### Create your own dos file and point to it   
+
+Create your own dos file:
+```javascript
+ {
+  "desktopSettings": {
+    "systemApps": {
+      "workspace": {
+        "version": "3.0.0"
+      }
+    }
+  }
+}
+```
+To configure Desktop Owner Settings you will need to be able to modify your registry settings. This can be done by scripts, applications or by hand. 
+
+You need to add a registry key:
+
+```javascript
+Key   :     HKEY_CURRENT_USER\Software\OpenFin\RVM\Settings\DesktopOwnerSettings
+Type  :     String
+Value :     file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json
+```
+
+##### Adding/Updating the DesktopOwnerSetting by hand using RegEdit
+
+To add/update this setting we are going to launch RegEdit from the command line (or you can launch it from the Windows Start Bar) by typing regedit and hitting enter.
+
+You will be presented with RegEdit where you can expand the folders until you get to OpenFin\RVM\Settings.
+If you see “DesktopOwnerSettings” it means that this has already been set by your organisation. Please check with your organisation’s desktop owner so that configuration can take place with their awareness.
+
+![](registry.png)
+
+If no DesktopOwnerSettings value exists then please add it by right clicking on OpenFin/RVM/Settings and adding a new string value:
+
+![](registry-add-key.png)
+
+You will provided an entry in the Settings Folder that you can rename to **DesktopOwnerSettings**. Double click on the new entry to set the value to a file path e.g.:
+
+**file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json**
+
+or a url (if you have a webserver):
+
+**http://localhost:8080/registry_dos_local.json**
+
+##### Once you have configured DesktopOwnerSettings
+
+Once you have done either of the approaches above you need to:
+
+* Use TaskManager, ProcessExplorer or the command line to close all OpenFin applications (so that the new DesktopOwnerSettings will get picked up).
+
+* Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): <a href="fins://system-apps/workspace" target="_blank">fins://system-apps/workspace</a>
+
+You should now see version 3 of OpenFin Workspace.
+
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace). 

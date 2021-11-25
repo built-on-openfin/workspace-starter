@@ -77,4 +77,4 @@ This is because the id represents the route that the user navigates to. So if an
 ---
 
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

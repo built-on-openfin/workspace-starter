@@ -69,4 +69,4 @@ $ npm run client
 ![](openfin-register-with-home-basic.gif)
 
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

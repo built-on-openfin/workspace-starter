@@ -164,4 +164,4 @@ The registration of a provider against home will look like the following:
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/workspace-overview). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
