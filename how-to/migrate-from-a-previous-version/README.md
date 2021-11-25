@@ -105,6 +105,14 @@ No. Your pages and workspaces will still be listed in Home.
 
 No. There is a version 3 branch configured to help teams who are still on version 3: <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/</a>
 
+## I am seeing a message when I try to launch OpenFin Workspace. How do I get Workspace running?
+
+![](workspace-dialog.png)
+
+Seeing this messages means you are running version 4+ of OpenFin Workspace. From version 4 OpenFin Workspace is an API driven experience and is launched from an application instead of directly. The how-to samples in this repo show you how to build an application that uses our openfin/workspace APIs.
+
+It may be that your existing shortcuts point to the **latest** version of OpenFin Workspace instead of a specific version. To pin to an earlier version of OpenFin Workspace please look at the question below.
+
 ## I am not ready to move to OpenFin Workspace v4, how do I stick with version 3?
 
 To stay on version v3 you can do the following:
