@@ -38,7 +38,7 @@
 ],
   "customSettings": {
     "bootstrap": {
-      "search": true,
+      "home": true,
       "store": true
     },
     "appProvider": {
