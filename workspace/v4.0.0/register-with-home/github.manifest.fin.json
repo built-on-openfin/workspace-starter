@@ -1,0 +1,42 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "request-a-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version": "21.93.64.11"
+  },
+  "platform": {
+    "uuid": "github-register-with-home",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-home/public/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-home/public/platform/provider.html",
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-home/public/favicon.ico",
+    "name": "Register With Home - Github",
+    "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "appProvider": {
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-home/public/github.apps.json",
+      "includeCredentialOnSourceRequest": "include"
+    },
+    "homeProvider": {
+      "id": "github-register-with-home",
+      "title": "Home Starter - Github",
+      "icon": "https://built-on-openfin.github.io/workspace-starter/how-to/register-with-home/public/favicon.ico",
+      "queryMinLength": 3,
+      "queryAgainst":["title"]
+    }
+  }
+}
