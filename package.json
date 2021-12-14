@@ -7,13 +7,12 @@
     },
     "how-tos": [
         "register-with-home",
-        "register-with-home-basic",
-        "register-with-store",
-        "register-with-store-basic"
+        "register-with-store"
     ],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "fs-extra": "^10.0.0"
+        "fs-extra": "^10.0.0",
+        "replace-in-file": "^6.3.2"
     }
 }
