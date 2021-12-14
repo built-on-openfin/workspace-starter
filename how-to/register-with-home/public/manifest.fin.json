@@ -6,7 +6,7 @@
     "version": "21.93.64.11"
   },
   "platform": {
-    "uuid": "register-with-home",
+    "uuid": "v4-register-with-home",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",
