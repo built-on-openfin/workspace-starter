@@ -30,4 +30,4 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: public # The folder the action should deploy
-          target-folder: steps.extract_branch.outputs.branch
+          target-folder: ${{ steps.extract_branch.outputs.branch }}
