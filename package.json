@@ -1,0 +1,19 @@
+{
+    "name": "openfin-workspace-starter",
+    "version": "4.0.0",
+    "description": "OpenFin Workspace Starter",
+    "scripts": {
+        "package-how-tos": "node ./scripts/package.js"
+    },
+    "how-tos": [
+        "register-with-home",
+        "register-with-home-basic",
+        "register-with-store",
+        "register-with-store-basic"
+    ],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "fs-extra": "^10.0.0"
+    }
+}
