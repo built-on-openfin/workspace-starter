@@ -4,17 +4,17 @@
     "name": "basic-interop-view",
     "title": "Basic Interop View",
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
-    "manifest": "http://localhost:8080/views/basic-interop-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/views/basic-interop-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/interop-view.png"
     }],
     "tags":["view", "interop"]
   },
@@ -23,17 +23,17 @@
     "name": "basic-fdc3-view",
     "title": "Basic FDC3 View",
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
-    "manifest": "http://localhost:8080/views/basic-fdc3-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/views/basic-fdc3-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/fdc3-view.png"
     }],
     "tags":["view", "fdc3"]
   },
@@ -53,7 +53,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/expero-news-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/expero-news-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -73,7 +73,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/expero-description-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/expero-description-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -93,7 +93,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/expero-stock-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/expero-stock-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -112,7 +112,7 @@
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-notification-studio.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/openfin-notification-studio.png"
     }],
     "tags":["hero", "manifest", "tools"]
   },
@@ -131,7 +131,7 @@
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-process-manager.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/openfin-process-manager.png"
     }],
     "tags":["hero", "manifest", "tools"]
   },
@@ -141,16 +141,16 @@
     "title": "OpenFin Developer Docs",
     "manifestType": "snapshot",
     "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-    "manifest": "http://localhost:8080/snapshot.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/snapshot.json",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/openfin-page-docs.png"
     }],
     "tags":["page"]
   },
@@ -162,14 +162,14 @@
     "manifestType": "external",
     "manifest": "winform-interop-example",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-winform-interop.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/icon-winform-interop.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-winform-interop.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/openfin-winform-interop.png"
     }],
     "tags":["native", "appasset"]
   },
@@ -181,14 +181,14 @@
     "manifestType": "external",
     "manifest": "notepad.exe",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-notepad.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/icon-notepad.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "Microsoft",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/microsoft-notepad-native.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/v4.0.0/register-with-store/images/previews/microsoft-notepad-native.png"
     }],
     "tags":["native"]
   }
