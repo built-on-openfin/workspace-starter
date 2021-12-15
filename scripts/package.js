@@ -20,7 +20,7 @@ for(let i = 0; i < package['how-tos'].length; i++) {
     let options = {
       files: 'public/' + package['how-tos'][i] + '/**/*.json',
       from: /http:\/\/localhost:8080/g,
-      to: 'https://built-on-openfin.github.io/workspace-starter/v' + package.version + '/' + package['how-tos'][i],
+      to: 'https://built-on-openfin.github.io/workspace-starter/workspace/v' + package.version + '/' + package['how-tos'][i],
     };
     try {
       let results = replace.sync(options);
