@@ -1,5 +1,11 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 
+interface BrowserProvider {
+    windowOptions: {
+        title?:string,
+        icon?:string
+    }
+}
 interface HomeProvider {
     id: string,
     title: string,
@@ -45,6 +51,7 @@ export interface StorefrontSettingsLandingPageRow {
 interface StorefrontProvider {
     id: string,
     title: string,
+    icon: string,
     landingPage: {
         hero?: {
           title: string,
@@ -76,6 +83,7 @@ interface StorefrontProvider {
 export interface CustomSettings {
     bootstrap?: {  store: boolean, home:boolean }
     appProvider?: AppProvider,
+    browserProvider?: BrowserProvider,
     homeProvider?: HomeProvider,
     storefrontProvider?:StorefrontProvider
 }

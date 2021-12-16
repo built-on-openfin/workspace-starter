@@ -1,5 +1,6 @@
 import {
   Home,
+  App,
   CLIProvider,
   CLISearchListenerRequest,
   CLIFilter,
@@ -10,15 +11,21 @@ import {
   CLIDispatchedSearchResult,
   CLIFilterOptionType
 } from "@openfin/workspace";
+import { Page } from '@openfin/workspace-platform';
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { getApps } from "./apps";
+import { getPage, getPages, deletePage, launchPage } from "./browser";
+
+const HOME_ACTION_DELETE_PAGE = "Delete Page";
+const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
   if (Array.isArray(tags)) {
     let filters: CLIFilter[] = [];
     let uniqueTags = [...new Set(tags.sort())];
     let tagFilter: CLIFilter = {
+      id: "tags",
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
       options: [],
@@ -39,6 +46,81 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
   return [];
 }
 
+function mapAppEntriesToSearchEntries(apps: App[]){
+  let appResults: CLISearchResult<any>[] = [];
+  if (Array.isArray(apps)) {
+    for (let i = 0; i < apps.length; i++) {
+      let action = { name: "Launch View", hotkey: "enter" };
+      let entry: any = {
+        key: apps[i].appId,
+        title: apps[i].title,
+        data: apps[i],
+        template:  CLITemplate.Plain,
+      };
+
+      if(apps[i].manifestType === "view") {
+        entry.label = "View";
+        entry.actions = [action];
+      }
+      if(apps[i].manifestType === "snapshot") {
+        entry.label = "Snapshot";
+        action.name = "Launch Snapshot";
+        entry.actions = [action];
+      }
+      if(apps[i].manifestType === "manifest") {
+        entry.label = "App";
+        action.name = "Launch App";
+        entry.actions = [action];
+      }
+      if(apps[i].manifestType === "external") {
+        action.name = "Launch Native App";
+        entry.actions = [action];
+        entry.label = "Native App";
+      }
+
+      if(Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+        entry.icon = apps[i].icons[0].src;
+      }
+
+      if (apps[i].description !== undefined) {
+        entry.description = apps[i].description;
+        entry.shortDescription = apps[i].description;
+        entry.template = CLITemplate.SimpleText;
+        entry.templateContent = apps[i].description;
+      };
+        
+      appResults.push(entry);
+    }
+  }
+  return appResults;
+}
+
+function mapPageEntriesToSearchEntries(pages: Page[]){
+  let pageResults: CLISearchResult<any>[] = [];
+  if (Array.isArray(pages)) {
+    for (let i = 0; i < pages.length; i++) {
+      let entry: any = {
+        key: pages[i].pageId,
+        title: pages[i].title,
+        label: "Page",
+        actions: [{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "enter" }, { name: HOME_ACTION_DELETE_PAGE, hotkey: "CommandOrControl+d" }],
+        data: {tags:["page"], pageId: pages[i].pageId },
+        template: CLITemplate.Plain
+      };
+      
+      if (pages[i].description !== undefined) {
+        entry.description = pages[i].description;
+        entry.shortDescription = pages[i].description;
+        entry.template = CLITemplate.SimpleText;
+        entry.templateContent = pages[i].description;
+      } 
+
+      pageResults.push(entry);
+    }
+  }
+  return pageResults;
+}
+
 async function getResults(
   query?: string,
   queryMinLength = 3,
@@ -46,35 +128,15 @@ async function getResults(
   filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
   let apps = await getApps();
+  let pages = await getPages();
+
   let tags = [];
+  let appSearchEntries = mapAppEntriesToSearchEntries(apps);
+  let pageSearchEntries = mapPageEntriesToSearchEntries(pages);
 
-  if (Array.isArray(apps)) {
-    let initialResults: CLISearchResult<any>[] = [];
+  let initialResults: CLISearchResult<any>[] = [...appSearchEntries, ...pageSearchEntries];
 
-    for (let i = 0; i < apps.length; i++) {
-      if (apps[i].description !== undefined) {
-        let entry: any = {
-          key: apps[i].appId,
-          title: apps[i].title,
-          actions: [{ name: "launch-app", hotkey: "enter" }],
-          data: apps[i],
-          description: apps[i].description,
-          shortDescription: apps[i].description,
-          template: CLITemplate.SimpleText,
-          templateContent: apps[i].description,
-        };
-        initialResults.push(entry);
-      } else {
-        let entry: any = {
-          key: apps[i].appId,
-          title: apps[i].title,
-          actions: [{ name: "launch-app", hotkey: "enter" }],
-          data: apps[i],
-          template:  CLITemplate.Plain,
-        };
-        initialResults.push(entry);
-      }
-    }
+  if (initialResults.length > 0) {
 
     let finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
@@ -199,6 +261,7 @@ export async function register() {
 
   const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
   const queryAgainst = settings?.homeProvider?.queryAgainst;
+  let lastResponse:CLISearchListenerResponse;
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
@@ -210,13 +273,30 @@ export async function register() {
     }
 
     let filters = request?.context?.selectedFilters;
-
-    return getResults(query, queryMinLength, queryAgainst, filters);
+    if(lastResponse !== undefined) {
+      lastResponse.close();
+    }
+    lastResponse = response;
+    lastResponse.open();
+    let results = await getResults(query, queryMinLength, queryAgainst, filters);
+    return results;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      await launch(result.data);
+      if(result.data.pageId !== undefined) {
+          if(result.action.name === HOME_ACTION_DELETE_PAGE) {
+            await deletePage(result.data.pageId);
+            if(lastResponse !== undefined && lastResponse !== null) {
+              lastResponse.revoke(result.key);
+            }
+          } else {
+            let pageToLaunch = await getPage(result.data.pageId);
+            await launchPage(pageToLaunch);
+          }
+      } else {
+        await launch(result.data);
+      }
     } else {
       console.warn("Unable to execute result without data being passed");
     }

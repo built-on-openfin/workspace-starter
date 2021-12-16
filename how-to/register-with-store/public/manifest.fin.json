@@ -3,7 +3,7 @@
   "licenseKey": "request-a-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "21.93.64.11"
+    "version": "23.96.67.7"
   },
   "platform": {
     "uuid": "v4-register-with-store",
@@ -47,6 +47,12 @@
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
     },
+    "browserProvider": {
+      "windowOptions": {
+        "title": "Browser Starter",
+        "icon": "http://localhost:8080/favicon.ico"
+      }
+    },
     "homeProvider": {
       "id": "register-with-store-home",
       "title": "Home Starter",
@@ -57,6 +63,7 @@
     "storefrontProvider": {
       "id": "register-with-store",
       "title": "Custom Storefront",
+      "icon": "http://localhost:8080/favicon.ico",
       "landingPage": {
         "hero": {
           "title": "Custom Hero Title",
