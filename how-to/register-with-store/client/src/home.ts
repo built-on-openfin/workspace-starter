@@ -103,7 +103,7 @@ function mapPageEntriesToSearchEntries(pages: Page[]){
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
-        actions: [{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "enter" }, { name: HOME_ACTION_DELETE_PAGE, hotkey: "CommandOrControl+d" }],
+        actions: [{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }],
         data: {tags:["page"], pageId: pages[i].pageId },
         template: CLITemplate.Plain
       };

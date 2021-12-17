@@ -8,13 +8,15 @@ OpenFin Workspace empowers you to take advantage of our store component by using
 
 This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
+This application also shows you how to use the new @openfin/workspace-platform npm module to use OpenFin Browser under your own application and to control how pages and displayed an launched within the Home UI.
+
 ---
 **Running the Sample**
 
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv4.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
 
 ---
 
@@ -61,7 +63,7 @@ $ npm run client
 
 ![](openfin-register-with-store-home-ui.gif)
 
-6. To launch your store launch the Home UI and use / to show a list of the available commands and select Storefront. Storefront will be shown and your store will be listed.
+6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ![](openfin-register-with-store-storefront.gif)
