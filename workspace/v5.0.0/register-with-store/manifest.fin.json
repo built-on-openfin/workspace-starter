@@ -6,7 +6,7 @@
     "version": "23.96.67.7"
   },
   "platform": {
-    "uuid": "v4-register-with-store",
+    "uuid": "register-with-store",
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/platform/provider.html",
@@ -50,8 +50,23 @@
     "browserProvider": {
       "windowOptions": {
         "title": "Browser Starter",
-        "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/favicon.ico"
+        "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/favicon.ico",
+        "newTabUrl": null,
+        "newPageUrl": null
       }
+    },
+    "themeProvider": {
+        "themes":[
+          {
+              "label": "Starter Theme",
+              "logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/favicon.ico",
+              "palette": {
+                  "brandPrimary": "#504CFF",
+                  "brandSecondary": "#383A40",
+                  "backgroundPrimary": "#111214"
+              }
+          }
+      ]
     },
     "homeProvider": {
       "id": "register-with-store-home",

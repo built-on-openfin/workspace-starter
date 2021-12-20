@@ -6,7 +6,7 @@
     "version": "21.93.64.11"
   },
   "platform": {
-    "uuid": "v4-register-with-home",
+    "uuid": "register-with-home",
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-home/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-home/platform/provider.html",
