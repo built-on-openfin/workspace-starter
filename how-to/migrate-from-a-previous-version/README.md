@@ -31,7 +31,38 @@ You will need to do a few manifest updates as you are now responsible for launch
 
 * Update the runtime version in your manifest to at least: **23.96.67.7**
 * Add the following setting to your platform configuration in your manifest:  **"preventQuitOnLastWindowClosed":true**
-* permissions for launching external processes if you wish to enable the launching of native apps (the how to samples show how)
+* Permissions: You need to add a **openUrlWithBrowser** permission (OpenFin Browser gives the option of opening a view using the system browser via right click). Optional: permissions for launching external processes (**launchExternalProcess**) if you wish to enable the launching of native apps and **downloadAsset** (if you want to version and deploy your native app through OpenFin). An example of the platform section of the register-with-store manifest is shown below:
+
+
+```javascript
+ "platform": {
+    "uuid": "register-with-store",
+    "icon": "http://localhost:8080/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "http://localhost:8080/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true,
+        "downloadAsset": true,
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  }
+```
 
 
 ### Search related filters now need an id
