@@ -1,12 +1,13 @@
 import {
   Storefront, 
-  launchApp,
+  App,
   StorefrontLandingPage,
   StorefrontNavigationSection,
   StorefrontFooter,
   StorefrontProvider,
   StorefrontTemplate,
 } from "@openfin/workspace";
+import { getCurrentSync } from '@openfin/workspace-platform';
 import {
   getApps,
   experoApp,
@@ -51,11 +52,15 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
   return {
     id: providerId,
     title: "Basic Store",
+    icon: "http://localhost:8080/favicon.ico",
     getNavigation: getNavigation,
     getLandingPage: getLandingPage,
     getFooter: getFooter,
     getApps,
-    launchApp: launchApp,
+    launchApp: async (app:App)=> {
+      let platform = getCurrentSync();
+      await platform.launchApp({app});
+    },
   };
 }
 

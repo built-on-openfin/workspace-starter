@@ -1,7 +1,12 @@
 
+import { init as workspacePlatformInit } from '@openfin/workspace-platform';
 import { register, deregister, show, hide } from './store';
 
 async function init() {
+  await workspacePlatformInit({
+    licenseKey: 'license-key-goes-here',
+    browser: {}
+  });
   let registerStore = document.getElementById("register");
   let showStore = document.getElementById("show");
   let hideStore = document.getElementById("hide");
