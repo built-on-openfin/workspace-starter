@@ -3,10 +3,10 @@
   "licenseKey": "request-a-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "21.93.64.11"
+    "version": "23.96.67.7"
   },
   "platform": {
-    "uuid": "v4-register-with-store-basic",
+    "uuid": "register-with-store-basic",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": true,
     "providerUrl": "http://localhost:8080/platform/provider.html"

@@ -8,11 +8,13 @@ export async function init() {
 
     if(settings.browserProvider !== undefined) {
         browser.defaultWindowOptions = {
-            icon: "https://cdn-group.bnpparibas.com/favicon.ico",
+            icon: settings.browserProvider.windowOptions?.icon,
             workspacePlatform: {
                 pages: null,
                 title: settings.browserProvider.windowOptions?.title,
-                favicon: "https://cdn-group.bnpparibas.com/favicon.ico"
+                favicon: settings.browserProvider.windowOptions?.icon,
+                newTabUrl: settings.browserProvider.windowOptions?.newTabUrl,
+                newPageUrl: settings.browserProvider.windowOptions?.newPageUrl
             }
         };
     }
@@ -20,6 +22,7 @@ export async function init() {
     console.log("Specifying following browser options: ", browser);
     await workspacePlatformInit({
         licenseKey: 'license-key-goes-here',
-        browser
+        browser,
+        theme: settings?.themeProvider?.themes
     });
 } 

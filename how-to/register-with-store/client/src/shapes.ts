@@ -1,9 +1,12 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
+import { CustomThemes } from "@openfin/workspace-platform";
 
 interface BrowserProvider {
     windowOptions: {
         title?:string,
-        icon?:string
+        icon?:string,
+        newTabUrl?: string;
+        newPageUrl?: string;
     }
 }
 interface HomeProvider {
@@ -13,6 +16,10 @@ interface HomeProvider {
     hidden?: boolean,
     queryMinLength?: number,
     queryAgainst?: string[],
+}
+
+interface ThemeProvider {
+    themes: CustomThemes
 }
 
 interface AppProvider {
@@ -84,6 +91,7 @@ export interface CustomSettings {
     bootstrap?: {  store: boolean, home:boolean }
     appProvider?: AppProvider,
     browserProvider?: BrowserProvider,
+    themeProvider?: ThemeProvider,
     homeProvider?: HomeProvider,
     storefrontProvider?:StorefrontProvider
 }
