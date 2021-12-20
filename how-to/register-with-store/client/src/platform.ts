@@ -1,5 +1,5 @@
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
-import { getSettings } from "./settings";
+import { getSettings, validateThemes } from "./settings";
 
 export async function init() {
     console.log("Initialising platform");
@@ -23,6 +23,6 @@ export async function init() {
     await workspacePlatformInit({
         licenseKey: 'license-key-goes-here',
         browser,
-        theme: settings?.themeProvider?.themes
+        theme: validateThemes(settings?.themeProvider?.themes)
     });
 } 
