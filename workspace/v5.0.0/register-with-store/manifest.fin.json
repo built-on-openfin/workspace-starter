@@ -14,7 +14,21 @@
     "permissions": {
       "System": {
         "launchExternalProcess": true,
-        "downloadAsset": true
+        "downloadAsset": true,
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
       }
     }
   },
