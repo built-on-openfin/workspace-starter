@@ -10,6 +10,7 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v4.0.0/register-with-store/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
