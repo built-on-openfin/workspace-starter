@@ -9,7 +9,8 @@
     "uuid": "register-with-store-basic",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": true,
-    "providerUrl": "http://localhost:8080/platform/provider.html"
+    "providerUrl": "http://localhost:8080/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true
   },
   "snapshot": {
     "windows": []

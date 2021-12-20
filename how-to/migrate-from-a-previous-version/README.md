@@ -22,7 +22,17 @@ You will need the following dependencies
 Using the register-with-store example as a guide:
 
 * Update your npm dependencies as shown above
+* Update your manifest
 * Do a few api updates (show below)
+
+### Manifest updates
+
+You will need to do a few manifest updates as you are now responsible for launching views, snapshots and native apps (if you decide to support that).
+
+* Update the runtime version in your manifest to at least: **23.96.67.7**
+* Add the following setting to your platform configuration in your manifest:  **"preventQuitOnLastWindowClosed":true**
+* permissions for launching external processes if you wish to enable the launching of native apps (the how to samples show how)
+
 
 ### Search related filters now need an id
 
@@ -228,6 +238,121 @@ In versions 1-4 you would see a + button next to the page tab (the visibility of
 
 This button is now missing by default and needs to be configured. Configuring this option lets you specify the page that should be loaded into the Add New View view.
 
+## New Features
+
+The new features for this release will be covered is covered in our release notes but this section will give a brief overview.
+
+### @openfin/workspace-platform
+
+There is a new npm module available that continues to empower you as the workspace platform developer.
+
+This module lets you initialize a workspace platform instead of a standard OpenFin platform and in doing so gives you the following:
+
+* An API to launch OpenFin Browser windows and Pages (that fall under your platform and not OpenFin Workspace). 
+* The ability to specify custom urls for the "Add Page" and "Add View" views.
+* The ability to specify default window options so that you can customize the logo shown in the menu and taskbar as well as the Window Title without needing Desktop Owner Settings.
+* An API for the retrieval and saving of Pages with a local store as default but with the option of overriding and providing your own logic for where pages should be saved and retrieved.
+* The initial introduction of theming support.
+
+### Specifying custom add (view/page) urls and custom title/icon
+
+This is best done through default window options.
+
+```javascript
+import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
+
+export async function init() {
+    console.log("Initialising platform");
+    let browser: BrowserInitConfig = {};
+    
+    browser.defaultWindowOptions = {
+        icon: "http path to icon",
+        workspacePlatform: {
+            pages: null,
+            title: "Title for windows",
+            favicon: "http path to favicon",
+            newTabUrl: "http url of page to load when someone selects adds a new view",
+            newPageUrl: "http url of page to load when someone selects add a page"
+        }
+    };
+    
+    await workspacePlatformInit({
+        licenseKey: 'license-key-goes-here',
+        browser
+    });
+} 
+```
+### Initial theme support
+
+This is done when you initialize your platform:
+
+```javascript
+import { init as workspacePlatformInit, CustomThemes } from '@openfin/workspace-platform';
+
+export async function init() {
+    console.log("Initialising platform");
+    const theme: CustomThemes = [
+     {
+              label: "Starter Theme",
+              logoUrl: "http://localhost:8080/favicon.ico",
+              palette: {
+                  brandPrimary: "#504CFF",
+                  brandSecondary: "#383A40",
+                  backgroundPrimary: "#111214"
+              }
+          }
+    ];
+    await workspacePlatformInit({
+        licenseKey: 'license-key-goes-here',
+        theme 
+    });
+} 
+```
+
+### The api to get, delete and save pages as well as launching a page or a view under your own platform
+
+This is taken from the **browser.ts** file (assuming the platform has been initialized) in the how-to register-store as (well as home) examples.
+
+File: [..\register-with-store\client\src\browser.ts](..\register-with-store\client\src\browser.ts)
+
+```javascript
+import { getCurrentSync, Page } from '@openfin/workspace-platform';
+
+export async function getPage(pageId:string) {
+    let platform = getCurrentSync();
+    return platform.Storage.getPage(pageId);
+}
+
+export async function getPages() {
+    let platform = getCurrentSync();
+    return platform.Storage.getPages();
+}
+
+export async function deletePage(pageId:string) {
+    let platform = getCurrentSync();
+    return platform.Storage.deletePage(pageId);
+}
+
+export async function launchPage(page:Page){
+    let platform = getCurrentSync();
+    return platform.Browser.createWindow({
+        workspacePlatform: {
+            pages: [page]
+        }
+    });
+}
+
+export async function launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity){
+    let platform = getCurrentSync();
+    let viewOptions;
+    if(typeof view === "string"){
+        viewOptions = { "url": view};
+    } else {
+        viewOptions = view;
+    }
+    return platform.createView(viewOptions, targetIdentity);
+}
+```
 # Migrate from a previous version - From v1-v3 to v4
 
 With Workspace 4.0, OpenFin has introduced the ability for Workspace customers to have  more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:

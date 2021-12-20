@@ -23,3 +23,14 @@ export async function launchPage(page:Page){
         }
     });
 }
+
+export async function launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity){
+    let platform = getCurrentSync();
+    let viewOptions;
+    if(typeof view === "string"){
+        viewOptions = { "url": view};
+    } else {
+        viewOptions = view;
+    }
+    return platform.createView(viewOptions, targetIdentity);
+}
