@@ -36,7 +36,7 @@ You will need to do a few manifest updates as you are now responsible for launch
 
 ### Search related filters now need an id
 
-File: [..\register-with-store\client\src\home.ts](..\register-with-store\client\src\home.ts)
+File: [home.ts](../register-with-store/client/src/home.ts)
 
 To make it easier to determine which filter was selected we have added an id so you don't have to rely on 'title' when determining what logic to apply.
 
@@ -59,7 +59,7 @@ becomes:
 ```
 ### Store registration now requires an icon (similar to Home registration)
 
-File: [..\register-with-store\client\src\store.ts](..\register-with-store\client\src\store.ts)
+File: [store.ts](../register-with-store/client/src/store.ts)
 
 You now need to specify an icon with your registration. This icon will show in the store dropdown alongside your store name.
 
@@ -97,7 +97,7 @@ Launching an app is now a platform responsibility and has moved from @openfin/wo
 
 This requires two changes:
   
-File: [..\register-with-store\client\src\platform.ts](..\register-with-store\client\src\platform.ts)
+File: [platform.ts](../register-with-store/client/src/platform.ts)
 
 Instead of initializing an OpenFin Platform you will be initializing an OpenFin Workspace Platform.
 
@@ -126,7 +126,7 @@ export async function init() {
 ```
 Once you know your app has initialized a workspace platform you can now safely reference it and use the launchApp function it provides. The platform.ts file in the sample shows an example of configuring the icons and window title but it was excluded from the snippet above to keep things simple.
 
-File: [..\register-with-store\client\src\launch.ts](..\register-with-store\client\src\launch.ts)
+File: [launch.ts](../register-with-store/client/src/launch.ts)
   
 The following snippet replaces common code with **...** to highlight the changes.
 
@@ -313,7 +313,7 @@ export async function init() {
 
 This is taken from the **browser.ts** file (assuming the platform has been initialized) in the how-to register-store as (well as home) examples.
 
-File: [..\register-with-store\client\src\browser.ts](..\register-with-store\client\src\browser.ts)
+File: [browser.ts](../register-with-store/client/src/browser.ts)
 
 ```javascript
 import { getCurrentSync, Page } from '@openfin/workspace-platform';
@@ -353,6 +353,17 @@ export async function launchView(view:OpenFin.PlatformViewCreationOptions | stri
     return platform.createView(viewOptions, targetIdentity);
 }
 ```
+### Focus - the ability to show/hide tabs to make it easier to focus on the content within a browser window
+
+The following new feature has been added for your end users:
+
+#### Tabs Showing - Click on the focus icon
+<img src="workspace-hide-tabs.png" width="100%" alt="Ability to bring a view into focus by removing tabs" />
+
+#### Tabs Hidden - Click on the focus icon again
+
+<img src="workspace-show-tabs.png" width="100%" alt="Ability to bring a view out of focus by adding tabs" />
+
 # Migrate from a previous version - From v1-v3 to v4
 
 With Workspace 4.0, OpenFin has introduced the ability for Workspace customers to have  more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:
