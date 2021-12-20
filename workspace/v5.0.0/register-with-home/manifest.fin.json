@@ -13,7 +13,21 @@
     "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
-        "launchExternalProcess": true
+        "launchExternalProcess": true,
+        "openUrlWithBrowser": {
+          "enabled": true,
+          "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
       }
     }
   },
@@ -24,13 +38,62 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
-    "name": "Register With Home - v4",
+    "name": "Register With Home - v5",
     "target": ["desktop", "start-menu"]
   },
   "customSettings": {
     "appProvider": {
       "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/apps.json",
       "includeCredentialOnSourceRequest": "include"
+    },
+    "browserProvider": {
+      "windowOptions": {
+        "title": "Browser Starter",
+        "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
+        "newTabUrl": null,
+        "newPageUrl": null
+      }
+    },
+    "themeProvider": {
+        "themes":[
+          {
+              "label": "Starter Theme",
+              "logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
+              "palette": {
+                  "brandPrimary": "#504CFF",
+                  "brandSecondary": "#383A40",
+                  "backgroundPrimary": "#111214",
+                  "functional1": null,
+                  "functional2": null,
+                  "functional3": null,
+                  "functional4": null,
+                  "functional5": null,
+                  "functional6": null,
+                  "functional7": null,
+                  "functional8": null,
+                  "functional9": null,
+                  "functional10": null,
+                  "statusSuccess": null,
+                  "statusWarning": null,
+                  "statusCritical": null,
+                  "statusActive": null,
+                  "inputBg": null,
+                  "inputColor": null,
+                  "inputPlaceholder": null,
+                  "inputDisabled": null,
+                  "inputFocused": null,
+                  "textDefault": null,
+                  "textHelp": null,
+                  "textInactive": null,
+                  "background1": null,
+                  "background2": null,
+                  "background3": null,
+                  "background4": null,
+                  "background5": null,
+                  "background6": null
+              }
+          }
+      ]
     },
     "homeProvider": {
       "id": "register-with-home",
