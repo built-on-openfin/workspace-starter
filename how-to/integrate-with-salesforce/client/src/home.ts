@@ -14,7 +14,7 @@ import {
   Action
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
-import { openUrl } from "./browser";
+import { launchView } from "./browser";
 import { getConnection, getSearchResults, init as connectToSalesforce } from "./salesforce";
 import { ConnectionError, getObjectUrl, SalesforceRestApiAccountSObject, SalesforceRestApiContactSObject, SalesforceRestApiSObjectBase } from "@openfin/salesforce";
 import { SalesforceResultData } from "./shapes";
@@ -218,7 +218,7 @@ export async function register(): Promise<void> {
     // otherwise open the result page url in browser
     const data = result.data as SalesforceResultData;
     if (data !== undefined) {
-      openUrl(data.pageUrl);
+      launchView(data.pageUrl);
     } else {
       console.warn("Unable to execute result without data being passed");
     }
