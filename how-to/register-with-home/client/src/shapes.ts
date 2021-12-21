@@ -1,17 +1,3 @@
-
-import { CustomThemes } from "@openfin/workspace-platform";
-interface BrowserProvider {
-    windowOptions: {
-        title?:string,
-        icon?:string,
-        newTabUrl?: string;
-        newPageUrl?: string;
-    }
-}
-
-interface ThemeProvider {
-    themes: CustomThemes
-}
 interface HomeProvider {
     id: string,
     title: string,
@@ -27,7 +13,5 @@ interface AppProvider {
 }
 export interface CustomSettings {
     appProvider?: AppProvider,
-    browserProvider?: BrowserProvider,
-    themeProvider?: ThemeProvider,
     homeProvider?: HomeProvider
 }

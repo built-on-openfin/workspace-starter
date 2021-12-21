@@ -14,7 +14,7 @@ This application you are about to install is a simple example of plugging in you
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv4.0.0%2Fregister-with-home%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Home</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fregister-with-home%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Home</a>
 
 ---
 
@@ -32,7 +32,7 @@ $ npm install
 $ npm run build
 ```
 
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 4.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -93,14 +93,35 @@ You have your own [Workspace Platform](public/manifest.fin.json) that is defined
 $ npm run client
 ```
 
-The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform. Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
+The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform (using the [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform) module). Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
 
 The bootstrapper has two main responsibilities:
 
 1. Import [home.ts](client/src/home.ts) to register this workspace platform against Home.
 2. Listen for when the workspace platform is closing so that it can deregister from Home.
 
-The **home provider**([home.ts](client/src/home.ts)) imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions,  [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from), [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results) and [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home.
+The **home provider**([home.ts](client/src/home.ts)) imports the following:
+
+-  [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
+-  [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
+- [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
+- [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
+- [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
+- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
+
+The registration of a provider against home will look like the following:
+
+```javascript
+ const cliProvider: CLIProvider = {
+    title: settings.homeProvider.title,
+    id: settings.homeProvider.id,
+    icon: settings.homeProvider.icon,
+    onUserInput: onUserInput,
+    onResultDispatch: onSelection,
+  };
+
+  await Home.register(cliProvider);
+```
 
 The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
 
@@ -144,7 +165,7 @@ The home provider will ask the [apps.ts](client/src/apps.ts) file for a list of 
 
 When a user selects a result in OpenFin Home, it is returned to the Home Provider and we use [launch.ts](client/src/launch.ts) to launch the result.
 
-The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to call fin.System.launchExternalProcess and have the relevant permission. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace module.
+The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. You can then pass the app to the launchApp function (which will execute under the context of the workspace platform) or call fin.System.launchExternalProcess yourself (if you need custom logic).
 
 The registration of a provider against home will look like the following:
 
