@@ -7,7 +7,8 @@
     },
     "how-tos": [
         "register-with-home",
-        "register-with-store"
+        "register-with-store",
+        "integrate-with-salesforce"
     ],
     "author": "",
     "license": "ISC",
