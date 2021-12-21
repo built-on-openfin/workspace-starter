@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/salesforce": "file:.yalc/@openfin/salesforce",
+    "@openfin/salesforce": "^2.0.0",
     "@openfin/workspace": "next",
     "@openfin/workspace-platform": "next"
   },
