@@ -21,7 +21,6 @@ export async function init() {
 
     console.log("Specifying following browser options: ", browser);
     await workspacePlatformInit({
-        licenseKey: 'license-key-goes-here',
         browser,
         theme: validateThemes(settings?.themeProvider?.themes)
     });

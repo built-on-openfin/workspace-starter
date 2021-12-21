@@ -3,7 +3,6 @@ import { register, show, hide, deregister } from './home';
 
 async function init() {
   await workspacePlatformInit({
-    licenseKey: 'license-key-goes-here',
     browser: {}
   });
   let registerHome = document.getElementById("register");

@@ -5,7 +5,6 @@ export async function init() {
     let browser: BrowserInitConfig = {};
 
     await workspacePlatformInit({
-        licenseKey: 'license-key-goes-here',
         browser
     });
 }

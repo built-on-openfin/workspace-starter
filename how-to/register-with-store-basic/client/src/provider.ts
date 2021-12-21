@@ -4,7 +4,6 @@ import { register, deregister, show, hide } from './store';
 
 async function init() {
   await workspacePlatformInit({
-    licenseKey: 'license-key-goes-here',
     browser: {}
   });
   let registerStore = document.getElementById("register");
