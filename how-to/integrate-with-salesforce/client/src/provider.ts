@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     await initialisePlatform();
   } catch (err) {
     const title = 'Failed to start Workspace platform';
-    const body = `<p>An error has occured during Workspace platform initialization:</p><p class="error">${(err as Error).message}.</p><p>Please check your configuration and try again.</p>`;
+    const body = `<p>An error has occurred during Workspace platform initialization:</p><p class="error">${(err as Error).message}.</p><p>Please check your configuration and try again.</p>`;
     const window = await fin.Window.create({
       alwaysOnTop: true,
       maximizable: false,
