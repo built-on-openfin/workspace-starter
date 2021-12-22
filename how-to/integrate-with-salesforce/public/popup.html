@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./js/popup.bundle.js"></script>
+    <style type="text/css">
+        :root {
+            --openfin-ui-globalBackground: #111214;
+            --openfin-ui-globalText: #FFFFFF;
+            --openfin-ui-globalTypography: 12px/1.5 Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+            --openfin-ui-brandPrimary: #504CFF;
+            --openfin-ui-brandPrimaryHover: #6965FF;
+            --openfin-ui-brandPrimaryText: #FFFFFF;
+            --openfin-ui-statusCritical: #C93400;
+        }
+        body {
+            align-items: center;
+            background: var(--openfin-ui-globalBackground);
+            color: var(--openfin-ui-globalText);
+            display: flex;
+            flex-direction: column;
+            font: var(--openfin-ui-globalTypography);
+            height: 100vh;
+            justify-content: center;
+            margin: 0;
+        }
+        #body {
+            text-align: center;
+        }
+        #close-btn {
+            background: var(--openfin-ui-brandPrimary);
+            border: 1px solid var(--openfin-ui-brandPrimary);
+            border-radius: 4px;
+            color: var(--openfin-ui-brandPrimaryText);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
+            margin-top: 0.5rem;
+            outline: none;
+            padding: 8px 16px;
+        }
+        #close-btn:hover {
+            background: var(--openfin-ui-brandPrimaryHover);
+        }
+        .error {
+            color: var(--openfin-ui-statusCritical);
+            font-family: consolas,monospace;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="body"></div>
+    <div>
+        <button id="close-btn" type="button">Close</button>
+    </div>
+  </body>
+</html>
