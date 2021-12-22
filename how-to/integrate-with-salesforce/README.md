@@ -75,7 +75,8 @@ $ npm run client
 7. Assuming login and authorization was successful, OpenFin Home will appear. Press the Enter key to display the default "Browse Salesforce" result that will open your Salesforce org in OpenFin Browser. To search for Accounts and Contacts, type a query into Home and click on a result to open the relevant detail page in OpenFin Browser.
 
 ## What does it look like?
-Here is an example of what the demo would look like when launched. You will need to configure the manifest with your SalesForce Organization Url and Consumer Key (steps to setup can be found in our [configuration steps](https://www.npmjs.com/package/@openfin/salesforce#user-content-configure-salesforce-org)). 
+
+Here is an example of what the demo would look like when launched. You will need to configure the manifest with your Salesforce Organization Url and Consumer Key (steps to setup can be found in our [configuration steps](https://www.npmjs.com/package/@openfin/salesforce#user-content-configure-salesforce-org)). 
 
 ![](workspace-salesforce-integration.gif)
 
