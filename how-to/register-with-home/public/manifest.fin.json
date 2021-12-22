@@ -1,12 +1,12 @@
 {
   "devtools_port": 9090,
-  "licenseKey": "request-a-key",
+  "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
     "version": "21.93.64.11"
   },
   "platform": {
-    "uuid": "v4-register-with-home",
+    "uuid": "register-with-home",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",

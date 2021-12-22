@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/workspace": "^4.0.0"
+    "@openfin/workspace": "4.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
