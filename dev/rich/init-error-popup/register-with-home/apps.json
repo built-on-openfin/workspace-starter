@@ -1,0 +1,176 @@
+[
+  {
+    "appId": "basic-interop-view",
+    "name": "basic-interop-view",
+    "title": "Basic Interop View",
+    "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/views/basic-interop-view.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/interop-view.png"
+    }],
+    "tags":["view", "interop"]
+  },
+  {
+    "appId": "basic-fdc3-view",
+    "name": "basic-fdc3-view",
+    "title": "Basic FDC3 View",
+    "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/views/basic-fdc3-view.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/fdc3-view.png"
+    }],
+    "tags":["view", "fdc3"]
+  },
+  {
+    "appId": "expero-company-news",
+    "name": "expero-company-news",
+    "title": "Gateway - Company News",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "Expero",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/expero-news-view.png"
+    }],
+    "tags":["expero", "view", "interop"]
+  },
+  {
+    "appId": "expero-description",
+    "name": "expero-description",
+    "title": "Gateway - Description",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/description.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "Expero",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/expero-description-view.png"
+    }],
+    "tags":["expero", "view", "interop"]
+  },
+  {
+    "appId": "expero-stock-quote",
+    "name": "expero-stock-quote",
+    "title": "Gateway - Stock Quote",
+    "manifest": "https://openfin-iex.experolabs.com/openfin/manifests/stock-quote.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "https://openfin-iex.experolabs.com/favicon.ico"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "Expero",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/expero-stock-view.png"
+    }],
+    "tags":["expero", "view", "interop"]
+  },
+  {
+    "appId": "notifications-generator",
+    "name": "notifications-studio",
+    "title": "OpenFin Notifications Studio",
+    "manifestType": "manifest",
+    "description": "Notifications Studio: This is OpenFin's tool for demonstrating the power of our Notification Center. Use it to create local notifications or use some of the examples shown in our Catalog. Experiment with our features and see the power that OpenFin Notification Center can bring to your applications.",
+    "manifest": "https://cdn.openfin.co/studio/notification/app.json",
+    "icons": [
+      { "src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"}
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/openfin-notification-studio.png"
+    }],
+    "tags":["hero", "manifest", "tools"]
+  },
+  {
+    "appId": "openfin-process-manager",
+    "name": "openfin-process-manager",
+    "title": "OpenFin Process Manager",
+    "manifestType": "manifest",
+    "description": "Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
+    "manifest": "https://cdn.openfin.co/process-manager/app.json",
+    "icons": [
+      { "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/openfin-process-manager.png"
+    }],
+    "tags":["hero", "manifest", "tools"]
+  },
+  {
+    "appId": "openfin-developer-page",
+    "name": "openfin-developer-page",
+    "title": "OpenFin Developer Docs",
+    "manifestType": "snapshot",
+    "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/snapshot.json",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/openfin-page-docs.png"
+    }],
+    "tags":["page"]
+  },
+  {
+    "appId": "Notepad",
+    "name": "Notepad",
+    "title": "Notepad",
+    "description": "Open Notepad and start taking some quick notes.",
+    "manifestType": "external",
+    "manifest": "notepad.exe",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/icon-notepad.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "Microsoft",
+    "intents": [],
+    "images": [{
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/images/previews/microsoft-notepad-native.png"
+    }],
+    "tags":["native"]
+  }
+]
