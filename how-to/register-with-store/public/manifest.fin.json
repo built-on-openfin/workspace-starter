@@ -1,19 +1,34 @@
 {
   "devtools_port": 9090,
-  "licenseKey": "request-a-key",
+  "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "21.93.64.11"
+    "version": "23.96.67.7"
   },
   "platform": {
-    "uuid": "v4-register-with-store",
+    "uuid": "register-with-store",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
-        "downloadAsset": true
+        "downloadAsset": true,
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
       }
     }
   },
@@ -24,7 +39,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Register With Store - v4",
+    "name": "Register With Store - v5",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
@@ -47,6 +62,55 @@
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
     },
+    "browserProvider": {
+      "windowOptions": {
+        "title": "Browser Starter",
+        "icon": "http://localhost:8080/favicon.ico",
+        "newTabUrl": null,
+        "newPageUrl": null
+      }
+    },
+    "themeProvider": {
+        "themes":[
+          {
+              "label": "Starter Theme",
+              "logoUrl": "http://localhost:8080/favicon.ico",
+              "palette": {
+                  "brandPrimary": "#504CFF",
+                  "brandSecondary": "#383A40",
+                  "backgroundPrimary": "#111214",
+                  "functional1": null,
+                  "functional2": null,
+                  "functional3": null,
+                  "functional4": null,
+                  "functional5": null,
+                  "functional6": null,
+                  "functional7": null,
+                  "functional8": null,
+                  "functional9": null,
+                  "functional10": null,
+                  "statusSuccess": null,
+                  "statusWarning": null,
+                  "statusCritical": null,
+                  "statusActive": null,
+                  "inputBg": null,
+                  "inputColor": null,
+                  "inputPlaceholder": null,
+                  "inputDisabled": null,
+                  "inputFocused": null,
+                  "textDefault": null,
+                  "textHelp": null,
+                  "textInactive": null,
+                  "background1": null,
+                  "background2": null,
+                  "background3": null,
+                  "background4": null,
+                  "background5": null,
+                  "background6": null
+              }
+          }
+      ]
+    },
     "homeProvider": {
       "id": "register-with-store-home",
       "title": "Home Starter",
@@ -57,6 +121,7 @@
     "storefrontProvider": {
       "id": "register-with-store",
       "title": "Custom Storefront",
+      "icon": "http://localhost:8080/favicon.ico",
       "landingPage": {
         "hero": {
           "title": "Custom Hero Title",

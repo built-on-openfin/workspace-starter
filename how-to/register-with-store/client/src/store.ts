@@ -179,6 +179,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
     return {
       id: settings.storefrontProvider.id,
       title: settings.storefrontProvider.title,
+      icon: settings.storefrontProvider.icon,
       getNavigation: getNavigation.bind(this),
       getLandingPage: getLandingPage.bind(this),
       getFooter: getFooter.bind(this),

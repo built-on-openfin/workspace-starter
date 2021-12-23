@@ -1,7 +1,10 @@
-import { fin } from 'openfin-adapter/src/mock';
+import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
     console.log("Initialising platform");
-    fin.Platform.init({
+    let browser: BrowserInitConfig = {};
+
+    await workspacePlatformInit({
+        browser
     });
-} 
+}

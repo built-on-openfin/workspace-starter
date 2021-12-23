@@ -1,6 +1,9 @@
 <img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
 
+
+>**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. The [OpenFin Container](https://www.openfin.co/container/) requires a Container License (see [manifest](public/manifest.fin.json)) and the use of Workspace components needs a Workspace License. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to talk about a production license.
 OpenFin Workspace is currently **only supported on Windows**.
+
 
 # Register With Store
 
@@ -8,13 +11,15 @@ OpenFin Workspace empowers you to take advantage of our store component by using
 
 This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
+This application also shows you how to use the new @openfin/workspace-platform npm module to use OpenFin Browser under your own application and to control how pages are displayed and launched within the Home UI.
+
 ---
 **Running the Sample**
 
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv4.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
 
 ---
 
@@ -32,7 +37,7 @@ $ npm install
 $ npm run build
 ```
 
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 4.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -61,7 +66,7 @@ $ npm run client
 
 ![](openfin-register-with-store-home-ui.gif)
 
-6. To launch your store launch the Home UI and use / to show a list of the available commands and select Storefront. Storefront will be shown and your store will be listed.
+6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ![](openfin-register-with-store-storefront.gif)
@@ -100,7 +105,11 @@ You have your own [Workspace Platform](public/manifest.fin.json) that is defined
 $ npm run client
 ```
 
-The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform. Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
+The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform. 
+
+The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for OpenFin Browser based windows. This lets us specify the icons, title and theme for the Browser Windows.
+
+Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
 
 The bootstrapper has two main responsibilities:
 
@@ -112,8 +121,10 @@ The bootstrapper has two main responsibilities:
 The **home provider**([home.ts](client/src/home.ts)) imports the following:
 
 -  [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
+-  [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
 - [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
 - [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
+- [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
 - [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
 
 The registration of a provider against home will look like the following:
@@ -142,6 +153,7 @@ The registration of a provider against store will look like the following:
 const storeProvider = {
       id: settings.storefrontProvider.id,
       title: settings.storefrontProvider.title,
+      icon: settings.storefrontProvider.icon,
       getNavigation: getNavigation.bind(this),
       getLandingPage: getLandingPage.bind(this),
       getFooter: getFooter.bind(this),
@@ -155,9 +167,9 @@ await Storefront.register(storeProvider)
 The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
 
 ```javascript
-   "customSettings": {
+"customSettings": {
     "bootstrap": {
-      "search": true,
+      "home": true,
       "store": true
     },
     "appProvider": {
@@ -166,16 +178,66 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
     },
+    "browserProvider": {
+      "windowOptions": {
+        "title": "Browser Starter",
+        "icon": "http://localhost:8080/favicon.ico",
+        "newTabUrl": null,
+        "newPageUrl": null
+      }
+    },
+    "themeProvider": {
+        "themes":[
+          {
+              "label": "Starter Theme",
+              "logoUrl": "http://localhost:8080/favicon.ico",
+              "palette": {
+                  "brandPrimary": "#504CFF",
+                  "brandSecondary": "#383A40",
+                  "backgroundPrimary": "#111214",
+                  "functional1": null,
+                  "functional2": null,
+                  "functional3": null,
+                  "functional4": null,
+                  "functional5": null,
+                  "functional6": null,
+                  "functional7": null,
+                  "functional8": null,
+                  "functional9": null,
+                  "functional10": null,
+                  "statusSuccess": null,
+                  "statusWarning": null,
+                  "statusCritical": null,
+                  "statusActive": null,
+                  "inputBg": null,
+                  "inputColor": null,
+                  "inputPlaceholder": null,
+                  "inputDisabled": null,
+                  "inputFocused": null,
+                  "textDefault": null,
+                  "textHelp": null,
+                  "textInactive": null,
+                  "background1": null,
+                  "background2": null,
+                  "background3": null,
+                  "background4": null,
+                  "background5": null,
+                  "background6": null
+              }
+          }
+      ]
+    },
     "homeProvider": {
       "id": "register-with-store-home",
       "title": "Home Starter",
-       "icon": "http://localhost:8080/favicon.ico",
+      "icon": "http://localhost:8080/favicon.ico",
       "queryMinLength": 3,
       "queryAgainst":["title"]
     },
     "storefrontProvider": {
       "id": "register-with-store",
       "title": "Custom Storefront",
+      "icon": "http://localhost:8080/favicon.ico",
       "landingPage": {
         "hero": {
           "title": "Custom Hero Title",
@@ -313,6 +375,16 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
 | cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
 | appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
+| **browserProvider** | Config related to OpenFin Browser |
+| title | The title for the window that shows up in the taskbar |
+| icon | The icon that should show in the taskbar and in the top left menu of the browser |
+| newTabUrl | Should we allow someone to add a new view to a page? What url should be loaded when they click add? |
+| newPageUrl | Should we allow someone to add a new page? What url should be loaded when they click add? |
+| **themeProvider** | What themes should be passed to OpenFin Workspace (at the moment only one is supported) |
+| themes | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used) |
+| themes.label | A label to use to identify this theme |
+| themes.logoUrl | Preferred logo for a theme |
+| pallete | A collection of settings that can be overriden (brandPrimary, brandSecondary and backgroundPrimary are mandatory if you are specifying a theme) |
 | **homeProvider** | Config related to the home provider setup to list things in Home and the Browser Add New View |
 | id | What your provider should be called |
 | title | The title that should be shown in the Home UI to represent your provider |
@@ -322,6 +394,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | **storefrontProvider** | Config settings that are used by the sample code to configure the store using the workspace APIs |
 | id | Unique ID for your store |
 | title | The name for your store that will be shown in the store selection dropdown |
+| icon | The icon to show in the store selection dropdown |
 | landingPage | The structure of the main page the user will be presented with when they visit your store |
 | landingPage.hero | Optional. Do you want a hero section on the main page. |
 | landingPage.topRow | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). Limit of 4 sections. |
@@ -355,7 +428,7 @@ The search provider checks the [apps.ts](client/src/apps.ts) file for a list of 
 
 When a user selects a result in OpenFin Home, it is returned to the search provider and the search provider uses [launch.ts](client/src/launch.ts) to launch the result.
 
-The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to call fin.System.launchExternalProcess and have the relevant permission (for now apps.ts filters unsuitable apps out). For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace module.
+The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
 
 The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both.
@@ -367,10 +440,16 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 ---
 **FAQ**
-- The store isn't launching or the storefront command isn't showing on the home ui?
+- The store isn't launching or the store command isn't showing on the home ui?
  
    - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
    - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
+- I am not seeing what I expected?
+ 
+   - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the workspace platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
+- Things have moved/gone?
+ 
+   - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
 
 ---
 

@@ -1,7 +1,10 @@
-
+import { init as workspacePlatformInit } from '@openfin/workspace-platform';
 import { register, show, hide, deregister } from './home';
 
 async function init() {
+  await workspacePlatformInit({
+    browser: {}
+  });
   let registerHome = document.getElementById("register");
   let deregisterHome = document.getElementById("deregister");
   let showHome = document.getElementById("show");

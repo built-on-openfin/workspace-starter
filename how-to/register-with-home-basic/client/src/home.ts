@@ -1,5 +1,5 @@
-
-import { Home, CLIProvider, CLISearchListenerRequest, CLITemplate, CLISearchResult, CLISearchListenerResponse, CLISearchResponse, CLIDispatchedSearchResult, launchApp  } from "@openfin/workspace";
+import { getCurrentSync } from '@openfin/workspace-platform';
+import { Home, CLIProvider, CLISearchListenerRequest, CLITemplate, CLISearchResult, CLISearchListenerResponse, CLISearchResponse, CLIDispatchedSearchResult  } from "@openfin/workspace";
 import { getApps } from "./apps";
 
 const providerId = "register-with-home-basic";
@@ -8,33 +8,50 @@ async function getResults(query?: string) : Promise<CLISearchResponse> {
    
     let apps = await getApps();
 
-    if(Array.isArray(apps)){
-        
+    if(Array.isArray(apps)){   
         let initialResults: CLISearchResult<any>[] = [];
 
         for(let i = 0; i < apps.length; i++) {
-            if(apps[i].description !== undefined) {
-                let entry: any = {
-                    key: apps[i].appId,
-                    title: apps[i].title,
-                    actions: [{ name: "launch-app", hotkey: 'enter' }],
-                    data: apps[i],
-                    description: apps[i].description,
-                    shortDescription: apps[i].description,
-                    template: CLITemplate.SimpleText,
-                    templateContent: apps[i].description,
-                };
-                initialResults.push(entry);
-            } else {
-                let entry: any = {
-                    key: apps[i].appId,
-                    title: apps[i].title,
-                    actions: [{ name: "launch-app", hotkey: 'enter' }],
-                    data: apps[i],
-                    template: CLITemplate.Plain
-                };
-                initialResults.push(entry);
+            let entry: any = {
+                key: apps[i].appId,
+                title: apps[i].title,
+                data: apps[i],
+                actions: [],
+                template: CLITemplate.Plain
+            };
+            let action = { name: "Launch View", hotkey: "enter" };
+
+            if(apps[i].manifestType === "view") {
+                entry.label = "View";
+                entry.actions = [action];
             }
+            if(apps[i].manifestType === "snapshot") {
+                entry.label = "Snapshot";
+                action.name = "Launch Snapshot";
+                entry.actions = [action];
+            }
+            if(apps[i].manifestType === "manifest") {
+                entry.label = "App";
+                action.name = "Launch App";
+                entry.actions = [action];
+            }
+            if(apps[i].manifestType === "external") {
+                action.name = "Launch Native App";
+                entry.actions = [action];
+                entry.label = "Native App";
+            }
+    
+            if(Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+                entry.icon = apps[i].icons[0].src;
+            }
+            
+            if(apps[i].description !== undefined) {
+                entry.description = apps[i].description;
+                entry.shortDescription = apps[i].description;
+                entry.template = CLITemplate.SimpleText;
+                entry.templateContent = apps[i].description;
+            }
+            initialResults.push(entry);
         }
 
         let finalResults;
@@ -84,7 +101,8 @@ export async function register(): Promise<void> {
 
     const onSelection = async (result:CLIDispatchedSearchResult) => {
         if (result.data !== undefined) {
-            await launchApp(result.data);
+            let platform = getCurrentSync();
+            await platform.launchApp({app: result.data});
         }  else {
             console.warn("Unable to execute result without data being passed");
         }

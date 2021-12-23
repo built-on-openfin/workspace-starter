@@ -1,5 +1,3 @@
-
-
 interface HomeProvider {
     id: string,
     title: string,

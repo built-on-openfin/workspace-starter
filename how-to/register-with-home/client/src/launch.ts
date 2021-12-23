@@ -1,4 +1,4 @@
-import { launchApp } from "@openfin/workspace";
+import { getCurrentSync } from '@openfin/workspace-platform';
 import { App } from "@openfin/workspace";
 import { fin } from 'openfin-adapter/src/mock';
 
@@ -12,7 +12,8 @@ export async function launch(appEntry: App) {
 
         await fin.System.launchExternalProcess(options);
     } else {
-        await launchApp(appEntry);
+        let platform = getCurrentSync();
+        await platform.launchApp({app: appEntry});
     }
     console.log("Finished application launch request");
 }
