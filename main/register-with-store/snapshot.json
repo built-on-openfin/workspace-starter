@@ -4,11 +4,6 @@
         "height": 1000,
         "width": 1600,
         "center": true,
-        "workstacks": [
-          {
-            "name": "Developer Docs"
-          }
-        ],
         "layout": {
           "content": [
             {

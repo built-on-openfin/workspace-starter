@@ -1,0 +1,51 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
+    "version": "23.96.67.7"
+  },
+  "platform": {
+    "uuid": "integrate-with-salesforce",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/integrate-with-salesforce/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/integrate-with-salesforce/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "openUrlWithBrowser": {
+          "enabled": true,
+          "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/integrate-with-salesforce/favicon.ico",
+    "name": "Integrate With Salesforce - v5",
+    "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "consumerKey": "",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/integrate-with-salesforce/favicon.ico",
+    "isSandbox": false,
+    "orgUrl": "",
+    "queryMinLength": 3,
+    "title": "Salesforce"
+  }
+}
