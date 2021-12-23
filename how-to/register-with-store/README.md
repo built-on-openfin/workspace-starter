@@ -1,6 +1,9 @@
 <img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
 
+
+>**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. The [OpenFin Container](https://www.openfin.co/container/) requires a Container License (see [manifest](public/manifest.fin.json)) and the use of Workspace components needs a Workspace License. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to talk about a production license.
 OpenFin Workspace is currently **only supported on Windows**.
+
 
 # Register With Store
 
