@@ -15,7 +15,7 @@ This application you are about to install is an example of configuring and integ
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fintegrate-with-salesforce%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Integrate With Salesforce</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fmain%2Fintegrate-with-salesforce%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Integrate With Salesforce</a>
 
 ---
 
