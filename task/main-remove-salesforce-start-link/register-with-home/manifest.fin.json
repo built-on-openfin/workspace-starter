@@ -1,0 +1,57 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version":"23.96.67.7"
+  },
+  "platform": {
+    "uuid": "register-with-home",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true,
+        "openUrlWithBrowser": {
+          "enabled": true,
+          "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
+    "name": "Register With Home - Latest",
+    "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "appProvider": {
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/apps.json",
+      "includeCredentialOnSourceRequest": "include"
+    },
+    "homeProvider": {
+      "id": "register-with-home",
+      "title": "Home Starter",
+      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
+      "queryMinLength": 3,
+      "queryAgainst":["title"]
+    }
+  }
+}
