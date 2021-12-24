@@ -38,7 +38,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-home/favicon.ico",
-    "name": "Register With Home - v5",
+    "name": "Register With Home - Latest",
     "target": ["desktop", "start-menu"]
   },
   "customSettings": {
