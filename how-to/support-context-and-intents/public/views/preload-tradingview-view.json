@@ -1,0 +1,5 @@
+{
+    "url": "https://www.tradingview.com/chart/?symbol=AAPL",
+    "fdc3InteropApi": "1.2",
+    "preloadScripts": [{"url": "http://localhost:8080/views/preload-tradingview.js"}]
+  }
