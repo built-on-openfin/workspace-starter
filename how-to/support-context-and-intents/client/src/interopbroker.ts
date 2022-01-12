@@ -97,6 +97,8 @@ export class PlatformInteropBroker extends InteropBroker {
     // show menu
     // launch a new window and optionally pass the available intents as customData.apps as part of the window options
     // the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
+    // this logic runs in the provider so we are using it as a way of determing the root (so it works with root hosting and subdirectory based hosting.)
+    let url = window.location.href.replace("platform/provider.html", "windows/intents/picker.html")
     const winOption = {
       name: "intent-picker",
       includeInSnapshot: false,
@@ -111,11 +113,7 @@ export class PlatformInteropBroker extends InteropBroker {
         intent: options.intent,
         intents: options.intents,
       },
-      url:
-        location.protocol +
-        "//" +
-        location.host +
-        "/windows/intents/picker.html",
+      url,
       frame: false,
       autoShow: true,
       alwaysOnTop: true,
