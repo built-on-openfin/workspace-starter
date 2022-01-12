@@ -14,7 +14,7 @@
     "publisher": "OpenFin",
     "intents": [{
       "name": "ShowInstrument",
-      "displayName": "Show Instrument",
+      "displayName": "Show Instrument (pages and views)",
       "contexts": [
         "fdc3.instrument"
       ],
@@ -39,7 +39,7 @@
     "publisher": "OpenFin",
     "intents": [{
       "name": "ShowInstrument",
-      "displayName": "Show Intrument",
+      "displayName": "Show Intrument (pages and views)",
       "contexts": [
         "fdc3.instrument"
       ],
@@ -64,7 +64,7 @@
     "publisher": "OpenFin",
     "intents": [{
       "name": "ShowInstrument",
-      "displayName": "Show Instrument",
+      "displayName": "Show Instrument (pages and views)",
       "contexts": [
         "fdc3.instrument"
       ],
@@ -89,7 +89,7 @@
     "publisher": "OpenFin",
     "intents": [{
       "name": "ShowInstrument",
-      "displayName": "Show Instrument",
+      "displayName": "Show Instrument (pages and views)",
       "contexts": [
         "fdc3.instrument"
       ],
@@ -188,14 +188,14 @@
     "intents": [
       {
         "name": "ShowInstrument",
-        "displayName": "Show Instrument",
+        "displayName": "Show Instrument (pages and views)",
         "contexts": [
           "fdc3.instrument"
         ],
         "customConfig": {}},
       {
       "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument For Page",
+      "displayName": "Show Instrument (pages only)",
       "contexts": [
         "fdc3.instrument"
       ],
@@ -221,14 +221,14 @@
     "intents": [
       {
         "name": "ShowInstrument",
-        "displayName": "Show Instrument",
+        "displayName": "Show Instrument (pages and views)",
         "contexts": [
           "fdc3.instrument"
         ],
         "customConfig": {}},
       {
       "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument For Page",
+      "displayName": "Show Instrument (pages only)",
       "contexts": [
         "fdc3.instrument"
       ],
