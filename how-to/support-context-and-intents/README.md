@@ -63,7 +63,7 @@ $ start npm run start
 ```bash
 $ npm run client
 ```
-![](openfin-register-with-store.gif)
+![](workspace-support-context-intents-build.gif)
 
 6. Type any character into the search box to show the default list of applications.
    The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
