@@ -23,6 +23,7 @@ This repository contains examples showing how to configure core Workspace functi
 | [How To Register With Store)](./how-to/register-with-store)   | This example is an extension of the registering with Home example. The main difference is that it is now using config and the list of apps to use our Storefront APIs to configure a store in addition to Home.
 | [How To Register With Store - Basic](./how-to/register-with-store-basic)   | This is a basic example where the apps and store configuration is hard-coded. The example app is visible and has 3 buttons to register/deregister the store, show the store and hide the store.
 | [How To Integrate With Salesforce](./how-to/integrate-with-salesforce)   | This example demonstrates how to implement Salesforce integration in OpenFin Workspace using our Salesforce integration API, enabling you to browse and search Salesforce data in OpenFin Home.
+| [How To Support Context And Intents](./how-to/support-context-and-intents)   | This example is an extension of the register with store example but shows you how to implement intent support in your workspace platform. It includes various examples of sharing context and different ways of raising an intent and passing the context to the intent target.
 
 
 ## Before you get started
