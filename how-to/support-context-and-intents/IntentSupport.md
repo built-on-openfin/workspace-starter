@@ -40,3 +40,10 @@ To run this sample:
 * Once you are happy with your selections you can use the button near the top to pick an instrument to send as part of the intent.
 ---
 
+## Example of raising intents
+
+![](workspace-support-context-intents-raising-intents.gif)
+
+## Example of Sharing context with Third Party Websites using preload scripts and fdc3 broadcasting.
+
+![](workspace-support-context-intents-preload.gif)
