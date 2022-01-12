@@ -8,7 +8,8 @@
     "how-tos": [
         "register-with-home",
         "register-with-store",
-        "integrate-with-salesforce"
+        "integrate-with-salesforce",
+        "support-context-and-intents"
     ],
     "author": "",
     "license": "ISC",
