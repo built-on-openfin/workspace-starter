@@ -1,0 +1,250 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version": "23.96.67.7"
+  },
+  "platform": {
+    "uuid": "register-with-store",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true,
+        "downloadAsset": true,
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+    "name": "Register With Store - Latest",
+    "target": ["desktop", "start-menu"]
+  },
+  "appAssets": [
+    {
+        "alias": "winform-interop-example",
+        "version": "1.0.0",
+        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/assets/native-interop-example.zip",
+        "target": "OpenFin.Interop.Win.Sample.exe",
+        "forceDownload": false
+    }
+],
+  "customSettings": {
+    "bootstrap": {
+      "home": true,
+      "store": true
+    },
+    "appProvider": {
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/apps.json",
+      "includeCredentialOnSourceRequest": "include",
+      "cacheDurationInMinutes": 1,
+      "appAssetTag": "appasset"
+    },
+    "browserProvider": {
+      "windowOptions": {
+        "title": "Browser Starter",
+        "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+        "newTabUrl": null,
+        "newPageUrl": null
+      }
+    },
+    "themeProvider": {
+        "themes":[
+          {
+              "label": "Starter Theme",
+              "logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+              "palette": {
+                  "brandPrimary": "#504CFF",
+                  "brandSecondary": "#383A40",
+                  "backgroundPrimary": "#111214",
+                  "functional1": null,
+                  "functional2": null,
+                  "functional3": null,
+                  "functional4": null,
+                  "functional5": null,
+                  "functional6": null,
+                  "functional7": null,
+                  "functional8": null,
+                  "functional9": null,
+                  "functional10": null,
+                  "statusSuccess": null,
+                  "statusWarning": null,
+                  "statusCritical": null,
+                  "statusActive": null,
+                  "inputBg": null,
+                  "inputColor": null,
+                  "inputPlaceholder": null,
+                  "inputDisabled": null,
+                  "inputFocused": null,
+                  "textDefault": null,
+                  "textHelp": null,
+                  "textInactive": null,
+                  "background1": null,
+                  "background2": null,
+                  "background3": null,
+                  "background4": null,
+                  "background5": null,
+                  "background6": null
+              }
+          }
+      ]
+    },
+    "homeProvider": {
+      "id": "register-with-store-home",
+      "title": "Home Starter",
+      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+      "queryMinLength": 3,
+      "queryAgainst":["title"]
+    },
+    "storefrontProvider": {
+      "id": "register-with-store",
+      "title": "Custom Storefront",
+      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico",
+      "landingPage": {
+        "hero": {
+          "title": "Custom Hero Title",
+          "description": "This is a demonstration of the hero section that you can configure for your store.",
+          "cta": {
+            "title": "Hero Apps!",
+            "tags": ["hero"]
+          },
+          "image": {
+            "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/superhero-unsplash.jpg"
+          }
+        },
+        "topRow": {
+          "title": "Custom Top Row Content",
+          "items": [
+            {
+              "title": "Expero",
+              "description": "A collection of example views from Expero showing the power of interop and context sharing.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-1-unsplash.jpg"
+              },
+              "tags": ["expero"]
+            },
+            {
+              "title": "Dev Tools",
+              "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-2-unsplash.jpg"
+              },
+              "tags": ["tools"]
+            },
+            {
+              "title": "Learning Resource",
+              "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-3-unsplash.jpg"
+              },
+              "tags": ["page"]
+            }
+          ]
+        },
+        "middleRow": {
+          "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+          "tags": ["fdc3","interop"]
+        },
+        "bottomRow": {
+          "title": "Quick Access",
+          "items": [
+            {
+              "title": "Views",
+              "description": "A collection of views made available through our catalog.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-4-unsplash.jpg"
+              },
+              "tags": ["view"]
+            },
+            {
+              "title": "Web Apps",
+              "description": "A collection of web apps built using OpenFin.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-5-unsplash.jpg"
+              },
+              "tags": ["manifest"]
+            },
+            {
+              "title": "Native Apps",
+              "description": "A collection of native apps made available through our catalog.",
+              "image": {
+                "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/images/coding-6-unsplash.jpg"
+              },
+              "tags": ["native"]
+            }
+          ]
+        }
+      },
+      "navigation": [
+        {
+          "title": "Applications",
+          "items": [
+            {
+              "title": "All Apps",
+              "tags": ["view","page","manifest","native"]
+            },
+            { "title": "Views", "tags": ["view"] },
+            { "title": "Pages", "tags": ["page"] },
+            {
+              "title": "Manifest",
+              "tags": ["manifest"]
+            },
+            {
+              "title": "Native",
+              "tags": ["native"]
+            }
+          ]
+        },
+        {
+          "title": "Context Sharing",
+          "items": [
+            {
+              "title": "FDC3 API",
+              "tags": ["fdc3"]
+            },
+            {
+              "title": "Interop API",
+              "tags": ["interop"]
+            }
+          ]
+        }
+      ],
+      "footer": {
+        "logo": { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.0.0/register-with-store/favicon.ico", "size": "32" },
+        "text": "Welcome to the OpenFin Sample Footer",
+        "links": [
+          {
+            "title": "Github",
+            "url": "https://github.com/built-on-openfin/workspace-starter"
+          },
+          {
+            "title": "YouTube",
+            "url": "https://www.youtube.com/user/OpenFinTech"
+          }
+        ]
+      }
+    }
+  }
+}
