@@ -23,7 +23,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fmain%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents</a>
 
 ---
 
@@ -458,6 +458,9 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 - How do I demonstrate intent support?
 
    - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
+- How do I demonstrate context support?
+
+   - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](public/views)folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](public/views/preload-tradingview-view.json)
 ---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
