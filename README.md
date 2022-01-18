@@ -9,6 +9,10 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 [Learn more about openfin.co/workspace](https://www.openfin.co/workspace/)
 
+## What version does this branch cover?
+
+This branch covers version **5.5.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Workspace&sub-product=Workspace&version=5.5.0)
+
 ## What you can do with this repository
 
 This repository contains examples showing how to configure core Workspace functionality for your application using our workspace API.
@@ -55,7 +59,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "5.0.0",
+        "version": "5.5.0",
         "customConfig": {
         }
       }
@@ -71,7 +75,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "5.0.0",
+        "version": "5.5.0",
         "customConfig": {
         }
       }

@@ -3,6 +3,24 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  licence from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
+# Migrate from a previous version - From v5 to v5.5
+
+With Workspace 5.5, OpenFin has continued extended theme support so that the provided palette now applies to the OpenFin Home and Store Components.
+
+## What dependencies will I need?
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^5.5.0",
+                    "@openfin/workspace-platform": "^5.5.0"
+                }
+```
+## What changes will I need to do if I want the simplest move from v5 to v5.5?
+
+There are no breaking changes and this release just includes fixes and extends theming support to OpenFin Home and Store (no api changes are required). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 5.5.0 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 5.5.0.
+
 # Migrate from a previous version - From v4 to v5
 
 With Workspace 5.0, OpenFin has extended the ability for Workspace customers to have  more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a workspace platform instead of the existing platform api. This lets you application launch OpenFin Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
