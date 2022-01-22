@@ -1,5 +1,5 @@
 name: GitHub Demo Packaging
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   Build-Package-Workspace-Starter:
     runs-on: ubuntu-latest

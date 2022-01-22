@@ -63,6 +63,15 @@ $ start npm run start
 ```bash
 $ npm run client
 ```
+
+If you want to see a second workspace platform run alongside the first you can fire up a copy using the following command:
+
+```bash
+$ npm run secondclient
+```
+
+This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
+
 ![](workspace-support-context-intents-build.gif)
 
 6. Type any character into the search box to show the default list of applications.

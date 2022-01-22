@@ -11,6 +11,7 @@
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
     "client": "start fin://localhost:8080/manifest.fin.json",
+    "secondclient": "start fin://localhost:8080/second.manifest.fin.json",
     "server": "node ./server/build/index.js",
     "kill": "(npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
     "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
