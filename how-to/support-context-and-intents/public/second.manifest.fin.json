@@ -7,7 +7,7 @@
   },
   "platform": {
     "uuid": "second-support-context-and-intents",
-    "icon": "http://localhost:8080/favicon.ico",
+    "icon": "http://localhost:8080/favicon-32x32.png",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",
     "preventQuitOnLastWindowClosed":true,
@@ -58,7 +58,7 @@
     "browserProvider": {
       "windowOptions": {
         "title": "Second Browser Starter",
-        "icon": "http://localhost:8080/favicon.ico",
+        "icon": "http://localhost:8080/favicon-32x32.png",
         "newTabUrl": null,
         "newPageUrl": null
       }
@@ -67,11 +67,11 @@
         "themes":[
           {
               "label": "Second Starter Theme",
-              "logoUrl": "http://localhost:8080/favicon.ico",
+              "logoUrl": "http://localhost:8080/favicon-32x32.png",
               "palette": {
-                  "brandPrimary": "#0070D2",
-                  "brandSecondary": "#0070D2",
-                  "backgroundPrimary": "#265A78",
+                  "brandPrimary": "#706fed",
+                  "brandSecondary": "#808dde",
+                  "backgroundPrimary": "#706fed",
                   "functional1": null,
                   "functional2": null,
                   "functional3": null,
@@ -94,12 +94,12 @@
                   "textDefault": null,
                   "textHelp": null,
                   "textInactive": null,
-                  "background1": "#0C4362",
-                  "background2": "#105998",
-                  "background3": "#265A78",
-                  "background4": "#0070D2",
-                  "background5": "#0070D2",
-                  "background6": "#0070D2"
+                  "background1": "#808dde",
+                  "background2": "#706fed",
+                  "background3": "#415c71",
+                  "background4": "#2c345c",
+                  "background5": "#2c345c",
+                  "background6": "#2c345c"
               }
           }
       ]
@@ -107,14 +107,14 @@
     "homeProvider": {
       "id": "second-support-context-and-intents",
       "title": "Second Home Starter",
-      "icon": "http://localhost:8080/favicon.ico",
+      "icon": "http://localhost:8080/favicon-32x32.png",
       "queryMinLength": 3,
       "queryAgainst":["title"]
     },
     "storefrontProvider": {
       "id": "second-support-context-and-intents",
       "title": "Second Custom Storefront",
-      "icon": "http://localhost:8080/favicon.ico",
+      "icon": "http://localhost:8080/favicon-32x32.png",
       "landingPage": {
         "hero": {
           "title": "Custom Hero Title",
@@ -225,7 +225,7 @@
         }
       ],
       "footer": {
-        "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+        "logo": { "src": "http://localhost:8080/favicon-32x32.png", "size": "32" },
         "text": "Welcome to the OpenFin Sample Footer",
         "links": [
           {
