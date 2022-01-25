@@ -20,8 +20,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/workspace": "next",
-    "@openfin/workspace-platform": "next"
+    "@openfin/workspace": "5.5.0",
+    "@openfin/workspace-platform": "5.5.0"
   },
   "devDependencies": {
     "express": "^4.17.1",

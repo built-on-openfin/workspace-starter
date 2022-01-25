@@ -465,8 +465,10 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 - Things have moved/gone?
  
    - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
-- How do I demonstrate intent support?
+- How do I know what the settings in the theme settings in the manifest file actually changes?
 
+   - [Workspace Themes Overview](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
+- How do I demonstrate intent support?
    - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
