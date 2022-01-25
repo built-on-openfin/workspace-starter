@@ -117,10 +117,10 @@
       "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.5.0/support-context-and-intents/favicon-32x32.png",
       "landingPage": {
         "hero": {
-          "title": "Custom Hero Title",
-          "description": "This is a demonstration of the hero section that you can configure for your store.",
+          "title": "Second Custom Hero Title",
+          "description": "This is a demonstration of the hero section that you can configure for your store and a demonstration that different stores can have different content.",
           "cta": {
-            "title": "Hero Apps!",
+            "title": "Second Hero Apps!",
             "tags": ["hero"]
           },
           "image": {
