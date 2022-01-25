@@ -23,7 +23,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.5.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
+* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.5.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
 
 ---
 
@@ -41,7 +42,7 @@ $ npm install
 $ npm run build
 ```
 
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.5.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -63,6 +64,15 @@ $ start npm run start
 ```bash
 $ npm run client
 ```
+
+If you want to see a second workspace platform run alongside the first you can fire up a copy using the following command:
+
+```bash
+$ npm run secondclient
+```
+
+This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
+
 ![](workspace-support-context-intents-build.gif)
 
 6. Type any character into the search box to show the default list of applications.
@@ -455,8 +465,10 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 - Things have moved/gone?
  
    - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
-- How do I demonstrate intent support?
+- How do I know what the settings in the theme settings in the manifest file actually changes?
 
+   - [Workspace Themes Overview](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
+- How do I demonstrate intent support?
    - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
