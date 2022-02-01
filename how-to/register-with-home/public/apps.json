@@ -1,41 +1,22 @@
 [
   {
-    "appId": "basic-interop-view",
-    "name": "basic-interop-view",
-    "title": "Basic Interop View",
-    "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
-    "manifest": "http://localhost:8080/views/basic-interop-view.json",
+    "appId": "local-newsplus-app",
+    "name": "local-newplus-app",
+    "title": "Newplus instance runing locally to test openfin features",
+    "description": "Newplus POC interaction",
+    "manifest": "http://local.dev.wsj.com:4000/public/local-manifest.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      { "src": "http://local.dev.wsj.com:4000/favicon.ico" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
+      "src":"http://local.dev.wsj.com:4000/favicon.ico"
     }],
     "tags":["view", "interop"]
-  },
-  {
-    "appId": "basic-fdc3-view",
-    "name": "basic-fdc3-view",
-    "title": "Basic FDC3 View",
-    "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
-    "manifest": "http://localhost:8080/views/basic-fdc3-view.json",
-    "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":["view", "fdc3"]
   },
   {
     "appId": "expero-company-news",
@@ -134,43 +115,5 @@
       "src":"http://localhost:8080/images/previews/openfin-process-manager.png"
     }],
     "tags":["hero", "manifest", "tools"]
-  },
-  {
-    "appId": "openfin-developer-page",
-    "name": "openfin-developer-page",
-    "title": "OpenFin Developer Docs",
-    "manifestType": "snapshot",
-    "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-    "manifest": "http://localhost:8080/snapshot.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":["page"]
-  },
-  {
-    "appId": "Notepad",
-    "name": "Notepad",
-    "title": "Notepad",
-    "description": "Open Notepad and start taking some quick notes.",
-    "manifestType": "external",
-    "manifest": "notepad.exe",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-notepad.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "Microsoft",
-    "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/microsoft-notepad-native.png"
-    }],
-    "tags":["native"]
   }
 ]
