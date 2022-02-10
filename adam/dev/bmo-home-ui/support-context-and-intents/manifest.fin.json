@@ -84,7 +84,7 @@
               "label": "Starter Theme",
               "logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v5.5.0/support-context-and-intents/images/BMO-icon.png",
               "palette": {
-                  "brandPrimary": "#0075BE",
+                  "brandPrimary": "#8c8c8c",
                   "brandSecondary": "#383A40",
                   "backgroundPrimary": "#111214",
                   "functional1": null,
@@ -110,7 +110,7 @@
                   "textHelp": null,
                   "textInactive": null,
                   "background1": "#0075BE",
-                  "background2": null,
+                  "background2": "#8c8c8c",
                   "background3": null,
                   "background4": null,
                   "background5": null,
