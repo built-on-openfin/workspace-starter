@@ -2,7 +2,11 @@ const fs = require('fs-extra');
 const {execSync} = require('child_process')
 const package = require("../package.json");
 const replace = require('replace-in-file');
+let hostFolder = "workspace/v" + package.version;
 
+if(package.howToCustomFolder !== undefined && package.howToCustomFolder !== ""){
+  hostFolder = package.howToCustomFolder;
+}
 
 fs.rmSync("public", { recursive: true, force: true });
 
@@ -20,7 +24,7 @@ for(let i = 0; i < package['how-tos'].length; i++) {
     let options = {
       files: 'public/' + package['how-tos'][i] + '/**/*.json',
       from: /http:\/\/localhost:8080/g,
-      to: 'https://built-on-openfin.github.io/workspace-starter/workspace/v' + package.version + '/' + package['how-tos'][i],
+      to: 'https://built-on-openfin.github.io/workspace-starter/' + hostFolder + '/' + package['how-tos'][i],
     };
     try {
       let results = replace.sync(options);

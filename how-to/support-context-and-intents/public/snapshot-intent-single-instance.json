@@ -1,8 +1,8 @@
 {
     "windows": [
       {
-        "height": 1000,
-        "width": 1600,
+        "defaultHeight": 900,
+        "defaultWidth": 1200,
         "center": true,
         "layout": {
           "settings": {

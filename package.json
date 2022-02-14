@@ -11,6 +11,7 @@
         "integrate-with-salesforce",
         "support-context-and-intents"
     ],
+    "howToCustomFolder":"",
     "author": "",
     "license": "ISC",
     "devDependencies": {
