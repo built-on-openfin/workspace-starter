@@ -3,7 +3,7 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  licence from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
-## OpenFin Workspace 5.5.0
+## OpenFin Workspace VNext (Under Development)
 
 The OpenFin Workspace is a full-featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, a store to aid in the discovery of content and a notification system to surface important moments while they're still important.
 
@@ -11,7 +11,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What version does this branch cover?
 
-This branch covers version **5.5.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Workspace&sub-product=Workspace&version=5.5.0)
+This branch covers version **6.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Workspace&sub-product=Workspace&version=6.0.0)
 
 ## What you can do with this repository
 
@@ -59,7 +59,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "5.5.0",
+        "version": "6.0.0",
         "customConfig": {
         }
       }
@@ -75,7 +75,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "5.5.0",
+        "version": "6.0.0",
         "customConfig": {
         }
       }
