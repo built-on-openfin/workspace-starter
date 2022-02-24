@@ -1,5 +1,138 @@
 [
   {
+    "appId": "call-app",
+    "name": "call-app",
+    "title": "Call Application",
+    "description": "Start a call.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/views/contact/call-app.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [{
+      "name": "ViewContact",
+      "displayName": "View Contact",
+      "contexts": [
+        "fdc3.contact"
+      ],
+      "customConfig": {}}],
+    "images": [],
+    "tags":["view", "interop", "fdc3", "contact"]
+  },
+  {
+    "appId": "participant-selection",
+    "name": "participant-selection",
+    "title": "Participant Selection",
+    "description": "Select a participant.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/views/contact/participant-selection.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [],
+    "tags":["view", "interop", "fdc3", "contact"]
+  },
+  {
+    "appId": "participant-history",
+    "name": "participant-history",
+    "title": "Participant History",
+    "description": "View participant history.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/views/contact/participant-history.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [{
+      "name": "ViewContact",
+      "displayName": "View Contact",
+      "contexts": [
+        "fdc3.contact"
+      ],
+      "customConfig": {}}],
+    "images": [],
+    "tags":["view", "interop", "fdc3", "contact"]
+  },
+  {
+    "appId": "investments-and-models",
+    "name": "investments-and-models",
+    "title": "Investments and Models",
+    "description": "View investments and models.",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/views/contact/investments-and-models.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [{
+      "name": "ViewContact",
+      "displayName": "View Contact",
+      "contexts": [
+        "fdc3.contact"
+      ],
+      "customConfig": {}}],
+    "images": [],
+    "tags":["view", "interop", "fdc3", "contact"]
+  },
+  {
+    "appId": "participant-summary-view",
+    "name": "participant-summary-view",
+    "title": "Participant Summary",
+    "description": "View summary of the participant",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/views/contact/participant-summary.json",
+    "manifestType": "view",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [{
+      "name": "ViewContact",
+      "displayName": "View Contact",
+      "contexts": [
+        "fdc3.contact"
+      ],
+      "customConfig": {}}],
+    "images": [],
+    "tags":["view", "interop", "fdc3", "contact"]
+  },
+  {
+    "appId": "client-overview",
+    "name": "client-overview",
+    "title": "Client Overview",
+    "manifestType": "snapshot",
+    "description": "Provides a summary of the current client",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/snapshot-contact-overview.json",
+    "icons": [
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/support-context-and-intents/images/icon-blue.png" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}}],
+    "images": [],
+    "tags":[ "page", "openfin", "client", "interop", "fdc3"]
+  },
+  {
     "appId": "basic-interop-view",
     "name": "basic-interop-view",
     "title": "Basic Interop View",
