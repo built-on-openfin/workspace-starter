@@ -19,6 +19,7 @@ import { getPage, getPages, deletePage, launchPage } from "./browser";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
+let isHomeRegistered = false;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
   if (Array.isArray(tags)) {
@@ -311,6 +312,7 @@ export async function register() {
   };
 
   await Home.register(cliProvider);
+  isHomeRegistered = true;
   console.log("Home configured.");
 }
 
@@ -323,6 +325,10 @@ export async function hide() {
 }
 
 export async function deregister() {
-  let settings = await getSettings();
-  return Home.deregister(settings.homeProvider.id);
+  if(isHomeRegistered) {
+    let settings = await getSettings();
+    return Home.deregister(settings.homeProvider.id);
+  } else {
+    console.warn("Unable to deregister home as there is an indication it was never registered")
+  }
 }
