@@ -52,12 +52,21 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
     return null;
   }
 
-  if (viewApp.manifestType !== "view") {
-    console.warn("The app passed was not of manifestType view.");
+  if (viewApp.manifestType !== "view" && viewApp.manifestType !== "inline-view") {
+    console.warn("The app passed was not of manifestType view or inline-view.");
     return null;
   }
-  let manifestResponse = await fetch(viewApp.manifest);
-  let manifest = await manifestResponse.json();
+  let manifest;
+
+  if(viewApp.manifestType === "view"){
+    let manifestResponse = await fetch(viewApp.manifest);
+    manifest = await manifestResponse.json();
+  } else {
+    // conversion because of manifestType. In most usecases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
+    // for passing the manifest inline
+    manifest = (viewApp.manifest as unknown) as OpenFin.ViewOptions;
+  }
+
 
   let name = manifest.name;
   let identity = { uuid: fin.me.identity.uuid, name };
@@ -70,13 +79,9 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 
   if (viewExists === false) {
     try {
-      if (wasNameSpecified) {
-        await launch(viewApp);
-      } else {
         let platform = getCurrentSync();
         let createdView = await platform.createView(manifest);
         identity = createdView.identity;
-      }
     } catch (err) {
       console.error("Error launching view", err);
       return null;
@@ -188,7 +193,10 @@ export async function launch(appEntry: App) {
 
       await fin.System.launchExternalProcess(options);
     }
-  } else {
+  } else if(appEntry.manifestType === "inline-view") {
+    await launchView(appEntry);
+  } 
+  else {
     let platform = getCurrentSync();
     await platform.launchApp({app: appEntry});
   }

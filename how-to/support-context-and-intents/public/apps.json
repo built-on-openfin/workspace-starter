@@ -183,6 +183,42 @@
     "tags":["view", "interop", "openfin"]
   },
   {
+    "appId": "fdc3-workbench",
+    "name": "fdc3-workbench",
+    "title": "FDC3 Workbench",
+    "description": "Launch the official FDC3 Workbench",
+    "manifest": {
+      "url":"https://fdc3.finos.org/toolbox/fdc3-workbench/",
+      "fdc3InteropApi": "1.2",
+      "name": "fdc3-workbench"
+    },
+    "manifestType": "inline-view",
+    "icons": [
+      { "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [{
+      "name": "ViewContact",
+      "displayName": "View Contact",
+      "contexts": [
+        "fdc3.contact"
+      ],
+      "customConfig": {}},
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}}],
+    "images": [{
+      "src":"http://localhost:8080/images/previews/fdc3-workbench.png"
+    }],
+    "tags":["view", "interop", "fdc3", "contact", "instrument"]
+  },
+  {
     "appId": "basic-fdc3-view",
     "name": "basic-fdc3-view",
     "title": "Basic FDC3 View",
