@@ -11,7 +11,7 @@
         "integrate-with-salesforce",
         "support-context-and-intents"
     ],
-    "howToCustomFolder":"workspace/vnext",
+    "howToCustomFolder":"",
     "author": "",
     "license": "ISC",
     "devDependencies": {
