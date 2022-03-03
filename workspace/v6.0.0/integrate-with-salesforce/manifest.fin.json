@@ -7,9 +7,9 @@
   },
   "platform": {
     "uuid": "integrate-with-salesforce",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/favicon.ico",
     "autoShow": false,
-    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/platform/provider.html",
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/platform/provider.html",
     "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
@@ -36,13 +36,13 @@
   "shortcut": {
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/favicon.ico",
     "name": "Integrate With Salesforce - v6.0",
     "target": ["desktop", "start-menu"]
   },
   "customSettings": {
     "consumerKey": "",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/favicon.ico",
     "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
