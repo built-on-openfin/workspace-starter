@@ -59,7 +59,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "6.0.0",
+        "version": "6.1.6",
         "customConfig": {
         }
       }
@@ -75,7 +75,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "6.0.0",
+        "version": "6.1.6",
         "customConfig": {
         }
       }
