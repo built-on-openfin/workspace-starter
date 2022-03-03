@@ -45,10 +45,9 @@ function setInstrument(ctx) {
   container.style.display = "unset";
   if (
     ctx.id !== undefined &&
-    ctx.id.ticker !== undefined &&
-    instrumentMap[ctx.id.ticker] !== undefined
+    ctx.id.ticker !== undefined
   ) {
-    name.innerText = instrumentMap[ctx.id.ticker];
+    name.innerText = instrumentMap[ctx.id.ticker] || ctx.id.ticker;
     ticker.innerText = ctx.id.ticker;
     type.innerText = ctx.type;
   } else {

@@ -23,8 +23,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.5.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
-* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv5.5.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
+* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
 
 ---
 
@@ -42,7 +42,7 @@ $ npm install
 $ npm run build
 ```
 
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.5.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 6.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -473,6 +473,9 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 - How do I demonstrate context support?
 
    - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](public/views)folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](public/views/preload-tradingview-view.json)
+- Do I always need a view manifest if it just contains a url?
+
+  - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [public/apps.json](public/apps.json#L185). The [launch.ts](client/src/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
 ---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

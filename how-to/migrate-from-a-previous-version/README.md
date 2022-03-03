@@ -3,6 +3,27 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  licence from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
+# Migrate from a previous version - From v5.5 to v6.0
+
+With Workspace 6.0, OpenFin has added additional options when it comes to customization. You can now customize:
+
+* The browser controls and menu [(https://developers.openfin.co/of-docs/docs/customize-browser-features)](https://developers.openfin.co/of-docs/docs/customize-browser-features)
+* Customize the template displayed as part of a search result entry in home [(https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)
+
+## What dependencies will I need?
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^6.0.0",
+                    "@openfin/workspace-platform": "^6.0.0"
+                }
+```
+## What changes will I need to do if I want the simplest move from v5.5 to v6?
+
+There are no breaking changes in this release (just fixes and the new features mentioned above). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 6.1.6 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 6.1.6.
+
 # Migrate from a previous version - From v5 to v5.5
 
 With Workspace 5.5, OpenFin has continued extended theme support so that the provided palette now applies to the OpenFin Home and Store Components.

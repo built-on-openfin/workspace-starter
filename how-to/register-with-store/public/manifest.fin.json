@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "23.96.67.7"
+    "version": "23.96.68.3"
   },
   "platform": {
     "uuid": "register-with-store",
@@ -39,13 +39,13 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Register With Store - v5.5",
+    "name": "Register With Store - v6.0",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
     {
         "alias": "winform-interop-example",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "src": "http://localhost:8080/assets/native-interop-example.zip",
         "target": "OpenFin.Interop.Win.Sample.exe",
         "forceDownload": false

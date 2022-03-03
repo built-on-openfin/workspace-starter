@@ -18,12 +18,15 @@ import {
   StorefrontSettingsNavigationItem,
 } from "./shapes";
 
+let isStoreRegistered = false;
+
 export async function register() {
   console.log("Initialising the storefront provider.");
   let provider = await getStoreProvider();
   if (provider !== null) {
     try {
       await Storefront.register(provider);
+      isStoreRegistered = true;
       console.log("Storefront provider initialised.");
     } catch (err) {
       console.error(
@@ -35,8 +38,12 @@ export async function register() {
 }
 
 export async function deregister() {
-  let settings = await getSettings();
-  Storefront.deregister(settings.storefrontProvider.id);
+  if(isStoreRegistered) {
+    let settings = await getSettings();
+    Storefront.deregister(settings.storefrontProvider.id);
+  } else {
+    console.warn("Unable to call store deregister as there is an indication it was never registered successfully.");
+  }
 }
 
 export async function show() {
@@ -46,7 +53,7 @@ export async function show() {
 
 export async function hide() {
   console.log("Hiding the store.");
-  return Storefront.show();
+  return Storefront.hide();
 }
 
 /**

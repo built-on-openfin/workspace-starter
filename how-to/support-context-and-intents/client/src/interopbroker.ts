@@ -17,7 +17,7 @@ export class PlatformInteropBroker extends InteropBroker {
   async launchAppWithIntent(app: App, intent) {
     console.log("Launching app with intent.");
 
-    if (app.manifestType !== "view" && app.manifestType !== "snapshot") {
+    if (app.manifestType !== "view" && app.manifestType !== "inline-view" && app.manifestType !== "snapshot") {
       // optional logic show a prompt to the user to let them know
       console.warn(
         "Unable to raise intent against app as only view/snapshot based apps are supported."
@@ -25,8 +25,8 @@ export class PlatformInteropBroker extends InteropBroker {
       return null;
     }
 
-    if (app.manifestType === "view") {
-      console.log("The supporting app is a view.");
+    if (app.manifestType === "view" || app.manifestType === "inline-view") {
+      console.log("The supporting app is a view (" + app.manifestType + ")");
 
       let identity = await launchView(app);
       if (identity === null) {
