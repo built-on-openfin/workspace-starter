@@ -32,11 +32,11 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getApps": () => (/* binding */ getApps),
+/* harmony export */   "developerContent": () => (/* binding */ developerContent),
 /* harmony export */   "experoApp": () => (/* binding */ experoApp),
+/* harmony export */   "getApps": () => (/* binding */ getApps),
 /* harmony export */   "notificationStudio": () => (/* binding */ notificationStudio),
-/* harmony export */   "processManager": () => (/* binding */ processManager),
-/* harmony export */   "developerContent": () => (/* binding */ developerContent)
+/* harmony export */   "processManager": () => (/* binding */ processManager)
 /* harmony export */ });
 async function getApps() {
     return [experoApp, notificationStudio, processManager, developerContent];
@@ -127,10 +127,10 @@ const developerContent = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "register": () => (/* binding */ register),
 /* harmony export */   "deregister": () => (/* binding */ deregister),
-/* harmony export */   "show": () => (/* binding */ show),
-/* harmony export */   "hide": () => (/* binding */ hide)
+/* harmony export */   "hide": () => (/* binding */ hide),
+/* harmony export */   "register": () => (/* binding */ register),
+/* harmony export */   "show": () => (/* binding */ show)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace */ "./node_modules/@openfin/workspace/index.js");
 /* harmony import */ var _openfin_workspace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace__WEBPACK_IMPORTED_MODULE_0__);
