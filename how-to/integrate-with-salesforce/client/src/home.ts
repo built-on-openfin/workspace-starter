@@ -15,9 +15,9 @@ import {
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launchView } from "./browser";
-import { getConnection, getSearchResults, init as connectToSalesforce } from "./salesforce";
-import { ConnectionError, getObjectUrl, SalesforceRestApiAccountSObject, SalesforceRestApiContactSObject, SalesforceRestApiSObjectBase } from "@openfin/salesforce";
+import { connectToSalesforce, getConnection, getObjectUrl, getSearchResults, SalesforceAccount, SalesforceContact } from "./salesforce";
 import { SalesforceResultData } from "./shapes";
+import { ConnectionError } from "@openfin/salesforce";
 
 const BROWSE_SEARCH_RESULT_KEY = 'browse-salesforce';
 const PROVIDER_ID = 'integrate-with-salesforce';
@@ -83,7 +83,7 @@ async function getResults(
   }
 
   // Retrieve search results from Salesforce
-  let searchResults: SalesforceRestApiSObjectBase[];
+  let searchResults: (SalesforceAccount | SalesforceContact)[];
   try {
     let selectedObjects: string[] = [];
     if (Array.isArray(filters) && filters.length > 0) {
@@ -114,57 +114,52 @@ async function getResults(
 
   const results = searchResults.map((searchResult) => {
     const data = {
-      pageUrl: getObjectUrl(searchResult, salesforceConnection),
+      pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
     } as SalesforceResultData;
-    switch (searchResult.attributes.type) {
-      case 'Account': {
-        const account = searchResult as SalesforceRestApiAccountSObject;
-        return {
-          actions: [{ name: 'View', hotkey: 'enter' }],
-          label: searchResult.attributes.type,
-          key: account.Id,
-          title: account.Name,
-          data,
-          template: CLITemplate.Contact,
-          templateContent: {
-            name: account.Name,
-            title: account.Industry,
-            details: [
-              [
-                ['Phone', account.Phone],
-                ['Type', account.Type],
-                ['Website', account.Website],
-              ],
+    if ('Website' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Name,
+        data,
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.Name,
+          title: searchResult.Industry,
+          details: [
+            [
+              ['Phone', searchResult.Phone],
+              ['Type', searchResult.Type],
+              ['Website', searchResult.Website],
             ],
-          },
-        } as CLISearchResultContact;
-      }
-      case 'Contact': {
-        const contact = searchResult as SalesforceRestApiContactSObject;
-        return {
-          actions: [{ name: 'View', hotkey: 'enter' }],
-          label: searchResult.attributes.type,
-          key: contact.Id,
-          title: contact.Name,
-          data,
-          template: CLITemplate.Contact,
-          templateContent: {
-            name: contact.Name,
-            title: contact.Title,
-            useInitials: true,
-            details: [
-              [
-                ['Department', contact.Department],
-                ['Email', contact.Email],
-                ['Work #', contact.Phone],
-              ],
+          ],
+        },
+      } as CLISearchResultContact;
+    } else if ('Email' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Name,
+        data,
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.Name,
+          title: searchResult.Title,
+          useInitials: true,
+          details: [
+            [
+              ['Department', searchResult.Department],
+              ['Email', searchResult.Email],
+              ['Work #', searchResult.Phone],
             ],
-          },
-        } as CLISearchResultContact;
-      }
-      default:
-        // in this case we are only searching for accounts and contacts
-        return undefined;
+          ],
+        },
+      } as CLISearchResultContact;
+    } else {
+      // in this case we are only searching for accounts and contacts
+      return undefined;
     }
   });
   const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];

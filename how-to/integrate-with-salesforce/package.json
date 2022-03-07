@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace--integrate-with-salesforce",
-  "version": "6.0.0",
+  "version": "5.5.0",
   "description": "OpenFin Workspace -- Integrate with Salesforce",
   "main": "index.js",
   "scripts": {
@@ -19,15 +19,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/salesforce": "2.0.0",
+    "@openfin/salesforce": "^2.1.1",
+    "@openfin/salesforce-lwc": "^1.1.0",
     "@openfin/workspace": "^6.0.0",
     "@openfin/workspace-platform": "^6.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "@types/node": "^14.14.33",
+    "@types/node": "^17.0.21",
+    "copy-webpack-plugin": "^10.2.4",
     "express": "^4.17.1",
-    "openfin-adapter": "^21.64.9",
+    "openfin-adapter": "^23.68.3",
     "source-map-loader": "^3.0.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4",
