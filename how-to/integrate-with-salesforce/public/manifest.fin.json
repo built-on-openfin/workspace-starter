@@ -41,10 +41,10 @@
     "target": ["desktop", "start-menu"]
   },
   "customSettings": {
-    "consumerKey": "3MVG9I9urWjeUW07KMnxakTLM5cd2ATHwmkSoIS54AseXgZOW0iC2VgjhrLCGFgQwmzc.NYADWph7IcMsldBB",
+    "consumerKey": "",
     "icon": "http://localhost:8080/favicon.ico",
     "isSandbox": false,
-    "orgUrl": "https://openfin2-dev-ed.my.salesforce.com/",
+    "orgUrl": "",
     "queryMinLength": 3,
     "title": "Salesforce"
   }
