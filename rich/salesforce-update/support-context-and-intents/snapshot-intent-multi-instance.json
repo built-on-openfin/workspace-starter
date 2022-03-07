@@ -1,0 +1,75 @@
+{
+    "windows": [
+      {
+        "defaultHeight": 900,
+        "defaultWidth": 1200,
+        "center": true,
+        "layout": {
+          "content": [
+            {
+              "type": "row",
+              "content": [
+                {
+                  "type": "column",
+                  "width": 100,
+                  "content": [
+                    {
+                      "type": "row",
+                      "height": 50,
+                      "content": [
+                        {
+                          "type": "stack",
+                          "width": 100,
+                          "height": 100,
+                          "content": [
+                            {
+                              "type": "component",
+                              "componentName": "view",
+                              "componentState": {
+                                "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/support-context-and-intents/views/basic-fdc3-view.html",
+                                "componentName": "view",
+                                "fdc3InteropApi": "1.2"
+                              },
+                              "title": "Intent Example 1"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "height": 50,
+                      "content": [
+                        {
+                          "type": "column",
+                          "width": 100,
+                          "content": [
+                            {
+                              "type": "stack",
+                              "width": 100,
+                              "height": 100,
+                              "content": [
+                                {
+                                  "type": "component",
+                                  "componentName": "view",
+                                  "componentState": {
+                                    "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/support-context-and-intents/views/basic-interop-view.html",
+                                    "componentName": "view"
+                                  },
+                                  "title": "Intent Example 2"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }

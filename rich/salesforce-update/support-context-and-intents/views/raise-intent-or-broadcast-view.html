@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Raise Intent Or Broadcast Instrument</title>
+    <script type="module" src="./raise-intent-or-broadcast-view.js"></script>
+    <link rel="stylesheet" href="./raise-intent-or-broadcast-view.css" />
+  </head>
+  <body>
+    <h1>Raise Intent Or Broadcast Instrument</h1>
+    <p>This view lets you experiment with the FDC3 and Interop APIs. 
+      <ul>
+        <li>Pick your API preference (fdc3 or interop)</li>
+        <li>Pick your action (raising intent or broadcasting/receiving context)</li>
+        <li>Click the button and pick an instrument</li>
+      </ul>
+      The available options will update to reflect your choice.
+    </p>
+    <div class="dropdown">
+      <button id="selectInstrument" class="dropbtn">
+        Send Instrument to Instrument Intent & Context Handlers
+      </button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#" data-ticker="AAPL">Apple</a>
+        <a href="#" data-ticker="TSLA">Tesla</a>
+        <a href="#" data-ticker="MSFT">Microsoft</a>
+      </div>
+    </div>
+    <h4>API Selection:</h4>
+    <div id="api-container">
+     <div>
+       <input type="radio" id="fdc3" name="api" value="fdc3"
+              checked>
+       <label for="fdc3">FDC3 API</label>
+     </div>
+     
+     <div>
+       <input type="radio" id="interop" name="api" value="interop">
+       <label for="interop">Interop API</label>
+     </div>
+   </div>
+   <h4>Action:</h4>
+   <div id="action-container">
+    <div>
+      <input type="radio" id="raise-intent" name="action" value="raise-intent"
+             checked>
+      <label for="raise-intent">Raise Intent</label>
+    </div>
+    
+    <div>
+      <input type="radio" id="broadcast" name="action" value="broadcast">
+      <label for="broadcast">broadcast</label>
+    </div>
+    </div>
+    <div id="intent-options-container">
+    <h4>Launch Application By Intent:</h4>
+
+    <div id="intent-container">
+    <div>
+      <input type="radio" id="ShowInstrument" name="intent" value="ShowInstrument"
+             checked>
+      <label for="ShowInstrument">ShowInstrument</label>
+    </div>
+    
+    
+    <div>
+      <input type="radio" id="ShowInstrumentForPage" name="intent" value="ShowInstrumentForPage">
+      <label for="ShowInstrumentForPage">ShowInstrumentForPage</label>
+    </div>
+  </div>
+    <h4>Launch Application By Context:</h4>
+
+    <div>
+      <input type="radio" id="fdc3.instrument" name="intent" value="fdc3.instrument">
+      <label for="fdc3.instrument">fdc3.instrument</label>
+    </div>
+
+    <h4>App Preference:</h4>
+<div>
+    <div>
+      <input type="radio" id="none" name="app" value="none" checked><label for="none">No Preference</label>
+    </div>
+    <div>
+      <input type="radio" id="appdoesnotexist" name="app" value="appdoesnotexist"><label for="nonExistentApp">Non Existent App</label>
+    </div>
+</div>
+<div id="app-container">
+    <div>
+      <input type="radio" id="basic-fdc3-view-multi" name="app" value="basic-fdc3-view-multi">
+      <label for="basic-fdc3-view-multi">Basic FDC3 View (Multi)</label>
+    </div>
+
+    <div>
+      <input type="radio" id="basic-interop-view-multi" name="app" value="basic-interop-view-multi">
+      <label for="basic-interop-view-multi">Basic Interop View (Multi)</label>
+    </div>
+</div>
+</div>
+  <div id="broadcast-data-container">
+    <div>
+      <h4>Broadcasted Instrument:</h4>
+      <span id="broadcasted-instrument">Nothing Broadcast</span>
+    </div>
+    <div id="instrument-container" style="display: none;">
+      <h4>Received Instrument:</h4>
+      <div><b>Name:</b> <span id="name"></span></div>
+      <div><b>Ticker:</b> <span id="ticker"></span></div>
+      <div><b>Type:</b> <span id="type"></span></div>
+    </div>
+  </div>
+  </body>
+</html>
