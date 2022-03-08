@@ -1,5 +1,5 @@
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
-import { init as connectToSalesforce } from './salesforce';
+import { connectToSalesforce } from './salesforce';
 import { getSettings } from "./settings";
 
 export async function init() {
