@@ -1,3 +1,4 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -12,6 +13,13 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, '../node_modules/@openfin/salesforce-lwc/preload.js') },
+      ],
+    }),
+  ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
