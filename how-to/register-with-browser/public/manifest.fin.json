@@ -56,9 +56,10 @@
         "name": "launch-bar",
         "frame": false,
         "icon":"https://www.openfin.co/favicon.ico",
-        "defaultHeight": 120,
+        "defaultHeight": 80,
         "defaultWidth": 1200,
         "defaultCentered": true,
+        "saveWindowState": false,
         "resizable": false,
         "alwaysOnTop": true,
         "cornerRounding": {

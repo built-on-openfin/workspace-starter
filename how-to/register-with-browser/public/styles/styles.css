@@ -3,6 +3,9 @@ html {
     overflow: hidden;
     background-color: #0B0B14;
 }
+.box {
+    background-color: #0B0B14;
+}
 ::-webkit-scrollbar {
     display: none;
 }
