@@ -1,33 +1,25 @@
 import { PlatformInteropBroker } from './interopbroker';
 
-import { init as workspacePlatformInit, BrowserInitConfig, BrowserButtonType } from '@openfin/workspace-platform';
+import { init as workspacePlatformInit, BrowserInitConfig, BrowserButtonType, BrowserOverrideCallback } from '@openfin/workspace-platform';
 import { getSettings, validateThemes } from "./settings";
 import { getActions } from './actions';
 import { getDefaultToolbarButtons } from './buttons';
+import { getDefaultWindowOptions, overrideCallback } from './browser';
 
 export async function init() {
     console.log("Initialising platform");
     let settings = await getSettings();
     let browser: BrowserInitConfig = {};
 
+
     if(settings.browserProvider !== undefined) {
-        browser.defaultWindowOptions = {
-            icon: settings.browserProvider.windowOptions?.icon,
-            workspacePlatform: {
-                pages: null,
-                title: settings.browserProvider.windowOptions?.title,
-                favicon: settings.browserProvider.windowOptions?.icon,
-                newTabUrl: settings.browserProvider.windowOptions?.newTabUrl,
-                newPageUrl: settings.browserProvider.windowOptions?.newPageUrl,
-                toolbarOptions: {
-                    buttons: getDefaultToolbarButtons()
-                }
-            }
-        };
+        browser.defaultWindowOptions = await getDefaultWindowOptions();
 
         browser.interopOverride =  async (InteropBroker, provider, options, ...args) => {
           return new PlatformInteropBroker(provider, options, ...args);
         };
+
+        browser.overrideCallback = overrideCallback;
     }
 
     console.log("Specifying following browser options: ", browser);

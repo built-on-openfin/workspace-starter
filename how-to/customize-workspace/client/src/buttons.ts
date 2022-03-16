@@ -37,6 +37,17 @@ const availableToolbarButtons = [
     { include: true, button: {
         type: BrowserButtonType.PresetLayouts
     }},
+    { include: true, button: {  
+        type: BrowserButtonType.Custom,
+        tooltip: 'Share',
+        disabled: false,
+        iconUrl: 'http://localhost:8080/icons/share.svg',
+        action: {
+            id: 'share',
+            customData: {
+            }
+        }
+    }},
     { include: true, button: {
         type: BrowserButtonType.SavePage
     }}
