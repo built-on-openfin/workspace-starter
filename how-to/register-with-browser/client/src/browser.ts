@@ -1,28 +1,8 @@
 import { LayoutExtended } from '@openfin/workspace';
-import { BrowserWindowModule, getCurrentSync, Page, PageLayout, PageWithUpdatableRuntimeAttribs, WorkspacePlatformModule } from '@openfin/workspace-platform';
+import { getCurrentSync, PageLayout, PageWithUpdatableRuntimeAttribs, WorkspacePlatformModule } from '@openfin/workspace-platform';
 import { v4 } from 'uuid';
 
 const platform: WorkspacePlatformModule = getCurrentSync();
-
-export async function getPage(pageId:string): Promise<Page> {
-    return platform.Storage.getPage(pageId);
-}
-
-export async function getPages(): Promise<Page[]> {
-    return platform.Storage.getPages();
-}
-
-export async function deletePage(pageId:string): Promise<void> {
-    return platform.Storage.deletePage(pageId);
-}
-
-export async function launchPage(page:Page): Promise<BrowserWindowModule> {
-    return platform.Browser.createWindow({
-        workspacePlatform: {
-            pages: [page]
-        }
-    });
-}
 
 export async function launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity){
     let viewOptions;

@@ -1,4 +1,4 @@
-import { init as workspacePlatformInit, BrowserInitConfig, CustomActionPayload } from '@openfin/workspace-platform';
+import { init as workspacePlatformInit, BrowserInitConfig, CustomActionPayload, CustomButtonActionPayload } from '@openfin/workspace-platform';
 import { getSettings, validateThemes } from "./settings";
 
 export async function init() {
@@ -24,12 +24,10 @@ export async function init() {
         browser,
         theme: validateThemes(settings?.themeProvider?.themes),
         customActions: {
-            'custom-save-page-clicked': (payload: CustomActionPayload) => {
+            'custom-save-page-clicked': (payload: CustomButtonActionPayload) => {
                 console.dir({message: "CUSTOM SAVE PAGE CLICKED", payload})
-                alert(JSON.stringify(payload));
+                console.dir({message: "LAYOUT", layout: payload.customData.layout})
             }
         }
     });
 } 
-
-// fin.Window.create url

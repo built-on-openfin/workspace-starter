@@ -11,8 +11,7 @@ OpenFin Workspace empowers you to take advantage of our browser component by usi
 2. Launch a browser window with a custom toolbar.
 3. Launch a browser window with multiple pages.
 4. Get all the pages for all open browser windows. 
-5. Retrieve a snapshot with the running platform.
-6. Quit the running platform.
+5. Quit the running platform.
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -68,17 +67,35 @@ $ npm run client
 This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
 
 ---
-### How this example works
 
-You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
+### How this example works
 
 ```bash
 $ npm run client
 ```
 
+1. The client command will launch a window with the options object `customSettings.bootstrap.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/bootrapper.ts`.
+<img src="./assets/Launch-App.gif" alt="initial window launch" />
+
+2. In `client/src/launchbar.ts` the `createBrowserWindow` function is invoked on click of the "Launch Browser Window" button. <img src="./assets/Launch-Browser-Window.gif" alt="launch browser window" />
+
+3. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page-clicked` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.  <img src="./assets/Custom-Toolbar.gif" alt="launch browser with custom toolbar" />
+
+4. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button. <img src="./assets/Multiple-Pages.gif" alt="launch multiple pages in browser window" />
+
+5. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.<img src="./assets/Page-Info.gif" alt="browser window page info" />
+
+6. The quit button simply quits the workspace platform with will quit both the app and all  browser windows.
+
+
+
+
+
 ### A note about this example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
+
+### How
 
 ---
 **FAQ**

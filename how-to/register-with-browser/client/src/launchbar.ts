@@ -21,7 +21,7 @@ const defaultPageLayout: PageLayout = {
                     componentName: 'view',
                     componentState: {
                         identity: createViewIdentity(fin.me.uuid, 'v2'),
-                        url: 'http://yahoo.com'
+                        url: 'http://openfin.jira.com'
                     }
                 }
             ]
@@ -94,8 +94,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     createBrowserWinBtn.addEventListener('click', createBrowserWindow);
 
     /************************ CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON ************************/
-    const customToobarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
-    customToobarBtn.addEventListener('click', createCustomToolbarWindow);
+    const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
+    customToolbarBtn.addEventListener('click', createCustomToolbarWindow);
 
     /************************ CREATE BROWSER WINDOW WITH MULTIPLE PAGES ************************/
     const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");
@@ -111,13 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.dir({ message: "All PAGES", pages });
         console.dir({ message: "UNSAVED PAGES", unsavedPages });
         console.dir({ message: "LAST FOCUSED WINDOW", lastFocusedWindow });
-    });
-
-    /************************ GET SNAPSHOT OF ALL BROWSER WINDOWS ************************/
-    const getBrowserSsBtn = document.querySelector("#get-browser-snapshot");
-    getBrowserSsBtn.addEventListener('click', async () => {
-        const ss = await platform.getSnapshot();
-        console.dir({ message: "SNAPSHOT DETAILS", ss });
     });
 
     /************************ QUIT LAUNCHER / BROWSER ************************/
