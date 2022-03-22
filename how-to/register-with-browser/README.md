@@ -74,8 +74,7 @@ This is a headless application. If you wish to debug it then you can update the 
 $ npm run client
 ```
 
-1. The client command will launch a window with the options object `customSettings.bootstrap.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/bootrapper.ts`.
-<img src="./assets/Launch-App.gif" alt="initial window launch" />
+1. The client command will launch a window with the options object `customSettings.bootstrap.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/bootrapper.ts`. <img src="./assets/Launch-App.gif" alt="initial window launch" />
 
 2. In `client/src/launchbar.ts` the `createBrowserWindow` function is invoked on click of the "Launch Browser Window" button. <img src="./assets/Launch-Browser-Window.gif" alt="launch browser window" />
 
@@ -87,28 +86,9 @@ $ npm run client
 
 6. The quit button simply quits the workspace platform with will quit both the app and all  browser windows.
 
-
-
-
-
 ### A note about this example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
-
-### How
-
----
-**FAQ**
-- The store isn't launching or the store command isn't showing on the home ui?
- 
-   - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
-   - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
-- I am not seeing what I expected?
- 
-   - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the workspace platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
-- Things have moved/gone?
- 
-   - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
 
 ---
 
