@@ -125,18 +125,27 @@ export async function getApps(): Promise<App[]> {
   }
 }
 
-export async function getAppsByTag(tags: string[]): Promise<App[]> {
+export async function getAppsByTag(tags: string[], mustMatchAll = false): Promise<App[]> {
   let apps = await getApps();
   let filteredApps = apps.filter((value) => {
     if (value.tags === undefined) {
       return false;
     }
+    let matchFound = false;
     for (let i = 0; i < tags.length; i++) {
       if (value.tags.indexOf(tags[i]) > -1) {
-        return true;
+        if(mustMatchAll) {
+          matchFound = true;
+        } else {
+          return true;
+        }
+      } else {
+        if(mustMatchAll) {
+          return false;
+        }
       }
     }
-    return false;
+    return matchFound;
   });
   return filteredApps;
 }

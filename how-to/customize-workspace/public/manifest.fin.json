@@ -5,6 +5,9 @@
     "arguments": "--v=1 --inspect",
     "version": "23.96.68.3"
   },
+  "startup_app": {
+    "name": "workspace-starter-how-to-customiza-workspace"
+  },
   "platform": {
     "uuid": "customize-workspace",
     "icon": "http://localhost:8080/favicon.ico",
@@ -14,6 +17,8 @@
     "permissions": {
       "System": {
         "launchExternalProcess": true,
+        "enableNativeWindowIntegrationProvider": true,
+        "terminateExternalProcess": true, 
         "downloadAsset": true,
         "openUrlWithBrowser": {
             "enabled": true,

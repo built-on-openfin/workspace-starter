@@ -7,10 +7,13 @@ import { BrowserCreateWindowRequest,
     OpenViewTabContextMenuPayload, 
     Page, 
     UpdateSavedPageRequest } from '@openfin/workspace-platform';
+import { NativeWindowIntegrationClient } from '@openfin/native-window-integration-client';
+import asset from '@openfin/native-window-integration-client/lib/provider.zip';
 import { getDefaultToolbarButtons } from './buttons';
 import { getGlobalMenu, getPageMenu, getViewMenu } from './menu';
 import { getSettings } from './settings';
 import { PlatformStorage } from './platform-storage';
+import { getAppsByTag } from './apps';
 
 const pageBoundsStorage = new PlatformStorage("page-bounds", "Page Bounds");
 
@@ -51,8 +54,8 @@ export async function deletePage(pageId:string) {
     return platform.Storage.deletePage(pageId);
 }
 
-export async function launchPage(page:Page){
-    let bounds = await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(page.pageId);
+export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
+    let customBounds = bounds || await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(page.pageId);
     let platform = getCurrentSync();
     let newWindow: BrowserCreateWindowRequest = {
         workspacePlatform: {
@@ -61,14 +64,14 @@ export async function launchPage(page:Page){
     };
 
     if(bounds !== undefined){
-        newWindow.height = bounds.height;
-        newWindow.width = bounds.width;
-        newWindow.x = bounds.left;
-        newWindow.y = bounds.top;
-        newWindow.defaultHeight = bounds.height;
-        newWindow.defaultWidth = bounds.width;
-        newWindow.defaultLeft = bounds.left;
-        newWindow.defaultTop = bounds.top;
+        newWindow.height = customBounds.height;
+        newWindow.width = customBounds.width;
+        newWindow.x = customBounds.left;
+        newWindow.y = customBounds.top;
+        newWindow.defaultHeight = customBounds.height;
+        newWindow.defaultWidth = customBounds.width;
+        newWindow.defaultLeft = customBounds.left;
+        newWindow.defaultTop = customBounds.top;
     }
 
     return platform.Browser.createWindow(newWindow);
@@ -104,7 +107,43 @@ export async function getDefaultWindowOptions() {
 };
 
 export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
+    let nwiApps = await getAppsByTag(["native", "nwi"], true);
+    let configuration = [];
+
+    nwiApps.forEach(app => {
+        if(app["data"] !== undefined && app["data"]["nwi"] !== undefined) {
+            configuration.push(app["data"]["nwi"]);
+        }
+    });
+  console.log("NWI Apps: ", configuration);
+    const myClient = await NativeWindowIntegrationClient.create({local: false, url: asset, configuration, mockConnection:false });
+    console.log('Native Window Integration Client connected successfully!');
+
     class Override extends WorkspacePlatformProvider {
+        async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
+            const snapshot = await super.getSnapshot(...args);
+            try {
+                const snapshotWithNativeWindows = await myClient.decorateSnapshot(snapshot);
+                return snapshotWithNativeWindows;
+            } catch (error) {
+                console.log('Native Window Integration failed to get snapshotWithNativeWindows:');
+                console.error(error);
+                return snapshot;
+            }
+        }
+
+        async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
+            await super.applySnapshot(...args);
+            try {
+                const info = await myClient.applySnapshot(args[0].snapshot);
+                // Do something with info
+                console.log(info);
+            } catch (error) {
+                console.log('Native Window Integration error applying native snapshot:');
+                console.error(error);
+            }
+        }
+
         async quit(payload, callerIdentity) {
             return super.quit(payload, callerIdentity);
         }

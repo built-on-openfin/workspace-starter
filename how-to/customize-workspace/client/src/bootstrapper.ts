@@ -1,5 +1,7 @@
 import { register as registerHome, show as showHome, deregister as deregisterHome } from './home';
 import { register as registerStore, show as showStore, deregister as deregisterStore } from './store';
+import { register as registerShare, deregister as deregisterShare } from './share';
+
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
 
@@ -11,6 +13,7 @@ export async function init() {
     let workspaceLoaded = false;
     let setupHome = settings?.bootstrap?.home ?? true;
     let setupStore = settings?.bootstrap?.store ?? true;
+    let setupShare = true;
 
     if(setupHome) {
         // only register search logic once workspace is running
@@ -26,10 +29,15 @@ export async function init() {
         }
     }
 
+    if(setupShare) {
+        await registerShare()
+    }
+
     const providerWindow = fin.Window.getCurrentSync();
     providerWindow.once("close-requested", async (event) => {
         await deregisterStore();
         await deregisterHome();
+        await deregisterShare();
         fin.Platform.getCurrentSync().quit();
   });
 }

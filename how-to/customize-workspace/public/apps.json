@@ -521,7 +521,14 @@
     "images": [{
       "src":"http://localhost:8080/images/previews/openfin-winform-interop.png"
     }],
-    "tags":["native", "appasset"]
+    "tags":["native", "appasset", "nwi"],
+    "data": {
+      "nwi": {
+        "name": "OpenFin.Interop.Win.Sample",
+        "title": "Interop Example Tool",
+        "lifetime": "application"
+      }
+    }
   },
   {
     "appId": "Notepad",
