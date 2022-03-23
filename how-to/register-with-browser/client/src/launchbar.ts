@@ -21,7 +21,7 @@ const defaultPageLayout: PageLayout = {
                     componentName: 'view',
                     componentState: {
                         identity: createViewIdentity(fin.me.uuid, 'v2'),
-                        url: 'http://openfin.jira.com'
+                        url: 'https://openfin.co'
                     }
                 }
             ]
@@ -104,13 +104,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     /************************ GET ALL BROWSER PAGES ************************/
     const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
     getBrowserPagesBtn.addEventListener('click', async () => {
-        const pages = await platform.Browser.getAllAttachedPages();
-        const { uuid, name } = await platform.Browser.getLastFocusedWindow();
-        const lastFocusedWindow = platform.Browser.wrapSync({ uuid, name });
-        const unsavedPages = pages.filter(page => page ? page : "no unsaved pages");
-        console.dir({ message: "All PAGES", pages });
-        console.dir({ message: "UNSAVED PAGES", unsavedPages });
-        console.dir({ message: "LAST FOCUSED WINDOW", lastFocusedWindow });
+        const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
+        if(lastFocusedWindow) {
+            const pages = await platform.Browser.getAllAttachedPages();
+            const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+            const wrappedBrowserWindow = platform.Browser.wrapSync({ uuid, name });
+            const lastBrowserWindowPages = await wrappedBrowserWindow.getPages();
+            const unsavedPages = lastBrowserWindowPages.filter(page => page.hasUnsavedChanges);
+            console.dir({ message: "All PAGES", pages });
+            console.dir({ message: "UNSAVED PAGES", unsavedPages });
+            console.dir({ message: "LAST FOCUSED WINDOW", wrappedBrowserWindow });
+        }
     });
 
     /************************ QUIT LAUNCHER / BROWSER ************************/

@@ -1,6 +1,6 @@
 import { LayoutExtended } from '@openfin/workspace';
 import { getCurrentSync, PageLayout, PageWithUpdatableRuntimeAttribs, WorkspacePlatformModule } from '@openfin/workspace-platform';
-import { v4 } from 'uuid';
+
 
 const platform: WorkspacePlatformModule = getCurrentSync();
 
@@ -15,7 +15,7 @@ export async function launchView(view:OpenFin.PlatformViewCreationOptions | stri
 }
 
 export async function createPageLayout(layout): Promise<PageLayout> {
-    const layoutId: string = `layout-${v4()}`;
+    const layoutId: string = `layout-${window.crypto.randomUUID()}`;
     return {
         ...layout,
         layoutDetails: { layoutId }
@@ -25,7 +25,7 @@ export async function createPageLayout(layout): Promise<PageLayout> {
 export async function createPageWithLayout(title: string, layout: LayoutExtended): Promise<PageWithUpdatableRuntimeAttribs> {
     const layoutWithDetails = await createPageLayout(layout);
     return {
-        pageId: v4(),
+        pageId: window.crypto.randomUUID(),
         title,
         layout: layoutWithDetails,
         isReadOnly: false,
@@ -34,6 +34,6 @@ export async function createPageWithLayout(title: string, layout: LayoutExtended
 }
 
 export function createViewIdentity(uuid: string, name: string): OpenFin.Identity {
-    const viewIdentity: OpenFin.Identity = { uuid: uuid, name: `${v4}-${name}` };
+    const viewIdentity: OpenFin.Identity = { uuid: uuid, name: `${window.crypto.randomUUID()}-${name}` };
     return viewIdentity;
 }
