@@ -77,7 +77,6 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         .map(x => x[1])
         .join(', ');
     const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
-    console.log(salesforceSearchQuery)
     const response = await sfConn.executeApiRequest<SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact>>(
         `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
     );
