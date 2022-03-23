@@ -1,4 +1,5 @@
 import {
+  Action,
   Home,
   CLIProvider,
   CLISearchListenerRequest,
@@ -11,11 +12,22 @@ import {
   CLISearchResultPlain,
   CLISearchResultSimpleText,
   CLISearchResultContact,
-  Action
+  CLISearchResultList
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launchView } from "./browser";
-import { connectToSalesforce, getConnection, getObjectUrl, getSearchResults, getChatterResults, SalesforceAccount, SalesforceContact, SalesforceFeedItem } from "./salesforce";
+import {
+  connectToSalesforce,
+  getConnection,
+  getObjectUrl,
+  getSearchResults,
+  getChatterResults,
+  SalesforceAccount,
+  SalesforceContact,
+  SalesforceFeedItem,
+  SalesforceTask,
+  SalesforceContentNote
+} from "./salesforce";
 import { SalesforceResultData } from "./shapes";
 import { ConnectionError } from "@openfin/salesforce";
 
@@ -83,7 +95,7 @@ async function getResults(
   }
 
   // Retrieve search results from Salesforce
-  let searchResults: (SalesforceAccount | SalesforceContact)[];
+  let searchResults: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote)[];
   let chatterResults: SalesforceFeedItem[];
   try {
     let selectedObjects: string[] = [];
@@ -92,7 +104,7 @@ async function getResults(
       if (objectsFilter) {
         selectedObjects = (Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options])
           .filter(x => !!x.isSelected)
-          .map(x => x.value);
+          .map(x => x.value === "Note" ? "ContentNote" : x.value);
       }
     }
     searchResults = await getSearchResults(searchQuery, selectedObjects);
@@ -160,8 +172,34 @@ async function getResults(
           ],
         },
       } as CLISearchResultContact;
+    } else if ('Description' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Subject,
+        data,
+        template: CLITemplate.List,
+        templateContent: [
+          ['Subject', searchResult.Subject],
+          ['Comments', searchResult.Description ?? "--No comments--"]
+        ]
+      } as CLISearchResultList;
+    } else if ('Content' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: "Note",
+        key: searchResult.Id,
+        title: searchResult.Title,
+        data,
+        template: CLITemplate.List,
+        templateContent: [
+          ['Title', searchResult.Title],
+          ['Content', bytesToDisplay(searchResult?.Content?.asByteArray)]
+        ]
+      } as CLISearchResultList;
     } else {
-      // in this case we are only searching for accounts and contacts
+      // in this case we are only searching for accounts, contacts, tasks and content notes
       return undefined;
     }
   });
@@ -183,7 +221,7 @@ async function getResults(
           details: [
             [
               ['Header', chatterResult?.header?.text],
-              ['Note', chatterResult?.body?.text ?? "Content only"]
+              ['Note', chatterResult?.body?.text ?? "--Content only--"]
             ],
           ],
         },
@@ -202,7 +240,7 @@ async function getResults(
   return {
     results: filteredResults,
     context: {
-      filters: getSearchFilters(objects),
+      filters: getSearchFilters(objects.map(c => c === "ContentNote" ? "Note" : c)),
     },
   };
 }
@@ -277,4 +315,16 @@ export async function hide(): Promise<void> {
 export async function deregister(): Promise<void> {
   let settings = await getSettings();
   return Home.deregister(PROVIDER_ID);
+}
+
+function bytesToDisplay(bytes: string | undefined): string {
+  let content;
+  if (bytes) {
+    content = stripHtml(atob(bytes));
+  }
+  return content || "--No content--";
+}
+
+function stripHtml(input: string): string {
+  return input.replace(/<[^>]*>?/gm, '');
 }
