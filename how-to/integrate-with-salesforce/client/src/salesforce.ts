@@ -76,14 +76,22 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         })
         .map(x => x[1])
         .join(', ');
-    const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
-    const response = await sfConn.executeApiRequest<SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact>>(
-        `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
-    );
-    return response.data.searchRecords;
+
+    if (fieldSpec.length > 0) {
+        const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
+        const response = await sfConn.executeApiRequest<SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact>>(
+            `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
+        );
+        return response.data.searchRecords;
+    }
+
+    return [];
 }
 
 export async function getChatterResults(query: string, selectedObjects?: string[]): Promise<SalesforceFeedItem[]> {
+    if (selectedObjects?.length > 0 && !selectedObjects.includes("Chatter")) {
+        return [];
+    }
     const response = await sfConn.executeApiRequest<SalesforceFeedElementPage>(
         `/services/data/vXX.X/chatter/feed-elements?q=${query}&pageSize=25&sort=LastModifiedDateDesc`
     );

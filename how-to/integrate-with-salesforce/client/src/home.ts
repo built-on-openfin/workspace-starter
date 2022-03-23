@@ -166,7 +166,7 @@ async function getResults(
     }
   });
 
-  results = results.concat(chatterResults.map(chatterResult => {
+  const chatterEntries = chatterResults.map(chatterResult => {
     if (chatterResult.type === "TextPost" || chatterResult.type === "ContentPost") {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
@@ -191,10 +191,14 @@ async function getResults(
     }
 
     return undefined;
-  }));
+  }).filter(Boolean);
 
-  const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
+  let filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
   const objects = searchResults.map(result => result.attributes.type);
+  if (chatterEntries.length > 0) {
+    filteredResults = filteredResults.concat(chatterEntries);
+    objects.push('Chatter');
+  }
   return {
     results: filteredResults,
     context: {
