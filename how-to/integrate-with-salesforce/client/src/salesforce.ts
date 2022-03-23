@@ -19,13 +19,47 @@ export type SalesforceContact = SalesforceRestApiSObject<{
     Title?: string;
 }>;
 
+export type SalesforceActor = {
+    id: string;
+    url: string;
+    type: string;
+    companyName: string;
+    displayName: string;
+    name: string;
+};
+
+export type SalesforceFeedTextArea = {
+    isRichText: boolean;
+    text: string;
+};
+
+export type SalesforceFeedItem = {
+    id: string;
+    url: string;
+    type: string;
+    actor?: SalesforceActor;
+    body?: SalesforceFeedTextArea;
+    header?: SalesforceFeedTextArea;
+};
+
+export type SalesforceFeedElementPage = {
+    currentPageToken: string;
+    currentPageUrl: string;
+    elements: SalesforceFeedItem[];
+    isModifiedToken: string;
+    isModifiedUrl: string;
+    nextPageUrl: string;
+    updatesToken: string;
+    updatesUrl: string;
+};
+
 export function getConnection(): SalesforceConnection {
     return sfConn;
 }
 
 export const getObjectUrl = (objectId: string, salesforceOrgOrigin: string): string => {
     return `${salesforceOrgOrigin}/${objectId}`;
-  };
+};
 
 export async function getSearchResults(query: string, selectedObjects?: string[]): Promise<(SalesforceContact | SalesforceAccount)[]> {
     const accountFieldSpec = 'Account(Id, Industry, Name, Phone, Type, Website)';
@@ -43,10 +77,18 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         .map(x => x[1])
         .join(', ');
     const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
+    console.log(salesforceSearchQuery)
     const response = await sfConn.executeApiRequest<SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact>>(
-    `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
+        `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
     );
     return response.data.searchRecords;
+}
+
+export async function getChatterResults(query: string, selectedObjects?: string[]): Promise<SalesforceFeedItem[]> {
+    const response = await sfConn.executeApiRequest<SalesforceFeedElementPage>(
+        `/services/data/vXX.X/chatter/feed-elements?q=${query}&pageSize=25&sort=LastModifiedDateDesc`
+    );
+    return response.data.elements;
 }
 
 export async function connectToSalesforce(): Promise<void> {

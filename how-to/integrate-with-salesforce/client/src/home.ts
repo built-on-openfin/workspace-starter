@@ -15,7 +15,7 @@ import {
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launchView } from "./browser";
-import { connectToSalesforce, getConnection, getObjectUrl, getSearchResults, SalesforceAccount, SalesforceContact } from "./salesforce";
+import { connectToSalesforce, getConnection, getObjectUrl, getSearchResults, getChatterResults, SalesforceAccount, SalesforceContact, SalesforceFeedItem } from "./salesforce";
 import { SalesforceResultData } from "./shapes";
 import { ConnectionError } from "@openfin/salesforce";
 
@@ -84,6 +84,7 @@ async function getResults(
 
   // Retrieve search results from Salesforce
   let searchResults: (SalesforceAccount | SalesforceContact)[];
+  let chatterResults: SalesforceFeedItem[];
   try {
     let selectedObjects: string[] = [];
     if (Array.isArray(filters) && filters.length > 0) {
@@ -95,6 +96,8 @@ async function getResults(
       }
     }
     searchResults = await getSearchResults(searchQuery, selectedObjects);
+
+    chatterResults = await getChatterResults(searchQuery, selectedObjects);
   } catch (err) {
     if (err instanceof ConnectionError) {
       const icon = await getSalesforceIconUrl();
@@ -112,7 +115,7 @@ async function getResults(
     return { results: [] };
   }
 
-  const results = searchResults.map((searchResult) => {
+  let results = searchResults.map((searchResult) => {
     const data = {
       pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
     } as SalesforceResultData;
@@ -162,6 +165,34 @@ async function getResults(
       return undefined;
     }
   });
+
+  results = results.concat(chatterResults.map(chatterResult => {
+    if (chatterResult.type === "TextPost" || chatterResult.type === "ContentPost") {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: "Chatter",
+        key: chatterResult.id,
+        title: chatterResult.actor?.displayName,
+        data: {
+          pageUrl: getObjectUrl(chatterResult.id, salesforceConnection.orgUrl)
+        } as SalesforceResultData,
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: chatterResult.actor?.displayName,
+          useInitials: true,
+          details: [
+            [
+              ['Header', chatterResult?.header?.text],
+              ['Note', chatterResult?.body?.text ?? "Content only"]
+            ],
+          ],
+        },
+      } as CLISearchResultContact;
+    }
+
+    return undefined;
+  }));
+
   const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
   const objects = searchResults.map(result => result.attributes.type);
   return {
