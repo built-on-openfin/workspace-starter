@@ -46,6 +46,13 @@
     "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
-    "title": "Salesforce"
+    "title": "Salesforce",
+    "iconMap": {
+      "contact": "http://localhost:8080/images/contact.svg",
+      "account": "http://localhost:8080/images/account.svg",
+      "chatter": "http://localhost:8080/images/chatter.svg",
+      "note": "http://localhost:8080/images/note.svg",
+      "task": "http://localhost:8080/images/task.svg"
+    }
   }
 }

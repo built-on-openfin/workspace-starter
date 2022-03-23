@@ -36,11 +36,6 @@ const PROVIDER_ID = 'integrate-with-salesforce';
 const NOT_CONNECTED_SEARCH_RESULT_KEY = 'not-connected-result';
 const OBJECTS_FILTER_ID = 'objects';
 
-async function getSalesforceIconUrl(): Promise<string> {
-  const { icon } = await getSettings();
-  return icon;
-}
-
 function getSearchFilters(objects: string[]): CLIFilter[] {
   if (Array.isArray(objects)) {
     let filters: CLIFilter[] = [];
@@ -75,7 +70,7 @@ async function getResults(
   // Define the default "browse" search result displayed when no query provided
   const salesforceConnection = getConnection();
   const { orgUrl } = salesforceConnection;
-  const icon = await getSalesforceIconUrl();
+  const { icon, iconMap } = await getSettings();
   const browseResult: CLISearchResultPlain = {
     actions: [{ name: 'Browse', hotkey: 'enter' }],
     data: {
@@ -112,7 +107,6 @@ async function getResults(
     chatterResults = await getChatterResults(searchQuery, selectedObjects);
   } catch (err) {
     if (err instanceof ConnectionError) {
-      const icon = await getSalesforceIconUrl();
       return {
         results: [
           {
@@ -137,6 +131,7 @@ async function getResults(
         label: searchResult.attributes.type,
         key: searchResult.Id,
         title: searchResult.Name,
+        icon: iconMap.account,
         data,
         template: CLITemplate.Contact,
         templateContent: {
@@ -157,6 +152,7 @@ async function getResults(
         label: searchResult.attributes.type,
         key: searchResult.Id,
         title: searchResult.Name,
+        icon: iconMap.contact,
         data,
         template: CLITemplate.Contact,
         templateContent: {
@@ -178,6 +174,7 @@ async function getResults(
         label: searchResult.attributes.type,
         key: searchResult.Id,
         title: searchResult.Subject,
+        icon: iconMap.task,
         data,
         template: CLITemplate.List,
         templateContent: [
@@ -191,6 +188,7 @@ async function getResults(
         label: "Note",
         key: searchResult.Id,
         title: searchResult.Title,
+        icon: iconMap.note,
         data,
         template: CLITemplate.List,
         templateContent: [
@@ -211,6 +209,7 @@ async function getResults(
         label: "Chatter",
         key: chatterResult.id,
         title: chatterResult.actor?.displayName,
+        icon: iconMap.chatter,
         data: {
           pageUrl: getObjectUrl(chatterResult.id, salesforceConnection.orgUrl)
         } as SalesforceResultData,
