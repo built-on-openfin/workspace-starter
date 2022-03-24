@@ -1,4 +1,4 @@
-import { create, NotificationOptions, IndicatorColor, addEventListener as notificationAddEventListener, removeEventListener as notificationRemoveEventListener, NotificationActionEvent } from "openfin-notifications";
+import { create, NotificationOptions, IndicatorColor } from "@openfin/workspace/notifications";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { PlatformStorage } from "./platform-storage";
 import { getSettings } from "./settings";

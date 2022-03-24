@@ -9,7 +9,10 @@ import {
   CLISearchListenerResponse,
   CLISearchResponse,
   CLIDispatchedSearchResult,
-  CLIFilterOptionType
+  CLIFilterOptionType,
+  ButtonStyle, 
+  TemplateFragment, 
+  TemplateFragmentTypes
 } from "@openfin/workspace";
 import { Page } from '@openfin/workspace-platform';
 import { getSettings } from "./settings";
@@ -17,9 +20,11 @@ import { launch } from "./launch";
 import { getApps } from "./apps";
 import { getPage, getPages, deletePage, launchPage } from "./browser";
 import { getWorkspace, getWorkspaces, deleteWorkspace, launchWorkspace, getWorkspaceIds, saveWorkspace, getWorkspaceTitles } from "./workspace";
+import { HomePageTemplate } from "./template";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
+const HOME_ACTION_SHARE_PAGE = "Share Page";
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
 const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
 
@@ -102,23 +107,30 @@ function mapAppEntriesToSearchEntries(apps: App[]){
 
 function mapPageEntriesToSearchEntries(pages: Page[]){
   let pageResults: CLISearchResult<any>[] = [];
+  
+ const pageTemplate: TemplateFragment = HomePageTemplate;
+
   if (Array.isArray(pages)) {
     for (let i = 0; i < pages.length; i++) {
       let entry: any = {
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
-        actions: [{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }],
+        actions: [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S"  },{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }],
         data: {tags:["page"], pageId: pages[i].pageId },
-        template: CLITemplate.Plain
-      };
-      
-      if (pages[i].description !== undefined) {
-        entry.description = pages[i].description;
-        entry.shortDescription = pages[i].description;
-        entry.template = CLITemplate.SimpleText;
-        entry.templateContent = pages[i].description;
-      } 
+      template: CLITemplate.Custom,
+              templateContent: {
+                  layout: pageTemplate,
+                  data: {
+                      title: pages[i].title,
+                      description: pages[i].description,
+                      instructions: "Use the buttons below to interact with your saved page.",
+                      openText: "Launch",
+                      deleteText: "Delete",
+                      shareText: "Share"
+                  }
+              }
+            }
 
       pageResults.push(entry);
     }
