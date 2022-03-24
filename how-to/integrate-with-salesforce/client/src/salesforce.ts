@@ -112,7 +112,7 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
     const batch: SalesforceBatchRequestItem[] = [];
 
     if (fieldSpec.length > 0) {
-        const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
+        const salesforceSearchQuery = `FIND {${escapeQuery(query)}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
 
         batch.push({
             method: "GET",
@@ -136,12 +136,16 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         let idx = 0;
         if (fieldSpec.length > 0) {
             const searchResponse = batchedResults[idx++] as SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote>;
-            results = results.concat(searchResponse.searchRecords);
+            if (searchResponse.searchRecords) {
+                results = results.concat(searchResponse.searchRecords);
+            }
         }
 
         if (includeChatter) {
             const chatterResponse = batchedResults[idx++] as SalesforceFeedElementPage;
-            results = results.concat(chatterResponse.elements);
+            if (chatterResponse.elements) {
+                results = results.concat(chatterResponse.elements);
+            }
         }
     }
 
@@ -168,4 +172,10 @@ export async function connectToSalesforce(): Promise<void> {
     enableLogging();
     const { orgUrl, consumerKey, isSandbox } = await getSettings();
     sfConn = await connect(orgUrl, consumerKey, isSandbox);
+}
+
+function escapeQuery(query: string): string {
+    // There are some reserved characters for queries so we need to escape them
+    // https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl_find.htm#i1423105
+    return query.replace(/[?&|!()^~*:"'+{}\-[\]\\]/gm, '\\$&');;
 }
