@@ -178,7 +178,7 @@ async function getResults(
         template: CLITemplate.List,
         templateContent: [
           ['Subject', searchResult.Subject],
-          ['Comments', searchResult.Description ?? "--No comments--"]
+          ['Comments', searchResult.Description]
         ]
       } as CLISearchResultList;
     } else if ('TextPreview' in searchResult) {
@@ -194,7 +194,7 @@ async function getResults(
         template: CLITemplate.List,
         templateContent: [
           ['Title', searchResult.Title],
-          ['Content', searchResult?.TextPreview || "--No content--"]
+          ['Content', searchResult?.TextPreview]
         ]
       } as CLISearchResultList;
     } else if ('actor' in searchResult && (searchResult.type === "TextPost" || searchResult.type === "ContentPost")) {
@@ -214,7 +214,7 @@ async function getResults(
           details: [
             [
               ['Header', searchResult?.header?.text],
-              ['Note', searchResult?.body?.text ?? "--Content only--"]
+              ['Note', searchResult?.body?.text]
             ],
           ],
         },
