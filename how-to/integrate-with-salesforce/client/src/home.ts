@@ -181,7 +181,7 @@ async function getResults(
           ['Comments', searchResult.Description ?? "--No comments--"]
         ]
       } as CLISearchResultList;
-    } else if ('Content' in searchResult) {
+    } else if ('TextPreview' in searchResult) {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
         label: "Note",
@@ -194,7 +194,7 @@ async function getResults(
         template: CLITemplate.List,
         templateContent: [
           ['Title', searchResult.Title],
-          ['Content', bytesToDisplay(searchResult?.Content?.asByteArray)]
+          ['Content', searchResult?.TextPreview || "--No content--"]
         ]
       } as CLISearchResultList;
     } else if ('actor' in searchResult && (searchResult.type === "TextPost" || searchResult.type === "ContentPost")) {
@@ -308,14 +308,3 @@ export async function deregister(): Promise<void> {
   return Home.deregister(PROVIDER_ID);
 }
 
-function bytesToDisplay(bytes: string | undefined): string {
-  let content;
-  if (bytes) {
-    content = stripHtml(atob(bytes));
-  }
-  return content || "--No content--";
-}
-
-function stripHtml(input: string): string {
-  return input.replace(/<[^>]*>?/gm, '');
-}

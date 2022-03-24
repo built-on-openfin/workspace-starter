@@ -46,7 +46,7 @@ export type SalesforceTask = SalesforceRestApiSObject<{
 
 export type SalesforceContentNote = SalesforceRestApiSObject<{
     Title?: string;
-    Content?: SalesforceTextBytes;
+    TextPreview?: string;
 }>;
 
 export type SalesforceActor = {
@@ -60,11 +60,6 @@ export type SalesforceActor = {
 
 export type SalesforceTextArea = {
     isRichText: boolean;
-    text: string;
-};
-
-export type SalesforceTextBytes = {
-    asByteArray: string;
     text: string;
 };
 
@@ -100,7 +95,7 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
     const accountFieldSpec = 'Account(Id, Industry, Name, Phone, Type, Website)';
     const contactFieldSpec = 'Contact(Department, Email, Id, Name, Phone, Title)';
     const taskFieldSpec = 'Task(Id, Subject, Description)';
-    const contentNoteFieldSpec = 'ContentNote(Id, Title, Content)';
+    const contentNoteFieldSpec = 'ContentNote(Id, Title, Content, TextPreview)';
     const fieldSpecMap = new Map<string, string>([
         ['Account', accountFieldSpec], ['Contact', contactFieldSpec], ['Task', taskFieldSpec], ['ContentNote', contentNoteFieldSpec]
     ]);
@@ -133,7 +128,7 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         })
     }
 
-    const batchedResults = await getBatchedResults(batch);
+    const batchedResults = await getBatchedResults<(SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote>) | SalesforceFeedElementPage>(batch);
 
     let results: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[] = [];
 
@@ -153,7 +148,7 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
     return results;
 }
 
-export async function getBatchedResults(batchRequests: SalesforceBatchRequestItem[]): Promise<unknown[]> {
+export async function getBatchedResults<T>(batchRequests: SalesforceBatchRequestItem[]): Promise<T[]> {
     if (batchRequests.length === 0) {
         return [];
     }
@@ -166,7 +161,7 @@ export async function getBatchedResults(batchRequests: SalesforceBatchRequestIte
         { 'Content-Type': 'application/json' }
     );
 
-    return response.data?.results.map(r => r.result) ?? [];
+    return response.data?.results.map(r => r.result as T) ?? [];
 }
 
 export async function connectToSalesforce(): Promise<void> {
