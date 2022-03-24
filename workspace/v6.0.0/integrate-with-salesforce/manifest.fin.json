@@ -46,6 +46,13 @@
     "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
-    "title": "Salesforce"
+    "title": "Salesforce",
+    "iconMap": {
+      "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/images/contact.svg",
+      "account": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/images/account.svg",
+      "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/images/chatter.svg",
+      "note": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/images/note.svg",
+      "task": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/integrate-with-salesforce/images/task.svg"
+    }
   }
 }
