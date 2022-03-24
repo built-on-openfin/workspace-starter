@@ -3,6 +3,26 @@ import { getSettings } from "./settings";
 
 let sfConn: SalesforceConnection;
 
+export type SalesforceBatchRequest = {
+    batchRequests: SalesforceBatchRequestItem[];
+    haltOnError: boolean;
+};
+
+export type SalesforceBatchRequestItem = {
+    method: string;
+    url: string;
+};
+
+export type SalesforceBatchResponse = {
+    hasErrors: boolean;
+    results: SalesforceBatchResponseItem[];
+};
+
+export type SalesforceBatchResponseItem = {
+    statusCode: number;
+    result: unknown;
+};
+
 export type SalesforceAccount = SalesforceRestApiSObject<{
     Industry?: string;
     Name: string;
@@ -76,7 +96,7 @@ export const getObjectUrl = (objectId: string, salesforceOrgOrigin: string): str
     return `${salesforceOrgOrigin}/${objectId}`;
 };
 
-export async function getSearchResults(query: string, selectedObjects?: string[]): Promise<(SalesforceContact | SalesforceAccount | SalesforceTask | SalesforceContentNote)[]> {
+export async function getSearchResults(query: string, selectedObjects?: string[]): Promise<(SalesforceContact | SalesforceAccount | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[]> {
     const accountFieldSpec = 'Account(Id, Industry, Name, Phone, Type, Website)';
     const contactFieldSpec = 'Contact(Department, Email, Id, Name, Phone, Title)';
     const taskFieldSpec = 'Task(Id, Subject, Description)';
@@ -94,25 +114,59 @@ export async function getSearchResults(query: string, selectedObjects?: string[]
         .map(x => x[1])
         .join(', ');
 
+    const batch: SalesforceBatchRequestItem[] = [];
+
     if (fieldSpec.length > 0) {
         const salesforceSearchQuery = `FIND {${query}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
-        const response = await sfConn.executeApiRequest<SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote>>(
-            `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
-        );
-        return response.data.searchRecords;
+
+        batch.push({
+            method: "GET",
+            url: `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`,
+        })
     }
 
-    return [];
+    const includeChatter = !selectedObjects?.length || selectedObjects.includes("Chatter");
+    if (includeChatter) {
+        batch.push({
+            method: "GET",
+            url: `/services/data/vXX.X/chatter/feed-elements?q=${query}&pageSize=25&sort=LastModifiedDateDesc`,
+        })
+    }
+
+    const batchedResults = await getBatchedResults(batch);
+
+    let results: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[] = [];
+
+    if (batchedResults.length > 0) {
+        let idx = 0;
+        if (fieldSpec.length > 0) {
+            const searchResponse = batchedResults[idx++] as SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote>;
+            results = results.concat(searchResponse.searchRecords);
+        }
+
+        if (includeChatter) {
+            const chatterResponse = batchedResults[idx++] as SalesforceFeedElementPage;
+            results = results.concat(chatterResponse.elements);
+        }
+    }
+
+    return results;
 }
 
-export async function getChatterResults(query: string, selectedObjects?: string[]): Promise<SalesforceFeedItem[]> {
-    if (selectedObjects?.length > 0 && !selectedObjects.includes("Chatter")) {
+export async function getBatchedResults(batchRequests: SalesforceBatchRequestItem[]): Promise<unknown[]> {
+    if (batchRequests.length === 0) {
         return [];
     }
-    const response = await sfConn.executeApiRequest<SalesforceFeedElementPage>(
-        `/services/data/vXX.X/chatter/feed-elements?q=${query}&pageSize=25&sort=LastModifiedDateDesc`
+    const batch: SalesforceBatchRequest = { batchRequests, haltOnError: false };
+
+    const response = await sfConn.executeApiRequest<SalesforceBatchResponse>(
+        `/services/data/vXX.X/composite/batch/`,
+        "POST",
+        batch,
+        { 'Content-Type': 'application/json' }
     );
-    return response.data.elements;
+
+    return response.data?.results.map(r => r.result) ?? [];
 }
 
 export async function connectToSalesforce(): Promise<void> {
