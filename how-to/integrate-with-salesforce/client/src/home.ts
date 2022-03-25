@@ -21,7 +21,6 @@ import {
   getConnection,
   getObjectUrl,
   getSearchResults,
-  getChatterResults,
   SalesforceAccount,
   SalesforceContact,
   SalesforceFeedItem,
@@ -90,8 +89,7 @@ async function getResults(
   }
 
   // Retrieve search results from Salesforce
-  let searchResults: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote)[];
-  let chatterResults: SalesforceFeedItem[];
+  let searchResults: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[];
   try {
     let selectedObjects: string[] = [];
     if (Array.isArray(filters) && filters.length > 0) {
@@ -103,8 +101,6 @@ async function getResults(
       }
     }
     searchResults = await getSearchResults(searchQuery, selectedObjects);
-
-    chatterResults = await getChatterResults(searchQuery, selectedObjects);
   } catch (err) {
     if (err instanceof ConnectionError) {
       return {
@@ -122,9 +118,6 @@ async function getResults(
   }
 
   let results = searchResults.map((searchResult) => {
-    const data = {
-      pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
-    } as SalesforceResultData;
     if ('Website' in searchResult) {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
@@ -132,7 +125,9 @@ async function getResults(
         key: searchResult.Id,
         title: searchResult.Name,
         icon: iconMap.account,
-        data,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.Contact,
         templateContent: {
           name: searchResult.Name,
@@ -153,7 +148,9 @@ async function getResults(
         key: searchResult.Id,
         title: searchResult.Name,
         icon: iconMap.contact,
-        data,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.Contact,
         templateContent: {
           name: searchResult.Name,
@@ -175,67 +172,62 @@ async function getResults(
         key: searchResult.Id,
         title: searchResult.Subject,
         icon: iconMap.task,
-        data,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.List,
         templateContent: [
           ['Subject', searchResult.Subject],
-          ['Comments', searchResult.Description ?? "--No comments--"]
+          ['Comments', searchResult.Description]
         ]
       } as CLISearchResultList;
-    } else if ('Content' in searchResult) {
+    } else if ('TextPreview' in searchResult) {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
         label: "Note",
         key: searchResult.Id,
         title: searchResult.Title,
         icon: iconMap.note,
-        data,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.List,
         templateContent: [
           ['Title', searchResult.Title],
-          ['Content', bytesToDisplay(searchResult?.Content?.asByteArray)]
+          ['Content', searchResult?.TextPreview]
         ]
       } as CLISearchResultList;
-    } else {
-      // in this case we are only searching for accounts, contacts, tasks and content notes
-      return undefined;
-    }
-  });
-
-  const chatterEntries = chatterResults.map(chatterResult => {
-    if (chatterResult.type === "TextPost" || chatterResult.type === "ContentPost") {
+    } else if ('actor' in searchResult && (searchResult.type === "TextPost" || searchResult.type === "ContentPost")) {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
         label: "Chatter",
-        key: chatterResult.id,
-        title: chatterResult.actor?.displayName,
+        key: searchResult.id,
+        title: searchResult.actor?.displayName,
         icon: iconMap.chatter,
         data: {
-          pageUrl: getObjectUrl(chatterResult.id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl)
         } as SalesforceResultData,
         template: CLITemplate.Contact,
         templateContent: {
-          name: chatterResult.actor?.displayName,
+          name: searchResult.actor?.displayName,
           useInitials: true,
           details: [
             [
-              ['Header', chatterResult?.header?.text],
-              ['Note', chatterResult?.body?.text ?? "--Content only--"]
+              ['Header', searchResult?.header?.text],
+              ['Note', searchResult?.body?.text]
             ],
           ],
         },
       } as CLISearchResultContact;
+    } else {
+      // in this case we are only searching for accounts, contacts, tasks, content notes and chatter
+      return undefined;
     }
+  });
 
-    return undefined;
-  }).filter(Boolean);
+  const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
+  const objects = searchResults.map(result => 'attributes' in result ? result.attributes.type : 'Chatter');
 
-  let filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
-  const objects = searchResults.map(result => result.attributes.type);
-  if (chatterEntries.length > 0) {
-    filteredResults = filteredResults.concat(chatterEntries);
-    objects.push('Chatter');
-  }
   return {
     results: filteredResults,
     context: {
@@ -316,14 +308,3 @@ export async function deregister(): Promise<void> {
   return Home.deregister(PROVIDER_ID);
 }
 
-function bytesToDisplay(bytes: string | undefined): string {
-  let content;
-  if (bytes) {
-    content = stripHtml(atob(bytes));
-  }
-  return content || "--No content--";
-}
-
-function stripHtml(input: string): string {
-  return input.replace(/<[^>]*>?/gm, '');
-}
