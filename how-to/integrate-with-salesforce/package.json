@@ -19,8 +19,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/salesforce": "^2.1.1",
-    "@openfin/salesforce-lwc": "^1.1.0",
+    "@openfin/salesforce": "^2.1.3",
+    "@openfin/salesforce-lwc": "^1.1.1",
     "@openfin/workspace": "^6.0.0",
     "@openfin/workspace-platform": "^6.0.0"
   },
