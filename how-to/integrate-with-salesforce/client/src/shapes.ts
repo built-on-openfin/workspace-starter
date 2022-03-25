@@ -5,6 +5,9 @@ export interface CustomSettings {
     orgUrl: string,
     queryMinLength: number,
     title: string,
+    iconMap: {
+        [id: string]: string
+    }
 }
 
 export interface SalesforceResultData {

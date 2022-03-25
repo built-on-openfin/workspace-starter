@@ -1,4 +1,5 @@
 import {
+  Action,
   Home,
   CLIProvider,
   CLISearchListenerRequest,
@@ -11,11 +12,21 @@ import {
   CLISearchResultPlain,
   CLISearchResultSimpleText,
   CLISearchResultContact,
-  Action
+  CLISearchResultList
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launchView } from "./browser";
-import { connectToSalesforce, getConnection, getObjectUrl, getSearchResults, SalesforceAccount, SalesforceContact } from "./salesforce";
+import {
+  connectToSalesforce,
+  getConnection,
+  getObjectUrl,
+  getSearchResults,
+  SalesforceAccount,
+  SalesforceContact,
+  SalesforceFeedItem,
+  SalesforceTask,
+  SalesforceContentNote
+} from "./salesforce";
 import { SalesforceResultData } from "./shapes";
 import { ConnectionError } from "@openfin/salesforce";
 
@@ -23,11 +34,6 @@ const BROWSE_SEARCH_RESULT_KEY = 'browse-salesforce';
 const PROVIDER_ID = 'integrate-with-salesforce';
 const NOT_CONNECTED_SEARCH_RESULT_KEY = 'not-connected-result';
 const OBJECTS_FILTER_ID = 'objects';
-
-async function getSalesforceIconUrl(): Promise<string> {
-  const { icon } = await getSettings();
-  return icon;
-}
 
 function getSearchFilters(objects: string[]): CLIFilter[] {
   if (Array.isArray(objects)) {
@@ -63,7 +69,7 @@ async function getResults(
   // Define the default "browse" search result displayed when no query provided
   const salesforceConnection = getConnection();
   const { orgUrl } = salesforceConnection;
-  const icon = await getSalesforceIconUrl();
+  const { icon, iconMap } = await getSettings();
   const browseResult: CLISearchResultPlain = {
     actions: [{ name: 'Browse', hotkey: 'enter' }],
     data: {
@@ -83,7 +89,7 @@ async function getResults(
   }
 
   // Retrieve search results from Salesforce
-  let searchResults: (SalesforceAccount | SalesforceContact)[];
+  let searchResults: (SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[];
   try {
     let selectedObjects: string[] = [];
     if (Array.isArray(filters) && filters.length > 0) {
@@ -91,13 +97,12 @@ async function getResults(
       if (objectsFilter) {
         selectedObjects = (Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options])
           .filter(x => !!x.isSelected)
-          .map(x => x.value);
+          .map(x => x.value === "Note" ? "ContentNote" : x.value);
       }
     }
     searchResults = await getSearchResults(searchQuery, selectedObjects);
   } catch (err) {
     if (err instanceof ConnectionError) {
-      const icon = await getSalesforceIconUrl();
       return {
         results: [
           {
@@ -112,17 +117,17 @@ async function getResults(
     return { results: [] };
   }
 
-  const results = searchResults.map((searchResult) => {
-    const data = {
-      pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
-    } as SalesforceResultData;
+  let results = searchResults.map((searchResult) => {
     if ('Website' in searchResult) {
       return {
         actions: [{ name: 'View', hotkey: 'enter' }],
         label: searchResult.attributes.type,
         key: searchResult.Id,
         title: searchResult.Name,
-        data,
+        icon: iconMap.account,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.Contact,
         templateContent: {
           name: searchResult.Name,
@@ -142,7 +147,10 @@ async function getResults(
         label: searchResult.attributes.type,
         key: searchResult.Id,
         title: searchResult.Name,
-        data,
+        icon: iconMap.contact,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
         template: CLITemplate.Contact,
         templateContent: {
           name: searchResult.Name,
@@ -157,17 +165,73 @@ async function getResults(
           ],
         },
       } as CLISearchResultContact;
+    } else if ('Description' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Subject,
+        icon: iconMap.task,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.List,
+        templateContent: [
+          ['Subject', searchResult.Subject],
+          ['Comments', searchResult.Description]
+        ]
+      } as CLISearchResultList;
+    } else if ('TextPreview' in searchResult) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: "Note",
+        key: searchResult.Id,
+        title: searchResult.Title,
+        icon: iconMap.note,
+        data: {
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.List,
+        templateContent: [
+          ['Title', searchResult.Title],
+          ['Content', searchResult?.TextPreview]
+        ]
+      } as CLISearchResultList;
+    } else if ('actor' in searchResult && (searchResult.type === "TextPost" || searchResult.type === "ContentPost")) {
+      return {
+        actions: [{ name: 'View', hotkey: 'enter' }],
+        label: "Chatter",
+        key: searchResult.id,
+        title: searchResult.actor?.displayName,
+        icon: iconMap.chatter,
+        data: {
+          pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl)
+        } as SalesforceResultData,
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.actor?.displayName,
+          useInitials: true,
+          details: [
+            [
+              ['Header', searchResult?.header?.text],
+              ['Note', searchResult?.body?.text]
+            ],
+          ],
+        },
+      } as CLISearchResultContact;
     } else {
-      // in this case we are only searching for accounts and contacts
+      // in this case we are only searching for accounts, contacts, tasks, content notes and chatter
       return undefined;
     }
   });
+
   const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
-  const objects = searchResults.map(result => result.attributes.type);
+  const objects = searchResults.map(result => 'attributes' in result ? result.attributes.type : 'Chatter');
+
   return {
     results: filteredResults,
     context: {
-      filters: getSearchFilters(objects),
+      filters: getSearchFilters(objects.map(c => c === "ContentNote" ? "Note" : c)),
     },
   };
 }
@@ -243,3 +307,4 @@ export async function deregister(): Promise<void> {
   let settings = await getSettings();
   return Home.deregister(PROVIDER_ID);
 }
+
