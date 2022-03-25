@@ -18,19 +18,8 @@ import { getAppsByTag } from './apps';
 const pageBoundsStorage = new PlatformStorage("page-bounds", "Page Bounds");
 
 async function savePageBounds(pageId:string) {
-    let platform = getCurrentSync();
-    let pages = await platform.Browser.getAllAttachedPages();
-    let windowId;
 
-    pages.forEach(page => {
-        if(page.pageId === pageId) {
-            windowId = page.parentIdentity;
-        }
-    });
-
-    let hostWindow = platform.Browser.wrapSync(windowId);
-
-    let bounds = await hostWindow.openfinWindow.getBounds();
+    let bounds = await getPageBounds(pageId);
 
     await pageBoundsStorage.saveToStorage<OpenFin.Bounds>(pageId, bounds);
 }
@@ -51,7 +40,34 @@ export async function getPages() {
 
 export async function deletePage(pageId:string) {
     let platform = getCurrentSync();
+    await deletePageBounds(pageId);
     return platform.Storage.deletePage(pageId);
+}
+
+export async function getPageBounds(pageId:string, fromStorage = false): Promise<OpenFin.Bounds> {
+
+    let bounds = null;
+
+    if(fromStorage) {
+        bounds = await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(pageId);
+    } else {
+        let platform = getCurrentSync();
+        let pages = await platform.Browser.getAllAttachedPages();
+        let windowId;
+    
+        pages.forEach(page => {
+            if(page.pageId === pageId) {
+                windowId = page.parentIdentity;
+            }
+        });
+    
+        if(windowId !== undefined) {
+            let hostWindow = platform.Browser.wrapSync(windowId);
+    
+            bounds = await hostWindow.openfinWindow.getBounds();
+        }
+    }
+    return bounds;
 }
 
 export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
@@ -100,7 +116,7 @@ export async function getDefaultWindowOptions() {
             newTabUrl: settings.browserProvider.windowOptions?.newTabUrl,
             newPageUrl: settings.browserProvider.windowOptions?.newPageUrl,
             toolbarOptions: {
-                buttons: getDefaultToolbarButtons()
+                buttons: await getDefaultToolbarButtons()
                 }
             }
     }

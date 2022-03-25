@@ -1,7 +1,18 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
-import { CustomThemes } from "@openfin/workspace-platform";
+import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
+import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
+interface PlatformProvider {
+    rootUrl: string
+}
 
+interface NotifcationProvider extends NotificationsPlatform {};
+
+interface ToolbarButtonDefinition {
+    include: boolean,
+    button: ToolbarButton
+}
 interface BrowserProvider {
+    toolbarButtons?: ToolbarButtonDefinition[]
     windowOptions: {
         title?:string,
         icon?:string,
@@ -88,10 +99,12 @@ interface StorefrontProvider {
 }
 
 export interface CustomSettings {
-    bootstrap?: {  store: boolean, home:boolean }
+    bootstrap?: {  store: boolean, home:boolean, notifications:boolean }
     appProvider?: AppProvider,
+    platformProvider?:PlatformProvider,
     browserProvider?: BrowserProvider,
     themeProvider?: ThemeProvider,
     homeProvider?: HomeProvider,
-    storefrontProvider?:StorefrontProvider
+    storefrontProvider?:StorefrontProvider,
+    notificationProvider?:NotifcationProvider
 }

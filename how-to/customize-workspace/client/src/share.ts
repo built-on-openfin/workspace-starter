@@ -1,15 +1,19 @@
 import { create, NotificationOptions, IndicatorColor } from "@openfin/workspace/notifications";
-import { getCurrentSync } from "@openfin/workspace-platform";
+import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { PlatformStorage } from "./platform-storage";
 import { getSettings } from "./settings";
 import { launchPage } from "./browser";
+import { getWorkspace } from "./workspace";
 
 let shareRegistered = false;
 const shareStorage = new PlatformStorage("share-storage", "Shared Entries");
 
-interface IShareCustomData {
-    windowIdentity: OpenFin.Identity,
-    pageId: string
+export interface IShareCustomData {
+    workspaceId?: string,
+    windowIdentity?: OpenFin.Identity,
+    pageId?: string
+    page?: Page,
+    bounds?: OpenFin.Bounds
 }
 
 interface IShareEntry {
@@ -158,11 +162,18 @@ async function notifyOfExpiry() {
       create(notification);
 }
 
-async function saveSharedPage(data: IShareCustomData) {
-    let platform = getCurrentSync();
-    const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
-    const page = await targetWindow.getPage(data.pageId);
-    const bounds = await targetWindow.openfinWindow.getBounds();
+async function saveSharedPage(data: IShareCustomData ) {
+    let page:Page;
+    let bounds: OpenFin.Bounds;
+    if(data.page !== undefined && data.bounds !== undefined) {
+        page = data.page;
+        bounds = data.bounds;
+    } else {
+        let platform = getCurrentSync();
+        const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
+        page = await targetWindow.getPage(data.pageId);
+        bounds = await targetWindow.openfinWindow.getBounds();
+    }
     const payload = {
         type: "page",
         payload: {
@@ -174,17 +185,30 @@ async function saveSharedPage(data: IShareCustomData) {
 }
 
 
-async function saveSharedWorkspace(data:IShareCustomData) {
-    console.log("Share workspace called.", data);
-    let platform = getCurrentSync();
-    let snapshot = await platform.getSnapshot();
-    const payload = {
-        type: "workspace",
-        payload: {
-            snapshot
+async function saveSharedWorkspace(workspaceId?:string) {
+    let snapshot = null;
+
+    if(workspaceId === undefined) {
+        let platform = getCurrentSync();
+        snapshot = await platform.getSnapshot();
+    } else {
+        let savedWorkspace = await getWorkspace(workspaceId);
+        if(savedWorkspace !== null) {
+            snapshot = savedWorkspace.snapshot;
         }
-    };
-    await saveShareRequest(payload);
+    }
+
+    if(snapshot === null || snapshot === undefined) {
+        await notifyOfFailure("Unable to action your workspace share request.");
+    } else {
+        const payload = {
+            type: "workspace",
+            payload: {
+                snapshot
+            }
+        };
+        await saveShareRequest(payload);
+    }
 }
 
 async function saveShareRequest(payload) {
@@ -247,12 +271,14 @@ async function loadSharedEntry(id:string) {
 }
 
 async function queryOnLaunch(userAppConfigArgs) {
-    console.log(userAppConfigArgs);
-    loadSharedEntry(userAppConfigArgs.shareId);
+    console.log("Received during startup: ", userAppConfigArgs);
+    if(userAppConfigArgs?.shareId !== undefined){
+        loadSharedEntry(userAppConfigArgs?.shareId);
+    }
 }
 
 async function queryWhileRunning(event) {
-    if (event.userAppConfigArgs) {
+    if (event?.userAppConfigArgs !== undefined && event?.userAppConfigArgs?.shareId !== undefined) {
         console.log(event.userAppConfigArgs);
         await loadSharedEntry(event.userAppConfigArgs.shareId);
     }
@@ -283,7 +309,7 @@ export async function deregister() {
     }
 }
 
-export async function share(payload:any) {
+export async function showShareOptions(payload:{windowIdentity:OpenFin.Identity, x: number, y:number}) {
     if(shareRegistered) {
         console.log("Share called with payload: ", payload);
 
@@ -300,20 +326,16 @@ export async function share(payload:any) {
             }
         });
 
-        let customData:IShareCustomData = {
-            windowIdentity,
-            pageId
-        };
-
         const template: OpenFin.MenuItemTemplate[] = [
             {
                 label: 'Share Page',
-                data: { identity: customData, type:"page" }
+                data: { identity: {windowIdentity,
+                    pageId}, type:"page" }
             },
             { type: 'separator', data:{} },
             {
                 label: 'Share Workspace',
-                data: { identity: customData, type:"workspace" }
+                data: { identity: {}, type:"workspace" }
             }
         ];
         currentWindow.openfinWindow.showPopupMenu({ template, x:payload.x, y:payload.y } as OpenFin.ShowPopupMenuOptions).then(async r => {
@@ -323,12 +345,24 @@ export async function share(payload:any) {
                 if(r.data.type === "page") {
                     await saveSharedPage(r.data.identity);
                 } else if(r.data.type === "workspace") {
-                    await saveSharedWorkspace(r.data.identity);
+                    await saveSharedWorkspace();
                 }
             }
         });
+    } else {
+        console.warn("Share cannot be triggered as it hasn't been registered yet.");
+    }
+}
 
-      
+export async function share(options?:IShareCustomData) {
+    if(shareRegistered) {
+        if(options === undefined || options.workspaceId !== undefined) {
+            console.log("A request to share the workspace has been raised.");
+            await saveSharedWorkspace(options?.workspaceId);
+        } else {
+            console.log("Share called with payload: ", options);
+            await saveSharedPage(options);
+        }
     } else {
         console.warn("Share cannot be triggered as it hasn't been registered yet.");
     }

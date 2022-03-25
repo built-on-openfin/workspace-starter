@@ -1,8 +1,8 @@
-import { BrowserButtonType, BrowserCreateWindowRequest, CustomActionCallerType, CustomActionsMap, getCurrentSync, Page } from "@openfin/workspace-platform";
+import { BrowserCreateWindowRequest, CustomActionCallerType, CustomActionsMap, getCurrentSync } from "@openfin/workspace-platform";
 import { getDefaultWindowOptions } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
-import { share } from "./share";
+import { showShareOptions } from "./share";
 
 async function getViewWindowIdentity(view:OpenFin.View): Promise<OpenFin.Identity> {
     let currentWindow = await view.getCurrentWindow();
@@ -55,7 +55,7 @@ export async function getActions(): Promise<CustomActionsMap> {
                 let currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
                 await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
                 if(currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
-                    let newButtons = updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
+                    let newButtons = await updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
                     await browserWindow.replaceToolbarOptions({ buttons: newButtons });
                 }
                 
@@ -68,7 +68,7 @@ export async function getActions(): Promise<CustomActionsMap> {
                 let currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
                 await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
                 if(currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
-                    let newButtons = updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
+                    let newButtons = await updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
                     await browserWindow.replaceToolbarOptions({ buttons: newButtons });
                 }
                 
@@ -82,7 +82,7 @@ export async function getActions(): Promise<CustomActionsMap> {
                 let currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
                 await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
                 if(currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
-                    let newButtons = updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
+                    let newButtons = await updateToolbarButtons(currentToolbarOptions.buttons, payload.customData.sourceId,  payload.customData.replacementId);
                     await browserWindow.replaceToolbarOptions({ buttons: newButtons });
                 }
             }
@@ -94,7 +94,7 @@ export async function getActions(): Promise<CustomActionsMap> {
         },
         "share": async (payload)=> {
             if(payload.callerType === CustomActionCallerType.CustomButton) {
-                await share(payload);
+                await showShareOptions(payload);
             }
         }
     }

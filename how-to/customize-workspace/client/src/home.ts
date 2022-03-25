@@ -10,23 +10,34 @@ import {
   CLISearchResponse,
   CLIDispatchedSearchResult,
   CLIFilterOptionType,
-  ButtonStyle, 
-  TemplateFragment, 
-  TemplateFragmentTypes
+  TemplateFragment,
 } from "@openfin/workspace";
-import { Page } from '@openfin/workspace-platform';
+import { Page } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { getApps } from "./apps";
-import { getPage, getPages, deletePage, launchPage } from "./browser";
-import { getWorkspace, getWorkspaces, deleteWorkspace, launchWorkspace, getWorkspaceIds, saveWorkspace, getWorkspaceTitles } from "./workspace";
-import { HomePageTemplate } from "./template";
+import {
+  getPage,
+  getPages,
+  deletePage,
+  launchPage,
+  getPageBounds,
+} from "./browser";
+import {
+  getWorkspaces,
+  deleteWorkspace,
+  launchWorkspace,
+  saveWorkspace,
+} from "./workspace";
+import { PageTemplate, WorkspaceTemplate } from "./template";
+import { share } from "./share";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
 const HOME_ACTION_SHARE_PAGE = "Share Page";
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
 const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
+const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 
 let isHomeRegistered = false;
 
@@ -56,7 +67,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
   return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: App[]){
+function mapAppEntriesToSearchEntries(apps: App[]) {
   let appResults: CLISearchResult<any>[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
@@ -65,30 +76,30 @@ function mapAppEntriesToSearchEntries(apps: App[]){
         key: apps[i].appId,
         title: apps[i].title,
         data: apps[i],
-        template:  CLITemplate.Plain,
+        template: CLITemplate.Plain,
       };
 
-      if(apps[i].manifestType === "view") {
+      if (apps[i].manifestType === "view") {
         entry.label = "View";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "snapshot") {
+      if (apps[i].manifestType === "snapshot") {
         entry.label = "Snapshot";
         action.name = "Launch Snapshot";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "manifest") {
+      if (apps[i].manifestType === "manifest") {
         entry.label = "App";
         action.name = "Launch App";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "external") {
+      if (apps[i].manifestType === "external") {
         action.name = "Launch Native App";
         entry.actions = [action];
         entry.label = "Native App";
       }
 
-      if(Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+      if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
         entry.icon = apps[i].icons[0].src;
       }
 
@@ -97,18 +108,22 @@ function mapAppEntriesToSearchEntries(apps: App[]){
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
-      };
-        
+      }
+
       appResults.push(entry);
     }
   }
   return appResults;
 }
 
-function mapPageEntriesToSearchEntries(pages: Page[]){
+async function mapPageEntriesToSearchEntries(pages: Page[]) {
   let pageResults: CLISearchResult<any>[] = [];
-  
- const pageTemplate: TemplateFragment = HomePageTemplate;
+  let settings = await getSettings();
+  let pageIcon;
+  if (settings?.platformProvider?.rootUrl !== undefined) {
+    pageIcon = settings.platformProvider.rootUrl + "/icons/page.svg";
+  }
+  const pageTemplate: TemplateFragment = PageTemplate.template;
 
   if (Array.isArray(pages)) {
     for (let i = 0; i < pages.length; i++) {
@@ -116,21 +131,27 @@ function mapPageEntriesToSearchEntries(pages: Page[]){
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
-        actions: [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S"  },{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }],
-        data: {tags:["page"], pageId: pages[i].pageId },
-      template: CLITemplate.Custom,
-              templateContent: {
-                  layout: pageTemplate,
-                  data: {
-                      title: pages[i].title,
-                      description: pages[i].description,
-                      instructions: "Use the buttons below to interact with your saved page.",
-                      openText: "Launch",
-                      deleteText: "Delete",
-                      shareText: "Share"
-                  }
-              }
-            }
+        icon: pageIcon,
+        actions: [
+          { name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" },
+          { name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
+          { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" },
+        ],
+        data: { tags: ["page"], pageId: pages[i].pageId },
+        template: CLITemplate.Custom,
+        templateContent: {
+          layout: pageTemplate,
+          data: {
+            title: pages[i].title,
+            description: pages[i].description,
+            instructions:
+              "Use the buttons below to interact with your saved page:",
+            openText: "Launch",
+            deleteText: "Delete",
+            shareText: "Share",
+          },
+        },
+      };
 
       pageResults.push(entry);
     }
@@ -138,7 +159,22 @@ function mapPageEntriesToSearchEntries(pages: Page[]){
   return pageResults;
 }
 
-function mapWorkspaceEntriesToSearchEntries(workspaces: {id:string, title: string, description?:string, snapshot:any }[]) {
+async function mapWorkspaceEntriesToSearchEntries(
+  workspaces: {
+    id: string;
+    title: string;
+    description?: string;
+    snapshot: any;
+  }[]
+) {
+  let settings = await getSettings();
+
+  let workspaceIcon;
+  if (settings?.platformProvider?.rootUrl !== undefined) {
+    workspaceIcon = settings.platformProvider.rootUrl + "/icons/workspaces.svg";
+  }
+  const workspaceTemplate: TemplateFragment = WorkspaceTemplate.template;
+
   let workspaceResults: CLISearchResult<any>[] = [];
   if (Array.isArray(workspaces)) {
     for (let i = 0; i < workspaces.length; i++) {
@@ -146,16 +182,26 @@ function mapWorkspaceEntriesToSearchEntries(workspaces: {id:string, title: strin
         key: workspaces[i].id,
         title: workspaces[i].title,
         label: "Workspace",
-        actions: [{ name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }],
-        data: {tags:["workspace"], workspaceId: workspaces[i].id },
-        template: CLITemplate.Plain
-      };
-
-      if (workspaces[i].description !== undefined) {
-        entry.description = workspaces[i].description;
-        entry.shortDescription = workspaces[i].description;
-        entry.template = CLITemplate.SimpleText;
-        entry.templateContent = workspaces[i].description;
+        icon: workspaceIcon,
+        actions: [
+          { name: HOME_ACTION_SHARE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+S" },
+          { name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D" },
+          { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" },
+        ],
+        data: { tags: ["workspace"], workspaceId: workspaces[i].id },
+        template: CLITemplate.Custom,
+        templateContent: {
+          layout: workspaceTemplate,
+          data: {
+            title: workspaces[i].title,
+            description: workspaces[i].description,
+            instructions:
+              "Use the buttons below to interact with your saved Workspace:",
+            openText: "Launch",
+            deleteText: "Delete",
+            shareText: "Share",
+          },
+        },
       };
 
       workspaceResults.push(entry);
@@ -176,13 +222,18 @@ async function getResults(
 
   let tags = [];
   let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-  let pageSearchEntries = mapPageEntriesToSearchEntries(pages);
-  let workspaceEntries = mapWorkspaceEntriesToSearchEntries(workspaces as any);
-  
-  let initialResults: CLISearchResult<any>[] = [...appSearchEntries, ...pageSearchEntries, ...workspaceEntries];
+  let pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
+  let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
+    workspaces as any
+  );
+
+  let initialResults: CLISearchResult<any>[] = [
+    ...appSearchEntries,
+    ...pageSearchEntries,
+    ...workspaceEntries,
+  ];
 
   if (initialResults.length > 0) {
-
     let finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
@@ -306,7 +357,7 @@ export async function register() {
 
   const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
   const queryAgainst = settings?.homeProvider?.queryAgainst;
-  let lastResponse:CLISearchListenerResponse;
+  let lastResponse: CLISearchListenerResponse;
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
@@ -317,92 +368,173 @@ export async function register() {
       return { results: [] };
     }
 
-    if(query.toLowerCase().indexOf("/w ") === 0) {
+    if (query.toLowerCase().indexOf("/w ") === 0) {
       let workspaces = await getWorkspaces();
       let workspaceText = request.query.replace("/w ", "");
-      let parts = workspaceText.split('>');
+      let parts = workspaceText.split(">");
       let title;
       let description;
-      if(parts.length === 1 || parts.length === 2) {
+      if (parts.length === 1 || parts.length === 2) {
         title = parts[0].trim();
       }
-      if(parts.length === 2) {
+      if (parts.length === 2) {
         description = parts[1].trim();
       }
 
-      let foundMatch = workspaces.find(entry => entry.title.toLowerCase() === title.toLowerCase());
-      if(foundMatch !== undefined && foundMatch !== null) {
+      let foundMatch = workspaces.find(
+        (entry) => entry.title.toLowerCase() === title.toLowerCase()
+      );
+      if (foundMatch !== undefined && foundMatch !== null) {
         // we have a match
-        return { results: [{
-          key: "WORKSPACE-EXISTS",
-          title: "Workspace " + foundMatch.title + " already exists.",
-          actions: [ ],
-          data: {tags:["workspace"], workspaceId: foundMatch.id }
-        }]}
+        return {
+          results: [
+            {
+              key: "WORKSPACE-EXISTS",
+              title: "Workspace " + foundMatch.title + " already exists.",
+              actions: [],
+              data: { tags: ["workspace"], workspaceId: foundMatch.id },
+            },
+          ],
+        };
       } else {
-        if(lastResponse !== undefined) {
+        if (lastResponse !== undefined) {
           lastResponse.close();
         }
         lastResponse = response;
         lastResponse.open();
-        return { results: [{
-          key: "WORKSPACE-SAVE",
-          title: "Save Current Workspace as " + title,
-          label: "Suggestion",
-          actions: [ { name: "Save Workspace", hotkey: "Enter" }],
-          data: {tags:["workspace"], workspaceId: crypto["randomUUID"](), workspaceTitle: title, workspaceDescription:description }
-        }]}
+        return {
+          results: [
+            {
+              key: "WORKSPACE-SAVE",
+              title: "Save Current Workspace as " + title,
+              label: "Suggestion",
+              actions: [{ name: "Save Workspace", hotkey: "Enter" }],
+              data: {
+                tags: ["workspace"],
+                workspaceId: crypto["randomUUID"](),
+                workspaceTitle: title,
+                workspaceDescription: description,
+              },
+            },
+          ],
+        };
       }
     }
 
     let filters = request?.context?.selectedFilters;
-    if(lastResponse !== undefined) {
+    if (lastResponse !== undefined) {
       lastResponse.close();
     }
     lastResponse = response;
     lastResponse.open();
-    let results = await getResults(query, queryMinLength, queryAgainst, filters);
+    let results = await getResults(
+      query,
+      queryMinLength,
+      queryAgainst,
+      filters
+    );
     return results;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      if(result.data.workspaceId !== undefined) {
-        if(result.data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
-          await saveWorkspace(result.data.workspaceId, result.data.workspaceTitle, result.data.workspaceDescription);
-          if(lastResponse !== undefined && lastResponse !== null) {
+      if (result.data.workspaceId !== undefined) {
+        if (
+          result.data.workspaceId !== undefined &&
+          result.key === "WORKSPACE-SAVE"
+        ) {
+          await saveWorkspace(
+            result.data.workspaceId,
+            result.data.workspaceTitle,
+            result.data.workspaceDescription
+          );
+          if (lastResponse !== undefined && lastResponse !== null) {
             lastResponse.revoke(result.key);
-            lastResponse.respond([{
-              key: "WORKSPACE-SAVED",
-              title: "Workspace " + result.data.workspaceTitle + " saved.",
-              actions: [ ],
-              data: {tags:["workspace"], workspaceId: result.data.workspaceId, workspaceTitle: result.data.workspaceTitle, workspaceDescription: result.data.workspaceDescription }
-            }])
+            lastResponse.respond([
+              {
+                key: "WORKSPACE-SAVED",
+                title: "Workspace " + result.data.workspaceTitle + " saved.",
+                actions: [],
+                data: {
+                  tags: ["workspace"],
+                  workspaceId: result.data.workspaceId,
+                  workspaceTitle: result.data.workspaceTitle,
+                  workspaceDescription: result.data.workspaceDescription,
+                },
+              },
+            ]);
           }
-        } else if(result.data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
-          if(lastResponse !== undefined && lastResponse !== null) {
+        } else if (
+          result.data.workspaceId !== undefined &&
+          result.key === "WORKSPACE-EXISTS"
+        ) {
+          if (lastResponse !== undefined && lastResponse !== null) {
             lastResponse.revoke(result.key);
           }
-        } else if(result.data.workspaceId !== undefined) {
-          if(result.action.name === HOME_ACTION_DELETE_WORKSPACE) {
+        } else if (result.data.workspaceId !== undefined) {
+          let workspaceAction = result.action.name;
+          if (
+            (result.action.hotkey !== undefined &&
+              result.action.hotkey.toLowerCase() === "enter" &&
+              workspaceAction !== WorkspaceTemplate.actions.share &&
+              workspaceAction !== WorkspaceTemplate.actions.delete) ||
+            workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
+            workspaceAction === WorkspaceTemplate.actions.launch
+          ) {
+            await launchWorkspace(result.data.workspaceId);
+          } else if (
+            workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
+            workspaceAction === WorkspaceTemplate.actions.delete
+          ) {
             await deleteWorkspace(result.data.workspaceId);
-            if(lastResponse !== undefined && lastResponse !== null) {
+            if (lastResponse !== undefined && lastResponse !== null) {
               lastResponse.revoke(result.key);
             }
+          } else if (
+            workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
+            workspaceAction === WorkspaceTemplate.actions.share
+          ) {
+            await share({ workspaceId: result.data.workspaceId });
           } else {
-            await launchWorkspace(result.data.workspaceId);
+            console.warn(
+              "Unrecognised action for workspace selection: " +
+                result.data.workspaceId
+            );
           }
         }
-      } else if(result.data.pageId !== undefined) {
-          if(result.action.name === HOME_ACTION_DELETE_PAGE) {
-            await deletePage(result.data.pageId);
-            if(lastResponse !== undefined && lastResponse !== null) {
-              lastResponse.revoke(result.key);
-            }
-          } else {
-            let pageToLaunch = await getPage(result.data.pageId);
-            await launchPage(pageToLaunch);
+      } else if (result.data.pageId !== undefined) {
+        let pageAction = result.action.name;
+        if (
+          (result.action.hotkey !== undefined &&
+            result.action.hotkey.toLowerCase() === "enter" &&
+            pageAction !== PageTemplate.actions.share && 
+            pageAction !== PageTemplate.actions.delete) ||
+          pageAction === HOME_ACTION_LAUNCH_PAGE ||
+          pageAction === PageTemplate.actions.launch
+        ) {
+          let pageToLaunch = await getPage(result.data.pageId);
+          await launchPage(pageToLaunch);
+        } else if (
+          pageAction === HOME_ACTION_DELETE_PAGE ||
+          pageAction === PageTemplate.actions.delete
+        ) {
+          await deletePage(result.data.pageId);
+          if (lastResponse !== undefined && lastResponse !== null) {
+            lastResponse.revoke(result.key);
           }
+        } else if (
+          pageAction == HOME_ACTION_SHARE_PAGE ||
+          pageAction === PageTemplate.actions.share
+        ) {
+          let page = await getPage(result.data.pageId);
+          let bounds = await getPageBounds(result.data.pageId, true);
+          await share({ page, bounds });
+        } else {
+          console.warn(
+            "Unknown action triggered on search result for page Id: " +
+              result.data.pageId
+          );
+        }
       } else {
         await launch(result.data);
       }
@@ -433,10 +565,12 @@ export async function hide() {
 }
 
 export async function deregister() {
-  if(isHomeRegistered) {
+  if (isHomeRegistered) {
     let settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
   } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered")
+    console.warn(
+      "Unable to deregister home as there is an indication it was never registered"
+    );
   }
 }

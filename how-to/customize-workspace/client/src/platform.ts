@@ -1,8 +1,7 @@
 import { PlatformInteropBroker } from './interopbroker';
-import { init as workspacePlatformInit, BrowserInitConfig, BrowserButtonType, BrowserOverrideCallback } from '@openfin/workspace-platform';
+import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 import { getSettings, validateThemes } from "./settings";
 import { getActions } from './actions';
-import { getDefaultToolbarButtons } from './buttons';
 import { getDefaultWindowOptions, overrideCallback } from './browser';
 
 export async function init() {

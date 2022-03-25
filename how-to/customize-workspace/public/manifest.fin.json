@@ -59,7 +59,11 @@
   "customSettings": {
     "bootstrap": {
       "home": true,
-      "store": true
+      "store": true,
+      "notifications":true
+    },
+    "platformProvider": {
+      "rootUrl": "http://localhost:8080"
     },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/apps.json",
@@ -73,7 +77,63 @@
         "icon": "http://localhost:8080/favicon.ico",
         "newTabUrl": null,
         "newPageUrl": null
-      }
+      },
+      "toolbarButtons":[
+        { 
+          "include": true, 
+          "button": {  
+            "type": "Custom",
+            "tooltip": "Pin this window",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/pin.svg",
+            "action": {
+                "id": "pin-window",
+                "customData": {
+                    "sourceId": "pin-window",
+                    "replacementId": "unpin-window"
+                }
+            }
+          }
+      },
+      { 
+        "include": false, 
+        "button": {  
+          "type": "Custom",
+          "tooltip": "Unpin this window",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/icons/pin-vertical.svg",
+          "action": {
+              "id": "unpin-window",
+              "customData": {
+                  "sourceId": "unpin-window",
+                  "replacementId": "pin-window"
+              }
+          }
+      }},
+      { "include": true, "button": {
+          "type": "ShowHideTabs"
+      }},
+      { "include": true, "button": {
+          "type": "ColorLinking"
+      }},
+      { "include": true, "button": {
+          "type": "PresetLayouts"
+      }},
+      { "include": true, "button": {  
+          "type": "Custom",
+          "tooltip": "Share",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/icons/share.svg",
+          "action": {
+              "id": "share",
+              "customData": {
+              }
+          }
+      }},
+      { "include": true, "button": {
+          "type": "SavePage"
+      }}
+      ]
     },
     "themeProvider": {
         "themes":[
@@ -250,6 +310,11 @@
           }
         ]
       }
+    },
+    "notificationProvider": {
+      "id": "custom-workspace",
+      "title": "Notification Starter",
+      "icon": "http://localhost:8080/favicon.ico"
     }
   }
 }
