@@ -1,5 +1,5 @@
 
-import { registerPlatform, deregisterPlatform } from "@openfin/workspace/notifications";
+import { register as registerPlatform, deregister as deregisterPlatform } from "@openfin/workspace/notifications";
 import { getSettings } from "./settings";
 let notificationsRegistered = false;
 

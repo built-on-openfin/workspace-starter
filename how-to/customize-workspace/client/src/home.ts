@@ -474,10 +474,6 @@ export async function register() {
         } else if (result.data.workspaceId !== undefined) {
           let workspaceAction = result.action.name;
           if (
-            (result.action.hotkey !== undefined &&
-              result.action.hotkey.toLowerCase() === "enter" &&
-              workspaceAction !== WorkspaceTemplate.actions.share &&
-              workspaceAction !== WorkspaceTemplate.actions.delete) ||
             workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
             workspaceAction === WorkspaceTemplate.actions.launch
           ) {
@@ -505,10 +501,6 @@ export async function register() {
       } else if (result.data.pageId !== undefined) {
         let pageAction = result.action.name;
         if (
-          (result.action.hotkey !== undefined &&
-            result.action.hotkey.toLowerCase() === "enter" &&
-            pageAction !== PageTemplate.actions.share && 
-            pageAction !== PageTemplate.actions.delete) ||
           pageAction === HOME_ACTION_LAUNCH_PAGE ||
           pageAction === PageTemplate.actions.launch
         ) {

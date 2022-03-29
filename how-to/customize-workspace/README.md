@@ -3,17 +3,19 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  licence from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
-# Support Context and Intents
+# Customize Workspace
 
-This sample is an extension of the register with store example. The sample covers:
+This sample is an extension of the support context and intents example. The sample covers:
 
 * Registering with Home
 * Registering a Store
-* Customizing OpenFin Browser
+* Customizing OpenFin Browser - Custom main menu, page right click context menu and view right click context menu. This example also shows how to determine what buttons should show in the top right of the menu header and adds a few custom buttons to demonstrate this.
 * Supporting Interop/FDC3 Context messages
 * Supporting Interop/FDC3 Intents
 * Using a golden data source (in [apps.json](public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
 * Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file) 
+* Workspace saving has been added (including an example of Native Window Integration)
+* An example of implementing your own sharing function has also been added.
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -23,8 +25,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
-* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fcustomize-workspace%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Workspace Example</a>
+* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv6.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Customize Workspace Example</a>
 
 ---
 
@@ -73,7 +75,7 @@ $ npm run secondclient
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
-![](workspace-support-context-intents-build.gif)
+![](workspace-customize-workspace-build.gif)
 
 6. Type any character into the search box to show the default list of applications.
    The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
@@ -104,7 +106,9 @@ These applications are read and transformed in order to be sent to our API.
 
 ### Intent Support Information
 
-This Readme contains information similar to the Register with Store readme (as this is an extension). To make the addition of Intent support clearer it has been moved to it's own markdown file: [**IntentSupport.md**](IntentSupport.md).
+This Readme contains information similar to the Support Context and Intents readme (as this is an extension). To make the addition of Intent support clearer it has been moved to it's own markdown file: [**IntentSupport.md**](IntentSupport.md).
+
+
 
 ---
 **NOTE ABOUT THE APP**
@@ -126,12 +130,14 @@ The [platform.ts](client/src/platform.ts) initializes the workspace platform by 
 
 Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
 
-The bootstrapper has two main responsibilities:
+The bootstrapper has the following responsibilities:
 
 1. Import [settings.ts](client/src/settings.ts) to see what should be bootstrapped. (That is, should it setup Store and Home?)
 2. Import [home.ts](client/src/home.ts) and ensure that a home provider is registered against home in order to provide a list of applications (if enabled).
 3. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
-4. Listen for when your workspace platform is about to close and deregister from home and store.
+4. Import [notifications.ts](client/src/notifications.ts) and ensure that you have registered your platform against notification center if enabled.
+5. Import [share.ts](client/src/share.ts) to enable custom share support.
+6. Listen for when your workspace platform is about to close and deregister from home, store and notification center. 
 
 The **home provider**([home.ts](client/src/home.ts)) imports the following:
 
@@ -140,6 +146,9 @@ The **home provider**([home.ts](client/src/home.ts)) imports the following:
 - [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
 - [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
 - [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
+- [workspace.ts](client/src/workspace.ts) to fetch saved workspaces and display them in the Home UI and launch/delete them when the action is executed.
+- [template.ts](client/src/template.ts) Workspace 6 supports custom templates for search results. This file exports a template for custom saved workspaces and pages.
+- [share.ts](client/src/share.ts) The custom template supports custom buttons and we have a share button when it comes to saved pages and workspaces.
 - [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
 
 The registration of a provider against home will look like the following:
@@ -185,7 +194,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 "customSettings": {
     "bootstrap": {
       "home": true,
-      "store": true
+      "store": true,
+      "notifications": true
+    },
+    "platformProvider": {
+      "rootUrl": "http://localhost:8080"
     },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/apps.json",
@@ -199,7 +212,95 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
         "icon": "http://localhost:8080/favicon.ico",
         "newTabUrl": null,
         "newPageUrl": null
-      }
+      },
+      "toolbarButtons":[
+        { 
+          "include": false, 
+          "button": {  
+            "type": "Custom",
+            "tooltip": "Change Opacity",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/favicon.ico",
+            "action": {
+                "id": "change-opacity",
+                "customData": {
+                  "sourceId": "change-opacity",
+                  "replacementId": "restore-opacity"
+                 }
+            }
+          }
+      },
+      { 
+        "include": false, 
+        "button": {  
+          "type": "Custom",
+          "tooltip": "Restore Opacity",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/favicon.ico",
+          "action": {
+              "id": "restore-opacity",
+              "customData": {
+                "sourceId": "restore-opacity",
+                "replacementId": "change-opacity"
+               }
+          }
+        }
+        },
+        { 
+          "include": true, 
+          "button": {  
+            "type": "Custom",
+            "tooltip": "Pin this window",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/pin.svg",
+            "action": {
+                "id": "pin-window",
+                "customData": {
+                    "sourceId": "pin-window",
+                    "replacementId": "unpin-window"
+                }
+            }
+          }
+      },
+      { 
+        "include": false, 
+        "button": {  
+          "type": "Custom",
+          "tooltip": "Unpin this window",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/icons/pin-vertical.svg",
+          "action": {
+              "id": "unpin-window",
+              "customData": {
+                  "sourceId": "unpin-window",
+                  "replacementId": "pin-window"
+              }
+          }
+      }},
+      { "include": true, "button": {
+          "type": "ShowHideTabs"
+      }},
+      { "include": true, "button": {
+          "type": "ColorLinking"
+      }},
+      { "include": true, "button": {
+          "type": "PresetLayouts"
+      }},
+      { "include": true, "button": {  
+          "type": "Custom",
+          "tooltip": "Share",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/icons/share.svg",
+          "action": {
+              "id": "share",
+              "customData": {
+              }
+          }
+      }},
+      { "include": true, "button": {
+          "type": "SavePage"
+      }}
+      ]
     },
     "themeProvider": {
         "themes":[
@@ -376,6 +477,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
           }
         ]
       }
+    },
+    "notificationProvider": {
+      "id": "customize-workspace",
+      "title": "Notification Starter",
+      "icon": "http://localhost:8080/favicon.ico"
     }
   }
 ```
@@ -385,16 +491,18 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | **bootstrap** | Config related to the bootstrapping process |
 | home | Should we use home and register a home provider to feed apps into Home and Browser |
 | store | Should we use store and register a store provider to display apps |
+| notifications | Should we use register the workspace platform against notification center so it can have it's own dedicated section that is themed and branded. |
 | **appProvider** | Config related to where the apps should be fetched from |
 | appsSourceUrl | Where should we fetch the apps from |
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
 | cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
 | appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
 | **browserProvider** | Config related to OpenFin Browser |
-| title | The title for the window that shows up in the taskbar |
-| icon | The icon that should show in the taskbar and in the top left menu of the browser |
-| newTabUrl | Should we allow someone to add a new view to a page? What url should be loaded when they click add? |
-| newPageUrl | Should we allow someone to add a new page? What url should be loaded when they click add? |
+| windowOptions.title | The title for the window that shows up in the taskbar |
+| windowOptions.icon | The icon that should show in the taskbar and in the top left menu of the browser |
+| windowOptions.newTabUrl | Should we allow someone to add a new view to a page? What url should be loaded when they click add? |
+| windowOptions.newPageUrl | Should we allow someone to add a new page? What url should be loaded when they click add? |
+| toolbarButtons | For this sample we let you add/remove buttons by adding them to this array. This works for the demo but a thing to note is that the actions referenced by the button need to be registered (see [actions.ts](client/src/actions.ts)). The object has two properties: include whether or not to include it (the first button is hidden but you can turn it on to experiment) and button which is in the toolbarbutton shape supported by the workspace-platform sdk.|
 | **themeProvider** | What themes should be passed to OpenFin Workspace (at the moment only one is supported) |
 | themes | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used) |
 | themes.label | A label to use to identify this theme |
@@ -422,6 +530,10 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | footer.logo | The logo to show in the footer |
 | footer.text | The text to show in the footer |
 | footer.links | What links do you want to show in the footer (opens up using the default web browser. |
+| **notificationProvider** | Config settings that are used by the sample code to configure the registration against Notification Center so your theme will be picked up and applied |
+| id | Unique ID for your notification registration |
+| title | The name for your workspace platform in the notification center |
+| icon | The icon to show in the notification center |
 
 ---
 **NOTE ABOUT THE MANIFEST**

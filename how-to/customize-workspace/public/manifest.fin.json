@@ -6,9 +6,10 @@
     "version": "23.96.68.3"
   },
   "startup_app": {
-    "name": "workspace-starter-how-to-customiza-workspace"
+    "name": "workspace-starter-how-to-customize-workspace"
   },
   "platform": {
+    "name": "workspace-starter-how-to-customize-workspace",
     "uuid": "customize-workspace",
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
@@ -44,7 +45,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Support Intents & Context - v6.0",
+    "name": "Customize Workspace - v6.3",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
@@ -79,6 +80,38 @@
         "newPageUrl": null
       },
       "toolbarButtons":[
+        { 
+          "include": false, 
+          "button": {  
+            "type": "Custom",
+            "tooltip": "Change Opacity",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/favicon.ico",
+            "action": {
+                "id": "change-opacity",
+                "customData": {
+                  "sourceId": "change-opacity",
+                  "replacementId": "restore-opacity"
+                 }
+            }
+          }
+      },
+      { 
+        "include": false, 
+        "button": {  
+          "type": "Custom",
+          "tooltip": "Restore Opacity",
+          "disabled": false,
+          "iconUrl": "http://localhost:8080/favicon.ico",
+          "action": {
+              "id": "restore-opacity",
+              "customData": {
+                "sourceId": "restore-opacity",
+                "replacementId": "change-opacity"
+               }
+          }
+        }
+    },
         { 
           "include": true, 
           "button": {  
@@ -177,14 +210,14 @@
       ]
     },
     "homeProvider": {
-      "id": "support-context-and-intents",
+      "id": "customize-workspace",
       "title": "Home Starter",
       "icon": "http://localhost:8080/favicon.ico",
       "queryMinLength": 3,
       "queryAgainst":["title"]
     },
     "storefrontProvider": {
-      "id": "support-context-and-intents",
+      "id": "customize-workspace",
       "title": "Custom Storefront",
       "icon": "http://localhost:8080/favicon.ico",
       "landingPage": {
@@ -312,7 +345,7 @@
       }
     },
     "notificationProvider": {
-      "id": "custom-workspace",
+      "id": "customize-workspace",
       "title": "Notification Starter",
       "icon": "http://localhost:8080/favicon.ico"
     }

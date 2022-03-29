@@ -22,7 +22,7 @@ You will need the following dependencies
 ```
 ## What changes will I need to do if I want the simplest move from v5.5 to v6?
 
-There are no breaking changes in this release (just fixes and the new features mentioned above). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 6.1.6 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 6.1.6.
+There are no breaking changes in this release (just fixes and the new features mentioned above). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 6.3.6 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 6.3.6.
 
 # Migrate from a previous version - From v5 to v5.5
 

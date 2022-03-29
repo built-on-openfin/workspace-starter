@@ -9,7 +9,8 @@
         "register-with-home",
         "register-with-store",
         "integrate-with-salesforce",
-        "support-context-and-intents"
+        "support-context-and-intents",
+        "customize-workspace"
     ],
     "howToCustomFolder":"",
     "author": "",
