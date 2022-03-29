@@ -7,7 +7,7 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 This sample is an extension of the support context and intents example. The sample covers:
 
-* Registering with Home
+* Registering with Home - with examples of using custom templates with search results.
 * Registering a Store
 * Customizing OpenFin Browser - Custom main menu, page right click context menu and view right click context menu. This example also shows how to determine what buttons should show in the top right of the menu header and adds a few custom buttons to demonstrate this.
 * Supporting Interop/FDC3 Context messages
@@ -75,7 +75,6 @@ $ npm run secondclient
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
-![](workspace-customize-workspace-build.gif)
 
 6. Type any character into the search box to show the default list of applications.
    The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
