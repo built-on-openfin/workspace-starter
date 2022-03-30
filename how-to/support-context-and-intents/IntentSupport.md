@@ -1,6 +1,6 @@
 <img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
 
->**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  licence from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+>**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
 # Support Context and Intents - How is Intent Support implemented?
@@ -33,7 +33,7 @@ To run this sample:
 * Bring up the Home UI and search for 'Raise Intent' and you will see the intent raising view.
 * Launch that and you will see it show up in a browser window.
 * You can now pick from a number of options:
-  * API: What API do you want to test - FDC3 or Interop (FDC3 is built ontop of our interop code so they are compatible with each other)
+  * API: What API do you want to test - FDC3 or Interop (FDC3 is built on top of our interop code so they are compatible with each other)
   * Action: Do you want to raise an intent or broadcast a context (We will focus on intent raising)
   * Launch application by Intent or By Context: showing you the two approaches that can be used
   * App Preference: No preference will result in a list of applications being shown in the app picker if more than one app supports an intent, Non Existent App (to demonstrate what would happen if an incorrect app id was passed when raising an intent), A specific app (this list is built dynamically using the interop or fdc3 apis to query the interop broker)
