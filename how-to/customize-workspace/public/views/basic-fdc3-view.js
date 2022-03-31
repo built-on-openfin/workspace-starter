@@ -7,17 +7,26 @@ showInstrument.onclick = () => {
 };
 
 // Close the dropdown menu if the user clicks outside of it
-window.onclick = function (event) {
+window.onclick = async function (event) {
   if (!event.target.matches(".dropbtn")) {
     let selectedInstrument = event.target.getAttribute("data-ticker");
 
     if (selectedInstrument !== null) {
       console.log("Instrument selected: " + selectedInstrument);
       if (window.fin !== undefined) {
-        window.fdc3.broadcast({
+        let latestContext = {
           type: "fdc3.instrument",
           id: { ticker: selectedInstrument }
-        });
+        };
+        
+        let fdc3SystemChannel = await fdc3.getCurrentChannel();
+        if(fdc3SystemChannel !== null) {
+          window.fdc3.broadcast(latestContext);
+        }
+
+        // get app channel
+        const appChannel = await window.fdc3.getOrCreateChannel('application-specific-channel');
+        appChannel.broadcast(latestContext);
       }
     }
     var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -71,6 +80,18 @@ async function init() {
 
     const intentListener = window.fdc3.addIntentListener('ShowInstrument', contextHandler);
     const intentPageListener = window.fdc3.addIntentListener('ShowInstrumentForPage', contextHandler);
+
+    // create application specific channel that works across views
+    const appChannel = await window.fdc3.getOrCreateChannel('application-specific-channel');
+    // get the current context of the channel
+    const current = await appChannel.getCurrentContext();
+
+    if(current !== undefined && current !== null) {
+      contextHandler(current);
+    }
+
+    // add a listener
+    appChannel.addContextListener(null, contextHandler);
   }
 }
 
