@@ -29,6 +29,7 @@ This repository contains examples showing how to configure core Workspace functi
 | [How To Integrate With Salesforce](./how-to/integrate-with-salesforce)   | This example demonstrates how to implement Salesforce integration in OpenFin Workspace using our Salesforce integration API, enabling you to browse and search Salesforce data in OpenFin Home.
 | [How To Support Context And Intents](./how-to/support-context-and-intents)   | This example is an extension of the register with store example but shows you how to implement intent support in your workspace platform. It includes various examples of sharing context and different ways of raising an intent and passing the context to the intent target.
 | [How To Register With Browser](./how-to/register-with-browser)   | This example provides details on how to use OpenFin's Browser component to implement a Workspace Platform. 
+| [How To Customize Workspace](./how-to/customize-workspace)   | This example is an extension of the context and intents how to but includes examples on how to: customize the browser (buttons, menus and context menus), have a custom workspace and page saving setup, how you could implement sharing of workspaces and pages and how you can use notifications and custom home search result templates. 
 
 
 ## Before you get started
