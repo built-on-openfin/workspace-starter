@@ -31,6 +31,8 @@ import {
 } from "./workspace";
 import { PageTemplate, WorkspaceTemplate } from "./template";
 import { share } from "./share";
+import type { Integration, IntegrationProvider } from "./shapes";
+import { salesForceGetAppSearchEntries, salesForceGetSearchResults, salesForceItemSelection, SalesforceSettings } from "./salesforce";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -219,6 +221,8 @@ async function getResults(
   let apps = await getApps();
   let pages = await getPages();
   let workspaces = await getWorkspaces();
+  let settings = await getSettings();
+  const integrationProviders: { [id: string]: Integration<unknown> } = mapIntegrationProviders(settings.integrationProvider);
 
   let tags = [];
   let appSearchEntries = mapAppEntriesToSearchEntries(apps);
@@ -226,6 +230,10 @@ async function getResults(
   let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
     workspaces as any
   );
+
+  if (integrationProviders.salesforce) {
+    await salesForceGetAppSearchEntries(integrationProviders.salesforce as Integration<SalesforceSettings>, appSearchEntries);
+  }
 
   let initialResults: CLISearchResult<any>[] = [
     ...appSearchEntries,
@@ -355,9 +363,12 @@ export async function register() {
     return;
   }
 
+  const integrationProviders: { [id: string]: Integration<unknown> } = mapIntegrationProviders(settings.integrationProvider);
+
   const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
   const queryAgainst = settings?.homeProvider?.queryAgainst;
   let lastResponse: CLISearchListenerResponse;
+  let filters;
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
@@ -421,7 +432,7 @@ export async function register() {
       }
     }
 
-    let filters = request?.context?.selectedFilters;
+    filters = request?.context?.selectedFilters;
     if (lastResponse !== undefined) {
       lastResponse.close();
     }
@@ -433,105 +444,124 @@ export async function register() {
       queryAgainst,
       filters
     );
+
+    if (integrationProviders.salesforce) {
+      const response = await salesForceGetSearchResults(integrationProviders.salesforce as Integration<SalesforceSettings>, query, filters);
+      if (response.results) {
+        results.results = results.results.concat(response.results);
+      }
+      if (response.context?.filters) {
+        results.context = results.context ?? {};
+        results.context.filters = results.context.filters ?? [];
+        results.context.filters = results.context.filters.concat(response.context.filters);
+      }
+    }
     return results;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
-    if (result.data !== undefined) {
-      if (result.data.workspaceId !== undefined) {
-        if (
-          result.data.workspaceId !== undefined &&
-          result.key === "WORKSPACE-SAVE"
-        ) {
-          await saveWorkspace(
-            result.data.workspaceId,
-            result.data.workspaceTitle,
-            result.data.workspaceDescription
-          );
-          if (lastResponse !== undefined && lastResponse !== null) {
-            lastResponse.revoke(result.key);
-            lastResponse.respond([
-              {
-                key: "WORKSPACE-SAVED",
-                title: "Workspace " + result.data.workspaceTitle + " saved.",
-                actions: [],
-                data: {
-                  tags: ["workspace"],
-                  workspaceId: result.data.workspaceId,
-                  workspaceTitle: result.data.workspaceTitle,
-                  workspaceDescription: result.data.workspaceDescription,
-                },
-              },
-            ]);
-          }
-        } else if (
-          result.data.workspaceId !== undefined &&
-          result.key === "WORKSPACE-EXISTS"
-        ) {
-          if (lastResponse !== undefined && lastResponse !== null) {
-            lastResponse.revoke(result.key);
-          }
-        } else if (result.data.workspaceId !== undefined) {
-          let workspaceAction = result.action.name;
+    let handled = false;
+    if (integrationProviders.salesforce) {
+      handled = await salesForceItemSelection(integrationProviders.salesforce as Integration<SalesforceSettings>, result, lastResponse);
+    }
+
+    if (!handled) {
+      if (result.data !== undefined) {
+        if (result.data.workspaceId !== undefined) {
           if (
-            workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-            workspaceAction === WorkspaceTemplate.actions.launch
+            result.data.workspaceId !== undefined &&
+            result.key === "WORKSPACE-SAVE"
           ) {
-            await launchWorkspace(result.data.workspaceId);
+            await saveWorkspace(
+              result.data.workspaceId,
+              result.data.workspaceTitle,
+              result.data.workspaceDescription
+            );
+            if (lastResponse !== undefined && lastResponse !== null) {
+              lastResponse.revoke(result.key);
+              lastResponse.respond([
+                {
+                  key: "WORKSPACE-SAVED",
+                  title: "Workspace " + result.data.workspaceTitle + " saved.",
+                  actions: [],
+                  data: {
+                    tags: ["workspace"],
+                    workspaceId: result.data.workspaceId,
+                    workspaceTitle: result.data.workspaceTitle,
+                    workspaceDescription: result.data.workspaceDescription,
+                  },
+                },
+              ]);
+            }
           } else if (
-            workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-            workspaceAction === WorkspaceTemplate.actions.delete
+            result.data.workspaceId !== undefined &&
+            result.key === "WORKSPACE-EXISTS"
           ) {
-            await deleteWorkspace(result.data.workspaceId);
+            if (lastResponse !== undefined && lastResponse !== null) {
+              lastResponse.revoke(result.key);
+            }
+          } else if (result.data.workspaceId !== undefined) {
+            let workspaceAction = result.action.name;
+            if (
+              workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
+              workspaceAction === WorkspaceTemplate.actions.launch
+            ) {
+              await launchWorkspace(result.data.workspaceId);
+            } else if (
+              workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
+              workspaceAction === WorkspaceTemplate.actions.delete
+            ) {
+              await deleteWorkspace(result.data.workspaceId);
+              if (lastResponse !== undefined && lastResponse !== null) {
+                lastResponse.revoke(result.key);
+              }
+            } else if (
+              workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
+              workspaceAction === WorkspaceTemplate.actions.share
+            ) {
+              await share({ workspaceId: result.data.workspaceId });
+            } else {
+              console.warn(
+                "Unrecognised action for workspace selection: " +
+                result.data.workspaceId
+              );
+            }
+          }
+        } else if (result.data.pageId !== undefined) {
+          let pageAction = result.action.name;
+          if (
+            pageAction === HOME_ACTION_LAUNCH_PAGE ||
+            pageAction === PageTemplate.actions.launch
+          ) {
+            let pageToLaunch = await getPage(result.data.pageId);
+            await launchPage(pageToLaunch);
+          } else if (
+            pageAction === HOME_ACTION_DELETE_PAGE ||
+            pageAction === PageTemplate.actions.delete
+          ) {
+            await deletePage(result.data.pageId);
             if (lastResponse !== undefined && lastResponse !== null) {
               lastResponse.revoke(result.key);
             }
           } else if (
-            workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
-            workspaceAction === WorkspaceTemplate.actions.share
+            pageAction == HOME_ACTION_SHARE_PAGE ||
+            pageAction === PageTemplate.actions.share
           ) {
-            await share({ workspaceId: result.data.workspaceId });
+            let page = await getPage(result.data.pageId);
+            let bounds = await getPageBounds(result.data.pageId, true);
+            await share({ page, bounds });
           } else {
             console.warn(
-              "Unrecognised action for workspace selection: " +
-                result.data.workspaceId
+              "Unknown action triggered on search result for page Id: " +
+              result.data.pageId
             );
           }
-        }
-      } else if (result.data.pageId !== undefined) {
-        let pageAction = result.action.name;
-        if (
-          pageAction === HOME_ACTION_LAUNCH_PAGE ||
-          pageAction === PageTemplate.actions.launch
-        ) {
-          let pageToLaunch = await getPage(result.data.pageId);
-          await launchPage(pageToLaunch);
-        } else if (
-          pageAction === HOME_ACTION_DELETE_PAGE ||
-          pageAction === PageTemplate.actions.delete
-        ) {
-          await deletePage(result.data.pageId);
-          if (lastResponse !== undefined && lastResponse !== null) {
-            lastResponse.revoke(result.key);
-          }
-        } else if (
-          pageAction == HOME_ACTION_SHARE_PAGE ||
-          pageAction === PageTemplate.actions.share
-        ) {
-          let page = await getPage(result.data.pageId);
-          let bounds = await getPageBounds(result.data.pageId, true);
-          await share({ page, bounds });
         } else {
-          console.warn(
-            "Unknown action triggered on search result for page Id: " +
-              result.data.pageId
-          );
+          await launch(result.data);
         }
       } else {
-        await launch(result.data);
+        console.warn("Unable to execute result without data being passed");
       }
-    } else {
-      console.warn("Unable to execute result without data being passed");
     }
   };
 
@@ -565,4 +595,15 @@ export async function deregister() {
       "Unable to deregister home as there is an indication it was never registered"
     );
   }
+}
+
+function mapIntegrationProviders(integrationProvider?: IntegrationProvider) {
+  const integrationProviders: { [id: string]: Integration<unknown> } = {};
+  if (integrationProvider?.integrations?.length) {
+    const enabledProviders = integrationProvider.integrations.filter(ip => ip.enabled);
+    for (const integrationProvider of enabledProviders) {
+      integrationProviders[integrationProvider.id] = integrationProvider;
+    }
+  }
+  return integrationProviders;
 }
