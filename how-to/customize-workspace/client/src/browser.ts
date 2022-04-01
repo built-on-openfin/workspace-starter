@@ -7,13 +7,11 @@ import { BrowserCreateWindowRequest,
     OpenViewTabContextMenuPayload, 
     Page, 
     UpdateSavedPageRequest } from '@openfin/workspace-platform';
-import { NativeWindowIntegrationClient } from '@openfin/native-window-integration-client';
-import asset from '@openfin/native-window-integration-client/lib/provider.zip';
 import { getDefaultToolbarButtons } from './buttons';
 import { getGlobalMenu, getPageMenu, getViewMenu } from './menu';
 import { getSettings } from './settings';
 import { PlatformStorage } from './platform-storage';
-import { getAppsByTag } from './apps';
+import { decorateSnapshot, applyDecoratedSnapshot } from './native-window-integration';
 
 const pageBoundsStorage = new PlatformStorage("page-bounds", "Page Bounds");
 
@@ -123,40 +121,24 @@ export async function getDefaultWindowOptions() {
 };
 
 export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
-    let nwiApps = await getAppsByTag(["native", "nwi"], true);
-    let configuration = [];
-
-    nwiApps.forEach(app => {
-        if(app["data"] !== undefined && app["data"]["nwi"] !== undefined) {
-            configuration.push(app["data"]["nwi"]);
-        }
-    });
-  console.log("NWI Apps: ", configuration);
-    const myClient = await NativeWindowIntegrationClient.create({local: false, url: asset, configuration, mockConnection:false });
-    console.log('Native Window Integration Client connected successfully!');
-
+    const settings = await getSettings();
+    const enableNWI = settings.platformProvider.enableNativeWindowIntegration;
     class Override extends WorkspacePlatformProvider {
         async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
             const snapshot = await super.getSnapshot(...args);
-            try {
-                const snapshotWithNativeWindows = await myClient.decorateSnapshot(snapshot);
-                return snapshotWithNativeWindows;
-            } catch (error) {
-                console.log('Native Window Integration failed to get snapshotWithNativeWindows:');
-                console.error(error);
-                return snapshot;
-            }
+
+            if(enableNWI) {
+                const decoratedSnapshot = await decorateSnapshot(snapshot);
+                return decoratedSnapshot;
+            } 
+            return snapshot;
         }
 
         async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
             await super.applySnapshot(...args);
-            try {
-                const info = await myClient.applySnapshot(args[0].snapshot);
-                // Do something with info
-                console.log(info);
-            } catch (error) {
-                console.log('Native Window Integration error applying native snapshot:');
-                console.error(error);
+
+            if(enableNWI) {
+                await applyDecoratedSnapshot(args[0].snapshot);
             }
         }
 

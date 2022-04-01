@@ -2,7 +2,8 @@ import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
 interface PlatformProvider {
-    rootUrl: string
+    rootUrl: string,
+    enableNativeWindowIntegration: boolean
 }
 
 interface NotifcationProvider extends NotificationsPlatform {};
