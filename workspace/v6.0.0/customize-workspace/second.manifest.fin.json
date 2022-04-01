@@ -57,7 +57,8 @@
       "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace"
+      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace",
+      "enableNativeWindowIntegration": false
     },
     "appProvider": {
       "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/apps.json",
