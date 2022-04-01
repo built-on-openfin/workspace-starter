@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Participant Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script defer="defer" src="static/js/index.js"></script>
+    <link href="static/css/index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div class="App">
+        <div class="participant-selection">Participant Selection</div>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Date</th>
+            <th>Account</th>
+            <th>Email</th>
+            <th>Interaction Type</th>
+            <th>Actions</th>
+          </tr>
+          <tr>
+            <td>05/05/2021</td>
+            <td class="username">John McHugh (464065)</td>
+            <td>john.mchugh@gmail.com</td>
+            <td>Phone Call</td>
+            <td>
+              <div class="actions">
+                <button class="action-select" data-contact="john">Select</button
+                ><button class="action-raise-intent" data-contact="john">Raise Intent</button
+                >
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>04/11/2020</td>
+            <td class="username">James Bond (3453465)</td>
+            <td>bond_james@grandhotels.com</td>
+            <td>Webex</td>
+            <td>
+              <div class="actions">
+                <button class="action-select" data-contact="james">Select</button
+                ><button class="action-raise-intent" data-contact="james">Raise Intent</button
+                >
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>04/01/2021</td>
+            <td class="username">Ashley James (234324)</td>
+            <td>ajames@uog.com</td>
+            <td>Email</td>
+            <td>
+              <div class="actions">
+                <button class="action-select" data-contact="ashley">Select</button
+                ><button class="action-raise-intent" data-contact="ashley">Raise Intent</button
+                >              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>03/23/2021</td>
+            <td class="username">Avi Green (213065)</td>
+            <td>agreen@uog.com</td>
+            <td>Zoom</td>
+            <td>
+              <div class="actions">
+                <button class="action-select" data-contact="avi">Select</button
+                ><button class="action-raise-intent" data-contact="avi">Raise Intent</button
+                >
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
