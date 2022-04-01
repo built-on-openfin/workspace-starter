@@ -207,9 +207,9 @@ function escapeQuery(query: string): string {
     return query.replace(/[?&|!()^~*:"'+{}\-[\]\\]/gm, '\\$&');;
 }
 
-export async function salesForceGetAppSearchEntries(integration: Integration<SalesforceSettings>, appSearchEntries: CLISearchResult<any>[]) {
+export async function salesForceGetAppSearchEntries(integration: Integration<SalesforceSettings>): Promise<CLISearchResultPlain[]> {
     if (integration?.data?.orgUrl) {
-        appSearchEntries.push(
+        return [
             {
                 actions: [{ name: 'Browse', hotkey: 'enter' }],
                 data: {
@@ -221,8 +221,10 @@ export async function salesForceGetAppSearchEntries(integration: Integration<Sal
                 templateContent: undefined,
                 title: 'Browse Salesforce',
             } as CLISearchResultPlain
-        );
+        ];
     }
+
+    return [];
 }
 
 export async function salesForceItemSelection(

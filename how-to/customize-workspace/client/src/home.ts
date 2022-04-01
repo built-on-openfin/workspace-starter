@@ -232,7 +232,10 @@ async function getResults(
   );
 
   if (integrationProviders.salesforce) {
-    await salesForceGetAppSearchEntries(integrationProviders.salesforce as Integration<SalesforceSettings>, appSearchEntries);
+    const appEntries = await salesForceGetAppSearchEntries(integrationProviders.salesforce as Integration<SalesforceSettings>);
+    if (appEntries.length > 0) {
+      appSearchEntries = appSearchEntries.concat(appEntries);
+    }
   }
 
   let initialResults: CLISearchResult<any>[] = [
