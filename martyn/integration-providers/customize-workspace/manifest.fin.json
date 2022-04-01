@@ -356,7 +356,7 @@
           "id": "salesforce",
           "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/favicon.ico",
           "title": "Salesforce",
-          "enabled": true,
+          "enabled": false,
           "data": {
             "consumerKey": "",
             "isSandbox": false,
