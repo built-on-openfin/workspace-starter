@@ -6,7 +6,7 @@ interface PlatformProvider {
     enableNativeWindowIntegration: boolean
 }
 
-interface NotifcationProvider extends NotificationsPlatform {};
+interface NotificationProvider extends NotificationsPlatform {};
 
 interface ToolbarButtonDefinition {
     include: boolean,
@@ -99,6 +99,18 @@ interface StorefrontProvider {
     footer: StorefrontFooter
 }
 
+export interface IntegrationProvider {
+    integrations?: Integration<unknown>[];
+}
+
+export interface Integration<T> {
+    id: string;
+    title: string;
+    icon: string;
+    enabled: boolean;
+    data?: T;
+}
+
 export interface CustomSettings {
     bootstrap?: {  store: boolean, home:boolean, notifications:boolean }
     appProvider?: AppProvider,
@@ -107,5 +119,6 @@ export interface CustomSettings {
     themeProvider?: ThemeProvider,
     homeProvider?: HomeProvider,
     storefrontProvider?:StorefrontProvider,
-    notificationProvider?:NotifcationProvider
+    notificationProvider?:NotificationProvider
+    integrationProvider?:IntegrationProvider
 }

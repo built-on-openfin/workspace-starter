@@ -349,6 +349,28 @@
       "id": "customize-workspace",
       "title": "Notification Starter",
       "icon": "http://localhost:8080/favicon.ico"
+    },
+    "integrationProvider": {
+      "integrations": [
+        {
+          "id": "salesforce",
+          "icon": "http://localhost:8080/images/salesforce/favicon.ico",
+          "title": "Salesforce",
+          "enabled": false,
+          "data": {
+            "consumerKey": "",
+            "isSandbox": false,
+            "orgUrl": "",
+            "iconMap": {
+              "contact": "http://localhost:8080/images/salesforce/contact.svg",
+              "account": "http://localhost:8080/images/salesforce/account.svg",
+              "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
+              "note": "http://localhost:8080/images/salesforce/note.svg",
+              "task": "http://localhost:8080/images/salesforce/task.svg"
+            }          
+          }
+        }
+      ]
     }
   }
 }
