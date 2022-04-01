@@ -356,7 +356,7 @@
           "id": "salesforce",
           "icon": "http://localhost:8080/images/salesforce/favicon.ico",
           "title": "Salesforce",
-          "enabled": true,
+          "enabled": false,
           "data": {
             "consumerKey": "",
             "isSandbox": false,
