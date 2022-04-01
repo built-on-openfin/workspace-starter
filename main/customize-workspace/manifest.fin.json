@@ -349,6 +349,28 @@
       "id": "customize-workspace",
       "title": "Notification Starter",
       "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/favicon.ico"
+    },
+    "integrationProvider": {
+      "integrations": [
+        {
+          "id": "salesforce",
+          "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/favicon.ico",
+          "title": "Salesforce",
+          "enabled": false,
+          "data": {
+            "consumerKey": "",
+            "isSandbox": false,
+            "orgUrl": "",
+            "iconMap": {
+              "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/contact.svg",
+              "account": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/account.svg",
+              "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/chatter.svg",
+              "note": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/note.svg",
+              "task": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/salesforce/task.svg"
+            }          
+          }
+        }
+      ]
     }
   }
 }
