@@ -76,6 +76,7 @@
       "toolbarButtons":[
         { 
           "include": true, 
+          "id": "change-opacity",
           "button": {  
             "type": "Custom",
             "tooltip": "Change Opacity",
@@ -92,6 +93,7 @@
       },
       { 
         "include": false, 
+        "id": "restore-opacity",
         "button": {  
           "type": "Custom",
           "tooltip": "Restore Opacity",
@@ -108,6 +110,7 @@
     },
         { 
           "include": true, 
+          "id": "pin-window",
           "button": {  
             "type": "Custom",
             "tooltip": "Pin this window",
@@ -124,6 +127,7 @@
       },
       { 
         "include": false, 
+        "id": "unpin-window",
         "button": {  
           "type": "Custom",
           "tooltip": "Unpin this window",
@@ -137,16 +141,16 @@
               }
           }
       }},
-      { "include": true, "button": {
+      { "include": true, "id": "show-hide-tabs", "button": {
           "type": "ShowHideTabs"
       }},
-      { "include": true, "button": {
+      { "include": true, "id":"color-linking", "button": {
           "type": "ColorLinking"
       }},
-      { "include": true, "button": {
+      { "include": true, "id": "preset-layouts", "button": {
           "type": "PresetLayouts"
       }},
-      { "include": true, "button": {  
+      { "include": true, "id": "share", "button": {  
           "type": "Custom",
           "tooltip": "Share",
           "disabled": false,
@@ -157,7 +161,7 @@
               }
           }
       }},
-      { "include": true, "button": {
+      { "include": true, "id":"save-page", "button": {
           "type": "SavePage"
       }}
       ]
