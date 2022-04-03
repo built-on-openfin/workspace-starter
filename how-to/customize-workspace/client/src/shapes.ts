@@ -9,6 +9,7 @@ interface PlatformProvider {
 interface NotificationProvider extends NotificationsPlatform {};
 
 interface ToolbarButtonDefinition {
+    id: string,
     include: boolean,
     button: ToolbarButton
 }
