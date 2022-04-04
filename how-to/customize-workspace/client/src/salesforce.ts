@@ -392,7 +392,7 @@ export async function salesForceGetSearchResults(
             icon: integration?.icon,
             title: "Reconnect to Salesforce",
             data: {
-              "providerId": "salesforce",
+              providerId,
               query,
               filters,
             },
