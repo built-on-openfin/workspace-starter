@@ -31,6 +31,8 @@ const NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
 let sfConn: SalesforceConnection;
 
+export const providerId = "salesforce";
+
 export type SalesforceBatchRequest = {
   batchRequests: SalesforceBatchRequestItem[];
   haltOnError: boolean;
@@ -112,6 +114,7 @@ export type SalesforceFeedElementPage = {
 };
 
 export interface SalesforceResultData {
+  providerId: string;
   pageUrl: string;
 }
 
@@ -285,6 +288,7 @@ export async function salesForceGetAppSearchEntries(
       {
         actions: [{ name: "Browse", hotkey: "enter" }],
         data: {
+          providerId,
           pageUrl: integration?.data?.orgUrl,
         } as SalesforceResultData,
         icon: integration.icon,
@@ -388,6 +392,7 @@ export async function salesForceGetSearchResults(
             icon: integration?.icon,
             title: "Reconnect to Salesforce",
             data: {
+              providerId,
               query,
               filters,
             },
@@ -407,6 +412,7 @@ export async function salesForceGetSearchResults(
         title: searchResult.Name,
         icon: integration?.data?.iconMap.account,
         data: {
+          providerId,
           pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
         },
         template: CLITemplate.Contact,
@@ -430,6 +436,7 @@ export async function salesForceGetSearchResults(
         title: searchResult.Name,
         icon: integration?.data?.iconMap.contact,
         data: {
+          providerId,
           pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
         },
         template: CLITemplate.Contact,
@@ -454,6 +461,7 @@ export async function salesForceGetSearchResults(
         title: searchResult.Subject,
         icon: integration?.data?.iconMap.task,
         data: {
+          providerId,
           pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
         },
         template: CLITemplate.List,
@@ -470,6 +478,7 @@ export async function salesForceGetSearchResults(
         title: searchResult.Title,
         icon: integration?.data?.iconMap.note,
         data: {
+          providerId,
           pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
         },
         template: CLITemplate.List,
@@ -489,6 +498,7 @@ export async function salesForceGetSearchResults(
         title: searchResult.actor?.displayName,
         icon: integration?.data?.iconMap.chatter,
         data: {
+          providerId,
           pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl),
         } as SalesforceResultData,
         template: CLITemplate.Contact,
