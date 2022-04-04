@@ -32,7 +32,7 @@ import {
 import { PageTemplate, WorkspaceTemplate } from "./template";
 import { share } from "./share";
 import type { Integration, IntegrationProvider } from "./shapes";
-import { salesForceGetAppSearchEntries, salesForceGetSearchResults, salesForceItemSelection, SalesforceSettings } from "./salesforce";
+import { salesForceGetAppSearchEntries, salesForceGetSearchResults, salesForceItemSelection, SalesforceSettings, providerId as salesforceProviderId } from "./salesforce";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -463,14 +463,13 @@ export async function register() {
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
-    let handled = false;
-    if (integrationProviders.salesforce) {
-      handled = await salesForceItemSelection(integrationProviders.salesforce as Integration<SalesforceSettings>, result, lastResponse);
-    }
-
-    if (!handled) {
       if (result.data !== undefined) {
-        if (result.data.workspaceId !== undefined) {
+        if(result.data.providerId === salesforceProviderId){
+          let handled = await salesForceItemSelection(integrationProviders.salesforce as Integration<SalesforceSettings>, result, lastResponse);
+          if(!handled) {
+            console.warn("Error while trying to handle salesforce entry", result.data);
+          }
+        } else if (result.data.workspaceId !== undefined) {
           if (
             result.data.workspaceId !== undefined &&
             result.key === "WORKSPACE-SAVE"
@@ -565,7 +564,6 @@ export async function register() {
       } else {
         console.warn("Unable to execute result without data being passed");
       }
-    }
   };
 
   const cliProvider: CLIProvider = {
