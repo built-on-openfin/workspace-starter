@@ -13,7 +13,6 @@ import {
   CLIFilterOptionType,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLISearchResult,
   CLISearchResultContact,
   CLISearchResultList,
   CLISearchResultPlain,
@@ -29,7 +28,7 @@ const BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
 const OBJECTS_FILTER_ID = "salesforce-objects";
 const NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
-let sfConn: SalesforceConnection;
+let salesforceConnection: SalesforceConnection;
 
 export const providerId = "salesforce";
 
@@ -127,23 +126,25 @@ export interface SalesforceSettings {
   };
 }
 
-export async function openConnection(
+export async function salesForceConnect(
   settings?: SalesforceSettings
-): Promise<SalesforceConnection> {
-  if (!sfConn && settings) {
-    enableLogging();
-    sfConn = await connect(
-      settings.orgUrl,
-      settings.consumerKey,
-      settings.isSandbox
-    );
+): Promise<void> {
+  if (!salesforceConnection && settings) {
+    try {
+      enableLogging();
+      salesforceConnection = await connect(
+        settings.orgUrl,
+        settings.consumerKey,
+        settings.isSandbox
+      );
+    } catch (err) {
+      console.error("Error connecting to Salesforce", err);
+    }
   }
-
-  return sfConn;
 }
 
 export function closeConnection(): void {
-  sfConn = undefined;
+  salesforceConnection = undefined;
 }
 
 export const getObjectUrl = (
@@ -264,7 +265,7 @@ export async function getBatchedResults<T>(
   }
   const batch: SalesforceBatchRequest = { batchRequests, haltOnError: false };
 
-  const response = await sfConn.executeApiRequest<SalesforceBatchResponse>(
+  const response = await salesforceConnection.executeApiRequest<SalesforceBatchResponse>(
     `/services/data/vXX.X/composite/batch/`,
     "POST",
     batch,
@@ -310,12 +311,7 @@ export async function salesForceItemSelection(
 ): Promise<boolean> {
   // if the user clicked the reconnect result, reconnect to salesforce and re-run query
   if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
-    enableLogging();
-    sfConn = await connect(
-      integration?.data?.orgUrl,
-      integration?.data?.consumerKey,
-      integration?.data?.isSandbox
-    );
+    await salesForceConnect(integration?.data)
 
     let results = await salesForceGetSearchResults(
       integration,
@@ -357,7 +353,12 @@ export async function salesForceGetSearchResults(
   query: string,
   filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
-  const salesforceConnection = await openConnection(integration.data);
+  await salesForceConnect(integration.data);
+  if (!salesforceConnection) {
+    return {
+      results: []
+    };
+  }
 
   let searchResults: (
     | SalesforceAccount
@@ -413,7 +414,7 @@ export async function salesForceGetSearchResults(
         icon: integration?.data?.iconMap.account,
         data: {
           providerId,
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+          pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
         },
         template: CLITemplate.Contact,
         templateContent: {
@@ -437,7 +438,7 @@ export async function salesForceGetSearchResults(
         icon: integration?.data?.iconMap.contact,
         data: {
           providerId,
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+          pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
         },
         template: CLITemplate.Contact,
         templateContent: {
@@ -462,7 +463,7 @@ export async function salesForceGetSearchResults(
         icon: integration?.data?.iconMap.task,
         data: {
           providerId,
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+          pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
         },
         template: CLITemplate.List,
         templateContent: [
@@ -479,7 +480,7 @@ export async function salesForceGetSearchResults(
         icon: integration?.data?.iconMap.note,
         data: {
           providerId,
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+          pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
         },
         template: CLITemplate.List,
         templateContent: [
@@ -499,7 +500,7 @@ export async function salesForceGetSearchResults(
         icon: integration?.data?.iconMap.chatter,
         data: {
           providerId,
-          pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl),
+          pageUrl: getObjectUrl(searchResult.id, integration.data?.orgUrl),
         } as SalesforceResultData,
         template: CLITemplate.Contact,
         templateContent: {

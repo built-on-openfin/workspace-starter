@@ -3,10 +3,18 @@ import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/works
 import { getSettings, validateThemes } from "./settings";
 import { getActions } from './actions';
 import { getDefaultWindowOptions, overrideCallback } from './browser';
+import { salesForceConnect, SalesforceSettings, providerId as salesforceProviderId } from './salesforce';
 
 export async function init() {
+    const settings = await getSettings();
+
+    const salesForceIntegration = settings?.integrationProvider?.integrations?.find(i => i.id === salesforceProviderId);
+    if (salesForceIntegration?.enabled) {
+        console.log("Initialising salesforce");
+        await salesForceConnect(salesForceIntegration.data as SalesforceSettings);
+    }
+
     console.log("Initialising platform");
-    let settings = await getSettings();
     let browser: BrowserInitConfig = {};
 
 
