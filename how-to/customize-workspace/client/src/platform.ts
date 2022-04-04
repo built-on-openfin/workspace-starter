@@ -10,8 +10,12 @@ export async function init() {
 
     const salesForceIntegration = settings?.integrationProvider?.integrations?.find(i => i.id === salesforceProviderId);
     if (salesForceIntegration?.enabled) {
-        console.log("Initialising salesforce");
-        await salesForceConnect(salesForceIntegration.data as SalesforceSettings);
+        console.log("Initialising SalesForce");
+        try {
+            await salesForceConnect(salesForceIntegration.data as SalesforceSettings);
+        } catch (err) {
+            console.error("Error connecting to SalesForce", err);
+        }
     }
 
     console.log("Initialising platform");
