@@ -42,7 +42,6 @@ export async function register() {
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      debugger;
       if (result.data.providerId === quoteProviderId) {
         quoteProviderHandleAction(result);
       }
