@@ -94,15 +94,17 @@ The additional commands are added through [home.ts](client/src/home.ts) and cust
 The commands implemented are:
 
 ```shell
-/ticker <symbol>
+/quote <symbol>
 ```
 
 e.g.
 
 ```shell
-/ticker MSFT
-/ticker APPL
+/quote MSFT
+/quote APPL
 ```
+
+![Customize Home Template Quote](customize-home-templates-quote.gif)
 
 ### A note about this example
 
