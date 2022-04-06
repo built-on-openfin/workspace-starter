@@ -7,6 +7,7 @@ import {
 import { CustomSettings, QuoteResult } from "./shapes";
 import { getQuoteTemplate } from "./templates";
 import { Chart, LineController, CategoryScale, LinearScale, LineElement, PointElement, TimeScale, Filler } from "chart.js";
+import { DateTime } from "luxon";
 
 Chart.register(LineController, CategoryScale, LinearScale, LineElement, PointElement, TimeScale, Filler);
 
@@ -23,7 +24,13 @@ export async function quoteProviderGetResults(settings: CustomSettings, query: s
         if (symbol.length > 0 && /^[a-z]+$/i.test(symbol)) {
             symbol = symbol.toUpperCase();
 
-            const quoteData = await getQuoteData(settings, symbol, "2022-03-04", "2022-04-04");
+            const now = DateTime.now();
+
+            const quoteData = await getQuoteData(
+                settings, 
+                symbol, 
+                now.minus({ months: 1 }).toFormat("yyyy-LL-dd"), 
+                now.toFormat("yyyy-LL-dd"));
 
             let price;
             let company;
