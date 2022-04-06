@@ -290,6 +290,7 @@ export async function salesForceGetAppSearchEntries(
         data: {
           providerId,
           pageUrl: integration?.data?.orgUrl,
+          tags: ["salesforce", "page"]
         } as SalesforceResultData,
         icon: integration.icon,
         key: BROWSE_SEARCH_RESULT_KEY,

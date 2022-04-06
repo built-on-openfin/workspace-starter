@@ -41,6 +41,8 @@ const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
 const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
 const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 
+const HOME_TAG_FILTERS = "tags";
+
 let isHomeRegistered = false;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
@@ -48,7 +50,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
     let filters: CLIFilter[] = [];
     let uniqueTags = [...new Set(tags.sort())];
     let tagFilter: CLIFilter = {
-      id: "tags",
+      id: HOME_TAG_FILTERS,
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
       options: [],
@@ -310,8 +312,9 @@ async function getResults(
         });
       }
 
-      if (Array.isArray(filters) && filters.length > 0) {
-        filterMatchFound = filters.some((filter) => {
+      const tagFilters = Array.isArray(filters) ? filters.filter(f => f.id === HOME_TAG_FILTERS) : [];
+      if (tagFilters.length > 0) {
+        filterMatchFound = tagFilters.some((filter) => {
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
               return filter.options.every((option) => {
