@@ -29,8 +29,8 @@ export interface QuoteResult {
                 dateTime: string,
                 value: string
             },
-            x: 1646352000000,
-            y: 289.86
+            x: number,
+            y: number
         }[];
     }
 }
