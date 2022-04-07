@@ -49,7 +49,7 @@ function createResult(key: string, emoji: string): HomeSearchResult {
     return {
         key: `emoji-${key}`,
         title: key,
-        label: "App",
+        label: "Information",
         actions: [
             { name: EMOJI_PROVIDER_COPY_EMOJI_ACTION, hotkey: "CmdOrCtrl+C" },
             { name: EMOJI_PROVIDER_DETAILS_ACTION, hotkey: "Enter" }
