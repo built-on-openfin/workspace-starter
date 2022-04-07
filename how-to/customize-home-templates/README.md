@@ -95,6 +95,7 @@ The commands implemented are:
 
 ```shell
 /quote <symbol>
+/emoji <code>
 ```
 
 e.g.
@@ -105,6 +106,16 @@ e.g.
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
+
+e.g.
+
+```shell
+/emoji man
+/emoji coffee
+```
+
+![Customize Home Template Emoji](customize-home-templates-emoji.gif)
+
 
 ### A note about this example
 

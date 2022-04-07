@@ -6,6 +6,7 @@ import {
   CLISearchResponse,
   CLIDispatchedSearchResult,
 } from "@openfin/workspace";
+import { emojiProviderGetResults, providerId as emojiProviderId, emojiProviderHandleAction } from "./emojiProvider";
 import { quoteProviderGetResults, providerId as quoteProviderId, quoteProviderHandleAction } from "./quoteProvider";
 import { getSettings } from "./settings";
 
@@ -37,13 +38,21 @@ export async function register() {
     }
     lastResponse = response;
     lastResponse.open();
-    return quoteProviderGetResults(settings, query);
+
+    const quoteResponses = await quoteProviderGetResults(settings, query);
+    const emojiResponses = await emojiProviderGetResults(settings, query);
+
+    return {
+      results: quoteResponses.results.concat(emojiResponses.results)
+    };
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
       if (result.data.providerId === quoteProviderId) {
         quoteProviderHandleAction(result);
+      } else if (result.data.providerId === emojiProviderId) {
+        emojiProviderHandleAction(result);
       }
     } else {
       console.warn("Unable to execute result without data being passed");

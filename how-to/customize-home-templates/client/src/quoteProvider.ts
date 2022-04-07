@@ -13,7 +13,7 @@ Chart.register(LineController, CategoryScale, LinearScale, LineElement, PointEle
 
 export const providerId: string = "quote";
 
-export const QUOTE_PROVIDER_DETAILS_ACTION = "quote-details";
+export const QUOTE_PROVIDER_DETAILS_ACTION = "Quote Details";
 
 export async function quoteProviderGetResults(settings: CustomSettings, query: string): Promise<CLISearchResponse> {
     const results: CLISearchResult<any>[] = [];
