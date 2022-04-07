@@ -48,7 +48,7 @@ export async function quoteProviderGetResults(settings: CustomSettings, query: s
                 const quoteResult: HomeSearchResult = {
                     key: `quote-${symbol}`,
                     title: symbol,
-                    label: "App",
+                    label: "Information",
                     actions: [
                         { name: QUOTE_PROVIDER_DETAILS_ACTION, hotkey: "Enter" }
                     ],
