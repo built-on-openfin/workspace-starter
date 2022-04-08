@@ -47,4 +47,3 @@ npm run test-register-with-home-local
 The examples can be run on CI, to use GitHub actions to run the tests there is an example workflow in [automation-tests.yaml](../../.github/workflows/automation-tests.yaml)
 
 This workflow demonstrates Building the packages, then serving the manifest, finally using the test runner to run the tests against the served manifest.
-
