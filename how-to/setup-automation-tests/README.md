@@ -31,7 +31,7 @@ To run the tests against the hosted version of the `register-with-home` app you 
 ```shell
 cd examples
 npm install
-npm run test-register-with-home-remote
+npm run test-remote
 ```
 
 Or if you already have a local version of the example running serving its manifest on `http://localhost:8080` then you can run.
@@ -39,7 +39,7 @@ Or if you already have a local version of the example running serving its manife
 ```shell
 cd examples
 npm install
-npm run test-register-with-home-local
+npm run test-local
 ```
 
 ## Running using CI
