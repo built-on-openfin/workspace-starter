@@ -172,7 +172,7 @@ export class WebDriverHelper {
      * @param path The path of the element to set.
      * @param attribute The attribute name to set.
      * @param value The value to set.
-     * @returns Nothing.
+     * @returns True id the element exists.
      */
     public static async setElementAttributeByPath<T>(path: string, attribute: string, value: T): Promise<boolean> {
         const script = `
@@ -199,7 +199,7 @@ export class WebDriverHelper {
      * Get an element attribute by xpath.
      * @param path The path of the element to set.
      * @param attribute The attribute name to set.
-     * @returns The value or undefined.
+     * @returns The value or undefined if the element doesn't exist.
      */
     public static async getElementAttributeByPath<T>(path: string, attribute: string): Promise<T> {
         const script = `
