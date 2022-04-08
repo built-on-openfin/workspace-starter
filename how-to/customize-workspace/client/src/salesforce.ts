@@ -13,6 +13,7 @@ import {
   CLIFilterOptionType,
   CLISearchListenerResponse,
   CLISearchResponse,
+  CLISearchResult,
   CLISearchResultContact,
   CLISearchResultList,
   CLISearchResultPlain,
@@ -126,14 +127,39 @@ export interface SalesforceSettings {
   };
 }
 
+export async function salesForceRegister(settings?: SalesforceSettings): Promise<void> {
+  console.log("Registering SalesForce");
+  try {
+    await salesForceConnect(settings);
+  } catch (err) {
+    console.error("Error connecting to SalesForce", err);
+  }
+}
+
+export async function salesForceUnregister(settings?: SalesforceSettings): Promise<void> {
+  await salesForceDisconnect();
+}
+
 export async function salesForceConnect(settings?: SalesforceSettings): Promise<void> {
-  if (settings?.orgUrl) {
+  if (settings?.orgUrl && !salesForceConnection) {
     enableLogging();
     salesForceConnection = await connect(
       settings.orgUrl,
       settings.consumerKey,
       settings.isSandbox
     );
+  }
+}
+
+export async function salesForceDisconnect(): Promise<void> {
+  if (salesForceConnection) {
+    try {
+      await salesForceConnection.disconnect();
+    } catch (err) {
+      console.error("Error disconnecting SalesForce", err);
+    } finally {
+      salesForceConnection = undefined;
+    }
   }
 }
 
@@ -202,11 +228,11 @@ export async function getSearchResults(
 
   const batchedResults = await getBatchedResults<
     | SalesforceRestApiSearchResponse<
-        | SalesforceAccount
-        | SalesforceContact
-        | SalesforceTask
-        | SalesforceContentNote
-      >
+      | SalesforceAccount
+      | SalesforceContact
+      | SalesforceTask
+      | SalesforceContentNote
+    >
     | SalesforceFeedElementPage
   >(batch);
 
@@ -273,25 +299,28 @@ function escapeQuery(query: string): string {
 
 export async function salesForceGetAppSearchEntries(
   integration: Integration<SalesforceSettings>
-): Promise<CLISearchResultPlain[]> {
+): Promise<CLISearchResult<any>[]> {
+  const results = [];
   if (integration?.data?.orgUrl) {
-    return [
-      {
-        actions: [{ name: "Browse", hotkey: "enter" }],
-        data: {
-          providerId,
-          pageUrl: integration?.data?.orgUrl,
-        } as SalesforceResultData,
-        icon: integration.icon,
-        key: BROWSE_SEARCH_RESULT_KEY,
-        template: CLITemplate.Plain,
-        templateContent: undefined,
-        title: "Browse Salesforce",
-      } as CLISearchResultPlain,
-    ];
+    results.push({
+      actions: [{ name: "Browse", hotkey: "enter" }],
+      data: {
+        providerId,
+        pageUrl: integration?.data?.orgUrl,
+      } as SalesforceResultData,
+      icon: integration.icon,
+      key: BROWSE_SEARCH_RESULT_KEY,
+      template: CLITemplate.Plain,
+      templateContent: undefined,
+      title: "Browse Salesforce",
+    } as CLISearchResultPlain);
+
+    if (!salesForceConnection) {
+      results.push(getReconnectSearchResult(integration));
+    }
   }
 
-  return [];
+  return results;
 }
 
 export async function salesForceItemSelection(
@@ -303,14 +332,16 @@ export async function salesForceItemSelection(
   if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
     await salesForceConnect(integration?.data)
 
-    let results = await salesForceGetSearchResults(
-      integration,
-      result.data?.query,
-      result.data?.filters
-    );
-    if (lastResponse) {
-      lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
-      lastResponse.respond(results.results);
+    if (result.data?.query) {
+      let results = await salesForceGetSearchResults(
+        integration,
+        result.data?.query,
+        result.data?.filters
+      );
+      if (lastResponse) {
+        lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
+        lastResponse.respond(results.results);
+      }
     }
     Home.show();
     return true;
@@ -502,20 +533,11 @@ export async function salesForceGetSearchResults(
         },
       };
     } catch (err) {
+      await salesForceDisconnect();
       if (err instanceof ConnectionError) {
         return {
           results: [
-            {
-              actions: [{ name: "Reconnect", hotkey: "enter" }],
-              key: NOT_CONNECTED_SEARCH_RESULT_KEY,
-              icon: integration?.icon,
-              title: "Reconnect to Salesforce",
-              data: {
-                providerId,
-                query,
-                filters,
-              },
-            } as CLISearchResultSimpleText,
+            getReconnectSearchResult(integration, query, filters),
           ]
         };
       }
@@ -526,6 +548,20 @@ export async function salesForceGetSearchResults(
   return {
     results: []
   };
+}
+
+function getReconnectSearchResult(integration: Integration<SalesforceSettings>, query?: string, filters?: CLIFilter[]) {
+  return {
+    actions: [{ name: "Reconnect", hotkey: "enter" }],
+    key: NOT_CONNECTED_SEARCH_RESULT_KEY,
+    icon: integration?.icon,
+    title: "Reconnect to Salesforce",
+    data: {
+      providerId,
+      query,
+      filters,
+    },
+  } as CLISearchResultSimpleText
 }
 
 function getSearchFilters(objects: string[]): CLIFilter[] {
