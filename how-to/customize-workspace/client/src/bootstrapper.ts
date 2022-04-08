@@ -5,8 +5,7 @@ import { register as registerNotifications, deregister as deregisterNotification
 
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
-import { providerId as salesforceProviderId, salesForceRegister, SalesforceSettings, salesForceUnregister } from './salesforce';
-import { Integration } from './shapes';
+import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
 
 export async function init() {
     // you can kick off your bootstrapping process here where you may decide to prompt for authentication, 
@@ -38,19 +37,12 @@ export async function init() {
 
     await registerShare()
 
-    let salesForceIntegration: Integration<SalesforceSettings> | undefined = undefined;
-    if (settings.integrationProvider?.integrations?.length) {
-        salesForceIntegration = settings?.integrationProvider?.integrations?.find(i => i.id === salesforceProviderId) as Integration<SalesforceSettings>;
-        if (salesForceIntegration?.enabled) {
-            await salesForceRegister(salesForceIntegration?.data)
-        }
-    }
+    await registerIntegration(settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();
     providerWindow.once("close-requested", async (event) => {
-        if (salesForceIntegration?.enabled) {
-            await salesForceUnregister(salesForceIntegration?.data);
-        }
+        await deregisterIntegration(settings.integrationProvider);
+
         await deregisterStore();
         await deregisterHome();
         await deregisterShare();

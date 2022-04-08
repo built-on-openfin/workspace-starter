@@ -12,14 +12,14 @@ import {
   CLIFilter,
   CLIFilterOptionType,
   CLISearchListenerResponse,
-  CLISearchResponse,
-  CLISearchResult,
   CLISearchResultContact,
   CLISearchResultList,
   CLISearchResultPlain,
   CLISearchResultSimpleText,
   CLITemplate,
   Home,
+  HomeSearchResponse,
+  HomeSearchResult,
 } from "@openfin/workspace";
 import { launchView } from "./browser";
 import { Integration } from "./shapes";
@@ -127,26 +127,26 @@ export interface SalesforceSettings {
   };
 }
 
-export async function salesForceRegister(settings?: SalesforceSettings): Promise<void> {
+export async function register(integration: Integration<SalesforceSettings>): Promise<void> {
   console.log("Registering SalesForce");
   try {
-    await salesForceConnect(settings);
+    await salesForceConnect(integration);
   } catch (err) {
     console.error("Error connecting to SalesForce", err);
   }
 }
 
-export async function salesForceUnregister(settings?: SalesforceSettings): Promise<void> {
+export async function deregister(integration: Integration<SalesforceSettings>): Promise<void> {
   await salesForceDisconnect();
 }
 
-export async function salesForceConnect(settings?: SalesforceSettings): Promise<void> {
-  if (settings?.orgUrl && !salesForceConnection) {
+export async function salesForceConnect(integration: Integration<SalesforceSettings>): Promise<void> {
+  if (integration?.data?.orgUrl && !salesForceConnection) {
     enableLogging();
     salesForceConnection = await connect(
-      settings.orgUrl,
-      settings.consumerKey,
-      settings.isSandbox
+      integration?.data.orgUrl,
+      integration?.data.consumerKey,
+      integration?.data.isSandbox
     );
   }
 }
@@ -170,7 +170,7 @@ export const getObjectUrl = (
   return `${salesforceOrgOrigin}/${objectId}`;
 };
 
-export async function getSearchResults(
+export async function getApiSearchResults(
   query: string,
   selectedObjects?: string[]
 ): Promise<
@@ -297,9 +297,7 @@ function escapeQuery(query: string): string {
   return query.replace(/[?&|!()^~*:"'+{}\-[\]\\]/gm, "\\$&");
 }
 
-export async function salesForceGetAppSearchEntries(
-  integration: Integration<SalesforceSettings>
-): Promise<CLISearchResult<any>[]> {
+export async function getAppSearchEntries(integration: Integration<SalesforceSettings>): Promise<HomeSearchResult[]> {
   const results = [];
   if (integration?.data?.orgUrl) {
     results.push({
@@ -323,17 +321,17 @@ export async function salesForceGetAppSearchEntries(
   return results;
 }
 
-export async function salesForceItemSelection(
+export async function itemSelection(
   integration: Integration<SalesforceSettings>,
   result: CLIDispatchedSearchResult,
   lastResponse?: CLISearchListenerResponse
 ): Promise<boolean> {
   // if the user clicked the reconnect result, reconnect to salesforce and re-run query
   if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
-    await salesForceConnect(integration?.data)
+    await salesForceConnect(integration)
 
     if (result.data?.query) {
-      let results = await salesForceGetSearchResults(
+      let results = await getSearchResults(
         integration,
         result.data?.query,
         result.data?.filters
@@ -369,11 +367,11 @@ export async function salesForceItemSelection(
   return false;
 }
 
-export async function salesForceGetSearchResults(
+export async function getSearchResults(
   integration: Integration<SalesforceSettings>,
   query: string,
   filters?: CLIFilter[]
-): Promise<CLISearchResponse> {
+): Promise<HomeSearchResponse> {
 
   if (salesForceConnection) {
     let searchResults: (
@@ -399,7 +397,7 @@ export async function salesForceGetSearchResults(
     }
 
     try {
-      searchResults = await getSearchResults(query, selectedObjects);
+      searchResults = await getApiSearchResults(query, selectedObjects);
 
       let results = searchResults.map((searchResult) => {
         if ("Website" in searchResult) {
