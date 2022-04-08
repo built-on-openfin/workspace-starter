@@ -1,0 +1,88 @@
+body {
+    font-family: 'Inter', sans-serif;
+    color: #111214;
+  }
+  
+  .card {
+    padding: 8px;
+    border-radius: 2px;
+    background-color: #ECEEF1;
+    margin-bottom: 8px;
+  }
+  
+  .username {
+    color: #7D808A;
+    margin-right: 8px;
+  }
+  
+  .plan {
+  
+  }
+  
+  .text {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .portfolio-value {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  
+  .btn-value {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .btn {
+    border-radius: 2px;
+    padding: 4px;
+    background-color: #C9CBD2;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  
+  .btn-wrapper {
+    margin-right: 8px;
+  }
+  
+  .app-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  
+  .app-title::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    margin-left: 11px;
+    display: inline-block;
+    background-image: url('icon.png');
+    background-size: cover;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  
+  .total-portfolio-wrapper {
+    text-align: right;
+  }
+  
+  .total-portfolio-label {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 12px;
+  }
