@@ -1,0 +1,9 @@
+{
+    "name": "setup-automation-tests",
+    "version": "1.0.0",
+    "description": "OpenFin packages for test automation",
+    "workspaces": [
+        "./packages/openfin-test-helpers",
+        "./packages/openfin-test-runner"
+    ]
+}

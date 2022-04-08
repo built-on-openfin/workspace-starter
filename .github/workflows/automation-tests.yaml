@@ -1,0 +1,38 @@
+name: Build and Test Headless
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Build Packages
+        run: |
+          cd how-to/register-with-home
+          npm install
+          cd ../setup-automation-tests
+          npm install
+          npm run dist --workspaces
+          cd examples/register-with-home
+          npm install
+      - name: Run Server and Tests
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "strict": true,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "outDir": "./es",
+        "inlineSourceMap": true,
+        "esModuleInterop": true,
+        "stripInternal": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true
+    },
+    "include": ["src"]
+}

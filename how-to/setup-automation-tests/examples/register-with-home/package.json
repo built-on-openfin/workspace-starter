@@ -1,0 +1,16 @@
+{
+    "name": "setup-automation-tests-register-with-home",
+    "version": "1.0.0",
+    "description": "OpenFin Workspace Starter E2E Tests",
+    "scripts": {
+        "test-remote": "openfin-test-runner https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js",
+        "test-local": "openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "openfin-test-helpers": "file:../packages/openfin-test-helpers",
+        "openfin-test-runner": "file:../packages/openfin-test-runner"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "name": "openfin-test-runner",
+    "version": "0.0.1",
+    "description": "",
+    "authors": [
+        "Martyn Janes <martyn.janes@openfin.co>"
+    ],
+    "license": "ISC",
+    "scripts": {
+        "build-clean": "rimraf ./es/* ./typings/*",
+        "build-lint": "eslint src --ext .ts",
+        "build-compile": "tsc",
+        "build-p": "run-p build-lint build-compile",
+        "build": "run-s build-clean build-p",
+        "format": "prettier --config .prettierrc src/**/* --write",
+        "package-clean": "rimraf ./dist/*",
+        "package-umd": "rollup --config rollup.config.js",
+        "package": "run-s package-clean package-umd",
+        "dist": "run-s format build package"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^9.1.0",
+        "glob": "^7.2.0",
+        "jszip": "^3.7.1",
+        "mocha": "^9.2.2",
+        "node-fetch": "^2.6.6",
+        "openfin-test-helpers": "^0.0.1",
+        "webdriver": "^7.19.1",
+        "xml2js": "^0.4.23"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^21.0.2",
+        "@rollup/plugin-node-resolve": "^13.1.3",
+        "@types/glob": "^7.2.0",
+        "@types/mocha": "^9.1.0",
+        "@types/node": "^17.0.23",
+        "@types/node-fetch": "^2.6.1",
+        "@types/xml2js": "^0.4.9",
+        "@typescript-eslint/eslint-plugin": "^5.16.0",
+        "@typescript-eslint/parser": "^5.16.0",
+        "eslint": "^8.10.0",
+        "eslint-plugin-header": "^3.1.1",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-jsdoc": "^38.0.6",
+        "eslint-plugin-unicorn": "^41.0.1",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^2.6.1",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.70.1",
+        "typescript": "^4.6.3"
+    },
+    "bin": {
+        "openfin-test-runner": "bin/index.js"
+    }
+}
