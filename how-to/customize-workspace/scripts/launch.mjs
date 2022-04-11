@@ -35,17 +35,25 @@ async function launchFromNode(manifestUrl) {
 
     const manifest = await fin.System.fetchManifest(manifestUrl);
     const platform = fin.Platform.wrapSync({ uuid: manifest.platform.uuid });
+    let quitRequested = false;
+    let quitPlatform = async () => {
+      if (platform !== undefined && quitRequested === false) {
+        quitRequested = true;
+        await platform.quit();
+      }
+    };
+
     console.log("Wrapped target platform: " + manifest.platform.uuid);
     // //do something when app is closing
     process.on("exit", async () => {
       console.log("Exit called");
-      await platform.quit();
+      await quitPlatform();
     });
 
     // //catches ctrl+c event
     process.on("SIGINT", async () => {
       console.log("Ctrl + C called");
-      await platform.quit();
+      await quitPlatform();
       process.exit();
     });
 
