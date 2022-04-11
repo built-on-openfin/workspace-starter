@@ -29,7 +29,7 @@ const BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
 const OBJECTS_FILTER_ID = "salesforce-objects";
 const NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
-let salesForceConnection: SalesforceConnection;
+let sfConn: SalesforceConnection;
 
 export const providerId = "salesforce";
 
@@ -127,40 +127,23 @@ export interface SalesforceSettings {
   };
 }
 
-export async function salesForceRegister(settings?: SalesforceSettings): Promise<void> {
-  console.log("Registering SalesForce");
-  try {
-    await salesForceConnect(settings);
-  } catch (err) {
-    console.error("Error connecting to SalesForce", err);
-  }
-}
-
-export async function salesForceUnregister(settings?: SalesforceSettings): Promise<void> {
-  await salesForceDisconnect();
-}
-
-export async function salesForceConnect(settings?: SalesforceSettings): Promise<void> {
-  if (settings?.orgUrl && !salesForceConnection) {
+export async function openConnection(
+  settings?: SalesforceSettings
+): Promise<SalesforceConnection> {
+  if (!sfConn && settings) {
     enableLogging();
-    salesForceConnection = await connect(
+    sfConn = await connect(
       settings.orgUrl,
       settings.consumerKey,
       settings.isSandbox
     );
   }
+
+  return sfConn;
 }
 
-export async function salesForceDisconnect(): Promise<void> {
-  if (salesForceConnection) {
-    try {
-      await salesForceConnection.disconnect();
-    } catch (err) {
-      console.error("Error disconnecting SalesForce", err);
-    } finally {
-      salesForceConnection = undefined;
-    }
-  }
+export function closeConnection(): void {
+  sfConn = undefined;
 }
 
 export const getObjectUrl = (
@@ -228,11 +211,11 @@ export async function getSearchResults(
 
   const batchedResults = await getBatchedResults<
     | SalesforceRestApiSearchResponse<
-      | SalesforceAccount
-      | SalesforceContact
-      | SalesforceTask
-      | SalesforceContentNote
-    >
+        | SalesforceAccount
+        | SalesforceContact
+        | SalesforceTask
+        | SalesforceContentNote
+      >
     | SalesforceFeedElementPage
   >(batch);
 
@@ -281,7 +264,7 @@ export async function getBatchedResults<T>(
   }
   const batch: SalesforceBatchRequest = { batchRequests, haltOnError: false };
 
-  const response = await salesForceConnection.executeApiRequest<SalesforceBatchResponse>(
+  const response = await sfConn.executeApiRequest<SalesforceBatchResponse>(
     `/services/data/vXX.X/composite/batch/`,
     "POST",
     batch,
@@ -299,28 +282,26 @@ function escapeQuery(query: string): string {
 
 export async function salesForceGetAppSearchEntries(
   integration: Integration<SalesforceSettings>
-): Promise<CLISearchResult<any>[]> {
-  const results = [];
+): Promise<CLISearchResultPlain[]> {
   if (integration?.data?.orgUrl) {
-    results.push({
-      actions: [{ name: "Browse", hotkey: "enter" }],
-      data: {
-        providerId,
-        pageUrl: integration?.data?.orgUrl,
-      } as SalesforceResultData,
-      icon: integration.icon,
-      key: BROWSE_SEARCH_RESULT_KEY,
-      template: CLITemplate.Plain,
-      templateContent: undefined,
-      title: "Browse Salesforce",
-    } as CLISearchResultPlain);
-
-    if (!salesForceConnection) {
-      results.push(getReconnectSearchResult(integration));
-    }
+    return [
+      {
+        actions: [{ name: "Browse", hotkey: "enter" }],
+        data: {
+          providerId,
+          pageUrl: integration?.data?.orgUrl,
+          tags: ["salesforce", "page"]
+        } as SalesforceResultData,
+        icon: integration.icon,
+        key: BROWSE_SEARCH_RESULT_KEY,
+        template: CLITemplate.Plain,
+        templateContent: undefined,
+        title: "Browse Salesforce",
+      } as CLISearchResultPlain,
+    ];
   }
 
-  return results;
+  return [];
 }
 
 export async function salesForceItemSelection(
@@ -330,18 +311,21 @@ export async function salesForceItemSelection(
 ): Promise<boolean> {
   // if the user clicked the reconnect result, reconnect to salesforce and re-run query
   if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
-    await salesForceConnect(integration?.data)
+    enableLogging();
+    sfConn = await connect(
+      integration?.data?.orgUrl,
+      integration?.data?.consumerKey,
+      integration?.data?.isSandbox
+    );
 
-    if (result.data?.query) {
-      let results = await salesForceGetSearchResults(
-        integration,
-        result.data?.query,
-        result.data?.filters
-      );
-      if (lastResponse) {
-        lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
-        lastResponse.respond(results.results);
-      }
+    let results = await salesForceGetSearchResults(
+      integration,
+      result.data?.query,
+      result.data?.filters
+    );
+    if (lastResponse) {
+      lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
+      lastResponse.respond(results.results);
     }
     Home.show();
     return true;
@@ -374,16 +358,16 @@ export async function salesForceGetSearchResults(
   query: string,
   filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
+  const salesforceConnection = await openConnection(integration.data);
 
-  if (salesForceConnection) {
-    let searchResults: (
-      | SalesforceAccount
-      | SalesforceContact
-      | SalesforceTask
-      | SalesforceContentNote
-      | SalesforceFeedItem
-    )[];
-
+  let searchResults: (
+    | SalesforceAccount
+    | SalesforceContact
+    | SalesforceTask
+    | SalesforceContentNote
+    | SalesforceFeedItem
+  )[];
+  try {
     let selectedObjects: string[] = [];
     if (Array.isArray(filters) && filters.length > 0) {
       const objectsFilter = filters.find((x) => x.id === OBJECTS_FILTER_ID);
@@ -397,171 +381,160 @@ export async function salesForceGetSearchResults(
           .map((x) => (x.value === "Note" ? "ContentNote" : x.value));
       }
     }
-
-    try {
-      searchResults = await getSearchResults(query, selectedObjects);
-
-      let results = searchResults.map((searchResult) => {
-        if ("Website" in searchResult) {
-          return {
-            actions: [{ name: "View", hotkey: "enter" }],
-            label: searchResult.attributes.type,
-            key: searchResult.Id,
-            title: searchResult.Name,
-            icon: integration?.data?.iconMap.account,
-            data: {
-              providerId,
-              pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-            },
-            template: CLITemplate.Contact,
-            templateContent: {
-              name: searchResult.Name,
-              title: searchResult.Industry,
-              details: [
-                [
-                  ["Phone", searchResult.Phone],
-                  ["Type", searchResult.Type],
-                  ["Website", searchResult.Website],
-                ],
-              ],
-            },
-          } as CLISearchResultContact;
-        } else if ("Email" in searchResult) {
-          return {
-            actions: [{ name: "View", hotkey: "enter" }],
-            label: searchResult.attributes.type,
-            key: searchResult.Id,
-            title: searchResult.Name,
-            icon: integration?.data?.iconMap.contact,
-            data: {
-              providerId,
-              pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-            },
-            template: CLITemplate.Contact,
-            templateContent: {
-              name: searchResult.Name,
-              title: searchResult.Title,
-              useInitials: true,
-              details: [
-                [
-                  ["Department", searchResult.Department],
-                  ["Email", searchResult.Email],
-                  ["Work #", searchResult.Phone],
-                ],
-              ],
-            },
-          } as CLISearchResultContact;
-        } else if ("Description" in searchResult) {
-          return {
-            actions: [{ name: "View", hotkey: "enter" }],
-            label: searchResult.attributes.type,
-            key: searchResult.Id,
-            title: searchResult.Subject,
-            icon: integration?.data?.iconMap.task,
-            data: {
-              providerId,
-              pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-            },
-            template: CLITemplate.List,
-            templateContent: [
-              ["Subject", searchResult.Subject],
-              ["Comments", searchResult.Description],
-            ],
-          } as CLISearchResultList;
-        } else if ("TextPreview" in searchResult) {
-          return {
-            actions: [{ name: "View", hotkey: "enter" }],
-            label: "Note",
-            key: searchResult.Id,
-            title: searchResult.Title,
-            icon: integration?.data?.iconMap.note,
-            data: {
-              providerId,
-              pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-            },
-            template: CLITemplate.List,
-            templateContent: [
-              ["Title", searchResult.Title],
-              ["Content", searchResult?.TextPreview],
-            ],
-          } as CLISearchResultList;
-        } else if (
-          "actor" in searchResult &&
-          (searchResult.type === "TextPost" || searchResult.type === "ContentPost")
-        ) {
-          return {
-            actions: [{ name: "View", hotkey: "enter" }],
-            label: "Chatter",
-            key: searchResult.id,
-            title: searchResult.actor?.displayName,
-            icon: integration?.data?.iconMap.chatter,
-            data: {
-              providerId,
-              pageUrl: getObjectUrl(searchResult.id, integration.data?.orgUrl),
-            } as SalesforceResultData,
-            template: CLITemplate.Contact,
-            templateContent: {
-              name: searchResult.actor?.displayName,
-              useInitials: true,
-              details: [
-                [
-                  ["Header", searchResult?.header?.text],
-                  ["Note", searchResult?.body?.text],
-                ],
-              ],
-            },
-          } as CLISearchResultContact;
-        } else {
-          // in this case we are only searching for accounts, contacts, tasks, content notes and chatter
-          return undefined;
-        }
-      });
-
-      const filteredResults = results.filter(
-        Boolean
-      ) as CLISearchResultContact<Action>[];
-      const objects = searchResults.map((result) =>
-        "attributes" in result ? result.attributes.type : "Chatter"
-      );
-
+    searchResults = await getSearchResults(query, selectedObjects);
+  } catch (err) {
+    closeConnection();
+    if (err instanceof ConnectionError) {
       return {
-        results: filteredResults,
-        context: {
-          filters: getSearchFilters(
-            objects.map((c) => (c === "ContentNote" ? "Note" : c))
-          ),
-        },
+        results: [
+          {
+            actions: [{ name: "Reconnect", hotkey: "enter" }],
+            key: NOT_CONNECTED_SEARCH_RESULT_KEY,
+            icon: integration?.icon,
+            title: "Reconnect to Salesforce",
+            data: {
+              providerId,
+              query,
+              filters,
+            },
+          } as CLISearchResultSimpleText,
+        ],
       };
-    } catch (err) {
-      await salesForceDisconnect();
-      if (err instanceof ConnectionError) {
-        return {
-          results: [
-            getReconnectSearchResult(integration, query, filters),
-          ]
-        };
-      }
-      console.error("Error retrieving SalesForce search results", err)
     }
+    return { results: [] };
   }
 
-  return {
-    results: []
-  };
-}
+  let results = searchResults.map((searchResult) => {
+    if ("Website" in searchResult) {
+      return {
+        actions: [{ name: "View", hotkey: "enter" }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Name,
+        icon: integration?.data?.iconMap.account,
+        data: {
+          providerId,
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.Name,
+          title: searchResult.Industry,
+          details: [
+            [
+              ["Phone", searchResult.Phone],
+              ["Type", searchResult.Type],
+              ["Website", searchResult.Website],
+            ],
+          ],
+        },
+      } as CLISearchResultContact;
+    } else if ("Email" in searchResult) {
+      return {
+        actions: [{ name: "View", hotkey: "enter" }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Name,
+        icon: integration?.data?.iconMap.contact,
+        data: {
+          providerId,
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.Name,
+          title: searchResult.Title,
+          useInitials: true,
+          details: [
+            [
+              ["Department", searchResult.Department],
+              ["Email", searchResult.Email],
+              ["Work #", searchResult.Phone],
+            ],
+          ],
+        },
+      } as CLISearchResultContact;
+    } else if ("Description" in searchResult) {
+      return {
+        actions: [{ name: "View", hotkey: "enter" }],
+        label: searchResult.attributes.type,
+        key: searchResult.Id,
+        title: searchResult.Subject,
+        icon: integration?.data?.iconMap.task,
+        data: {
+          providerId,
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.List,
+        templateContent: [
+          ["Subject", searchResult.Subject],
+          ["Comments", searchResult.Description],
+        ],
+      } as CLISearchResultList;
+    } else if ("TextPreview" in searchResult) {
+      return {
+        actions: [{ name: "View", hotkey: "enter" }],
+        label: "Note",
+        key: searchResult.Id,
+        title: searchResult.Title,
+        icon: integration?.data?.iconMap.note,
+        data: {
+          providerId,
+          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl),
+        },
+        template: CLITemplate.List,
+        templateContent: [
+          ["Title", searchResult.Title],
+          ["Content", searchResult?.TextPreview],
+        ],
+      } as CLISearchResultList;
+    } else if (
+      "actor" in searchResult &&
+      (searchResult.type === "TextPost" || searchResult.type === "ContentPost")
+    ) {
+      return {
+        actions: [{ name: "View", hotkey: "enter" }],
+        label: "Chatter",
+        key: searchResult.id,
+        title: searchResult.actor?.displayName,
+        icon: integration?.data?.iconMap.chatter,
+        data: {
+          providerId,
+          pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl),
+        } as SalesforceResultData,
+        template: CLITemplate.Contact,
+        templateContent: {
+          name: searchResult.actor?.displayName,
+          useInitials: true,
+          details: [
+            [
+              ["Header", searchResult?.header?.text],
+              ["Note", searchResult?.body?.text],
+            ],
+          ],
+        },
+      } as CLISearchResultContact;
+    } else {
+      // in this case we are only searching for accounts, contacts, tasks, content notes and chatter
+      return undefined;
+    }
+  });
 
-function getReconnectSearchResult(integration: Integration<SalesforceSettings>, query?: string, filters?: CLIFilter[]) {
+  const filteredResults = results.filter(
+    Boolean
+  ) as CLISearchResultContact<Action>[];
+  const objects = searchResults.map((result) =>
+    "attributes" in result ? result.attributes.type : "Chatter"
+  );
+
   return {
-    actions: [{ name: "Reconnect", hotkey: "enter" }],
-    key: NOT_CONNECTED_SEARCH_RESULT_KEY,
-    icon: integration?.icon,
-    title: "Reconnect to Salesforce",
-    data: {
-      providerId,
-      query,
-      filters,
+    results: filteredResults,
+    context: {
+      filters: getSearchFilters(
+        objects.map((c) => (c === "ContentNote" ? "Note" : c))
+      ),
     },
-  } as CLISearchResultSimpleText
+  };
 }
 
 function getSearchFilters(objects: string[]): CLIFilter[] {
