@@ -5,8 +5,9 @@ import { getActions } from './actions';
 import { getDefaultWindowOptions, overrideCallback } from './browser';
 
 export async function init() {
+    const settings = await getSettings();
+
     console.log("Initialising platform");
-    let settings = await getSettings();
     let browser: BrowserInitConfig = {};
 
 
