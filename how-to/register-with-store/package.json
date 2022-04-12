@@ -4,17 +4,15 @@
   "description": "OpenFin Workspace -- Register with store",
   "main": "index.js",
   "scripts": {
-    "dos": "desktop-owner-settings.bat && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
+    "dos": "desktop-owner-settings.bat && (npm run kill)",
     "build": "npm run build-server & npm run build-client",
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
-    "client": "start fin://localhost:8080/manifest.fin.json",
+    "client": "node ./scripts/launch.mjs",
     "server": "node ./server/build/index.js",
-    "kill": "(npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
-    "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
-    "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"
+    "kill": "node ./scripts/kill.mjs"
   },
   "author": "",
   "license": "ISC",

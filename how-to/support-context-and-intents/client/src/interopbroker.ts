@@ -129,6 +129,18 @@ export class PlatformInteropBroker extends InteropBroker {
     }
   }
 
+  async isConnectionAuthorized(id: OpenFin.Identity, payload?: any): Promise<boolean>{
+    console.log("Interop connection being made by the following identity with payload: ", id, payload);
+    // perform connection validation checks here if required and return false if it shouldn't be permissioned.
+    return true;
+  }
+
+  async isActionAuthorized(action: string, payload: any, identity: OpenFin.ClientIdentity): Promise<boolean> {
+    console.log("Interop Broker is action authorized: ", action, payload, identity);
+    // perform check here if you wish and return true/false accordingly
+    return true;
+  }
+  
   async handleInfoForIntentsByContext(context, clientIdentity) {
     let intents = await getIntentsByContext(context.type);
 

@@ -30,6 +30,15 @@ export async function getGlobalMenu(defaultGlobalContextMenu: GlobalContextMenuI
             }
         },
         {
+            label: 'Toggle Notification Center',
+            data: {
+                type: GlobalContextMenuOptionType.Custom,
+                action: {
+                    id: 'notification-toggle'
+                }
+            }
+        },
+        {
             type: 'separator',
             data: undefined
         },
