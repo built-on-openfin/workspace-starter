@@ -305,6 +305,7 @@ export async function getAppSearchEntries(integration: Integration<SalesforceSet
       data: {
         providerId,
         pageUrl: integration?.data?.orgUrl,
+        tags: ["salesforce"]
       } as SalesforceResultData,
       icon: integration.icon,
       key: BROWSE_SEARCH_RESULT_KEY,
@@ -410,6 +411,7 @@ export async function getSearchResults(
             data: {
               providerId,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+              tags: ["salesforce"]
             },
             template: CLITemplate.Contact,
             templateContent: {
@@ -434,6 +436,7 @@ export async function getSearchResults(
             data: {
               providerId,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+              tags: ["salesforce"]
             },
             template: CLITemplate.Contact,
             templateContent: {
@@ -459,6 +462,7 @@ export async function getSearchResults(
             data: {
               providerId,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+              tags: ["salesforce"]
             },
             template: CLITemplate.List,
             templateContent: [
@@ -476,6 +480,7 @@ export async function getSearchResults(
             data: {
               providerId,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+              tags: ["salesforce"]
             },
             template: CLITemplate.List,
             templateContent: [
@@ -496,6 +501,7 @@ export async function getSearchResults(
             data: {
               providerId,
               pageUrl: getObjectUrl(searchResult.id, integration.data?.orgUrl),
+              tags: ["salesforce"]
             } as SalesforceResultData,
             template: CLITemplate.Contact,
             templateContent: {

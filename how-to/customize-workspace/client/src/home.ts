@@ -305,7 +305,7 @@ async function getResults(
 
       const tagFilters = Array.isArray(filters) ? filters.filter(f => f.id === HOME_TAG_FILTERS) : [];
       if (tagFilters.length > 0) {
-        filterMatchFound = filters.some((filter) => {
+        filterMatchFound = tagFilters.some((filter) => {
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
               return filter.options.every((option) => {
