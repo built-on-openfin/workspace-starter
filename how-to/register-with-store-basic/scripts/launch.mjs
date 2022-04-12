@@ -57,13 +57,13 @@ async function launchFromNode(manifestUrl) {
         console.log("Wrapped classic app: " + manifest.startup_app.uuid);
     }
 
-    // //do something when app is closing
+    // do something when app is closing
     process.on("exit", async () => {
       console.log("Exit called");
       await quit();
     });
 
-    // //catches ctrl+c event
+    // catches ctrl+c event
     process.on("SIGINT", async () => {
       console.log("Ctrl + C called");
       await quit();
