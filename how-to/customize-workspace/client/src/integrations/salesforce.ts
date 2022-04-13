@@ -6,24 +6,19 @@ import {
   SalesforceRestApiSearchResponse,
   SalesforceRestApiSObject,
 } from "@openfin/salesforce";
-import {
+import type {
   Action,
   CLIDispatchedSearchResult,
   CLIFilter,
-  CLIFilterOptionType,
   CLISearchListenerResponse,
   CLISearchResultContact,
   CLISearchResultList,
   CLISearchResultPlain,
   CLISearchResultSimpleText,
-  CLITemplate,
-  Home,
   HomeSearchResponse,
   HomeSearchResult,
 } from "@openfin/workspace";
-import { launchView } from "./browser";
-import { Integration } from "./shapes";
-import { getSettings } from "./settings";
+import type { Integration, IntegrationManager } from "../shapes";
 
 const BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
 const OBJECTS_FILTER_ID = "salesforce-objects";
@@ -127,7 +122,10 @@ export interface SalesforceSettings {
   };
 }
 
-export async function register(integration: Integration<SalesforceSettings>): Promise<void> {
+let integrationManager: IntegrationManager;
+
+export async function register(integrationMan: IntegrationManager, integration: Integration<SalesforceSettings>): Promise<void> {
+  integrationManager = integrationManager;
   console.log("Registering SalesForce");
   try {
     await salesForceConnect(integration);
@@ -309,7 +307,7 @@ export async function getAppSearchEntries(integration: Integration<SalesforceSet
       } as SalesforceResultData,
       icon: integration.icon,
       key: BROWSE_SEARCH_RESULT_KEY,
-      template: CLITemplate.Plain,
+      template: "Plain",
       templateContent: undefined,
       title: "Browse Salesforce",
     } as CLISearchResultPlain);
@@ -342,17 +340,14 @@ export async function itemSelection(
         lastResponse.respond(results.results);
       }
     }
-    Home.show();
     return true;
   }
 
   // otherwise open the result page url in browser
   const data = result.data as SalesforceResultData;
   if (data !== undefined) {
-    let settings = await getSettings();
-    let preload =
-      settings.platformProvider.rootUrl + "/views/salesforce/preload.js";
-    let viewOptions = {
+    const preload = integrationManager.platformProvider.rootUrl + "/views/salesforce/preload.js";
+    const viewOptions = {
       url: data.pageUrl,
       fdc3InteropApi: "1.2",
       interop: {
@@ -362,7 +357,7 @@ export async function itemSelection(
       preloadScripts: [{ url: preload }],
       target: undefined,
     };
-    launchView(viewOptions);
+    await integrationManager.launchView(viewOptions);
     return true;
   }
   return false;
@@ -413,7 +408,7 @@ export async function getSearchResults(
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
               tags: ["salesforce"]
             },
-            template: CLITemplate.Contact,
+            template: "Contact",
             templateContent: {
               name: searchResult.Name,
               title: searchResult.Industry,
@@ -438,7 +433,7 @@ export async function getSearchResults(
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
               tags: ["salesforce"]
             },
-            template: CLITemplate.Contact,
+            template: "Contact",
             templateContent: {
               name: searchResult.Name,
               title: searchResult.Title,
@@ -464,7 +459,7 @@ export async function getSearchResults(
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
               tags: ["salesforce"]
             },
-            template: CLITemplate.List,
+            template: "List",
             templateContent: [
               ["Subject", searchResult.Subject],
               ["Comments", searchResult.Description],
@@ -482,7 +477,7 @@ export async function getSearchResults(
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
               tags: ["salesforce"]
             },
-            template: CLITemplate.List,
+            template: "List",
             templateContent: [
               ["Title", searchResult.Title],
               ["Content", searchResult?.TextPreview],
@@ -503,7 +498,7 @@ export async function getSearchResults(
               pageUrl: getObjectUrl(searchResult.id, integration.data?.orgUrl),
               tags: ["salesforce"]
             } as SalesforceResultData,
-            template: CLITemplate.Contact,
+            template: "Contact",
             templateContent: {
               name: searchResult.actor?.displayName,
               useInitials: true,
@@ -575,7 +570,7 @@ function getSearchFilters(objects: string[]): CLIFilter[] {
     let objectFilter: CLIFilter = {
       id: OBJECTS_FILTER_ID,
       title: "Objects",
-      type: CLIFilterOptionType.MultiSelect,
+      type: "MultiSelect" as any,
       options: [],
     };
 

@@ -1,6 +1,8 @@
 import { StorefrontFooter, Image, CLIDispatchedSearchResult, CLISearchListenerResponse, CLIFilter, HomeSearchResponse, HomeSearchResult } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
+import { View } from "openfin-adapter";
+
 interface PlatformProvider {
     rootUrl: string,
     enableNativeWindowIntegration: boolean
@@ -100,6 +102,12 @@ interface StorefrontProvider {
     footer: StorefrontFooter
 }
 
+export interface IntegrationManager {
+    platformProvider: PlatformProvider;
+
+    launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity): Promise<View>;
+}
+
 export interface IntegrationProvider {
     integrations?: Integration<unknown>[];
 }
@@ -115,7 +123,7 @@ export interface Integration<T> {
 
 export interface IntegrationModule<T> {
     providerId: string;
-    register(integration: Integration<T>): Promise<void>;
+    register(integrationManager: IntegrationManager, integration: Integration<T>): Promise<void>;
     deregister(integration: Integration<T>): Promise<void>;
     getSearchResults(integration: Integration<T>, query: string, filters?: CLIFilter[]): Promise<HomeSearchResponse>;
     getAppSearchEntries(integration: Integration<T>): Promise<HomeSearchResult[]>;

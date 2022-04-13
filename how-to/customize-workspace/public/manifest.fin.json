@@ -408,17 +408,32 @@
           "id": "salesforce",
           "icon": "http://localhost:8080/images/salesforce/favicon.ico",
           "title": "Salesforce",
-          "enabled": false,
+          "enabled": true,
+          "moduleUrl": "http://localhost:8080/js/salesforce.bundle.js",
           "data": {
-            "consumerKey": "",
-            "isSandbox": false,
-            "orgUrl": "",
+              "consumerKey": "3MVG9od6vNol.eBg5Qa31CmoGHTRB.DZKsa09L6IleAz632gtw6mbkWctzAtIunur_vdXX_5ou.tKQ7EgRVQI",
+              "isSandbox": true,
+              "orgUrl": "https://openfininc--demo.my.salesforce.com/",
+              "iconMap": {
+                  "contact": "http://localhost:8080/images/salesforce/contact.svg",
+                  "account": "http://localhost:8080/images/salesforce/account.svg",
+                  "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
+                  "note": "http://localhost:8080/images/salesforce/note.svg",
+                  "task": "http://localhost:8080/images/salesforce/task.svg"
+              }
+          }
+        },
+        {
+          "id": "factset",
+          "icon": "http://localhost:8080/images/factset/favicon.ico",
+          "title": "Factset",
+          "enabled": true,
+          "data": {
+            "apiEndpoint": "https://api.factset.com/",
+            "userId": "OPENFIN-1348114",
+            "apiKey": "pETcHpKszlmaTTlQbL4HmsdA5rjEIJ84u2eRfFiP",
             "iconMap": {
-              "contact": "http://localhost:8080/images/salesforce/contact.svg",
-              "account": "http://localhost:8080/images/salesforce/account.svg",
-              "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
-              "note": "http://localhost:8080/images/salesforce/note.svg",
-              "task": "http://localhost:8080/images/salesforce/task.svg"
+              "organization": "http://localhost:8080/images/factset/organization.svg"
             }
           }
         }

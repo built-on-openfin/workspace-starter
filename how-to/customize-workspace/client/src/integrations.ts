@@ -1,23 +1,20 @@
-import type { Integration, IntegrationModule, IntegrationProvider } from "./shapes";
-import * as salesforceModule from "./salesforce";
+import type { Integration, IntegrationManager, IntegrationModule, IntegrationProvider } from "./shapes";
 import { CLIDispatchedSearchResult, CLIFilter, CLISearchListenerResponse, HomeSearchResponse, HomeSearchResult } from "@openfin/workspace";
 
-export const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {
-    [salesforceModule.providerId]: salesforceModule
-};
+export const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
 export const homeIntegrations: {
     module: IntegrationModule<unknown>;
     integration: Integration<unknown>;
 }[] = [];
 
-export async function register(integrationProvider?: IntegrationProvider): Promise<void> {
+export async function register(integrationManager: IntegrationManager, integrationProvider?: IntegrationProvider): Promise<void> {
     if (Array.isArray(integrationProvider?.integrations)) {
         for (const integration of integrationProvider?.integrations) {
             if (integration.enabled) {
                 if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
                     try {
-                        knownIntegrationProviders[integration.id] = await import(integration.moduleUrl);
+                        knownIntegrationProviders[integration.id] = await import(/* webpackIgnore: true */ integration.moduleUrl);
                     } catch (err) {
                         console.error(`Error loading module ${integration.moduleUrl}`, err);
                     }
@@ -27,7 +24,7 @@ export async function register(integrationProvider?: IntegrationProvider): Promi
                         module: knownIntegrationProviders[integration.id],
                         integration
                     });
-                    await knownIntegrationProviders[integration.id].register(integration)
+                    await knownIntegrationProviders[integration.id].register(integrationManager, integration)
                 } else {
                     console.error("Missing module in integration providers", integration.id);
                 }
