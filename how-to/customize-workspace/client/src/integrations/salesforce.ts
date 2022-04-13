@@ -6,15 +6,17 @@ import {
   SalesforceRestApiSearchResponse,
   SalesforceRestApiSObject,
 } from "@openfin/salesforce";
-import type {
+import {
   Action,
   CLIDispatchedSearchResult,
   CLIFilter,
+  CLIFilterOptionType,
   CLISearchListenerResponse,
   CLISearchResultContact,
   CLISearchResultList,
   CLISearchResultPlain,
   CLISearchResultSimpleText,
+  CLITemplate,
   HomeSearchResponse,
   HomeSearchResult,
 } from "@openfin/workspace";
@@ -26,29 +28,29 @@ const NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
 let salesForceConnection: SalesforceConnection;
 
-export const providerId = "salesforce";
+const PROVIDER_ID = "salesforce";
 
-export type SalesforceBatchRequest = {
+type SalesforceBatchRequest = {
   batchRequests: SalesforceBatchRequestItem[];
   haltOnError: boolean;
 };
 
-export type SalesforceBatchRequestItem = {
+type SalesforceBatchRequestItem = {
   method: string;
   url: string;
 };
 
-export type SalesforceBatchResponse = {
+type SalesforceBatchResponse = {
   hasErrors: boolean;
   results: SalesforceBatchResponseItem[];
 };
 
-export type SalesforceBatchResponseItem = {
+type SalesforceBatchResponseItem = {
   statusCode: number;
   result: unknown;
 };
 
-export type SalesforceAccount = SalesforceRestApiSObject<{
+type SalesforceAccount = SalesforceRestApiSObject<{
   Industry?: string;
   Name: string;
   Phone?: string;
@@ -56,7 +58,7 @@ export type SalesforceAccount = SalesforceRestApiSObject<{
   Website?: string;
 }>;
 
-export type SalesforceContact = SalesforceRestApiSObject<{
+type SalesforceContact = SalesforceRestApiSObject<{
   Department?: string;
   Email: string;
   Name: string;
@@ -64,17 +66,17 @@ export type SalesforceContact = SalesforceRestApiSObject<{
   Title?: string;
 }>;
 
-export type SalesforceTask = SalesforceRestApiSObject<{
+type SalesforceTask = SalesforceRestApiSObject<{
   Subject?: string;
   Description?: string;
 }>;
 
-export type SalesforceContentNote = SalesforceRestApiSObject<{
+type SalesforceContentNote = SalesforceRestApiSObject<{
   Title?: string;
   TextPreview?: string;
 }>;
 
-export type SalesforceActor = {
+type SalesforceActor = {
   id: string;
   url: string;
   type: string;
@@ -83,12 +85,12 @@ export type SalesforceActor = {
   name: string;
 };
 
-export type SalesforceTextArea = {
+type SalesforceTextArea = {
   isRichText: boolean;
   text: string;
 };
 
-export type SalesforceFeedItem = {
+type SalesforceFeedItem = {
   id: string;
   url: string;
   type: string;
@@ -97,7 +99,7 @@ export type SalesforceFeedItem = {
   header?: SalesforceTextArea;
 };
 
-export type SalesforceFeedElementPage = {
+type SalesforceFeedElementPage = {
   currentPageToken: string;
   currentPageUrl: string;
   elements: SalesforceFeedItem[];
@@ -108,12 +110,12 @@ export type SalesforceFeedElementPage = {
   updatesUrl: string;
 };
 
-export interface SalesforceResultData {
+interface SalesforceResultData {
   providerId: string;
   pageUrl: string;
 }
 
-export interface SalesforceSettings {
+interface SalesforceSettings {
   consumerKey: string;
   isSandbox: boolean;
   orgUrl: string;
@@ -125,20 +127,20 @@ export interface SalesforceSettings {
 let integrationManager: IntegrationManager;
 
 export async function register(integrationMan: IntegrationManager, integration: Integration<SalesforceSettings>): Promise<void> {
-  integrationManager = integrationManager;
+  integrationManager = integrationMan;
   console.log("Registering SalesForce");
   try {
-    await salesForceConnect(integration);
+    await openConnection(integration);
   } catch (err) {
     console.error("Error connecting to SalesForce", err);
   }
 }
 
 export async function deregister(integration: Integration<SalesforceSettings>): Promise<void> {
-  await salesForceDisconnect();
+  await closeConnection();
 }
 
-export async function salesForceConnect(integration: Integration<SalesforceSettings>): Promise<void> {
+async function openConnection(integration: Integration<SalesforceSettings>): Promise<void> {
   if (integration?.data?.orgUrl && !salesForceConnection) {
     enableLogging();
     salesForceConnection = await connect(
@@ -149,7 +151,7 @@ export async function salesForceConnect(integration: Integration<SalesforceSetti
   }
 }
 
-export async function salesForceDisconnect(): Promise<void> {
+async function closeConnection(): Promise<void> {
   if (salesForceConnection) {
     try {
       await salesForceConnection.disconnect();
@@ -161,14 +163,14 @@ export async function salesForceDisconnect(): Promise<void> {
   }
 }
 
-export const getObjectUrl = (
+const getObjectUrl = (
   objectId: string,
   salesforceOrgOrigin: string
 ): string => {
   return `${salesforceOrgOrigin}/${objectId}`;
 };
 
-export async function getApiSearchResults(
+async function getApiSearchResults(
   query: string,
   selectedObjects?: string[]
 ): Promise<
@@ -271,7 +273,7 @@ export async function getApiSearchResults(
   return results;
 }
 
-export async function getBatchedResults<T>(
+async function getBatchedResults<T>(
   batchRequests: SalesforceBatchRequestItem[]
 ): Promise<T[]> {
   if (batchRequests.length === 0) {
@@ -301,13 +303,13 @@ export async function getAppSearchEntries(integration: Integration<SalesforceSet
     results.push({
       actions: [{ name: "Browse", hotkey: "enter" }],
       data: {
-        providerId,
+        providerId: PROVIDER_ID,
         pageUrl: integration?.data?.orgUrl,
-        tags: ["salesforce"]
+        tags: [PROVIDER_ID]
       } as SalesforceResultData,
       icon: integration.icon,
       key: BROWSE_SEARCH_RESULT_KEY,
-      template: "Plain",
+      template: CLITemplate.Plain,
       templateContent: undefined,
       title: "Browse Salesforce",
     } as CLISearchResultPlain);
@@ -327,7 +329,7 @@ export async function itemSelection(
 ): Promise<boolean> {
   // if the user clicked the reconnect result, reconnect to salesforce and re-run query
   if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
-    await salesForceConnect(integration)
+    await openConnection(integration)
 
     if (result.data?.query) {
       let results = await getSearchResults(
@@ -404,11 +406,11 @@ export async function getSearchResults(
             title: searchResult.Name,
             icon: integration?.data?.iconMap.account,
             data: {
-              providerId,
+              providerId: PROVIDER_ID,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-              tags: ["salesforce"]
+              tags: [PROVIDER_ID]
             },
-            template: "Contact",
+            template: CLITemplate.Contact,
             templateContent: {
               name: searchResult.Name,
               title: searchResult.Industry,
@@ -429,11 +431,11 @@ export async function getSearchResults(
             title: searchResult.Name,
             icon: integration?.data?.iconMap.contact,
             data: {
-              providerId,
+              providerId: PROVIDER_ID,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-              tags: ["salesforce"]
+              tags: [PROVIDER_ID]
             },
-            template: "Contact",
+            template: CLITemplate.Contact,
             templateContent: {
               name: searchResult.Name,
               title: searchResult.Title,
@@ -455,9 +457,9 @@ export async function getSearchResults(
             title: searchResult.Subject,
             icon: integration?.data?.iconMap.task,
             data: {
-              providerId,
+              providerId: PROVIDER_ID,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-              tags: ["salesforce"]
+              tags: [PROVIDER_ID]
             },
             template: "List",
             templateContent: [
@@ -473,9 +475,9 @@ export async function getSearchResults(
             title: searchResult.Title,
             icon: integration?.data?.iconMap.note,
             data: {
-              providerId,
+              providerId: PROVIDER_ID,
               pageUrl: getObjectUrl(searchResult.Id, integration.data?.orgUrl),
-              tags: ["salesforce"]
+              tags: [PROVIDER_ID]
             },
             template: "List",
             templateContent: [
@@ -494,11 +496,11 @@ export async function getSearchResults(
             title: searchResult.actor?.displayName,
             icon: integration?.data?.iconMap.chatter,
             data: {
-              providerId,
+              providerId: PROVIDER_ID,
               pageUrl: getObjectUrl(searchResult.id, integration.data?.orgUrl),
-              tags: ["salesforce"]
+              tags: [PROVIDER_ID]
             } as SalesforceResultData,
-            template: "Contact",
+            template: CLITemplate.Contact,
             templateContent: {
               name: searchResult.actor?.displayName,
               useInitials: true,
@@ -532,7 +534,7 @@ export async function getSearchResults(
         },
       };
     } catch (err) {
-      await salesForceDisconnect();
+      await closeConnection();
       if (err instanceof ConnectionError) {
         return {
           results: [
@@ -556,7 +558,7 @@ function getReconnectSearchResult(integration: Integration<SalesforceSettings>, 
     icon: integration?.icon,
     title: "Reconnect to Salesforce",
     data: {
-      providerId,
+      providerId: PROVIDER_ID,
       query,
       filters,
     },
@@ -570,7 +572,7 @@ function getSearchFilters(objects: string[]): CLIFilter[] {
     let objectFilter: CLIFilter = {
       id: OBJECTS_FILTER_ID,
       title: "Objects",
-      type: "MultiSelect" as any,
+      type: CLIFilterOptionType.MultiSelect,
       options: [],
     };
 

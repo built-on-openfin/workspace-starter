@@ -6,7 +6,7 @@ import { register as registerNotifications, deregister as deregisterNotification
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
 import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
-import { launchView } from './browser';
+import { launchPage, launchView } from './browser';
 
 export async function init() {
     // you can kick off your bootstrapping process here where you may decide to prompt for authentication, 
@@ -41,7 +41,8 @@ export async function init() {
     debugger;
     await registerIntegration({
         platformProvider: settings?.platformProvider,
-        launchView
+        launchView,
+        launchPage
     }, settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();

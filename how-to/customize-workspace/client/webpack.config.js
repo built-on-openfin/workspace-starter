@@ -46,6 +46,10 @@ module.exports = [
       extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
+      library: {
+        name: 'integration_salesforce',
+        type: 'window'
+      },
       filename: 'salesforce.bundle.js',
       path: path.resolve(__dirname, '..', 'public', 'js'),
     },
