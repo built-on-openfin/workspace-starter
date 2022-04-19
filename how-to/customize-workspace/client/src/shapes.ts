@@ -1,7 +1,8 @@
-import { StorefrontFooter, Image, CLIDispatchedSearchResult, CLISearchListenerResponse, CLIFilter, HomeSearchResponse, HomeSearchResult } from "@openfin/workspace";
-import { BrowserWindowModule, CustomThemes, Page, ToolbarButton } from "@openfin/workspace-platform";
+import { StorefrontFooter, Image } from "@openfin/workspace";
+import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
-import { View } from "openfin-adapter";
+import { IntegrationProvider } from "@openfin/workspace-integration";
+
 
 interface PlatformProvider {
     rootUrl: string,
@@ -100,34 +101,6 @@ interface StorefrontProvider {
         items: StorefrontSettingsNavigationItem[] 
     }[],
     footer: StorefrontFooter
-}
-
-export interface IntegrationManager {
-    platformProvider: PlatformProvider;
-
-    launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity): Promise<View>;
-    launchPage(page:Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
-}
-
-export interface IntegrationProvider {
-    integrations?: Integration<unknown>[];
-}
-
-export interface Integration<T> {
-    id: string;
-    title: string;
-    icon: string;
-    enabled: boolean;
-    moduleUrl?: string;
-    data?: T;
-}
-
-export interface IntegrationModule<T> {
-    register?(integrationManager: IntegrationManager, integration: Integration<T>): Promise<void>;
-    deregister?(integration: Integration<T>): Promise<void>;
-    getSearchResults?(integration: Integration<T>, query: string, filters?: CLIFilter[]): Promise<HomeSearchResponse>;
-    getAppSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
-    itemSelection?(integration: Integration<T>, result: CLIDispatchedSearchResult, lastResponse?: CLISearchListenerResponse): Promise<boolean>;
 }
 
 export interface CustomSettings {

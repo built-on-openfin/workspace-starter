@@ -14,13 +14,7 @@ export async function register(integrationManager: IntegrationManager, integrati
             if (integration.enabled) {
                 if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
                     try {
-                        // Because we are importing a web packed module
-                        // it gets constructed into the global window namespace
-                        // so we grab it from there, the webpack must also include
-                        // the library.name set to integretion_<integration.id>
-                        // and library.type set to window
-                        await import(/*webpackIgnore: true*/ integration.moduleUrl);
-                        knownIntegrationProviders[integration.id] = window[`integration_${integration.id}`];
+                        knownIntegrationProviders[integration.id] = await import(/*webpackIgnore: true*/ integration.moduleUrl);
                     } catch (err) {
                         console.error(`Error loading module ${integration.moduleUrl}`, err);
                     }

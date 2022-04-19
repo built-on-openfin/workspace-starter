@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = [
   {
-    entry: './client/src/provider.ts',
+    entry: './src/index.ts',
     devtool: 'inline-source-map',
     module: {
       rules: [
@@ -10,24 +10,21 @@ module.exports = [
           test: /\.tsx?$/,
           use: 'ts-loader',
           exclude: /node_modules/
-        },
-        {
-          test: /\.(zip)/,
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'assets/',
-          }
         }
- 
       ],
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-      filename: 'provider.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
+      filename: 'salesforce-integration.bundle.js',
+      library: {
+        type: "module"
+      },
+      path: path.resolve('dist', 'bundle'),
     },
+    experiments: {
+      outputModule: true
+    }
   }
 ];

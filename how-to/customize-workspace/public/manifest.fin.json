@@ -409,7 +409,7 @@
           "icon": "http://localhost:8080/images/salesforce/favicon.ico",
           "title": "Salesforce",
           "enabled": true,
-          "moduleUrl": "http://localhost:8080/js/salesforce.bundle.js",
+          "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
           "data": {
               "consumerKey": "3MVG9od6vNol.eBg5Qa31CmoGHTRB.DZKsa09L6IleAz632gtw6mbkWctzAtIunur_vdXX_5ou.tKQ7EgRVQI",
               "isSandbox": true,
