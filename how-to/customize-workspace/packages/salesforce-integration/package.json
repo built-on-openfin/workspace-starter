@@ -7,7 +7,7 @@
     ],
     "license": "ISC",
     "scripts": {
-        "build-clean": "rimraf ./dist/esm/* ./typings/*",
+        "build-clean": "rimraf ./dist/* ./typings/*",
         "build-lint": "eslint src --ext .ts",
         "build-compile": "tsc",
         "build-p": "run-p build-lint build-compile",

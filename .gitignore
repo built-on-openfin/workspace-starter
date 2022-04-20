@@ -1,6 +1,8 @@
 node_modules
 build
 out
+dist
+es
 .DS_STORE
 how-to/customize-workspace/public/js/assets/provider.zip
 how-to/customize-workspace/public/js/provider.bundle.js
