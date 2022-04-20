@@ -32,7 +32,7 @@ import {
 } from "./workspace";
 import { PageTemplate, WorkspaceTemplate } from "./template";
 import { share } from "./share";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getAppSearchEntries, getSearchResults, itemSelection } from "@openfin/workspace-integration";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";

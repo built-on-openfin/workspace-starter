@@ -8,6 +8,7 @@ export interface SalesforceBatchRequest {
      * The requests.
      */
     batchRequests: SalesforceBatchRequestItem[];
+
     /**
      * Halt the batch operations if there was an error.
      */

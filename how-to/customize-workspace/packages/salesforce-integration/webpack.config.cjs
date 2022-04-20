@@ -16,12 +16,13 @@ module.exports = [
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
+    externals: { fin: 'fin' },
     output: {
-      filename: 'salesforce-integration.bundle.js',
+      filename: 'salesforce.bundle.js',
       library: {
         type: "module"
       },
-      path: path.resolve('dist', 'bundle'),
+      path: path.resolve(__dirname, '..', '..', 'public', 'js', 'integrations'),
     },
     experiments: {
       outputModule: true

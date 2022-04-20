@@ -5,7 +5,7 @@ import { register as registerNotifications, deregister as deregisterNotification
 
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
-import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
+import { register as registerIntegration, deregister as deregisterIntegration } from '@openfin/workspace-integration';
 import { launchPage, launchView } from './browser';
 
 export async function init() {
@@ -38,9 +38,8 @@ export async function init() {
 
     await registerShare()
 
-    debugger;
     await registerIntegration({
-        platformProvider: settings?.platformProvider,
+        rootUrl: settings?.platformProvider.rootUrl,
         launchView,
         launchPage
     }, settings.integrationProvider);

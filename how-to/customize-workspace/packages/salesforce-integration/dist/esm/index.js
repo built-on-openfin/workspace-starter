@@ -1,3 +1,5 @@
+import { SalesForceIntegrationProvider } from "./integration";
 export * from "./integration";
 export * from "./shapes";
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsY0FBYyxlQUFlLENBQUM7QUFDOUIsY0FBYyxVQUFVLENBQUMifQ==
+export const integration = new SalesForceIntegrationProvider();
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLDZCQUE2QixFQUFFLE1BQU0sZUFBZSxDQUFDO0FBRTlELGNBQWMsZUFBZSxDQUFDO0FBQzlCLGNBQWMsVUFBVSxDQUFDO0FBRXpCLE1BQU0sQ0FBQyxNQUFNLFdBQVcsR0FBRyxJQUFJLDZCQUE2QixFQUFFLENBQUMifQ==
