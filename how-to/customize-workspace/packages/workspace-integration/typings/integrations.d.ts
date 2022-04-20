@@ -1,5 +1,5 @@
 import type { CLIDispatchedSearchResult, CLIFilter, CLISearchListenerResponse, HomeSearchResponse, HomeSearchResult } from "@openfin/workspace";
-import type { IntegrationManager, IntegrationProvider } from "./shapes";
+import type { IntegrationManager, IntegrationModule, IntegrationProvider } from "./shapes";
 /**
  * Register all the workspace integrations.
  * @param integrationManager The integration manager.
@@ -30,3 +30,9 @@ export declare function getAppSearchEntries(): Promise<HomeSearchResult[]>;
  * @returns True if the selection was handled.
  */
 export declare function itemSelection(result: CLIDispatchedSearchResult, lastResponse?: CLISearchListenerResponse): Promise<boolean>;
+/**
+ * Add an integration module that was loaded manually.
+ * @param id The id of the module.
+ * @param module The module.
+ */
+export declare function addKnownIntegrationProvider(id: string, module: IntegrationModule<unknown>): void;

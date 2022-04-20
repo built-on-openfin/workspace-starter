@@ -145,3 +145,12 @@ export async function itemSelection(
 
     return false;
 }
+
+/**
+ * Add an integration module that was loaded manually.
+ * @param id The id of the module.
+ * @param module The module.
+ */
+export function addKnownIntegrationProvider(id: string, module: IntegrationModule<unknown>): void {
+    knownIntegrationProviders[id] = module;
+}
