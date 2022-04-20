@@ -3,8 +3,6 @@ import * as express from "express";
 const router = express.Router();
 export default router;
 
-router.use(express.json());
-
 /**
  * In order for Home to make the cross origin request to our server,
  * we must allow CORS on Home's domains.
