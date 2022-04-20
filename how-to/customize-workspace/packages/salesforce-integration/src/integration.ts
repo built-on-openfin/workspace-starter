@@ -363,6 +363,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
     /**
      * Open the connection to SaleForce.
      * @param integration The integration details.
+     * @internal
      */
     private async openConnection(integration: Integration<SalesforceSettings>): Promise<void> {
         if (integration?.data?.orgUrl && !this._salesForceConnection) {
@@ -377,6 +378,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
     /**
      * Close the connection to SalesForce.
+     * @internal
      */
     private async closeConnection(): Promise<void> {
         if (this._salesForceConnection) {
@@ -395,6 +397,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * @param objectId The object id.
      * @param salesforceOrgOrigin The origin url.
      * @returns Then object url.
+     * @internal
      */
     private getObjectUrl(objectId: string, salesforceOrgOrigin?: string): string {
         if (!salesforceOrgOrigin) {
@@ -408,6 +411,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * @param query The query to call the API with.
      * @param selectedObjects The selected filters.
      * @returns The search result objects from the API.
+     * @internal
      */
     private async getApiSearchResults(
         query: string,
@@ -497,6 +501,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * Get batched results from SalesForce api.
      * @param batchRequests The batch requests to send.
      * @returns The results from the batch request.
+     * @internal
      */
     private async getBatchedResults<T>(batchRequests: SalesforceBatchRequestItem[]): Promise<T[]> {
         if (batchRequests.length === 0 || !this._salesForceConnection) {
@@ -518,6 +523,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * Escape any characters needed in SalesForce API calls.
      * @param query The query to escape.
      * @returns The escaped query.
+     * @internal
      */
     private escapeQuery(query: string): string {
         // There are some reserved characters for queries so we need to escape them
@@ -531,6 +537,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * @param query The query that needs to reconnect.
      * @param filters The filter for the reconnect.
      * @returns The search result entry.
+     * @internal
      */
     private getReconnectSearchResult(
         integration: Integration<SalesforceSettings>,
@@ -554,6 +561,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * Get the search filters based on the results.
      * @param objects The object types to create the filters from.
      * @returns The filters.
+     * @internal
      */
     private getSearchFilters(objects: string[]): CLIFilter[] {
         if (Array.isArray(objects) && objects.length > 0) {

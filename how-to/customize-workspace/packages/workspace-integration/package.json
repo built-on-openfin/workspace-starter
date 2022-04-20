@@ -20,8 +20,7 @@
     },
     "dependencies": {
         "@openfin/workspace": "6.3.6",
-        "@openfin/workspace-platform": "6.3.6",
-        "openfin-adapter": "^22.65.4"
+        "@openfin/workspace-platform": "6.3.6"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^21.0.2",
