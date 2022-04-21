@@ -1,0 +1,76 @@
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 75%;
+    background-color: #fff;
+    color: #434343;
+    padding: 25px;
+  }
+  
+  button {
+    -webkit-text-size-adjust: 100%;
+    visibility: visible;
+    line-height: 1.7;
+    z-index: 1;
+    margin-right: 5px;
+    padding: 7px 15px;
+    border: 0;
+    cursor: pointer;
+    overflow: visible;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+    border-radius: 4px;
+    text-decoration: none !important;
+    text-shadow: none;
+    background: linear-gradient(
+      to bottom,
+      #006d88 0,
+      #006d88 50%,
+      #022f3a 52%,
+      #022f3a 100%
+    );
+    display: inline;
+    width: auto;
+    font-size: 80%;
+    font-family: Verdana, Arial, sans-serif;
+  }
+  
+  /* Dropdown button on hover & focus */
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {
+    display: block;
+  }
