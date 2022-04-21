@@ -1,5 +1,5 @@
-import type { ElementReference } from "@wdio/protocols";
 import "../globals";
+import type { ElementReference } from "../shapes";
 
 /**
  * Helper class for using with WebDriver.
@@ -80,6 +80,14 @@ export class WebDriverHelper {
     }
 
     /**
+     * Get the URL of the current window.
+     * @returns The window title.
+     */
+    public static async getUrl(): Promise<string> {
+        return global.client.getUrl();
+    }
+
+    /**
      * Switch to a window by its title.
      * @param title The window title to switch to.
      * @returns True if the window was available.
@@ -110,6 +118,36 @@ export class WebDriverHelper {
     }
 
     /**
+     * Switch to a window by its URL.
+     * @param url The window url to switch to.
+     * @returns True if the window was available.
+     */
+    public static async switchToWindowByUrl(url: string): Promise<boolean> {
+        // If the current window is already the correct one just return.
+        const winUrl = await global.client.getUrl();
+        if (winUrl === url) {
+            return true;
+        }
+
+        // Otherwise switch to each window in turn and see if the title matches.
+        const currentWindow = await global.client.getWindowHandle();
+
+        const windowHandles = await global.client.getWindowHandles();
+
+        for (const windowHandle of windowHandles) {
+            await global.client.switchToWindow(windowHandle);
+            const winUrl = await global.client.getUrl();
+            if (winUrl === url) {
+                return true;
+            }
+        }
+
+        // No window was found so switch back to the original one.
+        await global.client.switchToWindow(currentWindow);
+        return false;
+    }
+
+    /**
      * Wait for a window by its title.
      * @param title The window title to wait for to.
      * @param timeout The maximum amount of time to wait in seconds.
@@ -130,6 +168,26 @@ export class WebDriverHelper {
     }
 
     /**
+     * Wait for a window by its URL.
+     * @param url The window URL to wait for to.
+     * @param timeout The maximum amount of time to wait in seconds.
+     * @returns True if the window was found.
+     */
+    public static async waitForWindowByUrl(url: string, timeout: number): Promise<boolean> {
+        const startTime = Date.now();
+
+        let found = false;
+        do {
+            found = await WebDriverHelper.switchToWindowByUrl(url);
+            if (!found) {
+                await WebDriverHelper.sleep(1000);
+            }
+        } while (!found && Date.now() - startTime < timeout * 1000);
+
+        return found;
+    }
+
+    /**
      * Close the current window.
      * @returns Nothing.
      */
@@ -138,33 +196,142 @@ export class WebDriverHelper {
     }
 
     /**
-     * Find an element by its id.
-     * @param id The id of the element to find.
-     * @returns The element if found.
-     */
-    public static async findElementById(id: string): Promise<string> {
-        const ref: ElementReference = await client.findElement("xpath", `//*[@id='${id}']`);
-        return WebDriverHelper.elementIdFromReference(ref);
-    }
-
-    /**
-     * Find an element by its tag type.
-     * @param tag The tag of the element to find.
-     * @returns The element if found.
-     */
-    public static async findElementByTag(tag: string): Promise<string> {
-        const ref: ElementReference = await client.findElement("xpath", `//${tag}`);
-        return WebDriverHelper.elementIdFromReference(ref);
-    }
-
-    /**
      * Find an element by its xpath.
      * @param path The path the element to find.
      * @returns The element if found.
      */
     public static async findElementByPath(path: string): Promise<string> {
-        const ref: ElementReference = await client.findElement("xpath", path);
+        const ref = await client.findElement("xpath", path);
         return WebDriverHelper.elementIdFromReference(ref);
+    }
+
+    /**
+     * Find elements by their xpath.
+     * @param path The path the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementsByPath(path: string): Promise<string[]> {
+        const refs = await client.findElements("xpath", path);
+        return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
+    }
+
+    /**
+     * Find an element from another element by its xpath.
+     * @param elementId The id of the element to start.
+     * @param xpath The xpath of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementFromElementByPath(elementId: string, xpath: string): Promise<string> {
+        const ref = await client.findElementFromElement(elementId, "xpath", xpath);
+        return WebDriverHelper.elementIdFromReference(ref);
+    }
+
+    /**
+     * Find elements from another element by their xpath.
+     * @param elementId The id of the element to start.
+     * @param xpath The xpath of the element to find.
+     * @returns The elements if found.
+     */
+    public static async findElementsFromElementByPath(elementId: string, xpath: string): Promise<string[]> {
+        const refs = await client.findElementsFromElement(elementId, "xpath", xpath);
+        return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
+    }
+
+    /**
+     * Find an element by its id.
+     * @param id The id of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementById(id: string): Promise<string> {
+        return WebDriverHelper.findElementByPath(`//*[@id='${id}']`);
+    }
+
+    /**
+     * Find an element by its tag.
+     * @param tag The tag of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementByTag(tag: string): Promise<string> {
+        return WebDriverHelper.findElementByPath(`//${tag}`);
+    }
+
+    /**
+     * Find all elements by their tag.
+     * @param tag The tag of the element to find.
+     * @returns The elements if found.
+     */
+    public static async findElementsByTag(tag: string): Promise<string[]> {
+        return WebDriverHelper.findElementsByPath(`//${tag}`);
+    }
+
+    /**
+     * Find an element from another element by its tag.
+     * @param elementId The id of the element to start.
+     * @param tag The tag of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementFromElementByTag(elementId: string, tag: string): Promise<string> {
+        return WebDriverHelper.findElementFromElementByPath(elementId, `//${tag}`);
+    }
+
+    /**
+     * Find all elements from another element by their tag.
+     * @param elementId The id of the element to start.
+     * @param tag The tag of the element to find.
+     * @returns The elements if found.
+     */
+    public static async findElementsFromElementByTag(elementId: string, tag: string): Promise<string[]> {
+        return WebDriverHelper.findElementsFromElementByPath(elementId, `//${tag}`);
+    }
+
+    /**
+     * Find an element by its class.
+     * @param className The class of the element to find.
+     * @param tag The tag of the element to find defaults to all.
+     * @returns The element if found.
+     */
+    public static async findElementByClass(className: string, tag: string = "*"): Promise<string> {
+        return WebDriverHelper.findElementByPath(`//${tag}[contains(@class,"${className}")]`);
+    }
+
+    /**
+     * Find all elements by their class.
+     * @param className The class of the element to find.
+     * @param tag The tag of the element to find defaults to all.
+     * @returns The element if found.
+     */
+    public static async findElementsByClass(className: string, tag: string = "*"): Promise<string[]> {
+        return WebDriverHelper.findElementsByPath(`//${tag}[contains(@class,"${className}")]`);
+    }
+
+    /**
+     * Find an element from another element by its class.
+     * @param elementId The id of the element to start.
+     * @param className The class of the element to find.
+     * @param tag The tag of the element to find defaults to all.
+     * @returns The element if found.
+     */
+    public static async findElementFromElementByClass(
+        elementId: string,
+        className: string,
+        tag: string = "*"
+    ): Promise<string> {
+        return WebDriverHelper.findElementFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
+    }
+
+    /**
+     * Find all elements from another element by their class.
+     * @param elementId The id of the element to start.
+     * @param className The class of the element to find.
+     * @param tag The tag of the element to find defaults to all.
+     * @returns The elements if found.
+     */
+    public static async findElementsFromElementByClass(
+        elementId: string,
+        className: string,
+        tag: string = "*"
+    ): Promise<string[]> {
+        return WebDriverHelper.findElementsFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
