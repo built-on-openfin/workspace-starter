@@ -29,7 +29,7 @@ There are some example tests written which use the `openfin-test-runner` and `op
 To run the tests against the hosted version of the `register-with-home` app you can run.
 
 ```shell
-cd examples
+cd examples/register-with-home
 npm install
 npm run test-remote
 ```
