@@ -1,15 +1,16 @@
-import type { Options } from "@wdio/types";
 import { Command, Option } from "commander";
 import fs from "fs/promises";
 import WebDriver from "webdriver";
 import { logBlank, logError, logHeader, logInfo, logSeparator } from "./console";
+import { runTestsJasmine } from "./frameworks/jasmine";
+import { runTestsMocha } from "./frameworks/mocha";
 import {
     closeOpenFinRVM,
     getChromeDriver,
     killProcessById,
     launchOpenFinRVM,
     loadManifest,
-    runTestsMocha,
+    resolveRuntimeVersion,
     setDesktopOwnerSettings,
     startChromeDriver,
     tempProfileDirCreate
@@ -22,7 +23,7 @@ const DEFAULT_DEV_TOOLS_PORT = 9090;
 const DEFAULT_CHROME_DRIVER_PORT = 4444;
 const DEFAULT_CHROME_DRIVER_STORE_FOLDER = "./chromedriver/";
 const DEFAULT_TEST_TIMEOUT_SECONDS = 120;
-const DEFAULT_OPENFIN_RUNTIME_VERSION = "23.96.68.3";
+const DEFAULT_OPENFIN_RUNTIME_VERSION = "stable";
 
 /**
  * Run the app.
@@ -48,7 +49,7 @@ export async function run(args: string[]): Promise<void> {
         .argument("testGlob <string>", "A glob pointing to the tests to run")
         .addOption(
             new Option("--logLevel <level>", "The log level for the webdriver")
-                .choices(["debug|silent"])
+                .choices(["debug", "silent"])
                 .default("silent")
         )
         .option<number>(
@@ -79,6 +80,11 @@ export async function run(args: string[]): Promise<void> {
             "The OpenFin runtime version to use if not specified in manifest",
             DEFAULT_OPENFIN_RUNTIME_VERSION
         )
+        .addOption(
+            new Option("--framework <jasmine>", "The test framework to run the tests with")
+                .choices(["mocha", "jasmine"])
+                .default("mocha")
+        )
         .configureOutput({
             writeOut: str => logInfo(str),
             writeErr: str => {
@@ -96,10 +102,11 @@ export async function run(args: string[]): Promise<void> {
                 manifestUrl: string,
                 testGlobPath: string,
                 opts: {
-                    logLevel: Options.WebDriverLogTypes;
+                    logLevel: "debug" | "silent";
                     devToolsPort: number;
                     chromeDriverPort: number;
                     chromeDriverStore: string;
+                    framework: "jasmine" | "mocha";
                     testTimeout: number;
                     defaultRuntimeVersion: string;
                 }
@@ -110,6 +117,7 @@ export async function run(args: string[]): Promise<void> {
                 logInfo("Dev Tools Port", opts.devToolsPort);
                 logInfo("Chrome Driver Port", opts.chromeDriverPort);
                 logInfo("Chrome Driver Store", opts.chromeDriverStore);
+                logInfo("Test Framework", opts.framework);
                 logInfo("Test Timeout", opts.testTimeout);
                 logInfo("Default Runtime Version", opts.defaultRuntimeVersion);
                 logSeparator();
@@ -118,11 +126,9 @@ export async function run(args: string[]): Promise<void> {
                 let chromeDriverProcessId: number | undefined;
                 let launchParams;
                 try {
-                    const manifest = await loadManifest(manifestUrl);
-                    const chromeDriverPath = await getChromeDriver(
-                        opts.chromeDriverStore,
-                        manifest?.runtime?.version ?? opts.defaultRuntimeVersion
-                    );
+                    const manifest = await loadManifest(manifestUrl, opts.defaultRuntimeVersion);
+                    const versions = await resolveRuntimeVersion(manifest.runtime.version);
+                    const chromeDriverPath = await getChromeDriver(opts.chromeDriverStore, versions.chrome);
 
                     tempDataDir = await tempProfileDirCreate();
                     await closeOpenFinRVM();
@@ -140,7 +146,11 @@ export async function run(args: string[]): Promise<void> {
                         logLevel: opts.logLevel
                     });
 
-                    await runTestsMocha(testGlobPath, client, opts.testTimeout);
+                    if (opts.framework === "jasmine") {
+                        await runTestsJasmine(testGlobPath, client, opts.testTimeout);
+                    } else {
+                        await runTestsMocha(testGlobPath, client, opts.testTimeout);
+                    }
 
                     await client.deleteSession();
 

@@ -1,14 +1,10 @@
 import { ChildProcess, spawn } from "child_process";
 import fs from "fs/promises";
-import glob from "glob";
 import JSZip from "jszip";
-import Mocha from "mocha";
 import fetch from "node-fetch";
 import "openfin-test-helpers";
 import os from "os";
 import path from "path";
-import { promisify } from "util";
-import type { Client } from "webdriver";
 import { Parser } from "xml2js";
 import { logError, logInfo, logSeparator } from "./console";
 import type { ChromeDriverManifest } from "./models/chromeDriverManifest";
@@ -19,23 +15,63 @@ const chromeDriverVersionBucketUrl = "https://chromedriver.storage.googleapis.co
 /**
  * Load the Openfin manifest.
  * @param manifestUrl The url of the manifest to load.
+ * @param defaultRuntimeVersion The runtime version to use if none in the manifest.
  * @returns The loaded manifest.
  */
-export async function loadManifest(manifestUrl: string): Promise<OpenFinManifest> {
+export async function loadManifest(manifestUrl: string, defaultRuntimeVersion: string): Promise<OpenFinManifest> {
     try {
         logInfo("Loading manifest", manifestUrl);
 
         const manifestResponse = await fetch(manifestUrl);
-        const manifestJson = await manifestResponse.json();
+        const manifestJson: OpenFinManifest = await manifestResponse.json();
+
+        manifestJson.runtime = manifestJson.runtime ?? {};
+        manifestJson.runtime.version = manifestJson.runtime.version ?? defaultRuntimeVersion;
 
         logInfo("Manifest loaded");
-        logInfo("Manifest Runtime Version", manifestJson?.runtime?.version);
         logSeparator();
 
-        return manifestJson as OpenFinManifest;
+        return manifestJson;
     } catch {
         throw new Error(`Unable to retrieve manifest ${manifestUrl}, is the web server running?`);
     }
+}
+
+/**
+ * Resolve the runtime version if it is a label to the real version.
+ * @param manifestVersion The version to resolve.
+ * @returns The real version of the runtime and the chrome version.
+ */
+export async function resolveRuntimeVersion(manifestVersion: string): Promise<{
+    runtime: string;
+    chrome: string;
+}> {
+    logInfo("Resolving runtime version", manifestVersion);
+    const parts = manifestVersion.split(".");
+    if (parts.length === 4) {
+        logInfo("Final Runtime version", manifestVersion);
+        logSeparator();
+        return {
+            runtime: manifestVersion,
+            chrome: parts[1]
+        };
+    }
+
+    try {
+        const response = await fetch(`https://developer.openfin.co/release/runtime/${manifestVersion}`);
+        const ver = await response.text();
+        const parts = ver.split(".");
+        if (parts.length === 4) {
+            logInfo("Final Runtime version", ver);
+            logSeparator();
+            return {
+                runtime: ver,
+                chrome: parts[1]
+            };
+        }
+    } catch {}
+
+    throw new Error(`Unable to resolve runtime version "${manifestVersion}"`);
 }
 
 /**
@@ -215,20 +251,13 @@ export async function closeOpenFinRVM(): Promise<void> {
 /**
  * Get the Chrome Driver to match the runtime version downloading if necessary.
  * @param chromeDriverStorePath The path to store the Chrome drivers in.
- * @param openFinRuntimeVersion The version of the OpenFin runtime.
+ * @param chromeVersion The version of the chrome runtime.
  * @returns The location of the driver executable.
  */
-export async function getChromeDriver(chromeDriverStorePath: string, openFinRuntimeVersion: string): Promise<string> {
-    const parts = openFinRuntimeVersion.split(".");
+export async function getChromeDriver(chromeDriverStorePath: string, chromeVersion: string): Promise<string> {
+    logInfo("Chromium runtime version", chromeVersion);
 
-    if (parts.length !== 4) {
-        throw new Error(`The version should be in four parts, it is "${openFinRuntimeVersion}"`);
-    }
-
-    const chromeRuntimeVersion = parts[1];
-    logInfo("Chromium runtime version", chromeRuntimeVersion);
-
-    const chromeDriverVersionPath = path.join(chromeDriverStorePath, chromeRuntimeVersion);
+    const chromeDriverVersionPath = path.join(chromeDriverStorePath, chromeVersion);
     try {
         await fs.mkdir(chromeDriverVersionPath, { recursive: true });
     } catch (err) {
@@ -246,10 +275,10 @@ export async function getChromeDriver(chromeDriverStorePath: string, openFinRunt
         const parsed: ChromeDriverManifest = await parser.parseStringPromise(xml);
 
         const manifestEntry = parsed?.ListBucketResult?.Contents.find(
-            e => e.Key[0].startsWith(`${chromeRuntimeVersion}`) && e.Key[0].endsWith("/chromedriver_win32.zip")
+            e => e.Key[0].startsWith(`${chromeVersion}`) && e.Key[0].endsWith("/chromedriver_win32.zip")
         );
         if (!manifestEntry) {
-            throw new Error(`Can not find chromedriver for version ${chromeRuntimeVersion}`);
+            throw new Error(`Can not find chromedriver for version ${chromeVersion}`);
         }
 
         const chromeDriverVersionUrl = `${chromeDriverVersionBucketUrl}${manifestEntry.Key}`;
@@ -355,35 +384,6 @@ export async function killProcessById(processId: number): Promise<void> {
  */
 export async function killProcessByImage(image: string): Promise<void> {
     await spawnWithOutputWait("taskkill", ["/F", "/IM", image, "/T"], undefined, true);
-}
-
-/**
- * Run the tests.
- * @param testPathGlob The global of the tests to run.
- * @param client The webdriver client to hand in to the tests.
- * @param maxTimeout The maximum length of time for a test to run in seconds.
- */
-export async function runTestsMocha(testPathGlob: string, client: Client, maxTimeout: number): Promise<void> {
-    logInfo("Running Tests using Mocha");
-
-    const testFiles = await promisify(glob)(testPathGlob);
-
-    global.client = client;
-
-    const mocha = new Mocha({});
-    mocha.timeout(maxTimeout * 1000);
-
-    for (const testFile of testFiles) {
-        mocha.addFile(testFile);
-    }
-
-    return new Promise<void>((resolve, reject) => {
-        const runner = mocha.run();
-        runner.on("end", () => {
-            resolve();
-            logSeparator();
-        });
-    });
 }
 
 /**
