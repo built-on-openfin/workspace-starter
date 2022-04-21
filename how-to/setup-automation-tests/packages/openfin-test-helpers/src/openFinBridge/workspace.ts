@@ -47,7 +47,7 @@ export class OpenFinBridgeWorkspace {
         if (!searchInputElement) {
             throw new Error("Element missing search-input");
         }
-        // https://github.com/webdriverio/webdriverio/blob/main/packages/wdio-utils/src/constants.ts
+        // Send an escape character to clear the input.
         await client.elementSendKeys(searchInputElement, "\uE00C");
     }
 
