@@ -4,7 +4,8 @@
     "description": "OpenFin Workspace Starter E2E Tests",
     "scripts": {
         "test-remote": "openfin-test-runner https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js",
-        "test-local": "openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js"
+        "test-local": "openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js",
+        "test-remote-jasmine": "openfin-test-runner https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jasmine"
     },
     "author": "",
     "license": "ISC",
