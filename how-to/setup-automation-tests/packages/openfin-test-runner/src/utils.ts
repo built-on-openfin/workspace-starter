@@ -40,9 +40,15 @@ export async function loadManifest(manifestUrl: string, defaultRuntimeVersion: s
 /**
  * Resolve the runtime version if it is a label to the real version.
  * @param manifestVersion The version to resolve.
+ * @param storageFolder The storage location.
+ * @param offline Run in offline mode.
  * @returns The real version of the runtime and the chrome version.
  */
-export async function resolveRuntimeVersion(manifestVersion: string): Promise<{
+export async function resolveRuntimeVersion(
+    manifestVersion: string,
+    storageFolder: string,
+    offline: boolean
+): Promise<{
     runtime: string;
     chrome: string;
 }> {
@@ -57,9 +63,33 @@ export async function resolveRuntimeVersion(manifestVersion: string): Promise<{
         };
     }
 
-    try {
+    let ver;
+    if (offline) {
+        const versionsJsonFilename = path.join(storageFolder, "offline-versions.json");
+        logInfo("Loading offline version file", versionsJsonFilename);
+        const exists = await fileExists(versionsJsonFilename);
+        if (!exists) {
+            throw new Error(
+                `If offlineStorage is set we are expecting a manifest version file to exist at "${versionsJsonFilename}"`
+            );
+        }
+        const versionsJsonBuffer = await fs.readFile(versionsJsonFilename);
+        const versionsJson: {
+            [id: string]: string;
+        } = JSON.parse(versionsJsonBuffer.toString());
+        // eslint-disable-next-line no-console
+        console.log("versionsJson", versionsJson);
+        ver = versionsJson[manifestVersion];
+
+        if (!ver) {
+            throw new Error(`offline-versions.json does not contain an entry for "${manifestVersion}"`);
+        }
+    } else {
         const response = await fetch(`https://developer.openfin.co/release/runtime/${manifestVersion}`);
-        const ver = await response.text();
+        ver = await response.text();
+    }
+
+    if (ver) {
         const parts = ver.split(".");
         if (parts.length === 4) {
             logInfo("Final Runtime version", ver);
@@ -69,7 +99,7 @@ export async function resolveRuntimeVersion(manifestVersion: string): Promise<{
                 chrome: parts[1]
             };
         }
-    } catch {}
+    }
 
     throw new Error(`Unable to resolve runtime version "${manifestVersion}"`);
 }
@@ -78,12 +108,16 @@ export async function resolveRuntimeVersion(manifestVersion: string): Promise<{
  * Launch the OpenFinRVM.
  * @param manifestUrl The manifest url to launch.
  * @param devToolsPort The dev tools port to launch the rvm with.
+ * @param storageFolder The storage location.
+ * @param offline Run in offline mode.
  * @param tempDataDir The temporary directory for storing the data.
  * @returns The process id that was launched.
  */
 export async function launchOpenFinRVM(
     manifestUrl: string,
     devToolsPort: number,
+    storageFolder: string,
+    offline: boolean,
     tempDataDir: string
 ): Promise<{
     processId: number | undefined;
@@ -100,6 +134,11 @@ export async function launchOpenFinRVM(
 
     const rvmExists = await fileExists(exePath);
     if (!rvmExists) {
+        if (offline) {
+            throw new Error(
+                `offline mode is enabled but the OpenFinRVM.exe can not be found at "${exePath}", make sure the OpenFin runtime is already available`
+            );
+        }
         await downloadOpenFinRVM(manifestUrl);
     }
 
@@ -250,14 +289,15 @@ export async function closeOpenFinRVM(): Promise<void> {
 
 /**
  * Get the Chrome Driver to match the runtime version downloading if necessary.
- * @param chromeDriverStorePath The path to store the Chrome drivers in.
  * @param chromeVersion The version of the chrome runtime.
+ * @param storageFolder The storage location.
+ * @param offline Run in offline mode.
  * @returns The location of the driver executable.
  */
-export async function getChromeDriver(chromeDriverStorePath: string, chromeVersion: string): Promise<string> {
+export async function getChromeDriver(chromeVersion: string, storageFolder: string, offline: boolean): Promise<string> {
     logInfo("Chromium runtime version", chromeVersion);
 
-    const chromeDriverVersionPath = path.join(chromeDriverStorePath, chromeVersion);
+    const chromeDriverVersionPath = path.join(storageFolder, "chromedriver", chromeVersion);
     try {
         await fs.mkdir(chromeDriverVersionPath, { recursive: true });
     } catch (err) {
@@ -267,7 +307,13 @@ export async function getChromeDriver(chromeDriverStorePath: string, chromeVersi
     }
 
     const chromeDriverPath = path.resolve(path.join(chromeDriverVersionPath, "chromedriver.exe"));
-    if (!(await fileExists(chromeDriverPath))) {
+    const versionExists = await fileExists(chromeDriverPath);
+    if (!versionExists) {
+        if (offline) {
+            throw new Error(
+                `offline mode is set but no chromedriver exists in ${chromeDriverPath}, you must manually download and store the correct version from ${chromeDriverVersionBucketUrl}`
+            );
+        }
         logInfo("Fetching Chrome Driver Version manifest", chromeDriverVersionBucketUrl);
         const chromeDriverVersionsManifest = await fetch(chromeDriverVersionBucketUrl);
         const xml = await chromeDriverVersionsManifest.text();
@@ -361,10 +407,24 @@ export async function tempProfileDirCreate(): Promise<string> {
  * @param filename The name of the file.
  * @returns True of the file exists.
  */
-async function fileExists(filename: string): Promise<boolean> {
+export async function fileExists(filename: string): Promise<boolean> {
     try {
         const stats = await fs.stat(filename);
         return stats.isFile();
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Does the directory exist.
+ * @param directory The name of the directory.
+ * @returns True of the directory exists.
+ */
+export async function directoryExists(directory: string): Promise<boolean> {
+    try {
+        const stats = await fs.stat(directory);
+        return stats.isDirectory();
     } catch {
         return false;
     }

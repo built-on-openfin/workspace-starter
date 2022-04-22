@@ -21,7 +21,7 @@ const APP_NAME = "openfin-test-runner";
 const APP_VERSION = "0.0.1";
 const DEFAULT_DEV_TOOLS_PORT = 9090;
 const DEFAULT_CHROME_DRIVER_PORT = 4444;
-const DEFAULT_CHROME_DRIVER_STORE_FOLDER = "./chromedriver/";
+const DEFAULT_STORAGE_FOLDER = "./storage/";
 const DEFAULT_TEST_TIMEOUT_SECONDS = 120;
 const DEFAULT_OPENFIN_RUNTIME_VERSION = "stable";
 
@@ -69,11 +69,8 @@ export async function run(args: string[]): Promise<void> {
             value => Number.parseInt(value, 10),
             DEFAULT_CHROME_DRIVER_PORT
         )
-        .option(
-            "--chromeDriverStore <string>",
-            "A folder path to store the chromedriver versions",
-            DEFAULT_CHROME_DRIVER_STORE_FOLDER
-        )
+        .option("--storageFolder <path>", "The path to store any downloaded or offline data", DEFAULT_STORAGE_FOLDER)
+        .option("--offline", "In offline mode no resources are retrieved, they are expected to be in the storageFolder")
         .option<number>(
             "--testTimeout <number>",
             "The timeout in seconds for running tests",
@@ -110,10 +107,11 @@ export async function run(args: string[]): Promise<void> {
                     logLevel: "debug" | "silent";
                     devToolsPort: number;
                     chromeDriverPort: number;
-                    chromeDriverStore: string;
                     framework: "jasmine" | "mocha";
                     testTimeout: number;
                     defaultRuntimeVersion: string;
+                    storageFolder: string;
+                    offline: boolean;
                 }
             ) => {
                 logInfo("Manifest Url", manifestUrl);
@@ -121,10 +119,11 @@ export async function run(args: string[]): Promise<void> {
                 logInfo("Log Level", opts.logLevel);
                 logInfo("Dev Tools Port", opts.devToolsPort);
                 logInfo("Chrome Driver Port", opts.chromeDriverPort);
-                logInfo("Chrome Driver Store", opts.chromeDriverStore);
                 logInfo("Test Framework", opts.framework);
                 logInfo("Test Timeout", opts.testTimeout);
                 logInfo("Default Runtime Version", opts.defaultRuntimeVersion);
+                logInfo("Storage Folder", opts.storageFolder);
+                logInfo("Offline", opts.offline ? "true" : "false");
                 logSeparator();
 
                 let tempDataDir: string | undefined;
@@ -132,12 +131,22 @@ export async function run(args: string[]): Promise<void> {
                 let launchParams;
                 try {
                     const manifest = await loadManifest(manifestUrl, opts.defaultRuntimeVersion);
-                    const versions = await resolveRuntimeVersion(manifest.runtime.version);
-                    const chromeDriverPath = await getChromeDriver(opts.chromeDriverStore, versions.chrome);
+                    const versions = await resolveRuntimeVersion(
+                        manifest.runtime.version,
+                        opts.storageFolder,
+                        opts.offline
+                    );
+                    const chromeDriverPath = await getChromeDriver(versions.chrome, opts.storageFolder, opts.offline);
 
                     tempDataDir = await tempProfileDirCreate();
                     await closeOpenFinRVM();
-                    launchParams = await launchOpenFinRVM(manifestUrl, opts.devToolsPort, tempDataDir);
+                    launchParams = await launchOpenFinRVM(
+                        manifestUrl,
+                        opts.devToolsPort,
+                        opts.storageFolder,
+                        opts.offline,
+                        tempDataDir
+                    );
                     chromeDriverProcessId = await startChromeDriver(chromeDriverPath, opts.chromeDriverPort);
 
                     const client = await WebDriver.newSession({
