@@ -1,6 +1,13 @@
-/// <reference types="openfin-adapter/fin" />
-import type { CLIDispatchedSearchResult, CLISearchListenerResponse, CLIFilter, HomeSearchResponse, HomeSearchResult } from "@openfin/workspace";
+import type {
+    CLIDispatchedSearchResult,
+    CLISearchListenerResponse,
+    CLIFilter,
+    HomeSearchResponse,
+    HomeSearchResult
+} from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import { View } from "openfin-adapter";
+
 /**
  * Integration manager provides environment methods and data.
  */
@@ -9,13 +16,15 @@ export interface IntegrationManager {
      * The root url for the provider.
      */
     rootUrl: string;
+
     /**
      * Launch a view in the workspace.
      * @param view The view to launch.
      * @param targetIdentity The optional target identity of the launch with.
      * @returns The launched view.
      */
-    launchView(view: OpenFin.PlatformViewCreationOptions | string, targetIdentity?: OpenFin.Identity): Promise<unknown>;
+    launchView(view: OpenFin.PlatformViewCreationOptions | string, targetIdentity?: OpenFin.Identity): Promise<View>;
+
     /**
      * Launch a page in the workspace.
      * @param page The page to launch.
@@ -24,6 +33,7 @@ export interface IntegrationManager {
      */
     launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 }
+
 /**
  * Integration provider settings.
  */
@@ -33,6 +43,7 @@ export interface IntegrationProvider {
      */
     integrations?: Integration<unknown>[];
 }
+
 /**
  * Integration details.
  */
@@ -41,27 +52,33 @@ export interface Integration<T> {
      * The id of the integration.
      */
     id: string;
+
     /**
      * The title of the integration.
      */
     title: string;
+
     /**
      * The icon of the integration.
      */
     icon: string;
+
     /**
      * Is the integration enabled.
      */
     enabled: boolean;
+
     /**
      * Module url to use if loading the module remotely.
      */
     moduleUrl?: string;
+
     /**
      * The data specific to the integration.
      */
     data?: T;
 }
+
 /**
  * The methods provided by the integration module.
  */
@@ -73,12 +90,14 @@ export interface IntegrationModule<T> {
      * @returns Nothing.
      */
     register?(integrationManager: IntegrationManager, integration: Integration<T>): Promise<void>;
+
     /**
      * The module is being deregistered.
      * @param integration The integration details.
      * @returns Nothing.
      */
     deregister?(integration: Integration<T>): Promise<void>;
+
     /**
      * Get a list of search results based on the query and filters.
      * @param integration The integration details.
@@ -87,12 +106,14 @@ export interface IntegrationModule<T> {
      * @returns The list of results and new filters.
      */
     getSearchResults?(integration: Integration<T>, query: string, filters?: CLIFilter[]): Promise<HomeSearchResponse>;
+
     /**
      * Get a list of the static application entries.
      * @param integration The integration details.
      * @returns The list of application entries.
      */
     getAppSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
+
     /**
      * An entry has been selected.
      * @param integration The integration details.
@@ -100,5 +121,9 @@ export interface IntegrationModule<T> {
      * @param lastResponse The last response.
      * @returns True if the item was handled.
      */
-    itemSelection?(integration: Integration<T>, result: CLIDispatchedSearchResult, lastResponse?: CLISearchListenerResponse): Promise<boolean>;
+    itemSelection?(
+        integration: Integration<T>,
+        result: CLIDispatchedSearchResult,
+        lastResponse?: CLISearchListenerResponse
+    ): Promise<boolean>;
 }

@@ -19,8 +19,9 @@
   "license": "ISC",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
+    "@openfin/salesforce": "^2.1.3",
+    "@openfin/salesforce-lwc": "^1.1.1",
     "@openfin/workspace": "6.3.6",
-    "@openfin/workspace-integration": "file:packages/workspace-integration",
     "@openfin/workspace-platform": "6.3.6",
     "file-loader": "^6.2.0",
     "openfin-adapter": "^22.65.4"

@@ -5,7 +5,7 @@ import { register as registerNotifications, deregister as deregisterNotification
 
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
-import { register as registerIntegration, deregister as deregisterIntegration } from '@openfin/workspace-integration';
+import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
 import { launchPage, launchView } from './browser';
 
 export async function init() {

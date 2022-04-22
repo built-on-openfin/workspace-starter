@@ -5,7 +5,7 @@ import type {
     HomeSearchResponse,
     HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule, IntegrationProvider } from "./shapes";
+import type { Integration, IntegrationManager, IntegrationModule, IntegrationProvider } from "./integrations-shapes";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 

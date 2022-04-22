@@ -1,7 +1,7 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
-import { IntegrationProvider } from "@openfin/workspace-integration";
+import { IntegrationProvider } from "./integrations-shapes";
 
 
 interface PlatformProvider {

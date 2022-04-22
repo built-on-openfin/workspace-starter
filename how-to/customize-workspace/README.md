@@ -32,29 +32,19 @@ To run this sample you can:
 
 ## Getting Started
 
-Note that these examples assume you are in the sub-directory for the example.
-
-1. Install and build the dependencies for the sub-packages
-
-```bash
-cd packages
-npm install
-npm run dist --workspaces
-```
-
-2. Install dependencies.
+1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
 $ npm install
 ```
 
-3. Build the project.
+2. Build the project.
 
 ```bash
 $ npm run build
 ```
 
-4. Optional (if you wish to pin the version of OpenFin Workspace to version 6.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 6.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -65,13 +55,13 @@ $ npm run build
 $ npm run dos
 ```
 
-5. Start the test server in a new window.
+4. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-6. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
@@ -86,10 +76,10 @@ $ npm run secondclient
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
 
-7. Type any character into the search box to show the default list of applications.
+6. Type any character into the search box to show the default list of applications.
    The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
-8. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
+7. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ## How it works

@@ -1,7 +1,0 @@
-{
-  "name": "openfin-workspace--customize-workspace-packages",
-  "workspaces": [
-    "./workspace-integration",
-    "./salesforce-integration"
-  ]
-}
