@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace--register-with-home",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "OpenFin Workspace -- Register with Home",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openfin/workspace": "^6.3.6",
-    "@openfin/workspace-platform": "^6.3.6"
+    "@openfin/workspace": "next",
+    "@openfin/workspace-platform": "next"
   },
   "devDependencies": {
     "express": "^4.17.1",
