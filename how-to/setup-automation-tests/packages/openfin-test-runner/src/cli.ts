@@ -25,6 +25,11 @@ const DEFAULT_CHROME_DRIVER_STORE_FOLDER = "./chromedriver/";
 const DEFAULT_TEST_TIMEOUT_SECONDS = 120;
 const DEFAULT_OPENFIN_RUNTIME_VERSION = "stable";
 
+const testFrameworks = {
+    mocha: runTestsMocha,
+    jasmine: runTestsJasmine
+};
+
 /**
  * Run the app.
  * @param args The arguments from the command line.
@@ -146,11 +151,7 @@ export async function run(args: string[]): Promise<void> {
                         logLevel: opts.logLevel
                     });
 
-                    if (opts.framework === "jasmine") {
-                        await runTestsJasmine(testGlobPath, client, opts.testTimeout);
-                    } else {
-                        await runTestsMocha(testGlobPath, client, opts.testTimeout);
-                    }
+                    await testFrameworks[opts.framework](testGlobPath, client, opts.testTimeout);
 
                     await client.deleteSession();
 
