@@ -103,9 +103,10 @@ export interface IntegrationModule<T> {
      * @param integration The integration details.
      * @param query The query to search for.
      * @param filters The filters to apply.
+     * @param lastResponse The last search response used for updating existing results.
      * @returns The list of results and new filters.
      */
-    getSearchResults?(integration: Integration<T>, query: string, filters?: CLIFilter[]): Promise<HomeSearchResponse>;
+    getSearchResults?(integration: Integration<T>, query: string, filters: CLIFilter[], lastResponse: CLISearchListenerResponse): Promise<HomeSearchResponse>;
 
     /**
      * Get a list of the static application entries.
@@ -121,9 +122,5 @@ export interface IntegrationModule<T> {
      * @param lastResponse The last response.
      * @returns True if the item was handled.
      */
-    itemSelection?(
-        integration: Integration<T>,
-        result: CLIDispatchedSearchResult,
-        lastResponse?: CLISearchListenerResponse
-    ): Promise<boolean>;
+    itemSelection?(integration: Integration<T>, result: CLIDispatchedSearchResult, lastResponse: CLISearchListenerResponse): Promise<boolean>;
 }

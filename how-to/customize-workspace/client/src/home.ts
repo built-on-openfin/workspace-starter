@@ -215,10 +215,10 @@ async function mapWorkspaceEntriesToSearchEntries(
 }
 
 async function getResults(
-  query?: string,
-  queryMinLength = 3,
-  queryAgainst: string[] = ["title"],
-  filters?: CLIFilter[]
+  query: string,
+  queryMinLength,
+  queryAgainst: string[],
+  filters: CLIFilter[]
 ): Promise<HomeSearchResponse> {
   let apps = await getApps();
   let pages = await getPages();
@@ -360,8 +360,8 @@ export async function register() {
     return;
   }
 
-  const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
-  const queryAgainst = settings?.homeProvider?.queryAgainst;
+  const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
+  const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
   let lastResponse: CLISearchListenerResponse;
   let filters;
 
@@ -440,7 +440,7 @@ export async function register() {
       filters
     );
 
-    const integrationResults = await getSearchResults(query, filters);
+    const integrationResults = await getSearchResults(query, filters, lastResponse);
     if (Array.isArray(integrationResults.results)) {
       searchResults.results = searchResults.results.concat(integrationResults.results);
     }

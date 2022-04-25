@@ -68,9 +68,10 @@ export async function deregister(integrationProvider?: IntegrationProvider): Pro
  * Get the search results from all the integration providers.
  * @param query The query to get the search results for.
  * @param filters The filters to apply to the search results.
+ * @param lastResponse The last search response used for updating existing results.
  * @returns The search results and new filters.
  */
-export async function getSearchResults(query: string, filters?: CLIFilter[]): Promise<HomeSearchResponse> {
+export async function getSearchResults(query: string, filters: CLIFilter[], lastResponse: CLISearchListenerResponse): Promise<HomeSearchResponse> {
     const homeResponse: HomeSearchResponse = {
         results: [],
         context: {
@@ -83,7 +84,8 @@ export async function getSearchResults(query: string, filters?: CLIFilter[]): Pr
             const integrationResults = await homeIntegration.module.getSearchResults(
                 homeIntegration.integration,
                 query,
-                filters
+                filters,
+                lastResponse
             );
             if (Array.isArray(integrationResults.results)) {
                 homeResponse.results = homeResponse.results.concat(integrationResults.results);

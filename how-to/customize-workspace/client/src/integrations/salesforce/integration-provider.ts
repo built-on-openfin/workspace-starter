@@ -141,14 +141,14 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
     public async itemSelection(
         integration: Integration<SalesforceSettings>,
         result: CLIDispatchedSearchResult,
-        lastResponse?: CLISearchListenerResponse
+        lastResponse: CLISearchListenerResponse
     ): Promise<boolean> {
         // if the user clicked the reconnect result, reconnect to salesforce and re-run query
         if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
             await this.openConnection(integration);
 
             if (result.data?.query) {
-                const results = await this.getSearchResults(integration, result.data?.query, result.data?.filters);
+                const results = await this.getSearchResults(integration, result.data?.query, result.data?.filters, lastResponse);
                 if (lastResponse) {
                     lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
                     lastResponse.respond(results.results);
@@ -182,12 +182,14 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
      * @param integration The integration details.
      * @param query The query to search for.
      * @param filters The filters to apply.
+     * @param lastResponse The last search response used for updating existing results.
      * @returns The list of results and new filters.
      */
     public async getSearchResults(
         integration: Integration<SalesforceSettings>,
         query: string,
-        filters?: CLIFilter[]
+        filters: CLIFilter[], 
+        lastResponse: CLISearchListenerResponse
     ): Promise<HomeSearchResponse> {
         if (this._salesForceConnection) {
             let searchResults: (
