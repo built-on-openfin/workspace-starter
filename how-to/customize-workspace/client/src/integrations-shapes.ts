@@ -32,6 +32,12 @@ export interface IntegrationManager {
      * @returns The window created.
      */
     launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+
+    /**
+     * Open a url with the browser.
+     * @param url The url to open.
+     */
+    openUrl(url: string): Promise<void>;
 }
 
 /**

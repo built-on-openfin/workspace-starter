@@ -41,7 +41,8 @@ export async function init() {
     await registerIntegration({
         rootUrl: settings?.platformProvider.rootUrl,
         launchView,
-        launchPage
+        launchPage,
+        openUrl: fin.System.openUrlWithBrowser
     }, settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();
