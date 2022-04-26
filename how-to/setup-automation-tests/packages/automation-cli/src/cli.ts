@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import WebDriver from "webdriver";
 import { logBlank, logError, logHeader, logInfo, logSeparator } from "./console";
 import { runTestsJasmine } from "./frameworks/jasmine";
+import { runTestsJest } from "./frameworks/jest";
 import { runTestsMocha } from "./frameworks/mocha";
 import {
     closeOpenFinRVM,
@@ -27,7 +28,8 @@ const DEFAULT_OPENFIN_RUNTIME_VERSION = "stable";
 
 const testFrameworks = {
     mocha: runTestsMocha,
-    jasmine: runTestsJasmine
+    jasmine: runTestsJasmine,
+    jest: runTestsJest
 };
 
 /**
@@ -83,8 +85,8 @@ export async function run(args: string[]): Promise<void> {
             DEFAULT_OPENFIN_RUNTIME_VERSION
         )
         .addOption(
-            new Option("--framework <jasmine>", "The test framework to run the tests with")
-                .choices(["mocha", "jasmine"])
+            new Option("--framework <mocha>", "The test framework to run the tests with")
+                .choices(["mocha", "jasmine", "jest"])
                 .default("mocha")
         )
         .configureOutput({
@@ -107,7 +109,7 @@ export async function run(args: string[]): Promise<void> {
                     logLevel: "debug" | "silent";
                     devToolsPort: number;
                     chromeDriverPort: number;
-                    framework: "jasmine" | "mocha";
+                    framework: "jasmine" | "mocha" | "jest";
                     testTimeout: number;
                     defaultRuntimeVersion: string;
                     storageFolder: string;

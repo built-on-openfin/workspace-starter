@@ -34,6 +34,7 @@
         "glob": "^7.2.0",
         "jasmine": "^4.1.0",
         "jasmine-spec-reporter": "^7.0.0",
+        "jest": "^28.0.1",
         "jszip": "^3.7.1",
         "mocha": "^9.2.2",
         "node-fetch": "^2.6.6",
