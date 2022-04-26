@@ -35,7 +35,7 @@ export class OpenFinBridgeWorkspace {
             if (!searchInputElement) {
                 throw new Error("Element missing search-input");
             }
-            await client.elementSendKeys(searchInputElement, letter);
+            await WebDriverHelper.elementSendKeys(searchInputElement, letter);
         }
     }
 
@@ -48,7 +48,7 @@ export class OpenFinBridgeWorkspace {
             throw new Error("Element missing search-input");
         }
         // Send an escape character to clear the input.
-        await client.elementSendKeys(searchInputElement, "\uE00C");
+        await WebDriverHelper.elementSendKeys(searchInputElement, "\uE00C");
     }
 
     /**
@@ -58,8 +58,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The element id of the nth item.
      */
     public static async homeSearchResultByIndex(index: number, operation?: "open" | "select"): Promise<string> {
-        const element = await client.findElement("xpath", `//*[@id='result-list']/div[${index + 1}]`);
-        const elementId = WebDriverHelper.elementIdFromReference(element);
+        const elementId = await WebDriverHelper.findElementByPath(`//*[@id='result-list']/div[${index + 1}]`);
 
         if (elementId) {
             const selectedIndex = await OpenFinBridgeWorkspace.homeSearchResultSelectedIndex();
@@ -67,11 +66,11 @@ export class OpenFinBridgeWorkspace {
             // Skip the selection if it is already selected, otherwise an open
             // will trigger twice
             if ((operation === "select" || operation === "open") && selectedIndex !== index) {
-                await client.elementClick(elementId);
+                await WebDriverHelper.elementClick(elementId);
             }
             if (operation === "open") {
                 // Sending a second click performs the double click operation
-                await client.elementClick(elementId);
+                await WebDriverHelper.elementClick(elementId);
             }
         }
 
@@ -85,8 +84,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The element id of the item.
      */
     public static async homeSearchResultById(id: string, operation?: "open" | "select"): Promise<string> {
-        const element = await client.findElement("xpath", `//*[@id='result-list']/*[@id='${id}']`);
-        const elementId = WebDriverHelper.elementIdFromReference(element);
+        const elementId = await WebDriverHelper.findElementByPath(`//*[@id='result-list']/*[@id='${id}']`);
 
         if (elementId) {
             const selectedId = await OpenFinBridgeWorkspace.homeSearchResultSelectedId();
@@ -94,11 +92,11 @@ export class OpenFinBridgeWorkspace {
             // Skip the selection if it is already selected, otherwise an open
             // will trigger twice
             if ((operation === "select" || operation === "open") && selectedId !== id) {
-                await client.elementClick(elementId);
+                await WebDriverHelper.elementClick(elementId);
             }
             if (operation === "open") {
                 // Sending a second click performs the double click operation
-                await client.elementClick(elementId);
+                await WebDriverHelper.elementClick(elementId);
             }
         }
 
@@ -110,7 +108,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The id of the search results.
      */
     public static async homeSearchResultIds(): Promise<string[]> {
-        const elements = await client.findElements("xpath", "//*[@id='result-list']/div");
+        const elements = await WebDriverHelper.findElementsByPath("//*[@id='result-list']/div");
 
         const resultIds: string[] = [];
 
@@ -175,7 +173,7 @@ export class OpenFinBridgeWorkspace {
     public static async homeFiltersOpen(): Promise<void> {
         const element = await WebDriverHelper.findElementByPath("//button[@shape='square']");
         if (element) {
-            await client.elementClick(element);
+            await WebDriverHelper.elementClick(element);
         }
     }
 
@@ -189,7 +187,7 @@ export class OpenFinBridgeWorkspace {
             `//div[@id='modal-root']//button[contains(text(), '${ok ? "OK" : "Cancel"}')]`
         );
         if (element) {
-            await client.elementClick(element);
+            await WebDriverHelper.elementClick(element);
         }
     }
 
@@ -198,7 +196,7 @@ export class OpenFinBridgeWorkspace {
      * @returns Filter ids.
      */
     public static async homeFiltersIds(): Promise<string[]> {
-        const elements = await client.findElements("xpath", "//div[@id='modal-root']//input[@type='checkbox']");
+        const elements = await WebDriverHelper.findElementsByPath("//div[@id='modal-root']//input[@type='checkbox']");
 
         const resultIds: string[] = [];
 

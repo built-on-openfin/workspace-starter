@@ -335,6 +335,25 @@ export class WebDriverHelper {
     }
 
     /**
+     * Send a click to an item.
+     * @param elementId The id of the element to click.
+     * @returns Nothing.
+     */
+    public static async elementClick(elementId: string): Promise<void> {
+        await client.elementClick(elementId);
+    }
+
+    /**
+     * Send keys to an element.
+     * @param elementId The id of the element to send the keys to.
+     * @param keys The keys to send to the element.
+     * @returns Nothing.
+     */
+    public static async elementSendKeys(elementId: string, keys: string): Promise<void> {
+        await client.elementSendKeys(elementId, keys);
+    }
+
+    /**
      * Set an element attribute by xpath.
      * @param path The path of the element to set.
      * @param attribute The attribute name to set.

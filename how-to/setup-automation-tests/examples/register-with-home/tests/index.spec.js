@@ -5,7 +5,7 @@ describe('Register With Home', () => {
     it('The title should be set', async () => {
         const title = await WebDriverHelper.getTitle();
 
-        expect(title).to.equal('Platform Provider2');
+        expect(title).to.equal('Platform Provider');
     });
 
     it('The runtime version should be set', async () => {
