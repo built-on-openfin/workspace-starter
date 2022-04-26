@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "OpenFin packages for test automation",
     "workspaces": [
-        "./packages/automation-cli",
-        "./packages/automation-helpers"
+        "./packages/automation-helpers",
+        "./packages/automation-cli"
     ]
 }
