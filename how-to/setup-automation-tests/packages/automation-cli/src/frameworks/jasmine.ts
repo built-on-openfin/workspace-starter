@@ -1,21 +1,21 @@
 import Jasmine from "jasmine";
 import { SpecReporter } from "jasmine-spec-reporter";
-import "@openfin/automation-helpers";
 import type { Client } from "webdriver";
 import { logInfo, logSeparator } from "../console";
 
 /**
  * Run the tests.
  * @param testPathGlob The global of the tests to run.
- * @param client The webdriver client to hand in to the tests.
+ * @param webdriver The webdriver client to hand in to the tests.
  * @param maxTimeout The maximum length of time for a test to run in seconds.
  * @returns Exit code of 1 if any tests failed.
  */
-export async function runTestsJasmine(testPathGlob: string, client: Client, maxTimeout: number): Promise<number> {
+export async function runTestsJasmine(testPathGlob: string, webdriver: Client, maxTimeout: number): Promise<number> {
     logInfo("Running Tests using Jasmine");
 
     // Set the global object which points to the client so that the automation helpers can access it
-    global.client = client;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).webdriver = webdriver;
 
     const runner = new Jasmine();
     runner.jasmine.DEFAULT_TIMEOUT_INTERVAL = maxTimeout * 1000;

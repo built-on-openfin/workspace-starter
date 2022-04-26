@@ -28,7 +28,6 @@
         "dist": "run-s format build package docs dist-clean"
     },
     "dependencies": {
-        "@openfin/automation-helpers": "^0.0.1",
         "chalk": "^4.1.2",
         "commander": "^9.1.0",
         "glob": "^7.2.0",

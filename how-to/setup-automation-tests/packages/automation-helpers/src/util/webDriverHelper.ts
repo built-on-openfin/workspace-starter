@@ -1,3 +1,4 @@
+import type { Client } from "webdriver";
 import "../globals";
 import type { ElementReference } from "../shapes";
 
@@ -5,6 +6,14 @@ import type { ElementReference } from "../shapes";
  * Helper class for using with WebDriver.
  */
 export class WebDriverHelper {
+    /**
+     * Get the raw web driver webdriver.
+     * @returns The web driver webdriver.
+     */
+    public static raw(): Client {
+        return globalThis.webdriver;
+    }
+
     /**
      * Call the execute async script for the specified method.
      * @param method The method to call on the OpenFin object.
@@ -25,7 +34,7 @@ export class WebDriverHelper {
         }
         callback(${callAsync ? "await " : ""}${method}(...args))
         `;
-        return client.executeAsyncScript(script, params ?? []) as Promise<T>;
+        return webdriver.executeAsyncScript(script, params ?? []) as Promise<T>;
     }
 
     /**
@@ -53,7 +62,7 @@ export class WebDriverHelper {
         const start = Date.now();
         let found = false;
         do {
-            found = await client.executeAsyncScript(script, [objectPath]);
+            found = await webdriver.executeAsyncScript(script, [objectPath]);
             if (!found) {
                 await WebDriverHelper.sleep(1000);
             }
@@ -76,7 +85,7 @@ export class WebDriverHelper {
      * @returns The window title.
      */
     public static async getTitle(): Promise<string> {
-        return global.client.getTitle();
+        return global.webdriver.getTitle();
     }
 
     /**
@@ -84,7 +93,7 @@ export class WebDriverHelper {
      * @returns The window title.
      */
     public static async getUrl(): Promise<string> {
-        return global.client.getUrl();
+        return global.webdriver.getUrl();
     }
 
     /**
@@ -94,26 +103,26 @@ export class WebDriverHelper {
      */
     public static async switchToWindow(title: string): Promise<boolean> {
         // If the current window is already the correct one just return.
-        const winTitle = await global.client.getTitle();
+        const winTitle = await global.webdriver.getTitle();
         if (winTitle === title) {
             return true;
         }
 
         // Otherwise switch to each window in turn and see if the title matches.
-        const currentWindow = await global.client.getWindowHandle();
+        const currentWindow = await global.webdriver.getWindowHandle();
 
-        const windowHandles = await global.client.getWindowHandles();
+        const windowHandles = await global.webdriver.getWindowHandles();
 
         for (const windowHandle of windowHandles) {
-            await global.client.switchToWindow(windowHandle);
-            const winTitle = await global.client.getTitle();
+            await global.webdriver.switchToWindow(windowHandle);
+            const winTitle = await global.webdriver.getTitle();
             if (winTitle === title) {
                 return true;
             }
         }
 
         // No window was found so switch back to the original one.
-        await global.client.switchToWindow(currentWindow);
+        await global.webdriver.switchToWindow(currentWindow);
         return false;
     }
 
@@ -124,26 +133,26 @@ export class WebDriverHelper {
      */
     public static async switchToWindowByUrl(url: string): Promise<boolean> {
         // If the current window is already the correct one just return.
-        const winUrl = await global.client.getUrl();
+        const winUrl = await global.webdriver.getUrl();
         if (winUrl === url) {
             return true;
         }
 
         // Otherwise switch to each window in turn and see if the title matches.
-        const currentWindow = await global.client.getWindowHandle();
+        const currentWindow = await global.webdriver.getWindowHandle();
 
-        const windowHandles = await global.client.getWindowHandles();
+        const windowHandles = await global.webdriver.getWindowHandles();
 
         for (const windowHandle of windowHandles) {
-            await global.client.switchToWindow(windowHandle);
-            const winUrl = await global.client.getUrl();
+            await global.webdriver.switchToWindow(windowHandle);
+            const winUrl = await global.webdriver.getUrl();
             if (winUrl === url) {
                 return true;
             }
         }
 
         // No window was found so switch back to the original one.
-        await global.client.switchToWindow(currentWindow);
+        await global.webdriver.switchToWindow(currentWindow);
         return false;
     }
 
@@ -192,7 +201,7 @@ export class WebDriverHelper {
      * @returns Nothing.
      */
     public static async closeWindow(): Promise<void> {
-        return client.executeAsyncScript("fin.desktop.Application.getCurrent().close()", []) as Promise<void>;
+        return webdriver.executeAsyncScript("fin.desktop.Application.getCurrent().close()", []) as Promise<void>;
     }
 
     /**
@@ -201,7 +210,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementByPath(path: string): Promise<string> {
-        const ref = await client.findElement("xpath", path);
+        const ref = await webdriver.findElement("xpath", path);
         return WebDriverHelper.elementIdFromReference(ref);
     }
 
@@ -211,7 +220,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementsByPath(path: string): Promise<string[]> {
-        const refs = await client.findElements("xpath", path);
+        const refs = await webdriver.findElements("xpath", path);
         return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
     }
 
@@ -222,7 +231,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementFromElementByPath(elementId: string, xpath: string): Promise<string> {
-        const ref = await client.findElementFromElement(elementId, "xpath", xpath);
+        const ref = await webdriver.findElementFromElement(elementId, "xpath", xpath);
         return WebDriverHelper.elementIdFromReference(ref);
     }
 
@@ -233,7 +242,7 @@ export class WebDriverHelper {
      * @returns The elements if found.
      */
     public static async findElementsFromElementByPath(elementId: string, xpath: string): Promise<string[]> {
-        const refs = await client.findElementsFromElement(elementId, "xpath", xpath);
+        const refs = await webdriver.findElementsFromElement(elementId, "xpath", xpath);
         return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
     }
 
@@ -340,7 +349,7 @@ export class WebDriverHelper {
      * @returns Nothing.
      */
     public static async elementClick(elementId: string): Promise<void> {
-        await client.elementClick(elementId);
+        await webdriver.elementClick(elementId);
     }
 
     /**
@@ -350,7 +359,7 @@ export class WebDriverHelper {
      * @returns Nothing.
      */
     public static async elementSendKeys(elementId: string, keys: string): Promise<void> {
-        await client.elementSendKeys(elementId, keys);
+        await webdriver.elementSendKeys(elementId, keys);
     }
 
     /**
@@ -374,7 +383,7 @@ export class WebDriverHelper {
             callback(false);
         }
         `;
-        return client.executeAsyncScript(script, [
+        return webdriver.executeAsyncScript(script, [
             path,
             attribute,
             value as unknown as string | object | number | boolean | undefined
@@ -399,7 +408,7 @@ export class WebDriverHelper {
             callback(undefined);
         }
         `;
-        return client.executeAsyncScript(script, [path, attribute]) as Promise<T>;
+        return webdriver.executeAsyncScript(script, [path, attribute]) as Promise<T>;
     }
 
     /**
