@@ -16,8 +16,8 @@ import {
     tempProfileDirCreate
 } from "./utils";
 
-const APP_TITLE = "OpenFin Test Runner";
-const APP_NAME = "openfin-test-runner";
+const APP_TITLE = "OpenFin Automation";
+const APP_NAME = "of-automation";
 const APP_VERSION = "0.0.1";
 const DEFAULT_DEV_TOOLS_PORT = 9090;
 const DEFAULT_CHROME_DRIVER_PORT = 4444;
@@ -40,7 +40,7 @@ export async function run(args: string[]): Promise<void> {
     logBlank();
 
     if (process.platform !== "win32") {
-        logError("The test runner will only run on windows");
+        logError("The automation CLI will only run on windows");
         // eslint-disable-next-line unicorn/no-process-exit
         process.exit(1);
     }
@@ -48,7 +48,7 @@ export async function run(args: string[]): Promise<void> {
     const program = new Command();
     program
         .name(APP_NAME)
-        .description("Run E2E Test using Chrome Driver with an OpenFin UI")
+        .description("Run Automation Tests using Chrome Driver with an OpenFin UI")
         .version(APP_VERSION)
         .argument("manifestUrl <string>", "The url of the manifest to fetch")
         .argument("testGlob <string>", "A glob pointing to the tests to run")
@@ -114,16 +114,16 @@ export async function run(args: string[]): Promise<void> {
                     offline: boolean;
                 }
             ) => {
-                logInfo("Manifest Url", manifestUrl);
-                logInfo("Test Glob Path", testGlobPath);
-                logInfo("Log Level", opts.logLevel);
-                logInfo("Dev Tools Port", opts.devToolsPort);
-                logInfo("Chrome Driver Port", opts.chromeDriverPort);
-                logInfo("Test Framework", opts.framework);
-                logInfo("Test Timeout", opts.testTimeout);
-                logInfo("Default Runtime Version", opts.defaultRuntimeVersion);
-                logInfo("Storage Folder", opts.storageFolder);
-                logInfo("Offline", opts.offline ? "true" : "false");
+                logInfo("* Manifest Url", manifestUrl);
+                logInfo("* Test Glob Path", testGlobPath);
+                logInfo("* Log Level", opts.logLevel);
+                logInfo("* Dev Tools Port", opts.devToolsPort);
+                logInfo("* Chrome Driver Port", opts.chromeDriverPort);
+                logInfo("* Test Framework", opts.framework);
+                logInfo("* Test Timeout", opts.testTimeout);
+                logInfo("* Default Runtime Version", opts.defaultRuntimeVersion);
+                logInfo("* Storage Folder", opts.storageFolder);
+                logInfo("* Offline", opts.offline ? "true" : "false");
                 logSeparator();
 
                 let tempDataDir: string | undefined;
@@ -160,11 +160,11 @@ export async function run(args: string[]): Promise<void> {
                         logLevel: opts.logLevel
                     });
 
-                    await testFrameworks[opts.framework](testGlobPath, client, opts.testTimeout);
+                    const exitCode = await testFrameworks[opts.framework](testGlobPath, client, opts.testTimeout);
 
                     await client.deleteSession();
 
-                    await exitApp(0, tempDataDir, chromeDriverProcessId, launchParams);
+                    await exitApp(exitCode, tempDataDir, chromeDriverProcessId, launchParams);
                 } catch (err) {
                     logBlank();
                     logError(err);

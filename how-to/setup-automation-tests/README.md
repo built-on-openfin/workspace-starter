@@ -9,9 +9,9 @@ Any application that requires front end test automation can be complicated to se
 
 This example contains two packages which aim to simplify this process:
 
-* openfin-test-helpers - A set of helper methods that can be used in tests to automate access to the OpenFin objects and UI.
+* @openfin/automation-helpers - A set of helper methods that can be used in tests to automate access to the OpenFin objects and UI.
 
-* openfin-test-runner - A CLI which when passed a manifest and set of tests will launch the necessary processes to run the tests. The correct chromedriver version for the runtime from the manifest will be downloaded if required.
+* @openfin/automation-cli - A CLI which when passed a manifest and set of tests will launch the necessary processes to run the tests. The correct chromedriver version for the runtime from the manifest will be downloaded if required.
 
 ## To build
 
@@ -24,7 +24,7 @@ npm run dist --workspaces
 
 ## To execute the example tests
 
-There are some example tests written which use the `openfin-test-runner` and `openfin-test-helpers`, they are written to execute against the `how-to/register-with-home` e.g.
+There are some example tests written which use the `@openfin/automation-cli` and `@openfin/automation-helpers`, they are written to execute against the `how-to/register-with-home` e.g.
 
 To run the tests against the hosted version of the `register-with-home` app you can run.
 
@@ -46,7 +46,7 @@ npm run test-local
 
 The examples can be run on CI, to use GitHub actions to run the tests there is an example workflow in [automation-tests.yaml](../../.github/workflows/automation-tests.yaml)
 
-This workflow demonstrates Building the packages, then serving the manifest, finally using the test runner to run the tests against the served manifest.
+This workflow demonstrates Building the packages, then serving the manifest, finally using the automation cli to run the tests against the served manifest.
 
 ## Example running locally
 
@@ -70,9 +70,9 @@ run command "npm run test-local --prefix how-to/setup-automation-tests/examples/
 [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\16.14.2\x64\npm.cmd run test-local --prefix how-to/setup-automation-tests/examples/register-with-home"
 
 > setup-automation-tests-register-with-home@1.0.0 test-local
-> openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js
+> of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js
 
-OpenFin Test Runner
+OpenFin Automation
 
 Manifest Url http://localhost:8080/manifest.fin.json
 Test Glob Path ./tests/**/*.spec.js
@@ -158,19 +158,6 @@ Cleaning up existing OpenFin instances
 SUCCESS: The process with PID 1556 (child process of PID 1956) has been terminated.
 SUCCESS: The process with PID 6608 (child process of PID 1956) has been terminated.
 SUCCESS: The process with PID 5964 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 2128 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 1100 (child process of PID 6872) has been terminated.
-SUCCESS: The process with PID 6596 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 6976 (child process of PID 6872) has been terminated.
-SUCCESS: The process with PID 5484 (child process of PID 6872) has been terminated.
-SUCCESS: The process with PID 5580 (child process of PID 6872) has been terminated.
-SUCCESS: The process with PID 6340 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 6832 (child process of PID 6872) has been terminated.
-SUCCESS: The process with PID 1880 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 6140 (child process of PID 1956) has been terminated.
-SUCCESS: The process with PID 1956 (child process of PID 4140) has been terminated.
-SUCCESS: The process with PID 6872 (child process of PID 4140) has been terminated.
-SUCCESS: The process with PID 4140 (child process of PID 1712) has been terminated.
 Cleanup complete
 ----------------------------------------------------------
 Removing temp data dir C:\Users\RUNNER~1\AppData\Local\Temp\openfin-test-1649419137419

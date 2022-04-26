@@ -15,7 +15,10 @@ declare module "jasmine" {
         constructor();
         loadConfig(config: Configuration): void;
         exitOnCompletion: boolean;
-        execute(): Promise<void>;
+        execute(): Promise<{
+            overallStatus: "failed" | "success";
+            totalTime: number;
+        }>;
         clearReporters(): void;
         addReporter(reporter: unknown): void;
     }

@@ -2,7 +2,6 @@ import { ChildProcess, spawn } from "child_process";
 import fs from "fs/promises";
 import JSZip from "jszip";
 import fetch from "node-fetch";
-import "openfin-test-helpers";
 import os from "os";
 import path from "path";
 import { Parser } from "xml2js";

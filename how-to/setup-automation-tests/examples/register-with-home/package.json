@@ -1,18 +1,19 @@
 {
     "name": "setup-automation-tests-register-with-home",
     "version": "1.0.0",
-    "description": "OpenFin Workspace Starter E2E Tests",
+    "description": "OpenFin Workspace Starter Automation Tests",
     "scripts": {
-        "test-local": "openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js",
-        "test-remote": "openfin-test-runner https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js",
-        "test-remote-jasmine": "openfin-test-runner https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jasmine",
-        "test-offline": "openfin-test-runner http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage"
+        "test-local": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js",
+        "test-remote": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js",
+        "test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine",
+        "test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jasmine",
+        "test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
         "chai": "^4.3.6",
-        "openfin-test-helpers": "file:../packages/openfin-test-helpers",
-        "openfin-test-runner": "file:../packages/openfin-test-runner"
+        "@openfin/automation-cli": "file:../packages/automation-cli",
+        "@openfin/automation-helpers": "file:../packages/automation-helpers"
     }
 }

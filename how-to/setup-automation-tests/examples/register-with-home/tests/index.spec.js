@@ -1,11 +1,11 @@
 const { expect } = require('chai');
-const { OpenFinBridgeSystem, WebDriverHelper, OpenFinBridgeWorkspace } = require('openfin-test-helpers');
+const { OpenFinBridgeSystem, OpenFinBridgeWorkspace, WebDriverHelper } = require('@openfin/automation-helpers');
 
 describe('Register With Home', () => {
     it('The title should be set', async () => {
         const title = await WebDriverHelper.getTitle();
 
-        expect(title).to.equal('Platform Provider');
+        expect(title).to.equal('Platform Provider2');
     });
 
     it('The runtime version should be set', async () => {
