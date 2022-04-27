@@ -77,10 +77,13 @@ waiting on "http://localhost:8080/manifest.fin.json" with timeout of 60 seconds
 > node ./server/build/index.js
 
 server is listening on port 8080
-run command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js" command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js"
+
+run command "npm run test-local-mocha --prefix how-to/setup-automation-tests/examples/register-with-home-js" 
+
+command "npm run test-local-mocha --prefix how-to/setup-automation-tests/examples/register-with-home-js"
 [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\16.14.2\x64\npm.cmd run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js"
 
-> setup-automation-tests-register-with-home@1.0.0 test-local
+> setup-automation-tests-register-with-home@1.0.0 test-local-mocha
 > of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js
 
 OpenFin Automation
