@@ -10,7 +10,9 @@ During the execution of the CLI it will retrieve the required OpenFin runtimes a
 
 The CLI can also run in offline more where the OpenFin runtimes and chromedriver are already expected to be available locally. An `offline-versions.json` file is also expected to exist in the storage folder to define the real version numbers for labelled runtimes (see example below)
 
-Currently Jasmine and Mocha are provided as in-built test runners.
+Currently Jasmine, Mocha and Jest are provided as in-built test runners.
+
+When the test frameworks run they will automatically determine if your tests are written with JavaScript and TypeScript and behave accordingly.
 
 The CLI process will exit with 1 if any of the tests failed.
 

@@ -19,15 +19,67 @@ jobs:
           cd ../setup-automation-tests
           npm install
           npm run dist --workspaces
-          cd examples/register-with-home
+          cd examples/register-with-home-js
           npm install
-      - name: Run Server and Tests
+          cd ../register-with-home-ts
+          npm install
+      - name: Run Server and JavaScript Tests with Mocha
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home
-          build: npm run build --prefix how-to/register-with-home
+          # This action requires a build step, so just use the one for the register-with-home-js
+          build: npm run build --prefix how-to/register-with-home-js
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
           # Execute the tests
-          command: npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home
+          command: npm run test-local-mocha --prefix how-to/setup-automation-tests/examples/register-with-home-js
+      - name: Run Server and JavaScript Tests with Jasmine
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home-js
+          build: npm run build --prefix how-to/register-with-home-js
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local-jasmine --prefix how-to/setup-automation-tests/examples/register-with-home-js
+      - name: Run Server and JavaScript Tests with Jest
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home-js
+          build: npm run build --prefix how-to/register-with-home-js
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local-jest --prefix how-to/setup-automation-tests/examples/register-with-home-js
+      - name: Run Server and TypeScript Tests with Mocha
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home-ts
+          build: npm run build --prefix how-to/register-with-home-ts
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local-mocha --prefix how-to/setup-automation-tests/examples/register-with-home-ts
+      - name: Run Server and TypeScript Tests with Jasmine
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home-ts
+          build: npm run build --prefix how-to/register-with-home-ts
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local-jasmine --prefix how-to/setup-automation-tests/examples/register-with-home-ts
+      - name: Run Server and TypeScript Tests with Jest
+        uses: BerniWittmann/background-server-action@v1.0.4
+        with:
+          # This action requires a build step, so just use the one for the register-with-home-ts
+          build: npm run build --prefix how-to/register-with-home-ts
+          # Start the server and wait for it to serve the manifest
+          start: npm run server --prefix how-to/register-with-home
+          wait-on: 'http://localhost:8080/manifest.fin.json'
+          # Execute the tests
+          command: npm run test-local-jest --prefix how-to/setup-automation-tests/examples/register-with-home-ts

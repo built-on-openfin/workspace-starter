@@ -26,12 +26,12 @@ npm run dist --workspaces
 
 There are some example tests written which use the `@openfin/automation-cli` and `@openfin/automation-helpers`, they are written to execute against the `how-to/register-with-home` e.g.
 
-To run the tests against the hosted version of the `register-with-home` app you can run.
+To run the tests against the hosted version of the `register-with-home` app using the mocha test framework you can run.
 
 ```shell
-cd examples/register-with-home
+cd examples/register-with-home-js
 npm install
-npm run test-remote
+npm run test-remote-mocha
 ```
 
 Or if you already have a local version of the example running serving its manifest on `http://localhost:8080` then you can run.
@@ -39,8 +39,19 @@ Or if you already have a local version of the example running serving its manife
 ```shell
 cd examples
 npm install
-npm run test-local
+npm run test-local-mocha
 ```
+
+There are also variants for the other test frameworks
+
+```shell
+npm run test-local-jasmine
+npm run test-remote-jasmine
+npm run test-local-jest
+npm run test-remote-jest
+```
+
+In addition to the JavaScript test examples there is also a duplicate set of examples which can be found in the `examples/register-with-home-ts` folder. The same npm run scripts are available in this example but the tests are written in TypeScript.
 
 ## Running using CI
 
@@ -66,8 +77,8 @@ waiting on "http://localhost:8080/manifest.fin.json" with timeout of 60 seconds
 > node ./server/build/index.js
 
 server is listening on port 8080
-run command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home" command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home"
-[command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\16.14.2\x64\npm.cmd run test-local --prefix how-to/setup-automation-tests/examples/register-with-home"
+run command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js" command "npm run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js"
+[command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\16.14.2\x64\npm.cmd run test-local --prefix how-to/setup-automation-tests/examples/register-with-home-js"
 
 > setup-automation-tests-register-with-home@1.0.0 test-local
 > of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js
