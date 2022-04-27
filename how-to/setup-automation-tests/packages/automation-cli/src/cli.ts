@@ -1,5 +1,8 @@
 import { Command, Option } from "commander";
 import fs from "fs/promises";
+import glob from "glob";
+import * as tsNode from "ts-node";
+import { promisify } from "util";
 import WebDriver from "webdriver";
 import { logBlank, logError, logHeader, logInfo, logSeparator } from "./console";
 import { runTestsJasmine } from "./frameworks/jasmine";
@@ -162,7 +165,20 @@ export async function run(args: string[]): Promise<void> {
                         logLevel: opts.logLevel
                     });
 
-                    const exitCode = await testFrameworks[opts.framework](testGlobPath, client, opts.testTimeout);
+                    const testFilesExpanded = await promisify(glob)(testGlobPath);
+
+                    const hasTypeScript = testFilesExpanded.some(filename => filename.includes(".ts"));
+                    if (hasTypeScript) {
+                        tsNode.register({});
+                    }
+
+                    const exitCode = await testFrameworks[opts.framework](
+                        testGlobPath,
+                        testFilesExpanded,
+                        client,
+                        opts.testTimeout,
+                        hasTypeScript
+                    );
 
                     await client.deleteSession();
 

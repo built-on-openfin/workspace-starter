@@ -5,10 +5,10 @@ import type { ElementReference } from "../shapes";
 /**
  * Helper class for using with WebDriver.
  */
-export class WebDriverHelper {
+export class WebDriver {
     /**
-     * Get the raw web driver webdriver.
-     * @returns The web driver webdriver.
+     * Get the raw webdriver.
+     * @returns The raw webdriver.
      */
     public static raw(): Client {
         return globalThis.webdriver;
@@ -64,7 +64,7 @@ export class WebDriverHelper {
         do {
             found = await webdriver.executeAsyncScript(script, [objectPath]);
             if (!found) {
-                await WebDriverHelper.sleep(1000);
+                await WebDriver.sleep(1000);
             }
         } while (!found && start - Date.now() < timeout * 1000);
 
@@ -167,9 +167,9 @@ export class WebDriverHelper {
 
         let found = false;
         do {
-            found = await WebDriverHelper.switchToWindow(title);
+            found = await WebDriver.switchToWindow(title);
             if (!found) {
-                await WebDriverHelper.sleep(1000);
+                await WebDriver.sleep(1000);
             }
         } while (!found && Date.now() - startTime < timeout * 1000);
 
@@ -187,9 +187,9 @@ export class WebDriverHelper {
 
         let found = false;
         do {
-            found = await WebDriverHelper.switchToWindowByUrl(url);
+            found = await WebDriver.switchToWindowByUrl(url);
             if (!found) {
-                await WebDriverHelper.sleep(1000);
+                await WebDriver.sleep(1000);
             }
         } while (!found && Date.now() - startTime < timeout * 1000);
 
@@ -211,7 +211,7 @@ export class WebDriverHelper {
      */
     public static async findElementByPath(path: string): Promise<string> {
         const ref = await webdriver.findElement("xpath", path);
-        return WebDriverHelper.elementIdFromReference(ref);
+        return WebDriver.elementIdFromReference(ref);
     }
 
     /**
@@ -221,7 +221,7 @@ export class WebDriverHelper {
      */
     public static async findElementsByPath(path: string): Promise<string[]> {
         const refs = await webdriver.findElements("xpath", path);
-        return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
+        return refs.map(ref => WebDriver.elementIdFromReference(ref));
     }
 
     /**
@@ -232,7 +232,7 @@ export class WebDriverHelper {
      */
     public static async findElementFromElementByPath(elementId: string, xpath: string): Promise<string> {
         const ref = await webdriver.findElementFromElement(elementId, "xpath", xpath);
-        return WebDriverHelper.elementIdFromReference(ref);
+        return WebDriver.elementIdFromReference(ref);
     }
 
     /**
@@ -243,7 +243,7 @@ export class WebDriverHelper {
      */
     public static async findElementsFromElementByPath(elementId: string, xpath: string): Promise<string[]> {
         const refs = await webdriver.findElementsFromElement(elementId, "xpath", xpath);
-        return refs.map(ref => WebDriverHelper.elementIdFromReference(ref));
+        return refs.map(ref => WebDriver.elementIdFromReference(ref));
     }
 
     /**
@@ -252,7 +252,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementById(id: string): Promise<string> {
-        return WebDriverHelper.findElementByPath(`//*[@id='${id}']`);
+        return WebDriver.findElementByPath(`//*[@id='${id}']`);
     }
 
     /**
@@ -261,7 +261,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementByTag(tag: string): Promise<string> {
-        return WebDriverHelper.findElementByPath(`//${tag}`);
+        return WebDriver.findElementByPath(`//${tag}`);
     }
 
     /**
@@ -270,7 +270,7 @@ export class WebDriverHelper {
      * @returns The elements if found.
      */
     public static async findElementsByTag(tag: string): Promise<string[]> {
-        return WebDriverHelper.findElementsByPath(`//${tag}`);
+        return WebDriver.findElementsByPath(`//${tag}`);
     }
 
     /**
@@ -280,7 +280,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementFromElementByTag(elementId: string, tag: string): Promise<string> {
-        return WebDriverHelper.findElementFromElementByPath(elementId, `//${tag}`);
+        return WebDriver.findElementFromElementByPath(elementId, `//${tag}`);
     }
 
     /**
@@ -290,7 +290,7 @@ export class WebDriverHelper {
      * @returns The elements if found.
      */
     public static async findElementsFromElementByTag(elementId: string, tag: string): Promise<string[]> {
-        return WebDriverHelper.findElementsFromElementByPath(elementId, `//${tag}`);
+        return WebDriver.findElementsFromElementByPath(elementId, `//${tag}`);
     }
 
     /**
@@ -300,7 +300,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementByClass(className: string, tag: string = "*"): Promise<string> {
-        return WebDriverHelper.findElementByPath(`//${tag}[contains(@class,"${className}")]`);
+        return WebDriver.findElementByPath(`//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
@@ -310,7 +310,7 @@ export class WebDriverHelper {
      * @returns The element if found.
      */
     public static async findElementsByClass(className: string, tag: string = "*"): Promise<string[]> {
-        return WebDriverHelper.findElementsByPath(`//${tag}[contains(@class,"${className}")]`);
+        return WebDriver.findElementsByPath(`//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
@@ -325,7 +325,7 @@ export class WebDriverHelper {
         className: string,
         tag: string = "*"
     ): Promise<string> {
-        return WebDriverHelper.findElementFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
+        return WebDriver.findElementFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
@@ -340,7 +340,7 @@ export class WebDriverHelper {
         className: string,
         tag: string = "*"
     ): Promise<string[]> {
-        return WebDriverHelper.findElementsFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
+        return WebDriver.findElementsFromElementByPath(elementId, `//${tag}[contains(@class,"${className}")]`);
     }
 
     /**

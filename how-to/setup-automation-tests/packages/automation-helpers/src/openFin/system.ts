@@ -1,14 +1,14 @@
-import { WebDriverHelper } from "../util/webDriverHelper";
+import { WebDriver } from "../util/webDriver";
 
 /**
  * Methods for OpenFin System object handling.
  */
-export class OpenFinBridgeSystem {
+export class OpenFinSystem {
     /**
      * Get the runtime version.
      * @returns The runtime version.
      */
     public static async getVersion(): Promise<string> {
-        return WebDriverHelper.callMethod<string>("fin.System.getVersion", undefined, true);
+        return WebDriver.callMethod<string>("fin.System.getVersion", undefined, true);
     }
 }

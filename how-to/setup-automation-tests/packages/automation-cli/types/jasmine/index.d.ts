@@ -21,6 +21,7 @@ declare module "jasmine" {
         }>;
         clearReporters(): void;
         addReporter(reporter: unknown): void;
+        coreVersion(): string;
     }
 
     export = jasmine;

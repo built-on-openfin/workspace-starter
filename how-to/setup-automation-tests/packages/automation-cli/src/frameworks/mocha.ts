@@ -1,29 +1,36 @@
-import glob from "glob";
 import Mocha from "mocha";
-import { promisify } from "util";
 import type { Client } from "webdriver";
 import { logInfo, logSeparator } from "../console";
 
 /**
  * Run the tests.
- * @param testPathGlob The global of the tests to run.
+ * @param testPathGlob The glob of the tests to run.
+ * @param testFilesExpanded The expanded list of the glob files.
  * @param webdriver The webdriver client to hand in to the tests.
  * @param maxTimeout The maximum length of time for a test to run in seconds.
+ * @param hasTypeScript Do the test files include TypeScript.
  * @returns Exit code of 1 if any tests failed.
  */
-export async function runTestsMocha(testPathGlob: string, webdriver: Client, maxTimeout: number): Promise<number> {
-    logInfo("Running Tests using Mocha");
+export async function runTestsMocha(
+    testPathGlob: string,
+    testFilesExpanded: string[],
+    webdriver: Client,
+    maxTimeout: number,
+    hasTypeScript: boolean
+): Promise<number> {
+    const mocha = new Mocha({});
 
-    const testFiles = await promisify(glob)(testPathGlob);
+    // The mocha version is not in the TS definitions.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    logInfo("Running Tests using Mocha", (mocha as any).version);
 
     // Set the global object which points to the client so that the automation helpers can access it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).webdriver = webdriver;
 
-    const mocha = new Mocha({});
     mocha.timeout(maxTimeout * 1000);
 
-    for (const testFile of testFiles) {
+    for (const testFile of testFilesExpanded) {
         mocha.addFile(testFile);
     }
 

@@ -5,19 +5,28 @@ import { logInfo, logSeparator } from "../console";
 
 /**
  * Run the tests.
- * @param testPathGlob The global of the tests to run.
+ * @param testPathGlob The glob of the tests to run.
+ * @param testFilesExpanded The expanded list of the glob files.
  * @param webdriver The webdriver client to hand in to the tests.
  * @param maxTimeout The maximum length of time for a test to run in seconds.
+ * @param hasTypeScript Do the test files include TypeScript.
  * @returns Exit code of 1 if any tests failed.
  */
-export async function runTestsJasmine(testPathGlob: string, webdriver: Client, maxTimeout: number): Promise<number> {
-    logInfo("Running Tests using Jasmine");
+export async function runTestsJasmine(
+    testPathGlob: string,
+    testFilesExpanded: string[],
+    webdriver: Client,
+    maxTimeout: number,
+    hasTypeScript: boolean
+): Promise<number> {
+    const runner = new Jasmine();
+
+    logInfo("Running Tests using Jasmine", runner.coreVersion());
 
     // Set the global object which points to the client so that the automation helpers can access it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).webdriver = webdriver;
 
-    const runner = new Jasmine();
     runner.jasmine.DEFAULT_TIMEOUT_INTERVAL = maxTimeout * 1000;
 
     runner.clearReporters();

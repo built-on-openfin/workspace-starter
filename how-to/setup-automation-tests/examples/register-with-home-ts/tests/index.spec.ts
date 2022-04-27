@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { OpenFinSystem, OpenFinWorkspace, WebDriver } = require('@openfin/automation-helpers');
+import { expect } from 'chai';
+import { OpenFinSystem, OpenFinWorkspace, WebDriver }  from '@openfin/automation-helpers';
 
 describe('Register with Home', () => {
     it('The title should be set', async () => {

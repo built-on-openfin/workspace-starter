@@ -379,7 +379,6 @@ export async function startChromeDriver(
         throw new Error("Unable to start Chrome Driver");
     }
 
-    logInfo("Waiting for Chrome Driver to connect to OpenFin platform...");
     logSeparator();
 
     return chromeDriverProcess.pid;

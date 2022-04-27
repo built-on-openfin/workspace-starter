@@ -1,17 +1,17 @@
-import { WebDriverHelper } from "../util/webDriverHelper";
+import { WebDriver } from "../util/webDriver";
 
 /**
  * Methods for OpenFin Workspace object handling.
  */
-export class OpenFinBridgeWorkspace {
+export class OpenFinWorkspace {
     /**
      * Show the home window.
      * @param timeout The amount of time to wait for the home window to open.
      * @returns True if the window was found and opened.
      */
     public static async homeShow(timeout: number): Promise<boolean> {
-        if (await WebDriverHelper.waitForWindow("OpenFin Home", timeout)) {
-            await WebDriverHelper.callMethod<undefined>("fin.Workspace.Home.show", undefined, true);
+        if (await WebDriver.waitForWindow("OpenFin Home", timeout)) {
+            await WebDriver.callMethod<undefined>("fin.Workspace.Home.show", undefined, true);
             return true;
         }
 
@@ -22,7 +22,7 @@ export class OpenFinBridgeWorkspace {
      * Hide the home window.
      */
     public static async homeHide(): Promise<void> {
-        await WebDriverHelper.callMethod<undefined>("fin.Workspace.Home.hide", undefined, true);
+        await WebDriver.callMethod<undefined>("fin.Workspace.Home.hide", undefined, true);
     }
 
     /**
@@ -31,11 +31,11 @@ export class OpenFinBridgeWorkspace {
      */
     public static async homeSearch(searchInput: string): Promise<void> {
         for (const letter of searchInput) {
-            const searchInputElement = await WebDriverHelper.findElementById("search-input");
+            const searchInputElement = await WebDriver.findElementById("search-input");
             if (!searchInputElement) {
                 throw new Error("Element missing search-input");
             }
-            await WebDriverHelper.elementSendKeys(searchInputElement, letter);
+            await WebDriver.elementSendKeys(searchInputElement, letter);
         }
     }
 
@@ -43,12 +43,12 @@ export class OpenFinBridgeWorkspace {
      * Clear the search on the home page.
      */
     public static async homeSearchClear(): Promise<void> {
-        const searchInputElement = await WebDriverHelper.findElementById("search-input");
+        const searchInputElement = await WebDriver.findElementById("search-input");
         if (!searchInputElement) {
             throw new Error("Element missing search-input");
         }
         // Send an escape character to clear the input.
-        await WebDriverHelper.elementSendKeys(searchInputElement, "\uE00C");
+        await WebDriver.elementSendKeys(searchInputElement, "\uE00C");
     }
 
     /**
@@ -58,19 +58,19 @@ export class OpenFinBridgeWorkspace {
      * @returns The element id of the nth item.
      */
     public static async homeSearchResultByIndex(index: number, operation?: "open" | "select"): Promise<string> {
-        const elementId = await WebDriverHelper.findElementByPath(`//*[@id='result-list']/div[${index + 1}]`);
+        const elementId = await WebDriver.findElementByPath(`//*[@id='result-list']/div[${index + 1}]`);
 
         if (elementId) {
-            const selectedIndex = await OpenFinBridgeWorkspace.homeSearchResultSelectedIndex();
+            const selectedIndex = await OpenFinWorkspace.homeSearchResultSelectedIndex();
 
             // Skip the selection if it is already selected, otherwise an open
             // will trigger twice
             if ((operation === "select" || operation === "open") && selectedIndex !== index) {
-                await WebDriverHelper.elementClick(elementId);
+                await WebDriver.elementClick(elementId);
             }
             if (operation === "open") {
                 // Sending a second click performs the double click operation
-                await WebDriverHelper.elementClick(elementId);
+                await WebDriver.elementClick(elementId);
             }
         }
 
@@ -84,19 +84,19 @@ export class OpenFinBridgeWorkspace {
      * @returns The element id of the item.
      */
     public static async homeSearchResultById(id: string, operation?: "open" | "select"): Promise<string> {
-        const elementId = await WebDriverHelper.findElementByPath(`//*[@id='result-list']/*[@id='${id}']`);
+        const elementId = await WebDriver.findElementByPath(`//*[@id='result-list']/*[@id='${id}']`);
 
         if (elementId) {
-            const selectedId = await OpenFinBridgeWorkspace.homeSearchResultSelectedId();
+            const selectedId = await OpenFinWorkspace.homeSearchResultSelectedId();
 
             // Skip the selection if it is already selected, otherwise an open
             // will trigger twice
             if ((operation === "select" || operation === "open") && selectedId !== id) {
-                await WebDriverHelper.elementClick(elementId);
+                await WebDriver.elementClick(elementId);
             }
             if (operation === "open") {
                 // Sending a second click performs the double click operation
-                await WebDriverHelper.elementClick(elementId);
+                await WebDriver.elementClick(elementId);
             }
         }
 
@@ -108,12 +108,12 @@ export class OpenFinBridgeWorkspace {
      * @returns The id of the search results.
      */
     public static async homeSearchResultIds(): Promise<string[]> {
-        const elements = await WebDriverHelper.findElementsByPath("//*[@id='result-list']/div");
+        const elements = await WebDriver.findElementsByPath("//*[@id='result-list']/div");
 
         const resultIds: string[] = [];
 
         for (let i = 0; i < elements.length; i++) {
-            const idProp = await WebDriverHelper.getElementAttributeByPath<string>(
+            const idProp = await WebDriver.getElementAttributeByPath<string>(
                 `(//*[@id='result-list']/div)[${i + 1}]`,
                 "id"
             );
@@ -128,10 +128,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The id of the selected search result.
      */
     public static async homeSearchResultSelectedId(): Promise<string> {
-        return WebDriverHelper.getElementAttributeByPath<string>(
-            "//*[@id='result-list']/div[@aria-selected='true']",
-            "id"
-        );
+        return WebDriver.getElementAttributeByPath<string>("//*[@id='result-list']/div[@aria-selected='true']", "id");
     }
 
     /**
@@ -139,8 +136,8 @@ export class OpenFinBridgeWorkspace {
      * @returns The index of the selected search result.
      */
     public static async homeSearchResultSelectedIndex(): Promise<number> {
-        const id = await OpenFinBridgeWorkspace.homeSearchResultSelectedId();
-        const allIds = await OpenFinBridgeWorkspace.homeSearchResultIds();
+        const id = await OpenFinWorkspace.homeSearchResultSelectedId();
+        const allIds = await OpenFinWorkspace.homeSearchResultIds();
         return allIds.indexOf(id);
     }
 
@@ -149,7 +146,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The innerHTML of the selected search result details.
      */
     public static async homeSearchResultSelectedItem(): Promise<string> {
-        return WebDriverHelper.getElementAttributeByPath<string>(
+        return WebDriver.getElementAttributeByPath<string>(
             "//*[@id='result-list']/div[@aria-selected='true']/div",
             "innerHTML"
         );
@@ -160,7 +157,7 @@ export class OpenFinBridgeWorkspace {
      * @returns The innerHTML of the selected search result details.
      */
     public static async homeSearchResultSelectedDetails(): Promise<string> {
-        return WebDriverHelper.getElementAttributeByPath<string>(
+        return WebDriver.getElementAttributeByPath<string>(
             "//*[@aria-label='Search result details section']/div",
             "innerHTML"
         );
@@ -171,9 +168,9 @@ export class OpenFinBridgeWorkspace {
      * @returns Nothing.
      */
     public static async homeFiltersOpen(): Promise<void> {
-        const element = await WebDriverHelper.findElementByPath("//button[@shape='square']");
+        const element = await WebDriver.findElementByPath("//button[@shape='square']");
         if (element) {
-            await WebDriverHelper.elementClick(element);
+            await WebDriver.elementClick(element);
         }
     }
 
@@ -183,11 +180,11 @@ export class OpenFinBridgeWorkspace {
      * @returns Nothing.
      */
     public static async homeFiltersClose(ok: boolean): Promise<void> {
-        const element = await WebDriverHelper.findElementByPath(
+        const element = await WebDriver.findElementByPath(
             `//div[@id='modal-root']//button[contains(text(), '${ok ? "OK" : "Cancel"}')]`
         );
         if (element) {
-            await WebDriverHelper.elementClick(element);
+            await WebDriver.elementClick(element);
         }
     }
 
@@ -196,12 +193,12 @@ export class OpenFinBridgeWorkspace {
      * @returns Filter ids.
      */
     public static async homeFiltersIds(): Promise<string[]> {
-        const elements = await WebDriverHelper.findElementsByPath("//div[@id='modal-root']//input[@type='checkbox']");
+        const elements = await WebDriver.findElementsByPath("//div[@id='modal-root']//input[@type='checkbox']");
 
         const resultIds: string[] = [];
 
         for (let i = 0; i < elements.length; i++) {
-            const idProp = await WebDriverHelper.getElementAttributeByPath<string>(
+            const idProp = await WebDriver.getElementAttributeByPath<string>(
                 `(//div[@id='modal-root']//input[@type='checkbox'])[${i + 1}]`,
                 "id"
             );
@@ -218,7 +215,7 @@ export class OpenFinBridgeWorkspace {
      * @returns Nothing.
      */
     public static async homeFiltersByIndexSet(index: number, setOrClear: boolean): Promise<void> {
-        await WebDriverHelper.setElementAttributeByPath(
+        await WebDriver.setElementAttributeByPath(
             `(//div[@id='modal-root']//input[@type='checkbox'])[${index + 1}]`,
             "checked",
             setOrClear
@@ -231,7 +228,7 @@ export class OpenFinBridgeWorkspace {
      * @returns True if the filter was set.
      */
     public static async homeFiltersByIndexGet(index: number): Promise<boolean> {
-        return WebDriverHelper.getElementAttributeByPath<boolean>(
+        return WebDriver.getElementAttributeByPath<boolean>(
             `(//div[@id='modal-root']//input[@type='checkbox'])[${index + 1}]`,
             "checked"
         );
@@ -244,7 +241,7 @@ export class OpenFinBridgeWorkspace {
      * @returns Nothing.
      */
     public static async homeFiltersByIdSet(id: string, setOrClear: boolean): Promise<void> {
-        await WebDriverHelper.setElementAttributeByPath(
+        await WebDriver.setElementAttributeByPath(
             `//div[@id='modal-root']//input[@type='checkbox'][@id='${id}']`,
             "checked",
             setOrClear
@@ -257,7 +254,7 @@ export class OpenFinBridgeWorkspace {
      * @returns True if the filter was set.
      */
     public static async homeFiltersByIdGet(id: string): Promise<boolean> {
-        return WebDriverHelper.getElementAttributeByPath<boolean>(
+        return WebDriver.getElementAttributeByPath<boolean>(
             `//div[@id='modal-root']//input[@type='checkbox'][@id='${id}']`,
             "checked"
         );
