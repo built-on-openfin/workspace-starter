@@ -26,8 +26,8 @@ jobs:
       - name: Run Server and JavaScript Tests with Mocha
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-js
-          build: npm run build --prefix how-to/register-with-home-js
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
@@ -36,8 +36,8 @@ jobs:
       - name: Run Server and JavaScript Tests with Jasmine
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-js
-          build: npm run build --prefix how-to/register-with-home-js
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
@@ -46,8 +46,8 @@ jobs:
       - name: Run Server and JavaScript Tests with Jest
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-js
-          build: npm run build --prefix how-to/register-with-home-js
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
@@ -56,8 +56,8 @@ jobs:
       - name: Run Server and TypeScript Tests with Mocha
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-ts
-          build: npm run build --prefix how-to/register-with-home-ts
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
@@ -66,8 +66,8 @@ jobs:
       - name: Run Server and TypeScript Tests with Jasmine
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-ts
-          build: npm run build --prefix how-to/register-with-home-ts
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
@@ -76,8 +76,8 @@ jobs:
       - name: Run Server and TypeScript Tests with Jest
         uses: BerniWittmann/background-server-action@v1.0.4
         with:
-          # This action requires a build step, so just use the one for the register-with-home-ts
-          build: npm run build --prefix how-to/register-with-home-ts
+          # This action requires a build step, so just use the one for the register-with-home
+          build: npm run build --prefix how-to/register-with-home
           # Start the server and wait for it to serve the manifest
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
