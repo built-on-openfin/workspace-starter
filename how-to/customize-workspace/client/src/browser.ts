@@ -78,14 +78,24 @@ export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
     };
 
     if(bounds !== undefined){
+        let monitors = await fin.System.getMonitorInfo();
+
         newWindow.height = customBounds.height;
         newWindow.width = customBounds.width;
-        newWindow.x = customBounds.left;
-        newWindow.y = customBounds.top;
         newWindow.defaultHeight = customBounds.height;
         newWindow.defaultWidth = customBounds.width;
-        newWindow.defaultLeft = customBounds.left;
-        newWindow.defaultTop = customBounds.top;
+        
+        if(monitors.virtualScreen !== undefined) {  
+            if(monitors.virtualScreen.left !== undefined && customBounds.left >= monitors.virtualScreen.left){
+                newWindow.x = customBounds.left;
+                newWindow.defaultLeft = customBounds.left;
+            }
+            
+            if(monitors.virtualScreen.top !== undefined && customBounds.top >= monitors.virtualScreen.top){
+                newWindow.y = customBounds.top;
+                newWindow.defaultTop = customBounds.top;
+            }
+        }
     }
 
     return platform.Browser.createWindow(newWindow);
