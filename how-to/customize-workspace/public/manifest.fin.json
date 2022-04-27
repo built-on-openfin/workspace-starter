@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "23.96.68.3"
+    "version": "23.96.68.5"
   },
   "startup_app": {
     "name": "workspace-starter-how-to-customize-workspace"
@@ -14,26 +14,26 @@
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
         "enableNativeWindowIntegrationProvider": true,
-        "terminateExternalProcess": true, 
+        "terminateExternalProcess": true,
         "downloadAsset": true,
         "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
+          "enabled": true,
+          "protocols": ["mailto"]
         }
       }
     },
     "defaultWindowOptions": {
       "permissions": {
         "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
+          "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+          }
         }
       }
     }
@@ -50,18 +50,18 @@
   },
   "appAssets": [
     {
-        "alias": "winform-interop-example",
-        "version": "2.0.0",
-        "src": "http://localhost:8080/assets/native-interop-example.zip",
-        "target": "OpenFin.Interop.Win.Sample.exe",
-        "forceDownload": false
+      "alias": "winform-interop-example",
+      "version": "2.0.0",
+      "src": "http://localhost:8080/assets/native-interop-example.zip",
+      "target": "OpenFin.Interop.Win.Sample.exe",
+      "forceDownload": false
     }
-],
+  ],
   "customSettings": {
     "bootstrap": {
       "home": true,
       "store": true,
-      "notifications":true
+      "notifications": true
     },
     "platformProvider": {
       "rootUrl": "http://localhost:8080",
@@ -80,138 +80,186 @@
         "newTabUrl": null,
         "newPageUrl": null
       },
-      "toolbarButtons":[
-        { 
-          "include": false, 
+      "toolbarButtons": [
+        {
+          "include": false,
           "id": "change-opacity",
-          "button": {  
+          "button": {
             "type": "Custom",
             "tooltip": "Change Opacity",
             "disabled": false,
             "iconUrl": "http://localhost:8080/favicon.ico",
             "action": {
-                "id": "change-opacity",
-                "customData": {
-                  "sourceId": "change-opacity",
-                  "replacementId": "restore-opacity"
-                 }
+              "id": "change-opacity",
+              "customData": {
+                "sourceId": "change-opacity",
+                "replacementId": "restore-opacity"
+              }
             }
           }
-      },
-      { 
-        "include": false, 
-        "id": "restore-opacity",
-        "button": {  
-          "type": "Custom",
-          "tooltip": "Restore Opacity",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/favicon.ico",
-          "action": {
+        },
+        {
+          "include": false,
+          "id": "restore-opacity",
+          "button": {
+            "type": "Custom",
+            "tooltip": "Restore Opacity",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/favicon.ico",
+            "action": {
               "id": "restore-opacity",
               "customData": {
                 "sourceId": "restore-opacity",
                 "replacementId": "change-opacity"
-               }
+              }
+            }
           }
-        }
-    },
-        { 
-          "include": true, 
+        },
+        {
+          "include": false,
+          "id": "home-show",
+          "button": {
+            "type": "Custom",
+            "tooltip": "Show Home",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/search.svg",
+            "action": {
+              "id": "home-show",
+              "customData": {}
+            }
+          }
+        },
+        {
+          "include": false,
+          "id": "notification-toggle",
+          "button": {
+            "type": "Custom",
+            "tooltip": "Toggle Notification Center",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/bell.svg",
+            "action": {
+              "id": "notification-toggle",
+              "customData": {}
+            }
+          }
+        },
+        {
+          "include": true,
           "id": "pin-window",
-          "button": {  
+          "button": {
             "type": "Custom",
             "tooltip": "Pin this window",
             "disabled": false,
             "iconUrl": "http://localhost:8080/icons/pin.svg",
             "action": {
-                "id": "pin-window",
-                "customData": {
-                    "sourceId": "pin-window",
-                    "replacementId": "unpin-window"
-                }
+              "id": "pin-window",
+              "customData": {
+                "sourceId": "pin-window",
+                "replacementId": "unpin-window"
+              }
             }
           }
-      },
-      { 
-        "include": false, 
-        "id": "unpin-window",
-        "button": {  
-          "type": "Custom",
-          "tooltip": "Unpin this window",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/icons/pin-vertical.svg",
-          "action": {
+        },
+        {
+          "include": false,
+          "id": "unpin-window",
+          "button": {
+            "type": "Custom",
+            "tooltip": "Unpin this window",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/pin-vertical.svg",
+            "action": {
               "id": "unpin-window",
               "customData": {
-                  "sourceId": "unpin-window",
-                  "replacementId": "pin-window"
+                "sourceId": "unpin-window",
+                "replacementId": "pin-window"
               }
+            }
           }
-      }},
-      { "include": true, "id": "show-hide-tabs", "button": {
-          "type": "ShowHideTabs"
-      }},
-      { "include": true, "id":"color-linking", "button": {
-          "type": "ColorLinking"
-      }},
-      { "include": true, "id": "preset-layouts", "button": {
-          "type": "PresetLayouts"
-      }},
-      { "include": true, "id": "share", "button": {  
-          "type": "Custom",
-          "tooltip": "Share",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/icons/share.svg",
-          "action": {
+        },
+        {
+          "include": true,
+          "id": "show-hide-tabs",
+          "button": {
+            "type": "ShowHideTabs"
+          }
+        },
+        {
+          "include": true,
+          "id": "color-linking",
+          "button": {
+            "type": "ColorLinking"
+          }
+        },
+        {
+          "include": true,
+          "id": "preset-layouts",
+          "button": {
+            "type": "PresetLayouts"
+          }
+        },
+        {
+          "include": true,
+          "id": "share",
+          "button": {
+            "type": "Custom",
+            "tooltip": "Share",
+            "disabled": false,
+            "iconUrl": "http://localhost:8080/icons/share.svg",
+            "action": {
               "id": "share",
-              "customData": {
-              }
+              "customData": {}
+            }
           }
-      }},
-      { "include": true, "id":"save-page", "button": {
-          "type": "SavePage"
-      }}
+        },
+        {
+          "include": true,
+          "id": "save-page",
+          "button": {
+            "type": "SavePage"
+          }
+        }
       ]
     },
     "themeProvider": {
-        "themes":[
-          {
-              "label": "Starter Theme",
-              "logoUrl": "http://localhost:8080/favicon.ico",
-              "palette": {
-                  "brandPrimary": "#504CFF",
-                  "brandSecondary": "#383A40",
-                  "backgroundPrimary": "#111214",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBg": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": null,
-                  "background2": null,
-                  "background3": null,
-                  "background4": null,
-                  "background5": null,
-                  "background6": null
-              }
+      "themes": [
+        {
+          "label": "Starter Theme",
+          "logoUrl": "http://localhost:8080/favicon.ico",
+          "palette": {
+            "brandPrimary": "#504CFF",
+            "brandSecondary": "#383A40",
+            "backgroundPrimary": "#111214",
+            "functional1": null,
+            "functional2": null,
+            "functional3": null,
+            "functional4": null,
+            "functional5": null,
+            "functional6": null,
+            "functional7": null,
+            "functional8": null,
+            "functional9": null,
+            "functional10": null,
+            "statusSuccess": null,
+            "statusWarning": null,
+            "statusCritical": null,
+            "statusActive": null,
+            "inputBg": null,
+            "inputColor": null,
+            "inputPlaceholder": null,
+            "inputDisabled": null,
+            "inputFocused": null,
+            "textDefault": null,
+            "textHelp": null,
+            "textInactive": null,
+            "background1": null,
+            "background2": null,
+            "background3": null,
+            "background4": null,
+            "background5": null,
+            "background6": null
           }
+        }
       ]
     },
     "homeProvider": {
@@ -219,7 +267,7 @@
       "title": "Home Starter",
       "icon": "http://localhost:8080/favicon.ico",
       "queryMinLength": 3,
-      "queryAgainst":["title"]
+      "queryAgainst": ["title"]
     },
     "storefrontProvider": {
       "id": "customize-workspace",
@@ -268,7 +316,7 @@
         },
         "middleRow": {
           "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
+          "tags": ["fdc3", "interop"]
         },
         "bottomRow": {
           "title": "Quick Access",
@@ -306,7 +354,7 @@
           "items": [
             {
               "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
+              "tags": ["view", "page", "manifest", "native"]
             },
             { "title": "Views", "tags": ["view"] },
             { "title": "Pages", "tags": ["page"] },
@@ -371,7 +419,7 @@
               "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
               "note": "http://localhost:8080/images/salesforce/note.svg",
               "task": "http://localhost:8080/images/salesforce/task.svg"
-            }          
+            }
           }
         }
       ]

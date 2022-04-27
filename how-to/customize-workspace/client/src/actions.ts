@@ -1,4 +1,5 @@
 import { BrowserCreateWindowRequest, CustomActionCallerType, CustomActionsMap, getCurrentSync } from "@openfin/workspace-platform";
+import { toggleNotificationCenter } from "@openfin/workspace/notifications";
 import { getDefaultWindowOptions } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
@@ -87,10 +88,11 @@ export async function getActions(): Promise<CustomActionsMap> {
                 }
             }
         },
-        "home-show": async (payload)=> {
-            if(payload.callerType === CustomActionCallerType.GlobalContextMenu) {
-                await show();
-            }
+        "home-show": async ()=> {
+            await show();
+        },
+        "notification-toggle": async ()=> {
+            await toggleNotificationCenter();
         },
         "share": async (payload)=> {
             if(payload.callerType === CustomActionCallerType.CustomButton) {

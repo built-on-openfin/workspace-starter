@@ -4,25 +4,23 @@
   "description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
   "main": "index.js",
   "scripts": {
-    "dos": "desktop-owner-settings.bat && (npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
+    "dos": "desktop-owner-settings.bat && (npm run kill)",
     "build": "npm run build-server & npm run build-client",
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
-    "client": "start fin://localhost:8080/manifest.fin.json",
-    "secondclient": "start fin://localhost:8080/second.manifest.fin.json",
+    "client": "node ./scripts/launch.mjs",
+    "secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
     "server": "node ./server/build/index.js",
-    "kill": "(npm run -s kill:fin || true) && (npm run -s kill:rvm || true)",
-    "kill:fin": "cmd.exe /c taskkill /F /IM OpenFin.exe /T",
-    "kill:rvm": "cmd.exe /c taskkill /F /IM OpenFinRVM.exe /T"
+    "kill": "node ./scripts/kill.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@openfin/native-window-integration-client": "0.0.13",
     "@openfin/salesforce": "^2.1.3",
     "@openfin/salesforce-lwc": "^1.1.1",
-    "@openfin/native-window-integration-client": "0.0.13",
     "@openfin/workspace": "6.3.6",
     "@openfin/workspace-platform": "6.3.6",
     "file-loader": "^6.2.0"
