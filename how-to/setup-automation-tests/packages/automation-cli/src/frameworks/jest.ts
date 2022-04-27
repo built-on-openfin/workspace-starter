@@ -1,6 +1,6 @@
 import { getVersion, runCLI } from "jest";
 import type { Client } from "webdriver";
-import { logSection, logSeparator } from "../console";
+import { logSection } from "../console";
 
 /**
  * Run the tests.
@@ -48,8 +48,6 @@ export async function runTestsJest(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const results = await runCLI(options as any, [testsFolder]);
-
-    logSeparator();
 
     return results.results.numFailedTests > 0 ? 1 : 0;
 }

@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import os from "os";
 import path from "path";
 import { Parser } from "xml2js";
-import { logBlank, logTask, logSection, logSeparator } from "./console";
+import { logBlank, logTask, logSection } from "./console";
 import type { ChromeDriverManifest } from "./models/chromeDriverManifest";
 import type { OpenFinManifest } from "./models/openFinManifest";
 import { fileExists, isNodeError, killProcessByImage, spawnWithOutput, spawnWithOutputWait } from "./utils";
@@ -28,7 +28,6 @@ export async function loadManifest(manifestUrl: string, defaultRuntimeVersion: s
         manifestJson.runtime.version = manifestJson.runtime.version ?? defaultRuntimeVersion;
 
         logTask("Manifest loaded");
-        logSeparator();
 
         return manifestJson;
     } catch {
@@ -56,7 +55,6 @@ export async function resolveRuntimeVersion(
     const parts = manifestVersion.split(".");
     if (parts.length === 4) {
         logTask("Final Runtime version", manifestVersion);
-        logSeparator();
         return {
             runtime: manifestVersion,
             chrome: parts[1]
@@ -93,7 +91,6 @@ export async function resolveRuntimeVersion(
         const parts = ver.split(".");
         if (parts.length === 4) {
             logTask("Final Runtime version", ver);
-            logSeparator();
             return {
                 runtime: ver,
                 chrome: parts[1]
@@ -157,7 +154,6 @@ export async function launchOpenFinRVM(
     logTask("Args", args);
     const openFinProcess = spawnWithOutput(exePath, args, { shell: true });
     logTask("OpenFinRVM Process", openFinProcess.pid);
-    logSeparator();
 
     return {
         processId: openFinProcess.pid,
@@ -244,8 +240,6 @@ export async function createDesktopOwnerSettings(): Promise<{
         }
     }
 
-    logSeparator();
-
     return {
         currentRegValue,
         tempDosFile
@@ -291,9 +285,6 @@ export async function closeOpenFinRVM(asTask: boolean): Promise<void> {
     await killProcessByImage("OpenFin.exe");
     await killProcessByImage("OpenFinRVM.exe");
     logTask("Cleanup instances complete");
-    if (!asTask) {
-        logSeparator();
-    }
 }
 
 /**
@@ -353,7 +344,6 @@ export async function getChromeDriver(chromeVersion: string, storageFolder: stri
     } else {
         logTask("Chrome Driver already exists", chromeDriverPath);
     }
-    logSeparator();
 
     return chromeDriverPath;
 }
@@ -391,8 +381,6 @@ export async function startChromeDriver(
         throw new Error("Unable to start Chrome Driver");
     }
 
-    logSeparator();
-
     return chromeDriverProcess.pid;
 }
 
@@ -404,10 +392,11 @@ export async function tempProfileDirCreate(): Promise<string> {
     const tempDir = os.tmpdir();
     const tempProfileDataDir = path.join(tempDir, `openfin-test-${Date.now()}`);
 
-    logSection("Creating temp profile dir", tempProfileDataDir);
+    logSection("Creating temp profile directory", tempProfileDataDir);
 
     await fs.mkdir(tempProfileDataDir, { recursive: true });
-    logSeparator();
+
+    logTask("Directory created");
 
     return tempProfileDataDir;
 }

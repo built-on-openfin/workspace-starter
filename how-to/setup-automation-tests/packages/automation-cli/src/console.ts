@@ -6,7 +6,7 @@ import chalk from "chalk";
  * @param header The header to log.
  */
 export function logHeader(header: string): void {
-    console.log(`📦 ${chalk.blue(chalk.underline(header))}`);
+    console.log(`🚀 ${chalk.blue(chalk.underline(header))}`);
 }
 
 /**
@@ -33,14 +33,6 @@ export function logShell(content: string): void {
 }
 
 /**
- * Log a separator line.
- */
-export function logSeparator(): void {
-    console.log("_______________________________________________________");
-    console.log();
-}
-
-/**
  * Log the output as an error.
  * @param error The error to log.
  */
@@ -54,6 +46,8 @@ export function logError(error: unknown): void {
  * @param data The data to log with the info.
  */
 export function logSection(info: unknown, data?: unknown): void {
+    console.log("_______________________________________________________");
+    console.log();
     console.log(`➡️  ${chalk.cyan(info)}`);
     if (data !== undefined) {
         console.log(`   ${chalk.gray(data)}`);
@@ -62,15 +56,15 @@ export function logSection(info: unknown, data?: unknown): void {
 }
 
 /**
- * Log the output as an info.
+ * Log the output as an settings.
  * @param info The info to log.
  * @param data The data to log with the info.
  */
-export function logInfo(info: unknown, data?: unknown): void {
+export function logSettings(info: unknown, data?: unknown): void {
     if (data !== undefined) {
-        console.log(`  ℹ️ ${chalk.green(info)}`, chalk.gray(data));
+        console.log(`  ⚙️  ${chalk.green(info)}`, chalk.gray(data));
     } else {
-        console.log(`  ℹ️ ${chalk.green(info)}`);
+        console.log(`  ⚙️  ${chalk.green(info)}`);
     }
 }
 
@@ -99,13 +93,17 @@ export function logHelp(help: unknown): void {
  * Log the exit.
  * @param exitCode The exit code.
  * @param success The content to display for success.
- * @param fail The content to display for success.
+ * @param failure The content to display for failure.
+ * @param termination The content to display for termination.
  */
-export function logExit(exitCode: number, success: string, fail: string): void {
+export function logExit(exitCode: number, success: string, failure: string, termination: string): void {
+    console.log("_______________________________________________________");
     console.log();
     if (exitCode === 0) {
-        console.log(`😀 ${success}`);
+        console.log(`😀  ${success}`);
+    } else if (exitCode === 1) {
+        console.log(`☹️  ${failure}`);
     } else {
-        console.log(`☹️ ${fail}`);
+        console.log(`💣  ${termination}`);
     }
 }

@@ -1,6 +1,6 @@
 import Mocha from "mocha";
 import type { Client } from "webdriver";
-import { logSection, logSeparator } from "../console";
+import { logSection } from "../console";
 
 /**
  * Run the tests.
@@ -42,7 +42,6 @@ export async function runTestsMocha(
         });
         runner.on("end", () => {
             resolve(failCount > 0 ? 1 : 0);
-            logSeparator();
         });
     });
 }

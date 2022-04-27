@@ -1,7 +1,7 @@
 import Jasmine from "jasmine";
 import { SpecReporter } from "jasmine-spec-reporter";
 import type { Client } from "webdriver";
-import { logSection, logSeparator } from "../console";
+import { logSection } from "../console";
 
 /**
  * Run the tests.
@@ -44,7 +44,6 @@ export async function runTestsJasmine(
     // If we don't set this flag the runner exits the whole app.
     runner.exitOnCompletion = false;
     const result = await runner.execute();
-    logSeparator();
 
     return result.overallStatus === "failed" ? 1 : 0;
 }

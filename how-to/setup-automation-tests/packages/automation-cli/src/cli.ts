@@ -4,18 +4,7 @@ import glob from "glob";
 import * as tsNode from "ts-node";
 import { promisify } from "util";
 import WebDriver from "webdriver";
-import {
-    logBlank,
-    logError,
-    logExit,
-    logHeader,
-    logHelp,
-    logInfo,
-    logPlain,
-    logSection,
-    logSeparator,
-    logTask
-} from "./console";
+import { logBlank, logError, logExit, logHeader, logHelp, logSettings, logPlain, logSection, logTask } from "./console";
 import { runTestsJasmine } from "./frameworks/jasmine";
 import { runTestsJest } from "./frameworks/jest";
 import { runTestsMocha } from "./frameworks/mocha";
@@ -130,17 +119,16 @@ export async function run(args: string[]): Promise<void> {
                     offline: boolean;
                 }
             ) => {
-                logInfo("Manifest Url", manifestUrl);
-                logInfo("Test Glob Path", testGlobPath);
-                logInfo("Log Level", opts.logLevel);
-                logInfo("Dev Tools Port", opts.devToolsPort);
-                logInfo("Chrome Driver Port", opts.chromeDriverPort);
-                logInfo("Test Framework", opts.framework);
-                logInfo("Test Timeout", opts.testTimeout);
-                logInfo("Default Runtime Version", opts.defaultRuntimeVersion);
-                logInfo("Storage Folder", opts.storageFolder);
-                logInfo("Offline", opts.offline ? "true" : "false");
-                logSeparator();
+                logSettings("Manifest Url", manifestUrl);
+                logSettings("Test Glob Path", testGlobPath);
+                logSettings("Log Level", opts.logLevel);
+                logSettings("Dev Tools Port", opts.devToolsPort);
+                logSettings("Chrome Driver Port", opts.chromeDriverPort);
+                logSettings("Test Framework", opts.framework);
+                logSettings("Test Timeout", opts.testTimeout);
+                logSettings("Default Runtime Version", opts.defaultRuntimeVersion);
+                logSettings("Storage Folder", opts.storageFolder);
+                logSettings("Offline", opts.offline ? "true" : "false");
 
                 let tempDataDir: string | undefined;
                 let chromeDriverProcessId: number | undefined;
@@ -153,10 +141,10 @@ export async function run(args: string[]): Promise<void> {
                     | undefined;
 
                 process.on("SIGINT", async () => {
-                    await exitApp(1, tempDataDir, chromeDriverProcessId, launchParams);
+                    await exitApp(2, tempDataDir, chromeDriverProcessId, launchParams);
                 });
                 process.on("SIGTERM", async () => {
-                    await exitApp(1, tempDataDir, chromeDriverProcessId, launchParams);
+                    await exitApp(2, tempDataDir, chromeDriverProcessId, launchParams);
                 });
 
                 try {
@@ -267,13 +255,13 @@ async function exitApp(
     } catch {}
 
     if (tempProfileDataDir) {
-        logTask("Removing temp data dir", tempProfileDataDir);
+        logTask("Removing temp data directory", tempProfileDataDir);
         try {
             await fs.rm(tempProfileDataDir, { recursive: true });
         } catch {}
     }
 
-    logExit(exitCode, "Successfully ran the tests", "Failed running the tests");
+    logExit(exitCode, "Successfully ran the tests", "Failed running the tests", "Application terminated");
 
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(exitCode);
