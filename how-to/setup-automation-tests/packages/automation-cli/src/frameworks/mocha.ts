@@ -1,6 +1,6 @@
 import Mocha from "mocha";
 import type { Client } from "webdriver";
-import { logInfo, logSeparator } from "../console";
+import { logSection, logSeparator } from "../console";
 
 /**
  * Run the tests.
@@ -22,7 +22,7 @@ export async function runTestsMocha(
 
     // The mocha version is not in the TS definitions.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logInfo("Running Tests using Mocha", (mocha as any).version);
+    logSection("Running Tests using Mocha", `Version ${(mocha as any).version}`);
 
     // Set the global object which points to the client so that the automation helpers can access it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -4,21 +4,32 @@ import glob from "glob";
 import * as tsNode from "ts-node";
 import { promisify } from "util";
 import WebDriver from "webdriver";
-import { logBlank, logError, logHeader, logInfo, logSeparator } from "./console";
+import {
+    logBlank,
+    logError,
+    logExit,
+    logHeader,
+    logHelp,
+    logInfo,
+    logPlain,
+    logSection,
+    logSeparator,
+    logTask
+} from "./console";
 import { runTestsJasmine } from "./frameworks/jasmine";
 import { runTestsJest } from "./frameworks/jest";
 import { runTestsMocha } from "./frameworks/mocha";
 import {
     closeOpenFinRVM,
     getChromeDriver,
-    killProcessById,
     launchOpenFinRVM,
     loadManifest,
     resolveRuntimeVersion,
     setDesktopOwnerSettings,
     startChromeDriver,
     tempProfileDirCreate
-} from "./utils";
+} from "./tasks";
+import { killProcessById } from "./utils";
 
 const APP_TITLE = "OpenFin Automation";
 const APP_NAME = "of-automation";
@@ -93,10 +104,10 @@ export async function run(args: string[]): Promise<void> {
                 .default("mocha")
         )
         .configureOutput({
-            writeOut: str => logInfo(str),
+            writeOut: str => logPlain(str),
             writeErr: str => {
-                logError(str);
-                logInfo(`use ${APP_NAME} --help to show help`);
+                logError(str.replace("error: ", ""));
+                logHelp(`use ${APP_NAME} --help to show help`);
             }
         })
         .exitOverride(err => {
@@ -119,21 +130,35 @@ export async function run(args: string[]): Promise<void> {
                     offline: boolean;
                 }
             ) => {
-                logInfo("* Manifest Url", manifestUrl);
-                logInfo("* Test Glob Path", testGlobPath);
-                logInfo("* Log Level", opts.logLevel);
-                logInfo("* Dev Tools Port", opts.devToolsPort);
-                logInfo("* Chrome Driver Port", opts.chromeDriverPort);
-                logInfo("* Test Framework", opts.framework);
-                logInfo("* Test Timeout", opts.testTimeout);
-                logInfo("* Default Runtime Version", opts.defaultRuntimeVersion);
-                logInfo("* Storage Folder", opts.storageFolder);
-                logInfo("* Offline", opts.offline ? "true" : "false");
+                logInfo("Manifest Url", manifestUrl);
+                logInfo("Test Glob Path", testGlobPath);
+                logInfo("Log Level", opts.logLevel);
+                logInfo("Dev Tools Port", opts.devToolsPort);
+                logInfo("Chrome Driver Port", opts.chromeDriverPort);
+                logInfo("Test Framework", opts.framework);
+                logInfo("Test Timeout", opts.testTimeout);
+                logInfo("Default Runtime Version", opts.defaultRuntimeVersion);
+                logInfo("Storage Folder", opts.storageFolder);
+                logInfo("Offline", opts.offline ? "true" : "false");
                 logSeparator();
 
                 let tempDataDir: string | undefined;
                 let chromeDriverProcessId: number | undefined;
-                let launchParams;
+                let launchParams:
+                    | {
+                          processId: number | undefined;
+                          currentRegValue: string;
+                          tempDosFile: string;
+                      }
+                    | undefined;
+
+                process.on("SIGINT", async () => {
+                    await exitApp(1, tempDataDir, chromeDriverProcessId, launchParams);
+                });
+                process.on("SIGTERM", async () => {
+                    await exitApp(1, tempDataDir, chromeDriverProcessId, launchParams);
+                });
+
                 try {
                     const manifest = await loadManifest(manifestUrl, opts.defaultRuntimeVersion);
                     const versions = await resolveRuntimeVersion(
@@ -144,7 +169,7 @@ export async function run(args: string[]): Promise<void> {
                     const chromeDriverPath = await getChromeDriver(versions.chrome, opts.storageFolder, opts.offline);
 
                     tempDataDir = await tempProfileDirCreate();
-                    await closeOpenFinRVM();
+                    await closeOpenFinRVM(false);
                     launchParams = await launchOpenFinRVM(
                         manifestUrl,
                         opts.devToolsPort,
@@ -212,8 +237,10 @@ async function exitApp(
           }
         | undefined
 ): Promise<void> {
+    logSection("Cleaning Up");
+
     if (chromeDriverProcessId) {
-        logInfo("Closing Chrome Driver");
+        logTask("Closing Chrome Driver");
         try {
             await killProcessById(chromeDriverProcessId);
         } catch {}
@@ -221,30 +248,32 @@ async function exitApp(
 
     if (launchParams) {
         try {
-            logInfo("Restoring DOS");
+            logTask("Restoring DOS");
             await setDesktopOwnerSettings(launchParams.currentRegValue);
         } catch {}
     }
 
     if (launchParams?.tempDosFile) {
         try {
-            logInfo("Removing temporary DOS Settings");
+            logTask("Removing temporary DOS Settings");
             await fs.unlink(launchParams.tempDosFile);
         } catch {}
     }
 
     try {
         if (launchParams?.processId) {
-            await closeOpenFinRVM();
+            await closeOpenFinRVM(true);
         }
     } catch {}
 
     if (tempProfileDataDir) {
-        logInfo("Removing temp data dir", tempProfileDataDir);
+        logTask("Removing temp data dir", tempProfileDataDir);
         try {
             await fs.rm(tempProfileDataDir, { recursive: true });
         } catch {}
     }
+
+    logExit(exitCode, "Successfully ran the tests", "Failed running the tests");
 
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(exitCode);

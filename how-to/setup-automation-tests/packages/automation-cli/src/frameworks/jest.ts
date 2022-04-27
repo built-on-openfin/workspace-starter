@@ -1,6 +1,6 @@
 import { getVersion, runCLI } from "jest";
 import type { Client } from "webdriver";
-import { logInfo, logSeparator } from "../console";
+import { logSection, logSeparator } from "../console";
 
 /**
  * Run the tests.
@@ -18,7 +18,7 @@ export async function runTestsJest(
     maxTimeout: number,
     hasTypeScript: boolean
 ): Promise<number> {
-    logInfo("Running Tests using Jest", getVersion());
+    logSection("Running Tests using Jest", `Version ${getVersion()}`);
 
     // Set the global object which points to the client so that the automation helpers can access it
     // This only works in jest >= 28 which lazy loads globalThis into its vm context

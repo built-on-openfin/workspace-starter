@@ -1,7 +1,7 @@
 import Jasmine from "jasmine";
 import { SpecReporter } from "jasmine-spec-reporter";
 import type { Client } from "webdriver";
-import { logInfo, logSeparator } from "../console";
+import { logSection, logSeparator } from "../console";
 
 /**
  * Run the tests.
@@ -21,7 +21,7 @@ export async function runTestsJasmine(
 ): Promise<number> {
     const runner = new Jasmine();
 
-    logInfo("Running Tests using Jasmine", runner.coreVersion());
+    logSection("Running Tests using Jasmine", `Version ${runner.coreVersion()}`);
 
     // Set the global object which points to the client so that the automation helpers can access it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
