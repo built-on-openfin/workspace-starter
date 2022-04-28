@@ -32,7 +32,7 @@ function getRequestOptions(url: string, options:FetchOptions, request) : { url:s
       if(keys.length > 0) {
         let length = keys.length;
         for(let i = 0; i < length; i++) {
-          url = url.replace(`[${keys[i]}]`,request[keys[i]] );
+          url = url.replace(`[${keys[i]}]`, encodeURIComponent(request[keys[i]]));
         }
       }
     }

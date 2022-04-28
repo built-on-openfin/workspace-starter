@@ -232,9 +232,7 @@ async function saveShareRequest(payload) {
         let platformInfo = await platform.Application.getInfo();
         let finsLink;
         
-        if(platformInfo.manifestUrl.indexOf("https") === 0) {
-            finsLink = platformInfo.manifestUrl.replace("https", "fins") + "?$$shareId=" + id;
-        } else if(platformInfo.manifestUrl.indexOf("http") === 0){
+        if(platformInfo.manifestUrl.indexOf("http") === 0){
             finsLink = platformInfo.manifestUrl.replace("http", "fin") + "?$$shareId=" + id;
         } else {
             console.error("We do not support file based manifest launches. The manifest has to be served over http/https: ", platformInfo.manifestUrl);
