@@ -112,6 +112,15 @@ export interface Integration<T> {
     data?: T;
 }
 
+export interface EndpointProvider {
+    endpoints?: Endpoint<unknown>[]
+}
+export interface Endpoint<T> {
+    id: string,
+    type:string,
+    options:T
+}
+
 export interface CustomSettings {
     bootstrap?: {  store: boolean, home:boolean, notifications:boolean }
     appProvider?: AppProvider,
@@ -121,5 +130,6 @@ export interface CustomSettings {
     homeProvider?: HomeProvider,
     storefrontProvider?:StorefrontProvider,
     notificationProvider?:NotificationProvider
-    integrationProvider?:IntegrationProvider
+    integrationProvider?:IntegrationProvider,
+    endpointProvider?: EndpointProvider
 }
