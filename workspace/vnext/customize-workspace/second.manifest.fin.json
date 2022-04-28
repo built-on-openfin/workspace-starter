@@ -66,6 +66,24 @@
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
     },
+    "endpointProvider": {
+      "endpoints": [{
+        "id":"share-get",
+        "type":"fetch",
+        "options": {
+          "method": "GET",
+          "url":"https://workspace.openfin.co/api/share/[id]"
+        }
+      },
+      {
+        "id":"share-save",
+        "type":"fetch",
+        "options": {
+          "method": "POST",
+          "url":"https://workspace.openfin.co/api/share"
+        }
+      }]
+    },
     "browserProvider": {
       "windowOptions": {
         "title": "Second Browser Starter",
