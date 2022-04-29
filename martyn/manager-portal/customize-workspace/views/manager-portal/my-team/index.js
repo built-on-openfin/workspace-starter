@@ -1,4 +1,4 @@
-import { broadcastFdc3, loadTeamData } from "../common/common.js";
+import { broadcastFdc3, buildUrl, loadTeamData } from "../common/common.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     init();
@@ -15,33 +15,37 @@ async function initDom() {
     const memberListElem = document.querySelector(".team-member-list");
 
     for (const teamMember of teamData) {
-        const memberElem = document.createElement("button");
+        const memberElem = document.createElement("div");
         memberElem.classList.add("row");
         memberElem.classList.add("gap10");
         memberElem.classList.add("middle");
         memberElem.classList.add("team-member-tile");
-        memberElem.addEventListener("click", () => selectTeamMember(teamMember))
 
         const memberImageElem = document.createElement("img");
         memberImageElem.classList.add("team-member-avatar");
-        memberImageElem.src = window.location.origin + "/images/avatars/avatar-" + teamMember.id + ".jpg";
+        memberImageElem.src = buildUrl("images/avatars", "avatar-" + teamMember.id + ".jpg");
 
         const memberInfoElem = document.createElement("div");
         memberInfoElem.classList.add("col");
         memberInfoElem.classList.add("fill");
         memberInfoElem.classList.add("gap5");
 
-        const memberNavigateElement = document.createElement("div");
+        const memberNavigateElement = document.createElement("button");
         memberNavigateElement.classList.add("team-member-navigate");
         memberNavigateElement.innerText = ">";
+        memberNavigateElement.addEventListener("click", () => selectTeamMember(teamMember))
 
         memberElem.appendChild(memberImageElem);
         memberElem.appendChild(memberInfoElem);
         memberElem.appendChild(memberNavigateElement);
 
-        const memberNameElem = document.createElement("div");
+        const memberNameElem = document.createElement("button");
         memberNameElem.classList.add("team-member-name")
         memberNameElem.innerText = teamMember.name;
+        memberNameElem.addEventListener("click", () => {
+            fin.System.openUrlWithBrowser("mailto:" + teamMember.email);
+        });
+        // memberNameElem.setAttribute("href", "mailto:" + teamMember.email);
 
         const memberRoleElem = document.createElement("div");
         memberRoleElem.classList.add("team-member-role")

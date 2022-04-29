@@ -119,6 +119,7 @@ p {
 }
 
 .team-member-name {
+  padding: 0;
   font-weight: bold;
   font-size: 10px;
   color: #ffffff;

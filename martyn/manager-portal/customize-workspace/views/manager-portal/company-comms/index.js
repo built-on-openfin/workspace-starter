@@ -49,7 +49,8 @@ async function initDom() {
 
         const contentLink = document.createElement("a");
         contentLink.classList.add("comm-link");
-        contentLink.setAttribute("src", companyComm.url);
+        contentLink.setAttribute("href", companyComm.url);
+        contentLink.setAttribute("target", "_blank");
         contentLink.innerText = "More";
 
         contentCol.append(contentTitle);

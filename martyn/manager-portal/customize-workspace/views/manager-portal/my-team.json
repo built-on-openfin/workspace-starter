@@ -1,7 +1,17 @@
 {
-    "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/my-team/index.html",
-    "fdc3InteropApi": "1.2",
-    "interop": {
-      "currentContextGroup": "orange"
+  "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/my-team/index.html",
+  "fdc3InteropApi": "1.2",
+  "interop": {
+    "currentContextGroup": "orange"
+  },
+  "permissions": {
+    "System": {
+      "openUrlWithBrowser": {
+        "enabled": true,
+        "protocols": [
+          "mailto"
+        ]
+      }
     }
   }
+}

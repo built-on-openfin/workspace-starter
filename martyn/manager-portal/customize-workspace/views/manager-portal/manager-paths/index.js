@@ -9,7 +9,17 @@ let teamData;
 async function init() {
     teamData = await loadTeamData();
 
+    initDom();
+
     await initFdc3Listener(handleContext);
+
+    updateMember();
+}
+
+function initDom() {
+    document.querySelector("#btnReview").addEventListener("click", () => {
+        window.open("https://www.expensify.com", "_blank");
+    })
 }
 
 function handleContext(ctx) {
@@ -19,11 +29,17 @@ function handleContext(ctx) {
 }
 
 function updateMember(fcd3Contact) {
-    const teamMember = teamData.find(m => m.id === fcd3Contact.id.FDS_ID);
+    const teamMember = fcd3Contact ? teamData.find(m => m.id === fcd3Contact.id.FDS_ID) : undefined;
 
     const firstName = teamMember?.name ? teamMember?.name.split(" ")[0] : "";
 
-    document.querySelector("#firstName").innerText = firstName;
-    document.querySelector("#reviewExpenses").style.display = firstName ? "flex" : "none";
+    console.log(firstName)
+
+    const expenseDescription = document.querySelector("#expenseDescription");
+    if (firstName) {
+        expenseDescription.innerText = firstName + " has submitted a new travel expense!";
+    } else {
+        expenseDescription.innerText = "Manage your expenses";
+    }
 }
 
