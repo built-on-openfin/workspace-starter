@@ -1,13 +1,25 @@
 export const MANAGER_PORTAL_CHANNEL = "manager-portal-channel";
 
-export async function loadTeamData() {
-    const response = await fetch(window.location.origin + "/data/team.json");
+export function buildUrl(folder, filename) {
+    const path = window.location.pathname.split("/");
+    path.pop(); // Remove the index.html
+    path.pop(); // Remove the current view folder
+    path.push(folder); // Add data folder
+    path.push(filename); // Add filename
+    return path.join("/");
+}
+
+export async function loadData(filename) {
+    const response = await fetch(buildUrl("data", filename));
     return response.json();
 }
 
+export async function loadTeamData() {
+    return loadData("team.json");
+}
+
 export async function loadCompanyComms() {
-    const response = await fetch(window.location.origin + "/data/company-comms.json");
-    return response.json();
+    return loadData("company-comms.json");
 }
 
 export async function initFdc3Listener(contextHandler) {

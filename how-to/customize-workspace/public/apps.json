@@ -763,7 +763,7 @@
     "title": "Manager Portal",
     "manifestType": "snapshot",
     "description": "Provides a portal for a manager",
-    "manifest": "http://localhost:8080/snapshot-manager-portal.json",
+    "manifest": "http://localhost:8080/views/manager-portal/snapshot-manager-portal.json",
     "icons": [
       {
         "src": "http://localhost:8080/images/icon-blue.png"
@@ -956,6 +956,38 @@
     "title": "Company Comms",
     "description": "View the communications for the company.",
     "manifest": "http://localhost:8080/views/manager-portal/company-comms.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "company-cal",
+    "name": "company-cal",
+    "title": "Company Calenda",
+    "description": "View the calendar for the company.",
+    "manifest": "http://localhost:8080/views/manager-portal/company-cal.json",
     "manifestType": "view",
     "icons": [
       {

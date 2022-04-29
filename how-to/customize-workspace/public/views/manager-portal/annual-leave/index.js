@@ -14,6 +14,8 @@ async function init() {
 
     await initDom();
     await initFdc3Listener(handleContext);
+
+    updateMember();
 }
 
 async function initDom() {
@@ -39,7 +41,7 @@ function handleContext(ctx) {
 }
 
 function updateMember(fcd3Contact) {
-    const teamMember = teamData.find(m => m.id === fcd3Contact.id.FDS_ID);
+    const teamMember = fcd3Contact ? teamData.find(m => m.id === fcd3Contact.id.FDS_ID) : undefined;
 
     smallCalendar.setDayStates(teamMember?.leave?.used, teamMember?.leave?.approved, teamMember?.leave?.awaitingApproval)
     largeCalendar.setDayStates(teamMember?.leave?.used, teamMember?.leave?.approved, teamMember?.leave?.awaitingApproval)
