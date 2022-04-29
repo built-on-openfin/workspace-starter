@@ -7,116 +7,9 @@
     "manifest": "http://localhost:8080/views/contact/call-app.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
-    "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
-  },
-  {
-    "appId": "participant-selection",
-    "name": "participant-selection",
-    "title": "Participant Selection",
-    "description": "Select a participant.",
-    "manifest": "http://localhost:8080/views/contact/participant-selection.json",
-    "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [],
-    "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
-  },
-  {
-    "appId": "participant-history",
-    "name": "participant-history",
-    "title": "Participant History",
-    "description": "View participant history.",
-    "manifest": "http://localhost:8080/views/contact/participant-history.json",
-    "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
-    "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
-  },
-  {
-    "appId": "investments-and-models",
-    "name": "investments-and-models",
-    "title": "Investments and Models",
-    "description": "View investments and models.",
-    "manifest": "http://localhost:8080/views/contact/investments-and-models.json",
-    "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
-    "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
-  },
-  {
-    "appId": "participant-summary-view",
-    "name": "participant-summary-view",
-    "title": "Participant Summary",
-    "description": "View summary of the participant",
-    "manifest": "http://localhost:8080/views/contact/participant-summary.json",
-    "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
-    "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
-  },
-  {
-    "appId": "client-overview",
-    "name": "client-overview",
-    "title": "Client Overview",
-    "manifestType": "snapshot",
-    "description": "Provides a summary of the current client",
-    "manifest": "http://localhost:8080/snapshot-contact-overview.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -128,9 +21,173 @@
         "contexts": [
           "fdc3.contact"
         ],
-        "customConfig": {}}],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":[ "page", "openfin", "client", "interop", "fdc3"]
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact"
+    ]
+  },
+  {
+    "appId": "participant-selection",
+    "name": "participant-selection",
+    "title": "Participant Selection",
+    "description": "Select a participant.",
+    "manifest": "http://localhost:8080/views/contact/participant-selection.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [],
+    "images": [],
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact"
+    ]
+  },
+  {
+    "appId": "participant-history",
+    "name": "participant-history",
+    "title": "Participant History",
+    "description": "View participant history.",
+    "manifest": "http://localhost:8080/views/contact/participant-history.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact"
+    ]
+  },
+  {
+    "appId": "investments-and-models",
+    "name": "investments-and-models",
+    "title": "Investments and Models",
+    "description": "View investments and models.",
+    "manifest": "http://localhost:8080/views/contact/investments-and-models.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact"
+    ]
+  },
+  {
+    "appId": "participant-summary-view",
+    "name": "participant-summary-view",
+    "title": "Participant Summary",
+    "description": "View summary of the participant",
+    "manifest": "http://localhost:8080/views/contact/participant-summary.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact"
+    ]
+  },
+  {
+    "appId": "client-overview",
+    "name": "client-overview",
+    "title": "Client Overview",
+    "manifestType": "snapshot",
+    "description": "Provides a summary of the current client",
+    "manifest": "http://localhost:8080/snapshot-contact-overview.json",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "page",
+      "openfin",
+      "client",
+      "interop",
+      "fdc3"
+    ]
   },
   {
     "appId": "basic-interop-view",
@@ -140,22 +197,32 @@
     "manifest": "http://localhost:8080/views/basic-interop-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
-    }],
-    "tags":["view", "interop"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/interop-view.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "interop"
+    ]
   },
   {
     "appId": "basic-interop-view-multi",
@@ -165,22 +232,33 @@
     "manifest": "http://localhost:8080/views/basic-interop-multi-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Intrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
-    }],
-    "tags":["view", "interop", "openfin"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Intrument (pages and views)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/interop-view.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "interop",
+      "openfin"
+    ]
   },
   {
     "appId": "fdc3-workbench",
@@ -188,35 +266,49 @@
     "title": "FDC3 Workbench",
     "description": "Launch the official FDC3 Workbench",
     "manifest": {
-      "url":"https://fdc3.finos.org/toolbox/fdc3-workbench/",
+      "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
       "fdc3InteropApi": "1.2",
       "name": "fdc3-workbench"
     },
     "manifestType": "inline-view",
     "icons": [
-      { "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }
+      {
+        "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}},
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      },
       {
         "name": "ViewInstrument",
         "displayName": "View Instrument",
         "contexts": [
           "fdc3.contact"
         ],
-        "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-workbench.png"
-    }],
-    "tags":["view", "interop", "fdc3", "contact", "instrument"]
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-workbench.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "interop",
+      "fdc3",
+      "contact",
+      "instrument"
+    ]
   },
   {
     "appId": "basic-fdc3-view",
@@ -226,22 +318,32 @@
     "manifest": "http://localhost:8080/views/basic-fdc3-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":["view", "fdc3"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "fdc3"
+    ]
   },
   {
     "appId": "basic-fdc3-view-multi",
@@ -251,22 +353,33 @@
     "manifest": "http://localhost:8080/views/basic-fdc3-multi-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":[ "view", "fdc3", "openfin"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "fdc3",
+      "openfin"
+    ]
   },
   {
     "appId": "raise-intent-or-broadcast-view",
@@ -276,16 +389,25 @@
     "manifest": "http://localhost:8080/views/raise-intent-or-broadcast-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":[ "view", "fdc3", "interop", "openfin"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": [
+      "view",
+      "fdc3",
+      "interop",
+      "openfin"
+    ]
   },
   {
     "appId": "preload-tradingview-view",
@@ -295,14 +417,20 @@
     "manifest": "http://localhost:8080/views/preload-tradingview-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [],
-    "tags":["view", "fdc3", "preload"]
+    "tags": [
+      "view",
+      "fdc3",
+      "preload"
+    ]
   },
   {
     "appId": "preload-google-view",
@@ -312,14 +440,20 @@
     "manifest": "http://localhost:8080/views/preload-google-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [],
-    "tags":["view", "fdc3", "preload"]
+    "tags": [
+      "view",
+      "fdc3",
+      "preload"
+    ]
   },
   {
     "appId": "expero-company-news",
@@ -336,10 +470,16 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-news-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-news-view.png"
+      }
+    ],
+    "tags": [
+      "expero",
+      "view",
+      "interop"
+    ]
   },
   {
     "appId": "openfin-intent-page",
@@ -349,7 +489,9 @@
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot-intent-single-instance.json",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -361,18 +503,26 @@
         "contexts": [
           "fdc3.instrument"
         ],
-        "customConfig": {}},
+        "customConfig": {}
+      },
       {
-      "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument (pages only)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":[ "page", "openfin"]
+        "name": "ShowInstrumentForPage",
+        "displayName": "Show Instrument (pages only)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": [
+      "page",
+      "openfin"
+    ]
   },
   {
     "appId": "openfin-intent-page-multi",
@@ -382,7 +532,9 @@
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This page can be launched multiple times. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot-intent-multi-instance.json",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -394,18 +546,26 @@
         "contexts": [
           "fdc3.instrument"
         ],
-        "customConfig": {}},
+        "customConfig": {}
+      },
       {
-      "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument (pages only)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":[ "page", "openfin"]
+        "name": "ShowInstrumentForPage",
+        "displayName": "Show Instrument (pages only)",
+        "contexts": [
+          "fdc3.instrument"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": [
+      "page",
+      "openfin"
+    ]
   },
   {
     "appId": "expero-description",
@@ -422,10 +582,16 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-description-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-description-view.png"
+      }
+    ],
+    "tags": [
+      "expero",
+      "view",
+      "interop"
+    ]
   },
   {
     "appId": "expero-stock-quote",
@@ -442,10 +608,16 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-stock-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-stock-view.png"
+      }
+    ],
+    "tags": [
+      "expero",
+      "view",
+      "interop"
+    ]
   },
   {
     "appId": "notifications-generator",
@@ -455,16 +627,24 @@
     "description": "Notifications Studio: This is OpenFin's tool for demonstrating the power of our Notification Center. Use it to create local notifications or use some of the examples shown in our Catalog. Experiment with our features and see the power that OpenFin Notification Center can bring to your applications.",
     "manifest": "https://cdn.openfin.co/studio/notification/app.json",
     "icons": [
-      { "src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"}
+      {
+        "src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-notification-studio.png"
-    }],
-    "tags":["hero", "manifest", "tools"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-notification-studio.png"
+      }
+    ],
+    "tags": [
+      "hero",
+      "manifest",
+      "tools"
+    ]
   },
   {
     "appId": "openfin-process-manager",
@@ -474,16 +654,24 @@
     "description": "Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
     "manifest": "https://cdn.openfin.co/process-manager/app.json",
     "icons": [
-      { "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }
+      {
+        "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-process-manager.png"
-    }],
-    "tags":["hero", "manifest", "tools"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-process-manager.png"
+      }
+    ],
+    "tags": [
+      "hero",
+      "manifest",
+      "tools"
+    ]
   },
   {
     "appId": "openfin-developer-page",
@@ -493,16 +681,22 @@
     "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot.json",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":["page"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": [
+      "page"
+    ]
   },
   {
     "appId": "winform-interop-example",
@@ -512,16 +706,24 @@
     "manifestType": "external",
     "manifest": "winform-interop-example",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-winform-interop.png" }
+      {
+        "src": "http://localhost:8080/images/icon-winform-interop.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-winform-interop.png"
-    }],
-    "tags":["native", "appasset", "nwi"],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-winform-interop.png"
+      }
+    ],
+    "tags": [
+      "native",
+      "appasset",
+      "nwi"
+    ],
     "data": {
       "nwi": {
         "name": "OpenFin.Interop.Win.Sample",
@@ -538,25 +740,278 @@
     "manifestType": "external",
     "manifest": "notepad.exe",
     "icons": [
-      { "src": "http://localhost:8080/images/icon-notepad.png" }
+      {
+        "src": "http://localhost:8080/images/icon-notepad.png"
+      }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "Microsoft",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/microsoft-notepad-native.png"
-    }],
-    "tags":["native"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/microsoft-notepad-native.png"
+      }
+    ],
+    "tags": [
+      "native"
+    ]
+  },
+  {
+    "appId": "manager-portal",
+    "name": "manager-portal",
+    "title": "Manager Portal",
+    "manifestType": "snapshot",
+    "description": "Provides a portal for a manager",
+    "manifest": "http://localhost:8080/snapshot-manager-portal.json",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "page",
+      "openfin",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "my-team",
+    "name": "my-team",
+    "title": "My Team",
+    "description": "View my team.",
+    "manifest": "http://localhost:8080/views/manager-portal/my-team.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "keeping-track",
+    "name": "keeping-track",
+    "title": "Keeping Track",
+    "description": "Keep track of a team member.",
+    "manifest": "http://localhost:8080/views/manager-portal/keeping-track.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "annual-leave",
+    "name": "annual-leave",
+    "title": "Annual Leave",
+    "description": "View the annual leave for a team member.",
+    "manifest": "http://localhost:8080/views/manager-portal/annual-leave.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "360-feedback",
+    "name": "360-feedback",
+    "title": "360 Feedback",
+    "description": "View the feedback for a team member.",
+    "manifest": "http://localhost:8080/views/manager-portal/360-feedback.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "manager-paths",
+    "name": "manager-paths",
+    "title": "Manager Paths",
+    "description": "View the manager paths for a team member.",
+    "manifest": "http://localhost:8080/views/manager-portal/manager-paths.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "company-comms",
+    "name": "company-comms",
+    "title": "Company Comms",
+    "description": "View the communications for the company.",
+    "manifest": "http://localhost:8080/views/manager-portal/company-comms.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
+  },
+  {
+    "appId": "franchise-comms",
+    "name": "franchise-comms",
+    "title": "Franchise Comms",
+    "description": "View the communications for the franchise.",
+    "manifest": "http://localhost:8080/views/manager-portal/franchise-comms.json",
+    "manifestType": "view",
+    "icons": [
+      {
+        "src": "http://localhost:8080/images/icon-blue.png"
+      }
+    ],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": [
+          "fdc3.contact"
+        ],
+        "customConfig": {}
+      }
+    ],
+    "images": [],
+    "tags": [
+      "view",
+      "manager",
+      "fcd3"
+    ]
   }
-
-
-
-
-  
-
- 
-  
-  
-
 ]
