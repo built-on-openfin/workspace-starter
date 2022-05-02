@@ -985,7 +985,7 @@
   {
     "appId": "company-cal",
     "name": "company-cal",
-    "title": "Company Calenda",
+    "title": "Company Calendar",
     "description": "View the calendar for the company.",
     "manifest": "http://localhost:8080/views/manager-portal/company-cal.json",
     "manifestType": "view",
