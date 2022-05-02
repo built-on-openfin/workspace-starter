@@ -985,7 +985,7 @@
   {
     "appId": "company-cal",
     "name": "company-cal",
-    "title": "Company Calenda",
+    "title": "Company Calendar",
     "description": "View the calendar for the company.",
     "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/company-cal.json",
     "manifestType": "view",

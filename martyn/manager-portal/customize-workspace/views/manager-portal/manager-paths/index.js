@@ -17,9 +17,10 @@ async function init() {
 }
 
 function initDom() {
-    document.querySelector("#btnReview").addEventListener("click", () => {
-        window.open("https://www.expensify.com", "_blank");
-    })
+    document.querySelector("#btnReview").addEventListener("click", async () => {
+        let plat = fin.Platform.getCurrentSync();
+        await plat.createView({ target: null, url: "https://www.expensify.com/reports" });
+    });
 }
 
 function handleContext(ctx) {
