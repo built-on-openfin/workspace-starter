@@ -79,23 +79,33 @@ export async function getSearchResults(query: string, filters: CLIFilter[], last
         }
     };
 
+    const promises: Promise<HomeSearchResponse>[] = [];
     for (const homeIntegration of homeIntegrations) {
         if (homeIntegration.module.getSearchResults) {
-            const integrationResults = await homeIntegration.module.getSearchResults(
+            promises.push(homeIntegration.module.getSearchResults(
                 homeIntegration.integration,
                 query,
                 filters,
                 lastResponse
-            );
-            if (Array.isArray(integrationResults.results)) {
-                homeResponse.results = homeResponse.results.concat(integrationResults.results);
+            ));
+        }
+    }
+
+    const promiseResults = await Promise.allSettled(promises);
+    for (const promiseResult of promiseResults) {
+        if (promiseResult.status === "fulfilled") {
+            if (Array.isArray(promiseResult.value.results)) {
+                homeResponse.results = homeResponse.results.concat(promiseResult.value.results);
             }
-            const newFilters = integrationResults.context?.filters;
+            const newFilters = promiseResult.value.context?.filters;
             if (Array.isArray(newFilters) && homeResponse.context?.filters) {
                 homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
             }
+        } else {
+            console.error(promiseResult.reason);
         }
     }
+
 
     return homeResponse;
 }
