@@ -1,7 +1,7 @@
 :root {
   --brand-primary: #504cff;
   --brand-secondary: #189ffb;
-  --brand-background: #ffffff;
+  --brand-background: #FAFBFE;
   --brand-tile-background: #e4e4e4;
   --brand-main-text: #000000;
 }
@@ -130,6 +130,9 @@ p {
 .team-member-tile[aria-selected="true"] > div > button {
   color: #ffffff;
 }
+.team-member-tile[aria-selected="true"] > .team-member-navigate {
+  color: #ffffff;
+}
 
 .team-member-name {
   padding: 0;
@@ -146,9 +149,6 @@ p {
   height: 38px;
   object-fit: cover;
   border-radius: 50%;
-}
-
-.team-member-navigate {
 }
 
 #smallCalendar {
@@ -192,6 +192,9 @@ p {
 
 .calendar-cell.calendar-cell-border {
   border: 1px solid var(--brand-main-text);
+}
+.calendar-cell.calendar-cell-large.calendar-cell-border {
+  border: 1px solid #e4e4e4;
 }
 
 .calendar-cell.calendar-cell-dimmed {
