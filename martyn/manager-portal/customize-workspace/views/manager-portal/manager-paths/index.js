@@ -34,8 +34,6 @@ function updateMember(fcd3Contact) {
 
     const firstName = teamMember?.name ? teamMember?.name.split(" ")[0] : "";
 
-    console.log(firstName)
-
     const expenseDescription = document.querySelector("#expenseDescription");
     if (firstName) {
         expenseDescription.innerText = firstName + " has submitted a new travel expense!";

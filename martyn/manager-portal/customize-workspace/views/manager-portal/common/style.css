@@ -1,6 +1,9 @@
 :root {
-  --accent: #504cff;
-  --blue: #189ffb;
+  --brand-primary: #504cff;
+  --brand-secondary: #189ffb;
+  --brand-background: #ffffff;
+  --brand-tile-background: #e4e4e4;
+  --brand-main-text: #000000;
 }
 
 * {
@@ -13,7 +16,6 @@ button {
   background: none;
   text-align: left;
   cursor: pointer;
-  color: #ffffff;
 }
 
 body {
@@ -23,12 +25,12 @@ body {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  background-color: #111214;
-  color: #ffffff;
+  background-color: var(--brand-background);
+  color: var(--brand-main-text);
 }
 
 body.scrollable {
- overflow: auto;
+  overflow: auto;
 }
 
 h1 {
@@ -47,7 +49,7 @@ p {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #111214;
+  background: var(--brand-background);
 }
 ::-webkit-scrollbar-thumb {
   background: #888;
@@ -118,7 +120,14 @@ p {
   padding: 6px;
   overflow: hidden;
   border-radius: 5px 0px 0px 5px;
-  background-color: #4f525a;
+  background-color: var(--brand-tile-background);
+}
+
+.team-member-tile[aria-selected="true"] {
+  background-color: var(--brand-secondary);
+  color: #ffffff;
+}
+.team-member-tile[aria-selected="true"] > div > button {
   color: #ffffff;
 }
 
@@ -126,12 +135,10 @@ p {
   padding: 0;
   font-weight: bold;
   font-size: 10px;
-  color: #ffffff;
 }
 
 .team-member-role {
   font-size: 10px;
-  color: #ffffff;
 }
 
 .team-member-avatar {
@@ -142,7 +149,6 @@ p {
 }
 
 .team-member-navigate {
-  color: #ffffff;
 }
 
 #smallCalendar {
@@ -185,16 +191,16 @@ p {
 }
 
 .calendar-cell.calendar-cell-border {
-  border: 1px solid #ffffff;
+  border: 1px solid var(--brand-main-text);
 }
 
 .calendar-cell.calendar-cell-dimmed {
-  background-color: #000000;
-  color: #747474;
+  background-color: #c9cbd2;
+  color: #ffffff;
 }
 
 .calendar-cell.calendar-cell-used {
-  background-color: var(--blue);
+  background-color: var(--brand-secondary);
   color: #ffffff;
 }
 
@@ -247,7 +253,7 @@ p {
 
 .summary-label.summary-highlight,
 .summary-value.summary-highlight {
-  color: var(--blue);
+  color: var(--brand-secondary);
   font-weight: bold;
 }
 
@@ -269,12 +275,13 @@ p {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border: 1px solid #ffffff;
+  border: 1px solid #afafaf;
   border-radius: 5px;
 }
 
 .path-tile > div > button {
-  background-color: var(--accent);
+  background-color: #005cb9;
+  color: #ffffff;
   border-radius: 5px;
   padding: 10px;
   min-width: 110px;
@@ -304,6 +311,7 @@ p {
   margin-top: 2px;
   font-size: 12px;
   font-weight: bold;
-  color: var(--blue);
+  color: var(--brand-secondary);
   cursor: pointer;
+  text-decoration: none;
 }
