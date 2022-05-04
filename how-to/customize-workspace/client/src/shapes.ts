@@ -1,6 +1,9 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications"; 
+import { IntegrationProvider } from "./integrations-shapes";
+
+
 interface PlatformProvider {
     rootUrl: string,
     enableNativeWindowIntegration: boolean
@@ -100,16 +103,13 @@ interface StorefrontProvider {
     footer: StorefrontFooter
 }
 
-export interface IntegrationProvider {
-    integrations?: Integration<unknown>[];
+export interface EndpointProvider {
+    endpoints?: Endpoint<unknown>[]
 }
-
-export interface Integration<T> {
-    id: string;
-    title: string;
-    icon: string;
-    enabled: boolean;
-    data?: T;
+export interface Endpoint<T> {
+    id: string,
+    type:string,
+    options:T
 }
 
 export interface CustomSettings {
@@ -121,5 +121,6 @@ export interface CustomSettings {
     homeProvider?: HomeProvider,
     storefrontProvider?:StorefrontProvider,
     notificationProvider?:NotificationProvider
-    integrationProvider?:IntegrationProvider
+    integrationProvider?:IntegrationProvider,
+    endpointProvider?: EndpointProvider
 }

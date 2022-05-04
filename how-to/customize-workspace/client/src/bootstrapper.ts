@@ -2,11 +2,12 @@ import { register as registerHome, show as showHome, deregister as deregisterHom
 import { register as registerStore, show as showStore, deregister as deregisterStore } from './store';
 import { register as registerShare, deregister as deregisterShare } from './share';
 import { register as registerNotifications, deregister as deregisterNotifications } from './notifications';
+import { init as endpointInit } from "./endpoint";
 
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
-import { providerId as salesforceProviderId, salesForceRegister, SalesforceSettings, salesForceUnregister } from './salesforce';
-import { Integration } from './shapes';
+import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
+import { launchPage, launchView } from './browser';
 
 export async function init() {
     // you can kick off your bootstrapping process here where you may decide to prompt for authentication, 
@@ -17,7 +18,7 @@ export async function init() {
     let setupHome = settings?.bootstrap?.home ?? true;
     let setupStore = settings?.bootstrap?.store ?? true;
     let setupNotifications = settings?.bootstrap?.notifications ?? true;
-
+    await endpointInit();
     if(setupHome) {
         // only register search logic once workspace is running
         await registerHome();
@@ -38,19 +39,17 @@ export async function init() {
 
     await registerShare()
 
-    let salesForceIntegration: Integration<SalesforceSettings> | undefined = undefined;
-    if (settings.integrationProvider?.integrations?.length) {
-        salesForceIntegration = settings?.integrationProvider?.integrations?.find(i => i.id === salesforceProviderId) as Integration<SalesforceSettings>;
-        if (salesForceIntegration?.enabled) {
-            await salesForceRegister(salesForceIntegration?.data)
-        }
-    }
+    await registerIntegration({
+        rootUrl: settings?.platformProvider.rootUrl,
+        launchView,
+        launchPage,
+        openUrl: fin.System.openUrlWithBrowser
+    }, settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();
     providerWindow.once("close-requested", async (event) => {
-        if (salesForceIntegration?.enabled) {
-            await salesForceUnregister(salesForceIntegration?.data);
-        }
+        await deregisterIntegration(settings.integrationProvider);
+
         await deregisterStore();
         await deregisterHome();
         await deregisterShare();
