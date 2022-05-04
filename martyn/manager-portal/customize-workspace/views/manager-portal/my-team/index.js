@@ -58,10 +58,12 @@ async function initDom() {
         memberInfoElem.appendChild(memberRoleElem);
 
         memberListElem.appendChild(memberElem);
-        if (memberListElem.childNodes.length === 0) {
-            memberElem.setAttribute("aria-selected", true);
-        }
     }
+
+    // Select the first team member by default, this will get overridden
+    // if there is a context value set
+    visualSelectMemberElem(memberListElem.childNodes[0]);
+    await selectTeamMember(teamData[0]);
 }
 
 async function selectTeamMember(member) {
