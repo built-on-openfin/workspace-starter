@@ -58,6 +58,9 @@ async function initDom() {
         memberInfoElem.appendChild(memberRoleElem);
 
         memberListElem.appendChild(memberElem);
+        if (memberListElem.childNodes.length === 0) {
+            memberElem.setAttribute("aria-selected", true);
+        }
     }
 }
 
