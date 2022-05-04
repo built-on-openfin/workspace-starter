@@ -7,7 +7,6 @@ export class Calendar {
     year;
     monthNamesLong;
     dayNamesShort;
-    usedDays;
     approvedDays;
     awaitingApprovalDays;
 
@@ -22,8 +21,7 @@ export class Calendar {
         this.dayNamesShort = [...Array(7).keys()].map(d => formatDay(new Date(Date.UTC(2000, 1, d))).slice(0, 2));
     }
 
-    setDayStates(used, approved, awaitingApproval) {
-        this.usedDays = used;
+    setDayStates(approved, awaitingApproval) {
         this.approvedDays = approved;
         this.awaitingApprovalDays = awaitingApproval;
         this.populateDays();
@@ -72,10 +70,16 @@ export class Calendar {
         const daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
         const daysInLastMonth = new Date(this.year, this.month, 0).getDate();
 
-        const firstDayOfWeek = firstDayOfMonth.getDay() - 1;
+        let firstDayOfWeek = firstDayOfMonth.getDay() - 1;
 
         const days = [];
         const daysState = [];
+        const todayFull = new Date();
+        const today = (new Date(todayFull.getFullYear(), todayFull.getMonth(), todayFull.getDate())).getTime();
+
+        if (firstDayOfWeek < 0) {
+            firstDayOfWeek += 7;
+        }
 
         // First fill in the days from the end of last month to the start day of this month
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
@@ -86,13 +90,12 @@ export class Calendar {
         for (let i = 0; i < daysInMonth; i++) {
             days.push(i + 1);
 
-
             const fullFormattedDate = this.year + "-" + (this.month + 1).toString().padStart(2, '0') + "-" + (i + 1).toString().padStart(2, '0')
 
-            if (this.usedDays && this.usedDays.includes(fullFormattedDate)) {
-                daysState.push(2);
-            } else if (this.approvedDays && this.approvedDays.includes(fullFormattedDate)) {
-                daysState.push(3);
+            if (this.approvedDays && this.approvedDays.includes(fullFormattedDate)) {
+                const d = new Date(this.year, this.month, i);
+
+                daysState.push(d.getTime() < today ? 2 : 3);
             } else if (this.awaitingApprovalDays && this.awaitingApprovalDays.includes(fullFormattedDate)) {
                 daysState.push(4);
             } else {
@@ -136,6 +139,9 @@ export class Calendar {
             const dayTextElem = document.createElement("div");
             dayTextElem.classList.add("calendar-cell-day-text");
             dayTextElem.innerText = days[i];
+            if (todayFull.getFullYear() == this.year && todayFull.getMonth() === this.month && days[i] === this.day && daysState[i] !== 0) {
+                dayTextElem.classList.add("calendar-cell-today");
+            }
 
             dayItemElem.appendChild(dayTextElem);
 
