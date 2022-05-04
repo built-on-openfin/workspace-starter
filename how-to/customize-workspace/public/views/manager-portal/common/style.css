@@ -203,12 +203,12 @@ p {
 }
 
 .calendar-cell.calendar-cell-used {
-  background-color: var(--brand-secondary);
+  background-color: #109128;
   color: #ffffff;
 }
 
 .calendar-cell.calendar-cell-approved {
-  background-color: #109128;
+  background-color: var(--brand-secondary);
   color: #ffffff;
 }
 
@@ -223,6 +223,10 @@ p {
 .calendar-cell-day-state-text {
   padding: 5px 5px;
   white-space: nowrap;
+}
+.calendar-cell-day-text.calendar-cell-today {
+  color: var(--brand-secondary);
+  font-weight: bold;
 }
 
 .calendar-cell-day-state-bar-container {
