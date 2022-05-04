@@ -423,17 +423,18 @@
           "icon": "http://localhost:8080/images/salesforce/favicon.ico",
           "title": "Salesforce",
           "enabled": false,
+          "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
           "data": {
-            "consumerKey": "",
-            "isSandbox": false,
-            "orgUrl": "",
-            "iconMap": {
-              "contact": "http://localhost:8080/images/salesforce/contact.svg",
-              "account": "http://localhost:8080/images/salesforce/account.svg",
-              "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
-              "note": "http://localhost:8080/images/salesforce/note.svg",
-              "task": "http://localhost:8080/images/salesforce/task.svg"
-            }
+              "consumerKey": "",
+              "isSandbox": false,
+              "orgUrl": "",
+              "iconMap": {
+                  "contact": "http://localhost:8080/images/salesforce/contact.svg",
+                  "account": "http://localhost:8080/images/salesforce/account.svg",
+                  "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
+                  "note": "http://localhost:8080/images/salesforce/note.svg",
+                  "task": "http://localhost:8080/images/salesforce/task.svg"
+              }
           }
         }
       ]
