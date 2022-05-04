@@ -266,12 +266,35 @@ p {
   font-weight: bold;
 }
 
+.manager-paths {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: #005cb9;
+  padding: 20px;
+}
+
+.manager-paths > a {
+  color: #ffffff;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.manager-paths > a[aria-selected="true"] {
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-thickness: 4px;
+  text-decoration-color: #E5832D;
+  text-underline-offset: 2px;
+}
+
 .paths-container {
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 1fr;
   gap: 10px;
+  overflow: auto;
 }
 
 .path-tile {
@@ -289,6 +312,24 @@ p {
   padding: 10px;
   min-width: 110px;
   text-align: center;
+}
+
+.company-comms {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+}
+
+.company-comms > a {
+  color: #000000;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.company-comms > a[aria-selected="true"] {
+  font-weight: bold;
+  color: #4426C6;
 }
 
 .company-comms-list {
