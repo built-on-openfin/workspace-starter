@@ -14,11 +14,9 @@ export class Calendar {
         this.rootElem = document.querySelector(`#${rootElem}`);
         this.variant = variant;
 
-        const formatMonth = new Intl.DateTimeFormat("en-US", { month: "long" }).format;
-        this.monthNamesLong = [...Array(12).keys()].map(m => formatMonth(new Date(Date.UTC(2000, m))));
+        this.monthNamesLong = [...Array(12).keys()].map(m => new Date(2000, m, 1).toLocaleString("default", { month: "long" }));
 
-        const formatDay = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
-        this.dayNamesShort = [...Array(7).keys()].map(d => formatDay(new Date(Date.UTC(2000, 1, d))).slice(0, 2));
+        this.dayNamesShort = [...Array(7).keys()].map(d => new Date(2000, 1, d).toLocaleString("default", { weekday: "short" }).slice(0, 2));
     }
 
     setDayStates(approved, awaitingApproval) {
