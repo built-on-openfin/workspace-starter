@@ -4,9 +4,9 @@ import { PlatformStorage } from "./platform-storage";
 import { getSettings } from "./settings";
 import { launchPage } from "./browser";
 import { getWorkspace } from "./workspace";
+import { requestResponse } from './endpoint';
 
 let shareRegistered = false;
-const shareStorage = new PlatformStorage("share-storage", "Shared Entries");
 
 export interface IShareCustomData {
     workspaceId?: string,
@@ -18,8 +18,7 @@ export interface IShareCustomData {
 
 interface IShareEntry {
     type: string,
-    expires: number,
-    payload: any
+    data: any
 }
 
 async function notifyOfSuccessfulLoad() {
@@ -176,7 +175,7 @@ async function saveSharedPage(data: IShareCustomData ) {
     }
     const payload = {
         type: "page",
-        payload: {
+        data: {
             page,
             bounds
         }
@@ -203,7 +202,7 @@ async function saveSharedWorkspace(workspaceId?:string) {
     } else {
         const payload = {
             type: "workspace",
-            payload: {
+            data: {
                 snapshot
             }
         };
@@ -213,34 +212,34 @@ async function saveSharedWorkspace(workspaceId?:string) {
 
 async function saveShareRequest(payload) {
     try {
-        let uuid = window.crypto.randomUUID();
+        
+        const expiryInHours = 24;
+        let response = await requestResponse<any, { url: string, id?:string }>("share-save", payload);   
+        let id = response.id;
+        if(id === undefined) {
+            let indexOfId = response.url.lastIndexOf("/");
+            if(indexOfId !== -1) {                
+                id = response.url.substring(indexOfId + 1);
+            }
+        }
+
+        if(id === undefined) {
+            await notifyOfFailure("The share request you raised could not be generated.");
+            return;
+        }
+
         let platform = getCurrentSync();
         let platformInfo = await platform.Application.getInfo();
         let finsLink;
         
-        if(platformInfo.manifestUrl.indexOf("https") === 0) {
-            finsLink = platformInfo.manifestUrl.replace("https", "fins") + "?$$shareId=" + uuid;
-        } else if(platformInfo.manifestUrl.indexOf("http") === 0){
-            finsLink = platformInfo.manifestUrl.replace("http", "fin") + "?$$shareId=" + uuid;
+        if(platformInfo.manifestUrl.indexOf("http") === 0){
+            finsLink = platformInfo.manifestUrl.replace("http", "fin") + "?$$shareId=" + id;
         } else {
             console.error("We do not support file based manifest launches. The manifest has to be served over http/https: ", platformInfo.manifestUrl);
             await notifyOfFailure("The share request you raised could not be generated.");
             return;
         }
-        const expiryInHours = 24;
-        payload.expires = Date.now() + (expiryInHours * 60000);
 
-        let existingEntries = await shareStorage.getAllStoredEntries<IShareEntry>();
-        let keys = Object.keys(existingEntries);
-        let currentTimeStamp = Date.now();
-        // clean up expired entries
-        for(let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            if(existingEntries[key].expires < currentTimeStamp) {
-                await shareStorage.clearStorageEntry(key);
-            }
-        }
-        await shareStorage.saveToStorage(uuid, payload);   
         await fin.Clipboard.writeText({
             data: finsLink
         });
@@ -252,21 +251,26 @@ async function saveShareRequest(payload) {
 }
 
 async function loadSharedEntry(id:string) {
-    let shareEntry = await shareStorage.getFromStorage<IShareEntry>(id);
-    if(shareEntry !== undefined) {
-        if(shareEntry.type === "page") {
-            await launchPage(shareEntry.payload.page, shareEntry.payload.bounds);
-        } else if(shareEntry.type === "workspace") {
-            let platform = getCurrentSync();
-            await platform.applySnapshot(shareEntry.payload.snapshot);
+    try {
+        let shareEntry = await requestResponse<{id:string}, IShareEntry>("share-get", { id });
+        if(shareEntry !== undefined && shareEntry !== null) {
+            if(shareEntry.type === "page") {
+                await launchPage(shareEntry.data.page, shareEntry.data.bounds);
+            } else if(shareEntry.type === "workspace") {
+                let platform = getCurrentSync();
+                await platform.applySnapshot(shareEntry.data.snapshot);
+            } else {
+                console.warn("Share entry of unknown type specified: " + shareEntry.type);
+                await notifyOfFailure("The specified share link is not supported and cannot be loaded.");
+                return;
+            }
+            await notifyOfSuccessfulLoad();
         } else {
-            console.warn("Share entry of unknown type specified: " + shareEntry.type);
-            await notifyOfFailure("The specified share link is not supported and cannot be loaded.");
-            return;
+            await notifyOfExpiry();
         }
-        await notifyOfSuccessfulLoad();
-    } else {
-        await notifyOfExpiry();
+    } catch(error) {
+        console.error("There has been an error trying to load and apply the share link.", error);
+        await notifyOfFailure("The specified share link cannot be loaded.");
     }
 }
 
