@@ -130,6 +130,10 @@ export async function run(args: string[]): Promise<void> {
                 logSettings("Storage Folder", opts.storageFolder);
                 logSettings("Offline", opts.offline ? "true" : "false");
 
+                const testFilesExpanded = await promisify(glob)(testGlobPath);
+                const hasTypeScript = testFilesExpanded.some(filename => filename.includes(".ts"));
+                logSettings("TypeScript", hasTypeScript ? "true" : "false");
+
                 let tempDataDir: string | undefined;
                 let chromeDriverProcessId: number | undefined;
                 let launchParams:
@@ -178,9 +182,6 @@ export async function run(args: string[]): Promise<void> {
                         logLevel: opts.logLevel
                     });
 
-                    const testFilesExpanded = await promisify(glob)(testGlobPath);
-
-                    const hasTypeScript = testFilesExpanded.some(filename => filename.includes(".ts"));
                     if (hasTypeScript) {
                         tsNode.register({});
                     }
