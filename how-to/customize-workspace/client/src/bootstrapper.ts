@@ -2,6 +2,7 @@ import { register as registerHome, show as showHome, deregister as deregisterHom
 import { register as registerStore, show as showStore, deregister as deregisterStore } from './store';
 import { register as registerShare, deregister as deregisterShare } from './share';
 import { register as registerNotifications, deregister as deregisterNotifications } from './notifications';
+import { init as endpointInit } from "./endpoint";
 
 import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
@@ -17,7 +18,7 @@ export async function init() {
     let setupHome = settings?.bootstrap?.home ?? true;
     let setupStore = settings?.bootstrap?.store ?? true;
     let setupNotifications = settings?.bootstrap?.notifications ?? true;
-
+    await endpointInit();
     if(setupHome) {
         // only register search logic once workspace is running
         await registerHome();
