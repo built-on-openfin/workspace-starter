@@ -23,6 +23,8 @@ Run `npm i @openfin/automation-cli`.
 ## Command Line Options
 
 ```shell
+🚀 OpenFin Automation
+
 Usage: of-automation [options] <manifestUrl <string>> <testGlob <string>>
 
 Run Automation Tests using Chrome Driver with an OpenFin UI
@@ -33,15 +35,20 @@ Arguments:
 
 Options:
   -V, --version                     output the version number
-  --logLevel <level>                The log level for the webdriver (choices: "debug", "silent", default: "silent")
+  --logLevel <level>                The log level for the webdriver (choices: "debug", "silent",  
+                                    default: "silent")
   --devToolsPort <number>           The port to run the dev tools on (default: 9090)
   --chromeDriverPort <number>       The port to run the chromedriver on (default: 4444)
-  --storageFolder <path>            The path to store any downloaded or offline data (default: "./storage/")
-  --offline                         In offline mode no resources are retrieved, they are expected to be in the storageFolder
-  --testTimeout <number>            The timeout in seconds for running tests (default: 120)
-  --defaultRuntimeVersion <string>  The OpenFin runtime version to use if not specified in manifest (default: "stable")
-  --framework <jasmine>             The test framework to run the tests with (choices: "mocha", "jasmine", default: "mocha")
-  -h, --help                        display help for command
+  --storageFolder <path>            The path to store any downloaded or offline data (default:    
+                                    "./storage/")
+  --offline                         In offline mode no resources are retrieved, they are expected 
+                                    to be in the storageFolder
+  --testTimeout <number>            The timeout in seconds for running tests (default: 120)       
+  --defaultRuntimeVersion <string>  The OpenFin runtime version to use if not specified in        
+                                    manifest (default: "stable")
+  --framework <mocha>               The test framework to run the tests with (choices: "mocha",   
+                                    "jasmine", "jest", default: "mocha")
+  -h, --help                        display help for command```
 ```
 
 ## Execution example
@@ -54,154 +61,152 @@ Assuming your manifest is already being served at `http://localhost:8080/manifes
 of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js
 ```
 
-You should see a summary similar to that show below:
+You should see a summary similar to that shown below:
 
 <details>
   <summary>CLI Output</summary>
+🚀 OpenFin Automation
 
-OpenFin Automation
+  ⚙️  Manifest Url http://localhost:8080/manifest.fin.json
 
-* Manifest Url http://localhost:8080/manifest.fin.json
-* Test Glob Path ./tests/\*_/_.spec.js
-* Log Level silent
-* Dev Tools Port 9090
-* Chrome Driver Port 4444
-* Test Framework mocha
-* Test Timeout 120
-* Default Runtime Version stable
-* Storage Folder ./storage/
-* Offline false
+  ⚙️  Test Glob Path ./tests/**/*.spec.js
 
----
+  ⚙️  Log Level silent
 
-Loading manifest http://localhost:8080/manifest.fin.json
+  ⚙️  Dev Tools Port 9090
 
-Manifest loaded
+  ⚙️  Chrome Driver Port 4444
 
----
+  ⚙️  Test Framework mocha
 
-Resolving runtime version 23.96.68.3
+  ⚙️  Test Timeout 120
 
-Final Runtime version 23.96.68.3
+  ⚙️  Default Runtime Version stable
 
----
+  ⚙️  Storage Folder ./storage/
 
-Chromium runtime version 96
+  ⚙️  Offline false
+_______________________________________________________
 
-Chrome Driver already exists .\storage\chromedriver\96\chromedriver.exe
+➡️  Loading manifest
+   http://localhost:8080/manifest.fin.json
 
----
+  ✅  Manifest loaded
+_______________________________________________________
 
-Creating temp profile dir <tempfolder>\openfin-test-1650963275529
+➡️  Resolving OpenFin runtime version
+   Version 23.96.68.3
 
-Cleaning up existing OpenFin instances
+  ✅  Final Runtime version 23.96.68.3
+_______________________________________________________
 
-Cleanup complete
+➡️  Get Chrome Driver
+   Version 96
 
----
+  ✅  Chrome Driver already exists .\storage\chromedriver\96\chromedriver.exe
+_______________________________________________________
 
-Querying Desktop Owner Settings
+➡️  Creating temp profile directory
+   .\tmp\\openfin-test-1651745687443
 
-HKEY_CURRENT_USER\Software\OpenFin\RVM\Settings
+  ✅  Directory created
+_______________________________________________________
 
-DesktopOwnerSettings REG_SZ file:\\\<tempfolder>openfin-dos-1650633984598.json
+➡️  Cleaning up OpenFin instances
 
-Writing Temporary Desktop Owner Settings <tempfolder>openfin-dos-1650963275620.json
+  ✅  Cleanup instances complete
+_______________________________________________________
 
-Setting Desktop Owner Setting file:\\\<tempfolder>openfin-dos-1650963275620.json
+➡️  Querying Desktop Owner Settings
 
-Value DesktopOwnerSettings exists, overwrite(Yes/No)? The operation completed successfully.
+  ✅  Writing Temporary Desktop Owner Settings .\tmp\\openfin-dos-1651745687531.json
 
-Current Desktop Owner Setting file:\\\<tempfolder>openfin-dos-1650633984598.json
+  ✅  Setting Desktop Owner Setting file:\\\.\tmp\\openfin-dos-1651745687531.json
 
----
+  ✅  Current Desktop Owner Setting http://localhost:5081/api/dos/openfin
+_______________________________________________________
 
-Running OpenFin <openfindir>\OpenFinRVM.exe
+➡️  Running OpenFin
+   C:\Users\marty\AppData\Local\OpenFin\OpenFinRVM.exe
 
-Args --config=http://localhost:8080/manifest.fin.json,--working-dir="<openfindir>",--runtime-arguments="--remote-debugging-port=9090"
+  ✅  Args --config=http://localhost:8080/manifest.fin.json,--working-dir="C:\Users\user\AppData\Local\OpenFin",--runtime-arguments="--remote-debugging-port=9090"
 
-OpenFinRVM Process 11564
+  ✅  OpenFinRVM Process 22084
+_______________________________________________________
 
----
+➡️  Starting Chrome Driver
+   .\storage\chromedriver\96\chromedriver.exe port 4444
 
-Starting Chrome Driver \storage\chromedriver\96\chromedriver.exe port 4444  
+  ✅  Chrome Driver Process 20880
 
-Chrome Driver Process 16948
+  ✅  Waiting for Chrome Driver to be ready
 
-Waiting for Chrome Driver to be ready
-
-Starting ChromeDriver 96.0.4664.18 (b8887b3d1742adb0873f871edc1d8d8c1d46bb96-refs/
-branch-heads/4664@{#236}) on port 4444
-
+Starting ChromeDriver 96.0.4664.18 (b8887b3d1742adb0873f871edc1d8d8c1d46bb96-refs/branch-heads/4664@{#236}) on port 4444
 Only local connections are allowed.
-
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
 ChromeDriver was started successfully.
+_______________________________________________________
 
-Waiting for Chrome Driver to connect to OpenFin platform...
+➡️  Running Tests using Mocha
+   Version 9.2.2
 
----
+  Register with Home
 
-Running Tests using Mocha
+    ✔ The title should be set
 
-Register With Home
+    ✔ The runtime version should be set
 
-✔ The title should be set
+    ✔ Can open the home window (7263ms)
 
-✔ The runtime version should be set
+    ✔ Can search in the home window (1392ms)
 
-✔ Can open the home window (7316ms)
+    ✔ Can select entries in the home window by index (2077ms)
 
-✔ Can search in the home window (1172ms)
+    ✔ Can select entries in the home window by id (2045ms)
 
-✔ Can select entries in the home window by index (2091ms)
+    ✔ Can open the home window filters
 
-✔ Can select entries in the home window by id (2050ms)
+    ✔ Can get the filter ids
 
-✔ Can open the home window filters
+    ✔ Set a filter by index
 
-✔ Can get the filter ids
+    ✔ Set a filter by id
 
-✔ Set a filter by index
+    ✔ Can close the home window filters (3035ms)
 
-✔ Set a filter by id
+    ✔ Can check selected entry content
 
-✔ Can close the home window filters (3036ms)
+    ✔ Can open an entry in the home window (1036ms)
 
-✔ Can check selected entry content
+    ✔ Can clear entries in the home window (1670ms)
 
-✔ Can open an entry in the home window (1039ms)
+    ✔ Can close the home window (640ms)
 
-✔ Can clear entries in the home window (1675ms)
+    ✔ Can perform operation in the interop window (2069ms)
 
-✔ Can close the home window (519ms)
 
-✔ Can perform operation in the interop window (2061ms)
+  16 passing (21s)
 
-16 passing (21s)
+_______________________________________________________
 
----
+➡️  Cleaning Up
 
-Closing Chrome Driver
+  ✅  Closing Chrome Driver
 
-SUCCESS: The process with PID 16948 (child process of PID 4512) has been terminated.
+  ✅  Restoring DOS
 
-Restoring DOS
+  ✅  Setting Desktop Owner Setting http://localhost:5081/api/dos/openfin
 
-Setting Desktop Owner Setting file:\\\<tempfolder>\openfin-dos-1650633984598.json
+  ✅  Removing temporary DOS Settings
+  
+  ✅  Cleaning up OpenFin instances
 
-Value DesktopOwnerSettings exists, overwrite(Yes/No)? The operation completed successfully.
+  ✅  Cleanup instances complete
+  
+  ✅  Removing temp data directory .\tmp\\openfin-test-1651745687443
+_______________________________________________________
 
-Removing temporary DOS Settings
-
-Cleaning up existing OpenFin instances
-
-SUCCESS: The process with PID 15644 (child process of PID 12776) has been terminated.
-
-Cleanup complete
-
----
-
-Removing temp data dir <tempfolder>openfin-test-1650963275529
+😀  Successfully ran the tests
 </details>
 
 ### offline-versions.json

@@ -2,23 +2,25 @@
 
 This package contains helper methods which can be use in automation testing to interact with the OpenFin ecosystem.
 
+They should be used in a test runner that has webdriver capabilities e.g. `@openfin/automation-cli`
+
 ## Installation
 
 Run `npm i @openfin/automation-helpers`.
 
 ## Code examples
 
-These examples use `chai` as the testing framework, but you can chose any framework you like.
+These examples use `chai` as the testing framework, but you can choose any framework you like.
 
 ### Access the OpenFin system runtime
 
 ```typescript
 import { expect } from "chai";
-import { OpenFinBridgeSystem } from "@openfin/automation-helpers";
+import { OpenFinSystem, WebDriver } from "@openfin/automation-helpers";
 
 describe('Test Suite', () => {
     it('The runtime version should be set', async () => {
-        const runtimeVersion = await OpenFinBridgeSystem.getVersion();
+        const runtimeVersion = await OpenFinSystem.getVersion();
 
         expect(runtimeVersion).to.equal('23.96.68.3');
     });
@@ -29,14 +31,14 @@ describe('Test Suite', () => {
 
 ```typescript
 import { expect } from "chai";
-import { OpenFinBridgeWorkspace } from "@openfin/automation-helpers";
+import { OpenFinWorkspace } from "@openfin/automation-helpers";
 
 describe('Test Suite', () => {
     it('Can search in the Home component', async () => {
-        await OpenFinBridgeWorkspace.homeSearch("basic");
-        await WebDriverHelper.sleep(1000);
+        await OpenFinWorkspace.homeSearch("basic");
+        await WebDriver.sleep(1000);
 
-        const ids = await OpenFinBridgeWorkspace.homeSearchResultIds();
+        const ids = await OpenFinWorkspace.homeSearchResultIds();
 
         expect(ids.length).equal(2);
         expect(ids[0]).equal("basic-interop-view");
@@ -49,17 +51,17 @@ describe('Test Suite', () => {
 
 ```typescript
 import { expect } from "chai";
-import { WebDriverHelper } from "@openfin/automation-helpers";
+import { WebDriver } from "@openfin/automation-helpers";
 
 describe('Test Suite', () => {
     it('Can perform operation in the interop window', async () => {
-        await WebDriverHelper.switchToWindow("Interop Instrument Selection");
+        await WebDriver.switchToWindow("Interop Instrument Selection");
 
-        await WebDriverHelper.setElementAttributeByPath("//h1", "innerHTML", "My New Title");
-        const value = await WebDriverHelper.getElementAttributeByPath("//h1", "innerHTML");
+        await WebDriver.setElementAttributeByPath("//h1", "innerHTML", "My New Title");
+        const value = await WebDriver.getElementAttributeByPath("//h1", "innerHTML");
         expect(value).eq("My New Title");
 
-        await WebDriverHelper.sleep(2000);
+        await WebDriver.sleep(2000);
     });
 });
 ```

@@ -66,5 +66,9 @@
     },
     "bin": {
         "of-automation": "bin/index.js"
-    }
+    },
+    "files": [
+        "bin",
+        "dist"
+    ]
 }
