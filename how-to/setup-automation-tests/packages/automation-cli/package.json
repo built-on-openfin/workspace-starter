@@ -37,7 +37,7 @@
         "jszip": "^3.7.1",
         "mocha": "^9.2.2",
         "node-fetch": "^2.6.6",
-        "ts-jest": "^28.0.0-next.1",
+        "ts-jest": "^28.0.1",
         "ts-node": "^10.7.0",
         "webdriver": "^7.19.1",
         "xml2js": "^0.4.23"
