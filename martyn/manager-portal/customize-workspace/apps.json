@@ -863,7 +863,7 @@
     "manifestType": "view",
     "icons": [
       {
-        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/icon-blue.png"
+        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/annual-leave/favicon.ico"
       }
     ],
     "contactEmail": "contact@example.com",
@@ -927,7 +927,7 @@
     "manifestType": "view",
     "icons": [
       {
-        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/icon-blue.png"
+        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/manager-paths/favicon.ico"
       }
     ],
     "contactEmail": "contact@example.com",
@@ -959,7 +959,7 @@
     "manifestType": "view",
     "icons": [
       {
-        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/icon-blue.png"
+        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/company-comms/favicon.ico"
       }
     ],
     "contactEmail": "contact@example.com",
@@ -991,7 +991,7 @@
     "manifestType": "view",
     "icons": [
       {
-        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/images/icon-blue.png"
+        "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/manager-portal/company-cal/favicon.ico"
       }
     ],
     "contactEmail": "contact@example.com",
