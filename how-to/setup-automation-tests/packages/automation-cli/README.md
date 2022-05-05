@@ -65,26 +65,19 @@ You should see a summary similar to that shown below:
 
 <details>
   <summary>CLI Output</summary>
+
+```shell  
 🚀 OpenFin Automation
 
   ⚙️  Manifest Url http://localhost:8080/manifest.fin.json
-
   ⚙️  Test Glob Path ./tests/**/*.spec.js
-
   ⚙️  Log Level silent
-
   ⚙️  Dev Tools Port 9090
-
   ⚙️  Chrome Driver Port 4444
-
   ⚙️  Test Framework mocha
-
   ⚙️  Test Timeout 120
-
   ⚙️  Default Runtime Version stable
-
   ⚙️  Storage Folder ./storage/
-
   ⚙️  Offline false
 _______________________________________________________
 
@@ -120,9 +113,7 @@ _______________________________________________________
 ➡️  Querying Desktop Owner Settings
 
   ✅  Writing Temporary Desktop Owner Settings .\tmp\\openfin-dos-1651745687531.json
-
   ✅  Setting Desktop Owner Setting file:\\\.\tmp\\openfin-dos-1651745687531.json
-
   ✅  Current Desktop Owner Setting http://localhost:5081/api/dos/openfin
 _______________________________________________________
 
@@ -130,7 +121,6 @@ _______________________________________________________
    C:\Users\marty\AppData\Local\OpenFin\OpenFinRVM.exe
 
   ✅  Args --config=http://localhost:8080/manifest.fin.json,--working-dir="C:\Users\user\AppData\Local\OpenFin",--runtime-arguments="--remote-debugging-port=9090"
-
   ✅  OpenFinRVM Process 22084
 _______________________________________________________
 
@@ -138,7 +128,6 @@ _______________________________________________________
    .\storage\chromedriver\96\chromedriver.exe port 4444
 
   ✅  Chrome Driver Process 20880
-
   ✅  Waiting for Chrome Driver to be ready
 
 Starting ChromeDriver 96.0.4664.18 (b8887b3d1742adb0873f871edc1d8d8c1d46bb96-refs/branch-heads/4664@{#236}) on port 4444
@@ -153,37 +142,21 @@ _______________________________________________________
   Register with Home
 
     ✔ The title should be set
-
     ✔ The runtime version should be set
-
     ✔ Can open the home window (7263ms)
-
     ✔ Can search in the home window (1392ms)
-
     ✔ Can select entries in the home window by index (2077ms)
-
     ✔ Can select entries in the home window by id (2045ms)
-
     ✔ Can open the home window filters
-
     ✔ Can get the filter ids
-
     ✔ Set a filter by index
-
     ✔ Set a filter by id
-
     ✔ Can close the home window filters (3035ms)
-
     ✔ Can check selected entry content
-
     ✔ Can open an entry in the home window (1036ms)
-
     ✔ Can clear entries in the home window (1670ms)
-
     ✔ Can close the home window (640ms)
-
     ✔ Can perform operation in the interop window (2069ms)
-
 
   16 passing (21s)
 
@@ -192,21 +165,17 @@ _______________________________________________________
 ➡️  Cleaning Up
 
   ✅  Closing Chrome Driver
-
   ✅  Restoring DOS
-
   ✅  Setting Desktop Owner Setting http://localhost:5081/api/dos/openfin
-
   ✅  Removing temporary DOS Settings
-  
   ✅  Cleaning up OpenFin instances
-
   ✅  Cleanup instances complete
-  
   ✅  Removing temp data directory .\tmp\\openfin-test-1651745687443
 _______________________________________________________
 
 😀  Successfully ran the tests
+```
+
 </details>
 
 ### offline-versions.json
