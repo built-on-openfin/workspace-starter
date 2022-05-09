@@ -363,6 +363,16 @@ export class WebDriver {
     }
 
     /**
+     * Get an attribute for an element.
+     * @param elementId The id of the element to get the element from.
+     * @param attribute The attribute to get.
+     * @returns The attribute.
+     */
+    public static async elementGetAttribute(elementId: string, attribute: string): Promise<string> {
+        return webdriver.getElementAttribute(elementId, attribute);
+    }
+
+    /**
      * Set an element attribute by xpath.
      * @param path The path of the element to set.
      * @param attribute The attribute name to set.
