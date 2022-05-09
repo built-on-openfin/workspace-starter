@@ -34,10 +34,15 @@
   </header>
   <main class="row fill gap20">
     <div class="col fill left gap20">
-      <button id="btnNotificationSimple">Simple Notification</button>
-      <button id="btnNotificationActionable">Actionable Notification</button>
-      <button id="btnNotificationForm">Form Notification</button>
-      <button id="btnNotificationUpdatable">Updatable Notification</button>
+      <h2>Platform</h2>
+      <button id="btnPlatformRegister" class="secondary">Register Platform</button>
+      <button id="btnPlatformDeregister" class="secondary">Deregister Platform</button>
+      <h2>Notifications</h2>
+      <button id="btnNotificationSimple" class="secondary">Simple Notification</button>
+      <button id="btnNotificationActionable" class="secondary">Actionable Notification</button>
+      <button id="btnNotificationForm" class="secondary">Form Notification</button>
+      <button id="btnNotificationUpdatable" class="secondary">Updatable Notification</button>
+      <button id="btnNotificationCustom" class="secondary">Custom Notification</button>
     </div>
     <div class="col fill gap20"
          id="logging-container">
@@ -51,8 +56,16 @@
   </main>
   <footer>
     <div class="row spread">
-      <button id="btnNotificationsCenterToggle">Notifications Center</button>
-      <button id="btnNotificationStudioOpen">Notifications Studio</button>
+      <div class="row gap10">
+        <button id="btnNotificationsCenterToggle">Notifications Center</button>
+        <button id="btnNotificationStudioOpen">Notifications Studio</button>
+      </div>
+      <div class="row gap10">
+        <a href="https://developers.openfin.co/of-docs/docs/overview-notifications"
+           target="_blank">Notification Center Docs</a>
+        <a href="https://developer.openfin.co/docs/services/notifications/stable/api/index.html"
+           target="_blank">API Docs</a>
+      </div>
     </div>
   </footer>
 </body>

@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@openfin/core": "^25.68.26",
+    "csstype": "^3.0.11",
     "openfin-notifications": "^1.13.0"
   },
   "devDependencies": {

@@ -69,6 +69,7 @@ p {
   background: #000000;
 }
 
+footer > div > div > a,
 button {
   background-color: var(--brand-primary);
   color: #ffffff;
@@ -79,10 +80,14 @@ button {
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;
+  text-decoration: none;
 }
 button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+button.secondary {
+  background-color: var(--brand-secondary);
 }
 
 pre {

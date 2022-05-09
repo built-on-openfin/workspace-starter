@@ -1,17 +1,30 @@
+import { fin } from "@openfin/core";
+import * as CSS from "csstype";
 import {
     addEventListener as addNotificationEventListener,
+    ContainerTemplateFragment,
     create,
-    update,
+    deregisterPlatform,
     getNotificationsCount,
-    toggleNotificationCenter,
     NotificationOptions,
-    UpdatableNotificationOptions
+    registerPlatform,
+    TemplateFragment,
+    TextTemplateFragment,
+    toggleNotificationCenter,
+    UpdatableNotificationOptions,
+    update
 } from 'openfin-notifications';
-import { fin } from "@openfin/core";
 
 let loggingElement: HTMLElement;
 const updatableNotifications = {};
 let updatableNotificationTimer;
+let activePlatform;
+
+const platform = {
+    id: 'workspace-starter-notification-platform',
+    icon: 'http://localhost:8080/images/icon-dot.png',
+    title: 'Custom Platform'
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
     console.log("Script loaded");
@@ -42,8 +55,32 @@ async function initDom() {
     const btnNotificationUpdatable = document.querySelector("#btnNotificationUpdatable");
     btnNotificationUpdatable.addEventListener("click", async () => showUpdatableNotification())
 
-    const btnNotificationsCenterToggle = document.querySelector("#btnNotificationsCenterToggle");
-    btnNotificationsCenterToggle.addEventListener("click", async () => toggleNotificationCenter());
+    const btnNotificationCustom = document.querySelector("#btnNotificationCustom");
+    btnNotificationCustom.addEventListener("click", async () => showCustomNotification())
+
+    const btnPlatformRegister = document.querySelector("#btnPlatformRegister");
+    btnPlatformRegister.addEventListener("click", async () => {
+        await registerPlatform(platform);
+        loggingAddEntry("Platform registered");
+        activePlatform = platform.id;
+    });
+
+    const btnPlatformDeregister = document.querySelector("#btnPlatformDeregister");
+    btnPlatformDeregister.addEventListener("click", async () => {
+        await deregisterPlatform(platform.id);
+        loggingAddEntry("Platform deregistered");
+        activePlatform = undefined;
+    });
+
+    const btnNotificationsCenterToggle: HTMLButtonElement = document.querySelector("#btnNotificationsCenterToggle");
+    btnNotificationsCenterToggle.addEventListener("click", async () => {
+        try {
+            btnNotificationsCenterToggle.disabled = true;
+            await toggleNotificationCenter();
+        } finally {
+            btnNotificationsCenterToggle.disabled = false;
+        }
+    });
 
     const btnNotificationStudioOpen: HTMLButtonElement = document.querySelector("#btnNotificationStudioOpen");
     btnNotificationStudioOpen.addEventListener("click", async () => {
@@ -115,7 +152,8 @@ async function showSimpleNotification() {
         toast: "transient",
         category: "default",
         template: "markdown",
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        platform: activePlatform
     }
 
     await create(notification);
@@ -129,6 +167,7 @@ async function showActionableNotification() {
         category: "default",
         template: "markdown",
         id: crypto.randomUUID(),
+        platform: activePlatform,
         buttons: [
             {
                 title: "Acknowledged",
@@ -159,6 +198,7 @@ async function showFormNotification() {
         category: "default",
         template: "markdown",
         id: crypto.randomUUID(),
+        platform: activePlatform,
         form: [
             {
                 key: 'amount',
@@ -211,7 +251,8 @@ async function showUpdatableNotification() {
         customData: {
             count: 0
         },
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        platform: activePlatform
     }
 
     if (Object.keys(updatableNotifications).length === 0) {
@@ -233,4 +274,113 @@ async function showUpdatableNotification() {
     await create(notification);
 
     updatableNotifications[notification.id] = notification;
+}
+
+async function showCustomNotification() {
+    const templateData = {
+        "subTitle": "Sub Title 🚀",
+        "firstValueTitle": "First Value",
+        "firstValue": "100",
+        "secondValueTitle": "Second Value",
+        "secondValue": "200",
+        "c0": "Col 1",
+        "c1": "Col 2",
+        "c2": "Col 3",
+        "d0_0": "50",
+        "d0_1": "150",
+        "d0_2": "250",
+        "d1_0": "550",
+        "d1_1": "650",
+        "d1_2": "750"
+    };
+
+    const notification: NotificationOptions = {
+        title: "Custom Notification",
+        toast: "transient",
+        category: "default",
+        template: "custom",
+        id: crypto.randomUUID(),
+        platform: activePlatform,
+        templateOptions: {
+            body: {
+                compositions: [
+                    {
+                        minTemplateAPIVersion: "1",
+                        layout: createContainer("column", [
+                            createText("subTitle", 12, { fontWeight: "bold" }),
+                            createLabelledValue("firstValueTitle", "firstValue"),
+                            createLabelledValue("secondValueTitle", "secondValue"),
+                            createTable([
+                                ["c0", "c1", "c2"],
+                                ["d0_0", "d0_1", "d0_2"],
+                                ["d1_0", "d1_1", "d1_2"]
+                            ])
+                        ], {
+                            gap: "10px"
+                        })
+                    }
+                ]
+            }
+        },
+        templateData
+    }
+
+    await create(notification);
+}
+
+function createContainer(containerType: "column" | "row", children: TemplateFragment[], style?: CSS.Properties): ContainerTemplateFragment {
+    return {
+        type: "container",
+        style: {
+            display: "flex",
+            flexDirection: containerType,
+            ...style
+        },
+        children
+    };
+}
+
+function createText(dataKey: string, fontSize: number = 14, style?: CSS.Properties): TextTemplateFragment {
+    return {
+        type: "text",
+        dataKey,
+        style: {
+            fontSize: `${fontSize ?? 14}px`,
+            ...style
+        }
+    }
+};
+
+export function createLabelledValue(labelKey: string, valueKey: string, style?: Record<string, string | number>): ContainerTemplateFragment {
+    return {
+        type: "container",
+        style: {
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "10px",
+            ...style
+        },
+        children: [
+            createText(labelKey, 12),
+            createText(valueKey, undefined, { color: "var(--openfin-ui-brandPrimary)" })
+        ]
+    }
+}
+
+export function createTable(tableData: string[][]): TemplateFragment {
+    const cells = [];
+    const colSpans = [];
+    for (let col = 0; col < tableData[0].length; col++) {
+        cells.push(createText(tableData[0][col], 10, { marginBottom: "10px", padding: "3px", whiteSpace: "nowrap", fontWeight: "bold", backgroundColor: "var(--openfin-ui-brandPrimary)" }));
+
+        colSpans.push(1);
+    }
+
+    for (let row = 1; row < tableData.length; row++) {
+        for (let col = 0; col < tableData[0].length; col++) {
+            cells.push(createText(tableData[row][col], 10, { padding: "3px", whiteSpace: "nowrap" }));
+        }
+    }
+
+    return createContainer("row", cells, { display: "grid", gridTemplateColumns: colSpans.map(s => `${s}fr`).join(" "), marginBottom: "10px", overflow: "auto" });
 }
