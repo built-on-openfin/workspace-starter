@@ -77,7 +77,7 @@ export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
         }
     };
 
-    if(bounds !== undefined){
+    if(customBounds !== undefined && customBounds !== null){
         let monitors = await fin.System.getMonitorInfo();
 
         newWindow.height = customBounds.height;

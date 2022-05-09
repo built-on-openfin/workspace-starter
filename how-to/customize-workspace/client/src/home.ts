@@ -4,13 +4,14 @@ import {
   CLIProvider,
   CLISearchListenerRequest,
   CLIFilter,
-  CLISearchResult,
   CLITemplate,
   CLISearchListenerResponse,
   CLISearchResponse,
   CLIDispatchedSearchResult,
   CLIFilterOptionType,
   TemplateFragment,
+  HomeSearchResponse,
+  HomeSearchResult,
 } from "@openfin/workspace";
 import { Page } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
@@ -31,8 +32,7 @@ import {
 } from "./workspace";
 import { PageTemplate, WorkspaceTemplate } from "./template";
 import { share } from "./share";
-import type { Integration, IntegrationProvider } from "./shapes";
-import { salesForceGetAppSearchEntries, salesForceGetSearchResults, salesForceItemSelection, SalesforceSettings, providerId as salesforceProviderId } from "./salesforce";
+import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -71,8 +71,8 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
   return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: App[]) {
-  let appResults: CLISearchResult<any>[] = [];
+function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
+  let appResults: HomeSearchResult[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
       let action = { name: "Launch View", hotkey: "enter" };
@@ -120,8 +120,8 @@ function mapAppEntriesToSearchEntries(apps: App[]) {
   return appResults;
 }
 
-async function mapPageEntriesToSearchEntries(pages: Page[]) {
-  let pageResults: CLISearchResult<any>[] = [];
+async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchResult[]> {
+  let pageResults: HomeSearchResult[] = [];
   let settings = await getSettings();
   let pageIcon;
   if (settings?.platformProvider?.rootUrl !== undefined) {
@@ -170,7 +170,7 @@ async function mapWorkspaceEntriesToSearchEntries(
     description?: string;
     snapshot: any;
   }[]
-) {
+): Promise<HomeSearchResult[]> {
   let settings = await getSettings();
 
   let workspaceIcon;
@@ -179,7 +179,7 @@ async function mapWorkspaceEntriesToSearchEntries(
   }
   const workspaceTemplate: TemplateFragment = WorkspaceTemplate.template;
 
-  let workspaceResults: CLISearchResult<any>[] = [];
+  let workspaceResults: HomeSearchResult[] = [];
   if (Array.isArray(workspaces)) {
     for (let i = 0; i < workspaces.length; i++) {
       let entry: any = {
@@ -215,32 +215,23 @@ async function mapWorkspaceEntriesToSearchEntries(
 }
 
 async function getResults(
-  query?: string,
-  queryMinLength = 3,
-  queryAgainst: string[] = ["title"],
-  filters?: CLIFilter[]
-): Promise<CLISearchResponse> {
+  query: string,
+  queryMinLength,
+  queryAgainst: string[],
+  filters: CLIFilter[]
+): Promise<HomeSearchResponse> {
   let apps = await getApps();
   let pages = await getPages();
   let workspaces = await getWorkspaces();
-  let settings = await getSettings();
-  const integrationProviders: { [id: string]: Integration<unknown> } = mapIntegrationProviders(settings.integrationProvider);
 
   let tags = [];
-  let appSearchEntries = mapAppEntriesToSearchEntries(apps);
+  let appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
   let pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
   let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
     workspaces as any
   );
 
-  if (integrationProviders.salesforce) {
-    const appEntries = await salesForceGetAppSearchEntries(integrationProviders.salesforce as Integration<SalesforceSettings>);
-    if (appEntries.length > 0) {
-      appSearchEntries = appSearchEntries.concat(appEntries);
-    }
-  }
-
-  let initialResults: CLISearchResult<any>[] = [
+  let initialResults: HomeSearchResult[] = [
     ...appSearchEntries,
     ...pageSearchEntries,
     ...workspaceEntries,
@@ -299,7 +290,7 @@ async function getResults(
               } else {
                 console.warn(
                   "Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " +
-                    target
+                  target
                 );
               }
             }
@@ -340,19 +331,19 @@ async function getResults(
       return textMatchFound && filterMatchFound;
     });
 
-    let response: CLISearchResponse = {
+    return {
       results: finalResults,
       context: {
         filters: getSearchFilters(tags),
       },
     };
-
-    return response;
-  } else {
-    return {
-      results: [],
-    };
   }
+  return {
+    results: [],
+    context: {
+      filters: []
+    }
+  };
 }
 
 export async function register() {
@@ -369,10 +360,8 @@ export async function register() {
     return;
   }
 
-  const integrationProviders: { [id: string]: Integration<unknown> } = mapIntegrationProviders(settings.integrationProvider);
-
-  const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
-  const queryAgainst = settings?.homeProvider?.queryAgainst;
+  const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
+  const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
   let lastResponse: CLISearchListenerResponse;
   let filters;
 
@@ -444,35 +433,30 @@ export async function register() {
     }
     lastResponse = response;
     lastResponse.open();
-    let results = await getResults(
+    const searchResults = await getResults(
       query,
       queryMinLength,
       queryAgainst,
       filters
     );
 
-    if (integrationProviders.salesforce) {
-      const response = await salesForceGetSearchResults(integrationProviders.salesforce as Integration<SalesforceSettings>, query, filters);
-      if (response.results) {
-        results.results = results.results.concat(response.results);
-      }
-      if (response.context?.filters) {
-        results.context = results.context ?? {};
-        results.context.filters = results.context.filters ?? [];
-        results.context.filters = results.context.filters.concat(response.context.filters);
-      }
+    const integrationResults = await getSearchResults(query, filters, lastResponse);
+    if (Array.isArray(integrationResults.results)) {
+      searchResults.results = searchResults.results.concat(integrationResults.results);
     }
-    return results;
+    if (Array.isArray(integrationResults.context.filters)) {
+      searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+    }
+
+    return searchResults;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
-      if (result.data !== undefined) {
-        if(result.data.providerId === salesforceProviderId){
-          let handled = await salesForceItemSelection(integrationProviders.salesforce as Integration<SalesforceSettings>, result, lastResponse);
-          if(!handled) {
-            console.warn("Error while trying to handle salesforce entry", result.data);
-          }
-        } else if (result.data.workspaceId !== undefined) {
+    if (result.data !== undefined) {
+      const handled = await itemSelection(result, lastResponse);
+
+      if (!handled) {
+        if (result.data.workspaceId !== undefined) {
           if (
             result.data.workspaceId !== undefined &&
             result.key === "WORKSPACE-SAVE"
@@ -564,9 +548,10 @@ export async function register() {
         } else {
           await launch(result.data);
         }
-      } else {
-        console.warn("Unable to execute result without data being passed");
       }
+    } else {
+      console.warn("Unable to execute result without data being passed");
+    }
   };
 
   const cliProvider: CLIProvider = {
@@ -599,15 +584,4 @@ export async function deregister() {
       "Unable to deregister home as there is an indication it was never registered"
     );
   }
-}
-
-function mapIntegrationProviders(integrationProvider?: IntegrationProvider) {
-  const integrationProviders: { [id: string]: Integration<unknown> } = {};
-  if (integrationProvider?.integrations?.length) {
-    const enabledProviders = integrationProvider.integrations.filter(ip => ip.enabled);
-    for (const integrationProvider of enabledProviders) {
-      integrationProviders[integrationProvider.id] = integrationProvider;
-    }
-  }
-  return integrationProviders;
 }
