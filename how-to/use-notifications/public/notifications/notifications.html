@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Use Notifications Example</title>
+  <meta name="description"
+        content="" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1" />
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com" />
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+  <link rel="stylesheet"
+        href="../style/notifications.css" />
+  <script src="../js/notifications.bundle.js"></script>
+</head>
+
+<body class="col fill gap20">
+  <header class="row spread middle">
+    <div class="col">
+      <h1>Use Notifications Example</h1>
+      <h1 class="tag">Demonstrate interacting with notifications.</h1>
+    </div>
+    <div class="row middle gap20">
+      <p id="notificationCount"></p>
+
+      <image src="/images/icon-blue.png"
+             alt="OpenFin"
+             height="40px"></image>
+    </div>
+  </header>
+  <main class="row fill gap20">
+    <div class="col fill left gap20">
+      <div class="fill">
+        <button id="btnNotificationSimple">Show Simple Notification</button>
+      </div>
+    </div>
+    <div class="col fill gap20"
+         id="logging-container">
+      <h2>Logging</h2>
+      <pre id="logging"
+           class="scroll fill"></pre>
+      <div class="row right">
+        <button id="btnLoggingClear">Clear Logging</button>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="row spread">
+      <button id="btnNotificationCenterToggle">Notification Center</button>
+      <button id="btnNotificationStudioOpen">Notification Studio</button>
+    </div>
+  </footer>
+</body>
+
+</html>
