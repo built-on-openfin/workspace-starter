@@ -1,13 +1,17 @@
 import {
     addEventListener as addNotificationEventListener,
     create,
+    update,
     getNotificationsCount,
     toggleNotificationCenter,
     NotificationOptions,
+    UpdatableNotificationOptions
 } from 'openfin-notifications';
 import { fin } from "@openfin/core";
 
 let loggingElement: HTMLElement;
+const updatableNotifications = {};
+let updatableNotificationTimer;
 
 window.addEventListener('DOMContentLoaded', async () => {
     console.log("Script loaded");
@@ -35,6 +39,9 @@ async function initDom() {
     const btnNotificationForm = document.querySelector("#btnNotificationForm");
     btnNotificationForm.addEventListener("click", async () => showFormNotification())
 
+    const btnNotificationUpdatable = document.querySelector("#btnNotificationUpdatable");
+    btnNotificationUpdatable.addEventListener("click", async () => showUpdatableNotification())
+
     const btnNotificationsCenterToggle = document.querySelector("#btnNotificationsCenterToggle");
     btnNotificationsCenterToggle.addEventListener("click", async () => toggleNotificationCenter());
 
@@ -58,6 +65,14 @@ function initListener() {
 
     addNotificationEventListener("notification-closed", event => {
         loggingAddEntry(`Closed: ${event.notification.id}`);
+
+        if (updatableNotifications[event.notification.id]) {
+            delete updatableNotifications[event.notification.id];
+            if (Object.keys(updatableNotifications).length === 0) {
+                clearInterval(updatableNotificationTimer);
+                updatableNotificationTimer = undefined;
+            }
+        }
     });
 
     addNotificationEventListener("notification-action", event => {
@@ -186,3 +201,36 @@ async function showFormNotification() {
     await create(notification);
 }
 
+async function showUpdatableNotification() {
+    const notification: NotificationOptions = {
+        title: "Updatable Notification",
+        body: "This is an updatable notification",
+        toast: "transient",
+        category: "default",
+        template: "markdown",
+        customData: {
+            count: 0
+        },
+        id: crypto.randomUUID()
+    }
+
+    if (Object.keys(updatableNotifications).length === 0) {
+        updatableNotificationTimer = setInterval(async () => {
+            for (const id in updatableNotifications) {
+                updatableNotifications[id].customData.count++;
+                const notificationUpdate: UpdatableNotificationOptions = {
+                    template: "markdown",
+                    body: `This is an updatable notification ${updatableNotifications[id].customData.count}`,
+                    id
+                }
+
+                await update(notificationUpdate)
+            }
+
+        }, 1000);
+    }
+
+    await create(notification);
+
+    updatableNotifications[notification.id] = notification;
+}
