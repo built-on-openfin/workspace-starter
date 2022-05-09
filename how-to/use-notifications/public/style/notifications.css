@@ -74,9 +74,11 @@ button {
   color: #ffffff;
   border: 0;
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px 20px;
   text-align: left;
   cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
 }
 button:disabled {
   opacity: 0.5;
@@ -85,7 +87,7 @@ button:disabled {
 
 pre {
   margin: 0;
-  white-space: pre-line;
+  white-space: pre-wrap;
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
 }
