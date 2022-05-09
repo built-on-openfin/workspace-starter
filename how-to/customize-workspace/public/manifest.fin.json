@@ -232,9 +232,9 @@
         },
         {
           "include": true,
-          "id": "save-page",
+          "id": "save-menu",
           "button": {
-            "type": "SavePage"
+            "type": "SaveMenu"
           }
         }
       ]

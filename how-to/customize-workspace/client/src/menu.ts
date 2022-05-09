@@ -1,56 +1,80 @@
 import { GlobalContextMenuItemTemplate, GlobalContextMenuOptionType, PageTabContextMenuItemTemplate, PageTabContextMenuOptionType, ViewTabContextMenuTemplate, ViewTabMenuOptionType } from "@openfin/workspace-platform";
 
-export async function getGlobalMenu(defaultGlobalContextMenu: GlobalContextMenuItemTemplate[] = []): Promise<GlobalContextMenuItemTemplate[]> {
-    const menuTemplateWithStorefront:GlobalContextMenuItemTemplate[] = [
-        {
-            type: 'normal',
-            label: 'Close Window',
-            data: {
-                type: GlobalContextMenuOptionType.CloseWindow
+
+function updateGlobalMenuEntry(menuEntries: GlobalContextMenuItemTemplate[], dataType:string, action: "REPLACE-LABEL"|"INSERT-BEFORE"|"INSERT-AFTER"|"DELETE", entry?: GlobalContextMenuItemTemplate) {
+    const entryIndex = menuEntries.findIndex(menuEntry => menuEntry.data !== undefined && menuEntry.data.type === dataType);
+    if(entryIndex === -1) {
+        console.warn("Unable to find global menu with entry type: " + dataType);
+    } else {
+        switch(action){
+            case "DELETE": {
+                menuEntries.splice(entryIndex);
+                break;
             }
-        },
-        {
-            type: 'separator',
-            data: undefined
-        },
-        {
-            type: 'normal',
-            label: 'Open Store',
-            data: {
-                type: GlobalContextMenuOptionType.OpenStorefront
-            }
-        },
-        {
-            label: 'Open Home',
-            data: {
-                type: GlobalContextMenuOptionType.Custom,
-                action: {
-                    id: 'home-show'
+            case "REPLACE-LABEL":
+                {
+                    if(entry === undefined || entry.label === undefined) {
+                        console.warn("Asked to replace label of menu entry but not provided an entry to grab a label from or given an empty label. Target menu data type: " + dataType);
+                    } else {
+                        menuEntries[entryIndex].label = entry.label;
+                    }
+                    break;
                 }
-            }
-        },
-        {
-            label: 'Toggle Notification Center',
-            data: {
-                type: GlobalContextMenuOptionType.Custom,
-                action: {
-                    id: 'notification-toggle'
+            case "INSERT-AFTER": {
+                if(entry === undefined) {
+                    console.warn(`You cannot insert a menu entry after the menu entry with data type: ${dataType} if you do not specify a menu entry`);
+                } else {
+                    menuEntries.splice(entryIndex + 1, 0, entry); 
                 }
+                break;
             }
-        },
-        {
-            type: 'separator',
-            data: undefined
-        },
-        {
-            type: 'normal',
-            label: 'Quit App',
-            data: {
-                type: GlobalContextMenuOptionType.Quit
+            case "INSERT-BEFORE": {
+                if(entry === undefined) {
+                    console.warn(`You cannot insert a menu entry before the menu entry with data type: ${dataType} if you do not specify a menu entry`);
+                } else if(entryIndex === 0) {
+                    menuEntries.unshift(entry);
+                }
+                else {
+                    menuEntries.splice(entryIndex -1, 0, entry); 
+                }
+                break;
             }
         }
-    ];
-    return menuTemplateWithStorefront;
+    }
+    return menuEntries;
+}
+
+export async function getGlobalMenu(defaultGlobalContextMenu: GlobalContextMenuItemTemplate[] = []): Promise<GlobalContextMenuItemTemplate[]> {
+
+    let menuItems = updateGlobalMenuEntry(defaultGlobalContextMenu, GlobalContextMenuOptionType.OpenStorefront, "INSERT-AFTER", {
+        label: 'Toggle Notification Center',
+        data: {
+            type: GlobalContextMenuOptionType.Custom,
+            action: {
+                id: 'notification-toggle'
+            }
+        }
+    });
+
+    menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.OpenStorefront, "INSERT-AFTER",  {
+        label: 'Open Home',
+        data: {
+            type: GlobalContextMenuOptionType.Custom,
+            action: {
+                id: 'home-show'
+            }
+        }
+    });
+
+    menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.Quit, "REPLACE-LABEL",  {
+        type: 'normal',
+        label: 'Quit App',
+        data: {
+            type: GlobalContextMenuOptionType.Quit
+        }
+    });
+
+    return menuItems;
 }
 
 export async function getPageMenu(defaultPageContextMenu: PageTabContextMenuItemTemplate[] = []): Promise<PageTabContextMenuItemTemplate[]> {

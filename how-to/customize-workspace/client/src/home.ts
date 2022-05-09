@@ -13,7 +13,7 @@ import {
   HomeSearchResponse,
   HomeSearchResult,
 } from "@openfin/workspace";
-import { Page } from "@openfin/workspace-platform";
+import { Page, Workspace, getCurrentSync } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { getApps } from "./apps";
@@ -30,7 +30,7 @@ import {
   launchWorkspace,
   saveWorkspace,
 } from "./workspace";
-import { PageTemplate, WorkspaceTemplate } from "./template";
+import { CurrentWorkspaceTemplate, PageTemplate, WorkspaceTemplate } from "./template";
 import { share } from "./share";
 import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 
@@ -47,9 +47,9 @@ let isHomeRegistered = false;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
   if (Array.isArray(tags)) {
-    let filters: CLIFilter[] = [];
-    let uniqueTags = [...new Set(tags.sort())];
-    let tagFilter: CLIFilter = {
+    const filters: CLIFilter[] = [];
+    const uniqueTags = [...new Set(tags.sort())];
+    const tagFilter: CLIFilter = {
       id: HOME_TAG_FILTERS,
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
@@ -72,11 +72,11 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 }
 
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
-  let appResults: HomeSearchResult[] = [];
+  const appResults: HomeSearchResult[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
-      let action = { name: "Launch View", hotkey: "enter" };
-      let entry: any = {
+      const action = { name: "Launch View", hotkey: "enter" };
+      const entry: any = {
         key: apps[i].appId,
         title: apps[i].title,
         data: apps[i],
@@ -121,8 +121,8 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 }
 
 async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchResult[]> {
-  let pageResults: HomeSearchResult[] = [];
-  let settings = await getSettings();
+  const pageResults: HomeSearchResult[] = [];
+  const settings = await getSettings();
   let pageIcon;
   if (settings?.platformProvider?.rootUrl !== undefined) {
     pageIcon = settings.platformProvider.rootUrl + "/icons/page.svg";
@@ -131,7 +131,7 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 
   if (Array.isArray(pages)) {
     for (let i = 0; i < pages.length; i++) {
-      let entry: any = {
+      const entry: any = {
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
@@ -164,43 +164,45 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 }
 
 async function mapWorkspaceEntriesToSearchEntries(
-  workspaces: {
-    id: string;
-    title: string;
-    description?: string;
-    snapshot: any;
-  }[]
+  workspaces: Workspace[]
 ): Promise<HomeSearchResult[]> {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   let workspaceIcon;
   if (settings?.platformProvider?.rootUrl !== undefined) {
     workspaceIcon = settings.platformProvider.rootUrl + "/icons/workspaces.svg";
   }
   const workspaceTemplate: TemplateFragment = WorkspaceTemplate.template;
+  const currentWorkspaceTemplate: TemplateFragment = CurrentWorkspaceTemplate.template;
 
-  let workspaceResults: HomeSearchResult[] = [];
+  const workspaceResults: HomeSearchResult[] = [];
   if (Array.isArray(workspaces)) {
+    const platform = getCurrentSync();
+    const currentWorkspace = await platform.getCurrentWorkspace();
+    const currentWorkspaceId = currentWorkspace?.workspaceId;
+
     for (let i = 0; i < workspaces.length; i++) {
-      let entry: any = {
-        key: workspaces[i].id,
+      let entryWorkspaceId = workspaces[i].workspaceId;
+      let actions = entryWorkspaceId === currentWorkspaceId ? [] : [
+        { name: HOME_ACTION_SHARE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+S" },
+        { name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D" },
+        { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" },
+      ];
+      let layout = currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
+      let instructions = currentWorkspaceId === workspaces[i].workspaceId ? "This is the currently active workspace. You can use the Browser menu to update/rename this workspace." :  "Use the buttons below to interact with your saved Workspace:";
+      const entry: any = {
+        key: entryWorkspaceId,
         title: workspaces[i].title,
         label: "Workspace",
         icon: workspaceIcon,
-        actions: [
-          { name: HOME_ACTION_SHARE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+S" },
-          { name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D" },
-          { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" },
-        ],
-        data: { tags: ["workspace"], workspaceId: workspaces[i].id },
+        actions,
+        data: { tags: ["workspace"], workspaceId: entryWorkspaceId },
         template: CLITemplate.Custom,
         templateContent: {
-          layout: workspaceTemplate,
+          layout,
           data: {
             title: workspaces[i].title,
-            description: workspaces[i].description,
-            instructions:
-              "Use the buttons below to interact with your saved Workspace:",
+            instructions,
             openText: "Launch",
             deleteText: "Delete",
             shareText: "Share",
@@ -220,25 +222,25 @@ async function getResults(
   queryAgainst: string[],
   filters: CLIFilter[]
 ): Promise<HomeSearchResponse> {
-  let apps = await getApps();
-  let pages = await getPages();
-  let workspaces = await getWorkspaces();
+  const apps = await getApps();
+  const pages = await getPages();
+  const workspaces = await getWorkspaces();
 
-  let tags = [];
-  let appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
-  let pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
-  let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
+  const tags = [];
+  const appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
+  const pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
+  const workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
     workspaces as any
   );
 
-  let initialResults: HomeSearchResult[] = [
+  const initialResults: HomeSearchResult[] = [
     ...appSearchEntries,
     ...pageSearchEntries,
     ...workspaceEntries,
   ];
 
   if (initialResults.length > 0) {
-    let finalResults = initialResults.filter((entry) => {
+    const finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
 
@@ -248,9 +250,9 @@ async function getResults(
         query.length >= queryMinLength
       ) {
         textMatchFound = queryAgainst.some((target) => {
-          let path = target.split(".");
+          const path = target.split(".");
           if (path.length === 1) {
-            let targetValue = entry[path[0]];
+            const targetValue = entry[path[0]];
 
             if (
               targetValue !== undefined &&
@@ -260,10 +262,10 @@ async function getResults(
               return targetValue.toLowerCase().indexOf(query) > -1;
             }
           } else if (path.length === 2) {
-            let target = entry[path[0]];
+            const specifiedTarget = entry[path[0]];
             let targetValue: string | string[];
-            if (target !== undefined && target !== null) {
-              targetValue = target[path[1]];
+            if (specifiedTarget !== undefined && specifiedTarget !== null) {
+              targetValue = specifiedTarget[path[1]];
             }
 
             if (
@@ -283,14 +285,14 @@ async function getResults(
                 targetValue.length > 0 &&
                 typeof targetValue[0] === "string" &&
                 targetValue.some(
-                  (target) => target.toLowerCase().indexOf(query) === 0
+                  (matchTarget) => matchTarget.toLowerCase().indexOf(query) === 0
                 )
               ) {
                 return true;
               } else {
                 console.warn(
                   "Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " +
-                  target
+                  specifiedTarget
                 );
               }
             }
@@ -348,7 +350,7 @@ async function getResults(
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -369,25 +371,16 @@ export async function register() {
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
+    const query = request.query.toLowerCase();
     if (query.indexOf("/") === 0 && query.toLowerCase().indexOf("/w ") !== 0) {
       return { results: [] };
     }
 
     if (query.toLowerCase().indexOf("/w ") === 0) {
-      let workspaces = await getWorkspaces();
-      let workspaceText = request.query.replace("/w ", "");
-      let parts = workspaceText.split(">");
-      let title;
-      let description;
-      if (parts.length === 1 || parts.length === 2) {
-        title = parts[0].trim();
-      }
-      if (parts.length === 2) {
-        description = parts[1].trim();
-      }
+      const workspaces = await getWorkspaces();
+      const title = request.query.replace("/w ", "");
 
-      let foundMatch = workspaces.find(
+      const foundMatch = workspaces.find(
         (entry) => entry.title.toLowerCase() === title.toLowerCase()
       );
       if (foundMatch !== undefined && foundMatch !== null) {
@@ -398,7 +391,7 @@ export async function register() {
               key: "WORKSPACE-EXISTS",
               title: "Workspace " + foundMatch.title + " already exists.",
               actions: [],
-              data: { tags: ["workspace"], workspaceId: foundMatch.id },
+              data: { tags: ["workspace"], workspaceId: foundMatch.workspaceId },
             },
           ],
         };
@@ -418,8 +411,7 @@ export async function register() {
               data: {
                 tags: ["workspace"],
                 workspaceId: crypto["randomUUID"](),
-                workspaceTitle: title,
-                workspaceDescription: description,
+                workspaceTitle: title
               },
             },
           ],
@@ -463,8 +455,7 @@ export async function register() {
           ) {
             await saveWorkspace(
               result.data.workspaceId,
-              result.data.workspaceTitle,
-              result.data.workspaceDescription
+              result.data.workspaceTitle
             );
             if (lastResponse !== undefined && lastResponse !== null) {
               lastResponse.revoke(result.key);
@@ -490,7 +481,7 @@ export async function register() {
               lastResponse.revoke(result.key);
             }
           } else if (result.data.workspaceId !== undefined) {
-            let workspaceAction = result.action.name;
+            const workspaceAction = result.action.name;
             if (
               workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
               workspaceAction === WorkspaceTemplate.actions.launch
@@ -517,12 +508,12 @@ export async function register() {
             }
           }
         } else if (result.data.pageId !== undefined) {
-          let pageAction = result.action.name;
+          const pageAction = result.action.name;
           if (
             pageAction === HOME_ACTION_LAUNCH_PAGE ||
             pageAction === PageTemplate.actions.launch
           ) {
-            let pageToLaunch = await getPage(result.data.pageId);
+            const pageToLaunch = await getPage(result.data.pageId);
             await launchPage(pageToLaunch);
           } else if (
             pageAction === HOME_ACTION_DELETE_PAGE ||
@@ -536,8 +527,8 @@ export async function register() {
             pageAction == HOME_ACTION_SHARE_PAGE ||
             pageAction === PageTemplate.actions.share
           ) {
-            let page = await getPage(result.data.pageId);
-            let bounds = await getPageBounds(result.data.pageId, true);
+            const page = await getPage(result.data.pageId);
+            const bounds = await getPageBounds(result.data.pageId, true);
             await share({ page, bounds });
           } else {
             console.warn(
@@ -577,7 +568,7 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
   } else {
     console.warn(
