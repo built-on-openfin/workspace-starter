@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>FDC3 Instrument Selection</title>
+    <script type="module" src="./basic-fdc3-view.js"></script>
+    <link rel="stylesheet" href="./basic-fdc3-view.css" />
+  </head>
+  <body>
+    <h1>FDC3 Instrument Selection</h1>
+    <div class="dropdown">
+      <button id="selectInstrument" class="dropbtn">
+        Select Instrument
+      </button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#" data-ticker="AAPL">Apple</a>
+        <a href="#" data-ticker="TSLA">Tesla</a>
+        <a href="#" data-ticker="MSFT">Microsoft</a>
+      </div>
+    </div>
+    <div id="instrument-container" style="display: none;">
+      <h4>Passed Instrument:</h4>
+      <div><b>Name:</b> <span id="name"></span></div>
+      <div><b>Ticker:</b> <span id="ticker"></span></div>
+      <div><b>Type:</b> <span id="type"></span></div>
+    </div>
+  </body>
+</html>
