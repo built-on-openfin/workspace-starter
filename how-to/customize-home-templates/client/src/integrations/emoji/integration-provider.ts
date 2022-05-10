@@ -95,8 +95,8 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
         } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION && result.data.key) {
             await fin.Clipboard.writeText({ data: result.data.key });
             return true;
-        } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION && result.data.url) {
-            await fin.System.openUrlWithBrowser(result.data.url);
+        } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION && result.data.url && this._integrationManager.openUrl) {
+            await this._integrationManager.openUrl(result.data.url);
             return true;
         }
 
