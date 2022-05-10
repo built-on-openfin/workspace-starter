@@ -1,0 +1,44 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version": "23.96.68.5"
+  },
+  "platform": {
+    "uuid": "use-notifications",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
+    "autoShow": true,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/notifications/notifications.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
+    "name": "Use Notifications - v6.0",
+    "target": ["desktop", "start-menu"]
+  }
+}
+  
