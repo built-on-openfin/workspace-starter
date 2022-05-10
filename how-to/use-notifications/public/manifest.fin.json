@@ -1,0 +1,44 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version": "23.96.68.5"
+  },
+  "platform": {
+    "uuid": "use-notifications",
+    "icon": "http://localhost:8080/favicon.ico",
+    "autoShow": true,
+    "providerUrl": "http://localhost:8080/notifications/notifications.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "http://localhost:8080/favicon.ico",
+    "name": "Use Notifications - v6.0",
+    "target": ["desktop", "start-menu"]
+  }
+}
+  

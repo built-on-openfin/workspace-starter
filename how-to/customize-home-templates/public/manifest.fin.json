@@ -47,8 +47,28 @@
       "title": "Customize Home Templates",
       "icon": "http://localhost:8080/favicon.ico"
     },
-    "quoteProvider": {
-      "rootUrl": "http://localhost:8080/quotes/"
+    "integrationProvider": {
+      "integrations": [
+        {
+          "id": "quote",
+          "icon": "http://localhost:8080/favicon.ico",
+          "title": "Quote Provider",
+          "enabled": true,
+          "moduleUrl": "http://localhost:8080/js/integrations/quote.bundle.js",
+          "data": {
+              "rootUrl": "http://localhost:8080/quotes/"
+          }
+        },
+        {
+          "id": "emoji",
+          "icon": "http://localhost:8080/favicon.ico",
+          "title": "Emoji Provider",
+          "enabled": true,
+          "moduleUrl": "http://localhost:8080/js/integrations/emoji.bundle.js",
+          "data": {
+          }
+        }
+      ]
     }
   }
 }

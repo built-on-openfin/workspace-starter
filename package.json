@@ -10,7 +10,9 @@
         "register-with-store",
         "integrate-with-salesforce",
         "support-context-and-intents",
-        "customize-workspace"
+        "customize-workspace",
+        "customize-home-templates",
+        "use-notifications"
     ],
     "howToCustomFolder":"workspace/vnext",
     "author": "",
