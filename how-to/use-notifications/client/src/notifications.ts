@@ -278,20 +278,20 @@ async function showUpdatableNotification() {
 
 async function showCustomNotification() {
     const templateData = {
-        "subTitle": "Sub Title 🚀",
-        "firstValueTitle": "First Value",
-        "firstValue": "100",
-        "secondValueTitle": "Second Value",
-        "secondValue": "200",
-        "c0": "Col 1",
-        "c1": "Col 2",
-        "c2": "Col 3",
-        "d0_0": "50",
-        "d0_1": "150",
-        "d0_2": "250",
-        "d1_0": "550",
-        "d1_1": "650",
-        "d1_2": "750"
+        subTitle: "Sub Title 🚀",
+        firstValueTitle: "First Value",
+        firstValue: "100",
+        secondValueTitle: "Second Value",
+        secondValue: "200",
+        c0: "Col 1",
+        c1: "Col 2",
+        c2: "Col 3",
+        d0_0: "50",
+        d0_1: "150",
+        d0_2: "250",
+        d1_0: "550",
+        d1_1: "650",
+        d1_2: "750"
     };
 
     const notification: NotificationOptions = {
