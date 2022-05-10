@@ -1,13 +1,10 @@
 import {
-  Home,
-  CLIProvider,
+  CLIDispatchedSearchResult, CLIProvider,
   CLISearchListenerRequest,
   CLISearchListenerResponse,
-  CLISearchResponse,
-  CLIDispatchedSearchResult,
+  CLISearchResponse, Home, HomeSearchResponse
 } from "@openfin/workspace";
-import { emojiProviderGetResults, providerId as emojiProviderId, emojiProviderHandleAction } from "./emojiProvider";
-import { quoteProviderGetResults, providerId as quoteProviderId, quoteProviderHandleAction } from "./quoteProvider";
+import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
@@ -39,20 +36,33 @@ export async function register() {
     lastResponse = response;
     lastResponse.open();
 
-    const quoteResponses = await quoteProviderGetResults(settings, query);
-    const emojiResponses = await emojiProviderGetResults(settings, query);
+    let appSearchEntries = await getAppSearchEntries();
 
-    return {
-      results: quoteResponses.results.concat(emojiResponses.results)
+    const searchResults: HomeSearchResponse = {
+      results: appSearchEntries,
+      context: {
+        filters: []
+      }
     };
+
+    const integrationResults = await getSearchResults(query, undefined, lastResponse);
+    if (Array.isArray(integrationResults.results)) {
+      searchResults.results = searchResults.results.concat(integrationResults.results);
+    }
+    if (Array.isArray(integrationResults.context.filters)) {
+      searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+    }
+
+    return searchResults;
+
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      if (result.data.providerId === quoteProviderId) {
-        quoteProviderHandleAction(result);
-      } else if (result.data.providerId === emojiProviderId) {
-        emojiProviderHandleAction(result);
+      const handled = await itemSelection(result, lastResponse);
+
+      if (!handled) {
+        console.warn(`Result not handled ${result.key}`, result.data);
       }
     } else {
       console.warn("Unable to execute result without data being passed");
