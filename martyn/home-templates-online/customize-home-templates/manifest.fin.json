@@ -1,0 +1,54 @@
+{
+  "devtools_port": 9090,
+  "licenseKey": "openfin-demo-license-key",
+  "runtime": {
+    "arguments": "--v=1 --inspect",
+    "version":"23.96.68.5"
+  },
+  "platform": {
+    "uuid": "customize-home-templates",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-home-templates/favicon.ico",
+    "autoShow": false,
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-home-templates/platform/provider.html",
+    "preventQuitOnLastWindowClosed":true,
+    "permissions": {
+      "System": {
+        "launchExternalProcess": true,
+        "openUrlWithBrowser": {
+          "enabled": true,
+          "protocols": ["mailto"]
+        }
+      }
+    },
+    "defaultWindowOptions": {
+      "permissions": {
+        "System": {
+            "openUrlWithBrowser": {
+                "enabled": true,
+                "protocols": ["mailto"]
+            }
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "windows": []
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "An way of showing examples of what OpenFin can do.",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-home-templates/favicon.ico",
+    "name": "Customize Home Templates - v6.0",
+    "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "homeProvider": {
+      "id": "customize-home-templates",
+      "title": "Customize Home Templates",
+      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-home-templates/favicon.ico"
+    },
+    "quoteProvider": {
+      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-home-templates/quotes/"
+    }
+  }
+}
