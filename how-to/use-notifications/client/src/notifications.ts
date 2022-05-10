@@ -13,7 +13,7 @@ import {
     toggleNotificationCenter,
     UpdatableNotificationOptions,
     update
-} from 'openfin-notifications';
+} from "@openfin/workspace/notifications";
 
 let loggingElement: HTMLElement;
 const updatableNotifications = {};
