@@ -11,7 +11,8 @@
         "integrate-with-salesforce",
         "support-context-and-intents",
         "customize-workspace",
-        "customize-home-templates"
+        "customize-home-templates",
+        "use-notifications"
     ],
     "howToCustomFolder":"",
     "author": "",
