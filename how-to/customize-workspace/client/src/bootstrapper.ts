@@ -43,7 +43,7 @@ export async function init() {
         rootUrl: settings?.platformProvider.rootUrl,
         launchView,
         launchPage,
-        openUrl: fin.System.openUrlWithBrowser
+        openUrl: url => fin.System.openUrlWithBrowser(url)
     }, settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();
