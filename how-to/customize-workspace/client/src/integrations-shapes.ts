@@ -34,10 +34,21 @@ export interface IntegrationManager {
     launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 
     /**
+     * Launch a snapshot.
+     * @param snapshotUrl The snapshot url 
+     */
+    launchSnapshot(snapshotUrl: string): Promise<OpenFin.Identity[]>;
+
+    /**
      * Open a url with the browser.
      * @param url The url to open.
      */
     openUrl(url: string): Promise<void>;
+
+    /**
+     * Show the home UI.
+     */
+    showHome(): Promise<void>;
 }
 
 /**

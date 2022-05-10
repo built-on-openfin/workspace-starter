@@ -8,6 +8,7 @@ import { fin } from 'openfin-adapter/src/mock';
 import { getSettings } from './settings';
 import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
 import { launchPage, launchView } from './browser';
+import { launchSnapshot } from './launch';
 
 export async function init() {
     // you can kick off your bootstrapping process here where you may decide to prompt for authentication, 
@@ -43,7 +44,9 @@ export async function init() {
         rootUrl: settings?.platformProvider.rootUrl,
         launchView,
         launchPage,
-        openUrl: url => fin.System.openUrlWithBrowser(url)
+        launchSnapshot: manifestUrl => launchSnapshot({ manifestType: "snapshot", manifest: manifestUrl, appId: "", title: "", icons: null, publisher: null }),
+        openUrl: url => fin.System.openUrlWithBrowser(url),
+        showHome
     }, settings.integrationProvider);
 
     const providerWindow = fin.Window.getCurrentSync();
