@@ -15,7 +15,7 @@ export interface IntegrationManager {
     /**
      * The root url for the provider.
      */
-    rootUrl: string;
+    rootUrl?: string;
 
     /**
      * Launch a view in the workspace.
@@ -23,7 +23,7 @@ export interface IntegrationManager {
      * @param targetIdentity The optional target identity of the launch with.
      * @returns The launched view.
      */
-    launchView(view: OpenFin.PlatformViewCreationOptions | string, targetIdentity?: OpenFin.Identity): Promise<View>;
+    launchView?(view: OpenFin.PlatformViewCreationOptions | string, targetIdentity?: OpenFin.Identity): Promise<View>;
 
     /**
      * Launch a page in the workspace.
@@ -31,24 +31,24 @@ export interface IntegrationManager {
      * @param bounds The optional bounds for the page.
      * @returns The window created.
      */
-    launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+    launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 
     /**
      * Launch a snapshot.
      * @param snapshotUrl The snapshot url 
      */
-    launchSnapshot(snapshotUrl: string): Promise<OpenFin.Identity[]>;
+    launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 
     /**
      * Open a url with the browser.
      * @param url The url to open.
      */
-    openUrl(url: string): Promise<void>;
+    openUrl?(url: string): Promise<void>;
 
     /**
      * Show the home UI.
      */
-    showHome(): Promise<void>;
+    showHome?(): Promise<void>;
 }
 
 /**
