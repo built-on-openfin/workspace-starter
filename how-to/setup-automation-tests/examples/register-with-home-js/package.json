@@ -1,5 +1,5 @@
 {
-    "name": "setup-automation-tests-register-with-home-ts",
+    "name": "setup-automation-tests-register-with-home-js",
     "version": "1.0.0",
     "description": "OpenFin Workspace Starter Automation Tests",
     "scripts": {

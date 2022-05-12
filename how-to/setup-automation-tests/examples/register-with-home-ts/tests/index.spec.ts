@@ -1,7 +1,13 @@
 import { expect } from 'chai';
-import { OpenFinSystem, OpenFinWorkspace, WebDriver }  from '@openfin/automation-helpers';
+import { OpenFinSystem, OpenFinHome, WebDriver }  from '@openfin/automation-helpers';
 
 describe('Register with Home', () => {
+    it('The runtime is ready', async () => {
+        const isReady = await OpenFinSystem.waitForReady(10000);
+
+        expect(isReady).to.equal(true);
+    });
+    
     it('The title should be set', async () => {
         const title = await WebDriver.getTitle();
 
@@ -15,15 +21,21 @@ describe('Register with Home', () => {
     });
 
     it('Can open the home window', async () => {
-        await OpenFinWorkspace.homeShow(10000);
+        const isShown = await OpenFinHome.show(20000);
+        expect(isShown).to.equal(true);
         await WebDriver.sleep(1000);
     });
 
+    it('Can perform a Node Webdriver specific test', async () => {
+        const elem = nodeWebDriver.findElement("xpath", "//*[@id='search-input']");
+        expect(elem).to.exist;
+    });
+
     it('Can search in the home window', async () => {
-        await OpenFinWorkspace.homeSearch("basic");
+        await OpenFinHome.search("basic");
         await WebDriver.sleep(1000);
 
-        const ids = await OpenFinWorkspace.homeSearchResultIds();
+        const ids = await OpenFinHome.searchResultIds();
 
         expect(ids.length).equal(2);
         expect(ids[0]).equal("basic-interop-view");
@@ -32,26 +44,26 @@ describe('Register with Home', () => {
 
     it('Can select entries in the home window by index', async () => {
         await WebDriver.sleep(1000);
-        await OpenFinWorkspace.homeSearchResultByIndex(1, "select");
+        await OpenFinHome.searchResultByIndex(1, "select");
 
         await WebDriver.sleep(1000);
-        await OpenFinWorkspace.homeSearchResultByIndex(0, "select");
+        await OpenFinHome.searchResultByIndex(0, "select");
     });
 
     it('Can select entries in the home window by id', async () => {
         await WebDriver.sleep(1000);
-        await OpenFinWorkspace.homeSearchResultById("basic-fdc3-view", "select");
+        await OpenFinHome.searchResultById("basic-fdc3-view", "select");
 
         await WebDriver.sleep(1000);
-        await OpenFinWorkspace.homeSearchResultById("basic-interop-view", "select");
+        await OpenFinHome.searchResultById("basic-interop-view", "select");
     });
 
     it('Can open the home window filters', async () => {
-        await OpenFinWorkspace.homeFiltersOpen();
+        await OpenFinHome.filtersOpen();
     });
 
     it('Can get the filter ids', async () => {
-        const filterIds = await OpenFinWorkspace.homeFiltersIds();
+        const filterIds = await OpenFinHome.filtersIds();
         expect(filterIds.length).equal(3);
         expect(filterIds[0]).equal("fdc3");
         expect(filterIds[1]).equal("interop");
@@ -59,54 +71,54 @@ describe('Register with Home', () => {
     });
 
     it('Set a filter by index', async () => {
-        const state = await OpenFinWorkspace.homeFiltersByIndexGet(1);
+        const state = await OpenFinHome.filtersByIndexGet(1);
         expect(state).equal(false);
 
-        await OpenFinWorkspace.homeFiltersByIndexSet(1, true);
-        const state2 = await OpenFinWorkspace.homeFiltersByIndexGet(1);
+        await OpenFinHome.filtersByIndexSet(1, true);
+        const state2 = await OpenFinHome.filtersByIndexGet(1);
         expect(state2).equal(true);
     });
 
     it('Set a filter by id', async () => {
-        const state = await OpenFinWorkspace.homeFiltersByIdGet("view");
+        const state = await OpenFinHome.filtersByIdGet("view");
         expect(state).equal(false);
 
-        await OpenFinWorkspace.homeFiltersByIdSet("view", true);
-        const state2 = await OpenFinWorkspace.homeFiltersByIdGet("view");
+        await OpenFinHome.filtersByIdSet("view", true);
+        const state2 = await OpenFinHome.filtersByIdGet("view");
         expect(state2).equal(true);
     });
 
     it('Can close the home window filters', async () => {
         await WebDriver.sleep(3000);
-        await OpenFinWorkspace.homeFiltersClose(true);
+        await OpenFinHome.filtersClose(true);
     });
 
     it('Can check selected entry content', async () => {
-        const itemHtml = await OpenFinWorkspace.homeSearchResultSelectedItem();
+        const itemHtml = await OpenFinHome.searchResultSelectedItem();
         expect(itemHtml).contains("Basic Interop View");
 
-        const itemDescriptionHtml = await OpenFinWorkspace.homeSearchResultSelectedDetails();
+        const itemDescriptionHtml = await OpenFinHome.searchResultSelectedDetails();
         expect(itemDescriptionHtml).contains("This is an example of a basic OpenFin Interop View");
     });
 
     it('Can open an entry in the home window', async () => {
         await WebDriver.sleep(500);
-        await OpenFinWorkspace.homeSearchResultById("basic-interop-view", "open");
+        await OpenFinHome.searchResultById("basic-interop-view", "open");
         await WebDriver.sleep(500);
     });
 
     it('Can clear entries in the home window', async () => {
-        await OpenFinWorkspace.homeSearchClear();
+        await OpenFinHome.searchClear();
         await WebDriver.sleep(500);
-        await OpenFinWorkspace.homeSearchClear();
+        await OpenFinHome.searchClear();
 
         await WebDriver.sleep(1000);
-        await OpenFinWorkspace.homeHide();
+        await OpenFinHome.hide();
     });
 
     it('Can close the home window', async () => {
         await WebDriver.sleep(500);
-        await OpenFinWorkspace.homeHide();
+        await OpenFinHome.hide();
     });
 
     it('Can perform operation in the interop window', async () => {
