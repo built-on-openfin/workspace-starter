@@ -1,6 +1,6 @@
 {
     "name": "@openfin/automation-cli",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "CLI for running automation tests within the OpenFin ecosystem",
     "authors": [
         "Martyn Janes <martyn.janes@openfin.co>"
@@ -27,6 +27,7 @@
         "dist": "run-s format build package docs dist-clean"
     },
     "dependencies": {
+        "@openfin/automation-helpers": "^0.1.0",
         "chalk": "^4.1.2",
         "commander": "^9.1.0",
         "glob": "^7.2.0",

@@ -1,3 +1,4 @@
+import { NodeWebDriver } from "@openfin/automation-helpers";
 import { getVersion, runCLI } from "jest";
 import type { Client } from "webdriver";
 import { logSection } from "../console";
@@ -22,8 +23,7 @@ export async function runTestsJest(
 
     // Set the global object which points to the client so that the automation helpers can access it
     // This only works in jest >= 28 which lazy loads globalThis into its vm context
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).webdriver = webdriver;
+    globalThis.webDriver = new NodeWebDriver(webdriver);
 
     let testsFolder = testPathGlob;
 

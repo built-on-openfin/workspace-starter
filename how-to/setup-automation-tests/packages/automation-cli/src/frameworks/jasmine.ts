@@ -1,3 +1,4 @@
+import { NodeWebDriver } from "@openfin/automation-helpers";
 import Jasmine from "jasmine";
 import { SpecReporter } from "jasmine-spec-reporter";
 import type { Client } from "webdriver";
@@ -24,8 +25,7 @@ export async function runTestsJasmine(
     logSection("Running Tests using Jasmine", `Version ${runner.coreVersion()}`);
 
     // Set the global object which points to the client so that the automation helpers can access it
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).webdriver = webdriver;
+    globalThis.webDriver = new NodeWebDriver(webdriver);
 
     runner.jasmine.DEFAULT_TIMEOUT_INTERVAL = maxTimeout * 1000;
 

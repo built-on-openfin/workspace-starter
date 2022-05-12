@@ -320,11 +320,24 @@ export async function getChromeDriver(chromeVersion: string, storageFolder: stri
         const parser = new Parser();
         const parsed: ChromeDriverManifest = await parser.parseStringPromise(xml);
 
-        const manifestEntry = parsed?.ListBucketResult?.Contents.find(
+        const allManifestEntries = parsed?.ListBucketResult?.Contents.filter(
             e => e.Key[0].startsWith(`${chromeVersion}`) && e.Key[0].endsWith("/chromedriver_win32.zip")
         );
-        if (!manifestEntry) {
+        if (!allManifestEntries || allManifestEntries.length === 0) {
             throw new Error(`Can not find chromedriver for version ${chromeVersion}`);
+        }
+
+        // Get the highest minor version number
+        let manifestEntry = allManifestEntries[0];
+        if (allManifestEntries.length > 1) {
+            let highest = 0;
+            for (let i = 0; i < allManifestEntries.length; i++) {
+                const minor = Number.parseInt(allManifestEntries[i].Key[0].split(".")[3], 10);
+                if (minor > highest) {
+                    highest = minor;
+                    manifestEntry = allManifestEntries[i];
+                }
+            }
         }
 
         const chromeDriverVersionUrl = `${chromeDriverVersionBucketUrl}${manifestEntry.Key}`;
