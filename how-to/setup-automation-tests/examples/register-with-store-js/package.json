@@ -1,0 +1,21 @@
+{
+    "name": "setup-automation-tests-register-with-store-js",
+    "version": "1.0.0",
+    "description": "OpenFin Workspace Starter Automation Tests",
+    "scripts": {
+        "test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js",
+        "test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js",
+        "test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine",
+        "test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jasmine",
+        "test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest",
+        "test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jest",
+        "test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@openfin/automation-cli": "file:../packages/automation-cli",
+        "@openfin/automation-helpers": "file:../packages/automation-helpers",
+        "chai": "^4.3.6"
+    }
+}
