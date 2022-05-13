@@ -25,7 +25,7 @@ describe('Register with Home', () => {
     });
 
     it('Can open the home window', async () => {
-        const isShown = await OpenFinHome.show(20000);
+        const isShown = await OpenFinHome.show(30000);
         expect(isShown).to.equal(true);
     });
 
