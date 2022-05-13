@@ -51,7 +51,15 @@ npm run test-local-jest
 npm run test-remote-jest
 ```
 
-In addition to the JavaScript test examples there is also a duplicate set of examples which can be found in the `examples/register-with-home-ts` folder. The same npm run scripts are available in this example but the tests are written in TypeScript.
+In addition to the JavaScript test examples there is also a duplicate set of examples which can be found in the [examples/register-with-home-ts](./examples/register-with-home-ts) folder. The same npm run scripts are available in this example but the tests are written in TypeScript.
+
+## Selenium
+
+The `@openfin/automation-helpers` can also be used with a [Selenium](https://www.selenium.dev/) setup, see the [selenium](./examples/selenium/) example for more details.
+
+## WebDriverIO
+
+The `@openfin/automation-helpers` can also be used with a [WebDriverIO](https://webdriver.io/) setup, see the [wdio](./examples/wdio/) example for more details.
 
 ## Running using CI
 
@@ -95,6 +103,7 @@ command "npm run test-local-mocha --prefix how-to/setup-automation-tests/example
   ⚙️  Chrome Driver Port 4444
   ⚙️  Test Framework mocha
   ⚙️  Test Timeout 120
+  ⚙️  Driver node
   ⚙️  Default Runtime Version stable
   ⚙️  Storage Folder ./storage/
   ⚙️  Offline false
