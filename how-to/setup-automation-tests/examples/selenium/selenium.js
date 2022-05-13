@@ -5,25 +5,17 @@ const childProcess = require('child_process');
 const { SeleniumWebDriver, OpenFinSystem } = require('@openfin/automation-helpers');
 const Mocha = require('mocha');
 
-// Note
-// The version of the chromedriver in the package.json should match the runtime version from the app manifest.
-// e.g. if the manifest runtime version is 23.96.68.3 then the chromedriver version should be "96.0.0"
-const testManifestUrl = "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json"
-
-async function run() {
+async function run(manifestUrl, chromeDriverPort, devToolsPort) {
     let seleniumDriver;
     let openFinRVMProcess
     try {
-        const chromeDriverPort = getRandomPort(5000, 5999);
-        const devToolsPort = getRandomPort(9000, 9999);
-
         // Spawn the OpenFin runtime with a specific debugging port and also
         // configure the selenium web driver to use the same port for debugger address
         console.log("Start OpenFin Runtime");
         openFinRVMProcess = childProcess.spawn(
             path.join(process.env.LocalAppData, 'OpenFin\\OpenFinRVM.exe'),
             [
-                '--config=' + testManifestUrl,
+                '--config=' + manifestUrl,
                 `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`
             ],
             { shell: true }
@@ -66,7 +58,7 @@ async function run() {
             }
             chromedriver.stop();
         } catch (err) { 
-            console.log(err);
+            console.error(err);
         }
     }
 }
@@ -75,7 +67,6 @@ async function runMochaTests() {
     return new Promise((resolve, reject) => {
         console.log();
         console.log("Running Tests with Mocha");
-        console.log();
 
         const mocha = new Mocha();
         mocha.timeout(60000);
@@ -90,6 +81,13 @@ function getRandomPort(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-run()
+// The version of the chromedriver in the package.json should match the runtime version from the app manifest.
+// e.g. if the manifest runtime version is 23.96.68.3 then the chromedriver version should be "96.0.0"
+const testManifestUrl = "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json"
+const chromeDriverPort = getRandomPort(5000, 5999);
+const devToolsPort = getRandomPort(9000, 9999);
+
+// These parameters could be supplied through command line options
+run(testManifestUrl, chromeDriverPort, devToolsPort)
     .then(() => console.log("Done"))
     .catch(err => console.error(err));
