@@ -12,7 +12,8 @@
         "support-context-and-intents",
         "customize-workspace",
         "customize-home-templates",
-        "use-notifications"
+        "use-notifications",
+        "register-with-browser"
     ],
     "howToCustomFolder":"",
     "author": "",
