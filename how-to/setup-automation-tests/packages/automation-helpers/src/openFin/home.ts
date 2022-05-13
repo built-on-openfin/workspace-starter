@@ -12,7 +12,11 @@ export class OpenFinHome {
      */
     public static async show(timeout: number): Promise<boolean> {
         if (await WebDriver.waitForWindow("OpenFin Home", timeout)) {
-            await WebDriver.callMethod<undefined>("fin.Workspace.Home.show", undefined, true);
+            // There should probably be a better way to detect that the home window is
+            // ready to show, without this sleep it does not have enough time to
+            // initialise the providers and will throw an error
+            await WebDriver.sleep(1000);
+            await WebDriver.callMethod("fin.Workspace.Home.show", undefined, true);
             return true;
         }
 
@@ -23,7 +27,7 @@ export class OpenFinHome {
      * Hide the home window.
      */
     public static async hide(): Promise<void> {
-        await WebDriver.callMethod<undefined>("fin.Workspace.Home.hide", undefined, true);
+        await WebDriver.callMethod("fin.Workspace.Home.hide", undefined, true);
     }
 
     /**

@@ -11,7 +11,11 @@ export class OpenFinStore {
      */
     public static async show(timeout: number): Promise<boolean> {
         if (await WebDriver.waitForWindow("Home | Storefront", timeout)) {
-            await WebDriver.callMethod<undefined>("fin.Workspace.Storefront.show", undefined, true);
+            // There should probably be a better way to detect that the store window is
+            // ready to show, without this sleep it does not have enough time to
+            // initialise the providers and will throw an error
+            await WebDriver.sleep(1000);
+            await WebDriver.callMethod("fin.Workspace.Storefront.show", undefined, true);
             return true;
         }
 
@@ -22,6 +26,6 @@ export class OpenFinStore {
      * Hide the store window.
      */
     public static async hide(): Promise<void> {
-        await WebDriver.callMethod<undefined>("fin.Workspace.Storefront.hide", undefined, true);
+        await WebDriver.callMethod("fin.Workspace.Storefront.hide", undefined, true);
     }
 }

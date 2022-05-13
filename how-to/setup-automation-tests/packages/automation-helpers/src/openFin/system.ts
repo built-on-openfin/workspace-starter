@@ -24,6 +24,14 @@ export class OpenFinSystem {
     }
 
     /**
+     * Exit the runtime.
+     * @returns The runtime version.
+     */
+    public static async exit(): Promise<string> {
+        return WebDriver.callMethod("fin.desktop.System.exit", undefined, true);
+    }
+
+    /**
      * Get the applications.
      * @returns The applications.
      */
