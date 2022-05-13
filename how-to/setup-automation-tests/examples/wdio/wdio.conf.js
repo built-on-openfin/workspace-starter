@@ -21,7 +21,6 @@ exports.config = {
         maxInstances: 1,
         browserName: 'chrome',
         "goog:chromeOptions": {
-
             debuggerAddress: `localhost:${devToolsPort}`
         }
     }],
