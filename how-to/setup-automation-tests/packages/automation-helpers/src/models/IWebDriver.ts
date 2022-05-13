@@ -1,4 +1,5 @@
 import type { IWebDriverElement } from "./IWebDriverElement";
+import type { LocatorTypes } from "./locatorTypes";
 
 /**
  * Web driver interface.
@@ -54,16 +55,18 @@ export interface IWebDriver {
     switchToWindowByUrl(url: string): Promise<boolean>;
 
     /**
-     * Find an element by its xpath.
-     * @param path The path the element to find.
+     * Find an element.
+     * @param locator The locator to use when finding the element.
+     * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    findElementByPath(path: string): Promise<IWebDriverElement>;
+    findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement>;
 
     /**
-     * Find elements by their xpath.
-     * @param path The path the element to find.
-     * @returns The element if found.
+     * Find elements.
+     * @param locator The locator to use when finding the elements.
+     * @param value The value to use with the locator.
+     * @returns The elements if found.
      */
-    findElementsByPath(path: string): Promise<IWebDriverElement[]>;
+    findElements(locator: LocatorTypes, value: string): Promise<IWebDriverElement[]>;
 }

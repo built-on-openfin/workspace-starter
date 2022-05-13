@@ -1,6 +1,7 @@
-import { Builder, By, type ThenableWebDriver } from "selenium-webdriver";
+import { Builder, type ThenableWebDriver } from "selenium-webdriver";
 import type { IWebDriver } from "../models/IWebDriver";
 import type { IWebDriverElement } from "../models/IWebDriverElement";
+import type { LocatorTypes } from "../models/locatorTypes";
 import { SeleniumWebDriverElement } from "./seleniumWebDriverElement";
 
 /**
@@ -166,28 +167,36 @@ export class SeleniumWebDriver implements IWebDriver {
     }
 
     /**
-     * Find an element by its xpath.
-     * @param path The path the element to find.
+     * Find an element.
+     * @param locator The locator to use when finding the element.
+     * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElementByPath(path: string): Promise<IWebDriverElement> {
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
         if (!this._webDriver) {
             throw new Error("No session started");
         }
-        const element = await this._webDriver.findElement(By.xpath(path));
+        const element = await this._webDriver.findElement({
+            using: locator,
+            value
+        });
         return new SeleniumWebDriverElement(this._webDriver, element);
     }
 
     /**
-     * Find elements by their xpath.
-     * @param path The path the element to find.
-     * @returns The element if found.
+     * Find elements.
+     * @param locator The locator to use when finding the elements.
+     * @param value The value to use with the locator.
+     * @returns The elements if found.
      */
-    public async findElementsByPath(path: string): Promise<IWebDriverElement[]> {
+    public async findElements(locator: LocatorTypes, value: string): Promise<IWebDriverElement[]> {
         if (!this._webDriver) {
             throw new Error("No session started");
         }
-        const elements = await this._webDriver.findElements(By.xpath(path));
+        const elements = await this._webDriver.findElements({
+            using: locator,
+            value
+        });
         return elements.map(ref => new SeleniumWebDriverElement(this._webDriver as ThenableWebDriver, ref));
     }
 }

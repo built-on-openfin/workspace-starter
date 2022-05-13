@@ -1,6 +1,7 @@
 import WebDriver, { type Client } from "webdriver";
 import type { IWebDriver } from "../models/IWebDriver";
 import type { IWebDriverElement } from "../models/IWebDriverElement";
+import type { LocatorTypes } from "../models/locatorTypes";
 import { NodeWebDriverElement } from "./nodeWebDriverElement";
 
 /**
@@ -169,28 +170,30 @@ export class NodeWebDriver implements IWebDriver {
     }
 
     /**
-     * Find an element by its xpath.
-     * @param path The path the element to find.
+     * Find an element.
+     * @param locator The locator to use when finding the element.
+     * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElementByPath(path: string): Promise<IWebDriverElement> {
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
         if (!this._client) {
             throw new Error("No session started");
         }
-        const ref = await this._client.findElement("xpath", path);
+        const ref = await this._client.findElement(locator, value);
         return new NodeWebDriverElement(this._client, ref);
     }
 
     /**
-     * Find elements by their xpath.
-     * @param path The path the element to find.
-     * @returns The element if found.
+     * Find elements.
+     * @param locator The locator to use when finding the elements.
+     * @param value The value to use with the locator.
+     * @returns The elements if found.
      */
-    public async findElementsByPath(path: string): Promise<IWebDriverElement[]> {
+    public async findElements(locator: LocatorTypes, value: string): Promise<IWebDriverElement[]> {
         if (!this._client) {
             throw new Error("No session started");
         }
-        const refs = await this._client.findElements("xpath", path);
+        const refs = await this._client.findElements(locator, value);
         return refs.map(ref => new NodeWebDriverElement(this._client as Client, ref));
     }
 }

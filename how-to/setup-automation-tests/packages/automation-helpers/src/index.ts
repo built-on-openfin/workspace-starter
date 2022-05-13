@@ -2,6 +2,7 @@ export * from "./globals";
 export * from "./models/elementReference";
 export * from "./models/IWebDriver";
 export * from "./models/IWebDriverElement";
+export * from "./models/locatorTypes";
 export * from "./openFin/home";
 export * from "./openFin/store";
 export * from "./openFin/system";

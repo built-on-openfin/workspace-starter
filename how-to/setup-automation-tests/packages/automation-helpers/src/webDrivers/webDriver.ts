@@ -158,7 +158,7 @@ export class WebDriver {
      * @returns The element if found.
      */
     public static async findElementByPath(path: string): Promise<IWebDriverElement> {
-        return globalThis.webDriver.findElementByPath(path);
+        return globalThis.webDriver.findElement("xpath", path);
     }
 
     /**
@@ -167,25 +167,7 @@ export class WebDriver {
      * @returns The element if found.
      */
     public static async findElementsByPath(path: string): Promise<IWebDriverElement[]> {
-        return globalThis.webDriver.findElementsByPath(path);
-    }
-
-    /**
-     * Find an element by its id.
-     * @param id The id of the element to find.
-     * @returns The element if found.
-     */
-    public static async findElementById(id: string): Promise<IWebDriverElement> {
-        return globalThis.webDriver.findElementByPath(`//*[@id='${id}']`);
-    }
-
-    /**
-     * Find an element by its tag.
-     * @param tag The tag of the element to find.
-     * @returns The element if found.
-     */
-    public static async findElementByTag(tag: string): Promise<IWebDriverElement> {
-        return globalThis.webDriver.findElementByPath(`//${tag}`);
+        return globalThis.webDriver.findElements("xpath", path);
     }
 
     /**
@@ -194,7 +176,43 @@ export class WebDriver {
      * @returns The elements if found.
      */
     public static async findElementsByTag(tag: string): Promise<IWebDriverElement[]> {
-        return globalThis.webDriver.findElementsByPath(`//${tag}`);
+        return globalThis.webDriver.findElements("tag name", tag);
+    }
+
+    /**
+     * Find an element by css selector.
+     * @param cssSelector The css selector of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementByCssSelector(cssSelector: string): Promise<IWebDriverElement> {
+        return globalThis.webDriver.findElement("css selector", cssSelector);
+    }
+
+    /**
+     * Find all elements by their css selector.
+     * @param cssSelector The css selector of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementsCssSelector(cssSelector: string): Promise<IWebDriverElement[]> {
+        return globalThis.webDriver.findElements("css selector", cssSelector);
+    }
+
+    /**
+     * Find an element by its id.
+     * @param id The id of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementById(id: string): Promise<IWebDriverElement> {
+        return globalThis.webDriver.findElement("xpath", `//*[@id='${id}']`);
+    }
+
+    /**
+     * Find an element by its tag.
+     * @param tag The tag of the element to find.
+     * @returns The element if found.
+     */
+    public static async findElementByTag(tag: string): Promise<IWebDriverElement> {
+        return globalThis.webDriver.findElement("tag name", tag);
     }
 
     /**
@@ -204,7 +222,7 @@ export class WebDriver {
      * @returns The element if found.
      */
     public static async findElementByClass(className: string, tag: string = "*"): Promise<IWebDriverElement> {
-        return globalThis.webDriver.findElementByPath(`//${tag}[contains(@class,"${className}")]`);
+        return globalThis.webDriver.findElement("xpath", `//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
@@ -214,7 +232,7 @@ export class WebDriver {
      * @returns The element if found.
      */
     public static async findElementsByClass(className: string, tag: string = "*"): Promise<IWebDriverElement[]> {
-        return globalThis.webDriver.findElementsByPath(`//${tag}[contains(@class,"${className}")]`);
+        return globalThis.webDriver.findElements("xpath", `//${tag}[contains(@class,"${className}")]`);
     }
 
     /**
