@@ -1,4 +1,4 @@
-import { By, type ThenableWebDriver } from "selenium-webdriver";
+import { Builder, By, type ThenableWebDriver } from "selenium-webdriver";
 import type { IWebDriver } from "../models/IWebDriver";
 import type { IWebDriverElement } from "../models/IWebDriverElement";
 import { SeleniumWebDriverElement } from "./seleniumWebDriverElement";
@@ -10,15 +10,56 @@ export class SeleniumWebDriver implements IWebDriver {
     /**
      * The selenium web driver to make the chromedriver calls with.
      */
-    private readonly _webDriver: ThenableWebDriver;
+    private _webDriver?: ThenableWebDriver;
 
     /**
      * Create a new instance of SeleniumWebDriver.
-     * @param webDriver The web driver to use for chromedriver calls.
+     * @param webDriver The web driver to use for chromedriver calls if already started.
      */
-    constructor(webDriver: ThenableWebDriver) {
-        this._webDriver = webDriver;
-        globalThis.seleniumWebDriver = webDriver;
+    constructor(webDriver?: ThenableWebDriver) {
+        if (webDriver) {
+            this._webDriver = webDriver;
+            globalThis.seleniumWebDriver = webDriver;
+        }
+    }
+
+    /**
+     * Start a new session on the driver.
+     * @param devToolsPort The devtool port.
+     * @param chromeDriverPort The chromedriver port.
+     * @param logLevel The level of logging.
+     * @returns Nothing.
+     */
+    public async startSession(
+        devToolsPort: number,
+        chromeDriverPort: number,
+        logLevel: "debug" | "silent"
+    ): Promise<void> {
+        if (!this._webDriver) {
+            this._webDriver = new Builder()
+                .usingServer(`http://localhost:${chromeDriverPort}`)
+                .withCapabilities({
+                    "goog:chromeOptions": {
+                        debuggerAddress: `localhost:${devToolsPort}`
+                    }
+                })
+                .forBrowser("chrome")
+                .build();
+
+            globalThis.seleniumWebDriver = this._webDriver;
+        }
+    }
+
+    /**
+     * End a session on the driver.
+     * @returns Nothing.
+     */
+    public async endSession(): Promise<void> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
+        await this._webDriver.quit();
+        this._webDriver = undefined;
     }
 
     /**
@@ -31,6 +72,9 @@ export class SeleniumWebDriver implements IWebDriver {
         script: string,
         args: (string | object | number | boolean | undefined)[]
     ): Promise<T> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         return this._webDriver.executeAsyncScript(script, ...args);
     }
 
@@ -39,6 +83,9 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns The window title.
      */
     public async getTitle(): Promise<string> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         return this._webDriver.getTitle();
     }
 
@@ -47,6 +94,9 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns The window title.
      */
     public async getUrl(): Promise<string> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         return this._webDriver.getCurrentUrl();
     }
 
@@ -56,6 +106,9 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns True if the window was available.
      */
     public async switchToWindow(title: string): Promise<boolean> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         // If the current window is already the correct one just return.
         const winTitle = await this._webDriver.getTitle();
         if (winTitle === title) {
@@ -86,6 +139,9 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns True if the window was available.
      */
     public async switchToWindowByUrl(url: string): Promise<boolean> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         // If the current window is already the correct one just return.
         const winUrl = await this._webDriver.getCurrentUrl();
         if (winUrl === url) {
@@ -115,6 +171,9 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns The element if found.
      */
     public async findElementByPath(path: string): Promise<IWebDriverElement> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         const element = await this._webDriver.findElement(By.xpath(path));
         return new SeleniumWebDriverElement(this._webDriver, element);
     }
@@ -125,7 +184,10 @@ export class SeleniumWebDriver implements IWebDriver {
      * @returns The element if found.
      */
     public async findElementsByPath(path: string): Promise<IWebDriverElement[]> {
+        if (!this._webDriver) {
+            throw new Error("No session started");
+        }
         const elements = await this._webDriver.findElements(By.xpath(path));
-        return elements.map(ref => new SeleniumWebDriverElement(this._webDriver, ref));
+        return elements.map(ref => new SeleniumWebDriverElement(this._webDriver as ThenableWebDriver, ref));
     }
 }

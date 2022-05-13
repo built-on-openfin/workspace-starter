@@ -1,10 +1,11 @@
+import { IWebDriver, NodeWebDriver, SeleniumWebDriver } from "@openfin/automation-helpers";
 import fs from "fs/promises";
 import JSZip from "jszip";
 import fetch from "node-fetch";
 import os from "os";
 import path from "path";
 import { Parser } from "xml2js";
-import { logBlank, logTask, logSection } from "./console";
+import { logBlank, logSection, logTask } from "./console";
 import type { ChromeDriverManifest } from "./models/chromeDriverManifest";
 import type { OpenFinManifest } from "./models/openFinManifest";
 import { fileExists, isNodeError, killProcessByImage, spawnWithOutput, spawnWithOutputWait } from "./utils";
@@ -75,8 +76,6 @@ export async function resolveRuntimeVersion(
         const versionsJson: {
             [id: string]: string;
         } = JSON.parse(versionsJsonBuffer.toString());
-        // eslint-disable-next-line no-console
-        console.log("versionsJson", versionsJson);
         ver = versionsJson[manifestVersion];
 
         if (!ver) {
@@ -412,4 +411,35 @@ export async function tempProfileDirCreate(): Promise<string> {
     logTask("Directory created");
 
     return tempProfileDataDir;
+}
+
+/**
+ * Setup the webdriver and start a session.
+ * @param driver The type of driver to use.
+ * @param devToolsPort The port for the dev tools.
+ * @param chromeDriverPort The port for the chrome driver.
+ * @param logLevel The level of logging.
+ * @returns The created webdriver.
+ */
+export async function setupWebDriver(
+    driver: "node" | "selenium",
+    devToolsPort: number,
+    chromeDriverPort: number,
+    logLevel: "debug" | "silent"
+): Promise<IWebDriver> {
+    // Set the global object which points to the client so that the automation helpers can access it
+    // This only works in jest >= 28 which lazy loads globalThis into its vm context
+    globalThis.webDriver = driver === "node" ? new NodeWebDriver() : new SeleniumWebDriver();
+
+    await globalThis.webDriver.startSession(devToolsPort, chromeDriverPort, logLevel);
+
+    return globalThis.webDriver;
+}
+
+/**
+ * End the session on the web driver.
+ * @param webDriver The webdriver to end the session on.
+ */
+export async function closeWebDriver(webDriver: IWebDriver): Promise<void> {
+    await webDriver.endSession();
 }

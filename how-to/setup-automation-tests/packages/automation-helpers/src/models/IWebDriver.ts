@@ -5,6 +5,21 @@ import type { IWebDriverElement } from "./IWebDriverElement";
  */
 export interface IWebDriver {
     /**
+     * Start a new session on the driver.
+     * @param devToolsPort The devtool port.
+     * @param chromeDriverPort The chromedriver port.
+     * @param logLevel The level of logging.
+     * @returns Nothing.
+     */
+    startSession(devToolsPort: number, chromeDriverPort: number, logLevel: "debug" | "silent"): Promise<void>;
+
+    /**
+     * End a session on the driver.
+     * @returns Nothing.
+     */
+    endSession(): Promise<void>;
+
+    /**
      * Execute JavaScript in the window.
      * @param script The script to execute.
      * @param args Arguments to pass to the async script.

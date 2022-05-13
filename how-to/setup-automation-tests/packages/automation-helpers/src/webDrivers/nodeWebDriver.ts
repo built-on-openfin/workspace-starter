@@ -1,24 +1,66 @@
-import type { Client } from "webdriver";
+import WebDriver, { type Client } from "webdriver";
 import type { IWebDriver } from "../models/IWebDriver";
 import type { IWebDriverElement } from "../models/IWebDriverElement";
 import { NodeWebDriverElement } from "./nodeWebDriverElement";
 
 /**
- * Webdriver for the Node environment.
+ * NodeWebDriver for the Node environment.
  */
 export class NodeWebDriver implements IWebDriver {
     /**
      * The node web driver to make the chromedriver calls with.
      */
-    private readonly _client: Client;
+    private _client?: Client;
 
     /**
      * Create a new instance of NodeWebDriver.
-     * @param client The client to use for chromedriver calls.
+     * @param client The client to use for chromedriver calls if already created.
      */
-    constructor(client: Client) {
-        this._client = client;
-        globalThis.nodeWebDriver = client;
+    constructor(client?: Client) {
+        if (client) {
+            this._client = client;
+            globalThis.nodeWebDriver = client;
+        }
+    }
+
+    /**
+     * Start a new session on the driver.
+     * @param devToolsPort The devtool port.
+     * @param chromeDriverPort The chromedriver port.
+     * @param logLevel The level of logging.
+     * @returns Nothing.
+     */
+    public async startSession(
+        devToolsPort: number,
+        chromeDriverPort: number,
+        logLevel: "debug" | "silent"
+    ): Promise<void> {
+        if (!this._client) {
+            this._client = await WebDriver.newSession({
+                capabilities: {
+                    browserName: "chrome",
+                    "goog:chromeOptions": {
+                        debuggerAddress: `localhost:${devToolsPort}`
+                    }
+                },
+                port: chromeDriverPort,
+                logLevel
+            });
+
+            globalThis.nodeWebDriver = this._client;
+        }
+    }
+
+    /**
+     * End a session on the driver.
+     * @returns Nothing.
+     */
+    public async endSession(): Promise<void> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
+        await this._client.deleteSession();
+        this._client = undefined;
     }
 
     /**
@@ -31,6 +73,9 @@ export class NodeWebDriver implements IWebDriver {
         script: string,
         args: (string | object | number | boolean | undefined)[]
     ): Promise<T> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
         return this._client.executeAsyncScript(script, args) as Promise<T>;
     }
 
@@ -39,6 +84,9 @@ export class NodeWebDriver implements IWebDriver {
      * @returns The window title.
      */
     public async getTitle(): Promise<string> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
         return this._client.getTitle();
     }
 
@@ -47,6 +95,9 @@ export class NodeWebDriver implements IWebDriver {
      * @returns The window title.
      */
     public async getUrl(): Promise<string> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
         return this._client.getUrl();
     }
 
@@ -56,6 +107,10 @@ export class NodeWebDriver implements IWebDriver {
      * @returns True if the window was available.
      */
     public async switchToWindow(title: string): Promise<boolean> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
+
         // If the current window is already the correct one just return.
         const winTitle = await this._client.getTitle();
         if (winTitle === title) {
@@ -86,6 +141,10 @@ export class NodeWebDriver implements IWebDriver {
      * @returns True if the window was available.
      */
     public async switchToWindowByUrl(url: string): Promise<boolean> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
+
         // If the current window is already the correct one just return.
         const winUrl = await this._client.getUrl();
         if (winUrl === url) {
@@ -115,6 +174,9 @@ export class NodeWebDriver implements IWebDriver {
      * @returns The element if found.
      */
     public async findElementByPath(path: string): Promise<IWebDriverElement> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
         const ref = await this._client.findElement("xpath", path);
         return new NodeWebDriverElement(this._client, ref);
     }
@@ -125,7 +187,10 @@ export class NodeWebDriver implements IWebDriver {
      * @returns The element if found.
      */
     public async findElementsByPath(path: string): Promise<IWebDriverElement[]> {
+        if (!this._client) {
+            throw new Error("No session started");
+        }
         const refs = await this._client.findElements("xpath", path);
-        return refs.map(ref => new NodeWebDriverElement(this._client, ref));
+        return refs.map(ref => new NodeWebDriverElement(this._client as Client, ref));
     }
 }

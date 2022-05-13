@@ -3,18 +3,19 @@ import fs from "fs/promises";
 import glob from "glob";
 import * as tsNode from "ts-node";
 import { promisify } from "util";
-import WebDriver from "webdriver";
 import { logBlank, logError, logExit, logHeader, logHelp, logSettings, logPlain, logSection, logTask } from "./console";
 import { runTestsJasmine } from "./frameworks/jasmine";
 import { runTestsJest } from "./frameworks/jest";
 import { runTestsMocha } from "./frameworks/mocha";
 import {
     closeOpenFinRVM,
+    closeWebDriver,
     getChromeDriver,
     launchOpenFinRVM,
     loadManifest,
     resolveRuntimeVersion,
     setDesktopOwnerSettings,
+    setupWebDriver,
     startChromeDriver,
     tempProfileDirCreate
 } from "./tasks";
@@ -28,6 +29,8 @@ const DEFAULT_CHROME_DRIVER_PORT = 4444;
 const DEFAULT_STORAGE_FOLDER = "./storage/";
 const DEFAULT_TEST_TIMEOUT_SECONDS = 120;
 const DEFAULT_OPENFIN_RUNTIME_VERSION = "stable";
+const DEFAULT_FRAMEWORK = "mocha";
+const DEFAULT_WEBDRIVER = "node";
 
 const testFrameworks = {
     mocha: runTestsMocha,
@@ -90,7 +93,12 @@ export async function run(args: string[]): Promise<void> {
         .addOption(
             new Option("--framework <mocha>", "The test framework to run the tests with")
                 .choices(["mocha", "jasmine", "jest"])
-                .default("mocha")
+                .default(DEFAULT_FRAMEWORK)
+        )
+        .addOption(
+            new Option("--driver <node>", "The webdriver used to access the runtime")
+                .choices(["node", "selenium"])
+                .default(DEFAULT_WEBDRIVER)
         )
         .configureOutput({
             writeOut: str => logPlain(str),
@@ -117,6 +125,7 @@ export async function run(args: string[]): Promise<void> {
                     defaultRuntimeVersion: string;
                     storageFolder: string;
                     offline: boolean;
+                    driver: "node" | "selenium";
                 }
             ) => {
                 logSettings("Manifest Url", manifestUrl);
@@ -126,6 +135,7 @@ export async function run(args: string[]): Promise<void> {
                 logSettings("Chrome Driver Port", opts.chromeDriverPort);
                 logSettings("Test Framework", opts.framework);
                 logSettings("Test Timeout", opts.testTimeout);
+                logSettings("Driver", opts.driver);
                 logSettings("Default Runtime Version", opts.defaultRuntimeVersion);
                 logSettings("Storage Folder", opts.storageFolder);
                 logSettings("Offline", opts.offline ? "true" : "false");
@@ -171,16 +181,12 @@ export async function run(args: string[]): Promise<void> {
                     );
                     chromeDriverProcessId = await startChromeDriver(chromeDriverPath, opts.chromeDriverPort);
 
-                    const client = await WebDriver.newSession({
-                        capabilities: {
-                            browserName: "chrome",
-                            "goog:chromeOptions": {
-                                debuggerAddress: `localhost:${opts.devToolsPort}`
-                            }
-                        },
-                        port: opts.chromeDriverPort,
-                        logLevel: opts.logLevel
-                    });
+                    const webDriver = await setupWebDriver(
+                        opts.driver,
+                        opts.devToolsPort,
+                        opts.chromeDriverPort,
+                        opts.logLevel
+                    );
 
                     if (hasTypeScript) {
                         tsNode.register({});
@@ -189,12 +195,11 @@ export async function run(args: string[]): Promise<void> {
                     const exitCode = await testFrameworks[opts.framework](
                         testGlobPath,
                         testFilesExpanded,
-                        client,
                         opts.testTimeout,
                         hasTypeScript
                     );
 
-                    await client.deleteSession();
+                    await closeWebDriver(webDriver);
 
                     await exitApp(exitCode, tempDataDir, chromeDriverProcessId, launchParams);
                 } catch (err) {

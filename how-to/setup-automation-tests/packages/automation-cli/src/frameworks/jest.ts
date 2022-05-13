@@ -1,13 +1,10 @@
-import { NodeWebDriver } from "@openfin/automation-helpers";
 import { getVersion, runCLI } from "jest";
-import type { Client } from "webdriver";
 import { logSection } from "../console";
 
 /**
  * Run the tests.
  * @param testPathGlob The glob of the tests to run.
  * @param testFilesExpanded The expanded list of the glob files.
- * @param webdriver The webdriver client to hand in to the tests.
  * @param maxTimeout The maximum length of time for a test to run in seconds.
  * @param hasTypeScript Do the test files include TypeScript.
  * @returns Exit code of 1 if any tests failed.
@@ -15,15 +12,10 @@ import { logSection } from "../console";
 export async function runTestsJest(
     testPathGlob: string,
     testFilesExpanded: string[],
-    webdriver: Client,
     maxTimeout: number,
     hasTypeScript: boolean
 ): Promise<number> {
     logSection("Running Tests using Jest", `Version ${getVersion()}`);
-
-    // Set the global object which points to the client so that the automation helpers can access it
-    // This only works in jest >= 28 which lazy loads globalThis into its vm context
-    globalThis.webDriver = new NodeWebDriver(webdriver);
 
     let testsFolder = testPathGlob;
 
