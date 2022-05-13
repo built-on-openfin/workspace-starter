@@ -1,34 +1,49 @@
 import { expect } from 'chai';
-import { OpenFinSystem, OpenFinHome, WebDriver }  from '@openfin/automation-helpers';
+import { OpenFinSystem, OpenFinHome, WebDriver } from '@openfin/automation-helpers';
+
+let providerWindowUrl;
 
 describe('Register with Home', () => {
     it('The runtime is ready', async () => {
         const isReady = await OpenFinSystem.waitForReady(10000);
-
         expect(isReady).to.equal(true);
     });
-    
+
     it('The title should be set', async () => {
         const title = await WebDriver.getTitle();
-
         expect(title).to.equal('Platform Provider');
+    });
+
+    it('The url should be set', async () => {
+        providerWindowUrl = await WebDriver.getUrl();
+        expect(providerWindowUrl).not.be.undefined;
     });
 
     it('The runtime version should be set', async () => {
         const runtimeVersion = await OpenFinSystem.getVersion();
-
         expect(runtimeVersion).to.equal('23.96.68.3');
     });
 
     it('Can open the home window', async () => {
         const isShown = await OpenFinHome.show(20000);
         expect(isShown).to.equal(true);
-        await WebDriver.sleep(1000);
     });
 
     it('Can perform a Node Webdriver specific test', async () => {
-        const elem = nodeWebDriver.findElement("xpath", "//*[@id='search-input']");
-        expect(elem).to.exist;
+        if (globalThis.nodeWebDriver) {
+            const elem = nodeWebDriver.findElement("xpath", "//*[@id='search-input']");
+            expect(elem).to.exist;
+        }
+    });
+
+    it('Can perform a Selenium Webdriver specific test', async () => {
+        if (globalThis.seleniumWebDriver) {
+            const elem = seleniumWebDriver.findElement({
+                using: 'xpath',
+                value: "//*[@id='search-input']"
+            });
+            expect(elem).to.exist;
+        }
     });
 
     it('Can search in the home window', async () => {
@@ -129,5 +144,11 @@ describe('Register with Home', () => {
         expect(value).eq("My New Title");
 
         await WebDriver.sleep(2000);
+    });
+
+    it('Can exit the runtime', async () => {
+        const found = await WebDriver.switchToWindowByUrl(providerWindowUrl);
+        expect(found).to.equal(true);
+        await OpenFinSystem.exit();
     });
 });

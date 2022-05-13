@@ -9,7 +9,9 @@
         "test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine",
         "test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jest",
         "test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jest",
-        "test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage"
+        "test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage",
+        "test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium",
+        "test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium"
     },
     "author": "",
     "license": "ISC",

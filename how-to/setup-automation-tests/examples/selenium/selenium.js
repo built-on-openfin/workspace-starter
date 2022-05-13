@@ -38,6 +38,8 @@ async function run() {
         await chromedriver.start([`--port=${CHROME_DRIVER_PORT}`], true);
 
         // Start the selenium webdriver with the ports for debugging and chrome driver
+        // This allows for greater flexibility in term of configuration
+        // but you could just call startSession on the SeleniumWebDriver
         console.log("Building the selenium webdriver");
         seleniumDriver = new Builder()
             .usingServer('http://localhost:' + CHROME_DRIVER_PORT)
