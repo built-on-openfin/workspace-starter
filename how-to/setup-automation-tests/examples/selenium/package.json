@@ -11,7 +11,6 @@
         "@openfin/automation-helpers": "file:../packages/automation-helpers",
         "chai": "^4.3.6",
         "chromedriver": "96.0.0",
-        "fkill": "^7.2.1",
         "mocha": "^10.0.0",
         "selenium-webdriver": "^4.1.2"
     }

@@ -3,7 +3,6 @@ const { Builder } = require("selenium-webdriver");
 const chromedriver = require("chromedriver");
 const childProcess = require('child_process');
 const { SeleniumWebDriver, OpenFinSystem } = require('@openfin/automation-helpers');
-const fkill = require('fkill');
 const Mocha = require('mocha');
 
 // Note
@@ -11,41 +10,38 @@ const Mocha = require('mocha');
 // e.g. if the manifest runtime version is 23.96.68.3 then the chromedriver version should be "96.0.0"
 const testManifestUrl = "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/manifest.fin.json"
 
-const CHROME_DRIVER_PORT = 5555;
-const DEV_TOOLS_PORT = 9191;
-
 async function run() {
     let seleniumDriver;
+    let openFinRVMProcess
     try {
-        // Remove old instances of the RVM and chromedriver to avoid conflicts
-        await cleanupRVM();
-        await fkill("chromedriver.exe", { silent: true, force: true, tree: true, ignoreCase: true });
+        const chromeDriverPort = getRandomPort(5000, 5999);
+        const devToolsPort = getRandomPort(9000, 9999);
 
         // Spawn the OpenFin runtime with a specific debugging port and also
         // configure the selenium web driver to use the same port for debugger address
         console.log("Start OpenFin Runtime");
-        childProcess.spawn(
+        openFinRVMProcess = childProcess.spawn(
             path.join(process.env.LocalAppData, 'OpenFin\\OpenFinRVM.exe'),
             [
                 '--config=' + testManifestUrl,
-                `--runtime-arguments="--remote-debugging-port=${DEV_TOOLS_PORT}"`
+                `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`
             ],
             { shell: true }
         );
 
         // Configure the chromedriver on a specific port and also communicate
         // this to the selenium driver
-        await chromedriver.start([`--port=${CHROME_DRIVER_PORT}`], true);
+        await chromedriver.start([`--port=${chromeDriverPort}`], true);
 
         // Start the selenium webdriver with the ports for debugging and chrome driver
         // This allows for greater flexibility in term of configuration
         // but you could just call startSession on the SeleniumWebDriver
         console.log("Building the selenium webdriver");
         seleniumDriver = new Builder()
-            .usingServer('http://localhost:' + CHROME_DRIVER_PORT)
+            .usingServer('http://localhost:' + chromeDriverPort)
             .withCapabilities({
                 'goog:chromeOptions': {
-                    debuggerAddress: 'localhost:' + DEV_TOOLS_PORT
+                    debuggerAddress: 'localhost:' + devToolsPort
                 }
             })
             .forBrowser("chrome")
@@ -62,10 +58,16 @@ async function run() {
         await runMochaTests();
     } finally {
         try {
-            await cleanupRVM();
-            await seleniumDriver.quit();
-            await chromedriver.stop();
-        } catch { }
+            if (openFinRVMProcess) {
+                childProcess.spawn("taskkill", ["/pid", openFinRVMProcess.pid, '/f', '/t']);
+            }
+            if (seleniumDriver) {
+                await seleniumDriver.quit();
+            }
+            chromedriver.stop();
+        } catch (err) { 
+            console.log(err);
+        }
     }
 }
 
@@ -84,9 +86,8 @@ async function runMochaTests() {
     });
 }
 
-async function cleanupRVM() {
-    await fkill("OpenFinRVM.exe", { silent: true, force: true, tree: true, ignoreCase: true });
-    await fkill("OpenFin.exe", { silent: true, force: true, tree: true, ignoreCase: true });
+function getRandomPort(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 run()
