@@ -13,7 +13,6 @@
     "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
-        "launchExternalProcess": true,
         "openUrlWithBrowser": {
           "enabled": true,
           "protocols": ["mailto"]
