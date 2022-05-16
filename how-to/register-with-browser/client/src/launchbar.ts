@@ -40,6 +40,17 @@ export async function createBrowserWindow(): Promise<BrowserWindowModule> {
     return createdBrowserWin;
 }
 
+export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
+    const page: Page = await createPageWithLayout('Untitled Page', defaultPageLayout);
+    const pages: Page[] = [page];
+
+    const options: BrowserCreateWindowRequest = {
+        workspacePlatform: { pages, disableMultiplePages:true }
+    };
+    const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+    return createdBrowserWin;
+}
+
 export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
     const page: Page = await createPageWithLayout('Untitled Page', defaultPageLayout);
     const pages: Page[] = [page];
@@ -96,6 +107,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     /************************ CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON ************************/
     const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
     customToolbarBtn.addEventListener('click', createCustomToolbarWindow);
+
+    /************************ CREATE BROWSER WINDOW WITH SINGLE PAGE AND NO TAB ************************/
+    const singlePageBrowserWinNoTabBtn = document.querySelector("#launch-nopagetab-browser-window");
+    singlePageBrowserWinNoTabBtn.addEventListener('click', createSinglePageNoTabWindow);
 
     /************************ CREATE BROWSER WINDOW WITH MULTIPLE PAGES ************************/
     const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");

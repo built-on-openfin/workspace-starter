@@ -31,7 +31,8 @@ This repository contains examples showing how to configure core Workspace functi
 | [How To Register With Browser](./how-to/register-with-browser)   | This example provides details on how to use OpenFin's Browser component to implement a Workspace Platform. 
 | [How To Customize Workspace](./how-to/customize-workspace)   | This example is an extension of the context and intents how to but includes examples on how to: customize the browser (buttons, menus and context menus), have a custom workspace and page saving setup, how you could implement sharing of workspaces and pages and how you can use notifications and custom home search result templates. 
 | [How To Customize Home Templates](./how-to/customize-home-templates)   | This example demonstrates how to customize home result templates. 
-| [Setup Automation Tests](./how-to/setup-automation-tests)   | This example contains some sub packages which provide features to simplify the running of automation tests against the OpenFin runtime. 
+| [How To Use Notifications](./how-to/use-notifications)   | This example demonstrates how to create, interact and audit notifications. 
+| [Setup Automation Tests](./how-to/setup-automation-tests)   | This example contains some sub packages and examples which demonstrate the running of automation tests against the OpenFin runtime. 
 
 
 ## Before you get started

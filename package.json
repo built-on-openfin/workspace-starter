@@ -10,7 +10,10 @@
         "register-with-store",
         "integrate-with-salesforce",
         "support-context-and-intents",
-        "customize-workspace"
+        "customize-workspace",
+        "customize-home-templates",
+        "use-notifications",
+        "register-with-browser"
     ],
     "howToCustomFolder":"",
     "author": "",
