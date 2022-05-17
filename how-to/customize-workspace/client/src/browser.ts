@@ -11,7 +11,6 @@ import { getDefaultToolbarButtons } from './buttons';
 import { getGlobalMenu, getPageMenu, getViewMenu } from './menu';
 import { getSettings } from './settings';
 import { PlatformStorage } from './platform-storage';
-import { decorateSnapshot, applyDecoratedSnapshot } from './native-window-integration';
 
 const pageBoundsStorage = new PlatformStorage("page-bounds", "Page Bounds");
 
@@ -131,25 +130,14 @@ export async function getDefaultWindowOptions() {
 };
 
 export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
-    const settings = await getSettings();
-    const enableNWI = settings.platformProvider.enableNativeWindowIntegration;
     class Override extends WorkspacePlatformProvider {
         async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
             const snapshot = await super.getSnapshot(...args);
-
-            if(enableNWI) {
-                const decoratedSnapshot = await decorateSnapshot(snapshot);
-                return decoratedSnapshot;
-            } 
             return snapshot;
         }
 
         async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
             await super.applySnapshot(...args);
-
-            if(enableNWI) {
-                await applyDecoratedSnapshot(args[0].snapshot);
-            }
         }
 
         async quit(payload, callerIdentity) {
