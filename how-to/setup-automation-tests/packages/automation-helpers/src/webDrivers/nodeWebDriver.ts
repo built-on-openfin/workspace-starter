@@ -175,12 +175,16 @@ export class NodeWebDriver implements IWebDriver {
      * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement | undefined> {
         if (!this._client) {
             throw new Error("No session started");
         }
         const ref = await this._client.findElement(locator, value);
-        return new NodeWebDriverElement(this._client, ref);
+        const elementId = NodeWebDriverElement.elementIdFromReference(ref);
+
+        if (elementId) {
+            return new NodeWebDriverElement(this._client, elementId);
+        }
     }
 
     /**
@@ -194,6 +198,11 @@ export class NodeWebDriver implements IWebDriver {
             throw new Error("No session started");
         }
         const refs = await this._client.findElements(locator, value);
-        return refs.map(ref => new NodeWebDriverElement(this._client as Client, ref));
+
+        const elementIds: string[] = refs
+            .map(ref => NodeWebDriverElement.elementIdFromReference(ref))
+            .filter(Boolean) as string[];
+
+        return elementIds.map(elementId => new NodeWebDriverElement(this._client as Client, elementId));
     }
 }

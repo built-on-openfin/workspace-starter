@@ -10,7 +10,7 @@ export interface IWebDriverElement {
      * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement>;
+    findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement | undefined>;
 
     /**
      * Find elements.

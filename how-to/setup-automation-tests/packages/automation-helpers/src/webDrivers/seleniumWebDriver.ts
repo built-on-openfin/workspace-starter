@@ -172,15 +172,22 @@ export class SeleniumWebDriver implements IWebDriver {
      * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement | undefined> {
         if (!this._webDriver) {
             throw new Error("No session started");
         }
-        const element = await this._webDriver.findElement({
-            using: locator,
-            value
-        });
-        return new SeleniumWebDriverElement(this._webDriver, element);
+        try {
+            const element = await this._webDriver.findElement({
+                using: locator,
+                value
+            });
+            return new SeleniumWebDriverElement(this._webDriver, element);
+        } catch (err) {
+            if (err instanceof Error && err.name === "NoSuchElementError") {
+                return undefined;
+            }
+            throw err;
+        }
     }
 
     /**

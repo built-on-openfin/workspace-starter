@@ -32,12 +32,19 @@ export class SeleniumWebDriverElement implements IWebDriverElement {
      * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
-        const element = await this._webDriver.findElement({
-            using: locator,
-            value
-        });
-        return new SeleniumWebDriverElement(this._webDriver, element);
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement | undefined> {
+        try {
+            const element = await this._webElement.findElement({
+                using: locator,
+                value
+            });
+            return new SeleniumWebDriverElement(this._webDriver, element);
+        } catch (err) {
+            if (err instanceof Error && err.name === "NoSuchElementError") {
+                return undefined;
+            }
+            throw err;
+        }
     }
 
     /**
@@ -47,7 +54,7 @@ export class SeleniumWebDriverElement implements IWebDriverElement {
      * @returns The elements if found.
      */
     public async findElements(locator: LocatorTypes, value: string): Promise<IWebDriverElement[]> {
-        const elements = await this._webDriver.findElements({
+        const elements = await this._webElement.findElements({
             using: locator,
             value
         });

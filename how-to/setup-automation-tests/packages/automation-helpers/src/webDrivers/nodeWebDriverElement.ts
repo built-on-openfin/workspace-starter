@@ -1,5 +1,4 @@
 import type { Client } from "webdriver";
-import type { ElementReference } from "../models/elementReference";
 import type { IWebDriverElement } from "../models/IWebDriverElement";
 import type { LocatorTypes } from "../models/locatorTypes";
 
@@ -15,16 +14,27 @@ export class NodeWebDriverElement implements IWebDriverElement {
     /**
      * The reference for the element.
      */
-    private readonly _reference: ElementReference;
+    private readonly _elementId: string;
 
     /**
      * Create a new instance of NodeWebDriverElement.
      * @param client The client to use for chromedriver calls.
-     * @param reference The reference to the element.
+     * @param elementId The reference to the element.
      */
-    constructor(client: Client, reference: ElementReference) {
+    constructor(client: Client, elementId: string) {
         this._client = client;
-        this._reference = reference;
+        this._elementId = elementId;
+    }
+
+    /**
+     * Get an element id from an element reference.
+     * @param elementReference The element reference to get the element id from.
+     * @returns The element id.
+     */
+    public static elementIdFromReference(
+        elementReference: Record<"element-6066-11e4-a52e-4f735466cecf", string | undefined>
+    ): string | undefined {
+        return elementReference["element-6066-11e4-a52e-4f735466cecf"];
     }
 
     /**
@@ -33,9 +43,14 @@ export class NodeWebDriverElement implements IWebDriverElement {
      * @param value The value to use with the locator.
      * @returns The element if found.
      */
-    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement> {
-        const ref = await this._client.findElement(locator, value);
-        return new NodeWebDriverElement(this._client, ref);
+    public async findElement(locator: LocatorTypes, value: string): Promise<IWebDriverElement | undefined> {
+        const ref = await this._client.findElementFromElement(this._elementId, locator, value);
+
+        const elementId = NodeWebDriverElement.elementIdFromReference(ref);
+
+        if (elementId) {
+            return new NodeWebDriverElement(this._client, elementId);
+        }
     }
 
     /**
@@ -45,8 +60,13 @@ export class NodeWebDriverElement implements IWebDriverElement {
      * @returns The elements if found.
      */
     public async findElements(locator: LocatorTypes, value: string): Promise<IWebDriverElement[]> {
-        const refs = await this._client.findElements(locator, value);
-        return refs.map(ref => new NodeWebDriverElement(this._client, ref));
+        const refs = await this._client.findElementsFromElement(this._elementId, locator, value);
+
+        const elementIds: string[] = refs
+            .map(ref => NodeWebDriverElement.elementIdFromReference(ref))
+            .filter(Boolean) as string[];
+
+        return elementIds.map(elementId => new NodeWebDriverElement(this._client, elementId));
     }
 
     /**
@@ -54,7 +74,7 @@ export class NodeWebDriverElement implements IWebDriverElement {
      * @returns Nothing.
      */
     public async click(): Promise<void> {
-        await this._client.elementClick(this.elementIdFromReference(this._reference));
+        await this._client.elementClick(this._elementId);
     }
 
     /**
@@ -63,7 +83,7 @@ export class NodeWebDriverElement implements IWebDriverElement {
      * @returns Nothing.
      */
     public async sendKeys(keys: string): Promise<void> {
-        await this._client.elementSendKeys(this.elementIdFromReference(this._reference), keys);
+        await this._client.elementSendKeys(this._elementId, keys);
     }
 
     /**
@@ -72,15 +92,6 @@ export class NodeWebDriverElement implements IWebDriverElement {
      * @returns The attribute.
      */
     public async getAttribute(attribute: string): Promise<string> {
-        return this._client.getElementAttribute(this.elementIdFromReference(this._reference), attribute);
-    }
-
-    /**
-     * Get an element id from an element reference.
-     * @param elementReference The element reference to get the element id from.
-     * @returns The element id.
-     */
-    public elementIdFromReference(elementReference: ElementReference): string {
-        return elementReference["element-6066-11e4-a52e-4f735466cecf"];
+        return this._client.getElementAttribute(this._elementId, attribute);
     }
 }
