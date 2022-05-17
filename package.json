@@ -13,7 +13,8 @@
         "customize-workspace",
         "customize-home-templates",
         "use-notifications",
-        "register-with-browser"
+        "register-with-browser",
+        "workspace-native-window-integration"
     ],
     "howToCustomFolder":"",
     "author": "",

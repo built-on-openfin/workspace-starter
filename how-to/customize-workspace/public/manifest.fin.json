@@ -64,8 +64,7 @@
       "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "http://localhost:8080",
-      "enableNativeWindowIntegration": true
+      "rootUrl": "http://localhost:8080"
     },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/apps.json",
