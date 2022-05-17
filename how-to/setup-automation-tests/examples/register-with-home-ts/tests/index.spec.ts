@@ -29,14 +29,14 @@ describe('Register with Home', () => {
         expect(isShown).to.equal(true);
     });
 
-    it('Can perform a Node Webdriver specific test', async () => {
+    it('Can perform a conditional Node Webdriver specific test', async () => {
         if (globalThis.nodeWebDriver) {
             const elem = nodeWebDriver.findElement("xpath", "//*[@id='search-input']");
             expect(elem).to.exist;
         }
     });
 
-    it('Can perform a Selenium Webdriver specific test', async () => {
+    it('Can perform a conditional Selenium Webdriver specific test', async () => {
         if (globalThis.seleniumWebDriver) {
             const elem = seleniumWebDriver.findElement({
                 using: 'xpath',
