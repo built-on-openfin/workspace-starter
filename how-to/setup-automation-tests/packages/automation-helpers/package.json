@@ -1,6 +1,6 @@
 {
     "name": "@openfin/automation-helpers",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Helper methods for automation testing in the OpenFin ecosystem",
     "authors": [
         "Martyn Janes <martyn.janes@openfin.co>"
