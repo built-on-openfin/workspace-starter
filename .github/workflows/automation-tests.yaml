@@ -66,3 +66,13 @@ jobs:
           start: npm run server --prefix how-to/register-with-home
           wait-on: 'http://localhost:8080/manifest.fin.json'
           command: npm run test-local-jest --prefix how-to/setup-automation-tests/examples/register-with-home-ts
+      - name: Run Selenium tests
+        run: |
+          cd how-to/setup-automation-tests/examples/selenium
+          npm install
+          npm run test
+      - name: Run WDIO tests
+        run: |
+          cd how-to/setup-automation-tests/examples/wdio
+          npm install
+          npm run test
