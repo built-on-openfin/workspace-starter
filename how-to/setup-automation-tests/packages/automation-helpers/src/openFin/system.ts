@@ -1,5 +1,5 @@
 import type { ApplicationInfo } from "@openfin/core/src/api/system/application";
-import type { WindowInfo } from "@openfin/core/src/api/system/window";
+import type { WindowDetail, WindowInfo } from "@openfin/core/src/api/system/window";
 import { WebDriver } from "../webDrivers/webDriver";
 
 /**
@@ -45,5 +45,46 @@ export class OpenFinSystem {
      */
     public static async getWindowsInfo(): Promise<WindowInfo[]> {
         return WebDriver.callMethod("fin.System.getAllWindows", undefined, true);
+    }
+
+    /**
+     * Find window details by name.
+     * @param name The name of the window.
+     * @returns The window details if the window exists.
+     */
+    public static async getWindowDetail(name: string): Promise<WindowDetail | undefined> {
+        const windowInfo = await OpenFinSystem.getWindowsInfo();
+
+        for (const wi of windowInfo) {
+            if (wi.mainWindow.name === name) {
+                return wi.mainWindow;
+            } else if (wi.childWindows?.length) {
+                for (const childWi of wi.childWindows) {
+                    if (childWi.name === name) {
+                        return childWi;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Wait for a window to be shown.
+     * @param name The name of the window.
+     * @param timeoutMs The timeout in ms to wait.
+     * @returns True if the window is showing.
+     */
+    public static async waitForWindow(name: string, timeoutMs: number): Promise<boolean> {
+        const start = Date.now();
+
+        do {
+            const windowDetail = await OpenFinSystem.getWindowDetail(name);
+            if (windowDetail?.isShowing) {
+                return true;
+            }
+            await WebDriver.sleep(1000);
+        } while (start - Date.now() < timeoutMs);
+
+        return false;
     }
 }
