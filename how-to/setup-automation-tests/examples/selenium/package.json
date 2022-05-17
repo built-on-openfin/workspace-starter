@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "OpenFin Workspace Starter Selenium Example",
     "scripts": {
-        "test": "node ./selenium.js"
+        "test": "node ./selenium.js",
+        "kill": "node ./kill.mjs"
     },
     "author": "",
     "license": "ISC",
