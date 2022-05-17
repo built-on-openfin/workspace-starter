@@ -1,5 +1,6 @@
 import type { IWebDriverElement } from "../models/IWebDriverElement";
 import { WebDriver } from "../webDrivers/webDriver";
+import { OpenFinSystem } from "./system";
 
 /**
  * Methods for OpenFin Home object handling.
@@ -11,12 +12,20 @@ export class OpenFinHome {
      * @returns True if the window was found and opened.
      */
     public static async show(timeout: number): Promise<boolean> {
-        if (await WebDriver.waitForWindow("OpenFin Home", timeout)) {
-            // There should probably be a better way to detect that the home window is
-            // ready to show, without this sleep it does not have enough time to
-            // initialise the providers and will throw an error
-            await WebDriver.sleep(1000);
-            await WebDriver.callMethod("fin.Workspace.Home.show", undefined, true);
+        if (
+            (await WebDriver.waitForWindowByTitle("OpenFin Home", timeout)) &&
+            // The condition and return will be null if the window opened
+            // an error string will be returned if the show throws an exception
+            // like the home providers not being ready
+            (await WebDriver.callMethodUntilCondition<string>(
+                "fin.Workspace.Home.show",
+                undefined,
+                true,
+                result => result === null,
+                timeout
+            )) === null &&
+            (await OpenFinSystem.waitForWindow("openfin-home", timeout))
+        ) {
             return true;
         }
 
@@ -33,14 +42,20 @@ export class OpenFinHome {
     /**
      * Perform a search on the home page.
      * @param searchInput The input to search for.
+     * @param timeoutMs The timeout to wait for results.
      */
-    public static async search(searchInput: string): Promise<void> {
+    public static async search(searchInput: string, timeoutMs: number = 10000): Promise<void> {
         for (const letter of searchInput) {
             const searchInputElement = await WebDriver.findElementById("search-input");
             if (!searchInputElement) {
                 throw new Error("Element missing search-input");
             }
             await searchInputElement.sendKeys(letter);
+        }
+
+        const resultList = await WebDriver.waitForElementById("result-list", timeoutMs);
+        if (!resultList) {
+            throw new Error("Search results could not be found");
         }
     }
 
@@ -62,7 +77,10 @@ export class OpenFinHome {
      * @param operation Optionally perform the operation on the item.
      * @returns The element id of the nth item.
      */
-    public static async searchResultByIndex(index: number, operation?: "open" | "select"): Promise<IWebDriverElement> {
+    public static async searchResultByIndex(
+        index: number,
+        operation?: "open" | "select"
+    ): Promise<IWebDriverElement | undefined> {
         const resultListItemElement = await WebDriver.findElementByPath(`//*[@id='result-list']/div[${index + 1}]`);
 
         if (resultListItemElement) {
@@ -88,7 +106,10 @@ export class OpenFinHome {
      * @param operation Optionally perform the operation on the item.
      * @returns The element id of the item.
      */
-    public static async searchResultById(id: string, operation?: "open" | "select"): Promise<IWebDriverElement> {
+    public static async searchResultById(
+        id: string,
+        operation?: "open" | "select"
+    ): Promise<IWebDriverElement | undefined> {
         const resultListItemElement = await WebDriver.findElementByPath(`//*[@id='result-list']/*[@id='${id}']`);
 
         if (resultListItemElement) {
