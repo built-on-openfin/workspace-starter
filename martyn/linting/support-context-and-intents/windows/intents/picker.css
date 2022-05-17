@@ -28,13 +28,7 @@ button {
   border-radius: 4px;
   text-decoration: none !important;
   text-shadow: none;
-  background: linear-gradient(
-    to bottom,
-    #006d88 0,
-    #006d88 50%,
-    #022f3a 52%,
-    #022f3a 100%
-  );
+  background: linear-gradient(to bottom, #006d88 0, #006d88 50%, #022f3a 52%, #022f3a 100%);
   display: inline;
   width: auto;
   font-size: 80%;
@@ -42,13 +36,7 @@ button {
 }
 
 input[type="text"]:disabled {
-    background: linear-gradient(
-        to bottom,
-        #a3a3a3 0,
-        #434343 50%,
-        #434343 52%,
-        #575757 100%
-      );
+  background: linear-gradient(to bottom, #a3a3a3 0, #434343 50%, #434343 52%, #575757 100%);
 }
 
 input[type="radio"] {
@@ -67,12 +55,11 @@ input[type="radio"] {
   padding-bottom: 15px;
 }
 
-
 .drag {
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
-  }
-  
-  .nodrag {
-    -webkit-app-region: no-drag;
-  }
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.nodrag {
+  -webkit-app-region: no-drag;
+}

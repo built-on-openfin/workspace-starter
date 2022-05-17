@@ -94,7 +94,7 @@ pre {
   margin: 0;
   white-space: pre-wrap;
   font-size: 12px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 
 header {
@@ -169,4 +169,3 @@ footer {
 .pad20 {
   padding: 20px;
 }
-

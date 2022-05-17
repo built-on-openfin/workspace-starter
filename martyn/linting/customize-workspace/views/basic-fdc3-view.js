@@ -18,14 +18,14 @@ window.onclick = async function (event) {
           type: "fdc3.instrument",
           id: { ticker: selectedInstrument }
         };
-        
+
         let fdc3SystemChannel = await fdc3.getCurrentChannel();
-        if(fdc3SystemChannel !== null) {
+        if (fdc3SystemChannel !== null) {
           window.fdc3.broadcast(latestContext);
         }
 
         // get app channel
-        const appChannel = await window.fdc3.getOrCreateChannel('application-specific-channel');
+        const appChannel = await window.fdc3.getOrCreateChannel("application-specific-channel");
         appChannel.broadcast(latestContext);
       }
     }
@@ -43,19 +43,16 @@ window.onclick = async function (event) {
 function setInstrument(ctx) {
   let container = document.getElementById("instrument-container");
   let instrumentMap = {
-    "TSLA": "TESLA",
-    "MSFT": "Microsoft",
-    "AAPL": "Apple"
+    TSLA: "TESLA",
+    MSFT: "Microsoft",
+    AAPL: "Apple"
   };
   let name = document.getElementById("name");
   let ticker = document.getElementById("ticker");
   let type = document.getElementById("type");
 
   container.style.display = "unset";
-  if (
-    ctx.id !== undefined &&
-    ctx.id.ticker !== undefined
-  ) {
+  if (ctx.id !== undefined && ctx.id.ticker !== undefined) {
     name.innerText = instrumentMap[ctx.id.ticker] || ctx.id.ticker;
     ticker.innerText = ctx.id.ticker;
     type.innerText = ctx.type;
@@ -68,8 +65,7 @@ function setInstrument(ctx) {
 
 async function init() {
   if (window.fdc3 !== undefined) {
-
-    const contextHandler = (ctx) => {
+    const contextHandler = ctx => {
       console.log("Context Received: ", ctx);
       if (ctx.type === "instrument" || ctx.type === "fdc3.instrument") {
         setInstrument(ctx);
@@ -78,15 +74,15 @@ async function init() {
 
     const contextListener = window.fdc3.addContextListener(contextHandler);
 
-    const intentListener = window.fdc3.addIntentListener('ShowInstrument', contextHandler);
-    const intentPageListener = window.fdc3.addIntentListener('ShowInstrumentForPage', contextHandler);
+    const intentListener = window.fdc3.addIntentListener("ShowInstrument", contextHandler);
+    const intentPageListener = window.fdc3.addIntentListener("ShowInstrumentForPage", contextHandler);
 
     // create application specific channel that works across views
-    const appChannel = await window.fdc3.getOrCreateChannel('application-specific-channel');
+    const appChannel = await window.fdc3.getOrCreateChannel("application-specific-channel");
     // get the current context of the channel
     const current = await appChannel.getCurrentContext();
 
-    if(current !== undefined && current !== null) {
+    if (current !== undefined && current !== null) {
       contextHandler(current);
     }
 
@@ -95,7 +91,7 @@ async function init() {
   }
 }
 
-window.test = (ctx) => {
+window.test = ctx => {
   setInstrument(ctx);
 };
 document.addEventListener("DOMContentLoaded", () => {

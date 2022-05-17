@@ -34,19 +34,16 @@ window.onclick = function (event) {
 function setInstrument(ctx) {
   let container = document.getElementById("instrument-container");
   let instrumentMap = {
-    "TSLA": "TESLA",
-    "MSFT": "Microsoft",
-    "AAPL": "Apple"
+    TSLA: "TESLA",
+    MSFT: "Microsoft",
+    AAPL: "Apple"
   };
   let name = document.getElementById("name");
   let ticker = document.getElementById("ticker");
   let type = document.getElementById("type");
 
   container.style.display = "unset";
-  if (
-    ctx.id !== undefined &&
-    ctx.id.ticker !== undefined
-  ) {
+  if (ctx.id !== undefined && ctx.id.ticker !== undefined) {
     name.innerText = instrumentMap[ctx.id.ticker] || ctx.id.ticker;
     ticker.innerText = ctx.id.ticker;
     type.innerText = ctx.type;
@@ -59,8 +56,7 @@ function setInstrument(ctx) {
 
 async function init() {
   if (window.fin !== undefined) {
-
-    const contextHandler = (ctx) => {
+    const contextHandler = ctx => {
       console.log("Context Received: ", ctx);
       if (ctx.type === "instrument" || ctx.type === "fdc3.instrument") {
         setInstrument(ctx);
@@ -69,12 +65,16 @@ async function init() {
 
     const contextListener = window.fin.me.interop.addContextHandler(contextHandler);
 
-    const intentListener =  await fin.me.interop.registerIntentHandler((intent)=>{ contextHandler(intent.context); }, 'ShowInstrument');
-    const intentPageListener = await fin.me.interop.registerIntentHandler((intent)=>{ contextHandler(intent.context); }, 'ShowInstrumentForPage');
+    const intentListener = await fin.me.interop.registerIntentHandler(intent => {
+      contextHandler(intent.context);
+    }, "ShowInstrument");
+    const intentPageListener = await fin.me.interop.registerIntentHandler(intent => {
+      contextHandler(intent.context);
+    }, "ShowInstrumentForPage");
   }
 }
 
-window.test = (ctx) => {
+window.test = ctx => {
   setInstrument(ctx);
 };
 document.addEventListener("DOMContentLoaded", () => {

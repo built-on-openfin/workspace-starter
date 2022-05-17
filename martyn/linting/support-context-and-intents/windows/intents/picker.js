@@ -56,7 +56,7 @@ function setAppVisibility(isVisible) {
 function setupIntentView(intents) {
   if (Array.isArray(intents)) {
     let listName = "intent";
-    if(intent.context?.type !== undefined) {
+    if (intent.context?.type !== undefined) {
       targetContextLabel.innerText = intent.context.type;
     }
 
@@ -65,25 +65,25 @@ function setupIntentView(intents) {
       intentsContainer.appendChild(intentEntry);
     }
 
-    cancelIntentSelectionBtn.onclick = async ()=> {
-        if(rejectAppSelection !== undefined) {
-            rejectAppSelection("Application selection cancelled.");
-        }
-        fin.me.close(true);
-    }
+    cancelIntentSelectionBtn.onclick = async () => {
+      if (rejectAppSelection !== undefined) {
+        rejectAppSelection("Application selection cancelled.");
+      }
+      fin.me.close(true);
+    };
 
     nextBtn.onclick = () => {
       let selectedIntentName = getSelection("intent");
       let selectedIntent = intents.find(entry => {
-        if(entry.intent.name === selectedIntentName) {
+        if (entry.intent.name === selectedIntentName) {
           intent.displayName = entry.intent.displayName;
           intent.name = entry.intent.name;
-          return true; 
+          return true;
         }
         return false;
       });
 
-      if(selectedIntent !== undefined){
+      if (selectedIntent !== undefined) {
         setIntentVisibility(false);
         setupAppView(selectedIntent.apps);
         setAppVisibility(true);
@@ -98,7 +98,7 @@ function setupIntentView(intents) {
 function setupAppView(apps) {
   if (Array.isArray(apps)) {
     let listName = "app";
-    if(intent.name !== undefined) {
+    if (intent.name !== undefined) {
       targetIntentLabel.innerText = intent.name;
     }
     appsContainer.replaceChildren();
@@ -108,17 +108,17 @@ function setupAppView(apps) {
       appsContainer.appendChild(appEntry);
     }
 
-    backBtn.onclick = ()=> {
+    backBtn.onclick = () => {
       setAppVisibility(false);
       setIntentVisibility(true);
     };
 
-    cancelAppSelectionBtn.onclick = async ()=> {
-        if(rejectAppSelection !== undefined) {
-            rejectAppSelection("Application selection cancelled.");
-        }
-        fin.me.close(true);
-    }
+    cancelAppSelectionBtn.onclick = async () => {
+      if (rejectAppSelection !== undefined) {
+        rejectAppSelection("Application selection cancelled.");
+      }
+      fin.me.close(true);
+    };
 
     launchBtn.onclick = async () => {
       resolveAppSelection({ appId: getSelection(listName), intent });
@@ -143,18 +143,16 @@ async function init() {
   launchBtn = document.getElementById("launch");
   launchBtn.disabled = true;
   cancelAppSelectionBtn = document.getElementById("cancel");
-  
+
   let data = await fin.me.getOptions();
-  
-  if (
-    data.customData !== undefined 
-  ) {
+
+  if (data.customData !== undefined) {
     apps = data.customData.apps;
     intent = data.customData.intent;
     intents = data.customData.intents;
   }
 
-  if(intents !== undefined) {
+  if (intents !== undefined) {
     backBtn.style.display = "unset";
     setupIntentView(intents);
   } else {
@@ -165,12 +163,10 @@ async function init() {
 // this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
 window["getIntentSelection"] = async () => {
   launchBtn.disabled = false;
-  return new Promise(
-    (resolve, reject) => {
-      resolveAppSelection = resolve;
-      rejectAppSelection = reject;
-    }
-  );
+  return new Promise((resolve, reject) => {
+    resolveAppSelection = resolve;
+    rejectAppSelection = reject;
+  });
 };
 
 document.addEventListener("DOMContentLoaded", () => {

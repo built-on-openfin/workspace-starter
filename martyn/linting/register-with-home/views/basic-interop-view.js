@@ -34,20 +34,16 @@ window.onclick = function (event) {
 function setInstrument(ctx) {
   let container = document.getElementById("instrument-container");
   let instrumentMap = {
-    "TSLA": "TESLA",
-    "MSFT": "Microsoft",
-    "AAPL": "Apple"
+    TSLA: "TESLA",
+    MSFT: "Microsoft",
+    AAPL: "Apple"
   };
   let name = document.getElementById("name");
   let ticker = document.getElementById("ticker");
   let type = document.getElementById("type");
 
   container.style.display = "unset";
-  if (
-    ctx.id !== undefined &&
-    ctx.id.ticker !== undefined &&
-    instrumentMap[ctx.id.ticker] !== undefined
-  ) {
+  if (ctx.id !== undefined && ctx.id.ticker !== undefined && instrumentMap[ctx.id.ticker] !== undefined) {
     name.innerText = instrumentMap[ctx.id.ticker];
     ticker.innerText = ctx.id.ticker;
     type.innerText = ctx.type;
@@ -60,7 +56,7 @@ function setInstrument(ctx) {
 
 async function init() {
   if (window.fin !== undefined) {
-    window.fin.me.interop.addContextHandler((ctx) => {
+    window.fin.me.interop.addContextHandler(ctx => {
       if (ctx.type === "instrument" || ctx.type === "fdc3.instrument") {
         setInstrument(ctx);
       }
@@ -68,7 +64,7 @@ async function init() {
   }
 }
 
-window.test = (ctx) => {
+window.test = ctx => {
   setInstrument(ctx);
 };
 document.addEventListener("DOMContentLoaded", () => {
