@@ -11,23 +11,7 @@
     "autoShow": true,
     "providerUrl": "http://localhost:8080/platform/provider.html",
     "preventQuitOnLastWindowClosed":true,
-    "permissions": {
-      "System": {
-        "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
-        }
-      }
-    },
     "defaultWindowOptions": {
-      "permissions": {
-        "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
-        }
-      }
     }
   },
   "snapshot": {

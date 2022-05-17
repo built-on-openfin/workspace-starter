@@ -12,7 +12,9 @@
         "support-context-and-intents",
         "customize-workspace",
         "customize-home-templates",
-        "use-notifications"
+        "use-notifications",
+        "register-with-browser",
+        "workspace-native-window-integration"
     ],
     "howToCustomFolder":"workspace/vnext",
     "author": "",

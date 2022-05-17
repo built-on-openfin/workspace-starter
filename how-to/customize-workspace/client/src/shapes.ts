@@ -5,8 +5,7 @@ import { IntegrationProvider } from "./integrations-shapes";
 
 
 interface PlatformProvider {
-    rootUrl: string,
-    enableNativeWindowIntegration: boolean
+    rootUrl: string
 }
 
 interface NotificationProvider extends NotificationsPlatform {};

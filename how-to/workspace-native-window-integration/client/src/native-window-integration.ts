@@ -6,6 +6,7 @@ let nwiClient: NativeWindowIntegrationClient;
 let clientRequested = false;
 
 async function init() {
+  clientRequested = true;
   let nwiApps = await getAppsByTag(["native", "nwi"], true);
   let configuration = [];
 
@@ -19,7 +20,6 @@ async function init() {
     // we can keep checking to see if nwi apps are added to the list.
     console.log("NWI compatible apps specified: ", configuration);
     try {
-      clientRequested = true;
       nwiClient = await NativeWindowIntegrationClient.create({
         local: false,
         url: asset,

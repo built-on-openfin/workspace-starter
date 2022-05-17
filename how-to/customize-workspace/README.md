@@ -14,8 +14,9 @@ This sample is an extension of the support context and intents example. The samp
 * Supporting Interop/FDC3 Intents
 * Using a golden data source (in [apps.json](public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
 * Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file) 
-* Workspace saving has been added (including an example of Native Window Integration)
+* Workspace saving has been added
 * An example of implementing your own sharing function has also been added.
+* An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -204,6 +205,24 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
+    },
+    "endpointProvider": {
+      "endpoints": [{
+        "id":"share-get",
+        "type":"fetch",
+        "options": {
+          "method": "GET",
+          "url":"https://targeturl"
+        }
+      },
+      {
+        "id":"share-save",
+        "type":"fetch",
+        "options": {
+          "method": "POST",
+          "url":"https://targeturl"
+        }
+      }]
     },
     "browserProvider": {
       "windowOptions": {
@@ -481,6 +500,29 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       "id": "customize-workspace",
       "title": "Notification Starter",
       "icon": "http://localhost:8080/favicon.ico"
+    },
+    "integrationProvider": {
+      "integrations": [
+        {
+          "id": "salesforce",
+          "icon": "http://localhost:8080/images/salesforce/favicon.ico",
+          "title": "Salesforce",
+          "enabled": false,
+          "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
+          "data": {
+              "consumerKey": "",
+              "isSandbox": false,
+              "orgUrl": "",
+              "iconMap": {
+                  "contact": "http://localhost:8080/images/salesforce/contact.svg",
+                  "account": "http://localhost:8080/images/salesforce/account.svg",
+                  "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
+                  "note": "http://localhost:8080/images/salesforce/note.svg",
+                  "task": "http://localhost:8080/images/salesforce/task.svg"
+              }
+          }
+        }
+      ]
     }
   }
 ```
@@ -496,6 +538,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
 | cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
 | appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
+| **endpointProvider** | Config related to endpoints that your application might use to do requests for data |
+| endpoints | An array of endpoint definitions |
+| endpoints.id | The id used to lookup the endpoint |
+| endpoints.type | The type of endpoint definition (used to identify the type of logic to use) |
+| endpoints.options | Options that will be read by the logic and used to perform the action |
 | **browserProvider** | Config related to OpenFin Browser |
 | windowOptions.title | The title for the window that shows up in the taskbar |
 | windowOptions.icon | The icon that should show in the taskbar and in the top left menu of the browser |
@@ -533,6 +580,14 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | id | Unique ID for your notification registration |
 | title | The name for your workspace platform in the notification center |
 | icon | The icon to show in the notification center |
+| **integrationProvider** | Config settings that are used to define additional search providers for your workspace platform |
+| integrations | An array of integrations |
+| integrations.id | The id of your integration |
+| integrations.icon | The icon to show for your integration |
+| integrations.title | The title for your integration entry |
+| integrations.enabled | Is the integration enabled |
+| integrations.moduleUrl | Where should the module be loaded from |
+| integrations.data | Data/config that will be passed to the integration module (for this sample look at the description of the settings from the integrate-with-salesforce starter) |
 
 ---
 **NOTE ABOUT THE MANIFEST**
