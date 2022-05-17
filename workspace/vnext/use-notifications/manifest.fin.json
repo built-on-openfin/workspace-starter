@@ -11,23 +11,7 @@
     "autoShow": true,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/notifications/notifications.html",
     "preventQuitOnLastWindowClosed":true,
-    "permissions": {
-      "System": {
-        "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
-        }
-      }
-    },
     "defaultWindowOptions": {
-      "permissions": {
-        "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
-        }
-      }
     }
   },
   "snapshot": {
