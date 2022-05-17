@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace--customize-workspace",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
   "main": "index.js",
   "scripts": {
@@ -19,8 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
-    "@openfin/workspace": "6.3.6",
-    "@openfin/workspace-platform": "6.3.6",
+    "@openfin/workspace": "next",
+    "@openfin/workspace-platform": "next",
     "file-loader": "^6.2.0"
   },
   "devDependencies": {
