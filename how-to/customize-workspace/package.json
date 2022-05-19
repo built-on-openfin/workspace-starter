@@ -16,7 +16,7 @@
     "kill": "node ./scripts/kill.mjs"
   },
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/salesforce": "^2.1.3",
     "@openfin/salesforce-lwc": "^1.1.1",
