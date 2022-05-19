@@ -16,7 +16,7 @@
     "kill": "node ./scripts/kill.mjs"
   },
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
     "@openfin/workspace": "7.3.10",
