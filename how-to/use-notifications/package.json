@@ -15,7 +15,7 @@
     "kill": "node ./scripts/kill.mjs"
   },
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/core": "^25.68.26",
     "@openfin/workspace": "7.3.10",
