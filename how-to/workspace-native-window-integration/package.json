@@ -1,7 +1,7 @@
 {
-  "name": "openfin-workspace--customize-workspace",
+  "name": "openfin-workspace--native-window-integration",
   "version": "6.0.0",
-  "description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
+  "description": "OpenFin Workspace Example Application -- Shows how to use native window integration.",
   "main": "index.js",
   "scripts": {
     "dos": "desktop-owner-settings.bat && (npm run kill)",
@@ -11,7 +11,6 @@
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
     "client": "node ./scripts/launch.mjs",
-    "secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
     "server": "node ./server/build/index.js",
     "kill": "node ./scripts/kill.mjs"
   },
