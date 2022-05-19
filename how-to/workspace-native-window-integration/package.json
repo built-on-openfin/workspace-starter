@@ -1,7 +1,7 @@
 {
-  "name": "openfin-workspace--customize-workspace",
+  "name": "openfin-workspace--workspace-native-window-integration",
   "version": "7.0.0",
-  "description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
+  "description": "OpenFin Workspace Example Application -- An example of an application that takes advantage of our native window integration.",
   "main": "index.js",
   "scripts": {
     "dos": "desktop-owner-settings.bat && (npm run kill)",
@@ -19,8 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
-    "@openfin/workspace": 7.3.9,
-    "@openfin/workspace-platform": 7.3.9,
+    "@openfin/workspace": "7.3.10",
+    "@openfin/workspace-platform": "7.3.10",
     "file-loader": "^6.2.0"
   },
   "devDependencies": {

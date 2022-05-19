@@ -24,7 +24,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Workspace Example</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Workspace Native Window Integration</a>
 
 ---
 
