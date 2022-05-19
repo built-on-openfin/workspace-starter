@@ -2,7 +2,7 @@
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "next",
+        "version": "7.3.10",
         "customConfig": {
           "hotkeys" : {
             "toggleHomeVisibility": "CommandOrControl+Space"
