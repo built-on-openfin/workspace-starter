@@ -343,7 +343,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
                   "statusWarning": null,
                   "statusCritical": null,
                   "statusActive": null,
-                  "inputBg": null,
+                  "inputBackground": null,
                   "inputColor": null,
                   "inputPlaceholder": null,
                   "inputDisabled": null,
