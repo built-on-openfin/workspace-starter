@@ -1,22 +1,26 @@
 import { BrowserCreateWindowRequest, 
     BrowserOverrideCallback, 
     CreateSavedPageRequest, 
+    CreateSavedWorkspaceRequest, 
     getCurrentSync, 
     OpenGlobalContextMenuPayload, 
     OpenPageTabContextMenuPayload, 
     OpenViewTabContextMenuPayload, 
     Page, 
-    UpdateSavedPageRequest } from '@openfin/workspace-platform';
+    UpdateSavedPageRequest, 
+    UpdateSavedWorkspaceRequest, 
+    Workspace} from '@openfin/workspace-platform';
+
 import { getDefaultToolbarButtons } from './buttons';
 import { getGlobalMenu, getPageMenu, getViewMenu } from './menu';
-import { getSettings } from './settings';
 import { PlatformStorage } from './platform-storage';
+import { getSettings } from './settings';
 
 const pageBoundsStorage = new PlatformStorage("page-bounds", "Page Bounds");
 
 async function savePageBounds(pageId:string) {
 
-    let bounds = await getPageBounds(pageId);
+    const bounds = await getPageBounds(pageId);
 
     await pageBoundsStorage.saveToStorage<OpenFin.Bounds>(pageId, bounds);
 }
@@ -26,17 +30,17 @@ async function deletePageBounds(pageId:string) {
 }
 
 export async function getPage(pageId:string) {
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     return platform.Storage.getPage(pageId);
 }
 
 export async function getPages() {
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     return platform.Storage.getPages();
 }
 
 export async function deletePage(pageId:string) {
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     await deletePageBounds(pageId);
     return platform.Storage.deletePage(pageId);
 }
@@ -48,8 +52,8 @@ export async function getPageBounds(pageId:string, fromStorage = false): Promise
     if(fromStorage) {
         bounds = await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(pageId);
     } else {
-        let platform = getCurrentSync();
-        let pages = await platform.Browser.getAllAttachedPages();
+        const platform = getCurrentSync();
+        const pages = await platform.Browser.getAllAttachedPages();
         let windowId;
     
         pages.forEach(page => {
@@ -59,7 +63,7 @@ export async function getPageBounds(pageId:string, fromStorage = false): Promise
         });
     
         if(windowId !== undefined) {
-            let hostWindow = platform.Browser.wrapSync(windowId);
+            const hostWindow = platform.Browser.wrapSync(windowId);
     
             bounds = await hostWindow.openfinWindow.getBounds();
         }
@@ -68,16 +72,16 @@ export async function getPageBounds(pageId:string, fromStorage = false): Promise
 }
 
 export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
-    let customBounds = bounds || await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(page.pageId);
-    let platform = getCurrentSync();
-    let newWindow: BrowserCreateWindowRequest = {
+    const customBounds = bounds || await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(page.pageId);
+    const platform = getCurrentSync();
+    const newWindow: BrowserCreateWindowRequest = {
         workspacePlatform: {
             pages: [page]
         }
     };
 
     if(customBounds !== undefined && customBounds !== null){
-        let monitors = await fin.System.getMonitorInfo();
+        const monitors = await fin.System.getMonitorInfo();
 
         newWindow.height = customBounds.height;
         newWindow.width = customBounds.width;
@@ -101,7 +105,7 @@ export async function launchPage(page:Page, bounds?: OpenFin.Bounds){
 }
 
 export async function launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity){
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     let viewOptions;
     if(typeof view === "string"){
         viewOptions = { "url": view};
@@ -140,8 +144,69 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
             await super.applySnapshot(...args);
         }
 
-        async quit(payload, callerIdentity) {
-            return super.quit(payload, callerIdentity);
+     
+        async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
+            // you can add your own custom implementation here if you are storing your workspaces
+            // in non-default location (e.g. on the server instead of locally)
+            return super.getSavedWorkspaces(query);
+        }
+
+        async getSavedWorkspace(id: string): Promise<Workspace>  {
+            // you can add your own custom implementation here if you are storing your workspaces
+            // in non-default location (e.g. on the server instead of locally)
+            return super.getSavedWorkspace(id);
+        }
+
+        async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
+            // you can add your own custom implementation here if you are storing your workspaces
+            // in non-default location (e.g. on the server instead of locally)
+            return super.createSavedWorkspace(req);
+        }
+   
+        async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
+            // you can add your own custom implementation here if you are storing your workspaces
+            // in non-default location (e.g. on the server instead of locally)
+            return super.updateSavedWorkspace(req);
+        }
+    
+        async deleteSavedWorkspace(id: string): Promise<void> {
+            // you can add your own custom implementation here if you are storing your workspaces
+            // in non-default location (e.g. on the server instead of locally)
+            return super.deleteSavedWorkspace(id);
+        }
+
+        async getSavedPages(query?: string): Promise<Page[]> {
+            // you can add your own custom implementation here if you are storing your pages
+            // in non-default location (e.g. on the server instead of locally)
+            return super.getSavedPages(query);
+        }
+        
+        async getSavedPage(id: string): Promise<Page> {
+            // you can add your own custom implementation here if you are storing your pages
+            // in non-default location (e.g. on the server instead of locally)
+            return super.getSavedPage(id);
+        }
+
+        async createSavedPage(req: CreateSavedPageRequest): Promise<void>{
+            // you can add your own custom implementation here if you are storing your pages
+            // in non-default location (e.g. on the server instead of locally)
+            await savePageBounds(req.page.pageId);
+            
+            super.createSavedPage(req);
+        }
+
+        async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
+            // you can add your own custom implementation here if you are storing your pages
+            // in non-default location (e.g. on the server instead of locally)
+            await savePageBounds(req.pageId);
+            super.updateSavedPage(req);
+        }
+        
+        async deleteSavedPage(id: string): Promise<void> {
+            // you can add your own custom implementation here if you are storing your pages
+            // in non-default location (e.g. on the server instead of locally)
+            deletePageBounds(id);
+            super.deleteSavedPage(id);
         }
 
         async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {
@@ -168,28 +233,8 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
             }, callerIdentity);
         }
 
-        async getSavedPages(query?: string): Promise<Page[]> {
-            return super.getSavedPages(query);
-        }
-        
-        async getSavedPage(id: string): Promise<Page> {
-            return super.getSavedPage(id);
-        }
-
-        async createSavedPage(req: CreateSavedPageRequest): Promise<void>{
-            await savePageBounds(req.page.pageId);
-            
-            super.createSavedPage(req);
-        }
-
-        async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
-            await savePageBounds(req.pageId);
-            super.updateSavedPage(req);
-        }
-        
-        async deleteSavedPage(id: string): Promise<void> {
-            deletePageBounds(id);
-            super.deleteSavedPage(id);
+        async quit(payload, callerIdentity) {
+            return super.quit(payload, callerIdentity);
         }
     }
     return new Override();

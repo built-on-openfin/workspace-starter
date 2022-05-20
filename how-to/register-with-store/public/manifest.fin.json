@@ -39,7 +39,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Register With Store - v6.0",
+    "name": "Register With Store - v7.0",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
