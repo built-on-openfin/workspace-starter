@@ -4,5 +4,5 @@
     "interop": {
       "currentContextGroup": "green"
     },
-    "preloadScripts": [{"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/customize-workspace/views/preload-tradingview.js"}]
+    "preloadScripts": [{"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/preload-tradingview.js"}]
   }
