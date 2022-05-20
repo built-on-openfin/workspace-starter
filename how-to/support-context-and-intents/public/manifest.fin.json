@@ -93,7 +93,7 @@
                   "statusWarning": null,
                   "statusCritical": null,
                   "statusActive": null,
-                  "inputBg": null,
+                  "inputBackground": null,
                   "inputColor": null,
                   "inputPlaceholder": null,
                   "inputDisabled": null,
