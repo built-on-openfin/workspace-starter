@@ -3,6 +3,25 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
+# Migrate from a previous version - From v6.0 to v7.0
+
+The main focus of this release is on introducing support for Workspace Management APIs and adding a UI for Workspace Management to the Browser.
+
+If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the customize-workspace example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
+
+* [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
+
+
+## What dependencies will I need?
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^7.0.0",
+                    "@openfin/workspace-platform": "^7.0.0"
+                }
+```
 # Migrate from a previous version - From v5.5 to v6.0
 
 With Workspace 6.0, OpenFin has added additional options when it comes to customization. You can now customize:

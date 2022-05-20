@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace--support-context-and-intents",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "OpenFin Workspace Example Application -- Adding intent support to a workspace platform",
   "main": "index.js",
   "scripts": {
@@ -18,8 +18,8 @@
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
-    "@openfin/workspace": "^6.3.6",
-    "@openfin/workspace-platform": "^6.3.6"
+    "@openfin/workspace": "7.3.10",
+    "@openfin/workspace-platform": "7.3.10"
   },
   "devDependencies": {
     "express": "^4.17.1",

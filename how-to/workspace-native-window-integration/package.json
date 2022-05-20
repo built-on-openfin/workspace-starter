@@ -1,7 +1,7 @@
 {
-  "name": "openfin-workspace--native-window-integration",
-  "version": "6.0.0",
-  "description": "OpenFin Workspace Example Application -- Shows how to use native window integration.",
+  "name": "openfin-workspace--workspace-native-window-integration",
+  "version": "7.0.0",
+  "description": "OpenFin Workspace Example Application -- An example of an application that takes advantage of our native window integration.",
   "main": "index.js",
   "scripts": {
     "dos": "desktop-owner-settings.bat && (npm run kill)",
@@ -11,6 +11,7 @@
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
     "client": "node ./scripts/launch.mjs",
+    "secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
     "server": "node ./server/build/index.js",
     "kill": "node ./scripts/kill.mjs"
   },
@@ -18,8 +19,8 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
-    "@openfin/workspace": "6.3.6",
-    "@openfin/workspace-platform": "6.3.6",
+    "@openfin/workspace": "7.3.10",
+    "@openfin/workspace-platform": "7.3.10",
     "file-loader": "^6.2.0"
   },
   "devDependencies": {

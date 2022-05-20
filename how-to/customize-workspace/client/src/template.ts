@@ -150,16 +150,8 @@ export const WorkspaceTemplate: {
       },
       {
         type: TemplateFragmentTypes.Text,
-        dataKey: "description",
-        optional: true,
-        style: {
-          paddingLeft: "10px",
-          paddingRight: "10px",
-        },
-      },
-      {
-        type: TemplateFragmentTypes.Text,
         dataKey: "instructions",
+        optional: true,
         style: {
           fontWeight: "bold",
           paddingTop: "10px",
@@ -235,3 +227,40 @@ export const WorkspaceTemplate: {
     ],
   },
 };
+
+export const CurrentWorkspaceTemplate: {
+  template: TemplateFragment;
+} = {
+  template: {
+    type: TemplateFragmentTypes.Container,
+    style: {
+      paddingTop: "10px",
+      display: "flex",
+      flexDirection: "column",
+    },
+    children: [
+      {
+        type: TemplateFragmentTypes.Text,
+        dataKey: "title",
+        style: {
+          fontWeight: "bold",
+          fontSize: "16px",
+          textAlign: "center",
+        },
+      },
+      {
+        type: TemplateFragmentTypes.Text,
+        dataKey: "instructions",
+        optional: true,
+        style: {
+          fontWeight: "bold",
+          paddingTop: "10px",
+          paddingBottom: "10px",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+        },
+      }
+    ],
+  },
+};
+

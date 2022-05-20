@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version": "23.96.68.5"
+    "version": "24.98.69.7"
   },
   "startup_app": {
     "name": "workspace-starter-how-to-customize-workspace"
@@ -45,7 +45,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Customize Workspace - v6.3",
+    "name": "Customize Workspace - v7.0",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
@@ -231,9 +231,9 @@
         },
         {
           "include": true,
-          "id": "save-page",
+          "id": "save-menu",
           "button": {
-            "type": "SavePage"
+            "type": "SaveMenu"
           }
         }
       ]

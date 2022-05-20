@@ -1,62 +1,61 @@
-import { getCurrentSync  } from '@openfin/workspace-platform';
-import { PlatformStorage } from './platform-storage';
+import { getCurrentSync, Workspace  } from '@openfin/workspace-platform';
 
-export interface ISavedWorkspace {
-    id:string,
-    title:string,
-    description?:string,
-    snapshot:any
-}
-
-const workspaceStorage = new PlatformStorage("workspace","workspace");
-
-export async function getWorkspace(workspaceId:string):Promise<ISavedWorkspace> {
-    return workspaceStorage.getFromStorage<ISavedWorkspace>(workspaceId);
+export async function getWorkspace(workspaceId:string):Promise<Workspace> {
+    const platform = getCurrentSync();
+    return platform.Storage.getWorkspace(workspaceId);
 }
 
 export async function getWorkspaceIds(): Promise<string[]>{
-    let entries = await workspaceStorage.getAllStoredEntries();
-    return Object.keys(entries);
+    const platform = getCurrentSync();
+    const entries = await platform.Storage.getWorkspaces();
+    const ids = [];
+
+    entries.forEach(wks => {
+        ids.push(wks.workspaceId);
+    });
+
+    return ids;
 }
 
 export async function getWorkspaceTitles(): Promise<string[]>{
-    let entries = await workspaceStorage.getAllStoredEntries<ISavedWorkspace>();
-    let keys = Object.keys(entries);
-    let titles = [];
-    for(let i = 0; i < keys.length; i++) {
-        titles.push(entries[keys[i]].title);
-    }
+    const platform = getCurrentSync();
+    const entries = await platform.Storage.getWorkspaces();
+    const titles = [];
+
+    entries.forEach(wks => {
+        titles.push(wks.title);
+    });
+    
     return titles;
 }
 
-export async function getWorkspaces():Promise<ISavedWorkspace[]> {
-    let entries = await workspaceStorage.getAllStoredEntries<ISavedWorkspace>();
-    return Object.values(entries);
+export async function getWorkspaces():Promise<Workspace[]> {
+    const platform = getCurrentSync();
+    return  platform.Storage.getWorkspaces();
 }
 
 export async function deleteWorkspace(workspaceId:string) {
-    await workspaceStorage.clearStorageEntry(workspaceId);
+    const platform = getCurrentSync();
+    await platform.Storage.deleteWorkspace(workspaceId);
 }
 
-export async function saveWorkspace(workspaceId: string, title: string, description?:string) {
-    let plat = getCurrentSync();
-    let snapshot = await plat.getSnapshot();
-    let workspaceToSave:ISavedWorkspace = {
-        id:workspaceId,
-        title,
-        description,
-        snapshot
-    };
+export async function saveWorkspace(workspaceId: string, title: string) {
+    const platform = getCurrentSync();
+    const snapshot = await platform.getSnapshot();
+    const currentWorkspace = await platform.getCurrentWorkspace();
+    const currentMetaData = currentWorkspace?.metadata;
 
-    await workspaceStorage.saveToStorage<ISavedWorkspace>(workspaceId, workspaceToSave);
+    const workspace = {
+        workspaceId,
+    title,
+    metadata: currentMetaData,
+    snapshot
+    };
+    await platform.Storage.saveWorkspace(workspace);
 }
 
 export async function launchWorkspace(workspaceId:string){
-    let workspace = await workspaceStorage.getFromStorage<ISavedWorkspace>(workspaceId);
-    if(workspace !== undefined && workspace.snapshot !== undefined){
-        let platform = fin.Platform.getCurrentSync();
-        await platform.applySnapshot(workspace.snapshot, {  closeExistingWindows : true})
-    } else {
-        console.error("Error: workspace Id did not have a snapshot: " + workspaceId);
-    }
+    const platform = getCurrentSync();
+    const workspace = await getWorkspace(workspaceId);
+    await platform.applyWorkspace(workspace);
 }
