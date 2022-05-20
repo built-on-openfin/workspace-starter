@@ -45,7 +45,7 @@
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
     "icon": "http://localhost:8080/favicon.ico",
-    "name": "Workspace Native Window Integration - v7.3",
+    "name": "Workspace Native Window Integration - v7.0",
     "target": ["desktop", "start-menu"]
   },
   "appAssets": [
