@@ -7,9 +7,9 @@
   },
   "platform": {
     "uuid": "use-notifications",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/use-notifications/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/favicon.ico",
     "autoShow": true,
-    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/use-notifications/notifications/notifications.html",
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/notifications/notifications.html",
     "preventQuitOnLastWindowClosed":true,
     "defaultWindowOptions": {
     }
@@ -20,7 +20,7 @@
   "shortcut": {
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/use-notifications/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/favicon.ico",
     "name": "Use Notifications - v7.0",
     "target": ["desktop", "start-menu"]
   }
