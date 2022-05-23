@@ -33,7 +33,7 @@
                               "isClosable": false,
                               "componentState": {
                                "name": "intent-view-example-1",
-                                "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-fdc3-view.html",
+                                "url": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-fdc3-view.html",
                                 "componentName": "view",
                                 "fdc3InteropApi": "1.2"
                               },
@@ -61,7 +61,7 @@
                                   "componentName": "view",
                                   "isClosable": false,
                                   "componentState": {
-                                    "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-interop-view.html",
+                                    "url": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-interop-view.html",
                                     "componentName": "view",
                                     "name": "intent-view-example-2"
                                   },

@@ -7,9 +7,9 @@
   },
   "platform": {
     "uuid": "customize-home-templates",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/favicon.ico",
     "autoShow": false,
-    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/platform/provider.html",
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/platform/provider.html",
     "preventQuitOnLastWindowClosed":true,
     "permissions": {
       "System": {
@@ -36,7 +36,7 @@
   "shortcut": {
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/favicon.ico",
     "name": "Customize Home Templates - v7.0",
     "target": ["desktop", "start-menu"]
   },
@@ -44,26 +44,26 @@
     "homeProvider": {
       "id": "customize-home-templates",
       "title": "Customize Home Templates",
-      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/favicon.ico"
+      "icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/favicon.ico"
     },
     "integrationProvider": {
       "integrations": [
         {
           "id": "quote",
-          "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/favicon.ico",
+          "icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/favicon.ico",
           "title": "Quote Provider",
           "enabled": true,
-          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/js/integrations/quote.bundle.js",
+          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/js/integrations/quote.bundle.js",
           "data": {
-              "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/quotes/"
+              "rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/quotes/"
           }
         },
         {
           "id": "emoji",
-          "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/favicon.ico",
+          "icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/favicon.ico",
           "title": "Emoji Provider",
           "enabled": true,
-          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
+          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-home-templates/js/integrations/emoji.bundle.js",
           "data": {
           }
         }

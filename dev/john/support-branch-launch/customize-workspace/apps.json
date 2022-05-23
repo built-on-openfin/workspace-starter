@@ -4,10 +4,10 @@
     "name": "call-app",
     "title": "Call Application",
     "description": "Start a call.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/contact/call-app.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/contact/call-app.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -27,10 +27,10 @@
     "name": "participant-selection",
     "title": "Participant Selection",
     "description": "Select a participant.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/contact/participant-selection.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/contact/participant-selection.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -44,10 +44,10 @@
     "name": "participant-history",
     "title": "Participant History",
     "description": "View participant history.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/contact/participant-history.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/contact/participant-history.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -67,10 +67,10 @@
     "name": "investments-and-models",
     "title": "Investments and Models",
     "description": "View investments and models.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/contact/investments-and-models.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/contact/investments-and-models.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -90,10 +90,10 @@
     "name": "participant-summary-view",
     "title": "Participant Summary",
     "description": "View summary of the participant",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/contact/participant-summary.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/contact/participant-summary.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -114,9 +114,9 @@
     "title": "Client Overview",
     "manifestType": "snapshot",
     "description": "Provides a summary of the current client",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/snapshot-contact-overview.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/snapshot-contact-overview.json",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -137,10 +137,10 @@
     "name": "basic-interop-view",
     "title": "Basic Interop View",
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-interop-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-interop-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -153,7 +153,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/interop-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/interop-view.png"
     }],
     "tags":["view", "interop"]
   },
@@ -162,10 +162,10 @@
     "name": "basic-interop-view-multi",
     "title": "Basic Interop View (Multi)",
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. Multiple instances can be launched. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-interop-multi-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-interop-multi-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -178,7 +178,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/interop-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/interop-view.png"
     }],
     "tags":["view", "interop", "openfin"]
   },
@@ -214,7 +214,7 @@
         ],
         "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/fdc3-workbench.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/fdc3-workbench.png"
     }],
     "tags":["view", "interop", "fdc3", "contact", "instrument"]
   },
@@ -223,10 +223,10 @@
     "name": "basic-fdc3-view",
     "title": "Basic FDC3 View",
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-fdc3-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-fdc3-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -239,7 +239,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/fdc3-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/fdc3-view.png"
     }],
     "tags":["view", "fdc3"]
   },
@@ -248,10 +248,10 @@
     "name": "basic-fdc3-view-multi",
     "title": "Basic FDC3 View (Multi)",
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'. This view can be launched multiple times.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/basic-fdc3-multi-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/basic-fdc3-multi-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -264,7 +264,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/fdc3-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/fdc3-view.png"
     }],
     "tags":[ "view", "fdc3", "openfin"]
   },
@@ -273,17 +273,17 @@
     "name": "raise-intent-or-broadcast-view",
     "title": "Raise Intent Or Broadcast View",
     "description": "This is an example of a basic OpenFin FDC3/Interop View. This view calls the raise Intent FDC3 or Interop api. It can also call the FDC3 broadcast or Interop setContext api (as well as listening to context).",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/raise-intent-or-broadcast-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/raise-intent-or-broadcast-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/fdc3-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/fdc3-view.png"
     }],
     "tags":[ "view", "fdc3", "interop", "openfin"]
   },
@@ -292,10 +292,10 @@
     "name": "preload-tradingview-view",
     "title": "Trading View",
     "description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/preload-tradingview-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/preload-tradingview-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -309,10 +309,10 @@
     "name": "preload-google-view",
     "title": "Google View",
     "description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/views/preload-google-view.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/views/preload-google-view.json",
     "manifestType": "view",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -337,7 +337,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/expero-news-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/expero-news-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -347,9 +347,9 @@
     "title": "Receive Intent Page",
     "manifestType": "snapshot",
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This entry has a manifest type of 'snapshot'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/snapshot-intent-single-instance.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/snapshot-intent-single-instance.json",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -370,7 +370,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-page-docs.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-page-docs.png"
     }],
     "tags":[ "page", "openfin"]
   },
@@ -380,9 +380,9 @@
     "title": "Receive Intent Page (Multi)",
     "manifestType": "snapshot",
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This page can be launched multiple times. This entry has a manifest type of 'snapshot'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/snapshot-intent-multi-instance.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/snapshot-intent-multi-instance.json",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
@@ -403,7 +403,7 @@
       ],
       "customConfig": {}}],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-page-docs.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-page-docs.png"
     }],
     "tags":[ "page", "openfin"]
   },
@@ -423,7 +423,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/expero-description-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/expero-description-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -443,7 +443,7 @@
     "publisher": "Expero",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/expero-stock-view.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/expero-stock-view.png"
     }],
     "tags":["expero", "view", "interop"]
   },
@@ -462,7 +462,7 @@
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-notification-studio.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-notification-studio.png"
     }],
     "tags":["hero", "manifest", "tools"]
   },
@@ -481,7 +481,7 @@
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-process-manager.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-process-manager.png"
     }],
     "tags":["hero", "manifest", "tools"]
   },
@@ -491,16 +491,16 @@
     "title": "OpenFin Developer Docs",
     "manifestType": "snapshot",
     "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-    "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/snapshot.json",
+    "manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/snapshot.json",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-blue.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-blue.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-page-docs.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-page-docs.png"
     }],
     "tags":["page"]
   },
@@ -512,14 +512,14 @@
     "manifestType": "external",
     "manifest": "winform-interop-example",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-winform-interop.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-winform-interop.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/openfin-winform-interop.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/openfin-winform-interop.png"
     }],
     "tags":["native", "appasset", "nwi"],
     "data": {
@@ -538,14 +538,14 @@
     "manifestType": "external",
     "manifest": "notepad.exe",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/icon-notepad.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/icon-notepad.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "Microsoft",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/customize-workspace/images/previews/microsoft-notepad-native.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/dev/john/support-branch-launch/customize-workspace/images/previews/microsoft-notepad-native.png"
     }],
     "tags":["native"]
   }
