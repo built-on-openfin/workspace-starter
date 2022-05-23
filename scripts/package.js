@@ -5,12 +5,10 @@ const replace = require('replace-in-file');
 
 let hostFolder = "main";
 
-if(process.argv !== undefined && process.argv.length > 2) {
-  hostFolder = process.argv[2];
-}
-
 if(package.howToCustomFolder !== undefined && package.howToCustomFolder !== ""){
   hostFolder = package.howToCustomFolder;
+} else if(process.argv !== undefined && process.argv.length > 2) {
+  hostFolder = process.argv[2];
 }
 
 console.log('host folder:', hostFolder);
