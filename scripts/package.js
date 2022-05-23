@@ -2,11 +2,16 @@ const fs = require('fs-extra');
 const {execSync} = require('child_process')
 const package = require("../package.json");
 const replace = require('replace-in-file');
-let hostFolder = "workspace/v" + package.version;
+
+let hostFolder = "main";
 
 if(package.howToCustomFolder !== undefined && package.howToCustomFolder !== ""){
   hostFolder = package.howToCustomFolder;
+} else if(process.argv !== undefined && process.argv.length > 2) {
+  hostFolder = process.argv[2];
 }
+
+console.log('host folder:', hostFolder);
 
 fs.rmSync("public", { recursive: true, force: true });
 
