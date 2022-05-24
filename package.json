@@ -3,24 +3,26 @@
     "version": "7.0.0",
     "description": "OpenFin Workspace Starter",
     "scripts": {
-        "package-how-tos": "node ./scripts/package.js"
+        "package-how-tos": "node ./scripts/package.js --legacy",
+        "package": "node ./scripts/package.js",
+        "package-for-github": "node ./scripts/package.js --location github",
+        "package-for-aws": "node ./scripts/package.js --location aws"
     },
-    "how-tos": [
-        "register-with-home",
-        "register-with-store",
-        "integrate-with-salesforce",
-        "support-context-and-intents",
-        "customize-workspace",
-        "customize-home-templates",
-        "use-notifications",
-        "register-with-browser",
-        "workspace-native-window-integration"
+    "workspaces": [
+        "how-to/*"
+    ],
+    "packageExclude": [
+        "how-to/register-with-home-basic",
+        "how-to/register-with-store-basic",
+        "how-to/migrate-from-a-previous-version"
     ],
     "howToCustomFolder":"",
     "author": "",
     "license": "SEE LICENSE IN LICENSE.MD",
     "devDependencies": {
+        "fast-glob": "^3.2.11",
         "fs-extra": "^10.0.0",
-        "replace-in-file": "^6.3.2"
+        "replace-in-file": "^6.3.2",
+        "yargs": "^17.5.1"
     }
 }

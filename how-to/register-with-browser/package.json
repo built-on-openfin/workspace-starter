@@ -24,7 +24,7 @@
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.33",
     "express": "^4.17.1",
-    "openfin-adapter": "^21.64.9",
+    "openfin-adapter": "^22.65.4",
     "source-map-loader": "^3.0.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.6.2",
