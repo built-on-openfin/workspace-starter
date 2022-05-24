@@ -7,14 +7,14 @@
   },
   "platform": {
     "uuid": "integrate-with-salesforce",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/favicon.ico",
     "autoShow": false,
-    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/platform/provider.html",
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/platform/provider.html",
     "preventQuitOnLastWindowClosed":true,
     "defaultViewOptions": {
       "fdc3InteropApi": "1.2",
       "preloadScripts": [{
-        "url": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/js/preload.js"
+        "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/js/preload.js"
       }]
     },
     "defaultWindowOptions": {
@@ -26,23 +26,23 @@
   "shortcut": {
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/favicon.ico",
     "name": "Integrate With Salesforce - v7.0",
     "target": ["desktop", "start-menu"]
   },
   "customSettings": {
     "consumerKey": "",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/favicon.ico",
     "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
     "title": "Salesforce",
     "iconMap": {
-      "contact": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/images/contact.svg",
-      "account": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/images/account.svg",
-      "chatter": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/images/chatter.svg",
-      "note": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/images/note.svg",
-      "task": "https://built-on-openfin.github.io/workspace-starter/sad/DEVOP-71/1/integrate-with-salesforce/images/task.svg"
+      "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/images/contact.svg",
+      "account": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/images/account.svg",
+      "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/images/chatter.svg",
+      "note": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/images/note.svg",
+      "task": "https://built-on-openfin.github.io/workspace-starter/workspace/v7.0.0/integrate-with-salesforce/images/task.svg"
     }
   }
 }
