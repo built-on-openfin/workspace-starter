@@ -24,6 +24,13 @@ export async function getSettings(): Promise<CustomSettings> {
     return settings;
 }
 
+function getSystemPreferredColorScheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+  }
+
 function validatePalette(themePalette, themeLabel:string): any {
     let palette = {};
 
@@ -63,6 +70,8 @@ function validatePalette(themePalette, themeLabel:string): any {
 export function validateThemes(themes: CustomThemes) : CustomThemes {
 
     let validatedThemes = [];
+    let defaultTheme;
+    let preferredColorScheme = getSystemPreferredColorScheme();
 
     if(Array.isArray(themes)) {
         for(let i = 0; i < themes.length; i++) {
@@ -74,9 +83,14 @@ export function validateThemes(themes: CustomThemes) : CustomThemes {
                 // don't pass an empty object as there are no theme properties
                 themeToValidate.palette = undefined;
             }
-            validatedThemes.push(themeToValidate);
+            if(themeToValidate.label.toLowerCase() === preferredColorScheme) {
+                console.log("Found a theme that matches system color scheme preferences and making it the default theme: " + preferredColorScheme);
+                validatedThemes.unshift(themeToValidate);
+            } else {
+                validatedThemes.push(themeToValidate);
+            }
         }
     }
-
+    
     return validatedThemes;
 }
