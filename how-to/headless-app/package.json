@@ -18,8 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@openfin/workspace": "^6.3.6",
-    "@openfin/workspace-platform": "^6.3.6",
-    "openfin-notifications": "^1.14.0"
+    "@openfin/workspace-platform": "^6.3.6"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
