@@ -1,0 +1,10 @@
+{
+    "url": "http://localhost:5000",
+    "interop": {
+      
+    },
+    "preloadScripts": [
+      {
+          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v6.0.0/register-with-home/views/preload.js"
+      }]
+  }
