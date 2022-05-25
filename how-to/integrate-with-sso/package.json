@@ -19,8 +19,8 @@
   "dependencies": {
     "@openfin/core": "^25.68.26",
     "@openfin/workspace": "7.3.10",
-    "auth0-js": "^9.19.0",
-    "csstype": "^3.0.11"
+    "@openfin/workspace-platform": "7.3.10",
+    "auth0-js": "^9.19.0"
   },
   "devDependencies": {
     "@types/auth0-js": "^9.14.6",

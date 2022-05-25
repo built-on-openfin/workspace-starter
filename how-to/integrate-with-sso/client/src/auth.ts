@@ -1,8 +1,6 @@
 import { logInformation } from "./provider";
 import * as auth0 from "auth0-js";
 
-(await fin.Window.getCurrent()).once("close-requested")
-
 const STORAGE_REALM = "integrate-with-sso";
 const STORE_AUTH_TOKEN = "token";
 const AUTH_DOMAIN = "open-fin-starter.us.auth0.com";
