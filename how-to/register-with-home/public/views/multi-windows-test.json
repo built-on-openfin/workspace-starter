@@ -1,0 +1,10 @@
+{
+    "url": "http://localhost:5000",
+    "interop": {
+      
+    },
+    "preloadScripts": [
+      {
+          "url": "http://localhost:8080/views/preload.js"
+      }]
+  }

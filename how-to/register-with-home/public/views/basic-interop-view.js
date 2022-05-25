@@ -1,7 +1,8 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
+import test from "preload.js";
 let showInstrument = document.getElementById("selectInstrument");
-
+test();
 showInstrument.onclick = () => {
   document.getElementById("myDropdown").classList.toggle("show");
 };
