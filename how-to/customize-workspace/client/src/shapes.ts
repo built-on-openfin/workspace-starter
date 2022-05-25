@@ -10,9 +10,10 @@ interface PlatformProvider {
 
 interface NotificationProvider extends NotificationsPlatform {};
 
-interface ToolbarButtonDefinition {
+export interface ToolbarButtonDefinition {
     id: string,
     include: boolean,
+    themes?: {[key:string]:string}
     button: ToolbarButton
 }
 interface BrowserProvider {
