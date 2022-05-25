@@ -24,6 +24,17 @@ export async function getSettings(): Promise<CustomSettings> {
     return settings;
 }
 
+function getSystemPreferredColorScheme() {
+    if (window.matchMedia) {
+      if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+        return 'dark';
+      } else {
+        return 'light';
+      }
+    }
+    return 'light';
+  }
+
 function validatePalette(themePalette, themeLabel:string): any {
     let palette = {};
 
@@ -63,6 +74,8 @@ function validatePalette(themePalette, themeLabel:string): any {
 export function validateThemes(themes: CustomThemes) : CustomThemes {
 
     let validatedThemes = [];
+    let defaultTheme;
+    let preferredColorScheme = getSystemPreferredColorScheme();
 
     if(Array.isArray(themes)) {
         for(let i = 0; i < themes.length; i++) {
@@ -74,8 +87,18 @@ export function validateThemes(themes: CustomThemes) : CustomThemes {
                 // don't pass an empty object as there are no theme properties
                 themeToValidate.palette = undefined;
             }
-            validatedThemes.push(themeToValidate);
+            if(themeToValidate.label.toLowerCase() === preferredColorScheme) {
+                // do not add it to the array. Hold it back to push to the front of the list of themes for default selection
+                defaultTheme = themeToValidate;
+            } else {
+                validatedThemes.push(themeToValidate);
+            }
         }
+    }
+
+    if(defaultTheme !== undefined) {
+        console.log("Found a theme that matches system color scheme preferences and making it the default theme: " + preferredColorScheme);
+        validatedThemes.unshift(defaultTheme);
     }
 
     return validatedThemes;
