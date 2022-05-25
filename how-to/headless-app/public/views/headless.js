@@ -1,3 +1,6 @@
+
+// add pubsub here and create many notifications
+
 // Create a notification with two buttons
 notifications.create({
     title: 'Reminder',
