@@ -84,18 +84,13 @@ export function validateThemes(themes: CustomThemes) : CustomThemes {
                 themeToValidate.palette = undefined;
             }
             if(themeToValidate.label.toLowerCase() === preferredColorScheme) {
-                // do not add it to the array. Hold it back to push to the front of the list of themes for default selection
-                defaultTheme = themeToValidate;
+                console.log("Found a theme that matches system color scheme preferences and making it the default theme: " + preferredColorScheme);
+                validatedThemes.unshift(themeToValidate);
             } else {
                 validatedThemes.push(themeToValidate);
             }
         }
     }
-
-    if(defaultTheme !== undefined) {
-        console.log("Found a theme that matches system color scheme preferences and making it the default theme: " + preferredColorScheme);
-        validatedThemes.unshift(defaultTheme);
-    }
-
+    
     return validatedThemes;
 }
