@@ -1,0 +1,78 @@
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 75%;
+  background-color: #fff;
+  color: #434343;
+  padding: 25px;
+  border: #434343;
+  border-style: solid;
+}
+
+button {
+  -webkit-text-size-adjust: 100%;
+  visibility: visible;
+  line-height: 1.7;
+  z-index: 1;
+  margin: 10px;
+  padding: 7px 15px;
+  border: 0;
+  cursor: pointer;
+  overflow: visible;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  white-space: nowrap;
+  border-radius: 4px;
+  text-decoration: none !important;
+  text-shadow: none;
+  background: linear-gradient(
+    to bottom,
+    #006d88 0,
+    #006d88 50%,
+    #022f3a 52%,
+    #022f3a 100%
+  );
+  display: inline;
+  width: auto;
+  font-size: 80%;
+  font-family: Verdana, Arial, sans-serif;
+}
+
+input[type="text"]:disabled {
+    background: linear-gradient(
+        to bottom,
+        #a3a3a3 0,
+        #434343 50%,
+        #434343 52%,
+        #575757 100%
+      );
+}
+
+input[type="radio"] {
+  vertical-align: bottom;
+}
+
+.launchContainer {
+  padding-top: 25px;
+}
+.intentContainer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.appContainer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+.drag {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+  }
+  
+  .nodrag {
+    -webkit-app-region: no-drag;
+  }
