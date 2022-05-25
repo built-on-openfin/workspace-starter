@@ -127,6 +127,9 @@
         },
         {
           "include": true,
+          "themes": {
+            "Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/icons/search-dark.svg"
+          },
           "id": "home-show",
           "button": {
             "type": "Custom",
@@ -142,6 +145,9 @@
         {
           "include": true,
           "id": "notification-toggle",
+          "themes": {
+            "Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/icons/bell-dark.svg"
+          },
           "button": {
             "type": "Custom",
             "tooltip": "Toggle Notification Center",
@@ -156,6 +162,9 @@
         {
           "include": true,
           "id": "pin-window",
+          "themes": {
+            "Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/icons/pin-dark.svg"
+          },
           "button": {
             "type": "Custom",
             "tooltip": "Pin this window",
@@ -173,6 +182,9 @@
         {
           "include": false,
           "id": "unpin-window",
+          "themes": {
+            "Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/icons/pin-vertical-dark.svg"
+          },
           "button": {
             "type": "Custom",
             "tooltip": "Unpin this window",
@@ -211,6 +223,9 @@
         {
           "include": true,
           "id": "share",
+          "themes": {
+            "Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/icons/share-dark.svg"
+          },
           "button": {
             "type": "Custom",
             "tooltip": "Share",
@@ -274,8 +289,8 @@
           "label": "Light",
           "logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-system-color-support-to-buttons/customize-workspace/favicon-32x32.png",
           "palette": {
-            "brandPrimary": "#05927f",
-            "brandSecondary": "#383A40",
+            "brandPrimary": "#399BB8",
+            "brandSecondary": null,
             "backgroundPrimary": "#111214",
             "functional1": null,
             "functional2": null,
@@ -290,7 +305,7 @@
             "statusSuccess": null,
             "statusWarning": null,
             "statusCritical": null,
-            "statusActive": "#05927f",
+            "statusActive": "#399BB8",
             "inputBackground": "#ECEEF1",
             "inputColor": "#1E1F23",
             "inputPlaceholder": "#7D808A",
