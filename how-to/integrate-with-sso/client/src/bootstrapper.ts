@@ -1,5 +1,6 @@
 import { fin } from "@openfin/core";
 import { init as authenticationInit } from "./auth";
+import { isAuthenticated as providerIsAuthenticated, isBusy as providerIsBusy, logInformation } from "./provider";
 import { getSettings } from "./settings";
 
 export async function init() {
@@ -13,5 +14,10 @@ export async function init() {
 
   const settings = await getSettings();
 
-  await authenticationInit(settings?.auth);
+  await authenticationInit(
+    settings?.auth,
+    providerIsAuthenticated,
+    providerIsBusy,
+    logInformation
+  );
 }
