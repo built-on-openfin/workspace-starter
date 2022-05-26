@@ -14,7 +14,8 @@
         "customize-home-templates",
         "use-notifications",
         "register-with-browser",
-        "workspace-native-window-integration"
+        "workspace-native-window-integration",
+        "integrate-with-sso"
     ],
     "howToCustomFolder":"",
     "author": "",

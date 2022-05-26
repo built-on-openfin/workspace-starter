@@ -1,5 +1,6 @@
 import { fin } from "@openfin/core";
 import { init as authenticationInit } from "./auth";
+import { getSettings } from "./settings";
 
 export async function init() {
   console.log("Initialising the bootstrapper");
@@ -10,5 +11,7 @@ export async function init() {
     await fin.Platform.getCurrentSync().quit();
   });
 
-  await authenticationInit();
+  const settings = await getSettings();
+
+  await authenticationInit(settings?.auth);
 }

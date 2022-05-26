@@ -1,23 +1,40 @@
-import { logInformation } from "./provider";
+import { logClear, logInformation } from "./provider";
 import * as auth0 from "auth0-js";
+import { AuthSettings } from "./shapes";
 
 const STORAGE_REALM = "integrate-with-sso";
-const STORE_AUTH_TOKEN = "token";
-const AUTH_DOMAIN = "open-fin-starter.us.auth0.com";
-const AUTH_CLIENT_ID = "F1Z7zuhH0c39EgYpJBqwVcysn0HhrSNv";
-const COMPLETE_LOGIN_URL = "http://localhost:8080/platform/login-complete.html";
-const COMPLETE_LOGOUT_URL = "http://localhost:8080/platform/logout-complete.html";
+const STORE_ACCESS_TOKEN = "token";
+const STORE_AUTH_STATE = "state";
 
-let authLoginWin: OpenFin.Window;
-let authLogoutWin: OpenFin.Window;
-let authToken: string;
+let authSettings: AuthSettings;
+let authWin: OpenFin.Window;
+let appWin: OpenFin.Window;
 
-export async function init() {
+export async function init(settings: AuthSettings) {
+  updateLoginButtonState(true);
+  updateLogoutButtonState(true);
+  updateAppButtonState(true);  
+
+  authSettings = settings;
+  if (!authSettings) {
+    logInformation("Error: Settings missing cannot continue");
+    return;
+  }
+
   logInformation("Initialising the authentication");
+  const btnClear = document.querySelector("#btnClear");
+  btnClear.addEventListener("click", async () => {
+    logClear();
+  });
+
+  const btnApp = document.querySelector<HTMLButtonElement>("#btnApp");
+  btnApp.addEventListener("click", async () => {
+    await showAppPage();
+});
 
   const btnLogin = document.querySelector("#btnLogin");
   btnLogin.addEventListener("click", async () => {
-    if (!authLoginWin) {
+    if (!authWin) {
       logInformation("Login page was manually opened");
       await showLoginPage();
     }
@@ -25,179 +42,199 @@ export async function init() {
 
   const btnLogout = document.querySelector("#btnLogout");
   btnLogout.addEventListener("click", async () => {
-    if (!authLoginWin) {
+    if (!authWin) {
       logInformation("Logout page was manually opened");
       await showLogoutPage();
     }
   });
 
   logInformation("Checking for existing token");
-
-  const token = await loadToken();
-  if (!token) {
-    logInformation("Token does not exist, show login page");
+  const accessToken = loadProperty(STORE_ACCESS_TOKEN);
+  if (!accessToken) {
+    logInformation("Access token does not exist, show login page");
     await showLoginPage();
+  } else {
+    const isValid = await checkTokenValidity(accessToken);
+    if (!isValid) {
+      logInformation("Access token not valid, show login page");
+      await showLoginPage();
+    } else {
+      updateLogoutButtonState();
+      logInformation("Access token valid, show application");
+      await showAppPage();
+    }
+  }
+}
+
+function createWebAuth(): { webAuth: auth0.WebAuth, state: string } {
+  let state = loadProperty(STORE_AUTH_STATE);
+  if (!loadProperty(STORE_AUTH_STATE)) {
+    state = crypto.randomUUID();
+    saveProperty(STORE_AUTH_STATE, state);
   }
 
-  updateLoginButtonState();
-  updateLogoutButtonState();
+  return {
+    webAuth: new auth0.WebAuth({
+      domain: authSettings.domain,
+      clientID: authSettings.clientId,
+      responseType: "token"
+    }),
+    state
+  };
 }
 
-async function loadToken(): Promise<string | null> {
-  return window.localStorage.getItem(`${STORAGE_REALM}/${STORE_AUTH_TOKEN}`);
+function loadProperty(propName: string): string {
+  return window.localStorage.getItem(`${STORAGE_REALM}/${propName}`);
 }
 
-async function saveToken(token: string): Promise<void> {
-  window.localStorage.setItem(`${STORAGE_REALM}/${STORE_AUTH_TOKEN}`, token);
+function saveProperty(propName: string, value: string): void {
+  window.localStorage.setItem(`${STORAGE_REALM}/${propName}`, value);
 }
 
-async function deleteToken(): Promise<void> {
-  window.localStorage.removeItem(`${STORAGE_REALM}/${STORE_AUTH_TOKEN}`);
+function removeProperty(propName: string): void {
+  window.localStorage.removeItem(`${STORAGE_REALM}/${propName}`);
+}
+
+async function checkTokenValidity(accessToken: string): Promise<boolean> {
+  return new Promise<boolean>(resolve => {
+    logInformation("Check session token is valid");
+
+    const { webAuth } = createWebAuth();
+    webAuth.client.userInfo(accessToken, (err) => {
+      if (err) {
+        logInformation("Check session failed");
+        logInformation(err.original?.message ?? err.description);
+        resolve(false);
+      } else {
+        logInformation("Check session success");
+        resolve(true);
+      }
+    });
+  });
 }
 
 async function showLoginPage() {
-  const webAuth = new auth0.WebAuth({
-    domain: AUTH_DOMAIN,
-    clientID: AUTH_CLIENT_ID
-  });
+  const { webAuth, state } = createWebAuth();
 
   const authUrl = webAuth.client.buildAuthorizeUrl({
-    redirectUri: COMPLETE_LOGIN_URL,
+    redirectUri: authSettings.loginUrl,
     responseType: "token",
-    nonce: crypto.randomUUID()
+    state
   });
 
+  removeProperty(STORE_ACCESS_TOKEN);
+
   updateLoginButtonState(true);
-  authLoginWin = await fin.Window.create({
-    name: window.crypto.randomUUID(),
-    alwaysOnTop: true,
-    maximizable: false,
-    minimizable: false,
-    autoShow: true,
-    defaultCentered: true,
-    defaultHeight: 700,
-    defaultWidth: 600,
-    includeInSnapshots: false,
-    resizable: false,
-    saveWindowState: false,
-    showTaskbarIcon: false,
-    url: authUrl
-  });
+  updateLogoutButtonState(true);
+  updateAppButtonState(true);
+  authWin = await showWindow(authUrl, "integrate-with-sso-auth");
 
   let completePoll;
 
   const cleanupWindow = async (isManualClose) => {
     logInformation(isManualClose
       ? "Login page was manually closed"
-      : "Complete page was detected closing login window"
+      : "Login complete page was detected closing login window"
     );
-    await authLoginWin.removeAllListeners();
-    if (!isManualClose) {
-      await authLoginWin.close(true);
+    if (authWin) {
+      await authWin.removeAllListeners();
+      if (!isManualClose) {
+        await authWin.close(true);
+      }
+      authWin = undefined;
     }
-    authLoginWin = undefined;
-    updateLoginButtonState(false);
     if (completePoll) {
       clearInterval(completePoll);
       completePoll = undefined;
     }
+    updateLogoutButtonState();
+    updateLoginButtonState();
   };
 
-  authLoginWin.addListener("closed", async () => {
-    if (authLoginWin) {
+  authWin.addListener("closed", async () => {
+    if (authWin) {
       await cleanupWindow(true);
     }
   });
 
   completePoll = setInterval(async () => {
-    const authenticatedResultOrError = await checkAuthenticationResult(authLoginWin, COMPLETE_LOGIN_URL);
+    const winUrl = await checkForUrl(authWin, authSettings.loginUrl);
 
-    console.log(authenticatedResultOrError);
+    if (winUrl) {
+      const authenticatedResultOrError = await checkAuthenticationResult(winUrl);
 
-    if (authenticatedResultOrError) {
       if (authenticatedResultOrError.err) {
-        await deleteToken();
-        authToken = undefined;
-      } else if (authenticatedResultOrError.err) {
-        authToken = authenticatedResultOrError.result.accessToken;
-        await saveToken(authToken);
+        logInformation(authenticatedResultOrError.err.description ?? authenticatedResultOrError.err.original?.message);
+        removeProperty(STORE_ACCESS_TOKEN);
+      } else if (authenticatedResultOrError.result) {
+        logInformation(`Access token: ${authenticatedResultOrError.result.accessToken}`);
+        saveProperty(STORE_ACCESS_TOKEN, authenticatedResultOrError.result.accessToken);
       }
-      updateLogoutButtonState();
-      logInformation(JSON.stringify(authenticatedResultOrError));
+
       await cleanupWindow(false);
+
+      if (authenticatedResultOrError.result) {
+        logInformation("Authenticated, show application");
+        await showAppPage();
+      }
     }
-  }, 1000);
+  }, 100);
 }
 
 async function showLogoutPage() {
-  const webAuth = new auth0.WebAuth({
-    domain: AUTH_DOMAIN,
-    clientID: AUTH_CLIENT_ID
-  });
+  const { webAuth } = createWebAuth();
 
   const authUrl = webAuth.client.buildLogoutUrl({
-    returnTo: COMPLETE_LOGOUT_URL
+    returnTo: authSettings.logoutUrl
   });
 
+  updateLoginButtonState(true);
   updateLogoutButtonState(true);
-  authLogoutWin = await fin.Window.create({
-    name: window.crypto.randomUUID(),
-    alwaysOnTop: true,
-    maximizable: false,
-    minimizable: false,
-    autoShow: true,
-    defaultCentered: true,
-    defaultHeight: 700,
-    defaultWidth: 600,
-    includeInSnapshots: false,
-    resizable: false,
-    saveWindowState: false,
-    showTaskbarIcon: false,
-    url: authUrl
-  });
+  updateAppButtonState(true);
+  authWin = await showWindow(authUrl, "integrate-with-sso-auth");
 
   let completePoll;
 
   const cleanupWindow = async (isManualClose) => {
     logInformation(isManualClose
       ? "Logout page was manually closed"
-      : "Complete page was detected closing logout window"
+      : "Logout complete page was detected closing logout window"
     );
-    await authLogoutWin.removeAllListeners();
-    if (!isManualClose) {
-      await authLogoutWin.close(true);
+    if (authWin) {
+      await authWin.removeAllListeners();
+      if (!isManualClose) {
+        await authWin.close(true);
+      }
+      authWin = undefined;
     }
-    authLogoutWin = undefined;
-    updateLogoutButtonState(false);
     if (completePoll) {
       clearInterval(completePoll);
       completePoll = undefined;
     }
+    updateLoginButtonState();
+    updateLogoutButtonState();
   };
 
-  authLogoutWin.addListener("closed", async () => {
-    if (authLogoutWin) {
+  authWin.addListener("closed", async () => {
+    if (authWin) {
       await cleanupWindow(true);
     }
   });
 
   completePoll = setInterval(async () => {
-    const authenticatedResult = await checkAuthenticationResult(authLogoutWin, COMPLETE_LOGOUT_URL);
+    const winUrl = await checkForUrl(authWin, authSettings.logoutUrl);
 
-    if (authenticatedResult) {
-      await deleteToken();
-      updateLogoutButtonState();
-      logInformation(JSON.stringify(authenticatedResult));
+    if (winUrl) {
+      removeProperty(STORE_ACCESS_TOKEN);
+      removeProperty(STORE_AUTH_STATE);
       await cleanupWindow(false);
+      await hideAppPage();
     }
-  }, 1000);
+  }, 100);
 
 }
 
-async function checkAuthenticationResult(win: OpenFin.Window, url: string): Promise<{
-  result?: auth0.Auth0DecodedHash;
-  err?: auth0.Auth0Error;
-} | undefined> {
+async function checkForUrl(win: OpenFin.Window, url: string): Promise<URL | undefined> {
   if (!win) {
     return undefined;
   }
@@ -206,29 +243,81 @@ async function checkAuthenticationResult(win: OpenFin.Window, url: string): Prom
   const isCompleteUrl = winInfo.url.includes(url);
 
   if (isCompleteUrl) {
-    const webAuth = new auth0.WebAuth({
-      domain: AUTH_DOMAIN,
-      clientID: AUTH_CLIENT_ID
-    });
-    return new Promise<{
-      result?: auth0.Auth0DecodedHash;
-      err?: auth0.Auth0Error;
-    }>((resolve) => {
-      webAuth.parseHash({ hash: new URL(winInfo.url).hash }, (err, result) => {
-        resolve({ result, err });
-      })
-    });
+    return new URL(winInfo.url);
   }
 
   return undefined;
 }
 
+async function checkAuthenticationResult(url: URL): Promise<{
+  result?: auth0.Auth0DecodedHash;
+  err?: auth0.Auth0Error;
+} | undefined> {
+  return new Promise<{
+    result?: auth0.Auth0DecodedHash;
+    err?: auth0.Auth0Error;
+  }>((resolve) => {
+    const { webAuth, state } = createWebAuth();
+    webAuth.parseHash({ hash: url.hash, state }, (err, result) => {
+      resolve({ result, err });
+    })
+  });
+}
+
 function updateLoginButtonState(forceDisabled?: boolean) {
   const btnLogin = document.querySelector<HTMLButtonElement>("#btnLogin");
-  btnLogin.disabled = authLoginWin !== undefined || forceDisabled;
+  const token = loadProperty(STORE_ACCESS_TOKEN);
+  btnLogin.disabled = authWin !== undefined || forceDisabled || token !== null;
 }
 
 function updateLogoutButtonState(forceDisabled?: boolean) {
   const btnLogout = document.querySelector<HTMLButtonElement>("#btnLogout");
-  btnLogout.disabled = authLogoutWin !== undefined || forceDisabled || authToken === undefined;
+  const token = loadProperty(STORE_ACCESS_TOKEN);
+  btnLogout.disabled = authWin !== undefined || forceDisabled || token === null;
+}
+
+function updateAppButtonState(forceDisabled?: boolean) {
+  const btnApp = document.querySelector<HTMLButtonElement>("#btnApp");
+  const token = loadProperty(STORE_ACCESS_TOKEN);
+  btnApp.disabled = appWin !== undefined || forceDisabled || token === null;
+}
+
+async function showAppPage() {
+  if (!appWin) {
+    appWin = await showWindow(authSettings.appUrl, "integrate-with-sso-app");
+
+    appWin.on("closed", () => {
+      appWin.removeAllListeners();
+      appWin = undefined;
+
+      updateAppButtonState();
+    });
+
+    updateAppButtonState();
+  }
+}
+
+async function hideAppPage() {
+  if (appWin) {
+    await appWin.close(true);
+  } else {
+    updateAppButtonState();
+  }
+}
+
+async function showWindow(url: string, id: string): Promise<OpenFin.Window> {
+  return fin.Window.create({
+    name: id,
+    alwaysOnTop: true,
+    maximizable: false,
+    minimizable: false,
+    autoShow: true,
+    defaultCentered: true,
+    defaultHeight: 700,
+    defaultWidth: 600,
+    includeInSnapshots: false,
+    resizable: false,
+    showTaskbarIcon: false,
+    url
+  });
 }

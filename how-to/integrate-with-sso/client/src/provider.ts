@@ -14,6 +14,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 export function logInformation(info: string) {
   const logElem = document.querySelector("#logOutput");
 
-  logElem.textContent = logElem.textContent + "\n" + info;
+  logElem.textContent = logElem.textContent + info + "\n\n";
   logElem.scrollTop = logElem.scrollHeight;
+}
+
+export function logClear() {
+  const logElem = document.querySelector("#logOutput");
+  logElem.textContent = "";
+  logElem.scrollTop = 0;
 }

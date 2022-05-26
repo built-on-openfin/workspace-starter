@@ -23,6 +23,15 @@
     "icon": "http://localhost:8080/favicon.ico",
     "name": "Integrate with SSO - v7.0",
     "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "auth": {
+      "domain": "<DOMAIN>",
+      "clientId": "<CLIENTID>",
+      "loginUrl": "http://localhost:8080/platform/login-complete.html",
+      "logoutUrl": "http://localhost:8080/platform/logout-complete.html",
+      "appUrl": "http://localhost:8080/platform/app.html"
+    }
   }
 }
   

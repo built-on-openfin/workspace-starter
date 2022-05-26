@@ -117,6 +117,7 @@ pre {
   margin: 0;
   font-size: 12px;
   font-family: "Courier New", Courier, monospace;
+  white-space: pre-line;
 }
 
 header {
