@@ -1,0 +1,172 @@
+:root {
+  --brand-background: #111214;
+  --brand-primary: #504cff;
+  --brand-secondary: #383a40;
+}
+
+* {
+  font-family: Inter, "Sans Serif";
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 30px;
+  margin: 0;
+  background-color: var(--brand-background);
+  color: #ffffff;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  color: var(--brand-primary);
+}
+h1.tag {
+  font-size: 12px;
+  font-weight: normal;
+  color: #ffffff;
+  margin-top: 5px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  color: #ffffff;
+}
+
+p {
+  font-size: 14px;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #6f7178aa;
+}
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+footer > div > div > a,
+button {
+  background-color: var(--brand-primary);
+  color: #ffffff;
+  border: 0;
+  border-radius: 5px;
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button.secondary {
+  background-color: var(--brand-secondary);
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ffffff;
+}
+
+footer {
+  padding-top: 10px;
+  border-top: 1px solid #ffffff;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.fill {
+  flex: 1;
+  overflow: hidden;
+}
+
+.scroll {
+  overflow: auto;
+}
+
+.middle {
+  align-items: center;
+}
+
+.bottom {
+  align-items: flex-end;
+}
+
+.spread {
+  justify-content: space-between;
+}
+
+.left {
+  align-items: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap5 {
+  gap: 5px;
+}
+
+.gap10 {
+  gap: 10px;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+.pad10 {
+  padding: 10px;
+}
+
+.pad20 {
+  padding: 20px;
+}
+
