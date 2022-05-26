@@ -1,6 +1,7 @@
 import { fin } from 'openfin-adapter/src/mock';
 import { CustomSettings } from './shapes';
 import { CustomThemes } from '@openfin/workspace-platform';
+import { CustomThemeOptions } from '@openfin/workspace-platform/common/src/api/theming';
 
 let settings:CustomSettings;
 
@@ -14,13 +15,6 @@ async function getConfiguredSettings(): Promise<CustomSettings> {
         settings = {};
     }
   
-    return settings;
-}
-
-export async function getSettings(): Promise<CustomSettings> {
-    if(settings === undefined) {
-        settings = await getConfiguredSettings();
-    }
     return settings;
 }
 
@@ -67,13 +61,31 @@ function validatePalette(themePalette, themeLabel:string): any {
     return palette;
 }
 
+export async function getSettings(): Promise<CustomSettings> {
+    if(settings === undefined) {
+        settings = await getConfiguredSettings();
+    }
+    return settings;
+}
+
+export async function getCurrentTheme(): Promise<CustomThemeOptions>{
+    const themes = await getThemes();
+    return themes.shift();
+}
+
+export async function getThemes(): Promise<CustomThemes> {
+    let settings = await getSettings();
+    let themes = validateThemes(settings?.themeProvider?.themes);
+    return themes;
+}
+
 export function validateThemes(themes: CustomThemes) : CustomThemes {
 
     let validatedThemes = [];
-    let defaultTheme;
-    let preferredColorScheme = getSystemPreferredColorScheme();
 
     if(Array.isArray(themes)) {
+        let preferredColorScheme = getSystemPreferredColorScheme();
+
         for(let i = 0; i < themes.length; i++) {
             let themeToValidate = themes[i];
             let palette = validatePalette(themeToValidate.palette, themeToValidate.label);
