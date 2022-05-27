@@ -7,15 +7,15 @@ const STORE_AUTH_STATE = "state";
 
 let authSettings: AuthSettings;
 let authWin: OpenFin.Window;
-let authenticatedCallback: (isAuthenticated) => Promise<void>
-let busyCallback: (isBusy) => Promise<void>
-let informationCallback: (info) => void
+let authenticatedCallback: (isAuthenticated: boolean, userInfo?: auth0.Auth0UserProfile) => Promise<void>
+let busyCallback: (isBusy: boolean) => Promise<void>
+let informationCallback: (info: string) => void
 
 export async function init(
   settings: AuthSettings,
-  authenticatedCb: (isAuthenticated) => Promise<void>,
-  busyCb: (isBusy) => Promise<void>,
-  informationCb: (info) => void
+  authenticatedCb: (isAuthenticated: boolean, userInfo?: auth0.Auth0UserProfile) => Promise<void>,
+  busyCb: (isBusy: boolean) => Promise<void>,
+  informationCb: (info: string) => void
 ) {
   authenticatedCallback = authenticatedCb;
   busyCallback = busyCb;
@@ -35,13 +35,13 @@ export async function init(
     informationCallback("Access token does not exist, show login page");
     await login();
   } else {
-    const isValid = await checkTokenValidity(accessToken);
-    if (!isValid) {
+    const userInfo = await checkTokenValidity(accessToken);
+    if (!userInfo) {
       informationCallback("Access token not valid, show login page");
       await login();
     } else {
       informationCallback("Access token valid, show application");
-      await authenticatedCallback(true);
+      await authenticatedCallback(true, userInfo);
     }
   }
 }
@@ -75,21 +75,21 @@ function removeProperty(propName: string): void {
   window.localStorage.removeItem(`${STORAGE_REALM}/${propName}`);
 }
 
-async function checkTokenValidity(accessToken: string): Promise<boolean> {
+async function checkTokenValidity(accessToken: string): Promise<auth0.Auth0UserProfile | undefined> {
   await busyCallback(true);
 
-  return new Promise<boolean>(resolve => {
+  return new Promise<auth0.Auth0UserProfile>(resolve => {
     informationCallback("Check session token is valid");
     const { webAuth } = createWebAuth();
-    webAuth.client.userInfo(accessToken, async (err) => {
+    webAuth.client.userInfo(accessToken, async (err, userInfo) => {
       await busyCallback(false);
       if (err) {
         informationCallback("Check session failed");
         informationCallback(err.original?.message ?? err.description);
-        resolve(false);
+        resolve(undefined);
       } else {
         informationCallback("Check session success");
-        resolve(true);
+        resolve(userInfo);
       }
     });
   });
@@ -157,7 +157,17 @@ export async function login() {
 
       if (authenticatedResultOrError.result) {
         informationCallback("Authenticated, show application");
-        await authenticatedCallback(true);
+
+        webAuth.client.userInfo(authenticatedResultOrError.result.accessToken, async (err, userInfo) => {
+          if (err) {
+            informationCallback("Get userInfo failed");
+            informationCallback(err.original?.message ?? err.description);
+            await authenticatedCallback(false);
+          } else {
+            informationCallback("Get userInfo success");
+            await authenticatedCallback(true, userInfo);
+          }
+        });
       }
     }
   }, 100);

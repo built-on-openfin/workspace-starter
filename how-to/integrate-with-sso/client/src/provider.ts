@@ -19,8 +19,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   await initialisePlatform();
 });
 
-export async function isAuthenticated(isAuthenticated) {
+export async function isAuthenticated(isAuthenticated: boolean, userProfile: { name: string }) {
   authenticated = isAuthenticated;
+
+  logInformation("User Profile");
+  logInformation(JSON.stringify(userProfile));
 
   updateButtonStates();
 
