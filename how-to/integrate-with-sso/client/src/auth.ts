@@ -10,6 +10,7 @@ let authWin: OpenFin.Window;
 let authenticatedCallback: (isAuthenticated: boolean, userInfo?: auth0.Auth0UserProfile) => Promise<void>
 let busyCallback: (isBusy: boolean) => Promise<void>
 let informationCallback: (info: string) => void
+let pollTimerId: NodeJS.Timeout | undefined;
 
 export async function init(
   settings: AuthSettings,
@@ -35,13 +36,14 @@ export async function init(
     informationCallback("Access token does not exist, show login page");
     await login();
   } else {
-    const userInfo = await checkTokenValidity(accessToken);
+    informationCallback("Check session validity");
+    const userInfo = await checkTokenValidity(accessToken, true);
     if (!userInfo) {
       informationCallback("Access token not valid, show login page");
       await login();
     } else {
       informationCallback("Access token valid, show application");
-      await authenticatedCallback(true, userInfo);
+      await authenticatedStateChanged(true, userInfo);
     }
   }
 }
@@ -75,20 +77,25 @@ function removeProperty(propName: string): void {
   window.localStorage.removeItem(`${STORAGE_REALM}/${propName}`);
 }
 
-async function checkTokenValidity(accessToken: string): Promise<auth0.Auth0UserProfile | undefined> {
-  await busyCallback(true);
+async function checkTokenValidity(accessToken: string | undefined, showBusy: boolean): Promise<auth0.Auth0UserProfile | undefined> {
+  if (!accessToken) {
+    return;
+  }
+  if (showBusy) {
+    await busyCallback(showBusy);
+  }
 
   return new Promise<auth0.Auth0UserProfile>(resolve => {
-    informationCallback("Check session token is valid");
     const { webAuth } = createWebAuth();
     webAuth.client.userInfo(accessToken, async (err, userInfo) => {
-      await busyCallback(false);
+      if (showBusy) {
+        await busyCallback(false);
+      }
       if (err) {
-        informationCallback("Check session failed");
+        informationCallback("Check session: failed");
         informationCallback(err.original?.message ?? err.description);
         resolve(undefined);
       } else {
-        informationCallback("Check session success");
         resolve(userInfo);
       }
     });
@@ -140,7 +147,7 @@ export async function login() {
   });
 
   completePoll = setInterval(async () => {
-    const winUrl = await checkForUrl(authWin, authSettings.loginUrl);
+    const winUrl = await checkForUrls(authWin, [authSettings.loginUrl]);
 
     if (winUrl) {
       const authenticatedResultOrError = await checkAuthenticationResult(winUrl);
@@ -162,10 +169,10 @@ export async function login() {
           if (err) {
             informationCallback("Get userInfo failed");
             informationCallback(err.original?.message ?? err.description);
-            await authenticatedCallback(false);
+            await authenticatedStateChanged(false);
           } else {
             informationCallback("Get userInfo success");
-            await authenticatedCallback(true, userInfo);
+            await authenticatedStateChanged(true, userInfo);
           }
         });
       }
@@ -176,8 +183,12 @@ export async function login() {
 export async function logout() {
   const { webAuth } = createWebAuth();
 
+  // We include the federated support so that any 3rd party providers are also logged out
+  // some providers do not return to the returnTo url after logout, so we need to monitor
+  // for additional urls to check for logout complete
   const authUrl = webAuth.client.buildLogoutUrl({
-    returnTo: authSettings.logoutUrl
+    returnTo: authSettings.logoutUrls[0],
+    federated: true
   });
 
   await busyCallback(true);
@@ -213,24 +224,59 @@ export async function logout() {
   });
 
   completePoll = setInterval(async () => {
-    const winUrl = await checkForUrl(authWin, authSettings.logoutUrl);
+    const winUrl = await checkForUrls(authWin, authSettings.logoutUrls);
 
     if (winUrl) {
       removeProperty(STORE_ACCESS_TOKEN);
       removeProperty(STORE_AUTH_STATE);
       await cleanupWindow(false);
-      await authenticatedCallback(false);
+      await authenticatedStateChanged(false);
     }
   }, 100);
 }
 
-async function checkForUrl(win: OpenFin.Window, url: string): Promise<URL | undefined> {
+export function expireAccessToken() {
+  removeProperty(STORE_ACCESS_TOKEN);
+  removeProperty(STORE_AUTH_STATE);
+}
+
+async function authenticatedStateChanged(isAuthenticated: boolean, userInfo?: auth0.Auth0UserProfile): Promise<void> {
+  pollTimerStop();
+  await authenticatedCallback(isAuthenticated, userInfo);
+  pollTimerStart(isAuthenticated);
+}
+
+function pollTimerStop() {
+  if (pollTimerId) {
+    clearInterval(pollTimerId);
+    pollTimerId = undefined;
+  }
+}
+
+function pollTimerStart(isAuthenticated: boolean) {
+  if ((authSettings.verifyPollMs ?? 0) > 0 && isAuthenticated) {
+    pollTimerId = setInterval(async () => {
+      const accessToken = loadProperty(STORE_ACCESS_TOKEN);
+      const userInfo = await checkTokenValidity(accessToken, false);
+      if (!userInfo) {
+        informationCallback("Access token no longer valid, logout");
+        removeProperty(STORE_ACCESS_TOKEN);
+        removeProperty(STORE_AUTH_STATE);
+        await authenticatedStateChanged(false);
+      } else {
+        informationCallback("Access token still valid");
+      }
+      }, authSettings.verifyPollMs);
+  }
+}
+
+async function checkForUrls(win: OpenFin.Window, urls: string[]): Promise<URL | undefined> {
   if (!win) {
     return undefined;
   }
 
   const winInfo = await win.getInfo();
-  const isCompleteUrl = winInfo.url.includes(url);
+  const isCompleteUrl = urls.some(u => winInfo.url.includes(u));
 
   if (isCompleteUrl) {
     return new URL(winInfo.url);

@@ -1,6 +1,6 @@
 
 import { fin } from '@openfin/core';
-import { login as authenticationLogin, logout as authenticationLogout } from './auth';
+import { login as authenticationLogin, logout as authenticationLogout, expireAccessToken as authenticationExpireAccessToken } from './auth';
 import { init as bootstrap } from './bootstrapper';
 import { init as initialisePlatform } from './platform';
 import { getSettings } from './settings';
@@ -22,8 +22,10 @@ window.addEventListener('DOMContentLoaded', async () => {
 export async function isAuthenticated(isAuthenticated: boolean, userProfile: { name: string }) {
   authenticated = isAuthenticated;
 
-  logInformation("User Profile");
-  logInformation(JSON.stringify(userProfile));
+  if (userProfile) {
+    logInformation("User Profile");
+    logInformation(JSON.stringify(userProfile));
+  }
 
   updateButtonStates();
 
@@ -74,6 +76,12 @@ function initDom() {
     logInformation("Logout page was manually opened");
     await authenticationLogout();
   });
+
+  const btnExpire = document.querySelector("#btnExpire");
+  btnExpire.addEventListener("click", async () => {
+    logInformation("Access token was manually expired, app will close after next validity check");
+    await authenticationExpireAccessToken();
+  });
 }
 
 async function showAppPage() {
@@ -120,6 +128,9 @@ function updateButtonStates() {
 
   const btnLogout = document.querySelector<HTMLButtonElement>("#btnLogout");
   btnLogout.disabled = authIsBusy || !authenticated;
+
+  const btnExpire = document.querySelector<HTMLButtonElement>("#btnExpire");
+  btnExpire.disabled = authIsBusy || !authenticated;
 
   const btnApp = document.querySelector<HTMLButtonElement>("#btnApp");
   btnApp.disabled = authIsBusy || !authenticated || appWin !== undefined;
