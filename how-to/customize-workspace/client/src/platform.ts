@@ -1,6 +1,6 @@
 import { PlatformInteropBroker } from './interopbroker';
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
-import { getSettings, validateThemes } from "./settings";
+import { getSettings, getThemes } from "./settings";
 import { getActions } from './actions';
 import { getDefaultWindowOptions, overrideCallback } from './browser';
 
@@ -24,10 +24,11 @@ export async function init() {
     console.log("Specifying following browser options: ", browser);
 
     let customActions = await getActions();
+    let theme = await getThemes();
 
     await workspacePlatformInit({
         browser,
-        theme: validateThemes(settings?.themeProvider?.themes),
-        customActions: customActions
+        theme,
+        customActions
     });
 } 

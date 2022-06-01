@@ -1,6 +1,7 @@
 import { fin } from 'openfin-adapter/src/mock';
 import { CustomSettings } from './shapes';
 import { CustomThemes } from '@openfin/workspace-platform';
+import { CustomThemeOptions } from '@openfin/workspace-platform/common/src/api/theming';
 
 let settings:CustomSettings;
 
@@ -17,12 +18,12 @@ async function getConfiguredSettings(): Promise<CustomSettings> {
     return settings;
 }
 
-export async function getSettings(): Promise<CustomSettings> {
-    if(settings === undefined) {
-        settings = await getConfiguredSettings();
+function getSystemPreferredColorScheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
     }
-    return settings;
-}
+    return 'light';
+  }
 
 function validatePalette(themePalette, themeLabel:string): any {
     let palette = {};
@@ -60,11 +61,31 @@ function validatePalette(themePalette, themeLabel:string): any {
     return palette;
 }
 
+export async function getSettings(): Promise<CustomSettings> {
+    if(settings === undefined) {
+        settings = await getConfiguredSettings();
+    }
+    return settings;
+}
+
+export async function getCurrentTheme(): Promise<CustomThemeOptions>{
+    const themes = await getThemes();
+    return themes.shift();
+}
+
+export async function getThemes(): Promise<CustomThemes> {
+    let settings = await getSettings();
+    let themes = validateThemes(settings?.themeProvider?.themes);
+    return themes;
+}
+
 export function validateThemes(themes: CustomThemes) : CustomThemes {
 
     let validatedThemes = [];
 
     if(Array.isArray(themes)) {
+        let preferredColorScheme = getSystemPreferredColorScheme();
+
         for(let i = 0; i < themes.length; i++) {
             let themeToValidate = themes[i];
             let palette = validatePalette(themeToValidate.palette, themeToValidate.label);
@@ -74,9 +95,14 @@ export function validateThemes(themes: CustomThemes) : CustomThemes {
                 // don't pass an empty object as there are no theme properties
                 themeToValidate.palette = undefined;
             }
-            validatedThemes.push(themeToValidate);
+            if(themeToValidate.label.toLowerCase() === preferredColorScheme) {
+                console.log("Found a theme that matches system color scheme preferences and making it the default theme: " + preferredColorScheme);
+                validatedThemes.unshift(themeToValidate);
+            } else {
+                validatedThemes.push(themeToValidate);
+            }
         }
     }
-
+    
     return validatedThemes;
 }
