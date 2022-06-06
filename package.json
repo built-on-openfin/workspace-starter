@@ -8,6 +8,7 @@
     "how-tos": [
         "register-with-home",
         "register-with-store",
+        "integrate-with-excel",
         "integrate-with-salesforce",
         "support-context-and-intents",
         "customize-workspace",
