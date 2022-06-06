@@ -88,28 +88,26 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
                 alias: result.data.workbook
             });
 
-            setTimeout(async () => {
-                try {
-                    const excel = await this.getExcel();
-                    if (excel) {
-                        const workbooks = await excel.getWorkbooks();
-                        for (const workbook of workbooks) {
-                            const name = await workbook.getName();
-                            if (name === result.data.workbook) {
-                                const worksheet = await workbook.getWorksheetByName(result.data.worksheet);
-                                await worksheet.activate();
+            try {
+                const excel = await this.getExcel();
+                if (excel) {
+                    const workbooks = await excel.getWorkbooks();
+                    for (const workbook of workbooks) {
+                        const name = await workbook.getName();
+                        if (name === result.data.workbook) {
+                            const worksheet = await workbook.getWorksheetByName(result.data.worksheet);
+                            await worksheet.activate();
 
-                                await worksheet.addEventListener("change", (cells) => {
-                                    this.handleCellChanges(result.data, cells)
-                                })
-                            }
+                            await worksheet.addEventListener("change", (cells) => {
+                                this.handleCellChanges(result.data, cells)
+                            })
                         }
-                        return true;
                     }
-                } catch (err) {
-                    console.error("Error launching Excel", err);
+                    return true;
                 }
-            }, 2000);
+            } catch (err) {
+                console.error("Error launching Excel", err);
+            }
         }
 
         return false;
