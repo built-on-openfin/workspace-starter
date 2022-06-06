@@ -30,7 +30,7 @@
     "@types/node": "^14.14.33",
     "@types/node-emoji": "^1.8.1",
     "express": "^4.17.1",
-    "openfin-adapter": "^21.64.9",
+    "openfin-adapter": "^22.65.4",
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4",
     "webpack": "^5.51.1",
