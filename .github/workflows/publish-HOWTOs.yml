@@ -1,0 +1,102 @@
+name: Publish HOWTOs
+on:
+  - push
+  - workflow_dispatch
+
+jobs:
+  build:
+    name: Build and package HOWTOs
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_BRANCH_PREFIX: "workspace/"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build-client --workspaces
+
+      - name: Package for publishing (GitHub Pages)
+        run: npm run package
+        env:
+          PKG_HOWTOS_LOCATION: github
+          PKG_HOWTOS_PATH: ${{ github.ref_name }}
+
+      - name: Package for publishing (AWS s3 CDN)
+        if: ${{ startsWith(github.ref_name, env.RELEASE_BRANCH_PREFIX) }}
+        run: npm run package
+        env:
+          PKG_HOWTOS_LOCATION: aws
+          PKG_HOWTOS_PATH: ${{ github.ref_name }}
+
+      - name: Upload artifacts (GitHub Pages)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: workflow-howtos-github
+          path: public-github/
+          retention-days: 1
+
+      - name: Upload artifacts (AWS s3 CDN)
+        if: ${{ startsWith(github.ref_name, env.RELEASE_BRANCH_PREFIX) }}
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: workflow-howtos-aws
+          path: public-aws/
+          retention-days: 1
+
+  publish-gh:
+    name: Publish HOWTOs (GitHub Pages)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow-howtos-github
+          path: public-github/
+
+      - name: Publish
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages  # Target branch to deploy to
+          folder: public-github  # Source folder to deploy
+          target-folder: ${{ github.ref_name }}  # Target folder to deploy to
+
+
+  publish-aws:
+    if: ${{ startsWith(github.ref_name, 'workspace/') }}
+    name: Publish HOWTOs (AWS s3 CDN)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow-howtos-aws
+          path: public-aws/
+
+      - name: Publish
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          # The bucket name should match the https host name in
+          # scripts/package.js:URLBaseMap['aws'].
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Target bucket to deploy to
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: public-aws  # Source folder to deploy
+          DEST_DIR: workspace-starter/${{ github.ref_name }}  # Target folder to deploy to
