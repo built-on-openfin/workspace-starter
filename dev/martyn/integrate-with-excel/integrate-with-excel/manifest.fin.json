@@ -52,7 +52,7 @@
   "appAssets": [
     {
       "alias": "excel-interop-example.xlsx",
-      "version": "0.0.3",
+      "version": "0.0.5",
       "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrate-with-excel/integrate-with-excel/assets/excel-interop-example.zip",
       "target": "excel-interop-example.xlsx",
       "forceDownload": true
@@ -63,6 +63,12 @@
       "id": "integrate-with-excel",
       "title": "Integrate With Excel",
       "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrate-with-excel/integrate-with-excel/favicon.ico"
+    },
+    "appProvider": {
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrate-with-excel/integrate-with-excel/apps.json",
+      "includeCredentialOnSourceRequest": "include",
+      "cacheDurationInMinutes": 1,
+      "appAssetTag": "appasset"
     },
     "integrationProvider": {
       "integrations": [
@@ -78,37 +84,41 @@
                 "title": "Excel Interop Example",
                 "description": "Demonstrate interop with Excel workbook",
                 "workbook": "excel-interop-example.xlsx",
-                "worksheet": "Sheet1",
-                "cellHandlers": [
+                "worksheets": [
                   {
-                    "cell": "$B$3",
-                    "type": "instrument",
-                    "color": "red"
-                  },
-                  {
-                    "cell": "$B$4",
-                    "type": "instrument",
-                    "color": "orange"
-                  },
-                  {
-                    "cell": "$B$5",
-                    "type": "instrument",
-                    "color": "yellow"
-                  },
-                  {
-                    "cell": "$B$6",
-                    "type": "instrument",
-                    "color": "green"
-                  },
-                  {
-                    "cell": "$B$7",
-                    "type": "instrument",
-                    "color": "blue"
-                  },
-                  {
-                    "cell": "$B$8",
-                    "type": "instrument",
-                    "color": "purple"
+                    "name": "Sheet1",
+                    "cellHandlers": [
+                      {
+                        "cell": "$B$3",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "green"
+                      },
+                      {
+                        "cell": "$B$4",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "purple"
+                      },
+                      {
+                        "cell": "$B$5",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "orange"
+                      },
+                      {
+                        "cell": "$B$6",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "red"
+                      },
+                      {
+                        "cell": "$B$7",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "pink"
+                      },
+                      {
+                        "cell": "$B$8",
+                        "types": ["instrument", "fdc3.instrument"],
+                        "contextGroup": "yellow"
+                      }
+                    ]
                   }
                 ]
               }
