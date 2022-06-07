@@ -1,11 +1,14 @@
 import {
+  App,
   CLIDispatchedSearchResult, CLIProvider,
   CLISearchListenerRequest,
   CLISearchListenerResponse,
-  CLISearchResponse, Home, HomeSearchResponse
+  CLISearchResponse, CLITemplate, Home, HomeSearchResponse, HomeSearchResult
 } from "@openfin/workspace";
 import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
+import { getApps } from "./apps";
+import { launch } from "./launch";
 
 let isHomeRegistered = false;
 
@@ -25,6 +28,8 @@ export async function register() {
 
   let lastResponse: CLISearchListenerResponse;
 
+  const apps = await getApps();
+
   const onUserInput = async (
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
@@ -36,7 +41,10 @@ export async function register() {
     lastResponse = response;
     lastResponse.open();
 
-    let appSearchEntries = await getAppSearchEntries();
+    let appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
+    if (query && query.length >= 3) {
+      appSearchEntries = appSearchEntries.filter(app => app.title.toLowerCase().includes(query.toLowerCase()));
+    }
 
     const searchResults: HomeSearchResponse = {
       results: appSearchEntries,
@@ -60,6 +68,10 @@ export async function register() {
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
       const handled = await itemSelection(result, lastResponse);
+
+      if (!handled) {
+        await launch(result.data);
+      }
 
       if (!handled) {
         console.warn(`Result not handled ${result.key}`, result.data);
@@ -99,3 +111,51 @@ export async function deregister() {
   }
 }
 
+function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
+  const appResults: HomeSearchResult[] = [];
+  if (Array.isArray(apps)) {
+    for (let i = 0; i < apps.length; i++) {
+      const action = { name: "Launch View", hotkey: "enter" };
+      const entry: any = {
+        key: apps[i].appId,
+        title: apps[i].title,
+        data: apps[i],
+        template: CLITemplate.Plain,
+      };
+
+      if (apps[i].manifestType === "view") {
+        entry.label = "View";
+        entry.actions = [action];
+      }
+      if (apps[i].manifestType === "snapshot") {
+        entry.label = "Snapshot";
+        action.name = "Launch Snapshot";
+        entry.actions = [action];
+      }
+      if (apps[i].manifestType === "manifest") {
+        entry.label = "App";
+        action.name = "Launch App";
+        entry.actions = [action];
+      }
+      if (apps[i].manifestType === "external") {
+        action.name = "Launch Native App";
+        entry.actions = [action];
+        entry.label = "Native App";
+      }
+
+      if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+        entry.icon = apps[i].icons[0].src;
+      }
+
+      if (apps[i].description !== undefined) {
+        entry.description = apps[i].description;
+        entry.shortDescription = apps[i].description;
+        entry.template = CLITemplate.SimpleText;
+        entry.templateContent = apps[i].description;
+      }
+
+      appResults.push(entry);
+    }
+  }
+  return appResults;
+}

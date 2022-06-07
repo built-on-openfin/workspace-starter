@@ -17,17 +17,16 @@
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
+    "@openfin/core": "^25.70.3",
     "@openfin/excel": "^1.3.0",
     "@openfin/workspace": "7.3.10",
-    "@openfin/workspace-platform": "7.3.10",
-    "chart.js": "^3.7.1",
-    "csstype": "^3.0.11"
+    "@openfin/workspace-platform": "7.3.10"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.33",
     "express": "^4.17.1",
-    "openfin-adapter": "^21.64.9",
+    "openfin-adapter": "^23.68.3",
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4",
     "webpack": "^5.51.1",

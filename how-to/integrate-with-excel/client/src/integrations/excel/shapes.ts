@@ -1,16 +1,24 @@
-export interface ExcelAsset {
-    title: string;
-    description: string;
-    workbook: string;
-    worksheet: string;
+export interface ExcelWorksheetSettings {
+    name: string;
     cellHandlers?: {
         cell: string;
-        type: "instrument";
-        color:  'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple'
+        types: string[];
+        contextGroup:  "green" | "purple" | "orange" | "red" | "pink" | "yellow"
     }[];
 }
 
+export interface ExcelWorkbook {
+
+}
+
+export interface ExcelAssetSettings {
+    title: string;
+    description: string;
+    workbook: string;
+    worksheets: ExcelWorksheetSettings[];
+}
+
 export interface ExcelSettings {
-    assets: ExcelAsset[];
+    assets: ExcelAssetSettings[];
 }
 

@@ -1,4 +1,4 @@
-import { fin } from 'openfin-adapter/src/mock';
+import { fin } from '@openfin/core';
 import { CustomSettings } from './shapes';
 
 let settings:CustomSettings;

@@ -7,7 +7,15 @@ interface HomeProvider {
     hidden?: boolean,
 }
 
+interface AppProvider {
+    appsSourceUrl: string,
+    includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
+    cacheDurationInMinutes?: number,
+    appAssetTag?: string
+}
+
 export interface CustomSettings {
-    homeProvider?: HomeProvider
-    integrationProvider?:IntegrationProvider
+    homeProvider?: HomeProvider;
+    appProvider?: AppProvider;
+    integrationProvider?:IntegrationProvider;
 }
