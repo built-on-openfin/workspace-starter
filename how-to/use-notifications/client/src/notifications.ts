@@ -20,12 +20,6 @@ const updatableNotifications = {};
 let updatableNotificationTimer;
 let activePlatform;
 
-const platform = {
-    id: 'workspace-starter-notification-platform',
-    icon: 'http://localhost:8080/images/icon-dot.png',
-    title: 'Custom Platform'
-};
-
 window.addEventListener('DOMContentLoaded', async () => {
     console.log("Script loaded");
 
@@ -43,6 +37,14 @@ async function initDom() {
 
     loggingShowHide();
 
+    const customSettings = await getCustomSettings();
+
+    const platform = {
+        id: 'workspace-starter-notification-platform',
+        icon: customSettings.customProviderIcon,
+        title: 'Custom Platform'
+    };
+
     const btnNotificationSimple = document.querySelector("#btnNotificationSimple");
     btnNotificationSimple.addEventListener("click", async () => showSimpleNotification())
 
@@ -57,6 +59,9 @@ async function initDom() {
 
     const btnNotificationCustom = document.querySelector("#btnNotificationCustom");
     btnNotificationCustom.addEventListener("click", async () => showCustomNotification())
+
+    const btnNotificationWithSound = document.querySelector("#btnNotificationWithSound");
+    btnNotificationWithSound.addEventListener("click", async () => showSoundNotification(customSettings.notificationSoundUrl))
 
     const btnPlatformRegister = document.querySelector("#btnPlatformRegister");
     btnPlatformRegister.addEventListener("click", async () => {
@@ -328,6 +333,26 @@ async function showCustomNotification() {
     await create(notification);
 }
 
+async function showSoundNotification(notificationSoundUrl: string) {
+    const notification: NotificationOptions = {
+        title: "Sound Notification",
+        body: "This is a notification with sound 🔉",
+        toast: "transient",
+        category: "default",
+        template: "markdown",
+        id: crypto.randomUUID(),
+        platform: activePlatform
+    }
+
+    await create(notification);
+    await playNotification(notificationSoundUrl);
+}
+
+async function playNotification(notificationSoundUrl: string) {
+    const audio = new Audio(notificationSoundUrl);
+    audio.play();
+}
+
 function createContainer(containerType: "column" | "row", children: TemplateFragment[], style?: CSS.Properties): ContainerTemplateFragment {
     return {
         type: "container",
@@ -383,4 +408,16 @@ export function createTable(tableData: string[][]): TemplateFragment {
     }
 
     return createContainer("row", cells, { display: "grid", gridTemplateColumns: colSpans.map(s => `${s}fr`).join(" "), marginBottom: "10px", overflow: "auto" });
+}
+
+async function getCustomSettings() {
+    const app = await fin.Application.getCurrent();
+    const manifest: OpenFin.Manifest & {
+        customSettings?: {
+            customProviderIcon: string;
+            notificationSoundUrl: string;
+        }
+    } = await app.getManifest();
+
+    return manifest.customSettings;
 }

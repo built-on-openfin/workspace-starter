@@ -23,6 +23,10 @@
     "icon": "http://localhost:8080/favicon.ico",
     "name": "Use Notifications - v7.0",
     "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "customProviderIcon": "http://localhost:8080/images/icon-dot.png",
+    "notificationSoundUrl": "http://localhost:8080/assets/notification.mp3"
   }
 }
   
