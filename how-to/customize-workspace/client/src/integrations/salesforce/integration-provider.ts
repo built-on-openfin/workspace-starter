@@ -107,7 +107,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
    * @returns The list of application entries.
    */
   public async getAppSearchEntries(integration: Integration<SalesforceSettings>): Promise<HomeSearchResult[]> {
-    const results = [];
+    const results: HomeSearchResult[] = [];
     if (integration?.data?.orgUrl) {
       results.push({
         actions: [{ name: "Browse", hotkey: "enter" }],
@@ -150,8 +150,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
       if (result.data?.query) {
         const results = await this.getSearchResults(
           integration,
-          result.data?.query,
-          result.data?.filters,
+          result.data?.query as string,
+          result.data?.filters as CLIFilter[],
           lastResponse
         );
         if (lastResponse) {

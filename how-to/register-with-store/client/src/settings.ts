@@ -1,6 +1,7 @@
+import { CustomThemes } from "@openfin/workspace-platform";
+import { CustomPaletteSet } from "@openfin/workspace-platform/common/src/api/theming";
 import { fin } from "openfin-adapter/src/mock";
 import { CustomSettings } from "./shapes";
-import { CustomThemes } from "@openfin/workspace-platform";
 
 let settings: CustomSettings;
 
@@ -24,16 +25,16 @@ export async function getSettings(): Promise<CustomSettings> {
   return settings;
 }
 
-function validatePalette(themePalette, themeLabel: string): any {
-  let palette = {};
+function validatePalette(themePalette: CustomPaletteSet, themeLabel: string): CustomPaletteSet {
+  const palette: Partial<CustomPaletteSet> = {};
 
-  let keys = Object.keys(themePalette);
+  const keys = Object.keys(themePalette);
 
-  keys.forEach((key) => {
+  for (const key of keys) {
     if (themePalette[key] !== undefined && themePalette[key] !== null && themePalette[key].trim().length > 0) {
       palette[key] = themePalette[key];
     }
-  });
+  }
 
   const brandPrimaryKey = "brandPrimary";
   const brandPrimaryValue = "#504CFF";
@@ -63,16 +64,16 @@ function validatePalette(themePalette, themeLabel: string): any {
     palette[backgroundPrimaryKey] = backgroundPrimaryValue;
   }
 
-  return palette;
+  return palette as CustomPaletteSet;
 }
 
 export function validateThemes(themes: CustomThemes): CustomThemes {
-  let validatedThemes = [];
+  const validatedThemes: CustomThemes = [];
 
   if (Array.isArray(themes)) {
     for (let i = 0; i < themes.length; i++) {
-      let themeToValidate = themes[i];
-      let palette = validatePalette(themeToValidate.palette, themeToValidate.label);
+      const themeToValidate = themes[i];
+      const palette = validatePalette(themeToValidate.palette, themeToValidate.label);
       if (palette !== null) {
         themeToValidate.palette = palette;
       } else {

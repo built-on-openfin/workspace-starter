@@ -1,10 +1,9 @@
-import { create, NotificationOptions, IndicatorColor } from "@openfin/workspace/notifications";
 import { getCurrentSync, Page } from "@openfin/workspace-platform";
-import { PlatformStorage } from "./platform-storage";
-import { getSettings } from "./settings";
+import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
 import { launchPage } from "./browser";
-import { getWorkspace } from "./workspace";
 import { requestResponse } from "./endpoint";
+import { getSettings } from "./settings";
+import { getWorkspace } from "./workspace";
 
 let shareRegistered = false;
 
@@ -16,13 +15,24 @@ export interface IShareCustomData {
   bounds?: OpenFin.Bounds;
 }
 
-interface IShareEntry {
-  type: string;
-  data: any;
+type IShareEntry = IShareEntryPage | IShareEntryWorkspace | IShareEntryUnknown;
+
+interface IShareEntryPage {
+  type: "page";
+  data: { page: Page; bounds: OpenFin.Bounds };
+}
+
+interface IShareEntryWorkspace {
+  type: "workspace";
+  data: { snapshot: string };
+}
+
+interface IShareEntryUnknown {
+  type: "other";
 }
 
 async function notifyOfSuccessfulLoad() {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   const notification: NotificationOptions = {
     expires: new Date(Date.now() + 30000),
@@ -53,20 +63,15 @@ async function notifyOfSuccessfulLoad() {
     title: "Share Request Applied",
     template: "markdown"
   };
-  create(notification);
+  await create(notification);
 }
 
 async function notifyOfSuccess(url: string, expiryInHours: number) {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   const notification: NotificationOptions = {
     expires: new Date(Date.now() + 30000),
-    body:
-      "The share request you raised has been copied to the **clipboard** and will be valid for " +
-      expiryInHours +
-      " hours. \n Share Url: \n * **" +
-      url +
-      "**",
+    body: `The share request you raised has been copied to the **clipboard** and will be valid for ${expiryInHours} hours. \n Share Url: \n * **${url}**`,
     buttons: [
       {
         submit: false,
@@ -93,11 +98,11 @@ async function notifyOfSuccess(url: string, expiryInHours: number) {
     title: "Share Request Raised",
     template: "markdown"
   };
-  create(notification);
+  await create(notification);
 }
 
 async function notifyOfFailure(body: string) {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   const notification: NotificationOptions = {
     expires: new Date(Date.now() + 30000),
@@ -128,11 +133,11 @@ async function notifyOfFailure(body: string) {
     title: "Share Request Failed",
     template: "markdown"
   };
-  create(notification);
+  await create(notification);
 }
 
 async function notifyOfExpiry() {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   const notification: NotificationOptions = {
     expires: new Date(Date.now() + 30000),
@@ -163,7 +168,7 @@ async function notifyOfExpiry() {
     title: "Share Request Expired",
     template: "markdown"
   };
-  create(notification);
+  await create(notification);
 }
 
 async function saveSharedPage(data: IShareCustomData) {
@@ -173,7 +178,7 @@ async function saveSharedPage(data: IShareCustomData) {
     page = data.page;
     bounds = data.bounds;
   } else {
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
     page = await targetWindow.getPage(data.pageId);
     bounds = await targetWindow.openfinWindow.getBounds();
@@ -192,10 +197,10 @@ async function saveSharedWorkspace(workspaceId?: string) {
   let snapshot = null;
 
   if (workspaceId === undefined) {
-    let platform = getCurrentSync();
+    const platform = getCurrentSync();
     snapshot = await platform.getSnapshot();
   } else {
-    let savedWorkspace = await getWorkspace(workspaceId);
+    const savedWorkspace = await getWorkspace(workspaceId);
     if (savedWorkspace !== null) {
       snapshot = savedWorkspace.snapshot;
     }
@@ -217,12 +222,12 @@ async function saveSharedWorkspace(workspaceId?: string) {
 async function saveShareRequest(payload) {
   try {
     const expiryInHours = 24;
-    let response = await requestResponse<any, { url: string; id?: string }>("share-save", payload);
+    const response = await requestResponse<unknown, { url: string; id?: string }>("share-save", payload);
     let id = response.id;
     if (id === undefined) {
-      let indexOfId = response.url.lastIndexOf("/");
+      const indexOfId = response.url.lastIndexOf("/");
       if (indexOfId !== -1) {
-        id = response.url.substring(indexOfId + 1);
+        id = response.url.slice(indexOfId + 1);
       }
     }
 
@@ -231,15 +236,15 @@ async function saveShareRequest(payload) {
       return;
     }
 
-    let platform = getCurrentSync();
-    let platformInfo = await platform.Application.getInfo();
-    let finsLink;
+    const platform = getCurrentSync();
+    const platformInfo = await platform.Application.getInfo();
+    let finsLink: string;
 
-    if (platformInfo.manifestUrl.indexOf("http") === 0) {
-      finsLink = platformInfo.manifestUrl.replace("http", "fin") + "?$$shareId=" + id;
+    if (platformInfo.manifestUrl.startsWith("http")) {
+      finsLink = `${platformInfo.manifestUrl.replace("http", "fin")}?$$shareId=${id}`;
     } else {
       console.error(
-        "We do not support file based manifest launches. The manifest has to be served over http/https: ",
+        "We do not support file based manifest launches. The manifest has to be served over http/https:",
         platformInfo.manifestUrl
       );
       await notifyOfFailure("The share request you raised could not be generated.");
@@ -258,15 +263,15 @@ async function saveShareRequest(payload) {
 
 async function loadSharedEntry(id: string) {
   try {
-    let shareEntry = await requestResponse<{ id: string }, IShareEntry>("share-get", { id });
+    const shareEntry = await requestResponse<{ id: string }, IShareEntry>("share-get", { id });
     if (shareEntry !== undefined && shareEntry !== null) {
       if (shareEntry.type === "page") {
         await launchPage(shareEntry.data.page, shareEntry.data.bounds);
       } else if (shareEntry.type === "workspace") {
-        let platform = getCurrentSync();
+        const platform = getCurrentSync();
         await platform.applySnapshot(shareEntry.data.snapshot);
       } else {
-        console.warn("Share entry of unknown type specified: " + shareEntry.type);
+        console.warn(`Share entry of unknown type specified: ${shareEntry.type}`);
         await notifyOfFailure("The specified share link is not supported and cannot be loaded.");
         return;
       }
@@ -280,30 +285,31 @@ async function loadSharedEntry(id: string) {
   }
 }
 
-async function queryOnLaunch(userAppConfigArgs) {
-  console.log("Received during startup: ", userAppConfigArgs);
+async function queryOnLaunch(userAppConfigArgs?: { shareId: string }) {
+  console.log("Received during startup:", userAppConfigArgs);
   if (userAppConfigArgs?.shareId !== undefined) {
-    loadSharedEntry(userAppConfigArgs?.shareId);
+    await loadSharedEntry(userAppConfigArgs?.shareId);
   }
 }
 
-async function queryWhileRunning(event) {
-  if (event?.userAppConfigArgs !== undefined && event?.userAppConfigArgs?.shareId !== undefined) {
+async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string } }) {
+  if (event?.userAppConfigArgs?.shareId !== undefined) {
     console.log(event.userAppConfigArgs);
     await loadSharedEntry(event.userAppConfigArgs.shareId);
   }
 }
 
 async function listenForShareRequests() {
+  // eslint-disable-next-line @typescript-eslint/dot-notation
   fin["desktop"].main(queryOnLaunch);
-  let platform = getCurrentSync();
-  platform.Application.addListener("run-requested", queryWhileRunning);
+  const platform = getCurrentSync();
+  await platform.Application.addListener("run-requested", queryWhileRunning);
 }
 
 export async function register() {
-  if (shareRegistered === false) {
+  if (!shareRegistered) {
     shareRegistered = true;
-    listenForShareRequests();
+    await listenForShareRequests();
   } else {
     console.warn("Share cannot be registered more than once.");
   }
@@ -312,8 +318,8 @@ export async function register() {
 export async function deregister() {
   if (shareRegistered) {
     // any cleanup logic can go here
-    let platform = getCurrentSync();
-    platform.Application.removeListener("run-requested", queryWhileRunning);
+    const platform = getCurrentSync();
+    await platform.Application.removeListener("run-requested", queryWhileRunning);
   } else {
     console.warn("Share isn't registered yet so cannot be deregistered.");
   }
@@ -321,20 +327,20 @@ export async function deregister() {
 
 export async function showShareOptions(payload: { windowIdentity: OpenFin.Identity; x: number; y: number }) {
   if (shareRegistered) {
-    console.log("Share called with payload: ", payload);
+    console.log("Share called with payload:", payload);
 
-    let windowIdentity = payload.windowIdentity;
+    const windowIdentity = payload.windowIdentity;
     let pageId;
 
-    let platformWorkspace = getCurrentSync();
-    let currentWindow = platformWorkspace.Browser.wrapSync(windowIdentity);
-    let currentPages = await currentWindow.getPages();
+    const platformWorkspace = getCurrentSync();
+    const currentWindow = platformWorkspace.Browser.wrapSync(windowIdentity);
+    const currentPages = await currentWindow.getPages();
 
-    currentPages.forEach((page) => {
-      if (page.isActive === true) {
+    for (const page of currentPages) {
+      if (page.isActive) {
         pageId = page.pageId;
       }
-    });
+    }
 
     const template: OpenFin.MenuItemTemplate[] = [
       {
@@ -347,17 +353,15 @@ export async function showShareOptions(payload: { windowIdentity: OpenFin.Identi
         data: { identity: {}, type: "workspace" }
       }
     ];
-    currentWindow.openfinWindow
+    await currentWindow.openfinWindow
       .showPopupMenu({ template, x: payload.x, y: payload.y } as OpenFin.ShowPopupMenuOptions)
       .then(async (r) => {
         if (r.result === "closed") {
           console.log("share menu dismissed.");
-        } else {
-          if (r.data.type === "page") {
-            await saveSharedPage(r.data.identity);
-          } else if (r.data.type === "workspace") {
-            await saveSharedWorkspace();
-          }
+        } else if (r.data.type === "page") {
+          await saveSharedPage(r.data.identity as IShareCustomData);
+        } else if (r.data.type === "workspace") {
+          await saveSharedWorkspace();
         }
       });
   } else {
@@ -371,7 +375,7 @@ export async function share(options?: IShareCustomData) {
       console.log("A request to share the workspace has been raised.");
       await saveSharedWorkspace(options?.workspaceId);
     } else {
-      console.log("Share called with payload: ", options);
+      console.log("Share called with payload: =", options);
       await saveSharedPage(options);
     }
   } else {

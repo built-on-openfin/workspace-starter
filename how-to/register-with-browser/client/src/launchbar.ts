@@ -1,14 +1,14 @@
-import { fin } from "openfin-adapter/src/mock";
 import {
-  BrowserCreateWindowRequest,
   BrowserButtonType,
+  BrowserCreateWindowRequest,
   BrowserWindowModule,
   getCurrentSync,
   Page,
+  PageLayout,
   ToolbarOptions,
-  WorkspacePlatformModule,
-  PageLayout
+  WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import { fin } from "openfin-adapter/src/mock";
 import { createPageWithLayout, createViewIdentity } from "./browser";
 
 const platform: WorkspacePlatformModule = getCurrentSync();
@@ -106,25 +106,25 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  (fin.me as OpenFin.Window).showDeveloperTools();
+  await (fin.me as OpenFin.Window).showDeveloperTools();
 
-  /************************ CREATE BROWSER WINDOW WITH VIEW ************************/
+  // CREATE BROWSER WINDOW WITH VIEW
   const createBrowserWinBtn = document.querySelector("#launch-browser-window");
   createBrowserWinBtn.addEventListener("click", createBrowserWindow);
 
-  /************************ CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON ************************/
+  // CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON
   const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
   customToolbarBtn.addEventListener("click", createCustomToolbarWindow);
 
-  /************************ CREATE BROWSER WINDOW WITH SINGLE PAGE AND NO TAB ************************/
+  // CREATE BROWSER WINDOW WITH SINGLE PAGE AND NO TAB
   const singlePageBrowserWinNoTabBtn = document.querySelector("#launch-nopagetab-browser-window");
   singlePageBrowserWinNoTabBtn.addEventListener("click", createSinglePageNoTabWindow);
 
-  /************************ CREATE BROWSER WINDOW WITH MULTIPLE PAGES ************************/
+  // CREATE BROWSER WINDOW WITH MULTIPLE PAGES
   const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");
   multiPageBrowserWinBtn.addEventListener("click", createMultiPageWindow);
 
-  /************************ GET ALL BROWSER PAGES ************************/
+  // GET ALL BROWSER PAGES
   const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
   getBrowserPagesBtn.addEventListener("click", async () => {
     const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
@@ -140,9 +140,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  /************************ QUIT LAUNCHER / BROWSER ************************/
+  // QUIT LAUNCHER / BROWSER
   const quitBtn = document.querySelector("#quit");
-  quitBtn.addEventListener("click", () => {
-    platform.quit();
+  quitBtn.addEventListener("click", async () => {
+    await platform.quit();
   });
 });

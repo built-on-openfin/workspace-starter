@@ -9,25 +9,25 @@ import { getSettings } from "./settings";
 
 let sfConn: SalesforceConnection;
 
-export type SalesforceBatchRequest = {
+export interface SalesforceBatchRequest {
   batchRequests: SalesforceBatchRequestItem[];
   haltOnError: boolean;
-};
+}
 
-export type SalesforceBatchRequestItem = {
+export interface SalesforceBatchRequestItem {
   method: string;
   url: string;
-};
+}
 
-export type SalesforceBatchResponse = {
+export interface SalesforceBatchResponse {
   hasErrors: boolean;
   results: SalesforceBatchResponseItem[];
-};
+}
 
-export type SalesforceBatchResponseItem = {
+export interface SalesforceBatchResponseItem {
   statusCode: number;
   result: unknown;
-};
+}
 
 export type SalesforceAccount = SalesforceRestApiSObject<{
   Industry?: string;
@@ -55,30 +55,30 @@ export type SalesforceContentNote = SalesforceRestApiSObject<{
   TextPreview?: string;
 }>;
 
-export type SalesforceActor = {
+export interface SalesforceActor {
   id: string;
   url: string;
   type: string;
   companyName: string;
   displayName: string;
   name: string;
-};
+}
 
-export type SalesforceTextArea = {
+export interface SalesforceTextArea {
   isRichText: boolean;
   text: string;
-};
+}
 
-export type SalesforceFeedItem = {
+export interface SalesforceFeedItem {
   id: string;
   url: string;
   type: string;
   actor?: SalesforceActor;
   body?: SalesforceTextArea;
   header?: SalesforceTextArea;
-};
+}
 
-export type SalesforceFeedElementPage = {
+export interface SalesforceFeedElementPage {
   currentPageToken: string;
   currentPageUrl: string;
   elements: SalesforceFeedItem[];
@@ -87,15 +87,14 @@ export type SalesforceFeedElementPage = {
   nextPageUrl: string;
   updatesToken: string;
   updatesUrl: string;
-};
+}
 
 export function getConnection(): SalesforceConnection {
   return sfConn;
 }
 
-export const getObjectUrl = (objectId: string, salesforceOrgOrigin: string): string => {
-  return `${salesforceOrgOrigin}/${objectId}`;
-};
+export const getObjectUrl = (objectId: string, salesforceOrgOrigin: string): string =>
+  `${salesforceOrgOrigin}/${objectId}`;
 
 export async function getSearchResults(
   query: string,
@@ -111,7 +110,7 @@ export async function getSearchResults(
     ["Task", taskFieldSpec],
     ["ContentNote", contentNoteFieldSpec]
   ]);
-  let fieldSpec = [...fieldSpecMap]
+  const fieldSpec = [...fieldSpecMap]
     .filter((x) => {
       if (selectedObjects?.length > 0) {
         return selectedObjects.includes(x[0]);
@@ -195,5 +194,5 @@ export async function connectToSalesforce(): Promise<void> {
 function escapeQuery(query: string): string {
   // There are some reserved characters for queries so we need to escape them
   // https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl_find.htm#i1423105
-  return query.replace(/[?&|!()^~*:"'+{}\-[\]\\]/gm, "\\$&");
+  return query.replace(/[!"&'()*+:?[\\\]^{|}~-]/gm, "\\$&");
 }

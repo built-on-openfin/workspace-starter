@@ -6,10 +6,10 @@ import {
   type HomeSearchResponse,
   type HomeSearchResult
 } from "@openfin/workspace";
+import * as emoji from "node-emoji";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
 import type { EmojiSettings } from "./shapes";
 import { getEmojiTemplate } from "./templates";
-import * as emoji from "node-emoji";
 
 /**
  * Implement the integration provider for Emojis.
@@ -71,9 +71,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
    * @returns The list of application entries.
    */
   public async getAppSearchEntries(integration: Integration<EmojiSettings>): Promise<HomeSearchResult[]> {
-    const results = [];
-
-    return results;
+    return [];
   }
 
   /**
@@ -88,6 +86,8 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
     result: CLIDispatchedSearchResult,
     lastResponse: CLISearchListenerResponse
   ): Promise<boolean> {
+    const data: { url?: string } = result.data;
+
     if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION && result.data.emoji) {
       await fin.Clipboard.writeText({ data: result.data.emoji });
       return true;
@@ -96,10 +96,10 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
       return true;
     } else if (
       result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION &&
-      result.data.url &&
+      data.url &&
       this._integrationManager.openUrl
     ) {
-      await this._integrationManager.openUrl(result.data.url);
+      await this._integrationManager.openUrl(data.url);
       return true;
     }
 
@@ -153,10 +153,10 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
   /**
    * Create a search result.
    * @param key The key for the emoji.
-   * @param emoji The emoji symbol.
+   * @param emojiName The emoji symbol.
    * @returns The search result.
    */
-  private createResult(key: string, emoji: string): HomeSearchResult {
+  private createResult(key: string, emojiName: string): HomeSearchResult {
     return {
       key: `emoji-${key}`,
       title: key,
@@ -168,7 +168,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
       data: {
         providerId: EmojiIntegrationProvider._PROVIDER_ID,
         key,
-        emoji,
+        emoji: emojiName,
         url: `https://emojipedia.org/${key}/`
       },
       template: CLITemplate.Custom,
@@ -184,7 +184,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
           key,
           emojiTitle: "Emoji",
           copyEmojiTitle: "Copy Emoji",
-          emoji,
+          emoji: emojiName,
           detailsTitle: "Further Details"
         }
       }

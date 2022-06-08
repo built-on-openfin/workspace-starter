@@ -1,12 +1,13 @@
+import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { ChannelProvider } from "openfin-adapter";
+import Transport from "openfin-adapter/src/transport/transport";
 import { PlatformInteropBroker } from "./interopbroker";
-
-import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
 import { getSettings, validateThemes } from "./settings";
 
 export async function init() {
   console.log("Initialising platform");
-  let settings = await getSettings();
-  let browser: BrowserInitConfig = {};
+  const settings = await getSettings();
+  const browser: BrowserInitConfig = {};
 
   if (settings.browserProvider !== undefined) {
     browser.defaultWindowOptions = {
@@ -20,12 +21,15 @@ export async function init() {
       }
     };
 
-    browser.interopOverride = async (InteropBroker, provider, options, ...args) => {
-      return new PlatformInteropBroker(provider, options, ...args);
-    };
+    browser.interopOverride = async (
+      InteropBroker,
+      provider: Transport,
+      options: ChannelProvider,
+      ...args: unknown[]
+    ) => new PlatformInteropBroker(provider, options, ...args);
   }
 
-  console.log("Specifying following browser options: ", browser);
+  console.log("Specifying following browser options:", browser);
   await workspacePlatformInit({
     browser,
     theme: validateThemes(settings?.themeProvider?.themes)

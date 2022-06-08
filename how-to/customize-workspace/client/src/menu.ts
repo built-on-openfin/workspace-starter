@@ -17,7 +17,7 @@ function updateGlobalMenuEntry(
     (menuEntry) => menuEntry.data !== undefined && menuEntry.data.type === dataType
   );
   if (entryIndex === -1) {
-    console.warn("Unable to find global menu with entry type: " + dataType);
+    console.warn(`Unable to find global menu with entry type: ${dataType}`);
   } else {
     switch (action) {
       case "DELETE": {
@@ -27,8 +27,7 @@ function updateGlobalMenuEntry(
       case "REPLACE-LABEL": {
         if (entry === undefined || entry.label === undefined) {
           console.warn(
-            "Asked to replace label of menu entry but not provided an entry to grab a label from or given an empty label. Target menu data type: " +
-              dataType
+            `Asked to replace label of menu entry but not provided an entry to grab a label from or given an empty label. Target menu data type: ${dataType}`
           );
         } else {
           menuEntries[entryIndex].label = entry.label;

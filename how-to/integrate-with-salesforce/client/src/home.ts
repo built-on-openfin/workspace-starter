@@ -1,20 +1,19 @@
+import { ConnectionError } from "@openfin/salesforce";
 import {
-  Action,
-  Home,
+  CLIDispatchedSearchResult,
+  CLIFilter,
+  CLIFilterOptionType,
   CLIProvider,
   CLISearchListenerRequest,
-  CLIFilter,
-  CLITemplate,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLIDispatchedSearchResult,
-  CLIFilterOptionType,
+  CLISearchResultContact,
+  CLISearchResultList,
   CLISearchResultPlain,
   CLISearchResultSimpleText,
-  CLISearchResultContact,
-  CLISearchResultList
+  CLITemplate,
+  Home
 } from "@openfin/workspace";
-import { getSettings } from "./settings";
 import { launchView } from "./browser";
 import {
   connectToSalesforce,
@@ -23,12 +22,12 @@ import {
   getSearchResults,
   SalesforceAccount,
   SalesforceContact,
+  SalesforceContentNote,
   SalesforceFeedItem,
-  SalesforceTask,
-  SalesforceContentNote
+  SalesforceTask
 } from "./salesforce";
+import { getSettings } from "./settings";
 import { SalesforceResultData } from "./shapes";
-import { ConnectionError } from "@openfin/salesforce";
 
 const BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
 const PROVIDER_ID = "integrate-with-salesforce";
@@ -37,23 +36,23 @@ const OBJECTS_FILTER_ID = "objects";
 
 function getSearchFilters(objects: string[]): CLIFilter[] {
   if (Array.isArray(objects)) {
-    let filters: CLIFilter[] = [];
-    let uniqueObjects = [...new Set(objects.sort())];
-    let objectFilter: CLIFilter = {
+    const filters: CLIFilter[] = [];
+    const uniqueObjects = [...new Set(objects.sort())];
+    const objectFilter: CLIFilter = {
       id: OBJECTS_FILTER_ID,
       title: "Objects",
       type: CLIFilterOptionType.MultiSelect,
       options: []
     };
 
-    uniqueObjects.forEach((object) => {
+    for (const object of uniqueObjects) {
       if (Array.isArray(objectFilter.options)) {
         objectFilter.options.push({
           value: object,
           isSelected: false
         });
       }
-    });
+    }
 
     filters.push(objectFilter);
     return filters;
@@ -80,7 +79,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
 
   // Return default browse result if query less than minimum char length or starts with /
   const searchQuery = query.trim();
-  if (searchQuery.length < queryMinLength || /^\//.test(searchQuery)) {
+  if (searchQuery.length < queryMinLength || searchQuery.startsWith("/")) {
     return { results: [browseResult] };
   }
 
@@ -98,7 +97,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
       const objectsFilter = filters.find((x) => x.id === OBJECTS_FILTER_ID);
       if (objectsFilter) {
         selectedObjects = (Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options])
-          .filter((x) => !!x.isSelected)
+          .filter((x) => Boolean(x.isSelected))
           .map((x) => (x.value === "Note" ? "ContentNote" : x.value));
       }
     }
@@ -119,7 +118,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
     return { results: [] };
   }
 
-  let results = searchResults.map((searchResult) => {
+  const results = searchResults.map((searchResult) => {
     if ("Website" in searchResult) {
       return {
         actions: [{ name: "View", hotkey: "enter" }],
@@ -128,7 +127,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
         title: searchResult.Name,
         icon: iconMap.account,
         data: {
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.Id, orgUrl)
         },
         template: CLITemplate.Contact,
         templateContent: {
@@ -151,7 +150,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
         title: searchResult.Name,
         icon: iconMap.contact,
         data: {
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.Id, orgUrl)
         },
         template: CLITemplate.Contact,
         templateContent: {
@@ -175,7 +174,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
         title: searchResult.Subject,
         icon: iconMap.task,
         data: {
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.Id, orgUrl)
         },
         template: CLITemplate.List,
         templateContent: [
@@ -191,7 +190,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
         title: searchResult.Title,
         icon: iconMap.note,
         data: {
-          pageUrl: getObjectUrl(searchResult.Id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.Id, orgUrl)
         },
         template: CLITemplate.List,
         templateContent: [
@@ -207,7 +206,7 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
         title: searchResult.actor?.displayName,
         icon: iconMap.chatter,
         data: {
-          pageUrl: getObjectUrl(searchResult.id, salesforceConnection.orgUrl)
+          pageUrl: getObjectUrl(searchResult.id, orgUrl)
         } as SalesforceResultData,
         template: CLITemplate.Contact,
         templateContent: {
@@ -221,13 +220,10 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
           ]
         }
       } as CLISearchResultContact;
-    } else {
-      // in this case we are only searching for accounts, contacts, tasks, content notes and chatter
-      return undefined;
     }
   });
 
-  const filteredResults = results.filter(Boolean) as CLISearchResultContact<Action>[];
+  const filteredResults = results.filter(Boolean) as CLISearchResultContact[];
   const objects = searchResults.map((result) => ("attributes" in result ? result.attributes.type : "Chatter"));
 
   return {
@@ -240,18 +236,18 @@ async function getResults(query?: string, queryMinLength = 3, filters?: CLIFilte
 
 export async function register(): Promise<void> {
   console.log("Initialising home");
-  let settings = await getSettings();
+  const settings = await getSettings();
   const queryMinLength = settings.queryMinLength || 3;
   let lastResponse: CLISearchListenerResponse;
   let query: string;
-  let filters: any;
+  let filters: CLIFilter[];
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
     query = request.query.toLowerCase();
-    if (query.indexOf("/") === 0) {
+    if (query.startsWith("/")) {
       return { results: [] };
     }
 
@@ -261,7 +257,7 @@ export async function register(): Promise<void> {
     }
     lastResponse = response;
     lastResponse.open();
-    let results = await getResults(query, queryMinLength, filters);
+    const results = await getResults(query, queryMinLength, filters);
     return results;
   };
 
@@ -269,17 +265,17 @@ export async function register(): Promise<void> {
     // if the user clicked the reconnect result, reconnect to salesforce and re-run query
     if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
       await connectToSalesforce();
-      let results = await getResults(query, queryMinLength, filters);
+      const results = await getResults(query, queryMinLength, filters);
       lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
       lastResponse.respond(results.results);
-      Home.show();
+      await Home.show();
       return;
     }
 
     // otherwise open the result page url in browser
     const data = result.data as SalesforceResultData;
     if (data !== undefined) {
-      launchView(data.pageUrl);
+      await launchView(data.pageUrl);
     } else {
       console.warn("Unable to execute result without data being passed");
     }
@@ -289,7 +285,7 @@ export async function register(): Promise<void> {
     title: settings.title,
     id: PROVIDER_ID,
     icon: settings.icon,
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection
   };
 
@@ -298,14 +294,13 @@ export async function register(): Promise<void> {
 }
 
 export async function show(): Promise<void> {
-  return Home.show();
+  await Home.show();
 }
 
 export async function hide(): Promise<void> {
-  return Home.hide();
+  await Home.hide();
 }
 
 export async function deregister(): Promise<void> {
-  let settings = await getSettings();
   return Home.deregister(PROVIDER_ID);
 }

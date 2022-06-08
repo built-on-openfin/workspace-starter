@@ -14,7 +14,7 @@ const providerId = "register-with-store-basic";
 
 export async function register() {
   console.log("Initialising the storefront provider.");
-  let provider = await getStoreProvider();
+  const provider = await getStoreProvider();
   try {
     await Storefront.register(provider);
     console.log("Storefront provider initialised.");
@@ -44,12 +44,12 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
     id: providerId,
     title: "Basic Store",
     icon: "http://localhost:8080/favicon.ico",
-    getNavigation: getNavigation,
-    getLandingPage: getLandingPage,
-    getFooter: getFooter,
+    getNavigation,
+    getLandingPage,
+    getFooter,
     getApps,
     launchApp: async (app: App) => {
-      let platform = getCurrentSync();
+      const platform = getCurrentSync();
       await platform.launchApp({ app });
     }
   };
@@ -58,7 +58,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
   console.log("Showing the store navigation.");
 
-  let navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [
+  const navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [
     {
       id: "apps",
       title: "Apps",
@@ -97,7 +97,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 async function getLandingPage(): Promise<StorefrontLandingPage> {
   console.log("Getting the store landing page.");
 
-  let landingPage: StorefrontLandingPage = {
+  const landingPage: StorefrontLandingPage = {
     hero: {
       title: "Custom Hero Title",
       description: "This is a demonstration of the hero section that you can configure for your store.",

@@ -1,5 +1,5 @@
-import { register as registerHome, show as showHome, deregister as deregisterHome } from "./home";
 import { fin } from "openfin-adapter/src/mock";
+import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";
 
 export async function init() {
   // you can kick off your bootstrapping process here where you may decide to prompt for authentication,
@@ -10,8 +10,8 @@ export async function init() {
   await showHome();
 
   const providerWindow = fin.Window.getCurrentSync();
-  providerWindow.once("close-requested", async (event) => {
+  await providerWindow.once("close-requested", async (event) => {
     await deregisterHome();
-    fin.Platform.getCurrentSync().quit();
+    await fin.Platform.getCurrentSync().quit();
   });
 }

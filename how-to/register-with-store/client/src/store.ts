@@ -18,7 +18,7 @@ let isStoreRegistered = false;
 
 export async function register() {
   console.log("Initialising the storefront provider.");
-  let provider = await getStoreProvider();
+  const provider = await getStoreProvider();
   if (provider !== null) {
     try {
       await Storefront.register(provider);
@@ -32,8 +32,8 @@ export async function register() {
 
 export async function deregister() {
   if (isStoreRegistered) {
-    let settings = await getSettings();
-    Storefront.deregister(settings.storefrontProvider.id);
+    const settings = await getSettings();
+    await Storefront.deregister(settings.storefrontProvider.id);
   } else {
     console.warn("Unable to call store deregister as there is an indication it was never registered successfully.");
   }
@@ -61,12 +61,12 @@ function getId(title: string, tags: string[] = []) {
   const search = " ";
   const replaceWith = "-";
   let result = title.replaceAll(search, replaceWith);
-  result += "-" + tags.join("-");
+  result += `-${tags.join("-")}`;
   return result.toLowerCase();
 }
 
 function isStorefrontConfigurationValid(config: CustomSettings): boolean {
-  let idList = [];
+  const idList = [];
   let hasDuplicateIds = false;
 
   if (
@@ -87,55 +87,53 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
     return false;
   }
 
-  let validateId = (id: string, namespace: string, warning: string) => {
+  const validateId = (id: string, namespace: string, warning: string) => {
     if (id === undefined) {
-      console.warn(namespace + ": " + warning);
+      console.warn(`${namespace}: ${warning}`);
+    } else if (idList.includes(id)) {
+      hasDuplicateIds = true;
+      console.error(
+        `${namespace}: The id is used in more than one place. Please have a unique and idempotent id: ${id}`
+      );
     } else {
-      if (idList.indexOf(id) > -1) {
-        hasDuplicateIds = true;
-        console.error(
-          namespace + ": The id is used in more than one place. Please have a unique and idempotent id: " + id
-        );
-      } else {
-        idList.push(id);
-      }
+      idList.push(id);
     }
   };
 
-  let warningMessage =
+  const warningMessage =
     "The id is not defined. This demo will generate an id based on title but you should have a unique and idempotent id when building your own store.";
 
   console.log("Validating settings storefrontProvider navigation config");
-  let navigation = config.storefrontProvider.navigation;
+  const navigation = config.storefrontProvider.navigation;
   for (let i = 0; i < navigation.length; i++) {
-    validateId(navigation[i].id, "storefrontProvider.navigation[" + i + "].id", warningMessage);
-    let items = navigation[i].items;
+    validateId(navigation[i].id, `storefrontProvider.navigation[${i}].id`, warningMessage);
+    const items = navigation[i].items;
     for (let n = 0; n < items.length; n++) {
-      validateId(items[n].id, "storefrontProvider.navigation[" + i + "].items[" + n + "].id", warningMessage);
+      validateId(items[n].id, `storefrontProvider.navigation[${i}].items[${n}].id`, warningMessage);
     }
   }
 
   console.log("Validating settings storefrontProvider landing page hero config");
-  let landingPage = config.storefrontProvider.landingPage;
+  const landingPage = config.storefrontProvider.landingPage;
 
   if (landingPage?.hero?.cta !== undefined) {
     validateId(landingPage.hero.cta.id, "storefrontProvider.landingPage.hero.cta.id", warningMessage);
   }
 
   console.log("Validating settings storefrontProvider landing page top row config");
-  let topRow = landingPage.topRow;
+  const topRow = landingPage.topRow;
 
   if (topRow.items !== undefined) {
     for (let i = 0; i < topRow.items.length; i++) {
-      validateId(topRow.items[i].id, "storefrontProvider.landingPage.topRow.items[" + i + "].id", warningMessage);
+      validateId(topRow.items[i].id, `storefrontProvider.landingPage.topRow.items[${i}].id`, warningMessage);
     }
   }
 
   console.log("Validating settings storefrontProvider landing page bottom row config");
-  let bottomRow = landingPage.bottomRow;
+  const bottomRow = landingPage.bottomRow;
   if (bottomRow.items !== undefined) {
     for (let i = 0; i < bottomRow.items.length; i++) {
-      validateId(bottomRow.items[i].id, "storefrontProvider.landingPage.bottomRow.items[" + i + "].id", warningMessage);
+      validateId(bottomRow.items[i].id, `storefrontProvider.landingPage.bottomRow.items[${i}].id`, warningMessage);
     }
   }
 
@@ -152,7 +150,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 
 async function getStoreProvider(): Promise<StorefrontProvider> {
   console.log("Getting the store provider.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (isStorefrontConfigurationValid(settings)) {
     return {
       id: settings.storefrontProvider.id,
@@ -172,8 +170,8 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
   console.log("Showing the store navigation.");
   const navigationSectionItemLimit = 5;
   const navigationSectionLimit = 2;
-  let settings = await getSettings();
-  let navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [];
+  const settings = await getSettings();
+  const navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [];
 
   if (settings?.storefrontProvider?.navigation === undefined) {
     return [];
@@ -184,7 +182,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
       console.log("More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken.");
       break;
     }
-    let navigationSection: StorefrontNavigationSection = {
+    const navigationSection: StorefrontNavigationSection = {
       id: settings.storefrontProvider.navigation[i].id ?? getId(settings.storefrontProvider.navigation[i].title),
       title: settings.storefrontProvider.navigation[i].title,
       items: (await getNavigationItems(
@@ -206,20 +204,20 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 
 async function getLandingPage(): Promise<StorefrontLandingPage> {
   console.log("Getting the store landing page.");
-  let landingPage: StorefrontLandingPage = {
+  const landingPage: StorefrontLandingPage = {
     topRow: null,
     middleRow: null,
     bottomRow: null
   };
 
-  let settings = await getSettings();
+  const settings = await getSettings();
   const storeFrontDetailedNavigationItemBottomRowLimit = 3;
   const storeFrontDetailedNavigationItemTopRowLimit = 4;
   const middleRowAppLimit = 6;
 
   if (settings?.storefrontProvider?.landingPage?.hero !== undefined) {
-    let hero = settings.storefrontProvider.landingPage.hero;
-    let cta = await getNavigationItem(hero.cta.id, hero.cta.title, hero.cta.tags);
+    const hero = settings.storefrontProvider.landingPage.hero;
+    const cta = await getNavigationItem(hero.cta.id, hero.cta.title, hero.cta.tags);
     landingPage.hero = {
       title: hero.title,
       image: hero.image,
@@ -229,17 +227,26 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   }
 
   if (settings?.storefrontProvider?.landingPage?.topRow !== undefined) {
-    landingPage.topRow = await getLandingPageRow(
+    const row = await getLandingPageRow(
       settings?.storefrontProvider?.landingPage?.topRow,
       storeFrontDetailedNavigationItemTopRowLimit
     );
+    landingPage.topRow = {
+      title: row.title,
+      items: row.items as [
+        StorefrontDetailedNavigationItem?,
+        StorefrontDetailedNavigationItem?,
+        StorefrontDetailedNavigationItem?,
+        StorefrontDetailedNavigationItem?
+      ]
+    };
   } else {
     console.error("You need to have a topRow defined in your landing page.");
   }
 
   if (settings?.storefrontProvider?.landingPage?.middleRow !== undefined) {
-    let middleRow = settings.storefrontProvider.landingPage.middleRow;
-    let middleRowApps = await getAppsByTag(middleRow.tags);
+    const middleRow = settings.storefrontProvider.landingPage.middleRow;
+    const middleRowApps = await getAppsByTag(middleRow.tags);
     if (middleRowApps.length > middleRowAppLimit) {
       console.warn(
         `Too many apps (${
@@ -249,7 +256,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
         )}. Only ${middleRowAppLimit} will be shown.`
       );
     }
-    let validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [App?, App?, App?, App?, App?, App?];
+    const validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [App?, App?, App?, App?, App?, App?];
     landingPage.middleRow = {
       title: middleRow.title,
       apps: validatedMiddleRowApps
@@ -259,10 +266,18 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   }
 
   if (settings?.storefrontProvider?.landingPage?.bottomRow !== undefined) {
-    landingPage.bottomRow = await getLandingPageRow(
+    const row = await getLandingPageRow(
       settings.storefrontProvider.landingPage.bottomRow,
       storeFrontDetailedNavigationItemBottomRowLimit
     );
+    landingPage.bottomRow = {
+      title: row.title,
+      items: row.items as [
+        StorefrontDetailedNavigationItem?,
+        StorefrontDetailedNavigationItem?,
+        StorefrontDetailedNavigationItem?
+      ]
+    };
   } else {
     console.error("You need to have a bottomRow defined in your landing page.");
   }
@@ -272,13 +287,12 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 
 async function getFooter(): Promise<StorefrontFooter> {
   console.log("Getting the store footer.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (settings?.storefrontProvider?.footer !== undefined) {
     return settings.storefrontProvider.footer;
-  } else {
-    console.error("Storefront is being initialised without a footer configured.");
-    return null;
   }
+  console.error("Storefront is being initialised without a footer configured.");
+  return null;
 }
 
 /**
@@ -294,7 +308,7 @@ async function getFooter(): Promise<StorefrontFooter> {
  * @returns StorefrontNavigationItem
  */
 async function getNavigationItem(id: string, title: string, tags: string[]): Promise<StorefrontNavigationItem> {
-  let navigationItem: StorefrontNavigationItem = {
+  const navigationItem: StorefrontNavigationItem = {
     id: id ?? getId(title, tags),
     title,
     templateId: StorefrontTemplate.AppGrid,
@@ -303,7 +317,7 @@ async function getNavigationItem(id: string, title: string, tags: string[]): Pro
     }
   };
 
-  let apps = await getAppsByTag(tags);
+  const apps = await getAppsByTag(tags);
 
   if (apps !== undefined && apps.length > 0) {
     navigationItem.templateData.apps = apps;
@@ -313,10 +327,10 @@ async function getNavigationItem(id: string, title: string, tags: string[]): Pro
 }
 
 async function getNavigationItems(items: StorefrontSettingsNavigationItem[], limit: number) {
-  let navigationItems: StorefrontNavigationItem[] = [];
+  const navigationItems: StorefrontNavigationItem[] = [];
 
   for (let i = 0; i < items.length; i++) {
-    let navigationItem = await getNavigationItem(items[i].id, items[i].title, items[i].tags);
+    const navigationItem = await getNavigationItem(items[i].id, items[i].title, items[i].tags);
     navigationItems.push(navigationItem);
   }
 
@@ -329,15 +343,15 @@ async function getNavigationItems(items: StorefrontSettingsNavigationItem[], lim
 }
 
 async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, limit: number) {
-  let items: StorefrontDetailedNavigationItem[] = [];
+  const items: StorefrontDetailedNavigationItem[] = [];
 
   for (let i = 0; i < definition.items.length; i++) {
-    let navigationItem = await getNavigationItem(
+    const navigationItem = await getNavigationItem(
       definition.items[i].id,
       definition.items[i].title,
       definition.items[i].tags
     );
-    let item: StorefrontDetailedNavigationItem = {
+    const item: StorefrontDetailedNavigationItem = {
       description: definition.items[i].description,
       image: definition.items[i].image,
       ...navigationItem
@@ -351,7 +365,7 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
     );
   }
 
-  let detailedNavigationItems = items.slice(0, limit) as any;
+  const detailedNavigationItems = items.slice(0, limit);
 
   return {
     title: definition.title,

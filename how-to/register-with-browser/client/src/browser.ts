@@ -12,9 +12,9 @@ export async function launchView(
   view: OpenFin.PlatformViewCreationOptions | string,
   targetIdentity?: OpenFin.Identity
 ) {
-  let viewOptions;
+  let viewOptions: OpenFin.PlatformViewCreationOptions;
   if (typeof view === "string") {
-    viewOptions = { url: view };
+    viewOptions = { url: view, target: null };
   } else {
     viewOptions = view;
   }
@@ -44,6 +44,6 @@ export async function createPageWithLayout(
 }
 
 export function createViewIdentity(uuid: string, name: string): OpenFin.Identity {
-  const viewIdentity: OpenFin.Identity = { uuid: uuid, name: `${window.crypto.randomUUID()}-${name}` };
+  const viewIdentity: OpenFin.Identity = { uuid, name: `${window.crypto.randomUUID()}-${name}` };
   return viewIdentity;
 }

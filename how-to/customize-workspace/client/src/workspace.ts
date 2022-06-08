@@ -8,11 +8,11 @@ export async function getWorkspace(workspaceId: string): Promise<Workspace> {
 export async function getWorkspaceIds(): Promise<string[]> {
   const platform = getCurrentSync();
   const entries = await platform.Storage.getWorkspaces();
-  const ids = [];
+  const ids: string[] = [];
 
-  entries.forEach((wks) => {
+  for (const wks of entries) {
     ids.push(wks.workspaceId);
-  });
+  }
 
   return ids;
 }
@@ -20,11 +20,11 @@ export async function getWorkspaceIds(): Promise<string[]> {
 export async function getWorkspaceTitles(): Promise<string[]> {
   const platform = getCurrentSync();
   const entries = await platform.Storage.getWorkspaces();
-  const titles = [];
+  const titles: string[] = [];
 
-  entries.forEach((wks) => {
+  for (const wks of entries) {
     titles.push(wks.title);
-  });
+  }
 
   return titles;
 }

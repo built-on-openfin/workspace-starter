@@ -7,14 +7,15 @@ async function getRestEntries(url: string, credentials?: "omit" | "same-origin" 
     return [];
   }
   const response = await fetch(url, options);
-  return response.json();
+  const json = await response.json();
+  return json as App[];
 }
 
 export async function getApps(): Promise<App[]> {
   console.log("Requesting apps.");
   try {
-    let settings = await getSettings();
-    let apps = await getRestEntries(
+    const settings = await getSettings();
+    const apps = await getRestEntries(
       settings?.appProvider?.appsSourceUrl,
       settings?.appProvider?.includeCredentialOnSourceRequest
     );

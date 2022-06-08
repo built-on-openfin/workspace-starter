@@ -1,22 +1,22 @@
 import { ButtonStyle, TemplateFragment, TemplateFragmentTypes } from "@openfin/workspace";
 
-const PageActions = {
+const PAGE_ACTIONS = {
   delete: "page-delete",
   share: "page-share",
   launch: "page-launch"
 };
 
-const WorkspaceActions = {
+const WORKSPACE_ACTIONS = {
   delete: "workspace-delete",
   share: "workspace-share",
   launch: "workspace-launch"
 };
 
-export const PageTemplate: {
+export const PAGE_TEMPLATE: {
   actions: { delete: string; share: string; launch: string };
   template: TemplateFragment;
 } = {
-  actions: PageActions,
+  actions: PAGE_ACTIONS,
   template: {
     type: TemplateFragmentTypes.Container,
     style: {
@@ -71,7 +71,7 @@ export const PageTemplate: {
               flexDirection: "column",
               width: "80px"
             },
-            action: PageActions.launch,
+            action: PAGE_ACTIONS.launch,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -90,7 +90,7 @@ export const PageTemplate: {
               marginLeft: "10px",
               marginRight: "10px"
             },
-            action: PageActions.delete,
+            action: PAGE_ACTIONS.delete,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -107,7 +107,7 @@ export const PageTemplate: {
               flexDirection: "column",
               width: "80px"
             },
-            action: PageActions.share,
+            action: PAGE_ACTIONS.share,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -122,11 +122,11 @@ export const PageTemplate: {
   }
 };
 
-export const WorkspaceTemplate: {
+export const WORKSPACE_TEMPLATE: {
   actions: { delete: string; share: string; launch: string };
   template: TemplateFragment;
 } = {
-  actions: WorkspaceActions,
+  actions: WORKSPACE_ACTIONS,
   template: {
     type: TemplateFragmentTypes.Container,
     style: {
@@ -173,7 +173,7 @@ export const WorkspaceTemplate: {
               flexDirection: "column",
               width: "80px"
             },
-            action: WorkspaceActions.launch,
+            action: WORKSPACE_ACTIONS.launch,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -192,7 +192,7 @@ export const WorkspaceTemplate: {
               marginLeft: "10px",
               marginRight: "10px"
             },
-            action: WorkspaceActions.delete,
+            action: WORKSPACE_ACTIONS.delete,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -209,7 +209,7 @@ export const WorkspaceTemplate: {
               flexDirection: "column",
               width: "80px"
             },
-            action: WorkspaceActions.share,
+            action: WORKSPACE_ACTIONS.share,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -224,7 +224,7 @@ export const WorkspaceTemplate: {
   }
 };
 
-export const CurrentWorkspaceTemplate: {
+export const CURRENT_WORKSPACE_TEMPLATE: {
   template: TemplateFragment;
 } = {
   template: {

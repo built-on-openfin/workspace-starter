@@ -14,7 +14,7 @@ let isHomeRegistered = false;
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -32,14 +32,14 @@ export async function register() {
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
+    const query = request.query.toLowerCase();
     if (lastResponse !== undefined) {
       lastResponse.close();
     }
     lastResponse = response;
     lastResponse.open();
 
-    let appSearchEntries = await getAppSearchEntries();
+    const appSearchEntries = await getAppSearchEntries();
 
     const searchResults: HomeSearchResponse = {
       results: appSearchEntries,
@@ -75,7 +75,7 @@ export async function register() {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection
   };
 
@@ -94,9 +94,8 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
-  } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }

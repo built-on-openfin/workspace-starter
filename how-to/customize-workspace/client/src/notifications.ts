@@ -3,9 +3,9 @@ import { getSettings } from "./settings";
 let notificationsRegistered = false;
 
 export async function register() {
-  if (notificationsRegistered === false) {
-    let settings = await getSettings();
-    let notificationPlatform = settings.notificationProvider;
+  if (!notificationsRegistered) {
+    const settings = await getSettings();
+    const notificationPlatform = settings.notificationProvider;
     if (notificationPlatform !== undefined) {
       try {
         await registerPlatform(settings.notificationProvider);
@@ -22,8 +22,8 @@ export async function register() {
 
 export async function deregister() {
   if (notificationsRegistered) {
-    let settings = await getSettings();
-    let notificationPlatform = settings.notificationProvider;
+    const settings = await getSettings();
+    const notificationPlatform = settings.notificationProvider;
     if (notificationPlatform !== undefined) {
       await deregisterPlatform(notificationPlatform.id);
       console.log("Unregistered platform notifications.");

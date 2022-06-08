@@ -1,29 +1,34 @@
-import { PlatformInteropBroker } from "./interopbroker";
-import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
-import { getSettings, getThemes } from "./settings";
+import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { ChannelProvider } from "openfin-adapter";
+import Transport from "openfin-adapter/src/transport/transport";
 import { getActions } from "./actions";
 import { getDefaultWindowOptions, overrideCallback } from "./browser";
+import { PlatformInteropBroker } from "./interopbroker";
+import { getSettings, getThemes } from "./settings";
 
 export async function init() {
   const settings = await getSettings();
 
   console.log("Initialising platform");
-  let browser: BrowserInitConfig = {};
+  const browser: BrowserInitConfig = {};
 
   if (settings.browserProvider !== undefined) {
     browser.defaultWindowOptions = await getDefaultWindowOptions();
 
-    browser.interopOverride = async (InteropBroker, provider, options, ...args) => {
-      return new PlatformInteropBroker(provider, options, ...args);
-    };
+    browser.interopOverride = async (
+      InteropBroker,
+      provider: Transport,
+      options: ChannelProvider,
+      ...args: unknown[]
+    ) => new PlatformInteropBroker(provider, options, ...args);
 
     browser.overrideCallback = overrideCallback;
   }
 
-  console.log("Specifying following browser options: ", browser);
+  console.log("Specifying following browser options:", browser);
 
-  let customActions = await getActions();
-  let theme = await getThemes();
+  const customActions = await getActions();
+  const theme = await getThemes();
 
   await workspacePlatformInit({
     browser,

@@ -1,33 +1,32 @@
-import { getCurrentSync } from "@openfin/workspace-platform";
 import {
-  Home,
+  CLIDispatchedSearchResult,
   CLIProvider,
   CLISearchListenerRequest,
-  CLITemplate,
-  CLISearchResult,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLIDispatchedSearchResult
+  CLITemplate,
+  Home,
+  HomeSearchResult
 } from "@openfin/workspace";
+import { getCurrentSync } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 
 const providerId = "register-with-home-basic";
 
 async function getResults(query?: string): Promise<CLISearchResponse> {
-  let apps = await getApps();
+  const apps = await getApps();
 
   if (Array.isArray(apps)) {
-    let initialResults: CLISearchResult<any>[] = [];
+    const initialResults: HomeSearchResult[] = [];
 
     for (let i = 0; i < apps.length; i++) {
-      let entry: any = {
+      const entry: Partial<HomeSearchResult> = {
         key: apps[i].appId,
         title: apps[i].title,
         data: apps[i],
-        actions: [],
-        template: CLITemplate.Plain
+        actions: []
       };
-      let action = { name: "Launch View", hotkey: "enter" };
+      const action = { name: "Launch View", hotkey: "enter" };
 
       if (apps[i].manifestType === "view") {
         entry.label = "View";
@@ -58,8 +57,10 @@ async function getResults(query?: string): Promise<CLISearchResponse> {
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
+      } else {
+        entry.template = CLITemplate.Plain;
       }
-      initialResults.push(entry);
+      initialResults.push(entry as HomeSearchResult);
     }
 
     let finalResults;
@@ -68,25 +69,24 @@ async function getResults(query?: string): Promise<CLISearchResponse> {
       finalResults = initialResults;
     } else {
       finalResults = initialResults.filter((entry) => {
-        let targetValue = entry.title;
+        const targetValue = entry.title;
 
         if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-          return targetValue.toLowerCase().indexOf(query) > -1;
+          return targetValue.toLowerCase().includes(query);
         }
         return false;
       });
     }
 
-    let response: CLISearchResponse = {
+    const response: CLISearchResponse = {
       results: finalResults
     };
 
     return response;
-  } else {
-    return {
-      results: []
-    };
   }
+  return {
+    results: []
+  };
 }
 
 export async function register(): Promise<void> {
@@ -98,8 +98,8 @@ export async function register(): Promise<void> {
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
-    if (query.indexOf("/") === 0) {
+    const query = request.query.toLowerCase();
+    if (query.startsWith("/")) {
       return { results: [] };
     }
 
@@ -112,7 +112,7 @@ export async function register(): Promise<void> {
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      let platform = getCurrentSync();
+      const platform = getCurrentSync();
       await platform.launchApp({ app: result.data });
     } else {
       console.warn("Unable to execute result without data being passed");
@@ -123,7 +123,7 @@ export async function register(): Promise<void> {
     title: "Basic Workspace Platform",
     id: providerId,
     icon: "http://localhost:8080/favicon.ico",
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection
   };
 

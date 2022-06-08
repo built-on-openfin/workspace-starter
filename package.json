@@ -7,7 +7,8 @@
     "package": "node ./scripts/package.js",
     "package-for-github": "node ./scripts/package.js --location github",
     "package-for-aws": "node ./scripts/package.js --location aws",
-    "prettier": "prettier --config .prettierrc --write ."
+    "prettier": "prettier --config .prettierrc --write .",
+    "eslint": "eslint **/*.ts"
   },
   "workspaces": [
     "how-to/*"
@@ -21,6 +22,15 @@
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb": "^19.0.2",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "fast-glob": "^3.2.11",
     "fs-extra": "^10.0.0",
     "prettier": "^2.6.2",

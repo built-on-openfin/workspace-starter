@@ -8,7 +8,7 @@ export async function init() {
 
   console.log("Initialising platform");
   const { icon, title } = await getSettings();
-  let browser: BrowserInitConfig = {};
+  const browser: BrowserInitConfig = {};
   browser.defaultWindowOptions = {
     icon,
     workspacePlatform: {
@@ -17,7 +17,7 @@ export async function init() {
       title
     }
   };
-  console.log("Specifying following browser options: ", browser);
+  console.log("Specifying following browser options:", browser);
   await workspacePlatformInit({
     browser,
     theme: [

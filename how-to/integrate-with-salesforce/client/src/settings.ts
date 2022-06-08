@@ -5,8 +5,15 @@ let settings: CustomSettings;
 
 async function getConfiguredSettings(): Promise<CustomSettings> {
   const app = await fin.Application.getCurrent();
-  const { customSettings } = await app.getManifest();
-  return customSettings;
+  const manifest = await app.getManifest();
+
+  if (manifest.customSettings !== undefined) {
+    settings = manifest.customSettings;
+  } else {
+    settings = {};
+  }
+
+  return settings;
 }
 
 export async function getSettings(): Promise<CustomSettings> {

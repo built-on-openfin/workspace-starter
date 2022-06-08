@@ -1,23 +1,24 @@
 import {
-  Home,
   App,
+  CLIDispatchedSearchResult,
+  CLIFilter,
+  CLIFilterOptionType,
   CLIProvider,
   CLISearchListenerRequest,
-  CLIFilter,
-  CLITemplate,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLIDispatchedSearchResult,
-  CLIFilterOptionType,
-  TemplateFragment,
+  CLITemplate,
+  Home,
   HomeSearchResponse,
-  HomeSearchResult
+  HomeSearchResult,
+  TemplateFragment
 } from "@openfin/workspace";
-import { getSettings } from "./settings";
-import { launch } from "./launch";
+import { BrowserSnapshot } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
-import { getWorkspaces, deleteWorkspace, launchWorkspace, saveWorkspace } from "./workspace";
-import { WorkspaceTemplate } from "./template";
+import { launch } from "./launch";
+import { getSettings } from "./settings";
+import { WORKSPACE_TEMPLATE } from "./template";
+import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
 
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
 const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
@@ -28,23 +29,23 @@ let isHomeRegistered = false;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
   if (Array.isArray(tags)) {
-    let filters: CLIFilter[] = [];
-    let uniqueTags = [...new Set(tags.sort())];
-    let tagFilter: CLIFilter = {
+    const filters: CLIFilter[] = [];
+    const uniqueTags = [...new Set(tags.sort())];
+    const tagFilter: CLIFilter = {
       id: HOME_TAG_FILTERS,
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
       options: []
     };
 
-    uniqueTags.forEach((tag) => {
+    for (const tag of uniqueTags) {
       if (Array.isArray(tagFilter.options)) {
         tagFilter.options.push({
           value: tag,
           isSelected: false
         });
       }
-    });
+    }
 
     filters.push(tagFilter);
     return filters;
@@ -53,15 +54,14 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 }
 
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
-  let appResults: HomeSearchResult[] = [];
+  const appResults: HomeSearchResult[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
-      let action = { name: "Launch View", hotkey: "enter" };
-      let entry: any = {
+      const action = { name: "Launch View", hotkey: "enter" };
+      const entry: Partial<HomeSearchResult> = {
         key: apps[i].appId,
         title: apps[i].title,
-        data: apps[i],
-        template: CLITemplate.Plain
+        data: apps[i]
       };
 
       if (apps[i].manifestType === "view") {
@@ -93,9 +93,11 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
+      } else {
+        entry.template = CLITemplate.Plain;
       }
 
-      appResults.push(entry);
+      appResults.push(entry as HomeSearchResult);
     }
   }
   return appResults;
@@ -106,21 +108,21 @@ async function mapWorkspaceEntriesToSearchEntries(
     id: string;
     title: string;
     description?: string;
-    snapshot: any;
+    snapshot: BrowserSnapshot;
   }[]
 ): Promise<HomeSearchResult[]> {
-  let settings = await getSettings();
+  const settings = await getSettings();
 
   let workspaceIcon;
   if (settings?.platformProvider?.rootUrl !== undefined) {
-    workspaceIcon = settings.platformProvider.rootUrl + "/icons/workspaces.svg";
+    workspaceIcon = `${settings.platformProvider.rootUrl}/icons/workspaces.svg`;
   }
-  const workspaceTemplate: TemplateFragment = WorkspaceTemplate.template;
+  const workspaceTemplate: TemplateFragment = WORKSPACE_TEMPLATE.template;
 
-  let workspaceResults: HomeSearchResult[] = [];
+  const workspaceResults: HomeSearchResult[] = [];
   if (Array.isArray(workspaces)) {
     for (let i = 0; i < workspaces.length; i++) {
-      let entry: any = {
+      const entry: HomeSearchResult = {
         key: workspaces[i].id,
         title: workspaces[i].title,
         label: "Workspace",
@@ -155,53 +157,51 @@ async function getResults(
   queryAgainst: string[],
   filters: CLIFilter[]
 ): Promise<HomeSearchResponse> {
-  let apps = await getApps();
-  let workspaces = await getWorkspaces();
+  const apps = await getApps();
+  const workspaces = await getWorkspaces();
 
-  let tags = [];
-  let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-  let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(workspaces as any);
+  const tags: string[] = [];
+  const appSearchEntries = mapAppEntriesToSearchEntries(apps);
+  const workspaceEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
 
-  let initialResults: HomeSearchResult[] = [...appSearchEntries, ...workspaceEntries];
+  const initialResults: HomeSearchResult[] = [...appSearchEntries, ...workspaceEntries];
 
   if (initialResults.length > 0) {
-    let finalResults = initialResults.filter((entry) => {
+    const finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
 
       if (query !== undefined && query !== null && query.length >= queryMinLength) {
         textMatchFound = queryAgainst.some((target) => {
-          let path = target.split(".");
+          const path = target.split(".");
           if (path.length === 1) {
-            let targetValue = entry[path[0]];
+            const targetValue = entry[path[0]];
 
             if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-              return targetValue.toLowerCase().indexOf(query) > -1;
+              return targetValue.toLowerCase().includes(query);
             }
           } else if (path.length === 2) {
-            let target = entry[path[0]];
+            const targetEntry = entry[path[0]];
             let targetValue: string | string[];
-            if (target !== undefined && target !== null) {
-              targetValue = target[path[1]];
+            if (targetEntry !== undefined && targetEntry !== null) {
+              targetValue = targetEntry[path[1]];
             }
 
             if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-              return targetValue.toLowerCase().indexOf(query) > -1;
+              return targetValue.toLowerCase().includes(query);
             }
 
             if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
               if (
                 targetValue.length > 0 &&
                 typeof targetValue[0] === "string" &&
-                targetValue.some((target) => target.toLowerCase().indexOf(query) === 0)
+                targetValue.some((target2) => target2.toLowerCase().startsWith(query))
               ) {
                 return true;
-              } else {
-                console.warn(
-                  "Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " +
-                    target
-                );
               }
+              console.warn(
+                `Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${targetEntry}`
+              );
             }
           } else {
             console.warn(
@@ -217,9 +217,7 @@ async function getResults(
         filterMatchFound = tagFilters.some((filter) => {
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
-              return filter.options.every((option) => {
-                return !option.isSelected || entry.data.tags.indexOf(option.value) > -1;
-              });
+              return filter.options.every((option) => !option.isSelected || entry.data.tags.includes(option.value));
             }
           } else if (filter.options.isSelected && entry.data?.tags !== undefined) {
             return entry.data?.tags.indexOf(filter.options.value) > -1;
@@ -229,7 +227,7 @@ async function getResults(
       }
 
       if (textMatchFound && Array.isArray(entry.data?.tags)) {
-        tags.push(...entry.data.tags);
+        tags.push(...(entry.data.tags as string[]));
       }
       return textMatchFound && filterMatchFound;
     });
@@ -251,7 +249,7 @@ async function getResults(
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -266,21 +264,21 @@ export async function register() {
   const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
   const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
   let lastResponse: CLISearchListenerResponse;
-  let filters;
+  let filters: CLIFilter[];
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
-    if (query.indexOf("/") === 0 && query.toLowerCase().indexOf("/w ") !== 0) {
+    const query = request.query.toLowerCase();
+    if (query.startsWith("/") && !query.toLowerCase().startsWith("/w ")) {
       return { results: [] };
     }
 
-    if (query.toLowerCase().indexOf("/w ") === 0) {
-      let workspaces = await getWorkspaces();
-      let workspaceText = request.query.replace("/w ", "");
-      let parts = workspaceText.split(">");
+    if (query.toLowerCase().startsWith("/w ")) {
+      const workspaces = await getWorkspaces();
+      const workspaceText = request.query.replace("/w ", "");
+      const parts = workspaceText.split(">");
       let title;
       let description;
       if (parts.length === 1 || parts.length === 2) {
@@ -290,42 +288,41 @@ export async function register() {
         description = parts[1].trim();
       }
 
-      let foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
+      const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
       if (foundMatch !== undefined && foundMatch !== null) {
         // we have a match
         return {
           results: [
             {
               key: "WORKSPACE-EXISTS",
-              title: "Workspace " + foundMatch.title + " already exists.",
+              title: `Workspace ${foundMatch.title} already exists.`,
               actions: [],
               data: { tags: ["workspace"], workspaceId: foundMatch.id }
             }
           ]
         };
-      } else {
-        if (lastResponse !== undefined) {
-          lastResponse.close();
-        }
-        lastResponse = response;
-        lastResponse.open();
-        return {
-          results: [
-            {
-              key: "WORKSPACE-SAVE",
-              title: "Save Current Workspace as " + title,
-              label: "Suggestion",
-              actions: [{ name: "Save Workspace", hotkey: "Enter" }],
-              data: {
-                tags: ["workspace"],
-                workspaceId: crypto["randomUUID"](),
-                workspaceTitle: title,
-                workspaceDescription: description
-              }
-            }
-          ]
-        };
       }
+      if (lastResponse !== undefined) {
+        lastResponse.close();
+      }
+      lastResponse = response;
+      lastResponse.open();
+      return {
+        results: [
+          {
+            key: "WORKSPACE-SAVE",
+            title: `Save Current Workspace as ${title}`,
+            label: "Suggestion",
+            actions: [{ name: "Save Workspace", hotkey: "Enter" }],
+            data: {
+              tags: ["workspace"],
+              workspaceId: crypto.randomUUID(),
+              workspaceTitle: title,
+              workspaceDescription: description
+            }
+          }
+        ]
+      };
     }
 
     filters = request?.context?.selectedFilters;
@@ -341,50 +338,56 @@ export async function register() {
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      if (result.data.workspaceId !== undefined) {
-        if (result.data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
-          await saveWorkspace(result.data.workspaceId, result.data.workspaceTitle, result.data.workspaceDescription);
+      const data: {
+        workspaceId?: string;
+        workspaceTitle?: string;
+        workspaceDescription?: string;
+      } & App = result.data;
+
+      if (data.workspaceId !== undefined) {
+        if (data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
+          await saveWorkspace(data.workspaceId, data.workspaceTitle, data.workspaceDescription);
           if (lastResponse !== undefined && lastResponse !== null) {
             lastResponse.revoke(result.key);
             lastResponse.respond([
               {
                 key: "WORKSPACE-SAVED",
-                title: "Workspace " + result.data.workspaceTitle + " saved.",
+                title: `Workspace ${data.workspaceTitle} saved.`,
                 actions: [],
                 data: {
                   tags: ["workspace"],
-                  workspaceId: result.data.workspaceId,
-                  workspaceTitle: result.data.workspaceTitle,
-                  workspaceDescription: result.data.workspaceDescription
+                  workspaceId: data.workspaceId,
+                  workspaceTitle: data.workspaceTitle,
+                  workspaceDescription: data.workspaceDescription
                 }
               }
             ]);
           }
-        } else if (result.data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
+        } else if (data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
           if (lastResponse !== undefined && lastResponse !== null) {
             lastResponse.revoke(result.key);
           }
-        } else if (result.data.workspaceId !== undefined) {
-          let workspaceAction = result.action.name;
+        } else if (data.workspaceId !== undefined) {
+          const workspaceAction = result.action.name;
           if (
             workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-            workspaceAction === WorkspaceTemplate.actions.launch
+            workspaceAction === WORKSPACE_TEMPLATE.actions.launch
           ) {
-            await launchWorkspace(result.data.workspaceId);
+            await launchWorkspace(data.workspaceId);
           } else if (
             workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-            workspaceAction === WorkspaceTemplate.actions.delete
+            workspaceAction === WORKSPACE_TEMPLATE.actions.delete
           ) {
-            await deleteWorkspace(result.data.workspaceId);
+            await deleteWorkspace(data.workspaceId);
             if (lastResponse !== undefined && lastResponse !== null) {
               lastResponse.revoke(result.key);
             }
           } else {
-            console.warn("Unrecognised action for workspace selection: " + result.data.workspaceId);
+            console.warn(`Unrecognised action for workspace selection: ${data.workspaceId}`);
           }
         }
       } else {
-        await launch(result.data);
+        await launch(data);
       }
     } else {
       console.warn("Unable to execute result without data being passed");
@@ -395,7 +398,7 @@ export async function register() {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection
   };
 
@@ -414,9 +417,8 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
-  } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }

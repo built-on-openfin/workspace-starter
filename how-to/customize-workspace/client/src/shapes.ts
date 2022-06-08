@@ -7,13 +7,14 @@ interface PlatformProvider {
   rootUrl: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface NotificationProvider extends NotificationsPlatform {}
 
 export interface ToolbarButtonDefinition {
   id: string;
   include: boolean;
   themes?: { [key: string]: string };
-  button: ToolbarButton;
+  button: ToolbarButton & { iconUrl?: string };
 }
 interface BrowserProvider {
   toolbarButtons?: ToolbarButtonDefinition[];
@@ -102,12 +103,38 @@ interface StorefrontProvider {
 }
 
 export interface EndpointProvider {
-  endpoints?: Endpoint<unknown>[];
+  endpoints?: EndpointTypes[];
 }
-export interface Endpoint<T> {
+
+export interface Endpoint {
   id: string;
-  type: string;
-  options: T;
+}
+
+export type FetchEndpoint = Endpoint & {
+  type: "fetch";
+  options: FetchOptions & { url: string };
+};
+
+// We could include more in this type
+export type EndpointTypes = FetchEndpoint;
+
+export interface FetchOptions {
+  body?: string;
+  method?: "GET" | "POST";
+  credentials?: "omit" | "same-origin" | "include";
+  mode?: "no-cors" | "cors" | "same-origin";
+  cache?: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached";
+  redirect?: "manual" | "follow" | "error";
+  referrerPolicy?:
+    | "no-referrer"
+    | "no-referrer-when-downgrade"
+    | "origin"
+    | "origin-when-cross-origin"
+    | "same-origin"
+    | "strict-origin"
+    | "strict-origin-when-cross-origin"
+    | "unsafe-url";
+  headers?: { [key: string]: string };
 }
 
 export interface CustomSettings {

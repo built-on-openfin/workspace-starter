@@ -1,21 +1,21 @@
 import {
-  Home,
   App,
+  CLIDispatchedSearchResult,
+  CLIFilter,
+  CLIFilterOptionType,
   CLIProvider,
   CLISearchListenerRequest,
-  CLIFilter,
-  CLISearchResult,
-  CLITemplate,
   CLISearchListenerResponse,
   CLISearchResponse,
-  CLIDispatchedSearchResult,
-  CLIFilterOptionType
+  CLITemplate,
+  Home,
+  HomeSearchResult
 } from "@openfin/workspace";
 import { Page } from "@openfin/workspace-platform";
-import { getSettings } from "./settings";
-import { launch } from "./launch";
 import { getApps } from "./apps";
-import { getPage, getPages, deletePage, launchPage } from "./browser";
+import { deletePage, getPage, getPages, launchPage } from "./browser";
+import { launch } from "./launch";
+import { getSettings } from "./settings";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -23,23 +23,23 @@ let isHomeRegistered = false;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
   if (Array.isArray(tags)) {
-    let filters: CLIFilter[] = [];
-    let uniqueTags = [...new Set(tags.sort())];
-    let tagFilter: CLIFilter = {
+    const filters: CLIFilter[] = [];
+    const uniqueTags = [...new Set(tags.sort())];
+    const tagFilter: CLIFilter = {
       id: "tags",
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
       options: []
     };
 
-    uniqueTags.forEach((tag) => {
+    for (const tag of uniqueTags) {
       if (Array.isArray(tagFilter.options)) {
         tagFilter.options.push({
           value: tag,
           isSelected: false
         });
       }
-    });
+    }
 
     filters.push(tagFilter);
     return filters;
@@ -47,16 +47,15 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
   return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: App[]) {
-  let appResults: CLISearchResult<any>[] = [];
+function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
+  const appResults: HomeSearchResult[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
-      let action = { name: "Launch View", hotkey: "enter" };
-      let entry: any = {
+      const action = { name: "Launch View", hotkey: "enter" };
+      const entry: Partial<HomeSearchResult> = {
         key: apps[i].appId,
         title: apps[i].title,
-        data: apps[i],
-        template: CLITemplate.Plain
+        data: apps[i]
       };
 
       if (apps[i].manifestType === "view") {
@@ -88,19 +87,21 @@ function mapAppEntriesToSearchEntries(apps: App[]) {
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
+      } else {
+        entry.template = CLITemplate.Plain;
       }
 
-      appResults.push(entry);
+      appResults.push(entry as HomeSearchResult);
     }
   }
   return appResults;
 }
 
 function mapPageEntriesToSearchEntries(pages: Page[]) {
-  let pageResults: CLISearchResult<any>[] = [];
+  const pageResults: HomeSearchResult[] = [];
   if (Array.isArray(pages)) {
     for (let i = 0; i < pages.length; i++) {
-      let entry: any = {
+      const entry: Partial<HomeSearchResult> = {
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
@@ -108,8 +109,7 @@ function mapPageEntriesToSearchEntries(pages: Page[]) {
           { name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
           { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
         ],
-        data: { tags: ["page"], pageId: pages[i].pageId },
-        template: CLITemplate.Plain
+        data: { tags: ["page"], pageId: pages[i].pageId }
       };
 
       if (pages[i].description !== undefined) {
@@ -117,9 +117,11 @@ function mapPageEntriesToSearchEntries(pages: Page[]) {
         entry.shortDescription = pages[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = pages[i].description;
+      } else {
+        entry.template = CLITemplate.Plain;
       }
 
-      pageResults.push(entry);
+      pageResults.push(entry as HomeSearchResult);
     }
   }
   return pageResults;
@@ -131,53 +133,51 @@ async function getResults(
   queryAgainst: string[] = ["title"],
   filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
-  let apps = await getApps();
-  let pages = await getPages();
+  const apps = await getApps();
+  const pages = await getPages();
 
-  let tags = [];
-  let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-  let pageSearchEntries = mapPageEntriesToSearchEntries(pages);
+  const tags: string[] = [];
+  const appSearchEntries = mapAppEntriesToSearchEntries(apps);
+  const pageSearchEntries = mapPageEntriesToSearchEntries(pages);
 
-  let initialResults: CLISearchResult<any>[] = [...appSearchEntries, ...pageSearchEntries];
+  const initialResults: HomeSearchResult[] = [...appSearchEntries, ...pageSearchEntries];
 
   if (initialResults.length > 0) {
-    let finalResults = initialResults.filter((entry) => {
+    const finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
 
       if (query !== undefined && query !== null && query.length >= queryMinLength) {
         textMatchFound = queryAgainst.some((target) => {
-          let path = target.split(".");
+          const path = target.split(".");
           if (path.length === 1) {
-            let targetValue = entry[path[0]];
+            const targetValue = entry[path[0]];
 
             if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-              return targetValue.toLowerCase().indexOf(query) > -1;
+              return targetValue.toLowerCase().includes(query);
             }
           } else if (path.length === 2) {
-            let target = entry[path[0]];
+            const targetEntry = entry[path[0]];
             let targetValue: string | string[];
-            if (target !== undefined && target !== null) {
-              targetValue = target[path[1]];
+            if (targetEntry !== undefined && targetEntry !== null) {
+              targetValue = targetEntry[path[1]];
             }
 
             if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-              return targetValue.toLowerCase().indexOf(query) > -1;
+              return targetValue.toLowerCase().includes(query);
             }
 
             if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
               if (
                 targetValue.length > 0 &&
                 typeof targetValue[0] === "string" &&
-                targetValue.some((target) => target.toLowerCase().indexOf(query) === 0)
+                targetValue.some((target2) => target2.toLowerCase().startsWith(query))
               ) {
                 return true;
-              } else {
-                console.warn(
-                  "Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " +
-                    target
-                );
               }
+              console.warn(
+                `Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${targetEntry}`
+              );
             }
           } else {
             console.warn(
@@ -192,9 +192,7 @@ async function getResults(
         filterMatchFound = filters.some((filter) => {
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
-              return filter.options.every((option) => {
-                return !option.isSelected || entry.data.tags.indexOf(option.value) > -1;
-              });
+              return filter.options.every((option) => !option.isSelected || entry.data.tags.includes(option.value));
             }
           } else if (filter.options.isSelected && entry.data?.tags !== undefined) {
             return entry.data?.tags.indexOf(filter.options.value) > -1;
@@ -204,12 +202,12 @@ async function getResults(
       }
 
       if (textMatchFound && Array.isArray(entry.data?.tags)) {
-        tags.push(...entry.data.tags);
+        tags.push(...(entry.data.tags as string[]));
       }
       return textMatchFound && filterMatchFound;
     });
 
-    let response: CLISearchResponse = {
+    const response: CLISearchResponse = {
       results: finalResults,
       context: {
         filters: getSearchFilters(tags)
@@ -217,16 +215,15 @@ async function getResults(
     };
 
     return response;
-  } else {
-    return {
-      results: []
-    };
   }
+  return {
+    results: []
+  };
 }
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -246,35 +243,36 @@ export async function register() {
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
-    if (query.indexOf("/") === 0) {
+    const query = request.query.toLowerCase();
+    if (query.startsWith("/")) {
       return { results: [] };
     }
 
-    let filters = request?.context?.selectedFilters;
+    const filters: CLIFilter[] = request?.context?.selectedFilters;
     if (lastResponse !== undefined) {
       lastResponse.close();
     }
     lastResponse = response;
     lastResponse.open();
-    let results = await getResults(query, queryMinLength, queryAgainst, filters);
+    const results = await getResults(query, queryMinLength, queryAgainst, filters);
     return results;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      if (result.data.pageId !== undefined) {
+      const data: { pageId?: string } & App = result.data;
+      if (data.pageId !== undefined) {
         if (result.action.name === HOME_ACTION_DELETE_PAGE) {
-          await deletePage(result.data.pageId);
+          await deletePage(data.pageId);
           if (lastResponse !== undefined && lastResponse !== null) {
             lastResponse.revoke(result.key);
           }
         } else {
-          let pageToLaunch = await getPage(result.data.pageId);
+          const pageToLaunch = await getPage(data.pageId);
           await launchPage(pageToLaunch);
         }
       } else {
-        await launch(result.data);
+        await launch(data);
       }
     } else {
       console.warn("Unable to execute result without data being passed");
@@ -285,7 +283,7 @@ export async function register() {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection
   };
 
@@ -304,9 +302,8 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
-  } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }

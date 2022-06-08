@@ -57,7 +57,7 @@ export function createButton(
     type: TemplateFragmentTypes.Button,
     buttonStyle,
     children: [createText(titleKey, 12)],
-    action: action,
+    action,
     style: {
       ...style
     }

@@ -13,10 +13,11 @@ interface ThemeProvider {
   themes: CustomThemes;
 }
 
-interface LaunchBarWindowSettings {
+export interface LaunchBarWindowSettings extends OpenFin.WindowCreationOptions {
   url: string;
   options: object;
 }
+
 export interface CustomSettings {
   bootstrap?: { launchBarWindowSettings?: LaunchBarWindowSettings };
   browserProvider?: BrowserProvider;

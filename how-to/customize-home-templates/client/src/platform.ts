@@ -2,7 +2,7 @@ import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/works
 
 export async function init() {
   console.log("Initialising platform");
-  let browser: BrowserInitConfig = {};
+  const browser: BrowserInitConfig = {};
 
   await workspacePlatformInit({
     browser

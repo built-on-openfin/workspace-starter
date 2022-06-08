@@ -46,21 +46,21 @@ export async function deletePage(pageId: string) {
   return platform.Storage.deletePage(pageId);
 }
 
-export async function getPageBounds(pageId: string, fromStorage = false): Promise<OpenFin.Bounds> {
-  let bounds = null;
+export async function getPageBounds(pageId: string, fromStorage = false): Promise<OpenFin.Bounds | null> {
+  let bounds: OpenFin.Bounds = null;
 
   if (fromStorage) {
     bounds = await pageBoundsStorage.getFromStorage<OpenFin.Bounds>(pageId);
   } else {
     const platform = getCurrentSync();
     const pages = await platform.Browser.getAllAttachedPages();
-    let windowId;
+    let windowId: OpenFin.Identity;
 
-    pages.forEach((page) => {
+    for (const page of pages) {
       if (page.pageId === pageId) {
         windowId = page.parentIdentity;
       }
-    });
+    }
 
     if (windowId !== undefined) {
       const hostWindow = platform.Browser.wrapSync(windowId);
@@ -109,9 +109,9 @@ export async function launchView(
   targetIdentity?: OpenFin.Identity
 ) {
   const platform = getCurrentSync();
-  let viewOptions;
+  let viewOptions: OpenFin.PlatformViewCreationOptions;
   if (typeof view === "string") {
-    viewOptions = { url: view };
+    viewOptions = { url: view, target: null };
   } else {
     viewOptions = view;
   }
@@ -138,80 +138,81 @@ export async function getDefaultWindowOptions() {
 
 export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
   class Override extends WorkspacePlatformProvider {
-    async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
+    public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
       const snapshot = await super.getSnapshot(...args);
       return snapshot;
     }
 
-    async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
+    public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
       await super.applySnapshot(...args);
     }
 
-    async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
+    public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
       // you can add your own custom implementation here if you are storing your workspaces
       // in non-default location (e.g. on the server instead of locally)
       return super.getSavedWorkspaces(query);
     }
 
-    async getSavedWorkspace(id: string): Promise<Workspace> {
+    public async getSavedWorkspace(id: string): Promise<Workspace> {
       // you can add your own custom implementation here if you are storing your workspaces
       // in non-default location (e.g. on the server instead of locally)
       return super.getSavedWorkspace(id);
     }
 
-    async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
+    public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
       // you can add your own custom implementation here if you are storing your workspaces
       // in non-default location (e.g. on the server instead of locally)
       return super.createSavedWorkspace(req);
     }
 
-    async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
+    public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
       // you can add your own custom implementation here if you are storing your workspaces
       // in non-default location (e.g. on the server instead of locally)
       return super.updateSavedWorkspace(req);
     }
 
-    async deleteSavedWorkspace(id: string): Promise<void> {
+    public async deleteSavedWorkspace(id: string): Promise<void> {
       // you can add your own custom implementation here if you are storing your workspaces
       // in non-default location (e.g. on the server instead of locally)
       return super.deleteSavedWorkspace(id);
     }
 
-    async getSavedPages(query?: string): Promise<Page[]> {
+    public async getSavedPages(query?: string): Promise<Page[]> {
       // you can add your own custom implementation here if you are storing your pages
       // in non-default location (e.g. on the server instead of locally)
       return super.getSavedPages(query);
     }
 
-    async getSavedPage(id: string): Promise<Page> {
+    public async getSavedPage(id: string): Promise<Page> {
       // you can add your own custom implementation here if you are storing your pages
       // in non-default location (e.g. on the server instead of locally)
       return super.getSavedPage(id);
     }
 
-    async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
+    public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
       // you can add your own custom implementation here if you are storing your pages
       // in non-default location (e.g. on the server instead of locally)
       await savePageBounds(req.page.pageId);
 
-      super.createSavedPage(req);
+      return super.createSavedPage(req);
     }
 
-    async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
+    public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
       // you can add your own custom implementation here if you are storing your pages
       // in non-default location (e.g. on the server instead of locally)
       await savePageBounds(req.pageId);
-      super.updateSavedPage(req);
+      return super.updateSavedPage(req);
     }
 
-    async deleteSavedPage(id: string): Promise<void> {
+    public async deleteSavedPage(id: string): Promise<void> {
       // you can add your own custom implementation here if you are storing your pages
       // in non-default location (e.g. on the server instead of locally)
-      deletePageBounds(id);
-      super.deleteSavedPage(id);
+      await deletePageBounds(id);
+      return super.deleteSavedPage(id);
     }
 
-    async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {
+    public async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return super.openGlobalContextMenu(
         {
           ...req,
@@ -221,7 +222,8 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
       );
     }
 
-    async openViewTabContextMenu(req: OpenViewTabContextMenuPayload, callerIdentity: OpenFin.Identity) {
+    public async openViewTabContextMenu(req: OpenViewTabContextMenuPayload, callerIdentity: OpenFin.Identity) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return super.openViewTabContextMenu(
         {
           ...req,
@@ -231,7 +233,8 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
       );
     }
 
-    async openPageTabContextMenu(req: OpenPageTabContextMenuPayload, callerIdentity: OpenFin.Identity) {
+    public async openPageTabContextMenu(req: OpenPageTabContextMenuPayload, callerIdentity: OpenFin.Identity) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return super.openPageTabContextMenu(
         {
           ...req,
@@ -241,7 +244,7 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
       );
     }
 
-    async quit(payload, callerIdentity) {
+    public async quit(payload: undefined, callerIdentity: OpenFin.Identity) {
       return super.quit(payload, callerIdentity);
     }
   }

@@ -1,15 +1,15 @@
 import { ButtonStyle, TemplateFragment, TemplateFragmentTypes } from "@openfin/workspace";
 
-const WorkspaceActions = {
+const WORKSPACE_ACTIONS = {
   delete: "workspace-delete",
   launch: "workspace-launch"
 };
 
-export const WorkspaceTemplate: {
+export const WORKSPACE_TEMPLATE: {
   actions: { delete: string; launch: string };
   template: TemplateFragment;
 } = {
-  actions: WorkspaceActions,
+  actions: WORKSPACE_ACTIONS,
   template: {
     type: TemplateFragmentTypes.Container,
     style: {
@@ -64,7 +64,7 @@ export const WorkspaceTemplate: {
               flexDirection: "column",
               width: "80px"
             },
-            action: WorkspaceActions.launch,
+            action: WORKSPACE_ACTIONS.launch,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
@@ -83,7 +83,7 @@ export const WorkspaceTemplate: {
               marginLeft: "10px",
               marginRight: "10px"
             },
-            action: WorkspaceActions.delete,
+            action: WORKSPACE_ACTIONS.delete,
             children: [
               {
                 type: TemplateFragmentTypes.Text,

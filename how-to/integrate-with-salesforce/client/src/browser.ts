@@ -14,20 +14,19 @@ export async function launchView(url: string) {
     }
   }
   if (createWindow) {
-    windowIdentity = (
-      await platform.createWindow({
-        defaultHeight: 700,
-        defaultWidth: 1200,
-        layout: {
-          content: [
-            {
-              type: "stack",
-              content: []
-            }
-          ]
-        }
-      })
-    ).identity;
+    const win = await platform.createWindow({
+      defaultHeight: 700,
+      defaultWidth: 1200,
+      layout: {
+        content: [
+          {
+            type: "stack",
+            content: []
+          }
+        ]
+      }
+    });
+    windowIdentity = win.identity;
   }
 
   const salesforceLwcPreloadScript: OpenFin.PreloadScript = {

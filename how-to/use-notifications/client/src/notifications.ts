@@ -1,5 +1,4 @@
 import { fin } from "@openfin/core";
-import * as CSS from "csstype";
 import {
   addEventListener as addNotificationEventListener,
   ContainerTemplateFragment,
@@ -14,10 +13,11 @@ import {
   UpdatableNotificationOptions,
   update
 } from "@openfin/workspace/notifications";
+import * as CSS from "csstype";
 
 let loggingElement: HTMLElement;
 const updatableNotifications = {};
-let updatableNotificationTimer;
+let updatableNotificationTimer: NodeJS.Timer;
 let activePlatform;
 
 const platform = {
@@ -38,7 +38,7 @@ async function initDom() {
 
   const btnLoggingClear = document.querySelector("#btnLoggingClear");
   btnLoggingClear.addEventListener("click", () => {
-    loggingElement.innerText = "";
+    loggingElement.textContent = "";
   });
 
   loggingShowHide();
@@ -132,17 +132,17 @@ function initListener() {
 
 function loggingShowHide(): void {
   const loggingContainer: HTMLElement = document.querySelector("#logging-container");
-  loggingContainer.style.display = loggingElement.innerText.length === 0 ? "none" : "flex";
+  loggingContainer.style.display = loggingElement.textContent.length === 0 ? "none" : "flex";
 }
 
 function loggingAddEntry(entry: string): void {
-  loggingElement.innerHTML = `${entry}\n\n` + loggingElement.innerHTML;
+  loggingElement.textContent = `${entry}\n\n${loggingElement.textContent}`;
   loggingShowHide();
 }
 
 function showNotificationCount(count: number): void {
   const btnNotificationsCenterToggle: HTMLElement = document.querySelector("#btnNotificationsCenterToggle");
-  btnNotificationsCenterToggle.innerText = `Notifications Center [${count}]`;
+  btnNotificationsCenterToggle.textContent = `Notifications Center [${count}]`;
 }
 
 async function showSimpleNotification() {
@@ -285,12 +285,12 @@ async function showCustomNotification() {
     c0: "Col 1",
     c1: "Col 2",
     c2: "Col 3",
-    d0_0: "50",
-    d0_1: "150",
-    d0_2: "250",
-    d1_0: "550",
-    d1_1: "650",
-    d1_2: "750"
+    d00: "50",
+    d01: "150",
+    d02: "250",
+    d10: "550",
+    d11: "650",
+    d12: "750"
   };
 
   const notification: NotificationOptions = {
@@ -313,8 +313,8 @@ async function showCustomNotification() {
                 createLabelledValue("secondValueTitle", "secondValue"),
                 createTable([
                   ["c0", "c1", "c2"],
-                  ["d0_0", "d0_1", "d0_2"],
-                  ["d1_0", "d1_1", "d1_2"]
+                  ["d00", "d01", "d02"],
+                  ["d10", "d11", "d12"]
                 ])
               ],
               {
@@ -376,7 +376,7 @@ export function createLabelledValue(
 }
 
 export function createTable(tableData: string[][]): TemplateFragment {
-  const cells = [];
+  const cells: TemplateFragment[] = [];
   const colSpans = [];
   for (let col = 0; col < tableData[0].length; col++) {
     cells.push(

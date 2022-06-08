@@ -6,19 +6,19 @@ import {
   type HomeSearchResponse,
   type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
-import type { QuoteSettings, QuoteResult } from "./shapes";
 import {
-  Chart,
-  LineController,
   CategoryScale,
+  Chart,
+  Filler,
   LinearScale,
+  LineController,
   LineElement,
   PointElement,
-  TimeScale,
-  Filler
+  TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
+import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { QuoteResult, QuoteSettings } from "./shapes";
 import { getQuoteTemplate } from "./templates";
 
 /**
@@ -71,9 +71,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
    * @returns The list of application entries.
    */
   public async getAppSearchEntries(integration: Integration<QuoteSettings>): Promise<HomeSearchResult[]> {
-    const results = [];
-
-    return results;
+    return [];
   }
 
   /**
@@ -88,12 +86,13 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
     result: CLIDispatchedSearchResult,
     lastResponse: CLISearchListenerResponse
   ): Promise<boolean> {
+    const data: { url?: string } = result.data;
     if (
       result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION &&
-      result.data.url &&
+      data.url &&
       this._integrationManager.openUrl
     ) {
-      await this._integrationManager.openUrl(result.data.url);
+      await this._integrationManager.openUrl(data.url);
       return true;
     }
 
@@ -131,17 +130,17 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
           now.toFormat("yyyy-LL-dd")
         );
 
-        let price;
-        let company;
-        let data;
+        let price: string | undefined;
+        let company: string | undefined;
+        let data: { x: number; y: number }[] | undefined;
 
         if (quoteData?.data?.lastSalePrice) {
-          price = quoteData.data.lastSalePrice;
+          price = quoteData.data.lastSalePrice.toString();
           company = quoteData.data.company;
           data = quoteData.data.chart;
         }
 
-        if (price !== undefined) {
+        if (price !== undefined && company !== undefined && data !== undefined) {
           const graphImage = await this.renderGraph(data);
 
           const quoteResult: HomeSearchResult = {
@@ -223,7 +222,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
             backgroundColor: "green",
             radius: 0,
             data
-          } as any
+          } as never
         ]
       },
       options: {

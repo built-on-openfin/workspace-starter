@@ -1,5 +1,6 @@
-import { NativeWindowIntegrationClient } from "@openfin/native-window-integration-client";
+import { ClientConfiguration, NativeWindowIntegrationClient } from "@openfin/native-window-integration-client";
 import asset from "@openfin/native-window-integration-client/lib/provider.zip";
+import { App } from "@openfin/workspace-platform";
 import { getAppsByTag } from "./apps";
 
 let nwiClient: NativeWindowIntegrationClient;
@@ -7,18 +8,18 @@ let clientRequested = false;
 
 async function init() {
   clientRequested = true;
-  let nwiApps = await getAppsByTag(["native", "nwi"], true);
-  let configuration = [];
+  const nwiApps = await getAppsByTag<App & { data?: { nwi?: ClientConfiguration } }>(["native", "nwi"], true);
+  const configuration = [];
 
-  nwiApps.forEach((app) => {
-    if (app["data"] !== undefined && app["data"]["nwi"] !== undefined) {
-      configuration.push(app["data"]["nwi"]);
+  for (const app of nwiApps) {
+    if (app.data?.nwi !== undefined) {
+      configuration.push(app.data?.nwi);
     }
-  });
+  }
 
   if (configuration.length > 0) {
     // we can keep checking to see if nwi apps are added to the list.
-    console.log("NWI compatible apps specified: ", configuration);
+    console.log("NWI compatible apps specified:", configuration);
     try {
       nwiClient = await NativeWindowIntegrationClient.create({
         local: false,
@@ -35,7 +36,7 @@ async function init() {
 
 export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
   try {
-    if (clientRequested === false) {
+    if (!clientRequested) {
       await init();
     }
 
@@ -57,7 +58,7 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 
 export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot) {
   try {
-    if (clientRequested === false) {
+    if (!clientRequested) {
       await init();
     }
 
