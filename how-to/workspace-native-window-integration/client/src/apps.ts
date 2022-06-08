@@ -5,19 +5,14 @@ import { getSettings } from "./settings";
 let cachedApps;
 
 async function validateEntries(apps: App[]) {
-  let canLaunchExternalProcessResponse =
-    await fin.System.queryPermissionForCurrentContext(
-      "System.launchExternalProcess"
-    );
+  let canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+    "System.launchExternalProcess"
+  );
   let canLaunchExternalProcess =
-    canLaunchExternalProcessResponse !== undefined &&
-    canLaunchExternalProcessResponse.granted;
+    canLaunchExternalProcessResponse !== undefined && canLaunchExternalProcessResponse.granted;
 
-  let canDownloadAppAssetsResponse =
-    await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-  let canDownloadAppAssets =
-    canDownloadAppAssetsResponse !== undefined &&
-    canDownloadAppAssetsResponse.granted;
+  let canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  let canDownloadAppAssets = canDownloadAppAssetsResponse !== undefined && canDownloadAppAssetsResponse.granted;
 
   if (canLaunchExternalProcess && canDownloadAppAssets) {
     return apps;
@@ -82,7 +77,6 @@ async function getRestEntries(
   return cachedApps;
 }
 
-
 export async function getApps(): Promise<App[]> {
   console.log("Requesting apps.");
   try {
@@ -110,13 +104,13 @@ export async function getAppsByTag(tags: string[], mustMatchAll = false): Promis
     let matchFound = false;
     for (let i = 0; i < tags.length; i++) {
       if (value.tags.indexOf(tags[i]) > -1) {
-        if(mustMatchAll) {
+        if (mustMatchAll) {
           matchFound = true;
         } else {
           return true;
         }
       } else {
-        if(mustMatchAll) {
+        if (mustMatchAll) {
           return false;
         }
       }
@@ -126,22 +120,22 @@ export async function getAppsByTag(tags: string[], mustMatchAll = false): Promis
   return filteredApps;
 }
 
-export async function getApp(requestedApp: string|{ appId:string }): Promise<App> {
-    let apps = await getApps();
-    let appId;
-    if(requestedApp !== undefined) {
-        if(typeof requestedApp === "string"){
-            appId = requestedApp;
-        } else {
-            appId = requestedApp.appId;
-        }
+export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
+  let apps = await getApps();
+  let appId;
+  if (requestedApp !== undefined) {
+    if (typeof requestedApp === "string") {
+      appId = requestedApp;
+    } else {
+      appId = requestedApp.appId;
     }
-    if(appId === undefined) {
-        return undefined;
-    }
-    let app = apps.find(entry => {
-        return entry.appId === appId;
-    });
+  }
+  if (appId === undefined) {
+    return undefined;
+  }
+  let app = apps.find((entry) => {
+    return entry.appId === appId;
+  });
 
-    return app;
+  return app;
 }

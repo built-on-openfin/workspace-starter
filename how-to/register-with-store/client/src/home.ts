@@ -11,7 +11,7 @@ import {
   CLIDispatchedSearchResult,
   CLIFilterOptionType
 } from "@openfin/workspace";
-import { Page } from '@openfin/workspace-platform';
+import { Page } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { getApps } from "./apps";
@@ -29,14 +29,14 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
       id: "tags",
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
-      options: [],
+      options: []
     };
 
     uniqueTags.forEach((tag) => {
       if (Array.isArray(tagFilter.options)) {
         tagFilter.options.push({
           value: tag,
-          isSelected: false,
+          isSelected: false
         });
       }
     });
@@ -47,7 +47,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
   return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: App[]){
+function mapAppEntriesToSearchEntries(apps: App[]) {
   let appResults: CLISearchResult<any>[] = [];
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
@@ -56,30 +56,30 @@ function mapAppEntriesToSearchEntries(apps: App[]){
         key: apps[i].appId,
         title: apps[i].title,
         data: apps[i],
-        template:  CLITemplate.Plain,
+        template: CLITemplate.Plain
       };
 
-      if(apps[i].manifestType === "view") {
+      if (apps[i].manifestType === "view") {
         entry.label = "View";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "snapshot") {
+      if (apps[i].manifestType === "snapshot") {
         entry.label = "Snapshot";
         action.name = "Launch Snapshot";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "manifest") {
+      if (apps[i].manifestType === "manifest") {
         entry.label = "App";
         action.name = "Launch App";
         entry.actions = [action];
       }
-      if(apps[i].manifestType === "external") {
+      if (apps[i].manifestType === "external") {
         action.name = "Launch Native App";
         entry.actions = [action];
         entry.label = "Native App";
       }
 
-      if(Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+      if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
         entry.icon = apps[i].icons[0].src;
       }
 
@@ -88,15 +88,15 @@ function mapAppEntriesToSearchEntries(apps: App[]){
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
-      };
-        
+      }
+
       appResults.push(entry);
     }
   }
   return appResults;
 }
 
-function mapPageEntriesToSearchEntries(pages: Page[]){
+function mapPageEntriesToSearchEntries(pages: Page[]) {
   let pageResults: CLISearchResult<any>[] = [];
   if (Array.isArray(pages)) {
     for (let i = 0; i < pages.length; i++) {
@@ -104,17 +104,20 @@ function mapPageEntriesToSearchEntries(pages: Page[]){
         key: pages[i].pageId,
         title: pages[i].title,
         label: "Page",
-        actions: [{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D"  }, { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }],
-        data: {tags:["page"], pageId: pages[i].pageId },
+        actions: [
+          { name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
+          { name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
+        ],
+        data: { tags: ["page"], pageId: pages[i].pageId },
         template: CLITemplate.Plain
       };
-      
+
       if (pages[i].description !== undefined) {
         entry.description = pages[i].description;
         entry.shortDescription = pages[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = pages[i].description;
-      } 
+      }
 
       pageResults.push(entry);
     }
@@ -138,26 +141,17 @@ async function getResults(
   let initialResults: CLISearchResult<any>[] = [...appSearchEntries, ...pageSearchEntries];
 
   if (initialResults.length > 0) {
-
     let finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
 
-      if (
-        query !== undefined &&
-        query !== null &&
-        query.length >= queryMinLength
-      ) {
+      if (query !== undefined && query !== null && query.length >= queryMinLength) {
         textMatchFound = queryAgainst.some((target) => {
           let path = target.split(".");
           if (path.length === 1) {
             let targetValue = entry[path[0]];
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              typeof targetValue === "string"
-            ) {
+            if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
               return targetValue.toLowerCase().indexOf(query) > -1;
             }
           } else if (path.length === 2) {
@@ -167,25 +161,15 @@ async function getResults(
               targetValue = target[path[1]];
             }
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              typeof targetValue === "string"
-            ) {
+            if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
               return targetValue.toLowerCase().indexOf(query) > -1;
             }
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              Array.isArray(targetValue)
-            ) {
+            if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
               if (
                 targetValue.length > 0 &&
                 typeof targetValue[0] === "string" &&
-                targetValue.some(
-                  (target) => target.toLowerCase().indexOf(query) === 0
-                )
+                targetValue.some((target) => target.toLowerCase().indexOf(query) === 0)
               ) {
                 return true;
               } else {
@@ -209,16 +193,10 @@ async function getResults(
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
               return filter.options.every((option) => {
-                return (
-                  !option.isSelected ||
-                  entry.data.tags.indexOf(option.value) > -1
-                );
+                return !option.isSelected || entry.data.tags.indexOf(option.value) > -1;
               });
             }
-          } else if (
-            filter.options.isSelected &&
-            entry.data?.tags !== undefined
-          ) {
+          } else if (filter.options.isSelected && entry.data?.tags !== undefined) {
             return entry.data?.tags.indexOf(filter.options.value) > -1;
           }
           return true;
@@ -234,14 +212,14 @@ async function getResults(
     let response: CLISearchResponse = {
       results: finalResults,
       context: {
-        filters: getSearchFilters(tags),
-      },
+        filters: getSearchFilters(tags)
+      }
     };
 
     return response;
   } else {
     return {
-      results: [],
+      results: []
     };
   }
 }
@@ -262,7 +240,7 @@ export async function register() {
 
   const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
   const queryAgainst = settings?.homeProvider?.queryAgainst;
-  let lastResponse:CLISearchListenerResponse;
+  let lastResponse: CLISearchListenerResponse;
 
   const onUserInput = async (
     request: CLISearchListenerRequest,
@@ -274,7 +252,7 @@ export async function register() {
     }
 
     let filters = request?.context?.selectedFilters;
-    if(lastResponse !== undefined) {
+    if (lastResponse !== undefined) {
       lastResponse.close();
     }
     lastResponse = response;
@@ -285,16 +263,16 @@ export async function register() {
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-      if(result.data.pageId !== undefined) {
-          if(result.action.name === HOME_ACTION_DELETE_PAGE) {
-            await deletePage(result.data.pageId);
-            if(lastResponse !== undefined && lastResponse !== null) {
-              lastResponse.revoke(result.key);
-            }
-          } else {
-            let pageToLaunch = await getPage(result.data.pageId);
-            await launchPage(pageToLaunch);
+      if (result.data.pageId !== undefined) {
+        if (result.action.name === HOME_ACTION_DELETE_PAGE) {
+          await deletePage(result.data.pageId);
+          if (lastResponse !== undefined && lastResponse !== null) {
+            lastResponse.revoke(result.key);
           }
+        } else {
+          let pageToLaunch = await getPage(result.data.pageId);
+          await launchPage(pageToLaunch);
+        }
       } else {
         await launch(result.data);
       }
@@ -308,7 +286,7 @@ export async function register() {
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
     onUserInput: onUserInput,
-    onResultDispatch: onSelection,
+    onResultDispatch: onSelection
   };
 
   await Home.register(cliProvider);
@@ -325,11 +303,10 @@ export async function hide() {
 }
 
 export async function deregister() {
-  if(isHomeRegistered) {
+  if (isHomeRegistered) {
     let settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
   } else {
     console.warn("Unable to deregister home as there is an indication it was never registered");
   }
 }
-

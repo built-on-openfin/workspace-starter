@@ -7,16 +7,12 @@ import {
   StorefrontProvider,
   StorefrontTemplate,
   StorefrontNavigationItem,
-  StorefrontDetailedNavigationItem,
+  StorefrontDetailedNavigationItem
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
-import {
-  CustomSettings,
-  StorefrontSettingsLandingPageRow,
-  StorefrontSettingsNavigationItem,
-} from "./shapes";
+import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
 
 let isStoreRegistered = false;
 
@@ -29,16 +25,13 @@ export async function register() {
       isStoreRegistered = true;
       console.log("Storefront provider initialised.");
     } catch (err) {
-      console.error(
-        "An error was encountered while trying to register the content store provider",
-        err
-      );
+      console.error("An error was encountered while trying to register the content store provider", err);
     }
   }
 }
 
 export async function deregister() {
-  if(isStoreRegistered) {
+  if (isStoreRegistered) {
     let settings = await getSettings();
     Storefront.deregister(settings.storefrontProvider.id);
   } else {
@@ -101,9 +94,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
       if (idList.indexOf(id) > -1) {
         hasDuplicateIds = true;
         console.error(
-          namespace +
-            ": The id is used in more than one place. Please have a unique and idempotent id: " +
-            id
+          namespace + ": The id is used in more than one place. Please have a unique and idempotent id: " + id
         );
       } else {
         idList.push(id);
@@ -114,21 +105,13 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
   let warningMessage =
     "The id is not defined. This demo will generate an id based on title but you should have a unique and idempotent id when building your own store.";
 
-    console.log("Validating settings storefrontProvider navigation config");
+  console.log("Validating settings storefrontProvider navigation config");
   let navigation = config.storefrontProvider.navigation;
   for (let i = 0; i < navigation.length; i++) {
-    validateId(
-      navigation[i].id,
-      "storefrontProvider.navigation[" + i + "].id",
-      warningMessage
-    );
+    validateId(navigation[i].id, "storefrontProvider.navigation[" + i + "].id", warningMessage);
     let items = navigation[i].items;
     for (let n = 0; n < items.length; n++) {
-      validateId(
-        items[n].id,
-        "storefrontProvider.navigation[" + i + "].items[" + n + "].id",
-        warningMessage
-      );
+      validateId(items[n].id, "storefrontProvider.navigation[" + i + "].items[" + n + "].id", warningMessage);
     }
   }
 
@@ -136,11 +119,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
   let landingPage = config.storefrontProvider.landingPage;
 
   if (landingPage?.hero?.cta !== undefined) {
-    validateId(
-      landingPage.hero.cta.id,
-      "storefrontProvider.landingPage.hero.cta.id",
-      warningMessage
-    );
+    validateId(landingPage.hero.cta.id, "storefrontProvider.landingPage.hero.cta.id", warningMessage);
   }
 
   console.log("Validating settings storefrontProvider landing page top row config");
@@ -148,11 +127,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 
   if (topRow.items !== undefined) {
     for (let i = 0; i < topRow.items.length; i++) {
-      validateId(
-        topRow.items[i].id,
-        "storefrontProvider.landingPage.topRow.items[" + i + "].id",
-        warningMessage
-      );
+      validateId(topRow.items[i].id, "storefrontProvider.landingPage.topRow.items[" + i + "].id", warningMessage);
     }
   }
 
@@ -160,11 +135,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
   let bottomRow = landingPage.bottomRow;
   if (bottomRow.items !== undefined) {
     for (let i = 0; i < bottomRow.items.length; i++) {
-      validateId(
-        bottomRow.items[i].id,
-        "storefrontProvider.landingPage.bottomRow.items[" + i + "].id",
-        warningMessage
-      );
+      validateId(bottomRow.items[i].id, "storefrontProvider.landingPage.bottomRow.items[" + i + "].id", warningMessage);
     }
   }
 
@@ -191,23 +162,18 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
       getLandingPage: getLandingPage.bind(this),
       getFooter: getFooter.bind(this),
       getApps,
-      launchApp: launch,
+      launchApp: launch
     };
   }
   return null;
 }
 
-async function getNavigation(): Promise<
-  [StorefrontNavigationSection?, StorefrontNavigationSection?]
-> {
+async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
   console.log("Showing the store navigation.");
   const navigationSectionItemLimit = 5;
   const navigationSectionLimit = 2;
   let settings = await getSettings();
-  let navigationSections: [
-    StorefrontNavigationSection?,
-    StorefrontNavigationSection?
-  ] = [];
+  let navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [];
 
   if (settings?.storefrontProvider?.navigation === undefined) {
     return [];
@@ -215,15 +181,11 @@ async function getNavigation(): Promise<
 
   for (let i = 0; i < settings.storefrontProvider.navigation.length; i++) {
     if (navigationSections.length === navigationSectionLimit) {
-      console.log(
-        "More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken."
-      );
+      console.log("More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken.");
       break;
     }
     let navigationSection: StorefrontNavigationSection = {
-      id:
-        settings.storefrontProvider.navigation[i].id ??
-        getId(settings.storefrontProvider.navigation[i].title),
+      id: settings.storefrontProvider.navigation[i].id ?? getId(settings.storefrontProvider.navigation[i].title),
       title: settings.storefrontProvider.navigation[i].title,
       items: (await getNavigationItems(
         settings.storefrontProvider.navigation[i].items,
@@ -234,7 +196,7 @@ async function getNavigation(): Promise<
         StorefrontNavigationItem?,
         StorefrontNavigationItem?,
         StorefrontNavigationItem?
-      ],
+      ]
     };
     navigationSections.push(navigationSection);
   }
@@ -247,7 +209,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   let landingPage: StorefrontLandingPage = {
     topRow: null,
     middleRow: null,
-    bottomRow: null,
+    bottomRow: null
   };
 
   let settings = await getSettings();
@@ -257,16 +219,12 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 
   if (settings?.storefrontProvider?.landingPage?.hero !== undefined) {
     let hero = settings.storefrontProvider.landingPage.hero;
-    let cta = await getNavigationItem(
-      hero.cta.id,
-      hero.cta.title,
-      hero.cta.tags
-    );
+    let cta = await getNavigationItem(hero.cta.id, hero.cta.title, hero.cta.tags);
     landingPage.hero = {
       title: hero.title,
       image: hero.image,
       description: hero.description,
-      cta,
+      cta
     };
   }
 
@@ -291,17 +249,10 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
         )}. Only ${middleRowAppLimit} will be shown.`
       );
     }
-    let validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
-      App?,
-      App?,
-      App?,
-      App?,
-      App?,
-      App?
-    ];
+    let validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [App?, App?, App?, App?, App?, App?];
     landingPage.middleRow = {
       title: middleRow.title,
-      apps: validatedMiddleRowApps,
+      apps: validatedMiddleRowApps
     };
   } else {
     console.error("You need to have a middleRow defined in your landing page.");
@@ -325,9 +276,7 @@ async function getFooter(): Promise<StorefrontFooter> {
   if (settings?.storefrontProvider?.footer !== undefined) {
     return settings.storefrontProvider.footer;
   } else {
-    console.error(
-      "Storefront is being initialised without a footer configured."
-    );
+    console.error("Storefront is being initialised without a footer configured.");
     return null;
   }
 }
@@ -344,18 +293,14 @@ async function getFooter(): Promise<StorefrontFooter> {
  * This allows apps to be tagged on the server and the store would automatically update the apps assigned to a particular section.
  * @returns StorefrontNavigationItem
  */
-async function getNavigationItem(
-  id: string,
-  title: string,
-  tags: string[]
-): Promise<StorefrontNavigationItem> {
+async function getNavigationItem(id: string, title: string, tags: string[]): Promise<StorefrontNavigationItem> {
   let navigationItem: StorefrontNavigationItem = {
     id: id ?? getId(title, tags),
     title,
     templateId: StorefrontTemplate.AppGrid,
     templateData: {
-      apps: [],
-    },
+      apps: []
+    }
   };
 
   let apps = await getAppsByTag(tags);
@@ -367,18 +312,11 @@ async function getNavigationItem(
   return navigationItem;
 }
 
-async function getNavigationItems(
-  items: StorefrontSettingsNavigationItem[],
-  limit: number
-) {
+async function getNavigationItems(items: StorefrontSettingsNavigationItem[], limit: number) {
   let navigationItems: StorefrontNavigationItem[] = [];
 
   for (let i = 0; i < items.length; i++) {
-    let navigationItem = await getNavigationItem(
-      items[i].id,
-      items[i].title,
-      items[i].tags
-    );
+    let navigationItem = await getNavigationItem(items[i].id, items[i].title, items[i].tags);
     navigationItems.push(navigationItem);
   }
 
@@ -390,10 +328,7 @@ async function getNavigationItems(
   return navigationItems.slice(0, limit);
 }
 
-async function getLandingPageRow(
-  definition: StorefrontSettingsLandingPageRow,
-  limit: number
-) {
+async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, limit: number) {
   let items: StorefrontDetailedNavigationItem[] = [];
 
   for (let i = 0; i < definition.items.length; i++) {
@@ -405,7 +340,7 @@ async function getLandingPageRow(
     let item: StorefrontDetailedNavigationItem = {
       description: definition.items[i].description,
       image: definition.items[i].image,
-      ...navigationItem,
+      ...navigationItem
     };
     items.push(item);
   }
@@ -420,6 +355,6 @@ async function getLandingPageRow(
 
   return {
     title: definition.title,
-    items: detailedNavigationItems,
+    items: detailedNavigationItems
   };
 }

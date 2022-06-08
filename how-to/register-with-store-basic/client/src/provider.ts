@@ -1,6 +1,5 @@
-
-import { init as workspacePlatformInit } from '@openfin/workspace-platform';
-import { register, deregister, show, hide } from './store';
+import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { register, deregister, show, hide } from "./store";
 
 async function init() {
   await workspacePlatformInit({
@@ -11,7 +10,7 @@ async function init() {
   let hideStore = document.getElementById("hide");
   let deregisterStore = document.getElementById("deregister");
 
-  registerStore.onclick = async ()=> {
+  registerStore.onclick = async () => {
     await register();
     showStore.style.display = "unset";
     hideStore.style.display = "unset";
@@ -19,7 +18,7 @@ async function init() {
     registerStore.style.display = "none";
   };
 
-  deregisterStore.onclick = async ()=> {
+  deregisterStore.onclick = async () => {
     showStore.style.display = "none";
     hideStore.style.display = "none";
     deregisterStore.style.display = "none";
@@ -27,15 +26,15 @@ async function init() {
     await deregister();
   };
 
-  showStore.onclick = async ()=> {
+  showStore.onclick = async () => {
     await show();
   };
 
-  hideStore.onclick = async ()=> {
+  hideStore.onclick = async () => {
     await hide();
   };
 }
 
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   await init();
 });

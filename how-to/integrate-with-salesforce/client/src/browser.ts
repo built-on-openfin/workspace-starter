@@ -1,5 +1,5 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { fin } from 'openfin-adapter/src/mock';
+import { fin } from "openfin-adapter/src/mock";
 
 let windowIdentity: OpenFin.Identity;
 
@@ -14,20 +14,22 @@ export async function launchView(url: string) {
     }
   }
   if (createWindow) {
-    windowIdentity = (await platform.createWindow({
-      defaultHeight: 700,
-      defaultWidth: 1200,
-      layout: {
-        content: [
-          {
-            type: "stack",
-            content: [],
-          },
-        ],
-      },
-    })).identity;
+    windowIdentity = (
+      await platform.createWindow({
+        defaultHeight: 700,
+        defaultWidth: 1200,
+        layout: {
+          content: [
+            {
+              type: "stack",
+              content: []
+            }
+          ]
+        }
+      })
+    ).identity;
   }
-  
+
   const salesforceLwcPreloadScript: OpenFin.PreloadScript = {
     url: `${window.location.origin}/js/preload.js`
   };

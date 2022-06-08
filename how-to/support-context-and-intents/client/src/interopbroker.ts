@@ -1,12 +1,7 @@
 import { App } from "@openfin/workspace";
 import { InteropBroker } from "openfin-adapter/src/api/interop";
 import { fin } from "openfin-adapter/src/mock";
-import {
-  getAppsByIntent,
-  getIntentsByContext,
-  getIntent,
-  getApp,
-} from "./apps";
+import { getAppsByIntent, getIntentsByContext, getIntent, getApp } from "./apps";
 import { launchView, launchSnapshot } from "./launch";
 
 const NoAppsFound = "NoAppsFound";
@@ -18,9 +13,7 @@ export class PlatformInteropBroker extends InteropBroker {
 
     if (app.manifestType !== "view" && app.manifestType !== "inline-view" && app.manifestType !== "snapshot") {
       // optional logic show a prompt to the user to let them know
-      console.warn(
-        "Unable to raise intent against app as only view/snapshot based apps are supported."
-      );
+      console.warn("Unable to raise intent against app as only view/snapshot based apps are supported.");
       return null;
     }
 
@@ -30,9 +23,7 @@ export class PlatformInteropBroker extends InteropBroker {
       let identity = await launchView(app);
       if (identity === null) {
         // optional logic show a prompt to the user to let them know
-        console.warn(
-          "Unable to raise intent against view as no identity was returned."
-        );
+        console.warn("Unable to raise intent against view as no identity was returned.");
         return null;
       } else {
         super.setIntentTarget(intent, identity);
@@ -45,9 +36,7 @@ export class PlatformInteropBroker extends InteropBroker {
       let identities = await launchSnapshot(app);
       if (identities === null) {
         // optional logic show a prompt to the user to let them know
-        console.warn(
-          "Unable to raise intent against target as no identity was returned."
-        );
+        console.warn("Unable to raise intent against target as no identity was returned.");
         return null;
       } else {
         for (let i = 0; i < identities.length; i++) {
@@ -58,7 +47,7 @@ export class PlatformInteropBroker extends InteropBroker {
 
     return {
       source: app.appId,
-      version: app.version,
+      version: app.version
     };
   }
 
@@ -85,11 +74,7 @@ export class PlatformInteropBroker extends InteropBroker {
     }
   }
 
-  async launchAppPicker(options: {
-    apps?: App[];
-    intent?: any;
-    intents?: any;
-  }): Promise<{
+  async launchAppPicker(options: { apps?: App[]; intent?: any; intents?: any }): Promise<{
     appId: string;
     intent: { name: string; displayName: string };
   }> {
@@ -97,7 +82,7 @@ export class PlatformInteropBroker extends InteropBroker {
     // launch a new window and optionally pass the available intents as customData.apps as part of the window options
     // the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
     // this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting.)
-    let url = window.location.href.replace("platform/provider.html", "windows/intents/picker.html")
+    let url = window.location.href.replace("platform/provider.html", "windows/intents/picker.html");
     const winOption = {
       name: "intent-picker",
       includeInSnapshot: false,
@@ -110,12 +95,12 @@ export class PlatformInteropBroker extends InteropBroker {
       customData: {
         apps: options.apps,
         intent: options.intent,
-        intents: options.intents,
+        intents: options.intents
       },
       url,
       frame: false,
       autoShow: true,
-      alwaysOnTop: true,
+      alwaysOnTop: true
     };
 
     let win = await fin.Window.create(winOption);
@@ -129,7 +114,7 @@ export class PlatformInteropBroker extends InteropBroker {
     }
   }
 
-  async isConnectionAuthorized(id: OpenFin.Identity, payload?: any): Promise<boolean>{
+  async isConnectionAuthorized(id: OpenFin.Identity, payload?: any): Promise<boolean> {
     console.log("Interop connection being made by the following identity with payload: ", id, payload);
     // perform connection validation checks here if required and return false if it shouldn't be permissioned.
     return true;
@@ -140,7 +125,7 @@ export class PlatformInteropBroker extends InteropBroker {
     // perform check here if you wish and return true/false accordingly
     return true;
   }
-  
+
   async handleInfoForIntentsByContext(context, clientIdentity) {
     let intents = await getIntentsByContext(context.type);
 
@@ -171,7 +156,7 @@ export class PlatformInteropBroker extends InteropBroker {
       apps: result.apps.map((app) => {
         let appEntry = { name: app.appId, appId: app.appId, title: app.title };
         return appEntry;
-      }),
+      })
     };
 
     return response;
@@ -185,7 +170,7 @@ export class PlatformInteropBroker extends InteropBroker {
     let intent = {
       context: contextForIntent,
       name: undefined,
-      displayName: undefined,
+      displayName: undefined
     };
     let targetApp: App;
     let targetAppIntent;
@@ -198,20 +183,13 @@ export class PlatformInteropBroker extends InteropBroker {
     if (targetApp !== undefined && Array.isArray(targetApp.intents)) {
       for (let i = 0; i < targetApp.intents.length; i++) {
         targetAppIntent = targetApp.intents[i];
-        if (
-          Array.isArray(targetAppIntent.contexts) &&
-          targetAppIntent.contexts.indexOf(contextForIntent.type) > -1
-        ) {
+        if (Array.isArray(targetAppIntent.contexts) && targetAppIntent.contexts.indexOf(contextForIntent.type) > -1) {
           targetAppIntentCount++;
         }
       }
     }
 
-    if (
-      targetApp !== undefined &&
-      targetAppIntent !== undefined &&
-      targetAppIntentCount === 1
-    ) {
+    if (targetApp !== undefined && targetAppIntent !== undefined && targetAppIntentCount === 1) {
       // a preferred name for an app was given with the context object
       // the app existed and it supported the context type and there was only one intent that supported
       // that context type. Launch the app with that intent otherwise present the user with a list of
@@ -229,10 +207,7 @@ export class PlatformInteropBroker extends InteropBroker {
       intent.name = availableIntents[0].intent.name;
       intent.displayName = availableIntents[0].intent.name;
       if (availableIntents[0].apps.length === 1) {
-        let intentResolver = await this.launchAppWithIntent(
-          availableIntents[0].apps[0],
-          intent
-        );
+        let intentResolver = await this.launchAppWithIntent(availableIntents[0].apps[0], intent);
         if (intentResolver === null) {
           throw Error(NoAppsFound);
         }
@@ -242,33 +217,24 @@ export class PlatformInteropBroker extends InteropBroker {
         try {
           let userSelection = await this.launchAppPicker({
             apps: availableIntents[0].apps,
-            intent,
+            intent
           });
 
           let selectedApp = availableIntents[0].apps.find(
-            (entry) =>
-              entry.appId === userSelection.appId && entry.appId !== undefined
+            (entry) => entry.appId === userSelection.appId && entry.appId !== undefined
           );
           if (selectedApp !== null && selectedApp !== undefined) {
-            let intentResolver = await this.launchAppWithIntent(
-              selectedApp,
-              intent
-            );
+            let intentResolver = await this.launchAppWithIntent(selectedApp, intent);
             if (intentResolver === null) {
               throw Error(NoAppsFound);
             }
             return intentResolver;
           } else {
-            console.error(
-              "We were returned a non existent appId to launch with the intent."
-            );
+            console.error("We were returned a non existent appId to launch with the intent.");
             throw new Error(NoAppsFound);
           }
         } catch (reason) {
-          console.error(
-            "App for intent by context not selected/launched.",
-            intent
-          );
+          console.error("App for intent by context not selected/launched.", intent);
           throw new Error(ResolverTimeout);
         }
       }
@@ -276,7 +242,7 @@ export class PlatformInteropBroker extends InteropBroker {
       try {
         let userSelection = await this.launchAppPicker({
           intent,
-          intents: availableIntents,
+          intents: availableIntents
         });
 
         let selectedIntent = availableIntents.find((entry) => {
@@ -291,31 +257,22 @@ export class PlatformInteropBroker extends InteropBroker {
           throw new Error(NoAppsFound);
         }
         let selectedApp = selectedIntent.apps.find(
-          (entry) =>
-            entry.appId === userSelection.appId && entry.appId !== undefined
+          (entry) => entry.appId === userSelection.appId && entry.appId !== undefined
         );
         if (selectedApp !== null && selectedApp !== undefined) {
           intent.displayName = userSelection.intent.displayName;
           intent.name = userSelection.intent.name;
-          let intentResolver = await this.launchAppWithIntent(
-            selectedApp,
-            userSelection.intent
-          );
+          let intentResolver = await this.launchAppWithIntent(selectedApp, userSelection.intent);
           if (intentResolver === null) {
             throw Error(NoAppsFound);
           }
           return intentResolver;
         } else {
-          console.error(
-            "We were returned a non existent appId to launch with the intent."
-          );
+          console.error("We were returned a non existent appId to launch with the intent.");
           throw new Error(NoAppsFound);
         }
       } catch (reason) {
-        console.error(
-          "App for intent by context not selected/launched.",
-          intent
-        );
+        console.error("App for intent by context not selected/launched.", intent);
         throw new Error(ResolverTimeout);
       }
     }
@@ -330,9 +287,7 @@ export class PlatformInteropBroker extends InteropBroker {
       targetApp = await getApp(intent.metadata?.target);
       if (targetApp === undefined) {
         // check to see if you have been passed a specific identity for a view that should be targetted instead of an app
-        let targetIdentity = await this.getTargetIdentity(
-          intent.metadata?.target
-        );
+        let targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
         if (targetIdentity !== undefined) {
           console.log(
             "We were passed a view identity instead of an app entry when raising/firing an intent. We will fire the intent at that as it exists and no app entry exists with that name.: ",
@@ -341,7 +296,7 @@ export class PlatformInteropBroker extends InteropBroker {
           );
           super.setIntentTarget(intent, targetIdentity);
           return {
-            source: targetIdentity.name,
+            source: targetIdentity.name
           };
         }
       }
@@ -359,10 +314,7 @@ export class PlatformInteropBroker extends InteropBroker {
 
     if (intentApps.length === 1) {
       // handle single entry
-      let intentResolver = await this.launchAppWithIntent(
-        intentApps[0],
-        intent
-      );
+      let intentResolver = await this.launchAppWithIntent(intentApps[0], intent);
       if (intentResolver === null) {
         throw Error(NoAppsFound);
       }
@@ -374,29 +326,21 @@ export class PlatformInteropBroker extends InteropBroker {
       try {
         let userSelection = await this.launchAppPicker({
           apps: intentApps,
-          intent,
+          intent
         });
         if (intentApps === undefined) {
           console.warn("We should have a list of apps to search from.");
           intentApps = [];
         }
-        let selectedApp = intentApps.find(
-          (entry) =>
-            entry.appId === userSelection.appId && entry.appId !== undefined
-        );
+        let selectedApp = intentApps.find((entry) => entry.appId === userSelection.appId && entry.appId !== undefined);
         if (selectedApp !== null && selectedApp !== undefined) {
-          let intentResolver = await this.launchAppWithIntent(
-            selectedApp,
-            intent
-          );
+          let intentResolver = await this.launchAppWithIntent(selectedApp, intent);
           if (intentResolver === null) {
             throw Error(NoAppsFound);
           }
           return intentResolver;
         } else {
-          console.error(
-            "We were returned a non existent appId to launch with the intent."
-          );
+          console.error("We were returned a non existent appId to launch with the intent.");
           throw new Error(NoAppsFound);
         }
       } catch (reason) {

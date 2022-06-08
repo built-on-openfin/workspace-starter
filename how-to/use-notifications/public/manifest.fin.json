@@ -10,9 +10,8 @@
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": true,
     "providerUrl": "http://localhost:8080/notifications/notifications.html",
-    "preventQuitOnLastWindowClosed":true,
-    "defaultWindowOptions": {
-    }
+    "preventQuitOnLastWindowClosed": true,
+    "defaultWindowOptions": {}
   },
   "snapshot": {
     "windows": []
@@ -25,4 +24,3 @@
     "target": ["desktop", "start-menu"]
   }
 }
-  

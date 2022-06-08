@@ -9,6 +9,12 @@
         "htmlWhitespaceSensitivity": "ignore",
         "jsxBracketSameLine": true
       }
+    },
+    {
+      "files": ["*.ts"],
+      "options": {
+        "singleQuote": false
+      }
     }
   ],
   "printWidth": 120,

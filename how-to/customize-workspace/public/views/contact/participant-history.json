@@ -1,7 +1,7 @@
 {
-    "url": "http://localhost:8080/views/contact/participant-history/index.html",
-    "fdc3InteropApi": "1.2",
-    "interop": {
-      "currentContextGroup": "green"
-    }
+  "url": "http://localhost:8080/views/contact/participant-history/index.html",
+  "fdc3InteropApi": "1.2",
+  "interop": {
+    "currentContextGroup": "green"
   }
+}

@@ -1,4 +1,4 @@
 {
-    "name": "interop-view",
-    "url": "http://localhost:8080/views/basic-interop-view.html"
+  "name": "interop-view",
+  "url": "http://localhost:8080/views/basic-interop-view.html"
 }

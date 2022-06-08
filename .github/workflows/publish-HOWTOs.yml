@@ -8,7 +8,7 @@ jobs:
     name: Build and package HOWTOs
     runs-on: ubuntu-latest
     env:
-      RELEASE_BRANCH_PREFIX: "workspace/"
+      RELEASE_BRANCH_PREFIX: 'workspace/'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -71,10 +71,9 @@ jobs:
       - name: Publish
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
-          branch: gh-pages  # Target branch to deploy to
-          folder: public-github  # Source folder to deploy
-          target-folder: ${{ github.ref_name }}  # Target folder to deploy to
-
+          branch: gh-pages # Target branch to deploy to
+          folder: public-github # Source folder to deploy
+          target-folder: ${{ github.ref_name }} # Target folder to deploy to
 
   publish-aws:
     if: ${{ startsWith(github.ref_name, 'workspace/') }}
@@ -95,8 +94,8 @@ jobs:
         env:
           # The bucket name should match the https host name in
           # scripts/package.js:URLBaseMap['aws'].
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Target bucket to deploy to
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }} # Target bucket to deploy to
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: public-aws  # Source folder to deploy
-          DEST_DIR: workspace-starter/${{ github.ref_name }}  # Target folder to deploy to
+          SOURCE_DIR: public-aws # Source folder to deploy
+          DEST_DIR: workspace-starter/${{ github.ref_name }} # Target folder to deploy to

@@ -1,8 +1,11 @@
 import {
-  CLIDispatchedSearchResult, CLIProvider,
+  CLIDispatchedSearchResult,
+  CLIProvider,
   CLISearchListenerRequest,
   CLISearchListenerResponse,
-  CLISearchResponse, Home, HomeSearchResponse
+  CLISearchResponse,
+  Home,
+  HomeSearchResponse
 } from "@openfin/workspace";
 import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
@@ -54,7 +57,6 @@ export async function register() {
     }
 
     return searchResults;
-
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
@@ -74,7 +76,7 @@ export async function register() {
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
     onUserInput: onUserInput,
-    onResultDispatch: onSelection,
+    onResultDispatch: onSelection
   };
 
   await Home.register(cliProvider);
@@ -98,4 +100,3 @@ export async function deregister() {
     console.warn("Unable to deregister home as there is an indication it was never registered");
   }
 }
-

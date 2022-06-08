@@ -10,24 +10,24 @@
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": true,
     "providerUrl": "http://localhost:8080/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
         "downloadAsset": true,
         "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
+          "enabled": true,
+          "protocols": ["mailto"]
         }
       }
     },
     "defaultWindowOptions": {
       "permissions": {
         "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
+          "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+          }
         }
       }
     }
@@ -43,4 +43,3 @@
     "target": ["desktop", "start-menu"]
   }
 }
-  

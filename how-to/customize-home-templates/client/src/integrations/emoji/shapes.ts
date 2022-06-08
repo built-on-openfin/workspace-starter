@@ -1,3 +1,1 @@
-export interface EmojiSettings {
-}
-
+export interface EmojiSettings {}

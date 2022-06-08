@@ -1,7 +1,7 @@
 import { fin } from "openfin-adapter/src/mock";
 import { register, deregister } from "./home";
 import { getSettings } from "./settings";
-import { register as registerIntegration, deregister as deregisterIntegration } from './integrations';
+import { register as registerIntegration, deregister as deregisterIntegration } from "./integrations";
 
 export async function init() {
   // you can kick off your bootstrapping process here where you may decide to prompt for authentication,
@@ -11,9 +11,12 @@ export async function init() {
 
   await register();
 
-  await registerIntegration({
-    openUrl: url => fin.System.openUrlWithBrowser(url)
-}, settings.integrationProvider);
+  await registerIntegration(
+    {
+      openUrl: (url) => fin.System.openUrlWithBrowser(url)
+    },
+    settings.integrationProvider
+  );
 
   const providerWindow = fin.Window.getCurrentSync();
   providerWindow.once("close-requested", async (event) => {

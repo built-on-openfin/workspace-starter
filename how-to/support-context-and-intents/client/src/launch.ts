@@ -1,4 +1,4 @@
-import { getCurrentSync } from '@openfin/workspace-platform';
+import { getCurrentSync } from "@openfin/workspace-platform";
 import { App } from "@openfin/workspace";
 import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
@@ -58,15 +58,14 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
   }
   let manifest;
 
-  if(viewApp.manifestType === "view"){
+  if (viewApp.manifestType === "view") {
     let manifestResponse = await fetch(viewApp.manifest);
     manifest = await manifestResponse.json();
   } else {
     // conversion because of manifestType. In most usecases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
     // for passing the manifest inline
-    manifest = (viewApp.manifest as unknown) as OpenFin.ViewOptions;
+    manifest = viewApp.manifest as unknown as OpenFin.ViewOptions;
   }
-
 
   let name = manifest.name;
   let identity = { uuid: fin.me.identity.uuid, name };
@@ -79,9 +78,9 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 
   if (viewExists === false) {
     try {
-        let platform = getCurrentSync();
-        let createdView = await platform.createView(manifest);
-        identity = createdView.identity;
+      let platform = getCurrentSync();
+      let createdView = await platform.createView(manifest);
+      identity = createdView.identity;
     } catch (err) {
       console.error("Error launching view", err);
       return null;
@@ -90,9 +89,7 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
   return identity;
 }
 
-export async function launchSnapshot(
-  snapshotApp: App
-): Promise<OpenFin.Identity[]> {
+export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity[]> {
   if (snapshotApp === undefined || snapshotApp === null) {
     console.warn("No app was passed to launchSnapshot");
     return null;
@@ -143,19 +140,12 @@ export async function launchSnapshot(
       try {
         await platform.applySnapshot(manifest);
       } catch (err) {
-        console.error(
-          "Error trying to apply snapshot to platform.",
-          err,
-          manifest
-        );
+        console.error("Error trying to apply snapshot to platform.", err, manifest);
       }
     }
 
     for (let w = 0; w < windowsToGather.length; w++) {
-      let windowViewIds = await getViewIdentities(
-        windowsToGather[w],
-        fin.me.identity.uuid
-      );
+      let windowViewIds = await getViewIdentities(windowsToGather[w], fin.me.identity.uuid);
       viewIds.push(...windowViewIds);
     }
 
@@ -171,10 +161,7 @@ export async function launch(appEntry: App) {
     let settings = await getSettings();
     let appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
 
-    if (
-      appEntry.tags !== undefined &&
-      appEntry.tags.indexOf(appAssetTag) > -1
-    ) {
+    if (appEntry.tags !== undefined && appEntry.tags.indexOf(appAssetTag) > -1) {
       console.log(
         "Application requested is a native app with a tag of appasset so it is provided by this workspace platform. Managing request via platform and not Workspace."
       );
@@ -184,21 +171,18 @@ export async function launch(appEntry: App) {
 
       await fin.System.launchExternalProcess(options);
     } else {
-      console.log(
-        "Application requested is a native app. Managing request via platform and not Workspace."
-      );
+      console.log("Application requested is a native app. Managing request via platform and not Workspace.");
       let options: OpenFin.ExternalProcessRequestType = {};
       options.path = appEntry.manifest;
       options.uuid = appEntry.appId;
 
       await fin.System.launchExternalProcess(options);
     }
-  } else if(appEntry.manifestType === "inline-view") {
+  } else if (appEntry.manifestType === "inline-view") {
     await launchView(appEntry);
-  } 
-  else {
+  } else {
     let platform = getCurrentSync();
-    await platform.launchApp({app: appEntry});
+    await platform.launchApp({ app: appEntry });
   }
   console.log("Finished application launch request");
 }

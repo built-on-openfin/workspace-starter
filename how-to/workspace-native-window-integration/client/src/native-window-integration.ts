@@ -24,21 +24,16 @@ async function init() {
         local: false,
         url: asset,
         configuration,
-        mockConnection: false,
+        mockConnection: false
       });
       console.log("Native Window Integration Client connected successfully!");
     } catch (err) {
-      console.log(
-        "Native Window Integration Client not connected successfully",
-        err
-      );
+      console.log("Native Window Integration Client not connected successfully", err);
     }
   }
 }
 
-export async function decorateSnapshot(
-  snapshot: OpenFin.Snapshot
-): Promise<OpenFin.Snapshot> {
+export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
   try {
     if (clientRequested === false) {
       await init();
@@ -51,16 +46,11 @@ export async function decorateSnapshot(
       return snapshot;
     }
 
-    const snapshotWithNativeWindows = await nwiClient.decorateSnapshot(
-      snapshot
-    );
+    const snapshotWithNativeWindows = await nwiClient.decorateSnapshot(snapshot);
     console.log("Native Window Integration sucessfully decorated snapshot.");
     return snapshotWithNativeWindows;
   } catch (error) {
-    console.error(
-      "Native Window Integration failed to decorate snapshot, returning undecorated snapshot.",
-      error
-    );
+    console.error("Native Window Integration failed to decorate snapshot, returning undecorated snapshot.", error);
     return snapshot;
   }
 }
@@ -80,9 +70,6 @@ export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot) {
       );
     }
   } catch (error) {
-    console.error(
-      "Native Window Integration error applying native snapshot:",
-      error
-    );
+    console.error("Native Window Integration error applying native snapshot:", error);
   }
 }

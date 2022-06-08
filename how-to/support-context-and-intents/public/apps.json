@@ -6,21 +6,20 @@
     "description": "Start a call.",
     "manifest": "http://localhost:8080/views/contact/call-app.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
+    "tags": ["view", "interop", "fdc3", "contact"]
   },
   {
     "appId": "participant-selection",
@@ -29,15 +28,13 @@
     "description": "Select a participant.",
     "manifest": "http://localhost:8080/views/contact/participant-selection.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
+    "tags": ["view", "interop", "fdc3", "contact"]
   },
   {
     "appId": "participant-history",
@@ -46,21 +43,20 @@
     "description": "View participant history.",
     "manifest": "http://localhost:8080/views/contact/participant-history.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
+    "tags": ["view", "interop", "fdc3", "contact"]
   },
   {
     "appId": "investments-and-models",
@@ -69,21 +65,20 @@
     "description": "View investments and models.",
     "manifest": "http://localhost:8080/views/contact/investments-and-models.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
+    "tags": ["view", "interop", "fdc3", "contact"]
   },
   {
     "appId": "participant-summary-view",
@@ -92,21 +87,20 @@
     "description": "View summary of the participant",
     "manifest": "http://localhost:8080/views/contact/participant-summary.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}}],
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":["view", "interop", "fdc3", "contact"]
+    "tags": ["view", "interop", "fdc3", "contact"]
   },
   {
     "appId": "client-overview",
@@ -115,9 +109,7 @@
     "manifestType": "snapshot",
     "description": "Provides a summary of the current client",
     "manifest": "http://localhost:8080/snapshot-contact-overview.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -125,12 +117,12 @@
       {
         "name": "ViewContact",
         "displayName": "View Contact",
-        "contexts": [
-          "fdc3.contact"
-        ],
-        "customConfig": {}}],
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
     "images": [],
-    "tags":[ "page", "openfin", "client", "interop", "fdc3"]
+    "tags": ["page", "openfin", "client", "interop", "fdc3"]
   },
   {
     "appId": "basic-interop-view",
@@ -139,23 +131,24 @@
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
     "manifest": "http://localhost:8080/views/basic-interop-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
-    }],
-    "tags":["view", "interop"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/interop-view.png"
+      }
+    ],
+    "tags": ["view", "interop"]
   },
   {
     "appId": "basic-interop-view-multi",
@@ -164,23 +157,24 @@
     "description": "This is an example of a basic OpenFin Interop View. This view calls setContext on the Interop api and passes a context object with a ticker as it's ID and a type of 'instrument'. This view also adds a context handler using the Interop api and can receive objects sent via the fin.me.interop.setContext or fdc3.broadcast api. Multiple instances can be launched. It listens for objects of type 'instrument' or 'fdc3.instrument'.",
     "manifest": "http://localhost:8080/views/basic-interop-multi-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Intrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/interop-view.png"
-    }],
-    "tags":["view", "interop", "openfin"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Intrument (pages and views)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/interop-view.png"
+      }
+    ],
+    "tags": ["view", "interop", "openfin"]
   },
   {
     "appId": "fdc3-workbench",
@@ -188,35 +182,35 @@
     "title": "FDC3 Workbench",
     "description": "Launch the official FDC3 Workbench",
     "manifest": {
-      "url":"https://fdc3.finos.org/toolbox/fdc3-workbench/",
+      "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
       "fdc3InteropApi": "1.2",
       "name": "fdc3-workbench"
     },
     "manifestType": "inline-view",
-    "icons": [
-      { "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }
-    ],
+    "icons": [{ "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ViewContact",
-      "displayName": "View Contact",
-      "contexts": [
-        "fdc3.contact"
-      ],
-      "customConfig": {}},
+    "intents": [
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
       {
         "name": "ViewInstrument",
         "displayName": "View Instrument",
-        "contexts": [
-          "fdc3.contact"
-        ],
-        "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-workbench.png"
-    }],
-    "tags":["view", "interop", "fdc3", "contact", "instrument"]
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-workbench.png"
+      }
+    ],
+    "tags": ["view", "interop", "fdc3", "contact", "instrument"]
   },
   {
     "appId": "basic-fdc3-view",
@@ -225,23 +219,24 @@
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'.",
     "manifest": "http://localhost:8080/views/basic-fdc3-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":["view", "fdc3"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": ["view", "fdc3"]
   },
   {
     "appId": "basic-fdc3-view-multi",
@@ -250,23 +245,24 @@
     "description": "This is an example of a basic OpenFin FDC3 View. This view calls broadcast on the FDC3 api and passes a context object with a ticker as it's ID and a type of 'fdc3.instrument'. This view also adds a context listener using the FDC3 api and can receive objects sent via the fdc3.broadcast or fin.me.interop.setContext api calls. It listens for objects of type 'fdc3.instrument' or 'instrument'. This view can be launched multiple times.",
     "manifest": "http://localhost:8080/views/basic-fdc3-multi-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [{
-      "name": "ShowInstrument",
-      "displayName": "Show Instrument (pages and views)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":[ "view", "fdc3", "openfin"]
+    "intents": [
+      {
+        "name": "ShowInstrument",
+        "displayName": "Show Instrument (pages and views)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": ["view", "fdc3", "openfin"]
   },
   {
     "appId": "raise-intent-or-broadcast-view",
@@ -275,17 +271,17 @@
     "description": "This is an example of a basic OpenFin FDC3/Interop View. This view calls the raise Intent FDC3 or Interop api. It can also call the FDC3 broadcast or Interop setContext api (as well as listening to context).",
     "manifest": "http://localhost:8080/views/raise-intent-or-broadcast-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/fdc3-view.png"
-    }],
-    "tags":[ "view", "fdc3", "interop", "openfin"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/fdc3-view.png"
+      }
+    ],
+    "tags": ["view", "fdc3", "interop", "openfin"]
   },
   {
     "appId": "preload-tradingview-view",
@@ -294,15 +290,13 @@
     "description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
     "manifest": "http://localhost:8080/views/preload-tradingview-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [],
-    "tags":["view", "fdc3", "preload"]
+    "tags": ["view", "fdc3", "preload"]
   },
   {
     "appId": "preload-google-view",
@@ -311,15 +305,13 @@
     "description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
     "manifest": "http://localhost:8080/views/preload-google-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [],
-    "tags":["view", "fdc3", "preload"]
+    "tags": ["view", "fdc3", "preload"]
   },
   {
     "appId": "expero-company-news",
@@ -336,10 +328,12 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-news-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-news-view.png"
+      }
+    ],
+    "tags": ["expero", "view", "interop"]
   },
   {
     "appId": "openfin-intent-page",
@@ -348,9 +342,7 @@
     "manifestType": "snapshot",
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot-intent-single-instance.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -358,21 +350,22 @@
       {
         "name": "ShowInstrument",
         "displayName": "Show Instrument (pages and views)",
-        "contexts": [
-          "fdc3.instrument"
-        ],
-        "customConfig": {}},
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      },
       {
-      "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument (pages only)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":[ "page", "openfin"]
+        "name": "ShowInstrumentForPage",
+        "displayName": "Show Instrument (pages only)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": ["page", "openfin"]
   },
   {
     "appId": "openfin-intent-page-multi",
@@ -381,9 +374,7 @@
     "manifestType": "snapshot",
     "description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This page can be launched multiple times. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot-intent-multi-instance.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -391,21 +382,22 @@
       {
         "name": "ShowInstrument",
         "displayName": "Show Instrument (pages and views)",
-        "contexts": [
-          "fdc3.instrument"
-        ],
-        "customConfig": {}},
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      },
       {
-      "name": "ShowInstrumentForPage",
-      "displayName": "Show Instrument (pages only)",
-      "contexts": [
-        "fdc3.instrument"
-      ],
-      "customConfig": {}}],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":[ "page", "openfin"]
+        "name": "ShowInstrumentForPage",
+        "displayName": "Show Instrument (pages only)",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": ["page", "openfin"]
   },
   {
     "appId": "expero-description",
@@ -422,10 +414,12 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-description-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-description-view.png"
+      }
+    ],
+    "tags": ["expero", "view", "interop"]
   },
   {
     "appId": "expero-stock-quote",
@@ -442,10 +436,12 @@
     "supportEmail": "support@example.com",
     "publisher": "Expero",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/expero-stock-view.png"
-    }],
-    "tags":["expero", "view", "interop"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/expero-stock-view.png"
+      }
+    ],
+    "tags": ["expero", "view", "interop"]
   },
   {
     "appId": "notifications-generator",
@@ -454,17 +450,17 @@
     "manifestType": "manifest",
     "description": "Notifications Studio: This is OpenFin's tool for demonstrating the power of our Notification Center. Use it to create local notifications or use some of the examples shown in our Catalog. Experiment with our features and see the power that OpenFin Notification Center can bring to your applications.",
     "manifest": "https://cdn.openfin.co/studio/notification/app.json",
-    "icons": [
-      { "src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"}
-    ],
+    "icons": [{ "src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-notification-studio.png"
-    }],
-    "tags":["hero", "manifest", "tools"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-notification-studio.png"
+      }
+    ],
+    "tags": ["hero", "manifest", "tools"]
   },
   {
     "appId": "openfin-process-manager",
@@ -473,17 +469,17 @@
     "manifestType": "manifest",
     "description": "Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
     "manifest": "https://cdn.openfin.co/process-manager/app.json",
-    "icons": [
-      { "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }
-    ],
+    "icons": [{ "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-process-manager.png"
-    }],
-    "tags":["hero", "manifest", "tools"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-process-manager.png"
+      }
+    ],
+    "tags": ["hero", "manifest", "tools"]
   },
   {
     "appId": "openfin-developer-page",
@@ -492,17 +488,17 @@
     "manifestType": "snapshot",
     "description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
     "manifest": "http://localhost:8080/snapshot.json",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-blue.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-page-docs.png"
-    }],
-    "tags":["page"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-page-docs.png"
+      }
+    ],
+    "tags": ["page"]
   },
   {
     "appId": "winform-interop-example",
@@ -511,17 +507,17 @@
     "description": "A Winform application built in .NET 5 that shows the power of our interop api.",
     "manifestType": "external",
     "manifest": "winform-interop-example",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-winform-interop.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-winform-interop.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/openfin-winform-interop.png"
-    }],
-    "tags":["native", "appasset"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/openfin-winform-interop.png"
+      }
+    ],
+    "tags": ["native", "appasset"]
   },
   {
     "appId": "Notepad",
@@ -530,26 +526,16 @@
     "description": "Open Notepad and start taking some quick notes.",
     "manifestType": "external",
     "manifest": "notepad.exe",
-    "icons": [
-      { "src": "http://localhost:8080/images/icon-notepad.png" }
-    ],
+    "icons": [{ "src": "http://localhost:8080/images/icon-notepad.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "Microsoft",
     "intents": [],
-    "images": [{
-      "src":"http://localhost:8080/images/previews/microsoft-notepad-native.png"
-    }],
-    "tags":["native"]
+    "images": [
+      {
+        "src": "http://localhost:8080/images/previews/microsoft-notepad-native.png"
+      }
+    ],
+    "tags": ["native"]
   }
-
-
-
-
-  
-
- 
-  
-  
-
 ]

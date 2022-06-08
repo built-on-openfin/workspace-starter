@@ -1,20 +1,14 @@
 import {
-  Storefront, 
+  Storefront,
   App,
   StorefrontLandingPage,
   StorefrontNavigationSection,
   StorefrontFooter,
   StorefrontProvider,
-  StorefrontTemplate,
+  StorefrontTemplate
 } from "@openfin/workspace";
-import { getCurrentSync } from '@openfin/workspace-platform';
-import {
-  getApps,
-  experoApp,
-  notificationStudio,
-  processManager,
-  developerContent,
-} from "./apps";
+import { getCurrentSync } from "@openfin/workspace-platform";
+import { getApps, experoApp, notificationStudio, processManager, developerContent } from "./apps";
 
 const providerId = "register-with-store-basic";
 
@@ -25,10 +19,7 @@ export async function register() {
     await Storefront.register(provider);
     console.log("Storefront provider initialised.");
   } catch (err) {
-    console.error(
-      "An error was encountered while trying to register the content store provider",
-      err
-    );
+    console.error("An error was encountered while trying to register the content store provider", err);
   }
 }
 
@@ -48,7 +39,7 @@ export async function hide() {
 
 async function getStoreProvider(): Promise<StorefrontProvider> {
   console.log("Getting the store provider.");
-  
+
   return {
     id: providerId,
     title: "Basic Store",
@@ -57,22 +48,17 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
     getLandingPage: getLandingPage,
     getFooter: getFooter,
     getApps,
-    launchApp: async (app:App)=> {
+    launchApp: async (app: App) => {
       let platform = getCurrentSync();
-      await platform.launchApp({app});
-    },
+      await platform.launchApp({ app });
+    }
   };
 }
 
-async function getNavigation(): Promise<
-  [StorefrontNavigationSection?, StorefrontNavigationSection?]
-> {
+async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
   console.log("Showing the store navigation.");
 
-  let navigationSections: [
-    StorefrontNavigationSection?,
-    StorefrontNavigationSection?
-  ] = [
+  let navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [
     {
       id: "apps",
       title: "Apps",
@@ -82,27 +68,27 @@ async function getNavigation(): Promise<
           title: "Views",
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [experoApp],
-          },
+            apps: [experoApp]
+          }
         },
         {
           id: "page",
           title: "Pages",
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [developerContent],
-          },
+            apps: [developerContent]
+          }
         },
         {
           id: "manifest",
           title: "Web Apps",
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [notificationStudio, processManager],
-          },
-        },
-      ],
-    },
+            apps: [notificationStudio, processManager]
+          }
+        }
+      ]
+    }
   ];
 
   return navigationSections;
@@ -114,19 +100,18 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
   let landingPage: StorefrontLandingPage = {
     hero: {
       title: "Custom Hero Title",
-      description:
-        "This is a demonstration of the hero section that you can configure for your store.",
+      description: "This is a demonstration of the hero section that you can configure for your store.",
       cta: {
         id: "hero-1",
         title: "Hero Apps!",
         templateId: StorefrontTemplate.AppGrid,
         templateData: {
-          apps: [notificationStudio, processManager],
-        },
+          apps: [notificationStudio, processManager]
+        }
       },
       image: {
-        src: "http://localhost:8080/images/superhero-unsplash.jpg",
-      },
+        src: "http://localhost:8080/images/superhero-unsplash.jpg"
+      }
     },
     topRow: {
       title: "Custom Top Row Content",
@@ -134,35 +119,32 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
         {
           id: "top-row-item-1",
           title: "Expero",
-          description:
-            "A collection of example views from Expero showing the power of interop and context sharing.",
+          description: "A collection of example views from Expero showing the power of interop and context sharing.",
           image: {
-            src: "http://localhost:8080/images/coding-1-unsplash.jpg",
+            src: "http://localhost:8080/images/coding-1-unsplash.jpg"
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [experoApp],
-          },
+            apps: [experoApp]
+          }
         },
         {
           id: "top-row-item-2",
           title: "Dev Tools",
-          description:
-            "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+          description: "A collection of developer tools that can aid with building and debugging OpenFin applications.",
           image: {
-            src: "http://localhost:8080/images/coding-2-unsplash.jpg",
+            src: "http://localhost:8080/images/coding-2-unsplash.jpg"
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [notificationStudio, processManager],
-          },
-        },
-      ],
+            apps: [notificationStudio, processManager]
+          }
+        }
+      ]
     },
     middleRow: {
-      title:
-        "A collection of simple views that show how to share context using the Interop API.",
-      apps: [experoApp],
+      title: "A collection of simple views that show how to share context using the Interop API.",
+      apps: [experoApp]
     },
     bottomRow: {
       title: "Quick Access",
@@ -170,30 +152,29 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
         {
           id: "bottom-row-item-1",
           title: "Views",
-          description:
-            "A collection of views made available through our catalog.",
+          description: "A collection of views made available through our catalog.",
           image: {
-            src: "http://localhost:8080/images/coding-4-unsplash.jpg",
+            src: "http://localhost:8080/images/coding-4-unsplash.jpg"
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [experoApp],
-          },
+            apps: [experoApp]
+          }
         },
         {
           id: "bottom-row-item-2",
           title: "Web Apps",
           description: "A collection of web apps built using OpenFin.",
           image: {
-            src: "http://localhost:8080/images/coding-5-unsplash.jpg",
+            src: "http://localhost:8080/images/coding-5-unsplash.jpg"
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
-            apps: [notificationStudio, processManager],
-          },
-        },
-      ],
-    },
+            apps: [notificationStudio, processManager]
+          }
+        }
+      ]
+    }
   };
 
   return landingPage;
@@ -207,12 +188,12 @@ async function getFooter(): Promise<StorefrontFooter> {
     links: [
       {
         title: "Github",
-        url: "https://github.com/built-on-openfin/workspace-starter",
+        url: "https://github.com/built-on-openfin/workspace-starter"
       },
       {
         title: "YouTube",
-        url: "https://www.youtube.com/user/OpenFinTech",
-      },
-    ],
+        url: "https://www.youtube.com/user/OpenFinTech"
+      }
+    ]
   };
 }

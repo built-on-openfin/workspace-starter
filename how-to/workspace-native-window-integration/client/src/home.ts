@@ -11,17 +11,12 @@ import {
   CLIFilterOptionType,
   TemplateFragment,
   HomeSearchResponse,
-  HomeSearchResult,
+  HomeSearchResult
 } from "@openfin/workspace";
 import { getSettings } from "./settings";
 import { launch } from "./launch";
 import { getApps } from "./apps";
-import {
-  getWorkspaces,
-  deleteWorkspace,
-  launchWorkspace,
-  saveWorkspace,
-} from "./workspace";
+import { getWorkspaces, deleteWorkspace, launchWorkspace, saveWorkspace } from "./workspace";
 import { WorkspaceTemplate } from "./template";
 
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
@@ -39,14 +34,14 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
       id: HOME_TAG_FILTERS,
       title: "Tags",
       type: CLIFilterOptionType.MultiSelect,
-      options: [],
+      options: []
     };
 
     uniqueTags.forEach((tag) => {
       if (Array.isArray(tagFilter.options)) {
         tagFilter.options.push({
           value: tag,
-          isSelected: false,
+          isSelected: false
         });
       }
     });
@@ -66,7 +61,7 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
         key: apps[i].appId,
         title: apps[i].title,
         data: apps[i],
-        template: CLITemplate.Plain,
+        template: CLITemplate.Plain
       };
 
       if (apps[i].manifestType === "view") {
@@ -132,7 +127,7 @@ async function mapWorkspaceEntriesToSearchEntries(
         icon: workspaceIcon,
         actions: [
           { name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D" },
-          { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" },
+          { name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
         ],
         data: { tags: ["workspace"], workspaceId: workspaces[i].id },
         template: CLITemplate.Custom,
@@ -141,12 +136,11 @@ async function mapWorkspaceEntriesToSearchEntries(
           data: {
             title: workspaces[i].title,
             description: workspaces[i].description,
-            instructions:
-              "Use the buttons below to interact with your saved Workspace:",
+            instructions: "Use the buttons below to interact with your saved Workspace:",
             openText: "Launch",
             deleteText: "Delete"
-          },
-        },
+          }
+        }
       };
 
       workspaceResults.push(entry);
@@ -166,35 +160,22 @@ async function getResults(
 
   let tags = [];
   let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-  let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(
-    workspaces as any
-  );
+  let workspaceEntries = await mapWorkspaceEntriesToSearchEntries(workspaces as any);
 
-  let initialResults: HomeSearchResult[] = [
-    ...appSearchEntries,
-    ...workspaceEntries,
-  ];
+  let initialResults: HomeSearchResult[] = [...appSearchEntries, ...workspaceEntries];
 
   if (initialResults.length > 0) {
     let finalResults = initialResults.filter((entry) => {
       let textMatchFound = true;
       let filterMatchFound = true;
 
-      if (
-        query !== undefined &&
-        query !== null &&
-        query.length >= queryMinLength
-      ) {
+      if (query !== undefined && query !== null && query.length >= queryMinLength) {
         textMatchFound = queryAgainst.some((target) => {
           let path = target.split(".");
           if (path.length === 1) {
             let targetValue = entry[path[0]];
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              typeof targetValue === "string"
-            ) {
+            if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
               return targetValue.toLowerCase().indexOf(query) > -1;
             }
           } else if (path.length === 2) {
@@ -204,31 +185,21 @@ async function getResults(
               targetValue = target[path[1]];
             }
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              typeof targetValue === "string"
-            ) {
+            if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
               return targetValue.toLowerCase().indexOf(query) > -1;
             }
 
-            if (
-              targetValue !== undefined &&
-              targetValue !== null &&
-              Array.isArray(targetValue)
-            ) {
+            if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
               if (
                 targetValue.length > 0 &&
                 typeof targetValue[0] === "string" &&
-                targetValue.some(
-                  (target) => target.toLowerCase().indexOf(query) === 0
-                )
+                targetValue.some((target) => target.toLowerCase().indexOf(query) === 0)
               ) {
                 return true;
               } else {
                 console.warn(
                   "Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: " +
-                  target
+                    target
                 );
               }
             }
@@ -241,22 +212,16 @@ async function getResults(
         });
       }
 
-      const tagFilters = Array.isArray(filters) ? filters.filter(f => f.id === HOME_TAG_FILTERS) : [];
+      const tagFilters = Array.isArray(filters) ? filters.filter((f) => f.id === HOME_TAG_FILTERS) : [];
       if (tagFilters.length > 0) {
         filterMatchFound = tagFilters.some((filter) => {
           if (Array.isArray(filter.options)) {
             if (entry.data?.tags !== undefined) {
               return filter.options.every((option) => {
-                return (
-                  !option.isSelected ||
-                  entry.data.tags.indexOf(option.value) > -1
-                );
+                return !option.isSelected || entry.data.tags.indexOf(option.value) > -1;
               });
             }
-          } else if (
-            filter.options.isSelected &&
-            entry.data?.tags !== undefined
-          ) {
+          } else if (filter.options.isSelected && entry.data?.tags !== undefined) {
             return entry.data?.tags.indexOf(filter.options.value) > -1;
           }
           return true;
@@ -272,8 +237,8 @@ async function getResults(
     return {
       results: finalResults,
       context: {
-        filters: getSearchFilters(tags),
-      },
+        filters: getSearchFilters(tags)
+      }
     };
   }
   return {
@@ -325,9 +290,7 @@ export async function register() {
         description = parts[1].trim();
       }
 
-      let foundMatch = workspaces.find(
-        (entry) => entry.title.toLowerCase() === title.toLowerCase()
-      );
+      let foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
       if (foundMatch !== undefined && foundMatch !== null) {
         // we have a match
         return {
@@ -336,9 +299,9 @@ export async function register() {
               key: "WORKSPACE-EXISTS",
               title: "Workspace " + foundMatch.title + " already exists.",
               actions: [],
-              data: { tags: ["workspace"], workspaceId: foundMatch.id },
-            },
-          ],
+              data: { tags: ["workspace"], workspaceId: foundMatch.id }
+            }
+          ]
         };
       } else {
         if (lastResponse !== undefined) {
@@ -357,10 +320,10 @@ export async function register() {
                 tags: ["workspace"],
                 workspaceId: crypto["randomUUID"](),
                 workspaceTitle: title,
-                workspaceDescription: description,
-              },
-            },
-          ],
+                workspaceDescription: description
+              }
+            }
+          ]
         };
       }
     }
@@ -371,77 +334,58 @@ export async function register() {
     }
     lastResponse = response;
     lastResponse.open();
-    const searchResults = await getResults(
-      query,
-      queryMinLength,
-      queryAgainst,
-      filters
-    );
+    const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
 
     return searchResults;
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
     if (result.data !== undefined) {
-        if (result.data.workspaceId !== undefined) {
-          if (
-            result.data.workspaceId !== undefined &&
-            result.key === "WORKSPACE-SAVE"
-          ) {
-            await saveWorkspace(
-              result.data.workspaceId,
-              result.data.workspaceTitle,
-              result.data.workspaceDescription
-            );
-            if (lastResponse !== undefined && lastResponse !== null) {
-              lastResponse.revoke(result.key);
-              lastResponse.respond([
-                {
-                  key: "WORKSPACE-SAVED",
-                  title: "Workspace " + result.data.workspaceTitle + " saved.",
-                  actions: [],
-                  data: {
-                    tags: ["workspace"],
-                    workspaceId: result.data.workspaceId,
-                    workspaceTitle: result.data.workspaceTitle,
-                    workspaceDescription: result.data.workspaceDescription,
-                  },
-                },
-              ]);
-            }
-          } else if (
-            result.data.workspaceId !== undefined &&
-            result.key === "WORKSPACE-EXISTS"
-          ) {
-            if (lastResponse !== undefined && lastResponse !== null) {
-              lastResponse.revoke(result.key);
-            }
-          } else if (result.data.workspaceId !== undefined) {
-            let workspaceAction = result.action.name;
-            if (
-              workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-              workspaceAction === WorkspaceTemplate.actions.launch
-            ) {
-              await launchWorkspace(result.data.workspaceId);
-            } else if (
-              workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-              workspaceAction === WorkspaceTemplate.actions.delete
-            ) {
-              await deleteWorkspace(result.data.workspaceId);
-              if (lastResponse !== undefined && lastResponse !== null) {
-                lastResponse.revoke(result.key);
+      if (result.data.workspaceId !== undefined) {
+        if (result.data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
+          await saveWorkspace(result.data.workspaceId, result.data.workspaceTitle, result.data.workspaceDescription);
+          if (lastResponse !== undefined && lastResponse !== null) {
+            lastResponse.revoke(result.key);
+            lastResponse.respond([
+              {
+                key: "WORKSPACE-SAVED",
+                title: "Workspace " + result.data.workspaceTitle + " saved.",
+                actions: [],
+                data: {
+                  tags: ["workspace"],
+                  workspaceId: result.data.workspaceId,
+                  workspaceTitle: result.data.workspaceTitle,
+                  workspaceDescription: result.data.workspaceDescription
+                }
               }
-            } else {
-              console.warn(
-                "Unrecognised action for workspace selection: " +
-                result.data.workspaceId
-              );
-            }
+            ]);
           }
-        } else {
-          await launch(result.data);
+        } else if (result.data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
+          if (lastResponse !== undefined && lastResponse !== null) {
+            lastResponse.revoke(result.key);
+          }
+        } else if (result.data.workspaceId !== undefined) {
+          let workspaceAction = result.action.name;
+          if (
+            workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
+            workspaceAction === WorkspaceTemplate.actions.launch
+          ) {
+            await launchWorkspace(result.data.workspaceId);
+          } else if (
+            workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
+            workspaceAction === WorkspaceTemplate.actions.delete
+          ) {
+            await deleteWorkspace(result.data.workspaceId);
+            if (lastResponse !== undefined && lastResponse !== null) {
+              lastResponse.revoke(result.key);
+            }
+          } else {
+            console.warn("Unrecognised action for workspace selection: " + result.data.workspaceId);
+          }
         }
-      
+      } else {
+        await launch(result.data);
+      }
     } else {
       console.warn("Unable to execute result without data being passed");
     }
@@ -452,7 +396,7 @@ export async function register() {
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
     onUserInput: onUserInput,
-    onResultDispatch: onSelection,
+    onResultDispatch: onSelection
   };
 
   await Home.register(cliProvider);
@@ -473,8 +417,6 @@ export async function deregister() {
     let settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
   } else {
-    console.warn(
-      "Unable to deregister home as there is an indication it was never registered"
-    );
+    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
 }

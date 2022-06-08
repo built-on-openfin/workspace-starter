@@ -1,9 +1,4 @@
-import {
-  ButtonStyle,
-  TemplateFragment,
-  TemplateFragmentTypes,
-} from "@openfin/workspace";
-
+import { ButtonStyle, TemplateFragment, TemplateFragmentTypes } from "@openfin/workspace";
 
 const WorkspaceActions = {
   delete: "workspace-delete",
@@ -20,7 +15,7 @@ export const WorkspaceTemplate: {
     style: {
       paddingTop: "10px",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     children: [
       {
@@ -29,8 +24,8 @@ export const WorkspaceTemplate: {
         style: {
           fontWeight: "bold",
           fontSize: "16px",
-          textAlign: "center",
-        },
+          textAlign: "center"
+        }
       },
       {
         type: TemplateFragmentTypes.Text,
@@ -38,8 +33,8 @@ export const WorkspaceTemplate: {
         optional: true,
         style: {
           paddingLeft: "10px",
-          paddingRight: "10px",
-        },
+          paddingRight: "10px"
+        }
       },
       {
         type: TemplateFragmentTypes.Text,
@@ -49,8 +44,8 @@ export const WorkspaceTemplate: {
           paddingTop: "10px",
           paddingBottom: "10px",
           paddingLeft: "10px",
-          paddingRight: "10px",
-        },
+          paddingRight: "10px"
+        }
       },
       {
         type: TemplateFragmentTypes.Container,
@@ -59,7 +54,7 @@ export const WorkspaceTemplate: {
           flexFlow: "row wrap",
           justifyContent: "center",
           paddingTop: "10px",
-          paddingBottom: "10px",
+          paddingBottom: "10px"
         },
         children: [
           {
@@ -67,16 +62,16 @@ export const WorkspaceTemplate: {
             style: {
               display: "flex",
               flexDirection: "column",
-              width: "80px",
+              width: "80px"
             },
             action: WorkspaceActions.launch,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
                 dataKey: "openText",
-                optional: false,
-              },
-            ],
+                optional: false
+              }
+            ]
           },
           {
             type: TemplateFragmentTypes.Button,
@@ -86,19 +81,19 @@ export const WorkspaceTemplate: {
               flexDirection: "column",
               width: "80px",
               marginLeft: "10px",
-              marginRight: "10px",
+              marginRight: "10px"
             },
             action: WorkspaceActions.delete,
             children: [
               {
                 type: TemplateFragmentTypes.Text,
                 dataKey: "deleteText",
-                optional: false,
-              },
-            ],
+                optional: false
+              }
+            ]
           }
-        ],
-      },
-    ],
-  },
+        ]
+      }
+    ]
+  }
 };
