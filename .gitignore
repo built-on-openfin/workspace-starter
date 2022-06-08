@@ -3,5 +3,5 @@ build
 out
 .DS_STORE
 how-to/customize-workspace/public/js/assets/provider.zip
-how-to/customize-workspace/public/js/provider.bundle.js
-public*/
+*.bundle.js
+./public/
