@@ -4,4 +4,4 @@ out
 .DS_STORE
 how-to/customize-workspace/public/js/assets/provider.zip
 *.bundle.js
-./public/
+public*/
