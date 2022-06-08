@@ -431,28 +431,23 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
             ["Task", taskFieldSpec],
             ["ContentNote", contentNoteFieldSpec]
         ]);
-        const fieldSpec = [...fieldSpecMap]
+        const fieldSpecs = [...fieldSpecMap]
             .filter(x => {
                 if (Array.isArray(selectedObjects) && selectedObjects.length > 0) {
                     return selectedObjects.includes(x[0]);
                 }
                 return true;
             })
-            .map(x => x[1])
-            .join(", ");
+            .map(x => x[1]);
 
-        const batch: SalesforceBatchRequestItem[] = [];
-
-        if (fieldSpec.length > 0) {
-            const salesforceSearchQuery = `FIND {${this.escapeQuery(
-                query
-            )}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 25`;
-
-            batch.push({
+        const batch: SalesforceBatchRequestItem[] = fieldSpecs.map(fieldSpec => {
+            const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 10`;
+    
+            return {
                 method: "GET",
-                url: `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
-            });
-        }
+                url: `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`,
+            }
+        });
 
         const includeChatter = !selectedObjects?.length || selectedObjects.includes("Chatter");
         if (includeChatter) {
@@ -479,18 +474,16 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
         if (batchedResults.length > 0) {
             let idx = 0;
-            if (fieldSpec.length > 0) {
-                const searchResponse = batchedResults[idx++] as SalesforceRestApiSearchResponse<
-                    SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
-                >;
-                if (searchResponse.searchRecords) {
+            for (; idx < fieldSpecs.length; idx++) {
+                const searchResponse = batchedResults[idx] as SalesforceRestApiSearchResponse<SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote>;
+                if (searchResponse?.searchRecords?.length) {
                     results = results.concat(searchResponse.searchRecords);
                 }
             }
 
             if (includeChatter) {
                 const chatterResponse = batchedResults[idx++] as SalesforceFeedElementPage;
-                if (chatterResponse.elements) {
+                if (chatterResponse?.elements?.length) {
                     results = results.concat(chatterResponse.elements);
                 }
             }
