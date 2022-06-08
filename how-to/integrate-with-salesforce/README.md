@@ -22,14 +22,16 @@ To run this sample you can:
 
 ### Configure Salesforce
 
-Before you can integrate your Salesforce org with OpenFin Home, you must following the required [configuration steps](https://www.npmjs.com/package/@openfin/salesforce#user-content-configure-salesforce-org) for our Salesforce integration.
+Before you can integrate your Salesforce org with OpenFin Home, you must following the required [configuration steps](https://developers.openfin.co/of-docs/docs/salesforce-openfin) for our Salesforce integration.
 
-When [configuring CORS](https://www.npmjs.com/package/@openfin/salesforce#user-content-enable-cors), the URL referred to in step 4 will be: `http://localhost:8080`, corresponding to the hostname and port number that this sample uses.
+When configuring CORS, the URL that you need to add is: `http://localhost:8080`, corresponding to the hostname and port number that this sample uses.
 
 Once you have completed the configuration steps, update the `customSettings` section in the sample app's [manifest file](./public/manifest.fin.json) as follows:
 
 - **`orgUrl`**: the URL of your Salesforce org (ending in "my.salesforce.com")
 - **`consumerKey`**: the Consumer Key of the Connected App you just created
+
+Optionally, if the enhanced notes feature is [enabled](https://help.salesforce.com/s/articleView?id=sf.notes_admin_setup.htm&type=5), this sample will include notes in the search results displayed in Home.
 
 With Salesforce configured and the sample custom settings updated, you can continue to run the sample.
 
@@ -75,7 +77,6 @@ $ npm run client
 7. Assuming login and authorization was successful, OpenFin Home will appear. Press the Enter key to display the default "Browse Salesforce" result that will open your Salesforce org in OpenFin Browser. To search for Accounts and Contacts, type a query into Home and click on a result to open the relevant detail page in OpenFin Browser.
 
 ## What does it look like?
-Here is an example of what the demo would look like when launched. You will need to configure the manifest with your SalesForce Organization Url and Consumer Key (steps to setup can be found in our [configuration steps](https://www.npmjs.com/package/@openfin/salesforce#user-content-configure-salesforce-org)). 
 
 ![](workspace-salesforce-integration.gif)
 
