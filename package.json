@@ -8,7 +8,7 @@
     "package-for-github": "node ./scripts/package.js --location github",
     "package-for-aws": "node ./scripts/package.js --location aws",
     "prettier": "prettier --config .prettierrc --write .",
-    "eslint": "eslint **/*.ts"
+    "eslint": "eslint ."
   },
   "workspaces": [
     "how-to/*"
