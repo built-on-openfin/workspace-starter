@@ -45,15 +45,23 @@ You need to create a `tenant` with an `application` and then populate the `custo
       "domain": "<DOMAIN>",
       "clientId": "<CLIENTID>",
       "loginUrl": "http://localhost:8080/platform/login-complete.html",
-      "logoutUrl": "http://localhost:8080/platform/logout-complete.html",
-      "appUrl": "http://localhost:8080/platform/app.html"
+      "logoutUrls": [
+        "http://localhost:8080/platform/logout-complete.html", 
+        "https://accounts.google.com"
+      ],
+      "appUrl": "http://localhost:8080/platform/app.html",
+      "verifyPollMs": 10000
    }
 }
 ```
 
 The login url `http://localhost:8080/platform/login-complete.html` needs to be added in Auth0 app config as an **Allowed Callback Url**.
 
-The logout url `http://localhost:8080/platform/logout-complete.html` needs to be added in auth0 app config as a **Allowed Logout Url**.
+The logout urls contain `http://localhost:8080/platform/logout-complete.html` which needs to be added in auth0 app config as a **Allowed Logout Url**, this is the default completion url for the logout flow.
+
+There is also a second entry for `https://accounts.google.com` in the `logoutUrls`, as the default for Auth0 is to include Google as a federated provider. This means that the logout flow can also complete at that secondary url.
+
+If you enable additional federated providers in Auth0 you might need additional logout urls.
 
 4. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner
