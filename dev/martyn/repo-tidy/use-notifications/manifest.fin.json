@@ -22,5 +22,9 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/use-notifications/favicon.ico",
     "name": "Use Notifications - v7.0",
     "target": ["desktop", "start-menu"]
+  },
+  "customSettings": {
+    "customProviderIcon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/use-notifications/images/icon-dot.png",
+    "notificationSoundUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/use-notifications/assets/notification.mp3"
   }
 }
