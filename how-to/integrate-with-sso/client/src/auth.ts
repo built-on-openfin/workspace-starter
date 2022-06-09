@@ -10,7 +10,7 @@ let authWin: OpenFin.Window;
 let authenticatedCallback: (isAuthenticated: boolean, userInfo?: auth0.Auth0UserProfile) => Promise<void>
 let busyCallback: (isBusy: boolean) => Promise<void>
 let informationCallback: (info: string) => void
-let pollTimerId: NodeJS.Timeout | undefined;
+let pollTimerId: number | undefined;
 
 export async function init(
   settings: AuthSettings,
@@ -248,14 +248,14 @@ async function authenticatedStateChanged(isAuthenticated: boolean, userInfo?: au
 
 function pollTimerStop() {
   if (pollTimerId) {
-    clearInterval(pollTimerId);
+    window.clearInterval(pollTimerId);
     pollTimerId = undefined;
   }
 }
 
 function pollTimerStart(isAuthenticated: boolean) {
   if ((authSettings.verifyPollMs ?? 0) > 0 && isAuthenticated) {
-    pollTimerId = setInterval(async () => {
+    pollTimerId = window.setInterval(async () => {
       const accessToken = loadProperty(STORE_ACCESS_TOKEN);
       const userInfo = await checkTokenValidity(accessToken, false);
       if (!userInfo) {
