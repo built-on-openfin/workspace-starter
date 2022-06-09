@@ -5,7 +5,7 @@ let settings: CustomSettings;
 
 async function getConfiguredSettings(): Promise<CustomSettings> {
     const app = await fin.Application.getCurrent();
-    const manifest = await app.getManifest();
+    const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 
     if (manifest.customSettings !== undefined) {
         settings = manifest.customSettings;
