@@ -14,8 +14,15 @@ interface AppProvider {
     appAssetTag?: string
 }
 
+interface BrowserProvider {
+    windowOptions: {
+        icon?: string,
+    }
+}
+
 export interface CustomSettings {
     homeProvider?: HomeProvider;
     appProvider?: AppProvider;
-    integrationProvider?:IntegrationProvider;
+    browserProvider?: BrowserProvider;
+    integrationProvider?: IntegrationProvider;
 }
