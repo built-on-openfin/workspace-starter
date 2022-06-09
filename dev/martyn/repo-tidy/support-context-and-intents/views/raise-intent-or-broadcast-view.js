@@ -1,6 +1,6 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
-let showInstrument = document.getElementById("selectInstrument");
+const showInstrument = document.querySelector('#selectInstrument');
 let intentContainer;
 let intentOptionsContainer;
 let appContainer;
@@ -10,93 +10,90 @@ let contextSubscription;
 let broadcastedInstrument;
 let broadcastDataContainer;
 
-let defaultFDC3InstrumentContext = {
-  "type": "fdc3.instrument",
-  "id": {
-    "ticker": "AAPL"
+const defaultFDC3InstrumentContext = {
+  type: 'fdc3.instrument',
+  id: {
+    ticker: 'AAPL'
   }
 };
 
-showInstrument.onclick = async () => {
-  document.getElementById("myDropdown").classList.toggle("show");
-};
+showInstrument.addEventListener('click', async () => {
+  document.querySelector('#myDropdown').classList.toggle('show');
+});
 
 async function onActionOrIntentSelection() {
-  let useFDC3 = getTargetAPI() === "fdc3";
-  let useContext = getSelection() === defaultFDC3InstrumentContext.type;
+  const useFDC3 = getTargetAPI() === 'fdc3';
+  const useContext = getSelection() === defaultFDC3InstrumentContext.type;
 
-  if(getAction() === "broadcast") {
-    if(useFDC3) {
-      showInstrument.innerText = "Broadcast Instrument using fdc3.broadcast";
+  if (getAction() === 'broadcast') {
+    if (useFDC3) {
+      showInstrument.textContent = 'Broadcast Instrument using fdc3.broadcast';
     } else {
-      showInstrument.innerText = "Broadcast Instrument using interop.setContext";
+      showInstrument.textContent = 'Broadcast Instrument using interop.setContext';
     }
-    broadcastDataContainer.style.display = "unset";
-    intentOptionsContainer.style.display = "none";
+    broadcastDataContainer.style.display = 'unset';
+    intentOptionsContainer.style.display = 'none';
   } else {
-    if(useFDC3) {
-      if(useContext) {
-        showInstrument.innerText = "Raise Intent By Context using fdc3.raiseIntentForContext";
+    if (useFDC3) {
+      if (useContext) {
+        showInstrument.textContent = 'Raise Intent By Context using fdc3.raiseIntentForContext';
       } else {
-        showInstrument.innerText = "Raise Intent using fdc3.raiseIntent";
+        showInstrument.textContent = 'Raise Intent using fdc3.raiseIntent';
       }
+    } else if (useContext) {
+      showInstrument.textContent = 'Raise Intent By Context using interop.fireIntentForContext';
     } else {
-      if(useContext) {
-        showInstrument.innerText = "Raise Intent By Context using interop.fireIntentForContext";
-      } else {
-        showInstrument.innerText = "Raise Intent using interop.fireIntent";
-      }
+      showInstrument.textContent = 'Raise Intent using interop.fireIntent';
     }
-    broadcastDataContainer.style.display = "none";
-    intentOptionsContainer.style.display = "unset";
+    broadcastDataContainer.style.display = 'none';
+    intentOptionsContainer.style.display = 'unset';
   }
 }
 
 async function onSelectionChange(radio) {
-  if(radio !== undefined && radio !== null && radio.target !== undefined && radio.target !== null) {
-    if(radio.target.name === "intent") {
+  if (radio !== undefined && radio !== null && radio.target !== undefined && radio.target !== null) {
+    if (radio.target.name === 'intent') {
       await buildAppList();
       await onActionOrIntentSelection();
     }
 
-    if(radio.target.name === "api") {
+    if (radio.target.name === 'api') {
       await buildActionList();
       await buildIntentList();
       await buildAppList();
       await listenToContext();
     }
 
-    if(radio.target.name === "action") {
+    if (radio.target.name === 'action') {
       await onActionOrIntentSelection();
     }
   }
 }
 
-function createEntry(name, label, value, checked = false, addEventListener = false)  {
-  let div = document.createElement("div");
-  let radioButton = document.createElement("input");
+function createEntry(name, label, value, checked = false, addEventListener = false) {
+  const div = document.createElement('div');
+  const radioButton = document.createElement('input');
 
-  radioButton.type = "radio";
+  radioButton.type = 'radio';
   radioButton.id = value;
   radioButton.value = value;
   radioButton.name = name;
   radioButton.checked = checked;
-  if(addEventListener) {
-    radioButton.addEventListener("change", onSelectionChange.bind(this));
+  if (addEventListener) {
+    radioButton.addEventListener('change', onSelectionChange.bind(this));
   }
 
-  let labelForRadioButton = document.createElement("label");
+  const labelForRadioButton = document.createElement('label');
   labelForRadioButton.for = value;
-  labelForRadioButton.innerText = label;
+  labelForRadioButton.textContent = label;
 
-  div.appendChild(radioButton);
-  div.appendChild(labelForRadioButton);
+  div.append(radioButton);
+  div.append(labelForRadioButton);
   return div;
 }
 
-
 function getSelection() {
-  let intents = document.getElementsByName("intent");
+  const intents = document.getElementsByName('intent');
 
   for (let i = 0; i < intents.length; i++) {
     if (intents[i].checked) {
@@ -106,7 +103,7 @@ function getSelection() {
 }
 
 function getAction() {
-  let intents = document.getElementsByName("action");
+  const intents = document.getElementsByName('action');
 
   for (let i = 0; i < intents.length; i++) {
     if (intents[i].checked) {
@@ -116,7 +113,7 @@ function getAction() {
 }
 
 function getAppPreference() {
-  let apps = document.getElementsByName("app");
+  const apps = document.getElementsByName('app');
   let preferredApp;
 
   for (let i = 0; i < apps.length; i++) {
@@ -125,14 +122,14 @@ function getAppPreference() {
     }
   }
 
-  if(preferredApp === "none") {
-    return undefined;
+  if (preferredApp === 'none') {
+    return;
   }
   return preferredApp;
 }
 
 function getTargetAPI() {
-  let intents = document.getElementsByName("api");
+  const intents = document.getElementsByName('api');
 
   for (let i = 0; i < intents.length; i++) {
     if (intents[i].checked) {
@@ -142,20 +139,20 @@ function getTargetAPI() {
 }
 
 function onContextChange(ctx) {
-  console.log("Context Received: ", ctx);
-  if (ctx.type === "instrument" || ctx.type === "fdc3.instrument") {
+  console.log('Context Received:', ctx);
+  if (ctx.type === 'instrument' || ctx.type === 'fdc3.instrument') {
     setInstrument(ctx);
   }
 }
 
 async function listenToContext() {
-  let api = getTargetAPI();
+  const api = getTargetAPI();
 
-  if(contextSubscription !== undefined) {
+  if (contextSubscription !== undefined) {
     contextSubscription.unsubscribe();
   }
 
-  if(api === "fdc3") {
+  if (api === 'fdc3') {
     contextSubscription = window.fdc3.addContextListener(onContextChange.bind(this));
   } else {
     contextSubscription = window.fin.me.interop.addContextHandler(onContextChange.bind(this));
@@ -163,47 +160,46 @@ async function listenToContext() {
 }
 
 async function fdc3Broadcast(context) {
-  let fdc3Channel = await fdc3.getCurrentChannel();
-  if(fdc3Channel !== null) {
+  const fdc3Channel = await fdc3.getCurrentChannel();
+  if (fdc3Channel !== null) {
     window.fdc3.broadcast(context);
-    broadcastedInstrument.innerText = "Instrument (" + context.id.ticker + ") sent via fdc3.broadcast against the " + fdc3Channel.displayMetadata.name + " channel.";
+    broadcastedInstrument.textContent = `Instrument (${context.id.ticker}) sent via fdc3.broadcast against the ${fdc3Channel.displayMetadata.name} channel.`;
   } else {
-    broadcastedInstrument.innerText = "Instrument (" + context.id.ticker + ") not sent via fdc3.broadcast as you are not joined to an fdc3 channel.";
+    broadcastedInstrument.textContent = `Instrument (${context.id.ticker}) not sent via fdc3.broadcast as you are not joined to an fdc3 channel.`;
   }
 }
 
 async function fdc3RaiseIntent(context) {
-  let userSelection = getSelection();
-  if(context.type === userSelection) {
+  const userSelection = getSelection();
+  if (context.type === userSelection) {
     return await window.fdc3.raiseIntentForContext(context, getAppPreference());
-  } else {
-    return await window.fdc3.raiseIntent(userSelection, context, getAppPreference());
   }
+  return await window.fdc3.raiseIntent(userSelection, context, getAppPreference());
 }
 
 async function interopSetContext(context) {
-  let contextGroup = await fdc3.getCurrentChannel();
-  if(contextGroup !== null) {
+  const contextGroup = await fdc3.getCurrentChannel();
+  if (contextGroup !== null) {
     window.fin.me.interop.setContext(context);
-    broadcastedInstrument.innerText = "Instrument (" + context.id.ticker + ") sent via interop.setContext against the " + contextGroup.displayMetadata.name + " context group.";
+    broadcastedInstrument.textContent = `Instrument (${context.id.ticker}) sent via interop.setContext against the ${contextGroup.displayMetadata.name} context group.`;
   } else {
-    broadcastedInstrument.innerText = "Instrument (" + context.id.ticker + ") not sent via interop.setContext as you are not part of a context group.";
+    broadcastedInstrument.textContent = `Instrument (${context.id.ticker}) not sent via interop.setContext as you are not part of a context group.`;
   }
 }
 
 async function interopFireIntent(context) {
-  let userSelection = getSelection();
-  if(context.type === userSelection) {
+  const userSelection = getSelection();
+  if (context.type === userSelection) {
     context.metadata = {
-      target: getAppPreference()              
+      target: getAppPreference()
     };
     intentResolver = await fin.me.interop.fireIntentForContext(context);
   } else {
-    let intent = {
+    const intent = {
       name: userSelection,
       context,
       metadata: {
-        target: getAppPreference()              
+        target: getAppPreference()
       }
     };
     intentResolver = await fin.me.interop.fireIntent(intent, getAppPreference());
@@ -212,180 +208,182 @@ async function interopFireIntent(context) {
 
 async function onInstrumentSelection(selectedInstrument) {
   if (selectedInstrument !== undefined && selectedInstrument !== null) {
-    console.log("Instrument selected: " + selectedInstrument);
+    console.log(`Instrument selected: ${selectedInstrument}`);
     if (window.fin !== undefined) {
-      let targetApi = getTargetAPI();
-      let action = getAction();
+      const targetApi = getTargetAPI();
+      const action = getAction();
       let intentResolver;
-      let context = {
+      const context = {
         type: defaultFDC3InstrumentContext.type,
-        id: { ticker: selectedInstrument },
+        id: { ticker: selectedInstrument }
       };
 
-      if (targetApi === "fdc3") {
-        if(action === "broadcast") {
+      if (targetApi === 'fdc3') {
+        if (action === 'broadcast') {
           await fdc3Broadcast(context);
         } else {
           intentResolver = await fdc3RaiseIntent(context);
         }
+      } else if (action === 'broadcast') {
+        await interopSetContext(context);
       } else {
-        if(action === "broadcast") {
-          await interopSetContext(context);
-        } else {
-          intentResolver = await interopFireIntent(context);
-        } 
+        intentResolver = await interopFireIntent(context);
       }
-      if(intentResolver !== undefined) {
-        console.log("Intent resolver received: ", intentResolver);
+      if (intentResolver !== undefined) {
+        console.log('Intent resolver received:', intentResolver);
       }
     }
   }
 }
 
 // Close the dropdown menu if the user clicks outside of it
-window.onclick = async function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    let selectedInstrument = event.target.getAttribute("data-ticker");
+window.addEventListener('click', async (event) => {
+  if (!event.target.matches('.dropbtn')) {
+    const selectedInstrument = event.target.dataset.ticker;
 
     if (selectedInstrument !== null) {
       await onInstrumentSelection(selectedInstrument);
     }
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
+    const dropdowns = document.querySelectorAll('.dropdown-content');
+    let i;
     for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
     }
   }
-};
+});
 
 function setInstrument(ctx) {
-  let container = document.getElementById("instrument-container");
-  let instrumentMap = {
-    TSLA: "TESLA",
-    MSFT: "Microsoft",
-    AAPL: "Apple",
+  const container = document.querySelector('#instrument-container');
+  const instrumentMap = {
+    TSLA: 'TESLA',
+    MSFT: 'Microsoft',
+    AAPL: 'Apple'
   };
-  let name = document.getElementById("name");
-  let ticker = document.getElementById("ticker");
-  let type = document.getElementById("type");
+  const name = document.querySelector('#name');
+  const ticker = document.querySelector('#ticker');
+  const type = document.querySelector('#type');
 
-  container.style.display = "unset";
-  if (
-    ctx.id !== undefined &&
-    ctx.id.ticker !== undefined &&
-    instrumentMap[ctx.id.ticker] !== undefined
-  ) {
-    name.innerText = instrumentMap[ctx.id.ticker];
-    ticker.innerText = ctx.id.ticker;
-    type.innerText = ctx.type;
+  container.style.display = 'unset';
+  if (ctx.id !== undefined && ctx.id.ticker !== undefined && instrumentMap[ctx.id.ticker] !== undefined) {
+    name.textContent = instrumentMap[ctx.id.ticker];
+    ticker.textContent = ctx.id.ticker;
+    type.textContent = ctx.type;
   } else {
-    name.innerText = "";
-    ticker.innerText = "";
-    type.innerText = "";
+    name.textContent = '';
+    ticker.textContent = '';
+    type.textContent = '';
   }
 }
 
 async function buildApiList() {
   apiContainer.replaceChildren();
-  let interopEntry = createEntry("api", "Interop API", "interop", false, true);
-  let fdc3Entry = createEntry("api", "FDC3 API", "fdc3", true, true);
-  apiContainer.appendChild(fdc3Entry);
-  apiContainer.appendChild(interopEntry);
+  const interopEntry = createEntry('api', 'Interop API', 'interop', false, true);
+  const fdc3Entry = createEntry('api', 'FDC3 API', 'fdc3', true, true);
+  apiContainer.append(fdc3Entry);
+  apiContainer.append(interopEntry);
 }
 
 async function buildActionList() {
   actionContainer.replaceChildren();
   let intentEntry;
   let broadcastEntry;
-  
-  if(getTargetAPI() === "fdc3") {
-    intentEntry = createEntry("action", "fdc3.raiseIntent / fdc3.raiseIntentForContext", "raise-intent", true, true);  
-    broadcastEntry = createEntry("action", "fdc3.broadcast / fdc3.addContextListener", "broadcast", false, true);  
+
+  if (getTargetAPI() === 'fdc3') {
+    intentEntry = createEntry('action', 'fdc3.raiseIntent / fdc3.raiseIntentForContext', 'raise-intent', true, true);
+    broadcastEntry = createEntry('action', 'fdc3.broadcast / fdc3.addContextListener', 'broadcast', false, true);
   } else {
-    intentEntry = createEntry("action", "interop.fireIntent / interop.fireIntentForContext", "raise-intent", true, true);
-    broadcastEntry = createEntry("action", "interop.setContext / interop.addContextHandler", "broadcast", false, true);  
+    intentEntry = createEntry(
+      'action',
+      'interop.fireIntent / interop.fireIntentForContext',
+      'raise-intent',
+      true,
+      true
+    );
+    broadcastEntry = createEntry('action', 'interop.setContext / interop.addContextHandler', 'broadcast', false, true);
   }
 
-  actionContainer.appendChild(intentEntry);
-  actionContainer.appendChild(broadcastEntry);
+  actionContainer.append(intentEntry);
+  actionContainer.append(broadcastEntry);
   await onActionOrIntentSelection();
 }
 
 async function buildIntentList() {
-  let api = getTargetAPI();
-  let selection = getSelection();
+  const api = getTargetAPI();
+  const selection = getSelection();
   let intents;
-  if(api === "fdc3") {
+  if (api === 'fdc3') {
     intents = await window.fdc3.findIntentsByContext(defaultFDC3InstrumentContext);
   } else {
     intents = await fin.me.interop.getInfoForIntentsByContext(defaultFDC3InstrumentContext);
   }
-  if(Array.isArray(intents)) {
+  if (Array.isArray(intents)) {
     intentContainer.replaceChildren();
-    intents.forEach(intentResult => {
-      let entry =  createEntry("intent", intentResult.intent.displayName, intentResult.intent.name, intentResult.intent.name === selection, true );
-      intentContainer.appendChild(entry);
-    });
+    for (const intentResult of intents) {
+      const entry = createEntry(
+        'intent',
+        intentResult.intent.displayName,
+        intentResult.intent.name,
+        intentResult.intent.name === selection,
+        true
+      );
+      intentContainer.append(entry);
+    }
   }
 }
 
 function getCombinedAppList(intents) {
-    let combinedAppList = [];
-    let combinedListOfAppIds = [];
+  const combinedAppList = [];
+  const combinedListOfAppIds = [];
 
-    intents.forEach(intent => {
-        intent.apps.forEach(app => {
-          if(combinedListOfAppIds.indexOf(app.appId) === -1) {
-            combinedAppList.push(app);
-            combinedListOfAppIds.push(app.appId);
-          }
-        });
-    });
+  for (const intent of intents) {
+    for (const app of intent.apps) {
+      if (!combinedListOfAppIds.includes(app.appId)) {
+        combinedAppList.push(app);
+        combinedListOfAppIds.push(app.appId);
+      }
+    }
+  }
 
-    return combinedAppList;
+  return combinedAppList;
 }
 
 async function buildAppList() {
-  let api = getTargetAPI();
-  let selection = getSelection();
-  let previousApp = getAppPreference();
+  const api = getTargetAPI();
+  const selection = getSelection();
+  const previousApp = getAppPreference();
   let previousAppMatchFound = false;
   let intents = [];
-  let findByContext = selection === defaultFDC3InstrumentContext.type;
-  if(api === "fdc3") {
-
-    if(findByContext) {
+  const findByContext = selection === defaultFDC3InstrumentContext.type;
+  if (api === 'fdc3') {
+    if (findByContext) {
       intents = await window.fdc3.findIntentsByContext(defaultFDC3InstrumentContext);
     } else {
-      let intent = await window.fdc3.findIntent(selection);
+      const intent = await window.fdc3.findIntent(selection);
       intents.push(intent);
     }
-
+  } else if (findByContext) {
+    intents = await fin.me.interop.getInfoForIntentsByContext(defaultFDC3InstrumentContext);
   } else {
-    if(findByContext) {
-      intents = await fin.me.interop.getInfoForIntentsByContext(defaultFDC3InstrumentContext);
-    } else {
-      let intent = await fin.me.interop.getInfoForIntent({name: selection});
-      intents.push(intent);
-    }
+    const intent = await fin.me.interop.getInfoForIntent({ name: selection });
+    intents.push(intent);
   }
-  if(Array.isArray(intents) && intents.length > 0) {
+  if (Array.isArray(intents) && intents.length > 0) {
     appContainer.replaceChildren();
-  
-    let apps = getCombinedAppList(intents);
-    apps.forEach(app => {
-      if(previousApp === app.appId) {
+
+    const apps = getCombinedAppList(intents);
+    for (const app of apps) {
+      if (previousApp === app.appId) {
         previousAppMatchFound = true;
       }
-      let entry =  createEntry("app", app.title, app.appId, app.appId === previousApp);
-      appContainer.appendChild(entry);
-    });
+      const entry = createEntry('app', app.title, app.appId, app.appId === previousApp);
+      appContainer.append(entry);
+    }
 
-    if(!previousAppMatchFound && previousApp !== "appdoesnotexist") {
-      let noPreferenceOption = document.getElementById("none");
+    if (!previousAppMatchFound && previousApp !== 'appdoesnotexist') {
+      const noPreferenceOption = document.querySelector('#none');
       noPreferenceOption.checked = true;
     }
   }
@@ -393,16 +391,15 @@ async function buildAppList() {
 
 async function init() {
   if (window.fdc3 !== undefined) {
-    
-    intentContainer = document.getElementById("intent-container");
-    appContainer = document.getElementById("app-container");
-    apiContainer = document.getElementById("api-container");
-    broadcastedInstrument = document.getElementById("broadcasted-instrument");
-    let contextSelection = document.getElementById("fdc3.instrument");
-    contextSelection.addEventListener("change", onSelectionChange.bind(this));
-    actionContainer = document.getElementById("action-container");
-    intentOptionsContainer = document.getElementById("intent-options-container");
-    broadcastDataContainer = document.getElementById("broadcast-data-container");
+    intentContainer = document.querySelector('#intent-container');
+    appContainer = document.querySelector('#app-container');
+    apiContainer = document.querySelector('#api-container');
+    broadcastedInstrument = document.querySelector('#broadcasted-instrument');
+    const contextSelection = document.querySelector('#fdc3.instrument');
+    contextSelection.addEventListener('change', onSelectionChange.bind(this));
+    actionContainer = document.querySelector('#action-container');
+    intentOptionsContainer = document.querySelector('#intent-options-container');
+    broadcastDataContainer = document.querySelector('#broadcast-data-container');
     await buildApiList();
     await buildActionList();
     await buildIntentList();
@@ -411,6 +408,6 @@ async function init() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   init();
 });

@@ -10,15 +10,16 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/integrate-with-salesforce/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/integrate-with-salesforce/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "defaultViewOptions": {
       "fdc3InteropApi": "1.2",
-      "preloadScripts": [{
-        "url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/integrate-with-salesforce/js/preload.js"
-      }]
+      "preloadScripts": [
+        {
+          "url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/integrate-with-salesforce/js/preload.js"
+        }
+      ]
     },
-    "defaultWindowOptions": {
-    }
+    "defaultWindowOptions": {}
   },
   "snapshot": {
     "windows": []

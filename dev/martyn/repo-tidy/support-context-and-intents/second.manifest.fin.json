@@ -10,24 +10,24 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/favicon-32x32.png",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
         "downloadAsset": true,
         "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
+          "enabled": true,
+          "protocols": ["mailto"]
         }
       }
     },
     "defaultWindowOptions": {
       "permissions": {
         "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
+          "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+          }
         }
       }
     }
@@ -37,13 +37,13 @@
   },
   "appAssets": [
     {
-        "alias": "winform-interop-example",
-        "version": "2.0.0",
-        "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/assets/native-interop-example.zip",
-        "target": "OpenFin.Interop.Win.Sample.exe",
-        "forceDownload": false
+      "alias": "winform-interop-example",
+      "version": "2.0.0",
+      "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/assets/native-interop-example.zip",
+      "target": "OpenFin.Interop.Win.Sample.exe",
+      "forceDownload": false
     }
-],
+  ],
   "customSettings": {
     "bootstrap": {
       "home": true,
@@ -64,44 +64,44 @@
       }
     },
     "themeProvider": {
-        "themes":[
-          {
-              "label": "Second Starter Theme",
-              "logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/favicon-32x32.png",
-              "palette": {
-                  "brandPrimary": "#706fed",
-                  "brandSecondary": "#808dde",
-                  "backgroundPrimary": "#706fed",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBackground": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": "#808dde",
-                  "background2": "#706fed",
-                  "background3": "#415c71",
-                  "background4": "#2c345c",
-                  "background5": "#2c345c",
-                  "background6": "#2c345c"
-              }
+      "themes": [
+        {
+          "label": "Second Starter Theme",
+          "logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/favicon-32x32.png",
+          "palette": {
+            "brandPrimary": "#706fed",
+            "brandSecondary": "#808dde",
+            "backgroundPrimary": "#706fed",
+            "functional1": null,
+            "functional2": null,
+            "functional3": null,
+            "functional4": null,
+            "functional5": null,
+            "functional6": null,
+            "functional7": null,
+            "functional8": null,
+            "functional9": null,
+            "functional10": null,
+            "statusSuccess": null,
+            "statusWarning": null,
+            "statusCritical": null,
+            "statusActive": null,
+            "inputBackground": null,
+            "inputColor": null,
+            "inputPlaceholder": null,
+            "inputDisabled": null,
+            "inputFocused": null,
+            "textDefault": null,
+            "textHelp": null,
+            "textInactive": null,
+            "background1": "#808dde",
+            "background2": "#706fed",
+            "background3": "#415c71",
+            "background4": "#2c345c",
+            "background5": "#2c345c",
+            "background6": "#2c345c"
           }
+        }
       ]
     },
     "homeProvider": {
@@ -109,7 +109,7 @@
       "title": "Second Home Starter",
       "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/support-context-and-intents/favicon-32x32.png",
       "queryMinLength": 3,
-      "queryAgainst":["title"]
+      "queryAgainst": ["title"]
     },
     "storefrontProvider": {
       "id": "second-support-context-and-intents",
@@ -158,7 +158,7 @@
         },
         "middleRow": {
           "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
+          "tags": ["fdc3", "interop"]
         },
         "bottomRow": {
           "title": "Quick Access",
@@ -196,7 +196,7 @@
           "items": [
             {
               "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
+              "tags": ["view", "page", "manifest", "native"]
             },
             { "title": "Views", "tags": ["view"] },
             { "title": "Pages", "tags": ["page"] },

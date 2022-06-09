@@ -3,14 +3,14 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version":"24.98.69.7"
+    "version": "24.98.69.7"
   },
   "platform": {
     "uuid": "customize-home-templates",
     "icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
         "openUrlWithBrowser": {
@@ -22,10 +22,10 @@
     "defaultWindowOptions": {
       "permissions": {
         "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
+          "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+          }
         }
       }
     }
@@ -55,7 +55,7 @@
           "enabled": true,
           "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/js/integrations/quote.bundle.js",
           "data": {
-              "rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/quotes/"
+            "rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/quotes/"
           }
         },
         {
@@ -64,8 +64,7 @@
           "title": "Emoji Provider",
           "enabled": true,
           "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/repo-tidy/customize-home-templates/js/integrations/emoji.bundle.js",
-          "data": {
-          }
+          "data": {}
         }
       ]
     }

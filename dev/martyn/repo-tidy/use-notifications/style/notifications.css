@@ -5,7 +5,7 @@
 }
 
 * {
-  font-family: Inter, "Sans Serif";
+  font-family: Inter, 'Sans Serif';
   box-sizing: border-box;
 }
 
@@ -169,4 +169,3 @@ footer {
 .pad20 {
   padding: 20px;
 }
-
