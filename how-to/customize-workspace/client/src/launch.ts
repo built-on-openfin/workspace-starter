@@ -31,7 +31,7 @@ function findViewNames(layout) {
 
   JSON.stringify(layout, (_, nestedValue) => {
     // check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
-    if (nestedValue?.name !== null && nestedValue.name.length > 0 && nestedValue.url !== undefined) {
+    if (nestedValue?.name?.length && nestedValue.url !== undefined) {
       collectedNames.push(nestedValue.name as string);
     }
     return nestedValue as unknown;
