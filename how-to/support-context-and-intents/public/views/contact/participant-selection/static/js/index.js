@@ -1,8 +1,9 @@
 function init() {
   if (window.fdc3) {
-    let selectButtons = document.getElementsByClassName('action-select');
-    let raiseIntentButtons = document.getElementsByClassName('action-raise-intent');
-    let contacts = {
+    const selectButtons = document.querySelectorAll('.action-select');
+    const raiseIntentButtons = document.querySelectorAll('.action-raise-intent');
+
+    const contacts = {
       john: {
         type: 'fdc3.contact',
         name: 'John McHugh',
@@ -32,27 +33,29 @@ function init() {
         }
       }
     };
-    function selectParticipant(event) {
-      let contact = contacts[event.target.dataset.contact];
-      if (contact !== undefined) {
-        window.fdc3.broadcast(contact);
-      }
-    }
-
-    function raiseIntent(event) {
-      let contact = contacts[event.target.dataset.contact];
-      if (contact !== undefined) {
-        window.fdc3.raiseIntent('ViewContact', contact);
-      }
-    }
 
     for (let i = 0; i < selectButtons.length; i++) {
-      selectButtons[i].onclick = selectParticipant;
+      selectButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
     }
 
     for (let i = 0; i < raiseIntentButtons.length; i++) {
-      raiseIntentButtons[i].onclick = raiseIntent;
+      raiseIntentButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
     }
   }
 }
+
+function selectParticipant(event, contacts) {
+  const contact = contacts[event.target.dataset.contact];
+  if (contact !== undefined) {
+    window.fdc3.broadcast(contact);
+  }
+}
+
+function raiseIntent(event, contacts) {
+  const contact = contacts[event.target.dataset.contact];
+  if (contact !== undefined) {
+    window.fdc3.raiseIntent('ViewContact', contact);
+  }
+}
+
 window.addEventListener('DOMContentLoaded', init);

@@ -1,9 +1,9 @@
+const { execSync } = require('child_process');
 const fg = require('fast-glob');
 const fs = require('fs-extra');
-const { execSync } = require('child_process');
-const package = require('../package.json');
 const replace = require('replace-in-file');
 const yargs = require('yargs');
+const packageJson = require('../package.json');
 
 const URLBaseMap = new Map([
   ['github', 'https://built-on-openfin.github.io'],
@@ -35,34 +35,35 @@ args = yargs(process.argv.slice(2))
   .alias('help', 'h').argv;
 
 function packageHOWTOs(args) {
-  const URLPattern = new RegExp('http://localhost:8080', 'g');
+  const URLPattern = /http:\/\/localhost:8080/g;
 
-  let publishDir = 'public-' + args.location;
+  let publishDir = `public-${args.location}`;
 
   if (args.legacy) {
     publishDir = 'public';
-    args.location = args.l = 'github';
+    args.location = 'github';
+    args.l = args.location;
   }
 
-  let baseURL = URLBaseMap.get(args.location);
-  let hostFolder = args.path ? args.path : 'workspace/v' + package.version;
+  const baseURL = URLBaseMap.get(args.location);
+  let hostFolder = args.path ? args.path : `workspace/v${packageJson.version}`;
 
-  if (package.howToCustomFolder !== undefined && package.howToCustomFolder !== '') {
-    hostFolder = package.howToCustomFolder;
+  if (packageJson.howToCustomFolder !== undefined && packageJson.howToCustomFolder !== '') {
+    hostFolder = packageJson.howToCustomFolder;
   }
 
   // Make a publish location specific copy to allow multiple package runs
   // for different locations.
   fs.rmSync(publishDir, { recursive: true, force: true });
 
-  workspaces = fg.sync(package.workspaces, { onlyDirectories: true });
-  if (package.packageExclude) {
-    workspaces = workspaces.filter((item) => !package.packageExclude.includes(item));
+  workspaces = fg.sync(packageJson.workspaces, { onlyDirectories: true });
+  if (packageJson.packageExclude) {
+    workspaces = workspaces.filter((item) => !packageJson.packageExclude.includes(item));
   }
 
   for (let i = 0; i < workspaces.length; i++) {
-    let workspace = workspaces[i];
-    let howto = workspace.split('/')[1];
+    const workspace = workspaces[i];
+    const howto = workspace.split('/')[1];
 
     if (args.legacy) {
       execSync('npm run build-client', {
@@ -71,26 +72,26 @@ function packageHOWTOs(args) {
       });
     }
 
-    let sourceDir = [workspace, 'public'].join('/');
-    let targetDir = [publishDir, howto].join('/');
+    const sourceDir = [workspace, 'public'].join('/');
+    const targetDir = [publishDir, howto].join('/');
 
     fs.copySync(sourceDir, targetDir);
 
-    let URL = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
-    let options = {
-      files: targetDir + '/**/*.json',
+    const URL = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
+    const options = {
+      files: `${targetDir}/**/*.json`,
       from: URLPattern,
       to: URL
     };
     try {
-      let results = replace.sync(options);
+      const results = replace.sync(options);
       console.log('Replacement results:', results);
-      console.log('URLs replaced with: ' + URL);
+      console.log(`URLs replaced with: ${URL}`);
     } catch (error) {
       console.error('Error occurred:', error);
     }
   }
-  console.log('Packages prepared for publishing in: ' + publishDir + '/');
+  console.log(`Packages prepared for publishing in: ${publishDir}/`);
 }
 
 packageHOWTOs(args);

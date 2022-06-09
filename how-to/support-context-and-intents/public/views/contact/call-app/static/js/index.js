@@ -1,6 +1,6 @@
 function init() {
-  let action = document.getElementById('action');
-  let timeLabel = document.getElementById('time');
+  const action = document.querySelector('#action');
+  const timeLabel = document.querySelector('#time');
   let intervalId = null;
   let seconds = 0;
   let min;
@@ -10,19 +10,19 @@ function init() {
     seconds++;
     min = Math.floor(seconds / 60);
     sec = seconds % 60;
-    let displayMinutes = min < 10 ? `0${min}` : min;
-    let displaySeconds = sec < 10 ? `0${sec}` : sec;
-    timeLabel.innerText = displayMinutes + ':' + displaySeconds;
+    const displayMinutes = min < 10 ? `0${min}` : min;
+    const displaySeconds = sec < 10 ? `0${sec}` : sec;
+    timeLabel.textContent = `${displayMinutes}:${displaySeconds}`;
   }
 
-  let startStopTimer = () => {
+  const startStopTimer = () => {
     if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
-      action.innerText = 'Start Call';
-      timeLabel.innerText = '00:00';
+      action.textContent = 'Start Call';
+      timeLabel.textContent = '00:00';
     } else {
-      action.innerText = 'End Call';
+      action.textContent = 'End Call';
       seconds = 0;
       update();
       intervalId = setInterval(() => {
@@ -31,6 +31,6 @@ function init() {
     }
   };
 
-  action.onclick = startStopTimer;
+  action.addEventListener('click', startStopTimer);
 }
 window.addEventListener('DOMContentLoaded', init);
