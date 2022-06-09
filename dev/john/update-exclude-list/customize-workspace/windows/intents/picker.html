@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Intent Picker</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="module" src="./picker.js"></script>
+    <link rel="stylesheet" href="./picker.css" />
+  </head>
+  <body>
+    <div id="intent-select-container" style="display: none;">
+        <div id="title" class="drag"><h2>Intent Picker</h2></div>
+        <div><b>Target Context Type:</b> <span id="target-context"></span></div>
+        <div id="intent-container" class="intentContainer"></div>
+        <div class="launchContainer">
+          <button id="next">Next</button
+          ><button id="cancel-intent-selection">Cancel</button>
+        </div>
+    </div>
+    <div id="app-select-container" style="display: none;">
+      <div id="title" class="drag"><h2>Application Picker</h2></div>
+      <div><b>Target Intent:</b> <span id="target-intent"></span></div>
+      <div id="app-container" class="appContainer"></div>
+      <div class="launchContainer">
+        <button id="back" style="display: none;">Back</button>
+        <button id="launch">Launch</button
+        ><button id="cancel">Cancel</button>
+      </div>
+    </div>
+  </body>
+</html>
