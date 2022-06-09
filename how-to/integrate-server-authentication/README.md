@@ -7,7 +7,7 @@
 
 Your OpenFin application will often need to authenticate using a server login page before use, this examples demonstrates such an integration.
 
-This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+This application you are about to install is a simple example of plugging in your own content or app. The basic server intercepts a request to the provider window and checks to see if you are authenticated. If you are not it redirects to a login screen. If you are then it will load the provider window. The settings in the manifest make the provider window visible (so it acts as a splash screen or the location where the login form will be displayed). When you have an authenticated session and the splash screen is visible then the provider will hide itself after a period of time and launch the main application window. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
 ---
 
