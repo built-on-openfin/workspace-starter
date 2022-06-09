@@ -1,5 +1,4 @@
 import * as express from "express";
-import crypto = require("crypto");
 import path = require("path");
 
 const router = express.Router();
@@ -8,17 +7,9 @@ export default router;
 const sessionIds = {};
 const SESSION_COOKIE_NAME = "app-session-id";
 let requestedUrl;
-/**
- * In order for Home to make the cross origin request to our server,
- * we must allow CORS on Home's domains.
- */
-const allowedCorsDomains = ["https://cdn.openfin.co"];
+
 const corsMiddleware: express.Handler = (req, res, next) => {
-    const origin = req.get('origin');
-    if (allowedCorsDomains.includes(origin)) {
-        res.header("Access-Control-Allow-Origin", origin);
-        res.header("Access-Control-Allow-Credentials", "true");
-    }
+    // add logic here if you wish to support cors.
     next();
 };
 
