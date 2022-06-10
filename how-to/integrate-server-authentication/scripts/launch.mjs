@@ -2,18 +2,18 @@ import { launch, connect } from 'openfin-adapter';
 
 async function launchFromNode(manifestUrl) {
   try {
-    console.log('Launching manifest: ' + manifestUrl);
+    console.log(`Launching manifest: ${manifestUrl}`);
 
     const port = await launch({ manifestUrl });
 
-    //We will use the port to connect from Node to determine when OpenFin exists.
+    // We will use the port to connect from Node to determine when OpenFin exists.
     const fin = await connect({
-      uuid: 'dev-connection-' + Date.now(), //Supply an addressable Id for the connection
-      address: `ws://127.0.0.1:${port}`, //Connect to the given port.
-      nonPersistent: true //We want OpenFin to exit as our application exists.
+      uuid: `dev-connection-${Date.now()}`, // Supply an addressable Id for the connection
+      address: `ws://127.0.0.1:${port}`, // Connect to the given port.
+      nonPersistent: true // We want OpenFin to exit as our application exists.
     });
 
-    //Once OpenFin exists we shut down the process.
+    // Once OpenFin exists we shut down the process.
     fin.once('disconnected', process.exit);
     return fin;
   } catch (e) {
@@ -45,7 +45,7 @@ async function launchFromNode(manifestUrl) {
           await platform.quit();
         }
       };
-      console.log('Wrapped target platform: ' + manifest.platform.uuid);
+      console.log(`Wrapped target platform: ${manifest.platform.uuid}`);
     } else {
       const app = fin.Application.wrapSync({ uuid: manifest.startup_app.uuid });
       quit = async () => {
@@ -54,7 +54,7 @@ async function launchFromNode(manifestUrl) {
           await app.quit();
         }
       };
-      console.log('Wrapped classic app: ' + manifest.startup_app.uuid);
+      console.log(`Wrapped classic app: ${manifest.startup_app.uuid}`);
     }
 
     // do something when app is closing
