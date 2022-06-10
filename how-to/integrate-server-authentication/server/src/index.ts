@@ -1,4 +1,4 @@
-import * as cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import express from "express";
 import router from "./routes";
 
