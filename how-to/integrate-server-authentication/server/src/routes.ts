@@ -17,7 +17,7 @@ router.get("/platform/provider.html", (req, res, next) => {
   console.log("Received request for /platform/provider.html");
   if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
     console.log("Session cookie available. Navigating to /platform/provider.html");
-    res.sendFile(path.join(__dirname, "..", "..", "public/platform/provider.html") as string);
+    res.sendFile(path.join(__dirname, "..", "..", "public/platform/provider.html"));
   } else {
     console.log("Session cookie not available. Navigating to /app/login");
     requestedUrl = "/platform/provider.html";
@@ -29,7 +29,7 @@ router.get("/app", (req, res, next) => {
   console.log("Received request for /app");
   if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
     console.log("Session cookie available. Navigating to /app/app.html");
-    res.sendFile(path.join(__dirname, "..", "..", "public/app/app.html") as string);
+    res.sendFile(path.join(__dirname, "..", "..", "public/app/app.html"));
   } else {
     console.log("Session cookie not available. Navigating to /app/login");
     requestedUrl = "/app";
@@ -45,7 +45,7 @@ router.get("/app/login", (req, res, next) => {
   }
   res.clearCookie(SESSION_COOKIE_NAME);
   console.log("Navigating to /app/login.html");
-  res.sendFile(path.join(__dirname, "..", "..", "public/app/login.html") as string);
+  res.sendFile(path.join(__dirname, "..", "..", "public/app/login.html"));
 });
 
 router.post("/app/logout", (req, res, next) => {
