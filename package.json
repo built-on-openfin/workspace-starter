@@ -16,7 +16,10 @@
   "packageExclude": [
     "how-to/register-with-home-basic",
     "how-to/register-with-store-basic",
-    "how-to/migrate-from-a-previous-version"
+    "how-to/migrate-from-a-previous-version",
+    "how-to/integrate-with-salesforce",
+    "how-to/integrate-with-sso",
+    "how-to/integrate-server-authentication"
   ],
   "howToCustomFolder": "",
   "author": "",

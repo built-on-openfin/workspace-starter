@@ -8,8 +8,7 @@ async function validateEntries(apps: App[]) {
   const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
     "System.launchExternalProcess"
   );
-  const canLaunchExternalProcess =
-    canLaunchExternalProcessResponse?.granted;
+  const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
   const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
   const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
@@ -27,16 +26,12 @@ async function validateEntries(apps: App[]) {
     if (apps[i].manifestType !== "external") {
       validatedApps.push(apps[i]);
     } else if (!canLaunchExternalProcess) {
-        rejectedAppIds.push(apps[i].appId);
-      } else if (
-        Array.isArray(apps[i].tags) &&
-        apps[i].tags.includes(appAssetTag) &&
-        !canDownloadAppAssets
-      ) {
-        rejectedAppIds.push(apps[i].appId);
-      } else {
-        validatedApps.push(apps[i]);
-      }
+      rejectedAppIds.push(apps[i].appId);
+    } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !canDownloadAppAssets) {
+      rejectedAppIds.push(apps[i].appId);
+    } else {
+      validatedApps.push(apps[i]);
+    }
   }
 
   if (rejectedAppIds.length > 0) {
@@ -108,8 +103,8 @@ export async function getAppsByTag(tags: string[], mustMatchAll = false): Promis
           return true;
         }
       } else if (mustMatchAll) {
-          return false;
-        }
+        return false;
+      }
     }
     return matchFound;
   });

@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "@types/node": "^17.0.21",
+    "@types/node": "^14.14.33",
     "copy-webpack-plugin": "^10.2.4",
     "express": "^4.17.1",
     "openfin-adapter": "^22.65.4",

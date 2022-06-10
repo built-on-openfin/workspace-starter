@@ -111,7 +111,7 @@ export async function deregister() {
     const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
   }
-    console.warn("Unable to deregister home as there is an indication it was never registered");
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {

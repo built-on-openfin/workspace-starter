@@ -5,7 +5,9 @@
     "sourceMap": true,
     "rootDir": "./src",
     "outDir": "build",
-    "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node"
   }
 }
