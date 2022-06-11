@@ -12,7 +12,7 @@ export async function init() {
 
   const settings = await getSettings();
   setTimeout(async () => {
-    // you could decide to try and animate the provider window opactity settings to make it look like it fades out if you prefer
+    // you could decide to try and animate the provider window opacity settings to make it look like it fades out if you prefer
     // for the purpose of the demo we hide it and then launch the main window
     (await fin.Window.getCurrent()).hide();
     // The server authentication is complete as the provider is loading so launch the full app
