@@ -1,0 +1,97 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  #root {
+    height: 100%;
+  }
+  
+  body {
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .App {
+    font-family: 'Inter', sans-serif;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .participant-summary {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #111214;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  
+  .participant-summary::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    margin-left: 11px;
+    display: inline-block;
+    background-image: url('icon.png');
+    background-size: cover;
+  }
+  
+  .username {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 500;
+    color: #111214;
+    text-align: left;
+    margin-bottom: 16px;
+  }
+  
+  .username::after {
+    content: '';
+    position: relative;
+    width: 8px;
+    height: 8px;
+    background-color: #35C759;
+    border-radius: 8px;
+    display: inline-block;
+    margin-left: 12px;
+  }
+  
+  .content-card {
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #F3F5F8;
+    flex: 1;
+  }
+  
+  .card {
+    padding: 4px;
+    border-radius: 2px;
+    background-color: #ECEEF1;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: #53565F;
+    margin-bottom: 10px;
+  }
+  
+  .row {
+    display: flex;
+    line-height: 18px;
+  }
+  
+  .col {
+    display: flex;
+    flex: 1;
+    font-weight: 400;
+    color: #111214;
+    text-align: left;
+  }
+  
+  .col.title {
+    font-weight: 500;
+  }
