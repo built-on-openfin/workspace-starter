@@ -18,8 +18,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^7.0.0",
-                    "@openfin/workspace-platform": "^7.0.0"
+                    "@openfin/workspace": "^8.0.0",
+                    "@openfin/workspace-platform": "^8.0.0"
                 }
 ```
 # Migrate from a previous version - From v5.5 to v6.0

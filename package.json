@@ -1,6 +1,6 @@
 {
     "name": "openfin-workspace-starter",
-    "version": "7.0.0",
+    "version": "8.0.0",
     "description": "OpenFin Workspace Starter",
     "scripts": {
         "package-how-tos": "node ./scripts/package.js --legacy",
@@ -19,7 +19,7 @@
         "how-to/integrate-with-sso",
         "how-to/integrate-server-authentication"
     ],
-    "howToCustomFolder":"",
+    "howToCustomFolder":"workspace/vnext",
     "author": "",
     "license": "SEE LICENSE IN LICENSE.MD",
     "devDependencies": {

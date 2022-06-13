@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace--integrate-server-authentication",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "OpenFin Workspace -- Integrate with Server Authentication",
   "main": "index.js",
   "scripts": {
@@ -18,8 +18,8 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/core": "^25.68.26",
-    "@openfin/workspace": "7.3.10",
-    "@openfin/workspace-platform": "7.3.10",
+    "@openfin/workspace": "next",
+    "@openfin/workspace-platform": "next",
     "cookie-parser": "^1.4.6"
   },
   "devDependencies": {
