@@ -187,6 +187,4 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
             }
         };
     }
-    
-
 }

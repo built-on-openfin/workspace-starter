@@ -66,6 +66,15 @@
           "moduleUrl": "http://localhost:8080/js/integrations/emoji.bundle.js",
           "data": {
           }
+        },
+        {
+          "id": "async",
+          "icon": "http://localhost:8080/favicon.ico",
+          "title": "Async Provider",
+          "enabled": true,
+          "moduleUrl": "http://localhost:8080/js/integrations/async.bundle.js",
+          "data": {
+          }
         }
       ]
     }
