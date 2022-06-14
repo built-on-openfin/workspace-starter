@@ -88,7 +88,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 
 export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
     const page: Page = await createPageWithLayout('Untitled Page', defaultPageLayout);
-    const pages: Page[] = [page, page, page];
+    const page1: Page = await createPageWithLayout('Untitled Page', defaultPageLayout);
+    const page2: Page = await createPageWithLayout('Untitled Page', defaultPageLayout);
+    const pages: Page[] = [page, page1, page2];
     const options: BrowserCreateWindowRequest = {
         workspacePlatform: { pages }
     };
