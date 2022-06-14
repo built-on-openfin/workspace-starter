@@ -5,7 +5,7 @@ OpenFin Workspace is currently **only supported on Windows** although you can ru
 
 # Register With Platform Windows
 
-OpenFin Workspace empowers you to take advantage of our store component by using our Storefront API to register your own store and populate it with your custom content. This example additionally lets you populate the Home UI using the same data source. This gives you the choice of fetching your list of applications from a *Content Discovery Service* or somewhere else. This example also shows you that you can use an existing Platform API application and register with these components without using the Browser component (if you have an existing app and don't want to migrate just yet).
+OpenFin Workspace empowers you to take advantage of our store component by using our Storefront API to register your own store and populate it with your custom content. This example additionally lets you populate the Home UI using the same data source. This gives you the choice of fetching your list of applications from a *Content Discovery Service* or somewhere else. This example also shows you that you can use an existing Platform API application and register with these components without using the Browser component (if you have an existing app and don't want to migrate just yet). This example is based off the **Register with Store** starter.
 
 This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -55,17 +55,17 @@ $ start npm run start
 ```bash
 $ npm run client
 ```
-![](openfin-register-with-store.gif)
+![](openfin-register-with-platform-windows.gif)
 
 6. Type any character into the search box to show the default list of applications.
    The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
-![](openfin-register-with-store-home-ui.gif)
+![](openfin-register-with-platform-windows-home.gif)
 
 6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
-![](openfin-register-with-store-storefront.gif)
+![](openfin-register-with-platform-windows-store.gif)
 
 ## How it works
 
@@ -103,7 +103,7 @@ $ npm run client
 
 The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform. 
 
-The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify that we do not want to use the Workspace Browser and which to continue using Platform API Windows.
+The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify that we do not want to use the Workspace Browser and which to continue using Platform API Windows by saying that the browser configuration is null.
 
 Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
 
@@ -215,15 +215,15 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       ]
     },
     "homeProvider": {
-      "id": "register-with-store-home",
-      "title": "Home Starter",
+      "id": "register-with-platform-windows",
+      "title": "Platform Windows Starter",
       "icon": "http://localhost:8080/favicon.ico",
       "queryMinLength": 3,
       "queryAgainst":["title"]
     },
     "storefrontProvider": {
-      "id": "register-with-store",
-      "title": "Custom Storefront",
+      "id": "register-with-platform-windows",
+      "title": "Platform Windows Storefront",
       "icon": "http://localhost:8080/favicon.ico",
       "landingPage": {
         "hero": {
@@ -415,6 +415,18 @@ The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Modu
 
 The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both.
 
+
+---
+**Custom Platform Windows**
+
+The platform api specific code:
+
+* [platform.ts](client/src/platform.ts) - specifying null for browser when initialing your platform against workspace so that the default workspace browser component is not used.
+* [manifest.fin.json](public/manifest.fin.json) - if you look at the **defaultWindowOptions** within the platform configuration you will see that the url is specified as:  "url": "http://localhost:8080/windows/platform-window.html". This is how an existing platform app would define a custom template to use to host the layout system. This page is used every time you launch a view from home or the store component. **This is optional. If you do not want a custom template then you can remove this url setting from the defaultWindowOptions setting**.
+* [platform-window.html](public/windows/platform-window.html) - this is the html template where you specify your custom html. It is important to include a hook for our layout system (see layout-container within the html). You can see that it brings in two scripts. 
+  * [platform-window.ts](client/src/platform-window.ts) - this file binds to the buttons for closing, minimizing and maximising your custom window
+  * [public/lib/wc-fin/wc-fin.esm.js](public/lib/wc-fin/wc-fin.esm.js) - this is a script that registers a web component that is used in the html template: *<fin-context-group-picker show-list-on-click="false" ></fin-context-group-picker>*. The web component is an example of a context group picker that will assign a context group to every view in the window. The picker is an example which can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin) and the settings for this particular component can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker)
+---
 
 ### A note about this example
 
