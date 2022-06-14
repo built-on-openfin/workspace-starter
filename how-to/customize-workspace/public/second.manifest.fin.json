@@ -201,6 +201,13 @@
         },
         {
           "include": true,
+          "id": "lock-unlock",
+          "button": {
+            "type": "LockUnlockPage"
+          }
+        },
+        {
+          "include": true,
           "id": "show-hide-tabs",
           "button": {
             "type": "ShowHideTabs"
