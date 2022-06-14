@@ -7,5 +7,4 @@ window.addEventListener('DOMContentLoaded', async () => {
   let platform = fin.Platform.getCurrentSync();
   platform.once('platform-api-ready', bootstrap.bind(this));
   await initialisePlatform();
-
 });

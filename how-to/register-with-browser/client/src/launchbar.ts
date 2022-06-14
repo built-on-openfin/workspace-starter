@@ -12,7 +12,7 @@ const defaultPageLayout: PageLayout = {
                     type: 'component',
                     componentName: 'view',
                     componentState: {
-                        identity: createViewIdentity(fin.me.uuid, 'v1'),
+                        name: createViewIdentity(fin.me.uuid, 'v1').name,
                         url: 'https://examples.com'
                     }
                 },
@@ -20,7 +20,7 @@ const defaultPageLayout: PageLayout = {
                     type: 'component',
                     componentName: 'view',
                     componentState: {
-                        identity: createViewIdentity(fin.me.uuid, 'v2'),
+                        name: createViewIdentity(fin.me.uuid, 'v2').name,
                         url: 'https://openfin.co'
                     }
                 }
@@ -76,6 +76,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
             },
             {
                 type: BrowserButtonType.PresetLayouts
+            },
+            {
+                type: BrowserButtonType.LockUnlockPage
             }
         ]
     };
