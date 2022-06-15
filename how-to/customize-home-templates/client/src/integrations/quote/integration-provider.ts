@@ -1,8 +1,8 @@
 import {
     CLITemplate,
-    type CLIDispatchedSearchResult,
+    type HomeDispatchedSearchResult,
     type CLIFilter,
-    type CLISearchListenerResponse,
+    type HomeSearchListenerResponse,
     type HomeSearchResponse,
     type HomeSearchResult
 } from "@openfin/workspace";
@@ -108,10 +108,13 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
      */
     public async itemSelection(
         integration: Integration<QuoteSettings>,
-        result: CLIDispatchedSearchResult,
-        lastResponse: CLISearchListenerResponse
+        result: HomeDispatchedSearchResult,
+        lastResponse: HomeSearchListenerResponse
     ): Promise<boolean> {
-        if (result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION && result.data.url && this._integrationManager.openUrl) {
+        if (result.action.trigger === "user-action" &&
+            result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION &&
+            result.data.url &&
+            this._integrationManager.openUrl) {
             await this._integrationManager.openUrl(result.data.url);
             return true;
         }
@@ -131,7 +134,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
         integration: Integration<QuoteSettings>,
         query: string,
         filters: CLIFilter[],
-        lastResponse: CLISearchListenerResponse
+        lastResponse: HomeSearchListenerResponse
     ): Promise<HomeSearchResponse> {
         const results = [];
 

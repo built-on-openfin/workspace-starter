@@ -1,6 +1,6 @@
 import type {
-    CLIDispatchedSearchResult,
-    CLISearchListenerResponse,
+    HomeDispatchedSearchResult,
+    HomeSearchListenerResponse,
     CLIFilter,
     HomeSearchResponse,
     HomeSearchResult
@@ -123,7 +123,7 @@ export interface IntegrationModule<T> {
      * @param lastResponse The last search response used for updating existing results.
      * @returns The list of results and new filters.
      */
-    getSearchResults?(integration: Integration<T>, query: string, filters: CLIFilter[], lastResponse: CLISearchListenerResponse): Promise<HomeSearchResponse>;
+    getSearchResults?(integration: Integration<T>, query: string, filters: CLIFilter[], lastResponse: HomeSearchListenerResponse): Promise<HomeSearchResponse>;
 
     /**
      * Get a list of the static application entries.
@@ -146,5 +146,5 @@ export interface IntegrationModule<T> {
      * @param lastResponse The last response.
      * @returns True if the item was handled.
      */
-    itemSelection?(integration: Integration<T>, result: CLIDispatchedSearchResult, lastResponse: CLISearchListenerResponse): Promise<boolean>;
+    itemSelection?(integration: Integration<T>, result: HomeDispatchedSearchResult, lastResponse: HomeSearchListenerResponse): Promise<boolean>;
 }

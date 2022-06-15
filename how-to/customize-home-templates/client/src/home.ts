@@ -1,8 +1,10 @@
 import {
-  CLIDispatchedSearchResult, CLIProvider,
-  CLISearchListenerRequest,
-  CLISearchListenerResponse,
-  CLISearchResponse, Home, HomeSearchResponse
+  HomeDispatchedSearchResult,
+  HomeSearchListenerRequest,
+  HomeSearchListenerResponse,
+  Home, 
+  HomeSearchResponse, 
+  HomeProvider
 } from "@openfin/workspace";
 import { getAppSearchEntries, getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
@@ -23,12 +25,12 @@ export async function register() {
     return;
   }
 
-  let lastResponse: CLISearchListenerResponse;
+  let lastResponse: HomeSearchListenerResponse;
 
   const onUserInput = async (
-    request: CLISearchListenerRequest,
-    response: CLISearchListenerResponse
-  ): Promise<CLISearchResponse> => {
+    request: HomeSearchListenerRequest,
+    response: HomeSearchListenerResponse
+  ): Promise<HomeSearchResponse> => {
     let query = request.query.toLowerCase();
     if (lastResponse !== undefined) {
       lastResponse.close();
@@ -60,7 +62,7 @@ export async function register() {
     return searchResults;
   };
 
-  const onSelection = async (result: CLIDispatchedSearchResult) => {
+  const onSelection = async (result: HomeDispatchedSearchResult) => {
     if (result.data !== undefined) {
       const handled = await itemSelection(result, lastResponse);
 
@@ -72,12 +74,13 @@ export async function register() {
     }
   };
 
-  const cliProvider: CLIProvider = {
+  const cliProvider: HomeProvider = {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
     onUserInput: onUserInput,
     onResultDispatch: onSelection,
+    dispatchFocusEvents: true
   };
 
   await Home.register(cliProvider);

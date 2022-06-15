@@ -1,8 +1,8 @@
 import {
     CLITemplate,
-    type CLIDispatchedSearchResult,
+    type HomeDispatchedSearchResult,
     type CLIFilter,
-    type CLISearchListenerResponse,
+    type HomeSearchListenerResponse,
     type HomeSearchResponse,
     type HomeSearchResult
 } from "@openfin/workspace";
@@ -118,18 +118,24 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
      */
     public async itemSelection(
         integration: Integration<EmojiSettings>,
-        result: CLIDispatchedSearchResult,
-        lastResponse: CLISearchListenerResponse
+        result: HomeDispatchedSearchResult,
+        lastResponse: HomeSearchListenerResponse
     ): Promise<boolean> {
-        if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION && result.data.emoji) {
-            await fin.Clipboard.writeText({ data: result.data.emoji });
-            return true;
-        } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION && result.data.key) {
-            await fin.Clipboard.writeText({ data: result.data.key });
-            return true;
-        } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION && result.data.url && this._integrationManager.openUrl) {
-            await this._integrationManager.openUrl(result.data.url);
-            return true;
+        if (result.action.trigger === "user-action") {
+            if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION &&
+                result.data.emoji) {
+                await fin.Clipboard.writeText({ data: result.data.emoji });
+                return true;
+            } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION &&
+                result.data.key) {
+                await fin.Clipboard.writeText({ data: result.data.key });
+                return true;
+            } else if (result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION &&
+                result.data.url &&
+                this._integrationManager.openUrl) {
+                await this._integrationManager.openUrl(result.data.url);
+                return true;
+            }
         }
 
         return false;
@@ -147,7 +153,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
         integration: Integration<EmojiSettings>,
         query: string,
         filters: CLIFilter[],
-        lastResponse: CLISearchListenerResponse
+        lastResponse: HomeSearchListenerResponse
     ): Promise<HomeSearchResponse> {
         const results = [];
 

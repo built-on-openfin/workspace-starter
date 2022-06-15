@@ -1,7 +1,7 @@
 import type {
-    CLIDispatchedSearchResult,
+    HomeDispatchedSearchResult,
     CLIFilter,
-    CLISearchListenerResponse,
+    HomeSearchListenerResponse,
     HomeSearchResponse,
     HomeSearchResult
 } from "@openfin/workspace";
@@ -71,7 +71,7 @@ export async function deregister(integrationProvider?: IntegrationProvider): Pro
  * @param lastResponse The last search response used for updating existing results.
  * @returns The search results and new filters.
  */
-export async function getSearchResults(query: string, filters: CLIFilter[], lastResponse: CLISearchListenerResponse): Promise<HomeSearchResponse> {
+export async function getSearchResults(query: string, filters: CLIFilter[], lastResponse: HomeSearchListenerResponse): Promise<HomeSearchResponse> {
     const homeResponse: HomeSearchResponse = {
         results: [],
         context: {
@@ -151,8 +151,8 @@ export async function getAppSearchEntries(): Promise<HomeSearchResult[]> {
  * @returns True if the selection was handled.
  */
 export async function itemSelection(
-    result: CLIDispatchedSearchResult,
-    lastResponse?: CLISearchListenerResponse
+    result: HomeDispatchedSearchResult,
+    lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
     if (result.data) {
         const foundIntegration = homeIntegrations.find(hi => hi.integration.id === result.data?.providerId);
