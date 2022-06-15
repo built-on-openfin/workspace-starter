@@ -74,6 +74,7 @@
           "enabled": true,
           "moduleUrl": "http://localhost:8080/js/integrations/async.bundle.js",
           "data": {
+            "rootUrl": "http://localhost:8080/contacts/"
           }
         }
       ]

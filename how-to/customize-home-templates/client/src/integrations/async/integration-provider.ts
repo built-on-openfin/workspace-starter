@@ -1,15 +1,14 @@
 import {
     CLITemplate,
-    type CLIDispatchedSearchResult,
+    type HomeDispatchedSearchResult,
     type CLIFilter,
-    type CLISearchListenerResponse,
+    type HomeSearchListenerResponse,
     type HomeSearchResponse,
     type HomeSearchResult
 } from "@openfin/workspace";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
-import type { AsyncSettings } from "./shapes";
-import { getAsyncTemplate } from "./templates";
+import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
 /**
  * Implement the integration provider for async results.
@@ -73,8 +72,8 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
     public async getHelpSearchEntries?(integration: Integration<AsyncSettings>): Promise<HomeSearchResult[]> {
         return [
             {
-                key: `${AsyncIntegrationProvider._PROVIDER_ID}-help`,
-                title: "/async",
+                key: `${AsyncIntegrationProvider._PROVIDER_ID}-help1`,
+                title: "/contacts-sync",
                 label: "Help",
                 actions: [],
                 data: {
@@ -82,13 +81,58 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
                 },
                 template: CLITemplate.Custom,
                 templateContent: createHelp(
-                    "/async",
+                    "/contacts-sync",
                     [
-                        "The async command can be used to search for data asynchronously.",
-                        "For example to search for contacts."
+                        "The contacts-sync command can be used to search for a contact.",
+                        "It demonstrates how a long running retrieval would have to wait for the response before anything is display.",
+                        "For example to search for a contact containing the letter a."
                     ],
                     [
-                        "/async contacts"
+                        "/contacts-sync a"
+                    ]
+                )
+            },
+            {
+                key: `${AsyncIntegrationProvider._PROVIDER_ID}-help2`,
+                title: "/contacts-partial",
+                label: "Help",
+                actions: [],
+                data: {
+                    providerId: AsyncIntegrationProvider._PROVIDER_ID
+                },
+                template: CLITemplate.Custom,
+                templateContent: createHelp(
+                    "/contacts-partial",
+                    [
+                        "The contacts-partial command can be used to search for a contact.",
+                        "It demonstrates how we would display results instantly while asynchronously retrieving all the results.",
+                        "For example to search for a contact containing the letter a."
+                    ],
+                    [
+                        "/contacts-partial a"
+                    ]
+                )
+            },
+            {
+                key: `${AsyncIntegrationProvider._PROVIDER_ID}-help3`,
+                title: "/contacts",
+                label: "Help",
+                actions: [],
+                data: {
+                    providerId: AsyncIntegrationProvider._PROVIDER_ID
+                },
+                template: CLITemplate.Custom,
+                templateContent: createHelp(
+                    "/contacts",
+                    [
+                        "The contacts command can be used to search for a contact.",
+                        "It demonstrates how we would display results instantly and only retrieve full data on entry selection.",
+                        "Contacts starting with E will show error on first load.",
+                        "For example to search for a contact containing the letter a."
+                    ],
+                    [
+                        "/contacts a",
+                        "/contacts e"
                     ]
                 )
             }
@@ -104,12 +148,25 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
      */
     public async itemSelection(
         integration: Integration<AsyncSettings>,
-        result: CLIDispatchedSearchResult,
-        lastResponse: CLISearchListenerResponse
+        result: HomeDispatchedSearchResult,
+        lastResponse: HomeSearchListenerResponse
     ): Promise<boolean> {
-        if (result.action.name === AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION && result.data.url && this._integrationManager.openUrl) {
+        if (result.action.trigger === "user-action" &&
+            result.action.name === AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION &&
+            result.data.url &&
+            this._integrationManager.openUrl) {
             await this._integrationManager.openUrl(result.data.url);
             return true;
+        } else if (
+            (result.action.trigger === "focus-change" && result.data?.state === "loading") ||
+            (result.action.trigger === "reload" && result.data?.state === "error")) {
+            setTimeout(async () => {
+                const contactResponse = await fetch(`${integration.data?.rootUrl}${result.data.contact.id}.json`);
+
+                const contactFull: ContactFull = await contactResponse.json();
+
+                lastResponse.respond([this.createResult(contactFull)]);
+            }, 0);
         }
 
         return false;
@@ -127,9 +184,17 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
         integration: Integration<AsyncSettings>,
         query: string,
         filters: CLIFilter[],
-        lastResponse: CLISearchListenerResponse
+        lastResponse: HomeSearchListenerResponse
     ): Promise<HomeSearchResponse> {
         const results = [];
+
+        if (query.startsWith("/contacts-sync ")) {
+            await this.contactsSync(query.slice(15), integration, results);
+        } else if (query.startsWith("/contacts-partial ")) {
+            await this.contactsPartial(query.slice(18), integration, results, lastResponse);
+        } else if (query.startsWith("/contacts ")) {
+            await this.contactsAsync(query.slice(10), integration, results, lastResponse);
+        }
 
         return {
             results
@@ -137,30 +202,187 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
     }
 
     /**
+     * Retrieve the contacts in a synchronous manner.
+     * @param query The query to search for
+     * @param integration The integration details.
+     * @param results The result list to populate.
+     */
+    private async contactsSync(query: string, integration: Integration<AsyncSettings>, results: HomeSearchResult[]) {
+        const wildcard = query.trim().toLowerCase();
+
+        if (wildcard.length > 0) {
+            try {
+                const response = await fetch(`${integration.data?.rootUrl}index.json`);
+
+                const json: ContactsResult = await response.json();
+
+                for (const contact of json.data) {
+                    if (contact.firstName.toLowerCase().includes(wildcard) || contact.lastName.toLowerCase().includes(wildcard)) {
+                        const contactResponse = await fetch(`${integration.data?.rootUrl}${contact.id}.json`);
+
+                        const contactFull: ContactFull = await contactResponse.json();
+
+                        results.push(this.createResult(contactFull));
+                    }
+                }
+
+                // Add an artificial pause to simulate slow retrieval
+                await new Promise(r => setTimeout(r, 3000));
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    /**
+     * Retrieve the contacts in a partially asynchronous manner.
+     * @param query The query to search for
+     * @param integration The integration details.
+     * @param results The result list to populate.
+     * @param lastResponse The last response to use for updating results.
+     */
+    private async contactsPartial(query: string, integration: Integration<AsyncSettings>, results: HomeSearchResult[], lastResponse: HomeSearchListenerResponse) {
+        const wildcard = query.trim().toLowerCase();
+
+        if (wildcard.length > 0) {
+            try {
+                const response = await fetch(`${integration.data?.rootUrl}index.json`);
+
+                const json: ContactsResult = await response.json();
+                const finalContacts = [];
+
+                for (const contact of json.data) {
+                    if (contact.firstName.toLowerCase().includes(wildcard) || contact.lastName.toLowerCase().includes(wildcard)) {
+                        finalContacts.push(contact);
+                        results.push(this.createResult(contact));
+                    }
+                }
+
+                setTimeout(async () => {
+                    for (const contact of finalContacts) {
+                        const contactResponse = await fetch(`${integration.data?.rootUrl}${contact.id}.json`);
+
+                        const contactFull: ContactFull = await contactResponse.json();
+
+                        lastResponse.respond([this.createResult(contactFull)]);
+
+                        // Add an artificial pause to simulate slow retrieval
+                        await new Promise(r => setTimeout(r, 1000));
+                    }
+
+                }, 0);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    /**
+     * Retrieve the contacts in an asynchronous manner.
+     * @param query The query to search for
+     * @param integration The integration details.
+     * @param results The result list to populate.
+     * @param lastResponse The last response to use for updating results.
+     */
+    private async contactsAsync(query: string, integration: Integration<AsyncSettings>, results: HomeSearchResult[], lastResponse: HomeSearchListenerResponse) {
+        const wildcard = query.trim().toLowerCase();
+
+        if (wildcard.length > 0) {
+            try {
+                const response = await fetch(`${integration.data?.rootUrl}index.json`);
+
+                const json: ContactsResult = await response.json();
+                const finalContacts = [];
+
+                for (const contact of json.data) {
+                    if (contact.firstName.toLowerCase().includes(wildcard) || contact.lastName.toLowerCase().includes(wildcard)) {
+                        finalContacts.push(contact);
+                        // If a contact starts with E show it in errored state
+                        if (contact.firstName.startsWith("E")) {
+                            results.push(this.createResultErrored(contact));
+                        } else {
+                            results.push(this.createResultLoading(contact));
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    /**
      * Create a search result.
-     * @param key The key for the item.
+     * @param contact The contact.
      * @returns The search result.
      */
-    private createResult(key: string): HomeSearchResult {
+    private createResult(contact: Partial<ContactFull>): HomeSearchResult {
+        const fullName = `${contact.firstName} ${contact.lastName}`;
+        const details = [];
+        if (contact.email) {
+            details.push(["E-mail", contact.email]);
+        }
         return {
-            key: `async-${key}`,
-            title: key,
+            key: `contact-${contact.id}`,
+            title: fullName,
             label: "Information",
             actions: [
             ],
             data: {
                 providerId: AsyncIntegrationProvider._PROVIDER_ID,
-                key
+                contact
             },
-            template: CLITemplate.Custom,
+            template: CLITemplate.Contact,
             templateContent: {
-                layout: getAsyncTemplate({
-                    detailsAction: AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION
-                }),
-                data: {
-                    detailsTitle: "Further Details"
-                }
+                name: fullName,
+                details: [details]
             }
+        };
+    }
+
+    /**
+     * Create a search result in loading state.
+     * @param contact The contact.
+     * @returns The search result.
+     */
+    private createResultLoading(contact: Contact): HomeSearchResult {
+        const fullName = `${contact.firstName} ${contact.lastName}`;
+        return {
+            key: `contact-${contact.id}`,
+            title: fullName,
+            label: "Information",
+            actions: [
+            ],
+            data: {
+                providerId: AsyncIntegrationProvider._PROVIDER_ID,
+                contact,
+                state: "loading"
+            },
+            template: CLITemplate.Loading,
+            templateContent: undefined
+        };
+    }
+
+    /**
+     * Create a search result in errored state.
+     * @param contact The contact.
+     * @returns The search result.
+     */
+    private createResultErrored(contact: Contact): HomeSearchResult {
+        const fullName = `${contact.firstName} ${contact.lastName}`;
+        return {
+            key: `contact-${contact.id}`,
+            title: fullName,
+            label: "Information",
+            actions: [
+            ],
+            data: {
+                providerId: AsyncIntegrationProvider._PROVIDER_ID,
+                contact,
+                state: "error"
+            },
+            template: CLITemplate.Error,
+            templateContent: "Unable to load data"
         };
     }
 }
