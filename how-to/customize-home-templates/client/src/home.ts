@@ -4,7 +4,7 @@ import {
   CLISearchListenerResponse,
   CLISearchResponse, Home, HomeSearchResponse
 } from "@openfin/workspace";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getAppSearchEntries, getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
@@ -36,25 +36,28 @@ export async function register() {
     lastResponse = response;
     lastResponse.open();
 
-    let appSearchEntries = await getAppSearchEntries();
-
     const searchResults: HomeSearchResponse = {
-      results: appSearchEntries,
+      results: [],
       context: {
         filters: []
       }
     };
 
-    const integrationResults = await getSearchResults(query, undefined, lastResponse);
-    if (Array.isArray(integrationResults.results)) {
-      searchResults.results = searchResults.results.concat(integrationResults.results);
-    }
-    if (Array.isArray(integrationResults.context.filters)) {
-      searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+    if (query === "?") {
+      searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
+    } else {
+      searchResults.results = searchResults.results.concat(await getAppSearchEntries());
+
+      const integrationResults = await getSearchResults(query, undefined, lastResponse);
+      if (Array.isArray(integrationResults.results)) {
+        searchResults.results = searchResults.results.concat(integrationResults.results);
+      }
+      if (Array.isArray(integrationResults.context.filters)) {
+        searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+      }
     }
 
     return searchResults;
-
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {

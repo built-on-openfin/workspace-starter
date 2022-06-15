@@ -90,7 +90,7 @@ module.exports = [
       extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-      filename: 'emoji.bundle.js',
+      filename: 'async.bundle.js',
       library: {
         type: "module"
       },

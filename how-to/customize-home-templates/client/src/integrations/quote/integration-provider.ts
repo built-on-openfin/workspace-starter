@@ -11,6 +11,7 @@ import type { QuoteSettings, QuoteResult } from "./shapes";
 import { Chart, LineController, CategoryScale, LinearScale, LineElement, PointElement, TimeScale, Filler } from "chart.js";
 import { DateTime } from "luxon";
 import { getQuoteTemplate } from "./templates";
+import { createHelp } from "../../templates";
 
 /**
  * Implement the integration provider for Quotes.
@@ -69,6 +70,36 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
     }
 
     /**
+     * Get a list of the static help entries.
+     * @param integration The integration details.
+     * @returns The list of help entries.
+     */
+    public async getHelpSearchEntries?(integration: Integration<QuoteSettings>): Promise<HomeSearchResult[]> {
+        return [
+            {
+                key: `${QuoteIntegrationProvider._PROVIDER_ID}-help`,
+                title: "/quote",
+                label: "Help",
+                actions: [],
+                data: {
+                    providerId: QuoteIntegrationProvider._PROVIDER_ID
+                },
+                template: CLITemplate.Custom,
+                templateContent: createHelp(
+                    "/quote",
+                    [
+                        "The quote command can be used to search for details of an instrument.",
+                        "For example to search for Microsoft instrument."
+                    ],
+                    [
+                        "/quote MSFT"
+                    ]
+                )
+            }
+        ];
+    }
+
+    /**
      * An entry has been selected.
      * @param integration The integration details.
      * @param result The dispatched result.
@@ -84,7 +115,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
             await this._integrationManager.openUrl(result.data.url);
             return true;
         }
-    
+
         return false;
     }
 
@@ -106,31 +137,31 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 
         if (query.startsWith("/quote ") && integration?.data?.rootUrl) {
             let symbol = query.slice(7);
-    
+
             if (symbol.length > 0 && /^[a-z]+$/i.test(symbol)) {
                 symbol = symbol.toUpperCase();
-    
+
                 const now = DateTime.now();
-    
+
                 const quoteData = await this.getQuoteData(
-                    integration?.data, 
-                    symbol, 
-                    now.minus({ months: 1 }).toFormat("yyyy-LL-dd"), 
+                    integration?.data,
+                    symbol,
+                    now.minus({ months: 1 }).toFormat("yyyy-LL-dd"),
                     now.toFormat("yyyy-LL-dd"));
-    
+
                 let price;
                 let company;
                 let data;
-    
+
                 if (quoteData?.data?.lastSalePrice) {
                     price = quoteData.data.lastSalePrice;
                     company = quoteData.data.company;
                     data = quoteData.data.chart;
                 }
-    
+
                 if (price !== undefined) {
                     const graphImage = await this.renderGraph(data);
-    
+
                     const quoteResult: HomeSearchResult = {
                         key: `quote-${symbol}`,
                         title: symbol,
@@ -159,7 +190,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
                 }
             }
         }
-    
+
         return {
             results
         };
@@ -177,9 +208,9 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
         try {
             const symbolUrl = `${settings?.rootUrl}${symbol}.json`;
             const response = await fetch(symbolUrl);
-    
+
             const json: QuoteResult = await response.json();
-    
+
             return json;
         } catch (err) {
             console.error(err);
@@ -196,7 +227,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
         canvas.width = 250;
         canvas.height = 110;
         const ctx = canvas.getContext('2d');
-    
+
         const chart = new Chart(ctx,
             {
                 type: "line",

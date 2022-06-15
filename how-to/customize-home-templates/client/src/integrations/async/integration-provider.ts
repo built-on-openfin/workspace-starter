@@ -7,6 +7,7 @@ import {
     type HomeSearchResult
 } from "@openfin/workspace";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import { createHelp } from "../../templates";
 import type { AsyncSettings } from "./shapes";
 import { getAsyncTemplate } from "./templates";
 
@@ -62,6 +63,36 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
         const results = [];
 
         return results;
+    }
+
+    /**
+     * Get a list of the static help entries.
+     * @param integration The integration details.
+     * @returns The list of help entries.
+     */
+    public async getHelpSearchEntries?(integration: Integration<AsyncSettings>): Promise<HomeSearchResult[]> {
+        return [
+            {
+                key: `${AsyncIntegrationProvider._PROVIDER_ID}-help`,
+                title: "/async",
+                label: "Help",
+                actions: [],
+                data: {
+                    providerId: AsyncIntegrationProvider._PROVIDER_ID
+                },
+                template: CLITemplate.Custom,
+                templateContent: createHelp(
+                    "/async",
+                    [
+                        "The async command can be used to search for data asynchronously.",
+                        "For example to search for contacts."
+                    ],
+                    [
+                        "/async contacts"
+                    ]
+                )
+            }
+        ];
     }
 
     /**
@@ -123,8 +154,8 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
             },
             template: CLITemplate.Custom,
             templateContent: {
-                layout: getAsyncTemplate({ 
-                    detailsAction: AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION 
+                layout: getAsyncTemplate({
+                    detailsAction: AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION
                 }),
                 data: {
                     detailsTitle: "Further Details"

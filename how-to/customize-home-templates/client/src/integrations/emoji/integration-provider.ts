@@ -10,6 +10,7 @@ import type { Integration, IntegrationManager, IntegrationModule } from "../../i
 import type { EmojiSettings } from "./shapes";
 import { getEmojiTemplate } from "./templates";
 import * as emoji from "node-emoji";
+import { createHelp } from "../../templates";
 
 /**
  * Implement the integration provider for Emojis.
@@ -78,6 +79,37 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
     }
 
     /**
+     * Get a list of the static help entries.
+     * @param integration The integration details.
+     * @returns The list of help entries.
+     */
+    public async getHelpSearchEntries?(integration: Integration<EmojiSettings>): Promise<HomeSearchResult[]> {
+        return [
+            {
+                key: `${EmojiIntegrationProvider._PROVIDER_ID}-help`,
+                title: "/emoji",
+                label: "Help",
+                actions: [],
+                data: {
+                    providerId: EmojiIntegrationProvider._PROVIDER_ID
+                },
+                template: CLITemplate.Custom,
+                templateContent: createHelp(
+                    "/emoji",
+                    [
+                        "The emoji command can be used to search for emojis by name.",
+                        "For example to search for emojis which include `woman` or `man` in their name."
+                    ],
+                    [
+                        "/emoji woman",
+                        "/emoji man"
+                    ]
+                )
+            }
+        ];
+    }
+
+    /**
      * An entry has been selected.
      * @param integration The integration details.
      * @param result The dispatched result.
@@ -121,19 +153,19 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 
         if (query.startsWith("/emoji ")) {
             let key = query.slice(7);
-    
+
             if (key.length > 0) {
                 key = key.toLowerCase();
-    
+
                 // Find exact match first if there is one
                 const matchEmoji = emoji.get(key);
                 if (matchEmoji && !matchEmoji.startsWith(":")) {
                     results.push(this.createResult(key, matchEmoji));
                 }
-    
+
                 // Find all other potential matches
                 const searchResult = emoji.search(key);
-    
+
                 for (const result of searchResult) {
                     if (result.emoji !== matchEmoji) {
                         results.push(this.createResult(result.key, result.emoji));
@@ -170,10 +202,10 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
             },
             template: CLITemplate.Custom,
             templateContent: {
-                layout: getEmojiTemplate({ 
-                    copyEmojiAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION, 
-                    copyKeyAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION, 
-                    detailsAction: EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION 
+                layout: getEmojiTemplate({
+                    copyEmojiAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION,
+                    copyKeyAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION,
+                    detailsAction: EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION
                 }),
                 data: {
                     keyTitle: "Key",

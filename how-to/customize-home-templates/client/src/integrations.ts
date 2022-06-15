@@ -128,6 +128,23 @@ export async function getAppSearchEntries(): Promise<HomeSearchResult[]> {
 }
 
 /**
+ * Get the help search entries for all the integration providers.
+ * @returns The list of help entries.
+ */
+ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
+    let results: HomeSearchResult[] = [];
+
+    for (const homeIntegration of homeIntegrations) {
+        if (homeIntegration.module.getHelpSearchEntries) {
+            const integrationResults = await homeIntegration.module.getHelpSearchEntries(homeIntegration.integration);
+            results = results.concat(integrationResults);
+        }
+    }
+
+    return results;
+}
+
+/**
  * The item for one of the providers was selected.
  * @param result The result of the selection.
  * @param lastResponse The last response.

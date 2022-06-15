@@ -133,6 +133,13 @@ export interface IntegrationModule<T> {
     getAppSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
 
     /**
+     * Get a list of the static help entries.
+     * @param integration The integration details.
+     * @returns The list of help entries.
+     */
+    getHelpSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
+
+    /**
      * An entry has been selected.
      * @param integration The integration details.
      * @param result The dispatched result.
