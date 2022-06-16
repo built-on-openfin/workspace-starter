@@ -1,5 +1,21 @@
 
+
 // add pubsub here and create many notifications
+
+
+const client = await fin.InterApplicationBus.Channel.connect('channelName');
+
+await client.register('client-action', (payload, identity) => {
+    console.log('Action dispatched by client: ', identity);
+    console.log('Payload sent in dispatch: ', payload);
+
+    return { echo: payload };
+});
+
+const providerResponse = await client.dispatch('provider-action', { message: 'Hello From the client' });
+console.log(providerResponse);
+
+
 
 // Create a notification with two buttons
 notifications.create({
