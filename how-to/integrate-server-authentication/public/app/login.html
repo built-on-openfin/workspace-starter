@@ -77,7 +77,7 @@
       });
       const btnExit = document.querySelector('#btnExit');
       btnExit.addEventListener('click', async () => {
-        await fin.Platform.getCurrentSync().quit();
+        await fin.Window.getCurrentSync().close();
       });
     </script>
   </body>
