@@ -94,7 +94,7 @@ The additional commands are added through [home.ts](client/src/home.ts) and cust
 The commands implemented are:
 
 ```shell
-? - which display a list of all the commands with help
+? - which displays a list of all the commands with help
 /quote <symbol>
 /emoji <code>
 /contacts <contact name>
