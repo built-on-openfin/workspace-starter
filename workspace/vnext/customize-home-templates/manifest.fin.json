@@ -66,6 +66,16 @@
           "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js",
           "data": {
           }
+        },
+        {
+          "id": "async",
+          "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/favicon.ico",
+          "title": "Async Provider",
+          "enabled": true,
+          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/async.bundle.js",
+          "data": {
+            "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/contacts/"
+          }
         }
       ]
     }
