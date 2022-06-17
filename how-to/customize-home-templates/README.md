@@ -135,6 +135,9 @@ e.g.
 
 ![Customize Home Template Emoji](customize-home-templates-emoji.gif)
 
+### Contact data
+
+The contact details in the sample are random generated from <https://www.mockaroo.com/>
 
 ### A note about this example
 
