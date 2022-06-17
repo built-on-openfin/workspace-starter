@@ -94,15 +94,34 @@ The additional commands are added through [home.ts](client/src/home.ts) and cust
 The commands implemented are:
 
 ```shell
+? - which displays a list of all the commands with help
 /quote <symbol>
 /emoji <code>
+/contacts <contact name>
+/contacts-sync <contact name>
+/contacts-partial <contact name>
 ```
+
+The **/quote** command demonstrates a template that is built dynamically with a graph image.
+
+The **/emoji** command demonstrates performing a search and returning multiple results with custom actions.
+
+The contacts commands demonstrate different approaches to retrieving data.
+
+* **/contacts-sync** - Retrieves the contact list and all the contact details in one go, which ends up with a noticeable delay in the UI
+* **/contacts-partial** - Retrieves the contact list asynchronously and then retrieves all the contact details in the background, updating the results when it has the detailed data
+* **/contacts** - Retrieves the contact list asynchronously and then only retrieves the details for an item when they are selected, using the additional `Loading` template as a placeholder while the data is loaded. Also by searching for a contact starting with the letter E it will initially show the `Error` template, the contact will work when selecting reload.
 
 e.g.
 
 ```shell
+/emoji man
 /quote MSFT
 /quote APPL
+/contacts john
+/contacts emma
+/contacts-sync john
+/contacts-partial john
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -116,6 +135,9 @@ e.g.
 
 ![Customize Home Template Emoji](customize-home-templates-emoji.gif)
 
+### Contact data
+
+The contact details in the sample are random generated from <https://www.mockaroo.com/>
 
 ### A note about this example
 
