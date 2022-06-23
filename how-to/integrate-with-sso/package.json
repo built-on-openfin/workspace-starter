@@ -9,6 +9,7 @@
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
+    "start": "npm run server",
     "client": "npm --prefix ../common/ run client",
     "server": "node ./server/build/index.js",
     "kill": "npm --prefix ../common/ run kill",
