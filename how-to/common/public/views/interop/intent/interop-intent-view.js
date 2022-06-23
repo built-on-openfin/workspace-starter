@@ -240,7 +240,7 @@ function getCombinedAppList(intents) {
 }
 
 function isRaiseByContext() {
-  return "raiseByContext" === getIntentRaiseType();
+  return "fireIntentForContext" === getIntentRaiseType();
 }
 
 async function buildAppList() {

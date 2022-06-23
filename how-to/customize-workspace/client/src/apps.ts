@@ -19,29 +19,34 @@ async function validateEntries(apps: App[]) {
     canDownloadAppAssetsResponse !== undefined &&
     canDownloadAppAssetsResponse.granted;
 
-  if (canLaunchExternalProcess && canDownloadAppAssets) {
-    return apps;
-  }
-
   let validatedApps = [];
   let rejectedAppIds = [];
   let settings = await getSettings();
   let appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
+  let supportedManifestTypes = settings?.appProvider?.manifestTypes;
 
   for (let i = 0; i < apps.length; i++) {
-    if (apps[i].manifestType !== "external") {
-      validatedApps.push(apps[i]);
-    } else {
-      if (canLaunchExternalProcess === false) {
-        rejectedAppIds.push(apps[i].appId);
-      } else if (
-        Array.isArray(apps[i].tags) &&
-        apps[i].tags.indexOf(appAssetTag) > -1 &&
-        canDownloadAppAssets === false
-      ) {
-        rejectedAppIds.push(apps[i].appId);
-      } else {
+
+    let validApp = true;
+    if(supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
+      validApp = supportedManifestTypes.indexOf(apps[i].manifestType) > -1;
+    }
+
+    if(validApp) {
+      if (apps[i].manifestType !== "external" ) {
         validatedApps.push(apps[i]);
+      } else {
+        if (canLaunchExternalProcess === false) {
+          rejectedAppIds.push(apps[i].appId);
+        } else if (
+          Array.isArray(apps[i].tags) &&
+          apps[i].tags.indexOf(appAssetTag) > -1 &&
+          canDownloadAppAssets === false
+        ) {
+          rejectedAppIds.push(apps[i].appId);
+        } else {
+          validatedApps.push(apps[i]);
+        }
       }
     }
   }

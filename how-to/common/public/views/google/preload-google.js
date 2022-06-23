@@ -8,7 +8,7 @@ let navigate = (view, ticker) => {
     let urlParams = new URLSearchParams(window.location.search);
     let currentSymbol = urlParams.get('q');
     console.log("Navigate called. currentQuery: " + currentSymbol);
-    if (currentSymbol !== undefined && currentSymbol !== null && currentSymbol.length > 0 && currentSymbol.toLowerCase() !== ticker.toLowerCase()) {
+    if (currentSymbol !== undefined && currentSymbol !== null && currentSymbol.length > 0 && currentSymbol.toLowerCase().indexOf(ticker.toLowerCase()) === -1) {
         view.navigate('https://www.google.com/search?q=' + ticker).then(x => console.log("Navigated view to ticker: " + ticker).catch(err => console.log('error navigating view to ticker: ' + ticker + " error: " + err)));
     }
 };

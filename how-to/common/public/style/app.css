@@ -103,7 +103,7 @@
     cursor: default;
   }
   footer > div > div > a:hover,
-  button:hover {
+  button:not(:disabled):hover {
     background-color: var(--brand-primary-hover);
   }
   button.image {
@@ -119,6 +119,7 @@
     margin: 0;
     font-size: 12px;
     font-family: "Courier New", Courier, monospace;
+    white-space: pre-line;  
   }
   
   header {
@@ -146,6 +147,7 @@
   
   select,
   input[type="text"],
+  input[type="password"],
   input[type="range"] {
     height: 30px;
     border-radius: 5px;
@@ -166,7 +168,8 @@
     outline: 2px solid var(--brand-primary-light);
   }
   
-  input[type="text"] {
+  input[type="text"],
+  input[type="password"] {
     flex: 1;
     border: 1px solid var(--brand-text-secondary);
   }
@@ -283,4 +286,8 @@
   
   .pad20 {
     padding: 20px;
+  }
+  
+  .error {
+    color: red;
   }

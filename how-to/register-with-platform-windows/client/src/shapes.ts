@@ -18,7 +18,8 @@ interface AppProvider {
     appsSourceUrl: string,
     includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
     cacheDurationInMinutes?: number,
-    appAssetTag?: string
+    appAssetTag?: string,
+    manifestTypes?: string[]
 }
 
 export interface StorefrontSettingsNavigationItem {

@@ -10,4 +10,4 @@ if %ERRORLEVEL% EQU 0 (
 	reg query HKEY_CURRENT_USER\Software\OpenFin\RVM\Settings -v DesktopOwnerSettings
 
 )
-reg add "HKCU\Software\OpenFin\RVM\Settings" -v "DesktopOwnerSettings" -d "http://localhost:8080/dos.json"
+reg add "HKCU\Software\OpenFin\RVM\Settings" -v "DesktopOwnerSettings" -d "http://localhost:8080/common/dos.json"

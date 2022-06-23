@@ -72,11 +72,6 @@ export function getDefaultFDC3ContextData() {
       },
       {
         type: "fdc3.contact",
-        name: "John McHugh",
-        id: { email: "john.mchugh@gmail.com" },
-      },
-      {
-        type: "fdc3.contact",
         name: "James Bond",
         id: { email: "bond_james@grandhotels.com" },
       },

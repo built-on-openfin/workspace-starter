@@ -51,6 +51,7 @@ html, body, #root {
     font-size: 30px;
     line-height: 36px;
     margin-bottom: 12px;
+    text-align: center;
   }
   
   .time-elapsed {
@@ -58,6 +59,7 @@ html, body, #root {
     font-size: 14px;
     line-height: 17px;
     margin-bottom: 50px;
+    text-align: center;
   }
   
   .call-btn {

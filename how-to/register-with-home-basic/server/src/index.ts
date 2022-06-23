@@ -1,11 +1,17 @@
-import *  as express from "express";
+var express = require('express');
+var path = require('path');
 
-import router from "./routes";
+var app = express();
 
-const app = express();
-app.use(router);
-
+const mainPath = path.join(__dirname,  "..","..", 'public');
+const commonPath = path.join(__dirname, "..","..","..","common",'public');
 const port = 8080;
+
+console.log("Main Path / = " + mainPath);
+console.log("Common Path /common = " + commonPath);
+console.log("Root path checks both the main and common directories.");
+app.use(express.static(mainPath));
+app.use("/common", express.static(commonPath));
 app.listen(port, () => {
     console.log("server is listening on port", port);
 });

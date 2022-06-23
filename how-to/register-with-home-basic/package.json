@@ -4,15 +4,16 @@
   "description": "OpenFin Workspace -- Register with Home - Basic",
   "main": "index.js",
   "scripts": {
-    "dos": "desktop-owner-settings.bat && (npm run kill)",
+    "dos": "npm --prefix ../common/ run dos",
     "build": "npm run build-server & npm run build-client",
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
-    "client": "node ./scripts/launch.mjs",
+    "client": "npm --prefix ../common/ run client",
     "server": "node ./server/build/index.js",
-    "kill": "node ./scripts/kill.mjs"
+    "kill": "npm --prefix ../common/ run kill",
+    "setup": "npm install && npm run build && npm --prefix ../common/ install ../common && npm --prefix ../common/ run build"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
