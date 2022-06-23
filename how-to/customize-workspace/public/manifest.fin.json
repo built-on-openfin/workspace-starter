@@ -52,7 +52,7 @@
     {
       "alias": "winform-interop-example",
       "version": "2.0.0",
-      "src": "http://localhost:8080/assets/native-interop-example.zip",
+      "src": "http://localhost:8080/common/assets/native-interop-example.zip",
       "target": "OpenFin.Interop.Win.Sample.exe",
       "forceDownload": false
     }
@@ -139,7 +139,7 @@
             "type": "Custom",
             "tooltip": "Show Home",
             "disabled": false,
-            "iconUrl": "http://localhost:8080/icons/search.svg",
+            "iconUrl": "http://localhost:8080/common/icons/search.svg",
             "action": {
               "id": "home-show",
               "customData": {}
@@ -153,7 +153,7 @@
             "type": "Custom",
             "tooltip": "Toggle Notification Center",
             "disabled": false,
-            "iconUrl": "http://localhost:8080/icons/bell.svg",
+            "iconUrl": "http://localhost:8080/common/icons/bell.svg",
             "action": {
               "id": "notification-toggle",
               "customData": {}
@@ -167,7 +167,7 @@
             "type": "Custom",
             "tooltip": "Pin this window",
             "disabled": false,
-            "iconUrl": "http://localhost:8080/icons/pin.svg",
+            "iconUrl": "http://localhost:8080/common/icons/pin.svg",
             "action": {
               "id": "pin-window",
               "customData": {
@@ -184,7 +184,7 @@
             "type": "Custom",
             "tooltip": "Unpin this window",
             "disabled": false,
-            "iconUrl": "http://localhost:8080/icons/pin-vertical.svg",
+            "iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
             "action": {
               "id": "unpin-window",
               "customData": {
@@ -229,7 +229,7 @@
             "type": "Custom",
             "tooltip": "Share",
             "disabled": false,
-            "iconUrl": "http://localhost:8080/icons/share.svg",
+            "iconUrl": "http://localhost:8080/common/icons/share.svg",
             "action": {
               "id": "share",
               "customData": {}
@@ -306,7 +306,7 @@
             "tags": ["hero"]
           },
           "image": {
-            "src": "http://localhost:8080/images/superhero-unsplash.jpg"
+            "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
           }
         },
         "topRow": {
@@ -316,7 +316,7 @@
               "title": "Expero",
               "description": "A collection of example views from Expero showing the power of interop and context sharing.",
               "image": {
-                "src": "http://localhost:8080/images/coding-1-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
               },
               "tags": ["expero"]
             },
@@ -324,7 +324,7 @@
               "title": "Dev Tools",
               "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-2-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
               },
               "tags": ["tools"]
             },
@@ -332,7 +332,7 @@
               "title": "Learning Resource",
               "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-3-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
               },
               "tags": ["page"]
             }
@@ -349,7 +349,7 @@
               "title": "Views",
               "description": "A collection of views made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-4-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
               },
               "tags": ["view"]
             },
@@ -357,7 +357,7 @@
               "title": "Web Apps",
               "description": "A collection of web apps built using OpenFin.",
               "image": {
-                "src": "http://localhost:8080/images/coding-5-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
               },
               "tags": ["manifest"]
             },
@@ -365,7 +365,7 @@
               "title": "Native Apps",
               "description": "A collection of native apps made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-6-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
               },
               "tags": ["native"]
             }
@@ -430,7 +430,7 @@
       "integrations": [
         {
           "id": "salesforce",
-          "icon": "http://localhost:8080/images/salesforce/favicon.ico",
+          "icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
           "title": "Salesforce",
           "enabled": false,
           "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
@@ -439,11 +439,11 @@
               "isSandbox": false,
               "orgUrl": "",
               "iconMap": {
-                  "contact": "http://localhost:8080/images/salesforce/contact.svg",
-                  "account": "http://localhost:8080/images/salesforce/account.svg",
-                  "chatter": "http://localhost:8080/images/salesforce/chatter.svg",
-                  "note": "http://localhost:8080/images/salesforce/note.svg",
-                  "task": "http://localhost:8080/images/salesforce/task.svg"
+                  "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
+                  "account": "http://localhost:8080/common/images/salesforce/account.svg",
+                  "chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
+                  "note": "http://localhost:8080/common/images/salesforce/note.svg",
+                  "task": "http://localhost:8080/common/images/salesforce/task.svg"
               }
           }
         }

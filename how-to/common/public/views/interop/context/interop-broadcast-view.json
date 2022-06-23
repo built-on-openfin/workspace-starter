@@ -1,0 +1,8 @@
+{
+    "url": "http://localhost:8080/common/views/interop/context/interop-broadcast-view.html",
+    "name": "interop-broadcast-view",
+    "customData": {
+      "contextData": null,
+      "customChannel": ""
+    }
+  }

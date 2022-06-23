@@ -5,12 +5,6 @@
         "defaultWidth": 1200,
         "center": true,
         "layout": {
-          "settings": {
-            "constrainDragToContainer": true,
-            "preventDragOut": true,
-            "preventDragIn": true,
-            "hasHeaders": false
-        },
           "content": [
             {
               "type": "row",
@@ -31,10 +25,8 @@
                             {
                               "type": "component",
                               "componentName": "view",
-                              "isClosable": false,
                               "componentState": {
-                               "name": "intent-view-example-1",
-                                "url": "http://localhost:8080/views/basic-fdc3-view.html",
+                                "url": "http://localhost:8080/common/views/fdc3/basic-fdc3-view.html",
                                 "componentName": "view",
                                 "fdc3InteropApi": "1.2"
                               },
@@ -60,11 +52,9 @@
                                 {
                                   "type": "component",
                                   "componentName": "view",
-                                  "isClosable": false,
                                   "componentState": {
-                                    "url": "http://localhost:8080/views/basic-interop-view.html",
-                                    "componentName": "view",
-                                    "name": "intent-view-example-2"
+                                    "url": "http://localhost:8080/common/views/interop/basic-interop-view.html",
+                                    "componentName": "view"
                                   },
                                   "title": "Intent Example 2"
                                 }
