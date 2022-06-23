@@ -23,13 +23,17 @@ let previewData = {
 async function applySettings() {
   const options = await fin.me.getOptions();
   const optionsData = options?.customData;
+  
   if (
-    optionsData.contextData !== undefined &&
-    optionsData.contextData !== null
+    optionsData?.contextData !== undefined &&
+    optionsData?.contextData !== null
   ) {
     contextData = optionsData.contextData;
   }
-  if (optionsData.intentData !== undefined && optionsData.intentData !== null) {
+  if (
+    optionsData?.intentData !== undefined &&
+    optionsData?.intentData !== null
+  ) {
     intentData = optionsData.intentData;
   }
 }
@@ -58,7 +62,6 @@ if(window.fdc3 !== undefined) {
   // ----------------------------------------------------
   // Raising Intent code
   // ----------------------------------------------------
-
   let context = ${context};
 `;
 
@@ -216,11 +219,19 @@ async function buildAppList() {
   let intents = [];
   let findByContext = isRaiseByContext();
 
-  if (findByContext) {
-    intents = await window.fdc3.findIntentsByContext(getContextToSend());
-  } else {
-    let intent = await window.fdc3.findIntent(getIntentToRaise());
-    intents.push(intent);
+  try {
+    if (findByContext) {
+      intents = await window.fdc3.findIntentsByContext(getContextToSend());
+    } else {
+      let intent = await window.fdc3.findIntent(getIntentToRaise());
+      intents.push(intent);
+    }
+  } catch (error) {
+    log(
+      "Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support."
+    );
+    console.error(error);
+    return [];
   }
 
   return getCombinedAppList(intents);
@@ -317,7 +328,11 @@ async function init() {
       showLogs();
     } catch (error) {
       console.error("Unable to raise intent", error);
-      log("Unable to raise intent. Likely a JSON parsing error:", error);
+      log(
+        "Unable to raise intent. Likely a JSON parsing error or the platform does not have a broker implementation that supports intents:",
+        error
+      );
+      showLogs();
     }
   });
 
@@ -336,9 +351,10 @@ async function init() {
     } catch (error) {
       console.error("Unable to raise intent by context", error);
       log(
-        "Unable to raise intent by context. Likely a JSON parsing error:",
+        "Unable to raise intent by context. Likely a JSON parsing error or the platform does not have a broker implementation that supports intents:",
         error
       );
+      showLogs();
     }
   });
 
@@ -363,7 +379,7 @@ async function init() {
   bindFDC3Types(intentData[getIntentToRaise()]);
   bindFDC3OnChange();
   showCodePreview();
-  listen(log, intentTypes, showLogs);
+  await listen(log, intentTypes, showLogs);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -6,16 +6,16 @@
         content="" />
   <meta name="viewport"
         content="width=device-width, initial-scale=1" />
-        <title>Intent View - FDC3</title>
-        <script type="module" src="./fdc3-intent-view.js"></script>
+        <title>Intent View - Interop</title>
+        <script type="module" src="./interop-intent-view.js"></script>
         <link rel="stylesheet" href="../../../style/app.css" />
 </head>
 
 <body class="col fill gap20">
   <header class="row spread middle">
     <div class="col">
-      <h1>FDC3 Intents</h1>
-      <h1 class="tag">Raise and listen to Intents</h1>
+      <h1>Interop Intents</h1>
+      <h1 class="tag">Fire and listen to Intents</h1>
     </div>
     <div class="row middle gap20">
       <image src="../../../images/icon-blue.png"
@@ -29,12 +29,12 @@
         <form class="col gap40 scroll-vertical">
           <div id="sectionCommon"
                class="formSection col gap10">
-            <h2>FDC3 Intent Options</h2>
+            <h2>Interop Intent Options</h2>
             <fieldset>
               <label for="intentType" title="There are different ways of raising an intent. If you know the intent name you can raise it directly. If you only have a context object you can raise an intent by passing the context to see if there are intents that support it.">Raise By</label>
               <select name="intentType" id="intentType">
-                <option value="raiseByIntent">raiseByIntent</option>
-                <option value="raiseByContext">raiseByContext</option>
+                <option value="fireIntent ">fireIntent</option>
+                <option value="fireIntentForContext">fireIntentForContext</option>
                </select>
             </fieldset>
             <fieldset>
@@ -65,7 +65,7 @@
                       ></textarea>
             </fieldset>
             <fieldset>
-              <label for="fdc3Apps" title="The FDC3 spec says you can suggest an application when raising an intent. It is up to your broker what it does with it. This list is updated when the intent type or context type change and the information is provided by your broker.">Target App</label>
+              <label for="fdc3Apps" title="The FDC3 spec says you can suggest an application when raising an intent. This is also supported by our Interop API. It is up to your broker what it does with it. This list is updated when the intent type or context type change and the information is provided by your broker.">Target App</label>
               <select name="fdc3Apps" id="fdc3Apps">
                </select>
             </fieldset>
@@ -83,14 +83,14 @@
   <footer>
     <div class="row spread">
       <div class="row gap10">
-        <button id="btnRaiseIntent">Raise Intent</button>
-        <button id="btnRaiseIntentByContext" style="display: none">Raise Context</button>
+        <button id="btnFireIntent">Fire Intent</button>
+        <button id="btnFireIntentForContext" style="display: none">Fire Context</button>
         <button id="btnClear">Clear</button>
         <button id="btnSeeCode">See Code</button>
         <button id="btnSeeLogs">See Logs</button>
       </div>
       <div class="row gap10">
-        <a href="https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin"
+        <a href="https://developers.openfin.co/of-docs/docs/interop-apis"
            target="_blank">Docs</a>
       </div>
     </div>

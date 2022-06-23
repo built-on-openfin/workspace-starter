@@ -23,17 +23,18 @@ let previewData = {
 async function applySettings() {
   const options = await fin.me.getOptions();
   const optionsData = options?.customData;
+
   if (
-    optionsData.contextData !== undefined &&
-    optionsData.contextData !== null
+    optionsData?.contextData !== undefined &&
+    optionsData?.contextData !== null
   ) {
     contextData = optionsData.contextData;
   }
 
   if (
     optionsData?.customChannel !== undefined &&
-    optionsData.customChannel !== null &&
-    optionsData.customChannel !== ""
+    optionsData?.customChannel !== null &&
+    optionsData?.customChannel !== ""
   ) {
     customChannel = optionsData.customChannel;
   }

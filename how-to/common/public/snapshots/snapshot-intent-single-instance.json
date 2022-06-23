@@ -33,7 +33,7 @@
                               "isClosable": false,
                               "componentState": {
                                "name": "intent-view-example-1",
-                                "url": "http://localhost:8080/common/views/fdc3/basic-fdc3-view.html",
+                                "url": "http://localhost:8080/common/views/fdc3/intent/fdc3-intent-view.html",
                                 "componentName": "view",
                                 "fdc3InteropApi": "1.2"
                               },
@@ -61,7 +61,7 @@
                                   "componentName": "view",
                                   "isClosable": false,
                                   "componentState": {
-                                    "url": "http://localhost:8080/common/views/interop/basic-interop-view.html",
+                                    "url": "http://localhost:8080/common/views/interop/intent/interop-intent-view.html",
                                     "componentName": "view",
                                     "name": "intent-view-example-2"
                                   },

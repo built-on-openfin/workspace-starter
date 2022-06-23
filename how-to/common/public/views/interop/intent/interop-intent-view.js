@@ -1,8 +1,8 @@
 import {
   getDefaultFDC3IntentData,
   getDefaultFDC3ContextData,
-} from "../fdc3-data.js";
-import { raiseIntent, raiseIntentByContext, listen } from "./fdc3-intent.js";
+} from "../../fdc3/fdc3-data.js";
+import { fireIntent, fireIntentForContext, listen } from "./interop-intent.js";
 
 // -------------------------------------------------
 // settings
@@ -23,13 +23,17 @@ let previewData = {
 async function applySettings() {
   const options = await fin.me.getOptions();
   const optionsData = options?.customData;
+
   if (
-    optionsData.contextData !== undefined &&
-    optionsData.contextData !== null
+    optionsData?.contextData !== undefined &&
+    optionsData?.contextData !== null
   ) {
     contextData = optionsData.contextData;
   }
-  if (optionsData.intentData !== undefined && optionsData.intentData !== null) {
+  if (
+    optionsData?.intentData !== undefined &&
+    optionsData?.intentData !== null
+  ) {
     intentData = optionsData.intentData;
   }
 }
@@ -53,12 +57,11 @@ function showCodePreview() {
 
 function updateCodePreview(context) {
   previewData.codePreview = `
-if(window.fdc3 !== undefined) {
+if(window.fin !== undefined) {
 
   // ----------------------------------------------------
   // Raising Intent code
   // ----------------------------------------------------
-
   let context = ${context};
 `;
 
@@ -72,25 +75,53 @@ if(window.fdc3 !== undefined) {
 
     if (isContextRequest) {
       previewData.codePreview += `
-  await fdc3.raiseIntentForContext(context, app);
+  context.metadata = {
+    target: app              
+  };
+  const intentResolver = 
+  await fin.me.interop.fireIntentForContext(context);
+  if(intentResolver !== undefined) {
+    console.log("Intent resolver received: ", intentResolver);
+  }
 `;
     } else {
       previewData.codePreview += `
   let intent = "${getIntentToRaise()}";
   
-  await fdc3.raiseIntent(intent, context, app);
+  const intentRequest = {
+    name: intent,
+    context,
+    metadata: {
+      target: app              
+    }
+  };
+  const intentResolver = await fin.me.interop.fireIntent(intentRequest, app);
+  if(intentResolver !== undefined) {
+    log("Intent resolver received: ", intentResolver);
+  }
 `;
     }
   } else {
     if (isContextRequest) {
       previewData.codePreview += `
-  await fdc3.raiseIntentForContext(context);
+  const intentResolver = 
+  await fin.me.interop.fireIntentForContext(context);
+  if(intentResolver !== undefined) {
+    console.log("Intent resolver received: ", intentResolver);
+  }
   `;
     } else {
       previewData.codePreview += `
   let intent = "${getIntentToRaise()}";
     
-  await fdc3.raiseIntent(intent, context);
+  const intentRequest = {
+    name: intent,
+    context
+  };
+  const intentResolver = await fin.me.interop.fireIntent(intentRequest);
+  if(intentResolver !== undefined) {
+    log("Intent resolver received: ", intentResolver);
+  }
   `;
     }
   }
@@ -99,15 +130,15 @@ if(window.fdc3 !== undefined) {
 
   previewData.codePreview += `
 
-if(window.fdc3 !== undefined) {
+if(window.fin !== undefined) {
 
   // ----------------------------------------------------
   // Listening code
   // ----------------------------------------------------
   let intent = "${getIntentToRaise()}";
-  fdc3.addIntentListener(intent, (ctx)=> {
-    console.log("Received Context For Intent: " + intent, ctx);
-  }); 
+  await fin.me.interop.registerIntentHandler((passedIntent)=>{ 
+    console.log("Received Context For Intent: " + passedIntent.name, passedIntent.context);
+  }, intent);
 `;
   previewData.codePreview += `
 }`;
@@ -216,13 +247,24 @@ async function buildAppList() {
   let intents = [];
   let findByContext = isRaiseByContext();
 
-  if (findByContext) {
-    intents = await window.fdc3.findIntentsByContext(getContextToSend());
-  } else {
-    let intent = await window.fdc3.findIntent(getIntentToRaise());
-    intents.push(intent);
+  try {
+    if (findByContext) {
+      intents = await window.fin.me.interop.getInfoForIntentsByContext(
+        getContextToSend()
+      );
+    } else {
+      let intent = await window.fin.me.interop.getInfoForIntent({
+        name: getIntentToRaise(),
+      });
+      intents.push(intent);
+    }
+  } catch (error) {
+    log(
+      "Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support."
+    );
+    console.error(error);
+    return [];
   }
-
   return getCombinedAppList(intents);
 }
 
@@ -233,9 +275,9 @@ function bindFDC3OnChange() {
   const fdc3Value = document.querySelector("#fdc3Value");
   const fdc3Apps = document.querySelector("#fdc3Apps");
   const specifiedContext = document.querySelector("#context");
-  const btnRaiseIntent = document.querySelector("#btnRaiseIntent");
-  const btnRaiseIntentByContext = document.querySelector(
-    "#btnRaiseIntentByContext"
+  const btnFireIntent = document.querySelector("#btnFireIntent");
+  const btnFireIntentForContext = document.querySelector(
+    "#btnFireIntentForContext"
   );
 
   fdc3RaiseBy.onchange = async () => {
@@ -243,11 +285,11 @@ function bindFDC3OnChange() {
     await bindApps(apps);
     updateCodePreview(specifiedContext.value);
     if (isRaiseByContext()) {
-      btnRaiseIntent.style.display = "none";
-      btnRaiseIntentByContext.style.display = "unset";
+      btnFireIntent.style.display = "none";
+      btnFireIntentForContext.style.display = "unset";
     } else {
-      btnRaiseIntent.style.display = "unset";
-      btnRaiseIntentByContext.style.display = "none";
+      btnFireIntent.style.display = "unset";
+      btnFireIntentForContext.style.display = "none";
     }
   };
 
@@ -304,8 +346,8 @@ function getAppSelection() {
 // Init Functions
 // -------------------------------------------------
 async function init() {
-  const btnRaiseIntent = document.querySelector("#btnRaiseIntent");
-  btnRaiseIntent.addEventListener("click", async () => {
+  const btnFireIntent = document.querySelector("#btnFireIntent");
+  btnFireIntent.addEventListener("click", async () => {
     try {
       const ctx = getContextToSend();
       const intent = getIntentToRaise();
@@ -313,32 +355,37 @@ async function init() {
       if (app === "none" || app === "") {
         app = undefined;
       }
-      await raiseIntent(log, intent, ctx, app);
+      await fireIntent(log, intent, ctx, app);
       showLogs();
     } catch (error) {
-      console.error("Unable to raise intent", error);
-      log("Unable to raise intent. Likely a JSON parsing error:", error);
+      console.error("Unable to fire intent", error);
+      log(
+        "Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:",
+        error
+      );
+      showLogs();
     }
   });
 
-  const btnRaiseIntentByContext = document.querySelector(
-    "#btnRaiseIntentByContext"
+  const btnFireIntentForContext = document.querySelector(
+    "#btnFireIntentForContext"
   );
-  btnRaiseIntentByContext.addEventListener("click", async () => {
+  btnFireIntentForContext.addEventListener("click", async () => {
     try {
       const ctx = getContextToSend();
       let app = getAppSelection();
       if (app === "none" || app === "") {
         app = undefined;
       }
-      await raiseIntentByContext(log, ctx, app);
+      await fireIntentForContext(log, ctx, app);
       showLogs();
     } catch (error) {
-      console.error("Unable to raise intent by context", error);
+      console.error("Unable to fire intent for context", error);
       log(
-        "Unable to raise intent by context. Likely a JSON parsing error:",
+        "Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:",
         error
       );
+      showLogs();
     }
   });
 
@@ -363,7 +410,7 @@ async function init() {
   bindFDC3Types(intentData[getIntentToRaise()]);
   bindFDC3OnChange();
   showCodePreview();
-  listen(log, intentTypes, showLogs);
+  await listen(log, intentTypes, showLogs);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

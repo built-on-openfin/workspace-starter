@@ -145,24 +145,162 @@
     "tags": ["view", "interop"]
   },
   {
-    "appId": "interop-broadcast-view-multi",
-    "name": "interop-broadcast-view-multi",
-    "title": "Interop SetContext View (Multi)",
-    "description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-    "manifest": "http://localhost:8080/common/views/interop/context/interop-broadcast-multi-view.json",
+    "appId": "interop-intent-view",
+    "name": "interop-intent-view",
+    "title": "Interop Intent View",
+    "description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it.",
+    "manifest": "http://localhost:8080/common/views/interop/intent/interop-intent-view.json",
     "manifestType": "view",
     "icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [
+      {
+        "name": "StartCall",
+        "displayName": "Start a Call",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "StartChat",
+        "displayName": "Start a Chat",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewChart",
+        "displayName": "View Chart",
+        "contexts": [
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.portfolio",
+          "fdc3.position"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact Details",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewQuote",
+        "displayName": "View Quote",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewNews",
+        "displayName": "View News",
+        "contexts": [
+          "fdc3.country",
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.organization",
+          "fdc3.portfolio"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewAnalysis",
+        "displayName": "View Analysis",
+        "contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument Details",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
     ],
     "images": [
       {
         "src": "http://localhost:8080/common/images/previews/interop-view.png"
       }
     ],
-    "tags": ["view", "interop", "openfin"]
+    "tags": ["view", "interop", "intent", "openfin"]
+  },
+  {
+    "appId": "interop-intent-view-multi",
+    "name": "interop-intent-view-multi",
+    "title": "Interop Intent View (Multi)",
+    "description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
+    "manifest": "http://localhost:8080/common/views/interop/intent/interop-intent-multi-view.json",
+    "manifestType": "view",
+    "icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
+    "contactEmail": "contact@example.com",
+    "supportEmail": "support@example.com",
+    "publisher": "OpenFin",
+    "intents": [
+      {
+        "name": "StartCall",
+        "displayName": "Start a Call",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "StartChat",
+        "displayName": "Start a Chat",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewChart",
+        "displayName": "View Chart",
+        "contexts": [
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.portfolio",
+          "fdc3.position"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact Details",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewQuote",
+        "displayName": "View Quote",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewNews",
+        "displayName": "View News",
+        "contexts": [
+          "fdc3.country",
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.organization",
+          "fdc3.portfolio"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewAnalysis",
+        "displayName": "View Analysis",
+        "contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument Details",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      }
+    ],
+    "images": [
+      {
+        "src": "http://localhost:8080/common/images/previews/interop-view.png"
+      }
+    ],
+    "tags": ["view", "interop", "intent", "openfin"]
   },
   {
     "appId": "fdc3-workbench",
@@ -299,14 +437,14 @@
         "src": "http://localhost:8080/common/images/previews/fdc3-view.png"
       }
     ],
-    "tags": ["view", "fdc3"]
+    "tags": ["view", "fdc3", "intent"]
   },
   {
-    "appId": "fdc3-broadcast-view-multi",
-    "name": "fdc3-broadcast-view-multi",
-    "title": "FDC3 Broadcast View (Multi)",
-    "description": "An example of broadcasting fdc3 context messages and the code needed to implement it. This view can be launched multiple times.",
-    "manifest": "http://localhost:8080/common/views/fdc3/context/fdc3-broadcast-multi-view.json",
+    "appId": "fdc3-intent-view-multi",
+    "name": "fdc3-intent-view-multi",
+    "title": "FDC3 Intent View (Multi)",
+    "description": "An example of raising and listening to fdc3 intents and the code needed to implement it. This view can be launched multiple times.",
+    "manifest": "http://localhost:8080/common/views/fdc3/intent/fdc3-intent-multi-view.json",
     "manifestType": "view",
     "icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
     "contactEmail": "contact@example.com",
@@ -314,8 +452,61 @@
     "publisher": "OpenFin",
     "intents": [
       {
-        "name": "ShowInstrument",
-        "displayName": "Show Instrument (pages and views)",
+        "name": "StartCall",
+        "displayName": "Start a Call",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "StartChat",
+        "displayName": "Start a Chat",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewChart",
+        "displayName": "View Chart",
+        "contexts": [
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.portfolio",
+          "fdc3.position"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact Details",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewQuote",
+        "displayName": "View Quote",
+        "contexts": ["fdc3.instrument"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewNews",
+        "displayName": "View News",
+        "contexts": [
+          "fdc3.country",
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.organization",
+          "fdc3.portfolio"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewAnalysis",
+        "displayName": "View Analysis",
+        "contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument Details",
         "contexts": ["fdc3.instrument"],
         "customConfig": {}
       }
@@ -325,26 +516,7 @@
         "src": "http://localhost:8080/common/images/previews/fdc3-view.png"
       }
     ],
-    "tags": ["view", "fdc3", "openfin"]
-  },
-  {
-    "appId": "raise-intent-or-broadcast-view",
-    "name": "raise-intent-or-broadcast-view",
-    "title": "Raise Intent Or Broadcast View",
-    "description": "This is an example of a basic OpenFin FDC3/Interop View. This view calls the raise Intent FDC3 or Interop api. It can also call the FDC3 broadcast or Interop setContext api (as well as listening to context).",
-    "manifest": "http://localhost:8080/common/views/intent/raise-intent-or-broadcast-view.json",
-    "manifestType": "view",
-    "icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
-    "contactEmail": "contact@example.com",
-    "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
-    "intents": [],
-    "images": [
-      {
-        "src": "http://localhost:8080/common/images/previews/fdc3-view.png"
-      }
-    ],
-    "tags": ["view", "fdc3", "interop", "openfin"]
+    "tags": ["view", "fdc3", "intent"]
   },
   {
     "appId": "preload-tradingview-view",
@@ -411,14 +583,61 @@
     "publisher": "OpenFin",
     "intents": [
       {
-        "name": "ShowInstrument",
-        "displayName": "Show Instrument (pages and views)",
+        "name": "StartCall",
+        "displayName": "Start a Call",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "StartChat",
+        "displayName": "Start a Chat",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewChart",
+        "displayName": "View Chart",
+        "contexts": [
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.portfolio",
+          "fdc3.position"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact Details",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewQuote",
+        "displayName": "View Quote",
         "contexts": ["fdc3.instrument"],
         "customConfig": {}
       },
       {
-        "name": "ShowInstrumentForPage",
-        "displayName": "Show Instrument (pages only)",
+        "name": "ViewNews",
+        "displayName": "View News",
+        "contexts": [
+          "fdc3.country",
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.organization",
+          "fdc3.portfolio"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewAnalysis",
+        "displayName": "View Analysis",
+        "contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument Details",
         "contexts": ["fdc3.instrument"],
         "customConfig": {}
       }
@@ -443,14 +662,61 @@
     "publisher": "OpenFin",
     "intents": [
       {
-        "name": "ShowInstrument",
-        "displayName": "Show Instrument (pages and views)",
+        "name": "StartCall",
+        "displayName": "Start a Call",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "StartChat",
+        "displayName": "Start a Chat",
+        "contexts": ["fdc3.contact", "fdc3.contactList"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewChart",
+        "displayName": "View Chart",
+        "contexts": [
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.portfolio",
+          "fdc3.position"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewContact",
+        "displayName": "View Contact Details",
+        "contexts": ["fdc3.contact"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewQuote",
+        "displayName": "View Quote",
         "contexts": ["fdc3.instrument"],
         "customConfig": {}
       },
       {
-        "name": "ShowInstrumentForPage",
-        "displayName": "Show Instrument (pages only)",
+        "name": "ViewNews",
+        "displayName": "View News",
+        "contexts": [
+          "fdc3.country",
+          "fdc3.instrument",
+          "fdc3.instrumentList",
+          "fdc3.organization",
+          "fdc3.portfolio"
+        ],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewAnalysis",
+        "displayName": "View Analysis",
+        "contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+        "customConfig": {}
+      },
+      {
+        "name": "ViewInstrument",
+        "displayName": "View Instrument Details",
         "contexts": ["fdc3.instrument"],
         "customConfig": {}
       }
