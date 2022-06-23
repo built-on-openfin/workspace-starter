@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect",
-    "version":"26.102.70.14"
+    "version":"26.102.70.16"
   },
   "platform": {
     "uuid": "register-with-home",
@@ -43,8 +43,9 @@
   },
   "customSettings": {
     "appProvider": {
-      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/apps.json",
-      "includeCredentialOnSourceRequest": "include"
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json",
+      "includeCredentialOnSourceRequest": "include",
+      "manifestTypes": ["view", "snapshot", "manifest", "external"]
     },
     "homeProvider": {
       "id": "register-with-home",

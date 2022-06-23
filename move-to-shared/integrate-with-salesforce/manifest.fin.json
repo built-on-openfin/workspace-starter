@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
-    "version": "26.102.70.14"
+    "version": "26.102.70.16"
   },
   "platform": {
     "uuid": "integrate-with-salesforce",
@@ -38,11 +38,11 @@
     "queryMinLength": 3,
     "title": "Salesforce",
     "iconMap": {
-      "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/contact.svg",
-      "account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
-      "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
-      "note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
-      "task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg"
+      "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/contact.svg",
+      "account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/account.svg",
+      "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/chatter.svg",
+      "note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/note.svg",
+      "task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/task.svg"
     }
   }
 }
