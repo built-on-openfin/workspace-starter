@@ -7,14 +7,14 @@
     "manifestType": "external",
     "manifest": "winform-interop-example",
     "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-native-window-integration/images/icon-winform-interop.png" }
+      { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-winform-interop.png" }
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
     "intents": [],
     "images": [{
-      "src":"https://built-on-openfin.github.io/workspace-starter/main/workspace-native-window-integration/images/previews/openfin-winform-interop.png"
+      "src":"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-winform-interop.png"
     }],
     "tags":["native", "appasset", "nwi"],
     "data": {
