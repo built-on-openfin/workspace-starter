@@ -19,8 +19,8 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/native-window-integration-client": "0.0.13",
-    "@openfin/workspace": "next",
-    "@openfin/workspace-platform": "next",
+    "@openfin/workspace": "8.1.7",
+    "@openfin/workspace-platform": "8.1.7",
     "file-loader": "^6.2.0"
   },
   "devDependencies": {

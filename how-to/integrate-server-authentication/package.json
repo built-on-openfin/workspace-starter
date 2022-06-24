@@ -19,8 +19,8 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/core": "^25.68.26",
-    "@openfin/workspace": "next",
-    "@openfin/workspace-platform": "next",
+    "@openfin/workspace": "8.1.7",
+    "@openfin/workspace-platform": "8.1.7",
     "cookie-parser": "^1.4.6"
   },
   "devDependencies": {
