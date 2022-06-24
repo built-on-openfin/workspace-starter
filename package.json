@@ -18,7 +18,7 @@
         "how-to/integrate-with-sso",
         "how-to/integrate-server-authentication"
     ],
-    "howToCustomFolder":"workspace/vnext",
+    "howToCustomFolder":"",
     "author": "",
     "license": "SEE LICENSE IN LICENSE.MD",
     "devDependencies": {
