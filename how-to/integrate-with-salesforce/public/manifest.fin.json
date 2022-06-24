@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
-    "version": "26.102.70.14"
+    "version": "26.102.70.16"
   },
   "platform": {
     "uuid": "integrate-with-salesforce",
@@ -38,11 +38,11 @@
     "queryMinLength": 3,
     "title": "Salesforce",
     "iconMap": {
-      "contact": "http://localhost:8080/images/contact.svg",
-      "account": "http://localhost:8080/images/account.svg",
-      "chatter": "http://localhost:8080/images/chatter.svg",
-      "note": "http://localhost:8080/images/note.svg",
-      "task": "http://localhost:8080/images/task.svg"
+      "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
+      "account": "http://localhost:8080/common/images/salesforce/account.svg",
+      "chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
+      "note": "http://localhost:8080/common/images/salesforce/note.svg",
+      "task": "http://localhost:8080/common/images/salesforce/task.svg"
     }
   }
 }

@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect --enable-mesh --security-realm=second-support-context-and-intents",
-    "version": "26.102.70.14"
+    "version": "26.102.70.16"
   },
   "platform": {
     "uuid": "second-support-context-and-intents",
@@ -39,7 +39,7 @@
     {
         "alias": "winform-interop-example",
         "version": "2.0.0",
-        "src": "http://localhost:8080/assets/native-interop-example.zip",
+        "src": "http://localhost:8080/common/assets/native-interop-example.zip",
         "target": "OpenFin.Interop.Win.Sample.exe",
         "forceDownload": false
     }
@@ -50,10 +50,11 @@
       "store": true
     },
     "appProvider": {
-      "appsSourceUrl": "http://localhost:8080/apps.json",
+      "appsSourceUrl": "http://localhost:8080/common/apps.json",
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
+      "appAssetTag": "appasset",
+      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "browserProvider": {
       "windowOptions": {
@@ -124,7 +125,7 @@
             "tags": ["hero"]
           },
           "image": {
-            "src": "http://localhost:8080/images/superhero-unsplash.jpg"
+            "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
           }
         },
         "topRow": {
@@ -134,7 +135,7 @@
               "title": "Expero",
               "description": "A collection of example views from Expero showing the power of interop and context sharing.",
               "image": {
-                "src": "http://localhost:8080/images/coding-1-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
               },
               "tags": ["expero"]
             },
@@ -142,7 +143,7 @@
               "title": "Dev Tools",
               "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-2-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
               },
               "tags": ["tools"]
             },
@@ -150,7 +151,7 @@
               "title": "Learning Resource",
               "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-3-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
               },
               "tags": ["page"]
             }
@@ -167,7 +168,7 @@
               "title": "Views",
               "description": "A collection of views made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-4-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
               },
               "tags": ["view"]
             },
@@ -175,7 +176,7 @@
               "title": "Web Apps",
               "description": "A collection of web apps built using OpenFin.",
               "image": {
-                "src": "http://localhost:8080/images/coding-5-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
               },
               "tags": ["manifest"]
             },
@@ -183,7 +184,7 @@
               "title": "Native Apps",
               "description": "A collection of native apps made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-6-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
               },
               "tags": ["native"]
             }

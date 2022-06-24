@@ -9,7 +9,8 @@ interface HomeProvider {
 
 interface AppProvider {
     appsSourceUrl: string,
-    includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include"
+    includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
+    manifestTypes?: string[];
 }
 export interface CustomSettings {
     appProvider?: AppProvider,
