@@ -5,16 +5,29 @@ import { getSettings } from "./settings";
 let cachedApps;
 
 async function validateEntries(apps: App[]) {
-  let canLaunchExternalProcessResponse =
-    await fin.System.queryPermissionForCurrentContext(
-      "System.launchExternalProcess"
-    );
+  let canLaunchExternalProcessResponse;
+
+  try {
+    canLaunchExternalProcessResponse =
+      await fin.System.queryPermissionForCurrentContext(
+        "System.launchExternalProcess"
+      );
+  } catch (error) {
+    console.error("Error while querying for System.launchExternalProcess permission", error);
+  }
   let canLaunchExternalProcess =
     canLaunchExternalProcessResponse !== undefined &&
     canLaunchExternalProcessResponse.granted;
 
-  let canDownloadAppAssetsResponse =
-    await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  let canDownloadAppAssetsResponse;
+
+  try {
+    canDownloadAppAssetsResponse =
+      await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  } catch (error) {
+    console.error("Error while querying for System.downloadAsset permission", error);
+  }
+
   let canDownloadAppAssets =
     canDownloadAppAssetsResponse !== undefined &&
     canDownloadAppAssetsResponse.granted;
@@ -28,12 +41,12 @@ async function validateEntries(apps: App[]) {
   for (let i = 0; i < apps.length; i++) {
 
     let validApp = true;
-    if(supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
+    if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
       validApp = supportedManifestTypes.indexOf(apps[i].manifestType) > -1;
     }
 
-    if(validApp) {
-      if (apps[i].manifestType !== "external" ) {
+    if (validApp) {
+      if (apps[i].manifestType !== "external") {
         validatedApps.push(apps[i]);
       } else {
         if (canLaunchExternalProcess === false) {
@@ -146,24 +159,24 @@ export async function getAppsByTag(tags: string[]): Promise<App[]> {
   return filteredApps;
 }
 
-export async function getApp(requestedApp: string|{ appId:string }): Promise<App> {
-    let apps = await getApps();
-    let appId;
-    if(requestedApp !== undefined) {
-        if(typeof requestedApp === "string"){
-            appId = requestedApp;
-        } else {
-            appId = requestedApp.appId;
-        }
+export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
+  let apps = await getApps();
+  let appId;
+  if (requestedApp !== undefined) {
+    if (typeof requestedApp === "string") {
+      appId = requestedApp;
+    } else {
+      appId = requestedApp.appId;
     }
-    if(appId === undefined) {
-        return undefined;
-    }
-    let app = apps.find(entry => {
-        return entry.appId === appId;
-    });
+  }
+  if (appId === undefined) {
+    return undefined;
+  }
+  let app = apps.find(entry => {
+    return entry.appId === appId;
+  });
 
-    return app;
+  return app;
 }
 
 export async function getAppsByIntent(intent: string): Promise<App[]> {
@@ -194,39 +207,39 @@ export async function getIntent(
     };
   } = {};
 
-  if(Array.isArray(apps)) {
+  if (Array.isArray(apps)) {
     apps.forEach((value) => {
-        if (value.intents !== undefined) {
-          for (let i = 0; i < value.intents.length; i++) {
-            if (value.intents[i].name === intent) {
-              if (contextType === undefined) {
+      if (value.intents !== undefined) {
+        for (let i = 0; i < value.intents.length; i++) {
+          if (value.intents[i].name === intent) {
+            if (contextType === undefined) {
+              intents = updateEntry(intents, value.intents[i], value);
+            } else {
+              if (
+                Array.isArray(value.intents[i].contexts) &&
+                value.intents[i].contexts.indexOf(contextType) > -1
+              ) {
                 intents = updateEntry(intents, value.intents[i], value);
-              } else {
-                if (
-                  Array.isArray(value.intents[i].contexts) &&
-                  value.intents[i].contexts.indexOf(contextType) > -1
-                ) {
-                  intents = updateEntry(intents, value.intents[i], value);
-                }
               }
             }
           }
         }
-      });
-    
-      let results = Object.values(intents);
-      if(results.length === 0) {
-          console.log(`No results found for findIntent for intent ${intent} and context ${contextType}`);
-          return null;
-      } else if(results.length === 1) {
-          return results[0];
-      } else {
-        console.warn(`Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`);
-        return results[0];
-      }    
-  } else {
-      console.warn("There was no apps returned so we are unable to find apps that support an intent.");
+      }
+    });
+
+    let results = Object.values(intents);
+    if (results.length === 0) {
+      console.log(`No results found for findIntent for intent ${intent} and context ${contextType}`);
       return null;
+    } else if (results.length === 1) {
+      return results[0];
+    } else {
+      console.warn(`Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`);
+      return results[0];
+    }
+  } else {
+    console.warn("There was no apps returned so we are unable to find apps that support an intent.");
+    return null;
   }
 }
 
@@ -241,23 +254,23 @@ export async function getIntentsByContext(
     };
   } = {};
 
-  if(Array.isArray(apps)){
+  if (Array.isArray(apps)) {
     apps.forEach((value) => {
-        if (value.intents !== undefined) {
-          for (let i = 0; i < value.intents.length; i++) {
-            if (
-              Array.isArray(value.intents[i].contexts) &&
-              value.intents[i].contexts.indexOf(contextType) > -1
-            ) {
-              intents = updateEntry(intents, value.intents[i], value);
-            }
+      if (value.intents !== undefined) {
+        for (let i = 0; i < value.intents.length; i++) {
+          if (
+            Array.isArray(value.intents[i].contexts) &&
+            value.intents[i].contexts.indexOf(contextType) > -1
+          ) {
+            intents = updateEntry(intents, value.intents[i], value);
           }
         }
-      });
-    
-      return Object.values(intents);
+      }
+    });
+
+    return Object.values(intents);
   } else {
-      console.warn("Unable to get apps so we can not get apps and intents that support a particular context");
+    console.warn("Unable to get apps so we can not get apps and intents that support a particular context");
   }
   return [];
 }

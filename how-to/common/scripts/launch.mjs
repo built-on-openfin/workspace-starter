@@ -37,24 +37,24 @@ async function launchFromNode(manifestUrl) {
     let quitRequested = false;
     let quit;
 
-    if(manifest.platform !== undefined && manifest.platform.uuid !== undefined) {
-        const platform = fin.Platform.wrapSync({ uuid: manifest.platform.uuid });   
-        quit = async () => {
-            if (platform !== undefined && quitRequested === false) {
-              quitRequested = true;
-              await platform.quit();
-            }
-        };  
-        console.log("Wrapped target platform: " + manifest.platform.uuid);   
+    if (manifest.platform !== undefined && manifest.platform.uuid !== undefined) {
+      const platform = fin.Platform.wrapSync({ uuid: manifest.platform.uuid });
+      quit = async () => {
+        if (platform !== undefined && quitRequested === false) {
+          quitRequested = true;
+          await platform.quit();
+        }
+      };
+      console.log("Wrapped target platform: " + manifest.platform.uuid);
     } else {
-        const app = fin.Application.wrapSync({ uuid: manifest.startup_app.uuid });   
-        quit = async () => {
-            if (app !== undefined && quitRequested === false) {
-              quitRequested = true;
-              await app.quit();
-            }
-        };  
-        console.log("Wrapped classic app: " + manifest.startup_app.uuid);
+      const app = fin.Application.wrapSync({ uuid: manifest.startup_app.uuid });
+      quit = async () => {
+        if (app !== undefined && quitRequested === false) {
+          quitRequested = true;
+          await app.quit();
+        }
+      };
+      console.log("Wrapped classic app: " + manifest.startup_app.uuid);
     }
 
     // do something when app is closing
@@ -74,8 +74,8 @@ async function launchFromNode(manifestUrl) {
       `You successfully connected to the manifest: ${manifestUrl}`
     );
     console.log(
-        `Please wait while the sample loads. Press Ctrl + C (Windows) or Command + C (Mac) to exit and close the sample.`
-      );
+      `Please wait while the sample loads. If using browser use the Quit option from the main menu otherwise press Ctrl + C (Windows) or Control + C (Mac) to exit and close the sample.`
+    );
   } catch (e) {
     throw new Error(`Error connecting: \n${e}`);
   }
