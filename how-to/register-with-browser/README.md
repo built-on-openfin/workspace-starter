@@ -27,20 +27,13 @@ To run this sample you can:
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
-
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 5.5.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
@@ -50,16 +43,22 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
+```
+
+5. Build the project if you modify the code.
+
+```bash
+$ npm run build
 ```
 
 ---
