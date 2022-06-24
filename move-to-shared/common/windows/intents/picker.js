@@ -133,7 +133,7 @@ async function init() {
   intentSelectionContainer = document.getElementById("intent-select-container");
   targetContextLabel = document.getElementById("target-context");
   intentsContainer = document.getElementById("intent-container");
-  nextBtn = document.getElementById("next");
+  nextBtn = document.getElementById("move-next");
   cancelIntentSelectionBtn = document.getElementById("cancel-intent-selection");
 
   appSelectionContainer = document.getElementById("app-select-container");
