@@ -12,7 +12,7 @@ This sample is an extension of the register with store example. The sample cover
 * Customizing OpenFin Browser
 * Supporting Interop/FDC3 Context messages
 * Supporting Interop/FDC3 Intents
-* Using a golden data source (in [apps.json](public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
+* Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
 * Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file) 
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
@@ -23,27 +23,21 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
-* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Support Context And Intents Example</a>
+* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Support Context And Intents Example</a>
 
 ---
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and build sample and common folder. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
@@ -53,13 +47,13 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
-$ start npm run start
+$ npm start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
@@ -73,26 +67,29 @@ $ npm run secondclient
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
-![](workspace-support-context-intents-build.gif)
+5. Type any character into the search box to show the default list of applications.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
-6. Type any character into the search box to show the default list of applications.
-   The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
-7. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
+7. If you modify and want to build the code you can run npm run build.
 
+```bash
+$ npm run build
+```
 ## How it works
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](public/dos.json)
-- [A list of applications](public/apps.json)
+- [A Desktop Owner Settings file](../common/public/dos.json)
+- [A list of applications](../common/public/apps.json)
 - Examples of View and Snapshot Manifest Types
 
 
 ### List of Applications
 
-The [list of applications](public/apps.json) contains a number of examples:
+The [list of applications](../common/public/apps.json) contains a number of examples:
 
 * Load views into OpenFin Browser
 * Launch an OpenFin application using its manifest file
@@ -187,11 +184,20 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       "home": true,
       "store": true
     },
+    "platformProvider": {
+      "rootUrl": "http://localhost:8080",
+      "intentPicker": { 
+        "url": "http://localhost:8080/common/windows/intents/picker.html",
+        "height": 400,
+        "width": 400
+      }
+    },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/apps.json",
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
+      "appAssetTag": "appasset",
+      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "browserProvider": {
       "windowOptions": {
@@ -262,7 +268,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
             "tags": ["hero"]
           },
           "image": {
-            "src": "http://localhost:8080/images/superhero-unsplash.jpg"
+            "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
           }
         },
         "topRow": {
@@ -272,7 +278,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Expero",
               "description": "A collection of example views from Expero showing the power of interop and context sharing.",
               "image": {
-                "src": "http://localhost:8080/images/coding-1-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
               },
               "tags": ["expero"]
             },
@@ -280,7 +286,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Dev Tools",
               "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-2-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
               },
               "tags": ["tools"]
             },
@@ -288,7 +294,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Learning Resource",
               "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "http://localhost:8080/images/coding-3-unsplash.jpg"
+                "src": "http://localhost:8080/images/common/coding-3-unsplash.jpg"
               },
               "tags": ["page"]
             }
@@ -305,7 +311,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Views",
               "description": "A collection of views made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-4-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
               },
               "tags": ["view"]
             },
@@ -313,7 +319,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Web Apps",
               "description": "A collection of web apps built using OpenFin.",
               "image": {
-                "src": "http://localhost:8080/images/coding-5-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
               },
               "tags": ["manifest"]
             },
@@ -321,7 +327,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "title": "Native Apps",
               "description": "A collection of native apps made available through our catalog.",
               "image": {
-                "src": "http://localhost:8080/images/coding-6-unsplash.jpg"
+                "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
               },
               "tags": ["native"]
             }
@@ -385,11 +391,17 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | **bootstrap** | Config related to the bootstrapping process |
 | home | Should we use home and register a home provider to feed apps into Home and Browser |
 | store | Should we use store and register a store provider to display apps |
+| **platformProvider** | Config related to the platform |
+| rootUrl | Used so that root urls can be defined via manifest for different environments |
+| intentPicker.url | The url that supports intent selection.  |
+| intentPicker.height | The height for the intent picker. |
+| intentPicker.width | The width for the intent picker. |
 | **appProvider** | Config related to where the apps should be fetched from |
 | appsSourceUrl | Where should we fetch the apps from |
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
 | cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
 | appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
+| manifestTypes | An array of the manifestTypes the app should support from the apps.json feed |
 | **browserProvider** | Config related to OpenFin Browser |
 | title | The title for the window that shows up in the taskbar |
 | icon | The icon that should show in the taskbar and in the top left menu of the browser |
@@ -472,10 +484,10 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
    - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
-   - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](public/views)folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](public/views/preload-tradingview-view.json)
+   - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](../common/public/views)folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
 - Do I always need a view manifest if it just contains a url?
 
-  - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [public/apps.json](public/apps.json#L185). The [launch.ts](client/src/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
+  - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [public/apps.json](../common/public/apps.json). The [launch.ts](client/src/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
 ---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

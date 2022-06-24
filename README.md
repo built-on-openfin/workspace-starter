@@ -3,7 +3,7 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
-## OpenFin Workspace 7.0.0
+## OpenFin Workspace 8.0.0
 
 The OpenFin Workspace is a full-featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, a store to aid in the discovery of content and a notification system to surface important moments while they're still important.
 
@@ -11,7 +11,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What version does this branch cover?
 
-This branch covers version **7.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=7.3.10)
+This branch covers version **8.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=8.1.7)
 
 ## What you can do with this repository
 
@@ -30,6 +30,7 @@ This repository contains examples showing how to configure core Workspace functi
 | [How To Integrate With Excel](./how-to/integrate-with-excel)   | This example demonstrates how to implement Excel integration in OpenFin Workspace using our Excel integration API, enabling you to browse monitor and update Excel data.
 | [How To Support Context And Intents](./how-to/support-context-and-intents)   | This example is an extension of the register with store example but shows you how to implement intent support in your workspace platform. It includes various examples of sharing context and different ways of raising an intent and passing the context to the intent target.
 | [How To Register With Browser](./how-to/register-with-browser)   | This example provides details on how to use OpenFin's Browser component to implement a Workspace Platform. 
+| [How To Register With Platform Windows](./how-to/register-with-platform-windows)   | This example is based off of the register with store example except that it uses Platform API Windows instead of Workspace Browser Windows. The sample is a way of demonstrating that existing platforms can decide to take advantage of Workspace Components such as Home and Store before deciding on whether to move to the Workspace Browser Component. 
 | [How To Customize Workspace](./how-to/customize-workspace)   | This example is an extension of the context and intents how to but includes examples on how to: customize the browser (buttons, menus and context menus), have a custom workspace and page saving setup, how you could implement sharing of workspaces and pages and how you can use notifications and custom home search result templates. 
 | [How To Add Workspace Native Window Integration](./how-to/workspace-native-window-integration)   | This example shows an example of configuring Home so that it can launch a native application, capture it's location as a workspace and then launch the workspace to launch and restore the position of the native application. 
 | [How To Customize Home Templates](./how-to/customize-home-templates)   | This example demonstrates how to customize home result templates. 
@@ -67,7 +68,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "7.3.10",
+        "version": "8.1.7",
         "customConfig": {
         }
       }
@@ -83,7 +84,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "7.3.10",
+        "version": "8.1.7",
         "customConfig": {
         }
       }

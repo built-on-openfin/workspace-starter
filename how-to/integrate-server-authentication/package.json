@@ -1,25 +1,26 @@
 {
   "name": "openfin-workspace--integrate-server-authentication",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "OpenFin Workspace -- Integrate with Server Authentication",
   "main": "index.js",
   "scripts": {
-    "dos": "desktop-owner-settings.bat && (npm run kill)",
+    "dos": "npm --prefix ../common/ run dos",
     "build": "npm run build-server & npm run build-client",
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
-    "client": "node ./scripts/launch.mjs",
+    "client": "npm --prefix ../common/ run client",
     "server": "node ./server/build/index.js",
-    "kill": "node ./scripts/kill.mjs"
+    "kill": "npm --prefix ../common/ run kill",
+    "setup": "cd ../../ && npm install && cd how-to/integrate-server-authentication && npm run build && npm --prefix ../common/ run build"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
     "@openfin/core": "^25.68.26",
-    "@openfin/workspace": "7.3.10",
-    "@openfin/workspace-platform": "7.3.10",
+    "@openfin/workspace": "8.1.7",
+    "@openfin/workspace-platform": "8.1.7",
     "cookie-parser": "^1.4.6"
   },
   "devDependencies": {

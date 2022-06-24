@@ -1,6 +1,14 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes } from "@openfin/workspace-platform";
 
+interface PlatformProvider {
+    rootUrl: string,
+    intentPicker?: {
+        url: string,
+        height?: number,
+        width?: number
+    }
+}
 interface BrowserProvider {
     windowOptions: {
         title?:string,
@@ -26,7 +34,8 @@ interface AppProvider {
     appsSourceUrl: string,
     includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
     cacheDurationInMinutes?: number,
-    appAssetTag?: string
+    appAssetTag?: string,
+    manifestTypes?: string[]
 }
 
 export interface StorefrontSettingsNavigationItem {
@@ -90,6 +99,7 @@ interface StorefrontProvider {
 export interface CustomSettings {
     bootstrap?: {  store: boolean, home:boolean }
     appProvider?: AppProvider,
+    platformProvider?:PlatformProvider,
     browserProvider?: BrowserProvider,
     themeProvider?: ThemeProvider,
     homeProvider?: HomeProvider,

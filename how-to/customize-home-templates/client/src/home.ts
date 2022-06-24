@@ -1,10 +1,12 @@
 import {
-  CLIDispatchedSearchResult, CLIProvider,
-  CLISearchListenerRequest,
-  CLISearchListenerResponse,
-  CLISearchResponse, Home, HomeSearchResponse
+  HomeDispatchedSearchResult,
+  HomeSearchListenerRequest,
+  HomeSearchListenerResponse,
+  Home, 
+  HomeSearchResponse, 
+  HomeProvider
 } from "@openfin/workspace";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getAppSearchEntries, getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
@@ -23,12 +25,12 @@ export async function register() {
     return;
   }
 
-  let lastResponse: CLISearchListenerResponse;
+  let lastResponse: HomeSearchListenerResponse;
 
   const onUserInput = async (
-    request: CLISearchListenerRequest,
-    response: CLISearchListenerResponse
-  ): Promise<CLISearchResponse> => {
+    request: HomeSearchListenerRequest,
+    response: HomeSearchListenerResponse
+  ): Promise<HomeSearchResponse> => {
     let query = request.query.toLowerCase();
     if (lastResponse !== undefined) {
       lastResponse.close();
@@ -36,28 +38,31 @@ export async function register() {
     lastResponse = response;
     lastResponse.open();
 
-    let appSearchEntries = await getAppSearchEntries();
-
     const searchResults: HomeSearchResponse = {
-      results: appSearchEntries,
+      results: [],
       context: {
         filters: []
       }
     };
 
-    const integrationResults = await getSearchResults(query, undefined, lastResponse);
-    if (Array.isArray(integrationResults.results)) {
-      searchResults.results = searchResults.results.concat(integrationResults.results);
-    }
-    if (Array.isArray(integrationResults.context.filters)) {
-      searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+    if (query === "?") {
+      searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
+    } else {
+      searchResults.results = searchResults.results.concat(await getAppSearchEntries());
+
+      const integrationResults = await getSearchResults(query, undefined, lastResponse);
+      if (Array.isArray(integrationResults.results)) {
+        searchResults.results = searchResults.results.concat(integrationResults.results);
+      }
+      if (Array.isArray(integrationResults.context.filters)) {
+        searchResults.context.filters = searchResults.context.filters.concat(integrationResults.context.filters);
+      }
     }
 
     return searchResults;
-
   };
 
-  const onSelection = async (result: CLIDispatchedSearchResult) => {
+  const onSelection = async (result: HomeDispatchedSearchResult) => {
     if (result.data !== undefined) {
       const handled = await itemSelection(result, lastResponse);
 
@@ -69,12 +74,13 @@ export async function register() {
     }
   };
 
-  const cliProvider: CLIProvider = {
+  const cliProvider: HomeProvider = {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
     onUserInput: onUserInput,
     onResultDispatch: onSelection,
+    dispatchFocusEvents: true
   };
 
   await Home.register(cliProvider);

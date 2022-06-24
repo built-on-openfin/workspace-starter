@@ -10,7 +10,7 @@ The goal of this sample is to demonstrate the use of:
 * Custom workspace saving in home through /w name of workspace
 * Launching a saved workspace from home by typing it's name and using the presented options
 * Launching a native application and being able to save it's position 
-* Using a golden data source (in [apps.json](public/apps.json)) to drive the apps that show up in Home (Only one native app for now).
+* Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home (Only one native app for now).
 
 The Native Integration Module provided by OpenFin can be found here: 
 
@@ -24,26 +24,20 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Workspace Native Window Integration</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Workspace Native Window Integration</a>
 
 ---
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
@@ -53,33 +47,38 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
 
-6. Hit enter in the home search box to show the default list of applications.
-   The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API). It only shows a default native application.
+5. Type any character into the search box to show the default list of Applications.
+   You can now use the custom commands e.g. `/price MSFT.
 
+6. If you modify the project and wish to rebuild you can run setup again or the build command below: 
+
+```bash
+$ npm run build
+```
 
 ## How it works
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](public/dos.json)
-- [A list of applications](public/apps.json)
+- [A Desktop Owner Settings file](../common/public/dos.json)
+- [A list of applications](../common/public/apps.json)
 - A native winform application
 
 ### List of Applications
 
-The [list of applications](public/apps.json) contains:
+The [list of applications](../common/public/apps.json) contains:
 
 * A native winform application is the only application in this example as the focus is on launching and saving this application as part of a workspace.
 
@@ -111,7 +110,7 @@ This is a headless application. If you wish to debug it then you can update the 
 ---
 ### How this example works
 
-You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
+You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](../common/public/platform/provider.html). It is launched by the following command (step 5 above):
 
 ```bash
 $ npm run client

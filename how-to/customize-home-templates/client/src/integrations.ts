@@ -1,7 +1,7 @@
 import type {
-    CLIDispatchedSearchResult,
+    HomeDispatchedSearchResult,
     CLIFilter,
-    CLISearchListenerResponse,
+    HomeSearchListenerResponse,
     HomeSearchResponse,
     HomeSearchResult
 } from "@openfin/workspace";
@@ -71,7 +71,7 @@ export async function deregister(integrationProvider?: IntegrationProvider): Pro
  * @param lastResponse The last search response used for updating existing results.
  * @returns The search results and new filters.
  */
-export async function getSearchResults(query: string, filters: CLIFilter[], lastResponse: CLISearchListenerResponse): Promise<HomeSearchResponse> {
+export async function getSearchResults(query: string, filters: CLIFilter[], lastResponse: HomeSearchListenerResponse): Promise<HomeSearchResponse> {
     const homeResponse: HomeSearchResponse = {
         results: [],
         context: {
@@ -128,14 +128,31 @@ export async function getAppSearchEntries(): Promise<HomeSearchResult[]> {
 }
 
 /**
+ * Get the help search entries for all the integration providers.
+ * @returns The list of help entries.
+ */
+ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
+    let results: HomeSearchResult[] = [];
+
+    for (const homeIntegration of homeIntegrations) {
+        if (homeIntegration.module.getHelpSearchEntries) {
+            const integrationResults = await homeIntegration.module.getHelpSearchEntries(homeIntegration.integration);
+            results = results.concat(integrationResults);
+        }
+    }
+
+    return results;
+}
+
+/**
  * The item for one of the providers was selected.
  * @param result The result of the selection.
  * @param lastResponse The last response.
  * @returns True if the selection was handled.
  */
 export async function itemSelection(
-    result: CLIDispatchedSearchResult,
-    lastResponse?: CLISearchListenerResponse
+    result: HomeDispatchedSearchResult,
+    lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
     if (result.data) {
         const foundIntegration = homeIntegrations.find(hi => hi.integration.id === result.data?.providerId);

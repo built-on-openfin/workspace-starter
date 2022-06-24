@@ -83,7 +83,7 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
         template: CLITemplate.Plain,
       };
 
-      if (apps[i].manifestType === "view") {
+      if (apps[i].manifestType === "view" || apps[i].manifestType === "inline-view") {
         entry.label = "View";
         entry.actions = [action];
       }
