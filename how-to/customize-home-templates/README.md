@@ -21,20 +21,14 @@ To run this sample you can:
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
@@ -59,7 +53,11 @@ $ npm run client
 6. Type any character into the search box to show the default list of Applications.
    You can now use the custom commands e.g. `/price MSFT.
 
+7. If you modify the project and wish to rebuild you can run setup again or the build command below: 
 
+```bash
+$ npm run build
+```
 ---
 **NOTE ABOUT THE APP**
 
@@ -68,26 +66,14 @@ This is a headless application. If you wish to debug it then you can update the 
 ---
 ## How it works
 
-The Server in this example provides two sets of content over HTTP GET.
+The Server in this example serves the sample and serves files from the [common](../common/) folder.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](public/dos.json)
-- [A list of applications](public/apps.json)
-- Examples of View and Snapshot Manifest Types
-
-### List of Applications
-
-The [list of applications](public/apps.json) contains a number of examples:
-
-* Load views into OpenFin Browser
-* Launch an OpenFin Application using it's manifest file
-* Launch a native application
-* Launch a page using the snapshot manifest type
-
-These applications are read and transformed in order to be sent to our API.
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
+- Sample data required by the sample
 
 ### How this example works
 
-This example is an extension of the [Register With Home](../register-with-home/) example, for full details on how registering with home works you can find more details there.
+This example is based on the [Register With Home](../register-with-home/) example, for full details on how registering with home works you can find more details there.
 
 The additional commands are added through [home.ts](client/src/home.ts) and custom templates for the commands are defined in [templates.ts](client/src/templates.ts).
 
