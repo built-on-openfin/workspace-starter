@@ -1,0 +1,3 @@
+Common files are served from the common how-to.
+
+The setup command should npm install and build this how-to and the common one.
