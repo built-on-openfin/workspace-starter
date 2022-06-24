@@ -376,6 +376,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
 | cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
 | appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
+| manifestTypes | ["view", "snapshot", "manifest", "external"] |
 | **browserProvider** | Config related to OpenFin Browser |
 | title | The title for the window that shows up in the taskbar |
 | icon | The icon that should show in the taskbar and in the top left menu of the browser |
