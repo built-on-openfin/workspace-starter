@@ -10,7 +10,8 @@
     "secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
     "build": "npm run build-client",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
-    "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production"
+    "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
+    "setup": "cd ../../ && npm install && cd how-to/common && npm run build"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",

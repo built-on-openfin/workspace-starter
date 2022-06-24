@@ -13,7 +13,7 @@
     "client": "npm --prefix ../common/ run client",
     "server": "node ./server/build/index.js",
     "kill": "npm --prefix ../common/ run kill",
-    "setup": "npm install && npm run build && npm --prefix ../common/ install ../common && npm --prefix ../common/ run build"
+    "setup": "cd ../../ && npm install && cd how-to/use-notifications && npm run build && npm --prefix ../common/ run build"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
