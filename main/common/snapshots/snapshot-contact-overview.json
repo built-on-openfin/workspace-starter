@@ -72,7 +72,7 @@
         "defaultFaviconUrl": "https://cdn.openfin.co/workspace/5.5.0/icons/defaultFavicon.svg"
     },
     "frame": false,
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/main/common/favicon.ico",
     "maxHeight": -1,
     "maxWidth": -1,
     "maximizable": true,
@@ -202,7 +202,7 @@
                                                     "detachOnClose": false,
                                                     "isClosable": true,
                                                     "preventDragOut": false,
-                                                    "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-summary/index.html",
+                                                    "url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary/index.html",
                                                     "componentName": "view",
                                                     "fdc3InteropApi": "1.2",
                                                     "interop": {
@@ -300,7 +300,7 @@
                                                         "width": false,
                                                         "height": false
                                                     },
-                                                     "initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-summary/index.html",
+                                                     "initialUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary/index.html",
                                                     "processAffinity": "x",
                                                     "zoomLevel": 0
                                                 },
@@ -333,7 +333,7 @@
                                                     "detachOnClose": false,
                                                     "isClosable": true,
                                                     "preventDragOut": false,
-                                                    "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/investments-and-models/index.html",
+                                                    "url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/investments-and-models/index.html",
                                                     "componentName": "view",
                                                     "fdc3InteropApi": "1.2",
                                                     "interop": {
@@ -431,7 +431,7 @@
                                                         "width": false,
                                                         "height": false
                                                     },
-                                                     "initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/investments-and-models/index.html",
+                                                     "initialUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/investments-and-models/index.html",
                                                     "processAffinity": "x",
                                                     "zoomLevel": 0
                                                 },
@@ -480,7 +480,7 @@
                                                             "detachOnClose": false,
                                                             "isClosable": true,
                                                             "preventDragOut": false,
-                                                            "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-history/index.html",
+                                                            "url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-history/index.html",
                                                             "componentName": "view",
                                                             "fdc3InteropApi": "1.2",
                                                             "interop": {
@@ -578,7 +578,7 @@
                                                                 "width": false,
                                                                 "height": false
                                                             },
-                                                            "initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-history/index.html",
+                                                            "initialUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-history/index.html",
                                                             "processAffinity": "x",
                                                             "zoomLevel": 0
                                                         },

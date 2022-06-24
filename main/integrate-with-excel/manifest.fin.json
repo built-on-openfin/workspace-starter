@@ -7,9 +7,9 @@
   },
   "platform": {
     "uuid": "integrate-with-excel",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/favicon.ico",
     "autoShow": false,
-    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/platform/provider.html",
+    "providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/platform/provider.html",
     "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
@@ -42,7 +42,7 @@
   "shortcut": {
     "company": "OpenFin",
     "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/favicon.ico",
+    "icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/favicon.ico",
     "name": "Integrate With Excel - v8.0",
     "target": [
       "desktop",
@@ -53,7 +53,7 @@
     {
       "alias": "excel-interop-example.xlsx",
       "version": "0.0.5",
-      "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/assets/excel-interop-example.zip",
+      "src": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/assets/excel-interop-example.zip",
       "target": "excel-interop-example.xlsx",
       "forceDownload": true
     }
@@ -62,27 +62,27 @@
     "homeProvider": {
       "id": "integrate-with-excel",
       "title": "Integrate With Excel",
-      "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/favicon.ico"
+      "icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/favicon.ico"
     },
     "appProvider": {
-      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/apps.json",
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/apps.json",
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset"
     },
     "browserProvider": {
       "windowOptions": {
-        "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/favicon.ico"
+        "icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/favicon.ico"
       }
     },
     "integrationProvider": {
       "integrations": [
         {
           "id": "excel",
-          "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/assets/excel.svg",
+          "icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/assets/excel.svg",
           "title": "Excel Provider",
           "enabled": true,
-          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/js/integrations/excel.bundle.js",
+          "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/js/integrations/excel.bundle.js",
           "data": {
             "assets": [
               {
