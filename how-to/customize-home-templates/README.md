@@ -58,6 +58,7 @@ $ npm run client
 ```bash
 $ npm run build
 ```
+
 ---
 **NOTE ABOUT THE APP**
 
