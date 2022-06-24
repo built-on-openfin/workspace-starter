@@ -23,20 +23,14 @@ To run this sample you can:
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
@@ -46,26 +40,34 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
-![](openfin-register-with-store.gif)
 
-6. Type any character into the search box to show the default list of applications.
-   The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+5. Type any character into the search box to show the default list of Applications.
+   You can now use the custom commands e.g. `/price MSFT.
+
+6. If you modify the project and wish to rebuild you can run setup again or the build command below: 
+
+```bash
+$ npm run build
+```
+
+7. Type any character into the search box to show the default list of applications.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
 ![](openfin-register-with-store-home-ui.gif)
 
-6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
+8. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ![](openfin-register-with-store-storefront.gif)
 
@@ -73,14 +75,14 @@ $ npm run client
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](public/dos.json)
-- [A list of applications](public/apps.json)
+- [A Desktop Owner Settings file](../common/public/dos.json)
+- [A list of applications](../common/public/apps.json)
 - Examples of View and Snapshot Manifest Types
 
 
 ### List of Applications
 
-The [list of applications](public/apps.json) contains a number of examples:
+The [list of applications](../common/public/apps.json) contains a number of examples:
 
 * Load views into OpenFin Browser
 * Launch an OpenFin application using its manifest file
@@ -429,7 +431,7 @@ When a user selects a result in OpenFin Home, it is returned to the search provi
 The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
 
-The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both.
+The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](../common/public/apps.json) file (simulating your server) will populate both.
 
 
 ### A note about this example
