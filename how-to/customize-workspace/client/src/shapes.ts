@@ -5,7 +5,12 @@ import { IntegrationProvider } from "./integrations-shapes";
 
 
 interface PlatformProvider {
-    rootUrl: string
+    rootUrl: string,
+    intentPicker?: {
+        url: string,
+        height?: number,
+        width?: number
+    }
 }
 
 interface NotificationProvider extends NotificationsPlatform {};

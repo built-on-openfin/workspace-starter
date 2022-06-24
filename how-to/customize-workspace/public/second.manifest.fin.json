@@ -57,7 +57,12 @@
       "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "http://localhost:8080"
+      "rootUrl": "http://localhost:8080",
+      "intentPicker": { 
+        "url": "http://localhost:8080/common/windows/intents/picker.html",
+        "height": 400,
+        "width": 400
+      }
     },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/common/apps.json",

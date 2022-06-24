@@ -198,7 +198,12 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "http://localhost:8080"
+      "rootUrl": "http://localhost:8080",
+      "intentPicker": { 
+        "url": "http://localhost:8080/common/windows/intents/picker.html",
+        "height": 400,
+        "width": 400
+      }
     },
     "appProvider": {
       "appsSourceUrl": "http://localhost:8080/common/apps.json",
@@ -534,6 +539,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | home | Should we use home and register a home provider to feed apps into Home and Browser |
 | store | Should we use store and register a store provider to display apps |
 | notifications | Should we use register the workspace platform against notification center so it can have it's own dedicated section that is themed and branded. |
+| **platformProvider** | Config related to the platform |
+| rootUrl | Used so that root urls can be defined via manifest for different environments |
+| intentPicker.url | The url that supports intent selection.  |
+| intentPicker.height | The height for the intent picker. |
+| intentPicker.width | The width for the intent picker. |
 | **appProvider** | Config related to where the apps should be fetched from |
 | appsSourceUrl | Where should we fetch the apps from |
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
