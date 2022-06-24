@@ -64,7 +64,12 @@
       "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace"
+      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace",
+      "intentPicker": { 
+        "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/intents/picker.html",
+        "height": 400,
+        "width": 400
+      }
     },
     "appProvider": {
       "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json",
