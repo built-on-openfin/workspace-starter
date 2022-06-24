@@ -61,7 +61,7 @@
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
       "appAssetTag": "appasset",
-      "manifestTypes": ["view", "snapshot", "manifest", "external"]
+      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "browserProvider": {
       "windowOptions": {
