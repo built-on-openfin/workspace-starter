@@ -63,7 +63,8 @@
       "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json",
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
+      "appAssetTag": "appasset",
+      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "endpointProvider": {
       "endpoints": [{
