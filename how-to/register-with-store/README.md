@@ -168,201 +168,202 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 
 ```javascript
 "customSettings": {
-    "bootstrap": {
-      "home": true,
-      "store": true
-    },
-    "appProvider": {
-      "appsSourceUrl": "http://localhost:8080/apps.json",
-      "includeCredentialOnSourceRequest": "include",
-      "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
-    },
-    "browserProvider": {
-      "windowOptions": {
-        "title": "Browser Starter",
-        "icon": "http://localhost:8080/favicon.ico",
-        "newTabUrl": null,
-        "newPageUrl": null
-      }
-    },
-    "themeProvider": {
-        "themes":[
-          {
-              "label": "Starter Theme",
-              "logoUrl": "http://localhost:8080/favicon.ico",
-              "palette": {
-                  "brandPrimary": "#504CFF",
-                  "brandSecondary": "#383A40",
-                  "backgroundPrimary": "#111214",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBackground": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": null,
-                  "background2": null,
-                  "background3": null,
-                  "background4": null,
-                  "background5": null,
-                  "background6": null
-              }
-          }
-      ]
-    },
-    "homeProvider": {
-      "id": "register-with-store-home",
-      "title": "Home Starter",
+  "bootstrap": {
+    "home": true,
+    "store": true
+  },
+  "appProvider": {
+    "appsSourceUrl": "http://localhost:8080/common/apps.json",
+    "includeCredentialOnSourceRequest": "include",
+    "cacheDurationInMinutes": 1,
+    "appAssetTag": "appasset",
+    "manifestTypes": ["view", "snapshot", "manifest", "external"]
+  },
+  "browserProvider": {
+    "windowOptions": {
+      "title": "Browser Starter",
       "icon": "http://localhost:8080/favicon.ico",
-      "queryMinLength": 3,
-      "queryAgainst":["title"]
-    },
-    "storefrontProvider": {
-      "id": "register-with-store",
-      "title": "Custom Storefront",
-      "icon": "http://localhost:8080/favicon.ico",
-      "landingPage": {
-        "hero": {
-          "title": "Custom Hero Title",
-          "description": "This is a demonstration of the hero section that you can configure for your store.",
-          "cta": {
-            "title": "Hero Apps!",
-            "tags": ["hero"]
-          },
-          "image": {
-            "src": "http://localhost:8080/images/superhero-unsplash.jpg"
-          }
-        },
-        "topRow": {
-          "title": "Custom Top Row Content",
-          "items": [
-            {
-              "title": "Expero",
-              "description": "A collection of example views from Expero showing the power of interop and context sharing.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-1-unsplash.jpg"
-              },
-              "tags": ["expero"]
-            },
-            {
-              "title": "Dev Tools",
-              "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-2-unsplash.jpg"
-              },
-              "tags": ["tools"]
-            },
-            {
-              "title": "Learning Resource",
-              "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-3-unsplash.jpg"
-              },
-              "tags": ["page"]
+      "newTabUrl": null,
+      "newPageUrl": null
+    }
+  },
+  "themeProvider": {
+      "themes":[
+        {
+            "label": "Starter Theme",
+            "logoUrl": "http://localhost:8080/favicon.ico",
+            "palette": {
+                "brandPrimary": "#504CFF",
+                "brandSecondary": "#383A40",
+                "backgroundPrimary": "#111214",
+                "functional1": null,
+                "functional2": null,
+                "functional3": null,
+                "functional4": null,
+                "functional5": null,
+                "functional6": null,
+                "functional7": null,
+                "functional8": null,
+                "functional9": null,
+                "functional10": null,
+                "statusSuccess": null,
+                "statusWarning": null,
+                "statusCritical": null,
+                "statusActive": null,
+                "inputBackground": null,
+                "inputColor": null,
+                "inputPlaceholder": null,
+                "inputDisabled": null,
+                "inputFocused": null,
+                "textDefault": null,
+                "textHelp": null,
+                "textInactive": null,
+                "background1": null,
+                "background2": null,
+                "background3": null,
+                "background4": null,
+                "background5": null,
+                "background6": null
             }
-          ]
+        }
+    ]
+  },
+  "homeProvider": {
+    "id": "register-with-store-home",
+    "title": "Home Starter",
+    "icon": "http://localhost:8080/favicon.ico",
+    "queryMinLength": 3,
+    "queryAgainst":["title"]
+  },
+  "storefrontProvider": {
+    "id": "register-with-store",
+    "title": "Custom Storefront",
+    "icon": "http://localhost:8080/favicon.ico",
+    "landingPage": {
+      "hero": {
+        "title": "Custom Hero Title",
+        "description": "This is a demonstration of the hero section that you can configure for your store.",
+        "cta": {
+          "title": "Hero Apps!",
+          "tags": ["hero"]
         },
-        "middleRow": {
-          "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
-        },
-        "bottomRow": {
-          "title": "Quick Access",
-          "items": [
-            {
-              "title": "Views",
-              "description": "A collection of views made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-4-unsplash.jpg"
-              },
-              "tags": ["view"]
-            },
-            {
-              "title": "Web Apps",
-              "description": "A collection of web apps built using OpenFin.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-5-unsplash.jpg"
-              },
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native Apps",
-              "description": "A collection of native apps made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-6-unsplash.jpg"
-              },
-              "tags": ["native"]
-            }
-          ]
+        "image": {
+          "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
         }
       },
-      "navigation": [
-        {
-          "title": "Applications",
-          "items": [
-            {
-              "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
-            },
-            { "title": "Views", "tags": ["view"] },
-            { "title": "Pages", "tags": ["page"] },
-            {
-              "title": "Manifest",
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native",
-              "tags": ["native"]
-            }
-          ]
-        },
-        {
-          "title": "Context Sharing",
-          "items": [
-            {
-              "title": "FDC3 API",
-              "tags": ["fdc3"]
-            },
-            {
-              "title": "Interop API",
-              "tags": ["interop"]
-            }
-          ]
-        }
-      ],
-      "footer": {
-        "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
-        "text": "Welcome to the OpenFin Sample Footer",
-        "links": [
+      "topRow": {
+        "title": "Custom Top Row Content",
+        "items": [
           {
-            "title": "Github",
-            "url": "https://github.com/built-on-openfin/workspace-starter"
+            "title": "Expero",
+            "description": "A collection of example views from Expero showing the power of interop and context sharing.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+            },
+            "tags": ["expero"]
           },
           {
-            "title": "YouTube",
-            "url": "https://www.youtube.com/user/OpenFinTech"
+            "title": "Dev Tools",
+            "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+            },
+            "tags": ["tools"]
+          },
+          {
+            "title": "Learning Resource",
+            "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+            },
+            "tags": ["page"]
+          }
+        ]
+      },
+      "middleRow": {
+        "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+        "tags": ["fdc3","interop"]
+      },
+      "bottomRow": {
+        "title": "Quick Access",
+        "items": [
+          {
+            "title": "Views",
+            "description": "A collection of views made available through our catalog.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+            },
+            "tags": ["view"]
+          },
+          {
+            "title": "Web Apps",
+            "description": "A collection of web apps built using OpenFin.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+            },
+            "tags": ["manifest"]
+          },
+          {
+            "title": "Native Apps",
+            "description": "A collection of native apps made available through our catalog.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+            },
+            "tags": ["native"]
           }
         ]
       }
+    },
+    "navigation": [
+      {
+        "title": "Applications",
+        "items": [
+          {
+            "title": "All Apps",
+            "tags": ["view","page","manifest","native"]
+          },
+          { "title": "Views", "tags": ["view"] },
+          { "title": "Pages", "tags": ["page"] },
+          {
+            "title": "Manifest",
+            "tags": ["manifest"]
+          },
+          {
+            "title": "Native",
+            "tags": ["native"]
+          }
+        ]
+      },
+      {
+        "title": "Context Sharing",
+        "items": [
+          {
+            "title": "FDC3 API",
+            "tags": ["fdc3"]
+          },
+          {
+            "title": "Interop API",
+            "tags": ["interop"]
+          }
+        ]
+      }
+    ],
+    "footer": {
+      "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+      "text": "Welcome to the OpenFin Sample Footer",
+      "links": [
+        {
+          "title": "Github",
+          "url": "https://github.com/built-on-openfin/workspace-starter"
+        },
+        {
+          "title": "YouTube",
+          "url": "https://www.youtube.com/user/OpenFinTech"
+        }
+      ]
     }
   }
+}
 ```
 
 | Property | Description |
