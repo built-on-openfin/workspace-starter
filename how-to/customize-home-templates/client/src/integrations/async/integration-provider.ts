@@ -225,9 +225,6 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
                         results.push(this.createResult(contactFull));
                     }
                 }
-
-                // Add an artificial pause to simulate slow retrieval
-                await new Promise(r => setTimeout(r, 3000));
             } catch (err) {
                 console.error(err);
             }
@@ -265,9 +262,6 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
                         const contactFull: ContactFull = await contactResponse.json();
 
                         lastResponse.respond([this.createResult(contactFull)]);
-
-                        // Add an artificial pause to simulate slow retrieval
-                        await new Promise(r => setTimeout(r, 1000));
                     }
 
                 }, 0);
