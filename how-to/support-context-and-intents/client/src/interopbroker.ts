@@ -4,6 +4,7 @@ import { InteropBroker } from "openfin-adapter/src/api/interop";
 import { fin } from "openfin-adapter/src/mock";
 import { getAppsByIntent, getIntentsByContext, getIntent, getApp } from "./apps";
 import { launchView, launchSnapshot } from "./launch";
+import { getSettings } from "./settings";
 
 const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
@@ -83,14 +84,21 @@ export class PlatformInteropBroker extends InteropBroker {
     // show menu
     // launch a new window and optionally pass the available intents as customData.apps as part of the window options
     // the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
-    // this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting.)
-    const url = window.location.href.replace("platform/provider.html", "windows/intents/picker.html");
+    const settings = await getSettings();
+
+    const height = settings?.platformProvider?.intentPicker?.height || 400;
+    const width = settings?.platformProvider?.intentPicker?.width || 400;
+    // this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
+    const url =
+      settings?.platformProvider?.intentPicker.url ||
+      window.location.href.replace("platform/provider.html", "common/windows/intents/picker.html");
+
     const winOption = {
       name: "intent-picker",
       includeInSnapshot: false,
       fdc3InteropApi: "1.2",
-      defaultWidth: 400,
-      defaultHeight: 400,
+      defaultWidth: width,
+      defaultHeight: height,
       showTaskbarIcon: false,
       saveWindowState: false,
       defaultCentered: true,

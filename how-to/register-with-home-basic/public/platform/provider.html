@@ -6,41 +6,27 @@
     <title>Basic Home Example</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../common/style/app.css" />
     <script src="../js/provider.bundle.js"></script>
-    <style>
-      body {
-        padding: 25px;
-        color: white;
-        background-color: #24262b;
-        font: 12px/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-          Helvetica Neue, sans-serif;
-      }
-
-      button {
-        background-color: #6965ff;
-        color: white;
-        font-weight: bold;
-      }
-    </style>
   </head>
   <body>
     <div>
-      <p>
-        <image src="/images/icon-blue.png" alt="OpenFin" style="float: right"></image>
-      </p>
+      <div>
+        <image src="/common/images/icon-blue.png" alt="OpenFin" style="float: right"></image>
+      </div>
       <h1>Basic Home Example</h1>
-      <p>
+      <div>
         Please click the register button to add your platform to Home (it will start up Home and OpenFin Workspace if it
         isn't already running). Once your platform is registered the show/hide buttons will appear. Use show to show
         OpenFin home.
-      </p>
-      <p>This is a simple example showing how you can hand code a registration against OpenFin Home.</p>
-      <p>
+      </div>
+      <div>This is a simple example showing how you can hand code a registration against OpenFin Home.</div>
+      <div>
         <button id="register">Register A Platform With Home</button>
         <button id="deregister" style="display: none">Deregister A Platform From Home</button>
         <button id="show" style="display: none">Show Home</button>
         <button id="hide" style="display: none">Hide Home</button>
-      </p>
+      </div>
     </div>
   </body>
 </html>

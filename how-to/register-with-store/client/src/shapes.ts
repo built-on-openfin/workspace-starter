@@ -27,6 +27,7 @@ interface AppProvider {
   includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
   cacheDurationInMinutes?: number;
   appAssetTag?: string;
+  manifestTypes?: string[];
 }
 
 export interface StorefrontSettingsNavigationItem {

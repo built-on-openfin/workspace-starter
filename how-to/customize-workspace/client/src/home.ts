@@ -71,7 +71,7 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
         data: apps[i]
       };
 
-      if (apps[i].manifestType === "view") {
+      if (apps[i].manifestType === "view" || apps[i].manifestType === "inline-view") {
         entry.label = "View";
         entry.actions = [action];
       }

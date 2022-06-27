@@ -233,10 +233,6 @@ export interface SalesforceSettings {
    */
   consumerKey: string;
   /**
-   * Is it a sandbox environment.
-   */
-  isSandbox: boolean;
-  /**
    * The org access url.
    */
   orgUrl: string;

@@ -5,6 +5,11 @@ import { IntegrationProvider } from "./integrations-shapes";
 
 interface PlatformProvider {
   rootUrl: string;
+  intentPicker?: {
+    url: string;
+    height?: number;
+    width?: number;
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -43,6 +48,7 @@ interface AppProvider {
   includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
   cacheDurationInMinutes?: number;
   appAssetTag?: string;
+  manifestTypes?: string[];
 }
 
 export interface StorefrontSettingsNavigationItem {

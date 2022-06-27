@@ -1,8 +1,8 @@
 import {
   CLITemplate,
-  type CLIDispatchedSearchResult,
   type CLIFilter,
-  type CLISearchListenerResponse,
+  type HomeDispatchedSearchResult,
+  type HomeSearchListenerResponse,
   type HomeSearchResponse,
   type HomeSearchResult
 } from "@openfin/workspace";
@@ -18,6 +18,7 @@ import {
 } from "chart.js";
 import { DateTime } from "luxon";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import { createHelp } from "../../templates";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 import { getQuoteTemplate } from "./templates";
 
@@ -75,6 +76,34 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
   }
 
   /**
+   * Get a list of the static help entries.
+   * @param integration The integration details.
+   * @returns The list of help entries.
+   */
+  public async getHelpSearchEntries?(integration: Integration<QuoteSettings>): Promise<HomeSearchResult[]> {
+    return [
+      {
+        key: `${QuoteIntegrationProvider._PROVIDER_ID}-help`,
+        title: "/quote",
+        label: "Help",
+        actions: [],
+        data: {
+          providerId: QuoteIntegrationProvider._PROVIDER_ID
+        },
+        template: CLITemplate.Custom,
+        templateContent: createHelp(
+          "/quote",
+          [
+            "The quote command can be used to search for details of an instrument.",
+            "For example to search for Microsoft instrument."
+          ],
+          ["/quote MSFT"]
+        )
+      }
+    ];
+  }
+
+  /**
    * An entry has been selected.
    * @param integration The integration details.
    * @param result The dispatched result.
@@ -83,16 +112,16 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
    */
   public async itemSelection(
     integration: Integration<QuoteSettings>,
-    result: CLIDispatchedSearchResult,
-    lastResponse: CLISearchListenerResponse
+    result: HomeDispatchedSearchResult,
+    lastResponse: HomeSearchListenerResponse
   ): Promise<boolean> {
-    const data: { url?: string } = result.data;
     if (
+      result.action.trigger === "user-action" &&
       result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION &&
-      data.url &&
+      result.data.url &&
       this._integrationManager.openUrl
     ) {
-      await this._integrationManager.openUrl(data.url);
+      await this._integrationManager.openUrl(result.data.url as string);
       return true;
     }
 
@@ -111,7 +140,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
     integration: Integration<QuoteSettings>,
     query: string,
     filters: CLIFilter[],
-    lastResponse: CLISearchListenerResponse
+    lastResponse: HomeSearchListenerResponse
   ): Promise<HomeSearchResponse> {
     const results = [];
 
@@ -130,17 +159,17 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
           now.toFormat("yyyy-LL-dd")
         );
 
-        let price: string | undefined;
-        let company: string | undefined;
-        let data: { x: number; y: number }[] | undefined;
+        let price;
+        let company;
+        let data: { x: number; y: number }[];
 
         if (quoteData?.data?.lastSalePrice) {
-          price = quoteData.data.lastSalePrice.toString();
+          price = quoteData.data.lastSalePrice;
           company = quoteData.data.company;
           data = quoteData.data.chart;
         }
 
-        if (price !== undefined && company !== undefined && data !== undefined) {
+        if (price !== undefined) {
           const graphImage = await this.renderGraph(data);
 
           const quoteResult: HomeSearchResult = {

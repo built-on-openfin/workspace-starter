@@ -16,26 +16,20 @@ This application you are about to install is a simple example of plugging in you
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fregister-with-home%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Home</a>
+- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fregister-with-home%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Home</a>
 
 ---
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do an initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
@@ -44,20 +38,26 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
 
-6. Type any character into the search box to show the default list of Applications.
-   The [apps](public/apps.json) are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
+5. Type any character into the search box to show the default list of Applications.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
+
+6. Build the project if you have changed the code.
+
+```bash
+$ npm run build
+```
 
 ![](openfin-register-with-home.gif)
 
@@ -73,13 +73,13 @@ This is a headless application. If you wish to debug it then you can update the 
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](public/dos.json)
-- [A list of applications](public/apps.json)
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
+- [A list of applications](../common/public/apps.json)
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](public/apps.json) contains a number of examples:
+The [list of applications](../common/public/apps.json) contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin Application using it's manifest file
@@ -132,7 +132,8 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
  "customSettings": {
         "appProvider": {
             "appsSourceUrl": "http://localhost:8080/apps.json",
-            "includeCredentialOnSourceRequest": "include"
+            "includeCredentialOnSourceRequest": "include",
+            "manifestTypes": ["view", "snapshot", "manifest", "external"]
         },
         "homeProvider": {
             "id":"register-with-home",
@@ -149,6 +150,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | **appProvider**                  | Config related to where the apps should be fetched from                                                                                                                                                                                                                                                                                                              |
 | appsSourceUrl                    | Where should we fetch the apps from                                                                                                                                                                                                                                                                                                                                  |
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include"                                                                                                                                                                                                                                                               |
+| manifestTypes                    | ["view", "snapshot", "manifest", "external"]                                                                                                                                                                                                                                                                                                                         |
 | **homeProvider**                 | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                        |
 | id                               | What your provider should be called                                                                                                                                                                                                                                                                                                                                  |
 | title                            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                             |

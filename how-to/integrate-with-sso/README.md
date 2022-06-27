@@ -21,19 +21,13 @@ To run this sample you can:
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and build the sample. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Configure the SSO provider
+2. Configure the SSO provider
 
 This example uses [Auth0](https://auth0.com/developers/hub) as a provider for the SSO features, you can signup for a free account to test this demonstration.
 
@@ -63,11 +57,11 @@ There is also a second entry for `https://accounts.google.com` in the `logoutUrl
 
 If you enable additional federated providers in Auth0 you might need additional logout urls.
 
-4. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **Do not use this in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```bash
 $ npm run dos
@@ -83,6 +77,12 @@ $ start npm run start
 
 ```bash
 $ npm run client
+```
+
+6. Build the project if you have modified the code.
+
+```bash
+$ npm run build
 ```
 
 ![](openfin-integrate-with-sso.gif)

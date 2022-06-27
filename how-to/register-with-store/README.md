@@ -18,26 +18,20 @@ This application also shows you how to use the new @openfin/workspace-platform n
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
+- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fregister-with-store%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Register With Store</a>
 
 ---
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
@@ -46,27 +40,34 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
 
-![](openfin-register-with-store.gif)
+5. Type any character into the search box to show the default list of Applications.
+   You can now use the custom commands e.g. `/price MSFT.
 
-6. Type any character into the search box to show the default list of applications.
-   The [apps](public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+6. If you modify the project and wish to rebuild you can run setup again or the build command below:
+
+```bash
+$ npm run build
+```
+
+7. Type any character into the search box to show the default list of applications.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
 ![](openfin-register-with-store-home-ui.gif)
 
-6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
+8. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
+   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ![](openfin-register-with-store-storefront.gif)
 
@@ -74,13 +75,13 @@ $ npm run client
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](public/dos.json)
-- [A list of applications](public/apps.json)
+- [A Desktop Owner Settings file](../common/public/dos.json)
+- [A list of applications](../common/public/apps.json)
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](public/apps.json) contains a number of examples:
+The [list of applications](../common/public/apps.json) contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin application using its manifest file
@@ -169,201 +170,202 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 
 ```javascript
 "customSettings": {
-    "bootstrap": {
-      "home": true,
-      "store": true
-    },
-    "appProvider": {
-      "appsSourceUrl": "http://localhost:8080/apps.json",
-      "includeCredentialOnSourceRequest": "include",
-      "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
-    },
-    "browserProvider": {
-      "windowOptions": {
-        "title": "Browser Starter",
-        "icon": "http://localhost:8080/favicon.ico",
-        "newTabUrl": null,
-        "newPageUrl": null
-      }
-    },
-    "themeProvider": {
-        "themes":[
-          {
-              "label": "Starter Theme",
-              "logoUrl": "http://localhost:8080/favicon.ico",
-              "palette": {
-                  "brandPrimary": "#504CFF",
-                  "brandSecondary": "#383A40",
-                  "backgroundPrimary": "#111214",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBackground": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": null,
-                  "background2": null,
-                  "background3": null,
-                  "background4": null,
-                  "background5": null,
-                  "background6": null
-              }
-          }
-      ]
-    },
-    "homeProvider": {
-      "id": "register-with-store-home",
-      "title": "Home Starter",
+  "bootstrap": {
+    "home": true,
+    "store": true
+  },
+  "appProvider": {
+    "appsSourceUrl": "http://localhost:8080/common/apps.json",
+    "includeCredentialOnSourceRequest": "include",
+    "cacheDurationInMinutes": 1,
+    "appAssetTag": "appasset",
+    "manifestTypes": ["view", "snapshot", "manifest", "external"]
+  },
+  "browserProvider": {
+    "windowOptions": {
+      "title": "Browser Starter",
       "icon": "http://localhost:8080/favicon.ico",
-      "queryMinLength": 3,
-      "queryAgainst":["title"]
-    },
-    "storefrontProvider": {
-      "id": "register-with-store",
-      "title": "Custom Storefront",
-      "icon": "http://localhost:8080/favicon.ico",
-      "landingPage": {
-        "hero": {
-          "title": "Custom Hero Title",
-          "description": "This is a demonstration of the hero section that you can configure for your store.",
-          "cta": {
-            "title": "Hero Apps!",
-            "tags": ["hero"]
-          },
-          "image": {
-            "src": "http://localhost:8080/images/superhero-unsplash.jpg"
-          }
-        },
-        "topRow": {
-          "title": "Custom Top Row Content",
-          "items": [
-            {
-              "title": "Expero",
-              "description": "A collection of example views from Expero showing the power of interop and context sharing.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-1-unsplash.jpg"
-              },
-              "tags": ["expero"]
-            },
-            {
-              "title": "Dev Tools",
-              "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-2-unsplash.jpg"
-              },
-              "tags": ["tools"]
-            },
-            {
-              "title": "Learning Resource",
-              "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-3-unsplash.jpg"
-              },
-              "tags": ["page"]
+      "newTabUrl": null,
+      "newPageUrl": null
+    }
+  },
+  "themeProvider": {
+      "themes":[
+        {
+            "label": "Starter Theme",
+            "logoUrl": "http://localhost:8080/favicon.ico",
+            "palette": {
+                "brandPrimary": "#504CFF",
+                "brandSecondary": "#383A40",
+                "backgroundPrimary": "#111214",
+                "functional1": null,
+                "functional2": null,
+                "functional3": null,
+                "functional4": null,
+                "functional5": null,
+                "functional6": null,
+                "functional7": null,
+                "functional8": null,
+                "functional9": null,
+                "functional10": null,
+                "statusSuccess": null,
+                "statusWarning": null,
+                "statusCritical": null,
+                "statusActive": null,
+                "inputBackground": null,
+                "inputColor": null,
+                "inputPlaceholder": null,
+                "inputDisabled": null,
+                "inputFocused": null,
+                "textDefault": null,
+                "textHelp": null,
+                "textInactive": null,
+                "background1": null,
+                "background2": null,
+                "background3": null,
+                "background4": null,
+                "background5": null,
+                "background6": null
             }
-          ]
+        }
+    ]
+  },
+  "homeProvider": {
+    "id": "register-with-store-home",
+    "title": "Home Starter",
+    "icon": "http://localhost:8080/favicon.ico",
+    "queryMinLength": 3,
+    "queryAgainst":["title"]
+  },
+  "storefrontProvider": {
+    "id": "register-with-store",
+    "title": "Custom Storefront",
+    "icon": "http://localhost:8080/favicon.ico",
+    "landingPage": {
+      "hero": {
+        "title": "Custom Hero Title",
+        "description": "This is a demonstration of the hero section that you can configure for your store.",
+        "cta": {
+          "title": "Hero Apps!",
+          "tags": ["hero"]
         },
-        "middleRow": {
-          "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
-        },
-        "bottomRow": {
-          "title": "Quick Access",
-          "items": [
-            {
-              "title": "Views",
-              "description": "A collection of views made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-4-unsplash.jpg"
-              },
-              "tags": ["view"]
-            },
-            {
-              "title": "Web Apps",
-              "description": "A collection of web apps built using OpenFin.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-5-unsplash.jpg"
-              },
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native Apps",
-              "description": "A collection of native apps made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/images/coding-6-unsplash.jpg"
-              },
-              "tags": ["native"]
-            }
-          ]
+        "image": {
+          "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
         }
       },
-      "navigation": [
-        {
-          "title": "Applications",
-          "items": [
-            {
-              "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
-            },
-            { "title": "Views", "tags": ["view"] },
-            { "title": "Pages", "tags": ["page"] },
-            {
-              "title": "Manifest",
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native",
-              "tags": ["native"]
-            }
-          ]
-        },
-        {
-          "title": "Context Sharing",
-          "items": [
-            {
-              "title": "FDC3 API",
-              "tags": ["fdc3"]
-            },
-            {
-              "title": "Interop API",
-              "tags": ["interop"]
-            }
-          ]
-        }
-      ],
-      "footer": {
-        "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
-        "text": "Welcome to the OpenFin Sample Footer",
-        "links": [
+      "topRow": {
+        "title": "Custom Top Row Content",
+        "items": [
           {
-            "title": "Github",
-            "url": "https://github.com/built-on-openfin/workspace-starter"
+            "title": "Expero",
+            "description": "A collection of example views from Expero showing the power of interop and context sharing.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+            },
+            "tags": ["expero"]
           },
           {
-            "title": "YouTube",
-            "url": "https://www.youtube.com/user/OpenFinTech"
+            "title": "Dev Tools",
+            "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+            },
+            "tags": ["tools"]
+          },
+          {
+            "title": "Learning Resource",
+            "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+            },
+            "tags": ["page"]
+          }
+        ]
+      },
+      "middleRow": {
+        "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+        "tags": ["fdc3","interop"]
+      },
+      "bottomRow": {
+        "title": "Quick Access",
+        "items": [
+          {
+            "title": "Views",
+            "description": "A collection of views made available through our catalog.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+            },
+            "tags": ["view"]
+          },
+          {
+            "title": "Web Apps",
+            "description": "A collection of web apps built using OpenFin.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+            },
+            "tags": ["manifest"]
+          },
+          {
+            "title": "Native Apps",
+            "description": "A collection of native apps made available through our catalog.",
+            "image": {
+              "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+            },
+            "tags": ["native"]
           }
         ]
       }
+    },
+    "navigation": [
+      {
+        "title": "Applications",
+        "items": [
+          {
+            "title": "All Apps",
+            "tags": ["view","page","manifest","native"]
+          },
+          { "title": "Views", "tags": ["view"] },
+          { "title": "Pages", "tags": ["page"] },
+          {
+            "title": "Manifest",
+            "tags": ["manifest"]
+          },
+          {
+            "title": "Native",
+            "tags": ["native"]
+          }
+        ]
+      },
+      {
+        "title": "Context Sharing",
+        "items": [
+          {
+            "title": "FDC3 API",
+            "tags": ["fdc3"]
+          },
+          {
+            "title": "Interop API",
+            "tags": ["interop"]
+          }
+        ]
+      }
+    ],
+    "footer": {
+      "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+      "text": "Welcome to the OpenFin Sample Footer",
+      "links": [
+        {
+          "title": "Github",
+          "url": "https://github.com/built-on-openfin/workspace-starter"
+        },
+        {
+          "title": "YouTube",
+          "url": "https://www.youtube.com/user/OpenFinTech"
+        }
+      ]
     }
   }
+}
 ```
 
 | Property                         | Description                                                                                                                                                                                                                                                                                                                                                          |
@@ -376,6 +378,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include"                                                                                                                                                                                                                                                               |
 | cacheDurationInMinutes           | How many minutes should we wait before refreshing the list from the server?                                                                                                                                                                                                                                                                                          |
 | appAssetTag                      | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed                                                                                                                                                |
+| manifestTypes                    | ["view", "snapshot", "manifest", "external"]                                                                                                                                                                                                                                                                                                                         |
 | **browserProvider**              | Config related to OpenFin Browser                                                                                                                                                                                                                                                                                                                                    |
 | title                            | The title for the window that shows up in the taskbar                                                                                                                                                                                                                                                                                                                |
 | icon                             | The icon that should show in the taskbar and in the top left menu of the browser                                                                                                                                                                                                                                                                                     |
@@ -431,7 +434,7 @@ When a user selects a result in OpenFin Home, it is returned to the search provi
 
 The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
-The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both.
+The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](../common/public/apps.json) file (simulating your server) will populate both.
 
 ### A note about this example
 

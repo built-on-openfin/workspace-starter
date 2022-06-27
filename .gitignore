@@ -2,6 +2,10 @@ node_modules
 build
 out
 .DS_STORE
+how-to/*/package-lock.json
 how-to/customize-workspace/public/js/assets/provider.zip
-*.bundle.js
+# Bundle/builds
+**/*.bundle.js
+**/build
+
 ./public*/

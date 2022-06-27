@@ -13,7 +13,14 @@ module.exports = {
   globals: {
     fin: 'readonly'
   },
-  ignorePatterns: ['**/dist/*', '**/node_modules/*', '**/*.bundle.js', '**/build/**/*.js', 'preload.js'],
+  ignorePatterns: [
+    '**/dist/*',
+    '**/node_modules/*',
+    '**/*.bundle.js',
+    '**/build/**/*.js',
+    'preload.js',
+    '**/wc-fin/*.js'
+  ],
   parserOptions: {
     ecmaVersion: 2020,
     project: './tsconfig.eslint.json',

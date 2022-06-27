@@ -184,8 +184,8 @@ export async function getBatchedResults<T>(batchRequests: SalesforceBatchRequest
 
 export async function connectToSalesforce(): Promise<void> {
   enableLogging();
-  const { orgUrl, consumerKey, isSandbox } = await getSettings();
-  sfConn = await connect(orgUrl, consumerKey, isSandbox);
+  const { orgUrl, consumerKey } = await getSettings();
+  sfConn = await connect(orgUrl, consumerKey);
 }
 
 function escapeQuery(query: string): string {

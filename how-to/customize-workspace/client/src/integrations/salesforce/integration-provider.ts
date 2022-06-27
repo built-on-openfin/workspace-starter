@@ -376,11 +376,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
   private async openConnection(integration: Integration<SalesforceSettings>): Promise<void> {
     if (integration?.data?.orgUrl && !this._salesForceConnection) {
       enableLogging();
-      this._salesForceConnection = await connect(
-        integration?.data.orgUrl,
-        integration?.data.consumerKey,
-        integration?.data.isSandbox
-      );
+      this._salesForceConnection = await connect(integration?.data.orgUrl, integration?.data.consumerKey);
     }
   }
 

@@ -1,37 +1,53 @@
 import { App } from "@openfin/workspace";
-import { AppIntent } from "@openfin/workspace-platform";
 import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
 
 let cachedApps: App[];
 
 async function validateEntries(apps: App[]) {
-  const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-    "System.launchExternalProcess"
-  );
+  let canLaunchExternalProcessResponse;
+
+  try {
+    canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+      "System.launchExternalProcess"
+    );
+  } catch (error) {
+    console.error("Error while querying for System.launchExternalProcess permission", error);
+  }
   const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
-  const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-  const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
+  let canDownloadAppAssetsResponse;
 
-  if (canLaunchExternalProcess && canDownloadAppAssets) {
-    return apps;
+  try {
+    canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  } catch (error) {
+    console.error("Error while querying for System.downloadAsset permission", error);
   }
+
+  const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 
   const validatedApps: App[] = [];
   const rejectedAppIds = [];
   const settings = await getSettings();
   const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
+  const supportedManifestTypes = settings?.appProvider?.manifestTypes;
 
   for (let i = 0; i < apps.length; i++) {
-    if (apps[i].manifestType !== "external") {
-      validatedApps.push(apps[i]);
-    } else if (!canLaunchExternalProcess) {
-      rejectedAppIds.push(apps[i].appId);
-    } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !canDownloadAppAssets) {
-      rejectedAppIds.push(apps[i].appId);
-    } else {
-      validatedApps.push(apps[i]);
+    let validApp = true;
+    if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
+      validApp = supportedManifestTypes.includes(apps[i].manifestType);
+    }
+
+    if (validApp) {
+      if (apps[i].manifestType !== "external") {
+        validatedApps.push(apps[i]);
+      } else if (canLaunchExternalProcess === false) {
+        rejectedAppIds.push(apps[i].appId);
+      } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && canDownloadAppAssets === false) {
+        rejectedAppIds.push(apps[i].appId);
+      } else {
+        validatedApps.push(apps[i]);
+      }
     }
   }
 
@@ -74,11 +90,11 @@ async function getRestEntries(
 function updateEntry(
   source: {
     [key: string]: {
-      intent: Partial<AppIntent>;
+      intent: { name: string; displayName: string };
       apps: App[];
     };
   },
-  intent: AppIntent,
+  intent,
   app: App
 ) {
   if (source[intent.name] === undefined) {
@@ -150,7 +166,9 @@ export async function getApp(requestedApp: string | { appId: string }): Promise<
   if (appId === undefined) {
     return undefined;
   }
-  return apps.find((entry) => entry.appId === appId);
+  const app = apps.find((entry) => entry.appId === appId);
+
+  return app;
 }
 
 export async function getAppsByIntent(intent: string): Promise<App[]> {
@@ -172,11 +190,11 @@ export async function getAppsByIntent(intent: string): Promise<App[]> {
 export async function getIntent(
   intent: string,
   contextType?: string
-): Promise<{ intent: Partial<AppIntent>; apps: App[] }> {
+): Promise<{ intent: { name: string; displayName: string }; apps: App[] }> {
   const apps = await getApps();
   let intents: {
     [key: string]: {
-      intent: Partial<AppIntent>;
+      intent: { name: string; displayName: string };
       apps: App[];
     };
   } = {};
@@ -212,11 +230,13 @@ export async function getIntent(
   return null;
 }
 
-export async function getIntentsByContext(contextType: string): Promise<{ intent: Partial<AppIntent>; apps: App[] }[]> {
+export async function getIntentsByContext(
+  contextType: string
+): Promise<{ intent: { name: string; displayName: string }; apps: App[] }[]> {
   const apps = await getApps();
   let intents: {
     [key: string]: {
-      intent: Partial<AppIntent>;
+      intent: { name: string; displayName: string };
       apps: App[];
     };
   } = {};

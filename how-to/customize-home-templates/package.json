@@ -1,27 +1,28 @@
 {
   "name": "openfin-workspace--customize-home-templates",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "OpenFin Workspace -- Register with Home",
   "main": "index.js",
   "scripts": {
-    "dos": "desktop-owner-settings.bat && (npm run kill)",
+    "dos": "npm --prefix ../common/ run dos",
     "build": "npm run build-server & npm run build-client",
     "build-server": "tsc --project ./server",
     "build-client": "webpack build --config ./client/webpack.config.js --mode=development",
     "build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
     "start": "npm run server",
-    "client": "node ./scripts/launch.mjs",
+    "client": "npm --prefix ../common/ run client",
     "server": "node ./server/build/index.js",
-    "kill": "node ./scripts/kill.mjs"
+    "kill": "npm --prefix ../common/ run kill",
+    "setup": "cd ../../ && npm install && cd how-to/customize-home-templates && npm run build && npm --prefix ../common/ run build"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.MD",
   "dependencies": {
-    "@openfin/workspace": "7.3.10",
-    "@openfin/workspace-platform": "7.3.10",
-    "chart.js": "^3.8.0",
-    "csstype": "^3.1.0",
-    "luxon": "^2.4.0",
+    "@openfin/workspace": "8.1.7",
+    "@openfin/workspace-platform": "8.1.7",
+    "chart.js": "^3.7.1",
+    "csstype": "^3.0.11",
+    "luxon": "^2.3.1",
     "node-emoji": "^1.11.0"
   },
   "devDependencies": {

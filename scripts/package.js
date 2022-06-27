@@ -36,7 +36,7 @@ args = yargs(process.argv.slice(2))
 
 function packageHOWTOs(args) {
   const URLPattern = /http:\/\/localhost:8080/g;
-
+  const CommonURLPattern = /http:\/\/localhost:8080\/common/g;
   let publishDir = `public-${args.location}`;
 
   if (args.legacy) {
@@ -83,7 +83,18 @@ function packageHOWTOs(args) {
       from: URLPattern,
       to: URL
     };
+
+    const commonUrl = [baseURL, 'workspace-starter', hostFolder, 'common'].join('/');
+    const commonOptions = {
+      files: `${targetDir}/**/*.json`,
+      from: CommonURLPattern,
+      to: commonUrl
+    };
     try {
+      const commonResults = replace.sync(commonOptions);
+      console.log('Replacement results for common:', commonResults);
+      console.log(`Common URLs replaced with: ${commonUrl}`);
+
       const results = replace.sync(options);
       console.log('Replacement results:', results);
       console.log(`URLs replaced with: ${URL}`);

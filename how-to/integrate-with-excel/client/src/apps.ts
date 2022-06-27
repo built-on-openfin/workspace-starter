@@ -5,12 +5,25 @@ import { getSettings } from "./settings";
 let cachedApps: App[];
 
 async function validateEntries(apps: App[]) {
-  const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-    "System.launchExternalProcess"
-  );
+  let canLaunchExternalProcessResponse;
+
+  try {
+    canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+      "System.launchExternalProcess"
+    );
+  } catch (error) {
+    console.error("Error while querying for System.launchExternalProcess permission", error);
+  }
   const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
-  const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  let canDownloadAppAssetsResponse;
+
+  try {
+    canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+  } catch (error) {
+    console.error("Error while querying for System.downloadAsset permission", error);
+  }
+
   const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 
   if (canLaunchExternalProcess && canDownloadAppAssets) {

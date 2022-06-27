@@ -16,26 +16,20 @@ This application you are about to install is a simple example of plugging in you
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Home Templates</a>
+- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Home Templates</a>
 
 ---
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
@@ -44,20 +38,26 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
 
-6. Type any character into the search box to show the default list of Applications.
+5. Type any character into the search box to show the default list of Applications.
    You can now use the custom commands e.g. `/price MSFT.
+
+6. If you modify the project and wish to rebuild you can run setup again or the build command below:
+
+```bash
+$ npm run build
+```
 
 ---
 
@@ -69,41 +69,48 @@ This is a headless application. If you wish to debug it then you can update the 
 
 ## How it works
 
-The Server in this example provides two sets of content over HTTP GET.
+The Server in this example serves the sample and serves files from the [common](../common/) folder.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](public/dos.json)
-- [A list of applications](public/apps.json)
-- Examples of View and Snapshot Manifest Types
-
-### List of Applications
-
-The [list of applications](public/apps.json) contains a number of examples:
-
-- Load views into OpenFin Browser
-- Launch an OpenFin Application using it's manifest file
-- Launch a native application
-- Launch a page using the snapshot manifest type
-
-These applications are read and transformed in order to be sent to our API.
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
+- Sample data required by the sample
 
 ### How this example works
 
-This example is an extension of the [Register With Home](../register-with-home/) example, for full details on how registering with home works you can find more details there.
+This example is based on the [Register With Home](../register-with-home/) example, for full details on how registering with home works you can find more details there.
 
 The additional commands are added through [home.ts](client/src/home.ts) and custom templates for the commands are defined in [templates.ts](client/src/templates.ts).
 
 The commands implemented are:
 
 ```shell
+? - which displays a list of all the commands with help
 /quote <symbol>
 /emoji <code>
+/contacts <contact name>
+/contacts-sync <contact name>
+/contacts-partial <contact name>
 ```
+
+The **/quote** command demonstrates a template that is built dynamically with a graph image.
+
+The **/emoji** command demonstrates performing a search and returning multiple results with custom actions.
+
+The contacts commands demonstrate different approaches to retrieving data.
+
+- **/contacts-sync** - Retrieves the contact list and all the contact details in one go, which ends up with a noticeable delay in the UI
+- **/contacts-partial** - Retrieves the contact list asynchronously and then retrieves all the contact details in the background, updating the results when it has the detailed data
+- **/contacts** - Retrieves the contact list asynchronously and then only retrieves the details for an item when they are selected, using the additional `Loading` template as a placeholder while the data is loaded. Also by searching for a contact starting with the letter E it will initially show the `Error` template, the contact will work when selecting reload.
 
 e.g.
 
 ```shell
+/emoji man
 /quote MSFT
 /quote APPL
+/contacts john
+/contacts emma
+/contacts-sync john
+/contacts-partial john
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -116,6 +123,10 @@ e.g.
 ```
 
 ![Customize Home Template Emoji](customize-home-templates-emoji.gif)
+
+### Contact data
+
+The contact details in the sample are random generated from <https://www.mockaroo.com/>
 
 ### A note about this example
 
