@@ -244,7 +244,7 @@ export interface SalesforceSettings {
   };
 
   /**
-   * Map of the icon urls.
+   * Preload script required by salesforce to make the fin api available.
    */
   preload: string;
 }
