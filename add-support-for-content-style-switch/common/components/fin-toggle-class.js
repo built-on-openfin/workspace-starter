@@ -1,10 +1,6 @@
 customElements.define(
   "fin-toggle-class",
-  class ToggleClass extends HTMLElement {
-    constructor() {
-      super();
-    }
-
+  class ToggleClass extends HTMLButtonElement {
     /**
      * Runs each time the element is appended to or moved in the DOM
      */
@@ -83,7 +79,10 @@ customElements.define(
 
         this.innerHTML = result.image;
         this.title = "Click to toggle style";
-        this.style.cursor = "pointer";
+        this.style.height = "40px";
+		this.style.width = "40px";
+		this.style.padding = "0px";
+		this.style.textAlign = "center";
       }
     }
 
@@ -120,5 +119,6 @@ customElements.define(
     onclick() {
       this.applySettings(true);
     }
-  }
+  },
+ {extends: 'button'}
 );

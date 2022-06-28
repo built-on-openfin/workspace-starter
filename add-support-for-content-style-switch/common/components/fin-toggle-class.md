@@ -1,4 +1,4 @@
-# <fin-toggle-class> - A web component to toggle between two css classes via an image
+# <button is="fin-toggle-class"></button> - A web component to toggle between two css classes via a button with an inline image
 
 This is a very basic webcomponent that lets you specify the following attributes:
 
@@ -13,10 +13,12 @@ This is a very basic webcomponent that lets you specify the following attributes
 
 The web component saves the selection so that it is applied when any page using the component is launched or reloaded. It uses the uuid of the application as part of the key to store the selection unless sync="false" then it uses the uuid of the application and the name of the page it is on (in order to isolate itself but still remember the user's selection).
 
+The type is a button to aid in accessibility.
+
 ## Example usage:
 
 ```javascript
         <script src="../../../components/fin-toggle-class.js" defer></script>
 
-        <fin-toggle-class></fin-toggle-class>
+        <button is="fin-toggle-class"></button>
 ```
