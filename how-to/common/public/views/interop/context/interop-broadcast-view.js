@@ -1,9 +1,9 @@
 import { getDefaultFDC3ContextData } from '../../fdc3/fdc3-data.js';
 import {
-  systemSetContext,
-  sessionSetContext,
-  listenToSystemContext,
-  listenToSessionContext
+	systemSetContext,
+	sessionSetContext,
+	listenToSystemContext,
+	listenToSessionContext
 } from './interop-broadcast.js';
 // -------------------------------------------------
 // settings
@@ -13,49 +13,49 @@ let customChannel = 'custom-app-channel';
 let isCodePreview = true;
 
 const previewData = {
-  codePreview: '',
-  logs: ''
+	codePreview: '',
+	logs: ''
 };
 
 // -------------------------------------------------
 // UI Functions
 // -------------------------------------------------
 async function applySettings() {
-  const options = await fin.me.getOptions();
-  const optionsData = options?.customData;
+	const options = await fin.me.getOptions();
+	const optionsData = options?.customData;
 
-  if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
-    contextData = optionsData.contextData;
-  }
+	if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
+		contextData = optionsData.contextData;
+	}
 
-  if (
-    optionsData?.customChannel !== undefined &&
-    optionsData?.customChannel !== null &&
-    optionsData?.customChannel !== ''
-  ) {
-    customChannel = optionsData.customChannel;
-  }
+	if (
+		optionsData?.customChannel !== undefined &&
+		optionsData?.customChannel !== null &&
+		optionsData?.customChannel !== ''
+	) {
+		customChannel = optionsData.customChannel;
+	}
 }
 
 function updatePreview() {
-  console.log('preview updated');
-  if (isCodePreview) {
-    showCodePreview();
-  } else {
-    showLogs();
-  }
+	console.log('preview updated');
+	if (isCodePreview) {
+		showCodePreview();
+	} else {
+		showLogs();
+	}
 }
 
 function showCodePreview() {
-  isCodePreview = true;
-  const preview = document.querySelector('#preview');
-  preview.textContent = previewData.codePreview;
-  const previewTitle = document.querySelector('#previewTitle');
-  previewTitle.textContent = 'Code Preview';
+	isCodePreview = true;
+	const preview = document.querySelector('#preview');
+	preview.textContent = previewData.codePreview;
+	const previewTitle = document.querySelector('#previewTitle');
+	previewTitle.textContent = 'Code Preview';
 }
 
 function updateCodePreview(context) {
-  previewData.codePreview = `
+	previewData.codePreview = `
 if(window.fin !== undefined) {
 
   // ----------------------------------------------------
@@ -78,8 +78,8 @@ if(window.fin !== undefined) {
     );
   }
 `;
-  if (customChannel !== undefined) {
-    previewData.codePreview += `
+	if (customChannel !== undefined) {
+		previewData.codePreview += `
   // alternatively you may have an app specific session 
   // context group instead of using a system contextual 
   // group
@@ -92,11 +92,11 @@ if(window.fin !== undefined) {
   );
   appSessionContextGroup.setContext(context);
 `;
-  }
-  previewData.codePreview += `
+	}
+	previewData.codePreview += `
 }`;
 
-  previewData.codePreview += `
+	previewData.codePreview += `
 
 if(window.fin !== undefined) {
 
@@ -111,8 +111,8 @@ if(window.fin !== undefined) {
   const systemListener = 
     fin.me.interop.addContextHandler(systemHandler);
 `;
-  if (customChannel !== undefined) {
-    previewData.codePreview += `
+	if (customChannel !== undefined) {
+		previewData.codePreview += `
   // listen to a defined application session context group
   const appHandler = (ctx) => {
     console.log("App Session Context Received: ", ctx);
@@ -128,131 +128,133 @@ if(window.fin !== undefined) {
   let appListener = 
     appSessionContextGroup.addContextHandler(appHandler);
 `;
-  }
-  previewData.codePreview += `
+	}
+	previewData.codePreview += `
 }`;
 
-  updatePreview();
+	updatePreview();
 }
 
 function showLogs() {
-  isCodePreview = false;
-  const preview = document.querySelector('#preview');
-  preview.textContent = previewData.logs;
-  const previewTitle = document.querySelector('#previewTitle');
-  previewTitle.textContent = 'Logs';
+	isCodePreview = false;
+	const preview = document.querySelector('#preview');
+	preview.textContent = previewData.logs;
+	const previewTitle = document.querySelector('#previewTitle');
+	previewTitle.textContent = 'Logs';
 }
 
 function clearLogs() {
-  previewData.logs = '';
-  showLogs();
+	previewData.logs = '';
+	showLogs();
 }
 
 function log(text, data) {
-  let logs = `
+	let logs = `
 ${new Date(Date.now()).toLocaleTimeString()}: ${text}`;
 
-  if (data !== undefined) {
-    logs += `
+	if (data !== undefined) {
+		logs += `
 ${JSON.stringify(data, null, 5)}`;
-  }
+	}
 
-  console.log(text, data);
-  previewData.logs = logs + previewData.logs;
-  updatePreview();
+	console.log(text, data);
+	previewData.logs = logs + previewData.logs;
+	updatePreview();
 }
 
 function bindFDC3Context(value) {
-  const specifiedContext = document.querySelector('#context');
-  specifiedContext.value = JSON.stringify(value, null, 5);
+	const specifiedContext = document.querySelector('#context');
+	specifiedContext.value = JSON.stringify(value, null, 5);
 }
 
 function bindFDC3Values(values) {
-  const fdc3Value = document.querySelector('#fdc3Value');
-  const fdc3ValueOptions = values.map((data, index) => `<option value=${index}>${data.name}</option>`).join('\n');
-  fdc3Value.innerHTML = fdc3ValueOptions;
-  const context = values[0];
-  bindFDC3Context(context);
-  updateCodePreview(JSON.stringify(context, null, 5));
+	const fdc3Value = document.querySelector('#fdc3Value');
+	const fdc3ValueOptions = values
+		.map((data, index) => `<option value=${index}>${data.name}</option>`)
+		.join('\n');
+	fdc3Value.innerHTML = fdc3ValueOptions;
+	const context = values[0];
+	bindFDC3Context(context);
+	updateCodePreview(JSON.stringify(context, null, 5));
 }
 
 function bindFDC3Types(types) {
-  const fdc3Type = document.querySelector('#fdc3Type');
-  const fdc3TypeOptions = types.map((type) => `<option value=${type}>${type}</option>`).join('\n');
-  fdc3Type.innerHTML = fdc3TypeOptions;
-  bindFDC3Values(contextData[types[0]]);
+	const fdc3Type = document.querySelector('#fdc3Type');
+	const fdc3TypeOptions = types.map((type) => `<option value=${type}>${type}</option>`).join('\n');
+	fdc3Type.innerHTML = fdc3TypeOptions;
+	bindFDC3Values(contextData[types[0]]);
 }
 
 function bindFDC3OnChange() {
-  const fdc3Type = document.querySelector('#fdc3Type');
-  fdc3Type.addEventListener('change', () => {
-    bindFDC3Values(contextData[fdc3Type.value]);
-  });
+	const fdc3Type = document.querySelector('#fdc3Type');
+	fdc3Type.addEventListener('change', () => {
+		bindFDC3Values(contextData[fdc3Type.value]);
+	});
 
-  const fdc3Value = document.querySelector('#fdc3Value');
-  fdc3Value.addEventListener('change', () => {
-    const context = contextData[fdc3Type.value][fdc3Value.value];
-    bindFDC3Context(context);
-    updateCodePreview(JSON.stringify(context, null, 5));
-  });
+	const fdc3Value = document.querySelector('#fdc3Value');
+	fdc3Value.addEventListener('change', () => {
+		const context = contextData[fdc3Type.value][fdc3Value.value];
+		bindFDC3Context(context);
+		updateCodePreview(JSON.stringify(context, null, 5));
+	});
 
-  const specifiedContext = document.querySelector('#context');
-  specifiedContext.addEventListener('change', () => {
-    updateCodePreview(specifiedContext.value);
-  });
+	const specifiedContext = document.querySelector('#context');
+	specifiedContext.addEventListener('change', () => {
+		updateCodePreview(specifiedContext.value);
+	});
 }
 
 function getContextToSend() {
-  const contextInput = document.querySelector('#context');
-  const context = contextInput.value;
-  return JSON.parse(context);
+	const contextInput = document.querySelector('#context');
+	const context = contextInput.value;
+	return JSON.parse(context);
 }
 
 // -------------------------------------------------
 // Init Functions
 // -------------------------------------------------
 async function init() {
-  const btnSetContext = document.querySelector('#btnSetContext');
-  btnSetContext.addEventListener('click', async () => {
-    try {
-      const ctx = getContextToSend();
-      await systemSetContext(log, ctx);
-      await sessionSetContext(log, customChannel, ctx);
-      showLogs();
-    } catch (error) {
-      console.error('Unable to set context', error);
-      log('Unable to call setContext for the current context. Likely a JSON parsing error:', error);
-    }
-  });
+	const btnSetContext = document.querySelector('#btnSetContext');
+	btnSetContext.addEventListener('click', async () => {
+		try {
+			const ctx = getContextToSend();
+			await systemSetContext(log, ctx);
+			await sessionSetContext(log, customChannel, ctx);
+			showLogs();
+		} catch (error) {
+			console.error('Unable to set context', error);
+			log('Unable to call setContext for the current context. Likely a JSON parsing error:', error);
+		}
+	});
 
-  const btnSeeCode = document.querySelector('#btnSeeCode');
-  btnSeeCode.addEventListener('click', async () => {
-    showCodePreview();
-  });
+	const btnSeeCode = document.querySelector('#btnSeeCode');
+	btnSeeCode.addEventListener('click', async () => {
+		showCodePreview();
+	});
 
-  const btnSeeLogs = document.querySelector('#btnSeeLogs');
-  btnSeeLogs.addEventListener('click', async () => {
-    showLogs();
-  });
+	const btnSeeLogs = document.querySelector('#btnSeeLogs');
+	btnSeeLogs.addEventListener('click', async () => {
+		showLogs();
+	});
 
-  const btnClear = document.querySelector('#btnClear');
-  btnClear.addEventListener('click', () => {
-    clearLogs();
-  });
+	const btnClear = document.querySelector('#btnClear');
+	btnClear.addEventListener('click', () => {
+		clearLogs();
+	});
 
-  await applySettings();
-  const dataTypes = Object.keys(contextData);
-  bindFDC3Types(dataTypes);
-  bindFDC3OnChange();
-  showCodePreview();
-  await listenToSystemContext(log, showLogs);
-  await listenToSessionContext(log, customChannel, showLogs);
+	await applySettings();
+	const dataTypes = Object.keys(contextData);
+	bindFDC3Types(dataTypes);
+	bindFDC3OnChange();
+	showCodePreview();
+	await listenToSystemContext(log, showLogs);
+	await listenToSessionContext(log, customChannel, showLogs);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  try {
-    init();
-  } catch (error) {
-    console.error(error);
-  }
+	try {
+		init();
+	} catch (error) {
+		console.error(error);
+	}
 });

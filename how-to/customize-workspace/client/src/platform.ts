@@ -7,32 +7,32 @@ import { PlatformInteropBroker } from "./interopbroker";
 import { getSettings, getThemes } from "./settings";
 
 export async function init() {
-  const settings = await getSettings();
+	const settings = await getSettings();
 
-  console.log("Initialising platform");
-  const browser: BrowserInitConfig = {};
+	console.log("Initialising platform");
+	const browser: BrowserInitConfig = {};
 
-  if (settings.browserProvider !== undefined) {
-    browser.defaultWindowOptions = await getDefaultWindowOptions();
+	if (settings.browserProvider !== undefined) {
+		browser.defaultWindowOptions = await getDefaultWindowOptions();
 
-    browser.interopOverride = async (
-      InteropBroker,
-      provider: Transport,
-      options: ChannelProvider,
-      ...args: unknown[]
-    ) => new PlatformInteropBroker(provider, options, ...args);
+		browser.interopOverride = async (
+			InteropBroker,
+			provider: Transport,
+			options: ChannelProvider,
+			...args: unknown[]
+		) => new PlatformInteropBroker(provider, options, ...args);
 
-    browser.overrideCallback = overrideCallback;
-  }
+		browser.overrideCallback = overrideCallback;
+	}
 
-  console.log("Specifying following browser options:", browser);
+	console.log("Specifying following browser options:", browser);
 
-  const customActions = await getActions();
-  const theme = await getThemes();
+	const customActions = await getActions();
+	const theme = await getThemes();
 
-  await workspacePlatformInit({
-    browser,
-    theme,
-    customActions
-  });
+	await workspacePlatformInit({
+		browser,
+		theme,
+		customActions
+	});
 }

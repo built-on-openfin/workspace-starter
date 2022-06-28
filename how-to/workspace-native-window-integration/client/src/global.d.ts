@@ -1,4 +1,4 @@
 declare module "*.zip" {
-  declare const value: string;
-  export default string;
+	declare const value: string;
+	export default string;
 }

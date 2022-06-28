@@ -1,12 +1,12 @@
 import {
-  CLIDispatchedSearchResult,
-  CLIProvider,
-  CLISearchListenerRequest,
-  CLISearchListenerResponse,
-  CLISearchResponse,
-  CLITemplate,
-  Home,
-  HomeSearchResult
+	CLIDispatchedSearchResult,
+	CLIProvider,
+	CLISearchListenerRequest,
+	CLISearchListenerResponse,
+	CLISearchResponse,
+	CLITemplate,
+	Home,
+	HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
@@ -14,132 +14,132 @@ import { getApps } from "./apps";
 const providerId = "register-with-home-basic";
 
 async function getResults(query?: string): Promise<CLISearchResponse> {
-  const apps = await getApps();
+	const apps = await getApps();
 
-  if (Array.isArray(apps)) {
-    const initialResults: HomeSearchResult[] = [];
+	if (Array.isArray(apps)) {
+		const initialResults: HomeSearchResult[] = [];
 
-    for (let i = 0; i < apps.length; i++) {
-      const entry: Partial<HomeSearchResult> = {
-        key: apps[i].appId,
-        title: apps[i].title,
-        data: apps[i],
-        actions: []
-      };
-      const action = { name: "Launch View", hotkey: "enter" };
+		for (let i = 0; i < apps.length; i++) {
+			const entry: Partial<HomeSearchResult> = {
+				key: apps[i].appId,
+				title: apps[i].title,
+				data: apps[i],
+				actions: []
+			};
+			const action = { name: "Launch View", hotkey: "enter" };
 
-      if (apps[i].manifestType === "view") {
-        entry.label = "View";
-        entry.actions = [action];
-      }
-      if (apps[i].manifestType === "snapshot") {
-        entry.label = "Snapshot";
-        action.name = "Launch Snapshot";
-        entry.actions = [action];
-      }
-      if (apps[i].manifestType === "manifest") {
-        entry.label = "App";
-        action.name = "Launch App";
-        entry.actions = [action];
-      }
-      if (apps[i].manifestType === "external") {
-        action.name = "Launch Native App";
-        entry.actions = [action];
-        entry.label = "Native App";
-      }
+			if (apps[i].manifestType === "view") {
+				entry.label = "View";
+				entry.actions = [action];
+			}
+			if (apps[i].manifestType === "snapshot") {
+				entry.label = "Snapshot";
+				action.name = "Launch Snapshot";
+				entry.actions = [action];
+			}
+			if (apps[i].manifestType === "manifest") {
+				entry.label = "App";
+				action.name = "Launch App";
+				entry.actions = [action];
+			}
+			if (apps[i].manifestType === "external") {
+				action.name = "Launch Native App";
+				entry.actions = [action];
+				entry.label = "Native App";
+			}
 
-      if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-        entry.icon = apps[i].icons[0].src;
-      }
+			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
+				entry.icon = apps[i].icons[0].src;
+			}
 
-      if (apps[i].description !== undefined) {
-        entry.description = apps[i].description;
-        entry.shortDescription = apps[i].description;
-        entry.template = CLITemplate.SimpleText;
-        entry.templateContent = apps[i].description;
-      } else {
-        entry.template = CLITemplate.Plain;
-      }
-      initialResults.push(entry as HomeSearchResult);
-    }
+			if (apps[i].description !== undefined) {
+				entry.description = apps[i].description;
+				entry.shortDescription = apps[i].description;
+				entry.template = CLITemplate.SimpleText;
+				entry.templateContent = apps[i].description;
+			} else {
+				entry.template = CLITemplate.Plain;
+			}
+			initialResults.push(entry as HomeSearchResult);
+		}
 
-    let finalResults;
+		let finalResults;
 
-    if (query === undefined || query === null || query.length === 0) {
-      finalResults = initialResults;
-    } else {
-      finalResults = initialResults.filter((entry) => {
-        const targetValue = entry.title;
+		if (query === undefined || query === null || query.length === 0) {
+			finalResults = initialResults;
+		} else {
+			finalResults = initialResults.filter((entry) => {
+				const targetValue = entry.title;
 
-        if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-          return targetValue.toLowerCase().includes(query);
-        }
-        return false;
-      });
-    }
+				if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+					return targetValue.toLowerCase().includes(query);
+				}
+				return false;
+			});
+		}
 
-    const response: CLISearchResponse = {
-      results: finalResults
-    };
+		const response: CLISearchResponse = {
+			results: finalResults
+		};
 
-    return response;
-  }
-  return {
-    results: []
-  };
+		return response;
+	}
+	return {
+		results: []
+	};
 }
 
 export async function register(): Promise<void> {
-  console.log("Initialising home.");
+	console.log("Initialising home.");
 
-  const queryMinLength = 3;
+	const queryMinLength = 3;
 
-  const onUserInput = async (
-    request: CLISearchListenerRequest,
-    response: CLISearchListenerResponse
-  ): Promise<CLISearchResponse> => {
-    const query = request.query.toLowerCase();
-    if (query.startsWith("/")) {
-      return { results: [] };
-    }
+	const onUserInput = async (
+		request: CLISearchListenerRequest,
+		response: CLISearchListenerResponse
+	): Promise<CLISearchResponse> => {
+		const query = request.query.toLowerCase();
+		if (query.startsWith("/")) {
+			return { results: [] };
+		}
 
-    if (query.length < queryMinLength) {
-      return getResults();
-    }
+		if (query.length < queryMinLength) {
+			return getResults();
+		}
 
-    return getResults(query);
-  };
+		return getResults(query);
+	};
 
-  const onSelection = async (result: CLIDispatchedSearchResult) => {
-    if (result.data !== undefined) {
-      const platform = getCurrentSync();
-      await platform.launchApp({ app: result.data });
-    } else {
-      console.warn("Unable to execute result without data being passed");
-    }
-  };
+	const onSelection = async (result: CLIDispatchedSearchResult) => {
+		if (result.data !== undefined) {
+			const platform = getCurrentSync();
+			await platform.launchApp({ app: result.data });
+		} else {
+			console.warn("Unable to execute result without data being passed");
+		}
+	};
 
-  const cliProvider: CLIProvider = {
-    title: "Basic Workspace Platform",
-    id: providerId,
-    icon: "http://localhost:8080/favicon.ico",
-    onUserInput,
-    onResultDispatch: onSelection
-  };
+	const cliProvider: CLIProvider = {
+		title: "Basic Workspace Platform",
+		id: providerId,
+		icon: "http://localhost:8080/favicon.ico",
+		onUserInput,
+		onResultDispatch: onSelection
+	};
 
-  console.log("Home configured.");
+	console.log("Home configured.");
 
-  return Home.register(cliProvider);
+	return Home.register(cliProvider);
 }
 
 export async function deregister() {
-  return Home.deregister(providerId);
+	return Home.deregister(providerId);
 }
 
 export async function show() {
-  return Home.show();
+	return Home.show();
 }
 
 export async function hide() {
-  return Home.hide();
+	return Home.hide();
 }

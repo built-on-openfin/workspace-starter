@@ -1,460 +1,460 @@
 {
-  "devtools_port": 9090,
-  "licenseKey": "openfin-demo-license-key",
-  "runtime": {
-    "arguments": "--v=1 --inspect",
-    "version": "26.102.70.16"
-  },
-  "startup_app": {
-    "name": "workspace-starter-how-to-customize-workspace"
-  },
-  "platform": {
-    "name": "workspace-starter-how-to-customize-workspace",
-    "uuid": "customize-workspace",
-    "icon": "http://localhost:8080/favicon.ico",
-    "autoShow": false,
-    "providerUrl": "http://localhost:8080/platform/provider.html",
-    "preventQuitOnLastWindowClosed": true,
-    "permissions": {
-      "System": {
-        "launchExternalProcess": true,
-        "enableNativeWindowIntegrationProvider": true,
-        "terminateExternalProcess": true,
-        "downloadAsset": true,
-        "openUrlWithBrowser": {
-          "enabled": true,
-          "protocols": ["mailto"]
-        }
-      }
-    },
-    "defaultWindowOptions": {
-      "permissions": {
-        "System": {
-          "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
-          }
-        }
-      }
-    }
-  },
-  "snapshot": {
-    "windows": []
-  },
-  "shortcut": {
-    "company": "OpenFin",
-    "description": "An way of showing examples of what OpenFin can do.",
-    "icon": "http://localhost:8080/favicon.ico",
-    "name": "Customize Workspace - v8.0",
-    "target": ["desktop", "start-menu"]
-  },
-  "appAssets": [
-    {
-      "alias": "winform-interop-example",
-      "version": "2.0.0",
-      "src": "http://localhost:8080/common/assets/native-interop-example.zip",
-      "target": "OpenFin.Interop.Win.Sample.exe",
-      "forceDownload": false
-    }
-  ],
-  "customSettings": {
-    "bootstrap": {
-      "home": true,
-      "store": true,
-      "notifications": true
-    },
-    "platformProvider": {
-      "rootUrl": "http://localhost:8080",
-      "intentPicker": {
-        "url": "http://localhost:8080/common/windows/intents/picker.html",
-        "height": 400,
-        "width": 400
-      }
-    },
-    "appProvider": {
-      "appsSourceUrl": "http://localhost:8080/common/apps.json",
-      "includeCredentialOnSourceRequest": "include",
-      "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset",
-      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
-    },
-    "endpointProvider": {
-      "endpoints": [
-        {
-          "id": "share-get",
-          "type": "fetch",
-          "options": {
-            "method": "GET",
-            "url": "https://workspace.openfin.co/api/share/[id]"
-          }
-        },
-        {
-          "id": "share-save",
-          "type": "fetch",
-          "options": {
-            "method": "POST",
-            "url": "https://workspace.openfin.co/api/share"
-          }
-        }
-      ]
-    },
-    "browserProvider": {
-      "windowOptions": {
-        "title": "Browser Starter",
-        "icon": "http://localhost:8080/favicon.ico",
-        "newTabUrl": null,
-        "newPageUrl": null
-      },
-      "toolbarButtons": [
-        {
-          "include": false,
-          "id": "change-opacity",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Change Opacity",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/favicon.ico",
-            "action": {
-              "id": "change-opacity",
-              "customData": {
-                "sourceId": "change-opacity",
-                "replacementId": "restore-opacity"
-              }
-            }
-          }
-        },
-        {
-          "include": false,
-          "id": "restore-opacity",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Restore Opacity",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/favicon.ico",
-            "action": {
-              "id": "restore-opacity",
-              "customData": {
-                "sourceId": "restore-opacity",
-                "replacementId": "change-opacity"
-              }
-            }
-          }
-        },
-        {
-          "include": false,
-          "id": "home-show",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Show Home",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/search.svg",
-            "action": {
-              "id": "home-show",
-              "customData": {}
-            }
-          }
-        },
-        {
-          "include": false,
-          "id": "notification-toggle",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Toggle Notification Center",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/bell.svg",
-            "action": {
-              "id": "notification-toggle",
-              "customData": {}
-            }
-          }
-        },
-        {
-          "include": true,
-          "id": "pin-window",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Pin this window",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/pin.svg",
-            "action": {
-              "id": "pin-window",
-              "customData": {
-                "sourceId": "pin-window",
-                "replacementId": "unpin-window"
-              }
-            }
-          }
-        },
-        {
-          "include": false,
-          "id": "unpin-window",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Unpin this window",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
-            "action": {
-              "id": "unpin-window",
-              "customData": {
-                "sourceId": "unpin-window",
-                "replacementId": "pin-window"
-              }
-            }
-          }
-        },
-        {
-          "include": true,
-          "id": "lock-unlock",
-          "button": {
-            "type": "LockUnlockPage"
-          }
-        },
-        {
-          "include": true,
-          "id": "show-hide-tabs",
-          "button": {
-            "type": "ShowHideTabs"
-          }
-        },
-        {
-          "include": true,
-          "id": "color-linking",
-          "button": {
-            "type": "ColorLinking"
-          }
-        },
-        {
-          "include": true,
-          "id": "preset-layouts",
-          "button": {
-            "type": "PresetLayouts"
-          }
-        },
-        {
-          "include": true,
-          "id": "share",
-          "button": {
-            "type": "Custom",
-            "tooltip": "Share",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/share.svg",
-            "action": {
-              "id": "share",
-              "customData": {}
-            }
-          }
-        },
-        {
-          "include": true,
-          "id": "save-menu",
-          "button": {
-            "type": "SaveMenu"
-          }
-        }
-      ]
-    },
-    "themeProvider": {
-      "themes": [
-        {
-          "label": "Starter Theme",
-          "logoUrl": "http://localhost:8080/favicon.ico",
-          "palette": {
-            "brandPrimary": "#504CFF",
-            "brandSecondary": "#383A40",
-            "backgroundPrimary": "#111214",
-            "functional1": null,
-            "functional2": null,
-            "functional3": null,
-            "functional4": null,
-            "functional5": null,
-            "functional6": null,
-            "functional7": null,
-            "functional8": null,
-            "functional9": null,
-            "functional10": null,
-            "statusSuccess": null,
-            "statusWarning": null,
-            "statusCritical": null,
-            "statusActive": null,
-            "inputBackground": null,
-            "inputColor": null,
-            "inputPlaceholder": null,
-            "inputDisabled": null,
-            "inputFocused": null,
-            "textDefault": null,
-            "textHelp": null,
-            "textInactive": null,
-            "background1": null,
-            "background2": null,
-            "background3": null,
-            "background4": null,
-            "background5": null,
-            "background6": null
-          }
-        }
-      ]
-    },
-    "homeProvider": {
-      "id": "customize-workspace",
-      "title": "Home Starter",
-      "icon": "http://localhost:8080/favicon.ico",
-      "queryMinLength": 3,
-      "queryAgainst": ["title"]
-    },
-    "storefrontProvider": {
-      "id": "customize-workspace",
-      "title": "Custom Storefront",
-      "icon": "http://localhost:8080/favicon.ico",
-      "landingPage": {
-        "hero": {
-          "title": "Custom Hero Title",
-          "description": "This is a demonstration of the hero section that you can configure for your store.",
-          "cta": {
-            "title": "Hero Apps!",
-            "tags": ["hero"]
-          },
-          "image": {
-            "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
-          }
-        },
-        "topRow": {
-          "title": "Custom Top Row Content",
-          "items": [
-            {
-              "title": "Expero",
-              "description": "A collection of example views from Expero showing the power of interop and context sharing.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
-              },
-              "tags": ["expero"]
-            },
-            {
-              "title": "Dev Tools",
-              "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
-              },
-              "tags": ["tools"]
-            },
-            {
-              "title": "Learning Resource",
-              "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
-              },
-              "tags": ["page"]
-            }
-          ]
-        },
-        "middleRow": {
-          "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3", "interop"]
-        },
-        "bottomRow": {
-          "title": "Quick Access",
-          "items": [
-            {
-              "title": "Views",
-              "description": "A collection of views made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
-              },
-              "tags": ["view"]
-            },
-            {
-              "title": "Web Apps",
-              "description": "A collection of web apps built using OpenFin.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
-              },
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native Apps",
-              "description": "A collection of native apps made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
-              },
-              "tags": ["native"]
-            }
-          ]
-        }
-      },
-      "navigation": [
-        {
-          "title": "Applications",
-          "items": [
-            {
-              "title": "All Apps",
-              "tags": ["view", "page", "manifest", "native"]
-            },
-            { "title": "Views", "tags": ["view"] },
-            { "title": "Pages", "tags": ["page"] },
-            {
-              "title": "Manifest",
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native",
-              "tags": ["native"]
-            }
-          ]
-        },
-        {
-          "title": "Context Sharing",
-          "items": [
-            {
-              "title": "FDC3 API",
-              "tags": ["fdc3"]
-            },
-            {
-              "title": "Interop API",
-              "tags": ["interop"]
-            }
-          ]
-        }
-      ],
-      "footer": {
-        "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
-        "text": "Welcome to the OpenFin Sample Footer",
-        "links": [
-          {
-            "title": "Github",
-            "url": "https://github.com/built-on-openfin/workspace-starter"
-          },
-          {
-            "title": "YouTube",
-            "url": "https://www.youtube.com/user/OpenFinTech"
-          }
-        ]
-      }
-    },
-    "notificationProvider": {
-      "id": "customize-workspace",
-      "title": "Notification Starter",
-      "icon": "http://localhost:8080/favicon.ico"
-    },
-    "integrationProvider": {
-      "integrations": [
-        {
-          "id": "salesforce",
-          "icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
-          "title": "Salesforce",
-          "enabled": false,
-          "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
-          "data": {
-            "consumerKey": "",
-            "orgUrl": "",
-            "iconMap": {
-              "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
-              "account": "http://localhost:8080/common/images/salesforce/account.svg",
-              "chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
-              "note": "http://localhost:8080/common/images/salesforce/note.svg",
-              "task": "http://localhost:8080/common/images/salesforce/task.svg"
-            }
-          }
-        }
-      ]
-    }
-  }
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "26.102.70.16"
+	},
+	"startup_app": {
+		"name": "workspace-starter-how-to-customize-workspace"
+	},
+	"platform": {
+		"name": "workspace-starter-how-to-customize-workspace",
+		"uuid": "customize-workspace",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"enableNativeWindowIntegrationProvider": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			}
+		}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "An way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Customize Workspace - v8.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"appAssets": [
+		{
+			"alias": "winform-interop-example",
+			"version": "2.0.0",
+			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"target": "OpenFin.Interop.Win.Sample.exe",
+			"forceDownload": false
+		}
+	],
+	"customSettings": {
+		"bootstrap": {
+			"home": true,
+			"store": true,
+			"notifications": true
+		},
+		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
+			"intentPicker": {
+				"url": "http://localhost:8080/common/windows/intents/picker.html",
+				"height": 400,
+				"width": 400
+			}
+		},
+		"appProvider": {
+			"appsSourceUrl": "http://localhost:8080/common/apps.json",
+			"includeCredentialOnSourceRequest": "include",
+			"cacheDurationInMinutes": 1,
+			"appAssetTag": "appasset",
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+		},
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "share-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://workspace.openfin.co/api/share/[id]"
+					}
+				},
+				{
+					"id": "share-save",
+					"type": "fetch",
+					"options": {
+						"method": "POST",
+						"url": "https://workspace.openfin.co/api/share"
+					}
+				}
+			]
+		},
+		"browserProvider": {
+			"windowOptions": {
+				"title": "Browser Starter",
+				"icon": "http://localhost:8080/favicon.ico",
+				"newTabUrl": null,
+				"newPageUrl": null
+			},
+			"toolbarButtons": [
+				{
+					"include": false,
+					"id": "change-opacity",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Change Opacity",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/favicon.ico",
+						"action": {
+							"id": "change-opacity",
+							"customData": {
+								"sourceId": "change-opacity",
+								"replacementId": "restore-opacity"
+							}
+						}
+					}
+				},
+				{
+					"include": false,
+					"id": "restore-opacity",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Restore Opacity",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/favicon.ico",
+						"action": {
+							"id": "restore-opacity",
+							"customData": {
+								"sourceId": "restore-opacity",
+								"replacementId": "change-opacity"
+							}
+						}
+					}
+				},
+				{
+					"include": false,
+					"id": "home-show",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Show Home",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/search.svg",
+						"action": {
+							"id": "home-show",
+							"customData": {}
+						}
+					}
+				},
+				{
+					"include": false,
+					"id": "notification-toggle",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Toggle Notification Center",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/bell.svg",
+						"action": {
+							"id": "notification-toggle",
+							"customData": {}
+						}
+					}
+				},
+				{
+					"include": true,
+					"id": "pin-window",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Pin this window",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/pin.svg",
+						"action": {
+							"id": "pin-window",
+							"customData": {
+								"sourceId": "pin-window",
+								"replacementId": "unpin-window"
+							}
+						}
+					}
+				},
+				{
+					"include": false,
+					"id": "unpin-window",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Unpin this window",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
+						"action": {
+							"id": "unpin-window",
+							"customData": {
+								"sourceId": "unpin-window",
+								"replacementId": "pin-window"
+							}
+						}
+					}
+				},
+				{
+					"include": true,
+					"id": "lock-unlock",
+					"button": {
+						"type": "LockUnlockPage"
+					}
+				},
+				{
+					"include": true,
+					"id": "show-hide-tabs",
+					"button": {
+						"type": "ShowHideTabs"
+					}
+				},
+				{
+					"include": true,
+					"id": "color-linking",
+					"button": {
+						"type": "ColorLinking"
+					}
+				},
+				{
+					"include": true,
+					"id": "preset-layouts",
+					"button": {
+						"type": "PresetLayouts"
+					}
+				},
+				{
+					"include": true,
+					"id": "share",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Share",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/share.svg",
+						"action": {
+							"id": "share",
+							"customData": {}
+						}
+					}
+				},
+				{
+					"include": true,
+					"id": "save-menu",
+					"button": {
+						"type": "SaveMenu"
+					}
+				}
+			]
+		},
+		"themeProvider": {
+			"themes": [
+				{
+					"label": "Starter Theme",
+					"logoUrl": "http://localhost:8080/favicon.ico",
+					"palette": {
+						"brandPrimary": "#504CFF",
+						"brandSecondary": "#383A40",
+						"backgroundPrimary": "#111214",
+						"functional1": null,
+						"functional2": null,
+						"functional3": null,
+						"functional4": null,
+						"functional5": null,
+						"functional6": null,
+						"functional7": null,
+						"functional8": null,
+						"functional9": null,
+						"functional10": null,
+						"statusSuccess": null,
+						"statusWarning": null,
+						"statusCritical": null,
+						"statusActive": null,
+						"inputBackground": null,
+						"inputColor": null,
+						"inputPlaceholder": null,
+						"inputDisabled": null,
+						"inputFocused": null,
+						"textDefault": null,
+						"textHelp": null,
+						"textInactive": null,
+						"background1": null,
+						"background2": null,
+						"background3": null,
+						"background4": null,
+						"background5": null,
+						"background6": null
+					}
+				}
+			]
+		},
+		"homeProvider": {
+			"id": "customize-workspace",
+			"title": "Home Starter",
+			"icon": "http://localhost:8080/favicon.ico",
+			"queryMinLength": 3,
+			"queryAgainst": ["title"]
+		},
+		"storefrontProvider": {
+			"id": "customize-workspace",
+			"title": "Custom Storefront",
+			"icon": "http://localhost:8080/favicon.ico",
+			"landingPage": {
+				"hero": {
+					"title": "Custom Hero Title",
+					"description": "This is a demonstration of the hero section that you can configure for your store.",
+					"cta": {
+						"title": "Hero Apps!",
+						"tags": ["hero"]
+					},
+					"image": {
+						"src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+					}
+				},
+				"topRow": {
+					"title": "Custom Top Row Content",
+					"items": [
+						{
+							"title": "Expero",
+							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+							},
+							"tags": ["expero"]
+						},
+						{
+							"title": "Dev Tools",
+							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+							},
+							"tags": ["tools"]
+						},
+						{
+							"title": "Learning Resource",
+							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+							},
+							"tags": ["page"]
+						}
+					]
+				},
+				"middleRow": {
+					"title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+					"tags": ["fdc3", "interop"]
+				},
+				"bottomRow": {
+					"title": "Quick Access",
+					"items": [
+						{
+							"title": "Views",
+							"description": "A collection of views made available through our catalog.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+							},
+							"tags": ["view"]
+						},
+						{
+							"title": "Web Apps",
+							"description": "A collection of web apps built using OpenFin.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+							},
+							"tags": ["manifest"]
+						},
+						{
+							"title": "Native Apps",
+							"description": "A collection of native apps made available through our catalog.",
+							"image": {
+								"src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+							},
+							"tags": ["native"]
+						}
+					]
+				}
+			},
+			"navigation": [
+				{
+					"title": "Applications",
+					"items": [
+						{
+							"title": "All Apps",
+							"tags": ["view", "page", "manifest", "native"]
+						},
+						{ "title": "Views", "tags": ["view"] },
+						{ "title": "Pages", "tags": ["page"] },
+						{
+							"title": "Manifest",
+							"tags": ["manifest"]
+						},
+						{
+							"title": "Native",
+							"tags": ["native"]
+						}
+					]
+				},
+				{
+					"title": "Context Sharing",
+					"items": [
+						{
+							"title": "FDC3 API",
+							"tags": ["fdc3"]
+						},
+						{
+							"title": "Interop API",
+							"tags": ["interop"]
+						}
+					]
+				}
+			],
+			"footer": {
+				"logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+				"text": "Welcome to the OpenFin Sample Footer",
+				"links": [
+					{
+						"title": "Github",
+						"url": "https://github.com/built-on-openfin/workspace-starter"
+					},
+					{
+						"title": "YouTube",
+						"url": "https://www.youtube.com/user/OpenFinTech"
+					}
+				]
+			}
+		},
+		"notificationProvider": {
+			"id": "customize-workspace",
+			"title": "Notification Starter",
+			"icon": "http://localhost:8080/favicon.ico"
+		},
+		"integrationProvider": {
+			"integrations": [
+				{
+					"id": "salesforce",
+					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
+					"title": "Salesforce",
+					"enabled": false,
+					"moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
+					"data": {
+						"consumerKey": "",
+						"orgUrl": "",
+						"iconMap": {
+							"contact": "http://localhost:8080/common/images/salesforce/contact.svg",
+							"account": "http://localhost:8080/common/images/salesforce/account.svg",
+							"chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
+							"note": "http://localhost:8080/common/images/salesforce/note.svg",
+							"task": "http://localhost:8080/common/images/salesforce/task.svg"
+						}
+					}
+				}
+			]
+		}
+	}
 }
