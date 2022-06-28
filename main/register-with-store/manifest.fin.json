@@ -10,24 +10,24 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "permissions": {
       "System": {
         "launchExternalProcess": true,
         "downloadAsset": true,
         "openUrlWithBrowser": {
-            "enabled": true,
-            "protocols": ["mailto"]
+          "enabled": true,
+          "protocols": ["mailto"]
         }
       }
     },
     "defaultWindowOptions": {
       "permissions": {
         "System": {
-            "openUrlWithBrowser": {
-                "enabled": true,
-                "protocols": ["mailto"]
-            }
+          "openUrlWithBrowser": {
+            "enabled": true,
+            "protocols": ["mailto"]
+          }
         }
       }
     }
@@ -44,13 +44,13 @@
   },
   "appAssets": [
     {
-        "alias": "winform-interop-example",
-        "version": "2.0.0",
-        "src": "https://built-on-openfin.github.io/workspace-starter/main/common/assets/native-interop-example.zip",
-        "target": "OpenFin.Interop.Win.Sample.exe",
-        "forceDownload": false
+      "alias": "winform-interop-example",
+      "version": "2.0.0",
+      "src": "https://built-on-openfin.github.io/workspace-starter/main/common/assets/native-interop-example.zip",
+      "target": "OpenFin.Interop.Win.Sample.exe",
+      "forceDownload": false
     }
-],
+  ],
   "customSettings": {
     "bootstrap": {
       "home": true,
@@ -72,44 +72,44 @@
       }
     },
     "themeProvider": {
-        "themes":[
-          {
-              "label": "Starter Theme",
-              "logoUrl": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
-              "palette": {
-                  "brandPrimary": "#504CFF",
-                  "brandSecondary": "#383A40",
-                  "backgroundPrimary": "#111214",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBackground": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": null,
-                  "background2": null,
-                  "background3": null,
-                  "background4": null,
-                  "background5": null,
-                  "background6": null
-              }
+      "themes": [
+        {
+          "label": "Starter Theme",
+          "logoUrl": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
+          "palette": {
+            "brandPrimary": "#504CFF",
+            "brandSecondary": "#383A40",
+            "backgroundPrimary": "#111214",
+            "functional1": null,
+            "functional2": null,
+            "functional3": null,
+            "functional4": null,
+            "functional5": null,
+            "functional6": null,
+            "functional7": null,
+            "functional8": null,
+            "functional9": null,
+            "functional10": null,
+            "statusSuccess": null,
+            "statusWarning": null,
+            "statusCritical": null,
+            "statusActive": null,
+            "inputBackground": null,
+            "inputColor": null,
+            "inputPlaceholder": null,
+            "inputDisabled": null,
+            "inputFocused": null,
+            "textDefault": null,
+            "textHelp": null,
+            "textInactive": null,
+            "background1": null,
+            "background2": null,
+            "background3": null,
+            "background4": null,
+            "background5": null,
+            "background6": null
           }
+        }
       ]
     },
     "homeProvider": {
@@ -117,7 +117,7 @@
       "title": "Home Starter",
       "icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
       "queryMinLength": 3,
-      "queryAgainst":["title"]
+      "queryAgainst": ["title"]
     },
     "storefrontProvider": {
       "id": "register-with-store",
@@ -166,7 +166,7 @@
         },
         "middleRow": {
           "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
+          "tags": ["fdc3", "interop"]
         },
         "bottomRow": {
           "title": "Quick Access",
@@ -204,7 +204,7 @@
           "items": [
             {
               "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
+              "tags": ["view", "page", "manifest", "native"]
             },
             { "title": "Views", "tags": ["view"] },
             { "title": "Pages", "tags": ["page"] },

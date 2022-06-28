@@ -4,7 +4,7 @@
       "workspace": {
         "version": "8.1.7",
         "customConfig": {
-          "hotkeys" : {
+          "hotkeys": {
             "toggleHomeVisibility": "CommandOrControl+Space"
           }
         }

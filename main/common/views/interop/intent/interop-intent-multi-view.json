@@ -1,7 +1,7 @@
 {
-    "url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/interop/intent/interop-intent-view.html",
-    "customData": {
-      "contextData": null,
-      "intentData": null
-    }
+  "url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/interop/intent/interop-intent-view.html",
+  "customData": {
+    "contextData": null,
+    "intentData": null
   }
+}

@@ -10,9 +10,8 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/favicon.ico",
     "autoShow": true,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/notifications/notifications.html",
-    "preventQuitOnLastWindowClosed":true,
-    "defaultWindowOptions": {
-    }
+    "preventQuitOnLastWindowClosed": true,
+    "defaultWindowOptions": {}
   },
   "snapshot": {
     "windows": []
@@ -29,4 +28,3 @@
     "notificationSoundUrl": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/assets/notification.mp3"
   }
 }
-  

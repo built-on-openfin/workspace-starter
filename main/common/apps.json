@@ -170,12 +170,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -193,13 +188,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -249,12 +238,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -272,13 +256,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -308,9 +286,7 @@
     "description": "Launch the official FDC3 Workbench",
     "manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/fdc3/workbench/fdc3-workbench-view.json",
     "manifestType": "view",
-    "icons": [
-      { "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }
-    ],
+    "icons": [{ "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -399,12 +375,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -422,13 +393,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -478,12 +443,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -501,13 +461,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -609,12 +563,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -632,13 +581,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -688,12 +631,7 @@
       {
         "name": "ViewChart",
         "displayName": "View Chart",
-        "contexts": [
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.portfolio",
-          "fdc3.position"
-        ],
+        "contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
         "customConfig": {}
       },
       {
@@ -711,13 +649,7 @@
       {
         "name": "ViewNews",
         "displayName": "View News",
-        "contexts": [
-          "fdc3.country",
-          "fdc3.instrument",
-          "fdc3.instrumentList",
-          "fdc3.organization",
-          "fdc3.portfolio"
-        ],
+        "contexts": ["fdc3.country", "fdc3.instrument", "fdc3.instrumentList", "fdc3.organization", "fdc3.portfolio"],
         "customConfig": {}
       },
       {
@@ -814,9 +746,7 @@
     "manifestType": "manifest",
     "description": "Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
     "manifest": "https://cdn.openfin.co/process-manager/app.json",
-    "icons": [
-      { "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }
-    ],
+    "icons": [{ "src": "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -854,9 +784,7 @@
     "description": "A Winform application built in .NET 5 that shows the power of our interop api.",
     "manifestType": "external",
     "manifest": "winform-interop-example",
-    "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-winform-interop.png" }
-    ],
+    "icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-winform-interop.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
@@ -882,9 +810,7 @@
     "description": "Open Notepad and start taking some quick notes.",
     "manifestType": "external",
     "manifest": "notepad.exe",
-    "icons": [
-      { "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-notepad.png" }
-    ],
+    "icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-notepad.png" }],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "Microsoft",
