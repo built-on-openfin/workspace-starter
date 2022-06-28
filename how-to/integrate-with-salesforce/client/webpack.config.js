@@ -9,22 +9,20 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        { from: `${path.dirname(require.resolve("@openfin/salesforce-lwc"))}/preload.js` },
-      ],
-    }),
+      patterns: [{ from: `${path.dirname(require.resolve('@openfin/salesforce-lwc'))}/preload.js` }]
+    })
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'provider.bundle.js',
-    path: path.resolve(__dirname,'..', 'public', 'js'),
-  },
+    path: path.resolve(__dirname, '..', 'public', 'js')
+  }
 };

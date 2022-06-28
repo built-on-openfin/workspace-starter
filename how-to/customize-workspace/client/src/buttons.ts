@@ -6,66 +6,69 @@ let allToolbarButtons: ToolbarButtonDefinition[];
 let defaultToolbarButtons: ToolbarButton[];
 
 async function getAvailableToolbarButtons(): Promise<ToolbarButtonDefinition[]> {
-    if(Array.isArray(allToolbarButtons)){
-        return allToolbarButtons;
-    }
-    let settings = await getSettings();
-    let theme = await getCurrentTheme();
-    let availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
-    let validatedToolbarButtons = [];
+  if (Array.isArray(allToolbarButtons)) {
+    return allToolbarButtons;
+  }
+  const settings = await getSettings();
+  const theme = await getCurrentTheme();
+  const availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
+  const validatedToolbarButtons: ToolbarButtonDefinition[] = [];
 
-    availableToolbarButtons.forEach(entry => {
-            if(entry.button["iconUrl"] !== undefined && theme?.label !== undefined &&
-            entry.themes !== undefined && entry.themes[theme.label] !== undefined) {
-                entry.button["iconUrl"] = entry.themes[theme.label];
-            }
-            validatedToolbarButtons.push(entry);
-    });
-    allToolbarButtons = validatedToolbarButtons;
-    return validatedToolbarButtons;
+  for (const entry of availableToolbarButtons) {
+    if (
+      entry.button.iconUrl !== undefined &&
+      theme?.label !== undefined &&
+      entry.themes !== undefined &&
+      entry.themes[theme.label] !== undefined
+    ) {
+      entry.button.iconUrl = entry.themes[theme.label];
+    }
+    validatedToolbarButtons.push(entry);
+  }
+  allToolbarButtons = validatedToolbarButtons;
+  return validatedToolbarButtons;
 }
 
 export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
-    if(Array.isArray(defaultToolbarButtons)){
-        return defaultToolbarButtons;
+  if (Array.isArray(defaultToolbarButtons)) {
+    return defaultToolbarButtons;
+  }
+
+  const defaultButtons: ToolbarButton[] = [];
+  const availableToolbarButtons = await getAvailableToolbarButtons();
+
+  for (const entry of availableToolbarButtons) {
+    if (entry.include) {
+      defaultButtons.push(entry.button);
     }
-
-    let defaultButtons = [];
-    let availableToolbarButtons = await getAvailableToolbarButtons();
-
-    availableToolbarButtons.forEach(entry => {
-        if(entry.include) {
-            defaultButtons.push(entry.button);
-        }
-    });
-    defaultToolbarButtons = defaultButtons;
-    return defaultButtons;
+  }
+  defaultToolbarButtons = defaultButtons;
+  return defaultButtons;
 }
 
-export async function updateToolbarButtons(buttons: ToolbarButton[], buttonId:string, replacementButtonId:string) { 
-    let index = buttons.findIndex(entry => {
-        if(entry.type === BrowserButtonType.Custom) {
-            if((entry as CustomBrowserButtonConfig).action.customData.sourceId === buttonId){
-                return true;
-            } 
-        }
-        return false;
-    });
-
-    if(index !== -1) {
-        let availableToolbarButtons = await getAvailableToolbarButtons();
-        let replacement = availableToolbarButtons.find(entry => {
-            if(entry.button.type === BrowserButtonType.Custom) {
-                let customButton = entry.button as CustomBrowserButtonConfig;
-                return customButton?.action?.customData?.sourceId === replacementButtonId
-            } else {
-                return false;
-            }
-
-        });
-        buttons[index] = replacement.button;
-        return buttons;
+export async function updateToolbarButtons(buttons: ToolbarButton[], buttonId: string, replacementButtonId: string) {
+  const index = buttons.findIndex((entry) => {
+    if (
+      entry.type === BrowserButtonType.Custom &&
+      (entry as CustomBrowserButtonConfig).action.customData.sourceId === buttonId
+    ) {
+      return true;
     }
+    return false;
+  });
 
+  if (index !== -1) {
+    const availableToolbarButtons = await getAvailableToolbarButtons();
+    const replacement = availableToolbarButtons.find((entry) => {
+      if (entry.button.type === BrowserButtonType.Custom) {
+        const customButton = entry.button as CustomBrowserButtonConfig;
+        return customButton?.action?.customData?.sourceId === replacementButtonId;
+      }
+      return false;
+    });
+    buttons[index] = replacement.button;
     return buttons;
+  }
+
+  return buttons;
 }

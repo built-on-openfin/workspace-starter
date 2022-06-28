@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "davidanson.vscode-markdownlint",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker"
+    ]
+}

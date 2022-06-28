@@ -1,26 +1,29 @@
-
-import { fin } from '@openfin/core';
-import { login as authenticationLogin, logout as authenticationLogout, expireAccessToken as authenticationExpireAccessToken } from './auth';
-import { init as bootstrap } from './bootstrapper';
-import { init as initialisePlatform } from './platform';
-import { getSettings } from './settings';
+import { fin } from "@openfin/core";
+import {
+  login as authenticationLogin,
+  logout as authenticationLogout,
+  expireAccessToken as authenticationExpireAccessToken
+} from "./auth";
+import { init as bootstrap } from "./bootstrapper";
+import { init as initialisePlatform } from "./platform";
+import { getSettings } from "./settings";
 
 let appWin: OpenFin.Window;
 let authIsBusy: boolean;
 let authenticated: boolean;
 
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   const platform = fin.Platform.getCurrentSync();
 
-  await platform.once('platform-api-ready', bootstrap.bind(this));
+  await platform.once("platform-api-ready", async () => bootstrap());
 
-  await initDom();
+  initDom();
 
   await initialisePlatform();
 });
 
-export async function isAuthenticated(isAuthenticated: boolean, userProfile: { name: string }) {
-  authenticated = isAuthenticated;
+export async function isAuthenticated(isAuthed: boolean, userProfile: { name: string }) {
+  authenticated = isAuthed;
 
   if (userProfile) {
     logInformation("User Profile");
@@ -36,15 +39,15 @@ export async function isAuthenticated(isAuthenticated: boolean, userProfile: { n
   }
 }
 
-export async function isBusy(isBusy) {
-  authIsBusy = isBusy;
+export async function isBusy(busy) {
+  authIsBusy = busy;
   updateButtonStates();
 }
 
 export function logInformation(info: string) {
   const logElem = document.querySelector("#logOutput");
 
-  logElem.textContent = logElem.textContent + info + "\n\n";
+  logElem.textContent = `${logElem.textContent + info}\n\n`;
   logElem.scrollTop = logElem.scrollHeight;
 }
 
@@ -78,9 +81,9 @@ function initDom() {
   });
 
   const btnExpire = document.querySelector("#btnExpire");
-  btnExpire.addEventListener("click", async () => {
+  btnExpire.addEventListener("click", () => {
     logInformation("Access token was manually expired, app will close after next validity check");
-    await authenticationExpireAccessToken();
+    authenticationExpireAccessToken();
   });
 }
 
@@ -103,8 +106,8 @@ async function showAppPage() {
       url: settings?.auth?.appUrl
     });
 
-    appWin.on("closed", () => {
-      appWin.removeAllListeners();
+    await appWin.on("closed", async () => {
+      await appWin.removeAllListeners();
       appWin = undefined;
 
       updateButtonStates();

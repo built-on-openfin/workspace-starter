@@ -2,8 +2,8 @@ import {
   HomeDispatchedSearchResult,
   HomeSearchListenerRequest,
   HomeSearchListenerResponse,
-  Home, 
-  HomeSearchResponse, 
+  Home,
+  HomeSearchResponse,
   HomeProvider
 } from "@openfin/workspace";
 import { getAppSearchEntries, getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
@@ -13,7 +13,7 @@ let isHomeRegistered = false;
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -31,7 +31,7 @@ export async function register() {
     request: HomeSearchListenerRequest,
     response: HomeSearchListenerResponse
   ): Promise<HomeSearchResponse> => {
-    let query = request.query.toLowerCase();
+    const query = request.query.toLowerCase();
     if (lastResponse !== undefined) {
       lastResponse.close();
     }
@@ -78,7 +78,7 @@ export async function register() {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
+    onUserInput,
     onResultDispatch: onSelection,
     dispatchFocusEvents: true
   };
@@ -98,10 +98,8 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
-  } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }
-

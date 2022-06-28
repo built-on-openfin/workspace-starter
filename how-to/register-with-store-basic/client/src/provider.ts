@@ -1,41 +1,40 @@
-
-import { init as workspacePlatformInit } from '@openfin/workspace-platform';
-import { register, deregister, show, hide } from './store';
+import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { register, deregister, show, hide } from "./store";
 
 async function init() {
   await workspacePlatformInit({
     browser: {}
   });
-  let registerStore = document.getElementById("register");
-  let showStore = document.getElementById("show");
-  let hideStore = document.getElementById("hide");
-  let deregisterStore = document.getElementById("deregister");
+  const registerStore = document.querySelector<HTMLButtonElement>("#register");
+  const showStore = document.querySelector<HTMLButtonElement>("#show");
+  const hideStore = document.querySelector<HTMLButtonElement>("#hide");
+  const deregisterStore = document.querySelector<HTMLButtonElement>("#deregister");
 
-  registerStore.onclick = async ()=> {
+  registerStore.addEventListener("click", async () => {
     await register();
     showStore.style.display = "unset";
     hideStore.style.display = "unset";
     deregisterStore.style.display = "unset";
     registerStore.style.display = "none";
-  };
+  });
 
-  deregisterStore.onclick = async ()=> {
+  deregisterStore.addEventListener("click", async () => {
     showStore.style.display = "none";
     hideStore.style.display = "none";
     deregisterStore.style.display = "none";
     registerStore.style.display = "unset";
     await deregister();
-  };
+  });
 
-  showStore.onclick = async ()=> {
+  showStore.addEventListener("click", async () => {
     await show();
-  };
+  });
 
-  hideStore.onclick = async ()=> {
+  hideStore.addEventListener("click", async () => {
     await hide();
-  };
+  });
 }
 
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   await init();
 });

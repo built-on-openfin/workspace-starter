@@ -7,65 +7,53 @@ async function getRestEntries(url: string, credentials?: "omit" | "same-origin" 
     return [];
   }
   const response = await fetch(url, options);
-  return response.json();
+  const json = await response.json();
+  return json as App[];
 }
 
 async function validateEntries(apps: App[]) {
   let canLaunchExternalProcessResponse;
 
   try {
-    canLaunchExternalProcessResponse =
-      await fin.System.queryPermissionForCurrentContext(
-        "System.launchExternalProcess"
-      );
+    canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+      "System.launchExternalProcess"
+    );
   } catch (error) {
     console.error("Error while querying for System.launchExternalProcess permission", error);
   }
-  let canLaunchExternalProcess =
-    canLaunchExternalProcessResponse !== undefined &&
-    canLaunchExternalProcessResponse.granted;
+  const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
   let canDownloadAppAssetsResponse;
 
   try {
-    canDownloadAppAssetsResponse =
-      await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+    canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
   } catch (error) {
     console.error("Error while querying for System.downloadAsset permission", error);
   }
 
-  let canDownloadAppAssets =
-    canDownloadAppAssetsResponse !== undefined &&
-    canDownloadAppAssetsResponse.granted;
+  const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 
-  let validatedApps = [];
-  let rejectedAppIds = [];
-  let settings = await getSettings();
-  let appAssetTag = "appasset";
-  let supportedManifestTypes = settings?.appProvider?.manifestTypes;
+  const validatedApps: App[] = [];
+  const rejectedAppIds = [];
+  const settings = await getSettings();
+  const appAssetTag = "appasset";
+  const supportedManifestTypes = settings?.appProvider?.manifestTypes;
 
   for (let i = 0; i < apps.length; i++) {
-
     let validApp = true;
     if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
-      validApp = supportedManifestTypes.indexOf(apps[i].manifestType) > -1;
+      validApp = supportedManifestTypes.includes(apps[i].manifestType);
     }
 
     if (validApp) {
       if (apps[i].manifestType !== "external") {
         validatedApps.push(apps[i]);
+      } else if (canLaunchExternalProcess === false) {
+        rejectedAppIds.push(apps[i].appId);
+      } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && canDownloadAppAssets === false) {
+        rejectedAppIds.push(apps[i].appId);
       } else {
-        if (canLaunchExternalProcess === false) {
-          rejectedAppIds.push(apps[i].appId);
-        } else if (
-          Array.isArray(apps[i].tags) &&
-          apps[i].tags.indexOf(appAssetTag) > -1 &&
-          canDownloadAppAssets === false
-        ) {
-          rejectedAppIds.push(apps[i].appId);
-        } else {
-          validatedApps.push(apps[i]);
-        }
+        validatedApps.push(apps[i]);
       }
     }
   }
@@ -83,9 +71,12 @@ async function validateEntries(apps: App[]) {
 export async function getApps(): Promise<App[]> {
   console.log("Requesting apps.");
   try {
-    let settings = await getSettings();
-    let apps = await getRestEntries(settings?.appProvider?.appsSourceUrl, settings?.appProvider?.includeCredentialOnSourceRequest);
-    return validateEntries(apps);
+    const settings = await getSettings();
+    const apps = await getRestEntries(
+      settings?.appProvider?.appsSourceUrl,
+      settings?.appProvider?.includeCredentialOnSourceRequest
+    );
+    return await validateEntries(apps);
   } catch (err) {
     console.error("Error retrieving apps. Returning empty list.", err);
     return [];

@@ -1,33 +1,34 @@
 <img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
 
->**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
+> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 # Customize Workspace
 
 This sample is an extension of the support context and intents example. The sample covers:
 
-* Registering with Home - with examples of using custom templates with search results.
-* Registering a Store
-* Customizing OpenFin Browser - Custom main menu, page right click context menu and view right click context menu. This example also shows how to determine what buttons should show in the top right of the menu header and adds a few custom buttons to demonstrate this.
-* Supporting Interop/FDC3 Context messages
-* Supporting Interop/FDC3 Intents
-* Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
-* Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file) 
-* Workspace saving has been added
-* An example of implementing your own sharing function has also been added.
-* An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
+- Registering with Home - with examples of using custom templates with search results.
+- Registering a Store
+- Customizing OpenFin Browser - Custom main menu, page right click context menu and view right click context menu. This example also shows how to determine what buttons should show in the top right of the menu header and adds a few custom buttons to demonstrate this.
+- Supporting Interop/FDC3 Context messages
+- Supporting Interop/FDC3 Intents
+- Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
+- Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
+- Workspace saving has been added
+- An example of implementing your own sharing function has also been added.
+- An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
 ---
+
 **Running the Sample**
 
 To run this sample you can:
 
-* Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Workspace Example</a>
-* Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Customize Workspace Example</a>
+- Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
+- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Workspace Example</a>
+- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Customize Workspace Example</a>
 
 ---
 
@@ -40,10 +41,9 @@ $ npm run setup
 ```
 
 2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-  
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```bash
@@ -70,7 +70,6 @@ $ npm run secondclient
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
-
 6. Type any character into the search box to show the default list of applications.
    The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
@@ -91,16 +90,15 @@ The Server in this example provides two sets of content over HTTP GET.
 - [A list of applications](../common/public/apps.json)
 - Examples of View and Snapshot Manifest Types
 
-
 ### List of Applications
 
 The [list of applications](../common/public/apps.json) contains a number of examples:
 
-* Load views into OpenFin Browser
-* Launch an OpenFin application using its manifest file
-* Launch a native application
-* Launch a page using the snapshot manifest type
-* Launch through an intent: a view (single instance and multi instance) and a page (single instance and multi instance)
+- Load views into OpenFin Browser
+- Launch an OpenFin application using its manifest file
+- Launch a native application
+- Launch a page using the snapshot manifest type
+- Launch through an intent: a view (single instance and multi instance) and a page (single instance and multi instance)
 
 These applications are read and transformed in order to be sent to our API.
 
@@ -108,14 +106,14 @@ These applications are read and transformed in order to be sent to our API.
 
 This Readme contains information similar to the Support Context and Intents readme (as this is an extension). To make the addition of Intent support clearer it has been moved to it's own markdown file: [**IntentSupport.md**](IntentSupport.md).
 
-
-
 ---
+
 **NOTE ABOUT THE APP**
 
 This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
 
 ---
+
 ### How this example works
 
 You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
@@ -124,11 +122,11 @@ You have your own [Workspace Platform](public/manifest.fin.json) that is defined
 $ npm run client
 ```
 
-The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform. 
+The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform.
 
 The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for OpenFin Browser based windows. This lets us specify the icons, title and theme for the Browser Windows. It also defines how the interop broker should work using [interopbroker.ts](client/src/interopbroker.ts).
 
-Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts). 
+Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts).
 
 The bootstrapper has the following responsibilities:
 
@@ -137,12 +135,12 @@ The bootstrapper has the following responsibilities:
 3. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
 4. Import [notifications.ts](client/src/notifications.ts) and ensure that you have registered your platform against notification center if enabled.
 5. Import [share.ts](client/src/share.ts) to enable custom share support.
-6. Listen for when your workspace platform is about to close and deregister from home, store and notification center. 
+6. Listen for when your workspace platform is about to close and deregister from home, store and notification center.
 
 The **home provider**([home.ts](client/src/home.ts)) imports the following:
 
--  [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
--  [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
+- [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
+- [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
 - [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
 - [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
 - [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
@@ -154,38 +152,39 @@ The **home provider**([home.ts](client/src/home.ts)) imports the following:
 The registration of a provider against home will look like the following:
 
 ```javascript
- const cliProvider: CLIProvider = {
-    title: settings.homeProvider.title,
-    id: settings.homeProvider.id,
-    icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
-    onResultDispatch: onSelection,
-  };
+const cliProvider: CLIProvider = {
+  title: settings.homeProvider.title,
+  id: settings.homeProvider.id,
+  icon: settings.homeProvider.icon,
+  onUserInput: onUserInput,
+  onResultDispatch: onSelection
+};
 
-  await Home.register(cliProvider);
+await Home.register(cliProvider);
 ```
 
 The **store provider**([store.ts](client/src/store.ts)) imports the following:
+
 - [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
 - [settings.ts](client/src/settings.ts) to read settings (such as the how to configure the store)
 - [apps.ts](client/src/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections
 - [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Store
-  
+
 The registration of a provider against store will look like the following:
 
 ```javascript
 const storeProvider = {
-      id: settings.storefrontProvider.id,
-      title: settings.storefrontProvider.title,
-      icon: settings.storefrontProvider.icon,
-      getNavigation: getNavigation.bind(this),
-      getLandingPage: getLandingPage.bind(this),
-      getFooter: getFooter.bind(this),
-      getApps,
-      launchApp: launch,
-    };
-    
-await Storefront.register(storeProvider)
+  id: settings.storefrontProvider.id,
+  title: settings.storefrontProvider.title,
+  icon: settings.storefrontProvider.icon,
+  getNavigation: getNavigation.bind(this),
+  getLandingPage: getLandingPage.bind(this),
+  getFooter: getFooter.bind(this),
+  getApps,
+  launchApp: launch
+};
+
+await Storefront.register(storeProvider);
 ```
 
 The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
@@ -199,7 +198,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
     },
     "platformProvider": {
       "rootUrl": "http://localhost:8080",
-      "intentPicker": { 
+      "intentPicker": {
         "url": "http://localhost:8080/common/windows/intents/picker.html",
         "height": 400,
         "width": 400
@@ -238,9 +237,9 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
         "newPageUrl": null
       },
       "toolbarButtons":[
-        { 
-          "include": false, 
-          "button": {  
+        {
+          "include": false,
+          "button": {
             "type": "Custom",
             "tooltip": "Change Opacity",
             "disabled": false,
@@ -254,9 +253,9 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
             }
           }
       },
-      { 
-        "include": false, 
-        "button": {  
+      {
+        "include": false,
+        "button": {
           "type": "Custom",
           "tooltip": "Restore Opacity",
           "disabled": false,
@@ -270,9 +269,9 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
           }
         }
         },
-        { 
-          "include": true, 
-          "button": {  
+        {
+          "include": true,
+          "button": {
             "type": "Custom",
             "tooltip": "Pin this window",
             "disabled": false,
@@ -286,9 +285,9 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
             }
           }
       },
-      { 
-        "include": false, 
-        "button": {  
+      {
+        "include": false,
+        "button": {
           "type": "Custom",
           "tooltip": "Unpin this window",
           "disabled": false,
@@ -310,7 +309,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
       { "include": true, "button": {
           "type": "PresetLayouts"
       }},
-      { "include": true, "button": {  
+      { "include": true, "button": {
           "type": "Custom",
           "tooltip": "Share",
           "disabled": false,
@@ -517,7 +516,6 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
           "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
           "data": {
               "consumerKey": "",
-              "isSandbox": false,
               "orgUrl": "",
               "iconMap": {
                   "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
@@ -533,87 +531,87 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
   }
 ```
 
-| Property | Description |
-| --- | --- |
-| **bootstrap** | Config related to the bootstrapping process |
-| home | Should we use home and register a home provider to feed apps into Home and Browser |
-| store | Should we use store and register a store provider to display apps |
-| notifications | Should we use register the workspace platform against notification center so it can have it's own dedicated section that is themed and branded. |
-| **platformProvider** | Config related to the platform |
-| rootUrl | Used so that root urls can be defined via manifest for different environments |
-| intentPicker.url | The url that supports intent selection.  |
-| intentPicker.height | The height for the intent picker. |
-| intentPicker.width | The width for the intent picker. |
-| **appProvider** | Config related to where the apps should be fetched from |
-| appsSourceUrl | Where should we fetch the apps from |
-| includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options:  "omit", "same-origin", "include"|
-| cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server? |
-| appAssetTag | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
-| manifestTypes | An array of the manifestTypes the app should support from the apps.json feed |
-| **endpointProvider** | Config related to endpoints that your application might use to do requests for data |
-| endpoints | An array of endpoint definitions |
-| endpoints.id | The id used to lookup the endpoint |
-| endpoints.type | The type of endpoint definition (used to identify the type of logic to use) |
-| endpoints.options | Options that will be read by the logic and used to perform the action |
-| **browserProvider** | Config related to OpenFin Browser |
-| windowOptions.title | The title for the window that shows up in the taskbar |
-| windowOptions.icon | The icon that should show in the taskbar and in the top left menu of the browser |
-| windowOptions.newTabUrl | Should we allow someone to add a new view to a page? What url should be loaded when they click add? |
-| windowOptions.newPageUrl | Should we allow someone to add a new page? What url should be loaded when they click add? |
-| toolbarButtons | For this sample we let you add/remove buttons by adding them to this array. This works for the demo but a thing to note is that the actions referenced by the button need to be registered (see [actions.ts](client/src/actions.ts)). The object has two properties: include whether or not to include it (the first button is hidden but you can turn it on to experiment) and button which is in the toolbarbutton shape supported by the workspace-platform sdk.|
-| **themeProvider** | What themes should be passed to OpenFin Workspace (at the moment only one is supported) |
-| themes | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used) |
-| themes.label | A label to use to identify this theme |
-| themes.logoUrl | Preferred logo for a theme |
-| pallete | A collection of settings that can be overriden (brandPrimary, brandSecondary and backgroundPrimary are mandatory if you are specifying a theme) |
-| **homeProvider** | Config related to the home provider setup to list things in Home and the Browser Add New View |
-| id | What your provider should be called |
-| title | The title that should be shown in the Home UI to represent your provider |
-| icon | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)  |
-| queryMinLength | How many characters should be typed before filtering the list? |
-| queryAgainst | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
-| **storefrontProvider** | Config settings that are used by the sample code to configure the store using the workspace APIs |
-| id | Unique ID for your store |
-| title | The name for your store that will be shown in the store selection dropdown |
-| icon | The icon to show in the store selection dropdown |
-| landingPage | The structure of the main page the user will be presented with when they visit your store |
-| landingPage.hero | Optional. Do you want a hero section on the main page. |
-| landingPage.topRow | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). Limit of 4 sections. |
-| landingPage.middleRow | What do you want this row to be called and what apps do you want to show in the middle (use tags to determine what apps are included in this row). Limit of 6 apps. |
-| landingPage.bottomRow | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). There is a limit of 3 sections.  |
-| navigation | How many navigation sections do you want on the left hand menu? Limit of 2. |
-| navigation[i].title | What do you want as a title for these set of links? |
-| navigation[i].items | How many links do you want to show (limit of 5) and what apps do you want a link to display (use tags to select apps) |
-| footer | What do you want to show in the store footer |
-| footer.logo | The logo to show in the footer |
-| footer.text | The text to show in the footer |
-| footer.links | What links do you want to show in the footer (opens up using the default web browser. |
-| **notificationProvider** | Config settings that are used by the sample code to configure the registration against Notification Center so your theme will be picked up and applied |
-| id | Unique ID for your notification registration |
-| title | The name for your workspace platform in the notification center |
-| icon | The icon to show in the notification center |
-| **integrationProvider** | Config settings that are used to define additional search providers for your workspace platform |
-| integrations | An array of integrations |
-| integrations.id | The id of your integration |
-| integrations.icon | The icon to show for your integration |
-| integrations.title | The title for your integration entry |
-| integrations.enabled | Is the integration enabled |
-| integrations.moduleUrl | Where should the module be loaded from |
-| integrations.data | Data/config that will be passed to the integration module (for this sample look at the description of the settings from the integrate-with-salesforce starter) |
+| Property                         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **bootstrap**                    | Config related to the bootstrapping process                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| home                             | Should we use home and register a home provider to feed apps into Home and Browser                                                                                                                                                                                                                                                                                                                                                                                  |
+| store                            | Should we use store and register a store provider to display apps                                                                                                                                                                                                                                                                                                                                                                                                   |
+| notifications                    | Should we use register the workspace platform against notification center so it can have it's own dedicated section that is themed and branded.                                                                                                                                                                                                                                                                                                                     |
+| **platformProvider**             | Config related to the platform                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| rootUrl                          | Used so that root urls can be defined via manifest for different environments                                                                                                                                                                                                                                                                                                                                                                                       |
+| intentPicker.url                 | The url that supports intent selection.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| intentPicker.height              | The height for the intent picker.                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| intentPicker.width               | The width for the intent picker.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **appProvider**                  | Config related to where the apps should be fetched from                                                                                                                                                                                                                                                                                                                                                                                                             |
+| appsSourceUrl                    | Where should we fetch the apps from                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include"                                                                                                                                                                                                                                                                                                                                                              |
+| cacheDurationInMinutes           | How many minutes should we wait before refreshing the list from the server?                                                                                                                                                                                                                                                                                                                                                                                         |
+| appAssetTag                      | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed                                                                                                                                                                                                                                               |
+| manifestTypes                    | An array of the manifestTypes the app should support from the apps.json feed                                                                                                                                                                                                                                                                                                                                                                                        |
+| **endpointProvider**             | Config related to endpoints that your application might use to do requests for data                                                                                                                                                                                                                                                                                                                                                                                 |
+| endpoints                        | An array of endpoint definitions                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| endpoints.id                     | The id used to lookup the endpoint                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| endpoints.type                   | The type of endpoint definition (used to identify the type of logic to use)                                                                                                                                                                                                                                                                                                                                                                                         |
+| endpoints.options                | Options that will be read by the logic and used to perform the action                                                                                                                                                                                                                                                                                                                                                                                               |
+| **browserProvider**              | Config related to OpenFin Browser                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| windowOptions.title              | The title for the window that shows up in the taskbar                                                                                                                                                                                                                                                                                                                                                                                                               |
+| windowOptions.icon               | The icon that should show in the taskbar and in the top left menu of the browser                                                                                                                                                                                                                                                                                                                                                                                    |
+| windowOptions.newTabUrl          | Should we allow someone to add a new view to a page? What url should be loaded when they click add?                                                                                                                                                                                                                                                                                                                                                                 |
+| windowOptions.newPageUrl         | Should we allow someone to add a new page? What url should be loaded when they click add?                                                                                                                                                                                                                                                                                                                                                                           |
+| toolbarButtons                   | For this sample we let you add/remove buttons by adding them to this array. This works for the demo but a thing to note is that the actions referenced by the button need to be registered (see [actions.ts](client/src/actions.ts)). The object has two properties: include whether or not to include it (the first button is hidden but you can turn it on to experiment) and button which is in the toolbarbutton shape supported by the workspace-platform sdk. |
+| **themeProvider**                | What themes should be passed to OpenFin Workspace (at the moment only one is supported)                                                                                                                                                                                                                                                                                                                                                                             |
+| themes                           | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used)                                                                                                                                                                                                                                                                                                                                                                 |
+| themes.label                     | A label to use to identify this theme                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| themes.logoUrl                   | Preferred logo for a theme                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| pallete                          | A collection of settings that can be overriden (brandPrimary, brandSecondary and backgroundPrimary are mandatory if you are specifying a theme)                                                                                                                                                                                                                                                                                                                     |
+| **homeProvider**                 | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                                                                                                                       |
+| id                               | What your provider should be called                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| title                            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                                                                                                                            |
+| icon                             | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)                                                                                                                                                                                                                                                                                                                           |
+| queryMinLength                   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                                                                                                                      |
+| queryAgainst                     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"]                                                                                                |
+| **storefrontProvider**           | Config settings that are used by the sample code to configure the store using the workspace APIs                                                                                                                                                                                                                                                                                                                                                                    |
+| id                               | Unique ID for your store                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| title                            | The name for your store that will be shown in the store selection dropdown                                                                                                                                                                                                                                                                                                                                                                                          |
+| icon                             | The icon to show in the store selection dropdown                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| landingPage                      | The structure of the main page the user will be presented with when they visit your store                                                                                                                                                                                                                                                                                                                                                                           |
+| landingPage.hero                 | Optional. Do you want a hero section on the main page.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| landingPage.topRow               | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). Limit of 4 sections.                                                                                                                                                                                                                                                                                                       |
+| landingPage.middleRow            | What do you want this row to be called and what apps do you want to show in the middle (use tags to determine what apps are included in this row). Limit of 6 apps.                                                                                                                                                                                                                                                                                                 |
+| landingPage.bottomRow            | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). There is a limit of 3 sections.                                                                                                                                                                                                                                                                                            |
+| navigation                       | How many navigation sections do you want on the left hand menu? Limit of 2.                                                                                                                                                                                                                                                                                                                                                                                         |
+| navigation[i].title              | What do you want as a title for these set of links?                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| navigation[i].items              | How many links do you want to show (limit of 5) and what apps do you want a link to display (use tags to select apps)                                                                                                                                                                                                                                                                                                                                               |
+| footer                           | What do you want to show in the store footer                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| footer.logo                      | The logo to show in the footer                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| footer.text                      | The text to show in the footer                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| footer.links                     | What links do you want to show in the footer (opens up using the default web browser.                                                                                                                                                                                                                                                                                                                                                                               |
+| **notificationProvider**         | Config settings that are used by the sample code to configure the registration against Notification Center so your theme will be picked up and applied                                                                                                                                                                                                                                                                                                              |
+| id                               | Unique ID for your notification registration                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| title                            | The name for your workspace platform in the notification center                                                                                                                                                                                                                                                                                                                                                                                                     |
+| icon                             | The icon to show in the notification center                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **integrationProvider**          | Config settings that are used to define additional search providers for your workspace platform                                                                                                                                                                                                                                                                                                                                                                     |
+| integrations                     | An array of integrations                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| integrations.id                  | The id of your integration                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| integrations.icon                | The icon to show for your integration                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| integrations.title               | The title for your integration entry                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| integrations.enabled             | Is the integration enabled                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| integrations.moduleUrl           | Where should the module be loaded from                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| integrations.data                | Data/config that will be passed to the integration module (for this sample look at the description of the settings from the integrate-with-salesforce starter)                                                                                                                                                                                                                                                                                                      |
 
 ---
+
 **NOTE ABOUT THE MANIFEST**
 
 This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your store.
 
-The manifest for the storefront does not include an `id` for the `cta`, `items` and `navigation` sections. 
+The manifest for the storefront does not include an `id` for the `cta`, `items` and `navigation` sections.
 
-This is to reduce noise in the example manifest and to prevent issues if an item or section is copied and pasted. The code has a fallback that uses the title or title plus tags to form an `id`. This works for the demo, as the manifest file is storing the configuration. If the configuration were ever fetched from a server, then it should return a unique (e.g., GUID) and idempotent ID. 
+This is to reduce noise in the example manifest and to prevent issues if an item or section is copied and pasted. The code has a fallback that uses the title or title plus tags to form an `id`. This works for the demo, as the manifest file is storing the configuration. If the configuration were ever fetched from a server, then it should return a unique (e.g., GUID) and idempotent ID.
 
-This is because the `id` represents the route that the user navigates to. So, if an` id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function you defined and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x". 
+This is because the `id` represents the route that the user navigates to. So, if an` id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function you defined and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x".
 
 ---
-
 
 These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the Workspace Platform. Your server will need to support CORS).
 
@@ -623,37 +621,43 @@ When a user selects a result in OpenFin Home, it is returned to the home provide
 
 The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
-
 The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](../common/public/apps.json) file (simulating your server) will populate both.
-
 
 ### A note about this example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
 ---
+
 **FAQ**
+
 - The store isn't launching or the store command isn't showing on the home ui?
- 
-   - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
-   - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
+
+  - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
+  - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
+
 - I am not seeing what I expected?
- 
-   - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the workspace platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
+
+  - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the workspace platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
+
 - Things have moved/gone?
- 
-   - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
+
+  - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
+
 - How do I know what the settings in the theme settings in the manifest file actually changes?
 
-   - [Workspace Themes Overview](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
+  - [Workspace Themes Overview](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
+
 - How do I demonstrate intent support?
-   - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
+  - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
-   - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [../common/public/views](../common/public/views) folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
+  - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [../common/public/views](../common/public/views) folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
+
 - Do I always need a view manifest if it just contains a url?
 
   - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [../common/public/apps.json](../common/public/apps.json). The [launch.ts](client/src/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
+
 ---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

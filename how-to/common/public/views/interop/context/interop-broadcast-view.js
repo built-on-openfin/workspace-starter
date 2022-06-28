@@ -1,20 +1,20 @@
-import { getDefaultFDC3ContextData } from "../../fdc3/fdc3-data.js";
+import { getDefaultFDC3ContextData } from '../../fdc3/fdc3-data.js';
 import {
   systemSetContext,
   sessionSetContext,
   listenToSystemContext,
-  listenToSessionContext,
-} from "./interop-broadcast.js";
+  listenToSessionContext
+} from './interop-broadcast.js';
 // -------------------------------------------------
 // settings
 // -------------------------------------------------
 let contextData = getDefaultFDC3ContextData();
-let customChannel = "custom-app-channel";
+let customChannel = 'custom-app-channel';
 let isCodePreview = true;
 
-let previewData = {
-  codePreview: "",
-  logs: "",
+const previewData = {
+  codePreview: '',
+  logs: ''
 };
 
 // -------------------------------------------------
@@ -23,25 +23,22 @@ let previewData = {
 async function applySettings() {
   const options = await fin.me.getOptions();
   const optionsData = options?.customData;
-  
-  if (
-    optionsData?.contextData !== undefined &&
-    optionsData?.contextData !== null
-  ) {
+
+  if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
     contextData = optionsData.contextData;
   }
 
   if (
     optionsData?.customChannel !== undefined &&
     optionsData?.customChannel !== null &&
-    optionsData?.customChannel !== ""
+    optionsData?.customChannel !== ''
   ) {
     customChannel = optionsData.customChannel;
   }
 }
 
 function updatePreview() {
-  console.log("preview updated");
+  console.log('preview updated');
   if (isCodePreview) {
     showCodePreview();
   } else {
@@ -51,10 +48,10 @@ function updatePreview() {
 
 function showCodePreview() {
   isCodePreview = true;
-  const preview = document.querySelector("#preview");
+  const preview = document.querySelector('#preview');
   preview.textContent = previewData.codePreview;
-  const previewTitle = document.querySelector("#previewTitle");
-  previewTitle.innerText = "Code Preview";
+  const previewTitle = document.querySelector('#previewTitle');
+  previewTitle.textContent = 'Code Preview';
 }
 
 function updateCodePreview(context) {
@@ -140,14 +137,14 @@ if(window.fin !== undefined) {
 
 function showLogs() {
   isCodePreview = false;
-  const preview = document.querySelector("#preview");
+  const preview = document.querySelector('#preview');
   preview.textContent = previewData.logs;
-  const previewTitle = document.querySelector("#previewTitle");
-  previewTitle.innerText = "Logs";
+  const previewTitle = document.querySelector('#previewTitle');
+  previewTitle.textContent = 'Logs';
 }
 
 function clearLogs() {
-  previewData.logs = "";
+  previewData.logs = '';
   showLogs();
 }
 
@@ -166,15 +163,13 @@ ${JSON.stringify(data, null, 5)}`;
 }
 
 function bindFDC3Context(value) {
-  const specifiedContext = document.querySelector("#context");
+  const specifiedContext = document.querySelector('#context');
   specifiedContext.value = JSON.stringify(value, null, 5);
 }
 
 function bindFDC3Values(values) {
-  const fdc3Value = document.querySelector("#fdc3Value");
-  let fdc3ValueOptions = values
-    .map((data, index) => `<option value=${index}>${data.name}</option>`)
-    .join("\n");
+  const fdc3Value = document.querySelector('#fdc3Value');
+  const fdc3ValueOptions = values.map((data, index) => `<option value=${index}>${data.name}</option>`).join('\n');
   fdc3Value.innerHTML = fdc3ValueOptions;
   const context = values[0];
   bindFDC3Context(context);
@@ -182,35 +177,33 @@ function bindFDC3Values(values) {
 }
 
 function bindFDC3Types(types) {
-  const fdc3Type = document.querySelector("#fdc3Type");
-  let fdc3TypeOptions = types
-    .map((type) => `<option value=${type}>${type}</option>`)
-    .join("\n");
+  const fdc3Type = document.querySelector('#fdc3Type');
+  const fdc3TypeOptions = types.map((type) => `<option value=${type}>${type}</option>`).join('\n');
   fdc3Type.innerHTML = fdc3TypeOptions;
   bindFDC3Values(contextData[types[0]]);
 }
 
 function bindFDC3OnChange() {
-  const fdc3Type = document.querySelector("#fdc3Type");
-  fdc3Type.onchange = () => {
+  const fdc3Type = document.querySelector('#fdc3Type');
+  fdc3Type.addEventListener('change', () => {
     bindFDC3Values(contextData[fdc3Type.value]);
-  };
+  });
 
-  const fdc3Value = document.querySelector("#fdc3Value");
-  fdc3Value.onchange = () => {
+  const fdc3Value = document.querySelector('#fdc3Value');
+  fdc3Value.addEventListener('change', () => {
     const context = contextData[fdc3Type.value][fdc3Value.value];
     bindFDC3Context(context);
     updateCodePreview(JSON.stringify(context, null, 5));
-  };
+  });
 
-  const specifiedContext = document.querySelector("#context");
-  specifiedContext.onchange = () => {
+  const specifiedContext = document.querySelector('#context');
+  specifiedContext.addEventListener('change', () => {
     updateCodePreview(specifiedContext.value);
-  };
+  });
 }
 
 function getContextToSend() {
-  const contextInput = document.querySelector("#context");
+  const contextInput = document.querySelector('#context');
   const context = contextInput.value;
   return JSON.parse(context);
 }
@@ -219,34 +212,31 @@ function getContextToSend() {
 // Init Functions
 // -------------------------------------------------
 async function init() {
-  const btnSetContext = document.querySelector("#btnSetContext");
-  btnSetContext.addEventListener("click", async () => {
+  const btnSetContext = document.querySelector('#btnSetContext');
+  btnSetContext.addEventListener('click', async () => {
     try {
       const ctx = getContextToSend();
       await systemSetContext(log, ctx);
       await sessionSetContext(log, customChannel, ctx);
       showLogs();
     } catch (error) {
-      console.error("Unable to set context", error);
-      log(
-        "Unable to call setContext for the current context. Likely a JSON parsing error:",
-        error
-      );
+      console.error('Unable to set context', error);
+      log('Unable to call setContext for the current context. Likely a JSON parsing error:', error);
     }
   });
 
-  const btnSeeCode = document.querySelector("#btnSeeCode");
-  btnSeeCode.addEventListener("click", async () => {
+  const btnSeeCode = document.querySelector('#btnSeeCode');
+  btnSeeCode.addEventListener('click', async () => {
     showCodePreview();
   });
 
-  const btnSeeLogs = document.querySelector("#btnSeeLogs");
-  btnSeeLogs.addEventListener("click", async () => {
+  const btnSeeLogs = document.querySelector('#btnSeeLogs');
+  btnSeeLogs.addEventListener('click', async () => {
     showLogs();
   });
 
-  const btnClear = document.querySelector("#btnClear");
-  btnClear.addEventListener("click", () => {
+  const btnClear = document.querySelector('#btnClear');
+  btnClear.addEventListener('click', () => {
     clearLogs();
   });
 
@@ -259,7 +249,7 @@ async function init() {
   await listenToSessionContext(log, customChannel, showLogs);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   try {
     init();
   } catch (error) {

@@ -10,8 +10,7 @@
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [
-    ],
+    "intents": [],
     "images": [
       {
         "src": "http://localhost:8080/common/images/previews/interop-view.png"
@@ -30,12 +29,12 @@
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
     "publisher": "OpenFin",
-    "intents": [
-    ],
+    "intents": [],
     "images": [
       {
         "src": "http://localhost:8080/common/images/previews/fdc3-view.png"
       }
     ],
     "tags": ["view", "fdc3"]
-  }]
+  }
+]

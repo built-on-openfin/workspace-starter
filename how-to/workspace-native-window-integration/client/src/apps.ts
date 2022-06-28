@@ -2,60 +2,48 @@ import { App } from "@openfin/workspace";
 import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
 
-let cachedApps;
+let cachedApps: App[];
 
 async function validateEntries(apps: App[]) {
   let canLaunchExternalProcessResponse;
 
   try {
-    canLaunchExternalProcessResponse =
-      await fin.System.queryPermissionForCurrentContext(
-        "System.launchExternalProcess"
-      );
+    canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+      "System.launchExternalProcess"
+    );
   } catch (error) {
     console.error("Error while querying for System.launchExternalProcess permission", error);
   }
-  let canLaunchExternalProcess =
-    canLaunchExternalProcessResponse !== undefined &&
-    canLaunchExternalProcessResponse.granted;
+  const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
   let canDownloadAppAssetsResponse;
 
   try {
-    canDownloadAppAssetsResponse =
-      await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+    canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
   } catch (error) {
     console.error("Error while querying for System.downloadAsset permission", error);
   }
 
-  let canDownloadAppAssets =
-    canDownloadAppAssetsResponse !== undefined &&
-    canDownloadAppAssetsResponse.granted;
+  const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 
   if (canLaunchExternalProcess && canDownloadAppAssets) {
     return apps;
   }
 
-  let validatedApps = [];
-  let rejectedAppIds = [];
-  let settings = await getSettings();
-  let appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
+  const validatedApps: App[] = [];
+  const rejectedAppIds = [];
+  const settings = await getSettings();
+  const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
 
   for (let i = 0; i < apps.length; i++) {
     if (apps[i].manifestType !== "external") {
       validatedApps.push(apps[i]);
+    } else if (!canLaunchExternalProcess) {
+      rejectedAppIds.push(apps[i].appId);
+    } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !canDownloadAppAssets) {
+      rejectedAppIds.push(apps[i].appId);
     } else {
-      if (canLaunchExternalProcess === false) {
-        rejectedAppIds.push(apps[i].appId);
-      } else if (
-        Array.isArray(apps[i].tags) &&
-        apps[i].tags.indexOf(appAssetTag) > -1 &&
-        canDownloadAppAssets === false
-      ) {
-        rejectedAppIds.push(apps[i].appId);
-      } else {
-        validatedApps.push(apps[i]);
-      }
+      validatedApps.push(apps[i]);
     }
   }
 
@@ -80,12 +68,12 @@ async function getRestEntries(
   }
   const response = await fetch(url, options);
 
-  let apps: App[] = await response.json();
+  const apps: App[] = await response.json();
 
   cachedApps = await validateEntries(apps);
 
   if (cacheDuration !== undefined) {
-    let setTimeoutInMs = cacheDuration * 60 * 1000;
+    const setTimeoutInMs = cacheDuration * 60 * 1000;
     setTimeout(() => {
       console.log("Clearing cache of apps as cache duration has passed.");
       cachedApps = undefined;
@@ -95,12 +83,11 @@ async function getRestEntries(
   return cachedApps;
 }
 
-
 export async function getApps(): Promise<App[]> {
   console.log("Requesting apps.");
   try {
-    let settings = await getSettings();
-    let apps =
+    const settings = await getSettings();
+    const apps =
       cachedApps ??
       (await getRestEntries(
         settings?.appProvider?.appsSourceUrl,
@@ -114,33 +101,31 @@ export async function getApps(): Promise<App[]> {
   }
 }
 
-export async function getAppsByTag(tags: string[], mustMatchAll = false): Promise<App[]> {
-  let apps = await getApps();
-  let filteredApps = apps.filter((value) => {
+export async function getAppsByTag<T extends App>(tags: string[], mustMatchAll = false): Promise<T[]> {
+  const apps = await getApps();
+  const filteredApps: T[] = apps.filter((value) => {
     if (value.tags === undefined) {
       return false;
     }
     let matchFound = false;
     for (let i = 0; i < tags.length; i++) {
-      if (value.tags.indexOf(tags[i]) > -1) {
+      if (value.tags.includes(tags[i])) {
         if (mustMatchAll) {
           matchFound = true;
         } else {
           return true;
         }
-      } else {
-        if (mustMatchAll) {
-          return false;
-        }
+      } else if (mustMatchAll) {
+        return false;
       }
     }
     return matchFound;
-  });
+  }) as T[];
   return filteredApps;
 }
 
 export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
-  let apps = await getApps();
+  const apps = await getApps();
   let appId;
   if (requestedApp !== undefined) {
     if (typeof requestedApp === "string") {
@@ -152,9 +137,7 @@ export async function getApp(requestedApp: string | { appId: string }): Promise<
   if (appId === undefined) {
     return undefined;
   }
-  let app = apps.find(entry => {
-    return entry.appId === appId;
-  });
+  const app = apps.find((entry) => entry.appId === appId);
 
   return app;
 }

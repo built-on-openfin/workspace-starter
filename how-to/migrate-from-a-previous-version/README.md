@@ -1,7 +1,7 @@
 <img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to Storefront" />
 
->**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-OpenFin Workspace is currently **only supported on Windows**.
+> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> OpenFin Workspace is currently **only supported on Windows**.
 
 # Migrate from a previous version - From v7.0 to v8.0
 
@@ -11,22 +11,22 @@ The main focus of this release is:
 
 For developers of existing applications that use the Platform API, you now have the option to use OpenFin Workspace components while continuing to use your existing custom platform windows. This provides additional flexibility on deciding when to adopt our out-of-the box Browser component, easing your transition to Workspace.
 
-* We have a sample [how-to/register-with-platform-windows](../register-with-platform-windows) 
-* [https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace](https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace)
+- We have a sample [how-to/register-with-platform-windows](../register-with-platform-windows)
+- [https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace](https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace)
 
 ### Asynchronous Search Results in Home
 
 Platform Providers can now configure search results to display only on-demand, after the end-user selects a result. This can significantly improve performance for queries that can have numerous results. For example, your Home Provider can fetch only the top-level search results in the initial query and then display the details of a particular result only after a user clicks on it, deferring the lookup of additional rich information to your backend services only when that information is required. Templates to indicate result loading or failure to the user are included.
 
-* The [how-to/customize-home-templates](../customize-home-templates) sample has been updated with examples.
-* [https://developers.openfin.co/of-docs/docs/provide-search-results-async](https://developers.openfin.co/of-docs/docs/provide-search-results-async)
+- The [how-to/customize-home-templates](../customize-home-templates) sample has been updated with examples.
+- [https://developers.openfin.co/of-docs/docs/provide-search-results-async](https://developers.openfin.co/of-docs/docs/provide-search-results-async)
 
 ### Content Locking
 
 Platform Providers can now lock Browser Windows and/or Pages to offer fixed, repeatable experiences for end-users. End-users can also manually lock and unlock Pages themselves in Workspace Browser, if that feature is enabled through a Platform Provider’s configuration.
 
-* The [how-to/register-with-browser](../register-with-browser) samples shows a page with browser lock/unlock enabled.
-* [https://developers.openfin.co/of-docs/docs/lock-content-in-browser](https://developers.openfin.co/of-docs/docs/lock-content-in-browser)
+- The [how-to/register-with-browser](../register-with-browser) samples shows a page with browser lock/unlock enabled.
+- [https://developers.openfin.co/of-docs/docs/lock-content-in-browser](https://developers.openfin.co/of-docs/docs/lock-content-in-browser)
 
 ### Improved Designs of Home Filters
 
@@ -45,7 +45,7 @@ You will need the following dependencies
 
 ## Other Changes?
 
-The structure of the how-to samples has been updated. The views (content) and some of the common scripts to setup dos, start and kill the project and the apps.json file have been moved to a [how-to/common](../common) folder. The express.js code has been simplified so it most cases you just have an index.ts file. And the server now maps the sample folder and /common to the common how-to. 
+The structure of the how-to samples has been updated. The views (content) and some of the common scripts to setup dos, start and kill the project and the apps.json file have been moved to a [how-to/common](../common) folder. The express.js code has been simplified so it most cases you just have an index.ts file. And the server now maps the sample folder and /common to the common how-to.
 
 A new npm command **"npm run setup"** has also been introduced that takes advantage of our npm workspaces support and installs from the root directory and then builds the sample you are currently in and the common directory.
 
@@ -57,8 +57,7 @@ The main focus of this release is on introducing support for Workspace Managemen
 
 If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the customize-workspace example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
 
-* [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
-
+- [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
 
 ## What dependencies will I need?
 
@@ -70,13 +69,14 @@ You will need the following dependencies
                     "@openfin/workspace-platform": "^7.0.0"
                 }
 ```
+
 # Migrate from a previous version - From v5.5 to v6.0
 
 With Workspace 6.0, OpenFin has added additional options when it comes to customization. You can now customize:
 
-* The browser controls and menu [(https://developers.openfin.co/of-docs/docs/customize-browser-features)](https://developers.openfin.co/of-docs/docs/customize-browser-features)
-* Customize the template displayed as part of a search result entry in home [(https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)
-* Register your workspace platform with Notification Center so that your theming is taken into account.[(https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)
+- The browser controls and menu [(https://developers.openfin.co/of-docs/docs/customize-browser-features)](https://developers.openfin.co/of-docs/docs/customize-browser-features)
+- Customize the template displayed as part of a search result entry in home [(https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)
+- Register your workspace platform with Notification Center so that your theming is taken into account.[(https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)
 
 ## What dependencies will I need?
 
@@ -88,6 +88,7 @@ You will need the following dependencies
                     "@openfin/workspace-platform": "^6.0.0"
                 }
 ```
+
 ## What changes will I need to do if I want the simplest move from v5.5 to v6?
 
 There are no breaking changes in this release (just fixes and the new features mentioned above). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 6.3.6 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 6.3.6.
@@ -106,13 +107,14 @@ You will need the following dependencies
                     "@openfin/workspace-platform": "^5.5.0"
                 }
 ```
+
 ## What changes will I need to do if I want the simplest move from v5 to v5.5?
 
 There are no breaking changes and this release just includes fixes and extends theming support to OpenFin Home and Store (no api changes are required). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 5.5.0 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 5.5.0.
 
 # Migrate from a previous version - From v4 to v5
 
-With Workspace 5.0, OpenFin has extended the ability for Workspace customers to have  more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a workspace platform instead of the existing platform api. This lets you application launch OpenFin Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
+With Workspace 5.0, OpenFin has extended the ability for Workspace customers to have more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a workspace platform instead of the existing platform api. This lets you application launch OpenFin Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
 
 ## What dependencies will I need?
 
@@ -129,18 +131,17 @@ You will need the following dependencies
 
 Using the register-with-store example as a guide:
 
-* Update your npm dependencies as shown above
-* Update your manifest
-* Do a few api updates (show below)
+- Update your npm dependencies as shown above
+- Update your manifest
+- Do a few api updates (show below)
 
 ### Manifest updates
 
 You will need to do a few manifest updates as you are now responsible for launching views, snapshots and native apps (if you decide to support that).
 
-* Update the runtime version in your manifest to at least: **23.96.67.7**
-* Add the following setting to your platform configuration in your manifest:  **"preventQuitOnLastWindowClosed":true**
-* Permissions: You need to add a **openUrlWithBrowser** permission (OpenFin Browser gives the option of opening a view using the system browser via right click). Optional: permissions for launching external processes (**launchExternalProcess**) if you wish to enable the launching of native apps and **downloadAsset** (if you want to version and deploy your native app through OpenFin). An example of the platform section of the register-with-store manifest is shown below:
-
+- Update the runtime version in your manifest to at least: **23.96.67.7**
+- Add the following setting to your platform configuration in your manifest: **"preventQuitOnLastWindowClosed":true**
+- Permissions: You need to add a **openUrlWithBrowser** permission (OpenFin Browser gives the option of opening a view using the system browser via right click). Optional: permissions for launching external processes (**launchExternalProcess**) if you wish to enable the launching of native apps and **downloadAsset** (if you want to version and deploy your native app through OpenFin). An example of the platform section of the register-with-store manifest is shown below:
 
 ```javascript
  "platform": {
@@ -172,7 +173,6 @@ You will need to do a few manifest updates as you are now responsible for launch
   }
 ```
 
-
 ### Search related filters now need an id
 
 File: [home.ts](../register-with-store/client/src/home.ts)
@@ -180,22 +180,26 @@ File: [home.ts](../register-with-store/client/src/home.ts)
 To make it easier to determine which filter was selected we have added an id so you don't have to rely on 'title' when determining what logic to apply.
 
 So this:
+
 ```javascript
- let tagFilter: CLIFilter = {
-      title: "Tags",
-      type: CLIFilterOptionType.MultiSelect,
-      options: [],
-    };
+let tagFilter: CLIFilter = {
+  title: 'Tags',
+  type: CLIFilterOptionType.MultiSelect,
+  options: []
+};
 ```
+
 becomes:
+
 ```javascript
- let tagFilter: CLIFilter = {
-      id: "tags",
-      title: "Tags",
-      type: CLIFilterOptionType.MultiSelect,
-      options: [],
-    };
+let tagFilter: CLIFilter = {
+  id: 'tags',
+  title: 'Tags',
+  type: CLIFilterOptionType.MultiSelect,
+  options: []
+};
 ```
+
 ### Store registration now requires an icon (similar to Home registration)
 
 File: [store.ts](../register-with-store/client/src/store.ts)
@@ -203,6 +207,7 @@ File: [store.ts](../register-with-store/client/src/store.ts)
 You now need to specify an icon with your registration. This icon will show in the store dropdown alongside your store name.
 
 So this:
+
 ```javascript
 return {
   id: settings.storefrontProvider.id,
@@ -211,10 +216,12 @@ return {
   getLandingPage: getLandingPage.bind(this),
   getFooter: getFooter.bind(this),
   getApps,
-  launchApp: launch,
+  launchApp: launch
 };
 ```
+
 becomes:
+
 ```javascript
 return {
   id: settings.storefrontProvider.id,
@@ -224,7 +231,7 @@ return {
   getLandingPage: getLandingPage.bind(this),
   getFooter: getFooter.bind(this),
   getApps,
-  launchApp: launch,
+  launchApp: launch
 };
 ```
 
@@ -235,40 +242,44 @@ settings.storefrontProvider.icon is just a setting in the manifest.fin.json file
 Launching an app is now a platform responsibility and has moved from @openfin/workspace to @openfin/workspace-platform.
 
 This requires two changes:
-  
+
 File: [platform.ts](../register-with-store/client/src/platform.ts)
 
 Instead of initializing an OpenFin Platform you will be initializing an OpenFin Workspace Platform.
 
 So this:
+
 ```javascript
 import { fin } from 'openfin-adapter/src/mock';
 
 export async function init() {
-    console.log("Initialising platform");
-    await fin.Platform.init({
-    });
-} 
+  console.log('Initialising platform');
+  await fin.Platform.init({});
+}
 ```
+
 becomes:
+
 ```javascript
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-    console.log("Initialising platform");
-    let browser: BrowserInitConfig = {};
-    await workspacePlatformInit({
-        browser
-    });
-} 
+  console.log('Initialising platform');
+  let browser: BrowserInitConfig = {};
+  await workspacePlatformInit({
+    browser
+  });
+}
 ```
+
 Once you know your app has initialized a workspace platform you can now safely reference it and use the launchApp function it provides. The platform.ts file in the sample shows an example of configuring the icons and window title but it was excluded from the snippet above to keep things simple.
 
 File: [launch.ts](../register-with-store/client/src/launch.ts)
-  
+
 The following snippet replaces common code with **...** to highlight the changes.
 
 So this:
+
 ```javascript
 import { launchApp } from "@openfin/workspace";
 ...
@@ -283,7 +294,9 @@ export async function launch(appEntry: App) {
     console.log("Finished application launch request");
 }
 ```
+
 becomes:
+
 ```javascript
 import { getCurrentSync } from '@openfin/workspace-platform';
 ...
@@ -299,6 +312,7 @@ export async function launch(appEntry: App) {
     console.log("Finished application launch request");
 }
 ```
+
 ### Hand Crafted Snapshots might fail to load correctly
 
 In the store sample there is a [snapshot.json](../register-with-store/public/snapshot.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
@@ -312,45 +326,45 @@ In the store sample there is a [snapshot.json](../register-with-store/public/sna
                 }
             ],
 ```
+
 It shouldn't have that. It is an incomplete workstacks definition and this has now been renamed to pages. If you have this, remove it from your snapshot and it will load correctly.
 
 ## Do I still need Desktop Owner Settings (DOS)?
 
 Desktop Owner Settings are still needed for two things:
 
-* Pinning the version of workspace (we still provide the dos command so you can pin your workspace to version 5.0.0 to run the 5.0.0 sample). Without this the latest version of Workspace will be used.
-* Specifying an icon - this is only used by the dock now as everything else is configured using APIs.
+- Pinning the version of workspace (we still provide the dos command so you can pin your workspace to version 5.0.0 to run the 5.0.0 sample). Without this the latest version of Workspace will be used.
+- Specifying an icon - this is only used by the dock now as everything else is configured using APIs.
 
 ## How do I configure the logo and title for the browser?
 
-This is now done when you initialize your workspace platform. You can specify Default Window Options for your Browser Windows. Example taken from the store example: [platform.ts](../register-with-store/client/src/platform.ts) 
-
-
+This is now done when you initialize your workspace platform. You can specify Default Window Options for your Browser Windows. Example taken from the store example: [platform.ts](../register-with-store/client/src/platform.ts)
 
 ```javascript
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
-import { getSettings } from "./settings";
+import { getSettings } from './settings';
 
 export async function init() {
-    console.log("Initialising platform");
-    let settings = await getSettings();
-    let browser: BrowserInitConfig = {};
+  console.log('Initialising platform');
+  let settings = await getSettings();
+  let browser: BrowserInitConfig = {};
 
-    if(settings.browserProvider !== undefined) {
-        browser.defaultWindowOptions = {
-            icon: settings.browserProvider.windowOptions?.icon,
-            workspacePlatform: {
-                pages: null,
-                title: settings.browserProvider.windowOptions?.title,
-                favicon: settings.browserProvider.windowOptions?.icon
-            }
-        };
-    }
-    await workspacePlatformInit({
-        browser
-    });
-} 
+  if (settings.browserProvider !== undefined) {
+    browser.defaultWindowOptions = {
+      icon: settings.browserProvider.windowOptions?.icon,
+      workspacePlatform: {
+        pages: null,
+        title: settings.browserProvider.windowOptions?.title,
+        favicon: settings.browserProvider.windowOptions?.icon
+      }
+    };
+  }
+  await workspacePlatformInit({
+    browser
+  });
+}
 ```
+
 ## Behaviour Changes
 
 So now that your code is working what else has changed from a user perspective?
@@ -385,11 +399,11 @@ There is a new npm module available that continues to empower you as the workspa
 
 This module lets you initialize a workspace platform instead of a standard OpenFin platform and in doing so gives you the following:
 
-* An API to launch OpenFin Browser windows and Pages (that fall under your platform and not OpenFin Workspace). 
-* The ability to specify custom urls for the "Add Page" and "Add View" views.
-* The ability to specify default window options so that you can customize the logo shown in the menu and taskbar as well as the Window Title without needing Desktop Owner Settings.
-* An API for the retrieval and saving of Pages with a local store as default but with the option of overriding and providing your own logic for where pages should be saved and retrieved.
-* The initial introduction of theming support.
+- An API to launch OpenFin Browser windows and Pages (that fall under your platform and not OpenFin Workspace).
+- The ability to specify custom urls for the "Add Page" and "Add View" views.
+- The ability to specify default window options so that you can customize the logo shown in the menu and taskbar as well as the Window Title without needing Desktop Owner Settings.
+- An API for the retrieval and saving of Pages with a local store as default but with the option of overriding and providing your own logic for where pages should be saved and retrieved.
+- The initial introduction of theming support.
 
 ### Specifying custom add (view/page) urls and custom title/icon
 
@@ -399,25 +413,26 @@ This is best done through default window options.
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-    console.log("Initialising platform");
-    let browser: BrowserInitConfig = {};
-    
-    browser.defaultWindowOptions = {
-        icon: "http path to icon",
-        workspacePlatform: {
-            pages: null,
-            title: "Title for windows",
-            favicon: "http path to favicon",
-            newTabUrl: "http url of page to load when someone selects adds a new view",
-            newPageUrl: "http url of page to load when someone selects add a page"
-        }
-    };
-    
-    await workspacePlatformInit({
-        browser
-    });
-} 
+  console.log('Initialising platform');
+  let browser: BrowserInitConfig = {};
+
+  browser.defaultWindowOptions = {
+    icon: 'http path to icon',
+    workspacePlatform: {
+      pages: null,
+      title: 'Title for windows',
+      favicon: 'http path to favicon',
+      newTabUrl: 'http url of page to load when someone selects adds a new view',
+      newPageUrl: 'http url of page to load when someone selects add a page'
+    }
+  };
+
+  await workspacePlatformInit({
+    browser
+  });
+}
 ```
+
 ### Initial theme support
 
 This is done when you initialize your platform:
@@ -426,22 +441,22 @@ This is done when you initialize your platform:
 import { init as workspacePlatformInit, CustomThemes } from '@openfin/workspace-platform';
 
 export async function init() {
-    console.log("Initialising platform");
-    const theme: CustomThemes = [
-     {
-              label: "Starter Theme",
-              logoUrl: "http://localhost:8080/favicon.ico",
-              palette: {
-                  brandPrimary: "#504CFF",
-                  brandSecondary: "#383A40",
-                  backgroundPrimary: "#111214"
-              }
-          }
-    ];
-    await workspacePlatformInit({
-        theme 
-    });
-} 
+  console.log('Initialising platform');
+  const theme: CustomThemes = [
+    {
+      label: 'Starter Theme',
+      logoUrl: 'http://localhost:8080/favicon.ico',
+      palette: {
+        brandPrimary: '#504CFF',
+        brandSecondary: '#383A40',
+        backgroundPrimary: '#111214'
+      }
+    }
+  ];
+  await workspacePlatformInit({
+    theme
+  });
+}
 ```
 
 ### The api to get, delete and save pages as well as launching a page or a view under your own platform
@@ -453,46 +468,51 @@ File: [browser.ts](../register-with-store/client/src/browser.ts)
 ```javascript
 import { getCurrentSync, Page } from '@openfin/workspace-platform';
 
-export async function getPage(pageId:string) {
-    let platform = getCurrentSync();
-    return platform.Storage.getPage(pageId);
+export async function getPage(pageId: string) {
+  let platform = getCurrentSync();
+  return platform.Storage.getPage(pageId);
 }
 
 export async function getPages() {
-    let platform = getCurrentSync();
-    return platform.Storage.getPages();
+  let platform = getCurrentSync();
+  return platform.Storage.getPages();
 }
 
-export async function deletePage(pageId:string) {
-    let platform = getCurrentSync();
-    return platform.Storage.deletePage(pageId);
+export async function deletePage(pageId: string) {
+  let platform = getCurrentSync();
+  return platform.Storage.deletePage(pageId);
 }
 
-export async function launchPage(page:Page){
-    let platform = getCurrentSync();
-    return platform.Browser.createWindow({
-        workspacePlatform: {
-            pages: [page]
-        }
-    });
-}
-
-export async function launchView(view:OpenFin.PlatformViewCreationOptions | string , targetIdentity?: OpenFin.Identity){
-    let platform = getCurrentSync();
-    let viewOptions;
-    if(typeof view === "string"){
-        viewOptions = { "url": view};
-    } else {
-        viewOptions = view;
+export async function launchPage(page: Page) {
+  let platform = getCurrentSync();
+  return platform.Browser.createWindow({
+    workspacePlatform: {
+      pages: [page]
     }
-    return platform.createView(viewOptions, targetIdentity);
+  });
+}
+
+export async function launchView(
+  view: OpenFin.PlatformViewCreationOptions | string,
+  targetIdentity?: OpenFin.Identity
+) {
+  let platform = getCurrentSync();
+  let viewOptions;
+  if (typeof view === 'string') {
+    viewOptions = { url: view };
+  } else {
+    viewOptions = view;
+  }
+  return platform.createView(viewOptions, targetIdentity);
 }
 ```
+
 ### Focus - the ability to show/hide tabs to make it easier to focus on the content within a browser window
 
 The following new feature has been added for your end users:
 
 #### Tabs Showing - Click on the focus icon
+
 <img src="workspace-hide-tabs.png" width="100%" alt="Ability to bring a view into focus by removing tabs" />
 
 #### Tabs Hidden - Click on the focus icon again
@@ -501,25 +521,26 @@ The following new feature has been added for your end users:
 
 # Migrate from a previous version - From v1-v3 to v4
 
-With Workspace 4.0, OpenFin has introduced the ability for Workspace customers to have  more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:
+With Workspace 4.0, OpenFin has introduced the ability for Workspace customers to have more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:
 
 Manage the application, view and workspaces content available in Workspace
 Provide an async (aka “lazy”) Search
 Provide in-memory auto-complete Search
-Display icons for all registered Providers in the Home/Search UI 
+Display icons for all registered Providers in the Home/Search UI
 Selecting a given CLI provider icon to show the results from that provider
-Apply icons/ logos 
+Apply icons/ logos
 
 With the addition of the CLI Provider concept, OpenFin has deprecated Workspace Desktop Owner Setting overrides (customConfig options ) that pertain to apps and workspaces REST URLs in favor of this programmatic API approach.
 
 ## Behavior Changes
-* The fins link or desktop icon to start workspace components is no longer supported. These must be started by a workspace platform or CLI provider. The system will now return an error if the fins link is used to start a workspace component.
-* The “/W” entry point into the Workspaces directory has been removed. 
-* The command buttons (Storefront, Notifications etc) no longer show on the Home UI. They are available as root commands by typing /. 
-* You can no longer specify a Content Discovery Service (CDS). An example is available for how to mimic this functionality using the new APIs available in the howto.
-* Home and Store are now enabled by default. However, they will not show unless a platform has registered with them.
-* Workspace service is no longer supported. Any saved workspaces are only saved locally. Additional workspace related APIs will be released in upcoming releases.
-* Unlike the v1 search API, you must select a CLI provider to see the results from that provider. However, if only one provider is registered then it is automatically selected.
+
+- The fins link or desktop icon to start workspace components is no longer supported. These must be started by a workspace platform or CLI provider. The system will now return an error if the fins link is used to start a workspace component.
+- The “/W” entry point into the Workspaces directory has been removed.
+- The command buttons (Storefront, Notifications etc) no longer show on the Home UI. They are available as root commands by typing /.
+- You can no longer specify a Content Discovery Service (CDS). An example is available for how to mimic this functionality using the new APIs available in the howto.
+- Home and Store are now enabled by default. However, they will not show unless a platform has registered with them.
+- Workspace service is no longer supported. Any saved workspaces are only saved locally. Additional workspace related APIs will be released in upcoming releases.
+- Unlike the v1 search API, you must select a CLI provider to see the results from that provider. However, if only one provider is registered then it is automatically selected.
 
 ## I used DesktopOwnerSettings to configure the logo. How do I do that now?
 
@@ -530,21 +551,23 @@ The logo setting is still supported for Desktop Owners and is used to specify th
             "iconUrl": "https://yourserver/favicon-16x16.png"
          }
 ```
+
 The new API approach will let you register your logo for Home without the need for DesktopOwnerSettings (configuring the logo for Browser etc will be available in a future release).
 
 You can import Home from @openfin/workspace to register your application against Home. The icon setting lets you specify your logo.
 
 ```javascript
- const cliProvider: CLIProvider = {
-    title: "title",
-    id: "id",
-    icon: "http://pathto/icon",
-    onUserInput: onUserInput,
-    onResultDispatch: onResultDispatch
-  };
+const cliProvider: CLIProvider = {
+  title: 'title',
+  id: 'id',
+  icon: 'http://pathto/icon',
+  onUserInput: onUserInput,
+  onResultDispatch: onResultDispatch
+};
 
-  await Home.register(cliProvider);
+await Home.register(cliProvider);
 ```
+
 The how to samples provide a basic how to example ([how-to/register-with-home-basic](../register-with-home-basic/)) as well as a more complex example ([how-to/register-with-home](../register-with-home/)).
 
 ## I used DesktopOwnerSettings to configure the apps. How do I do that now?
@@ -554,24 +577,25 @@ Instead of configuring the apps endpoint through DesktopOwnerSettings:
 ```javascript
  "appDirectoryUrl": "https://yourserver/api/apps"
 ```
+
 You can now import Home from @openfin/workspace to register your application against Home. The onUserInput and onResultDispatch setting lets you specify functions to determine what results to return based on user queries and the ability to respond to a user selection.
 
 ```javascript
- const cliProvider: CLIProvider = {
-    title: "title",
-    id: "id",
-    icon: "http://pathto/icon",
-    onUserInput: onUserInput,
-    onResultDispatch: onResultDispatch
-  };
+const cliProvider: CLIProvider = {
+  title: 'title',
+  id: 'id',
+  icon: 'http://pathto/icon',
+  onUserInput: onUserInput,
+  onResultDispatch: onResultDispatch
+};
 
-  await Home.register(cliProvider);
-``` 
-  
+await Home.register(cliProvider);
+```
+
 We have an example ([how-to/register-with-home](../register-with-home/)) that shows how to register against Home, query a rest endpoint that matches the appDirectoryUrl format and map that to a collection of search results to display in Home.
 
 ## I used DesktopOwnerSettings to configure a share url. How do I do that now?
-  
+
 If you have never configured a share url in DesktopOwnerSettings then we recommend not starting that now as we are looking at having an API driven approach. If you already have this configured then it will continue to work in version 4 of OpenFin Workspace.
 
 ```javascript
@@ -614,13 +638,14 @@ It may be that your existing shortcuts point to the **latest** version of OpenFi
 
 To stay on version v3 you can do the following:
 
-##### Use Version 3 Examples 
+##### Use Version 3 Examples
 
 Clone the <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">version 3 branch</a> and run the npm run dos command on any of the how-to samples. You will need to have the local server running to serve the dos.json file.
 
-##### Create your own dos file and point to it   
+##### Create your own dos file and point to it
 
 Create your own dos file:
+
 ```javascript
  {
   "desktopSettings": {
@@ -632,7 +657,8 @@ Create your own dos file:
   }
 }
 ```
-To configure Desktop Owner Settings you will need to be able to modify your registry settings. This can be done by scripts, applications or by hand. 
+
+To configure Desktop Owner Settings you will need to be able to modify your registry settings. This can be done by scripts, applications or by hand.
 
 You need to add a registry key:
 
@@ -667,10 +693,10 @@ or a url (if you have a webserver):
 
 Once you have done either of the approaches above you need to:
 
-* Use TaskManager, ProcessExplorer or the command line to close all OpenFin applications (so that the new DesktopOwnerSettings will get picked up).
+- Use TaskManager, ProcessExplorer or the command line to close all OpenFin applications (so that the new DesktopOwnerSettings will get picked up).
 
-* Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): <a href="fins://system-apps/workspace" target="_blank">fins://system-apps/workspace</a>
+- Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): <a href="fins://system-apps/workspace" target="_blank">fins://system-apps/workspace</a>
 
 You should now see version 3 of OpenFin Workspace.
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace). 
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).

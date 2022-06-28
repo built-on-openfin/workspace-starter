@@ -1,10 +1,10 @@
-import * as express from "express";
-import * as cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
+import express from "express";
+import path from "path";
 import router from "./routes";
-var path = require('path');
 
-const commonPath = path.join(__dirname, "..","..","..","common",'public');
-console.log("Common Path /common = " + commonPath);
+const commonPath = path.join(__dirname, "..", "..", "..", "common", "public");
+console.log(`Common Path /common = ${commonPath}`);
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
@@ -13,5 +13,5 @@ app.use(router);
 const port = 8080;
 
 app.listen(port, () => {
-    console.log("server is listening on port", port);
+  console.log("server is listening on port", port);
 });

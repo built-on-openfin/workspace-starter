@@ -11,15 +11,15 @@ module.exports = [
           use: 'ts-loader',
           exclude: /node_modules/
         }
-      ],
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'provider.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
-    },
+      path: path.resolve(__dirname, '..', 'public', 'js')
+    }
   },
   {
     entry: './client/src/integrations/salesforce/index.ts',
@@ -31,18 +31,18 @@ module.exports = [
           use: 'ts-loader',
           exclude: /node_modules/
         }
-      ],
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     externals: { fin: 'fin' },
     output: {
       filename: 'salesforce.bundle.js',
       library: {
-        type: "module"
+        type: 'module'
       },
-      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations'),
+      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
     },
     experiments: {
       outputModule: true

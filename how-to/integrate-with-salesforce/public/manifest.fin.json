@@ -10,15 +10,16 @@
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": false,
     "providerUrl": "http://localhost:8080/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "defaultViewOptions": {
       "fdc3InteropApi": "1.2",
-      "preloadScripts": [{
-        "url": "http://localhost:8080/js/preload.js"
-      }]
+      "preloadScripts": [
+        {
+          "url": "http://localhost:8080/js/preload.js"
+        }
+      ]
     },
-    "defaultWindowOptions": {
-    }
+    "defaultWindowOptions": {}
   },
   "snapshot": {
     "windows": []
@@ -33,7 +34,6 @@
   "customSettings": {
     "consumerKey": "",
     "icon": "http://localhost:8080/favicon.ico",
-    "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
     "title": "Salesforce",

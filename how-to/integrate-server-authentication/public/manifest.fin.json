@@ -10,7 +10,7 @@
     "icon": "http://localhost:8080/favicon.ico",
     "autoShow": true,
     "providerUrl": "http://localhost:8080/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "frame": false,
     "alwaysOnTop": true,
     "resizable": false,
@@ -38,4 +38,3 @@
     }
   }
 }
-  

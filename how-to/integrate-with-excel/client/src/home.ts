@@ -1,20 +1,25 @@
 import {
   App,
-  CLIDispatchedSearchResult, CLIProvider,
+  CLIDispatchedSearchResult,
+  CLIProvider,
   CLISearchListenerRequest,
   CLISearchListenerResponse,
-  CLISearchResponse, CLITemplate, Home, HomeSearchResponse, HomeSearchResult
+  CLISearchResponse,
+  CLITemplate,
+  Home,
+  HomeSearchResponse,
+  HomeSearchResult
 } from "@openfin/workspace";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
-import { getSettings } from "./settings";
 import { getApps } from "./apps";
+import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
+import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
 
 export async function register() {
   console.log("Initialising home.");
-  let settings = await getSettings();
+  const settings = await getSettings();
   if (
     settings.homeProvider === undefined ||
     settings.homeProvider.id === undefined ||
@@ -34,7 +39,7 @@ export async function register() {
     request: CLISearchListenerRequest,
     response: CLISearchListenerResponse
   ): Promise<CLISearchResponse> => {
-    let query = request.query.toLowerCase();
+    const query = request.query.toLowerCase();
     if (lastResponse !== undefined) {
       lastResponse.close();
     }
@@ -43,7 +48,7 @@ export async function register() {
 
     let appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
     if (query && query.length >= 3) {
-      appSearchEntries = appSearchEntries.filter(app => app.title.toLowerCase().includes(query.toLowerCase()));
+      appSearchEntries = appSearchEntries.filter((app) => app.title.toLowerCase().includes(query.toLowerCase()));
     }
 
     const searchResults: HomeSearchResponse = {
@@ -62,7 +67,6 @@ export async function register() {
     }
 
     return searchResults;
-
   };
 
   const onSelection = async (result: CLIDispatchedSearchResult) => {
@@ -70,7 +74,7 @@ export async function register() {
       const handled = await itemSelection(result, lastResponse);
 
       if (!handled) {
-        await launch(result.data);
+        await launch(result.data as App);
       }
 
       if (!handled) {
@@ -85,8 +89,8 @@ export async function register() {
     title: settings.homeProvider.title,
     id: settings.homeProvider.id,
     icon: settings.homeProvider.icon,
-    onUserInput: onUserInput,
-    onResultDispatch: onSelection,
+    onUserInput,
+    onResultDispatch: onSelection
   };
 
   await Home.register(cliProvider);
@@ -104,11 +108,10 @@ export async function hide() {
 
 export async function deregister() {
   if (isHomeRegistered) {
-    let settings = await getSettings();
+    const settings = await getSettings();
     return Home.deregister(settings.homeProvider.id);
-  } else {
-    console.warn("Unable to deregister home as there is an indication it was never registered");
   }
+  console.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
@@ -116,11 +119,10 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
   if (Array.isArray(apps)) {
     for (let i = 0; i < apps.length; i++) {
       const action = { name: "Launch View", hotkey: "enter" };
-      const entry: any = {
+      const entry: Partial<HomeSearchResult> = {
         key: apps[i].appId,
         title: apps[i].title,
-        data: apps[i],
-        template: CLITemplate.Plain,
+        data: apps[i]
       };
 
       if (apps[i].manifestType === "view") {
@@ -152,9 +154,11 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
         entry.shortDescription = apps[i].description;
         entry.template = CLITemplate.SimpleText;
         entry.templateContent = apps[i].description;
+      } else {
+        entry.template = CLITemplate.Plain;
       }
 
-      appResults.push(entry);
+      appResults.push(entry as HomeSearchResult);
     }
   }
   return appResults;

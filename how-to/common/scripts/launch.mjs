@@ -1,20 +1,20 @@
-import { launch, connect } from "openfin-adapter";
+import { launch, connect } from 'openfin-adapter';
 
 async function launchFromNode(manifestUrl) {
   try {
-    console.log("Launching manifest: " + manifestUrl);
+    console.log(`Launching manifest: ${manifestUrl}`);
 
     const port = await launch({ manifestUrl });
 
-    //We will use the port to connect from Node to determine when OpenFin exists.
+    // We will use the port to connect from Node to determine when OpenFin exists.
     const fin = await connect({
-      uuid: "dev-connection-" + Date.now(), //Supply an addressable Id for the connection
-      address: `ws://127.0.0.1:${port}`, //Connect to the given port.
-      nonPersistent: true, //We want OpenFin to exit as our application exists.
+      uuid: `dev-connection-${Date.now()}`, // Supply an addressable Id for the connection
+      address: `ws://127.0.0.1:${port}`, // Connect to the given port.
+      nonPersistent: true // We want OpenFin to exit as our application exists.
     });
 
-    //Once OpenFin exists we shut down the process.
-    fin.once("disconnected", process.exit);
+    // Once OpenFin exists we shut down the process.
+    fin.once('disconnected', process.exit);
     return fin;
   } catch (e) {
     throw new Error(`Error: \n${e}`);
@@ -25,7 +25,7 @@ async function launchFromNode(manifestUrl) {
   try {
     const launchArgs = process.argv.slice(2);
 
-    let manifestUrl = "http://localhost:8080/manifest.fin.json";
+    let manifestUrl = 'http://localhost:8080/manifest.fin.json';
 
     if (launchArgs.length > 0) {
       manifestUrl = launchArgs[0];
@@ -45,7 +45,7 @@ async function launchFromNode(manifestUrl) {
           await platform.quit();
         }
       };
-      console.log("Wrapped target platform: " + manifest.platform.uuid);
+      console.log(`Wrapped target platform: ${manifest.platform.uuid}`);
     } else {
       const app = fin.Application.wrapSync({ uuid: manifest.startup_app.uuid });
       quit = async () => {
@@ -54,24 +54,25 @@ async function launchFromNode(manifestUrl) {
           await app.quit();
         }
       };
-      console.log("Wrapped classic app: " + manifest.startup_app.uuid);
+      console.log(`Wrapped classic app: ${manifest.startup_app.uuid}`);
     }
 
     // do something when app is closing
-    process.on("exit", async () => {
-      console.log("Exit called");
+    process.on('exit', async () => {
+      console.log('Exit called');
       await quit();
     });
 
     // catches ctrl+c event
-    process.on("SIGINT", async () => {
-      console.log("Ctrl + C called");
+    process.on('SIGINT', async () => {
+      console.log('Ctrl + C called');
       await quit();
       process.exit();
     });
 
+    console.log(`You successfully connected to the manifest: ${manifestUrl}`);
     console.log(
-      `You successfully connected to the manifest: ${manifestUrl}`
+      `Please wait while the sample loads. Press Ctrl + C (Windows) or Command + C (Mac) to exit and close the sample.`
     );
     console.log(
       `Please wait while the sample loads. If using browser use the Quit option from the main menu otherwise press Ctrl + C (Windows) or Control + C (Mac) to exit and close the sample.`

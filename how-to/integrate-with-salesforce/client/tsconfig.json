@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs"
+    "target": "es2021",
+    "module": "commonjs",
+    "sourceMap": true,
+    "rootDir": "./src",
+    "outDir": "build",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node"
   },
-  "extends": "../tsconfig.json",
   "include": ["./src/**/*.ts"]
 }
- 

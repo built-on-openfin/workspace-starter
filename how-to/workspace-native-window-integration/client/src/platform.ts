@@ -1,15 +1,12 @@
-import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
-import { getSettings } from "./settings";
-import { overrideCallback } from './browser';
+import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
+import { overrideCallback } from "./browser";
 
 export async function init() {
-    const settings = await getSettings();
+  console.log("Initialising platform");
+  const browser: BrowserInitConfig = {};
+  browser.overrideCallback = overrideCallback;
 
-    console.log("Initialising platform");
-    let browser: BrowserInitConfig = {};
-    browser.overrideCallback = overrideCallback;
-
-    await workspacePlatformInit({
-        browser
-    });
-} 
+  await workspacePlatformInit({
+    browser
+  });
+}

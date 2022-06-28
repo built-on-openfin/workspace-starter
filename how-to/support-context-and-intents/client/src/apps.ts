@@ -2,64 +2,51 @@ import { App } from "@openfin/workspace";
 import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
 
-let cachedApps;
+let cachedApps: App[];
 
 async function validateEntries(apps: App[]) {
   let canLaunchExternalProcessResponse;
 
   try {
-    canLaunchExternalProcessResponse =
-      await fin.System.queryPermissionForCurrentContext(
-        "System.launchExternalProcess"
-      );
+    canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+      "System.launchExternalProcess"
+    );
   } catch (error) {
     console.error("Error while querying for System.launchExternalProcess permission", error);
   }
-  let canLaunchExternalProcess =
-    canLaunchExternalProcessResponse !== undefined &&
-    canLaunchExternalProcessResponse.granted;
+  const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 
   let canDownloadAppAssetsResponse;
 
   try {
-    canDownloadAppAssetsResponse =
-      await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+    canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
   } catch (error) {
     console.error("Error while querying for System.downloadAsset permission", error);
   }
 
-  let canDownloadAppAssets =
-    canDownloadAppAssetsResponse !== undefined &&
-    canDownloadAppAssetsResponse.granted;
+  const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 
-  let validatedApps = [];
-  let rejectedAppIds = [];
-  let settings = await getSettings();
-  let appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
-  let supportedManifestTypes = settings?.appProvider?.manifestTypes;
+  const validatedApps: App[] = [];
+  const rejectedAppIds = [];
+  const settings = await getSettings();
+  const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
+  const supportedManifestTypes = settings?.appProvider?.manifestTypes;
 
   for (let i = 0; i < apps.length; i++) {
-
     let validApp = true;
     if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
-      validApp = supportedManifestTypes.indexOf(apps[i].manifestType) > -1;
+      validApp = supportedManifestTypes.includes(apps[i].manifestType);
     }
 
     if (validApp) {
       if (apps[i].manifestType !== "external") {
         validatedApps.push(apps[i]);
+      } else if (canLaunchExternalProcess === false) {
+        rejectedAppIds.push(apps[i].appId);
+      } else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && canDownloadAppAssets === false) {
+        rejectedAppIds.push(apps[i].appId);
       } else {
-        if (canLaunchExternalProcess === false) {
-          rejectedAppIds.push(apps[i].appId);
-        } else if (
-          Array.isArray(apps[i].tags) &&
-          apps[i].tags.indexOf(appAssetTag) > -1 &&
-          canDownloadAppAssets === false
-        ) {
-          rejectedAppIds.push(apps[i].appId);
-        } else {
-          validatedApps.push(apps[i]);
-        }
+        validatedApps.push(apps[i]);
       }
     }
   }
@@ -85,12 +72,12 @@ async function getRestEntries(
   }
   const response = await fetch(url, options);
 
-  let apps: App[] = await response.json();
+  const apps: App[] = await response.json();
 
   cachedApps = await validateEntries(apps);
 
   if (cacheDuration !== undefined) {
-    let setTimeoutInMs = cacheDuration * 60 * 1000;
+    const setTimeoutInMs = cacheDuration * 60 * 1000;
     setTimeout(() => {
       console.log("Clearing cache of apps as cache duration has passed.");
       cachedApps = undefined;
@@ -116,9 +103,9 @@ function updateEntry(
     source[intent.name] = {
       intent: {
         name: intent.name,
-        displayName: intent.displayName,
+        displayName: intent.displayName
       },
-      apps: [],
+      apps: []
     };
   }
   source[intent.name].apps.push(app);
@@ -128,8 +115,8 @@ function updateEntry(
 export async function getApps(): Promise<App[]> {
   console.log("Requesting apps.");
   try {
-    let settings = await getSettings();
-    let apps =
+    const settings = await getSettings();
+    const apps =
       cachedApps ??
       (await getRestEntries(
         settings?.appProvider?.appsSourceUrl,
@@ -144,13 +131,13 @@ export async function getApps(): Promise<App[]> {
 }
 
 export async function getAppsByTag(tags: string[]): Promise<App[]> {
-  let apps = await getApps();
-  let filteredApps = apps.filter((value) => {
+  const apps = await getApps();
+  const filteredApps = apps.filter((value) => {
     if (value.tags === undefined) {
       return false;
     }
     for (let i = 0; i < tags.length; i++) {
-      if (value.tags.indexOf(tags[i]) > -1) {
+      if (value.tags.includes(tags[i])) {
         return true;
       }
     }
@@ -160,7 +147,7 @@ export async function getAppsByTag(tags: string[]): Promise<App[]> {
 }
 
 export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
-  let apps = await getApps();
+  const apps = await getApps();
   let appId;
   if (requestedApp !== undefined) {
     if (typeof requestedApp === "string") {
@@ -172,16 +159,14 @@ export async function getApp(requestedApp: string | { appId: string }): Promise<
   if (appId === undefined) {
     return undefined;
   }
-  let app = apps.find(entry => {
-    return entry.appId === appId;
-  });
+  const app = apps.find((entry) => entry.appId === appId);
 
   return app;
 }
 
 export async function getAppsByIntent(intent: string): Promise<App[]> {
-  let apps = await getApps();
-  let filteredApps = apps.filter((value) => {
+  const apps = await getApps();
+  const filteredApps = apps.filter((value) => {
     if (value.intents === undefined) {
       return false;
     }
@@ -199,7 +184,7 @@ export async function getIntent(
   intent: string,
   contextType?: string
 ): Promise<{ intent: { name: string; displayName: string }; apps: App[] }> {
-  let apps = await getApps();
+  const apps = await getApps();
   let intents: {
     [key: string]: {
       intent: { name: string; displayName: string };
@@ -208,45 +193,40 @@ export async function getIntent(
   } = {};
 
   if (Array.isArray(apps)) {
-    apps.forEach((value) => {
+    for (const value of apps) {
       if (value.intents !== undefined) {
         for (let i = 0; i < value.intents.length; i++) {
           if (value.intents[i].name === intent) {
             if (contextType === undefined) {
               intents = updateEntry(intents, value.intents[i], value);
-            } else {
-              if (
-                Array.isArray(value.intents[i].contexts) &&
-                value.intents[i].contexts.indexOf(contextType) > -1
-              ) {
-                intents = updateEntry(intents, value.intents[i], value);
-              }
+            } else if (Array.isArray(value.intents[i].contexts) && value.intents[i].contexts.includes(contextType)) {
+              intents = updateEntry(intents, value.intents[i], value);
             }
           }
         }
       }
-    });
+    }
 
-    let results = Object.values(intents);
+    const results = Object.values(intents);
     if (results.length === 0) {
       console.log(`No results found for findIntent for intent ${intent} and context ${contextType}`);
       return null;
     } else if (results.length === 1) {
       return results[0];
-    } else {
-      console.warn(`Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`);
-      return results[0];
     }
-  } else {
-    console.warn("There was no apps returned so we are unable to find apps that support an intent.");
-    return null;
+    console.warn(
+      `Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`
+    );
+    return results[0];
   }
+  console.warn("There was no apps returned so we are unable to find apps that support an intent.");
+  return null;
 }
 
 export async function getIntentsByContext(
   contextType: string
 ): Promise<{ intent: { name: string; displayName: string }; apps: App[] }[]> {
-  let apps = await getApps();
+  const apps = await getApps();
   let intents: {
     [key: string]: {
       intent: { name: string; displayName: string };
@@ -255,22 +235,19 @@ export async function getIntentsByContext(
   } = {};
 
   if (Array.isArray(apps)) {
-    apps.forEach((value) => {
+    for (const value of apps) {
       if (value.intents !== undefined) {
         for (let i = 0; i < value.intents.length; i++) {
-          if (
-            Array.isArray(value.intents[i].contexts) &&
-            value.intents[i].contexts.indexOf(contextType) > -1
-          ) {
+          if (Array.isArray(value.intents[i].contexts) && value.intents[i].contexts.includes(contextType)) {
             intents = updateEntry(intents, value.intents[i], value);
           }
         }
       }
-    });
+    }
 
     return Object.values(intents);
-  } else {
-    console.warn("Unable to get apps so we can not get apps and intents that support a particular context");
   }
+  console.warn("Unable to get apps so we can not get apps and intents that support a particular context");
+
   return [];
 }

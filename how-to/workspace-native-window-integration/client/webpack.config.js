@@ -16,18 +16,17 @@ module.exports = [
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: 'assets/',
+            outputPath: 'assets/'
           }
         }
- 
-      ],
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'provider.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
-    },
+      path: path.resolve(__dirname, '..', 'public', 'js')
+    }
   }
 ];

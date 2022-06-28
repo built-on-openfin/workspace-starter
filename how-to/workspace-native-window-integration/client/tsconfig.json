@@ -1,13 +1,14 @@
 {
-    "compilerOptions": {
-      "target": "es2021",
-      "module": "ES2020",
-      "sourceMap": true,
-      "rootDir": "./src",
-      "outDir": "build",
-      "moduleResolution": "node",
-      "skipLibCheck": true
-    },
-    "include": ["./src/**/*.ts"]
-  }
-  
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "ES2020",
+    "sourceMap": true,
+    "rootDir": "./src",
+    "outDir": "build",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node"
+  },
+  "include": ["./src/**/*.ts"]
+}

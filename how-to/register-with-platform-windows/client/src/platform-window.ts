@@ -1,36 +1,31 @@
-import OpenFin, { fin } from '@openfin/core';
+import OpenFin, { fin } from "@openfin/core";
 
-export const CONTAINER_ID = 'layout-container';
+export const CONTAINER_ID = "layout-container";
 const openfinWindow: OpenFin.Window = fin.Window.getCurrentSync();
 
 const maxOrRestore = async (): Promise<void> => {
-    if (await openfinWindow.getState() === 'normal') {
-        return await openfinWindow.maximize();
-    }
+  if ((await openfinWindow.getState()) === "normal") {
+    return openfinWindow.maximize();
+  }
 
-    return openfinWindow.restore();
+  return openfinWindow.restore();
 };
 
-const closeWindow = (): Promise<void> => {
-    return openfinWindow.close();
-};
+const closeWindow = async (): Promise<void> => openfinWindow.close();
 
-const minimizeWindow = (): Promise<void> => {
-    return openfinWindow.minimize();
-}; 
+const minimizeWindow = async (): Promise<void> => openfinWindow.minimize();
 
 const setupTitleBar = (): void => {
-    const minBtn: HTMLElement = document.getElementById('minimize-button');
-    const maxBtn: HTMLElement = document.getElementById('expand-button');
-    const closeBtn: HTMLElement = document.getElementById('close-button');
-    
-    minBtn.onclick = minimizeWindow;
-    maxBtn.onclick = maxOrRestore;
-    closeBtn.onclick = closeWindow;
+  const minBtn: HTMLElement = document.querySelector("#minimize-button");
+  const maxBtn: HTMLElement = document.querySelector("#expand-button");
+  const closeBtn: HTMLElement = document.querySelector("#close-button");
 
+  minBtn.addEventListener("click", minimizeWindow);
+  maxBtn.addEventListener("click", maxOrRestore);
+  closeBtn.addEventListener("click", closeWindow);
 };
 
-window.addEventListener('DOMContentLoaded', async () => {
-    await fin.Platform.Layout.init({ containerId: CONTAINER_ID });
-    setupTitleBar();
+window.addEventListener("DOMContentLoaded", async () => {
+  await fin.Platform.Layout.init({ containerId: CONTAINER_ID });
+  setupTitleBar();
 });

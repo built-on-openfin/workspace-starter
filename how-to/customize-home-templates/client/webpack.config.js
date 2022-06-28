@@ -9,18 +9,17 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'provider.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
-    },
-
+      path: path.resolve(__dirname, '..', 'public', 'js')
+    }
   },
   {
     entry: './client/src/integrations/quote/index.ts',
@@ -30,23 +29,23 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'quote.bundle.js',
       library: {
-        type: "module"
+        type: 'module'
       },
-      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations'),
+      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
     },
     experiments: {
       outputModule: true
-    },
+    }
   },
   {
     entry: './client/src/integrations/emoji/index.ts',
@@ -56,23 +55,23 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'emoji.bundle.js',
       library: {
-        type: "module"
+        type: 'module'
       },
-      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations'),
+      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
     },
     experiments: {
       outputModule: true
-    },
+    }
   },
   {
     entry: './client/src/integrations/async/index.ts',
@@ -82,22 +81,22 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'async.bundle.js',
       library: {
-        type: "module"
+        type: 'module'
       },
-      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations'),
+      path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
     },
     experiments: {
       outputModule: true
-    },
+    }
   }
 ];

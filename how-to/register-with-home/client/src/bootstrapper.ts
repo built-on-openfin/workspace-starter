@@ -7,8 +7,8 @@ export async function init() {
   console.log("Initialising the bootstrapper");
   await register();
   const providerWindow = fin.Window.getCurrentSync();
-  providerWindow.once("close-requested", async (event) => {
+  await providerWindow.once("close-requested", async (event) => {
     await deregister();
-    fin.Platform.getCurrentSync().quit();
+    await fin.Platform.getCurrentSync().quit();
   });
 }

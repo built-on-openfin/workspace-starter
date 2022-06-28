@@ -9,24 +9,34 @@
     <link rel="stylesheet" href="./picker.css" />
     <link rel="stylesheet" href="../../style/app.css" />
   </head>
-  <body style="border-color: white;">
-    <div id="intent-select-container" style="display: none;">
-        <div id="title" class="drag"><h2>Intent Picker</h2></div>
-        <div><h5>Target Context Type: <span id="target-context"></span></h5></div>
-        <div id="intent-container" class="intentContainer"></div>
-        <div class="launchContainer">
-          <button id="cancel-intent-selection" style="margin-right: 10px;">Cancel</button>
-          <button id="move-next">Next</button>
-        </div>
+  <body style="border-color: white">
+    <div id="intent-select-container" style="display: none">
+      <div id="title" class="drag"><h2>Intent Picker</h2></div>
+      <div>
+        <h5>
+          Target Context Type:
+          <span id="target-context"></span>
+        </h5>
+      </div>
+      <div id="intent-container" class="intentContainer"></div>
+      <div class="launchContainer">
+        <button id="cancel-intent-selection" style="margin-right: 10px">Cancel</button>
+        <button id="move-next">Next</button>
+      </div>
     </div>
-    <div id="app-select-container" style="display: none;">
+    <div id="app-select-container" style="display: none">
       <div id="title" class="drag"><h2>Application Picker</h2></div>
-      <div><h5>Target Intent: <span id="target-intent"></span></h5></div>
+      <div>
+        <h5>
+          Target Intent:
+          <span id="target-intent"></span>
+        </h5>
+      </div>
       <div id="app-container" class="appContainer"></div>
       <div class="launchContainer">
-        <button id="cancel" style="margin-right: 10px;">Cancel</button>
-        <button id="back" style="display: none;margin-right: 10px;">Back</button>
-        <button id="launch" style="margin-right: 10px;">Launch</button>
+        <button id="cancel" style="margin-right: 10px">Cancel</button>
+        <button id="back" style="display: none; margin-right: 10px">Back</button>
+        <button id="launch" style="margin-right: 10px">Launch</button>
       </div>
     </div>
   </body>

@@ -9,17 +9,17 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'provider.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
-    },
+      path: path.resolve(__dirname, '..', 'public', 'js')
+    }
   },
   {
     entry: './client/src/launchbar.ts',
@@ -29,16 +29,16 @@ module.exports = [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
+          exclude: /node_modules/
+        }
+      ]
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: 'launchbar.bundle.js',
-      path: path.resolve(__dirname, '..', 'public', 'js'),
-    },
-  },
+      path: path.resolve(__dirname, '..', 'public', 'js')
+    }
+  }
 ];

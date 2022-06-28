@@ -1,40 +1,40 @@
-import { init as workspacePlatformInit } from '@openfin/workspace-platform';
-import { register, show, hide, deregister } from './home';
+import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { register, show, hide, deregister } from "./home";
 
 async function init() {
   await workspacePlatformInit({
     browser: {}
   });
-  let registerHome = document.getElementById("register");
-  let deregisterHome = document.getElementById("deregister");
-  let showHome = document.getElementById("show");
-  let hideHome = document.getElementById("hide");
+  const registerHome = document.querySelector<HTMLButtonElement>("#register");
+  const deregisterHome = document.querySelector<HTMLButtonElement>("#deregister");
+  const showHome = document.querySelector<HTMLButtonElement>("#show");
+  const hideHome = document.querySelector<HTMLButtonElement>("#hide");
 
-  registerHome.onclick = async ()=> {
+  registerHome.addEventListener("click", async () => {
     await register();
     showHome.style.display = "unset";
     hideHome.style.display = "unset";
-    deregisterHome.style.display = "unset"
+    deregisterHome.style.display = "unset";
     registerHome.style.display = "none";
-  };
+  });
 
-  deregisterHome.onclick = async ()=> {
+  deregisterHome.addEventListener("click", async () => {
     showHome.style.display = "none";
     hideHome.style.display = "none";
-    deregisterHome.style.display = "none"
+    deregisterHome.style.display = "none";
     registerHome.style.display = "unset";
     await deregister();
-  }
+  });
 
-  showHome.onclick = async ()=> {
+  showHome.addEventListener("click", async () => {
     await show();
-  };
+  });
 
-  hideHome.onclick = async ()=> {
+  hideHome.addEventListener("click", async () => {
     await hide();
-  };
+  });
 }
 
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   await init();
 });

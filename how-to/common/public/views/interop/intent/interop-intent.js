@@ -8,12 +8,12 @@ export async function fireIntent(log, intent, context, app) {
       name: intent,
       context,
       metadata: {
-        target: app,
-      },
+        target: app
+      }
     };
     const intentResolver = await fin.me.interop.fireIntent(intentRequest, app);
     if (intentResolver !== undefined) {
-      log("Intent resolver received: ", intentResolver);
+      log('Intent resolver received: ', intentResolver);
     }
   }
 }
@@ -23,46 +23,41 @@ export async function fireIntentForContext(log, context, app) {
     if (app === undefined) {
       log(`Firing intent for context ${context.type}:`, context);
     } else {
-      log(
-        `Firing intent for context ${context.type} and targeting app: ${app}. Context: `,
-        context
-      );
+      log(`Firing intent for context ${context.type} and targeting app: ${app}. Context: `, context);
     }
     context.metadata = {
-      target: app,
+      target: app
     };
 
     const intentResolver = await fin.me.interop.fireIntentForContext(context);
     if (intentResolver !== undefined) {
-      log("Intent resolver received: ", intentResolver);
+      log('Intent resolver received: ', intentResolver);
     }
   }
 }
 
 export async function listen(log, intentList, onChange) {
-  if (window.fin !== undefined) {
+  if (
+    window.fin !== undefined &&
     // ----------------------------------------------------
     // Listening code
     // ----------------------------------------------------
-    if (intentList.length > 0) {
-      log("View Manifest/Defaults specified following intents: ", intentList);
-      try {
-        for (let i = 0; i < intentList.length; i++) {
-          await fin.me.interop.registerIntentHandler((passedIntent) => {
-            log(
-              "Received Context For Intent: " + passedIntent.name,
-              passedIntent.context
-            );
-            onChange();
-          }, intentList[i]);
-        }
-      } catch (error) {
-        log(
-          "Error while trying to register an intent handler. It may be this platform does not have a custom broker implementation with Intent support.",
-          error
-        );
-        onChange();
+    intentList.length > 0
+  ) {
+    log('View Manifest/Defaults specified following intents: ', intentList);
+    try {
+      for (let i = 0; i < intentList.length; i++) {
+        await fin.me.interop.registerIntentHandler((passedIntent) => {
+          log(`Received Context For Intent: ${passedIntent.name}`, passedIntent.context);
+          onChange();
+        }, intentList[i]);
       }
+    } catch (error) {
+      log(
+        'Error while trying to register an intent handler. It may be this platform does not have a custom broker implementation with Intent support.',
+        error
+      );
+      onChange();
     }
   }
 }

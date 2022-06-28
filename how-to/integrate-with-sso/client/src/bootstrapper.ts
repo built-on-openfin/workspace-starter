@@ -8,16 +8,11 @@ export async function init() {
 
   const providerWindow = fin.Window.getCurrentSync();
 
-  providerWindow.once("close-requested", async () => {
+  await providerWindow.once("close-requested", async () => {
     await fin.Platform.getCurrentSync().quit();
   });
 
   const settings = await getSettings();
 
-  await authenticationInit(
-    settings?.auth,
-    providerIsAuthenticated,
-    providerIsBusy,
-    logInformation
-  );
+  await authenticationInit(settings?.auth, providerIsAuthenticated, providerIsBusy, logInformation);
 }
