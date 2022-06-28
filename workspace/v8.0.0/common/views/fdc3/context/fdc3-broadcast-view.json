@@ -1,8 +1,8 @@
 {
-  "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/fdc3/context/fdc3-broadcast-view.html",
-  "fdc3InteropApi": "1.2",
-  "customData": {
-    "contextData": null,
-    "customChannel": ""
-  }
+	"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/fdc3/context/fdc3-broadcast-view.html",
+	"fdc3InteropApi": "1.2",
+	"customData": {
+		"contextData": null,
+		"customChannel": ""
+	}
 }
