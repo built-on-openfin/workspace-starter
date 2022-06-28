@@ -3,7 +3,7 @@
   "licenseKey": "openfin-demo-license-key",
   "runtime": {
     "arguments": "--v=1 --inspect --enable-mesh --security-realm=second-support-context-and-intents",
-    "version": "24.98.69.7"
+    "version": "26.102.70.16"
   },
   "platform": {
     "uuid": "second-support-context-and-intents",
@@ -39,7 +39,7 @@
     {
         "alias": "winform-interop-example",
         "version": "2.0.0",
-        "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/assets/native-interop-example.zip",
+        "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/assets/native-interop-example.zip",
         "target": "OpenFin.Interop.Win.Sample.exe",
         "forceDownload": false
     }
@@ -49,11 +49,20 @@
       "home": true,
       "store": true
     },
+    "platformProvider": {
+      "rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents",
+      "intentPicker": { 
+        "url": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/windows/intents/picker.html",
+        "height": 400,
+        "width": 400
+      }
+    },
     "appProvider": {
-      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/apps.json",
+      "appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/apps.json",
       "includeCredentialOnSourceRequest": "include",
       "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset"
+      "appAssetTag": "appasset",
+      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "browserProvider": {
       "windowOptions": {
@@ -124,7 +133,7 @@
             "tags": ["hero"]
           },
           "image": {
-            "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/superhero-unsplash.jpg"
+            "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/superhero-unsplash.jpg"
           }
         },
         "topRow": {
@@ -134,7 +143,7 @@
               "title": "Expero",
               "description": "A collection of example views from Expero showing the power of interop and context sharing.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-1-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-1-unsplash.jpg"
               },
               "tags": ["expero"]
             },
@@ -142,7 +151,7 @@
               "title": "Dev Tools",
               "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-2-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-2-unsplash.jpg"
               },
               "tags": ["tools"]
             },
@@ -150,7 +159,7 @@
               "title": "Learning Resource",
               "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-3-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-3-unsplash.jpg"
               },
               "tags": ["page"]
             }
@@ -167,7 +176,7 @@
               "title": "Views",
               "description": "A collection of views made available through our catalog.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-4-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-4-unsplash.jpg"
               },
               "tags": ["view"]
             },
@@ -175,7 +184,7 @@
               "title": "Web Apps",
               "description": "A collection of web apps built using OpenFin.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-5-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-5-unsplash.jpg"
               },
               "tags": ["manifest"]
             },
@@ -183,7 +192,7 @@
               "title": "Native Apps",
               "description": "A collection of native apps made available through our catalog.",
               "image": {
-                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/support-context-and-intents/images/coding-6-unsplash.jpg"
+                "src": "https://built-on-openfin.github.io/workspace-starter/dev/adam/clean-up/common/images/coding-6-unsplash.jpg"
               },
               "tags": ["native"]
             }
