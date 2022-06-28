@@ -17,7 +17,7 @@
 				<h1 class="tag">Broadcast and Listen To Context</h1>
 			</div>
 			<div class="row middle gap10">
-				<button is="fin-toggle-class"></button>
+				<button is="fin-toggle-class" title="Change style"></button>
 				<image src="../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
 			</div>
 		</header>
@@ -27,6 +27,18 @@
 					<form class="col gap40 scroll-vertical">
 						<div id="sectionCommon" class="formSection col gap10">
 							<h2>FDC3 Options</h2>
+							<fieldset>
+								<label
+									for="channelType"
+									title="There are different types of channel you can broadcast and listen against. System Channels defined by the platform (generally color coded) and custom application channels."
+								>
+									Channel Type
+								</label>
+								<select name="channelType" id="channelType">
+									<option value="systemChannel">System Channel</option>
+									<option value="appChannel">App Channel</option>
+								</select>
+							</fieldset>
 							<fieldset>
 								<label
 									for="fdc3Type"

@@ -48,12 +48,12 @@ function showCodePreview() {
 
 function updateCodePreview(context) {
 	previewData.codePreview = `
+// --------------------------------
+// Raising Intent code
+// --------------------------------
 if(window.fdc3 !== undefined) {
-
-  // ----------------------------------------------------
-  // Raising Intent code
-  // ----------------------------------------------------
-  let context = ${context};
+  
+	let context = ${context};
 `;
 
 	const appSelection = getAppSelection();
@@ -61,45 +61,48 @@ if(window.fdc3 !== undefined) {
 
 	if (appSelection !== 'none' && appSelection !== '') {
 		previewData.codePreview += `
-  let app = "${appSelection}";
+  	let app = "${appSelection}";
 `;
 
 		if (isContextRequest) {
 			previewData.codePreview += `
-  await fdc3.raiseIntentForContext(context, app);
+  	await fdc3.raiseIntentForContext(context, app);
 `;
 		} else {
 			previewData.codePreview += `
-  let intent = "${getIntentToRaise()}";
+  	let intent = "${getIntentToRaise()}";
   
-  await fdc3.raiseIntent(intent, context, app);
+  	await fdc3.raiseIntent(intent, context, app);
 `;
 		}
 	} else if (isContextRequest) {
 		previewData.codePreview += `
-  await fdc3.raiseIntentForContext(context);
+  	await fdc3.raiseIntentForContext(context);
   `;
 	} else {
 		previewData.codePreview += `
-  let intent = "${getIntentToRaise()}";
+  	let intent = "${getIntentToRaise()}";
     
-  await fdc3.raiseIntent(intent, context);
+  	await fdc3.raiseIntent(intent, context);
   `;
 	}
 	previewData.codePreview += `
 }`;
 
 	previewData.codePreview += `
-
+	
+// --------------------------------
+// Listening code
+// --------------------------------
 if(window.fdc3 !== undefined) {
 
-  // ----------------------------------------------------
-  // Listening code
-  // ----------------------------------------------------
-  let intent = "${getIntentToRaise()}";
-  fdc3.addIntentListener(intent, (ctx)=> {
-    console.log("Received Context For Intent: " + intent, ctx);
-  }); 
+  	let intent = "${getIntentToRaise()}";
+
+  	fdc3.addIntentListener(intent, (ctx)=> {
+  
+		console.log("Received Context For Intent: " + intent, ctx);
+  
+	}); 
 `;
 	previewData.codePreview += `
 }`;
