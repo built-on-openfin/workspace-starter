@@ -445,6 +445,7 @@
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/spaces-tabs/common/views/salesforce/preload.js",
 						"iconMap": {
 							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/spaces-tabs/common/images/salesforce/contact.svg",
 							"account": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/spaces-tabs/common/images/salesforce/account.svg",
