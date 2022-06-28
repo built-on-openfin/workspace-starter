@@ -40,7 +40,7 @@ export async function listenToSessionContext(log, appSessionContextGroupName, on
 			onContextReceived();
 		};
 
-		await fin.me.interop.joinSessionContextGroup(appSessionContextGroupName);
+		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup(appSessionContextGroupName);
 
 		// listen for new app channel messages
 		log(`Listening for app session context group: ${appSessionContextGroupName} context.`);

@@ -40,7 +40,7 @@ export async function listenToAppBroadcast(log, appChannelName, onContextReceive
 			log('App Channel Context Received: ', ctx);
 			onContextReceived();
 		};
-		await fdc3.getOrCreateChannel(appChannelName);
+		const appChannel = await fdc3.getOrCreateChannel(appChannelName);
 
 		// listen for new app channel messages
 		log(`Listening for app channel: ${appChannelName} context.`);
