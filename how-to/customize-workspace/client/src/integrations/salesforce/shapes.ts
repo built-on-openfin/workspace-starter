@@ -242,4 +242,9 @@ export interface SalesforceSettings {
   iconMap: {
     [id: string]: string;
   };
+
+  /**
+   * Map of the icon urls.
+   */
+  preload: string;
 }
