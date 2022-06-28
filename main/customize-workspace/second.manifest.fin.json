@@ -493,6 +493,7 @@
           "data": {
             "consumerKey": "",
             "orgUrl": "",
+            "preload": "https://built-on-openfin.github.io/workspace-starter/main/common/views/salesforce/preload.js",
             "iconMap": {
               "contact": "https://built-on-openfin.github.io/workspace-starter/main/common/images/salesforce/contact.svg",
               "account": "https://built-on-openfin.github.io/workspace-starter/main/common/images/salesforce/account.svg",
