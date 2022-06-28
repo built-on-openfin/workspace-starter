@@ -3,7 +3,7 @@ body {
   border-style: solid;
 }
 
-input[type="radio"] {
+input[type='radio'] {
   vertical-align: bottom;
 }
 

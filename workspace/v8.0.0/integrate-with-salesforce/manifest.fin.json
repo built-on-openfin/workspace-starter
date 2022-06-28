@@ -10,15 +10,16 @@
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/integrate-with-salesforce/favicon.ico",
     "autoShow": false,
     "providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/integrate-with-salesforce/platform/provider.html",
-    "preventQuitOnLastWindowClosed":true,
+    "preventQuitOnLastWindowClosed": true,
     "defaultViewOptions": {
       "fdc3InteropApi": "1.2",
-      "preloadScripts": [{
-        "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/integrate-with-salesforce/js/preload.js"
-      }]
+      "preloadScripts": [
+        {
+          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/integrate-with-salesforce/js/preload.js"
+        }
+      ]
     },
-    "defaultWindowOptions": {
-    }
+    "defaultWindowOptions": {}
   },
   "snapshot": {
     "windows": []
@@ -33,7 +34,6 @@
   "customSettings": {
     "consumerKey": "",
     "icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/integrate-with-salesforce/favicon.ico",
-    "isSandbox": false,
     "orgUrl": "",
     "queryMinLength": 3,
     "title": "Salesforce",

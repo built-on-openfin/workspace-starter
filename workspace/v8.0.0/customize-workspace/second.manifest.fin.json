@@ -58,7 +58,7 @@
     },
     "platformProvider": {
       "rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/customize-workspace",
-      "intentPicker": { 
+      "intentPicker": {
         "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/windows/intents/picker.html",
         "height": 400,
         "width": 400
@@ -72,22 +72,24 @@
       "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
     },
     "endpointProvider": {
-      "endpoints": [{
-        "id":"share-get",
-        "type":"fetch",
-        "options": {
-          "method": "GET",
-          "url":"https://workspace.openfin.co/api/share/[id]"
+      "endpoints": [
+        {
+          "id": "share-get",
+          "type": "fetch",
+          "options": {
+            "method": "GET",
+            "url": "https://workspace.openfin.co/api/share/[id]"
+          }
+        },
+        {
+          "id": "share-save",
+          "type": "fetch",
+          "options": {
+            "method": "POST",
+            "url": "https://workspace.openfin.co/api/share"
+          }
         }
-      },
-      {
-        "id":"share-save",
-        "type":"fetch",
-        "options": {
-          "method": "POST",
-          "url":"https://workspace.openfin.co/api/share"
-        }
-      }]
+      ]
     },
     "browserProvider": {
       "windowOptions": {
@@ -489,16 +491,15 @@
           "enabled": false,
           "moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/customize-workspace/js/integrations/salesforce.bundle.js",
           "data": {
-              "consumerKey": "",
-              "isSandbox": false,
-              "orgUrl": "",
-              "iconMap": {
-                  "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/contact.svg",
-                  "account": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/account.svg",
-                  "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/chatter.svg",
-                  "note": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/note.svg",
-                  "task": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/task.svg"
-              }
+            "consumerKey": "",
+            "orgUrl": "",
+            "iconMap": {
+              "contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/contact.svg",
+              "account": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/account.svg",
+              "chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/chatter.svg",
+              "note": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/note.svg",
+              "task": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/salesforce/task.svg"
+            }
           }
         }
       ]

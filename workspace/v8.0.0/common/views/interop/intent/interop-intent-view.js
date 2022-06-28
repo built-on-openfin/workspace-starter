@@ -1,8 +1,5 @@
-import {
-  getDefaultFDC3IntentData,
-  getDefaultFDC3ContextData,
-} from "../../fdc3/fdc3-data.js";
-import { fireIntent, fireIntentForContext, listen } from "./interop-intent.js";
+import { getDefaultFDC3IntentData, getDefaultFDC3ContextData } from '../../fdc3/fdc3-data.js';
+import { fireIntent, fireIntentForContext, listen } from './interop-intent.js';
 
 // -------------------------------------------------
 // settings
@@ -12,9 +9,9 @@ let intentData = getDefaultFDC3IntentData();
 
 let isCodePreview = true;
 
-let previewData = {
-  codePreview: "",
-  logs: "",
+const previewData = {
+  codePreview: '',
+  logs: ''
 };
 
 // -------------------------------------------------
@@ -24,22 +21,16 @@ async function applySettings() {
   const options = await fin.me.getOptions();
   const optionsData = options?.customData;
 
-  if (
-    optionsData?.contextData !== undefined &&
-    optionsData?.contextData !== null
-  ) {
+  if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
     contextData = optionsData.contextData;
   }
-  if (
-    optionsData?.intentData !== undefined &&
-    optionsData?.intentData !== null
-  ) {
+  if (optionsData?.intentData !== undefined && optionsData?.intentData !== null) {
     intentData = optionsData.intentData;
   }
 }
 
 function updatePreview() {
-  console.log("preview updated");
+  console.log('preview updated');
   if (isCodePreview) {
     showCodePreview();
   } else {
@@ -49,10 +40,10 @@ function updatePreview() {
 
 function showCodePreview() {
   isCodePreview = true;
-  const preview = document.querySelector("#preview");
+  const preview = document.querySelector('#preview');
   preview.textContent = previewData.codePreview;
-  const previewTitle = document.querySelector("#previewTitle");
-  previewTitle.innerText = "Code Preview";
+  const previewTitle = document.querySelector('#previewTitle');
+  previewTitle.textContent = 'Code Preview';
 }
 
 function updateCodePreview(context) {
@@ -65,10 +56,10 @@ if(window.fin !== undefined) {
   let context = ${context};
 `;
 
-  let appSelection = getAppSelection();
-  let isContextRequest = isRaiseByContext();
+  const appSelection = getAppSelection();
+  const isContextRequest = isRaiseByContext();
 
-  if (appSelection !== "none" && appSelection !== "") {
+  if (appSelection !== 'none' && appSelection !== '') {
     previewData.codePreview += `
   let app = "${appSelection}";
 `;
@@ -101,17 +92,16 @@ if(window.fin !== undefined) {
   }
 `;
     }
-  } else {
-    if (isContextRequest) {
-      previewData.codePreview += `
+  } else if (isContextRequest) {
+    previewData.codePreview += `
   const intentResolver = 
   await fin.me.interop.fireIntentForContext(context);
   if(intentResolver !== undefined) {
     console.log("Intent resolver received: ", intentResolver);
   }
   `;
-    } else {
-      previewData.codePreview += `
+  } else {
+    previewData.codePreview += `
   let intent = "${getIntentToRaise()}";
     
   const intentRequest = {
@@ -123,7 +113,6 @@ if(window.fin !== undefined) {
     log("Intent resolver received: ", intentResolver);
   }
   `;
-    }
   }
   previewData.codePreview += `
 }`;
@@ -148,14 +137,14 @@ if(window.fin !== undefined) {
 
 function showLogs() {
   isCodePreview = false;
-  const preview = document.querySelector("#preview");
+  const preview = document.querySelector('#preview');
   preview.textContent = previewData.logs;
-  const previewTitle = document.querySelector("#previewTitle");
-  previewTitle.innerText = "Logs";
+  const previewTitle = document.querySelector('#previewTitle');
+  previewTitle.textContent = 'Logs';
 }
 
 function clearLogs() {
-  previewData.logs = "";
+  previewData.logs = '';
   showLogs();
 }
 
@@ -174,15 +163,13 @@ ${JSON.stringify(data, null, 5)}`;
 }
 
 function bindFDC3Context(value) {
-  const specifiedContext = document.querySelector("#context");
+  const specifiedContext = document.querySelector('#context');
   specifiedContext.value = JSON.stringify(value, null, 5);
 }
 
 function bindFDC3Values(values) {
-  const fdc3Value = document.querySelector("#fdc3Value");
-  let fdc3ValueOptions = values
-    .map((data, index) => `<option value=${index}>${data.name}</option>`)
-    .join("\n");
+  const fdc3Value = document.querySelector('#fdc3Value');
+  const fdc3ValueOptions = values.map((data, index) => `<option value=${index}>${data.name}</option>`).join('\n');
   fdc3Value.innerHTML = fdc3ValueOptions;
   const context = values[0];
   bindFDC3Context(context);
@@ -190,19 +177,15 @@ function bindFDC3Values(values) {
 }
 
 function bindFDC3Types(types) {
-  const fdc3Type = document.querySelector("#fdc3Type");
-  let fdc3TypeOptions = types
-    .map((type) => `<option value=${type}>${type}</option>`)
-    .join("\n");
+  const fdc3Type = document.querySelector('#fdc3Type');
+  const fdc3TypeOptions = types.map((type) => `<option value=${type}>${type}</option>`).join('\n');
   fdc3Type.innerHTML = fdc3TypeOptions;
   bindFDC3Values(contextData[types[0]]);
 }
 
 function bindFDC3Intents(intents) {
-  const fdc3Intent = document.querySelector("#fdc3Intents");
-  let fdc3IntentOptions = intents
-    .map((intent) => `<option value=${intent}>${intent}</option>`)
-    .join("\n");
+  const fdc3Intent = document.querySelector('#fdc3Intents');
+  const fdc3IntentOptions = intents.map((intent) => `<option value=${intent}>${intent}</option>`).join('\n');
   fdc3Intent.innerHTML = fdc3IntentOptions;
   buildAppList()
     .then((apps) => {
@@ -212,55 +195,48 @@ function bindFDC3Intents(intents) {
 }
 
 function bindApps(apps) {
-  const fdc3Apps = document.querySelector("#fdc3Apps");
-  apps.unshift(
-    { appId: "none", title: "No Preference" },
-    { appId: "wrong-app", title: "Non Existent App" }
-  );
-  let fdc3AppOptions = apps
-    .map((app) => `<option value=${app.appId}>${app.title}</option>`)
-    .join("\n");
+  const fdc3Apps = document.querySelector('#fdc3Apps');
+  apps.unshift({ appId: 'none', title: 'No Preference' }, { appId: 'wrong-app', title: 'Non Existent App' });
+  const fdc3AppOptions = apps.map((app) => `<option value=${app.appId}>${app.title}</option>`).join('\n');
   fdc3Apps.innerHTML = fdc3AppOptions;
 }
 
 function getCombinedAppList(intents) {
-  let combinedAppList = [];
-  let combinedListOfAppIds = [];
+  const combinedAppList = [];
+  const combinedListOfAppIds = [];
 
-  intents.forEach((intent) => {
-    intent.apps.forEach((app) => {
-      if (combinedListOfAppIds.indexOf(app.appId) === -1) {
+  for (const intent of intents) {
+    for (const app of intent.apps) {
+      if (!combinedListOfAppIds.includes(app.appId)) {
         combinedAppList.push(app);
         combinedListOfAppIds.push(app.appId);
       }
-    });
-  });
+    }
+  }
 
   return combinedAppList;
 }
 
 function isRaiseByContext() {
-  return "fireIntentForContext" === getIntentRaiseType();
+  return getIntentRaiseType() === 'fireIntentForContext';
 }
 
 async function buildAppList() {
   let intents = [];
-  let findByContext = isRaiseByContext();
+  const findByContext = isRaiseByContext();
 
   try {
     if (findByContext) {
-      intents = await window.fin.me.interop.getInfoForIntentsByContext(
-        getContextToSend()
-      );
+      intents = await window.fin.me.interop.getInfoForIntentsByContext(getContextToSend());
     } else {
-      let intent = await window.fin.me.interop.getInfoForIntent({
-        name: getIntentToRaise(),
+      const intent = await window.fin.me.interop.getInfoForIntent({
+        name: getIntentToRaise()
       });
       intents.push(intent);
     }
   } catch (error) {
     log(
-      "Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support."
+      'Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support.'
     );
     console.error(error);
     return [];
@@ -269,76 +245,74 @@ async function buildAppList() {
 }
 
 function bindFDC3OnChange() {
-  const fdc3RaiseBy = document.querySelector("#intentType");
-  const fdc3Intent = document.querySelector("#fdc3Intents");
-  const fdc3Type = document.querySelector("#fdc3Type");
-  const fdc3Value = document.querySelector("#fdc3Value");
-  const fdc3Apps = document.querySelector("#fdc3Apps");
-  const specifiedContext = document.querySelector("#context");
-  const btnFireIntent = document.querySelector("#btnFireIntent");
-  const btnFireIntentForContext = document.querySelector(
-    "#btnFireIntentForContext"
-  );
+  const fdc3RaiseBy = document.querySelector('#intentType');
+  const fdc3Intent = document.querySelector('#fdc3Intents');
+  const fdc3Type = document.querySelector('#fdc3Type');
+  const fdc3Value = document.querySelector('#fdc3Value');
+  const fdc3Apps = document.querySelector('#fdc3Apps');
+  const specifiedContext = document.querySelector('#context');
+  const btnFireIntent = document.querySelector('#btnFireIntent');
+  const btnFireIntentForContext = document.querySelector('#btnFireIntentForContext');
 
-  fdc3RaiseBy.onchange = async () => {
-    let apps = await buildAppList();
+  fdc3RaiseBy.addEventListener('change', async () => {
+    const apps = await buildAppList();
     await bindApps(apps);
     updateCodePreview(specifiedContext.value);
     if (isRaiseByContext()) {
-      btnFireIntent.style.display = "none";
-      btnFireIntentForContext.style.display = "unset";
+      btnFireIntent.style.display = 'none';
+      btnFireIntentForContext.style.display = 'unset';
     } else {
-      btnFireIntent.style.display = "unset";
-      btnFireIntentForContext.style.display = "none";
+      btnFireIntent.style.display = 'unset';
+      btnFireIntentForContext.style.display = 'none';
     }
-  };
+  });
 
-  fdc3Intent.onchange = async () => {
-    let getFDC3Types = intentData[getIntentToRaise()];
+  fdc3Intent.addEventListener('change', async () => {
+    const getFDC3Types = intentData[getIntentToRaise()];
     bindFDC3Types(getFDC3Types);
-    let apps = await buildAppList();
+    const apps = await buildAppList();
     await bindApps(apps);
-  };
+  });
 
-  fdc3Type.onchange = async () => {
+  fdc3Type.addEventListener('change', async () => {
     bindFDC3Values(contextData[fdc3Type.value]);
-    let apps = await buildAppList();
+    const apps = await buildAppList();
     await bindApps(apps);
-  };
+  });
 
-  fdc3Value.onchange = () => {
+  fdc3Value.addEventListener('change', () => {
     const context = contextData[fdc3Type.value][fdc3Value.value];
     bindFDC3Context(context);
     updateCodePreview(JSON.stringify(context, null, 5));
-  };
+  });
 
-  specifiedContext.onchange = () => {
+  specifiedContext.addEventListener('change', () => {
     updateCodePreview(specifiedContext.value);
-  };
+  });
 
-  fdc3Apps.onchange = () => {
+  fdc3Apps.addEventListener('change', () => {
     updateCodePreview(specifiedContext.value);
-  };
+  });
 }
 
 function getContextToSend() {
-  const contextInput = document.querySelector("#context");
+  const contextInput = document.querySelector('#context');
   const context = contextInput.value;
   return JSON.parse(context);
 }
 
 function getIntentToRaise() {
-  const intent = document.querySelector("#fdc3Intents");
+  const intent = document.querySelector('#fdc3Intents');
   return intent.value;
 }
 
 function getIntentRaiseType() {
-  const intent = document.querySelector("#intentType");
+  const intent = document.querySelector('#intentType');
   return intent.value;
 }
 
 function getAppSelection() {
-  const intent = document.querySelector("#fdc3Apps");
+  const intent = document.querySelector('#fdc3Apps');
   return intent.value;
 }
 
@@ -346,61 +320,59 @@ function getAppSelection() {
 // Init Functions
 // -------------------------------------------------
 async function init() {
-  const btnFireIntent = document.querySelector("#btnFireIntent");
-  btnFireIntent.addEventListener("click", async () => {
+  const btnFireIntent = document.querySelector('#btnFireIntent');
+  btnFireIntent.addEventListener('click', async () => {
     try {
       const ctx = getContextToSend();
       const intent = getIntentToRaise();
       let app = getAppSelection();
-      if (app === "none" || app === "") {
+      if (app === 'none' || app === '') {
         app = undefined;
       }
       await fireIntent(log, intent, ctx, app);
       showLogs();
     } catch (error) {
-      console.error("Unable to fire intent", error);
+      console.error('Unable to fire intent', error);
       log(
-        "Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:",
+        'Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:',
         error
       );
       showLogs();
     }
   });
 
-  const btnFireIntentForContext = document.querySelector(
-    "#btnFireIntentForContext"
-  );
-  btnFireIntentForContext.addEventListener("click", async () => {
+  const btnFireIntentForContext = document.querySelector('#btnFireIntentForContext');
+  btnFireIntentForContext.addEventListener('click', async () => {
     try {
       const ctx = getContextToSend();
       let app = getAppSelection();
-      if (app === "none" || app === "") {
+      if (app === 'none' || app === '') {
         app = undefined;
       }
       await fireIntentForContext(log, ctx, app);
       showLogs();
     } catch (error) {
-      console.error("Unable to fire intent for context", error);
+      console.error('Unable to fire intent for context', error);
       log(
-        "Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:",
+        'Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:',
         error
       );
       showLogs();
     }
   });
 
-  const btnSeeCode = document.querySelector("#btnSeeCode");
-  btnSeeCode.addEventListener("click", async () => {
+  const btnSeeCode = document.querySelector('#btnSeeCode');
+  btnSeeCode.addEventListener('click', async () => {
     showCodePreview();
   });
 
-  const btnSeeLogs = document.querySelector("#btnSeeLogs");
-  btnSeeLogs.addEventListener("click", async () => {
+  const btnSeeLogs = document.querySelector('#btnSeeLogs');
+  btnSeeLogs.addEventListener('click', async () => {
     showLogs();
   });
 
-  const btnClear = document.querySelector("#btnClear");
-  btnClear.addEventListener("click", () => {
+  const btnClear = document.querySelector('#btnClear');
+  btnClear.addEventListener('click', () => {
     clearLogs();
   });
 
@@ -413,7 +385,7 @@ async function init() {
   await listen(log, intentTypes, showLogs);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   try {
     init();
   } catch (error) {
