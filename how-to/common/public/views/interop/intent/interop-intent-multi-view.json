@@ -1,7 +1,7 @@
 {
-  "url": "http://localhost:8080/common/views/interop/intent/interop-intent-view.html",
-  "customData": {
-    "contextData": null,
-    "intentData": null
-  }
+	"url": "http://localhost:8080/common/views/interop/intent/interop-intent-view.html",
+	"customData": {
+		"contextData": null,
+		"intentData": null
+	}
 }

@@ -13,5 +13,5 @@ console.log("Root path checks both the main and common directories.");
 app.use(express.static(mainPath));
 app.use("/common", express.static(commonPath));
 app.listen(port, () => {
-  console.log("server is listening on port", port);
+	console.log("server is listening on port", port);
 });

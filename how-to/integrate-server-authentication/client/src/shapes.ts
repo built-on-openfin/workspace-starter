@@ -1,9 +1,9 @@
 export interface AuthSettings {
-  loginUrl: string;
-  logoutUrl: string;
-  appUrl: string;
+	loginUrl: string;
+	logoutUrl: string;
+	appUrl: string;
 }
 
 export interface CustomSettings {
-  auth?: AuthSettings;
+	auth?: AuthSettings;
 }

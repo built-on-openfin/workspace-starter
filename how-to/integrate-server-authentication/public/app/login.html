@@ -1,78 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Example Login</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="../common/style/app.css" />
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Example Login</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+	</head>
 
-  <body class="col fill gap20">
-    <header class="row spread middle">
-      <div class="col">
-        <h1>Example Login</h1>
-        <h1 class="tag">Demonstrate integrating Server Authentication.</h1>
-      </div>
-      <div class="row middle gap20">
-        <image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
-      </div>
-    </header>
-    <main class="col fill gap10 pad20">
-      <form class="col left gap20">
-        <p>
-          This example only has one set of credentials that work
-          <i>test@example.com / pass1234</i>
-        </p>
-        <p>Enter your credentials to login:</p>
-        <fieldset>
-          <label for="textEmailAddress">E-mail Address</label>
-          <input type="text" id="textEmailAddress" />
-        </fieldset>
-        <fieldset>
-          <label for="textPassword">Password</label>
-          <input type="password" id="textPassword" />
-        </fieldset>
-        <button type="button" id="btnLogin">Login</button>
-        <span id="textError" class="error"></span>
-      </form>
-    </main>
-    <footer class="row right">
-      <button type="button" id="btnExit">Exit</button>
-    </footer>
-    <script>
-      const textEmailAddress = document.querySelector('#textEmailAddress');
-      const textPassword = document.querySelector('#textPassword');
-      const textError = document.querySelector('#textError');
-      textError.textContent = '';
-      const btnLogin = document.querySelector('#btnLogin');
-      btnLogin.addEventListener('click', async () => {
-        // On success this will set a cookie and redirect to app
-        fetch('http://localhost:8080/app/login', {
-          method: 'post',
-          redirect: 'follow',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email: textEmailAddress.value, password: textPassword.value })
-        })
-          .then((response) => {
-            if (!response.ok) {
-              textError.textContent = response.statusText;
-            } else if (response.redirected) {
-              window.location.href = response.url;
-            }
-          })
-          .catch((err) => {
-            textError.textContent = err;
-          });
-      });
-      const btnExit = document.querySelector('#btnExit');
-      btnExit.addEventListener('click', async () => {
-        await fin.Window.getCurrentSync().close();
-      });
-    </script>
-  </body>
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Example Login</h1>
+				<h1 class="tag">Demonstrate integrating Server Authentication.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap10 pad20">
+			<form class="col left gap20">
+				<p>
+					This example only has one set of credentials that work
+					<i>test@example.com / pass1234</i>
+				</p>
+				<p>Enter your credentials to login:</p>
+				<fieldset>
+					<label for="textEmailAddress">E-mail Address</label>
+					<input type="text" id="textEmailAddress" />
+				</fieldset>
+				<fieldset>
+					<label for="textPassword">Password</label>
+					<input type="password" id="textPassword" />
+				</fieldset>
+				<button type="button" id="btnLogin">Login</button>
+				<span id="textError" class="error"></span>
+			</form>
+		</main>
+		<footer class="row right">
+			<button type="button" id="btnExit">Exit</button>
+		</footer>
+		<script>
+			const textEmailAddress = document.querySelector('#textEmailAddress');
+			const textPassword = document.querySelector('#textPassword');
+			const textError = document.querySelector('#textError');
+			textError.textContent = '';
+			const btnLogin = document.querySelector('#btnLogin');
+			btnLogin.addEventListener('click', async () => {
+				// On success this will set a cookie and redirect to app
+				fetch('http://localhost:8080/app/login', {
+					method: 'post',
+					redirect: 'follow',
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: textEmailAddress.value,
+						password: textPassword.value
+					})
+				})
+					.then((response) => {
+						if (!response.ok) {
+							textError.textContent = response.statusText;
+						} else if (response.redirected) {
+							window.location.href = response.url;
+						}
+					})
+					.catch((err) => {
+						textError.textContent = err;
+					});
+			});
+			const btnExit = document.querySelector('#btnExit');
+			btnExit.addEventListener('click', async () => {
+				await fin.Window.getCurrentSync().close();
+			});
+		</script>
+	</body>
 </html>
