@@ -1,0 +1,9 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/simplifybroadcast/common/views/fdc3/intent/fdc3-intent-view.html",
+	"fdc3InteropApi": "1.2",
+	"name": "fdc3-intent-view",
+	"customData": {
+		"contextData": null,
+		"intentData": null
+	}
+}
