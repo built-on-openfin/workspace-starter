@@ -1,4 +1,4 @@
-import { fin } from "openfin-adapter/src/mock";
+import { fin } from "@openfin/core";
 import { LaunchBarWindowSettings } from "./shapes";
 
 export async function createLaunchBarWindow(options: LaunchBarWindowSettings) {

@@ -1,5 +1,5 @@
+import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
-import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
 
 let cachedApps: App[];

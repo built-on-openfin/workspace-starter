@@ -1,9 +1,7 @@
 import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { ChannelProvider } from "openfin-adapter";
-import Transport from "openfin-adapter/src/transport/transport";
 import { getActions } from "./actions";
 import { getDefaultWindowOptions, overrideCallback } from "./browser";
-import { PlatformInteropBroker } from "./interopbroker";
+import { interopOverride } from "./interopbroker";
 import { getSettings, getThemes } from "./settings";
 
 export async function init() {
@@ -15,13 +13,7 @@ export async function init() {
   if (settings.browserProvider !== undefined) {
     browser.defaultWindowOptions = await getDefaultWindowOptions();
 
-    browser.interopOverride = async (
-      InteropBroker,
-      provider: Transport,
-      options: ChannelProvider,
-      ...args: unknown[]
-    ) => new PlatformInteropBroker(provider, options, ...args);
-
+    browser.interopOverride = interopOverride;
     browser.overrideCallback = overrideCallback;
   }
 

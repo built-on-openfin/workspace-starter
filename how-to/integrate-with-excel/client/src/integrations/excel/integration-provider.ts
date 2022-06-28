@@ -1,3 +1,4 @@
+import { fin } from "@openfin/core";
 import { Cell, enableLogging, ExcelApplication, getExcelApplication } from "@openfin/excel";
 import {
   CLITemplate,
@@ -7,7 +8,6 @@ import {
   type HomeSearchResponse,
   type HomeSearchResult
 } from "@openfin/workspace";
-import { InteropClient } from "openfin-adapter/src/api/interop";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
 import type { ExcelAssetSettings, ExcelSettings, ExcelWorksheetSettings } from "./shapes";
 
@@ -43,7 +43,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
    * The interop clients for the different contexts.
    * @internal
    */
-  private _interopClients: { [id: string]: InteropClient };
+  private _interopClients: { [id: string]: OpenFin.InteropClient };
 
   /**
    * The module is being registered.
