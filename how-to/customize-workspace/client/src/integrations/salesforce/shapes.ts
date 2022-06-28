@@ -242,4 +242,9 @@ export interface SalesforceSettings {
   iconMap: {
     [id: string]: string;
   };
+
+  /**
+   * Preload script required by salesforce to make the fin api available.
+   */
+  preload: string;
 }

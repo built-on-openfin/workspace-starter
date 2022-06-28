@@ -167,10 +167,9 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
     if (
       data !== undefined &&
       this._integrationManager &&
-      this._integrationManager.rootUrl &&
       this._integrationManager.launchView
     ) {
-      const preload = `${this._integrationManager.rootUrl}/views/salesforce/preload.js`;
+      const preload = integration?.data?.preload;
       const viewOptions = {
         url: data.pageUrl,
         fdc3InteropApi: "1.2",
