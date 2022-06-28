@@ -68,13 +68,6 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
   private _integrationManager: IntegrationManager | undefined;
 
   /**
-   * The integration settings.
-   * @internal
-   */
-   private _settings: SalesforceSettings | undefined;
-
-
-  /**
    * The connection to SalesForce.
    * @internal
    */
@@ -91,7 +84,6 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
     integration: Integration<SalesforceSettings>
   ): Promise<void> {
     this._integrationManager = integrationManager;
-    this._settings = integration.data;
     console.log("Registering SalesForce");
     try {
       await this.openConnection(integration);
@@ -177,7 +169,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
       this._integrationManager &&
       this._integrationManager.launchView
     ) {
-      const preload = this._settings.preload;
+      const preload = integration?.data?.preload;
       const viewOptions = {
         url: data.pageUrl,
         fdc3InteropApi: "1.2",
