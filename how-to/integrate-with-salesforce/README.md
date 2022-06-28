@@ -43,15 +43,9 @@ With Salesforce configured and the sample custom settings updated, you can conti
 $ npm install
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This samples includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
-   settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this samples.
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
+   settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
@@ -60,21 +54,27 @@ $ npm run build
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
 ```bash
 $ npm run client
 ```
 
-6. At this point you will be prompted to log in to your Salesforce org (unless you have single sign-on configured), and to authorize your Connected App's request for permissions.
+5. At this point you will be prompted to log in to your Salesforce org (unless you have single sign-on configured), and to authorize your Connected App's request for permissions.
 
-7. Assuming login and authorization was successful, OpenFin Home will appear. Press the Enter key to display the default "Browse Salesforce" result that will open your Salesforce org in OpenFin Browser. To search for Accounts and Contacts, type a query into Home and click on a result to open the relevant detail page in OpenFin Browser.
+6. Assuming login and authorization was successful, OpenFin Home will appear. Press the Enter key to display the default "Browse Salesforce" result that will open your Salesforce org in OpenFin Browser. To search for Accounts and Contacts, type a query into Home and click on a result to open the relevant detail page in OpenFin Browser.
+
+7. Build the project if you have modified the code.
+
+```bash
+$ npm run build
+```
 
 ## What does it look like?
 

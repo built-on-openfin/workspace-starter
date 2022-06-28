@@ -3,6 +3,54 @@
 >**_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a  license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 OpenFin Workspace is currently **only supported on Windows**.
 
+# Migrate from a previous version - From v7.0 to v8.0
+
+The main focus of this release is:
+
+### Support Platform Windows
+
+For developers of existing applications that use the Platform API, you now have the option to use OpenFin Workspace components while continuing to use your existing custom platform windows. This provides additional flexibility on deciding when to adopt our out-of-the box Browser component, easing your transition to Workspace.
+
+* We have a sample [how-to/register-with-platform-windows](../register-with-platform-windows) 
+* [https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace](https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace)
+
+### Asynchronous Search Results in Home
+
+Platform Providers can now configure search results to display only on-demand, after the end-user selects a result. This can significantly improve performance for queries that can have numerous results. For example, your Home Provider can fetch only the top-level search results in the initial query and then display the details of a particular result only after a user clicks on it, deferring the lookup of additional rich information to your backend services only when that information is required. Templates to indicate result loading or failure to the user are included.
+
+* The [how-to/customize-home-templates](../customize-home-templates) sample has been updated with examples.
+* [https://developers.openfin.co/of-docs/docs/provide-search-results-async](https://developers.openfin.co/of-docs/docs/provide-search-results-async)
+
+### Content Locking
+
+Platform Providers can now lock Browser Windows and/or Pages to offer fixed, repeatable experiences for end-users. End-users can also manually lock and unlock Pages themselves in Workspace Browser, if that feature is enabled through a Platform Provider’s configuration.
+
+* The [how-to/register-with-browser](../register-with-browser) samples shows a page with browser lock/unlock enabled.
+* [https://developers.openfin.co/of-docs/docs/lock-content-in-browser](https://developers.openfin.co/of-docs/docs/lock-content-in-browser)
+
+### Improved Designs of Home Filters
+
+The visual designs of filters in Workspace Home have been improved, so end-users can quickly and easily zero in on the content that they are searching for and quickly clear out selected filters
+
+## What dependencies will I need?
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^8.0.0",
+                    "@openfin/workspace-platform": "^8.0.0"
+                }
+```
+
+## Other Changes?
+
+The structure of the how-to samples has been updated. The views (content) and some of the common scripts to setup dos, start and kill the project and the apps.json file have been moved to a [how-to/common](../common) folder. The express.js code has been simplified so it most cases you just have an index.ts file. And the server now maps the sample folder and /common to the common how-to. 
+
+A new npm command **"npm run setup"** has also been introduced that takes advantage of our npm workspaces support and installs from the root directory and then builds the sample you are currently in and the common directory.
+
+Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only customize-workspace supports inline-view as a manifestType as it is supported by the sample and will not be recognised by the workspace api).
+
 # Migrate from a previous version - From v6.0 to v7.0
 
 The main focus of this release is on introducing support for Workspace Management APIs and adding a UI for Workspace Management to the Browser.

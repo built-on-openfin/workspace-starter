@@ -17,47 +17,46 @@ The example is a simple view that shows launching, interacting and auditing noti
 To run this sample you can:
 
 * Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv7.0.0%2Fuse-notifications%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Use Notifications</a>
+* Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fuse-notifications%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Use Notifications</a>
 
 ---
 
 
 ## Getting Started
 
-1. Install dependencies. Note that these examples assume you are in the sub-directory for the example.
+1. Install dependencies and do an initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```bash
-$ npm install
+$ npm run setup
 ```
 
-2. Build the project.
-
-```bash
-$ npm run build
-```
-
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 7.0.0) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example includes a utility (`desktop-owner-settings.bat`) that adds the Windows registry key for you, pointing to a local desktop owner 
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner 
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
   
-   (**WARNING**: This script kills all open OpenFin processes. **Do not use this in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
-
+   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```bash
 $ npm run dos
 ```
 
-4. Start the test server in a new window.
+3. Start the test server in a new window.
 
 ```bash
 $ start npm run start
 ```
 
-5. Start the demonstration application.
+4. Start the demonstration application.
 
 ```bash
 $ npm run client
+```
+
+5. Build the project if you change the code.
+
+```bash
+$ npm run build
 ```
 
 ![](openfin-use-notifications.gif)

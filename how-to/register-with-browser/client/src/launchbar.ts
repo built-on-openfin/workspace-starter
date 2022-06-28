@@ -76,6 +76,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
             },
             {
                 type: BrowserButtonType.PresetLayouts
+            },
+            {
+                type: BrowserButtonType.LockUnlockPage
             }
         ]
     };

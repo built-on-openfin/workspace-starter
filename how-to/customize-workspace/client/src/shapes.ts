@@ -5,7 +5,12 @@ import { IntegrationProvider } from "./integrations-shapes";
 
 
 interface PlatformProvider {
-    rootUrl: string
+    rootUrl: string,
+    intentPicker?: {
+        url: string,
+        height?: number,
+        width?: number
+    }
 }
 
 interface NotificationProvider extends NotificationsPlatform {};
@@ -42,7 +47,8 @@ interface AppProvider {
     appsSourceUrl: string,
     includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include",
     cacheDurationInMinutes?: number,
-    appAssetTag?: string
+    appAssetTag?: string,
+    manifestTypes?: string[]
 }
 
 export interface StorefrontSettingsNavigationItem {

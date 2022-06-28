@@ -125,7 +125,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
         },
       },
       image: {
-        src: "http://localhost:8080/images/superhero-unsplash.jpg",
+        src: "http://localhost:8080/common/images/superhero-unsplash.jpg",
       },
     },
     topRow: {
@@ -137,7 +137,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           description:
             "A collection of example views from Expero showing the power of interop and context sharing.",
           image: {
-            src: "http://localhost:8080/images/coding-1-unsplash.jpg",
+            src: "http://localhost:8080/common/images/coding-1-unsplash.jpg",
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
@@ -150,7 +150,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           description:
             "A collection of developer tools that can aid with building and debugging OpenFin applications.",
           image: {
-            src: "http://localhost:8080/images/coding-2-unsplash.jpg",
+            src: "http://localhost:8080/common/images/coding-2-unsplash.jpg",
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
@@ -173,7 +173,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           description:
             "A collection of views made available through our catalog.",
           image: {
-            src: "http://localhost:8080/images/coding-4-unsplash.jpg",
+            src: "http://localhost:8080/common/images/coding-4-unsplash.jpg",
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
@@ -185,7 +185,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
           title: "Web Apps",
           description: "A collection of web apps built using OpenFin.",
           image: {
-            src: "http://localhost:8080/images/coding-5-unsplash.jpg",
+            src: "http://localhost:8080/common/images/coding-5-unsplash.jpg",
           },
           templateId: StorefrontTemplate.AppGrid,
           templateData: {
