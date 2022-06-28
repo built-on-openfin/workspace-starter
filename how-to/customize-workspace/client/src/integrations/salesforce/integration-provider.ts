@@ -166,13 +166,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		// otherwise open the result page url in browser
 		const data = result.data as SalesforceResultData;
-		if (
-			data !== undefined &&
-			this._integrationManager &&
-			this._integrationManager.rootUrl &&
-			this._integrationManager.launchView
-		) {
-			const preload = `${this._integrationManager.rootUrl}/views/salesforce/preload.js`;
+		if (data !== undefined && this._integrationManager && this._integrationManager.launchView) {
+			const preload = integration?.data?.preload;
 			const viewOptions = {
 				url: data.pageUrl,
 				fdc3InteropApi: "1.2",
