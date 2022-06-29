@@ -47,6 +47,8 @@ function showCodePreview() {
 }
 
 function updateCodePreview(context) {
+	const intent = getIntentToRaise();
+
 	previewData.codePreview = `
 // --------------------------------
 // Raising Intent code
@@ -81,7 +83,7 @@ if(window.fin !== undefined) {
 `;
 		} else {
 			previewData.codePreview += `
-  	let intent = "${getIntentToRaise()}";
+  	let intent = "${intent}";
   
   	const intentRequest = {
 		name: intent,
@@ -113,7 +115,7 @@ if(window.fin !== undefined) {
   `;
 	} else {
 		previewData.codePreview += `
-	let intent = "${getIntentToRaise()}";
+	let intent = "${intent}";
     
   	const intentRequest = {
     	name: intent,
@@ -139,7 +141,7 @@ if(window.fin !== undefined) {
 // -------------------------------- 
 if(window.fin !== undefined) {
 
-	let intent = "${getIntentToRaise()}";
+	let intent = "${intent}";
 
   	await fin.me.interop.registerIntentHandler((passedIntent)=>{ 
   
@@ -249,16 +251,30 @@ async function buildAppList() {
 		if (findByContext) {
 			intents = await window.fin.me.interop.getInfoForIntentsByContext(getContextToSend());
 		} else {
+			const intentToRaise = getIntentToRaise();
+			if (intentToRaise === '') {
+				// no intent available to perform a search.
+				return [];
+			}
 			const intent = await window.fin.me.interop.getInfoForIntent({
 				name: getIntentToRaise()
 			});
 			intents.push(intent);
 		}
 	} catch (error) {
-		log(
-			'Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support.'
-		);
-		console.error(error);
+		if (findByContext) {
+			log(
+				`Unable to look up intents to build a supporting app list. It could be this platform does not have a custom Interop Broker with intent support or that there are no apps that support this context type: ${getContextToSend()}.`
+			);
+		} else if (error.toString().includes('NoAppsFound')) {
+			log(
+				`Unable to to build a supporting app list. There are no apps that support the intent: ${getIntentToRaise()}.`
+			);
+		} else {
+			log(
+				`Unable to to build a supporting app list. Your platform might not have a custom interop broker implementation that supports intents.`
+			);
+		}
 		return [];
 	}
 	return getCombinedAppList(intents);
@@ -273,6 +289,8 @@ function bindFDC3OnChange() {
 	const specifiedContext = document.querySelector('#context');
 	const btnFireIntent = document.querySelector('#btnFireIntent');
 	const btnFireIntentForContext = document.querySelector('#btnFireIntentForContext');
+	const customIntentContainer = document.querySelector('#customIntentContainer');
+	const customIntent = document.querySelector('#customIntent');
 
 	fdc3RaiseBy.addEventListener('change', async () => {
 		const apps = await buildAppList();
@@ -288,10 +306,15 @@ function bindFDC3OnChange() {
 	});
 
 	fdc3Intent.addEventListener('change', async () => {
-		const getFDC3Types = intentData[getIntentToRaise()];
-		bindFDC3Types(getFDC3Types);
+		bindFDC3Types(getFDC3Types());
 		const apps = await buildAppList();
 		await bindApps(apps);
+		const intent = fdc3Intent.value;
+		if (intent === 'Custom') {
+			customIntentContainer.style.display = 'flex';
+		} else {
+			customIntentContainer.style.display = 'none';
+		}
 	});
 
 	fdc3Type.addEventListener('change', async () => {
@@ -313,6 +336,10 @@ function bindFDC3OnChange() {
 	fdc3Apps.addEventListener('change', () => {
 		updateCodePreview(specifiedContext.value);
 	});
+
+	customIntent.addEventListener('change', () => {
+		updateCodePreview(specifiedContext.value);
+	});
 }
 
 function getContextToSend() {
@@ -322,8 +349,13 @@ function getContextToSend() {
 }
 
 function getIntentToRaise() {
-	const intent = document.querySelector('#fdc3Intents');
-	return intent.value;
+	const selectedIntent = document.querySelector('#fdc3Intents');
+	let intent = selectedIntent.value;
+	if (intent === 'Custom') {
+		const customIntent = document.querySelector('#customIntent');
+		intent = customIntent.value;
+	}
+	return intent;
 }
 
 function getIntentRaiseType() {
@@ -336,15 +368,23 @@ function getAppSelection() {
 	return intent.value;
 }
 
+function getFDC3Types() {
+	let types = intentData[getIntentToRaise()];
+	if (types === undefined) {
+		types = intentData['Custom'];
+	}
+	return types;
+}
+
 // -------------------------------------------------
 // Init Functions
 // -------------------------------------------------
 async function init() {
 	const btnFireIntent = document.querySelector('#btnFireIntent');
 	btnFireIntent.addEventListener('click', async () => {
+		const ctx = getContextToSend();
+		const intent = getIntentToRaise();
 		try {
-			const ctx = getContextToSend();
-			const intent = getIntentToRaise();
 			let app = getAppSelection();
 			if (app === 'none' || app === '') {
 				app = undefined;
@@ -352,11 +392,16 @@ async function init() {
 			await fireIntent(log, intent, ctx, app);
 			showLogs();
 		} catch (error) {
-			console.error('Unable to fire intent', error);
-			log(
-				'Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:',
-				error
-			);
+			if (error.toString().includes('NoAppsFound')) {
+				log(
+					`Unable to fire intent. This platform does not support the intent ${intent}. No apps available to support it.`
+				);
+			} else {
+				log(
+					'Unable to fire intent. Likely a JSON parsing error or the platform does not have a broker implementation that supports intents:',
+					error.message !== undefined ? error.message : error
+				);
+			}
 			showLogs();
 		}
 	});
@@ -375,7 +420,7 @@ async function init() {
 			console.error('Unable to fire intent for context', error);
 			log(
 				'Unable to fire intent. Likely a JSON parsing error or this platform does not have a custom interop broker implementation that supports intents:',
-				error
+				error.message !== undefined ? error.message : error
 			);
 			showLogs();
 		}
@@ -399,7 +444,7 @@ async function init() {
 	await applySettings();
 	const intentTypes = Object.keys(intentData);
 	bindFDC3Intents(intentTypes);
-	bindFDC3Types(intentData[getIntentToRaise()]);
+	bindFDC3Types(getFDC3Types());
 	bindFDC3OnChange();
 	showCodePreview();
 	await listen(log, intentTypes, showLogs);
