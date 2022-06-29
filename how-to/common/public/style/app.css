@@ -127,6 +127,10 @@ p {
 	background: #000000;
 }
 
+main {
+    min-height: 100px;
+}
+
 footer > div > div > a,
 button {
 	background-color: var(--brand-primary);
