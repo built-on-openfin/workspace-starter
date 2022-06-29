@@ -209,7 +209,7 @@ async function buildAppList() {
 			intents = await window.fdc3.findIntentsByContext(getContextToSend());
 		} else {
 			const intentToRaise = getIntentToRaise();
-			if(intentToRaise === "") {
+			if (intentToRaise === '') {
 				// no intent available to perform a search.
 				return [];
 			}
