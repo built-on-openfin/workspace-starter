@@ -31,7 +31,7 @@
 				"frame": false,
 				"icon": "https://www.openfin.co/favicon.ico",
 				"defaultHeight": 80,
-				"defaultWidth": 1500,
+				"defaultWidth": 1200,
 				"defaultCentered": true,
 				"saveWindowState": false,
 				"resizable": false,
