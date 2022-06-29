@@ -1165,6 +1165,17 @@ export function getDefaultFDC3IntentData() {
 		],
 		ViewAnalysis: ['fdc3.instrument', 'fdc3.organization', 'fdc3.portfolio'],
 		ViewInstrument: ['fdc3.instrument'],
-		Custom: ['fdc3.contact', 'fdc3.contactList', 'fdc3.country', 'fdc3.instrument', 'fdc3.instrumentList', 'fdc3.organization', 'fdc3.portfolio', 'fdc3.position', 'fdc3.organization', 'custom']
+		Custom: [
+			'fdc3.contact',
+			'fdc3.contactList',
+			'fdc3.country',
+			'fdc3.instrument',
+			'fdc3.instrumentList',
+			'fdc3.organization',
+			'fdc3.portfolio',
+			'fdc3.position',
+			'fdc3.organization',
+			'custom'
+		]
 	};
 }

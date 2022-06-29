@@ -252,7 +252,7 @@ async function buildAppList() {
 			intents = await window.fin.me.interop.getInfoForIntentsByContext(getContextToSend());
 		} else {
 			const intentToRaise = getIntentToRaise();
-			if(intentToRaise === "") {
+			if (intentToRaise === '') {
 				// no intent available to perform a search.
 				return [];
 			}
@@ -367,7 +367,6 @@ function getAppSelection() {
 	const intent = document.querySelector('#fdc3Apps');
 	return intent.value;
 }
-
 
 function getFDC3Types() {
 	let types = intentData[getIntentToRaise()];
