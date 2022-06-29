@@ -103,9 +103,52 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 	const page1: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
 	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
 	const pages: Page[] = [page, page1, page2];
+
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
 	};
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	return createdBrowserWin;
+}
+
+export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page1: Page = await createPageWithLayout("Untitled Page 1", defaultPageLayout);
+	const lockPage1: Page = { isLocked: true, ...page1 };
+	const pages: Page[] = [page, lockPage1];
+	const toolbarOptions: ToolbarOptions = {
+		buttons: [
+			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Save Current Page",
+				iconUrl: "https://www.openfin.co/favicon.ico",
+				action: {
+					id: "custom-save-page-clicked",
+					customData: {
+						pageId: page.pageId,
+						layout: page.layout
+					}
+				}
+			},
+			{
+				type: BrowserButtonType.ShowHideTabs
+			},
+			{
+				type: BrowserButtonType.ColorLinking
+			},
+			{
+				type: BrowserButtonType.PresetLayouts
+			},
+			{
+				type: BrowserButtonType.SavePage
+			}
+		]
+	};
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: { pages, toolbarOptions }
+	};
+
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -128,6 +171,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// CREATE BROWSER WINDOW WITH MULTIPLE PAGES
 	const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");
 	multiPageBrowserWinBtn.addEventListener("click", createMultiPageWindow);
+
+	// CREATE BROWSER WINDOW WITH A SINGLE LOCKED PAGE
+	const singleLockedPage = document.querySelector("#launch-single-locked-page");
+	singleLockedPage.addEventListener("click", createWindowWithLockedPage);
 
 	// GET ALL BROWSER PAGES
 	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
