@@ -86,7 +86,7 @@ $ npm run client
 
 5. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.<img src="./assets/Page-Info.gif" alt="browser window page info" />
 
-6.  In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.<img src="./assets/Launch-Locked-Page.gif" alt="launch locked page" />
+6. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.<img src="./assets/Launch-Locked-Page.gif" alt="launch locked page" />
 
 7. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
 

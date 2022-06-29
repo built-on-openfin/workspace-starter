@@ -232,9 +232,9 @@ async function init() {
 		try {
 			const ctx = getContextToSend();
 			const channelType = getChannelType();
-			if(channelType === SYSTEM_CHANNEL) {
+			if (channelType === SYSTEM_CHANNEL) {
 				await systemBroadcast(log, ctx);
-			} else if(channelType === APP_CHANNEL) {
+			} else if (channelType === APP_CHANNEL) {
 				await appBroadcast(log, customChannel, ctx);
 			}
 			showLogs();
