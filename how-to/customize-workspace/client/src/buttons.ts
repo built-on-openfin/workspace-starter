@@ -1,44 +1,78 @@
 import { BrowserButtonType, CustomBrowserButtonConfig, ToolbarButton } from "@openfin/workspace-platform";
-import { getSettings } from "./settings";
+import { getCurrentTheme, getSettings } from "./settings";
+import { ToolbarButtonDefinition } from "./shapes";
 
-export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
-    let defaultButtons = [];
-    let settings = await getSettings();
-    let availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
+let allToolbarButtons: ToolbarButtonDefinition[];
+let defaultToolbarButtons: ToolbarButton[];
 
-    availableToolbarButtons.forEach(entry => {
-        if(entry.include){
-            defaultButtons.push(entry.button);
-        }
-    });
-    return defaultButtons;
+async function getAvailableToolbarButtons(): Promise<ToolbarButtonDefinition[]> {
+	if (Array.isArray(allToolbarButtons)) {
+		return allToolbarButtons;
+	}
+	const settings = await getSettings();
+	const theme = await getCurrentTheme();
+	const availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
+	const validatedToolbarButtons: ToolbarButtonDefinition[] = [];
+
+	for (const entry of availableToolbarButtons) {
+		if (
+			entry.button.iconUrl !== undefined &&
+			theme?.label !== undefined &&
+			entry.themes !== undefined &&
+			entry.themes[theme.label] !== undefined
+		) {
+			entry.button.iconUrl = entry.themes[theme.label];
+		}
+		validatedToolbarButtons.push(entry);
+	}
+	allToolbarButtons = validatedToolbarButtons;
+	return validatedToolbarButtons;
 }
 
-export async function updateToolbarButtons(buttons: ToolbarButton[], buttonId:string, replacementButtonId:string) { 
-    let index = buttons.findIndex(entry => {
-        if(entry.type === BrowserButtonType.Custom) {
-            if((entry as CustomBrowserButtonConfig).action.customData.sourceId === buttonId){
-                return true;
-            } 
-        }
-        return false;
-    });
+export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
+	if (Array.isArray(defaultToolbarButtons)) {
+		return defaultToolbarButtons;
+	}
 
-    if(index !== -1) {
-        let settings = await getSettings();
-        let availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
-        let replacement = availableToolbarButtons.find(entry => {
-            if(entry.button.type === BrowserButtonType.Custom) {
-                let customButton = entry.button as CustomBrowserButtonConfig;
-                return customButton?.action?.customData?.sourceId === replacementButtonId
-            } else {
-                return false;
-            }
+	const defaultButtons: ToolbarButton[] = [];
+	const availableToolbarButtons = await getAvailableToolbarButtons();
 
-        });
-        buttons[index] = replacement.button;
-        return buttons;
-    }
+	for (const entry of availableToolbarButtons) {
+		if (entry.include) {
+			defaultButtons.push(entry.button);
+		}
+	}
+	defaultToolbarButtons = defaultButtons;
+	return defaultButtons;
+}
 
-    return buttons;
+export async function updateToolbarButtons(
+	buttons: ToolbarButton[],
+	buttonId: string,
+	replacementButtonId: string
+) {
+	const index = buttons.findIndex((entry) => {
+		if (
+			entry.type === BrowserButtonType.Custom &&
+			(entry as CustomBrowserButtonConfig).action.customData.sourceId === buttonId
+		) {
+			return true;
+		}
+		return false;
+	});
+
+	if (index !== -1) {
+		const availableToolbarButtons = await getAvailableToolbarButtons();
+		const replacement = availableToolbarButtons.find((entry) => {
+			if (entry.button.type === BrowserButtonType.Custom) {
+				const customButton = entry.button as CustomBrowserButtonConfig;
+				return customButton?.action?.customData?.sourceId === replacementButtonId;
+			}
+			return false;
+		});
+		buttons[index] = replacement.button;
+		return buttons;
+	}
+
+	return buttons;
 }

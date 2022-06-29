@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 
 const router = express.Router();
 export default router;
@@ -9,12 +9,12 @@ export default router;
  */
 const allowedCorsDomains = ["https://cdn.openfin.co"];
 const corsMiddleware: express.Handler = (req, res, next) => {
-    const origin = req.get('origin');
-    if (allowedCorsDomains.includes(origin)) {
-        res.header("Access-Control-Allow-Origin", origin);
-        res.header("Access-Control-Allow-Credentials", "true");
-    }
-    next();
+	const origin = req.get("origin");
+	if (allowedCorsDomains.includes(origin)) {
+		res.header("Access-Control-Allow-Origin", origin);
+		res.header("Access-Control-Allow-Credentials", "true");
+	}
+	next();
 };
 
 /**

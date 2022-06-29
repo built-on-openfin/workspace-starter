@@ -1,60 +1,72 @@
-import { register as registerHome, show as showHome, deregister as deregisterHome } from './home';
-import { register as registerStore, show as showStore, deregister as deregisterStore } from './store';
-import { register as registerShare, deregister as deregisterShare } from './share';
-import { register as registerNotifications, deregister as deregisterNotifications } from './notifications';
-
-import { fin } from 'openfin-adapter/src/mock';
-import { getSettings } from './settings';
-import { providerId as salesforceProviderId, salesForceRegister, SalesforceSettings, salesForceUnregister } from './salesforce';
-import { Integration } from './shapes';
+import { fin } from "openfin-adapter/src/mock";
+import { launchPage, launchView } from "./browser";
+import { init as endpointInit } from "./endpoint";
+import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";
+import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
+import { launchSnapshot } from "./launch";
+import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
+import { getSettings } from "./settings";
+import { deregister as deregisterShare, register as registerShare } from "./share";
+import { deregister as deregisterStore, register as registerStore, show as showStore } from "./store";
 
 export async function init() {
-    // you can kick off your bootstrapping process here where you may decide to prompt for authentication, 
-    // gather reference data etc before starting workspace and interacting with it.
-    console.log("Initialising the bootstrapper");
-    let settings = await getSettings();
-    let workspaceLoaded = false;
-    let setupHome = settings?.bootstrap?.home ?? true;
-    let setupStore = settings?.bootstrap?.store ?? true;
-    let setupNotifications = settings?.bootstrap?.notifications ?? true;
+	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
+	// gather reference data etc before starting workspace and interacting with it.
+	console.log("Initialising the bootstrapper");
+	const settings = await getSettings();
+	let workspaceLoaded = false;
+	const setupHome = settings?.bootstrap?.home ?? true;
+	const setupStore = settings?.bootstrap?.store ?? true;
+	const setupNotifications = settings?.bootstrap?.notifications ?? true;
+	await endpointInit();
+	if (setupHome) {
+		// only register search logic once workspace is running
+		await registerHome();
+		workspaceLoaded = true;
+		await showHome();
+	}
 
-    if(setupHome) {
-        // only register search logic once workspace is running
-        await registerHome();
-        workspaceLoaded = true;
-        await showHome();
-    }
+	if (setupStore) {
+		await registerStore();
+		if (!workspaceLoaded) {
+			await showStore();
+		}
+	}
 
-    if(setupStore) {
-        await registerStore();
-        if(!workspaceLoaded) {
-            await showStore();
-        }
-    }
+	if (setupNotifications) {
+		await registerNotifications();
+	}
 
-    if(setupNotifications) {
-        await registerNotifications();
-    }
+	await registerShare();
 
-    await registerShare()
+	await registerIntegration(
+		{
+			rootUrl: settings?.platformProvider.rootUrl,
+			launchView,
+			launchPage,
+			launchSnapshot: async (manifestUrl) =>
+				launchSnapshot({
+					manifestType: "snapshot",
+					manifest: manifestUrl,
+					appId: "",
+					title: "",
+					icons: null,
+					publisher: null
+				}),
+			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+			showHome
+		},
+		settings.integrationProvider
+	);
 
-    let salesForceIntegration: Integration<SalesforceSettings> | undefined = undefined;
-    if (settings.integrationProvider?.integrations?.length) {
-        salesForceIntegration = settings?.integrationProvider?.integrations?.find(i => i.id === salesforceProviderId) as Integration<SalesforceSettings>;
-        if (salesForceIntegration?.enabled) {
-            await salesForceRegister(salesForceIntegration?.data)
-        }
-    }
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async (event) => {
+		await deregisterIntegration(settings.integrationProvider);
 
-    const providerWindow = fin.Window.getCurrentSync();
-    providerWindow.once("close-requested", async (event) => {
-        if (salesForceIntegration?.enabled) {
-            await salesForceUnregister(salesForceIntegration?.data);
-        }
-        await deregisterStore();
-        await deregisterHome();
-        await deregisterShare();
-        await deregisterNotifications();
-        fin.Platform.getCurrentSync().quit();
-    });
+		await deregisterStore();
+		await deregisterHome();
+		await deregisterShare();
+		await deregisterNotifications();
+		await fin.Platform.getCurrentSync().quit();
+	});
 }
