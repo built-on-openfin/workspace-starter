@@ -48,12 +48,12 @@ function showCodePreview() {
 
 function updateCodePreview(context) {
 	previewData.codePreview = `
+// --------------------------------
+// Raising Intent code
+// --------------------------------
 if(window.fin !== undefined) {
 
-  // ----------------------------------------------------
-  // Raising Intent code
-  // ----------------------------------------------------
-  let context = ${context};
+	let context = ${context};
 `;
 
 	const appSelection = getAppSelection();
@@ -61,73 +61,91 @@ if(window.fin !== undefined) {
 
 	if (appSelection !== 'none' && appSelection !== '') {
 		previewData.codePreview += `
-  let app = "${appSelection}";
+  	let app = "${appSelection}";
 `;
 
 		if (isContextRequest) {
 			previewData.codePreview += `
-  context.metadata = {
-    target: app              
-  };
-  const intentResolver = 
-  await fin.me.interop.fireIntentForContext(context);
-  if(intentResolver !== undefined) {
-    console.log("Intent resolver received: ", intentResolver);
-  }
+  	context.metadata = {
+    	target: app              
+  	};
+
+  	const intentResolver = 
+  	await fin.me.interop.fireIntentForContext(context);
+  
+  	if(intentResolver !== undefined) {
+ 
+		console.log("Intent resolver received: ", intentResolver);
+  
+	}
 `;
 		} else {
 			previewData.codePreview += `
-  let intent = "${getIntentToRaise()}";
+  	let intent = "${getIntentToRaise()}";
   
-  const intentRequest = {
-    name: intent,
-    context,
-    metadata: {
-      target: app              
-    }
-  };
-  const intentResolver = await fin.me.interop.fireIntent(intentRequest, app);
-  if(intentResolver !== undefined) {
-    log("Intent resolver received: ", intentResolver);
-  }
+  	const intentRequest = {
+		name: intent,
+		context,
+		metadata: {
+		target: app              
+		}
+  	};
+
+  	const intentResolver = await fin.me.interop.fireIntent(intentRequest, app);
+  
+  	if(intentResolver !== undefined) {
+ 
+		console.log("Intent resolver received: ", intentResolver);
+  
+	}
 `;
 		}
 	} else if (isContextRequest) {
 		previewData.codePreview += `
-  const intentResolver = 
-  await fin.me.interop.fireIntentForContext(context);
-  if(intentResolver !== undefined) {
-    console.log("Intent resolver received: ", intentResolver);
-  }
+  	const intentResolver = 
+  	await fin.me.interop.fireIntentForContext(context);
+
+  	if(intentResolver !== undefined) {
+
+    	console.log("Intent resolver received: ", intentResolver);
+  
+	}
   `;
 	} else {
 		previewData.codePreview += `
-  let intent = "${getIntentToRaise()}";
+	let intent = "${getIntentToRaise()}";
     
-  const intentRequest = {
-    name: intent,
-    context
-  };
-  const intentResolver = await fin.me.interop.fireIntent(intentRequest);
-  if(intentResolver !== undefined) {
-    log("Intent resolver received: ", intentResolver);
-  }
+  	const intentRequest = {
+    	name: intent,
+    	context
+  	};
+
+  	const intentResolver = await fin.me.interop.fireIntent(intentRequest);
+
+  	if(intentResolver !== undefined) {
+
+		console.log("Intent resolver received: ", intentResolver);
+  
+	}
   `;
 	}
 	previewData.codePreview += `
 }`;
 
 	previewData.codePreview += `
-
+	
+// --------------------------------
+// Listening code
+// -------------------------------- 
 if(window.fin !== undefined) {
 
-  // ----------------------------------------------------
-  // Listening code
-  // ----------------------------------------------------
-  let intent = "${getIntentToRaise()}";
-  await fin.me.interop.registerIntentHandler((passedIntent)=>{ 
-    console.log("Received Context For Intent: " + passedIntent.name, passedIntent.context);
-  }, intent);
+	let intent = "${getIntentToRaise()}";
+
+  	await fin.me.interop.registerIntentHandler((passedIntent)=>{ 
+  
+		console.log("Received Context For Intent: " + passedIntent.name, passedIntent.context);
+  
+	}, intent);
 `;
 	previewData.codePreview += `
 }`;

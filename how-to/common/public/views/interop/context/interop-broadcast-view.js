@@ -11,6 +11,8 @@ import {
 let contextData = getDefaultFDC3ContextData();
 let customChannel = 'custom-app-channel';
 let isCodePreview = true;
+const SYSTEM_CONTEXT_GROUP = 'systemContextGroup';
+const SESSION_CONTEXT_GROUP = 'sessionContextGroup';
 
 const previewData = {
 	codePreview: '',
@@ -55,42 +57,51 @@ function showCodePreview() {
 }
 
 function updateCodePreview(context) {
+	const contextGroupType = getContextGroupType();
+
 	previewData.codePreview = `
+// --------------------------------
+// SetContext code
+// --------------------------------  
 if(window.fin !== undefined) {
 
-  // ----------------------------------------------------
-  // SetContext code
-  // ----------------------------------------------------
-
-  const context = ${context};
-
-  try {
-    console.log(
-      "setting context on system contextual group",
-      context
-    );
-    fin.me.interop.setContext(context);
-  } catch(error) {
-    console.warn(
-      "You are not bound to a system context group" +
-      " and are unable to set context",
-      error
-    );
-  }
+	const context = ${context};
 `;
-	if (customChannel !== undefined) {
+
+	if (contextGroupType === SYSTEM_CONTEXT_GROUP) {
 		previewData.codePreview += `
-  // alternatively you may have an app specific session 
-  // context group instead of using a system contextual 
-  // group
-  let sessionName = '${customChannel}';
-  let appSessionContextGroup = 
+	try {
+
+    	console.log(
+      	"setting context on system contextual group",
+      	context
+    	);
+
+    	fin.me.interop.setContext(context);
+
+  	} catch(error) {
+    
+		console.warn(
+      	"You are not bound to a system context group" +
+      	" and are unable to set context",
+      	error
+		);
+
+	}
+`;
+	} else if (customChannel !== undefined && contextGroupType === SESSION_CONTEXT_GROUP) {
+		previewData.codePreview += `
+	let sessionName = '${customChannel}';
+ 
+  	let appSessionContextGroup = 
     await fin.me.interop.joinSessionContextGroup(sessionName);
-  console.log(
+ 
+	console.log(
     "Setting context on session context group " + sessionName,
     context
-  );
-  appSessionContextGroup.setContext(context);
+  	);
+
+  	appSessionContextGroup.setContext(context);
 `;
 	}
 	previewData.codePreview += `
@@ -98,34 +109,40 @@ if(window.fin !== undefined) {
 
 	previewData.codePreview += `
 
+// --------------------------------
+// Listening code
+// --------------------------------
 if(window.fin !== undefined) {
+`;
 
-  // ----------------------------------------------------
-  // Listening code
-  // ----------------------------------------------------
+	if (contextGroupType === SYSTEM_CONTEXT_GROUP) {
+		previewData.codePreview += `
+	const systemHandler = (ctx) => {
 
-  const systemHandler = (ctx) => {
-    console.log("System Context Received: ", ctx);
-  };
+    	console.log("System Context Received: ", ctx);
+  
+	};
 
-  const systemListener = 
+  	const systemListener = 
     fin.me.interop.addContextHandler(systemHandler);
 `;
-	if (customChannel !== undefined) {
+	} else if (customChannel !== undefined && contextGroupType === SESSION_CONTEXT_GROUP) {
 		previewData.codePreview += `
-  // listen to a defined application session context group
-  const appHandler = (ctx) => {
-    console.log("App Session Context Received: ", ctx);
-  };
+  	const appHandler = (ctx) => {
 
-  let sessionName = '${customChannel}';
-  let appSessionContextGroup = 
+    	console.log("App Session Context Received: ", ctx);
+  
+	};
+
+  	let sessionName = '${customChannel}';
+
+  	let appSessionContextGroup = 
     await fin.me.interop.joinSessionContextGroup(sessionName);
       
-  // listen for new session context group messages
-  console.log("Listening for app session context group: " + 
-  appSessionContextGroupName + " context.");
-  let appListener = 
+  	console.log("Listening for app session context group: " + 
+  	appSessionContextGroupName + " context.");
+
+  	let appListener = 
     appSessionContextGroup.addContextHandler(appHandler);
 `;
 	}
@@ -186,6 +203,12 @@ function bindFDC3Types(types) {
 }
 
 function bindFDC3OnChange() {
+	const channelType = document.querySelector('#contextGroupType');
+	channelType.addEventListener('change', () => {
+		const context = contextData[fdc3Type.value][fdc3Value.value];
+		updateCodePreview(JSON.stringify(context, null, 5));
+	});
+
 	const fdc3Type = document.querySelector('#fdc3Type');
 	fdc3Type.addEventListener('change', () => {
 		bindFDC3Values(contextData[fdc3Type.value]);
@@ -210,6 +233,11 @@ function getContextToSend() {
 	return JSON.parse(context);
 }
 
+function getContextGroupType() {
+	const contextGroupType = document.querySelector('#contextGroupType');
+	return contextGroupType.value;
+}
+
 // -------------------------------------------------
 // Init Functions
 // -------------------------------------------------
@@ -218,8 +246,13 @@ async function init() {
 	btnSetContext.addEventListener('click', async () => {
 		try {
 			const ctx = getContextToSend();
-			await systemSetContext(log, ctx);
-			await sessionSetContext(log, customChannel, ctx);
+			const contextGroupType = getContextGroupType();
+
+			if(contextGroupType === SYSTEM_CONTEXT_GROUP) {
+				await systemSetContext(log, ctx);
+			} else if(contextGroupType === SESSION_CONTEXT_GROUP) {
+				await sessionSetContext(log, customChannel, ctx);
+			}
 			showLogs();
 		} catch (error) {
 			console.error('Unable to set context', error);

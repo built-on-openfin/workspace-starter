@@ -17,7 +17,7 @@
 				<h1 class="tag">Set and Listen To Context</h1>
 			</div>
 			<div class="row middle gap10">
-				<button is="fin-toggle-class"></button>
+				<button is="fin-toggle-class" title="Change style"></button>
 				<image src="../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
 			</div>
 		</header>
@@ -27,6 +27,18 @@
 					<form class="col gap40 scroll-vertical">
 						<div id="sectionCommon" class="formSection col gap10">
 							<h2>Interop Options</h2>
+							<fieldset>
+								<label
+									for="contextGroupType"
+									title="There are different types of context group you can set context and listen against. System Context Groups defined by the platform (generally color coded) and custom Session Context Groups."
+								>
+									Context Group Type
+								</label>
+								<select name="contextGroupType" id="contextGroupType">
+									<option value="systemContextGroup">System Context Group</option>
+									<option value="sessionContextGroup">Session Context Group</option>
+								</select>
+							</fieldset>
 							<fieldset>
 								<label
 									for="fdc3Type"
