@@ -1,0 +1,16 @@
+name: Check Linting has been applied
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Run eslint
+        run: |-
+          npm install
+          npm run eslint
