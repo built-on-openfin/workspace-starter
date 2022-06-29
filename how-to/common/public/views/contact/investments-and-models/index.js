@@ -14,7 +14,7 @@ function init() {
 }
 
 function setContact(ctx) {
-	const userNameContainers = document.querySelectorAll('.username');
+	const userNameContainers = document.querySelectorAll('#username');
 
 	for (let i = 0; i < userNameContainers.length; i++) {
 		userNameContainers[i].textContent = ctx.name;

@@ -17,8 +17,8 @@ function setContact(ctx) {
 	const username = ctx.name;
 	const email = ctx.id?.email;
 
-	const userNameContainers = document.querySelectorAll('.username');
-	const emailContainers = document.querySelectorAll('.email');
+	const userNameContainers = document.querySelectorAll('#username');
+	const emailContainers = document.querySelectorAll('#email');
 
 	for (let i = 0; i < userNameContainers.length; i++) {
 		userNameContainers[i].textContent = username;

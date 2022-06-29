@@ -1,7 +1,6 @@
 function init() {
 	if (window.fdc3) {
-		const selectButtons = document.querySelectorAll('.action-select');
-		const raiseIntentButtons = document.querySelectorAll('.action-raise-intent');
+		const actionButtons = document.querySelectorAll('[data-contact]');
 
 		const contacts = {
 			john: {
@@ -34,12 +33,12 @@ function init() {
 			}
 		};
 
-		for (let i = 0; i < selectButtons.length; i++) {
-			selectButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
-		}
-
-		for (let i = 0; i < raiseIntentButtons.length; i++) {
-			raiseIntentButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
+		for (let i = 0; i < actionButtons.length; i++) {
+            if (i % 2 === 0) {
+			    actionButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
+            } else {
+                actionButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
+            }
 		}
 	}
 }
