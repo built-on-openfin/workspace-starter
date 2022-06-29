@@ -27,7 +27,7 @@ function createEntry(name, label, value, checked = false) {
 	radioButton.checked = checked;
 
 	const labelForRadioButton = document.createElement('label');
-	labelForRadioButton.setAttribute("for", value);
+	labelForRadioButton.setAttribute('for', value);
 	labelForRadioButton.textContent = label;
 
 	fieldset.append(radioButton);
@@ -130,7 +130,7 @@ function setupAppView(applications) {
 			fin.me.close(true);
 		});
 
-        setIntentVisibility(false);
+		setIntentVisibility(false);
 		setAppVisibility(true);
 	}
 }

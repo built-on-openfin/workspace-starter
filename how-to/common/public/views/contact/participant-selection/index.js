@@ -34,11 +34,11 @@ function init() {
 		};
 
 		for (let i = 0; i < actionButtons.length; i++) {
-            if (i % 2 === 0) {
-			    actionButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
-            } else {
-                actionButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
-            }
+			if (i % 2 === 0) {
+				actionButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
+			} else {
+				actionButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
+			}
 		}
 	}
 }
