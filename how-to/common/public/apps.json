@@ -857,5 +857,239 @@
 			}
 		],
 		"tags": ["native"]
+	},
+	{
+		"appId": "manager-portal",
+		"name": "manager-portal",
+		"title": "Manager Portal",
+		"manifestType": "snapshot",
+		"description": "Provides a portal for a manager",
+		"manifest": "http://localhost:8080/common/views/manager-portal/snapshot-manager-portal.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["page", "openfin", "manager", "fcd3"]
+	},
+	{
+		"appId": "my-team",
+		"name": "my-team",
+		"title": "My Team",
+		"description": "View my team.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/my-team.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "keeping-track",
+		"name": "keeping-track",
+		"title": "Keeping Track",
+		"description": "Keep track of a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/keeping-track.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "annual-leave",
+		"name": "annual-leave",
+		"title": "Annual Leave",
+		"description": "View the annual leave for a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/annual-leave.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/annual-leave/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "360-feedback",
+		"name": "360-feedback",
+		"title": "360 Feedback",
+		"description": "View the feedback for a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/360-feedback.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "manager-paths",
+		"name": "manager-paths",
+		"title": "Manager Paths",
+		"description": "View the manager paths for a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-paths.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/manager-paths/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-comms",
+		"name": "company-comms",
+		"title": "Company Comms",
+		"description": "View the communications for the company.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-comms.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/company-comms/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-cal",
+		"name": "company-cal",
+		"title": "Company Calendar",
+		"description": "View the calendar for the company.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-cal.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/company-cal/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "franchise-comms",
+		"name": "franchise-comms",
+		"title": "Franchise Comms",
+		"description": "View the communications for the franchise.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/franchise-comms.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
 	}
 ]
