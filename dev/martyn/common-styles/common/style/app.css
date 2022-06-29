@@ -21,7 +21,7 @@
 }
 
 .primary {
-    color: var(--brand-primary);
+	color: var(--brand-primary);
 }
 
 * {
@@ -50,14 +50,14 @@ body.border {
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
-    border: 1px solid #000000;
-    border-radius: 5px;
-    width: 99%;
-    height: 99%;
+	border: 1px solid #000000;
+	border-radius: 5px;
+	width: 99%;
+	height: 99%;
 }
 
 body.small {
-    padding: 15px;
+	padding: 15px;
 }
 
 h1 {
@@ -182,7 +182,7 @@ td button {
 }
 
 button.center {
-    text-align: center;
+	text-align: center;
 }
 
 pre {
@@ -258,12 +258,12 @@ input[type='checkbox'] {
 input[type='radio'] {
 	width: 16px;
 	height: 16px;
-    margin: 2px;
+	margin: 2px;
 }
 
 input[type='radio'] + label {
-    white-space: nowrap;
-    margin-left: 10px;
+	white-space: nowrap;
+	margin-left: 10px;
 }
 
 select {
@@ -425,28 +425,28 @@ td {
 }
 
 .form {
-    background-color: #f3f3f3;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 12px;
+	background-color: #f3f3f3;
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 12px;
 }
 
 .form-group {
-    background-color: #e3e3e3;
-    border-radius: 5px;
-    padding: 10px;
+	background-color: #e3e3e3;
+	border-radius: 5px;
+	padding: 10px;
 }
 
 .form-group fieldset {
-    flex-wrap: wrap;
-    font-size: 12px;
+	flex-wrap: wrap;
+	font-size: 12px;
 }
 
 .form label,
 .form-group label {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .no-textwrap {
-    white-space: nowrap;
+	white-space: nowrap;
 }

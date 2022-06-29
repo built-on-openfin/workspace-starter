@@ -248,9 +248,9 @@ async function init() {
 			const ctx = getContextToSend();
 			const contextGroupType = getContextGroupType();
 
-			if(contextGroupType === SYSTEM_CONTEXT_GROUP) {
+			if (contextGroupType === SYSTEM_CONTEXT_GROUP) {
 				await systemSetContext(log, ctx);
-			} else if(contextGroupType === SESSION_CONTEXT_GROUP) {
+			} else if (contextGroupType === SESSION_CONTEXT_GROUP) {
 				await sessionSetContext(log, customChannel, ctx);
 			}
 			showLogs();
