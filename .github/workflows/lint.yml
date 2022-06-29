@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  prettier:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
