@@ -1,9 +1,12 @@
 const query = document.querySelector('#query');
 const action = document.querySelector('#action');
 
+function isQueryAUrl(value) {
+    return /^https?:\/\//.test(value);
+}
+
 function validateValue(e) {
-	const value = e.target.value;
-	if (value.startsWith('http://') || value.startsWith('https://')) {
+	if (isQueryAUrl(e.target.value)) {
 		action.textContent = 'Navigate To Url';
 	} else {
 		action.textContent = 'Search';
@@ -11,11 +14,10 @@ function validateValue(e) {
 }
 
 function actionQuery() {
-	const value = query.value;
-	if (value.startsWith('http://') || value.startsWith('https://')) {
-		location.href = value;
+	if (isQueryAUrl(query.value)) {
+		location.href = query.value;
 	} else {
-		location.href = `https://www.google.com/search?q=${encodeURIComponent(value)}`;
+		location.href = `https://www.google.com/search?q=${encodeURIComponent(query.value)}`;
 	}
 }
 
