@@ -7,17 +7,9 @@
 		<link rel="stylesheet" href="../../../style/app.css" />
 		<script defer="defer" src="./new-tab.js"></script>
 		<style>
-			.query {
-				width: 80%;
-				padding: 20px 10px;
-				font-size: x-large;
-				text-align: center;
-			}
 			.query-container {
-				width: 100%;
 				padding-top: 125px;
 				padding-bottom: 25px;
-				text-align: center;
 			}
 		</style>
 	</head>
@@ -29,12 +21,10 @@
 			</div>
 		</header>
 		<main class="form fill col middle scroll-vertical">
-			<div class="query-container">
-				<input id="query" type="text" class="query" placeholder="Query or Url" />
+			<div class="width-full row pad20 query-container">
+				<input id="query" type="text" class="large center" placeholder="Query or Url" />
 			</div>
-			<div>
-				<button type="submit" id="action">Search</button>
-			</div>
+			<button type="submit" id="action">Search</button>
 		</main>
 	</body>
 </html>
