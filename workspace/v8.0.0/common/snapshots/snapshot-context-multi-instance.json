@@ -26,11 +26,14 @@
 														"type": "component",
 														"componentName": "view",
 														"componentState": {
-															"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/fdc3/intent/fdc3-intent-view.html",
+															"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/fdc3/context/fdc3-broadcast-view.html",
 															"componentName": "view",
-															"fdc3InteropApi": "1.2"
+															"fdc3InteropApi": "1.2",
+															"interop": {
+																"currentContextGroup": "green"
+															}
 														},
-														"title": "FDC3 Intents - Intents using FDC3"
+														"title": "FDC3 Context - Context using FDC3"
 													}
 												]
 											}
@@ -53,10 +56,13 @@
 																"type": "component",
 																"componentName": "view",
 																"componentState": {
-																	"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/interop/intent/interop-intent-view.html",
-																	"componentName": "view"
+																	"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/interop/context/interop-broadcast-view.html",
+																	"componentName": "view",
+																	"interop": {
+																		"currentContextGroup": "green"
+																	}
 																},
-																"title": "Interop API Intents - Intents using Interop API"
+																"title": "Interop API Context - Context using Interop API"
 															}
 														]
 													}
