@@ -11,6 +11,8 @@ import {
 let contextData = getDefaultFDC3ContextData();
 let customChannel = 'custom-app-channel';
 let isCodePreview = true;
+const SYSTEM_CHANNEL = 'systemChannel';
+const APP_CHANNEL = 'appChannel';
 
 const previewData = {
 	codePreview: '',
@@ -55,68 +57,83 @@ function showCodePreview() {
 }
 
 function updateCodePreview(context) {
+	const channelType = getChannelType();
 	previewData.codePreview = `
-if(window.fdc3 !== undefined) {
-
-// ----------------------------------------------------
+// --------------------------------
 // Broadcasting code
-// ----------------------------------------------------
-
-const context = ${context};
-
-const systemChannel = await fdc3.getCurrentChannel();
-if(systemChannel !== null) {
-  console.log('broadcasting on ' + systemChannel.type + 
-  ' channel: ' + systemChannel.id, context);
-  fdc3.broadcast(context);
-} else {
-  console.log("You are not bound to a system channel");
-}
-`;
-	if (customChannel !== undefined) {
-		previewData.codePreview += `
-// alternatively you may have an app specific channel
-// instead of using a system channel
-let channel = '${customChannel}';
-let appChannel = await fdc3.getOrCreateChannel(channel);
-console.log('broadcasting on ' + appChannel.type + 
-' channel: ' + appChannel.id, context);
-appChannel.broadcast(context);
-`;
-	}
-	previewData.codePreview += `
-}`;
-
-	previewData.codePreview += `
-
+// --------------------------------
 if(window.fdc3 !== undefined) {
 
-// ----------------------------------------------------
-// Listening code
-// ----------------------------------------------------
-
-const systemHandler = (ctx) => {
-  console.log("System Context Received: ", ctx);
-};
-
-const systemListener = fdc3.addContextListener(null, systemHandler);
+	const context = ${context};
 `;
-	if (customChannel !== undefined) {
-		previewData.codePreview += `
-// listen to a defined application channel
-const appHandler = (ctx) => {
-  console.log("App Channel Context Received: ", ctx);
-};
-let channel = '${customChannel}';
-let appChannel = await fdc3.getOrCreateChannel(channel);
 
-// listen for new app channel messages
-let appListener = appChannel.addContextListener(null, appHandler);
+	if (channelType === SYSTEM_CHANNEL) {
+		previewData.codePreview += `
+	const systemChannel = await fdc3.getCurrentChannel();
+
+	if(systemChannel !== null) {
+	
+  		console.log('broadcasting on ' + systemChannel.type + 
+  		' channel: ' + systemChannel.id, context);
+  
+  		fdc3.broadcast(context);
+
+	} else {
+  
+		console.log("You are not bound to a system channel");
+
+	}
+`;
+	} else if (channelType === APP_CHANNEL && customChannel !== undefined) {
+		previewData.codePreview += `
+	let channel = '${customChannel}';
+
+	let appChannel = await fdc3.getOrCreateChannel(channel);
+
+	console.log('broadcasting on ' + appChannel.type + 
+	' channel: ' + appChannel.id, context);
+
+	appChannel.broadcast(context);
 `;
 	}
 	previewData.codePreview += `
 }`;
 
+	previewData.codePreview += `
+	
+// --------------------------------
+// Listening code
+// --------------------------------
+if(window.fdc3 !== undefined) {
+`;
+
+	if (channelType === SYSTEM_CHANNEL) {
+		previewData.codePreview += `	
+	const systemHandler = (ctx) => {
+
+  		console.log("System Context Received: ", ctx);
+
+	};
+
+	const systemListener = fdc3.addContextListener(null, systemHandler);
+`;
+	} else if (channelType === APP_CHANNEL && customChannel !== undefined) {
+		previewData.codePreview += `
+	const appHandler = (ctx) => {
+  
+		console.log("App Channel Context Received: ", ctx);
+
+	};
+
+	let channel = '${customChannel}';
+
+	let appChannel = await fdc3.getOrCreateChannel(channel);
+
+	let appListener = appChannel.addContextListener(null, appHandler);
+`;
+	}
+	previewData.codePreview += `
+}`;
 	updatePreview();
 }
 
@@ -171,6 +188,12 @@ function bindFDC3Types(types) {
 }
 
 function bindFDC3OnChange() {
+	const channelType = document.querySelector('#channelType');
+	channelType.addEventListener('change', () => {
+		const context = contextData[fdc3Type.value][fdc3Value.value];
+		updateCodePreview(JSON.stringify(context, null, 5));
+	});
+
 	const fdc3Type = document.querySelector('#fdc3Type');
 	fdc3Type.addEventListener('change', () => {
 		bindFDC3Values(contextData[fdc3Type.value]);
@@ -195,6 +218,11 @@ function getContextToSend() {
 	return JSON.parse(context);
 }
 
+function getChannelType() {
+	const channelType = document.querySelector('#channelType');
+	return channelType.value;
+}
+
 // -------------------------------------------------
 // Init Functions
 // -------------------------------------------------
@@ -203,8 +231,12 @@ async function init() {
 	btnBroadcast.addEventListener('click', async () => {
 		try {
 			const ctx = getContextToSend();
-			await systemBroadcast(log, ctx);
-			await appBroadcast(log, customChannel, ctx);
+			const channelType = getChannelType();
+			if (channelType === SYSTEM_CHANNEL) {
+				await systemBroadcast(log, ctx);
+			} else if (channelType === APP_CHANNEL) {
+				await appBroadcast(log, customChannel, ctx);
+			}
 			showLogs();
 		} catch (error) {
 			console.error('Unable to broadcast context', error);

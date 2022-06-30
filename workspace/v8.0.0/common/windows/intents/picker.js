@@ -17,7 +17,7 @@ let intents;
 let apps;
 
 function createEntry(name, label, value, checked = false) {
-	const div = document.createElement('div');
+	const fieldset = document.createElement('fieldset');
 	const radioButton = document.createElement('input');
 
 	radioButton.type = 'radio';
@@ -27,12 +27,12 @@ function createEntry(name, label, value, checked = false) {
 	radioButton.checked = checked;
 
 	const labelForRadioButton = document.createElement('label');
-	labelForRadioButton.for = value;
+	labelForRadioButton.setAttribute('for', value);
 	labelForRadioButton.textContent = label;
 
-	div.append(radioButton);
-	div.append(labelForRadioButton);
-	return div;
+	fieldset.append(radioButton);
+	fieldset.append(labelForRadioButton);
+	return fieldset;
 }
 
 function getSelection(name) {
@@ -46,11 +46,11 @@ function getSelection(name) {
 }
 
 function setIntentVisibility(isVisible) {
-	intentSelectionContainer.style.display = isVisible ? 'unset' : 'none';
+	intentSelectionContainer.style.display = isVisible ? 'flex' : 'none';
 }
 
 function setAppVisibility(isVisible) {
-	appSelectionContainer.style.display = isVisible ? 'unset' : 'none';
+	appSelectionContainer.style.display = isVisible ? 'flex' : 'none';
 }
 
 function setupIntentView(setupIntents) {
@@ -130,6 +130,7 @@ function setupAppView(applications) {
 			fin.me.close(true);
 		});
 
+		setIntentVisibility(false);
 		setAppVisibility(true);
 	}
 }
@@ -158,9 +159,10 @@ async function init() {
 	}
 
 	if (intents !== undefined) {
-		backBtn.style.display = 'unset';
+		backBtn.style.display = 'block';
 		setupIntentView(intents);
 	} else {
+		backBtn.style.display = 'none';
 		setupAppView(apps);
 	}
 }
