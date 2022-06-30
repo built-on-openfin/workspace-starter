@@ -95,8 +95,8 @@
 			"windowOptions": {
 				"title": "Second Browser Starter",
 				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-default-add-new-tab-view/customize-workspace/favicon-32x32.png",
-				"newTabUrl": null,
-				"newPageUrl": null
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-default-add-new-tab-view/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-default-add-new-tab-view/common/views/platform/new-tab/new-tab.html"
 			},
 			"toolbarButtons": [
 				{
