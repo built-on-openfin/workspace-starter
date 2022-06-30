@@ -68,8 +68,8 @@
 			"windowOptions": {
 				"title": "Second Browser Starter",
 				"icon": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/favicon-32x32.png",
-				"newTabUrl": null,
-				"newPageUrl": null
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html"
 			}
 		},
 		"themeProvider": {
