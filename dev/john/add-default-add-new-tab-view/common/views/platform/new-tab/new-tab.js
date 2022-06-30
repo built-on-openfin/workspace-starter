@@ -2,7 +2,7 @@ const query = document.querySelector('#query');
 const action = document.querySelector('#action');
 
 function isQueryAUrl(value) {
-    return /^https?:\/\//.test(value);
+	return /^https?:\/\//.test(value);
 }
 
 function validateValue(e) {
