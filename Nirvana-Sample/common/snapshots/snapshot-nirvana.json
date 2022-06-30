@@ -4,6 +4,7 @@
 			"defaultHeight": 900,
 			"defaultWidth": 1200,
 			"center": true,
+			"resizable": false,
 			"layout": {
 				"settings": {
 					"hasHeaders": false
