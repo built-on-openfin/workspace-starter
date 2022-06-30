@@ -46,8 +46,8 @@
 			"windowOptions": {
 				"title": "Browser Starter",
 				"icon": "https://www.openfin.co/favicon.ico",
-				"newTabUrl": null,
-				"newPageUrl": null
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/views/platform/new-tab/new-tab.html"
 			}
 		},
 		"themeProvider": {
