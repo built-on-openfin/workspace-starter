@@ -248,6 +248,17 @@ input[type='password'] {
 	border: 1px solid var(--brand-text-secondary);
 }
 
+input[type='text'].large,
+input[type='password'].large {
+	font-size: 20px;
+	padding: 20px 10px;
+}
+
+input[type='text'].center,
+input[type='password'].center {
+	text-align: center;
+}
+
 input[type='checkbox'],
 input[type='radio'] {
 	background-color: var(--brand-background);
@@ -453,4 +464,8 @@ td {
 
 .no-textwrap {
 	white-space: nowrap;
+}
+
+.width-full {
+	width: 100%;
 }
