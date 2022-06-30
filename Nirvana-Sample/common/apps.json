@@ -857,5 +857,27 @@
 			}
 		],
 		"tags": ["native"]
+	},
+	{
+		"appId": "Nirvana",
+		"name": "Nirvana",
+		"title": "Nirvana",
+		"manifestType": "snapshot",
+		"description": "Nirvana sample",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/Nirvana-Sample/common/snapshots/snapshot-nirvana.json",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/Nirvana-Sample/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3"]
 	}
 ]
