@@ -26,6 +26,21 @@ async function doesViewExist(name: string, uuid: string) {
 	return exists;
 }
 
+async function doesWindowExist(name: string, uuid: string) {
+	const win = fin.Window.wrapSync({ name, uuid });
+	let exists = false;
+	try {
+		await win.getInfo();
+		exists = true;
+		if (await win.isShowing()) {
+			await win.bringToFront();
+		}
+	} catch {
+		exists = false;
+	}
+	return exists;
+}
+
 function findViewNames(layout) {
 	const collectedNames: string[] = [];
 
@@ -38,6 +53,50 @@ function findViewNames(layout) {
 	});
 
 	return collectedNames;
+}
+export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
+	if (windowApp === undefined || windowApp === null) {
+		console.warn("No app was passed to launchWindow");
+		return null;
+	}
+
+	if (windowApp.manifestType !== "window" && windowApp.manifestType !== "inline-window") {
+		console.warn("The app passed was not of manifestType window or inline-window.");
+		return null;
+	}
+	let manifest: OpenFin.WindowOptions;
+
+	if (windowApp.manifestType === "window") {
+		const manifestResponse = await fetch(windowApp.manifest);
+		manifest = await manifestResponse.json();
+	} else {
+		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For classic windows we are demonstrating how it could be used
+		// for passing the manifest inline
+		manifest = windowApp.manifest as unknown as OpenFin.WindowOptions;
+	}
+
+	const name = manifest.name;
+	let identity = { uuid: fin.me.identity.uuid, name };
+	const wasNameSpecified = name !== undefined;
+	let windowExists = false;
+
+	if (wasNameSpecified) {
+		windowExists = await doesWindowExist(identity.name, identity.uuid);
+	} else {
+		manifest.name = `classic-window-${crypto.randomUUID()}`;
+		identity.name = manifest.name;
+	}
+
+	if (!windowExists) {
+		try {
+			const createdWindow = await fin.Window.create(manifest);
+			identity = createdWindow.identity;
+		} catch (err) {
+			console.error("Error launching window", err);
+			return null;
+		}
+	}
+	return identity;
 }
 
 export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
@@ -174,6 +233,10 @@ export async function launch(appEntry: App) {
 		}
 	} else if (appEntry.manifestType === "inline-view") {
 		await launchView(appEntry);
+	} else if (appEntry.manifestType === "window" || appEntry.manifestType === "inline-window") {
+		await launchWindow(appEntry);
+	} else if (appEntry.manifestType === "desktop-browser") {
+		await fin.System.openUrlWithBrowser(appEntry.manifest);
 	} else {
 		const platform = getCurrentSync();
 		await platform.launchApp({ app: appEntry });

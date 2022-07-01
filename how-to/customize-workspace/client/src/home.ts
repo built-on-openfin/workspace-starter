@@ -75,6 +75,14 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 				entry.label = "View";
 				entry.actions = [action];
 			}
+			if (apps[i].manifestType === "window" || apps[i].manifestType === "inline-window") {
+				entry.label = "Window";
+				entry.actions = [action];
+			}
+			if (apps[i].manifestType === "desktop-browser") {
+				entry.label = "Desktop Browser Url";
+				entry.actions = [action];
+			}
 			if (apps[i].manifestType === "snapshot") {
 				entry.label = "Snapshot";
 				action.name = "Launch Snapshot";
