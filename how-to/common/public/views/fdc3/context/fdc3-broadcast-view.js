@@ -3,7 +3,8 @@ import {
 	systemBroadcast,
 	appBroadcast,
 	listenToSystemBroadcast,
-	listenToAppBroadcast
+	listenToAppBroadcast,
+	getFDC3Version
 } from './fdc3-broadcast.js';
 // -------------------------------------------------
 // settings
@@ -212,6 +213,14 @@ function bindFDC3OnChange() {
 	});
 }
 
+function bindFDC3Version() {
+	const fdc3VersionLabel = document.querySelector('#fdc3Version');
+	const fdc3Version = getFDC3Version();
+	if (fdc3Version !== undefined) {
+		fdc3VersionLabel.textContent = `(v${fdc3Version})`;
+	}
+}
+
 function getContextToSend() {
 	const contextInput = document.querySelector('#context');
 	const context = contextInput.value;
@@ -221,6 +230,20 @@ function getContextToSend() {
 function getChannelType() {
 	const channelType = document.querySelector('#channelType');
 	return channelType.value;
+}
+
+async function logEnvironment() {
+	if (window.fdc3 !== undefined) {
+		log(`FDC3 Version: v${getFDC3Version()}`);
+		const channels = await window.fdc3.getSystemChannels();
+		if (Array.isArray(channels)) {
+			log('-- Available System Channels -- ');
+			for (let i = 0; i < channels.length; i++) {
+				log(`- ${channels[i].id}`);
+			}
+			log('-- Available System Channels -- ');
+		}
+	}
 }
 
 // -------------------------------------------------
@@ -259,11 +282,12 @@ async function init() {
 		clearLogs();
 	});
 
+	await logEnvironment();
 	await applySettings();
 	const dataTypes = Object.keys(contextData);
 	bindFDC3Types(dataTypes);
 	bindFDC3OnChange();
-	showCodePreview();
+	bindFDC3Version();
 	await listenToSystemBroadcast(log, showLogs);
 	await listenToAppBroadcast(log, customChannel, showLogs);
 }

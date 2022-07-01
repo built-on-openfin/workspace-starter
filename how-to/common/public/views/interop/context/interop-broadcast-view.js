@@ -238,6 +238,19 @@ function getContextGroupType() {
 	return contextGroupType.value;
 }
 
+async function logEnvironment() {
+	if (window.fin !== undefined) {
+		const contextGroups = await window.fin.me.interop.getContextGroups();
+		if (Array.isArray(contextGroups)) {
+			log('-- Available System Context Groups -- ');
+			for (let i = 0; i < contextGroups.length; i++) {
+				log(`- ${contextGroups[i].id}`);
+			}
+			log('-- Available System Context Groups -- ');
+		}
+	}
+}
+
 // -------------------------------------------------
 // Init Functions
 // -------------------------------------------------
@@ -275,6 +288,7 @@ async function init() {
 		clearLogs();
 	});
 
+	await logEnvironment();
 	await applySettings();
 	const dataTypes = Object.keys(contextData);
 	bindFDC3Types(dataTypes);
