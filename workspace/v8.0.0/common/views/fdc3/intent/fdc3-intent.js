@@ -50,3 +50,11 @@ export async function listen(log, intentList, onChange) {
 		}
 	}
 }
+
+export function getFDC3Version() {
+	let version;
+	if (window.fdc3 !== undefined) {
+		version = fdc3.getInfo().fdc3Version;
+	}
+	return version;
+}
