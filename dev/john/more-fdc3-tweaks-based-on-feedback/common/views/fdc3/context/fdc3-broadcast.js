@@ -47,3 +47,11 @@ export async function listenToAppBroadcast(log, appChannelName, onContextReceive
 		appChannel.addContextListener(null, appHandler);
 	}
 }
+
+export function getFDC3Version() {
+	let version;
+	if (window.fdc3 !== undefined) {
+		version = fdc3.getInfo().fdc3Version;
+	}
+	return version;
+}

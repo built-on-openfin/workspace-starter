@@ -1,5 +1,5 @@
 import { getDefaultFDC3IntentData, getDefaultFDC3ContextData } from '../fdc3-data.js';
-import { raiseIntent, raiseIntentByContext, listen } from './fdc3-intent.js';
+import { raiseIntent, raiseIntentByContext, listen, getFDC3Version } from './fdc3-intent.js';
 
 // -------------------------------------------------
 // settings
@@ -178,6 +178,14 @@ function bindApps(apps) {
 	apps.unshift({ appId: 'none', title: 'No Preference' }, { appId: 'wrong-app', title: 'Non Existent App' });
 	const fdc3AppOptions = apps.map((app) => `<option value=${app.appId}>${app.title}</option>`).join('\n');
 	fdc3Apps.innerHTML = fdc3AppOptions;
+}
+
+function bindFDC3Version() {
+	const fdc3VersionLabel = document.querySelector('#fdc3Version');
+	const fdc3Version = getFDC3Version();
+	if (fdc3Version !== undefined) {
+		fdc3VersionLabel.textContent = `(v${fdc3Version})`;
+	}
 }
 
 function getCombinedAppList(intents) {
@@ -405,6 +413,7 @@ async function init() {
 	bindFDC3Intents(intentTypes);
 	bindFDC3Types(getFDC3Types());
 	bindFDC3OnChange();
+	bindFDC3Version();
 	showCodePreview();
 	await listen(log, intentTypes, showLogs);
 }
