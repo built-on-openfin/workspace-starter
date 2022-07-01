@@ -21,6 +21,25 @@
 		"images": [],
 		"tags": ["page", "openfin", "client", "interop", "fdc3"]
 	},
+  {
+		"appId": "bat file",
+		"name": "bat file",
+		"title": "bat file",
+		"description": "bat file.",
+		"manifestType": "external",
+		"manifest": "C:\\Users\\puvne\\Desktop\\Openfin\\built-on-openfin\\workspace-starter\\how-to\\common\\public\\assets\\test.bat",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/Nirvana-Sample/common/images/icon-notepad.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/Nirvana-Sample/common/images/previews/microsoft-notepad-native.png"
+			}
+		],
+		"tags": ["native"]
+	},
 	{
 		"appId": "call-app",
 		"name": "call-app",
