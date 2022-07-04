@@ -1,22 +1,31 @@
 const path = require('path');
 
-module.exports = {
-	entry: './client/src/index.ts',
-	devtool: 'inline-source-map',
-	module: {
-		rules: [
-			{
-				test: /\.tsx?$/,
-				use: 'ts-loader',
-				exclude: /node_modules/
-			}
-		]
-	},
-	resolve: {
-		extensions: ['.tsx', '.ts', '.js']
-	},
-	output: {
-		filename: 'common.bundle.js',
-		path: path.resolve(__dirname, '..', 'public', 'js')
+module.exports = [
+	{
+		entry: './client/src/windows/hidden-window/hidden.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'common.windows.hidden.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
-};
+];

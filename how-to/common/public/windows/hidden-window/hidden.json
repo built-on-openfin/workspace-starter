@@ -1,0 +1,12 @@
+{
+	"autoShow": false,
+	"backgroundThrottling": false,
+	"includeInSnapshots": false,
+	"name": "hidden-window-example",
+	"showTaskbarIcon": false,
+	"fdc3InteropApi": "1.2",
+	"height": 500,
+	"width": 800,
+	"url": "http://localhost:8080/common/windows/hidden-window/hidden.html",
+	"processAffinity": "custom-affinity"
+}
