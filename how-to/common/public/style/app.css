@@ -317,11 +317,12 @@ input[type='range'] {
 }
 
 input[type='range']::-webkit-slider-runnable-track {
-	height: 5px;
+	-webkit-appearance: none;
+	height: 10px;
 	border: 1px solid var(--brand-input-border);
 	background-color: var(--brand-input-background);
-	border: none;
 	border-radius: 3px;
+	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -333,6 +334,7 @@ input[type='range']::-webkit-slider-thumb {
 	border: 1px solid var(--brand-input-border);
 	background: var(--brand-input-background);
 	cursor: pointer;
+	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
 }
 
 input[type='range']:hover::-webkit-slider-runnable-track,
