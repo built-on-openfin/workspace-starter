@@ -30,8 +30,8 @@ function createEntry(name, label, value, checked = false) {
 	labelForRadioButton.setAttribute('for', value);
 	labelForRadioButton.textContent = label;
 
-    fieldset.classList.add("row");
-    fieldset.classList.add("middle");
+	fieldset.classList.add('row');
+	fieldset.classList.add('middle');
 
 	fieldset.append(radioButton);
 	fieldset.append(labelForRadioButton);
