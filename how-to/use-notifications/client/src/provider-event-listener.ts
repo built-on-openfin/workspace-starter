@@ -1,11 +1,11 @@
 import { provider } from "@openfin/workspace/notifications";
 
-let statusInterval: number | undefined;
+let statusIntervalId: number | undefined;
 let lastConnectionStatus: boolean | undefined;
 
 export function addEventListener(event: string, callback: (status: provider.ProviderStatus) => void) {
-	if (event === "connection-changed" && statusInterval === undefined) {
-		window.setInterval(async () => {
+	if (event === "connection-changed" && statusIntervalId === undefined) {
+		statusIntervalId = window.setInterval(async () => {
 			const status = await provider.getStatus();
 			if (status.connected !== lastConnectionStatus) {
 				lastConnectionStatus = status.connected;
@@ -16,9 +16,9 @@ export function addEventListener(event: string, callback: (status: provider.Prov
 }
 
 export function removeEventListener(event: string, callback: (status: provider.ProviderStatus) => void) {
-	if (event === "connection-changed" && statusInterval) {
-		window.clearInterval(statusInterval);
-		statusInterval = undefined;
+	if (event === "connection-changed" && statusIntervalId) {
+		window.clearInterval(statusIntervalId);
+		statusIntervalId = undefined;
 		lastConnectionStatus = undefined;
 	}
 }
