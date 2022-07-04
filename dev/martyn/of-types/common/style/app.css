@@ -1,27 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
 :root {
-	--brand-background: #111214;
+	--brand-background: #1e1f23;
+	--brand-border: #2f3136;
 	--brand-primary: hsl(241, 100%, 65%);
 	--brand-primary-light: hsl(241, 100%, 85%);
 	--brand-primary-hover: hsl(241, 100%, 55%);
 	--brand-text: #ffffff;
-	--brand-text-secondary: #eeeeee;
+	--brand-text-secondary: #c9cbd2;
+	--brand-input-background: #383a40;
+	--brand-input-border: #53565f;
+	--brand-input-border-highlight: #c9cbd2;
 
 	accent-color: var(--brand-primary);
 }
 
 .theme-light {
 	--brand-background: #ffffff;
+	--brand-border: #eeeeee;
 	--brand-primary: hsl(241, 100%, 65%);
 	--brand-primary-light: hsl(241, 100%, 85%);
 	--brand-primary-hover: hsl(241, 100%, 55%);
 	--brand-text: #111214;
 	--brand-text-secondary: #333333;
+	--brand-input-background: #f7f7f7;
+	--brand-input-border: #c9cbd2;
+	--brand-input-border-highlight: #53565f;
 }
 
 .primary {
 	color: var(--brand-primary);
+}
+
+.error {
+	color: #ff0000;
 }
 
 * {
@@ -39,7 +51,7 @@ body {
 	justify-content: stretch;
 	align-items: stretch;
 	overflow: hidden;
-	padding: 30px;
+	padding: 20px;
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
@@ -54,6 +66,10 @@ body.border {
 	border-radius: 5px;
 	width: 99%;
 	height: 99%;
+}
+
+body.border-light {
+	border-color: var(--brand-input-border-highlight);
 }
 
 body.small {
@@ -71,6 +87,7 @@ h1.tag {
 	font-size: 12px;
 	font-weight: normal;
 	margin-top: 5px;
+	color: var(--brand-text-secondary);
 }
 
 h2 {
@@ -106,7 +123,8 @@ h5 {
 }
 
 p {
-	font-size: 14px;
+	color: var(--brand-text-secondary);
+	font-size: 12px;
 	margin-block-start: 0;
 	margin-block-end: 0;
 }
@@ -131,13 +149,13 @@ main {
 	min-height: 100px;
 }
 
-footer > div > div > a,
-button {
+button,
+footer a {
 	background-color: var(--brand-primary);
 	color: #ffffff;
 	border: 2px solid var(--brand-primary);
 	border-radius: 5px;
-	padding: 10px 20px;
+	padding: 8px 20px;
 	text-align: left;
 	cursor: pointer;
 	font-size: 12px;
@@ -145,29 +163,42 @@ button {
 	text-decoration: none;
 	outline: 0;
 	white-space: nowrap;
+	transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 button:disabled {
 	opacity: 0.5;
 	cursor: default;
 }
-footer > div > div > a:hover,
-button:not(:disabled):hover {
+button:not(:read-only):focus,
+button:not(:disabled):hover,
+footer a:not(:read-only):focus,
+footer a:not(:disabled):not(:read-only):hover {
+	border-color: var(--brand-input-border-highlight);
+}
+
+footer a:hover,
+button:not(:disabled):not(:read-only):hover {
 	background-color: var(--brand-primary-hover);
 	border-color: var(--brand-primary-hover);
 }
 button.image {
-	padding: 2px;
-	background: none;
+	width: 40px;
+	height: 40px;
+	padding: 0px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 button.image > img {
 	width: 32px;
 	height: 32px;
 }
 button.secondary {
-	background-color: #ffffff;
-	color: var(--brand-primary);
+	background-color: var(--brand-input-background);
+	color: var(--brand-text);
+	border-color: var(--brand-input-border);
 }
-button.secondary:not(:disabled):hover {
+button.secondary:not(:disabled):not(:read-only):hover {
 	background-color: #eeeeee;
 }
 button.plain {
@@ -175,7 +206,7 @@ button.plain {
 	background-color: transparent;
 	color: var(--brand-primary);
 }
-button.plain:not(:disabled):hover {
+button.plain:not(:disabled):not(:read-only):hover {
 	border-color: transparent;
 	background-color: transparent;
 }
@@ -184,6 +215,10 @@ td button {
 	padding: 5px 10px;
 	font-size: 10px;
 }
+td button.plain {
+	width: auto;
+	height: auto;
+}
 
 button.center {
 	text-align: center;
@@ -191,61 +226,134 @@ button.center {
 
 pre {
 	margin: 0;
+	padding: 5px;
+	border-radius: 4px;
 	font-size: 12px;
 	font-family: 'Courier New', Courier, monospace;
-	white-space: pre-line;
+	white-space: pre-wrap;
+	border: 1px solid var(--brand-input-border);
+	background-color: var(--brand-input-background);
+	width: 100%;
+	min-height: 20px;
 }
 
 header {
 	padding-bottom: 10px;
-	border-bottom: 1px solid var(--brand-text-secondary);
+	border-bottom: 2px solid var(--brand-border);
 }
 
 footer {
 	padding-top: 10px;
-	border-top: 1px solid var(--brand-text-secondary);
+	border-top: 1px solid var(--brand-border);
 }
 
 fieldset {
 	display: flex;
-	flex-direction: row;
-	align-items: center;
+	flex-direction: column;
+	align-items: flex-start;
 	border: 0;
 	padding: 0;
 	font-size: 12px;
+	gap: 5px;
 }
 
 label {
-	width: 140px;
+	font-size: 12px;
+	font-weight: 600;
 }
 
 select,
 input[type='text'],
 input[type='password'],
-input[type='range'] {
-	height: 30px;
-	border-radius: 5px;
-	border: 0;
-	outline: 2px solid transparent;
-	background-color: var(--brand-background);
+textarea {
+	border-radius: 4px;
+	border: 1px solid var(--brand-input-border);
+	background-color: var(--brand-input-background);
+	font-size: 12px;
+	outline: 0;
 	color: var(--brand-text);
+	transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	width: 50%;
+	min-width: 200px;
+}
+
+select.full,
+input[type='text'].full,
+input[type='password'].full,
+input[type='range'].full,
+textarea.full {
+	width: 100%;
+}
+
+select,
+input[type='text'],
+input[type='password'],
+textarea {
+	padding: 8px 12px;
+	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
+}
+
+textarea {
+	width: 95%;
+}
+
+select:not(:read-only):focus,
+select:not(:disabled):not(:read-only):hover,
+input[type='text']:not(:read-only):focus,
+input[type='text']:not(:disabled):not(:read-only):hover,
+input[type='password']:not(:read-only):focus,
+input[type='password']:not(:disabled):not(:read-only):hover,
+textarea:not(:read-only):focus,
+textarea:not(:disabled):not(:read-only):hover {
+	border-color: var(--brand-input-border-highlight);
+}
+
+input[type='range'] {
+	-webkit-appearance: none;
+	height: 20px;
+	width: 200px;
+	background: transparent;
+	outline: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+	-webkit-appearance: none;
+	height: 10px;
+	border: 1px solid var(--brand-input-border);
+	background-color: var(--brand-input-background);
+	border-radius: 3px;
+	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	height: 20px;
+	width: 20px;
+	border-radius: 5px;
+	margin-top: -6px;
+	border: 1px solid var(--brand-input-border);
+	background: var(--brand-input-background);
+	cursor: pointer;
+	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
+}
+
+input[type='range']:hover::-webkit-slider-runnable-track,
+input[type='range']:focus::-webkit-slider-runnable-track,
+input[type='range']:hover::-webkit-slider-thumb,
+input[type='range']:focus::-webkit-slider-thumb {
+	border-color: var(--brand-input-border-highlight);
+}
+
+select:disabled,
+input:disabled {
+	opacity: 0.5;
+	cursor: default;
+	pointer-events: none;
 }
 
 fieldset > span {
 	margin-left: 10px;
 	width: 50px;
-}
-
-input:focus,
-button:focus,
-footer > div > div > a:focus {
-	outline: 2px solid var(--brand-primary-light);
-}
-
-input[type='text'],
-input[type='password'] {
-	flex: 1;
-	border: 1px solid var(--brand-text-secondary);
 }
 
 input[type='text'].large,
@@ -262,27 +370,20 @@ input[type='password'].center {
 input[type='checkbox'],
 input[type='radio'] {
 	background-color: var(--brand-background);
-	color: var(--brand-text);
+	color: var(--brand-background);
 }
 
-input[type='checkbox'] {
-	width: 20px;
-	height: 20px;
-}
-
+input[type='checkbox'],
 input[type='radio'] {
-	width: 16px;
-	height: 16px;
+	width: 18px;
+	height: 18px;
 	margin: 2px;
 }
 
+input[type='checkbox'] + label,
 input[type='radio'] + label {
 	white-space: nowrap;
 	margin-left: 10px;
-}
-
-select {
-	width: 120 px;
 }
 
 input[type='color'] {
@@ -301,12 +402,37 @@ input[type='color']::-webkit-color-swatch {
 	border-radius: 7px;
 }
 
-em {
+input[type='color'] {
+	border: 0;
+	border-radius: 7px;
+	background: none;
+	padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch {
+	border: solid 1px var(--brand-primary-light);
+	border-radius: 7px;
+}
+
+option {
+	border-radius: 0;
+	padding: 10px;
+}
+
+ul {
 	font-size: 12px;
 }
 
-.formSection {
-	margin-right: 20px;
+li {
+	font-size: 12px;
+}
+
+em {
+	font-size: 12px;
 }
 
 .row {
@@ -321,7 +447,6 @@ em {
 
 .fill {
 	flex: 1;
-	overflow: hidden;
 }
 
 .fill_2 {
@@ -340,8 +465,8 @@ em {
 	overflow-x: auto;
 }
 
-.overflow-visible {
-	overflow: visible;
+.overflow-hidden {
+	overflow: hidden;
 }
 
 .middle {
@@ -398,10 +523,6 @@ em {
 
 .pad20 {
 	padding: 20px;
-}
-
-.error {
-	color: red;
 }
 
 table {
