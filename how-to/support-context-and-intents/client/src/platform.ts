@@ -19,7 +19,7 @@ export async function init() {
 			}
 		};
 
-        // Fix this type overload when openfin-adapter references are removed from WS
+		// Fix this type overload when openfin-adapter references are removed from WS
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		browser.interopOverride = interopOverride as any;
 	}

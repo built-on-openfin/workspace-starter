@@ -1,16 +1,17 @@
 import {
-    App, CLIFilter,
-    CLIFilterOptionType,
-    CLIProvider,
-    CLISearchListenerRequest,
-    CLISearchListenerResponse,
-    CLISearchResponse,
-    CLITemplate,
-    Home,
-    HomeDispatchedSearchResult,
-    HomeSearchResponse,
-    HomeSearchResult,
-    TemplateFragment
+	App,
+	CLIFilter,
+	CLIFilterOptionType,
+	CLIProvider,
+	CLISearchListenerRequest,
+	CLISearchListenerResponse,
+	CLISearchResponse,
+	CLITemplate,
+	Home,
+	HomeDispatchedSearchResult,
+	HomeSearchResponse,
+	HomeSearchResult,
+	TemplateFragment
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
