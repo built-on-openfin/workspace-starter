@@ -1,42 +1,43 @@
 {
-  "name": "openfin-workspace-starter",
-  "version": "8.0.0",
-  "description": "OpenFin Workspace Starter",
-  "scripts": {
-    "package-how-tos": "node ./scripts/package.js --legacy",
-    "package": "node ./scripts/package.js",
-    "package-for-github": "node ./scripts/package.js --location github",
-    "package-for-aws": "node ./scripts/package.js --location aws",
-    "prettier": "prettier --config .prettierrc --write .",
-    "eslint": "eslint . --ext .js,.mjs,.ts"
-  },
-  "workspaces": [
-    "how-to/*"
-  ],
-  "packageExclude": [
-    "how-to/register-with-home-basic",
-    "how-to/register-with-store-basic",
-    "how-to/migrate-from-a-previous-version",
-    "how-to/integrate-with-sso",
-    "how-to/integrate-server-authentication"
-  ],
-  "howToCustomFolder": "",
-  "author": "",
-  "license": "SEE LICENSE IN LICENSE.MD",
-  "devDependencies": {
-    "eslint": "^8.17.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "eslint-plugin-unicorn": "^42.0.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "fast-glob": "^3.2.11",
-    "fs-extra": "^10.0.0",
-    "prettier": "^2.6.2",
-    "replace-in-file": "^6.3.2",
-    "yargs": "^17.5.1"
-  }
+	"name": "openfin-workspace-starter",
+	"version": "8.0.0",
+	"description": "OpenFin Workspace Starter",
+	"scripts": {
+		"package-how-tos": "node ./scripts/package.js --legacy",
+		"package": "node ./scripts/package.js",
+		"package-for-github": "node ./scripts/package.js --location github",
+		"package-for-aws": "node ./scripts/package.js --location aws",
+		"prettier": "prettier --config .prettierrc --write .",
+		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"validate": "npm run prettier & npm run eslint"
+	},
+	"workspaces": [
+		"how-to/*"
+	],
+	"packageExclude": [
+		"how-to/register-with-home-basic",
+		"how-to/register-with-store-basic",
+		"how-to/migrate-from-a-previous-version",
+		"how-to/integrate-with-sso",
+		"how-to/integrate-server-authentication"
+	],
+	"howToCustomFolder": "",
+	"author": "",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"devDependencies": {
+		"eslint": "^8.17.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-airbnb-typescript": "^17.0.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-simple-import-sort": "^7.0.0",
+		"eslint-plugin-unicorn": "^42.0.0",
+		"eslint-plugin-unused-imports": "^2.0.0",
+		"fast-glob": "^3.2.11",
+		"fs-extra": "^10.0.0",
+		"prettier": "^2.6.2",
+		"replace-in-file": "^6.3.2",
+		"yargs": "^17.5.1"
+	}
 }

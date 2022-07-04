@@ -1,0 +1,15 @@
+name: Check Prettier formatting has been applied
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Run prettier
+        run: |-
+          npx prettier --config .prettierrc --check .
