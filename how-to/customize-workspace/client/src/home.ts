@@ -71,33 +71,39 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 				data: apps[i]
 			};
 
-			if (apps[i].manifestType === "view" || apps[i].manifestType === "inline-view") {
-				entry.label = "View";
-				entry.actions = [action];
+			switch (apps[i].manifestType) {
+				case "view":
+				case "inline-view": {
+					entry.label = "View";
+					break;
+				}
+				case "window":
+				case "inline-window": {
+					entry.label = "Window";
+					break;
+				}
+				case "desktop-browser": {
+					entry.label = "Desktop Browser Url";
+					break;
+				}
+				case "snapshot": {
+					entry.label = "Snapshot";
+					action.name = "Launch Snapshot";
+					break;
+				}
+				case "manifest": {
+					entry.label = "App";
+					action.name = "Launch App";
+					break;
+				}
+				case "external": {
+					action.name = "Launch Native App";
+					entry.label = "Native App";
+					break;
+				}
 			}
-			if (apps[i].manifestType === "window" || apps[i].manifestType === "inline-window") {
-				entry.label = "Window";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "desktop-browser") {
-				entry.label = "Desktop Browser Url";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "snapshot") {
-				entry.label = "Snapshot";
-				action.name = "Launch Snapshot";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "manifest") {
-				entry.label = "App";
-				action.name = "Launch App";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "external") {
-				action.name = "Launch Native App";
-				entry.actions = [action];
-				entry.label = "Native App";
-			}
+
+			entry.actions = [action];
 
 			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
 				entry.icon = apps[i].icons[0].src;
