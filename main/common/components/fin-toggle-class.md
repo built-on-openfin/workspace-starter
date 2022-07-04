@@ -1,4 +1,6 @@
-# <button is="fin-toggle-class"></button> - A web component to toggle between two css classes via a button with an inline image
+# A web component to toggle between two css classes via a button with an inline image
+
+`<button is="fin-toggle-class"></button>`
 
 This is a very basic webcomponent that lets you specify the following attributes:
 
@@ -9,7 +11,7 @@ This is a very basic webcomponent that lets you specify the following attributes
 - height - the default height applied against the image (default is 32px)
 - width - the default width applied against the image (default is 32px)
 - target - the element you wish to apply the css class to (default is the body element)
-- sync - whether this view (where the webcomponent is placed) should react to changes to other windows which are also using this webcomponet (default is true so when one window is changed they all change. Set sync="false" if you want to isolate one from the others).
+- sync - whether this view (where the webcomponent is placed) should react to changes to other windows which are also using this webcomponent (default is true so when one window is changed they all change. Set sync="false" if you want to isolate one from the others).
 
 The web component saves the selection so that it is applied when any page using the component is launched or reloaded. It uses the uuid of the application as part of the key to store the selection unless sync="false" then it uses the uuid of the application and the name of the page it is on (in order to isolate itself but still remember the user's selection).
 
