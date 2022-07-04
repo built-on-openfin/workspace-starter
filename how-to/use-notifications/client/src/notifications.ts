@@ -6,6 +6,7 @@ import {
 	deregisterPlatform,
 	getNotificationsCount,
 	NotificationOptions,
+	provider,
 	registerPlatform,
 	TemplateFragment,
 	TextTemplateFragment,
@@ -14,17 +15,19 @@ import {
 	update
 } from "@openfin/workspace/notifications";
 import * as CSS from "csstype";
+import { addEventListener as providerEventListener } from "./provider-event-listener";
 
 let loggingElement: HTMLElement;
 const updatableNotifications = {};
 let updatableNotificationTimer: NodeJS.Timer;
 let activePlatform;
+let connected = false;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	console.log("Script loaded");
 
 	await initDom();
-	initListener();
+	await initListener();
 });
 
 async function initDom() {
@@ -104,7 +107,7 @@ async function initDom() {
 	showNotificationCount(await getNotificationsCount());
 }
 
-function initListener() {
+async function initListener() {
 	addNotificationEventListener("notification-created", (event) => {
 		loggingAddEntry(`Created: ${event.notification.id}`);
 	});
@@ -139,6 +142,16 @@ function initListener() {
 	addNotificationEventListener("notifications-count-changed", (event) => {
 		showNotificationCount(event.count);
 	});
+
+	providerEventListener("connection-changed", (status) => {
+		connected = status.connected;
+		updateConnectedState();
+	});
+
+	const status = await provider.getStatus();
+	connected = status.connected;
+
+	updateConnectedState();
 }
 
 function loggingShowHide(): void {
@@ -149,6 +162,16 @@ function loggingShowHide(): void {
 function loggingAddEntry(entry: string): void {
 	loggingElement.textContent = `${entry}\n\n${loggingElement.textContent}`;
 	loggingShowHide();
+}
+
+function updateConnectedState(): void {
+	const isConnected = document.querySelector("#isConnected");
+	isConnected.textContent = connected ? "Yes" : "No";
+
+	const buttons = document.querySelectorAll("button");
+	for (const button of buttons) {
+		button.disabled = !connected;
+	}
 }
 
 function showNotificationCount(count: number): void {
