@@ -722,10 +722,10 @@
 		"tags": ["page", "openfin", "tools"]
 	},
 	{
-		"appId": "openfin-versions",
-		"name": "openfin-versions",
-		"title": "OpenFin Versions",
-		"description": "Launch the OpenFin Versions page to see the different versions of our rvm, container, workspace, adapter and intergration offerings.",
+		"appId": "openfin-versions-workspace",
+		"name": "openfin-versions-workspace",
+		"title": "OpenFin Versions - Workspace",
+		"description": "Launch the OpenFin Workspace Versions page. This launches the url as a view to demonstrate the capability. This is an example of a inline-view entry in the app catalog.",
 		"manifest": {
 			"url": "https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace",
 			"name": "openfin-versions"
@@ -742,6 +742,46 @@
 		"intents": [],
 		"images": [],
 		"tags": ["versions", "view"]
+	},
+	{
+		"appId": "openfin-versions-runtime",
+		"name": "openfin-versions-runtime",
+		"title": "OpenFin Versions - Runtime",
+		"description": "Launch the OpenFin Runtime Versions page. This launches in a classic window to demonstrate the capability. This is a example of an inline-window entry in the app catalog.",
+		"manifest": {
+			"url": "https://developer.openfin.co/versions/?product=Runtime"
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["versions", "window"]
+	},
+	{
+		"appId": "openfin-versions-integrations",
+		"name": "openfin-versions-integrations",
+		"title": "OpenFin Versions - Integrations",
+		"description": "Launch the OpenFin Integrations Versions page. This launches the url into the desktop browser to demonstrate the capability. This is an example of a desktop-browser entry in the app catalog.",
+		"manifest": "https://developer.openfin.co/versions/?product=Runtime#/?product=Integrations",
+		"manifestType": "desktop-browser",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["versions", "desktop-browser"]
 	},
 	{
 		"appId": "preload-tradingview-view",
@@ -998,5 +1038,24 @@
 			}
 		],
 		"tags": ["page", "openfin", "manager", "fcd3"]
+	},
+	{
+		"appId": "hidden-window-example",
+		"name": "hidden-window-example",
+		"title": "Hidden/Headless Window Example",
+		"manifestType": "window",
+		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/windows/hidden-window/hidden.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["window", "headless"]
 	}
 ]
