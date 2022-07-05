@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>FDC3 Intents - Intents using FDC3</title>
+		<script type="module" src="./fdc3-intent-view.js"></script>
+		<script src="../../../components/fin-toggle-class.js" defer></script>
+		<link rel="stylesheet" href="../../../style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>
+					Intents using FDC3
+					<span id="fdc3Version"></span>
+				</h1>
+				<h1 class="tag">Raise and listen to Intents</h1>
+			</div>
+			<div class="row middle gap10">
+				<button is="fin-toggle-class" title="Change style"></button>
+				<image src="../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="row fill gap20">
+			<div class="row fill gap40">
+				<div class="fill col gap20">
+					<form class="col gap40 scroll-vertical">
+						<div class="col gap10">
+							<h2>FDC3 Intent Options</h2>
+							<fieldset>
+								<label
+									for="intentType"
+									title="There are different ways of raising an intent. If you know the intent name you can raise it directly. If you only have a context object you can raise an intent by passing the context to see if there are intents that support it."
+								>
+									Raise By
+								</label>
+								<select name="intentType" id="intentType">
+									<option value="raiseByIntent">raiseByIntent</option>
+									<option value="raiseByContext">raiseByContext</option>
+								</select>
+							</fieldset>
+							<fieldset>
+								<label
+									for="fdc3Intents"
+									title="There are a number of defined intents. We are including the list of fdc3 defined intents here but you can create your own."
+								>
+									Intent
+								</label>
+								<select name="fdc3Intents" id="fdc3Intents"></select>
+							</fieldset>
+							<fieldset id="customIntentContainer" style="display: none">
+								<label for="customIntent" title="Define your own intent name">Custom Intent</label>
+								<input type="text" id="customIntent" />
+							</fieldset>
+
+							<fieldset>
+								<label
+									for="fdc3Type"
+									title="What type of context objects are you looking to send. We update this list of supported types for the intent you selected."
+								>
+									Context Type
+								</label>
+								<select name="fdc3Type" id="fdc3Type"></select>
+							</fieldset>
+							<fieldset>
+								<label
+									for="fdc3Value"
+									title="We provide at least one example based on the context type selected. You can use this to see the default structure of these context types."
+								>
+									Sample Data
+								</label>
+								<select name="fdc3Value" id="fdc3Value"></select>
+							</fieldset>
+							<fieldset>
+								<label
+									for="context"
+									title="We populate this text area with the value selected from the dropdown above but you can also customize it to publish your own context types."
+								>
+									Context To Send
+								</label>
+								<textarea id="context" rows="8"></textarea>
+							</fieldset>
+							<fieldset>
+								<label
+									for="fdc3Apps"
+									title="The FDC3 spec says you can suggest an application when raising an intent. It is up to your broker what it does with it. This list is updated when the intent type or context type change and the information is provided by your broker."
+								>
+									Target App
+								</label>
+								<select name="fdc3Apps" id="fdc3Apps"></select>
+							</fieldset>
+						</div>
+					</form>
+				</div>
+				<div class="col fill gap20">
+					<h2 id="previewTitle">Code Preview</h2>
+					<pre id="preview" class="fill scroll-vertical"></pre>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="row spread">
+				<div class="row gap10">
+					<button id="btnRaiseIntent">Execute</button>
+					<button id="btnRaiseIntentByContext" style="display: none">Execute</button>
+					<button id="btnClear">Clear</button>
+					<button id="btnSeeCode">See Code</button>
+					<button id="btnSeeLogs">See Logs</button>
+				</div>
+				<div class="row gap10">
+					<a href="https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin" target="_blank">
+						Docs
+					</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
