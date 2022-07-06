@@ -428,6 +428,28 @@ module.exports = {
 					{
 						selector: 'variable',
 						format: ['camelCase', 'UPPER_CASE']
+					},
+					{
+						selector: 'enumMember',
+						format: ['PascalCase']
+					},
+					{
+						selector: 'property',
+						modifiers: ['static'],
+						leadingUnderscore: 'forbid',
+						format: ['UPPER_CASE']
+					},
+					{
+						selector: 'property',
+						modifiers: ['private'],
+						leadingUnderscore: 'require',
+						format: ['camelCase']
+					},
+					{
+						selector: 'property',
+						modifiers: ['static', 'private'],
+						leadingUnderscore: 'require',
+						format: ['UPPER_CASE', 'camelCase']
 					}
 				],
 				'@typescript-eslint/no-array-constructor': ['error'],
