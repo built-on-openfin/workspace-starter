@@ -12,22 +12,15 @@ import { getSettings, getThemes } from "./settings";
 function registerAvailableStorage() {
 	PlatformStorage.register(
 		DEFAULT_STORAGE_KEYS.PageBounds,
-		async (options) =>
-			new Promise((resolve, reject) =>
-				resolve(new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.PageBounds, "PageBounds"))
-			)
+		async (options) => new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.PageBounds, "PageBounds")
 	);
 	PlatformStorage.register(
 		DEFAULT_STORAGE_KEYS.Page,
-		async (options) =>
-			new Promise((resolve, reject) => resolve(new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.Page, "Page")))
+		async (options) => new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.Page, "Page")
 	);
 	PlatformStorage.register(
 		DEFAULT_STORAGE_KEYS.Workspace,
-		async (options) =>
-			new Promise((resolve, reject) =>
-				resolve(new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.Workspace, "Workspace"))
-			)
+		async (options) => new PlatformLocalStorage(DEFAULT_STORAGE_KEYS.Workspace, "Workspace")
 	);
 }
 
