@@ -17,6 +17,7 @@ This sample is an extension of the support context and intents example. The samp
 - Workspace saving has been added
 - An example of implementing your own sharing function has also been added.
 - An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
+- An example of swapping out where workspaces and pages are stored (First Starter uses the default storage and Second Starter enables custom storage).
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -198,6 +199,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
     },
     "platformProvider": {
       "rootUrl": "http://localhost:8080",
+      "useCustomStorage": false,
       "intentPicker": {
         "url": "http://localhost:8080/common/windows/intents/picker.html",
         "height": 400,
@@ -539,6 +541,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | notifications                    | Should we use register the workspace platform against notification center so it can have it's own dedicated section that is themed and branded.                                                                                                                                                                                                                                                                                                                     |
 | **platformProvider**             | Config related to the platform                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | rootUrl                          | Used so that root urls can be defined via manifest for different environments                                                                                                                                                                                                                                                                                                                                                                                       |
+| useCustomStorage                 | Register custom storage providers for the saving of page and workspace related information (Default is false).                                                                                                                                                                                                                                                                                                                                                      |
 | intentPicker.url                 | The url that supports intent selection.                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | intentPicker.height              | The height for the intent picker.                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | intentPicker.width               | The width for the intent picker.                                                                                                                                                                                                                                                                                                                                                                                                                                    |

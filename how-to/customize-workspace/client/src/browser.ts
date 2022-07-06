@@ -15,19 +15,39 @@ import {
 
 import { getDefaultToolbarButtons } from "./buttons";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
+import { PlatformLocalStorage } from "./platform-local-storage";
 import { PlatformStorage } from "./platform-storage";
-import { DEFAULT_STORAGE_KEYS } from "./platform-storage-shapes";
+import { DEFAULT_STORAGE_KEYS, IPlatformStorage } from "./platform-storage-shapes";
 import { getSettings } from "./settings";
+
+const DEFAULT_PAGE_BOUNDS_STORAGE = new PlatformLocalStorage<OpenFin.Bounds>(
+	DEFAULT_STORAGE_KEYS.PageBounds,
+	"PageBounds"
+);
+
+async function getPageBoundsStorage(): Promise<IPlatformStorage<OpenFin.Bounds>> {
+	const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.PageBounds)
+		? await PlatformStorage.getStorage<OpenFin.Bounds>(DEFAULT_STORAGE_KEYS.PageBounds)
+		: undefined;
+	if (storage !== undefined) {
+		return storage;
+	}
+	return DEFAULT_PAGE_BOUNDS_STORAGE;
+}
 
 async function savePageBounds(pageId: string) {
 	const bounds = await getPageBounds(pageId);
-	const boundsStorage = await PlatformStorage.getStorage<OpenFin.Bounds>(DEFAULT_STORAGE_KEYS.PageBounds);
-	await boundsStorage.set(pageId, bounds);
+	const storage = await getPageBoundsStorage();
+	if (storage !== undefined) {
+		await storage.set(pageId, bounds);
+	}
 }
 
 async function deletePageBounds(pageId: string) {
-	const boundsStorage = await PlatformStorage.getStorage(DEFAULT_STORAGE_KEYS.PageBounds);
-	await boundsStorage.remove(pageId);
+	const storage = await getPageBoundsStorage();
+	if (storage !== undefined) {
+		await storage.remove(pageId);
+	}
 }
 
 export async function getPage(pageId: string) {
@@ -50,8 +70,10 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 	let bounds: OpenFin.Bounds = null;
 
 	if (fromStorage) {
-		const boundsStorage = await PlatformStorage.getStorage<OpenFin.Bounds>(DEFAULT_STORAGE_KEYS.PageBounds);
-		bounds = await boundsStorage.get(pageId);
+		const storage = await getPageBoundsStorage();
+		if (storage !== undefined) {
+			bounds = await storage.get(pageId);
+		}
 	} else {
 		const platform = getCurrentSync();
 		const pages = await platform.Browser.getAllAttachedPages();
@@ -75,8 +97,10 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 	let customBounds = bounds;
 	if (customBounds === undefined) {
-		const boundsStorage = await PlatformStorage.getStorage<OpenFin.Bounds>(DEFAULT_STORAGE_KEYS.PageBounds);
-		customBounds = await boundsStorage.get(page.pageId);
+		const storage = await getPageBoundsStorage();
+		if (storage !== undefined) {
+			customBounds = await storage.get(page.pageId);
+		}
 	}
 
 	const platform = getCurrentSync();
@@ -156,7 +180,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
+				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Returning saved workspaces from custom storage for query: ${query}.`);
 				return storage.getAll(query);
@@ -168,7 +195,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedWorkspace(id: string): Promise<Workspace> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
+				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Returning saved workspace from custom storage for workspace id: ${id}.`);
 				return storage.get(id);
@@ -180,7 +210,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
+				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Saving workspace to custom storage for workspace id: ${req.workspace.workspaceId}.`);
 				return storage.set(req.workspace.workspaceId, req.workspace);
@@ -192,7 +225,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
+				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(
 					`Saving updated workspace to custom storage for workspace id: ${req.workspace.workspaceId}.`
@@ -208,7 +244,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async deleteSavedWorkspace(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
+				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Deleting workspace from custom storage for workspace id: ${id}.`);
 				return storage.remove(id);
@@ -220,7 +259,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
+				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Returning saved pages from custom storage for query: ${query}.`);
 				return storage.getAll(query);
@@ -232,7 +274,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedPage(id: string): Promise<Page> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
+				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`Returning saved page with id ${id} from custom storage.`);
 				return storage.get(id);
@@ -247,7 +292,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
+				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`creating saved page and saving to custom storage. PageId: ${req.page.pageId}`);
 				await storage.set(req.page.pageId, req.page);
@@ -263,7 +311,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
+				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`updating saved page and saving to custom storage with page id: ${req.page.pageId}.`);
 				await storage.set(req.page.pageId, req.page);
@@ -279,7 +330,10 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page);
+			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
+				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
+				: undefined;
+
 			if (storage !== undefined) {
 				console.log(`deleting saved page from custom storage. PageId: ${id}.`);
 				await storage.remove(id);

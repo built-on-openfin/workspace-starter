@@ -27,9 +27,12 @@ function registerAvailableStorage() {
 export async function init() {
 	const settings = await getSettings();
 
-	console.log("Initialising platform");
+	console.log("Initializing platform");
 	const browser: BrowserInitConfig = {};
-	registerAvailableStorage();
+	if (settings?.platformProvider?.useCustomStorage) {
+		registerAvailableStorage();
+	}
+
 	if (settings.browserProvider !== undefined) {
 		browser.defaultWindowOptions = await getDefaultWindowOptions();
 

@@ -18,7 +18,7 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 		const store = this.getCompleteStore();
 		const savedEntry = store[id];
 		if (savedEntry === undefined || savedEntry === null) {
-			console.error(`No ${this._storageTypeName} entry was found for id ${id}.`);
+			console.warn(`No ${this._storageTypeName} entry was found for id ${id}.`);
 			return null;
 		}
 		return savedEntry;

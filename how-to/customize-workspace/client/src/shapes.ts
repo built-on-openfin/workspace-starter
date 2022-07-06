@@ -5,6 +5,7 @@ import { IntegrationProvider } from "./integrations-shapes";
 
 interface PlatformProvider {
 	rootUrl: string;
+	useCustomStorage?: boolean;
 	intentPicker?: {
 		url: string;
 		height?: number;
