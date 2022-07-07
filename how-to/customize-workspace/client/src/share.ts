@@ -353,21 +353,20 @@ export async function showShareOptions(payload: { windowIdentity: OpenFin.Identi
 				data: { identity: {}, type: "workspace" }
 			}
 		];
-		await currentWindow.openfinWindow
-			.showPopupMenu({
-				template,
-				x: payload.x,
-				y: payload.y
-			} as OpenFin.ShowPopupMenuOptions)
-			.then(async (r) => {
-				if (r.result === "closed") {
-					console.log("share menu dismissed.");
-				} else if (r.data.type === "page") {
-					await saveSharedPage(r.data.identity as IShareCustomData);
-				} else if (r.data.type === "workspace") {
-					await saveSharedWorkspace();
-				}
-			});
+
+		const r = await currentWindow.openfinWindow.showPopupMenu({
+			template,
+			x: payload.x,
+			y: payload.y
+		});
+
+		if (r.result === "closed") {
+			console.log("share menu dismissed.");
+		} else if (r.data.type === "page") {
+			await saveSharedPage(r.data.identity as IShareCustomData);
+		} else if (r.data.type === "workspace") {
+			await saveSharedWorkspace();
+		}
 	} else {
 		console.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
