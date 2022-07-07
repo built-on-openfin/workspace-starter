@@ -19,7 +19,7 @@
 	"author": "",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^25.70.8",
+		"@openfin/core": "^27.70.8",
 		"@openfin/excel": "^1.3.0",
 		"@openfin/workspace": "8.1.7",
 		"@openfin/workspace-platform": "8.1.7"
