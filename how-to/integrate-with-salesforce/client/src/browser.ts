@@ -1,5 +1,5 @@
+import { fin } from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { fin } from "openfin-adapter/src/mock";
 
 let windowIdentity: OpenFin.Identity;
 

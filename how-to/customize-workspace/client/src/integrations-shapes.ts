@@ -1,12 +1,11 @@
 import type {
-	CLIDispatchedSearchResult,
-	CLISearchListenerResponse,
+	HomeDispatchedSearchResult,
+	HomeSearchListenerResponse,
 	CLIFilter,
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import { View } from "openfin-adapter";
 
 /**
  * Integration manager provides environment methods and data.
@@ -26,7 +25,7 @@ export interface IntegrationManager {
 	launchView?(
 		view: OpenFin.PlatformViewCreationOptions | string,
 		targetIdentity?: OpenFin.Identity
-	): Promise<View>;
+	): Promise<OpenFin.View>;
 
 	/**
 	 * Launch a page in the workspace.
@@ -130,7 +129,7 @@ export interface IntegrationModule<T> {
 		integration: Integration<T>,
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: CLISearchListenerResponse
+		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse>;
 
 	/**
@@ -141,6 +140,13 @@ export interface IntegrationModule<T> {
 	getAppSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
 
 	/**
+	 * Get a list of the static help entries.
+	 * @param integration The integration details.
+	 * @returns The list of help entries.
+	 */
+	getHelpSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
+
+	/**
 	 * An entry has been selected.
 	 * @param integration The integration details.
 	 * @param result The dispatched result.
@@ -149,7 +155,7 @@ export interface IntegrationModule<T> {
 	 */
 	itemSelection?(
 		integration: Integration<T>,
-		result: CLIDispatchedSearchResult,
-		lastResponse: CLISearchListenerResponse
+		result: HomeDispatchedSearchResult,
+		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean>;
 }

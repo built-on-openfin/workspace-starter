@@ -1,4 +1,3 @@
-import { fin } from "openfin-adapter/src/mock";
 import { deregister, register } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { getSettings } from "./settings";

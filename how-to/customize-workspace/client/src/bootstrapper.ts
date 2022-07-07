@@ -1,4 +1,4 @@
-import { fin } from "openfin-adapter/src/mock";
+import { fin } from "@openfin/core";
 import { launchPage, launchView } from "./browser";
 import { init as endpointInit } from "./endpoint";
 import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";

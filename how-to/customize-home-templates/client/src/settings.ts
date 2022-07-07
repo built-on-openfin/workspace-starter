@@ -1,11 +1,11 @@
-import { fin } from "openfin-adapter/src/mock";
+import { fin } from "@openfin/core";
 import { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;
 
 async function getConfiguredSettings(): Promise<CustomSettings> {
 	const app = await fin.Application.getCurrent();
-	const manifest = await app.getManifest();
+	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 
 	if (manifest.customSettings !== undefined) {
 		settings = manifest.customSettings;

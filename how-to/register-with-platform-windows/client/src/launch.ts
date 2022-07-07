@@ -1,6 +1,6 @@
+import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { fin } from "openfin-adapter/src/mock";
 import { getSettings } from "./settings";
 
 export async function launch(appEntry: App) {

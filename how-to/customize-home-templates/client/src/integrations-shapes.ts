@@ -6,7 +6,6 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import { View } from "openfin-adapter";
 
 /**
  * Integration manager provides environment methods and data.
@@ -26,7 +25,7 @@ export interface IntegrationManager {
 	launchView?(
 		view: OpenFin.PlatformViewCreationOptions | string,
 		targetIdentity?: OpenFin.Identity
-	): Promise<View>;
+	): Promise<OpenFin.View>;
 
 	/**
 	 * Launch a page in the workspace.

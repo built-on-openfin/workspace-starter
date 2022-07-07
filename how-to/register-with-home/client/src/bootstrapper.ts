@@ -1,5 +1,5 @@
-import { fin } from "openfin-adapter/src/mock";
-import { register, deregister } from "./home";
+import { fin } from "@openfin/core";
+import { deregister, register } from "./home";
 
 export async function init() {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,

@@ -1,3 +1,4 @@
+import { fin } from "@openfin/core";
 import {
 	BrowserButtonType,
 	BrowserCreateWindowRequest,
@@ -8,7 +9,6 @@ import {
 	ToolbarOptions,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { fin } from "openfin-adapter/src/mock";
 import { createPageWithLayout, createViewIdentity } from "./browser";
 
 const platform: WorkspacePlatformModule = getCurrentSync();
@@ -21,7 +21,7 @@ const defaultPageLayout: PageLayout = {
 					type: "component",
 					componentName: "view",
 					componentState: {
-						identity: createViewIdentity(fin.me.uuid, "v1"),
+						...createViewIdentity(fin.me.uuid, "v1"),
 						url: "https://examples.com"
 					}
 				},
@@ -29,7 +29,7 @@ const defaultPageLayout: PageLayout = {
 					type: "component",
 					componentName: "view",
 					componentState: {
-						identity: createViewIdentity(fin.me.uuid, "v2"),
+						...createViewIdentity(fin.me.uuid, "v2"),
 						url: "https://openfin.co"
 					}
 				}

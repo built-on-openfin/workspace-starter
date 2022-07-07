@@ -1,6 +1,5 @@
 import {
 	App,
-	CLIDispatchedSearchResult,
 	CLIFilter,
 	CLIFilterOptionType,
 	CLIProvider,
@@ -9,6 +8,7 @@ import {
 	CLISearchResponse,
 	CLITemplate,
 	Home,
+	HomeDispatchedSearchResult,
 	HomeSearchResponse,
 	HomeSearchResult,
 	TemplateFragment
@@ -422,7 +422,7 @@ export async function register() {
 		return searchResults;
 	};
 
-	const onSelection = async (result: CLIDispatchedSearchResult) => {
+	const onSelection = async (result: HomeDispatchedSearchResult) => {
 		if (result.data !== undefined) {
 			const handled = await itemSelection(result, lastResponse);
 

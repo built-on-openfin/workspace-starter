@@ -1,7 +1,5 @@
 import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { ChannelProvider } from "openfin-adapter";
-import Transport from "openfin-adapter/src/transport/transport";
-import { PlatformInteropBroker } from "./interopbroker";
+import { interopOverride } from "./interopbroker";
 import { getSettings, validateThemes } from "./settings";
 
 export async function init() {
@@ -21,12 +19,9 @@ export async function init() {
 			}
 		};
 
-		browser.interopOverride = async (
-			InteropBroker,
-			provider: Transport,
-			options: ChannelProvider,
-			...args: unknown[]
-		) => new PlatformInteropBroker(provider, options, ...args);
+		// Fix this type overload when openfin-adapter references are removed from WS
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		browser.interopOverride = interopOverride as any;
 	}
 
 	console.log("Specifying following browser options:", browser);

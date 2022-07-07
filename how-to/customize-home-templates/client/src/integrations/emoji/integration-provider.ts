@@ -1,3 +1,4 @@
+import { fin } from "@openfin/core";
 import {
 	CLITemplate,
 	type CLIFilter,

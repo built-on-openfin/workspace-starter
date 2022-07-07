@@ -1,4 +1,4 @@
-import { fin } from "openfin-adapter/src/mock";
+import { fin } from "@openfin/core";
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 
