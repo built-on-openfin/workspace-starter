@@ -1,62 +1,52 @@
+import { IPlatformStorage } from "./platform-storage-shapes";
+
 export class PlatformStorage {
-	private readonly storageTypeName: string;
+	private static readonly _storageImplementations = new Map<string, IPlatformStorage<unknown>>();
 
-	private readonly storageKey: string;
+	private static readonly _storageRegister = new Map<
+		string,
+		(options?: unknown) => Promise<IPlatformStorage<unknown>>
+	>();
 
-	constructor(storageId: string, storageType: string) {
-		this.storageTypeName = storageType;
-		this.storageKey = `${fin.me.identity.uuid.toLowerCase().replaceAll(" ", "")}-${storageId}`;
-	}
-
-	public async getFromStorage<T>(id: string): Promise<T> {
-		if (id === undefined) {
-			console.error(`No id was specified for getting a ${this.storageTypeName} entry.`);
-			return null;
-		}
-		const store = await this.getAllStoredEntries<T>();
-		const savedEntry = store[id];
-		if (savedEntry === undefined || savedEntry === null) {
-			console.error(`No ${this.storageTypeName} entry was found for id ${id}.`);
-			return null;
-		}
-		return savedEntry;
-	}
-
-	public async saveToStorage<T>(id: string, entry: T) {
-		if (entry === undefined) {
-			console.error(`You need to provide a id for the ${this.storageTypeName} entry you wish to save.`);
+	public static register(
+		name: string,
+		onStorageCreation: (options?: unknown) => Promise<IPlatformStorage<unknown>>
+	) {
+		if (this._storageRegister.has(name)) {
+			console.error(`You have tried to register platform storage using a name that already exists`);
 		} else {
-			const store = await this.getAllStoredEntries<T>();
-
-			store[id] = entry;
-
-			localStorage.setItem(this.storageKey, JSON.stringify(store));
+			this._storageRegister.set(name, onStorageCreation);
+			console.log(`The storage implementation ${name} has been registered`);
 		}
 	}
 
-	public async getAllStoredEntries<T>(): Promise<{ [key: string]: T }> {
-		const store = localStorage.getItem(this.storageKey);
-		if (store === null) {
-			console.log(`Storage has no ${this.storageTypeName} entries.`);
-			return {};
-		}
-
-		return JSON.parse(store) as { [key: string]: T };
+	public static isRegistered(name: string): boolean {
+		return this._storageRegister.has(name);
 	}
 
-	public async clearStorageEntry(id: string) {
-		if (id === undefined) {
-			console.error(`An id to clear the saved ${this.storageTypeName} was not provided.`);
-		} else {
-			const store = await this.getAllStoredEntries();
-			const entry = store[id];
-
-			if (entry !== undefined) {
-				delete store[id];
-				localStorage.setItem(this.storageKey, JSON.stringify(store));
-			} else {
-				console.error(`You tried to delete a non-existent ${this.storageTypeName} with id ${id}`);
-			}
+	public static deregister(name: string) {
+		if (this._storageRegister.has(name)) {
+			this._storageRegister.delete(name);
+			console.log(`Removed storage implementation ${name} from register.`);
 		}
+
+		if (this._storageImplementations.has(name)) {
+			console.warn(`The storage implementation ${name} has a registered instance which will not be cleared.`);
+		}
+	}
+
+	public static async getStorage<T>(
+		name: string,
+		initializationOptions?: unknown
+	): Promise<IPlatformStorage<T>> {
+		if (this._storageImplementations.has(name)) {
+			return this._storageImplementations.get(name) as IPlatformStorage<T>;
+		} else if (this._storageRegister.has(name)) {
+			const implementation = this._storageRegister.get(name);
+			const instance = await implementation(initializationOptions);
+			this._storageImplementations.set(name, instance);
+			return instance as IPlatformStorage<T>;
+		}
+		console.error(`You have specified a storage implementation: ${name} that has not been registered`);
 	}
 }
