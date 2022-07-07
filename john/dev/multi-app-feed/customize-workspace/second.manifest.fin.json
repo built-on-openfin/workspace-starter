@@ -66,7 +66,7 @@
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/john/dev/multi-app-feed/common/apps.json",
+			"appsSourceUrl": ["https://built-on-openfin.github.io/workspace-starter/john/dev/multi-app-feed/customize-workspace/apps.json", "https://built-on-openfin.github.io/workspace-starter/john/dev/multi-app-feed/common/apps.json"],
 			"includeCredentialOnSourceRequest": "include",
 			"cacheDurationInMinutes": 1,
 			"appAssetTag": "appasset",
