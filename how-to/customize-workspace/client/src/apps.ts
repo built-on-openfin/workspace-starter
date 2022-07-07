@@ -66,17 +66,20 @@ async function validateEntries(apps: App[]) {
 }
 
 async function getRestEntries(
-	url: string,
+	source: string | string[],
 	credentials?: "omit" | "same-origin" | "include",
 	cacheDuration?: number
 ): Promise<App[]> {
 	const options = credentials !== undefined ? { credentials } : undefined;
-	if (url === undefined) {
+	if (source === undefined) {
 		return [];
 	}
-	const response = await fetch(url, options);
+	const urls = Array.isArray(source) ? source : [source];
 
-	const apps: App[] = await response.json();
+	const res = await Promise.all(urls.map(async (u) => fetch(u, options)));
+	const jsonResults = await Promise.all(res.map(async (r) => r.json()));
+
+	const apps: App[] = jsonResults.flat();
 
 	cachedApps = await validateEntries(apps);
 
