@@ -45,7 +45,7 @@ interface ThemeProvider {
 }
 
 interface AppProvider {
-	appsSourceUrl: string;
+	appsSourceUrl: string | string[];
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
 	cacheDurationInMinutes?: number;
 	appAssetTag?: string;

@@ -73,7 +73,7 @@
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/common/apps.json",
+			"appsSourceUrl": ["http://localhost:8080/apps.json", "http://localhost:8080/common/apps.json"],
 			"includeCredentialOnSourceRequest": "include",
 			"cacheDurationInMinutes": 1,
 			"appAssetTag": "appasset",
