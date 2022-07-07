@@ -210,9 +210,7 @@ function bindFDC3Intents(intents) {
 	const fdc3IntentOptions = intents.map((intent) => `<option value=${intent}>${intent}</option>`).join('\n');
 	fdc3Intent.innerHTML = fdc3IntentOptions;
 	buildAppList()
-		.then((apps) => {
-			bindApps(apps);
-		})
+		.then((apps) => bindApps(apps))
 		.catch((error) => console.error(error));
 }
 

@@ -13,11 +13,8 @@ if (window === window.top) {
 		) {
 			view
 				.navigate(`https://www.tradingview.com/chart/?symbol=${ticker}`)
-				.then((x) =>
-					console
-						.log(`Navigated view to ticker: ${ticker}`)
-						.catch((err) => console.log(`error navigating view to ticker: ${ticker} error: ${err}`))
-				);
+				.then((x) => console.log(`Navigated view to ticker: ${ticker}`))
+				.catch((err) => console.log(`error navigating view to ticker: ${ticker} error: ${err}`));
 		}
 	};
 

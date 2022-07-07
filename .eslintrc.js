@@ -8,6 +8,7 @@ module.exports = {
 		'plugin:import/errors',
 		'plugin:import/warnings',
 		'plugin:import/typescript',
+		'plugin:promise/recommended',
 		'plugin:unicorn/recommended'
 	],
 	globals: {
@@ -27,7 +28,7 @@ module.exports = {
 		sourceType: 'module',
 		tsconfigRootDir: __dirname
 	},
-	plugins: ['simple-import-sort', 'unicorn', 'unused-imports'],
+	plugins: ['promise', 'simple-import-sort', 'unicorn', 'unused-imports'],
 	root: true,
 	rules: {
 		'accessor-pairs': ['error'],
