@@ -77,11 +77,13 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
+	 * @param startupQueryParams The query params passed to app at startup.
 	 * @returns Nothing.
 	 */
 	public async register(
 		integrationManager: IntegrationManager,
-		integration: Integration<SalesforceSettings>
+		integration: Integration<SalesforceSettings>,
+		startupQueryParams: unknown
 	): Promise<void> {
 		this._integrationManager = integrationManager;
 		console.log("Registering SalesForce");

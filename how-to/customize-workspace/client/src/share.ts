@@ -2,6 +2,7 @@ import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
 import { launchPage } from "./browser";
 import { requestResponse } from "./endpoint";
+import { setQueryParams } from "./integrations";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 
@@ -290,6 +291,7 @@ async function queryOnLaunch(userAppConfigArgs?: { shareId: string }) {
 	if (userAppConfigArgs?.shareId !== undefined) {
 		await loadSharedEntry(userAppConfigArgs?.shareId);
 	}
+	setQueryParams(userAppConfigArgs);
 }
 
 async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string } }) {

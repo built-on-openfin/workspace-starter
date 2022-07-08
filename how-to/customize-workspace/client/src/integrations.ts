@@ -19,6 +19,8 @@ const homeIntegrations: {
 	integration: Integration<unknown>;
 }[] = [];
 
+let startupQueryParams: unknown;
+
 /**
  * Register all the workspace integrations.
  * @param integrationManager The integration manager.
@@ -47,7 +49,7 @@ export async function register(
 						integration
 					});
 					if (homeIntegration.register) {
-						await homeIntegration.register(integrationManager, integration);
+						await homeIntegration.register(integrationManager, integration, startupQueryParams);
 					}
 				} else {
 					console.error("Missing module in integration providers", integration.id);
@@ -191,4 +193,12 @@ export async function itemSelection(
  */
 export function addKnownIntegrationProvider(id: string, module: IntegrationModule<unknown>): void {
 	knownIntegrationProviders[id] = module;
+}
+
+/**
+ * Set the startup query params.
+ * @param queryParams The id of the module.
+ */
+export function setQueryParams(queryParams?: unknown): void {
+	startupQueryParams = queryParams;
 }

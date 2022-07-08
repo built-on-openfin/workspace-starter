@@ -51,11 +51,13 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
+	 * @param startupQueryParams The query params passed to app at startup.
 	 * @returns Nothing.
 	 */
 	public async register(
 		integrationManager: IntegrationManager,
-		integration: Integration<EmojiSettings>
+		integration: Integration<EmojiSettings>,
+		startupQueryParams: unknown
 	): Promise<void> {
 		this._integrationManager = integrationManager;
 	}

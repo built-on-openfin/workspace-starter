@@ -36,11 +36,13 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
+	 * @param startupQueryParams The query params passed to app at startup.
 	 * @returns Nothing.
 	 */
 	public async register(
 		integrationManager: IntegrationManager,
-		integration: Integration<AsyncSettings>
+		integration: Integration<AsyncSettings>,
+		startupQueryParams: unknown
 	): Promise<void> {
 		this._integrationManager = integrationManager;
 	}

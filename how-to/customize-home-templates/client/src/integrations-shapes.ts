@@ -106,9 +106,14 @@ export interface IntegrationModule<T> {
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
+	 * @param startupQueryParams The query params passed to app at startup.
 	 * @returns Nothing.
 	 */
-	register?(integrationManager: IntegrationManager, integration: Integration<T>): Promise<void>;
+	register?(
+		integrationManager: IntegrationManager,
+		integration: Integration<T>,
+		queryParams?: unknown
+	): Promise<void>;
 
 	/**
 	 * The module is being deregistered.
