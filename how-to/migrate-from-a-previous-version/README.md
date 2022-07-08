@@ -683,11 +683,11 @@ If no DesktopOwnerSettings value exists then please add it by right clicking on 
 
 You will provided an entry in the Settings Folder that you can rename to **DesktopOwnerSettings**. Double click on the new entry to set the value to a file path e.g.:
 
-```file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json```
+`file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json`
 
 or a url (if you have a webserver):
 
-```http://localhost:8080/registry_dos_local.json```
+`http://localhost:8080/registry_dos_local.json`
 
 ##### Once you have configured DesktopOwnerSettings
 
