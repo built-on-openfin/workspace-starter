@@ -302,6 +302,7 @@ input[type='url'],
 input[type='number'],
 input[type='date'],
 input[type='time'],
+input[type='datetime-local'],
 input[type='color'],
 textarea {
 	border-radius: 5px;
@@ -334,6 +335,7 @@ input[type='url'].full,
 input[type='number'].full,
 input[type='date'].full,
 input[type='time'].full,
+input[type='datetime-local'].full,
 input[type='range'].full,
 textarea.full {
 	width: 95%;
@@ -355,6 +357,8 @@ input[type='date']:not(:read-only):focus,
 input[type='date']:not(:disabled):not(:read-only):hover,
 input[type='time']:not(:read-only):focus,
 input[type='time']:not(:disabled):not(:read-only):hover,
+input[type='datetime-local']:not(:read-only):focus,
+input[type='datetime-local']:not(:disabled):not(:read-only):hover,
 textarea:not(:read-only):focus,
 textarea:not(:disabled):not(:read-only):hover,
 input[type='checkbox']:focus,
@@ -367,7 +371,8 @@ input[type='color']:not(:disabled):hover {
 }
 
 input[type='date'],
-input[type='time'] {
+input[type='time'],
+input[type='datetime-local'] {
 	width: 200px;
 	min-width: auto;
 }
