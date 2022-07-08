@@ -340,7 +340,7 @@ input[type='color']:not(:disabled):hover::-webkit-color-swatch {
 	border-color: var(--brand-input-border-highlight);
 }
 
-select {
+select:not([multiple]) {
 	appearance: none;
 	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23C9CBD2'><polygon points='0,0 100,0 50,50'/></svg>");
 	background-repeat: no-repeat;
@@ -349,7 +349,21 @@ select {
 	background-color: var(--brand-input-background);
 }
 
-.theme-light select {
+option {
+	color: var(--brand-text);
+}
+
+option:hover {
+	background: var(--brand-input-border)
+		linear-gradient(0deg, var(--brand-input-border) 0%, var(--brand-input-border) 100%);
+}
+
+option:checked {
+	background: var(--brand-primary) linear-gradient(0deg, var(--brand-primary) 0%, var(--brand-primary) 100%);
+	color: #ffffff;
+}
+
+.theme-light select:not([multiple]) {
 	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23333333'><polygon points='0,0 100,0 50,50'/></svg>");
 }
 
@@ -621,7 +635,7 @@ td {
 }
 
 .drag {
-	-webkit-user-select: none;
+	user-select: none;
 	-webkit-app-region: drag;
 }
 
