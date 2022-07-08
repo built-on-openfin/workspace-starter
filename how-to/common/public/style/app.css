@@ -291,6 +291,8 @@ label {
 
 select,
 input[type='text'],
+input[type='url'],
+input[type='email'],
 input[type='password'],
 textarea {
 	border-radius: 4px;
@@ -317,6 +319,8 @@ textarea.resizable {
 
 select.full,
 input[type='text'].full,
+input[type='email'].full,
+input[type='url'].full,
 input[type='password'].full,
 input[type='range'].full,
 textarea.full {
@@ -327,6 +331,10 @@ select:focus,
 select:not(:disabled):hover,
 input[type='text']:not(:read-only):focus,
 input[type='text']:not(:disabled):not(:read-only):hover,
+input[type='email']:not(:read-only):focus,
+input[type='email']:not(:disabled):not(:read-only):hover,
+input[type='url']:not(:read-only):focus,
+input[type='url']:not(:disabled):not(:read-only):hover,
 input[type='password']:not(:read-only):focus,
 input[type='password']:not(:disabled):not(:read-only):hover,
 textarea:not(:read-only):focus,
@@ -409,12 +417,16 @@ fieldset > span {
 }
 
 input[type='text'].large,
+input[type='email'].large,
+input[type='url'].large,
 input[type='password'].large {
 	font-size: 20px;
 	padding: 20px 10px;
 }
 
 input[type='text'].center,
+input[type='email'].center,
+input[type='url'].center,
 input[type='password'].center {
 	text-align: center;
 }
