@@ -427,6 +427,10 @@ input[type='week'] {
 	margin: 0;
 }
 
+input[type='file'] {
+	padding: 4px 12px;
+}
+
 select {
 	appearance: none;
 }
