@@ -722,6 +722,25 @@
 		"tags": ["page", "openfin", "tools"]
 	},
 	{
+		"appId": "app-definition-builder",
+		"name": "app-definition-builder",
+		"title": "App Definition Builder",
+		"description": "A developer tool to help build an app definition",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/app/app-definition-builder/app-definition-builder-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/previews/app-definition-builder.png"
+			}
+		],
+		"tags": ["view", "app", "tool"]
+	},
+	{
 		"appId": "openfin-versions-workspace",
 		"name": "openfin-versions-workspace",
 		"title": "OpenFin Versions - Workspace",
