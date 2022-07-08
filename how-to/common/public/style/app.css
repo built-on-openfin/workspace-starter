@@ -142,19 +142,20 @@ p {
 }
 
 ::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+	width: 8px;
+	height: 8px;
 }
 ::-webkit-scrollbar-track {
-	background: #6f7178aa;
+	background: var(--brand-input-background);
 	border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb {
-	background: #333333;
+	background: var(--brand-border);
 	border-radius: 5px;
+	border: 1px solid var(--brand-input-border);
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: #000000;
+	border: 1px solid var(--brand-input-border-highlight);
 }
 
 main {
