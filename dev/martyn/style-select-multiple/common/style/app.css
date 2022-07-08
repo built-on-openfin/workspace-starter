@@ -303,6 +303,8 @@ input[type='number'],
 input[type='date'],
 input[type='time'],
 input[type='datetime-local'],
+input[type='month'],
+input[type='week'],
 input[type='color'],
 textarea {
 	border-radius: 5px;
@@ -336,6 +338,8 @@ input[type='number'].full,
 input[type='date'].full,
 input[type='time'].full,
 input[type='datetime-local'].full,
+input[type='month'].full,
+input[type='week'].full,
 input[type='range'].full,
 textarea.full {
 	width: 95%;
@@ -359,6 +363,10 @@ input[type='time']:not(:read-only):focus,
 input[type='time']:not(:disabled):not(:read-only):hover,
 input[type='datetime-local']:not(:read-only):focus,
 input[type='datetime-local']:not(:disabled):not(:read-only):hover,
+input[type='month']:not(:read-only):focus,
+input[type='month']:not(:disabled):not(:read-only):hover,
+input[type='week']:not(:read-only):focus,
+input[type='week']:not(:disabled):not(:read-only):hover,
 textarea:not(:read-only):focus,
 textarea:not(:disabled):not(:read-only):hover,
 input[type='checkbox']:focus,
@@ -372,7 +380,9 @@ input[type='color']:not(:disabled):hover {
 
 input[type='date'],
 input[type='time'],
-input[type='datetime-local'] {
+input[type='datetime-local'],
+input[type='month'],
+input[type='week'] {
 	width: 200px;
 	min-width: auto;
 }
