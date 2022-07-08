@@ -748,6 +748,26 @@
 		"tags": ["view", "app", "tool"]
 	},
 	{
+		"appId": "starter-style-guide",
+		"name": "starter-style-guide",
+		"title": "Starter Style Guide",
+		"description": "A style guide used to aid in the building of workspace starter samples.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/style/style-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/previews/starter-style-guide.png"
+			}
+		],
+		"tags": ["view", "style", "tool"]
+	},
+	{
 		"appId": "openfin-versions-workspace",
 		"name": "openfin-versions-workspace",
 		"title": "OpenFin Versions - Workspace",
