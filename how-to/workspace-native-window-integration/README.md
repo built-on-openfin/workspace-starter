@@ -1,4 +1,4 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
+![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
@@ -18,14 +18,12 @@ The Native Integration Module provided by OpenFin can be found here:
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
----
-
-**Running the Sample**
+## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Workspace Native Window Integration</a>
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Workspace Native Window Integration](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fworkspace-native-window-integration%2Fmanifest.fin.json)
 
 ---
 
@@ -33,8 +31,8 @@ To run this sample you can:
 
 1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
-```bash
-$ npm run setup
+```shell
+npm run setup
 ```
 
 2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
@@ -43,20 +41,20 @@ $ npm run setup
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
-```bash
-$ npm run dos
+```shell
+npm run dos
 ```
 
 3. Start the test server in a new window.
 
-```bash
-$ start npm run start
+```shell
+npm run start
 ```
 
 4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 5. Type any character into the search box to show the default list of Applications.
@@ -64,8 +62,8 @@ $ npm run client
 
 6. If you modify the project and wish to rebuild you can run setup again or the build command below:
 
-```bash
-$ npm run build
+```shell
+npm run build
 ```
 
 ## How it works
@@ -84,16 +82,16 @@ The [list of applications](../common/public/apps.json) contains:
 
 The entries are read and transformed in order to be sent to our API.
 
-### NPM Packages Included:
+### NPM Packages Included
 
 - @openfin/native-window-integration-client
 - file-loader
 - @openfin/workspace
 - @openfin/workspace-platform
 
-### Addition to the Webpack Module Rules:
+### Addition to the Webpack Module Rules
 
-```bash
+```shell
         {
           test: /\.(zip)/,
           loader: 'file-loader',
@@ -104,20 +102,16 @@ The entries are read and transformed in order to be sent to our API.
         }
 ```
 
----
-
-**NOTE ABOUT THE APP**
+### Note About The App
 
 This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**.
-
----
 
 ### How this example works
 
 You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](../common/public/platform/provider.html). It is launched by the following command (step 5 above):
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform.
@@ -193,11 +187,9 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | queryMinLength                   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                       |
 | queryAgainst                     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
 
----
+### Note About The Manifest
 
-**NOTE ABOUT THE MANIFEST**
-
-## This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your store.
+> This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your store.
 
 These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the Workspace Platform. Your server will need to support CORS).
 
@@ -207,13 +199,13 @@ When a user selects a result in OpenFin Home, it is returned to the home provide
 
 The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission (like this example does).
 
-### A note about this example
+### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
 ---
 
-**FAQ**
+## FAQ
 
 - Why do you only have one application?
 
@@ -221,10 +213,10 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 - How do I save a workspace?
 
-  - Type Win or hit enter and you will see the winfor app. Launch it and move it somewhere.
+  - Type Win or hit enter and you will see the winform app. Launch it and move it somewhere.
   - Bring up home and type /w mynativewks and hit enter
   - You should see the workspace has been saved. Clear the text and type mynative and you should see your workspace entry.
 
 ---
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

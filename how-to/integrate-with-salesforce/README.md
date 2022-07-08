@@ -1,4 +1,4 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
+![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
@@ -9,15 +9,11 @@ OpenFin Workspace empowers you to browse and search your Salesforce org data usi
 
 This application you are about to install is an example of configuring and integrating your Salesforce org with OpenFin Home, allowing you to launch your Salesforce org site in a themed OpenFin Browser, search for Accounts and Contacts, and use filters to refine the results. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment).
 
----
-
-**Running the Sample**
+## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-
----
 
 ## Getting Started
 
@@ -40,8 +36,8 @@ With Salesforce configured and the sample custom settings updated, you can conti
 
 1. Install dependencies. Note that these samples assume you are in the sub-directory for the sample.
 
-```bash
-$ npm install
+```shell
+npm install
 ```
 
 2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
@@ -50,20 +46,20 @@ $ npm install
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
-```bash
-$ npm run dos
+```shell
+npm run dos
 ```
 
 3. Start the test server in a new window.
 
-```bash
-$ start npm run start
+```shell
+npm run start
 ```
 
 4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 5. At this point you will be prompted to log in to your Salesforce org (unless you have single sign-on configured), and to authorize your Connected App's request for permissions.
@@ -72,16 +68,18 @@ $ npm run client
 
 7. Build the project if you have modified the code.
 
-```bash
-$ npm run build
+```shell
+npm run build
 ```
 
 ## What does it look like?
 
-![](workspace-salesforce-integration.gif)
+![Salesforce Integration](workspace-salesforce-integration.gif)
 
-## A note about this sample
+### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+---
+
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

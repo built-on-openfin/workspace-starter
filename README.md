@@ -1,4 +1,4 @@
-<img src="./assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Starter" />
+![OpenFin Workspace Starter](./assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
@@ -48,7 +48,7 @@ OpenFin Workspace is currently **only supported on Windows**.
 
 A desktop owner settings file is no longer required to configure OpenFin Workspace. However, there may be settings that a Desktop Owner may wish to configure (such as version) and this requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
 
-- Go to _%localappdata%/OpenFin_ in windows explorer
+- Go to `%localappdata%/OpenFin` in windows explorer
 - Right-click on OpenFinRVM and select _Properties_
 - Click on the _Details_ tab and see your version number
 
@@ -90,4 +90,6 @@ Depending on your version the following rules will apply:
 }
 ```
 
-Read more about these settings in [Workspace documentation](https://developers.openfin.co/of-docs/docs/workspace-override-options)
+---
+
+### Read more about these settings in [Workspace documentation](https://developers.openfin.co/of-docs/docs/workspace-override-options)

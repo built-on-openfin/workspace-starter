@@ -1,4 +1,4 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
+![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
@@ -21,24 +21,21 @@ This sample is an extension of the support context and intents example. The samp
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
----
-
-**Running the Sample**
+## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json" target="_blank">Github Workspace Starter Customize Workspace Example</a>
-- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): <a href="https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json" target="_blank">Github Workspace Starter Second Customize Workspace Example</a>
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json)
 
----
+- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): [Github Workspace Starter Second Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
 1. Install dependencies and build the sample. Note that these examples assume you are in the sub-directory for the example.
 
-```bash
-$ npm run setup
+```shell
+npm run setup
 ```
 
 2. Optional (if you wish to pin the version of OpenFin Workspace to version 8.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
@@ -47,26 +44,26 @@ $ npm run setup
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
-```bash
-$ npm run dos
+```shell
+npm run dos
 ```
 
 3. Start the test server in a new window.
 
-```bash
-$ start npm start
+```shell
+npm start
 ```
 
 5. Start Your Workspace Platform (this starts Workspace if it isn't already running).
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 If you want to see a second workspace platform run alongside the first you can fire up a copy using the following command:
 
-```bash
-$ npm run secondclient
+```shell
+npm run secondclient
 ```
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
@@ -79,8 +76,8 @@ This runs the same code with slightly different settings to show a different the
 
 8. If you modify the project and want to rebuild.
 
-```bash
-$ npm run build
+```shell
+npm run build
 ```
 
 ## How it works
@@ -107,20 +104,16 @@ These applications are read and transformed in order to be sent to our API.
 
 This Readme contains information similar to the Support Context and Intents readme (as this is an extension). To make the addition of Intent support clearer it has been moved to it's own markdown file: [**IntentSupport.md**](IntentSupport.md).
 
----
-
-**NOTE ABOUT THE APP**
+### Note About The App
 
 This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
-
----
 
 ### How this example works
 
 You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform.
@@ -566,7 +559,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | themes                           | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used)                                                                                                                                                                                                                                                                                                                                                                 |
 | themes.label                     | A label to use to identify this theme                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | themes.logoUrl                   | Preferred logo for a theme                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| pallete                          | A collection of settings that can be overriden (brandPrimary, brandSecondary and backgroundPrimary are mandatory if you are specifying a theme)                                                                                                                                                                                                                                                                                                                     |
+| pallette                          | A collection of settings that can be overridden (brandPrimary, brandSecondary and backgroundPrimary are mandatory if you are specifying a theme)                                                                                                                                                                                                                                                                                                                     |
 | **homeProvider**                 | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                                                                                                                       |
 | id                               | What your provider should be called                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | title                            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -602,9 +595,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | integrations.moduleUrl           | Where should the module be loaded from                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | integrations.data                | Data/config that will be passed to the integration module (for this sample look at the description of the settings from the integrate-with-salesforce starter)                                                                                                                                                                                                                                                                                                      |
 
----
-
-**NOTE ABOUT THE MANIFEST**
+### Note About The Manifest
 
 This is a demo application for learning and is not meant for production use. Please use this as a way of seeing how you might approach configuring your store.
 
@@ -612,7 +603,7 @@ The manifest for the storefront does not include an `id` for the `cta`, `items` 
 
 This is to reduce noise in the example manifest and to prevent issues if an item or section is copied and pasted. The code has a fallback that uses the title or title plus tags to form an `id`. This works for the demo, as the manifest file is storing the configuration. If the configuration were ever fetched from a server, then it should return a unique (e.g., GUID) and idempotent ID.
 
-This is because the `id` represents the route that the user navigates to. So, if an` id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function you defined and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x".
+This is because the `id` represents the route that the user navigates to. So, if an `id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function you defined and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x".
 
 ---
 
@@ -626,13 +617,11 @@ The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Modu
 
 The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both. We have an array that points to the common [apps.json](../common/public/apps.json)apps.json and a project specific [apps.json](public/apps.json) which is empty and ready for you to add to.
 
-### A note about this example
+### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
----
-
-**FAQ**
+## FAQ
 
 - The store isn't launching or the store command isn't showing on the home ui?
 
@@ -655,7 +644,7 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
   - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
-  - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [../common/public/views](../common/public/views) folder. In there you will also see two examples of thirdparty content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
+  - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [../common/public/views](../common/public/views) folder. In there you will also see two examples of third-party content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
 
 - Do I always need a view manifest if it just contains a url?
 
@@ -663,4 +652,4 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 ---
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

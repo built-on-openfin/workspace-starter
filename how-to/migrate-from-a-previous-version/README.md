@@ -1,9 +1,9 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to Storefront" />
+![OpenFin Workspace Example Application -- Adding your application to Storefront](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
-# Migrate from a previous version - From v7.0 to v8.0
+## Migrate from a previous version - From v7.0 to v8.0
 
 The main focus of this release is:
 
@@ -32,7 +32,7 @@ Platform Providers can now lock Browser Windows and/or Pages to offer fixed, rep
 
 The visual designs of filters in Workspace Home have been improved, so end-users can quickly and easily zero in on the content that they are searching for and quickly clear out selected filters
 
-## What dependencies will I need?
+## What dependencies will I need for v8
 
 You will need the following dependencies
 
@@ -49,7 +49,7 @@ The structure of the how-to samples has been updated. The views (content) and so
 
 A new npm command **"npm run setup"** has also been introduced that takes advantage of our npm workspaces support and installs from the root directory and then builds the sample you are currently in and the common directory.
 
-Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only customize-workspace supports inline-view as a manifestType as it is supported by the sample and will not be recognised by the workspace api).
+Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only customize-workspace supports inline-view as a manifestType as it is supported by the sample and will not be recognized by the workspace api).
 
 # Migrate from a previous version - From v6.0 to v7.0
 
@@ -59,7 +59,7 @@ If you have customized the main browser menu you may want to change the way the 
 
 - [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
 
-## What dependencies will I need?
+## What dependencies will I need for v7?
 
 You will need the following dependencies
 
@@ -78,7 +78,7 @@ With Workspace 6.0, OpenFin has added additional options when it comes to custom
 - Customize the template displayed as part of a search result entry in home [(https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)
 - Register your workspace platform with Notification Center so that your theming is taken into account.[(https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)
 
-## What dependencies will I need?
+## What dependencies will I need v5?
 
 You will need the following dependencies
 
@@ -97,7 +97,7 @@ There are no breaking changes in this release (just fixes and the new features m
 
 With Workspace 5.5, OpenFin has continued extended theme support so that the provided palette now applies to the OpenFin Home and Store Components.
 
-## What dependencies will I need?
+## What dependencies will I need for v6?
 
 You will need the following dependencies
 
@@ -116,7 +116,7 @@ There are no breaking changes and this release just includes fixes and extends t
 
 With Workspace 5.0, OpenFin has extended the ability for Workspace customers to have more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a workspace platform instead of the existing platform api. This lets you application launch OpenFin Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
 
-## What dependencies will I need?
+## What dependencies will I need for v5?
 
 You will need the following dependencies
 
@@ -365,7 +365,7 @@ export async function init() {
 }
 ```
 
-## Behaviour Changes
+## Behavior Changes
 
 So now that your code is working what else has changed from a user perspective?
 
@@ -373,7 +373,7 @@ So now that your code is working what else has changed from a user perspective?
 
 Workspaces & Pages are no longer shown by default in the Home UI - We now provide APIs to be able to fetch saved pages and return them in the search results yourself. If you want to implement workspaces then you will need to do that through your workspace platform.
 
-The save icon is present on your browser's window and by default it will save your page to indexdb. Version 5 provides APIs to get these pages. You can also specify a different storage location (e.g. you may decide you want to save them to a rest endpoint).
+The save icon is present on your browser's window and by default it will save your page to indexedDB. Version 5 provides APIs to get these pages. You can also specify a different storage location (e.g. you may decide you want to save them to a rest endpoint).
 
 If you have existing pages from version 1-4 that you need to migrate please contact support@openfin.co who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
 
@@ -513,11 +513,11 @@ The following new feature has been added for your end users:
 
 #### Tabs Showing - Click on the focus icon
 
-<img src="workspace-hide-tabs.png" width="100%" alt="Ability to bring a view into focus by removing tabs" />
+![Ability to bring a view into focus by removing tabs](workspace-hide-tabs.png)
 
 #### Tabs Hidden - Click on the focus icon again
 
-<img src="workspace-show-tabs.png" width="100%" alt="Ability to bring a view out of focus by adding tabs" />
+![Ability to bring a view out of focus by adding tabs](workspace-show-tabs.png)
 
 # Migrate from a previous version - From v1-v3 to v4
 
@@ -532,7 +532,7 @@ Apply icons/ logos
 
 With the addition of the CLI Provider concept, OpenFin has deprecated Workspace Desktop Owner Setting overrides (customConfig options ) that pertain to apps and workspaces REST URLs in favor of this programmatic API approach.
 
-## Behavior Changes
+## Behavior Changes v4
 
 - The fins link or desktop icon to start workspace components is no longer supported. These must be started by a workspace platform or CLI provider. The system will now return an error if the fins link is used to start a workspace component.
 - The “/W” entry point into the Workspaces directory has been removed.
@@ -612,7 +612,7 @@ This DesktopOwnerSetting is no longer supported in version 4. Please reach out t
 
 ## I used the @openfin/search-api npm module to populate Home with my apps. How do I do that now?
 
-We have examples of using the search api to populate a list of applications in our version 3 branch. The example: [how-to/register-with-home](../register-with-home/) is an updated version of the version 3 <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/how-to/add-an-application-to-workspace-via-api" target="_blank">how-to/add-an-application-to-workspace-via-api</a> example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
+We have examples of using the search api to populate a list of applications in our version 3 branch. The example: [how-to/register-with-home](../register-with-home/) is an updated version of the version 3 [how-to/add-an-application-to-workspace-via-api](https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/how-to/add-an-application-to-workspace-via-api) example. You will notice that both examples still follow the same approach. The main difference can be found by comparing search.ts against home.ts. You will see that @openfin/workspace is used instead of @openfin/search-api and that workspace.ts is also no longer needed.
 
 ## Will the views that I developed need changing with version 4?
 
@@ -624,11 +624,11 @@ No. Your pages and workspaces will still be listed in Home.
 
 ## I am still on version 3, have the examples gone?
 
-No. There is a version 3 branch configured to help teams who are still on version 3: <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/</a>
+No. There is a version 3 branch configured to help teams who are still on version 3: [https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/](https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/)
 
 ## I am seeing a message when I try to launch OpenFin Workspace. How do I get Workspace running?
 
-![](workspace-dialog.png)
+![Workspace Dialog](workspace-dialog.png)
 
 Seeing this messages means you are running version 4+ of OpenFin Workspace. From version 4 OpenFin Workspace is an API driven experience and is launched from an application instead of directly. The how-to samples in this repo show you how to build an application that uses our openfin/workspace APIs.
 
@@ -638,11 +638,11 @@ It may be that your existing shortcuts point to the **latest** version of OpenFi
 
 To stay on version v3 you can do the following:
 
-##### Use Version 3 Examples
+### Use Version 3 Examples
 
-Clone the <a href="https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/" target="_blank">version 3 branch</a> and run the npm run dos command on any of the how-to samples. You will need to have the local server running to serve the dos.json file.
+Clone the [version 3 branch](https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/)> and run the npm run dos command on any of the how-to samples. You will need to have the local server running to serve the dos.json file.
 
-##### Create your own dos file and point to it
+#### Create your own dos file and point to it
 
 Create your own dos file:
 
@@ -673,21 +673,21 @@ Value :     file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json
 To add/update this setting we are going to launch RegEdit from the command line (or you can launch it from the Windows Start Bar) by typing regedit and hitting enter.
 
 You will be presented with RegEdit where you can expand the folders until you get to OpenFin\RVM\Settings.
-If you see “DesktopOwnerSettings” it means that this has already been set by your organisation. Please check with your organisation’s desktop owner so that configuration can take place with their awareness.
+If you see "DesktopOwnerSettings" it means that this has already been set by your organization. Please check with your organization's desktop owner so that configuration can take place with their awareness.
 
-![](registry.png)
+![Registry](registry.png)
 
 If no DesktopOwnerSettings value exists then please add it by right clicking on OpenFin/RVM/Settings and adding a new string value:
 
-![](registry-add-key.png)
+![Registry Add Key](registry-add-key.png)
 
 You will provided an entry in the Settings Folder that you can rename to **DesktopOwnerSettings**. Double click on the new entry to set the value to a file path e.g.:
 
-**file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json**
+```file:\\\C:\PATH\TO\YOUR\FOLDER\registry_dos_local.json```
 
 or a url (if you have a webserver):
 
-**http://localhost:8080/registry_dos_local.json**
+```http://localhost:8080/registry_dos_local.json```
 
 ##### Once you have configured DesktopOwnerSettings
 
@@ -695,8 +695,10 @@ Once you have done either of the approaches above you need to:
 
 - Use TaskManager, ProcessExplorer or the command line to close all OpenFin applications (so that the new DesktopOwnerSettings will get picked up).
 
-- Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): <a href="fins://system-apps/workspace" target="_blank">fins://system-apps/workspace</a>
+- Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): [fins://system-apps/workspace](fins://system-apps/workspace)
 
 You should now see version 3 of OpenFin Workspace.
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+---
+
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)
