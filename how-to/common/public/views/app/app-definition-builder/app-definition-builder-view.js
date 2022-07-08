@@ -138,11 +138,11 @@ function bindManifestTypeDetails() {
 		helpLink.style.display = 'none';
 	}
 	if (manifestTypeInfo.manifest === 'string') {
-		manifestContainer.style.display = 'unset';
+		manifestContainer.style.display = 'flex';
 		inlineManifestContainer.style.display = 'none';
 	} else if (manifestTypeInfo.manifest === 'object') {
 		manifestContainer.style.display = 'none';
-		inlineManifestContainer.style.display = 'unset';
+		inlineManifestContainer.style.display = 'flex';
 	}
 }
 
