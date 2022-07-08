@@ -10,4 +10,4 @@ This view can be customized by specifying customData in the [interop-broadcast-v
 
 - **customChannel** - We come up with a default customChannel name but you may wish to change it to something else.
 
-![](../../../images/previews/view-context-interop-api.png)
+![Context Using Interop API](../../../images/previews/view-context-interop-api.png)

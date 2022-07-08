@@ -10,4 +10,4 @@ This view can be customized by specifying customData in the [fdc3-intent-view.js
 
 - **intentData** - An object that contains entries for each intent type you wish to support alongside an array of contextual types supported by that intent. A default is provided using [fdc3-data.js](../fdc3-data.js).
 
-![](../../../images/previews/view-intents-fdc3.png)
+![Intents Using FDC3](../../../images/previews/view-intents-fdc3.png)

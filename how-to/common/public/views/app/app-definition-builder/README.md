@@ -10,4 +10,4 @@ This view can be customized by specifying customData in the [app-definition-buil
 
 - **manifestTypes** - A url to a JSON file that contains a list of the manifest types you wish to make available to the App Definition Builder.
 
-![](../../../images/previews/app-definition-builder.png)
+![App Definition Builder](../../../images/previews/app-definition-builder.png)

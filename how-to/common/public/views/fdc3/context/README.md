@@ -10,4 +10,4 @@ This view can be customized by specifying customData in the [fdc3-broadcast-view
 
 - **customChannel** - We come up with a default customChannel name but you may wish to change it to something else.
 
-![](../../../images/previews/view-context-fdc3.png)
+![Context Using FDC3](../../../images/previews/view-context-fdc3.png)
