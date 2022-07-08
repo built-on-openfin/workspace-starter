@@ -176,6 +176,8 @@ a:focus {
 }
 
 button,
+input[type='button'],
+::-webkit-file-upload-button,
 a.button,
 footer a {
 	background-color: var(--brand-primary);
@@ -200,6 +202,10 @@ footer a:hover {
 
 a.button:focus,
 a.button:hover,
+input[type='button']:focus,
+input[type='button']:hover,
+input[type='file']:focus::-webkit-file-upload-button,
+::-webkit-file-upload-button:hover,
 footer a:focus,
 footer a:not(:disabled):hover,
 button:not(:disabled):focus,
@@ -236,7 +242,9 @@ button.plain:not(:disabled):not(:read-only):hover {
 	border-color: transparent;
 	background-color: transparent;
 }
+
 button.small,
+::-webkit-file-upload-button,
 td button {
 	padding: 5px 10px;
 	font-size: 10px;
@@ -248,6 +256,10 @@ td button.plain {
 
 button.center {
 	text-align: center;
+}
+
+::-webkit-file-upload-button {
+	margin-right: 10px;
 }
 
 pre {
@@ -297,6 +309,7 @@ label {
 select,
 input[type='text'],
 input[type='password'],
+input[type='file'],
 input[type='email'],
 input[type='url'],
 input[type='number'],
@@ -332,6 +345,7 @@ textarea.resizable {
 select.full,
 input[type='text'].full,
 input[type='password'].full,
+input[type='file'].full,
 input[type='email'].full,
 input[type='url'].full,
 input[type='number'].full,
@@ -351,6 +365,8 @@ input[type='text']:not(:read-only):focus,
 input[type='text']:not(:disabled):not(:read-only):hover,
 input[type='password']:not(:read-only):focus,
 input[type='password']:not(:disabled):not(:read-only):hover,
+input[type='file']:not(:read-only):focus,
+input[type='file']:not(:disabled):not(:read-only):hover,
 input[type='email']:not(:read-only):focus,
 input[type='email']:not(:disabled):not(:read-only):hover,
 input[type='url']:not(:read-only):focus,
@@ -395,7 +411,8 @@ input[type='week'] {
 ::-webkit-datetime-edit-month-field:focus,
 ::-webkit-datetime-edit-year-field:focus,
 ::-webkit-datetime-edit-hour-field:focus,
-::-webkit-datetime-edit-minute-field:focus {
+::-webkit-datetime-edit-minute-field:focus,
+::-webkit-datetime-edit-week-field:focus {
 	background-color: var(--brand-primary);
 	color: #ffffff;
 }
@@ -502,6 +519,7 @@ fieldset > span {
 
 input[type='text'].large,
 input[type='password'].large,
+input[type='file'].large,
 input[type='email'].large,
 input[type='url'].large,
 input[type='date'].large,
