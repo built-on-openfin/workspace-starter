@@ -414,6 +414,7 @@ select:not([multiple]):not(:disabled) {
 option {
 	color: var(--brand-text);
 	padding: 6px;
+    margin-bottom: 1px;
 }
 
 option:hover {
