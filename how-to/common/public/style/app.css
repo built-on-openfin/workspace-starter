@@ -744,6 +744,10 @@ td {
 	-webkit-app-region: drag;
 }
 
+.no-drag {
+	-webkit-app-region: none;
+}
+
 .form {
 	background-color: #f3f3f3;
 	border-radius: 5px;
