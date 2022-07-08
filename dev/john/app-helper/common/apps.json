@@ -732,7 +732,14 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [],
+		"intents": [
+			{
+				"name": "CreateAppDefinition",
+				"displayName": "Create an App Definition",
+				"contexts": ["openfin.app"],
+				"customConfig": {}
+			}
+		],
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/previews/app-definition-builder.png"
@@ -1085,31 +1092,25 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/my-team.json",
 		"manifestType": "view",
 		"icons": [
-		  {
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/icon-blue.png"
-		  }
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/images/icon-blue.png"
+			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [
-		  {
-			"name": "ViewContact",
-			"displayName": "View Contact",
-			"contexts": [
-			  "fdc3.contact"
-			],
-			"customConfig": {}
-		  }
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
 		],
 		"images": [],
-		"tags": [
-		  "view",
-		  "manager",
-		  "fcd3"
-		]
-	  },
-	  {
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
 		"appId": "annual-leave",
 		"name": "annual-leave",
 		"title": "Annual Leave",
@@ -1117,31 +1118,25 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/annual-leave.json",
 		"manifestType": "view",
 		"icons": [
-		  {
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/annual-leave/favicon.ico"
-		  }
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/annual-leave/favicon.ico"
+			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [
-		  {
-			"name": "ViewContact",
-			"displayName": "View Contact",
-			"contexts": [
-			  "fdc3.contact"
-			],
-			"customConfig": {}
-		  }
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
 		],
 		"images": [],
-		"tags": [
-		  "view",
-		  "manager",
-		  "fcd3"
-		]
-	  },
-	  {
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
 		"appId": "manager-paths",
 		"name": "manager-paths",
 		"title": "Manager Paths",
@@ -1149,31 +1144,25 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/manager-paths.json",
 		"manifestType": "view",
 		"icons": [
-		  {
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/manager-paths/favicon.ico"
-		  }
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/manager-paths/favicon.ico"
+			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [
-		  {
-			"name": "ViewContact",
-			"displayName": "View Contact",
-			"contexts": [
-			  "fdc3.contact"
-			],
-			"customConfig": {}
-		  }
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
 		],
 		"images": [],
-		"tags": [
-		  "view",
-		  "manager",
-		  "fcd3"
-		]
-	  },
-	  {
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
 		"appId": "company-comms",
 		"name": "company-comms",
 		"title": "Company Comms",
@@ -1181,31 +1170,25 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-comms.json",
 		"manifestType": "view",
 		"icons": [
-		  {
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-comms/favicon.ico"
-		  }
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-comms/favicon.ico"
+			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [
-		  {
-			"name": "ViewContact",
-			"displayName": "View Contact",
-			"contexts": [
-			  "fdc3.contact"
-			],
-			"customConfig": {}
-		  }
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
 		],
 		"images": [],
-		"tags": [
-		  "view",
-		  "manager",
-		  "fcd3"
-		]
-	  },
-	  {
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
 		"appId": "company-cal",
 		"name": "company-cal",
 		"title": "Company Calendar",
@@ -1213,28 +1196,22 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-cal.json",
 		"manifestType": "view",
 		"icons": [
-		  {
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-cal/favicon.ico"
-		  }
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/app-helper/common/views/manager-portal/company-cal/favicon.ico"
+			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [
-		  {
-			"name": "ViewContact",
-			"displayName": "View Contact",
-			"contexts": [
-			  "fdc3.contact"
-			],
-			"customConfig": {}
-		  }
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
 		],
 		"images": [],
-		"tags": [
-		  "view",
-		  "manager",
-		  "fcd3"
-		]
-	  }
+		"tags": ["view", "manager", "fcd3"]
+	}
 ]

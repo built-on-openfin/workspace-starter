@@ -18,7 +18,7 @@ const availableIntents = document.querySelector('#intents');
 const preview = document.querySelector('#preview');
 const btnReset = document.querySelector('#btnReset');
 const btnCopy = document.querySelector('#btnCopy');
-
+const defaultInlineManifest = { url: 'https://www.mydomain.com', fdc3InteropApi: '1.2' };
 let manifestTypes = [];
 let intents = [];
 
@@ -159,7 +159,7 @@ function reset() {
 	title.value = '';
 	description.value = '';
 	bindManifestTypes();
-	inlineManifest.value = `{ "url": "https://mydomain.com/", "fdc3InteropApi": "1.2" }`;
+	inlineManifest.value = JSON.stringify(defaultInlineManifest);
 	icon.value = '';
 	appImage.value = '';
 	contactEmail.value = '';
@@ -199,11 +199,94 @@ async function bindChangeEvent() {
 	availableIntents.addEventListener('input', updateAppPreview);
 }
 
+function applyAppDefinition(app) {
+	if (app.appId !== undefined) {
+		id.value = app.appId;
+	}
+
+	if (app.title !== undefined) {
+		title.value = app.title;
+	}
+
+	if (app.description !== undefined) {
+		description.value = app.description;
+	}
+
+	if (app.manifestType !== undefined) {
+		manifestType.value = app.manifestType;
+	}
+
+	if (typeof app.manifest === 'string') {
+		manifest.value = app.manifest;
+	} else {
+		inlineManifest.value = JSON.stringify(app.manifest, null, 4);
+	}
+	bindManifestTypeDetails();
+
+	if (Array.isArray(app.icons) && app.icons.length > 0) {
+		icon.value = app.icons[0].src;
+	}
+
+	if (Array.isArray(app.images) && app.images.length > 0) {
+		appImage.value = app.images[0].src;
+	}
+
+	if (Array.isArray(app.tags) && app.tags.length > 0) {
+		tags.value = app.tags.join(', ');
+	}
+
+	if (app.publisher !== undefined) {
+		publisher.value = app.publisher;
+	}
+
+	if (app.supportEmail !== undefined) {
+		supportEmail.value = app.supportEmail;
+	}
+
+	if (app.contactEmail !== undefined) {
+		contactEmail.value = app.contactEmail;
+	}
+
+	bindIntents();
+
+	if (Array.isArray(app.intents) && app.intents.length > 0) {
+		const intentsToSet = [];
+
+		for (let i = 0; i < app.intents.length; i++) {
+			if (intents.some((entry) => entry.name === app.intents[i].name)) {
+				intentsToSet.push(app.intents[i].name);
+			}
+		}
+		console.log(intentsToSet);
+
+		if (intentsToSet.length > 0) {
+			const options = Array.from(availableIntents.options);
+			for (let i = 0; i < options.length; i++) {
+				options[i].selected = intentsToSet.includes(options[i].value);
+			}
+		}
+	}
+
+	updateAppPreview();
+}
+
 async function init() {
 	await applySettings();
 	await bindDomElements();
 	await bindChangeEvent();
-	inlineManifest.value = `{ "url": "https://mydomain.com/", "fdc3InteropApi": "1.2" }`;
+	inlineManifest.value = JSON.stringify(defaultInlineManifest);
+	if (window.fdc3 !== undefined) {
+		const intent = 'CreateAppDefinition';
+		fdc3.addIntentListener(intent, (ctx) => {
+			if (ctx.type === 'openfin.app') {
+				try {
+					applyAppDefinition(ctx.app);
+				} catch (error) {
+					console.error('Error while trying to apply the following intent context:', ctx, error);
+				}
+			}
+		});
+	}
 }
 document.addEventListener('DOMContentLoaded', () => {
 	try {
