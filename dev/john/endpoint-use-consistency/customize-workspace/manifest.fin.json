@@ -73,9 +73,9 @@
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": ["https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/customize-workspace/apps.json", "https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/common/apps.json"],
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
+			"endpointIds": ["apps-get", "common-apps-get"],
+			"cacheDurationInSeconds": 10,
+			"cacheDurationInMinutes":0,
 			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
@@ -89,7 +89,25 @@
 			]
 		},
 		"endpointProvider": {
+			"modules": [
+			],
 			"endpoints": [
+				{
+					"id": "apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/customize-workspace/apps.json"
+					}
+				},
+				{
+					"id": "common-apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/common/apps.json"
+					}
+				},
 				{
 					"id": "share-get",
 					"type": "fetch",
