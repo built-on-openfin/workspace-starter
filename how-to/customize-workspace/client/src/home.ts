@@ -15,7 +15,7 @@ import {
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
-import { deletePage, getPage, getPageBounds, getPages, launchPage } from "./browser";
+import { getPageBounds, launchPage } from "./browser";
 import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
@@ -236,8 +236,9 @@ async function getResults(
 	queryAgainst: string[],
 	filters: CLIFilter[]
 ): Promise<HomeSearchResponse> {
+	const platform = getCurrentSync();
 	const apps = await getApps();
-	const pages = await getPages();
+	const pages = await platform.Storage.getPages();
 	const workspaces = await getWorkspaces();
 
 	const tags: string[] = [];
@@ -483,15 +484,18 @@ export async function register() {
 				} else if (data.pageId !== undefined) {
 					const pageAction = result.action.name;
 					if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_TEMPLATE.actions.launch) {
-						const pageToLaunch = await getPage(data.pageId);
+						const platform = getCurrentSync();
+						const pageToLaunch = await platform.Storage.getPage(data.pageId);
 						await launchPage(pageToLaunch);
 					} else if (pageAction === HOME_ACTION_DELETE_PAGE || pageAction === PAGE_TEMPLATE.actions.delete) {
-						await deletePage(data.pageId);
+						const platform = getCurrentSync();
+						await platform.Storage.deletePage(data.pageId);
 						if (lastResponse !== undefined && lastResponse !== null) {
 							lastResponse.revoke(result.key);
 						}
 					} else if (pageAction === HOME_ACTION_SHARE_PAGE || pageAction === PAGE_TEMPLATE.actions.share) {
-						const page = await getPage(data.pageId);
+						const platform = getCurrentSync();
+						const page = await platform.Storage.getPage(data.pageId);
 						const bounds = await getPageBounds(data.pageId, true);
 						await share({ page, bounds });
 					} else {

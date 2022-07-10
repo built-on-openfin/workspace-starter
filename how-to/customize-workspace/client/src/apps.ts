@@ -1,36 +1,58 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
-import { getSettings } from "./settings";
+import { EndpointService } from "./endpoint-shapes";
+import { AppOptions } from "./shapes";
 
 let cachedApps: App[];
+let endpoints: EndpointService;
+let cacheDuration = 0;
+let endpointIds: string[] = [];
+let isInitialized = false;
+let defaultCredentials: "omit" | "same-origin" | "include";
+let appAssetTag: string = "appasset";
+let supportedManifestTypes: string[] = [];
+let canLaunchExternalProcess: boolean;
+let canDownloadAppAssets: boolean;
+
+async function getCanLaunchExternalProcess() {
+	if (canLaunchExternalProcess === undefined) {
+		let canLaunchExternalProcessResponse;
+
+		try {
+			canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
+				"System.launchExternalProcess"
+			);
+
+			canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
+		} catch (error) {
+			console.error("Error while querying for System.launchExternalProcess permission", error);
+			canLaunchExternalProcess = false;
+		}
+	}
+	return canLaunchExternalProcess;
+}
+
+async function getCanDownloadAppAssets() {
+	if (canDownloadAppAssets === undefined) {
+		let canDownloadAppAssetsResponse;
+
+		try {
+			canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+			canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
+		} catch (error) {
+			console.error("Error while querying for System.downloadAsset permission", error);
+			canDownloadAppAssets = false;
+		}
+	}
+	return canDownloadAppAssets;
+}
 
 async function validateEntries(apps: App[]) {
-	let canLaunchExternalProcessResponse;
-
-	try {
-		canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.launchExternalProcess"
-		);
-	} catch (error) {
-		console.error("Error while querying for System.launchExternalProcess permission", error);
-	}
-	const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
-
-	let canDownloadAppAssetsResponse;
-
-	try {
-		canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-	} catch (error) {
-		console.error("Error while querying for System.downloadAsset permission", error);
-	}
-
-	const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
+	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
+	const hasDownloadAppAssets = await getCanDownloadAppAssets();
 
 	const validatedApps: App[] = [];
 	const rejectedAppIds = [];
-	const settings = await getSettings();
-	const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
-	const supportedManifestTypes = settings?.appProvider?.manifestTypes;
 
 	for (let i = 0; i < apps.length; i++) {
 		let validApp = true;
@@ -41,12 +63,12 @@ async function validateEntries(apps: App[]) {
 		if (validApp) {
 			if (apps[i].manifestType !== "external") {
 				validatedApps.push(apps[i]);
-			} else if (canLaunchExternalProcess === false) {
+			} else if (!hasLaunchExternalProcess) {
 				rejectedAppIds.push(apps[i].appId);
 			} else if (
 				Array.isArray(apps[i].tags) &&
 				apps[i].tags.includes(appAssetTag) &&
-				canDownloadAppAssets === false
+				!hasDownloadAppAssets
 			) {
 				rejectedAppIds.push(apps[i].appId);
 			} else {
@@ -65,30 +87,40 @@ async function validateEntries(apps: App[]) {
 	return validatedApps;
 }
 
-async function getRestEntries(
-	source: string | string[],
+async function getEntries(
+	source: string[],
 	credentials?: "omit" | "same-origin" | "include",
-	cacheDuration?: number
+	cache?: number
 ): Promise<App[]> {
 	const options = credentials !== undefined ? { credentials } : undefined;
-	if (source === undefined) {
+	if (!Array.isArray(source)) {
 		return [];
 	}
-	const urls = Array.isArray(source) ? source : [source];
+	const apps: App[] = [];
 
-	const res = await Promise.all(urls.map(async (u) => fetch(u, options)));
-	const jsonResults = await Promise.all(res.map(async (r) => r.json()));
-
-	const apps: App[] = jsonResults.flat();
+	for (let i = 0; i < endpointIds.length; i++) {
+		const endpointId = endpointIds[i];
+		try {
+			if (endpoints.hasEndpoint(endpointId)) {
+				const results = await endpoints.requestResponse<unknown, App[]>(endpointId);
+				apps.push(...results);
+			} else {
+				const resp = await fetch(endpointId, options);
+				const jsonResults: App[] = await resp.json();
+				apps.push(...jsonResults);
+			}
+		} catch (error) {
+			console.error(`Error fetching apps from endpoint ${endpointId}`, error);
+		}
+	}
 
 	cachedApps = await validateEntries(apps);
 
-	if (cacheDuration !== undefined) {
-		const setTimeoutInMs = cacheDuration * 60 * 1000;
+	if (cache !== undefined && cache !== 0) {
 		setTimeout(() => {
 			console.log("Clearing cache of apps as cache duration has passed.");
 			cachedApps = undefined;
-		}, setTimeoutInMs);
+		}, cache);
 	}
 
 	return cachedApps;
@@ -119,16 +151,51 @@ function updateEntry(
 	return source;
 }
 
+export async function init(options: AppOptions, endpointService: EndpointService) {
+	if (isInitialized) {
+		console.warn("The app service is already initialized.");
+		return;
+	}
+	isInitialized = true;
+	endpoints = endpointService;
+	if (options?.appsSourceUrl !== undefined) {
+		// backward compatibility support
+		console.log("Using appsSourceUrl as it was specified. Backwards compatibility mode. Try to use the endpointIds setting instead and define some endpoints.");
+		if (Array.isArray(options?.appsSourceUrl)) {
+			console.log("appsSourceUrl specified as an array of urls");
+			const appUrls: string[] = options?.appsSourceUrl || [];
+			endpointIds.push(...appUrls);
+		} else {
+			console.log("appsSourceUrl specified as a single url.");
+			endpointIds.push(options?.appsSourceUrl);
+		}
+	} else if (Array.isArray(options?.endpointIds)) {
+		console.log("Using the following passed endpoints", options?.endpointIds);
+		endpointIds = options?.endpointIds || [];
+	}
+
+	if (options?.cacheDurationInSeconds !== undefined) {
+		cacheDuration += (options?.cacheDurationInSeconds * 1000);
+	}
+
+	if (options?.cacheDurationInMinutes !== undefined) {
+		cacheDuration += (options?.cacheDurationInMinutes * 60 * 1000);
+	}
+
+	defaultCredentials = options?.includeCredentialOnSourceRequest;
+	appAssetTag = options?.appAssetTag ?? "appasset";
+	supportedManifestTypes = options.manifestTypes || [];
+}
+
 export async function getApps(): Promise<App[]> {
 	console.log("Requesting apps.");
 	try {
-		const settings = await getSettings();
 		const apps =
 			cachedApps ??
-			(await getRestEntries(
-				settings?.appProvider?.appsSourceUrl,
-				settings?.appProvider?.includeCredentialOnSourceRequest,
-				settings?.appProvider?.cacheDurationInMinutes
+			(await getEntries(
+				endpointIds,
+				defaultCredentials,
+				cacheDuration
 			));
 		return apps;
 	} catch (err) {

@@ -1,6 +1,5 @@
 import { fin } from "@openfin/core";
 import { launchPage, launchView } from "./browser";
-import { init as endpointInit } from "./endpoint";
 import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
@@ -18,7 +17,6 @@ export async function init() {
 	const setupHome = settings?.bootstrap?.home ?? true;
 	const setupStore = settings?.bootstrap?.store ?? true;
 	const setupNotifications = settings?.bootstrap?.notifications ?? true;
-	await endpointInit();
 	if (setupHome) {
 		// only register search logic once workspace is running
 		await registerHome();

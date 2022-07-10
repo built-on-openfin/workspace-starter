@@ -1,11 +1,11 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
+import { EndpointProvider } from "./endpoint-shapes";
 import { IntegrationProvider } from "./integrations-shapes";
 
 interface PlatformProvider {
 	rootUrl: string;
-	useCustomStorage?: boolean;
 	intentPicker?: {
 		url: string;
 		height?: number;
@@ -45,12 +45,16 @@ interface ThemeProvider {
 }
 
 interface AppProvider {
-	appsSourceUrl: string | string[];
+	appsSourceUrl?: string | string[];
+	endpointIds?: string[];
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
 	cacheDurationInMinutes?: number;
+	cacheDurationInSeconds?: number;
 	appAssetTag?: string;
 	manifestTypes?: string[];
 }
+
+export type AppOptions = AppProvider;
 
 export interface StorefrontSettingsNavigationItem {
 	/**
@@ -107,41 +111,6 @@ interface StorefrontProvider {
 		items: StorefrontSettingsNavigationItem[];
 	}[];
 	footer: StorefrontFooter;
-}
-
-export interface EndpointProvider {
-	endpoints?: EndpointTypes[];
-}
-
-export interface Endpoint {
-	id: string;
-}
-
-export type FetchEndpoint = Endpoint & {
-	type: "fetch";
-	options: FetchOptions & { url: string };
-};
-
-// We could include more in this type
-export type EndpointTypes = FetchEndpoint;
-
-export interface FetchOptions {
-	body?: string;
-	method?: "GET" | "POST";
-	credentials?: "omit" | "same-origin" | "include";
-	mode?: "no-cors" | "cors" | "same-origin";
-	cache?: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached";
-	redirect?: "manual" | "follow" | "error";
-	referrerPolicy?:
-		| "no-referrer"
-		| "no-referrer-when-downgrade"
-		| "origin"
-		| "origin-when-cross-origin"
-		| "same-origin"
-		| "strict-origin"
-		| "strict-origin-when-cross-origin"
-		| "unsafe-url";
-	headers?: { [key: string]: string };
 }
 
 export interface CustomSettings {

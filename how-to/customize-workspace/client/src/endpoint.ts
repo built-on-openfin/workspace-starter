@@ -1,15 +1,43 @@
-import { getSettings } from "./settings";
-import { EndpointTypes, FetchOptions } from "./shapes";
+import { EndpointDefinition, FetchOptions, EndpointModuleDefinition, Endpoint, EndpointModule, EndpointServiceOptions } from "./endpoint-shapes";
 
-let availableEndpoints: EndpointTypes[];
+let endpointDefinitions: EndpointDefinition[] = [];
+let moduleDefinitions: EndpointModuleDefinition[] = [];
+let isInitialized = false;
 
-export async function init(endpoints: EndpointTypes[] = null) {
-	if (endpoints !== null) {
-		availableEndpoints = endpoints;
-	} else {
-		const settings = await getSettings();
-		availableEndpoints = settings.endpointProvider.endpoints || [];
+const availableEndpoints: { [key: string]: Endpoint } = {};
+
+async function getModuleEndpoint(moduleId: string): Promise<Endpoint> {
+	const endpointModule = availableEndpoints[moduleId];
+	if (endpointModule !== undefined) {
+		return endpointModule;
 	}
+	const moduleDefinition = moduleDefinitions.find((entry) => entry.id === moduleId);
+
+	if (moduleDefinition === undefined) {
+		console.warn(`Specified Endpoint Module Id: ${moduleId} is not available.`);
+		return undefined;
+	}
+
+	try {
+		const mod: EndpointModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
+		const endpoint = mod.endpoint;
+		await endpoint.init(moduleDefinition.data);
+		availableEndpoints[moduleDefinition.id] = endpoint;
+		return endpoint;
+	} catch (err) {
+		console.error(`Error loading module ${moduleId} with url ${moduleDefinition.url}`, err);
+		return undefined;
+	}
+}
+
+function getEndpointDefinition(endpointId: string): EndpointDefinition {
+	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
+
+	if (endpoint === undefined) {
+		console.warn(`Specified Endpoint Id ${endpointId} is not available.`);
+	}
+
+	return endpoint;
 }
 
 function getRequestOptions(
@@ -34,46 +62,68 @@ function getRequestOptions(
 	return { url, options };
 }
 
+export async function init(options: EndpointServiceOptions) {
+	if (isInitialized) {
+		return;
+	}
+	isInitialized = true;
+	endpointDefinitions = options?.endpoints || [];
+
+	moduleDefinitions = options?.modules || [];
+}
+
+export function hasEndpoint(id: string) {
+	return endpointDefinitions.some((entry) => entry.id === id);
+}
+
 export async function action<T>(endpointId: string, request?: T): Promise<boolean> {
-	const endpoint = availableEndpoints.find((entry) => entry.id === endpointId);
+	const endpoint = getEndpointDefinition(endpointId);
 
 	if (endpoint === undefined) {
-		console.warn(`${endpointId} is not available.`);
 		return false;
 	}
 
+	const endpointType = endpoint.type;
+
 	// currently only fetch is supported but you could load different implementations of this intent based on type
-	if (endpoint.type === "fetch") {
+	if (endpointType === "fetch") {
 		const { url, ...options } = endpoint.options;
 		const req = getRequestOptions(url, options, request);
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
 			console.warn(
-				`${endpointId} specifies a type: ${endpoint.type} with a method ${req.options.method} that is not supported.`
+				`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 			);
 			return false;
 		}
 		const response = await fetch(req.url, req.options);
 		return response.ok;
+	} else if (endpointType === "module") {
+		const resolvedEndpoint = await getModuleEndpoint(endpoint.typeId);
+
+		if (resolvedEndpoint === undefined) {
+			return false;
+		}
+		return resolvedEndpoint.action(endpoint, request);
 	}
-	console.warn(`${endpointId} specifies a type: ${endpoint.type} that is not supported.`);
+	console.warn(`${endpointId} specifies a type: ${endpointType} that is not supported.`);
 	return false;
 }
 
-export async function requestResponse<T, R>(endpointId: string, request: T): Promise<R | null> {
-	const endpoint = availableEndpoints.find((entry) => entry.id === endpointId);
+export async function requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null> {
+	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
 	if (endpoint === undefined) {
-		console.warn(`${endpointId} is not available.`);
 		return null;
 	}
 
+	const endpointType = endpoint.type;
 	// currently only fetch is supported but you could load different implementations of this intent based on type
-	if (endpoint.type === "fetch") {
+	if (endpointType === "fetch") {
 		const { url, ...options } = endpoint.options;
 		const req = getRequestOptions(url, options, request);
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
 			console.warn(
-				`${endpointId} specifies a type: ${endpoint.type} with a method ${req.options.method} that is not supported.`
+				`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 			);
 			return null;
 		}
@@ -84,7 +134,14 @@ export async function requestResponse<T, R>(endpointId: string, request: T): Pro
 			return json as R;
 		}
 		return null;
+	} else if (endpointType === "module") {
+		const resolvedEndpoint = await getModuleEndpoint(endpoint.typeId);
+
+		if (resolvedEndpoint === undefined) {
+			return null;
+		}
+		return resolvedEndpoint.requestResponse<T, R>(endpoint, request);
 	}
-	console.warn(`${endpointId} specifies a type: ${endpoint.type} that is not supported.`);
+	console.warn(`${endpointId} specifies a type: ${endpointType} that is not supported.`);
 	return null;
 }

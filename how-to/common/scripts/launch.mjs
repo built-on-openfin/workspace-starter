@@ -60,14 +60,22 @@ async function launchFromNode(manifestUrl) {
 		// do something when app is closing
 		process.on('exit', async () => {
 			console.log('Exit called');
+			try {
 			await quit();
+			} catch(error) {
+				console.log("Quit with error.", error);
+			}
 		});
 
 		// catches ctrl+c event
 		process.on('SIGINT', async () => {
 			console.log('Ctrl + C called');
+			try {
 			await quit();
 			process.exit();
+			} catch(error) {
+				console.log("Quit with error.", error);
+			}
 		});
 
 		console.log(`You successfully connected to the manifest: ${manifestUrl}`);

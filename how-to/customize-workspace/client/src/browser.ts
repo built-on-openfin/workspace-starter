@@ -14,65 +14,49 @@ import {
 } from "@openfin/workspace-platform";
 
 import { getDefaultToolbarButtons } from "./buttons";
+import * as endpointService from "./endpoint";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
 import { PlatformLocalStorage } from "./platform-local-storage";
-import { PlatformStorage } from "./platform-storage";
-import { DEFAULT_STORAGE_KEYS, IPlatformStorage } from "./platform-storage-shapes";
 import { getSettings } from "./settings";
 
 const DEFAULT_PAGE_BOUNDS_STORAGE = new PlatformLocalStorage<OpenFin.Bounds>(
-	DEFAULT_STORAGE_KEYS.PageBounds,
+	"page-bounds",
 	"PageBounds"
 );
 
-async function getPageBoundsStorage(): Promise<IPlatformStorage<OpenFin.Bounds>> {
-	const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.PageBounds)
-		? await PlatformStorage.getStorage<OpenFin.Bounds>(DEFAULT_STORAGE_KEYS.PageBounds)
-		: undefined;
-	if (storage !== undefined) {
-		return storage;
-	}
-	return DEFAULT_PAGE_BOUNDS_STORAGE;
-}
-
 async function savePageBounds(pageId: string) {
 	const bounds = await getPageBounds(pageId);
-	const storage = await getPageBoundsStorage();
-	if (storage !== undefined) {
-		await storage.set(pageId, bounds);
+	if (bounds !== null) {
+		const setPageBoundsEndpointId = "page-bounds-set";
+		if (endpointService.hasEndpoint(setPageBoundsEndpointId)) {
+			await endpointService.action<{ id: string; payload: OpenFin.Bounds}>(setPageBoundsEndpointId,
+				{ id: pageId, payload: bounds });
+			return;
+		}
+		await DEFAULT_PAGE_BOUNDS_STORAGE.set(pageId, bounds);
 	}
 }
 
 async function deletePageBounds(pageId: string) {
-	const storage = await getPageBoundsStorage();
-	if (storage !== undefined) {
-		await storage.remove(pageId);
+	const removePageBoundsEndpointId = "page-bounds-remove";
+	if (endpointService.hasEndpoint(removePageBoundsEndpointId)) {
+		await endpointService.action<{ id: string }>(removePageBoundsEndpointId,
+			{ id: pageId });
+		return;
 	}
-}
-
-export async function getPage(pageId: string) {
-	const platform = getCurrentSync();
-	return platform.Storage.getPage(pageId);
-}
-
-export async function getPages() {
-	const platform = getCurrentSync();
-	return platform.Storage.getPages();
-}
-
-export async function deletePage(pageId: string) {
-	const platform = getCurrentSync();
-	await deletePageBounds(pageId);
-	return platform.Storage.deletePage(pageId);
+	await DEFAULT_PAGE_BOUNDS_STORAGE.remove(pageId);
 }
 
 export async function getPageBounds(pageId: string, fromStorage = false): Promise<OpenFin.Bounds | null> {
 	let bounds: OpenFin.Bounds = null;
 
 	if (fromStorage) {
-		const storage = await getPageBoundsStorage();
-		if (storage !== undefined) {
-			bounds = await storage.get(pageId);
+		const getPageBoundsEndpointId = "page-bounds-get";
+		if (endpointService.hasEndpoint(getPageBoundsEndpointId)) {
+			bounds = await endpointService.requestResponse<string, OpenFin.Bounds>(getPageBoundsEndpointId,
+			pageId);
+		} else {
+			bounds = await DEFAULT_PAGE_BOUNDS_STORAGE.get(pageId);
 		}
 	} else {
 		const platform = getCurrentSync();
@@ -94,13 +78,26 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 	return bounds;
 }
 
+// export async function getPage(pageId: string) {
+// 	const platform = getCurrentSync();
+// 	return platform.Storage.getPage(pageId);
+// }
+
+// export async function getPages() {
+// 	const platform = getCurrentSync();
+// 	return platform.Storage.getPages();
+// }
+
+// export async function deletePage(pageId: string) {
+// 	const platform = getCurrentSync();
+// 	await deletePageBounds(pageId);
+// 	return platform.Storage.deletePage(pageId);
+// }
+
 export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 	let customBounds = bounds;
 	if (customBounds === undefined) {
-		const storage = await getPageBoundsStorage();
-		if (storage !== undefined) {
-			customBounds = await storage.get(page.pageId);
-		}
+		customBounds = await getPageBounds(page.pageId, true);
 	}
 
 	const platform = getCurrentSync();
@@ -180,13 +177,13 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
-				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
-				: undefined;
+			const getWorkspacesEndpointId = "workspace-get-all";
 
-			if (storage !== undefined) {
+			if (endpointService.hasEndpoint(getWorkspacesEndpointId)) {
+				const workspacesResponse = await endpointService.requestResponse<string, { data: Workspace[]}>
+				(getWorkspacesEndpointId, query);
 				console.log(`Returning saved workspaces from custom storage for query: ${query}.`);
-				return storage.getAll(query);
+				return workspacesResponse.data;
 			}
 			console.log(`Returning saved workspaces from default storage for query: ${query}.`);
 			return super.getSavedWorkspaces(query);
@@ -195,13 +192,13 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedWorkspace(id: string): Promise<Workspace> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
-				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
-				: undefined;
+			const getWorkspaceEndpointId = "workspace-get";
 
-			if (storage !== undefined) {
+			if (endpointService.hasEndpoint(getWorkspaceEndpointId)) {
+				// eslint-disable-next-line max-len
+				const workspaceResponse = await endpointService.requestResponse<string, Workspace>(getWorkspaceEndpointId, id);
 				console.log(`Returning saved workspace from custom storage for workspace id: ${id}.`);
-				return storage.get(id);
+				return workspaceResponse;
 			}
 			console.log(`Returning saved workspace from default storage for workspace id: ${id}.`);
 			return super.getSavedWorkspace(id);
@@ -210,13 +207,17 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
-				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
-				: undefined;
+			const setWorkspaceEndpointId = "workspace-set";
 
-			if (storage !== undefined) {
-				console.log(`Saving workspace to custom storage for workspace id: ${req.workspace.workspaceId}.`);
-				return storage.set(req.workspace.workspaceId, req.workspace);
+			if (endpointService.hasEndpoint(setWorkspaceEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string; payload: Workspace}>(setWorkspaceEndpointId, { id: req.workspace.workspaceId, payload: req.workspace });
+				if (success) {
+					console.log(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
+				} else {
+					console.log(`Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`);
+				}
+				return;
 			}
 			console.log(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}.`);
 			return super.createSavedWorkspace(req);
@@ -225,15 +226,17 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
-				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
-				: undefined;
+			const setWorkspaceEndpointId = "workspace-set";
 
-			if (storage !== undefined) {
-				console.log(
-					`Saving updated workspace to custom storage for workspace id: ${req.workspace.workspaceId}.`
-				);
-				return storage.set(req.workspace.workspaceId, req.workspace);
+			if (endpointService.hasEndpoint(setWorkspaceEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string; payload: Workspace}>(setWorkspaceEndpointId, { id: req.workspace.workspaceId, payload: req.workspace });
+				if (success) {
+					console.log(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
+				} else {
+					console.log(`Unable to update workspace with id: ${req.workspace.workspaceId} against custom storage`);
+				}
+				return;
 			}
 			console.log(
 				`Saving updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
@@ -244,13 +247,17 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async deleteSavedWorkspace(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Workspace)
-				? await PlatformStorage.getStorage<Workspace>(DEFAULT_STORAGE_KEYS.Workspace)
-				: undefined;
+			const removeWorkspaceEndpointId = "workspace-remove";
 
-			if (storage !== undefined) {
-				console.log(`Deleting workspace from custom storage for workspace id: ${id}.`);
-				return storage.remove(id);
+			if (endpointService.hasEndpoint(removeWorkspaceEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string}>(removeWorkspaceEndpointId, { id });
+				if (success) {
+					console.log(`Removed workspace with id: ${id} from custom storage`);
+				} else {
+					console.log(`Unable to remove workspace with id: ${id} from custom storage`);
+				}
+				return;
 			}
 			console.log(`Deleting workspace from default storage for workspace id: ${id}.`);
 			return super.deleteSavedWorkspace(id);
@@ -259,13 +266,13 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
-				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
-				: undefined;
+			const getPagesEndpointId = "page-get-all";
 
-			if (storage !== undefined) {
+			if (endpointService.hasEndpoint(getPagesEndpointId)) {
+				// eslint-disable-next-line max-len
+				const pagesResponse = await endpointService.requestResponse<string, { data: Page[]}>(getPagesEndpointId, query);
 				console.log(`Returning saved pages from custom storage for query: ${query}.`);
-				return storage.getAll(query);
+				return pagesResponse.data;
 			}
 			console.log(`Returning saved pages from default storage for query: ${query}.`);
 			return super.getSavedPages(query);
@@ -274,13 +281,13 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 		public async getSavedPage(id: string): Promise<Page> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
-				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
-				: undefined;
+			const getPageEndpointId = "page-get";
 
-			if (storage !== undefined) {
-				console.log(`Returning saved page with id ${id} from custom storage.`);
-				return storage.get(id);
+			if (endpointService.hasEndpoint(getPageEndpointId)) {
+				// eslint-disable-next-line max-len
+				const pageResponse = await endpointService.requestResponse<string, Page>(getPageEndpointId, id);
+				console.log(`Returning saved page from custom storage for page id: ${id}.`);
+				return pageResponse;
 			}
 			console.log(`Returning saved page with id ${id} from default storage.`);
 			return super.getSavedPage(id);
@@ -292,17 +299,20 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
-				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
-				: undefined;
+			const setPageEndpointId = "page-set";
 
-			if (storage !== undefined) {
-				console.log(`creating saved page and saving to custom storage. PageId: ${req.page.pageId}`);
-				await storage.set(req.page.pageId, req.page);
-			} else {
-				console.log(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
-				await super.createSavedPage(req);
+			if (endpointService.hasEndpoint(setPageEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string; payload: Page}>(setPageEndpointId, { id: req.page.pageId, payload: req.page });
+				if (success) {
+					console.log(`Saved page with id: ${req.page.pageId} to custom storage`);
+				} else {
+					console.log(`Unable to save page with id: ${req.page.pageId} to custom storage`);
+				}
+				return;
 			}
+			console.log(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
+			return super.createSavedPage(req);
 		}
 
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
@@ -311,17 +321,20 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
-				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
-				: undefined;
+			const setPageEndpointId = "page-set";
 
-			if (storage !== undefined) {
-				console.log(`updating saved page and saving to custom storage with page id: ${req.page.pageId}.`);
-				await storage.set(req.page.pageId, req.page);
-			} else {
-				console.log(`updating saved page and saving to default storage with page id: ${req.page.pageId}.`);
-				await super.updateSavedPage(req);
+			if (endpointService.hasEndpoint(setPageEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string; payload: Page}>(setPageEndpointId, { id: req.page.pageId, payload: req.page });
+				if (success) {
+					console.log(`Updated page with id: ${req.page.pageId} against custom storage`);
+				} else {
+					console.log(`Unable to save page with id: ${req.page.pageId} against custom storage`);
+				}
+				return;
 			}
+			console.log(`updating saved page and saving to default storage with page id: ${req.page.pageId}.`);
+			return super.updateSavedPage(req);
 		}
 
 		public async deleteSavedPage(id: string): Promise<void> {
@@ -330,17 +343,19 @@ export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatfor
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const storage = PlatformStorage.isRegistered(DEFAULT_STORAGE_KEYS.Page)
-				? await PlatformStorage.getStorage<Page>(DEFAULT_STORAGE_KEYS.Page)
-				: undefined;
-
-			if (storage !== undefined) {
-				console.log(`deleting saved page from custom storage. PageId: ${id}.`);
-				await storage.remove(id);
-			} else {
-				console.log(`deleting saved page from default storage. PageId: ${id}.`);
-				await super.deleteSavedPage(id);
+			const removePageEndpointId = "page-remove";
+			if (endpointService.hasEndpoint(removePageEndpointId)) {
+				// eslint-disable-next-line max-len
+				const success = await endpointService.action<{ id: string}>(removePageEndpointId, { id });
+				if (success) {
+					console.log(`Removed page with id: ${id} from custom storage`);
+				} else {
+					console.log(`Unable to remove page with id: ${id} from custom storage`);
+				}
+				return;
 			}
+			console.log(`deleting saved page from default storage. PageId: ${id}.`);
+			await super.deleteSavedPage(id);
 		}
 
 		public async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {
