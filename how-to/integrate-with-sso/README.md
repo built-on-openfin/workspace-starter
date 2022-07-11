@@ -1,4 +1,4 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Integrate with SSO" />
+![OpenFin Workspace Example Application -- Integrate with SSO](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
@@ -9,27 +9,23 @@ Your OpenFin application will often need to authenticate with a SSO provider bef
 
 This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
----
-
-**Running the Sample**
+## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 
----
-
 ## Getting Started
 
 1. Install dependencies and build the sample. Note that these examples assume you are in the sub-directory for the example.
 
-```bash
-$ npm run setup
+```shell
+npm run setup
 ```
 
 2. Configure the SSO provider
 
-This example uses [Auth0](https://auth0.com/developers/hub) as a provider for the SSO features, you can signup for a free account to test this demonstration.
+This example uses [Auth0](https://auth0.com/developers/hub) as a provider for the SSO features, you can sign-up for a free account to test this demonstration.
 
 You need to create a `tenant` with an `application` and then populate the `customSettings` in the `public/manifest.fin.json` file in the repo. The `domain` and `clientId` values can be viewed in the settings for the application on the Auth0 management console.
 
@@ -63,28 +59,30 @@ If you enable additional federated providers in Auth0 you might need additional 
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
-```bash
-$ npm run dos
+```shell
+npm run dos
 ```
 
 4. Start the test server in a new window.
 
-```bash
-$ start npm run start
+```shell
+npm run start
 ```
 
 5. Start the demonstration application.
 
-```bash
-$ npm run client
+```shell
+npm run client
 ```
 
 6. Build the project if you have modified the code.
 
-```bash
-$ npm run build
+```shell
+npm run build
 ```
 
-![](openfin-integrate-with-sso.gif)
+![Integrate with SSO](openfin-integrate-with-sso.gif)
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+---
+
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

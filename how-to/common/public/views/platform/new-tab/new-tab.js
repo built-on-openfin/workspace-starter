@@ -21,7 +21,7 @@ function actionQuery() {
 	}
 }
 
-function init() {
+async function init() {
 	query.addEventListener('input', validateValue);
 	query.addEventListener('keydown', (event) => {
 		if (event.key === 'Enter') {
@@ -29,6 +29,9 @@ function init() {
 		}
 	});
 	action.addEventListener('click', actionQuery);
+	if (window.fin !== undefined) {
+		await fin.me.updateOptions({ fdc3InteropApi: '1.2' });
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {

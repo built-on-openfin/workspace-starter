@@ -1,0 +1,9 @@
+{
+	"url": "http://localhost:8080/common/views/app/app-definition-builder/app-definition-builder-view.html",
+	"fdc3InteropApi": "1.2",
+	"customData": {
+		"onlySupportedManifestTypes": true,
+		"intents": "http://localhost:8080/common/data/intents.json",
+		"manifestTypes": "http://localhost:8080/common/data/manifest-types.json"
+	}
+}

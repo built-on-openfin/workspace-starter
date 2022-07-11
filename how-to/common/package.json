@@ -14,7 +14,12 @@
 		"setup": "cd ../../ && npm install && cd how-to/common && npm run build",
 		"validate": "npm --prefix ../../ run validate"
 	},
-	"author": "",
+	"author": "john.mandia@openfin.co",
+	"contributors": [
+		"adam.saland@openfin.co",
+		"martyn.janes@openfin.co",
+		"pj.singh@openfin.co"
+	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
