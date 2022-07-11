@@ -1,11 +1,11 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Common Content" />
+![OpenFin Workspace Example Application -- Common Content](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 # Common Content
 
-This folder contains common assets that apply across projects. If a sample needs them then it will reference them through the /common path. The local server will map that to this folder.
+This folder contains common assets that apply across projects. If a sample needs them then it will reference them through the `/common` path. The local server will map that to this folder.
 
 This lets each sample reference the examples they wish to make available without having to list all of them or duplicate the content. Common styling, images and snapshots can also be made available through this folder.
 
@@ -15,14 +15,14 @@ This folder supports building content written in TypeScript but the majority of 
 
 1. Run setup. Note that these examples assume you are in the common sub-directory.
 
-```bash
-$ npm run setup
+```shell
+npm run setup
 ```
 
 2. Build the project (only needed if you have modified the Typescript code after setup).
 
-```bash
-$ npm run build
+```shell
+npm run build
 ```
 
 If you build and start one of the other samples it will reference this project if needed.
@@ -49,4 +49,4 @@ If you build and start one of the other samples it will reference this project i
 
 - [New Tab View](public/views/platform/new-tab/) - A basic view used by a workspace platform so that users can add new views and pages. This view is a basic example that lets you enter a query which is passed onto google or paste and navigate to a url. It is mainly used for development purposes to let you see what a url looks like in Workspace Browser before creating an [App Definition](public/views/app/app-definition-builder/) for it.
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace).
+### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

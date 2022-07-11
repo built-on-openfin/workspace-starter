@@ -1,4 +1,4 @@
-<img src="../../assets/OpenFin-Workspace-Starter.png" width="100%" alt="OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)" />
+![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
@@ -21,9 +21,7 @@ Intent support is added to the sample in the following ways:
 - Update [apps.ts](client/src/apps.ts) to support getting apps that support intents or context types.
 - Update [launch.ts](client/src/launch.ts) so that it can launch views and pages directly (it needs to do this as the interopbroker needs to know the ids of the views created in order to pass the intent to them).
 
----
-
-**Running the Sample**
+## Running the Sample
 
 To run this sample:
 
@@ -38,12 +36,10 @@ To run this sample:
   - App Preference: No preference will result in a list of applications being shown in the app picker if more than one app supports an intent, Non Existent App (to demonstrate what would happen if an incorrect app id was passed when raising an intent), A specific app (this list is built dynamically using the interop or fdc3 apis to query the interop broker)
 - Once you are happy with your selections can click the button to raise the intent or context.
 
----
-
 ## Example of raising intents
 
-![](workspace-support-context-intents-raising-intents.gif)
+![Raising Intents](workspace-support-context-intents-raising-intents.gif)
 
-## Example of Sharing context with Third Party Websites using preload scripts and fdc3 broadcasting.
+## Example of Sharing context with Third Party Websites using preload scripts and fdc3 broadcasting
 
-![](workspace-support-context-intents-preload.gif)
+![Sharing context](workspace-support-context-intents-preload.gif)
