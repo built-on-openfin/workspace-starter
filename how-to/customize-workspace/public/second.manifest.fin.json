@@ -106,6 +106,22 @@
 					}
 				},
 				{
+					"id": "share-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://workspace.openfin.co/api/share/[id]"
+					}
+				},
+				{
+					"id": "share-save",
+					"type": "fetch",
+					"options": {
+						"method": "POST",
+						"url": "https://workspace.openfin.co/api/share"
+					}
+				},
+				{
 					"id": "workspace-get",
 					"type": "module",
 					"typeId": "local-storage",
@@ -202,22 +218,6 @@
 					"options": {
 						"action": "remove",
 						"dataType": "page-bounds"
-					}
-				},
-				{
-					"id": "share-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://workspace.openfin.co/api/share/[id]"
-					}
-				},
-				{
-					"id": "share-save",
-					"type": "fetch",
-					"options": {
-						"method": "POST",
-						"url": "https://workspace.openfin.co/api/share"
 					}
 				}
 			]

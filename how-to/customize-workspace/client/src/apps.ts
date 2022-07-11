@@ -100,7 +100,7 @@ async function getEntries(
 		const endpointId = endpointIds[i];
 		try {
 			if (endpoints.hasEndpoint(endpointId)) {
-				const results = await endpoints.requestResponse<unknown, App[]>(endpointId);
+				const results = await endpoints.requestResponse<never, App[]>(endpointId);
 				apps.push(...results);
 			} else {
 				const resp = await fetch(endpointId, options);

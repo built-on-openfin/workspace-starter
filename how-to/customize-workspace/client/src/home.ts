@@ -16,7 +16,7 @@ import {
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
 import { share } from "./share";
@@ -242,7 +242,7 @@ async function getResults(
 	const workspaces = await getWorkspaces();
 
 	const tags: string[] = [];
-	const appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
+	const appSearchEntries = mapAppEntriesToSearchEntries(apps);
 	const pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
 	const workspaceEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
 

@@ -116,25 +116,6 @@ export async function getSearchResults(
 }
 
 /**
- * Get the app search entries for all the integration providers.
- * @returns The list of app entries.
- */
-export async function getAppSearchEntries(): Promise<HomeSearchResult[]> {
-	let results: HomeSearchResult[] = [];
-
-	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getAppSearchEntries) {
-			const integrationResults = await homeIntegration.module.getAppSearchEntries(
-				homeIntegration.integration
-			);
-			results = results.concat(integrationResults);
-		}
-	}
-
-	return results;
-}
-
-/**
  * Get the help search entries for all the integration providers.
  * @returns The list of help entries.
  */

@@ -31,14 +31,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const getWorkspacesEndpointId = "workspace-get-all";
 
 			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
-				const workspacesResponse = await endpointProvider.requestResponse<string, { data: Workspace[] }>(
+				const workspacesResponse = await endpointProvider
+				.requestResponse<{ query?: string }, { data: Workspace[] }>(
 					getWorkspacesEndpointId,
-					query
+					{ query }
 				);
-				console.log(`Returning saved workspaces from custom storage for query: ${query}.`);
+				console.log(`Returning saved workspaces from custom storage for query: ${query ?? "none"}.`);
 				return workspacesResponse.data;
 			}
-			console.log(`Returning saved workspaces from default storage for query: ${query}.`);
+			console.log(`Returning saved workspaces from default storage for query: ${query ?? "none"}.`);
 			return super.getSavedWorkspaces(query);
 		}
 
@@ -49,9 +50,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getWorkspaceEndpointId)) {
 				// eslint-disable-next-line max-len
-				const workspaceResponse = await endpointProvider.requestResponse<string, Workspace>(
+				const workspaceResponse = await endpointProvider.requestResponse<{ id: string }, Workspace>(
 					getWorkspaceEndpointId,
-					id
+					{ id }
 				);
 				console.log(`Returning saved workspace from custom storage for workspace id: ${id}.`);
 				return workspaceResponse;
@@ -134,14 +135,14 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
 				// eslint-disable-next-line max-len
-				const pagesResponse = await endpointProvider.requestResponse<string, { data: Page[] }>(
+				const pagesResponse = await endpointProvider.requestResponse<{ query: string}, { data: Page[] }>(
 					getPagesEndpointId,
-					query
+					{ query }
 				);
-				console.log(`Returning saved pages from custom storage for query: ${query}.`);
+				console.log(`Returning saved pages from custom storage for query: ${query ?? "none"}.`);
 				return pagesResponse.data;
 			}
-			console.log(`Returning saved pages from default storage for query: ${query}.`);
+			console.log(`Returning saved pages from default storage for query: ${query ?? "none"}.`);
 			return super.getSavedPages(query);
 		}
 
@@ -152,7 +153,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getPageEndpointId)) {
 				// eslint-disable-next-line max-len
-				const pageResponse = await endpointProvider.requestResponse<string, Page>(getPageEndpointId, id);
+				const pageResponse = await endpointProvider.requestResponse<{id:string}, Page>(getPageEndpointId, { id });
 				console.log(`Returning saved page from custom storage for page id: ${id}.`);
 				return pageResponse;
 			}

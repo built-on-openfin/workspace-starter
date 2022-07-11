@@ -1,12 +1,12 @@
-interface BaseEndpointDefinition {
+interface BaseEndpointDefinition<O> {
 	id: string;
+	options?: O;
 }
 
-type ModuleEndpointDefinition = BaseEndpointDefinition & {
+type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
 	type: "module";
 	typeId: string;
-	options: unknown;
 };
 
 // We could include more in this type
-export type EndpointDefinition = ModuleEndpointDefinition;
+export type EndpointDefinition<O> = ModuleEndpointDefinition<O>;

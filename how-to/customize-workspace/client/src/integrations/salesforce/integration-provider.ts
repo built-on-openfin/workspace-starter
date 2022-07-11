@@ -102,11 +102,11 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Get a list of the static application entries.
+	 * Get a list of the default application entries.
 	 * @param integration The integration details.
 	 * @returns The list of application entries.
 	 */
-	public async getAppSearchEntries(
+	async getDefaultEntries(
 		integration: Integration<SalesforceSettings>
 	): Promise<HomeSearchResult[]> {
 		const results: HomeSearchResult[] = [];
@@ -198,6 +198,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		filters: CLIFilter[],
 		lastResponse: CLISearchListenerResponse
 	): Promise<HomeSearchResponse> {
+		const response: HomeSearchResponse = {
+			results: await this.getDefaultEntries(integration)
+		};
+
 		if (this._salesForceConnection) {
 			let searchResults: (
 				| SalesforceAccount
@@ -346,27 +350,20 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				const objects = searchResults.map((result) =>
 					"attributes" in result ? result.attributes.type : "Chatter"
 				);
-
-				return {
-					results: filteredResults,
-					context: {
-						filters: this.getSearchFilters(objects.map((c) => (c === "ContentNote" ? "Note" : c)))
-					}
+				response.results.push(...filteredResults);
+				response.context = {
+					filters: this.getSearchFilters(objects.map((c) => (c === "ContentNote" ? "Note" : c)))
 				};
 			} catch (err) {
 				await this.closeConnection();
 				if (err instanceof ConnectionError) {
-					return {
-						results: [this.getReconnectSearchResult(integration, query, filters)]
-					};
+					response.results.push(this.getReconnectSearchResult(integration, query, filters));
 				}
 				console.error("Error retrieving SalesForce search results", err);
 			}
 		}
 
-		return {
-			results: []
-		};
+		return response;
 	}
 
 	/**
