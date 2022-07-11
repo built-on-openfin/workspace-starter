@@ -17,7 +17,10 @@ export async function init(options: unknown): Promise<void> {
 	console.log("Was passed the following options:", options);
 }
 
-export async function action(endpointDefinition: EndpointDefinition<{ dataType: string; method: "REMOVE" | "SET" }>, request?: { id: string; payload?: unknown }): Promise<boolean> {
+export async function action(
+	endpointDefinition: EndpointDefinition<{ dataType: string; method: "REMOVE" | "SET" }>,
+	request?: { id: string; payload?: unknown }
+): Promise<boolean> {
 	if (request === undefined) {
 		console.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false.`);
 		return false;
@@ -45,7 +48,9 @@ export async function requestResponse(
 	request?: { id?: string; query?: string }
 ): Promise<unknown | null> {
 	if (request === undefined) {
-		console.warn(`A request is required for this request response: ${endpointDefinition.id}. Returning null.`);
+		console.warn(
+			`A request is required for this request response: ${endpointDefinition.id}. Returning null.`
+		);
 		return null;
 	}
 	const options = endpointDefinition.options;

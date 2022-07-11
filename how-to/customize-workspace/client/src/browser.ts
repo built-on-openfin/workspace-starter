@@ -36,9 +36,9 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 	if (fromStorage) {
 		const getPageBoundsEndpointId = "page-bounds-get";
 		if (endpointProvider.hasEndpoint(getPageBoundsEndpointId)) {
-			bounds = await endpointProvider.requestResponse<string, OpenFin.Bounds>(
+			bounds = await endpointProvider.requestResponse<{ id: string }, OpenFin.Bounds>(
 				getPageBoundsEndpointId,
-				pageId
+				{ id: pageId }
 			);
 		} else {
 			bounds = await DEFAULT_PAGE_BOUNDS_STORAGE.get(pageId);

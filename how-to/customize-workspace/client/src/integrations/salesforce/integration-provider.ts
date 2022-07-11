@@ -102,38 +102,6 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Get a list of the default application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	async getDefaultEntries(
-		integration: Integration<SalesforceSettings>
-	): Promise<HomeSearchResult[]> {
-		const results: HomeSearchResult[] = [];
-		if (integration?.data?.orgUrl) {
-			results.push({
-				actions: [{ name: "Browse", hotkey: "enter" }],
-				data: {
-					providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-					pageUrl: integration?.data?.orgUrl,
-					tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-				} as SalesforceResultData,
-				icon: integration.icon,
-				key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-				template: CLITemplate.Plain,
-				templateContent: undefined,
-				title: "Browse Salesforce"
-			} as CLISearchResultPlain);
-
-			if (!this._salesForceConnection) {
-				results.push(this.getReconnectSearchResult(integration));
-			}
-		}
-
-		return results;
-	}
-
-	/**
 	 * An entry has been selected.
 	 * @param integration The integration details.
 	 * @param result The dispatched result.
@@ -364,6 +332,36 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		return response;
+	}
+
+	/**
+	 * Get a list of the default application entries.
+	 * @param integration The integration details.
+	 * @returns The list of application entries.
+	 */
+	private async getDefaultEntries(integration: Integration<SalesforceSettings>): Promise<HomeSearchResult[]> {
+		const results: HomeSearchResult[] = [];
+		if (integration?.data?.orgUrl) {
+			results.push({
+				actions: [{ name: "Browse", hotkey: "enter" }],
+				data: {
+					providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+					pageUrl: integration?.data?.orgUrl,
+					tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+				} as SalesforceResultData,
+				icon: integration.icon,
+				key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+				template: CLITemplate.Plain,
+				templateContent: undefined,
+				title: "Browse Salesforce"
+			} as CLISearchResultPlain);
+
+			if (!this._salesForceConnection) {
+				results.push(this.getReconnectSearchResult(integration));
+			}
+		}
+
+		return results;
 	}
 
 	/**

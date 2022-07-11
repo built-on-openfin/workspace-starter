@@ -31,11 +31,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const getWorkspacesEndpointId = "workspace-get-all";
 
 			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
-				const workspacesResponse = await endpointProvider
-				.requestResponse<{ query?: string }, { data: Workspace[] }>(
-					getWorkspacesEndpointId,
-					{ query }
-				);
+				const workspacesResponse = await endpointProvider.requestResponse<
+					{ query?: string },
+					{ data: Workspace[] }
+				>(getWorkspacesEndpointId, { query });
 				console.log(`Returning saved workspaces from custom storage for query: ${query ?? "none"}.`);
 				return workspacesResponse.data;
 			}
@@ -135,7 +134,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
 				// eslint-disable-next-line max-len
-				const pagesResponse = await endpointProvider.requestResponse<{ query: string}, { data: Page[] }>(
+				const pagesResponse = await endpointProvider.requestResponse<{ query: string }, { data: Page[] }>(
 					getPagesEndpointId,
 					{ query }
 				);
@@ -153,7 +152,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getPageEndpointId)) {
 				// eslint-disable-next-line max-len
-				const pageResponse = await endpointProvider.requestResponse<{id:string}, Page>(getPageEndpointId, { id });
+				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
+					id
+				});
 				console.log(`Returning saved page from custom storage for page id: ${id}.`);
 				return pageResponse;
 			}
