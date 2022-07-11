@@ -35,8 +35,6 @@ args = yargs(process.argv.slice(2))
 	.alias('help', 'h').argv;
 
 function packageHOWTOs(args) {
-	const URLPattern = /http:\/\/localhost:8080/g;
-	const CommonURLPattern = /http:\/\/localhost:8080\/common/g;
 	let publishDir = `public-${args.location}`;
 
 	if (args.legacy) {
@@ -77,27 +75,37 @@ function packageHOWTOs(args) {
 
 		fs.copySync(sourceDir, targetDir);
 
-		const URL = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
-		const options = {
-			files: `${targetDir}/**/*.json`,
-			from: URLPattern,
-			to: URL
-		};
-
-		const commonUrl = [baseURL, 'workspace-starter', hostFolder, 'common'].join('/');
-		const commonOptions = {
-			files: `${targetDir}/**/*.json`,
-			from: CommonURLPattern,
-			to: commonUrl
-		};
 		try {
-			const commonResults = replace.sync(commonOptions);
-			console.log('Replacement results for common:', commonResults);
-			console.log(`Common URLs replaced with: ${commonUrl}`);
+            const commonUrl = [baseURL, 'workspace-starter', hostFolder, 'common'].join('/');
+            const commonOptions = [
+				{
+					files: `${targetDir}/**/*.json`,
+					from: /http:\/\/localhost:8080\/common/g,
+					to: commonUrl
+				},
+				{
+					files: `${targetDir}/**/*.html`,
+					from: /(src|href)="\/common/g,
+					to: `$1="${commonUrl}`
+				}
+			];
 
-			const results = replace.sync(options);
+			for (const common of commonOptions) {
+				const commonResults = replace.sync(common);
+				console.log('Replacement results for common:', commonResults);
+				console.log(`Common URLs replaced with: ${commonUrl}`);
+			}
+
+            const rootUrl = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
+            const options = {
+                files: `${targetDir}/**/*.json`,
+                from: /http:\/\/localhost:8080/g,
+                to: rootUrl
+            };
+
+            const results = replace.sync(options);
 			console.log('Replacement results:', results);
-			console.log(`URLs replaced with: ${URL}`);
+			console.log(`URLs replaced with: ${rootUrl}`);
 		} catch (error) {
 			console.error('Error occurred:', error);
 		}
