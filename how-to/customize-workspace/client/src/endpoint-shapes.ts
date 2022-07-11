@@ -1,6 +1,6 @@
-export interface EndpointService {
+export interface EndpointProvider {
 	init: (options: unknown) => Promise<void>;
-    hasEndpoint(id: string): boolean;
+	hasEndpoint(id: string): boolean;
 	action<T>(endpointId: string, request?: T): Promise<boolean>;
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null>;
 }
@@ -20,12 +20,10 @@ export interface EndpointModuleDefinition {
 	data?: unknown;
 }
 
-export interface EndpointProvider {
+export interface EndpointProviderOptions {
 	modules?: EndpointModuleDefinition[];
 	endpoints?: EndpointDefinition[];
 }
-
-export type EndpointServiceOptions = EndpointProvider;
 
 interface BaseEndpointDefinition {
 	id: string;

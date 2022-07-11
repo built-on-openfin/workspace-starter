@@ -1,10 +1,10 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
-import { EndpointService } from "./endpoint-shapes";
-import { AppOptions } from "./shapes";
+import { EndpointProvider } from "./endpoint-shapes";
+import { AppProviderOptions } from "./shapes";
 
 let cachedApps: App[];
-let endpoints: EndpointService;
+let endpoints: EndpointProvider;
 let cacheDuration = 0;
 let endpointIds: string[] = [];
 let isInitialized = false;
@@ -37,7 +37,9 @@ async function getCanDownloadAppAssets() {
 		let canDownloadAppAssetsResponse;
 
 		try {
-			canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
+			canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext(
+				"System.downloadAsset"
+			);
 			canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 		} catch (error) {
 			console.error("Error while querying for System.downloadAsset permission", error);
@@ -65,11 +67,7 @@ async function validateEntries(apps: App[]) {
 				validatedApps.push(apps[i]);
 			} else if (!hasLaunchExternalProcess) {
 				rejectedAppIds.push(apps[i].appId);
-			} else if (
-				Array.isArray(apps[i].tags) &&
-				apps[i].tags.includes(appAssetTag) &&
-				!hasDownloadAppAssets
-			) {
+			} else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !hasDownloadAppAssets) {
 				rejectedAppIds.push(apps[i].appId);
 			} else {
 				validatedApps.push(apps[i]);
@@ -151,16 +149,18 @@ function updateEntry(
 	return source;
 }
 
-export async function init(options: AppOptions, endpointService: EndpointService) {
+export async function init(options: AppProviderOptions, endpointProvider: EndpointProvider) {
 	if (isInitialized) {
 		console.warn("The app service is already initialized.");
 		return;
 	}
 	isInitialized = true;
-	endpoints = endpointService;
+	endpoints = endpointProvider;
 	if (options?.appsSourceUrl !== undefined) {
 		// backward compatibility support
-		console.log("Using appsSourceUrl as it was specified. Backwards compatibility mode. Try to use the endpointIds setting instead and define some endpoints.");
+		console.log(
+			"Using appsSourceUrl as it was specified. Backwards compatibility mode. Try to use the endpointIds setting instead and define some endpoints."
+		);
 		if (Array.isArray(options?.appsSourceUrl)) {
 			console.log("appsSourceUrl specified as an array of urls");
 			const appUrls: string[] = options?.appsSourceUrl || [];
@@ -175,11 +175,11 @@ export async function init(options: AppOptions, endpointService: EndpointService
 	}
 
 	if (options?.cacheDurationInSeconds !== undefined) {
-		cacheDuration += (options?.cacheDurationInSeconds * 1000);
+		cacheDuration += options?.cacheDurationInSeconds * 1000;
 	}
 
 	if (options?.cacheDurationInMinutes !== undefined) {
-		cacheDuration += (options?.cacheDurationInMinutes * 60 * 1000);
+		cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 	}
 
 	defaultCredentials = options?.includeCredentialOnSourceRequest;
@@ -190,13 +190,7 @@ export async function init(options: AppOptions, endpointService: EndpointService
 export async function getApps(): Promise<App[]> {
 	console.log("Requesting apps.");
 	try {
-		const apps =
-			cachedApps ??
-			(await getEntries(
-				endpointIds,
-				defaultCredentials,
-				cacheDuration
-			));
+		const apps = cachedApps ?? (await getEntries(endpointIds, defaultCredentials, cacheDuration));
 		return apps;
 	} catch (err) {
 		console.error("Error retrieving apps. Returning empty list.", err);

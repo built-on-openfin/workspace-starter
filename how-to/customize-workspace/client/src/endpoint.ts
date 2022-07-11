@@ -1,4 +1,11 @@
-import { EndpointDefinition, FetchOptions, EndpointModuleDefinition, Endpoint, EndpointModule, EndpointServiceOptions } from "./endpoint-shapes";
+import {
+	EndpointDefinition,
+	FetchOptions,
+	EndpointModuleDefinition,
+	Endpoint,
+	EndpointModule,
+	EndpointProviderOptions
+} from "./endpoint-shapes";
 
 let endpointDefinitions: EndpointDefinition[] = [];
 let moduleDefinitions: EndpointModuleDefinition[] = [];
@@ -62,7 +69,7 @@ function getRequestOptions(
 	return { url, options };
 }
 
-export async function init(options: EndpointServiceOptions) {
+export async function init(options: EndpointProviderOptions) {
 	if (isInitialized) {
 		return;
 	}

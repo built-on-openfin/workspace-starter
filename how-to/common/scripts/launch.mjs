@@ -61,9 +61,9 @@ async function launchFromNode(manifestUrl) {
 		process.on('exit', async () => {
 			console.log('Exit called');
 			try {
-			await quit();
-			} catch(error) {
-				console.log("Quit with error.", error);
+				await quit();
+			} catch (error) {
+				console.log('Quit with error.', error);
 			}
 		});
 
@@ -71,10 +71,10 @@ async function launchFromNode(manifestUrl) {
 		process.on('SIGINT', async () => {
 			console.log('Ctrl + C called');
 			try {
-			await quit();
-			process.exit();
-			} catch(error) {
-				console.log("Quit with error.", error);
+				await quit();
+				process.exit();
+			} catch (error) {
+				console.log('Quit with error.', error);
 			}
 		});
 

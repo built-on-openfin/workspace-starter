@@ -1,17 +1,18 @@
 import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
 import { getActions } from "./actions";
-import * as appService from "./apps";
-import { getDefaultWindowOptions, overrideCallback } from "./browser";
-import * as endpointService from "./endpoint";
+import * as appProvider from "./apps";
+import { getDefaultWindowOptions } from "./browser";
+import * as endpointProvider from "./endpoint";
 import { interopOverride } from "./interopbroker";
+import { overrideCallback } from "./platform-override";
 import { getSettings, getThemes } from "./settings";
 
 export async function init() {
 	console.log("Initializing Core Services");
 	const settings = await getSettings();
 
-	await endpointService.init(settings?.endpointProvider);
-	await appService.init(settings?.appProvider, endpointService);
+	await endpointProvider.init(settings?.endpointProvider);
+	await appProvider.init(settings?.appProvider, endpointProvider);
 
 	console.log("Initializing platform");
 	const browser: BrowserInitConfig = {};

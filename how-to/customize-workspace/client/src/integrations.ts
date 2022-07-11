@@ -9,7 +9,7 @@ import type {
 	Integration,
 	IntegrationManager,
 	IntegrationModule,
-	IntegrationProvider
+	IntegrationProviderOptions
 } from "./integrations-shapes";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
@@ -26,7 +26,7 @@ const homeIntegrations: {
  */
 export async function register(
 	integrationManager: IntegrationManager,
-	integrationProvider?: IntegrationProvider
+	integrationProvider?: IntegrationProviderOptions
 ): Promise<void> {
 	const integrations = integrationProvider?.integrations;
 	if (Array.isArray(integrations)) {
@@ -61,7 +61,7 @@ export async function register(
  * Deregister all the integrations.
  * @param integrationProvider The integration provider.
  */
-export async function deregister(integrationProvider?: IntegrationProvider): Promise<void> {
+export async function deregister(integrationProvider?: IntegrationProviderOptions): Promise<void> {
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.deregister) {
 			await homeIntegration.module.deregister(homeIntegration.integration);

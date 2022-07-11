@@ -1,10 +1,10 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
-import { EndpointProvider } from "./endpoint-shapes";
-import { IntegrationProvider } from "./integrations-shapes";
+import { EndpointProviderOptions } from "./endpoint-shapes";
+import { IntegrationProviderOptions } from "./integrations-shapes";
 
-interface PlatformProvider {
+interface PlatformProviderOptions {
 	rootUrl: string;
 	intentPicker?: {
 		url: string;
@@ -14,7 +14,7 @@ interface PlatformProvider {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface NotificationProvider extends NotificationsPlatform {}
+interface NotificationProviderOptions extends NotificationsPlatform {}
 
 export interface ToolbarButtonDefinition {
 	id: string;
@@ -22,7 +22,7 @@ export interface ToolbarButtonDefinition {
 	themes?: { [key: string]: string };
 	button: ToolbarButton & { iconUrl?: string };
 }
-interface BrowserProvider {
+interface BrowserProviderOptions {
 	toolbarButtons?: ToolbarButtonDefinition[];
 	windowOptions: {
 		title?: string;
@@ -32,7 +32,7 @@ interface BrowserProvider {
 	};
 	supportedMenuActions?: string[];
 }
-interface HomeProvider {
+interface HomeProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
@@ -41,11 +41,11 @@ interface HomeProvider {
 	queryAgainst?: string[];
 }
 
-interface ThemeProvider {
+interface ThemeProviderOptions {
 	themes: CustomThemes;
 }
 
-interface AppProvider {
+export interface AppProviderOptions {
 	appsSourceUrl?: string | string[];
 	endpointIds?: string[];
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
@@ -54,9 +54,6 @@ interface AppProvider {
 	appAssetTag?: string;
 	manifestTypes?: string[];
 }
-
-export type AppOptions = AppProvider;
-
 export interface StorefrontSettingsNavigationItem {
 	/**
 	 * This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how
@@ -82,7 +79,7 @@ export interface StorefrontSettingsLandingPageRow {
 	title: string;
 	items: StorefrontSettingsDetailedNavigationItem[];
 }
-interface StorefrontProvider {
+interface StorefrontProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
@@ -116,13 +113,13 @@ interface StorefrontProvider {
 
 export interface CustomSettings {
 	bootstrap?: { store: boolean; home: boolean; notifications: boolean };
-	appProvider?: AppProvider;
-	platformProvider?: PlatformProvider;
-	browserProvider?: BrowserProvider;
-	themeProvider?: ThemeProvider;
-	homeProvider?: HomeProvider;
-	storefrontProvider?: StorefrontProvider;
-	notificationProvider?: NotificationProvider;
-	integrationProvider?: IntegrationProvider;
-	endpointProvider?: EndpointProvider;
+	appProvider?: AppProviderOptions;
+	platformProvider?: PlatformProviderOptions;
+	browserProvider?: BrowserProviderOptions;
+	themeProvider?: ThemeProviderOptions;
+	homeProvider?: HomeProviderOptions;
+	storefrontProvider?: StorefrontProviderOptions;
+	notificationProvider?: NotificationProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
+	endpointProvider?: EndpointProviderOptions;
 }

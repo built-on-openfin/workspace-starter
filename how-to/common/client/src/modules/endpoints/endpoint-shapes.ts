@@ -1,4 +1,3 @@
-
 interface BaseEndpointDefinition {
 	id: string;
 }

@@ -56,7 +56,7 @@ export interface IntegrationManager {
 /**
  * Integration provider settings.
  */
-export interface IntegrationProvider {
+export interface IntegrationProviderOptions {
 	/**
 	 * The list of integrations.
 	 */
