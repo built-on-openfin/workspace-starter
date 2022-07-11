@@ -1,0 +1,9 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/main/common/views/app/app-definition-builder/app-definition-builder-view.html",
+	"fdc3InteropApi": "1.2",
+	"customData": {
+		"onlySupportedManifestTypes": true,
+		"intents": "https://built-on-openfin.github.io/workspace-starter/main/common/data/intents.json",
+		"manifestTypes": "https://built-on-openfin.github.io/workspace-starter/main/common/data/manifest-types.json"
+	}
+}
