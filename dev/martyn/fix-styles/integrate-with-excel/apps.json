@@ -1,0 +1,40 @@
+[
+	{
+		"appId": "interop-broadcast-view",
+		"name": "interop-broadcast-view",
+		"title": "Interop SetContext View",
+		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/views/interop/context/interop-broadcast-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/images/previews/interop-view.png"
+			}
+		],
+		"tags": ["view", "interop"]
+	},
+	{
+		"appId": "fdc3-broadcast-view",
+		"name": "fdc3-broadcast-view",
+		"title": "FDC3 Broadcast View",
+		"description": "This is an example view used to demonstrate the broadcasting and listenting of passed context objects using the fdc3 api.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/views/fdc3/context/fdc3-broadcast-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/fix-styles/common/images/previews/fdc3-view.png"
+			}
+		],
+		"tags": ["view", "fdc3"]
+	}
+]
