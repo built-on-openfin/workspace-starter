@@ -722,6 +722,51 @@
 		"tags": ["page", "openfin", "tools"]
 	},
 	{
+		"appId": "app-definition-builder",
+		"name": "app-definition-builder",
+		"title": "App Definition Builder",
+		"description": "A developer tool to help build an app definition",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/app/app-definition-builder/app-definition-builder-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "CreateAppDefinition",
+				"displayName": "Create an App Definition",
+				"contexts": ["openfin.app"],
+				"customConfig": {}
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/previews/app-definition-builder.png"
+			}
+		],
+		"tags": ["view", "app", "tool"]
+	},
+	{
+		"appId": "starter-style-guide",
+		"name": "starter-style-guide",
+		"title": "Starter Style Guide",
+		"description": "A style guide used to aid in the building of workspace starter samples.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/style/style-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/previews/starter-style-guide.png"
+			}
+		],
+		"tags": ["view", "style", "tool"]
+	},
+	{
 		"appId": "openfin-versions-workspace",
 		"name": "openfin-versions-workspace",
 		"title": "OpenFin Versions - Workspace",
@@ -1010,6 +1055,25 @@
 		"tags": ["native"]
 	},
 	{
+		"appId": "hidden-window-example",
+		"name": "hidden-window-example",
+		"title": "Hidden/Headless Window Example",
+		"manifestType": "window",
+		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/windows/hidden-window/hidden.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["window", "headless"]
+	},
+	{
 		"appId": "manager-portal",
 		"name": "manager-portal",
 		"title": "Manager Portal",
@@ -1040,12 +1104,12 @@
 		"tags": ["page", "openfin", "manager", "fcd3"]
 	},
 	{
-		"appId": "hidden-window-example",
-		"name": "hidden-window-example",
-		"title": "Hidden/Headless Window Example",
-		"manifestType": "window",
-		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/windows/hidden-window/hidden.json",
+		"appId": "my-team",
+		"name": "my-team",
+		"title": "My Team",
+		"description": "View my team.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/my-team.json",
+		"manifestType": "view",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/images/icon-blue.png"
@@ -1054,8 +1118,119 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [],
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
 		"images": [],
-		"tags": ["window", "headless"]
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "annual-leave",
+		"name": "annual-leave",
+		"title": "Annual Leave",
+		"description": "View the annual leave for a team member.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/annual-leave.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/annual-leave/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "manager-paths",
+		"name": "manager-paths",
+		"title": "Manager Paths",
+		"description": "View the manager paths for a team member.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/manager-paths.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/manager-paths/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-comms",
+		"name": "company-comms",
+		"title": "Company Comms",
+		"description": "View the communications for the company.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/company-comms.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/company-comms/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-cal",
+		"name": "company-cal",
+		"title": "Company Calendar",
+		"description": "View the calendar for the company.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/company-cal.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/style-select-multiple/common/views/manager-portal/company-cal/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
 	}
 ]
