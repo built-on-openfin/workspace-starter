@@ -1,11 +1,11 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
-import { IntegrationProvider } from "./integrations-shapes";
+import { EndpointProviderOptions } from "./endpoint-shapes";
+import { IntegrationProviderOptions } from "./integrations-shapes";
 
-interface PlatformProvider {
+interface PlatformProviderOptions {
 	rootUrl: string;
-	useCustomStorage?: boolean;
 	intentPicker?: {
 		url: string;
 		height?: number;
@@ -14,7 +14,7 @@ interface PlatformProvider {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface NotificationProvider extends NotificationsPlatform {}
+interface NotificationProviderOptions extends NotificationsPlatform {}
 
 export interface ToolbarButtonDefinition {
 	id: string;
@@ -22,7 +22,7 @@ export interface ToolbarButtonDefinition {
 	themes?: { [key: string]: string };
 	button: ToolbarButton & { iconUrl?: string };
 }
-interface BrowserProvider {
+interface BrowserProviderOptions {
 	toolbarButtons?: ToolbarButtonDefinition[];
 	windowOptions: {
 		title?: string;
@@ -32,7 +32,7 @@ interface BrowserProvider {
 	};
 	supportedMenuActions?: string[];
 }
-interface HomeProvider {
+interface HomeProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
@@ -41,18 +41,19 @@ interface HomeProvider {
 	queryAgainst?: string[];
 }
 
-interface ThemeProvider {
+interface ThemeProviderOptions {
 	themes: CustomThemes;
 }
 
-interface AppProvider {
-	appsSourceUrl: string | string[];
+export interface AppProviderOptions {
+	appsSourceUrl?: string | string[];
+	endpointIds?: string[];
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
 	cacheDurationInMinutes?: number;
+	cacheDurationInSeconds?: number;
 	appAssetTag?: string;
 	manifestTypes?: string[];
 }
-
 export interface StorefrontSettingsNavigationItem {
 	/**
 	 * This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how
@@ -78,7 +79,7 @@ export interface StorefrontSettingsLandingPageRow {
 	title: string;
 	items: StorefrontSettingsDetailedNavigationItem[];
 }
-interface StorefrontProvider {
+interface StorefrontProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
@@ -110,50 +111,15 @@ interface StorefrontProvider {
 	footer: StorefrontFooter;
 }
 
-export interface EndpointProvider {
-	endpoints?: EndpointTypes[];
-}
-
-export interface Endpoint {
-	id: string;
-}
-
-export type FetchEndpoint = Endpoint & {
-	type: "fetch";
-	options: FetchOptions & { url: string };
-};
-
-// We could include more in this type
-export type EndpointTypes = FetchEndpoint;
-
-export interface FetchOptions {
-	body?: string;
-	method?: "GET" | "POST";
-	credentials?: "omit" | "same-origin" | "include";
-	mode?: "no-cors" | "cors" | "same-origin";
-	cache?: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached";
-	redirect?: "manual" | "follow" | "error";
-	referrerPolicy?:
-		| "no-referrer"
-		| "no-referrer-when-downgrade"
-		| "origin"
-		| "origin-when-cross-origin"
-		| "same-origin"
-		| "strict-origin"
-		| "strict-origin-when-cross-origin"
-		| "unsafe-url";
-	headers?: { [key: string]: string };
-}
-
 export interface CustomSettings {
 	bootstrap?: { store: boolean; home: boolean; notifications: boolean };
-	appProvider?: AppProvider;
-	platformProvider?: PlatformProvider;
-	browserProvider?: BrowserProvider;
-	themeProvider?: ThemeProvider;
-	homeProvider?: HomeProvider;
-	storefrontProvider?: StorefrontProvider;
-	notificationProvider?: NotificationProvider;
-	integrationProvider?: IntegrationProvider;
-	endpointProvider?: EndpointProvider;
+	appProvider?: AppProviderOptions;
+	platformProvider?: PlatformProviderOptions;
+	browserProvider?: BrowserProviderOptions;
+	themeProvider?: ThemeProviderOptions;
+	homeProvider?: HomeProviderOptions;
+	storefrontProvider?: StorefrontProviderOptions;
+	notificationProvider?: NotificationProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
+	endpointProvider?: EndpointProviderOptions;
 }

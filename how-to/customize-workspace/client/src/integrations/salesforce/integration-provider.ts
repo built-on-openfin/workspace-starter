@@ -102,38 +102,6 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	public async getAppSearchEntries(
-		integration: Integration<SalesforceSettings>
-	): Promise<HomeSearchResult[]> {
-		const results: HomeSearchResult[] = [];
-		if (integration?.data?.orgUrl) {
-			results.push({
-				actions: [{ name: "Browse", hotkey: "enter" }],
-				data: {
-					providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-					pageUrl: integration?.data?.orgUrl,
-					tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-				} as SalesforceResultData,
-				icon: integration.icon,
-				key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-				template: CLITemplate.Plain,
-				templateContent: undefined,
-				title: "Browse Salesforce"
-			} as CLISearchResultPlain);
-
-			if (!this._salesForceConnection) {
-				results.push(this.getReconnectSearchResult(integration));
-			}
-		}
-
-		return results;
-	}
-
-	/**
 	 * An entry has been selected.
 	 * @param integration The integration details.
 	 * @param result The dispatched result.
@@ -198,6 +166,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		filters: CLIFilter[],
 		lastResponse: CLISearchListenerResponse
 	): Promise<HomeSearchResponse> {
+		const response: HomeSearchResponse = {
+			results: await this.getDefaultEntries(integration)
+		};
+
 		if (this._salesForceConnection) {
 			let searchResults: (
 				| SalesforceAccount
@@ -346,27 +318,50 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				const objects = searchResults.map((result) =>
 					"attributes" in result ? result.attributes.type : "Chatter"
 				);
-
-				return {
-					results: filteredResults,
-					context: {
-						filters: this.getSearchFilters(objects.map((c) => (c === "ContentNote" ? "Note" : c)))
-					}
+				response.results.push(...filteredResults);
+				response.context = {
+					filters: this.getSearchFilters(objects.map((c) => (c === "ContentNote" ? "Note" : c)))
 				};
 			} catch (err) {
 				await this.closeConnection();
 				if (err instanceof ConnectionError) {
-					return {
-						results: [this.getReconnectSearchResult(integration, query, filters)]
-					};
+					response.results.push(this.getReconnectSearchResult(integration, query, filters));
 				}
 				console.error("Error retrieving SalesForce search results", err);
 			}
 		}
 
-		return {
-			results: []
-		};
+		return response;
+	}
+
+	/**
+	 * Get a list of the default application entries.
+	 * @param integration The integration details.
+	 * @returns The list of application entries.
+	 */
+	private async getDefaultEntries(integration: Integration<SalesforceSettings>): Promise<HomeSearchResult[]> {
+		const results: HomeSearchResult[] = [];
+		if (integration?.data?.orgUrl) {
+			results.push({
+				actions: [{ name: "Browse", hotkey: "enter" }],
+				data: {
+					providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+					pageUrl: integration?.data?.orgUrl,
+					tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+				} as SalesforceResultData,
+				icon: integration.icon,
+				key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+				template: CLITemplate.Plain,
+				templateContent: undefined,
+				title: "Browse Salesforce"
+			} as CLISearchResultPlain);
+
+			if (!this._salesForceConnection) {
+				results.push(this.getReconnectSearchResult(integration));
+			}
+		}
+
+		return results;
 	}
 
 	/**

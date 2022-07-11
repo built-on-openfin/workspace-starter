@@ -9,7 +9,7 @@ import type {
 	Integration,
 	IntegrationManager,
 	IntegrationModule,
-	IntegrationProvider
+	IntegrationProviderOptions
 } from "./integrations-shapes";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
@@ -26,7 +26,7 @@ const homeIntegrations: {
  */
 export async function register(
 	integrationManager: IntegrationManager,
-	integrationProvider?: IntegrationProvider
+	integrationProvider?: IntegrationProviderOptions
 ): Promise<void> {
 	const integrations = integrationProvider?.integrations;
 	if (Array.isArray(integrations)) {
@@ -61,7 +61,7 @@ export async function register(
  * Deregister all the integrations.
  * @param integrationProvider The integration provider.
  */
-export async function deregister(integrationProvider?: IntegrationProvider): Promise<void> {
+export async function deregister(integrationProvider?: IntegrationProviderOptions): Promise<void> {
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.deregister) {
 			await homeIntegration.module.deregister(homeIntegration.integration);
@@ -113,25 +113,6 @@ export async function getSearchResults(
 	}
 
 	return homeResponse;
-}
-
-/**
- * Get the app search entries for all the integration providers.
- * @returns The list of app entries.
- */
-export async function getAppSearchEntries(): Promise<HomeSearchResult[]> {
-	let results: HomeSearchResult[] = [];
-
-	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getAppSearchEntries) {
-			const integrationResults = await homeIntegration.module.getAppSearchEntries(
-				homeIntegration.integration
-			);
-			results = results.concat(integrationResults);
-		}
-	}
-
-	return results;
 }
 
 /**

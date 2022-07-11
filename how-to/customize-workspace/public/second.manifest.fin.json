@@ -58,7 +58,6 @@
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
-			"useCustomStorage": true,
 			"intentPicker": {
 				"url": "http://localhost:8080/common/windows/intents/picker.html",
 				"height": 400,
@@ -66,9 +65,9 @@
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": ["http://localhost:8080/apps.json", "http://localhost:8080/common/apps.json"],
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
+			"endpointIds": ["apps-get", "common-apps-get"],
+			"cacheDurationInSeconds": 10,
+			"cacheDurationInMinutes": 0,
 			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
@@ -82,7 +81,30 @@
 			]
 		},
 		"endpointProvider": {
+			"modules": [
+				{
+					"id": "local-storage",
+					"url": "http://localhost:8080/common/js/endpoints/endpoint-local-storage.bundle.js",
+					"data": {}
+				}
+			],
 			"endpoints": [
+				{
+					"id": "apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:8080/apps.json"
+					}
+				},
+				{
+					"id": "common-apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:8080/common/apps.json"
+					}
+				},
 				{
 					"id": "share-get",
 					"type": "fetch",
@@ -97,6 +119,105 @@
 					"options": {
 						"method": "POST",
 						"url": "https://workspace.openfin.co/api/share"
+					}
+				},
+				{
+					"id": "workspace-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "workspace"
+					}
+				},
+				{
+					"id": "workspace-get-all",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GETALL",
+						"dataType": "workspace"
+					}
+				},
+				{
+					"id": "workspace-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "workspace"
+					}
+				},
+				{
+					"id": "workspace-remove",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "REMOVE",
+						"dataType": "workspace"
+					}
+				},
+				{
+					"id": "page-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "page"
+					}
+				},
+				{
+					"id": "page-get-all",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GETALL",
+						"dataType": "page"
+					}
+				},
+				{
+					"id": "page-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "page"
+					}
+				},
+				{
+					"id": "page-remove",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "REMOVE",
+						"dataType": "page"
+					}
+				},
+				{
+					"id": "page-bounds-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "page-bounds"
+					}
+				},
+				{
+					"id": "page-bounds-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "page-bounds"
+					}
+				},
+				{
+					"id": "page-bounds-remove",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "REMOVE",
+						"dataType": "page-bounds"
 					}
 				}
 			]

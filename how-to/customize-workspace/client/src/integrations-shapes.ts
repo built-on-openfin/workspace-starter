@@ -56,7 +56,7 @@ export interface IntegrationManager {
 /**
  * Integration provider settings.
  */
-export interface IntegrationProvider {
+export interface IntegrationProviderOptions {
 	/**
 	 * The list of integrations.
 	 */
@@ -131,13 +131,6 @@ export interface IntegrationModule<T> {
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse>;
-
-	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	getAppSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
 
 	/**
 	 * Get a list of the static help entries.

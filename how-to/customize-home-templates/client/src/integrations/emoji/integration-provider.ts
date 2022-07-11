@@ -68,15 +68,6 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	public async deregister(integration: Integration<EmojiSettings>): Promise<void> {}
 
 	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	public async getAppSearchEntries(integration: Integration<EmojiSettings>): Promise<HomeSearchResult[]> {
-		return [];
-	}
-
-	/**
 	 * Get a list of the static help entries.
 	 * @param integration The integration details.
 	 * @returns The list of help entries.
