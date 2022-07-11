@@ -76,8 +76,8 @@ function packageHOWTOs(args) {
 		fs.copySync(sourceDir, targetDir);
 
 		try {
-            const commonUrl = [baseURL, 'workspace-starter', hostFolder, 'common'].join('/');
-            const commonOptions = [
+			const commonUrl = [baseURL, 'workspace-starter', hostFolder, 'common'].join('/');
+			const commonOptions = [
 				{
 					files: `${targetDir}/**/*.json`,
 					from: /http:\/\/localhost:8080\/common/g,
@@ -96,14 +96,14 @@ function packageHOWTOs(args) {
 				console.log(`Common URLs replaced with: ${commonUrl}`);
 			}
 
-            const rootUrl = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
-            const options = {
-                files: `${targetDir}/**/*.json`,
-                from: /http:\/\/localhost:8080/g,
-                to: rootUrl
-            };
+			const rootUrl = [baseURL, 'workspace-starter', hostFolder, howto].join('/');
+			const options = {
+				files: `${targetDir}/**/*.json`,
+				from: /http:\/\/localhost:8080/g,
+				to: rootUrl
+			};
 
-            const results = replace.sync(options);
+			const results = replace.sync(options);
 			console.log('Replacement results:', results);
 			console.log(`URLs replaced with: ${rootUrl}`);
 		} catch (error) {
