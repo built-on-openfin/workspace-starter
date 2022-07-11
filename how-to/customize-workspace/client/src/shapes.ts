@@ -30,6 +30,7 @@ interface BrowserProvider {
 		newTabUrl?: string;
 		newPageUrl?: string;
 	};
+	supportedMenuActions?: string[];
 }
 interface HomeProvider {
 	id: string;
