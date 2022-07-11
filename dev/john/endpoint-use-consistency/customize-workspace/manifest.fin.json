@@ -65,7 +65,6 @@
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/customize-workspace",
-			"useCustomStorage": false,
 			"intentPicker": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-use-consistency/common/windows/intents/picker.html",
 				"height": 400,
