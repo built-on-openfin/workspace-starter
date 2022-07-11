@@ -6,7 +6,7 @@ import {
 	HomeSearchResponse,
 	HomeProvider
 } from "@openfin/workspace";
-import { getAppSearchEntries, getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
@@ -48,8 +48,6 @@ export async function register() {
 		if (query === "?") {
 			searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
 		} else {
-			searchResults.results = searchResults.results.concat(await getAppSearchEntries());
-
 			const integrationResults = await getSearchResults(query, undefined, lastResponse);
 			if (Array.isArray(integrationResults.results)) {
 				searchResults.results = searchResults.results.concat(integrationResults.results);

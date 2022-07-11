@@ -67,15 +67,6 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	public async deregister(integration: Integration<QuoteSettings>): Promise<void> {}
 
 	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	public async getAppSearchEntries(integration: Integration<QuoteSettings>): Promise<HomeSearchResult[]> {
-		return [];
-	}
-
-	/**
 	 * Get a list of the static help entries.
 	 * @param integration The integration details.
 	 * @returns The list of help entries.

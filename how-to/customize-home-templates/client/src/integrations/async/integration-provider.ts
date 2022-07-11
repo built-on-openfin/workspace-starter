@@ -53,15 +53,6 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	public async deregister(integration: Integration<AsyncSettings>): Promise<void> {}
 
 	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	public async getAppSearchEntries(integration: Integration<AsyncSettings>): Promise<HomeSearchResult[]> {
-		return [];
-	}
-
-	/**
 	 * Get a list of the static help entries.
 	 * @param integration The integration details.
 	 * @returns The list of help entries.

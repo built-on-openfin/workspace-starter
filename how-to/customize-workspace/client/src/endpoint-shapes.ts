@@ -25,25 +25,28 @@ export interface EndpointProviderOptions {
 	endpoints?: EndpointDefinition[];
 }
 
-interface BaseEndpointDefinition {
+interface BaseEndpointDefinition<O> {
 	id: string;
+	type: string;
+	options?: O;
 }
 
-type FetchEndpointDefinition = BaseEndpointDefinition & {
-	type: "fetch";
-	options: FetchOptions & { url: string };
-};
-
-type ModuleEndpointDefinition = BaseEndpointDefinition & {
+type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
 	type: "module";
 	typeId: string;
-	options: unknown;
 };
 
 // We could include more in this type
-export type EndpointDefinition = FetchEndpointDefinition | ModuleEndpointDefinition;
+
+type FetchEndpointDefinition = BaseEndpointDefinition<FetchOptions & { url: string }> & {
+	type: "fetch";
+};
+
+// We could include more in this type
+export type EndpointDefinition = FetchEndpointDefinition | ModuleEndpointDefinition<unknown>;
 
 export interface FetchOptions {
+	url?: string;
 	body?: string;
 	method?: "GET" | "POST";
 	credentials?: "omit" | "same-origin" | "include";

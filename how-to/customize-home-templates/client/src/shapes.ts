@@ -1,6 +1,6 @@
-import { IntegrationProvider } from "./integrations-shapes";
+import { IntegrationProviderOptions } from "./integrations-shapes";
 
-interface HomeProvider {
+interface HomeProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
@@ -8,6 +8,6 @@ interface HomeProvider {
 }
 
 export interface CustomSettings {
-	homeProvider?: HomeProvider;
-	integrationProvider?: IntegrationProvider;
+	homeProvider?: HomeProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
 }
