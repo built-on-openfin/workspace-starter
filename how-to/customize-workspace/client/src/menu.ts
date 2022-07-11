@@ -6,6 +6,8 @@ import {
 	ViewTabContextMenuTemplate,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
+import { ACTION_IDS } from "./actions";
+import { getSettings } from "./settings";
 
 function updateGlobalMenuEntry(
 	menuEntries: GlobalContextMenuItemTemplate[],
@@ -64,30 +66,39 @@ function updateGlobalMenuEntry(
 export async function getGlobalMenu(
 	defaultGlobalContextMenu: GlobalContextMenuItemTemplate[] = []
 ): Promise<GlobalContextMenuItemTemplate[]> {
-	let menuItems = updateGlobalMenuEntry(
-		defaultGlobalContextMenu,
-		GlobalContextMenuOptionType.OpenStorefront,
-		"INSERT-AFTER",
-		{
-			label: "Toggle Notification Center",
+	const settings = await getSettings();
+	const allowedMenuActions = settings?.browserProvider?.supportedMenuActions;
+
+	let menuItems = defaultGlobalContextMenu;
+
+	if (allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.notificationToggle)) {
+		menuItems = updateGlobalMenuEntry(
+			defaultGlobalContextMenu,
+			GlobalContextMenuOptionType.OpenStorefront,
+			"INSERT-AFTER",
+			{
+				label: "Toggle Notification Center",
+				data: {
+					type: GlobalContextMenuOptionType.Custom,
+					action: {
+						id: ACTION_IDS.notificationToggle
+					}
+				}
+			}
+		);
+	}
+
+	if (allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.homeShow)) {
+		menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.OpenStorefront, "INSERT-AFTER", {
+			label: "Open Home",
 			data: {
 				type: GlobalContextMenuOptionType.Custom,
 				action: {
-					id: "notification-toggle"
+					id: ACTION_IDS.homeShow
 				}
 			}
-		}
-	);
-
-	menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.OpenStorefront, "INSERT-AFTER", {
-		label: "Open Home",
-		data: {
-			type: GlobalContextMenuOptionType.Custom,
-			action: {
-				id: "home-show"
-			}
-		}
-	});
+		});
+	}
 
 	menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.Quit, "REPLACE-LABEL", {
 		type: "normal",
@@ -103,43 +114,73 @@ export async function getGlobalMenu(
 export async function getPageMenu(
 	defaultPageContextMenu: PageTabContextMenuItemTemplate[] = []
 ): Promise<PageTabContextMenuItemTemplate[]> {
-	const menuTemplate: PageTabContextMenuItemTemplate[] = [
-		{
+	const settings = await getSettings();
+	const allowedMenuActions = settings?.browserProvider?.supportedMenuActions;
+
+	const customMenuEntries: PageTabContextMenuItemTemplate[] = [];
+
+	if (allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.movePageToNewWindow)) {
+		customMenuEntries.push({
 			label: "Move Page to new Window",
 			data: {
 				type: PageTabContextMenuOptionType.Custom,
 				action: {
-					id: "move-page-to-new-window"
+					id: ACTION_IDS.movePageToNewWindow
 				}
 			}
-		},
-		{
+		});
+	}
+
+	if (customMenuEntries.length > 0) {
+		customMenuEntries.push({
 			type: "separator",
 			data: undefined
-		},
-		...defaultPageContextMenu
-	];
-	return menuTemplate;
+		});
+	}
+
+	return [...customMenuEntries, ...defaultPageContextMenu];
 }
 
 export async function getViewMenu(
 	defaultViewContextMenu: ViewTabContextMenuTemplate[] = []
 ): Promise<ViewTabContextMenuTemplate[]> {
-	const menuTemplate: ViewTabContextMenuTemplate[] = [
-		{
+	const settings = await getSettings();
+	const allowedMenuActions = settings?.browserProvider?.supportedMenuActions;
+	const customMenuEntries: ViewTabContextMenuTemplate[] = [];
+
+	if (allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.moveViewToNewWindow)) {
+		customMenuEntries.push({
 			label: "Move View(s) to new Window",
 			data: {
 				type: ViewTabMenuOptionType.Custom,
 				action: {
-					id: "move-view-to-new-window"
+					id: ACTION_IDS.moveViewToNewWindow
 				}
 			}
-		},
-		{
+		});
+	}
+
+	if (
+		allowedMenuActions === undefined ||
+		allowedMenuActions.includes(ACTION_IDS.raiseCreateAppDefinitionIntent)
+	) {
+		customMenuEntries.push({
+			label: "Create App Definition",
+			data: {
+				type: ViewTabMenuOptionType.Custom,
+				action: {
+					id: ACTION_IDS.raiseCreateAppDefinitionIntent
+				}
+			}
+		});
+	}
+
+	if (customMenuEntries.length > 0) {
+		customMenuEntries.push({
 			type: "separator",
 			data: undefined
-		},
-		...defaultViewContextMenu
-	];
-	return menuTemplate;
+		});
+	}
+
+	return [...customMenuEntries, ...defaultViewContextMenu];
 }

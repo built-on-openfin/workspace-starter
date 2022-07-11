@@ -1,0 +1,56 @@
+[
+	{
+		"name": "StartCall",
+		"displayName": "Start a Call",
+		"contexts": ["fdc3.contact", "fdc3.contactList"],
+		"customConfig": {}
+	},
+	{
+		"name": "StartChat",
+		"displayName": "Start a Chat",
+		"contexts": ["fdc3.contact", "fdc3.contactList"],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewChart",
+		"displayName": "View Chart",
+		"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewContact",
+		"displayName": "View Contact Details",
+		"contexts": ["fdc3.contact"],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewQuote",
+		"displayName": "View Quote",
+		"contexts": ["fdc3.instrument"],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewNews",
+		"displayName": "View News",
+		"contexts": [
+			"fdc3.country",
+			"fdc3.instrument",
+			"fdc3.instrumentList",
+			"fdc3.organization",
+			"fdc3.portfolio"
+		],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewAnalysis",
+		"displayName": "View Analysis",
+		"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+		"customConfig": {}
+	},
+	{
+		"name": "ViewInstrument",
+		"displayName": "View Instrument Details",
+		"contexts": ["fdc3.instrument"],
+		"customConfig": {}
+	}
+]
