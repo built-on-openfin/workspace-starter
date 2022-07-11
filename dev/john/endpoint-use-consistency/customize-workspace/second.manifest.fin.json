@@ -67,7 +67,7 @@
 		"appProvider": {
 			"endpointIds": ["apps-get", "common-apps-get"],
 			"cacheDurationInSeconds": 10,
-			"cacheDurationInMinutes":0,
+			"cacheDurationInMinutes": 0,
 			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
