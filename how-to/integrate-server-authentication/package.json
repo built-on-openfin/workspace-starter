@@ -16,7 +16,7 @@
 		"setup": "cd ../../ && npm install && cd how-to/integrate-server-authentication && npm run build && npm --prefix ../common/ run build",
 		"validate": "npm --prefix ../../ run validate"
 	},
-	"author": "",
+	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
