@@ -65,7 +65,6 @@
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace",
-			"useCustomStorage": false,
 			"intentPicker": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/intents/picker.html",
 				"height": 400,
@@ -73,9 +72,9 @@
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": ["https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps.json", "https://built-on-openfin.github.io/workspace-starter/main/common/apps.json"],
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
+			"endpointIds": ["apps-get", "common-apps-get"],
+			"cacheDurationInSeconds": 10,
+			"cacheDurationInMinutes": 0,
 			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
@@ -89,7 +88,24 @@
 			]
 		},
 		"endpointProvider": {
+			"modules": [],
 			"endpoints": [
+				{
+					"id": "apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps.json"
+					}
+				},
+				{
+					"id": "common-apps-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/workspace-starter/main/common/apps.json"
+					}
+				},
 				{
 					"id": "share-get",
 					"type": "fetch",
