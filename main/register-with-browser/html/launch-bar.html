@@ -6,58 +6,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Launch Bar</title>
 		<script src="../js/launchbar.bundle.js"></script>
-		<link rel="stylesheet" href="../styles/styles.css" />
+		<link rel="stylesheet" href="../common/style/app.css" />
 	</head>
 
-	<body style="-webkit-app-region: drag" class="is-fullhd is-flex box">
-		<div
-			class="buttons is-align-items-flex-center is-justify-content-flex-center is-align-content-flex-center"
-		>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="launch-browser-window"
-			>
-				Launch Browser Window
-			</button>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="launch-browser-window-with-custom-btn"
-			>
-				Launch Browser With Custom Toolbar
-			</button>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="launch-nopagetab-browser-window"
-			>
-				Launch Page With No Tab
-			</button>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="launch-multipage-browser-window"
-			>
-				Launch Multiple Pages
-			</button>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="launch-single-locked-page"
-			>
-				Launch Single Locked Page
-			</button>
-			<button
-				style="-webkit-app-region: no-drag"
-				class="button is-link is-light is-outlined"
-				id="get-browser-pages"
-			>
-				Get All Pages
-			</button>
-			<button style="-webkit-app-region: no-drag" class="button is-link is-light is-outlined" id="quit">
-				Quit
-			</button>
+	<body class="drag">
+		<div class="row gap10 no-drag">
+			<button id="launch-browser-window">Launch Browser Window</button>
+			<button id="launch-browser-window-with-custom-btn">Launch Browser With Custom Toolbar</button>
+			<button id="launch-nopagetab-browser-window">Launch Page With No Tab</button>
+			<button id="launch-multipage-browser-window">Launch Multiple Pages</button>
+			<button id="launch-single-locked-page">Launch Single Locked Page</button>
+			<button id="get-browser-pages">Get All Pages</button>
+			<button id="quit">Quit</button>
 		</div>
 	</body>
 </html>
