@@ -10,19 +10,23 @@ async function init() {
 	const showHome = document.querySelector<HTMLButtonElement>("#show");
 	const hideHome = document.querySelector<HTMLButtonElement>("#hide");
 
+	showHome.disabled = true;
+	hideHome.disabled = true;
+	deregisterHome.disabled = true;
+
 	registerHome.addEventListener("click", async () => {
 		await register();
-		showHome.style.display = "unset";
-		hideHome.style.display = "unset";
-		deregisterHome.style.display = "unset";
-		registerHome.style.display = "none";
+		showHome.disabled = false;
+		hideHome.disabled = false;
+		deregisterHome.disabled = false;
+		registerHome.disabled = true;
 	});
 
 	deregisterHome.addEventListener("click", async () => {
-		showHome.style.display = "none";
-		hideHome.style.display = "none";
-		deregisterHome.style.display = "none";
-		registerHome.style.display = "unset";
+		showHome.disabled = true;
+		hideHome.disabled = true;
+		deregisterHome.disabled = true;
+		registerHome.disabled = false;
 		await deregister();
 	});
 

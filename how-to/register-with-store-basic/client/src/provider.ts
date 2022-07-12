@@ -10,19 +10,24 @@ async function init() {
 	const hideStore = document.querySelector<HTMLButtonElement>("#hide");
 	const deregisterStore = document.querySelector<HTMLButtonElement>("#deregister");
 
+	showStore.disabled = true;
+	hideStore.disabled = true;
+	deregisterStore.disabled = true;
+	registerStore.disabled = false;
+
 	registerStore.addEventListener("click", async () => {
 		await register();
-		showStore.style.display = "unset";
-		hideStore.style.display = "unset";
-		deregisterStore.style.display = "unset";
-		registerStore.style.display = "none";
+		showStore.disabled = false;
+		hideStore.disabled = false;
+		deregisterStore.disabled = false;
+		registerStore.disabled = true;
 	});
 
 	deregisterStore.addEventListener("click", async () => {
-		showStore.style.display = "none";
-		hideStore.style.display = "none";
-		deregisterStore.style.display = "none";
-		registerStore.style.display = "unset";
+		showStore.disabled = true;
+		hideStore.disabled = true;
+		deregisterStore.disabled = true;
+		registerStore.disabled = false;
 		await deregister();
 	});
 
