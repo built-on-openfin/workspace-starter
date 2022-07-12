@@ -90,12 +90,12 @@ customElements.define(
 			};
 
 			if (toggle === true) {
-				if (currentClass === firstClass) {
+				if (currentClass === firstClass || currentClass === null) {
 					result.classToAdd = secondClass;
 					result.classToRemove = firstClass;
 					result.image = secondImage;
 				}
-			} else {
+			} else if (currentClass !== null) {
 				result.classToAdd = currentClass;
 				result.classToRemove = currentClass === firstClass ? secondClass : firstClass;
 				result.image = currentClass === firstClass ? firstImage : secondImage;
