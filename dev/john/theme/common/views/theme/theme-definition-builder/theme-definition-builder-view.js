@@ -104,12 +104,7 @@ function validateDomain() {
 }
 
 function rgbToHex(r, g, b) {
-	const hexToReturn = [r, g, b]
-		.map((x) => {
-			const hex = x.toString(16);
-			return hex.length === 1 ? `0${hex}` : hex;
-		})
-		.join('');
+	const hexToReturn = [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('');
 	return `#${hexToReturn}`;
 }
 
@@ -118,7 +113,7 @@ function rgbStringToHex(rgbString) {
 		return rgbString;
 	}
 	const result = rgbString.replace('rgb(', '').replace(')', '')
-	.split(',');
+.split(',');
 	const r = Number.parseInt(result[0].trim(), 10);
 	const g = Number.parseInt(result[1].trim(), 10);
 	const b = Number.parseInt(result[2].trim(), 10);
@@ -190,7 +185,7 @@ async function captureUrl(url, delay) {
 		console.log(`Error while trying to screen capture ${url}`, err);
 	}
 
-	if(targetWindow !== undefined) {
+	if (targetWindow !== undefined) {
 		targetWindow.close(true);
 	}
 	return result;
@@ -208,16 +203,17 @@ async function copyToClipboard(value) {
 
 function updatePreview(customData) {
 	if (customData.theme !== undefined) {
-		preview.textContent = JSON.stringify(customData.theme, null, 4);
 		const json = JSON.stringify(customData.theme, null, 4);
-  		const dataURL = `data:application/json;base64,${btoa(json)}`;
+		const dataURL = `data:application/json;base64,${btoa(json)}`;
+		preview.textContent = json;
+
 		let filename = customData.theme.title.toLowerCase().trim()
-		.replaceAll(" ","-");
-		if(filename === "") {
-			filename = "my-custom";
+.replaceAll(' ', '-');
+		if (filename === '') {
+			filename = 'my-custom';
 		}
-		btnSave.setAttribute("download", `${filename}.workspacetheme`);
-  		btnSave.setAttribute("href", dataURL);
+		btnSave.setAttribute('download', `${filename}.workspacetheme`);
+		btnSave.setAttribute('href', dataURL);
 	}
 }
 
@@ -289,7 +285,7 @@ async function bindButtons() {
 		const url = domain.value;
 		const delay = Number.parseInt(domainDelay.value, 10) * 1000;
 		const siteImage = await captureUrl(url, delay);
-		if(siteImage !== undefined && siteImage !== null) {
+		if (siteImage !== undefined && siteImage !== null) {
 			const colors = await getThemePalette(siteImage);
 			domainPreview.src = `data:image/jpg;base64,${siteImage}`;
 			domainPreview.title =
@@ -314,7 +310,7 @@ async function bindButtons() {
 }
 
 async function saveChanges(customData) {
-	console.log("Custom Data to be saved:", customData);
+	console.log('Custom Data to be saved:', customData);
 	await fin.me.updateOptions({ customData });
 }
 
@@ -412,8 +408,8 @@ async function applyChanges(customData) {
 			palette8.style.backgroundColor = domainPalette.palette8;
 			palette9.style.backgroundColor = domainPalette.palette9;
 			palette10.style.backgroundColor = domainPalette.palette10;
-			if(domainPalette.dominantColor !== undefined) {
-				paletteContainer.style.display = "flex";
+			if (domainPalette.dominantColor !== undefined) {
+				paletteContainer.style.display = 'flex';
 			}
 		}
 	}
@@ -427,9 +423,9 @@ async function init() {
 	} else {
 		const customData = {
 			theme: {
-				"title": "",
-				"logo": "",
-				"palette": paletteDark
+				title: '',
+				logo: '',
+				palette: paletteDark
 			}
 		};
 		await applyChanges(customData);
