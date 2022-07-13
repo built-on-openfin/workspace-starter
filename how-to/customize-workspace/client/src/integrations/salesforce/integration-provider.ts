@@ -167,7 +167,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		lastResponse: CLISearchListenerResponse
 	): Promise<HomeSearchResponse> {
 		const response: HomeSearchResponse = {
-			results: await this.getDefaultEntries(integration)
+			results: await this.getDefaultEntries(integration, query)
 		};
 
 		if (this._salesForceConnection) {
@@ -337,26 +337,37 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	/**
 	 * Get a list of the default application entries.
 	 * @param integration The integration details.
+	 * @param query The query to search for.
 	 * @returns The list of application entries.
 	 */
-	private async getDefaultEntries(integration: Integration<SalesforceSettings>): Promise<HomeSearchResult[]> {
+	private async getDefaultEntries(
+		integration: Integration<SalesforceSettings>,
+		query: string
+	): Promise<HomeSearchResult[]> {
 		const results: HomeSearchResult[] = [];
 		if (integration?.data?.orgUrl) {
-			results.push({
-				actions: [{ name: "Browse", hotkey: "enter" }],
-				data: {
-					providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-					pageUrl: integration?.data?.orgUrl,
-					tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-				} as SalesforceResultData,
-				icon: integration.icon,
-				key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-				template: CLITemplate.Plain,
-				templateContent: undefined,
-				title: "Browse Salesforce"
-			} as CLISearchResultPlain);
-
-			if (!this._salesForceConnection) {
+			const title = "Browse Salesforce";
+			if (
+				query === undefined ||
+				query === null ||
+				query === "" ||
+				title.toLowerCase().includes(query.toLowerCase())
+			) {
+				results.push({
+					actions: [{ name: "Browse", hotkey: "enter" }],
+					data: {
+						providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+						pageUrl: integration?.data?.orgUrl,
+						tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+					} as SalesforceResultData,
+					icon: integration.icon,
+					key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+					template: CLITemplate.Plain,
+					templateContent: undefined,
+					title
+				} as CLISearchResultPlain);
+			}
+			if (!this._salesForceConnection && (query === undefined || query === null || query === "")) {
 				results.push(this.getReconnectSearchResult(integration));
 			}
 		}

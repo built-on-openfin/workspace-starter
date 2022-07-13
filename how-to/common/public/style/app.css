@@ -13,6 +13,8 @@
 	--brand-table-header-text: #ffffff;
 	--brand-table-row-even: #383a40;
 	--brand-table-row-odd: #53565f;
+	--brand-error: #cc0000;
+	--brand-success: #00aa00;
 
 	accent-color: var(--brand-primary);
 }
@@ -37,11 +39,11 @@
 }
 
 .error {
-	color: #ff0000;
+	color: var(--brand-error);
 }
 
 .success {
-	color: #00aa00;
+	color: var(--brand-success);
 }
 
 ::selection {
@@ -517,6 +519,12 @@ a[disabled] {
 	resize: none;
 }
 
+select:invalid,
+input:invalid,
+textarea:invalid {
+	border-color: var(--brand-error);
+}
+
 fieldset > span {
 	margin-left: 10px;
 	width: 50px;
@@ -737,6 +745,11 @@ td {
 	padding: 5px;
 	word-break: break-word;
 	color: var(--brand-text);
+}
+
+.border {
+	border: 1px solid var(--brand-input-border);
+	border-radius: 5px;
 }
 
 .drag {
