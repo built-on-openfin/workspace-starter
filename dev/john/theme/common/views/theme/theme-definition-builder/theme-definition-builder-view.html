@@ -5,9 +5,25 @@
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Theme Definition Builder</title>
+		<script src="./color-thief/color-thief.umd.js"></script>
 		<script type="module" src="./theme-definition-builder-view.js"></script>
 		<link rel="stylesheet" href="../../../style/app.css" />
 		<script src="../../../components/fin-toggle-class.js" defer></script>
+		<style>
+			.swatch {
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				display: inline-block;
+				margin-right: 5px;
+			}
+			.swatches {
+				padding-top: 5px;
+			}
+			.pointer-cursor {
+				cursor: pointer;
+			}
+		</style>
 	</head>
 
 	<body class="col fill gap20">
@@ -17,7 +33,7 @@
 				<h1 class="tag">Helping you build a theme definition for your workspace</h1>
 			</div>
 			<div class="row middle gap10">
-				<button is="fin-toggle-class" title="Change style"></button>
+				<button is="fin-toggle-class" id="class-toggle" title="Change style"></button>
 				<image src="../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
 			</div>
 		</header>
@@ -29,7 +45,7 @@
 							<h2>Theme Options</h2>
 							<fieldset>
 								<label for="title" title="The title for this theme">Title</label>
-								<input type="text" id="title" class="full" placeholder="light-theme" />
+								<input type="text" id="title" class="full" placeholder="your-theme" />
 							</fieldset>
 							<fieldset>
 								<label for="logo" title="The path to the logo for this theme.">Logo</label>
@@ -44,8 +60,10 @@
 								<input type="color" id="brand-secondary" value="#383A40" />
 							</fieldset>
 							<fieldset>
-								<label for="background-primary" title="A color for backgroundPrimary.">backgroundPrimary</label>
-								<input type="color" id="background-primary" value="#000" />
+								<label for="background-primary" title="A color for backgroundPrimary.">
+									backgroundPrimary
+								</label>
+								<input type="color" id="background-primary" value="#000000" />
 							</fieldset>
 							<fieldset>
 								<label for="background-1" title="A color for background1.">background1</label>
@@ -81,7 +99,7 @@
 							</fieldset>
 							<fieldset>
 								<label for="status-critical" title="A color for statusCritical.">statusCritical</label>
-								<input type="color" id="status-critical" value="#000" />
+								<input type="color" id="status-critical" value="#000000" />
 							</fieldset>
 							<fieldset>
 								<label for="status-active" title="A color for statusActive.">statusActive</label>
@@ -113,7 +131,7 @@
 							</fieldset>
 							<fieldset>
 								<label for="text-help" title="A color for textHelp.">textHelp</label>
-								<input type="color" id="text-help" value="#C9CBD2" />
+								<input type="color" id="text-help" valu"#C9CBD2"e= />
 							</fieldset>
 							<fieldset>
 								<label for="text-inactive" title="A color for textInactive.">textInactive</label>
@@ -122,36 +140,134 @@
 						</div>
 					</form>
 				</div>
-				<div class="col fill gap30">
-					<div class="fill col gap10">
-						<form class="col gap40 scroll-vertical">
-							<div class="form-section col gap10">
-								<h2>Theme Inspiration</h2>
-								<fieldset>
-									<label for="Domain" title="The domain you are building a theme for">Domain</label>
-									<input type="url" id="domain" class="full" placeholder="https://www.yourdomain.com" />
-								</fieldset>
-								<fieldset>
-									<label for="title" title="The title for this theme">Domain Preview</label>
-									<image src="http://localhost:8080/favicon.ico" />
-								</fieldset>
-								<fieldset>
-									<h4 id="previewTitle">Theme Definition</h4>
-									<pre id="preview" class="fill scroll-vertical"></pre>
-								</fieldset>
+
+				<form class="fill_2 col gap40 scroll-vertical">
+					<div class="form-section col fill gap10">
+						<h2>Theme Inspiration</h2>
+						<fieldset>
+							<label for="domain" title="The domain you are building a theme for">Domain</label>
+							<div class="full row gap10">
+								<input type="url" id="domain" class="fill" placeholder="https://www.yourdomain.com" />
+								<button id="btnCaptureDomain" type="button">Capture Domain Colors</button>
 							</div>
-						</form>
+						</fieldset>
+						<fieldset>
+							<label for="domain-delay">
+								Delay Before Capture In Seconds:
+								<span id="delay">2</span>
+							</label>
+							<input type="range" id="domain-delay" min="0" value="2" max="20" />
+						</fieldset>
+						<fieldset id="palette-container" style="display: none">
+							<div class="full row gap10">
+								<div>
+									<label>Dominant Color</label>
+									<div class="swatches">
+										<div
+											class="swatch pointer-cursor"
+											id="dominant-color"
+											style="background-color: red"
+											draggable="true"
+											title="Click to copy @dominantColor to the clipboard"
+										></div>
+									</div>
+								</div>
+								<div>
+									<label>Palette</label>
+									<div class="swatches">
+										<div
+											class="swatch pointer-cursor"
+											id="palette-1"
+											style="background-color: blue"
+											draggable="true"
+											title="Click to copy @dominantColor to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-2"
+											style="background-color: green"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-3"
+											style="background-color: orange"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-4"
+											style="background-color: blue"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-5"
+											style="background-color: green"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-6"
+											style="background-color: orange"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-7"
+											style="background-color: blue"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-8"
+											style="background-color: green"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-9"
+											style="background-color: orange"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+										<div
+											class="swatch pointer-cursor"
+											id="palette-10"
+											style="background-color: blue"
+											draggable="true"
+											title="Click to copy @palette1Color to the clipboard"
+										></div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset>
+							<image id="domain-preview" class="pointer-cursor" width="100%" />
+						</fieldset>
+						<fieldset class="fill">
+							<h4 id="previewTitle">Theme Definition</h4>
+							<pre id="preview" class="fill scroll-vertical"></pre>
+						</fieldset>
 					</div>
-				</div>
+				</form>
 			</div>
 		</main>
 		<footer>
 			<div class="row spread">
 				<div class="row gap10">
-					<button id="btnReset">Reset</button>
+					<button id="btnResetDark">Apply Dark Theme</button>
+					<button id="btnResetLight">Apply Light Theme</button>
 				</div>
 				<div class="row gap10">
-					<button id="btnGetDomainColors">Get Domain Colors</button>
+					<a class="button" id="btnSave">Save To File</a>
 					<button id="btnCopy">Copy To Clipboard</button>
 				</div>
 			</div>

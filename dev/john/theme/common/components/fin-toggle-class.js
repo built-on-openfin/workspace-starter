@@ -47,7 +47,7 @@ customElements.define(
 			const defaultSecondImage = `<svg stroke="currentColor" style="width:${width};height:${height}" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M14 2c1.82 0 3.53.5 5 1.35-2.99 1.73-5 4.95-5 8.65s2.01 6.92 5 8.65A9.973 9.973 0 0114 22C8.48 22 4 17.52 4 12S8.48 2 14 2z"></path></svg>`;
 
 			const getTargetElement = document.querySelector(target);
-			const classToApply = localStorage.getItem(key);
+			const classToApply = this.currentClass;
 			const resolvedFirstImage =
 				firstImage !== null
 					? `<img src="${firstImage}" height="${height}" width="${width}>`
@@ -72,6 +72,12 @@ customElements.define(
 					getTargetElement.classList.remove(result.classToRemove);
 				}
 				localStorage.setItem(key, result.classToAdd);
+				this.dispatchEvent(
+					new CustomEvent('class-changed', {
+						detail: { class: result.classToAdd },
+						composed: true
+					})
+				);
 			}
 
 			this.innerHTML = result.image;
@@ -106,6 +112,10 @@ customElements.define(
 
 		onclick() {
 			this.applySettings(true);
+		}
+
+		get currentClass() {
+			return localStorage.getItem(this.key);
 		}
 	},
 	{ extends: 'button' }
