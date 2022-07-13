@@ -112,8 +112,9 @@ function rgbStringToHex(rgbString) {
 	if (!rgbString.includes('rgb')) {
 		return rgbString;
 	}
-	const result = rgbString.replace('rgb(', '').replace(')', '')
-.split(',');
+	let result = rgbString.replace('rgb(', '');
+	result = result.replace(')', '');
+	result = result.split(',');
 	const r = Number.parseInt(result[0].trim(), 10);
 	const g = Number.parseInt(result[1].trim(), 10);
 	const b = Number.parseInt(result[2].trim(), 10);
@@ -207,8 +208,9 @@ function updatePreview(customData) {
 		const dataURL = `data:application/json;base64,${btoa(json)}`;
 		preview.textContent = json;
 
-		let filename = customData.theme.title.toLowerCase().trim()
-.replaceAll(' ', '-');
+		let filename = customData.theme.title.toLowerCase();
+		filename = filename.trim();
+		filename = filename.replaceAll(' ', '-');
 		if (filename === '') {
 			filename = 'my-custom';
 		}
