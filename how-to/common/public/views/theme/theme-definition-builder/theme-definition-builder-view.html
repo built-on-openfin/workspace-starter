@@ -45,11 +45,11 @@
 							<h2>Theme Options</h2>
 							<fieldset>
 								<label for="title" title="The title for this theme">Title</label>
-								<input type="text" id="title" class="full" placeholder="your-theme" />
+								<input type="text" id="title" class="full" placeholder="your-theme" required />
 							</fieldset>
 							<fieldset>
 								<label for="logo" title="The path to the logo for this theme.">Logo</label>
-								<input type="url" id="logo" class="full" placeholder="http://localhost:8080/favicon.ico" />
+								<input type="url" id="logo" class="full" placeholder="http://localhost:8080/favicon.ico" required/>
 							</fieldset>
 							<fieldset>
 								<label for="brand-primary" title="A color for brandPrimary.">brandPrimary</label>
@@ -250,7 +250,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<image id="domain-preview" class="pointer-cursor" width="100%" />
+							<image id="domain-preview" class="pointer-cursor border" style="display:none" width="100%" />
 						</fieldset>
 						<fieldset class="fill">
 							<h4 id="previewTitle">Theme Definition</h4>

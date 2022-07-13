@@ -100,7 +100,13 @@ const paletteDark = {
 };
 
 function validateDomain() {
-	btnCaptureDomain.disabled = !domain.checkValidity();
+	let isValid;
+	if(domain.value.trim() === "") {
+		isValid = false;
+	} else {
+		isValid = domain.checkValidity();
+	}
+	btnCaptureDomain.disabled = !isValid;
 }
 
 function rgbToHex(r, g, b) {
@@ -289,6 +295,7 @@ async function bindButtons() {
 		const siteImage = await captureUrl(url, delay);
 		if (siteImage !== undefined && siteImage !== null) {
 			const colors = await getThemePalette(siteImage);
+			domainPreview.style.display = "unset";
 			domainPreview.src = `data:image/jpg;base64,${siteImage}`;
 			domainPreview.title =
 				'If the capture has a cookie consent popup you can click the image to launch it in a new window in order to dismiss the prompt. If you re-request the image it will not include the prompt.';
