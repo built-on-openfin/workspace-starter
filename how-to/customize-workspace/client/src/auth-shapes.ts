@@ -1,6 +1,11 @@
 export interface AuthProvider {
 	init<T>(options: T): Promise<void>;
-	isAuthenticationRequired(callback: (authenticationRequired: boolean) => void): Promise<boolean>;
+	subscribe(
+		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
+		callback: () => Promise<void>
+	): string;
+	unsubscribe(from: string): void;
+	isAuthenticationRequired(): Promise<boolean>;
 	login(): Promise<boolean>;
 	logout(): Promise<boolean>;
 	setLogger(

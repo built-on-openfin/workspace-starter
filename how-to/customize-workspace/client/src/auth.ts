@@ -52,6 +52,25 @@ export async function init(options: AuthProviderOptions) {
 	}
 }
 
+export function subscribe(
+	to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
+	callback: () => Promise<void>
+): string {
+	if (authProvider === undefined) {
+		logWarning("Auth: Please initialize auth before trying to use subscribe.");
+		return null;
+	}
+	return authProvider.subscribe(to, callback);
+}
+
+export function unsubscribe(from: string) {
+	if (authProvider === undefined) {
+		logWarning("Auth: Please initialize auth before trying to use unsubscribe.");
+		return null;
+	}
+	return authProvider.unsubscribe(from);
+}
+
 export async function login(): Promise<boolean> {
 	if (authProvider === undefined) {
 		logWarning("Auth: Please initialize auth before trying to use login.");
@@ -70,9 +89,7 @@ export async function logout(): Promise<boolean> {
 	return authProvider.logout();
 }
 
-export async function isAuthenticationRequired(
-	callback?: (authenticationRequired: boolean) => void
-): Promise<boolean> {
+export async function isAuthenticationRequired(): Promise<boolean> {
 	if (authProvider === undefined) {
 		logInfo(
 			"Auth: Auth may not be required for this app. If it is please initialize auth before trying to use isAuthenticationRequired."
@@ -80,7 +97,7 @@ export async function isAuthenticationRequired(
 		return false;
 	}
 	logInfo("Auth: isAuthenticationRequired requested.");
-	return authProvider.isAuthenticationRequired(callback);
+	return authProvider.isAuthenticationRequired();
 }
 
 export async function getUserInfo<T>(): Promise<T> {

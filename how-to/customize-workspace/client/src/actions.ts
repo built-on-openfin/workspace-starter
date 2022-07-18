@@ -241,11 +241,7 @@ export async function getActions(): Promise<CustomActionsMap> {
 	};
 
 	actionMap[ACTION_IDS.logoutAndQuit] = async () => {
-		const isLoggedOut = await authProvider.logout();
-		if (isLoggedOut) {
-			const plat = getCurrentSync();
-			await plat.quit();
-		}
+		await authProvider.logout();
 	};
 
 	return actionMap;

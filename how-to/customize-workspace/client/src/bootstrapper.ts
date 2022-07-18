@@ -1,5 +1,4 @@
 import { fin } from "@openfin/core";
-import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { launchPage, launchView } from "./browser";
@@ -25,10 +24,9 @@ let setupHome;
 let setupStore;
 let setupNotifications;
 
-async function onAuthenticationRequired() {
+async function onReAuthenticationRequired() {
 	console.log(`The platform has detected that authentication is required (might be expired session).`);
 	console.log(`At this stage the platform can decide how to proceed:`);
-	console.log(` - Call login to trigger the login process?`);
 	console.log(` - Hide all visible windows?`);
 	console.log(
 		` - Disable results from showing in home by having the home provider check to see if authentication is required before showing results?`
@@ -42,20 +40,7 @@ async function onAuthenticationRequired() {
 	if (setupStore) {
 		await hideStore();
 	}
-
-	try {
-		const isLoggedIn = await authProvider.login();
-		if (!isLoggedIn) {
-			console.warn(
-				"Authentication required and unable to log in. A real app should think about what to do next. Save current workspace and quit? Or just quit. This platform is quitting if the user refuses to log in."
-			);
-			const unauthenticatedPlatform = getCurrentSync();
-			await unauthenticatedPlatform.quit();
-			return false;
-		}
-	} catch (error) {
-		console.error("Error while trying to re-authenticate.", error);
-	}
+	// login management handled by platform.
 }
 
 export async function init() {
@@ -108,17 +93,21 @@ export async function init() {
 	);
 
 	if (isAuthenticationEnabled()) {
+		console.log("Setting up listeners for authentication events.");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		const authenticationRequired = await authProvider.isAuthenticationRequired(
-			async (authRequired: boolean) => {
-				if (authRequired) {
-					await onAuthenticationRequired();
-				}
-			}
-		);
+		authProvider.subscribe("logged-in", async () => {
+			// what behavior do you want to do when someone logs in
+			// potentially the inverse if you hid something on session expiration
+		});
+		authProvider.subscribe("before-logged-out", async () => {
+			// what behavior do you want to do when someone logs in
+			// do you want to save anything before they log themselves out
+		});
+		authProvider.subscribe("session-expired", onReAuthenticationRequired);
+		const authenticationRequired = await authProvider.isAuthenticationRequired();
 		if (authenticationRequired) {
-			await onAuthenticationRequired();
+			await onReAuthenticationRequired();
 		}
 	}
 
