@@ -1,9 +1,9 @@
 export interface AuthProvider {
 	init<T>(options: T): Promise<void>;
-	isAuthenticationRequired (callback: (authenticationRequired: boolean) => void): Promise<boolean>;
+	isAuthenticationRequired(callback: (authenticationRequired: boolean) => void): Promise<boolean>;
 	login(): Promise<boolean>;
 	logout(): Promise<boolean>;
-	setLogger (
+	setLogger(
 		info: (message: string) => void,
 		warn: (message: string) => void,
 		error: (message: string) => void
