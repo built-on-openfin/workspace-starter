@@ -99,9 +99,9 @@ export function setLogger(
 ): void {
 	if (authProvider === undefined) {
 		if (warn !== undefined) {
-			warn("Auth: Please initialize auth before trying to use getUserInfo.");
+			warn("Auth: Please initialize auth before trying to use setLogger.");
 		} else {
-			logWarning("Auth: Please initialize auth before trying to use getUserInfo.");
+			logWarning("Auth: Please initialize auth before trying to use setLogger.");
 		}
 		return;
 	}
