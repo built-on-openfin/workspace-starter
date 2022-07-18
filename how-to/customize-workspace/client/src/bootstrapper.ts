@@ -44,7 +44,7 @@ async function onAuthenticationRequired() {
 	}
 
 	try {
-		const isLoggedIn = 	await authProvider.login();
+		const isLoggedIn = await authProvider.login();
 		if (!isLoggedIn) {
 			console.warn(
 				"Authentication required and unable to log in. A real app should think about what to do next. Save current workspace and quit? Or just quit. This platform is quitting if the user refuses to log in."
@@ -110,12 +110,13 @@ export async function init() {
 	if (isAuthenticationEnabled()) {
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		const authenticationRequired = await authProvider
-		.isAuthenticationRequired(async (authRequired: boolean) => {
-			if (authRequired) {
-				await onAuthenticationRequired();
+		const authenticationRequired = await authProvider.isAuthenticationRequired(
+			async (authRequired: boolean) => {
+				if (authRequired) {
+					await onAuthenticationRequired();
+				}
 			}
-		});
+		);
 		if (authenticationRequired) {
 			await onAuthenticationRequired();
 		}

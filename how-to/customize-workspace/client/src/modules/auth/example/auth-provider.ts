@@ -5,14 +5,14 @@ let authRequiredCallback: (authenticationRequired: boolean) => void;
 let authenticated: boolean;
 let authOptions: ExampleOptions;
 interface ExampleOptions {
- autoLogin: boolean;
- authenticatedUrl: string;
- loginUrl: string;
- logoutUrl: string;
- loginHeight: number;
- loginWidth: number;
- checkLoginStatusInSeconds: number;
- checkSessionValidityInSeconds: number;
+	autoLogin: boolean;
+	authenticatedUrl: string;
+	loginUrl: string;
+	logoutUrl: string;
+	loginHeight: number;
+	loginWidth: number;
+	checkLoginStatusInSeconds: number;
+	checkSessionValidityInSeconds: number;
 }
 
 const EXAMPLE_AUTH_AUTHENTICATED_KEY = "EXAMPLE_AUTH_IS_AUTHENTICATED";
@@ -85,61 +85,65 @@ async function checkAuth(url: string): Promise<boolean> {
 
 async function getAuthenticationFromUser(): Promise<boolean> {
 	return new Promise<boolean>((resolve, reject) => {
-		openLoginWindow(authOptions.loginUrl).then(async (win) => {
-			try {
-				if (win !== undefined) {
-					const info = await win.getInfo();
-					if (info.url === authOptions.authenticatedUrl) {
-						await win.close(true);
-						resolve(true);
-						return true;
+		openLoginWindow(authOptions.loginUrl)
+			.then(async (win) => {
+				try {
+					if (win !== undefined) {
+						const info = await win.getInfo();
+						if (info.url === authOptions.authenticatedUrl) {
+							await win.close(true);
+							resolve(true);
+							return true;
+						}
+						await win.show(true);
 					}
-					await win.show(true);
+				} catch (error) {
+					logError(`Error while checking if login window automatically redirected. Error ${error.message}`);
+					if (win !== undefined) {
+						await win.show(true);
+					}
 				}
-			} catch (error) {
-				logError(`Error while checking if login window automatically redirected. Error ${error.message}`);
-				if (win !== undefined) {
-					await win.show(true);
-				}
-			}
 
-			let statusCheck: number;
+				let statusCheck: number;
 
-			await win.addListener("closed", async () => {
-				if (win) {
-					window.clearInterval(statusCheck);
-					statusCheck = undefined;
-					logInfo("Example Auth: Auth Window cancelled by user.");
-					win = undefined;
-					resolve(false);
-					return false;
-				}
-			});
-			statusCheck = window.setInterval(async () => {
-				if (win !== undefined) {
-					const winInfo = await win.getInfo();
-					if (winInfo.url === authOptions.authenticatedUrl) {
+				await win.addListener("closed", async () => {
+					if (win) {
 						window.clearInterval(statusCheck);
-						await win.removeAllListeners();
-						await win.close(true);
-						resolve(true);
-						return true;
+						statusCheck = undefined;
+						logInfo("Example Auth: Auth Window cancelled by user.");
+						win = undefined;
+						resolve(false);
+						return false;
 					}
-				} else {
-					resolve(false);
-					return false;
-				}
-			}, (authOptions.checkLoginStatusInSeconds ?? 1 * 1000));
-			return true;
-		})
-		.catch((error) => {
-			console.error(`Error while trying to authenticate the user`, error);
-		});
+				});
+				statusCheck = window.setInterval(async () => {
+					if (win !== undefined) {
+						const winInfo = await win.getInfo();
+						if (winInfo.url === authOptions.authenticatedUrl) {
+							window.clearInterval(statusCheck);
+							await win.removeAllListeners();
+							await win.close(true);
+							resolve(true);
+							return true;
+						}
+					} else {
+						resolve(false);
+						return false;
+					}
+				}, authOptions.checkLoginStatusInSeconds ?? 1 * 1000);
+				return true;
+			})
+			.catch((error) => {
+				console.error(`Error while trying to authenticate the user`, error);
+			});
 	});
 }
 
 function checkForSessionExpiry() {
-	if (authOptions?.checkSessionValidityInSeconds !== undefined && authOptions?.checkSessionValidityInSeconds > -1) {
+	if (
+		authOptions?.checkSessionValidityInSeconds !== undefined &&
+		authOptions?.checkSessionValidityInSeconds > -1
+	) {
 		setTimeout(async () => {
 			const stillAuthenticated = await checkAuth(authOptions.loginUrl);
 			if (stillAuthenticated) {
@@ -194,35 +198,38 @@ export async function login(): Promise<boolean> {
 
 export async function logout(): Promise<boolean> {
 	return new Promise<boolean>((resolve, reject) => {
-	if (authenticated === undefined || !authenticated) {
-		logError("Example Auth: You have requested to log out but are not logged in.");
-		resolve(false);
-		return false;
-	}
-	logInfo("Example Auth: Log out requested.");
-	authenticated = false;
-	localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
-	if (authOptions.logoutUrl !== undefined &&
-		authOptions.logoutUrl !== null &&
-		authOptions.loginUrl.trim().length > 0) {
-			openLogoutWindow(authOptions.logoutUrl).then((win) => {
-				// give time for the logout window to load.
-				setTimeout(async () => {
-					await win.close();
-					resolve(true);
+		if (authenticated === undefined || !authenticated) {
+			logError("Example Auth: You have requested to log out but are not logged in.");
+			resolve(false);
+			return false;
+		}
+		logInfo("Example Auth: Log out requested.");
+		authenticated = false;
+		localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
+		if (
+			authOptions.logoutUrl !== undefined &&
+			authOptions.logoutUrl !== null &&
+			authOptions.loginUrl.trim().length > 0
+		) {
+			openLogoutWindow(authOptions.logoutUrl)
+				.then((win) => {
+					// give time for the logout window to load.
+					setTimeout(async () => {
+						await win.close();
+						resolve(true);
+						return true;
+					}, 2000);
 					return true;
-				}, 2000);
-				return true;
-			})
-			.catch((error) => {
-				logError(`Error while launching logout window. ${error}`);
-				resolve(false);
-				return false;
-			});
-	} else {
-		resolve(true);
-		return true;
-	}
+				})
+				.catch((error) => {
+					logError(`Error while launching logout window. ${error}`);
+					resolve(false);
+					return false;
+				});
+		} else {
+			resolve(true);
+			return true;
+		}
 	});
 }
 

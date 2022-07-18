@@ -110,9 +110,11 @@ export async function getGlobalMenu(
 		}
 	});
 
-	if (isAuthenticationEnabled() &&
-	(allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.logoutAndQuit)) &&
-	!await authProvider.isAuthenticationRequired()) {
+	if (
+		isAuthenticationEnabled() &&
+		(allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.logoutAndQuit)) &&
+		!(await authProvider.isAuthenticationRequired())
+	) {
 		menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.Quit, "INSERT-AFTER", {
 			label: "Log Out and Quit App",
 			data: {

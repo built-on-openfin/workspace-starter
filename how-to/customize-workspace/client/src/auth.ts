@@ -14,7 +14,9 @@ export function isAuthenticationEnabled() {
 export async function init(options: AuthProviderOptions) {
 	authOptions = options;
 	if (authOptions === undefined || authOptions === null) {
-		logInfo("Unable to initialize authentication without settings. If this platform requires auth please ensure you have set the authProvider settings.");
+		logInfo(
+			"Unable to initialize authentication without settings. If this platform requires auth please ensure you have set the authProvider settings."
+		);
 		return;
 	}
 
@@ -72,7 +74,9 @@ export async function isAuthenticationRequired(
 	callback?: (authenticationRequired: boolean) => void
 ): Promise<boolean> {
 	if (authProvider === undefined) {
-		logInfo("Auth: Auth may not be required for this app. If it is please initialize auth before trying to use isAuthenticationRequired.");
+		logInfo(
+			"Auth: Auth may not be required for this app. If it is please initialize auth before trying to use isAuthenticationRequired."
+		);
 		return false;
 	}
 	logInfo("Auth: isAuthenticationRequired requested.");

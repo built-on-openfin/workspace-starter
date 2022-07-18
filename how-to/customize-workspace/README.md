@@ -30,7 +30,7 @@ To run this sample you can:
 - Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json)
 
 - Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): [Github Workspace Starter Second Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json)
- 
+
 ## Getting Started
 
 1. Install dependencies and build the sample. Note that these examples assume you are in the sub-directory for the example.
