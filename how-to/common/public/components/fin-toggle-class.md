@@ -20,7 +20,7 @@ The type is a button to aid in accessibility.
 ## Example usage:
 
 ```javascript
-        <script src="../../../components/fin-toggle-class.js" defer></script>
+        <script src="/common/components/fin-toggle-class.js" defer></script>
 
         <button is="fin-toggle-class"></button>
 ```
