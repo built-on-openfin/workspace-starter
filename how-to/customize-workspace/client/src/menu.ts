@@ -7,6 +7,8 @@ import {
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
 import { ACTION_IDS } from "./actions";
+import * as authProvider from "./auth";
+import { isAuthenticationEnabled } from "./auth";
 import { getSettings } from "./settings";
 
 function updateGlobalMenuEntry(
@@ -107,6 +109,20 @@ export async function getGlobalMenu(
 			type: GlobalContextMenuOptionType.Quit
 		}
 	});
+
+	if (isAuthenticationEnabled() &&
+	(allowedMenuActions === undefined || allowedMenuActions.includes(ACTION_IDS.logoutAndQuit)) &&
+	!await authProvider.isAuthenticationRequired()) {
+		menuItems = updateGlobalMenuEntry(menuItems, GlobalContextMenuOptionType.Quit, "INSERT-AFTER", {
+			label: "Log Out and Quit App",
+			data: {
+				type: GlobalContextMenuOptionType.Custom,
+				action: {
+					id: ACTION_IDS.logoutAndQuit
+				}
+			}
+		});
+	}
 
 	return menuItems;
 }

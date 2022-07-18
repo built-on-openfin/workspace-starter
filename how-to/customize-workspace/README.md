@@ -18,6 +18,7 @@ This sample is an extension of the support context and intents example. The samp
 - An example of implementing your own sharing function has also been added.
 - An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
 - An example of swapping out where workspaces and pages are stored (First Starter uses the default storage and Second Starter enables custom storage).
+- An example of having client side authentication. We dynamically load an auth module (which you can swap out with your own) that has a basic implementation so that you can try different states and change how the platform should respond.
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -29,7 +30,7 @@ To run this sample you can:
 - Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fmanifest.fin.json)
 
 - Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding. This manifest takes advantage of Desktop System Preferences for Light or Dark mode by providing themes that can match that preference (it is picked up and applied on load): [Github Workspace Starter Second Customize Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv8.0.0%2Fcustomize-workspace%2Fsecond.manifest.fin.json)
-
+ 
 ## Getting Started
 
 1. Install dependencies and build the sample. Note that these examples assume you are in the sub-directory for the example.

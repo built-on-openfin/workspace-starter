@@ -7,8 +7,8 @@ export interface EndpointProvider {
 
 export interface Endpoint {
 	init: (options: unknown) => Promise<void>;
-	action<T>(endpointDefinition: EndpointDefinition, request?: T): Promise<boolean>;
-	requestResponse<T, R>(endpointDefinition: EndpointDefinition, request?: T): Promise<R | null>;
+	action<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
+	requestResponse<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
 }
 
 export interface EndpointModule {
@@ -22,7 +22,7 @@ export interface EndpointModuleDefinition {
 
 export interface EndpointProviderOptions {
 	modules?: EndpointModuleDefinition[];
-	endpoints?: EndpointDefinition[];
+	endpoints?: EndpointDefinition<unknown>[];
 }
 
 interface BaseEndpointDefinition<O> {
@@ -38,12 +38,12 @@ type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
 
 // We could include more in this type
 
-type FetchEndpointDefinition = BaseEndpointDefinition<FetchOptions & { url: string }> & {
+type FetchEndpointDefinition<O> = BaseEndpointDefinition<O> & {
 	type: "fetch";
 };
 
 // We could include more in this type
-export type EndpointDefinition = FetchEndpointDefinition | ModuleEndpointDefinition<unknown>;
+export type EndpointDefinition<O> = FetchEndpointDefinition<FetchOptions> | ModuleEndpointDefinition<O>;
 
 export interface FetchOptions {
 	url?: string;

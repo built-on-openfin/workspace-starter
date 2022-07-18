@@ -6,6 +6,7 @@ import {
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
+import * as authProvider from "./auth";
 import { getDefaultWindowOptions } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
@@ -37,7 +38,8 @@ export const ACTION_IDS = {
 	notificationToggle: "notification-toggle",
 	share: "share",
 	changeOpacity: "change-opacity",
-	restoreOpacity: "restore-opacity"
+	restoreOpacity: "restore-opacity",
+	logoutAndQuit: "logout-and-quit"
 };
 
 export async function getActions(): Promise<CustomActionsMap> {
@@ -235,6 +237,14 @@ export async function getActions(): Promise<CustomActionsMap> {
 				);
 				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
 			}
+		}
+	};
+
+	actionMap[ACTION_IDS.logoutAndQuit] = async () => {
+		const isLoggedOut = await authProvider.logout();
+		if (isLoggedOut) {
+			const plat = getCurrentSync();
+			await plat.quit();
 		}
 	};
 

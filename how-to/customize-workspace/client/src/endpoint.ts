@@ -7,7 +7,7 @@ import {
 	EndpointProviderOptions
 } from "./endpoint-shapes";
 
-let endpointDefinitions: EndpointDefinition[] = [];
+let endpointDefinitions: EndpointDefinition<unknown>[] = [];
 let moduleDefinitions: EndpointModuleDefinition[] = [];
 let isInitialized = false;
 
@@ -37,7 +37,7 @@ async function getModuleEndpoint(moduleId: string): Promise<Endpoint> {
 	}
 }
 
-function getEndpointDefinition(endpointId: string): EndpointDefinition {
+function getEndpointDefinition(endpointId: string): EndpointDefinition<unknown> {
 	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
 	if (endpoint === undefined) {
