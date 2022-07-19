@@ -1,9 +1,10 @@
-import type {
+import {
 	HomeDispatchedSearchResult,
 	CLIFilter,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult
+	HomeSearchResult,
+	CLITemplate
 } from "@openfin/workspace";
 import type {
 	Integration,
@@ -11,14 +12,133 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
+import { TURNOFF_INTEGRATION_TEMPLATE, TURNON_INTEGRATION_TEMPLATE } from "./template";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
 const homeIntegrations: {
 	module: IntegrationModule<unknown>;
 	integration: Integration<unknown>;
+	search: boolean;
 }[] = [];
 
+let integrationCommand: string;
+let integrationDescription: string;
+let passedIntegrationManager: IntegrationManager;
+let passedIntegrationProvider: IntegrationProviderOptions;
+
+/**
+ * Create an integration result.
+ * @param id The id of the integration.
+ * @param name The name of the integration.
+ * @param description The description of the integration.
+ * @param icon The icon of the integration.
+ * @param searchEnabled is search enabled for this integration.
+ * @returns The search result.
+ */
+ function createResult(id: string,
+	name: string, description: string, icon: string, searchEnabled: boolean): HomeSearchResult {
+	return {
+		key: `integration-${id}`,
+		title: `${name}`,
+		icon,
+		actions: [],
+		data: {
+			providerId: "integration-provider",
+			integrationId: id,
+			searchEnabled
+		},
+		template: CLITemplate.Custom,
+		templateContent: {
+			layout: searchEnabled ? TURNOFF_INTEGRATION_TEMPLATE.template : TURNON_INTEGRATION_TEMPLATE.template,
+			data: {
+				title: name,
+				description,
+				icon,
+				btnText: searchEnabled ? "Turn Off Integration" : "Turn On Integration"
+			}
+		}
+	};
+}
+
+async function initializeIntegration(integrationManager: IntegrationManager,
+	integration: Integration<unknown>) {
+		if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
+			try {
+				const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
+				knownIntegrationProviders[integration.id] = mod.integration;
+			} catch (err) {
+				console.error(`Error loading module ${integration.moduleUrl}`, err);
+			}
+		}
+		if (knownIntegrationProviders[integration.id]) {
+			const homeIntegration = knownIntegrationProviders[integration.id];
+			homeIntegrations.push({
+				module: homeIntegration,
+				integration,
+				search: true
+			});
+			if (homeIntegration.register) {
+				await homeIntegration.register(integrationManager, integration);
+			}
+		} else {
+			console.error("Missing module in integration providers", integration.id);
+		}
+}
+
+export async function getManagementResults(
+
+): Promise<HomeSearchResponse> {
+	const homeResponse: HomeSearchResponse = {
+		results: [],
+		context: {
+			filters: []
+		}
+	};
+
+	const integrations = passedIntegrationProvider?.integrations;
+	if (Array.isArray(integrations)) {
+		for (const integration of integrations) {
+			const existingIntegration = homeIntegrations.find((entry) => entry.integration.id === integration.id);
+			if (existingIntegration) {
+				homeResponse.results.push(
+					createResult(existingIntegration.integration.id,
+						existingIntegration.integration.title,
+						existingIntegration.integration.description,
+						existingIntegration.integration.icon,
+						existingIntegration.search));
+			} else {
+				homeResponse.results.push(
+					createResult(integration.id,
+						integration.title,
+						integration.description,
+						integration.icon,
+						false));
+			}
+		}
+	}
+
+	return homeResponse;
+}
+
+async function updateIntegrationStatus(integrationId: string, searchEnabled): Promise<boolean> {
+	const knownIntegration = knownIntegrationProviders[integrationId];
+	if (knownIntegration === undefined) {
+		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
+		if (integration !== undefined) {
+			await initializeIntegration(passedIntegrationManager, integration);
+			return true;
+		}
+		console.warn(`Unable to find specified integration: ${integrationId} in settings.`);
+		return false;
+	}
+	const index = homeIntegrations.findIndex((entry) => entry.integration.id === integrationId);
+	if (index !== -1) {
+		homeIntegrations[index].search = !searchEnabled;
+		return true;
+	}
+	return false;
+}
 /**
  * Register all the workspace integrations.
  * @param integrationManager The integration manager.
@@ -28,30 +148,14 @@ export async function register(
 	integrationManager: IntegrationManager,
 	integrationProvider?: IntegrationProviderOptions
 ): Promise<void> {
+	passedIntegrationProvider = integrationProvider;
+	passedIntegrationManager = integrationManager;
 	const integrations = integrationProvider?.integrations;
+
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
-			if (integration.enabled) {
-				if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
-					try {
-						const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
-						knownIntegrationProviders[integration.id] = mod.integration;
-					} catch (err) {
-						console.error(`Error loading module ${integration.moduleUrl}`, err);
-					}
-				}
-				if (knownIntegrationProviders[integration.id]) {
-					const homeIntegration = knownIntegrationProviders[integration.id];
-					homeIntegrations.push({
-						module: homeIntegration,
-						integration
-					});
-					if (homeIntegration.register) {
-						await homeIntegration.register(integrationManager, integration);
-					}
-				} else {
-					console.error("Missing module in integration providers", integration.id);
-				}
+			if (integration.enabled && (integration.autoStart ?? true)) {
+				await initializeIntegration(integrationManager, integration);
 			}
 		}
 	}
@@ -87,6 +191,10 @@ export async function getSearchResults(
 			filters: []
 		}
 	};
+
+	if (query.startsWith(`/${passedIntegrationProvider.command ?? "search"}`)) {
+		return getManagementResults();
+	}
 
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
@@ -145,6 +253,9 @@ export async function itemSelection(
 	lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
 	if (result.data) {
+		if (result.data?.providerId === "integration-provider") {
+			return updateIntegrationStatus(result.data?.integrationId, result?.data?.searchEnabled);
+		}
 		const foundIntegration = homeIntegrations.find((hi) => hi.integration.id === result.data?.providerId);
 
 		if (foundIntegration?.module?.itemSelection) {

@@ -355,9 +355,9 @@ export async function register() {
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
 		const query = request.query.toLowerCase();
-		if (query.startsWith("/") && !query.toLowerCase().startsWith("/w ")) {
-			return { results: [] };
-		}
+		// if (query.startsWith("/") && !query.toLowerCase().startsWith("/w ")) {
+		// 	return { results: [] };
+		// }
 
 		if (query.toLowerCase().startsWith("/w ")) {
 			const workspaces = await getWorkspaces();
