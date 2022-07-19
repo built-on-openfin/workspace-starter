@@ -1251,5 +1251,20 @@
 		],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "getting-started",
+		"name": "getting-started",
+		"title": "Getting Started Guide",
+		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.0.0/common/snapshots/snapshot-getting-started.json",
+		"manifestType": "snapshot",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-getting-started-snapshot-to-apps/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "snapshot", "tool"]
 	}
 ]
