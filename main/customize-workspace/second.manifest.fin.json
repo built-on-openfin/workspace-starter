@@ -56,6 +56,23 @@
 			"store": true,
 			"notifications": true
 		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "example",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/auth/example.bundle.js",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1
+					}
+				}
+			],
+			"authProviderId": "example"
+		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace",
 			"intentPicker": {
@@ -84,7 +101,7 @@
 			"modules": [
 				{
 					"id": "local-storage",
-					"url": "https://built-on-openfin.github.io/workspace-starter/main/common/js/endpoints/endpoint-local-storage.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/endpoints/local-storage.bundle.js",
 					"data": {}
 				}
 			],
@@ -620,7 +637,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/integrations/salesforce.bundle.js",
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",

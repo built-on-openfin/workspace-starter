@@ -467,7 +467,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/integrations/salesforce.bundle.js",
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
