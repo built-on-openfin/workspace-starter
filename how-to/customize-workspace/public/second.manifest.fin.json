@@ -56,6 +56,23 @@
 			"store": true,
 			"notifications": true
 		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "example",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1
+					}
+				}
+			],
+			"authProviderId": "example"
+		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
 			"intentPicker": {
@@ -84,7 +101,7 @@
 			"modules": [
 				{
 					"id": "local-storage",
-					"url": "http://localhost:8080/common/js/endpoints/endpoint-local-storage.bundle.js",
+					"url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js",
 					"data": {}
 				}
 			],
@@ -620,7 +637,7 @@
 					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
+					"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",

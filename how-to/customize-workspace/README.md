@@ -18,6 +18,7 @@ This sample is an extension of the support context and intents example. The samp
 - An example of implementing your own sharing function has also been added.
 - An example of supporting additional search providers (we include optional support from the integrate-with-salesforce starter project).
 - An example of swapping out where workspaces and pages are stored (First Starter uses the default storage and Second Starter enables custom storage).
+- An example of having client side authentication. We dynamically load an auth module (which you can swap out with your own) that has a basic implementation so that you can try different states and change how the platform should respond.
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 

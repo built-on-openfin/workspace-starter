@@ -1,4 +1,4 @@
-import { EndpointDefinition } from "../endpoint-shapes";
+import { EndpointDefinition } from "../../../endpoint-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import { IPlatformStorage } from "./platform-storage-shapes";
 
@@ -25,14 +25,21 @@ export async function action(
 		console.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false.`);
 		return false;
 	}
-	const options = endpointDefinition.options;
-	const localStorage = getStorage<unknown>(options.dataType);
+	if (endpointDefinition.type !== "module") {
+		console.warn(
+			`We only expect endpoints of type module. Unable to perform action: ${endpointDefinition.id}`
+		);
+		return false;
+	}
 
-	if (options.method === "REMOVE") {
+	const { dataType, method } = endpointDefinition.options;
+	const localStorage = getStorage<unknown>(dataType);
+
+	if (method === "REMOVE") {
 		const id: string = request.id;
 		await localStorage.remove(id);
 		return true;
-	} else if (options.method === "SET") {
+	} else if (method === "SET") {
 		if (request.payload === undefined) {
 			console.warn(`The payload needs to be specified for this action: ${endpointDefinition.id}`);
 			return false;
@@ -53,16 +60,23 @@ export async function requestResponse(
 		);
 		return null;
 	}
-	const options = endpointDefinition.options;
-	const localStorage = getStorage<unknown>(options.dataType);
+	if (endpointDefinition.type !== "module") {
+		console.warn(
+			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
+		);
+		return null;
+	}
 
-	if (options.method === "GET") {
+	const { dataType, method } = endpointDefinition.options;
+	const localStorage = getStorage<unknown>(dataType);
+
+	if (method === "GET") {
 		if (request.id === undefined) {
 			console.warn(`An id is required for this request response: ${endpointDefinition.id}. Returning null.`);
 			return null;
 		}
 		return localStorage.get(request.id);
-	} else if (options.method === "GETALL") {
+	} else if (method === "GETALL") {
 		return { data: await localStorage.getAll() };
 	}
 	return null;

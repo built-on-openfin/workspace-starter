@@ -1,6 +1,7 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
+import { AuthProviderOptions } from "./auth-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
 
@@ -113,6 +114,7 @@ interface StorefrontProviderOptions {
 
 export interface CustomSettings {
 	bootstrap?: { store: boolean; home: boolean; notifications: boolean };
+	authProvider?: AuthProviderOptions;
 	appProvider?: AppProviderOptions;
 	platformProvider?: PlatformProviderOptions;
 	browserProvider?: BrowserProviderOptions;

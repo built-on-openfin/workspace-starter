@@ -18,7 +18,7 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationManager, IntegrationModule } from "../../../integrations-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,

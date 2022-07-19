@@ -1,7 +1,7 @@
 import { BrowserCreateWindowRequest, getCurrentSync, Page } from "@openfin/workspace-platform";
 import { getDefaultToolbarButtons } from "./buttons";
 import * as endpointProvider from "./endpoint";
-import { PlatformLocalStorage } from "./platform-local-storage";
+import { PlatformLocalStorage } from "./modules/endpoints/local-storage/platform-local-storage";
 import { getSettings } from "./settings";
 
 const DEFAULT_PAGE_BOUNDS_STORAGE = new PlatformLocalStorage<OpenFin.Bounds>("page-bounds", "PageBounds");

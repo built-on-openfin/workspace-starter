@@ -467,7 +467,7 @@
 					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
+					"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",

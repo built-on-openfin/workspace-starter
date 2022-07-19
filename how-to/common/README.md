@@ -29,13 +29,13 @@ If you build and start one of the other samples it will reference this project i
 
 ## Content
 
-### Tools
+### Linked Tools
 
-- [App Definition Builder](public/views/app/app-definition-builder/)
-- [Context using FDC3](public/views/fdc3/context/)
-- [Intents using FDC3](public/views/fdc3/intent/)
-- [Context using Interop API](public/views/interop/context/)
-- [Intents using Interop API](public/views/interop/intent/)
+- App Definition Builder
+- Context using FDC3
+- Intents using FDC3
+- Context using Interop API
+- Intents using Interop API
 
 ### Samples
 
