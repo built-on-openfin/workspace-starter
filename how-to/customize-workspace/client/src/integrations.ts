@@ -4,7 +4,8 @@ import {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	CLITemplate
+	CLITemplate,
+	ButtonStyle
 } from "@openfin/workspace";
 import * as endpointProvider from "./endpoint";
 import type {
@@ -13,7 +14,7 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
-import { TURNOFF_INTEGRATION_TEMPLATE, TURNON_INTEGRATION_TEMPLATE } from "./template";
+import { createButton, createContainer, createImage, createText } from "./templates";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -54,11 +55,36 @@ function createResult(
 		},
 		template: CLITemplate.Custom,
 		templateContent: {
-			layout: include ? TURNOFF_INTEGRATION_TEMPLATE.template : TURNON_INTEGRATION_TEMPLATE.template,
+			layout: createContainer(
+				"column",
+				[
+					createContainer(
+						"row",
+						[
+							createImage("icon", name, { width: "32px", height: "32px" }),
+							createText("title", 16, {
+								color: "var(--openfin-ui-brandPrimary)",
+								fontWeight: "bold"
+							})
+						],
+						{
+							alignItems: "center",
+							gap: "10px"
+						}
+					),
+					createText("description", 12, { padding: "10px 0px" }),
+					createText("status", 12, { padding: "10px 0px" }),
+					createButton(ButtonStyle.Primary, "btnText", "")
+				],
+				{
+					padding: "10px"
+				}
+			),
 			data: {
 				title: name,
-				description,
+				description: description ?? "You can enable/disable an integrations features",
 				icon,
+				status: `State: ${include ? "on" : "off"}`,
 				btnText: include ? "Turn Off Integration" : "Turn On Integration"
 			}
 		}
@@ -175,9 +201,14 @@ async function updateIntegrationStatus(
 		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
 		if (integration !== undefined) {
 			await initializeIntegration(passedIntegrationManager, integration);
-			lastResponse.respond([
-				createResult(integration.id, integration.title, integration.description, integration.icon, !include)
-			]);
+			const result = createResult(
+				integration.id,
+				integration.title,
+				integration.description,
+				integration.icon,
+				!include
+			);
+			lastResponse.respond([result]);
 			await savePreference(integration.id, !include);
 			return true;
 		}
