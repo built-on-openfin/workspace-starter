@@ -12,7 +12,6 @@ const WORKSPACE_ACTIONS = {
 	launch: "workspace-launch"
 };
 
-
 export const PAGE_TEMPLATE: {
 	actions: { delete: string; share: string; launch: string };
 	template: TemplateFragment;
@@ -260,7 +259,6 @@ export const CURRENT_WORKSPACE_TEMPLATE: {
 		]
 	}
 };
-
 
 export const TURNON_INTEGRATION_TEMPLATE: {
 	template: TemplateFragment;

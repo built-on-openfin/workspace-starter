@@ -6,6 +6,7 @@ import {
 	HomeSearchResult,
 	CLITemplate
 } from "@openfin/workspace";
+import * as endpointProvider from "./endpoint";
 import type {
 	Integration,
 	IntegrationManager,
@@ -34,8 +35,13 @@ let passedIntegrationProvider: IntegrationProviderOptions;
  * @param include is search enabled for this integration.
  * @returns The search result.
  */
- function createResult(id: string,
-	name: string, description: string, icon: string, include: boolean): HomeSearchResult {
+function createResult(
+	id: string,
+	name: string,
+	description: string,
+	icon: string,
+	include: boolean
+): HomeSearchResult {
 	return {
 		key: `integration-${id}`,
 		title: `${name}`,
@@ -59,34 +65,34 @@ let passedIntegrationProvider: IntegrationProviderOptions;
 	};
 }
 
-async function initializeIntegration(integrationManager: IntegrationManager,
-	integration: Integration<unknown>) {
-		if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
-			try {
-				const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
-				knownIntegrationProviders[integration.id] = mod.integration;
-			} catch (err) {
-				console.error(`Error loading module ${integration.moduleUrl}`, err);
-			}
+async function initializeIntegration(
+	integrationManager: IntegrationManager,
+	integration: Integration<unknown>
+) {
+	if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
+		try {
+			const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
+			knownIntegrationProviders[integration.id] = mod.integration;
+		} catch (err) {
+			console.error(`Error loading module ${integration.moduleUrl}`, err);
 		}
-		if (knownIntegrationProviders[integration.id]) {
-			const homeIntegration = knownIntegrationProviders[integration.id];
-			homeIntegrations.push({
-				module: homeIntegration,
-				integration,
-				include: true
-			});
-			if (homeIntegration.register) {
-				await homeIntegration.register(integrationManager, integration);
-			}
-		} else {
-			console.error("Missing module in integration providers", integration.id);
+	}
+	if (knownIntegrationProviders[integration.id]) {
+		const homeIntegration = knownIntegrationProviders[integration.id];
+		homeIntegrations.push({
+			module: homeIntegration,
+			integration,
+			include: true
+		});
+		if (homeIntegration.register) {
+			await homeIntegration.register(integrationManager, integration);
 		}
+	} else {
+		console.error("Missing module in integration providers", integration.id);
+	}
 }
 
-export async function getManagementResults(
-
-): Promise<HomeSearchResponse> {
+export async function getManagementResults(): Promise<HomeSearchResponse> {
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
@@ -100,19 +106,23 @@ export async function getManagementResults(
 			if (integration.enabled) {
 				const existingIntegration = homeIntegrations.find((entry) => entry.integration.id === integration.id);
 				if (existingIntegration) {
-					homeResponse.results.push(
-						createResult(existingIntegration.integration.id,
-							existingIntegration.integration.title,
-							existingIntegration.integration.description,
-							existingIntegration.integration.icon,
-							existingIntegration.include));
+					const result = createResult(
+						existingIntegration.integration.id,
+						existingIntegration.integration.title,
+						existingIntegration.integration.description,
+						existingIntegration.integration.icon,
+						existingIntegration.include
+					);
+					homeResponse.results.push(result);
 				} else {
-					homeResponse.results.push(
-						createResult(integration.id,
-							integration.title,
-							integration.description,
-							integration.icon,
-							false));
+					const result = createResult(
+						integration.id,
+						integration.title,
+						integration.description,
+						integration.icon,
+						false
+					);
+					homeResponse.results.push(result);
 				}
 			}
 		}
@@ -121,20 +131,54 @@ export async function getManagementResults(
 	return homeResponse;
 }
 
-async function updateIntegrationStatus(lastResponse: HomeSearchListenerResponse,
+async function savePreference(integrationId: string, include: boolean) {
+	const integrationPreferenceEndpointId = "integration-preferences-set";
+	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
+		// eslint-disable-next-line max-len
+		const success = await endpointProvider.action<{ id: string; payload: { include: boolean } }>(
+			integrationPreferenceEndpointId,
+			{ id: integrationId, payload: { include } }
+		);
+		if (success) {
+			console.log(`Saved integration: ${integrationId} preference. Include: ${include}`);
+		} else {
+			console.log(`Unable to save integration: ${integrationId} preference. Include: ${include}`);
+		}
+	}
+}
+
+async function getPreference(integrationId: string): Promise<{ include: boolean }> {
+	const integrationPreferenceEndpointId = "integration-preferences-get";
+	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
+		// eslint-disable-next-line max-len
+		const preference = await endpointProvider.requestResponse<{ id: string }, { include: boolean }>(
+			integrationPreferenceEndpointId,
+			{ id: integrationId }
+		);
+		if (preference !== undefined && preference !== null) {
+			console.log(`Retrieved preference for integration: ${integrationId}`);
+		} else {
+			console.log(`Unable to get preference for integration: ${integrationId}`);
+		}
+		return preference;
+	}
+	return null;
+}
+
+async function updateIntegrationStatus(
+	lastResponse: HomeSearchListenerResponse,
 	integrationId: string,
-	include: boolean): Promise<boolean> {
+	include: boolean
+): Promise<boolean> {
 	const knownIntegration = knownIntegrationProviders[integrationId];
 	if (knownIntegration === undefined) {
 		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
 		if (integration !== undefined) {
 			await initializeIntegration(passedIntegrationManager, integration);
 			lastResponse.respond([
-				createResult(integration.id,
-				integration.title,
-				integration.description,
-				integration.icon, !include)
+				createResult(integration.id, integration.title, integration.description, integration.icon, !include)
 			]);
+			await savePreference(integration.id, !include);
 			return true;
 		}
 		console.warn(`Unable to find specified integration: ${integrationId} in settings.`);
@@ -144,12 +188,15 @@ async function updateIntegrationStatus(lastResponse: HomeSearchListenerResponse,
 	if (index !== -1) {
 		homeIntegrations[index].include = !include;
 		lastResponse.respond([
-			createResult(homeIntegrations[index].integration.id,
+			createResult(
+				homeIntegrations[index].integration.id,
 				homeIntegrations[index].integration.title,
 				homeIntegrations[index].integration.description,
-				homeIntegrations[index].integration.icon, 
-				!include)
+				homeIntegrations[index].integration.icon,
+				!include
+			)
 		]);
+		await savePreference(homeIntegrations[index].integration.id, !include);
 		return true;
 	}
 	return false;
@@ -169,8 +216,16 @@ export async function register(
 
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
-			if (integration.enabled && (integration.autoStart ?? true)) {
-				await initializeIntegration(integrationManager, integration);
+			if (integration.enabled) {
+				const integrationPreference = await getPreference(integration.id);
+				if (integrationPreference !== null) {
+					// follow preference
+					if (integrationPreference.include) {
+						await initializeIntegration(integrationManager, integration);
+					}
+				} else if (integration.autoStart ?? true) {
+					await initializeIntegration(integrationManager, integration);
+				}
 			}
 		}
 	}
@@ -207,7 +262,10 @@ export async function getSearchResults(
 		}
 	};
 
-	if (passedIntegrationProvider.isManagementEnabled && query.startsWith(`/${passedIntegrationProvider.command ?? "integrations"}`)) {
+	if (
+		passedIntegrationProvider.isManagementEnabled &&
+		query.startsWith(`/${passedIntegrationProvider.command ?? "integrations"}`)
+	) {
 		return getManagementResults();
 	}
 
