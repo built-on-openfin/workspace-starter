@@ -236,6 +236,24 @@
 						"method": "REMOVE",
 						"dataType": "page-bounds"
 					}
+				},
+				{
+					"id": "integration-preferences-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "integration-preferences"
+					}
+				},
+				{
+					"id": "integration-preferences-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "integration-preferences"
+					}
 				}
 			]
 		},
@@ -631,6 +649,8 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon-32x32.png"
 		},
 		"integrationProvider": {
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico",
+			"isManagementEnabled": true,
 			"integrations": [
 				{
 					"id": "salesforce",
@@ -650,6 +670,15 @@
 							"task": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/common/images/salesforce/task.svg"
 						}
 					}
+				},
+				{
+					"id": "emoji",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"autoStart": false,
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/js/integrations/emoji.bundle.js",
+					"data": {}
 				}
 			]
 		}
