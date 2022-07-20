@@ -16,7 +16,7 @@ import {
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
-import { getSearchResults, itemSelection } from "./integrations";
+import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
 import { share } from "./share";
@@ -355,9 +355,6 @@ export async function register() {
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
 		const query = request.query.toLowerCase();
-		// if (query.startsWith("/") && !query.toLowerCase().startsWith("/w ")) {
-		// 	return { results: [] };
-		// }
 
 		if (query.toLowerCase().startsWith("/w ")) {
 			const workspaces = await getWorkspaces();
@@ -408,8 +405,19 @@ export async function register() {
 		}
 		lastResponse = response;
 		lastResponse.open();
-		const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
 
+		if (query === "?") {
+			const integrationHelpSearchEntries = await getHelpSearchEntries();
+			const searchResults = {
+				results: integrationHelpSearchEntries,
+				context: {
+					filters: []
+				}
+			};
+			return searchResults;
+		}
+
+		const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
 		const integrationResults = await getSearchResults(query, filters, lastResponse);
 		if (Array.isArray(integrationResults.results)) {
 			searchResults.results = searchResults.results.concat(integrationResults.results);

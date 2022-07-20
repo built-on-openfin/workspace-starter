@@ -19,11 +19,9 @@ const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = 
 const homeIntegrations: {
 	module: IntegrationModule<unknown>;
 	integration: Integration<unknown>;
-	search: boolean;
+	include: boolean;
 }[] = [];
 
-let integrationCommand: string;
-let integrationDescription: string;
 let passedIntegrationManager: IntegrationManager;
 let passedIntegrationProvider: IntegrationProviderOptions;
 
@@ -33,11 +31,11 @@ let passedIntegrationProvider: IntegrationProviderOptions;
  * @param name The name of the integration.
  * @param description The description of the integration.
  * @param icon The icon of the integration.
- * @param searchEnabled is search enabled for this integration.
+ * @param include is search enabled for this integration.
  * @returns The search result.
  */
  function createResult(id: string,
-	name: string, description: string, icon: string, searchEnabled: boolean): HomeSearchResult {
+	name: string, description: string, icon: string, include: boolean): HomeSearchResult {
 	return {
 		key: `integration-${id}`,
 		title: `${name}`,
@@ -46,16 +44,16 @@ let passedIntegrationProvider: IntegrationProviderOptions;
 		data: {
 			providerId: "integration-provider",
 			integrationId: id,
-			searchEnabled
+			include
 		},
 		template: CLITemplate.Custom,
 		templateContent: {
-			layout: searchEnabled ? TURNOFF_INTEGRATION_TEMPLATE.template : TURNON_INTEGRATION_TEMPLATE.template,
+			layout: include ? TURNOFF_INTEGRATION_TEMPLATE.template : TURNON_INTEGRATION_TEMPLATE.template,
 			data: {
 				title: name,
 				description,
 				icon,
-				btnText: searchEnabled ? "Turn Off Integration" : "Turn On Integration"
+				btnText: include ? "Turn Off Integration" : "Turn On Integration"
 			}
 		}
 	};
@@ -76,7 +74,7 @@ async function initializeIntegration(integrationManager: IntegrationManager,
 			homeIntegrations.push({
 				module: homeIntegration,
 				integration,
-				search: true
+				include: true
 			});
 			if (homeIntegration.register) {
 				await homeIntegration.register(integrationManager, integration);
@@ -99,21 +97,23 @@ export async function getManagementResults(
 	const integrations = passedIntegrationProvider?.integrations;
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
-			const existingIntegration = homeIntegrations.find((entry) => entry.integration.id === integration.id);
-			if (existingIntegration) {
-				homeResponse.results.push(
-					createResult(existingIntegration.integration.id,
-						existingIntegration.integration.title,
-						existingIntegration.integration.description,
-						existingIntegration.integration.icon,
-						existingIntegration.search));
-			} else {
-				homeResponse.results.push(
-					createResult(integration.id,
-						integration.title,
-						integration.description,
-						integration.icon,
-						false));
+			if (integration.enabled) {
+				const existingIntegration = homeIntegrations.find((entry) => entry.integration.id === integration.id);
+				if (existingIntegration) {
+					homeResponse.results.push(
+						createResult(existingIntegration.integration.id,
+							existingIntegration.integration.title,
+							existingIntegration.integration.description,
+							existingIntegration.integration.icon,
+							existingIntegration.include));
+				} else {
+					homeResponse.results.push(
+						createResult(integration.id,
+							integration.title,
+							integration.description,
+							integration.icon,
+							false));
+				}
 			}
 		}
 	}
@@ -121,12 +121,20 @@ export async function getManagementResults(
 	return homeResponse;
 }
 
-async function updateIntegrationStatus(integrationId: string, searchEnabled): Promise<boolean> {
+async function updateIntegrationStatus(lastResponse: HomeSearchListenerResponse,
+	integrationId: string,
+	include: boolean): Promise<boolean> {
 	const knownIntegration = knownIntegrationProviders[integrationId];
 	if (knownIntegration === undefined) {
 		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
 		if (integration !== undefined) {
 			await initializeIntegration(passedIntegrationManager, integration);
+			lastResponse.respond([
+				createResult(integration.id,
+				integration.title,
+				integration.description,
+				integration.icon, !include)
+			]);
 			return true;
 		}
 		console.warn(`Unable to find specified integration: ${integrationId} in settings.`);
@@ -134,7 +142,14 @@ async function updateIntegrationStatus(integrationId: string, searchEnabled): Pr
 	}
 	const index = homeIntegrations.findIndex((entry) => entry.integration.id === integrationId);
 	if (index !== -1) {
-		homeIntegrations[index].search = !searchEnabled;
+		homeIntegrations[index].include = !include;
+		lastResponse.respond([
+			createResult(homeIntegrations[index].integration.id,
+				homeIntegrations[index].integration.title,
+				homeIntegrations[index].integration.description,
+				homeIntegrations[index].integration.icon, 
+				!include)
+		]);
 		return true;
 	}
 	return false;
@@ -192,13 +207,13 @@ export async function getSearchResults(
 		}
 	};
 
-	if (query.startsWith(`/${passedIntegrationProvider.command ?? "search"}`)) {
+	if (passedIntegrationProvider.isManagementEnabled && query.startsWith(`/${passedIntegrationProvider.command ?? "integrations"}`)) {
 		return getManagementResults();
 	}
 
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getSearchResults) {
+		if (homeIntegration.module.getSearchResults && homeIntegration.include) {
 			promises.push(
 				homeIntegration.module.getSearchResults(homeIntegration.integration, query, filters, lastResponse)
 			);
@@ -230,8 +245,22 @@ export async function getSearchResults(
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	let results: HomeSearchResult[] = [];
 
+	if (passedIntegrationProvider.isManagementEnabled) {
+		const entry: HomeSearchResult = {
+			key: "integration-provider-help",
+			title: `/${passedIntegrationProvider.command ?? "integrations"}`,
+			label: "Help",
+			actions: [],
+			icon: passedIntegrationProvider.icon,
+			description: passedIntegrationProvider.commandDescription,
+			shortDescription: passedIntegrationProvider.commandDescription,
+			template: CLITemplate.SimpleText,
+			templateContent: passedIntegrationProvider.commandDescription
+		};
+		results.push(entry);
+	}
 	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getHelpSearchEntries) {
+		if (homeIntegration.module.getHelpSearchEntries && homeIntegration.include) {
 			const integrationResults = await homeIntegration.module.getHelpSearchEntries(
 				homeIntegration.integration
 			);
@@ -254,7 +283,9 @@ export async function itemSelection(
 ): Promise<boolean> {
 	if (result.data) {
 		if (result.data?.providerId === "integration-provider") {
-			return updateIntegrationStatus(result.data?.integrationId, result?.data?.searchEnabled);
+			const integrationId: string = result.data.integrationId;
+			const include: boolean = result.data.include;
+			return updateIntegrationStatus(lastResponse, integrationId, include);
 		}
 		const foundIntegration = homeIntegrations.find((hi) => hi.integration.id === result.data?.providerId);
 

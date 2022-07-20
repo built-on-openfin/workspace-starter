@@ -76,6 +76,11 @@ export interface IntegrationProviderOptions {
 	 * What description should accompany the command
 	 */
 	commandDescription?: string;
+
+	/**
+	 * An icon representing the top level integration provider
+	 */
+	icon?: string;
 }
 
 /**

@@ -461,6 +461,8 @@
 			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"integrationProvider": {
+			"icon": "http://localhost:8080/favicon.ico",
+			"isManagementEnabled": true,
 			"integrations": [
 				{
 					"id": "salesforce",
@@ -480,6 +482,15 @@
 							"task": "http://localhost:8080/common/images/salesforce/task.svg"
 						}
 					}
+				},
+				{
+					"id": "emoji",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"autoStart": false,
+					"moduleUrl": "http://localhost:8080/js/integrations/emoji.bundle.js",
+					"data": {}
 				}
 			]
 		}
