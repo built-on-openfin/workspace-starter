@@ -461,6 +461,8 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico"
 		},
 		"integrationProvider": {
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico",
+			"isManagementEnabled": true,
 			"integrations": [
 				{
 					"id": "salesforce",
@@ -480,6 +482,15 @@
 							"task": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/common/images/salesforce/task.svg"
 						}
 					}
+				},
+				{
+					"id": "emoji",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"autoStart": false,
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/js/integrations/emoji.bundle.js",
+					"data": {}
 				}
 			]
 		}
