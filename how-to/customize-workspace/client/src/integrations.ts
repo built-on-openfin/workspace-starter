@@ -158,6 +158,23 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 		}
 	}
 
+	if (homeResponse.results.length === 0) {
+		const description = "You either have no integrations listed or none of them are enabled. Please check with support if you believe you should have access to integrations.";
+		const noEntries: HomeSearchResult = {
+			key: "integration-provider-no-results",
+			title: "No integrations available",
+			data: {},
+			actions: [],
+			icon: passedIntegrationProvider.icon,
+			description,
+			shortDescription: description,
+			template: CLITemplate.SimpleText,
+			templateContent: description
+		};
+		homeResponse.results.push(noEntries);
+		console.error("Integration management is enabled but you have no integrations listed in your settings or none of them are enabled.");
+	}
+
 	return homeResponse;
 }
 
