@@ -55,13 +55,19 @@ export async function getActions(): Promise<CustomActionsMap> {
 					const options = await view.getOptions();
 					const info = await view.getInfo();
 					const name = options.name;
+					const fdc3InteropApi =
+						options.fdc3InteropApi !== undefined &&
+						options.fdc3InteropApi !== null &&
+						options.fdc3InteropApi.length > 0
+							? options.fdc3InteropApi
+							: "1.2";
 					const preloads =
 						Array.isArray(options.preloadScripts) && options.preloadScripts.length > 0
 							? options.preloadScripts
 							: undefined;
 					const manifest = {
 						url: info.url,
-						fdc3InteropApi: options.fdc3InteropApi,
+						fdc3InteropApi,
 						interop: options.interop,
 						customData: options.customData,
 						preloadScripts: preloads
