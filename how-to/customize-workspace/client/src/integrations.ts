@@ -14,7 +14,7 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
-import { createButton, createContainer, createImage, createText } from "./templates";
+import { createButton, createContainer, createHelp, createImage, createText } from "./templates";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -74,7 +74,11 @@ function createResult(
 					),
 					createText("description", 12, { padding: "10px 0px" }),
 					createText("status", 12, { padding: "10px 0px" }),
-					createButton(ButtonStyle.Primary, "btnText", "")
+					createButton(
+						ButtonStyle.Primary,
+						"btnText",
+						include ? "Turn Off Integration" : "Turn On Integration"
+					)
 				],
 				{
 					padding: "10px"
@@ -82,7 +86,7 @@ function createResult(
 			),
 			data: {
 				title: name,
-				description: description ?? "You can enable/disable an integrations features",
+				description: description ?? "You can enable/disable an integration features",
 				icon,
 				status: `State: ${include ? "on" : "off"}`,
 				btnText: include ? "Turn Off Integration" : "Turn On Integration"
@@ -157,7 +161,7 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 	return homeResponse;
 }
 
-async function savePreference(integrationId: string, include: boolean) {
+async function setPreference(integrationId: string, include: boolean) {
 	const integrationPreferenceEndpointId = "integration-preferences-set";
 	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
 		// eslint-disable-next-line max-len
@@ -209,7 +213,7 @@ async function updateIntegrationStatus(
 				!include
 			);
 			lastResponse.respond([result]);
-			await savePreference(integration.id, !include);
+			await setPreference(integration.id, !include);
 			return true;
 		}
 		console.warn(`Unable to find specified integration: ${integrationId} in settings.`);
@@ -227,7 +231,7 @@ async function updateIntegrationStatus(
 				!include
 			)
 		]);
-		await savePreference(homeIntegrations[index].integration.id, !include);
+		await setPreference(homeIntegrations[index].integration.id, !include);
 		return true;
 	}
 	return false;
@@ -335,18 +339,29 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	let results: HomeSearchResult[] = [];
 
 	if (passedIntegrationProvider.isManagementEnabled) {
-		const entry: HomeSearchResult = {
+		const commandKeyword = passedIntegrationProvider.command ?? "integrations";
+		const command = `/${commandKeyword}`;
+		const helpEntry: HomeSearchResult = {
 			key: "integration-provider-help",
-			title: `/${passedIntegrationProvider.command ?? "integrations"}`,
+			title: command,
 			label: "Help",
-			actions: [],
 			icon: passedIntegrationProvider.icon,
-			description: passedIntegrationProvider.commandDescription,
-			shortDescription: passedIntegrationProvider.commandDescription,
-			template: CLITemplate.SimpleText,
-			templateContent: passedIntegrationProvider.commandDescription
+			actions: [],
+			data: {
+				providerId: "integration-provider"
+			},
+			template: CLITemplate.Custom,
+			templateContent: createHelp(
+				command,
+				[
+					passedIntegrationProvider.commandDescription ??
+						`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
+				],
+				[command]
+			)
 		};
-		results.push(entry);
+
+		results.push(helpEntry);
 	}
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.getHelpSearchEntries && homeIntegration.include) {

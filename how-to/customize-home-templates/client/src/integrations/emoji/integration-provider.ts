@@ -78,6 +78,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 				key: `${EmojiIntegrationProvider._PROVIDER_ID}-help`,
 				title: "/emoji",
 				label: "Help",
+				icon: integration.icon,
 				actions: [],
 				data: {
 					providerId: EmojiIntegrationProvider._PROVIDER_ID

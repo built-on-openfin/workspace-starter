@@ -651,6 +651,8 @@
 		"integrationProvider": {
 			"icon": "http://localhost:8080/favicon.ico",
 			"isManagementEnabled": true,
+			"command": "integrations",
+			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"integrations": [
 				{
 					"id": "salesforce",
@@ -677,7 +679,7 @@
 					"title": "Emoji Provider",
 					"enabled": true,
 					"autoStart": false,
-					"moduleUrl": "http://localhost:8080/js/integrations/emoji.bundle.js",
+					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v8.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
