@@ -487,6 +487,7 @@
 					"id": "emoji",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Emoji Provider",
+					"description": "Search for emojis by name",
 					"enabled": true,
 					"autoStart": false,
 					"moduleUrl": "http://localhost:8080/js/integrations/emoji.bundle.js",
