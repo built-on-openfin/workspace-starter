@@ -175,9 +175,14 @@ async function updateIntegrationStatus(
 		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
 		if (integration !== undefined) {
 			await initializeIntegration(passedIntegrationManager, integration);
-			lastResponse.respond([
-				createResult(integration.id, integration.title, integration.description, integration.icon, !include)
-			]);
+			const result = createResult(
+				integration.id,
+				integration.title,
+				integration.description,
+				integration.icon,
+				!include
+			);
+			lastResponse.respond([result]);
 			await savePreference(integration.id, !include);
 			return true;
 		}
