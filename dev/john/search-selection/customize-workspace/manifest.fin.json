@@ -487,6 +487,7 @@
 					"id": "emoji",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/favicon.ico",
 					"title": "Emoji Provider",
+					"description": "Search for emojis by name",
 					"enabled": true,
 					"autoStart": false,
 					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/js/integrations/emoji.bundle.js",
