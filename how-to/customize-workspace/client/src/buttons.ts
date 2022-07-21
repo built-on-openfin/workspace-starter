@@ -1,6 +1,7 @@
 import { BrowserButtonType, CustomBrowserButtonConfig, ToolbarButton } from "@openfin/workspace-platform";
-import { getCurrentTheme, getSettings } from "./settings";
+import { getSettings } from "./settings";
 import { ToolbarButtonDefinition } from "./shapes";
+import { getCurrentTheme } from "./themes";
 
 let allToolbarButtons: ToolbarButtonDefinition[];
 let defaultToolbarButtons: ToolbarButton[];

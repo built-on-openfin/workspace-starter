@@ -1,10 +1,10 @@
 import {
+	Home,
 	HomeDispatchedSearchResult,
+	HomeProvider,
 	HomeSearchListenerRequest,
 	HomeSearchListenerResponse,
-	Home,
-	HomeSearchResponse,
-	HomeProvider
+	HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";
@@ -31,35 +31,39 @@ export async function register() {
 		request: HomeSearchListenerRequest,
 		response: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> => {
-		const query = request.query.toLowerCase();
-		if (lastResponse !== undefined) {
-			lastResponse.close();
+		try {
+			const query = request.query.toLowerCase();
+			if (lastResponse !== undefined) {
+				lastResponse.close();
+			}
+			lastResponse = response;
+			lastResponse.open();
+
+			const searchResults: HomeSearchResponse = {
+				results: [],
+				context: {
+					filters: []
+				}
+			};
+
+			if (query === "?") {
+				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
+			} else {
+				const integrationResults = await getSearchResults(query, undefined, lastResponse);
+				if (Array.isArray(integrationResults.results)) {
+					searchResults.results = searchResults.results.concat(integrationResults.results);
+				}
+				if (Array.isArray(integrationResults.context.filters)) {
+					searchResults.context.filters = searchResults.context.filters.concat(
+						integrationResults.context.filters
+					);
+				}
+			}
+
+			return searchResults;
+		} catch (err) {
+			console.error("Exception while getting search list results", err);
 		}
-		lastResponse = response;
-		lastResponse.open();
-
-		const searchResults: HomeSearchResponse = {
-			results: [],
-			context: {
-				filters: []
-			}
-		};
-
-		if (query === "?") {
-			searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
-		} else {
-			const integrationResults = await getSearchResults(query, undefined, lastResponse);
-			if (Array.isArray(integrationResults.results)) {
-				searchResults.results = searchResults.results.concat(integrationResults.results);
-			}
-			if (Array.isArray(integrationResults.context.filters)) {
-				searchResults.context.filters = searchResults.context.filters.concat(
-					integrationResults.context.filters
-				);
-			}
-		}
-
-		return searchResults;
 	};
 
 	const onSelection = async (result: HomeDispatchedSearchResult) => {

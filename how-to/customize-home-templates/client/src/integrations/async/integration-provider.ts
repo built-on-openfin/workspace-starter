@@ -68,7 +68,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					providerId: AsyncIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
-				templateContent: createHelp(
+				templateContent: await createHelp(
 					"/contacts-sync",
 					[
 						"The contacts-sync command can be used to search for a contact.",
@@ -87,7 +87,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					providerId: AsyncIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
-				templateContent: createHelp(
+				templateContent: await createHelp(
 					"/contacts-partial",
 					[
 						"The contacts-partial command can be used to search for a contact.",
@@ -106,7 +106,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					providerId: AsyncIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
-				templateContent: createHelp(
+				templateContent: await createHelp(
 					"/contacts",
 					[
 						"The contacts command can be used to search for a contact.",

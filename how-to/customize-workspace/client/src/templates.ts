@@ -43,7 +43,7 @@ export async function createHelp(
 			await createContainer("column", exampleFragments, {
 				padding: "10px",
 				marginTop: "6px",
-				backgroundColor: theme.palette.background5,
+				backgroundColor: theme.palette.inputBackground,
 				color: theme.palette.inputColor,
 				borderRadius: "5px"
 			})

@@ -236,6 +236,24 @@
 						"method": "REMOVE",
 						"dataType": "page-bounds"
 					}
+				},
+				{
+					"id": "integration-preferences-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "integration-preferences"
+					}
+				},
+				{
+					"id": "integration-preferences-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "integration-preferences"
+					}
 				}
 			]
 		},
@@ -631,12 +649,18 @@
 			"icon": "http://localhost:8080/favicon-32x32.png"
 		},
 		"integrationProvider": {
+			"icon": "http://localhost:8080/favicon.ico",
+			"isManagementEnabled": true,
+			"command": "integrations",
+			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"integrations": [
 				{
 					"id": "salesforce",
 					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
+					"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 					"enabled": false,
+					"autoStart": true,
 					"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
@@ -650,6 +674,15 @@
 							"task": "http://localhost:8080/common/images/salesforce/task.svg"
 						}
 					}
+				},
+				{
+					"id": "emoji",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"autoStart": false,
+					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v8.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
+					"data": {}
 				}
 			]
 		}

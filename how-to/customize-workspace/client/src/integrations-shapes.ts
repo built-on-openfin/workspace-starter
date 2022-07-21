@@ -61,6 +61,26 @@ export interface IntegrationProviderOptions {
 	 * The list of integrations.
 	 */
 	integrations?: Integration<unknown>[];
+
+	/**
+	 * Do you wish to expose an option of turning on/off integrations.
+	 */
+	isManagementEnabled?: boolean;
+
+	/**
+	 * What command should we look for in order to return the list of integrations
+	 */
+	command?: string;
+
+	/**
+	 * What description should accompany the command
+	 */
+	commandDescription?: string;
+
+	/**
+	 * An icon representing the top level integration provider
+	 */
+	icon?: string;
 }
 
 /**
@@ -78,6 +98,11 @@ export interface Integration<T> {
 	title: string;
 
 	/**
+	 * The description of the integration.
+	 */
+	description?: string;
+
+	/**
 	 * The icon of the integration.
 	 */
 	icon: string;
@@ -86,6 +111,11 @@ export interface Integration<T> {
 	 * Is the integration enabled.
 	 */
 	enabled: boolean;
+
+	/**
+	 * Does the integration start automatically if enabled (default is true).
+	 */
+	autoStart?: boolean;
 
 	/**
 	 * Module url to use if loading the module remotely.

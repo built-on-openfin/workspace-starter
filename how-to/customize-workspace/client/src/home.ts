@@ -16,7 +16,7 @@ import {
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
-import { getSearchResults, itemSelection } from "./integrations";
+import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
 import { share } from "./share";
@@ -259,7 +259,7 @@ async function getResults(
 					if (path.length === 1) {
 						const targetValue = entry[path[0]];
 
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+						if (targetValue === "string") {
 							return targetValue.toLowerCase().includes(query);
 						}
 					} else if (path.length === 2) {
@@ -269,11 +269,11 @@ async function getResults(
 							targetValue = specifiedTarget[path[1]];
 						}
 
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+						if (typeof targetValue === "string") {
 							return targetValue.toLowerCase().includes(query);
 						}
 
-						if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
+						if (Array.isArray(targetValue)) {
 							if (
 								targetValue.length > 0 &&
 								typeof targetValue[0] === "string" &&
@@ -354,73 +354,85 @@ export async function register() {
 		request: CLISearchListenerRequest,
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
-		const query = request.query.toLowerCase();
-		if (query.startsWith("/") && !query.toLowerCase().startsWith("/w ")) {
-			return { results: [] };
-		}
+		try {
+			const query = request.query.toLowerCase();
 
-		if (query.toLowerCase().startsWith("/w ")) {
-			const workspaces = await getWorkspaces();
-			const title = request.query.replace("/w ", "");
+			if (query.toLowerCase().startsWith("/w ")) {
+				const workspaces = await getWorkspaces();
+				const title = request.query.replace("/w ", "");
 
-			const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
-			if (foundMatch !== undefined && foundMatch !== null) {
-				// we have a match
+				const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
+				if (foundMatch !== undefined && foundMatch !== null) {
+					// we have a match
+					return {
+						results: [
+							{
+								key: "WORKSPACE-EXISTS",
+								title: `Workspace ${foundMatch.title} already exists.`,
+								actions: [],
+								data: {
+									tags: ["workspace"],
+									workspaceId: foundMatch.workspaceId
+								}
+							}
+						]
+					};
+				}
+				if (lastResponse !== undefined) {
+					lastResponse.close();
+				}
+				lastResponse = response;
+				lastResponse.open();
 				return {
 					results: [
 						{
-							key: "WORKSPACE-EXISTS",
-							title: `Workspace ${foundMatch.title} already exists.`,
-							actions: [],
+							key: "WORKSPACE-SAVE",
+							title: `Save Current Workspace as ${title}`,
+							label: "Suggestion",
+							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 							data: {
 								tags: ["workspace"],
-								workspaceId: foundMatch.workspaceId
+								workspaceId: crypto.randomUUID(),
+								workspaceTitle: title
 							}
 						}
 					]
 				};
 			}
+
+			filters = request?.context?.selectedFilters;
 			if (lastResponse !== undefined) {
 				lastResponse.close();
 			}
 			lastResponse = response;
 			lastResponse.open();
-			return {
-				results: [
-					{
-						key: "WORKSPACE-SAVE",
-						title: `Save Current Workspace as ${title}`,
-						label: "Suggestion",
-						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
-						data: {
-							tags: ["workspace"],
-							workspaceId: crypto.randomUUID(),
-							workspaceTitle: title
-						}
+
+			if (query === "?") {
+				const integrationHelpSearchEntries = await getHelpSearchEntries();
+				const searchResults = {
+					results: integrationHelpSearchEntries,
+					context: {
+						filters: []
 					}
-				]
-			};
-		}
+				};
+				return searchResults;
+			}
 
-		filters = request?.context?.selectedFilters;
-		if (lastResponse !== undefined) {
-			lastResponse.close();
-		}
-		lastResponse = response;
-		lastResponse.open();
-		const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
+			const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
+			const integrationResults = await getSearchResults(query, filters, lastResponse);
+			if (Array.isArray(integrationResults.results)) {
+				searchResults.results = searchResults.results.concat(integrationResults.results);
+			}
+			if (Array.isArray(integrationResults.context.filters)) {
+				searchResults.context.filters = searchResults.context.filters.concat(
+					integrationResults.context.filters
+				);
+			}
 
-		const integrationResults = await getSearchResults(query, filters, lastResponse);
-		if (Array.isArray(integrationResults.results)) {
-			searchResults.results = searchResults.results.concat(integrationResults.results);
+			return searchResults;
+		} catch (err) {
+			console.error("Exception while getting search list results", err);
 		}
-		if (Array.isArray(integrationResults.context.filters)) {
-			searchResults.context.filters = searchResults.context.filters.concat(
-				integrationResults.context.filters
-			);
-		}
-
-		return searchResults;
 	};
 
 	const onSelection = async (result: HomeDispatchedSearchResult) => {

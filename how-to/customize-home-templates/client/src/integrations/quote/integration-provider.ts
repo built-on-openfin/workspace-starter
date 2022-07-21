@@ -82,7 +82,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					providerId: QuoteIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
-				templateContent: createHelp(
+				templateContent: await createHelp(
 					"/quote",
 					[
 						"The quote command can be used to search for details of an instrument.",
@@ -179,7 +179,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 						},
 						template: CLITemplate.Custom,
 						templateContent: {
-							layout: getQuoteTemplate({
+							layout: await getQuoteTemplate({
 								detailsAction: QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION
 							}),
 							data: {

@@ -1,23 +1,30 @@
 import { ButtonStyle, TemplateFragment } from "@openfin/workspace";
 import { createButton, createContainer, createImage, createText } from "../../templates";
+import { getCurrentTheme } from "../../themes";
 
-export function getQuoteTemplate(actions: { detailsAction: string }): TemplateFragment {
+export async function getQuoteTemplate(actions: { detailsAction: string }): Promise<TemplateFragment> {
+	const theme = await getCurrentTheme();
+
 	return createContainer(
 		"column",
 		[
-			createContainer("row", [createText("symbol", 18, { fontWeight: "bold" }), createText("price", 18)], {
-				justifyContent: "space-between"
-			}),
-			createText("company", 12, { color: "gray", margin: "5px 0px" }),
-			createContainer("column", [createImage("graph", "History")], {
+			await createContainer(
+				"row",
+				[await createText("symbol", 18, { fontWeight: "bold" }), await createText("price", 18)],
+				{
+					justifyContent: "space-between"
+				}
+			),
+			await createText("company", 12, { color: theme.palette.textDefault, margin: "5px 0px" }),
+			await createContainer("column", [await createImage("graph", "History")], {
 				backgroundColor: "black",
 				borderRadius: "5px",
 				padding: "5px"
 			}),
-			createContainer(
+			await createContainer(
 				"row",
 				[
-					createButton(ButtonStyle.Primary, "detailsTitle", actions.detailsAction, {
+					await createButton(ButtonStyle.Primary, "detailsTitle", actions.detailsAction, {
 						fontSize: "12px"
 					})
 				],

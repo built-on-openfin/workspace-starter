@@ -1,20 +1,23 @@
 import { ButtonStyle, TemplateFragment } from "@openfin/workspace";
 import { createButton, createContainer, createText } from "../../templates";
+import { getCurrentTheme } from "../../themes";
 
-export function getEmojiTemplate(actions: {
+export async function getEmojiTemplate(actions: {
 	copyEmojiAction: string;
 	copyKeyAction: string;
 	detailsAction: string;
-}): TemplateFragment {
+}): Promise<TemplateFragment> {
+	const theme = await getCurrentTheme();
+
 	return createContainer(
 		"column",
 		[
-			createText("keyTitle", 12, { color: "lightgray", fontWeight: "bold" }),
-			createContainer(
+			await createText("keyTitle", 12, { color: theme.palette.brandPrimary, fontWeight: "bold" }),
+			await createContainer(
 				"row",
 				[
-					createText("key", 12, { color: "white", wordBreak: "break-all" }),
-					createButton(ButtonStyle.Secondary, "copyKeyTitle", actions.copyKeyAction, {
+					await createText("key", 12, { color: theme.palette.textDefault, wordBreak: "break-all" }),
+					await createButton(ButtonStyle.Secondary, "copyKeyTitle", actions.copyKeyAction, {
 						fontSize: "12px"
 					})
 				],
@@ -26,12 +29,12 @@ export function getEmojiTemplate(actions: {
 				}
 			),
 
-			createText("emojiTitle", 12, { color: "lightgray", fontWeight: "bold" }),
-			createContainer(
+			await createText("emojiTitle", 12, { color: theme.palette.brandPrimary, fontWeight: "bold" }),
+			await createContainer(
 				"row",
 				[
-					createText("emoji", 32, { color: "white" }),
-					createButton(ButtonStyle.Secondary, "copyEmojiTitle", actions.copyEmojiAction, {
+					await createText("emoji", 32, { color: theme.palette.textDefault }),
+					await createButton(ButtonStyle.Secondary, "copyEmojiTitle", actions.copyEmojiAction, {
 						fontSize: "12px"
 					})
 				],
@@ -43,10 +46,10 @@ export function getEmojiTemplate(actions: {
 				}
 			),
 
-			createContainer(
+			await createContainer(
 				"row",
 				[
-					createButton(ButtonStyle.Primary, "detailsTitle", actions.detailsAction, {
+					await createButton(ButtonStyle.Primary, "detailsTitle", actions.detailsAction, {
 						fontSize: "12px"
 					})
 				],

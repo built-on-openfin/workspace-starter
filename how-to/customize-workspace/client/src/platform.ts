@@ -11,8 +11,9 @@ import { getDefaultWindowOptions } from "./browser";
 import * as endpointProvider from "./endpoint";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
-import { getSettings, getThemes } from "./settings";
+import { getSettings } from "./settings";
 import { CustomSettings } from "./shapes";
+import { getThemes } from "./themes";
 
 let platformInitialized = false;
 

@@ -78,12 +78,13 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 				key: `${EmojiIntegrationProvider._PROVIDER_ID}-help`,
 				title: "/emoji",
 				label: "Help",
+				icon: integration.icon,
 				actions: [],
 				data: {
 					providerId: EmojiIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
-				templateContent: createHelp(
+				templateContent: await createHelp(
 					"/emoji",
 					[
 						"The emoji command can be used to search for emojis by name.",
@@ -149,7 +150,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> {
-		const results = [];
+		const results: HomeSearchResult[] = [];
 
 		if (query.startsWith("/emoji ")) {
 			let key = query.slice(7);
@@ -160,7 +161,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 				// Find exact match first if there is one
 				const matchEmoji = emoji.get(key);
 				if (matchEmoji && !matchEmoji.startsWith(":")) {
-					results.push(this.createResult(key, matchEmoji));
+					results.push(await this.createResult(key, matchEmoji));
 				}
 
 				// Find all other potential matches
@@ -168,7 +169,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 
 				for (const result of searchResult) {
 					if (result.emoji !== matchEmoji) {
-						results.push(this.createResult(result.key, result.emoji));
+						results.push(await this.createResult(result.key, result.emoji));
 					}
 				}
 			}
@@ -185,7 +186,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	 * @param symbol The emoji symbol.
 	 * @returns The search result.
 	 */
-	private createResult(key: string, symbol: string): HomeSearchResult {
+	private async createResult(key: string, symbol: string): Promise<HomeSearchResult> {
 		return {
 			key: `emoji-${key}`,
 			title: key,
@@ -208,7 +209,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: getEmojiTemplate({
+				layout: await getEmojiTemplate({
 					copyEmojiAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION,
 					copyKeyAction: EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION,
 					detailsAction: EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION
