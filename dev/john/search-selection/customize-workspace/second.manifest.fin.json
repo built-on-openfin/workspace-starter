@@ -658,7 +658,9 @@
 					"id": "salesforce",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
+					"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 					"enabled": false,
+					"autoStart": true,
 					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/search-selection/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
