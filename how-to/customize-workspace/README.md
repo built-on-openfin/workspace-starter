@@ -187,350 +187,418 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 ```javascript
 "customSettings": {
     "bootstrap": {
-      "home": true,
-      "store": true,
-      "notifications": true
+        "home": true,
+        "store": true,
+        "notifications": true
     },
     "platformProvider": {
-      "rootUrl": "http://localhost:8080",
-      "useCustomStorage": false,
-      "intentPicker": {
-        "url": "http://localhost:8080/common/windows/intents/picker.html",
-        "height": 400,
-        "width": 400
-      }
+        "rootUrl": "http://localhost:8080",
+        "useCustomStorage": false,
+        "intentPicker": {
+            "url": "http://localhost:8080/common/windows/intents/picker.html",
+            "height": 400,
+            "width": 400
+        }
     },
     "appProvider": {
-      "appsSourceUrl": "http://localhost:8080/common/apps.json",
-      "includeCredentialOnSourceRequest": "include",
-      "cacheDurationInMinutes": 1,
-      "appAssetTag": "appasset",
-      "manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+        "appsSourceUrl": "http://localhost:8080/common/apps.json",
+        "includeCredentialOnSourceRequest": "include",
+        "cacheDurationInMinutes": 1,
+        "appAssetTag": "appasset",
+        "manifestTypes": [
+            "view",
+            "snapshot",
+            "manifest",
+            "external",
+            "inline-view"
+        ]
     },
     "endpointProvider": {
-      "endpoints": [{
-        "id":"share-get",
-        "type":"fetch",
-        "options": {
-          "method": "GET",
-          "url":"https://targeturl"
-        }
-      },
-      {
-        "id":"share-save",
-        "type":"fetch",
-        "options": {
-          "method": "POST",
-          "url":"https://targeturl"
-        }
-      }]
-    },
-    "browserProvider": {
-      "windowOptions": {
-        "title": "Browser Starter",
-        "icon": "http://localhost:8080/favicon.ico",
-        "newTabUrl": null,
-        "newPageUrl": null
-      },
-      "toolbarButtons":[
-        {
-          "include": false,
-          "button": {
-            "type": "Custom",
-            "tooltip": "Change Opacity",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/favicon.ico",
-            "action": {
-                "id": "change-opacity",
-                "customData": {
-                  "sourceId": "change-opacity",
-                  "replacementId": "restore-opacity"
-                 }
-            }
-          }
-      },
-      {
-        "include": false,
-        "button": {
-          "type": "Custom",
-          "tooltip": "Restore Opacity",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/favicon.ico",
-          "action": {
-              "id": "restore-opacity",
-              "customData": {
-                "sourceId": "restore-opacity",
-                "replacementId": "change-opacity"
-               }
-          }
-        }
-        },
-        {
-          "include": true,
-          "button": {
-            "type": "Custom",
-            "tooltip": "Pin this window",
-            "disabled": false,
-            "iconUrl": "http://localhost:8080/common/icons/pin.svg",
-            "action": {
-                "id": "pin-window",
-                "customData": {
-                    "sourceId": "pin-window",
-                    "replacementId": "unpin-window"
+        "endpoints": [
+            {
+                "id": "share-get",
+                "type": "fetch",
+                "options": {
+                    "method": "GET",
+                    "url": "https://targeturl"
+                }
+            },
+            {
+                "id": "share-save",
+                "type": "fetch",
+                "options": {
+                    "method": "POST",
+                    "url": "https://targeturl"
                 }
             }
-          }
-      },
-      {
-        "include": false,
-        "button": {
-          "type": "Custom",
-          "tooltip": "Unpin this window",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
-          "action": {
-              "id": "unpin-window",
-              "customData": {
-                  "sourceId": "unpin-window",
-                  "replacementId": "pin-window"
-              }
-          }
-      }},
-      { "include": true, "button": {
-          "type": "ShowHideTabs"
-      }},
-      { "include": true, "button": {
-          "type": "ColorLinking"
-      }},
-      { "include": true, "button": {
-          "type": "PresetLayouts"
-      }},
-      { "include": true, "button": {
-          "type": "Custom",
-          "tooltip": "Share",
-          "disabled": false,
-          "iconUrl": "http://localhost:8080/common/icons/share.svg",
-          "action": {
-              "id": "share",
-              "customData": {
-              }
-          }
-      }},
-      { "include": true, "button": {
-          "type": "SavePage"
-      }}
-      ]
+        ]
+    },
+    "browserProvider": {
+        "windowOptions": {
+            "title": "Browser Starter",
+            "icon": "http://localhost:8080/favicon.ico",
+            "newTabUrl": null,
+            "newPageUrl": null
+        },
+        "toolbarButtons": [
+            {
+                "include": false,
+                "button": {
+                    "type": "Custom",
+                    "tooltip": "Change Opacity",
+                    "disabled": false,
+                    "iconUrl": "http://localhost:8080/favicon.ico",
+                    "action": {
+                        "id": "change-opacity",
+                        "customData": {
+                            "sourceId": "change-opacity",
+                            "replacementId": "restore-opacity"
+                        }
+                    }
+                }
+            },
+            {
+                "include": false,
+                "button": {
+                    "type": "Custom",
+                    "tooltip": "Restore Opacity",
+                    "disabled": false,
+                    "iconUrl": "http://localhost:8080/favicon.ico",
+                    "action": {
+                        "id": "restore-opacity",
+                        "customData": {
+                            "sourceId": "restore-opacity",
+                            "replacementId": "change-opacity"
+                        }
+                    }
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "Custom",
+                    "tooltip": "Pin this window",
+                    "disabled": false,
+                    "iconUrl": "http://localhost:8080/common/icons/pin.svg",
+                    "action": {
+                        "id": "pin-window",
+                        "customData": {
+                            "sourceId": "pin-window",
+                            "replacementId": "unpin-window"
+                        }
+                    }
+                }
+            },
+            {
+                "include": false,
+                "button": {
+                    "type": "Custom",
+                    "tooltip": "Unpin this window",
+                    "disabled": false,
+                    "iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
+                    "action": {
+                        "id": "unpin-window",
+                        "customData": {
+                            "sourceId": "unpin-window",
+                            "replacementId": "pin-window"
+                        }
+                    }
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "ShowHideTabs"
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "ColorLinking"
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "PresetLayouts"
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "Custom",
+                    "tooltip": "Share",
+                    "disabled": false,
+                    "iconUrl": "http://localhost:8080/common/icons/share.svg",
+                    "action": {
+                        "id": "share",
+                        "customData": {}
+                    }
+                }
+            },
+            {
+                "include": true,
+                "button": {
+                    "type": "SavePage"
+                }
+            }
+        ]
     },
     "themeProvider": {
-        "themes":[
-          {
-              "label": "Starter Theme",
-              "logoUrl": "http://localhost:8080/favicon.ico",
-              "palette": {
-                  "brandPrimary": "#504CFF",
-                  "brandSecondary": "#383A40",
-                  "backgroundPrimary": "#111214",
-                  "functional1": null,
-                  "functional2": null,
-                  "functional3": null,
-                  "functional4": null,
-                  "functional5": null,
-                  "functional6": null,
-                  "functional7": null,
-                  "functional8": null,
-                  "functional9": null,
-                  "functional10": null,
-                  "statusSuccess": null,
-                  "statusWarning": null,
-                  "statusCritical": null,
-                  "statusActive": null,
-                  "inputBackground": null,
-                  "inputColor": null,
-                  "inputPlaceholder": null,
-                  "inputDisabled": null,
-                  "inputFocused": null,
-                  "textDefault": null,
-                  "textHelp": null,
-                  "textInactive": null,
-                  "background1": null,
-                  "background2": null,
-                  "background3": null,
-                  "background4": null,
-                  "background5": null,
-                  "background6": null
-              }
-          }
-      ]
+        "themes": [
+            {
+                "label": "Starter Theme",
+                "logoUrl": "http://localhost:8080/favicon.ico",
+                "palette": {
+                    "brandPrimary": "#504CFF",
+                    "brandSecondary": "#383A40",
+                    "backgroundPrimary": "#111214",
+                    "functional1": null,
+                    "functional2": null,
+                    "functional3": null,
+                    "functional4": null,
+                    "functional5": null,
+                    "functional6": null,
+                    "functional7": null,
+                    "functional8": null,
+                    "functional9": null,
+                    "functional10": null,
+                    "statusSuccess": null,
+                    "statusWarning": null,
+                    "statusCritical": null,
+                    "statusActive": null,
+                    "inputBackground": null,
+                    "inputColor": null,
+                    "inputPlaceholder": null,
+                    "inputDisabled": null,
+                    "inputFocused": null,
+                    "textDefault": null,
+                    "textHelp": null,
+                    "textInactive": null,
+                    "background1": null,
+                    "background2": null,
+                    "background3": null,
+                    "background4": null,
+                    "background5": null,
+                    "background6": null
+                }
+            }
+        ]
     },
     "homeProvider": {
-      "id": "register-with-store-home",
-      "title": "Home Starter",
-      "icon": "http://localhost:8080/favicon.ico",
-      "queryMinLength": 3,
-      "queryAgainst":["title"]
+        "id": "register-with-store-home",
+        "title": "Home Starter",
+        "icon": "http://localhost:8080/favicon.ico",
+        "queryMinLength": 3,
+        "queryAgainst": [
+            "title"
+        ]
     },
     "storefrontProvider": {
-      "id": "register-with-store",
-      "title": "Custom Storefront",
-      "icon": "http://localhost:8080/favicon.ico",
-      "landingPage": {
-        "hero": {
-          "title": "Custom Hero Title",
-          "description": "This is a demonstration of the hero section that you can configure for your store.",
-          "cta": {
-            "title": "Hero Apps!",
-            "tags": ["hero"]
-          },
-          "image": {
-            "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
-          }
-        },
-        "topRow": {
-          "title": "Custom Top Row Content",
-          "items": [
-            {
-              "title": "Expero",
-              "description": "A collection of example views from Expero showing the power of interop and context sharing.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
-              },
-              "tags": ["expero"]
+        "id": "register-with-store",
+        "title": "Custom Storefront",
+        "icon": "http://localhost:8080/favicon.ico",
+        "landingPage": {
+            "hero": {
+                "title": "Custom Hero Title",
+                "description": "This is a demonstration of the hero section that you can configure for your store.",
+                "cta": {
+                    "title": "Hero Apps!",
+                    "tags": [
+                        "hero"
+                    ]
+                },
+                "image": {
+                    "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+                }
             },
-            {
-              "title": "Dev Tools",
-              "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
-              },
-              "tags": ["tools"]
+            "topRow": {
+                "title": "Custom Top Row Content",
+                "items": [
+                    {
+                        "title": "Expero",
+                        "description": "A collection of example views from Expero showing the power of interop and context sharing.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+                        },
+                        "tags": [
+                            "expero"
+                        ]
+                    },
+                    {
+                        "title": "Dev Tools",
+                        "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+                        },
+                        "tags": [
+                            "tools"
+                        ]
+                    },
+                    {
+                        "title": "Learning Resource",
+                        "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+                        },
+                        "tags": [
+                            "page"
+                        ]
+                    }
+                ]
             },
-            {
-              "title": "Learning Resource",
-              "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
-              },
-              "tags": ["page"]
+            "middleRow": {
+                "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+                "tags": [
+                    "fdc3",
+                    "interop"
+                ]
+            },
+            "bottomRow": {
+                "title": "Quick Access",
+                "items": [
+                    {
+                        "title": "Views",
+                        "description": "A collection of views made available through our catalog.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+                        },
+                        "tags": [
+                            "view"
+                        ]
+                    },
+                    {
+                        "title": "Web Apps",
+                        "description": "A collection of web apps built using OpenFin.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+                        },
+                        "tags": [
+                            "manifest"
+                        ]
+                    },
+                    {
+                        "title": "Native Apps",
+                        "description": "A collection of native apps made available through our catalog.",
+                        "image": {
+                            "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+                        },
+                        "tags": [
+                            "native"
+                        ]
+                    }
+                ]
             }
-          ]
         },
-        "middleRow": {
-          "title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-          "tags": ["fdc3","interop"]
-        },
-        "bottomRow": {
-          "title": "Quick Access",
-          "items": [
+        "navigation": [
             {
-              "title": "Views",
-              "description": "A collection of views made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
-              },
-              "tags": ["view"]
+                "title": "Applications",
+                "items": [
+                    {
+                        "title": "All Apps",
+                        "tags": [
+                            "view",
+                            "page",
+                            "manifest",
+                            "native"
+                        ]
+                    },
+                    {
+                        "title": "Views",
+                        "tags": [
+                            "view"
+                        ]
+                    },
+                    {
+                        "title": "Pages",
+                        "tags": [
+                            "page"
+                        ]
+                    },
+                    {
+                        "title": "Manifest",
+                        "tags": [
+                            "manifest"
+                        ]
+                    },
+                    {
+                        "title": "Native",
+                        "tags": [
+                            "native"
+                        ]
+                    }
+                ]
             },
             {
-              "title": "Web Apps",
-              "description": "A collection of web apps built using OpenFin.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
-              },
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native Apps",
-              "description": "A collection of native apps made available through our catalog.",
-              "image": {
-                "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
-              },
-              "tags": ["native"]
+                "title": "Context Sharing",
+                "items": [
+                    {
+                        "title": "FDC3 API",
+                        "tags": [
+                            "fdc3"
+                        ]
+                    },
+                    {
+                        "title": "Interop API",
+                        "tags": [
+                            "interop"
+                        ]
+                    }
+                ]
             }
-          ]
+        ],
+        "footer": {
+            "logo": {
+                "src": "http://localhost:8080/favicon.ico",
+                "size": "32"
+            },
+            "text": "Welcome to the OpenFin Sample Footer",
+            "links": [
+                {
+                    "title": "Github",
+                    "url": "https://github.com/built-on-openfin/workspace-starter"
+                },
+                {
+                    "title": "YouTube",
+                    "url": "https://www.youtube.com/user/OpenFinTech"
+                }
+            ]
         }
-      },
-      "navigation": [
-        {
-          "title": "Applications",
-          "items": [
-            {
-              "title": "All Apps",
-              "tags": ["view","page","manifest","native"]
-            },
-            { "title": "Views", "tags": ["view"] },
-            { "title": "Pages", "tags": ["page"] },
-            {
-              "title": "Manifest",
-              "tags": ["manifest"]
-            },
-            {
-              "title": "Native",
-              "tags": ["native"]
-            }
-          ]
-        },
-        {
-          "title": "Context Sharing",
-          "items": [
-            {
-              "title": "FDC3 API",
-              "tags": ["fdc3"]
-            },
-            {
-              "title": "Interop API",
-              "tags": ["interop"]
-            }
-          ]
-        }
-      ],
-      "footer": {
-        "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
-        "text": "Welcome to the OpenFin Sample Footer",
-        "links": [
-          {
-            "title": "Github",
-            "url": "https://github.com/built-on-openfin/workspace-starter"
-          },
-          {
-            "title": "YouTube",
-            "url": "https://www.youtube.com/user/OpenFinTech"
-          }
-        ]
-      }
     },
     "notificationProvider": {
-      "id": "customize-workspace",
-      "title": "Notification Starter",
-      "icon": "http://localhost:8080/favicon.ico"
+        "id": "customize-workspace",
+        "title": "Notification Starter",
+        "icon": "http://localhost:8080/favicon.ico"
     },
     "integrationProvider": {
-   "icon": "http://localhost:8080/favicon.ico",
-   "isManagementEnabled": true,
-   "command": "integrations",
-   "commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
-      "integrations": [
-        {
-          "id": "salesforce",
-          "icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
-          "title": "Salesforce",
-          "description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
-          "enabled": false,
-          "autoStart": true,
-          "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
-          "data": {
-              "consumerKey": "",
-              "orgUrl": "",
-              "iconMap": {
-                  "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
-                  "account": "http://localhost:8080/common/images/salesforce/account.svg",
-                  "chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
-                  "note": "http://localhost:8080/common/images/salesforce/note.svg",
-                  "task": "http://localhost:8080/common/images/salesforce/task.svg"
-              }
-          }
-        }
-      ]
+        "icon": "http://localhost:8080/favicon.ico",
+        "isManagementEnabled": true,
+        "command": "integrations",
+        "commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
+        "integrations": [
+            {
+                "id": "salesforce",
+                "icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
+                "title": "Salesforce",
+                "description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
+                "enabled": false,
+                "autoStart": true,
+                "moduleUrl": "http://localhost:8080/js/integrations/salesforce.bundle.js",
+                "data": {
+                    "consumerKey": "",
+                    "orgUrl": "",
+                    "iconMap": {
+                        "contact": "http://localhost:8080/common/images/salesforce/contact.svg",
+                        "account": "http://localhost:8080/common/images/salesforce/account.svg",
+                        "chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
+                        "note": "http://localhost:8080/common/images/salesforce/note.svg",
+                        "task": "http://localhost:8080/common/images/salesforce/task.svg"
+                    }
+                }
+            }
+        ]
     }
-  }
+}
 ```
 
 | Property                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
