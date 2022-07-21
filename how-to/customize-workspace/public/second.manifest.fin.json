@@ -658,7 +658,9 @@
 					"id": "salesforce",
 					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
+					"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 					"enabled": false,
+					"autoStart": true,
 					"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
