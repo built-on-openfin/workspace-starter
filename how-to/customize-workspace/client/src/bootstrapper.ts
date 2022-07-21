@@ -52,25 +52,6 @@ export async function init() {
 	setupHome = settings?.bootstrap?.home ?? true;
 	setupStore = settings?.bootstrap?.store ?? true;
 	setupNotifications = settings?.bootstrap?.notifications ?? true;
-	if (setupHome) {
-		// only register search logic once workspace is running
-		await registerHome();
-		workspaceLoaded = true;
-		await showHome();
-	}
-
-	if (setupStore) {
-		await registerStore();
-		if (!workspaceLoaded) {
-			await showStore();
-		}
-	}
-
-	if (setupNotifications) {
-		await registerNotifications();
-	}
-
-	await registerShare();
 
 	await registerIntegration(
 		{
@@ -91,6 +72,26 @@ export async function init() {
 		},
 		settings.integrationProvider
 	);
+
+	if (setupHome) {
+		// only register search logic once workspace is running
+		await registerHome();
+		workspaceLoaded = true;
+		await showHome();
+	}
+
+	if (setupStore) {
+		await registerStore();
+		if (!workspaceLoaded) {
+			await showStore();
+		}
+	}
+
+	if (setupNotifications) {
+		await registerNotifications();
+	}
+
+	await registerShare();
 
 	if (isAuthenticationEnabled()) {
 		console.log("Setting up listeners for authentication events.");
@@ -113,8 +114,7 @@ export async function init() {
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
-		await deregisterIntegration(settings.integrationProvider);
-
+		await deregisterIntegration();
 		await deregisterStore();
 		await deregisterHome();
 		await deregisterShare();

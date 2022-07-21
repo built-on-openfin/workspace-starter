@@ -8,20 +8,22 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import * as CSS from "csstype";
+import { getCurrentTheme } from "./themes";
 
-export function createHelp(
+export async function createHelp(
 	title: string,
 	description: string[],
 	examples: string[]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-): { layout: PlainContainerTemplateFragment; data: any } {
+): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
+	const theme = await getCurrentTheme();
 	const additionalData = {};
 	const fragments: TemplateFragment[] = [];
 	for (let i = 0; i < description.length; i++) {
 		const descriptionKey = `desc-${i}`;
 		additionalData[descriptionKey] = description[i];
 		fragments.push(
-			createText(descriptionKey, 12, {
+			await createText(descriptionKey, 12, {
 				padding: "6px 0px"
 			})
 		);
@@ -31,36 +33,26 @@ export function createHelp(
 		const exampleKey = `line-${i}`;
 		additionalData[exampleKey] = examples[i];
 		exampleFragments.push(
-			createText(exampleKey, 12, {
+			await createText(exampleKey, 12, {
 				fontFamily: "monospace"
 			})
 		);
 	}
 	if (exampleFragments.length > 0) {
 		fragments.push(
-			createContainer("column", exampleFragments, {
+			await createContainer("column", exampleFragments, {
 				padding: "10px",
 				marginTop: "6px",
-				backgroundColor: "var(--openfin-ui-inputBackground)",
-				color: "var(--openfin-ui-inputColor)",
+				backgroundColor: theme.palette.inputBackground,
+				color: theme.palette.inputColor,
 				borderRadius: "5px"
 			})
 		);
 	}
 	return {
-		layout: createContainer(
-			"column",
-			[
-				createText("title", 16, {
-					color: "var(--openfin-ui-brandPrimary)",
-					fontWeight: "bold"
-				}),
-				...fragments
-			],
-			{
-				padding: "10px"
-			}
-		),
+		layout: await createContainer("column", [await createTitle("title"), ...fragments], {
+			padding: "10px"
+		}),
 		data: {
 			title,
 			...additionalData
@@ -68,11 +60,11 @@ export function createHelp(
 	};
 }
 
-export function createContainer(
+export async function createContainer(
 	containerType: "column" | "row",
 	children: TemplateFragment[],
 	style?: CSS.Properties
-): PlainContainerTemplateFragment {
+): Promise<PlainContainerTemplateFragment> {
 	return {
 		type: TemplateFragmentTypes.Container,
 		style: {
@@ -84,11 +76,30 @@ export function createContainer(
 	};
 }
 
-export function createText(
+export async function createTitle(
+	dataKey: string,
+	fontSize: number = 16,
+	fontWeight: string = "bold",
+	style?: CSS.Properties
+): Promise<TextTemplateFragment> {
+	const theme = await getCurrentTheme();
+	return {
+		type: TemplateFragmentTypes.Text,
+		dataKey,
+		style: {
+			color: theme.palette.brandPrimary,
+			fontSize: `${fontSize ?? 16}px`,
+			fontWeight,
+			...style
+		}
+	};
+}
+
+export async function createText(
 	dataKey: string,
 	fontSize: number = 14,
 	style?: CSS.Properties
-): TextTemplateFragment {
+): Promise<TextTemplateFragment> {
 	return {
 		type: TemplateFragmentTypes.Text,
 		dataKey,
@@ -99,11 +110,11 @@ export function createText(
 	};
 }
 
-export function createImage(
+export async function createImage(
 	dataKey: string,
 	alternativeText: string,
 	style?: CSS.Properties
-): ImageTemplateFragment {
+): Promise<ImageTemplateFragment> {
 	return {
 		type: TemplateFragmentTypes.Image,
 		dataKey,
@@ -114,18 +125,26 @@ export function createImage(
 	};
 }
 
-export function createButton(
+export async function createButton(
 	buttonStyle: ButtonStyle,
 	titleKey: string,
 	action: string,
 	style?: CSS.Properties
-): ButtonTemplateFragment {
+): Promise<ButtonTemplateFragment> {
+	const theme = await getCurrentTheme();
+	const buttonOptions =
+		buttonStyle === ButtonStyle.Secondary
+			? {
+					border: `1px solid ${theme.palette.inputColor}`
+			  }
+			: {};
 	return {
 		type: TemplateFragmentTypes.Button,
 		buttonStyle,
-		children: [createText(titleKey, 12)],
+		children: [await createText(titleKey, 12)],
 		action,
 		style: {
+			...buttonOptions,
 			...style
 		}
 	};

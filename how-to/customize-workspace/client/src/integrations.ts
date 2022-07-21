@@ -14,7 +14,7 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
-import { createButton, createContainer, createHelp, createImage, createText } from "./templates";
+import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -36,13 +36,15 @@ let passedIntegrationProvider: IntegrationProviderOptions;
  * @param include is search enabled for this integration.
  * @returns The search result.
  */
-function createResult(
+async function createResult(
 	id: string,
 	name: string,
 	description: string,
 	icon: string,
 	include: boolean
-): HomeSearchResult {
+): Promise<HomeSearchResult> {
+	const buttonAction = include ? "Turn Off Integration" : "Turn On Integration";
+
 	return {
 		key: `integration-${id}`,
 		title: `${name}`,
@@ -55,50 +57,55 @@ function createResult(
 		},
 		template: CLITemplate.Custom,
 		templateContent: {
-			layout: createContainer(
+			layout: await createContainer(
 				"column",
 				[
-					createContainer(
-						"row",
+					await createContainer(
+						"column",
 						[
-							createImage("icon", name, { width: "32px", height: "32px" }),
-							createText("title", 16, {
-								color: "var(--openfin-ui-brandPrimary)",
-								fontWeight: "bold"
-							})
+							await createContainer(
+								"row",
+								[
+									await createImage("icon", name, { width: "32px", height: "32px" }),
+									await createTitle("title")
+								],
+								{
+									alignItems: "center",
+									gap: "10px"
+								}
+							),
+							await createText("description", 12)
 						],
 						{
-							alignItems: "center",
-							gap: "10px"
+							gap: "20px"
 						}
 					),
-					createText("description", 12, { padding: "10px 0px" }),
-					createText("status", 12, { padding: "10px 0px" }),
-					createButton(
-						ButtonStyle.Primary,
-						"btnText",
-						include ? "Turn Off Integration" : "Turn On Integration"
-					)
+					await createContainer("column", [
+						await createText("status", 12, { paddingBottom: "10px", fontFamily: "monospace" }),
+						await createButton(include ? ButtonStyle.Primary : ButtonStyle.Secondary, "btnText", buttonAction)
+					])
 				],
 				{
-					padding: "10px"
+					padding: "10px",
+					flex: 1,
+					justifyContent: "space-between"
 				}
 			),
 			data: {
 				title: name,
-				description: description ?? "You can enable/disable an integration features",
+				description: description ?? "You can enable/disable an integrations features",
 				icon,
-				status: `State: ${include ? "on" : "off"}`,
-				btnText: include ? "Turn Off Integration" : "Turn On Integration"
+				status: `Integration State: ${include ? "On" : "Off"}`,
+				btnText: buttonAction
 			}
 		}
 	};
 }
 
-async function initializeIntegration(
-	integrationManager: IntegrationManager,
-	integration: Integration<unknown>
-) {
+async function initializeIntegration(integration: Integration<unknown>) {
+	if (!passedIntegrationManager) {
+		console.error("IntegrationManager is not available, make sure your have called register");
+	}
 	if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
 		try {
 			const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
@@ -115,7 +122,7 @@ async function initializeIntegration(
 			include: true
 		});
 		if (homeIntegration.register) {
-			await homeIntegration.register(integrationManager, integration);
+			await homeIntegration.register(passedIntegrationManager, integration);
 		}
 	} else {
 		console.error("Missing module in integration providers", integration.id);
@@ -123,6 +130,10 @@ async function initializeIntegration(
 }
 
 export async function getManagementResults(): Promise<HomeSearchResponse> {
+	if (!passedIntegrationProvider) {
+		console.error("IntegrationProvider is not available, make sure your have called register");
+	}
+
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
@@ -130,13 +141,13 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 		}
 	};
 
-	const integrations = passedIntegrationProvider?.integrations;
+	const integrations = passedIntegrationProvider.integrations;
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
 			if (integration.enabled) {
 				const existingIntegration = homeIntegrations.find((entry) => entry.integration.id === integration.id);
 				if (existingIntegration) {
-					const result = createResult(
+					const result = await createResult(
 						existingIntegration.integration.id,
 						existingIntegration.integration.title,
 						existingIntegration.integration.description,
@@ -145,7 +156,7 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 					);
 					homeResponse.results.push(result);
 				} else {
-					const result = createResult(
+					const result = await createResult(
 						integration.id,
 						integration.title,
 						integration.description,
@@ -220,12 +231,16 @@ async function updateIntegrationStatus(
 	integrationId: string,
 	include: boolean
 ): Promise<boolean> {
+	if (!passedIntegrationProvider) {
+		console.error("IntegrationProvider is not available, make sure your have called register");
+	}
+
 	const knownIntegration = knownIntegrationProviders[integrationId];
 	if (knownIntegration === undefined) {
 		const integration = passedIntegrationProvider.integrations.find((entry) => entry.id === integrationId);
 		if (integration !== undefined) {
-			await initializeIntegration(passedIntegrationManager, integration);
-			const result = createResult(
+			await initializeIntegration(integration);
+			const result = await createResult(
 				integration.id,
 				integration.title,
 				integration.description,
@@ -243,7 +258,7 @@ async function updateIntegrationStatus(
 	if (index !== -1) {
 		homeIntegrations[index].include = !include;
 		lastResponse.respond([
-			createResult(
+			await createResult(
 				homeIntegrations[index].integration.id,
 				homeIntegrations[index].integration.title,
 				homeIntegrations[index].integration.description,
@@ -265,8 +280,8 @@ export async function register(
 	integrationManager: IntegrationManager,
 	integrationProvider?: IntegrationProviderOptions
 ): Promise<void> {
-	passedIntegrationProvider = integrationProvider;
 	passedIntegrationManager = integrationManager;
+	passedIntegrationProvider = integrationProvider;
 	const integrations = integrationProvider?.integrations;
 
 	if (Array.isArray(integrations)) {
@@ -276,10 +291,10 @@ export async function register(
 				if (integrationPreference !== null) {
 					// follow preference
 					if (integrationPreference.include) {
-						await initializeIntegration(integrationManager, integration);
+						await initializeIntegration(integration);
 					}
 				} else if (integration.autoStart ?? true) {
-					await initializeIntegration(integrationManager, integration);
+					await initializeIntegration(integration);
 				}
 			}
 		}
@@ -290,7 +305,7 @@ export async function register(
  * Deregister all the integrations.
  * @param integrationProvider The integration provider.
  */
-export async function deregister(integrationProvider?: IntegrationProviderOptions): Promise<void> {
+export async function deregister(): Promise<void> {
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.deregister) {
 			await homeIntegration.module.deregister(homeIntegration.integration);
@@ -310,6 +325,10 @@ export async function getSearchResults(
 	filters: CLIFilter[],
 	lastResponse: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
+	if (!passedIntegrationProvider) {
+		console.error("IntegrationProvider is not available, make sure your have called register");
+	}
+
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
@@ -356,11 +375,16 @@ export async function getSearchResults(
  * @returns The list of help entries.
  */
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
+	if (!passedIntegrationProvider) {
+		console.error("IntegrationProvider is not available, make sure your have called register");
+	}
+
 	let results: HomeSearchResult[] = [];
 
 	if (passedIntegrationProvider.isManagementEnabled) {
 		const commandKeyword = passedIntegrationProvider.command ?? "integrations";
 		const command = `/${commandKeyword}`;
+
 		const helpEntry: HomeSearchResult = {
 			key: "integration-provider-help",
 			title: command,
@@ -371,7 +395,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 				providerId: "integration-provider"
 			},
 			template: CLITemplate.Custom,
-			templateContent: createHelp(
+			templateContent: await createHelp(
 				command,
 				[
 					passedIntegrationProvider.commandDescription ??
