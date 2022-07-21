@@ -1,8 +1,8 @@
 name: Check Linting has been applied
 
 on:
-  push:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   lint:
