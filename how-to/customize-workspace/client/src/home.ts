@@ -259,7 +259,7 @@ async function getResults(
 					if (path.length === 1) {
 						const targetValue = entry[path[0]];
 
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+						if (targetValue === "string") {
 							return targetValue.toLowerCase().includes(query);
 						}
 					} else if (path.length === 2) {
@@ -269,11 +269,11 @@ async function getResults(
 							targetValue = specifiedTarget[path[1]];
 						}
 
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
+						if (typeof targetValue === "string") {
 							return targetValue.toLowerCase().includes(query);
 						}
 
-						if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
+						if (Array.isArray(targetValue)) {
 							if (
 								targetValue.length > 0 &&
 								typeof targetValue[0] === "string" &&
