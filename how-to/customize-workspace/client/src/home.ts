@@ -259,7 +259,7 @@ async function getResults(
 					if (path.length === 1) {
 						const targetValue = entry[path[0]];
 
-						if (targetValue === "string") {
+						if (typeof targetValue === "string") {
 							return targetValue.toLowerCase().includes(query);
 						}
 					} else if (path.length === 2) {
