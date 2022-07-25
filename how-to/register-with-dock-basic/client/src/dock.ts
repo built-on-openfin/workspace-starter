@@ -2,9 +2,16 @@ import { Dock, DockButtonNames, DockProvider } from "@openfin/workspace";
 
 const providerId = "register-with-dock-basic";
 
-export async function register() {
+export async function register(options: {
+	showHome: boolean;
+	showNotifications: boolean;
+	showStorefront: boolean;
+	showWorkspaces: boolean;
+	customIconUrl: string;
+	customOpenUrl: string;
+}) {
 	console.log("Initialising the dock provider.");
-	const provider = await getDockProvider();
+	const provider = await getDockProvider(options);
 	try {
 		await Dock.register(provider);
 		console.log("Dock provider initialised.");
@@ -27,7 +34,14 @@ export async function minimize() {
 	return Dock.minimize();
 }
 
-async function getDockProvider(): Promise<DockProvider> {
+async function getDockProvider(options: {
+	showHome: boolean;
+	showNotifications: boolean;
+	showStorefront: boolean;
+	showWorkspaces: boolean;
+	customIconUrl: string;
+	customOpenUrl: string;
+}): Promise<DockProvider> {
 	console.log("Getting the dock provider.");
 
 	const webRoot = window.location.href.replace("platform/provider.html", "");
@@ -37,10 +51,10 @@ async function getDockProvider(): Promise<DockProvider> {
 		title: "Basic Dock",
 		icon: `${webRoot}favicon.ico`,
 		workspaceComponents: {
-			hideHomeButton: false,
-			hideNotificationsButton: false,
-			hideStorefrontButton: false,
-			hideWorkspacesButton: false
+			hideHomeButton: !options.showHome,
+			hideNotificationsButton: !options.showNotifications,
+			hideStorefrontButton: !options.showStorefront,
+			hideWorkspacesButton: !options.showWorkspaces
 		},
 		buttons: [
 			{
@@ -55,6 +69,14 @@ async function getDockProvider(): Promise<DockProvider> {
 				iconUrl: "https://www.bing.com/favicon.ico",
 				action: {
 					id: "launch-bing"
+				}
+			},
+			{
+				tooltip: "Custom",
+				iconUrl: options.customIconUrl,
+				action: {
+					id: "launch-custom",
+					customData: options.customOpenUrl
 				}
 			},
 			{

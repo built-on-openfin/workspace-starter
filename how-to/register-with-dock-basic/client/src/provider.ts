@@ -1,12 +1,24 @@
 import OpenFin from "@openfin/core";
 import {
 	CustomActionPayload,
+	CustomButtonActionPayload,
 	CustomDropdownItemActionPayload,
 	getCurrentSync,
 	init as workspacePlatformInit,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { register, deregister, show, minimize } from "./dock";
+
+let registerDock;
+let showDock;
+let minimizeDock;
+let deregisterDock;
+let showHomeButton;
+let showNotificationButton;
+let showStorefrontButton;
+let showWorkspacesButton;
+let customIconUrl;
+let customOpenUrl;
 
 async function init() {
 	await workspacePlatformInit({
@@ -18,6 +30,9 @@ async function init() {
 			"launch-bing": async (payload: CustomActionPayload) => {
 				await launchView("https://www.bing.com");
 			},
+			"launch-custom": async (payload: CustomButtonActionPayload) => {
+				await launchView(payload.customData as string);
+			},
 			"launch-tools": async (payload: CustomDropdownItemActionPayload) => {
 				if (payload.customData === "twitter") {
 					await launchView("https://www.twitter.com");
@@ -28,29 +43,33 @@ async function init() {
 		}
 	});
 
-	const registerDock = document.querySelector<HTMLButtonElement>("#register");
-	const showDock = document.querySelector<HTMLButtonElement>("#show");
-	const minimizeDock = document.querySelector<HTMLButtonElement>("#minimize");
-	const deregisterDock = document.querySelector<HTMLButtonElement>("#deregister");
+	registerDock = document.querySelector<HTMLButtonElement>("#register");
+	showDock = document.querySelector<HTMLButtonElement>("#show");
+	minimizeDock = document.querySelector<HTMLButtonElement>("#minimize");
+	deregisterDock = document.querySelector<HTMLButtonElement>("#deregister");
+	showHomeButton = document.querySelector<HTMLInputElement>("#showHomeButton");
+	showNotificationButton = document.querySelector<HTMLInputElement>("#showNotificationButton");
+	showStorefrontButton = document.querySelector<HTMLInputElement>("#showStorefrontButton");
+	showWorkspacesButton = document.querySelector<HTMLInputElement>("#showWorkspacesButton");
+	customIconUrl = document.querySelector<HTMLInputElement>("#customIconUrl");
+	customOpenUrl = document.querySelector<HTMLInputElement>("#customOpenUrl");
 
-	showDock.disabled = true;
-	minimizeDock.disabled = true;
-	deregisterDock.disabled = true;
-	registerDock.disabled = false;
+	setStates(false);
 
 	registerDock.addEventListener("click", async () => {
-		await register();
-		showDock.disabled = false;
-		minimizeDock.disabled = false;
-		deregisterDock.disabled = false;
-		registerDock.disabled = true;
+		await register({
+			showHome: Boolean(showHomeButton.value),
+			showNotifications: Boolean(showNotificationButton.value),
+			showStorefront: Boolean(showStorefrontButton.value),
+			showWorkspaces: Boolean(showWorkspacesButton.value),
+			customIconUrl: customIconUrl.value,
+			customOpenUrl: customOpenUrl.value
+		});
+		setStates(true);
 	});
 
 	deregisterDock.addEventListener("click", async () => {
-		showDock.disabled = true;
-		minimizeDock.disabled = true;
-		deregisterDock.disabled = true;
-		registerDock.disabled = false;
+		setStates(false);
 		await deregister();
 	});
 
@@ -61,6 +80,19 @@ async function init() {
 	minimizeDock.addEventListener("click", async () => {
 		await minimize();
 	});
+}
+
+function setStates(isRegistered: boolean): void {
+	registerDock.disabled = isRegistered;
+	deregisterDock.disabled = !isRegistered;
+	showDock.disabled = !isRegistered;
+	minimizeDock.disabled = !isRegistered;
+	showHomeButton.disabled = isRegistered;
+	showNotificationButton.disabled = isRegistered;
+	showStorefrontButton.disabled = isRegistered;
+	showWorkspacesButton.disabled = isRegistered;
+	customIconUrl.disabled = isRegistered;
+	customOpenUrl.disabled = isRegistered;
 }
 
 export async function launchView(
