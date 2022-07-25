@@ -6,10 +6,10 @@ import {
 	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult
+	HomeSearchResult,
+	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { RegistrationMetaInfo } from "@openfin/workspace/search-api/src/shapes";
 import { getApps } from "./apps";
 
 const providerId = "register-with-home-basic";
