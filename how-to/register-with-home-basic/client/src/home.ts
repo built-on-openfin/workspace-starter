@@ -9,6 +9,7 @@ import {
 	HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
+import { RegistrationMetaInfo } from "@openfin/workspace/search-api/src/shapes";
 import { getApps } from "./apps";
 
 const providerId = "register-with-home-basic";
@@ -89,7 +90,7 @@ async function getResults(query?: string): Promise<CLISearchResponse> {
 	};
 }
 
-export async function register(): Promise<void> {
+export async function register(): Promise<RegistrationMetaInfo> {
 	console.log("Initialising home.");
 
 	const queryMinLength = 3;

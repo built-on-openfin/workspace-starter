@@ -14,6 +14,7 @@ import {
 	TemplateFragment
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
+import { RegistrationMetaInfo } from "@openfin/workspace/search-api/src/shapes";
 import { getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
@@ -331,7 +332,7 @@ async function getResults(
 	};
 }
 
-export async function register() {
+export async function register(): Promise<RegistrationMetaInfo> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (
@@ -530,9 +531,10 @@ export async function register() {
 		onResultDispatch: onSelection
 	};
 
-	await Home.register(cliProvider);
+	const registrationInfo = await Home.register(cliProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
+	return registrationInfo;
 }
 
 export async function show() {

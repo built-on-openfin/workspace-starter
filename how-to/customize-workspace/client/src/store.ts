@@ -17,11 +17,12 @@ import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNav
 let isStoreRegistered = false;
 
 export async function register() {
-	console.log("Initialising the storefront provider.");
+	console.log("Initializing the storefront provider.");
 	const provider = await getStoreProvider();
 	if (provider !== null) {
 		try {
-			await Storefront.register(provider);
+			//const registrationInfo = await Storefront.register(provider);
+			//console.log(`store version:`, registrationInfo);
 			isStoreRegistered = true;
 			console.log("Storefront provider initialised.");
 		} catch (err) {
