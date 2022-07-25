@@ -681,7 +681,7 @@
 					"title": "Emoji Provider",
 					"enabled": true,
 					"autoStart": false,
-					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v8.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
+					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
