@@ -163,7 +163,7 @@ export async function getActions(): Promise<CustomActionsMap> {
 
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 			const platform = getCurrentSync();
-			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
+			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
 			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
 			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
