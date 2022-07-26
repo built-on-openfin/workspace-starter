@@ -11,7 +11,8 @@ import {
 	HomeDispatchedSearchResult,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment
+	TemplateFragment,
+	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
@@ -33,6 +34,7 @@ const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 const HOME_TAG_FILTERS = "tags";
 
 let isHomeRegistered = false;
+let registrationInfo: RegistrationMetaInfo;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
@@ -331,7 +333,7 @@ async function getResults(
 	};
 }
 
-export async function register() {
+export async function register(): Promise<RegistrationMetaInfo> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (
@@ -342,7 +344,7 @@ export async function register() {
 		console.warn(
 			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);
-		return;
+		return null;
 	}
 
 	const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
@@ -530,9 +532,10 @@ export async function register() {
 		onResultDispatch: onSelection
 	};
 
-	await Home.register(cliProvider);
+	registrationInfo = await Home.register(cliProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
+	return registrationInfo;
 }
 
 export async function show() {

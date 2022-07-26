@@ -1,3 +1,4 @@
+import { fin } from "@openfin/core";
 import { deregister, register } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { getSettings } from "./settings";
