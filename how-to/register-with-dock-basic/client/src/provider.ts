@@ -57,7 +57,7 @@ async function init() {
 	setStates(false);
 
 	registerDock.addEventListener("click", async () => {
-		registerDock.disabled = true;
+		setStates(null);
 		try {
 			await register({
 				showHome: showHomeButton.checked,
@@ -88,17 +88,17 @@ async function init() {
 	});
 }
 
-function setStates(isRegistered: boolean): void {
-	registerDock.disabled = isRegistered;
-	deregisterDock.disabled = !isRegistered;
-	showDock.disabled = !isRegistered;
-	minimizeDock.disabled = !isRegistered;
-	showHomeButton.disabled = isRegistered;
-	showNotificationButton.disabled = isRegistered;
-	showStorefrontButton.disabled = isRegistered;
-	showWorkspacesButton.disabled = isRegistered;
-	customIconUrl.disabled = isRegistered;
-	customOpenUrl.disabled = isRegistered;
+function setStates(isRegistered: boolean | null): void {
+	registerDock.disabled = isRegistered === null || isRegistered;
+	deregisterDock.disabled = isRegistered === null || !isRegistered;
+	showDock.disabled = isRegistered === null || !isRegistered;
+	minimizeDock.disabled = isRegistered === null || !isRegistered;
+	showHomeButton.disabled = isRegistered === null || isRegistered;
+	showNotificationButton.disabled = isRegistered === null || isRegistered;
+	showStorefrontButton.disabled = isRegistered === null || isRegistered;
+	showWorkspacesButton.disabled = isRegistered === null || isRegistered;
+	customIconUrl.disabled = isRegistered === null || isRegistered;
+	customOpenUrl.disabled = isRegistered === null || isRegistered;
 }
 
 export async function launchView(
