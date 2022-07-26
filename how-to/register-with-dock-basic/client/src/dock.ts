@@ -86,7 +86,6 @@ async function getDockProvider(options: {
 				options: [
 					{
 						tooltip: "Twitter",
-						iconUrl: "https://www.twitter.com/favicon.ico",
 						action: {
 							id: "launch-tools",
 							customData: "twitter"
@@ -94,7 +93,6 @@ async function getDockProvider(options: {
 					},
 					{
 						tooltip: "Facebook",
-						iconUrl: "https://www.facebook.com/favicon.ico",
 						action: {
 							id: "launch-tools",
 							customData: "facebook"
