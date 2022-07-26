@@ -7,7 +7,7 @@ import {
 	init as workspacePlatformInit,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { register, deregister, show, minimize } from "./dock";
+import { deregister, minimize, register, show } from "./dock";
 
 let registerDock;
 let showDock;
@@ -57,15 +57,21 @@ async function init() {
 	setStates(false);
 
 	registerDock.addEventListener("click", async () => {
-		await register({
-			showHome: Boolean(showHomeButton.value),
-			showNotifications: Boolean(showNotificationButton.value),
-			showStorefront: Boolean(showStorefrontButton.value),
-			showWorkspaces: Boolean(showWorkspacesButton.value),
-			customIconUrl: customIconUrl.value,
-			customOpenUrl: customOpenUrl.value
-		});
-		setStates(true);
+		registerDock.disabled = true;
+		try {
+			await register({
+				showHome: showHomeButton.checked,
+				showNotifications: showNotificationButton.checked,
+				showStorefront: showStorefrontButton.checked,
+				showWorkspaces: showWorkspacesButton.checked,
+				customIconUrl: customIconUrl.value,
+				customOpenUrl: customOpenUrl.value
+			});
+			setStates(true);
+		} catch (err) {
+			console.error("Error registering dock provider", err);
+			setStates(false);
+		}
 	});
 
 	deregisterDock.addEventListener("click", async () => {
