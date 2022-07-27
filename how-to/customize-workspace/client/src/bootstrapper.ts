@@ -56,7 +56,7 @@ export async function init() {
 	// gather reference data etc before starting workspace and interacting with it.
 	console.log("Initializing the bootstrapper");
 	const settings = await getSettings();
-	bootstrapOptions = settings.bootstrap;
+	bootstrapOptions = { ...settings.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;

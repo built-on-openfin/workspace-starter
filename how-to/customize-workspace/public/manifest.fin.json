@@ -482,7 +482,10 @@
 					"tooltip": "Google",
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
-						"id": "launch-google"
+						"id": "launch-view",
+                        "customData": {
+                            "url": "https://www.google.com"
+                        }
 					}
 				},
 				{
@@ -492,13 +495,19 @@
 						{
 							"tooltip": "Twitter",
 							"action": {
-								"id": "launch-twitter"
+								"id": "launch-view",
+                                "customData": {
+                                    "url": "https://twitter.com/openfintech"
+                                }
 							}
 						},
 						{
 							"tooltip": "YouTube",
 							"action": {
-								"id": "launch-youtube"
+								"id": "launch-view",
+                                "customData": {
+                                    "url": "https://www.youtube.com/user/OpenFinTech"
+                                }
 							}
 						}
 					]

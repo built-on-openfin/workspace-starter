@@ -21,9 +21,9 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 		tooltip: app.title,
 		iconUrl: getAppIcon(app),
 		action: {
-			id: ACTION_IDS.launchFromDock,
+			id: ACTION_IDS.launchApp,
 			customData: {
-				type: "dock-app",
+				source: "dock",
 				appId: app.appId
 			}
 		}
@@ -68,9 +68,9 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 						tooltip: optionTooltip,
 						action: option.appId
 							? {
-									id: ACTION_IDS.launchFromDock,
+									id: ACTION_IDS.launchApp,
 									customData: {
-										type: "dock-app",
+										source: "dock",
 										appId: button.appId
 									}
 							  }
@@ -94,9 +94,9 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					iconUrl,
 					action: button.appId
 						? {
-								id: ACTION_IDS.launchFromDock,
+								id: ACTION_IDS.launchApp,
 								customData: {
-									type: "dock-app",
+									source: "dock",
 									appId: button.appId
 								}
 						  }

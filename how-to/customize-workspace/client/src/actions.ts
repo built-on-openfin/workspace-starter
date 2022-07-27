@@ -45,10 +45,8 @@ export const ACTION_IDS = {
 	changeOpacity: "change-opacity",
 	restoreOpacity: "restore-opacity",
 	logoutAndQuit: "logout-and-quit",
-	launchFromDock: "launch-from-dock",
-	launchGoogle: "launch-google",
-	launchTwitter: "launch-twitter",
-	launchYouTube: "launch-youtube"
+	launchApp: "launch-app",
+	launchView: "launch-view"
 };
 
 export async function getActions(): Promise<CustomActionsMap> {
@@ -259,10 +257,10 @@ export async function getActions(): Promise<CustomActionsMap> {
 		await authProvider.logout();
 	};
 
-	actionMap[ACTION_IDS.launchFromDock] = async (
+	actionMap[ACTION_IDS.launchApp] = async (
 		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
 	) => {
-		if (payload.customData?.type === "dock-app" && payload.customData?.appId) {
+		if (payload.customData?.source === "dock" && payload.customData?.appId) {
 			const app = await getApp(payload.customData.appId as string);
 			if (app) {
 				await launch(app);
@@ -272,16 +270,14 @@ export async function getActions(): Promise<CustomActionsMap> {
 		}
 	};
 
-	actionMap[ACTION_IDS.launchGoogle] = async () => {
-		await launchView("https://www.google.com");
-	};
-
-	actionMap[ACTION_IDS.launchTwitter] = async () => {
-		await launchView("https://twitter.com/openfintech");
-	};
-
-	actionMap[ACTION_IDS.launchYouTube] = async () => {
-		await launchView("https://www.youtube.com/user/OpenFinTech");
+	actionMap[ACTION_IDS.launchView] = async (
+		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
+	) => {
+        if (payload.customData?.url) {
+            await launchView(payload.customData?.url as string);
+		} else {
+            console.error("Launch view called with empty url");
+        }
 	};
 
 	return actionMap;
