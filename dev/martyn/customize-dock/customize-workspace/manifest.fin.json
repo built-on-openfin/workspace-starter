@@ -483,9 +483,9 @@
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
 						"id": "launch-view",
-                        "customData": {
-                            "url": "https://www.google.com"
-                        }
+						"customData": {
+							"url": "https://www.google.com"
+						}
 					}
 				},
 				{
@@ -496,18 +496,18 @@
 							"tooltip": "Twitter",
 							"action": {
 								"id": "launch-view",
-                                "customData": {
-                                    "url": "https://twitter.com/openfintech"
-                                }
+								"customData": {
+									"url": "https://twitter.com/openfintech"
+								}
 							}
 						},
 						{
 							"tooltip": "YouTube",
 							"action": {
 								"id": "launch-view",
-                                "customData": {
-                                    "url": "https://www.youtube.com/user/OpenFinTech"
-                                }
+								"customData": {
+									"url": "https://www.youtube.com/user/OpenFinTech"
+								}
 							}
 						}
 					]
