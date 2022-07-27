@@ -273,11 +273,11 @@ export async function getActions(): Promise<CustomActionsMap> {
 	actionMap[ACTION_IDS.launchView] = async (
 		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
 	) => {
-        if (payload.customData?.url) {
-            await launchView(payload.customData?.url as string);
+		if (payload.customData?.url) {
+			await launchView(payload.customData?.url as string);
 		} else {
-            console.error("Launch view called with empty url");
-        }
+			console.error("Launch view called with empty url");
+		}
 	};
 
 	return actionMap;
