@@ -4,13 +4,17 @@ import {
 	CustomActionCallerType,
 	CustomActionPayload,
 	CustomActionsMap,
+	CustomButtonActionPayload,
+	CustomDropdownItemActionPayload,
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
+import { getApp } from "./apps";
 import * as authProvider from "./auth";
-import { getDefaultWindowOptions } from "./browser";
+import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
+import { launch } from "./launch";
 import { showShareOptions } from "./share";
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
@@ -40,7 +44,11 @@ export const ACTION_IDS = {
 	share: "share",
 	changeOpacity: "change-opacity",
 	restoreOpacity: "restore-opacity",
-	logoutAndQuit: "logout-and-quit"
+	logoutAndQuit: "logout-and-quit",
+	launchFromDock: "launch-from-dock",
+	launchGoogle: "launch-google",
+	launchTwitter: "launch-twitter",
+	launchYouTube: "launch-youtube"
 };
 
 export async function getActions(): Promise<CustomActionsMap> {
@@ -249,6 +257,31 @@ export async function getActions(): Promise<CustomActionsMap> {
 
 	actionMap[ACTION_IDS.logoutAndQuit] = async () => {
 		await authProvider.logout();
+	};
+
+	actionMap[ACTION_IDS.launchFromDock] = async (
+		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
+	) => {
+		if (payload.customData?.type === "dock-app" && payload.customData?.appId) {
+			const app = await getApp(payload.customData.appId as string);
+			if (app) {
+				await launch(app);
+			} else {
+				console.error(`Unable to find app with id '${payload.customData.appId}' in dock launch`);
+			}
+		}
+	};
+
+	actionMap[ACTION_IDS.launchGoogle] = async () => {
+		await launchView("https://www.google.com");
+	};
+
+	actionMap[ACTION_IDS.launchTwitter] = async () => {
+		await launchView("https://twitter.com/openfintech");
+	};
+
+	actionMap[ACTION_IDS.launchYouTube] = async () => {
+		await launchView("https://www.youtube.com/user/OpenFinTech");
 	};
 
 	return actionMap;

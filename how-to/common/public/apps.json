@@ -23,7 +23,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "interop", "fdc3", "contact"]
+		"tags": ["view", "interop", "fdc3", "contact", "dock"]
 	},
 	{
 		"appId": "participant-selection",
@@ -1041,7 +1041,7 @@
 				"src": "http://localhost:8080/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi"],
+		"tags": ["native", "appasset", "nwi", "dock"],
 		"data": {
 			"nwi": {
 				"name": "OpenFin.Interop.Win.Sample",
@@ -1071,7 +1071,7 @@
 				"src": "http://localhost:8080/common/images/previews/microsoft-notepad-native.png"
 			}
 		],
-		"tags": ["native"]
+		"tags": ["native", "dock"]
 	},
 	{
 		"appId": "hidden-window-example",
@@ -1172,7 +1172,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "manager", "fcd3"]
+		"tags": ["view", "manager", "fcd3", "dock"]
 	},
 	{
 		"appId": "manager-paths",
@@ -1198,7 +1198,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "manager", "fcd3"]
+		"tags": ["view", "manager", "fcd3", "dock"]
 	},
 	{
 		"appId": "company-comms",
