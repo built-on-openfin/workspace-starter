@@ -12,6 +12,9 @@ interface PlatformProviderOptions {
 		height?: number;
 		width?: number;
 	};
+	connections?: {
+		snapshotSources?: string[];
+	};
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
