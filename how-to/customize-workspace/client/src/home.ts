@@ -253,14 +253,20 @@ async function getResults(
 			let textMatchFound = true;
 			let filterMatchFound = true;
 
-			if (query !== undefined && query !== null && query.length >= queryMinLength) {
+			const isCommand = query.startsWith("/");
+
+			if (query.length >= queryMinLength || isCommand) {
 				textMatchFound = queryAgainst.some((target) => {
 					const path = target.split(".");
 					if (path.length === 1) {
 						const targetValue = entry[path[0]];
 
 						if (typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(query);
+							const lowerTarget = targetValue.toLowerCase();
+							if (isCommand) {
+								return lowerTarget.startsWith(query);
+							}
+							return lowerTarget.includes(query);
 						}
 					} else if (path.length === 2) {
 						const specifiedTarget = entry[path[0]];
@@ -270,7 +276,11 @@ async function getResults(
 						}
 
 						if (typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(query);
+							const lowerTarget = targetValue.toLowerCase();
+							if (isCommand) {
+								return lowerTarget.startsWith(query);
+							}
+							return lowerTarget.includes(query);
 						}
 
 						if (Array.isArray(targetValue)) {
@@ -420,16 +430,33 @@ export async function register() {
 
 			const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
 			const integrationResults = await getSearchResults(query, filters, lastResponse);
-			if (Array.isArray(integrationResults.results)) {
+			if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
 				searchResults.results = searchResults.results.concat(integrationResults.results);
 			}
-			if (Array.isArray(integrationResults.context.filters)) {
+			if (
+				Array.isArray(integrationResults.context.filters) &&
+				integrationResults.context.filters.length > 0
+			) {
 				searchResults.context.filters = searchResults.context.filters.concat(
 					integrationResults.context.filters
 				);
 			}
 
-			return searchResults;
+			// Remove any empty filter lists as these can cause the UI to continually
+			// expand and collapse as you type
+			const finalFilters = [];
+			if (Array.isArray(searchResults.context?.filters)) {
+				for (const filter of searchResults.context.filters) {
+					if (Array.isArray(filter.options) && filter.options.length > 0) {
+						finalFilters.push(filter);
+					}
+				}
+			}
+			searchResults.context.filters = finalFilters.length > 0 ? finalFilters : undefined;
+
+			if (searchResults.results.length > 0 || finalFilters.length > 0) {
+				return searchResults;
+			}
 		} catch (err) {
 			console.error("Exception while getting search list results", err);
 		}
