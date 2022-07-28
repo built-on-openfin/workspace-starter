@@ -329,3 +329,9 @@ export async function getIntentsByContext(
 
 	return [];
 }
+
+export function getAppIcon(app: App): string | undefined {
+	if (Array.isArray(app.icons) && app.icons.length > 0) {
+		return app.icons[0].src;
+	}
+}
