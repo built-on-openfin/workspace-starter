@@ -1,15 +1,21 @@
 import { fin } from "@openfin/core";
 import { EndpointDefinition } from "../../../endpoint-shapes";
 
-
 export async function init(options: unknown): Promise<void> {
 	console.log("Was passed the following options:", options);
 }
 
 export async function action(
-	endpointDefinition: EndpointDefinition<{ channelName: string; actionName: string;
-		payload?: unknown; wait?: boolean; uuid?: string;
-		logInfo?: boolean; logWarn?: boolean; logError?: boolean; }>,
+	endpointDefinition: EndpointDefinition<{
+		channelName: string;
+		actionName: string;
+		payload?: unknown;
+		wait?: boolean;
+		uuid?: string;
+		logInfo?: boolean;
+		logWarn?: boolean;
+		logError?: boolean;
+	}>,
 	request?: { payload?: unknown }
 ): Promise<boolean> {
 	if (request === undefined) {
@@ -26,23 +32,30 @@ export async function action(
 	const logWarn = endpointDefinition?.options?.logWarn ?? true;
 	const logError = endpointDefinition?.options?.logError ?? true;
 
-	if (endpointDefinition.options === undefined || endpointDefinition.options.actionName === undefined ||
-		endpointDefinition.options.channelName === undefined) {
+	if (
+		endpointDefinition.options === undefined ||
+		endpointDefinition.options.actionName === undefined ||
+		endpointDefinition.options.channelName === undefined
+	) {
 		if (logWarn) {
-			console.warn(
-				`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`
-			);
+			console.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return false;
 	}
 
 	try {
-		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName,
-			{ wait: endpointDefinition.options.wait, payload: endpointDefinition.options.payload });
-		if (endpointDefinition.options.uuid !== undefined &&
-			endpointDefinition.options.uuid !== channel.providerIdentity.uuid) {
+		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
+			wait: endpointDefinition.options.wait,
+			payload: endpointDefinition.options.payload
+		});
+		if (
+			endpointDefinition.options.uuid !== undefined &&
+			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
+		) {
 			if (logWarn) {
-				console.warn(`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`);
+				console.warn(
+					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
+				);
 			}
 			return false;
 		}
@@ -54,17 +67,27 @@ export async function action(
 		return true;
 	} catch (error) {
 		if (logError) {
-			console.error(`Error executing/or connecting to action. Endpoint with id: ${endpointDefinition.id}`, error);
+			console.error(
+				`Error executing/or connecting to action. Endpoint with id: ${endpointDefinition.id}`,
+				error
+			);
 		}
 		return false;
 	}
 }
 
 export async function requestResponse(
-	endpointDefinition: EndpointDefinition<{ channelName: string; actionName: string;
-		payload?: unknown; wait?: boolean; uuid?: string;
-		logInfo?: boolean; logWarn?: boolean; logError?: boolean;
-		default?: "object"|"array"; }>,
+	endpointDefinition: EndpointDefinition<{
+		channelName: string;
+		actionName: string;
+		payload?: unknown;
+		wait?: boolean;
+		uuid?: string;
+		logInfo?: boolean;
+		logWarn?: boolean;
+		logError?: boolean;
+		default?: "object" | "array";
+	}>,
 	request?: { payload?: unknown }
 ): Promise<unknown | null> {
 	let defaultValue: unknown = null;
@@ -86,22 +109,29 @@ export async function requestResponse(
 			defaultValue = {};
 		}
 	}
-	if (endpointDefinition.options === undefined || endpointDefinition.options.actionName === undefined ||
-		endpointDefinition.options.channelName === undefined) {
+	if (
+		endpointDefinition.options === undefined ||
+		endpointDefinition.options.actionName === undefined ||
+		endpointDefinition.options.channelName === undefined
+	) {
 		if (logWarn) {
-			console.warn(
-				`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`
-			);
+			console.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return defaultValue;
 	}
 	try {
-		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName,
-			{ wait: endpointDefinition.options.wait, payload: endpointDefinition.options.payload });
-		if (endpointDefinition.options.uuid !== undefined &&
-			endpointDefinition.options.uuid !== channel.providerIdentity.uuid) {
+		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
+			wait: endpointDefinition.options.wait,
+			payload: endpointDefinition.options.payload
+		});
+		if (
+			endpointDefinition.options.uuid !== undefined &&
+			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
+		) {
 			if (logWarn) {
-				console.warn(`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`);
+				console.warn(
+					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
+				);
 			}
 			return defaultValue;
 		}
@@ -113,7 +143,10 @@ export async function requestResponse(
 		return response;
 	} catch (error) {
 		if (logError) {
-			console.error(`Error executing request/response and connecting to endpoint with id: ${endpointDefinition.id}`, error);
+			console.error(
+				`Error executing request/response and connecting to endpoint with id: ${endpointDefinition.id}`,
+				error
+			);
 		}
 		return defaultValue;
 	}

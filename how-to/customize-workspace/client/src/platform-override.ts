@@ -20,7 +20,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
 			const snapshot = await super.getSnapshot(...args);
 
-            return decorateSnapshot(snapshot);
+			return decorateSnapshot(snapshot);
 		}
 
 		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
