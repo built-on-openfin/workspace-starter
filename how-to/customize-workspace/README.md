@@ -502,7 +502,23 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
                 "hideNotificationsButton": false,
                 "hideStorefrontButton": false
             },
-            "appTags": ["dock"],
+            "apps": [
+                {
+                    "display": "individual",
+                    "tags": ["dock"]
+                },
+                {
+                    "display": "group",
+                    "tooltip": "FDC3",
+                    "tags": ["fdc3"]
+                },
+                {
+                    "display": "group",
+                    "tooltip": "Manager",
+                    "iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
+                    "tags": ["manager"]
+                }
+            ],
             "buttons": [
                 {
                     "tooltip": "Google",
@@ -717,7 +733,11 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | workspaceComponents.hideWorkspacesButton                       | Hide the inbuilt workspaces button in the dock                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | workspaceComponents.hideNotificationsButton                    | Hide the inbuilt notifications button in the dock                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | workspaceComponents.hideStorefrontButton                       | Hide the inbuilt store button in the dock                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| appTags                                                        | The list of tags for applications to be shown in the dock, defaults to `["dock"]`                                                                                                                                                                                                                                                                                                                                                                                   |
+| apps                                                           | The list of buttons generated from app tags`                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| apps.item.display `["individual", "group"]`                    | Display the apps with the specified tags as individual buttons or grouped in a drop down                                                                                                                                                                                                                                                                                                                                                                            |
+| apps.item.tags                                                 | The application tags to include for this item                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| apps.item.tooltip `[optional if group]`                        | A tooltip for the group button in group mode                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| apps.item.iconUrl `[optional if group]`                        | An icon for the group button in group mode, will pick first app if not supplied                                                                                                                                                                                                                                                                                                                                                                                     |
 | buttons                                                        | A list of additional buttons that can be shown in the dock, they can be custom or launch apps                                                                                                                                                                                                                                                                                                                                                                       |
 | button.item.appId                                              | Get the details from the app to launch, the tooltip and iconUrl can override the values from app.json                                                                                                                                                                                                                                                                                                                                                               |
 | button.item.tooltip `[optional if using appId]`                | The label to show when hovering the button                                                                                                                                                                                                                                                                                                                                                                                                                          |
