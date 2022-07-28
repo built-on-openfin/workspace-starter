@@ -1041,7 +1041,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi"],
+		"tags": ["native", "appasset", "nwi", "dock"],
 		"data": {
 			"nwi": {
 				"name": "OpenFin.Interop.Win.Sample",
@@ -1071,7 +1071,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/microsoft-notepad-native.png"
 			}
 		],
-		"tags": ["native"]
+		"tags": ["native", "dock"]
 	},
 	{
 		"appId": "hidden-window-example",
