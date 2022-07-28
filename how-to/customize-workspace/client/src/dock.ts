@@ -12,79 +12,125 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 
 	const settings = await getSettings();
 
-	const appTags = settings.dockProvider.appTags ?? ["dock"];
+	const buttons: DockButton[] = [];
 
-	const dockApps = await getAppsByTag(appTags);
+	if (Array.isArray(settings.dockProvider.apps)) {
+		for (const appButton of settings.dockProvider.apps) {
+			if (!Array.isArray(appButton.tags)) {
+				console.error("You must specify an array for the tags parameter for an DockAppButton");
+			} else {
+				const dockApps = await getAppsByTag(appButton.tags);
 
-	// First add all the buttons tagged from apps
-	const buttons: DockButton[] = dockApps.map((app) => ({
-		tooltip: app.title,
-		iconUrl: getAppIcon(app),
-		action: {
-			id: ACTION_IDS.launchApp,
-			customData: {
-				source: "dock",
-				appId: app.appId
+				if (appButton.display === "individual") {
+					for (const dockApp of dockApps) {
+						buttons.push({
+							tooltip: appButton.tooltip ?? dockApp.title,
+							iconUrl: appButton.iconUrl ?? getAppIcon(dockApp),
+							action: {
+								id: ACTION_IDS.launchApp,
+								customData: {
+									source: "dock",
+									appId: dockApp.appId
+								}
+							}
+						});
+					}
+				} else if (appButton.display === "group") {
+					if (!appButton.tooltip) {
+						console.error("You must specify the tooltip for a grouped DockAppButton");
+					}
+					let iconUrl = appButton.iconUrl;
+					const options = [];
+
+					for (const dockApp of dockApps) {
+						// If the config doesn't specify an icon, just use the icon from the first entry
+						if (!iconUrl) {
+							iconUrl = getAppIcon(dockApp);
+						}
+
+						options.push({
+							tooltip: dockApp.title,
+							action: {
+								id: ACTION_IDS.launchApp,
+								customData: {
+									source: "dock",
+									appId: dockApp.appId
+								}
+							}
+						});
+					}
+
+					buttons.push({
+						type: DockButtonNames.DropdownButton,
+						tooltip: appButton.tooltip,
+						iconUrl,
+						options
+					});
+				}
 			}
 		}
-	}));
+	}
 
 	// Now add the custom buttons
 	if (Array.isArray(settings.dockProvider?.buttons)) {
-		for (const button of settings.dockProvider.buttons) {
-			let tooltip = button.tooltip;
-			let iconUrl = button.iconUrl;
+		for (const dockButton of settings.dockProvider.buttons) {
+			// Is this a dock drop down
+			if ("options" in dockButton) {
+				if (!dockButton.tooltip || !dockButton.iconUrl) {
+					console.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+				} else {
+					const options = [];
 
-			// If the button has an appId we are going to launch that
-			// but the config can override the tooltip or icon
-			if (button.appId && (!tooltip || !iconUrl)) {
-				const app = await getApp(button.appId);
-				if (!tooltip) {
-					tooltip = app.title;
-				}
-				if (!iconUrl) {
-					iconUrl = getAppIcon(app);
-				}
-			}
+					for (const option of dockButton.options) {
+						let optionTooltip = option.tooltip;
 
-			// Is this a custom drop down
-			if ("options" in button) {
-				const options = [];
+						// If the options has an appId we are going to launch that
+						// but the config can override the tooltip
+						if (option.appId && !optionTooltip) {
+							const app = await getApp(option.appId);
+							optionTooltip = app.title;
+						}
 
-				for (const option of button.options) {
-					let optionTooltip = option.tooltip;
-
-					// If the options has an appId we are going to launch that
-					// but the config can override the tooltip
-					if (option.appId && !optionTooltip) {
-						const app = await getApp(option.appId);
-						optionTooltip = app.title;
+						// If we have an appId do the default dock launch action
+						// otherwise we just perform a custom action and this
+						// must be handled in actions.ts
+						options.push({
+							tooltip: optionTooltip,
+							action: option.appId
+								? {
+										id: ACTION_IDS.launchApp,
+										customData: {
+											source: "dock",
+											appId: option.appId
+										}
+								  }
+								: option.action
+						});
 					}
 
-					// If we have an appId do the default dock launch action
-					// otherwise we just perform a custom action and this
-					// must be handled in actions.ts
-					options.push({
-						tooltip: optionTooltip,
-						action: option.appId
-							? {
-									id: ACTION_IDS.launchApp,
-									customData: {
-										source: "dock",
-										appId: button.appId
-									}
-							  }
-							: option.action
+					buttons.push({
+						type: DockButtonNames.DropdownButton,
+						tooltip: dockButton.tooltip,
+						iconUrl: dockButton.iconUrl,
+						options
 					});
 				}
-
-				buttons.push({
-					type: DockButtonNames.DropdownButton,
-					tooltip,
-					iconUrl,
-					options
-				});
 			} else {
+				let tooltip = dockButton.tooltip;
+				let iconUrl = dockButton.iconUrl;
+
+				// If the button has an appId we are going to launch that
+				// but the config can override the tooltip or icon
+				if (dockButton.appId && (!tooltip || !iconUrl)) {
+					const app = await getApp(dockButton.appId);
+					if (!tooltip) {
+						tooltip = app.title;
+					}
+					if (!iconUrl) {
+						iconUrl = getAppIcon(app);
+					}
+				}
+
 				// This is just a button with no dropdown
 				// it might be launching an app or a custom action
 				// which we must define in actions.ts
@@ -92,15 +138,15 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					type: DockButtonNames.ActionButton,
 					tooltip,
 					iconUrl,
-					action: button.appId
+					action: dockButton.appId
 						? {
 								id: ACTION_IDS.launchApp,
 								customData: {
 									source: "dock",
-									appId: button.appId
+									appId: dockButton.appId
 								}
 						  }
-						: button.action
+						: dockButton.action
 				});
 			}
 		}

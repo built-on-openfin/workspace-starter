@@ -54,12 +54,17 @@ interface HomeProviderOptions {
 }
 
 interface DockButtonBase {
-	appId?: string;
 	tooltip?: string;
 	iconUrl?: string;
 }
 
-interface DockButton extends DockButtonBase {
+interface DockButtonApp extends DockButtonBase {
+	display: "individual" | "group";
+	tags?: string[];
+}
+
+interface DockButtonAction extends DockButtonBase {
+	appId?: string;
 	action?: {
 		id: string;
 		customData: unknown;
@@ -87,8 +92,8 @@ interface DockProviderOptions {
 		hideNotificationsButton?: boolean;
 		hideStorefrontButton?: boolean;
 	};
-	appTags?: string[];
-	buttons?: (DockButton | DockButtonDropdown)[];
+	apps?: DockButtonApp[];
+	buttons?: (DockButtonAction | DockButtonDropdown)[];
 }
 
 interface ThemeProviderOptions {

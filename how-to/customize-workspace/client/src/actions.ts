@@ -260,13 +260,19 @@ export async function getActions(): Promise<CustomActionsMap> {
 	actionMap[ACTION_IDS.launchApp] = async (
 		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
 	) => {
-		if (payload.customData?.source === "dock" && payload.customData?.appId) {
+		if (payload.customData?.appId) {
 			const app = await getApp(payload.customData.appId as string);
 			if (app) {
 				await launch(app);
 			} else {
-				console.error(`Unable to find app with id '${payload.customData.appId}' in dock launch`);
+				console.error(
+					`Unable to find app with id '${
+						payload.customData.appId
+					}' in call to launchApp action from source '${payload.customData?.source ?? "unknown source"}'`
+				);
 			}
+		} else {
+			console.error(`No appId specified in payload.customData in launchApp action`);
 		}
 	};
 
@@ -276,7 +282,7 @@ export async function getActions(): Promise<CustomActionsMap> {
 		if (payload.customData?.url) {
 			await launchView(payload.customData?.url as string);
 		} else {
-			console.error("Launch view called with empty url");
+			console.error(`No url specified in payload.customData in launchView action`);
 		}
 	};
 

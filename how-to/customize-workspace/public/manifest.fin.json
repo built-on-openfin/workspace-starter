@@ -476,7 +476,23 @@
 				"hideNotificationsButton": false,
 				"hideStorefrontButton": false
 			},
-			"appTags": ["dock"],
+			"apps": [
+				{
+					"display": "individual",
+					"tags": ["dock"]
+				},
+				{
+					"display": "group",
+					"tooltip": "FDC3",
+					"tags": ["fdc3"]
+				},
+				{
+					"display": "group",
+					"tooltip": "Manager",
+					"iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
+					"tags": ["manager"]
+				}
+			],
 			"buttons": [
 				{
 					"tooltip": "Google",

@@ -23,7 +23,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "interop", "fdc3", "contact", "dock"]
+		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "participant-selection",
@@ -1172,7 +1172,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "manager", "fcd3", "dock"]
+		"tags": ["view", "manager", "fcd3"]
 	},
 	{
 		"appId": "manager-paths",
@@ -1198,7 +1198,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["view", "manager", "fcd3", "dock"]
+		"tags": ["view", "manager", "fcd3"]
 	},
 	{
 		"appId": "company-comms",
