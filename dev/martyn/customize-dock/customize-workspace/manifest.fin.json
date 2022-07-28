@@ -476,7 +476,23 @@
 				"hideNotificationsButton": false,
 				"hideStorefrontButton": false
 			},
-			"appTags": ["dock"],
+			"apps": [
+				{
+					"display": "individual",
+					"tags": ["dock"]
+				},
+				{
+					"display": "group",
+					"tooltip": "FDC3",
+					"tags": ["fdc3"]
+				},
+				{
+					"display": "group",
+					"tooltip": "Manager",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-gradient.png",
+					"tags": ["manager"]
+				}
+			],
 			"buttons": [
 				{
 					"tooltip": "Google",
