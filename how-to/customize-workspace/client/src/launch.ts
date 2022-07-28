@@ -1,6 +1,7 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import * as endpointProvider from "./endpoint";
 import { getSettings } from "./settings";
 
 async function getViewIdentities(name: string, uuid: string) {
@@ -240,6 +241,15 @@ export async function launch(appEntry: App) {
 			await launchWindow(appEntry);
 		} else if (appEntry.manifestType === "desktop-browser") {
 			await fin.System.openUrlWithBrowser(appEntry.manifest);
+		} else if (appEntry.manifestType === "endpoint") {
+			if (endpointProvider.hasEndpoint(appEntry.manifest)) {
+				const launched = await endpointProvider.action(appEntry.manifest, { payload: appEntry });
+				if (!launched) {
+					console.warn(`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`);
+				}
+			} else {
+				console.warn(`App with id: ${appEntry.appId} could not be launched as it is of manifestType: ${appEntry.manifestType} and the endpoint: ${appEntry.manifest} is not available.`);
+			}
 		} else {
 			const platform = getCurrentSync();
 			await platform.launchApp({ app: appEntry });
