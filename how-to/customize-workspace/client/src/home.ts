@@ -15,7 +15,7 @@ import {
 	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
-import { getApps } from "./apps";
+import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
@@ -106,10 +106,7 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 			}
 
 			entry.actions = [action];
-
-			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-				entry.icon = apps[i].icons[0].src;
-			}
+			entry.icon = getAppIcon(apps[i]);
 
 			if (apps[i].description !== undefined) {
 				entry.description = apps[i].description;

@@ -33,6 +33,17 @@ interface BrowserProviderOptions {
 	};
 	supportedMenuActions?: string[];
 }
+
+export type BootstrapComponents = "home" | "store" | "dock" | "notifications";
+
+export interface BootstrapOptions {
+	store: boolean;
+	home: boolean;
+	dock: boolean;
+	notifications: boolean;
+	autoShow: BootstrapComponents[];
+}
+
 interface HomeProviderOptions {
 	id: string;
 	title: string;
@@ -40,6 +51,49 @@ interface HomeProviderOptions {
 	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
+}
+
+interface DockButtonBase {
+	tooltip?: string;
+	iconUrl?: string;
+}
+
+interface DockButtonApp extends DockButtonBase {
+	display: "individual" | "group";
+	tags?: string[];
+}
+
+interface DockButtonAction extends DockButtonBase {
+	appId?: string;
+	action?: {
+		id: string;
+		customData: unknown;
+	};
+}
+
+interface DockButtonDropdown extends DockButtonBase {
+	options: {
+		appId?: string;
+		tooltip?: string;
+		action?: {
+			id: string;
+			customData: unknown;
+		};
+	}[];
+}
+
+interface DockProviderOptions {
+	id: string;
+	title: string;
+	icon: string;
+	workspaceComponents?: {
+		hideHomeButton?: boolean;
+		hideWorkspacesButton?: boolean;
+		hideNotificationsButton?: boolean;
+		hideStorefrontButton?: boolean;
+	};
+	apps?: DockButtonApp[];
+	buttons?: (DockButtonAction | DockButtonDropdown)[];
 }
 
 interface ThemeProviderOptions {
@@ -113,7 +167,7 @@ interface StorefrontProviderOptions {
 }
 
 export interface CustomSettings {
-	bootstrap?: { store: boolean; home: boolean; notifications: boolean };
+	bootstrap?: BootstrapOptions;
 	authProvider?: AuthProviderOptions;
 	appProvider?: AppProviderOptions;
 	platformProvider?: PlatformProviderOptions;
@@ -121,6 +175,7 @@ export interface CustomSettings {
 	themeProvider?: ThemeProviderOptions;
 	homeProvider?: HomeProviderOptions;
 	storefrontProvider?: StorefrontProviderOptions;
+	dockProvider?: DockProviderOptions;
 	notificationProvider?: NotificationProviderOptions;
 	integrationProvider?: IntegrationProviderOptions;
 	endpointProvider?: EndpointProviderOptions;
