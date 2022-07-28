@@ -22,9 +22,9 @@ export async function action(
 		);
 		return false;
 	}
-	const logInfo = endpointDefinition?.options?.logInfo === undefined || endpointDefinition.options.logInfo;
-	const logWarn = endpointDefinition?.options?.logWarn === undefined || endpointDefinition.options.logWarn;
-	const logError = endpointDefinition?.options?.logError === undefined || endpointDefinition.options.logError;
+	const logInfo = endpointDefinition?.options?.logInfo ?? true;
+	const logWarn = endpointDefinition?.options?.logWarn ?? true;
+	const logError = endpointDefinition?.options?.logError ?? true;
 
 	if (endpointDefinition.options === undefined || endpointDefinition.options.actionName === undefined ||
 		endpointDefinition.options.channelName === undefined) {
@@ -75,9 +75,9 @@ export async function requestResponse(
 		);
 		return defaultValue;
 	}
-	const logInfo = endpointDefinition?.options?.logInfo === undefined || endpointDefinition.options.logInfo;
-	const logWarn = endpointDefinition?.options?.logWarn === undefined || endpointDefinition.options.logWarn;
-	const logError = endpointDefinition?.options?.logError === undefined || endpointDefinition.options.logError;
+	const logInfo = endpointDefinition?.options?.logInfo ?? true;
+	const logWarn = endpointDefinition?.options?.logWarn ?? true;
+	const logError = endpointDefinition?.options?.logError ?? true;
 
 	if (endpointDefinition?.options?.default !== undefined) {
 		if (endpointDefinition.options.default === "array") {
