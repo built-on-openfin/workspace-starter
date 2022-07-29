@@ -43,7 +43,7 @@ export async function init() {
 		appInfo.initialOptions as OpenFin.ApplicationCreationOptions & CustomUserAppArgs
 	);
 	if (customPalette) {
-		console.log("Load customPalette from command line");
+		console.log("Loaded customPalette from command line", customPalette);
 	}
 
 	// If there is a palette stored in local storage use that as it is from
