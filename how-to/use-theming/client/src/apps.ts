@@ -1,29 +1,27 @@
 import { App } from "@openfin/workspace";
 
 export async function getApps(): Promise<App[]> {
-	return [experoApp, notificationStudio, processManager, developerContent];
+	return [themeBuilderApp, notificationStudio, processManager, developerContent];
 }
 
-export const experoApp: App = {
-	appId: "expero-company-news",
-	title: "Gateway - Company News",
-	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
+export const themeBuilderApp: App = {
+	appId: "theme-definition-builder",
+	title: "Theme Definition Builder",
+	description: "A tool to help in the building of a theme.",
+	manifest:
+		"https://samples.openfin.co/dev-extensions/extensions/v1.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 	manifestType: "view",
-	icons: [
-		{
-			src: "https://openfin-iex.experolabs.com/favicon.ico"
-		}
-	],
+	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "Expero",
+	publisher: "OpenFin",
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/expero-news-view.png"
+			src: "https://samples.openfin.co/dev-extensions/extensions/v1.0.0/branding/images/previews/theme-definition-builder.png"
 		}
 	],
-	tags: ["expero", "view", "interop"]
+	tags: ["view", "theme", "tool"]
 };
 
 export const notificationStudio: App = {

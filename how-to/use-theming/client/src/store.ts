@@ -8,7 +8,7 @@ import {
 	StorefrontTemplate
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { getApps, experoApp, notificationStudio, processManager, developerContent } from "./apps";
+import { getApps, themeBuilderApp, notificationStudio, processManager, developerContent } from "./apps";
 
 const providerId = "use-theming";
 
@@ -68,7 +68,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 					title: "Views",
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [themeBuilderApp]
 					}
 				},
 				{
@@ -126,7 +126,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [themeBuilderApp]
 					}
 				},
 				{
@@ -146,7 +146,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		},
 		middleRow: {
 			title: "A collection of simple views that show how to share context using the Interop API.",
-			apps: [experoApp]
+			apps: [themeBuilderApp]
 		},
 		bottomRow: {
 			title: "Quick Access",
@@ -160,7 +160,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [themeBuilderApp]
 					}
 				},
 				{

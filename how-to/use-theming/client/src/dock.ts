@@ -60,7 +60,7 @@ async function getDockProvider(): Promise<DockProvider> {
 			{
 				type: DockButtonNames.DropdownButton,
 				tooltip: "Social",
-				iconUrl: `${webRoot}assets/spanner.svg`,
+				iconUrl: `${webRoot}favicon.ico`,
 				options: [
 					{
 						tooltip: "Twitter",

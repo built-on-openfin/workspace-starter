@@ -1,15 +1,18 @@
 import { fin } from "@openfin/core";
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 
-type CustomApplicationOptions = OpenFin.ApplicationCreationOptions & {
-	userAppConfigArgs: { palette: string };
-};
+interface CustomUserAppArgs {
+	userAppConfigArgs: {
+		palette: string;
+	};
+}
 
 export async function init() {
 	console.log("Initializing platform");
 
 	// This is the default dark theme
-	let palette = {
+	const darkPalette = {
 		brandPrimary: "#504CFF",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
@@ -36,28 +39,57 @@ export async function init() {
 	// Find any palette options passed on the command line and override the default palette
 	const app = fin.Application.getCurrentSync();
 	const appInfo = await app.getInfo();
-	const userArgs = (appInfo.initialOptions as CustomApplicationOptions)?.userAppConfigArgs;
-	if (typeof userArgs?.palette === "string") {
-		try {
-			const plainJson = atob(userArgs.palette);
-			const customPalette = JSON.parse(plainJson);
-			palette = {
-				...palette,
-				...customPalette
-			};
-			console.log("Custom palette", palette);
-		} catch (err) {
-			console.error("Error decoding palette", err);
-		}
+	let customPalette = extractPaletteFromOptions(
+		appInfo.initialOptions as OpenFin.ApplicationCreationOptions & CustomUserAppArgs
+	);
+	if (customPalette) {
+		console.log("Load customPalette from command line");
 	}
+
+	// If there is a palette stored in local storage use that as it is from
+	// a restart requested, but then remove it
+	const loadedRunPalette = window.localStorage.getItem("customPalette");
+	if (loadedRunPalette) {
+		customPalette = JSON.parse(loadedRunPalette) as Partial<CustomPaletteSet>;
+		console.log("Loaded customPalette from localStorage", customPalette);
+		window.localStorage.removeItem("customPalette");
+	}
+
+	// If run was requested when we are already running restart the app
+	// as we can only update the palette by re-initialising the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.Application.addListener("run-requested", async (params: CustomUserAppArgs) => {
+		console.log("Run requested with new palette", params.userAppConfigArgs?.palette);
+		const runPalette = extractPaletteFromOptions(params);
+		window.localStorage.setItem("customPalette", JSON.stringify(runPalette));
+		await app.restart();
+	});
 
 	await workspacePlatformInit({
 		browser: {},
 		theme: [
 			{
 				label: "theme",
-				palette
+				palette: {
+					...darkPalette,
+					...customPalette
+				}
 			}
 		]
 	});
+}
+
+function extractPaletteFromOptions(customUserAppArgs: CustomUserAppArgs): Partial<CustomPaletteSet> {
+	if (typeof customUserAppArgs?.userAppConfigArgs?.palette === "string") {
+		try {
+			const plainJson = atob(customUserAppArgs?.userAppConfigArgs?.palette);
+			const customPalette = JSON.parse(plainJson) as CustomPaletteSet;
+			console.log("Custom palette", customPalette);
+			return customPalette;
+		} catch (err) {
+			console.error("Error decoding palette", err);
+		}
+	}
+
+	return {};
 }
