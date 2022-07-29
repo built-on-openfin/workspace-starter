@@ -61,29 +61,31 @@ The `secondclient` passed the palette to the command line with a base64 encoded 
 You could produce a similar encoding for your palette by doing the following:
 
 ```js
-btoa(JSON.stringify({
-    brandPrimary: "#504CFF",
-    brandSecondary: "#1E1F23",
-    backgroundPrimary: "#FAFBFE",
-    background1: "#FFFFFF",
-    background2: "#FAFBFE",
-    background3: "#F3F5F8",
-    background4: "#ECEEF1",
-    background5: "#DDDFE4",
-    background6: "#C9CBD2",
-    statusSuccess: "#35C759",
-    statusWarning: "#F48F00",
-    statusCritical: "#BE1D1F",
-    statusActive: "#0498FB",
-    inputBackground: "#ECEEF1",
-    inputColor: "#1E1F23",
-    inputPlaceholder: "#383A40",
-    inputDisabled: "#7D808A",
-    inputFocused: "#C9CBD2",
-    textDefault: "#1E1F23",
-    textHelp: "#2F3136",
-    textInactive: "#7D808A"
-}));
+btoa(
+  JSON.stringify({
+    brandPrimary: '#504CFF',
+    brandSecondary: '#1E1F23',
+    backgroundPrimary: '#FAFBFE',
+    background1: '#FFFFFF',
+    background2: '#FAFBFE',
+    background3: '#F3F5F8',
+    background4: '#ECEEF1',
+    background5: '#DDDFE4',
+    background6: '#C9CBD2',
+    statusSuccess: '#35C759',
+    statusWarning: '#F48F00',
+    statusCritical: '#BE1D1F',
+    statusActive: '#0498FB',
+    inputBackground: '#ECEEF1',
+    inputColor: '#1E1F23',
+    inputPlaceholder: '#383A40',
+    inputDisabled: '#7D808A',
+    inputFocused: '#C9CBD2',
+    textDefault: '#1E1F23',
+    textHelp: '#2F3136',
+    textInactive: '#7D808A'
+  })
+);
 ```
 
 Which outputs:
