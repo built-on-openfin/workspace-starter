@@ -61,6 +61,7 @@ export async function init() {
 	await platform.Application.addListener("run-requested", async (params: CustomUserAppArgs) => {
 		console.log("Run requested with new palette", params.userAppConfigArgs?.palette);
 		const runPalette = extractPaletteFromOptions(params);
+        console.log("Store customPalette and restart app");
 		window.localStorage.setItem("customPalette", JSON.stringify(runPalette));
 		await app.restart();
 	});
