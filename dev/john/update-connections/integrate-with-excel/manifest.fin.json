@@ -39,7 +39,7 @@
 		"company": "OpenFin",
 		"description": "An way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-excel/favicon.ico",
-		"name": "Integrate With Excel - v8.0",
+		"name": "Integrate With Excel - v9.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
