@@ -1,5 +1,6 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
+import { getConnectedApps } from "./connections";
 import { EndpointProvider } from "./endpoint-shapes";
 import { AppProviderOptions } from "./shapes";
 
@@ -110,6 +111,12 @@ async function getEntries(
 		} catch (error) {
 			console.error(`Error fetching apps from endpoint ${endpointId}`, error);
 		}
+	}
+
+	const connectedApps = await getConnectedApps();
+	if (connectedApps.length > 0) {
+		console.log(`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated.`);
+		apps.push(...connectedApps);
 	}
 
 	cachedApps = await validateEntries(apps);

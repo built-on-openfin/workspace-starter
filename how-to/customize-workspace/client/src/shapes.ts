@@ -2,6 +2,7 @@ import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
 import { AuthProviderOptions } from "./auth-shapes";
+import { ConnectionProviderOptions } from "./connection-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
 
@@ -11,9 +12,6 @@ interface PlatformProviderOptions {
 		url: string;
 		height?: number;
 		width?: number;
-	};
-	connections?: {
-		snapshotSources?: string[];
 	};
 }
 
@@ -173,6 +171,7 @@ export interface CustomSettings {
 	bootstrap?: BootstrapOptions;
 	authProvider?: AuthProviderOptions;
 	appProvider?: AppProviderOptions;
+	connectionProvider?: ConnectionProviderOptions;
 	platformProvider?: PlatformProviderOptions;
 	browserProvider?: BrowserProviderOptions;
 	themeProvider?: ThemeProviderOptions;

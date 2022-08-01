@@ -10,6 +10,7 @@ import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { getDefaultWindowOptions } from "./browser";
 import * as endpointProvider from "./endpoint";
+import * as connectionProvider from "./connections";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
 import { getSettings } from "./settings";
@@ -48,6 +49,7 @@ async function manageAuthFlow() {
 async function setupPlatform(settings: CustomSettings) {
 	console.log("Initializing Core Services");
 	await endpointProvider.init(settings?.endpointProvider);
+	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 
 	console.log("Initializing platform");

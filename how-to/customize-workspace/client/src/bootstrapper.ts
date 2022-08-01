@@ -2,6 +2,7 @@ import { fin } from "@openfin/core";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { launchPage, launchView } from "./browser";
+import { registerAction } from "./connections";
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,
@@ -88,16 +89,34 @@ export async function init() {
 		// only register search logic once workspace is running
 		await registerHome();
 		registeredComponents.push("home");
+		registerAction("show-home", async () => {
+			await showHome();
+		});
+		registerAction("hide-home", async () => {
+			await hideHome();
+		});
 	}
 
 	if (bootstrapOptions.store) {
 		await registerStore();
 		registeredComponents.push("store");
+		registerAction("show-store", async () => {
+			await showStore();
+		});
+		registerAction("hide-store", async () => {
+			await hideStore();
+		});
 	}
 
 	if (bootstrapOptions.dock) {
 		await registerDock(bootstrapOptions);
 		registeredComponents.push("dock");
+		registerAction("show-dock", async () => {
+			await showDock();
+		});
+		registerAction("minimize-dock", async () => {
+			await minimizeDock();
+		});
 	}
 
 	if (bootstrapOptions.notifications) {

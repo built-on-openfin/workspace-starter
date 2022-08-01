@@ -1,6 +1,7 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { getSettings } from "./settings";
 
@@ -116,7 +117,7 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 		const manifestResponse = await fetch(viewApp.manifest);
 		manifest = await manifestResponse.json();
 	} else {
-		// conversion because of manifestType. In most usecases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
+		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
 		// for passing the manifest inline
 		manifest = viewApp.manifest as unknown as OpenFin.ViewOptions;
 	}
@@ -254,6 +255,9 @@ export async function launch(appEntry: App) {
 					`App with id: ${appEntry.appId} could not be launched as it is of manifestType: ${appEntry.manifestType} and the endpoint: ${appEntry.manifest} is not available.`
 				);
 			}
+		} else if (appEntry.manifestType === "connection") {
+			console.log(`An app defined by a connection (connected app) has been selected. Passing selection to connection.`);
+			await launchConnectedApp(appEntry);
 		} else {
 			const platform = getCurrentSync();
 			await platform.launchApp({ app: appEntry });
