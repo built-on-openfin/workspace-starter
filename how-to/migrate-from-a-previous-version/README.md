@@ -32,7 +32,7 @@ Platform Providers can now lock Browser Windows and/or Pages to offer fixed, rep
 
 The visual designs of filters in Workspace Home have been improved, so end-users can quickly and easily zero in on the content that they are searching for and quickly clear out selected filters
 
-## What dependencies will I need for v8
+## What dependencies will I need for v9
 
 You will need the following dependencies
 
