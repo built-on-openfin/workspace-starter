@@ -38,7 +38,7 @@
 		"company": "OpenFin",
 		"description": "An way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Use Theming - v8.0",
+		"name": "Use Theming - v9.0",
 		"target": ["desktop", "start-menu"]
 	}
 }
