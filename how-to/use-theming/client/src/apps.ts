@@ -4,6 +4,8 @@ export async function getApps(): Promise<App[]> {
 	return [themeBuilderApp, notificationStudio, processManager, developerContent];
 }
 
+const webRoot = window.location.href.replace("platform/provider.html", "");
+
 export const themeBuilderApp: App = {
 	appId: "theme-definition-builder",
 	title: "Theme Definition Builder",
@@ -11,7 +13,7 @@ export const themeBuilderApp: App = {
 	manifest:
 		"https://samples.openfin.co/dev-extensions/extensions/v1.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 	manifestType: "view",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
+	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
@@ -42,7 +44,7 @@ export const notificationStudio: App = {
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/openfin-notification-studio.png"
+			src: `${webRoot}common/images/previews/openfin-notification-studio.png`
 		}
 	],
 	tags: ["hero", "manifest", "tools"]
@@ -62,7 +64,7 @@ export const processManager: App = {
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/openfin-process-manager.png"
+			src: `${webRoot}common/images/previews/openfin-process-manager.png`
 		}
 	],
 	tags: ["hero", "manifest", "tools"]
@@ -74,15 +76,15 @@ export const developerContent: App = {
 	manifestType: "snapshot",
 	description:
 		"Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-	manifest: "http://localhost:8080/common/snapshots/snapshot.json",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
+	manifest: `${webRoot}common/snapshots/snapshot.json`,
+	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/openfin-page-docs.png"
+			src: `${webRoot}common/images/previews/openfin-page-docs.png`
 		}
 	],
 	tags: ["page"]
