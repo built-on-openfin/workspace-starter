@@ -34,7 +34,7 @@ async function getDockProvider(): Promise<DockProvider> {
 
 	return {
 		id: providerId,
-		title: "Basic Dock",
+		title: "Theming Dock",
 		icon: `${webRoot}favicon.ico`,
 		workspaceComponents: {
 			hideHomeButton: true,

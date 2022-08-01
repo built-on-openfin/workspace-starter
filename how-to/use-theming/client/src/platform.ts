@@ -1,14 +1,7 @@
-import { fin } from "@openfin/core";
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import { ThemingPayload } from "./shapes";
 
-interface CustomUserAppArgs {
-	userAppConfigArgs: {
-		palette: string;
-	};
-}
-
-export async function init() {
+export async function init(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing platform");
 
 	// This is the default dark theme
@@ -36,36 +29,6 @@ export async function init() {
 		textInactive: "#7D808A"
 	};
 
-	// Find any palette options passed on the command line and override the default palette
-	const app = fin.Application.getCurrentSync();
-	const appInfo = await app.getInfo();
-	let customPalette = extractPaletteFromOptions(
-		appInfo.initialOptions as OpenFin.ApplicationCreationOptions & CustomUserAppArgs
-	);
-	if (customPalette) {
-		console.log("Loaded customPalette from command line", customPalette);
-	}
-
-	// If there is a palette stored in local storage use that as it is from
-	// a restart requested, but then remove it
-	const loadedRunPalette = window.localStorage.getItem("customPalette");
-	if (loadedRunPalette) {
-		customPalette = JSON.parse(loadedRunPalette) as Partial<CustomPaletteSet>;
-		console.log("Loaded customPalette from localStorage", customPalette);
-		window.localStorage.removeItem("customPalette");
-	}
-
-	// If run was requested when we are already running restart the app
-	// as we can only update the palette by re-initialising the platform.
-	const platform = fin.Platform.getCurrentSync();
-	await platform.Application.addListener("run-requested", async (params: CustomUserAppArgs) => {
-		console.log("Run requested with new palette", params.userAppConfigArgs?.palette);
-		const runPalette = extractPaletteFromOptions(params);
-		console.log("Store customPalette and restart app");
-		window.localStorage.setItem("customPalette", JSON.stringify(runPalette));
-		await app.restart();
-	});
-
 	await workspacePlatformInit({
 		browser: {},
 		theme: [
@@ -73,24 +36,9 @@ export async function init() {
 				label: "theme",
 				palette: {
 					...darkPalette,
-					...customPalette
+					...themingPayload?.palette
 				}
 			}
 		]
 	});
-}
-
-function extractPaletteFromOptions(customUserAppArgs: CustomUserAppArgs): Partial<CustomPaletteSet> {
-	if (typeof customUserAppArgs?.userAppConfigArgs?.palette === "string") {
-		try {
-			const plainJson = atob(customUserAppArgs?.userAppConfigArgs?.palette);
-			const customPalette = JSON.parse(plainJson) as CustomPaletteSet;
-			console.log("Custom palette", customPalette);
-			return customPalette;
-		} catch (err) {
-			console.error("Error decoding palette", err);
-		}
-	}
-
-	return {};
 }
