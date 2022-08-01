@@ -256,7 +256,9 @@ export async function launch(appEntry: App) {
 				);
 			}
 		} else if (appEntry.manifestType === "connection") {
-			console.log(`An app defined by a connection (connected app) has been selected. Passing selection to connection.`);
+			console.log(
+				`An app defined by a connection (connected app) has been selected. Passing selection to connection.`
+			);
 			await launchConnectedApp(appEntry);
 		} else {
 			const platform = getCurrentSync();

@@ -43,11 +43,14 @@ export async function applyClientSnapshot(snapshot) {
 	await Promise.all(
 		sources.map(async (entry) => {
 			const clientSnapshot: ClientSnapshot = Array.isArray(snapshot.clientSnapshots)
-			? snapshot.clientSnapshots.find((s: ClientSnapshot) => s.identity.uuid === entry.identity.uuid) : undefined;
+				? snapshot.clientSnapshots.find((s: ClientSnapshot) => s.identity.uuid === entry.identity.uuid)
+				: undefined;
 			if (clientSnapshot) {
 				try {
 					const snapShotSource = await fin.SnapshotSource.wrap(clientSnapshot.identity);
-					console.log(`Snapshot source: ${entry.identity.uuid} is running and has a snapshot entry. Applying snapshot.`);
+					console.log(
+						`Snapshot source: ${entry.identity.uuid} is running and has a snapshot entry. Applying snapshot.`
+					);
 					await snapShotSource.applySnapshot(clientSnapshot.snapshot);
 				} catch {
 					console.log(`Snapshot source: ${entry.identity.uuid} is not able to apply the snapshot.`);
