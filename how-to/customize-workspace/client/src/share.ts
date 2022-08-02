@@ -288,27 +288,6 @@ async function loadSharedEntry(id: string) {
 	}
 }
 
-async function queryOnLaunch(userAppConfigArgs?: { shareId: string }) {
-	console.log("Received during startup:", userAppConfigArgs);
-	if (userAppConfigArgs?.shareId !== undefined) {
-		await loadSharedEntry(userAppConfigArgs?.shareId);
-	}
-}
-
-async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string } }) {
-	if (event?.userAppConfigArgs?.shareId !== undefined) {
-		console.log(event.userAppConfigArgs);
-		await loadSharedEntry(event.userAppConfigArgs.shareId);
-	}
-}
-
-async function listenForShareRequests() {
-	// eslint-disable-next-line @typescript-eslint/dot-notation
-	fin["desktop"].main(queryOnLaunch);
-	const platform = getCurrentSync();
-	await platform.Application.addListener("run-requested", queryWhileRunning);
-}
-
 export async function register() {
 	if (!shareRegistered) {
 		shareRegistered = true;

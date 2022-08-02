@@ -15,9 +15,7 @@ import {
 	register as registerHome,
 	show as showHome
 } from "./home";
-import {
-	init as registerInitOptionsListener
-} from "./init-options";
+import { init as registerInitOptionsListener } from "./init-options";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
 import { manifestTypes } from "./manifest-types";
