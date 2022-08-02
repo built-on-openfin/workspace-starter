@@ -11,22 +11,20 @@ import {
 let connectionService: ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};
 const registeredActions: { [key: string]: () => Promise<void> } = {};
+const appSourceTypeId = "appSource";
+const snapshotSourceTypeId = "snapshotSource";
+const actionsTypeId = "actions";
 let initialized = false;
 let connectionOptions: ConnectionProviderOptions;
-interface ConnectedAppSourceConnection {
-	identity: OpenFin.Identity;
-	connectionData: AppSourceConnection;
-}
 
 function isActionSupported(identity: OpenFin.Identity, payload: { action: string }) {
 	const requestingClient = connectedClients[identity.uuid];
-	const actions = "actions";
 	const actionId = payload?.action;
 	const requestedAction = registerAction[actionId];
-	const actionSettings = requestingClient.connectionTypes.find((entry) => entry.type === actions);
-	let supportedActions = connectionOptions.supportedActions || [];
+	const actionSettings = requestingClient.connectionTypes.find((entry) => entry.type === actionsTypeId);
+	let supportedActions = connectionOptions.supportedActions ?? [];
 
-	if (actionSettings.type === actions) {
+	if (actionSettings.type === actionsTypeId) {
 		if (Array.isArray(actionSettings.supportedActions) && actionSettings.supportedActions.length > 0) {
 			supportedActions = actionSettings.supportedActions;
 		}
@@ -47,7 +45,7 @@ async function executeAction(identity: OpenFin.Identity, payload: { action: stri
 	}
 
 	console.log(
-		`Not Executing action: ${actionId} on behalf of connection: ${identity.uuid} as the action was either not provided or not listed in the supported actions definition.`
+		`Not Executing action: ${actionId} on behalf of connection: ${identity.uuid} as the action was either not provided or not listed in the supported ${actionsTypeId} definition.`
 	);
 	return false;
 }
@@ -93,8 +91,7 @@ export async function init(options: ConnectionProviderOptions) {
 				if (isValid) {
 					if (connectedClients[identity.uuid] !== undefined) {
 						isValid = false;
-						errorMessage =
-							"This platform can only accept one connection from an external connection. The uuid is already registered.";
+						errorMessage = `This platform can only accept one connection from an external connection. The uuid (${identity.uuid}) is already registered.`;
 					} else {
 						// assign the passed identity
 						validatedConnection.identity = identity;
@@ -154,15 +151,18 @@ export function clearAction(actionName: string): boolean {
 }
 
 export async function getConnectedAppSourceClients() {
-	const connections: ConnectedAppSourceConnection[] = [];
+	const connections: {
+		identity: OpenFin.Identity;
+		connectionData: AppSourceConnection;
+	}[] = [];
 
 	const availableConnections = Object.values(connectedClients);
 	for (const connection of availableConnections) {
 		const matchedConnection = connection.connectionTypes.find(
-			(supportedConnectionType) => supportedConnectionType.type === "appSource"
+			(supportedConnectionType) => supportedConnectionType.type === appSourceTypeId
 		);
 
-		if (matchedConnection !== undefined && matchedConnection.type === "appSource") {
+		if (matchedConnection?.type === appSourceTypeId) {
 			connections.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
@@ -206,7 +206,7 @@ export async function launchConnectedApp(app: App) {
 		await connectionService.dispatch(connectedSource.identity, "launchApp", app);
 	} else {
 		console.warn(
-			`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestType}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with appSource support or hasn't connected to this platform.`
+			`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestType}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with ${appSourceTypeId} support or hasn't connected to this platform.`
 		);
 	}
 }
@@ -217,10 +217,10 @@ export async function getConnectedSnapshotSourceClients() {
 	const availableConnections = Object.values(connectedClients);
 	for (const connection of availableConnections) {
 		const matchedConnection = connection.connectionTypes.find(
-			(supportedConnectionType) => supportedConnectionType.type === "snapshotSource"
+			(supportedConnectionType) => supportedConnectionType.type === snapshotSourceTypeId
 		);
 
-		if (matchedConnection !== undefined && matchedConnection.type === "snapshotSource") {
+		if (matchedConnection?.type === snapshotSourceTypeId) {
 			connections.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
