@@ -24,7 +24,7 @@ function isActionSupported(identity: OpenFin.Identity, payload: { action: string
 	const actionSettings = requestingClient.connectionTypes.find((entry) => entry.type === actionsTypeId);
 	let supportedActions = connectionOptions.supportedActions ?? [];
 
-	if (actionSettings.type === actionsTypeId) {
+	if (actionSettings?.type === actionsTypeId) {
 		if (Array.isArray(actionSettings.supportedActions) && actionSettings.supportedActions.length > 0) {
 			supportedActions = actionSettings.supportedActions;
 		}
