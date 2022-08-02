@@ -17,6 +17,7 @@ import {
 } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
 import { getSettings } from "./settings";
 import { BootstrapComponents, BootstrapOptions } from "./shapes";
@@ -70,7 +71,7 @@ export async function init() {
 			launchPage,
 			launchSnapshot: async (manifestUrl) =>
 				launchSnapshot({
-					manifestType: "snapshot",
+					manifestType: manifestTypes.snapshot.id,
 					manifest: manifestUrl,
 					appId: "",
 					title: "",

@@ -19,6 +19,7 @@ import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 import { share } from "./share";
 import { CURRENT_WORKSPACE_TEMPLATE, PAGE_TEMPLATE, WORKSPACE_TEMPLATE } from "./template";
@@ -74,33 +75,43 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 			};
 
 			switch (apps[i].manifestType) {
-				case "view":
-				case "inline-view": {
-					entry.label = "View";
+				case manifestTypes.view.id:
+				case manifestTypes.inlineView.id: {
+					entry.label = manifestTypes.view.label;
 					break;
 				}
-				case "window":
-				case "inline-window": {
-					entry.label = "Window";
+				case manifestTypes.window.id:
+				case manifestTypes.inlineWindow.id: {
+					entry.label = manifestTypes.window.label;
 					break;
 				}
-				case "desktop-browser": {
-					entry.label = "Desktop Browser Url";
+				case manifestTypes.desktopBrowser.id: {
+					entry.label = manifestTypes.desktopBrowser.label;
 					break;
 				}
-				case "snapshot": {
-					entry.label = "Snapshot";
+				case manifestTypes.snapshot.id: {
+					entry.label = manifestTypes.snapshot.label;
 					action.name = "Launch Snapshot";
 					break;
 				}
-				case "manifest": {
-					entry.label = "App";
+				case manifestTypes.manifest.id: {
+					entry.label = manifestTypes.manifest.label;
 					action.name = "Launch App";
 					break;
 				}
-				case "external": {
+				case manifestTypes.external.id: {
 					action.name = "Launch Native App";
-					entry.label = "Native App";
+					entry.label = manifestTypes.external.label;
+					break;
+				}
+				case manifestTypes.endpoint.id: {
+					action.name = "Launch";
+					entry.label = manifestTypes.endpoint.label;
+					break;
+				}
+				case manifestTypes.connection.id: {
+					action.name = "Launch Connected App";
+					entry.label = manifestTypes.connection.label;
 					break;
 				}
 			}

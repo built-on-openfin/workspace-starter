@@ -7,6 +7,7 @@ import {
 	ConnectionProviderOptions,
 	SnapshotSourceConnection
 } from "./connection-shapes";
+import { manifestTypes } from "./manifest-types";
 
 let connectionService: ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};
@@ -178,15 +179,17 @@ export async function getConnectedApps(): Promise<App[]> {
 			connectedSources[i].identity,
 			"getApps"
 		);
-		const manifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
+		const supportedManifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
 		let validatedApps: App[] = [];
-		if (Array.isArray(manifestTypes) && manifestTypes.length > 0) {
-			validatedApps = returnedApplications.filter((entry) => manifestTypes.includes(entry.manifestType));
+		if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
+			validatedApps = returnedApplications.filter((entry) =>
+				supportedManifestTypes.includes(entry.manifestType)
+			);
 		} else {
 			validatedApps = returnedApplications;
 		}
 		for (let v = 0; v < validatedApps.length; v++) {
-			if (validatedApps[v].manifestType === "connection") {
+			if (validatedApps[v].manifestType === manifestTypes.connection.id) {
 				// ensure that if an app from a connection is marked as connection
 				// then it should only be sent to itself and not another uuid
 				validatedApps[v].manifest = connectedSources[i].identity.uuid;
@@ -199,14 +202,13 @@ export async function getConnectedApps(): Promise<App[]> {
 
 export async function launchConnectedApp(app: App) {
 	const connectedSources = await getConnectedAppSourceClients();
-	const manifestType = "connection";
 	const connectedSource = connectedSources.find((entry) => entry.identity.uuid === app.manifest);
-	if (app.manifestType === manifestType && connectedSource !== undefined) {
+	if (app.manifestType === manifestTypes.connection.id && connectedSource !== undefined) {
 		console.log(`Launching app: ${app.appId} against connection: ${connectedSource.identity.uuid}`);
 		await connectionService.dispatch(connectedSource.identity, "launchApp", app);
 	} else {
 		console.warn(
-			`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestType}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with ${appSourceTypeId} support or hasn't connected to this platform.`
+			`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestTypes.connection.id}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with ${appSourceTypeId} support or hasn't connected to this platform.`
 		);
 	}
 }
