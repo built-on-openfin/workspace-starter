@@ -1,23 +1,25 @@
 import { fin } from "@openfin/core";
-import { getSettings } from "./settings";
+import { getConnectedSnapshotSourceClients } from "./connections";
 interface ClientSnapshot {
 	identity: OpenFin.ApplicationIdentity;
 	snapshot: unknown;
 }
 
 export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
-	const settings = await getSettings();
-	const sources = settings?.platformProvider?.connections?.snapshotSources ?? [];
+	const sources = await getConnectedSnapshotSourceClients();
 
+	if (sources.length === 0) {
+		return snapshot;
+	}
 	const clientSnapshots: ClientSnapshot[] = await Promise.all(
-		sources.map(async (uuid) => {
-			const snapShotSource = await fin.SnapshotSource.wrap({ uuid });
+		sources.map(async (entry) => {
+			const snapShotSource = await fin.SnapshotSource.wrap({ uuid: entry.identity.uuid });
 			try {
-				console.log(`Snapshot source: ${uuid}. Requesting a snapshot.`);
+				console.log(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot.`);
 				const sourceSnapshot = await snapShotSource.getSnapshot();
-				return { identity: { uuid }, snapshot: sourceSnapshot };
+				return { identity: entry.identity, snapshot: sourceSnapshot };
 			} catch {
-				console.log(`Snapshot source: ${uuid} was not available.`);
+				console.log(`Snapshot source: ${entry.identity.uuid} was not available.`);
 				return null;
 			}
 		})
@@ -34,24 +36,27 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 }
 
 export async function applyClientSnapshot(snapshot) {
-	const settings = await getSettings();
-	const sources = settings?.platformProvider?.connections?.snapshotSources ?? [];
-
+	const sources = await getConnectedSnapshotSourceClients();
+	if (sources.length === 0) {
+		return {};
+	}
 	await Promise.all(
-		sources.map(async (uuid) => {
-			const clientSnapshot: ClientSnapshot = snapshot.clientSnapshots.find(
-				(s: ClientSnapshot) => s.identity.uuid === uuid
-			);
+		sources.map(async (entry) => {
+			const clientSnapshot: ClientSnapshot = Array.isArray(snapshot.clientSnapshots)
+				? snapshot.clientSnapshots.find((s: ClientSnapshot) => s.identity.uuid === entry.identity.uuid)
+				: undefined;
 			if (clientSnapshot) {
 				try {
 					const snapShotSource = await fin.SnapshotSource.wrap(clientSnapshot.identity);
-					console.log(`Snapshot source: ${uuid} is running and has a snapshot entry. Applying snapshot.`);
+					console.log(
+						`Snapshot source: ${entry.identity.uuid} is running and has a snapshot entry. Applying snapshot.`
+					);
 					await snapShotSource.applySnapshot(clientSnapshot.snapshot);
 				} catch {
-					console.log(`Snapshot source: ${uuid} is not able to apply the snapshot.`);
+					console.log(`Snapshot source: ${entry.identity.uuid} is not able to apply the snapshot.`);
 				}
 			} else {
-				console.log(`Snapshot source: ${uuid} but doesn't have any entries in this snapshot.`);
+				console.log(`Snapshot source: ${entry.identity.uuid} but doesn't have any entries in this snapshot.`);
 			}
 			return {};
 		})

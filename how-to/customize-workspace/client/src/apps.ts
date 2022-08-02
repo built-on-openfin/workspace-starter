@@ -1,6 +1,8 @@
 import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
+import { getConnectedApps } from "./connections";
 import { EndpointProvider } from "./endpoint-shapes";
+import { manifestTypes } from "./manifest-types";
 import { AppProviderOptions } from "./shapes";
 
 let cachedApps: App[];
@@ -63,7 +65,7 @@ async function validateEntries(apps: App[]) {
 		}
 
 		if (validApp) {
-			if (apps[i].manifestType !== "external") {
+			if (apps[i].manifestType !== manifestTypes.external.id) {
 				validatedApps.push(apps[i]);
 			} else if (!hasLaunchExternalProcess) {
 				rejectedAppIds.push(apps[i].appId);
@@ -110,6 +112,12 @@ async function getEntries(
 		} catch (error) {
 			console.error(`Error fetching apps from endpoint ${endpointId}`, error);
 		}
+	}
+
+	const connectedApps = await getConnectedApps();
+	if (connectedApps.length > 0) {
+		console.log(`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated.`);
+		apps.push(...connectedApps);
 	}
 
 	cachedApps = await validateEntries(apps);

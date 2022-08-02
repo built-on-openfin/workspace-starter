@@ -15,6 +15,7 @@ import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
 import { launch } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { showShareOptions } from "./share";
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
@@ -89,9 +90,9 @@ export async function getActions(): Promise<CustomActionsMap> {
 						name,
 						title: info.title,
 						description: info.title,
-						manifestType: "inline-view",
+						manifestType: manifestTypes.inlineView.id,
 						manifest,
-						tags: ["view"],
+						tags: [manifestTypes.view.id],
 						icons,
 						images: [],
 						publisher: "",
