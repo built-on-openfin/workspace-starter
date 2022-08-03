@@ -20,12 +20,14 @@ export interface IntegrationManager {
 	/**
 	 * Launch a view in the workspace.
 	 * @param view The view to launch.
-	 * @param targetIdentity The optional target identity of the launch with.
+	 * @param targetIdentity The optional target identity to launch with.
+	 * @param targetView The optional target view to launch with.
 	 * @returns The launched view.
 	 */
 	launchView?(
 		view: OpenFin.PlatformViewCreationOptions | string,
-		targetIdentity?: OpenFin.Identity
+		targetIdentity?: OpenFin.Identity,
+		targetView?: OpenFin.Identity
 	): Promise<OpenFin.View>;
 
 	/**

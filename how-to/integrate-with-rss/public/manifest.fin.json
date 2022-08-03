@@ -57,6 +57,7 @@
 					"data": {
 						"rootUrl": "http://localhost:8080/",
 						"proxyUrl": "http://localhost:8080/proxy",
+						"feedView": "http://localhost:8080/views/rss-feed.html",
 						"feeds": [
 							{
 								"id": "openfin-tech",

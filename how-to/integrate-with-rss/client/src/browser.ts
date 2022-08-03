@@ -2,7 +2,8 @@ import { getCurrentSync } from "@openfin/workspace-platform";
 
 export async function launchView(
 	view: OpenFin.PlatformViewCreationOptions | string,
-	targetIdentity?: OpenFin.Identity
+	targetIdentity?: OpenFin.Identity,
+	targetView?: OpenFin.Identity
 ) {
 	const platform = getCurrentSync();
 	let viewOptions: OpenFin.PlatformViewCreationOptions;
@@ -11,5 +12,5 @@ export async function launchView(
 	} else {
 		viewOptions = view;
 	}
-	return platform.createView(viewOptions, targetIdentity);
+	return platform.createView(viewOptions, targetIdentity, targetView);
 }

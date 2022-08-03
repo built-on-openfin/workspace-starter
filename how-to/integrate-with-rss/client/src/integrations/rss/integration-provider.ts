@@ -1,3 +1,4 @@
+import { fin } from "@openfin/core";
 import {
 	CLITemplate,
 	HomeSearchResult,
@@ -12,7 +13,16 @@ import {
 } from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
-import type { RssFeed, RssFeedCache, RssFeedCacheEntry, RssFeedEntry, RssFeedSettings } from "./shapes";
+import {
+	RssChannelFeedSubscribePayload,
+	RssFeed,
+	RssCache,
+	RssFeedCacheEntry,
+	RssFeedEntry,
+	RssFeedSettings,
+	CHANNEL_ACTIONS,
+	RssFeedCache
+} from "./shapes";
 import { getRssEntryTemplate } from "./templates";
 
 /**
@@ -26,10 +36,22 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	private static readonly _PROVIDER_ID = "rss";
 
 	/**
+	 * The key to use for a rss feed result.
+	 * @internal
+	 */
+	private static readonly _RSS_PROVIDER_FEED_VIEW_ACTION = "View Feed";
+
+	/**
 	 * The key to use for a rss entry result.
 	 * @internal
 	 */
-	private static readonly _RSS_PROVIDER_VIEW_ACTION = "View Entry";
+	private static readonly _RSS_PROVIDER_ENTRY_VIEW_ACTION = "View Entry";
+
+	/**
+	 * The name to use for the rss feed application channel.
+	 * @internal
+	 */
+	private static readonly _RSS_APP_CHANNEL_NAME = "rss-feed";
 
 	/**
 	 * The integration manager.
@@ -47,13 +69,27 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * The id of the timer used to poll the feeds.
 	 * @internal
 	 */
-	private _feedsCache: RssFeedCache;
+	private _feedsCache: RssCache;
+
+	/**
+	 * The channel for issuing feed updates.
+	 */
+	private _channelProvider: OpenFin.ChannelProvider | undefined;
+
+	/**
+	 * The subscribers for the feeds.
+	 */
+	private _subscribers: {
+		clientId: OpenFin.Identity;
+		feedIds: string[];
+	}[];
 
 	/**
 	 * Create a new instance of RssIntegrationProvider.
 	 */
 	constructor() {
 		this._feedsCache = {};
+		this._subscribers = [];
 	}
 
 	/**
@@ -86,6 +122,53 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 					}
 				}
 			);
+
+			this._channelProvider = await fin.InterApplicationBus.Channel.create(
+				RssIntegrationProvider._RSS_APP_CHANNEL_NAME
+			);
+
+			this._channelProvider.register(
+				CHANNEL_ACTIONS.feedSubscribe,
+				async (payload: RssChannelFeedSubscribePayload, clientId: OpenFin.Identity) => {
+					let subscriber = this._subscribers.find(
+						(s) => s.clientId.name === clientId.name && s.clientId.uuid === clientId.uuid
+					);
+					if (!subscriber) {
+						subscriber = {
+							clientId,
+							feedIds: []
+						};
+						this._subscribers.push(subscriber);
+						console.log(`Adding subscriber ${clientId.uuid}, ${clientId.name}`);
+					}
+					if (!subscriber.feedIds.includes(payload.feedId)) {
+						if (this._feedsCache[payload.feedId] === undefined) {
+							console.warn(
+								`Trying to subscribe to unknown feed ${payload.feedId} for ${clientId.uuid}, ${clientId.name}`
+							);
+						} else {
+							console.log(
+								`Adding feed ${payload.feedId} subscription for ${clientId.uuid}, ${clientId.name}`
+							);
+							subscriber.feedIds.push(payload.feedId);
+							await this.publishUpdate(clientId, payload.feedId);
+						}
+					}
+				}
+			);
+
+			this._channelProvider.onDisconnection((clientId: OpenFin.Identity) => {
+				const subscriberIdx = this._subscribers.findIndex(
+					(s) => s.clientId.name === clientId.name && s.clientId.uuid === clientId.uuid
+				);
+
+				if (subscriberIdx >= 0) {
+					console.log(`Removing subscriber ${clientId.uuid}, ${clientId.name}`);
+					this._subscribers.splice(subscriberIdx, 1);
+				} else {
+					console.warn(`Trying to remove unknown subscriber ${clientId.uuid}, ${clientId.name}`);
+				}
+			});
 		}
 	}
 
@@ -95,9 +178,15 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * @returns Nothing.
 	 */
 	public async deregister(integration: Integration<RssFeedSettings>): Promise<void> {
+		this._feedsCache = {};
+		this._subscribers = [];
 		if (this._pollingTimerId) {
 			window.clearInterval(this._pollingTimerId);
 			this._pollingTimerId = undefined;
+		}
+		if (this._channelProvider) {
+			this._channelProvider.remove(CHANNEL_ACTIONS.feedSubscribe);
+			this._channelProvider = undefined;
 		}
 	}
 
@@ -115,7 +204,8 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	): Promise<boolean> {
 		if (
 			result.action.trigger === "user-action" &&
-			result.action.name === RssIntegrationProvider._RSS_PROVIDER_VIEW_ACTION &&
+			(result.action.name === RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION ||
+				result.action.name === RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION) &&
 			result.data.url &&
 			this._integrationManager.launchView
 		) {
@@ -147,6 +237,9 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			const matches: RssFeedCacheEntry[] = [];
 
 			for (const feed in this._feedsCache) {
+				if (re.test(this._feedsCache[feed].title)) {
+					results.push(await this.createFeedResult(integration, this._feedsCache[feed]));
+				}
 				for (const entryKey in this._feedsCache[feed].entries) {
 					const entry = this._feedsCache[feed].entries[entryKey];
 
@@ -159,7 +252,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			matches.sort((a, b) => a.lastUpdated - b.lastUpdated);
 
 			for (const match of matches) {
-				results.push(await this.createResult(integration, match));
+				results.push(await this.createEntryResult(integration, match));
 			}
 		}
 
@@ -199,6 +292,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 				if (feedDetails) {
 					this._feedsCache[feed.id] = this._feedsCache[feed.id] ?? {
+						id: feed.id,
 						title: feedDetails.title ?? feed.id,
 						entries: {}
 					};
@@ -256,6 +350,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 		}
 
 		await this.saveFeeds();
+		await this.publishFeeds();
 	}
 
 	/**
@@ -289,12 +384,52 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	}
 
 	/**
-	 * Create a search result.
+	 * Create a search result for a feed.
+	 * @param integration The integration details.
+	 * @param feed The RSS feed.
+	 * @returns The search result.
+	 */
+	private async createFeedResult(
+		integration: Integration<RssFeedSettings>,
+		feed: RssFeedCache
+	): Promise<HomeSearchResult> {
+		return {
+			key: `rss-${feed.id}`,
+			title: feed.title,
+			label: "Feed",
+			icon: `${integration.data.rootUrl}assets/rss.svg`,
+			actions: [
+				{
+					name: RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: RssIntegrationProvider._PROVIDER_ID,
+				...feed,
+				url: `${integration.data?.feedView}?feedId=${feed.id}`
+			},
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await getRssEntryTemplate({
+					viewAction: RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION
+				}),
+				data: {
+					titleLabel: "Title",
+					title: feed.title,
+					viewLabel: "View"
+				}
+			}
+		};
+	}
+
+	/**
+	 * Create a search result for an entry.
 	 * @param integration The integration details.
 	 * @param entry The RSS feed entry.
 	 * @returns The search result.
 	 */
-	private async createResult(
+	private async createEntryResult(
 		integration: Integration<RssFeedSettings>,
 		entry: RssFeedCacheEntry
 	): Promise<HomeSearchResult> {
@@ -305,7 +440,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			icon: `${integration.data.rootUrl}assets/rss.svg`,
 			actions: [
 				{
-					name: RssIntegrationProvider._RSS_PROVIDER_VIEW_ACTION,
+					name: RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION,
 					hotkey: "Enter"
 				}
 			],
@@ -316,7 +451,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await getRssEntryTemplate({
-					viewAction: RssIntegrationProvider._RSS_PROVIDER_VIEW_ACTION
+					viewAction: RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION
 				}),
 				data: {
 					titleLabel: "Title",
@@ -337,7 +472,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	private async loadFeeds(): Promise<void> {
 		const feeds = window.localStorage.getItem("rss-feed-cache");
 		if (feeds) {
-			this._feedsCache = JSON.parse(feeds) as RssFeedCache;
+			this._feedsCache = JSON.parse(feeds) as RssCache;
 		}
 	}
 
@@ -346,5 +481,29 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 */
 	private async saveFeeds(): Promise<void> {
 		window.localStorage.setItem("rss-feed-cache", JSON.stringify(this._feedsCache));
+	}
+
+	/**
+	 * Publish the feeds to subscribers.
+	 */
+	private async publishFeeds(): Promise<void> {
+		for (const subscriber of this._subscribers) {
+			for (const feedId of subscriber.feedIds) {
+				await this.publishUpdate(subscriber.clientId, feedId);
+			}
+		}
+	}
+
+	/**
+	 * Publish the update for a client subscriptions.
+	 * @param clientId The client to send the update to.
+	 * @param feedId The feed that has been updated.
+	 */
+	private async publishUpdate(clientId: OpenFin.Identity, feedId: string): Promise<void> {
+		if (this._channelProvider) {
+			await this._channelProvider.dispatch(clientId, CHANNEL_ACTIONS.feedUpdate, {
+				feed: this._feedsCache[feedId] ?? {}
+			});
+		}
 	}
 }

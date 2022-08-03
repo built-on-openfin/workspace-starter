@@ -66,10 +66,13 @@ export interface RssFeedCacheEntry {
 }
 
 export interface RssFeedCache {
-	[id: string]: {
-		title: string;
-		entries: { [entryId: string]: RssFeedCacheEntry };
-	};
+	id: string;
+	title: string;
+	entries: { [entryId: string]: RssFeedCacheEntry };
+}
+
+export interface RssCache {
+	[id: string]: RssFeedCache;
 }
 
 export interface RssFeedConfig {
@@ -80,6 +83,20 @@ export interface RssFeedConfig {
 export interface RssFeedSettings {
 	rootUrl: string;
 	proxyUrl: string;
+	feedView: string;
 	feeds: RssFeedConfig[];
 	pollingInterval?: number;
 }
+
+export interface RssChannelFeedSubscribePayload {
+	feedId: string;
+}
+
+export interface RssChannelFeedUpdatePayload {
+	feed: RssFeedCache;
+}
+
+export const CHANNEL_ACTIONS = {
+	feedSubscribe: "feed-subscribe",
+	feedUpdate: "feed-update"
+};
