@@ -15,6 +15,7 @@ import {
 	register as registerHome,
 	show as showHome
 } from "./home";
+import { init as registerInitOptionsListener } from "./init-options";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
 import { manifestTypes } from "./manifest-types";
@@ -170,4 +171,8 @@ export async function init() {
 		await deregisterNotifications();
 		await fin.Platform.getCurrentSync().quit();
 	});
+
+	// Once the platform is started and everything is bootstrapped initialize the init options
+	// listener so that it is ready to handle initial params or subsequent requests.
+	await registerInitOptionsListener(settings?.initOptionsProvider);
 }

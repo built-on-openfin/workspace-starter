@@ -3,10 +3,12 @@ import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
 import { launchPage } from "./browser";
 import { requestResponse } from "./endpoint";
+import { registerListener, removeListener } from "./init-options";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 
 let shareRegistered = false;
+let initOptionsListenerId: string;
 
 export interface IShareCustomData {
 	workspaceId?: string;
@@ -286,31 +288,17 @@ async function loadSharedEntry(id: string) {
 	}
 }
 
-async function queryOnLaunch(userAppConfigArgs?: { shareId: string }) {
-	console.log("Received during startup:", userAppConfigArgs);
-	if (userAppConfigArgs?.shareId !== undefined) {
-		await loadSharedEntry(userAppConfigArgs?.shareId);
-	}
-}
-
-async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string } }) {
-	if (event?.userAppConfigArgs?.shareId !== undefined) {
-		console.log(event.userAppConfigArgs);
-		await loadSharedEntry(event.userAppConfigArgs.shareId);
-	}
-}
-
-async function listenForShareRequests() {
-	// eslint-disable-next-line @typescript-eslint/dot-notation
-	fin["desktop"].main(queryOnLaunch);
-	const platform = getCurrentSync();
-	await platform.Application.addListener("run-requested", queryWhileRunning);
-}
-
 export async function register() {
 	if (!shareRegistered) {
 		shareRegistered = true;
-		await listenForShareRequests();
+		initOptionsListenerId = registerListener("shareId", async (initOptions) => {
+			console.log("Received share request.");
+			if (typeof initOptions.shareId === "string") {
+				await loadSharedEntry(initOptions.shareId);
+			} else {
+				console.warn("shareId passed but it wasn't a string");
+			}
+		});
 	} else {
 		console.warn("Share cannot be registered more than once.");
 	}
@@ -319,8 +307,7 @@ export async function register() {
 export async function deregister() {
 	if (shareRegistered) {
 		// any cleanup logic can go here
-		const platform = getCurrentSync();
-		await platform.Application.removeListener("run-requested", queryWhileRunning);
+		removeListener(initOptionsListenerId);
 	} else {
 		console.warn("Share isn't registered yet so cannot be deregistered.");
 	}

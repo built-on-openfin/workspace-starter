@@ -643,6 +643,70 @@
 				]
 			}
 		},
+		"dockProvider": {
+			"id": "customize-workspace",
+			"title": "Home Starter",
+			"icon": "http://localhost:8080/favicon.ico",
+			"workspaceComponents": {
+				"hideHomeButton": false,
+				"hideWorkspacesButton": false,
+				"hideNotificationsButton": false,
+				"hideStorefrontButton": false
+			},
+			"apps": [
+				{
+					"display": "individual",
+					"tags": ["dock"]
+				},
+				{
+					"display": "group",
+					"tooltip": "FDC3",
+					"tags": ["fdc3"]
+				},
+				{
+					"display": "group",
+					"tooltip": "Manager",
+					"iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
+					"tags": ["manager"]
+				}
+			],
+			"buttons": [
+				{
+					"tooltip": "Google",
+					"iconUrl": "https://www.google.com/favicon.ico",
+					"action": {
+						"id": "launch-view",
+						"customData": {
+							"url": "https://www.google.com"
+						}
+					}
+				},
+				{
+					"tooltip": "Social",
+					"iconUrl": "http://localhost:8080/common/icons/share.svg",
+					"options": [
+						{
+							"tooltip": "Twitter",
+							"action": {
+								"id": "launch-view",
+								"customData": {
+									"url": "https://twitter.com/openfintech"
+								}
+							}
+						},
+						{
+							"tooltip": "YouTube",
+							"action": {
+								"id": "launch-view",
+								"customData": {
+									"url": "https://www.youtube.com/user/OpenFinTech"
+								}
+							}
+						}
+					]
+				}
+			]
+		},
 		"notificationProvider": {
 			"id": "second-customize-workspace",
 			"title": "Second Notification Starter",
@@ -683,6 +747,16 @@
 					"autoStart": false,
 					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js",
 					"data": {}
+				}
+			]
+		},
+		"initOptionsProvider": {
+			"modules": [
+				{
+					"id": "interop",
+					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
+					"data": {},
+					"supportedActions": ["raise-intent", "share-context"]
 				}
 			]
 		}

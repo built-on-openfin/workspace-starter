@@ -571,6 +571,16 @@
 					"data": {}
 				}
 			]
+		},
+		"initOptionsProvider": {
+			"modules": [
+				{
+					"id": "interop",
+					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
+					"data": {},
+					"supportedActions": ["raise-intent", "share-context"]
+				}
+			]
 		}
 	}
 }
