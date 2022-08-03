@@ -51,6 +51,12 @@
 			"forceDownload": true
 		}
 	],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With Excel - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
 	"customSettings": {
 		"homeProvider": {
 			"id": "integrate-with-excel",

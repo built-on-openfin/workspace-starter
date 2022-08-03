@@ -22,3 +22,32 @@ export async function getSettings(): Promise<CustomSettings> {
 	}
 	return settings;
 }
+
+export async function isValid() {
+	console.log(`Settings: Validating source of initial settings.`);
+	const app = await fin.Application.getCurrent();
+	const info = await app.getInfo();
+	const manifestUrl = info.manifestUrl;
+	console.log(`Settings: Source of initial settings: ${manifestUrl}`);
+	// this check could be removed or it could be dynamically generated as part of the code or passed made available from the server
+	// that hosts the code. It couldn't be from the manifest itself as it is validating where the manifest is coming from.
+	const validHosts = [
+		"localhost",
+		"127.0.0.1",
+		"built-on-openfin.github.io",
+		"openfin.github.io",
+		"samples.openfin.co",
+		"cdn.openfin.co"
+	];
+	const url = new URL(manifestUrl);
+	console.log(`Settings: Checking host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
+	const isValidHost = validHosts.includes(url.hostname);
+	if (isValidHost) {
+		console.log(`The source of the initial settings is valid.`);
+	} else {
+		console.warn(
+			`The source of the initial settings ${manifestUrl} does not match any of the valid host names. Please update the list if required.`
+		);
+	}
+	return isValidHost;
+}
