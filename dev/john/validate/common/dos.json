@@ -1,0 +1,14 @@
+{
+	"desktopSettings": {
+		"systemApps": {
+			"workspace": {
+				"version": "next",
+				"customConfig": {
+					"hotkeys": {
+						"toggleHomeVisibility": "CommandOrControl+Space"
+					}
+				}
+			}
+		}
+	}
+}
