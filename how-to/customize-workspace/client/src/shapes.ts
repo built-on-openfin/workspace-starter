@@ -4,6 +4,7 @@ import { NotificationsPlatform } from "@openfin/workspace/notifications";
 import { AuthProviderOptions } from "./auth-shapes";
 import { ConnectionProviderOptions } from "./connection-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
+import { InitOptionsProviderOptions } from "./init-options-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface PlatformProviderOptions {
@@ -168,17 +169,18 @@ interface StorefrontProviderOptions {
 }
 
 export interface CustomSettings {
-	bootstrap?: BootstrapOptions;
-	authProvider?: AuthProviderOptions;
 	appProvider?: AppProviderOptions;
-	connectionProvider?: ConnectionProviderOptions;
-	platformProvider?: PlatformProviderOptions;
+	authProvider?: AuthProviderOptions;
+	bootstrap?: BootstrapOptions;
 	browserProvider?: BrowserProviderOptions;
-	themeProvider?: ThemeProviderOptions;
-	homeProvider?: HomeProviderOptions;
-	storefrontProvider?: StorefrontProviderOptions;
+	connectionProvider?: ConnectionProviderOptions;
 	dockProvider?: DockProviderOptions;
-	notificationProvider?: NotificationProviderOptions;
-	integrationProvider?: IntegrationProviderOptions;
 	endpointProvider?: EndpointProviderOptions;
+	homeProvider?: HomeProviderOptions;
+	initOptionsProvider?: InitOptionsProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
+	notificationProvider?: NotificationProviderOptions;
+	platformProvider?: PlatformProviderOptions;
+	storefrontProvider?: StorefrontProviderOptions;
+	themeProvider?: ThemeProviderOptions;
 }

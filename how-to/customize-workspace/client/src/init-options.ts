@@ -1,6 +1,10 @@
 import { fin } from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
-const actionListeners: Map<string, Map<string, (payload: unknown) => Promise<void>>> = new Map();
+import { InitOptionsHandler, InitOptionsModule, InitOptionsProviderOptions } from "./init-options-shapes";
+const actionListeners: Map<
+	string,
+	Map<string, (requestedAction: string, payload?: unknown) => Promise<void>>
+> = new Map();
 const actionListenerMap: { [key: string]: string } = {};
 const listeners: Map<
 	string,
@@ -9,6 +13,21 @@ const listeners: Map<
 const listenerMap: { [key: string]: string } = {};
 let initialized = false;
 const actionParamName = "action";
+const actionPayloadParamName = "payload";
+const modules: { [key: string]: InitOptionsHandler } = {};
+
+async function loadInitOptionsModule(id: string, url: string, data: unknown): Promise<boolean> {
+	try {
+		const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
+		const actionHandler = mod.handler;
+		await actionHandler.init(data);
+		modules[id] = actionHandler;
+		return true;
+	} catch (err) {
+		console.error(`Error loading module ${id} with url ${url}`, err);
+		return false;
+	}
+}
 
 function extractPayloadFromParams<T>(initOptions?: {
 	[key: string]: string | number | boolean;
@@ -27,9 +46,10 @@ function extractPayloadFromParams<T>(initOptions?: {
 
 async function notifyActionListeners(initOptions: { [key: string]: string | boolean | number }) {
 	const action = initOptions[actionParamName] as string;
-	const payload = extractPayloadFromParams(initOptions);
+	const payload =
+		initOptions[actionPayloadParamName] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
 	const availableListeners = actionListeners.get(action);
-	if (availableListeners !== undefined && availableListeners !== null && payload !== undefined) {
+	if (availableListeners !== undefined && availableListeners !== null) {
 		const subscriberIds = Array.from(availableListeners.keys());
 
 		for (let i = 0; i < subscriberIds.length; i++) {
@@ -37,7 +57,7 @@ async function notifyActionListeners(initOptions: { [key: string]: string | bool
 			console.log(
 				`Init Options: Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`
 			);
-			await availableListeners.get(subscriberId)(payload);
+			await availableListeners.get(subscriberId)(action, payload);
 		}
 	}
 }
@@ -70,18 +90,22 @@ async function notifyListeners(initOptions: { [key: string]: string | boolean | 
 	}
 }
 
-async function queryOnLaunch(userAppConfigArgs?: { shareId: string }) {
-	console.log("Received during startup:", userAppConfigArgs);
-	if (userAppConfigArgs[actionParamName] !== undefined) {
-		await notifyActionListeners(userAppConfigArgs);
-	} else {
-		await notifyListeners(userAppConfigArgs);
+async function queryOnLaunch(userAppConfigArgs?: { [key: string]: string | boolean | number }) {
+	if (userAppConfigArgs !== undefined) {
+		console.log("Received during startup:", userAppConfigArgs);
+		if (userAppConfigArgs[actionParamName] !== undefined) {
+			await notifyActionListeners(userAppConfigArgs);
+		} else {
+			await notifyListeners(userAppConfigArgs);
+		}
 	}
 }
 
-async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string } }) {
-	if (event?.userAppConfigArgs?.shareId !== undefined) {
-		console.log(event.userAppConfigArgs);
+async function queryWhileRunning(event: {
+	userAppConfigArgs?: { [key: string]: string | boolean | number };
+}) {
+	if (event?.userAppConfigArgs !== undefined) {
+		console.log("Received while platform is running:", event.userAppConfigArgs);
 		if (event.userAppConfigArgs[actionParamName] !== undefined) {
 			await notifyActionListeners(event.userAppConfigArgs);
 		} else {
@@ -90,11 +114,39 @@ async function queryWhileRunning(event: { userAppConfigArgs?: { shareId: string 
 	}
 }
 
-export async function init() {
+export async function init(options?: InitOptionsProviderOptions) {
 	if (initialized) {
 		return;
 	}
 	initialized = true;
+	if (Array.isArray(options?.modules)) {
+		for (let i = 0; i < options.modules.length; i++) {
+			const module = options.modules[i];
+			if (Array.isArray(module?.supportedActions) && module.supportedActions.length > 0) {
+				const isModuleLoaded = await loadInitOptionsModule(module.id, module.url, module.data);
+				if (isModuleLoaded) {
+					const loadedModule = modules[module.id];
+					if (loadedModule.init !== undefined) {
+						await loadedModule.init(module.data);
+					}
+					for (let a = 0; a < module.supportedActions.length; a++) {
+						const supportedAction = module.supportedActions[a];
+						registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
+							const actionHandler = modules[module.id];
+							if (actionHandler !== undefined) {
+								console.log(`Action: ${requestedAction} being handled by module ${module.id}`);
+								await actionHandler.action(requestedAction, payload);
+							} else {
+								console.warn(
+									`Unable to retrieve module with id: ${module.id} to execute action: ${requestedAction}`
+								);
+							}
+						});
+					}
+				}
+			}
+		}
+	}
 	// eslint-disable-next-line @typescript-eslint/dot-notation
 	fin["desktop"].main(queryOnLaunch);
 	const platform = getCurrentSync();
@@ -103,7 +155,7 @@ export async function init() {
 
 export function registerActionListener<T>(
 	action: string,
-	actionHandler: (payload: T) => Promise<void>
+	actionHandler: (requestedAction: string, payload?: T) => Promise<void>
 ): string {
 	const key = crypto.randomUUID();
 	if (!actionListeners.has(action)) {
