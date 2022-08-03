@@ -28,6 +28,12 @@
 			}
 		},
 		"defaultWindowOptions": {
+			"experimental": {
+				"showViewsOnResize": {
+					"enabled": true,
+					"delayMs": 0
+				}
+			},
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
@@ -57,6 +63,12 @@
 			"forceDownload": false
 		}
 	],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Customize Workspace - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
