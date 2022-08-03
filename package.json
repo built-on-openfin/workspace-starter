@@ -20,7 +20,6 @@
 		"how-to/register-with-store-basic",
 		"how-to/migrate-from-a-previous-version",
 		"how-to/integrate-with-sso",
-		"how-to/integrate-with-rss",
 		"how-to/integrate-server-authentication"
 	],
 	"howToCustomFolder": "workspace/vnext",
