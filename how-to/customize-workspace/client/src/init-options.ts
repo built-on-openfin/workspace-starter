@@ -8,7 +8,7 @@ import {
 } from "./init-options-shapes";
 const actionListeners: Map<
 	string,
-	Map<string, (requestedAction: string, payload?: unknown) => Promise<void>>
+	Map<string, <T>(requestedAction: string, payload?: T) => Promise<void>>
 > = new Map();
 const actionListenerMap: { [key: string]: string } = {};
 const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map();
@@ -18,12 +18,16 @@ const actionParamName = "action";
 const actionPayloadParamName = "payload";
 const modules: { [key: string]: InitOptionsHandler } = {};
 
-async function loadInitOptionsModule(id: string, url: string, data: unknown): Promise<boolean> {
+async function loadInitOptionsModule<T>(id: string, url: string, data: T): Promise<boolean> {
 	try {
-		const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
-		const actionHandler = mod.handler;
-		await actionHandler.init(data);
-		modules[id] = actionHandler;
+		if (modules[id] === undefined) {
+			const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
+			const actionHandler = mod.handler;
+			if (actionHandler.init !== undefined) {
+				await actionHandler.init(data);
+			}
+			modules[id] = actionHandler;
+		}
 		return true;
 	} catch (err) {
 		console.error(`Init Options: Error loading module ${id} with url ${url}`, err);
@@ -45,7 +49,7 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
 }
 
 async function notifyActionListeners(initOptions: UserAppConfigArgs) {
-	const action = initOptions[actionParamName] as string;
+	const action = initOptions[actionParamName];
 	const payload =
 		initOptions[actionPayloadParamName] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
 	const availableListeners = actionListeners.get(action);
@@ -137,10 +141,6 @@ export async function init(options?: InitOptionsProviderOptions) {
 			if (Array.isArray(module?.supportedActions) && module.supportedActions.length > 0) {
 				const isModuleLoaded = await loadInitOptionsModule(module.id, module.url, module.data);
 				if (isModuleLoaded) {
-					const loadedModule = modules[module.id];
-					if (loadedModule.init !== undefined) {
-						await loadedModule.init(module.data);
-					}
 					for (let a = 0; a < module.supportedActions.length; a++) {
 						const supportedAction = module.supportedActions[a];
 						registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
@@ -171,9 +171,9 @@ export async function init(options?: InitOptionsProviderOptions) {
 	await platform.Application.addListener("run-requested", queryWhileRunning);
 }
 
-export function registerActionListener<T>(
+export function registerActionListener(
 	action: string,
-	actionHandler: (requestedAction: string, payload?: T) => Promise<void>
+	actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>
 ): string {
 	const key = crypto.randomUUID();
 	if (!actionListeners.has(action)) {

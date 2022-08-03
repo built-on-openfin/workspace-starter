@@ -17,5 +17,5 @@ export interface InitOptionsProviderOptions {
 }
 
 export interface UserAppConfigArgs {
-	[key: string]: string | boolean | number;
+	[key: string]: string;
 }
