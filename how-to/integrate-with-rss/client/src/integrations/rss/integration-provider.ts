@@ -358,7 +358,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * @param feedTitle The title of the feed.
 	 * @param feedEntry The entry being updated.
 	 */
-	private async notify(type: "add" | "update", feedTitle: string, feedEntry: RssFeedEntry) {
+	private async notify(type: "add" | "update", feedTitle: string, feedEntry: RssFeedCacheEntry) {
 		await this._integrationManager.createNotification({
 			title: feedTitle,
 			body:
@@ -376,7 +376,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 					cta: true,
 					onClick: {
 						action: "view-entry",
-						payload: feedEntry.id
+						payload: feedEntry
 					}
 				}
 			]
