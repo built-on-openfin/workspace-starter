@@ -39,7 +39,7 @@ async function shareContext(payload: ShareContextPayload) {
 
 export async function init() {
 	// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
-	console.log(`The interop init options action handler has been loaded`);
+	console.log(`init options interop handler: The interop init options action handler has been loaded`);
 }
 
 export async function action(
@@ -48,18 +48,22 @@ export async function action(
 ): Promise<void> {
 	if (payload === undefined) {
 		console.warn(
-			`Actions passed to the interop init options module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
+			`init options interop handler: Actions passed to the interop init options module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
 		);
 		return;
 	}
-	switch (requestedAction) {
-		case "raise-intent": {
-			await raiseIntent(payload as RaiseIntentPayload);
-			break;
+	try {
+		switch (requestedAction) {
+			case "raise-intent": {
+				await raiseIntent(payload as RaiseIntentPayload);
+				break;
+			}
+			case "share-context": {
+				await shareContext(payload as ShareContextPayload);
+				break;
+			}
 		}
-		case "share-context": {
-			await shareContext(payload as ShareContextPayload);
-			break;
-		}
+	} catch (error) {
+		console.error(`init options interop handler: Error trying to perform action ${requestedAction}.`, error);
 	}
 }
