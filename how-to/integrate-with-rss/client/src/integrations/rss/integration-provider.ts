@@ -18,7 +18,6 @@ import {
 	RssFeed,
 	RssCache,
 	RssFeedCacheEntry,
-	RssFeedEntry,
 	RssFeedSettings,
 	CHANNEL_ACTIONS,
 	RssFeedCache
