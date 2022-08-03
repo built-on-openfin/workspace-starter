@@ -1,5 +1,4 @@
 import { fin } from "@openfin/core";
-import { create as createNotification } from "@openfin/workspace/notifications";
 import { launchView } from "./browser";
 import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
@@ -16,8 +15,7 @@ export async function init() {
 
 	await registerIntegration(
 		{
-			launchView,
-			createNotification
+			launchView
 		},
 		settings.integrationProvider
 	);

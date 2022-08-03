@@ -9,6 +9,7 @@ import {
 } from "@openfin/workspace";
 import {
 	addEventListener as addNotificationEventListener,
+	create as createNotification,
 	NotificationActionEvent
 } from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
@@ -358,7 +359,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * @param feedEntry The entry being updated.
 	 */
 	private async notify(type: "add" | "update", feedTitle: string, feedEntry: RssFeedCacheEntry) {
-		await this._integrationManager.createNotification({
+		await createNotification({
 			title: feedTitle,
 			body:
 				type === "update"

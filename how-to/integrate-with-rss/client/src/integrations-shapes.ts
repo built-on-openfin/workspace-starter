@@ -6,7 +6,6 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import { Notification, NotificationOptions } from "@openfin/workspace/notifications";
 
 /**
  * Integration manager provides environment methods and data.
@@ -54,11 +53,6 @@ export interface IntegrationManager {
 	 * Show the home UI.
 	 */
 	showHome?(): Promise<void>;
-
-	/**
-	 * Create a notification.
-	 */
-	createNotification?<T extends NotificationOptions>(options: T): Promise<Notification<T>>;
 }
 
 /**
