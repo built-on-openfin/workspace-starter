@@ -15,3 +15,7 @@ export interface InitOptionsModuleDefinition {
 export interface InitOptionsProviderOptions {
 	modules?: InitOptionsModuleDefinition[];
 }
+
+export interface UserAppConfigArgs {
+	[key: string]: string | boolean | number;
+}

@@ -125,7 +125,6 @@ export async function init() {
 		await registerNotifications();
 	}
 
-	await registerInitOptionsListener(settings?.initOptionsProvider);
 	await registerShare();
 
 	// If the autoShow options is not set, default to the first registered component.
@@ -172,4 +171,8 @@ export async function init() {
 		await deregisterNotifications();
 		await fin.Platform.getCurrentSync().quit();
 	});
+
+	// Once the platform is started and everything is bootstrapped initialize the init options
+	// listener so that it is ready to handle initial params or subsequent requests.
+	await registerInitOptionsListener(settings?.initOptionsProvider);
 }

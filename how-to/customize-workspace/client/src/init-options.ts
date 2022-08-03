@@ -1,15 +1,17 @@
 import { fin } from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { InitOptionsHandler, InitOptionsModule, InitOptionsProviderOptions } from "./init-options-shapes";
+import {
+	InitOptionsHandler,
+	InitOptionsModule,
+	InitOptionsProviderOptions,
+	UserAppConfigArgs
+} from "./init-options-shapes";
 const actionListeners: Map<
 	string,
 	Map<string, (requestedAction: string, payload?: unknown) => Promise<void>>
 > = new Map();
 const actionListenerMap: { [key: string]: string } = {};
-const listeners: Map<
-	string,
-	Map<string, (initOptions: { [key: string]: string | boolean | number }) => Promise<void>>
-> = new Map();
+const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map();
 const listenerMap: { [key: string]: string } = {};
 let initialized = false;
 const actionParamName = "action";
@@ -29,9 +31,7 @@ async function loadInitOptionsModule(id: string, url: string, data: unknown): Pr
 	}
 }
 
-function extractPayloadFromParams<T>(initOptions?: {
-	[key: string]: string | number | boolean;
-}): T | undefined {
+function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
 	try {
 		if (typeof initOptions?.payload === "string") {
 			const plainJson = atob(initOptions?.payload);
@@ -44,7 +44,7 @@ function extractPayloadFromParams<T>(initOptions?: {
 	}
 }
 
-async function notifyActionListeners(initOptions: { [key: string]: string | boolean | number }) {
+async function notifyActionListeners(initOptions: UserAppConfigArgs) {
 	const action = initOptions[actionParamName] as string;
 	const payload =
 		initOptions[actionPayloadParamName] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
@@ -69,7 +69,7 @@ async function notifyActionListeners(initOptions: { [key: string]: string | bool
 	}
 }
 
-async function notifyListeners(initOptions: { [key: string]: string | boolean | number }) {
+async function notifyListeners(initOptions: UserAppConfigArgs) {
 	const customParamIds = Array.from(listeners.keys());
 	let listenerId: string;
 	for (let i = 0; i < customParamIds.length; i++) {
@@ -104,7 +104,7 @@ async function notifyListeners(initOptions: { [key: string]: string | boolean | 
 	}
 }
 
-async function queryOnLaunch(userAppConfigArgs?: { [key: string]: string | boolean | number }) {
+async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
 	if (userAppConfigArgs !== undefined) {
 		console.log("Init Options: Received during startup:", userAppConfigArgs);
 		if (userAppConfigArgs[actionParamName] !== undefined) {
@@ -115,9 +115,7 @@ async function queryOnLaunch(userAppConfigArgs?: { [key: string]: string | boole
 	}
 }
 
-async function queryWhileRunning(event: {
-	userAppConfigArgs?: { [key: string]: string | boolean | number };
-}) {
+async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }) {
 	if (event?.userAppConfigArgs !== undefined) {
 		console.log("Init Options: Received while platform is running:", event.userAppConfigArgs);
 		if (event.userAppConfigArgs[actionParamName] !== undefined) {
@@ -161,8 +159,14 @@ export async function init(options?: InitOptionsProviderOptions) {
 			}
 		}
 	}
-	// eslint-disable-next-line @typescript-eslint/dot-notation
-	fin["desktop"].main(queryOnLaunch);
+	const app = fin.Application.getCurrentSync();
+	const appInfo = await app.getInfo();
+	const customInitOptions = appInfo.initialOptions as OpenFin.ApplicationCreationOptions & {
+		userAppConfigArgs?: UserAppConfigArgs;
+	};
+
+	await queryOnLaunch(customInitOptions?.userAppConfigArgs);
+
 	const platform = getCurrentSync();
 	await platform.Application.addListener("run-requested", queryWhileRunning);
 }
@@ -184,7 +188,7 @@ export function registerActionListener<T>(
 
 export function registerListener(
 	paramName: string,
-	handler: (initOptions: { [key: string]: string | number | boolean }) => Promise<void>
+	handler: (initOptions: UserAppConfigArgs) => Promise<void>
 ): string {
 	if (paramName === actionParamName) {
 		console.warn("Init Options: Please use registerActionListener if you wish to listen for an action.");
