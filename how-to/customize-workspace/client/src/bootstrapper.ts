@@ -64,6 +64,7 @@ export async function init() {
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
+	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
 	await registerIntegration(
 		{
@@ -127,8 +128,13 @@ export async function init() {
 
 	await registerShare();
 
-	// If the autoShow options is not set, default to the first registered component.
-	if (!Array.isArray(bootstrapOptions.autoShow) || bootstrapOptions.autoShow.length === 0) {
+	// Remove any entries from autoShow that have not been registered
+	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter((component) =>
+		registeredComponents.includes(component)
+	);
+
+	// If the autoShow options is not empty, default to the first registered component.
+	if (bootstrapOptions.autoShow.length === 0) {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
