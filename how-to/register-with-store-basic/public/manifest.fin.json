@@ -41,5 +41,11 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Register With Store Basic - v9.0",
 		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Register With Store Basic - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
 	}
 }
