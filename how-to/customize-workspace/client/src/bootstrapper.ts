@@ -134,7 +134,7 @@ export async function init() {
 	);
 
 	// If the autoShow options is not empty, default to the first registered component.
-	if (bootstrapOptions.autoShow.length === 0) {
+	if (bootstrapOptions.autoShow.length === 0 && registeredComponents.length > 0) {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
