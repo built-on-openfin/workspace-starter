@@ -23,6 +23,12 @@
 		"name": "Integrate with SSO - v9.0",
 		"target": ["desktop", "start-menu"]
 	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With SSO - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
 	"customSettings": {
 		"auth": {
 			"domain": "<DOMAIN>",

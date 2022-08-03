@@ -57,6 +57,12 @@
 			"forceDownload": false
 		}
 	],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Customize Workspace - Client",
+		"email": "support@company.com",
+		"forwardErrorReports": true
+	},
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
