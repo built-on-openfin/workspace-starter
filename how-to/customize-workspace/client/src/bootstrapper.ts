@@ -15,6 +15,7 @@ import {
 	register as registerHome,
 	show as showHome
 } from "./home";
+import { init as registerInitOptionsListener } from "./init-options";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
 import { manifestTypes } from "./manifest-types";
@@ -63,6 +64,7 @@ export async function init() {
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
+	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
 	await registerIntegration(
 		{
@@ -126,8 +128,13 @@ export async function init() {
 
 	await registerShare();
 
-	// If the autoShow options is not set, default to the first registered component.
-	if (!Array.isArray(bootstrapOptions.autoShow) || bootstrapOptions.autoShow.length === 0) {
+	// Remove any entries from autoShow that have not been registered
+	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter((component) =>
+		registeredComponents.includes(component)
+	);
+
+	// If the autoShow options is not empty, default to the first registered component.
+	if (bootstrapOptions.autoShow.length === 0 && registeredComponents.length > 0) {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
@@ -170,4 +177,8 @@ export async function init() {
 		await deregisterNotifications();
 		await fin.Platform.getCurrentSync().quit();
 	});
+
+	// Once the platform is started and everything is bootstrapped initialize the init options
+	// listener so that it is ready to handle initial params or subsequent requests.
+	await registerInitOptionsListener(settings?.initOptionsProvider);
 }
