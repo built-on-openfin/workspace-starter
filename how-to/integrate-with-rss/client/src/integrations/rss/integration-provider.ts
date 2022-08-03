@@ -270,15 +270,21 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			try {
 				console.log(`Retrieving RSS feed '${feed.id}' from ${feed.url}`);
 
-				const feedResponse = await fetch(integration.data?.proxyUrl, {
-					method: "POST",
-					headers: {
-						"content-type": "application/json"
-					},
-					body: JSON.stringify({
-						url: feed.url
-					})
-				});
+				let feedResponse: Response;
+				if (integration.data?.proxyUrl) {
+					feedResponse = await fetch(integration.data?.proxyUrl, {
+						method: "POST",
+						headers: {
+							"content-type": "application/json"
+						},
+						body: JSON.stringify({
+							url: feed.url
+						})
+					});
+				} else {
+					feedResponse = await fetch(feed.url);
+				}
+
 				const feedXml = await feedResponse.text();
 
 				const parser = new XMLParser({

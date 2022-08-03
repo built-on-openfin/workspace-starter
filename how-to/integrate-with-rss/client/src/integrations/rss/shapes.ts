@@ -82,7 +82,7 @@ export interface RssFeedConfig {
 
 export interface RssFeedSettings {
 	rootUrl: string;
-	proxyUrl: string;
+	proxyUrl?: string;
 	feedView: string;
 	feeds: RssFeedConfig[];
 	pollingInterval?: number;
