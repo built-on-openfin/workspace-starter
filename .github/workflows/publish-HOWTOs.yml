@@ -87,6 +87,13 @@ jobs:
           name: workflow-howtos-aws
           path: public-aws/
 
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: 'zip'
+          filename: ${{ github.ref_name }}.zip
+          path: public-aws/
+
       - name: Publish
         uses: jakejarvis/s3-sync-action@master
         with:
