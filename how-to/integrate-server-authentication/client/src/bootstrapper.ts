@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { getSettings } from "./settings";
 
 export async function init() {

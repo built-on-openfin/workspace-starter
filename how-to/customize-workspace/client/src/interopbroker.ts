@@ -1,4 +1,3 @@
-import OpenFin, { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";

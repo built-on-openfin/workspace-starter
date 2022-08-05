@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { EndpointDefinition } from "../../../endpoint-shapes";
 
 export async function init(options: unknown): Promise<void> {

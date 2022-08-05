@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 
