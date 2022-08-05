@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { Cell, enableLogging, ExcelApplication, getExcelApplication } from "@openfin/excel";
 import {
 	CLITemplate,

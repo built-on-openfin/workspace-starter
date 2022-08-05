@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { getSettings } from "./settings";
 

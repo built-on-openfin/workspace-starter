@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import * as auth0 from "auth0-js";
 import { AuthSettings } from "./shapes";
 

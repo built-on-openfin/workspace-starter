@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { getConnectedSnapshotSourceClients } from "./connections";
 interface ClientSnapshot {
 	identity: OpenFin.ApplicationIdentity;

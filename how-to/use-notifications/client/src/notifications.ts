@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import {
 	addEventListener as addNotificationEventListener,
 	ContainerTemplateFragment,

@@ -1,4 +1,3 @@
-import OpenFin from "@openfin/core";
 import {
 	CustomActionPayload,
 	CustomButtonActionPayload,

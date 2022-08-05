@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 let logInfo = console.log;
 let logWarning = console.warn;
 let logError = console.error;

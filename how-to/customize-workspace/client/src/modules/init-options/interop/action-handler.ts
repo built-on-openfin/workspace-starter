@@ -1,5 +1,3 @@
-import { fin } from "@openfin/core";
-
 interface RaiseIntentPayload {
 	name: string;
 	context: OpenFin.Context;
