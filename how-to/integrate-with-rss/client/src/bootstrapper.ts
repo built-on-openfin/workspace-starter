@@ -1,5 +1,5 @@
 import { fin } from "@openfin/core";
-import { launchView } from "./browser";
+import { findAndActivateView, launchPage, launchView, launchWindow } from "./browser";
 import { deregister as deregisterHome, register as registerHome, show as showHome } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { getSettings } from "./settings";
@@ -15,7 +15,10 @@ export async function init() {
 
 	await registerIntegration(
 		{
-			launchView
+			launchView,
+			launchPage,
+			launchWindow,
+			findAndActivateView
 		},
 		settings.integrationProvider
 	);

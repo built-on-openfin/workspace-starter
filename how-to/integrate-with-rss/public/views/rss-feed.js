@@ -1,4 +1,5 @@
 const RSS_APP_CHANNEL_NAME = 'rss-feed';
+const RSS_WINDOW_NAME = 'internal-generated-window-rss-feed';
 
 const CHANNEL_ACTIONS = {
 	feedSubscribe: 'feed-subscribe',
@@ -37,7 +38,7 @@ async function updateFeed(feed) {
 		for (const entry in feed.entries) {
 			entries.push(feed.entries[entry]);
 		}
-		entries.sort((a, b) => a.lastUpdated - b.lastUpdated);
+		entries.sort((a, b) => b.lastUpdated - a.lastUpdated);
 
 		const feedContainer = document.querySelector('#feed-container');
 		feedContainer.innerHTML = '';
@@ -52,9 +53,13 @@ async function updateFeed(feed) {
 			textContainer.classList.add('col');
 			textContainer.classList.add('left');
 			textContainer.classList.add('gap10');
+			textContainer.classList.add('overflow-hidden');
 
 			const title = document.createElement('h4');
 			title.textContent = entry.title;
+
+			const date = document.createElement('p');
+			date.textContent = new Date(entry.lastUpdated).toLocaleString();
 
 			const description = document.createElement('p');
 			description.textContent =
@@ -64,15 +69,17 @@ async function updateFeed(feed) {
 			view.textContent = 'View';
 			view.addEventListener('click', () => {
 				const platform = window.fin.Platform.getCurrentSync();
-				platform.createView({ url: entry.url });
+				platform.createView({ url: entry.url }, { uuid: platform.identity.uuid, name: RSS_WINDOW_NAME });
 			});
 
 			textContainer.append(title);
+			textContainer.append(date);
 			textContainer.append(description);
 			textContainer.append(view);
 
 			const imageContainer = document.createElement('div');
-			imageContainer.style.width = '200px';
+			imageContainer.style.display = 'flex';
+			imageContainer.style.flex = '0 0 200px';
 
 			if (entry.thumbnailUrl) {
 				const thumbnail = document.createElement('img');
