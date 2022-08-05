@@ -9,9 +9,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
-		"types": [
-			"../../common/types/fin"
-		]
+		"types": ["../../common/types/fin"]
 	},
 	"include": ["./src/**/*.ts"]
 }
