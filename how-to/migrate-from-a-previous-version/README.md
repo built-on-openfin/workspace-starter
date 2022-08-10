@@ -3,6 +3,59 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v8.0 to v9.0
+
+The main focus of this release is:
+
+### New and improved Dock
+
+OpenFin has introduced the ability for developers to register a Workspace Platform with the Dock component. This enables end-users to access multiple Workspace Platforms in a single, unified Dock component.
+
+In addition, Dock is fully themable by Workspace Platforms, to deliver a branded experience whilst being part of a shared experience.
+
+Developers of Workspace Platform can also fully customize the buttons in Dock. For example, they can add, remove and reorder buttons in Dock.
+
+### Change of Behaviour - Home doesn't automatically appear on registration
+
+Home no longer appears when a Workspace Platform first registers the Home component. For Home to show automatically, developers of Workspace Platforms must add `Home.show()` right after registering the Home component. This is the pattern followed in the starters so if you have been following the starters you have already been doing this.
+
+### Version Information upon registration
+
+When you register a component you will be returned information that will tell you the version of Workspace you have registered against as well as the version of the npm module that was used for the registration.
+
+```javascript
+{
+    clientAPIVersion: string;
+    workspaceVersion: string;
+}
+```
+
+## What dependencies will I need for v9
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^9.0.0",
+                    "@openfin/workspace-platform": "^9.0.0"
+                }
+```
+
+## Other Changes?
+
+We have introduced new starters:
+
+* use-theming - this starter is focused on giving you an easy way of trying out different theme palettes. You can change and apply them to the workspace to find the right combination of colors for your platform.
+* register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
+* integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
+* common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
+* customize-workspace - customize workspace continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
+
+  * DockProvider - Dock support has been added and is configurable through the manifest file
+  * An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
+  * InitOptionsProvider - More module types supported. You can now create a module for handling init option params and we include an example that allows external apps to raise an intent or pass context via querystring parameters that target a platform.
+  * ConnectionProvider - The concept of connections has been added to customize-workspace. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
+
 ## Migrate from a previous version - From v7.0 to v8.0
 
 The main focus of this release is:
@@ -32,14 +85,14 @@ Platform Providers can now lock Browser Windows and/or Pages to offer fixed, rep
 
 The visual designs of filters in Workspace Home have been improved, so end-users can quickly and easily zero in on the content that they are searching for and quickly clear out selected filters
 
-## What dependencies will I need for v9
+## What dependencies will I need for v8
 
 You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^9.0.0",
-                    "@openfin/workspace-platform": "^9.0.0"
+                    "@openfin/workspace": "^8.0.0",
+                    "@openfin/workspace-platform": "^8.0.0"
                 }
 ```
 

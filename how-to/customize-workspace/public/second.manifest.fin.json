@@ -44,7 +44,7 @@
 	"appAssets": [
 		{
 			"alias": "winform-interop-example",
-			"version": "2.0.0",
+			"version": "3.0.0",
 			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
@@ -751,7 +751,7 @@
 					"title": "Emoji Provider",
 					"enabled": true,
 					"autoStart": false,
-					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js",
+					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
