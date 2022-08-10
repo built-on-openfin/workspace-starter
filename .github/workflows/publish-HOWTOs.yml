@@ -91,7 +91,7 @@ jobs:
         uses: suisei-cn/actions-download-file@v1
         id: downloadfile
         with:
-          url: https://github.com/built-on-openfin/workspace-starter/archive/refs/heads/workspace/${{ github.ref_name }}.zip
+          url: https://github.com/built-on-openfin/workspace-starter/archive/refs/heads/${{ github.ref_name }}.zip
           target: public-aws/
 
       - name: Publish
