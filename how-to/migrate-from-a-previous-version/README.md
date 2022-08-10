@@ -25,8 +25,8 @@ When you register a component you will be returned information that will tell yo
 
 ```javascript
 {
-    clientAPIVersion: string;
-    workspaceVersion: string;
+  clientAPIVersion: string;
+  workspaceVersion: string;
 }
 ```
 
@@ -45,16 +45,16 @@ You will need the following dependencies
 
 We have introduced new starters:
 
-* use-theming - this starter is focused on giving you an easy way of trying out different theme palettes. You can change and apply them to the workspace to find the right combination of colors for your platform.
-* register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
-* integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
-* common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
-* customize-workspace - customize workspace continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
+- use-theming - this starter is focused on giving you an easy way of trying out different theme palettes. You can change and apply them to the workspace to find the right combination of colors for your platform.
+- register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
+- integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
+- common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
+- customize-workspace - customize workspace continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
 
-  * DockProvider - Dock support has been added and is configurable through the manifest file
-  * An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
-  * InitOptionsProvider - More module types supported. You can now create a module for handling init option params and we include an example that allows external apps to raise an intent or pass context via querystring parameters that target a platform.
-  * ConnectionProvider - The concept of connections has been added to customize-workspace. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
+  - DockProvider - Dock support has been added and is configurable through the manifest file
+  - An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
+  - InitOptionsProvider - More module types supported. You can now create a module for handling init option params and we include an example that allows external apps to raise an intent or pass context via querystring parameters that target a platform.
+  - ConnectionProvider - The concept of connections has been added to customize-workspace. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
 
 ## Migrate from a previous version - From v7.0 to v8.0
 
