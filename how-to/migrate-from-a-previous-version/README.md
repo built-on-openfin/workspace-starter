@@ -15,7 +15,7 @@ In addition, Dock is fully themable by Workspace Platforms, to deliver a branded
 
 Developers of Workspace Platform can also fully customize the buttons in Dock. For example, they can add, remove and reorder buttons in Dock.
 
-### Change of Behaviour - Home doesn't automatically appear on registration
+### Change of Behavior - Home doesn't automatically appear on registration
 
 Home no longer appears when a Workspace Platform first registers the Home component. For Home to show automatically, developers of Workspace Platforms must add `Home.show()` right after registering the Home component. This is the pattern followed in the starters so if you have been following the starters you have already been doing this.
 
