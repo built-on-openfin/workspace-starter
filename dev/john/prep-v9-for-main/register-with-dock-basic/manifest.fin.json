@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-dock-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-dock-basic/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/register-with-dock-basic/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-dock-basic/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/register-with-dock-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},

@@ -11,9 +11,9 @@
 	"platform": {
 		"uuid": "second-workspace-starter-how-to-customize-workspace",
 		"name": "second-workspace-starter-how-to-customize-workspace",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -45,7 +45,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.0",
-			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
@@ -66,12 +66,12 @@
 			"modules": [
 				{
 					"id": "example",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/auth/example.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/js/modules/auth/example.bundle.js",
 					"data": {
 						"autoLogin": false,
-						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-login.html",
-						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-logged-in.html",
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/windows/modules/auth/example-logged-in.html",
 						"checkLoginStatusInSeconds": 1,
 						"checkSessionValidityInSeconds": -1
 					}
@@ -80,9 +80,9 @@
 			"authProviderId": "example"
 		},
 		"platformProvider": {
-			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace",
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace",
 			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/intents/picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			}
@@ -107,7 +107,7 @@
 			"modules": [
 				{
 					"id": "local-storage",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/endpoints/local-storage.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/js/modules/endpoints/local-storage.bundle.js",
 					"data": {}
 				}
 			],
@@ -117,7 +117,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/apps.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/apps.json"
 					}
 				},
 				{
@@ -125,7 +125,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/apps.json"
 					}
 				},
 				{
@@ -266,9 +266,9 @@
 		"browserProvider": {
 			"windowOptions": {
 				"title": "Second Browser Starter",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/views/platform/new-tab/new-tab.html"
 			},
 			"toolbarButtons": [
 				{
@@ -278,7 +278,7 @@
 						"type": "Custom",
 						"tooltip": "Change Opacity",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon.ico",
 						"action": {
 							"id": "change-opacity",
 							"customData": {
@@ -295,7 +295,7 @@
 						"type": "Custom",
 						"tooltip": "Restore Opacity",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon.ico",
 						"action": {
 							"id": "restore-opacity",
 							"customData": {
@@ -308,14 +308,14 @@
 				{
 					"include": true,
 					"themes": {
-						"Light": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/search-dark.svg"
+						"Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/search-dark.svg"
 					},
 					"id": "home-show",
 					"button": {
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -326,13 +326,13 @@
 					"include": true,
 					"id": "notification-toggle",
 					"themes": {
-						"Light": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/bell-dark.svg"
+						"Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/bell-dark.svg"
 					},
 					"button": {
 						"type": "Custom",
 						"tooltip": "Toggle Notification Center",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/bell.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/bell.svg",
 						"action": {
 							"id": "notification-toggle",
 							"customData": {}
@@ -343,13 +343,13 @@
 					"include": true,
 					"id": "pin-window",
 					"themes": {
-						"Light": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/pin-dark.svg"
+						"Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/pin-dark.svg"
 					},
 					"button": {
 						"type": "Custom",
 						"tooltip": "Pin this window",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/pin.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/pin.svg",
 						"action": {
 							"id": "pin-window",
 							"customData": {
@@ -363,13 +363,13 @@
 					"include": false,
 					"id": "unpin-window",
 					"themes": {
-						"Light": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/pin-vertical-dark.svg"
+						"Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/pin-vertical-dark.svg"
 					},
 					"button": {
 						"type": "Custom",
 						"tooltip": "Unpin this window",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/pin-vertical.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/pin-vertical.svg",
 						"action": {
 							"id": "unpin-window",
 							"customData": {
@@ -411,13 +411,13 @@
 					"include": true,
 					"id": "share",
 					"themes": {
-						"Light": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/share-dark.svg"
+						"Light": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/share-dark.svg"
 					},
 					"button": {
 						"type": "Custom",
 						"tooltip": "Share",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/share.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/share.svg",
 						"action": {
 							"id": "share",
 							"customData": {}
@@ -437,7 +437,7 @@
 			"themes": [
 				{
 					"label": "Dark",
-					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 					"palette": {
 						"brandPrimary": "#504CFF",
 						"brandSecondary": "#383A40",
@@ -474,7 +474,7 @@
 				},
 				{
 					"label": "Light",
-					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,
@@ -514,14 +514,14 @@
 		"homeProvider": {
 			"id": "second-customize-workspace",
 			"title": "Second Home Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "second-customize-workspace",
 			"title": "Second Custom Storefront",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 			"landingPage": {
 				"hero": {
 					"title": "Second Custom Hero Title",
@@ -531,7 +531,7 @@
 						"tags": ["hero"]
 					},
 					"image": {
-						"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/superhero-unsplash.jpg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/superhero-unsplash.jpg"
 					}
 				},
 				"topRow": {
@@ -541,7 +541,7 @@
 							"title": "Expero",
 							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-1-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-1-unsplash.jpg"
 							},
 							"tags": ["expero"]
 						},
@@ -549,7 +549,7 @@
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-2-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-2-unsplash.jpg"
 							},
 							"tags": ["tools"]
 						},
@@ -557,7 +557,7 @@
 							"title": "Learning Resource",
 							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-3-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-3-unsplash.jpg"
 							},
 							"tags": ["page"]
 						}
@@ -574,7 +574,7 @@
 							"title": "Views",
 							"description": "A collection of views made available through our catalog.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-4-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-4-unsplash.jpg"
 							},
 							"tags": ["view"]
 						},
@@ -582,7 +582,7 @@
 							"title": "Web Apps",
 							"description": "A collection of web apps built using OpenFin.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-5-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-5-unsplash.jpg"
 							},
 							"tags": ["manifest"]
 						},
@@ -590,7 +590,7 @@
 							"title": "Native Apps",
 							"description": "A collection of native apps made available through our catalog.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-6-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/coding-6-unsplash.jpg"
 							},
 							"tags": ["native"]
 						}
@@ -633,7 +633,7 @@
 			],
 			"footer": {
 				"logo": {
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+					"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png",
 					"size": "32"
 				},
 				"text": "Welcome to the OpenFin Sample Footer",
@@ -652,7 +652,7 @@
 		"dockProvider": {
 			"id": "customize-workspace",
 			"title": "Home Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon.ico",
 			"workspaceComponents": {
 				"hideHomeButton": false,
 				"hideWorkspacesButton": false,
@@ -672,7 +672,7 @@
 				{
 					"display": "group",
 					"tooltip": "Manager",
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-gradient.png",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/icon-gradient.png",
 					"tags": ["manager"]
 				}
 			],
@@ -689,7 +689,7 @@
 				},
 				{
 					"tooltip": "Social",
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/share.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/icons/share.svg",
 					"options": [
 						{
 							"tooltip": "Twitter",
@@ -716,38 +716,38 @@
 		"notificationProvider": {
 			"id": "second-customize-workspace",
 			"title": "Second Notification Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon-32x32.png"
 		},
 		"integrationProvider": {
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon.ico",
 			"isManagementEnabled": true,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"integrations": [
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 					"enabled": false,
 					"autoStart": true,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/integrations/salesforce.bundle.js",
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/salesforce/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/views/salesforce/preload.js",
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/task.svg"
+							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/images/salesforce/task.svg"
 						}
 					}
 				},
 				{
 					"id": "emoji",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/favicon.ico",
 					"title": "Emoji Provider",
 					"enabled": true,
 					"autoStart": false,
@@ -760,7 +760,7 @@
 			"modules": [
 				{
 					"id": "interop",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/init-options/interop.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/customize-workspace/js/modules/init-options/interop.bundle.js",
 					"data": {},
 					"supportedActions": ["raise-intent", "share-context"]
 				}

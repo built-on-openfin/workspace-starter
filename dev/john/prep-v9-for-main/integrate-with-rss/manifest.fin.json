@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-rss",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -36,7 +36,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "An way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/favicon.ico",
 		"name": "Integrate with RSS - v9.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -44,20 +44,20 @@
 		"homeProvider": {
 			"id": "integrate-with-rss",
 			"title": "Integrate with RSS",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/favicon.ico"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/favicon.ico"
 		},
 		"integrationProvider": {
 			"integrations": [
 				{
 					"id": "rss",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/favicon.ico",
 					"title": "RSS Provider",
 					"enabled": true,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/js/integrations/rss.bundle.js",
+					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/js/integrations/rss.bundle.js",
 					"data": {
-						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/",
-						"proxyUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/proxy",
-						"feedView": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-rss/views/rss-feed.html",
+						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/",
+						"proxyUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/proxy",
+						"feedView": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/integrate-with-rss/views/rss-feed.html",
 						"feeds": [
 							{
 								"id": "openfin-tech",

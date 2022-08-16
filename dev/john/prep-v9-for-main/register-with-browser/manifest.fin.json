@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-browser-from-window",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-browser/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/register-with-browser/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-browser/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/register-with-browser/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
@@ -32,7 +32,7 @@
 	"customSettings": {
 		"bootstrap": {
 			"launchBarWindowSettings": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-browser/html/launch-bar.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/register-with-browser/html/launch-bar.html",
 				"name": "launch-bar",
 				"frame": false,
 				"icon": "https://www.openfin.co/favicon.ico",
@@ -52,8 +52,8 @@
 			"windowOptions": {
 				"title": "Browser Starter",
 				"icon": "https://www.openfin.co/favicon.ico",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/prep-v9-for-main/common/views/platform/new-tab/new-tab.html"
 			}
 		},
 		"themeProvider": {
