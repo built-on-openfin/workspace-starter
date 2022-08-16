@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;

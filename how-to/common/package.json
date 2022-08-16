@@ -23,8 +23,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next"
+		"@openfin/workspace": "9.0.9",
+		"@openfin/workspace-platform": "9.0.9"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.11",

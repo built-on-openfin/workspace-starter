@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { IPlatformStorage } from "./platform-storage-shapes";
 
 export class PlatformLocalStorage<T> implements IPlatformStorage<T> {

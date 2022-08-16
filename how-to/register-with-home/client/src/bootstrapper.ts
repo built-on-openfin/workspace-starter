@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { deregister, register } from "./home";
 
 export async function init() {

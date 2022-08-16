@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { getConnectedApps } from "./connections";
 import { EndpointProvider } from "./endpoint-shapes";

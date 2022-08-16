@@ -5,8 +5,11 @@
 		"sourceMap": true,
 		"rootDir": "./src",
 		"outDir": "build",
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
-		"skipLibCheck": false
+		"types": ["../../common/types/fin"]
 	},
 	"include": ["./src/**/*.ts"]
 }

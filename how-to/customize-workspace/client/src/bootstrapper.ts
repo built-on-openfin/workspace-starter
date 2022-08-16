@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { launchPage, launchView } from "./browser";

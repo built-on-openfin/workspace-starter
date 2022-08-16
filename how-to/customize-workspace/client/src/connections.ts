@@ -1,5 +1,3 @@
-import { fin } from "@openfin/core";
-import { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import { App } from "@openfin/workspace";
 import {
 	AppSourceConnection,
@@ -9,7 +7,7 @@ import {
 } from "./connection-shapes";
 import { manifestTypes } from "./manifest-types";
 
-let connectionService: ChannelProvider;
+let connectionService: OpenFin.ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};
 const registeredActions: { [key: string]: () => Promise<void> } = {};
 const appSourceTypeId = "appSource";

@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 export class PlatformStorage {
 	private readonly _storageTypeName: string;
 

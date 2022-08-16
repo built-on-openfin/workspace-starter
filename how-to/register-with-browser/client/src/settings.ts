@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { CustomThemes } from "@openfin/workspace-platform";
 import { CustomPaletteSet } from "@openfin/workspace-platform/common/src/api/theming";
 import { CustomSettings } from "./shapes";

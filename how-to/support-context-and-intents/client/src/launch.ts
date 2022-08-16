@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
