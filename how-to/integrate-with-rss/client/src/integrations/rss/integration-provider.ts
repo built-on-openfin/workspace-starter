@@ -1,11 +1,13 @@
 import {
 	CLITemplate,
 	HomeSearchResult,
+	Page,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse
 } from "@openfin/workspace";
+import { LayoutComponentExtended } from "@openfin/workspace-platform/client-api/src";
 import {
 	addEventListener as addNotificationEventListener,
 	create as createNotification,
@@ -14,15 +16,15 @@ import {
 import { XMLParser } from "fast-xml-parser";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
 import {
+	CHANNEL_ACTIONS,
+	RssCache,
 	RssChannelFeedSubscribePayload,
 	RssFeed,
-	RssCache,
+	RssFeedCache,
 	RssFeedCacheEntry,
-	RssFeedSettings,
-	CHANNEL_ACTIONS,
-	RssFeedCache
+	RssFeedSettings
 } from "./shapes";
-import { getRssEntryTemplate } from "./templates";
+import { getRssEntryTemplate, getRssFeedTemplate } from "./templates";
 
 /**
  * Implement the integration provider for RSS Feeds.
@@ -51,6 +53,12 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * @internal
 	 */
 	private static readonly _RSS_APP_CHANNEL_NAME = "rss-feed";
+
+	/**
+	 * The window name.
+	 * @internal
+	 */
+	private static readonly _RSS_WINDOW_NAME = "internal-generated-window-rss-feed";
 
 	/**
 	 * The integration manager.
@@ -115,9 +123,18 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 			addNotificationEventListener(
 				"notification-action",
-				async (event: NotificationActionEvent<{ action: string; payload: RssFeedCacheEntry }>) => {
+				async (
+					event: NotificationActionEvent<{
+						action: string;
+						payload: {
+							feed: Omit<RssFeedCache, "entries">;
+							entry: RssFeedCacheEntry;
+						};
+					}>
+				) => {
 					if (event?.result.action === "view-entry") {
-						await this._integrationManager.launchView(event.result.payload.url);
+						const payload = event.result.payload;
+						await this.launchFeedOrEntry(integration, payload.feed, payload.entry);
 					}
 				}
 			);
@@ -203,12 +220,18 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	): Promise<boolean> {
 		if (
 			result.action.trigger === "user-action" &&
-			(result.action.name === RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION ||
-				result.action.name === RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION) &&
-			result.data.url &&
+			((result.action.name === RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION && result.data.feed) ||
+				(result.action.name === RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION &&
+					result.data.entry)) &&
+			this._integrationManager.launchWindow &&
+			this._integrationManager.launchPage &&
 			this._integrationManager.launchView
 		) {
-			await this._integrationManager.launchView(result.data.url as string);
+			await this.launchFeedOrEntry(
+				integration,
+				result.data.feed as Omit<RssFeedCache, "entries">,
+				result.data.entry as RssFeedCacheEntry
+			);
 			return true;
 		}
 
@@ -233,7 +256,10 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 		if (query.length >= 3) {
 			const re = new RegExp(query, "gi");
-			const matches: RssFeedCacheEntry[] = [];
+			const matches: {
+				feed: RssFeedCache;
+				entry: RssFeedCacheEntry;
+			}[] = [];
 
 			for (const feed in this._feedsCache) {
 				if (re.test(this._feedsCache[feed].title)) {
@@ -243,15 +269,18 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 					const entry = this._feedsCache[feed].entries[entryKey];
 
 					if (re.test(entry.title) || re.test(entry.description)) {
-						matches.push(entry);
+						matches.push({
+							feed: this._feedsCache[feed],
+							entry
+						});
 					}
 				}
 			}
 
-			matches.sort((a, b) => a.lastUpdated - b.lastUpdated);
+			matches.sort((a, b) => b.entry.lastUpdated - a.entry.lastUpdated);
 
 			for (const match of matches) {
-				results.push(await this.createEntryResult(integration, match));
+				results.push(await this.createEntryResult(integration, match.feed, match.entry));
 			}
 		}
 
@@ -337,11 +366,11 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 									// If the new last updated time is greater then the previous one
 									// then the entry has been updated
 									if (entryCache[entryId].lastUpdated > previousUpdated) {
-										await this.notify("update", this._feedsCache[feed.id].title, entryCache[entryId]);
+										await this.notify("update", this._feedsCache[feed.id], entryCache[entryId]);
 									}
 								} else if (!isNewCache) {
 									// If there was no previous update time for this entry then it is new
-									await this.notify("add", this._feedsCache[feed.id].title, entryCache[entryId]);
+									await this.notify("add", this._feedsCache[feed.id], entryCache[entryId]);
 								}
 							}
 						}
@@ -363,9 +392,9 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	 * @param feedTitle The title of the feed.
 	 * @param feedEntry The entry being updated.
 	 */
-	private async notify(type: "add" | "update", feedTitle: string, feedEntry: RssFeedCacheEntry) {
+	private async notify(type: "add" | "update", feed: RssFeedCache, feedEntry: RssFeedCacheEntry) {
 		await createNotification({
-			title: feedTitle,
+			title: feed.title,
 			body:
 				type === "update"
 					? `An entry on the feed has been updated titled '${feedEntry.title}'`
@@ -381,7 +410,13 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 					cta: true,
 					onClick: {
 						action: "view-entry",
-						payload: feedEntry
+						payload: {
+							feed: {
+								id: feed.id,
+								title: feed.title
+							},
+							entry: feedEntry
+						}
 					}
 				}
 			]
@@ -411,12 +446,14 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			],
 			data: {
 				providerId: RssIntegrationProvider._PROVIDER_ID,
-				...feed,
-				url: `${integration.data?.feedView}?feedId=${feed.id}`
+				feed: {
+					id: feed.id,
+					title: feed.title
+				}
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await getRssEntryTemplate({
+				layout: await getRssFeedTemplate({
 					viewAction: RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION
 				}),
 				data: {
@@ -431,18 +468,20 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	/**
 	 * Create a search result for an entry.
 	 * @param integration The integration details.
+	 * @param feed The RSS feed.
 	 * @param entry The RSS feed entry.
 	 * @returns The search result.
 	 */
 	private async createEntryResult(
 		integration: Integration<RssFeedSettings>,
+		feed: RssFeedCache,
 		entry: RssFeedCacheEntry
 	): Promise<HomeSearchResult> {
 		return {
 			key: `rss-${entry.id}`,
 			title: entry.title,
 			label: "Information",
-			icon: `${integration.data.rootUrl}assets/rss.svg`,
+			icon: `${integration.data.rootUrl}assets/rss-entry.svg`,
 			actions: [
 				{
 					name: RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION,
@@ -451,7 +490,11 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			],
 			data: {
 				providerId: RssIntegrationProvider._PROVIDER_ID,
-				...entry
+				feed: {
+					id: feed.id,
+					title: feed.title
+				},
+				entry
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
@@ -508,6 +551,97 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 		if (this._channelProvider) {
 			await this._channelProvider.dispatch(clientId, CHANNEL_ACTIONS.feedUpdate, {
 				feed: this._feedsCache[feedId] ?? {}
+			});
+		}
+	}
+
+	/**
+	 * Launch a feed or an entry.
+	 * @param integration The integration details.
+	 * @param feed The feed to launch.
+	 * @param entry The individual entry to launch.
+	 */
+	private async launchFeedOrEntry(
+		integration: Integration<RssFeedSettings>,
+		feed: Omit<RssFeedCache, "entries">,
+		entry?: RssFeedCacheEntry
+	): Promise<void> {
+		const platformId = fin.Platform.getCurrentSync().identity.uuid;
+		const viewUrl = entry?.url ?? `${integration.data?.feedView}?feedId=${feed.id}`;
+		const viewTitle = entry ? undefined : feed.title;
+		const viewId = `rss-view-${entry?.id ?? feed.id}`;
+		const viewTargetIdentity = entry
+			? null
+			: {
+					name: viewId,
+					uuid: platformId
+			  };
+
+		const pageId = `rss-feed-page-${feed.id}`;
+
+		const viewDetails = await this._integrationManager.findAndActivateView(
+			{ name: RssIntegrationProvider._RSS_WINDOW_NAME, uuid: platformId },
+			pageId,
+			{
+				name: viewId,
+				uuid: platformId
+			}
+		);
+
+		const page: Page = {
+			title: feed.title,
+			pageId,
+			iconUrl: `${integration.data.rootUrl}assets/rss.svg`,
+			layout: {
+				content: [
+					{
+						type: "stack",
+						content: [
+							{
+								type: "component",
+								componentName: "view",
+								componentState: {
+									title: viewTitle,
+									name: viewId,
+									uuid: viewId,
+									url: viewUrl
+								}
+							} as LayoutComponentExtended
+						]
+					}
+				]
+			}
+		};
+
+		if (!viewDetails.window) {
+			await this._integrationManager.launchWindow(
+				{
+					name: RssIntegrationProvider._RSS_WINDOW_NAME,
+					uuid: platformId,
+					icon: `${integration.data.rootUrl}assets/rss.svg`,
+					workspacePlatform: {
+						favicon: `${integration.data.rootUrl}assets/rss.svg`,
+						title: "RSS Feeds",
+						pages: [page]
+					}
+				},
+				true
+			);
+		} else if (viewDetails.window && !viewDetails.page) {
+			await this._integrationManager.launchPage(page, {
+				uuid: platformId,
+				name: RssIntegrationProvider._RSS_WINDOW_NAME
+			});
+		} else if (viewDetails.window && viewDetails.page && !viewDetails.view) {
+			const view: OpenFin.PlatformViewCreationOptions = {
+				target: viewTargetIdentity,
+				name: viewTitle,
+				url: viewUrl
+			};
+
+			await this._integrationManager.launchView(view, {
+				uuid: platformId,
+				name: RssIntegrationProvider._RSS_WINDOW_NAME
 			});
 		}
 	}

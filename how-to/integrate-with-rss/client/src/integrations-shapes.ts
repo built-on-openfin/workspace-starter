@@ -5,7 +5,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import type { BrowserCreateWindowRequest, BrowserWindowModule, Page } from "@openfin/workspace-platform";
 
 /**
  * Integration manager provides environment methods and data.
@@ -30,12 +30,42 @@ export interface IntegrationManager {
 	): Promise<OpenFin.View>;
 
 	/**
+	 * Is there a view in the specified window and page.
+	 * @param windowIdentity The window to look in.
+	 * @param pageId The page in the window to look.
+	 * @param viewIdentity The identity of the view to find.
+	 */
+	findAndActivateView?(
+		windowIdentity: OpenFin.Identity,
+		pageId: string,
+		viewIdentity: OpenFin.Identity
+	): Promise<
+		| {
+				window?: BrowserWindowModule;
+				page?: Page;
+				view?: OpenFin.View;
+		  }
+		| undefined
+	>;
+
+	/**
 	 * Launch a page in the workspace.
 	 * @param page The page to launch.
-	 * @param bounds The optional bounds for the page.
+	 * @param targetWindowIdentity The target window to add the page to.
 	 * @returns The window created.
 	 */
-	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+	launchPage?(page: Page, targetWindowIdentity?: OpenFin.Identity): Promise<BrowserWindowModule>;
+
+	/**
+	 * Launch a browser window in the workspace.
+	 * @param options The window options.
+	 * @param reuse Reuse a window with the same identity if it already exists.
+	 * @returns The window created.
+	 */
+	launchWindow?(
+		options: BrowserCreateWindowRequest,
+		reuse?: boolean
+	): Promise<BrowserWindowModule | undefined>;
 
 	/**
 	 * Launch a snapshot.
