@@ -6,6 +6,7 @@ import { registerListener, removeListener } from "./init-options";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 
+export let isShareEnabled = false;
 let shareRegistered = false;
 let initOptionsListenerId: string;
 
@@ -287,28 +288,34 @@ async function loadSharedEntry(id: string) {
 	}
 }
 
-export async function register() {
-	if (!shareRegistered) {
-		shareRegistered = true;
-		initOptionsListenerId = registerListener("shareId", async (initOptions) => {
-			console.log("Received share request.");
-			if (typeof initOptions.shareId === "string") {
-				await loadSharedEntry(initOptions.shareId);
-			} else {
-				console.warn("shareId passed but it wasn't a string");
-			}
-		});
-	} else {
-		console.warn("Share cannot be registered more than once.");
+export async function register(bootstrapEnabled: boolean) {
+	isShareEnabled = bootstrapEnabled;
+
+	if (isShareEnabled) {
+		if (!shareRegistered) {
+			shareRegistered = true;
+			initOptionsListenerId = registerListener("shareId", async (initOptions) => {
+				console.log("Received share request.");
+				if (typeof initOptions.shareId === "string") {
+					await loadSharedEntry(initOptions.shareId);
+				} else {
+					console.warn("shareId passed but it wasn't a string");
+				}
+			});
+		} else {
+			console.warn("Share cannot be registered more than once.");
+		}
 	}
 }
 
 export async function deregister() {
-	if (shareRegistered) {
-		// any cleanup logic can go here
-		removeListener(initOptionsListenerId);
-	} else {
-		console.warn("Share isn't registered yet so cannot be deregistered.");
+	if (isShareEnabled) {
+		if (shareRegistered) {
+			// any cleanup logic can go here
+			removeListener(initOptionsListenerId);
+		} else {
+			console.warn("Share isn't registered yet so cannot be deregistered.");
+		}
 	}
 }
 

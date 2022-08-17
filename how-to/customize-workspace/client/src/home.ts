@@ -11,7 +11,6 @@ import {
 	HomeDispatchedSearchResult,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment,
 	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
@@ -21,8 +20,14 @@ import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integra
 import { launch } from "./launch";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
-import { share } from "./share";
-import { CURRENT_WORKSPACE_TEMPLATE, PAGE_TEMPLATE, WORKSPACE_TEMPLATE } from "./template";
+import { isShareEnabled, share } from "./share";
+import {
+	getCurrentWorkspaceTemplate,
+	getPageTemplate,
+	PAGE_ACTION_IDS,
+	getWorkspaceTemplate,
+	WORKSPACE_ACTION_IDS
+} from "./template";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
@@ -141,7 +146,7 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 	if (settings?.platformProvider?.rootUrl !== undefined) {
 		pageIcon = `${settings.platformProvider.rootUrl}/icons/page.svg`;
 	}
-	const pageTemplate: TemplateFragment = PAGE_TEMPLATE.template;
+	const pageTemplate = getPageTemplate(isShareEnabled);
 
 	if (Array.isArray(pages)) {
 		for (let i = 0; i < pages.length; i++) {
@@ -150,11 +155,13 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 				title: pages[i].title,
 				label: "Page",
 				icon: pageIcon,
-				actions: [
-					{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" },
+				actions: (isShareEnabled
+					? [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" }]
+					: []
+				).concat([
 					{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
 					{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
-				],
+				]),
 				data: { tags: ["page"], pageId: pages[i].pageId },
 				template: CLITemplate.Custom,
 				templateContent: {
@@ -183,8 +190,9 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 	if (settings?.platformProvider?.rootUrl !== undefined) {
 		workspaceIcon = `${settings.platformProvider.rootUrl}/icons/workspaces.svg`;
 	}
-	const workspaceTemplate: TemplateFragment = WORKSPACE_TEMPLATE.template;
-	const currentWorkspaceTemplate: TemplateFragment = CURRENT_WORKSPACE_TEMPLATE.template;
+	const workspaceTemplate = getWorkspaceTemplate(isShareEnabled);
+
+	const currentWorkspaceTemplate = getCurrentWorkspaceTemplate();
 
 	const workspaceResults: HomeSearchResult[] = [];
 	if (Array.isArray(workspaces)) {
@@ -197,17 +205,21 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 			const actions =
 				entryWorkspaceId === currentWorkspaceId
 					? []
-					: [
-							{
-								name: HOME_ACTION_SHARE_WORKSPACE,
-								hotkey: "CmdOrCtrl+Shift+S"
-							},
+					: (isShareEnabled
+							? [
+									{
+										name: HOME_ACTION_SHARE_WORKSPACE,
+										hotkey: "CmdOrCtrl+Shift+S"
+									}
+							  ]
+							: []
+					  ).concat([
 							{
 								name: HOME_ACTION_DELETE_WORKSPACE,
 								hotkey: "CmdOrCtrl+Shift+D"
 							},
 							{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
-					  ];
+					  ]);
 			const layout =
 				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
 			const instructions =
@@ -510,12 +522,12 @@ export async function register(): Promise<RegistrationMetaInfo> {
 						const workspaceAction = result.action.name;
 						if (
 							workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-							workspaceAction === WORKSPACE_TEMPLATE.actions.launch
+							workspaceAction === WORKSPACE_ACTION_IDS.launch
 						) {
 							await launchWorkspace(data.workspaceId);
 						} else if (
 							workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-							workspaceAction === WORKSPACE_TEMPLATE.actions.delete
+							workspaceAction === WORKSPACE_ACTION_IDS.delete
 						) {
 							await deleteWorkspace(data.workspaceId);
 							if (lastResponse !== undefined && lastResponse !== null) {
@@ -523,26 +535,26 @@ export async function register(): Promise<RegistrationMetaInfo> {
 							}
 						} else if (
 							workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
-							workspaceAction === WORKSPACE_TEMPLATE.actions.share
+							workspaceAction === WORKSPACE_ACTION_IDS.share
 						) {
 							await share({ workspaceId: data.workspaceId });
 						} else {
-							console.warn(`Unrecognised action for workspace selection: ${data.workspaceId}`);
+							console.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
 						}
 					}
 				} else if (data.pageId !== undefined) {
 					const pageAction = result.action.name;
-					if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_TEMPLATE.actions.launch) {
+					if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_ACTION_IDS.launch) {
 						const platform = getCurrentSync();
 						const pageToLaunch = await platform.Storage.getPage(data.pageId);
 						await launchPage(pageToLaunch);
-					} else if (pageAction === HOME_ACTION_DELETE_PAGE || pageAction === PAGE_TEMPLATE.actions.delete) {
+					} else if (pageAction === HOME_ACTION_DELETE_PAGE || pageAction === PAGE_ACTION_IDS.delete) {
 						const platform = getCurrentSync();
 						await platform.Storage.deletePage(data.pageId);
 						if (lastResponse !== undefined && lastResponse !== null) {
 							lastResponse.revoke(result.key);
 						}
-					} else if (pageAction === HOME_ACTION_SHARE_PAGE || pageAction === PAGE_TEMPLATE.actions.share) {
+					} else if (pageAction === HOME_ACTION_SHARE_PAGE || pageAction === PAGE_ACTION_IDS.share) {
 						const platform = getCurrentSync();
 						const page = await platform.Storage.getPage(data.pageId);
 						const bounds = await getPageBounds(data.pageId, true);
