@@ -1,15 +1,13 @@
 import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
 import { ACTION_IDS } from "./actions";
 import { getApp, getAppIcon, getAppsByTag } from "./apps";
+import { logger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { BootstrapOptions } from "./shapes";
 
 let isDockRegistered = false;
 
 export async function register(bootstrapOptions: BootstrapOptions): Promise<RegistrationMetaInfo> {
-	console.log("Initialising dock.");
-	isDockRegistered = true;
-
 	const settings = await getSettings();
 
 	const buttons: DockButton[] = [];
@@ -17,7 +15,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 	if (Array.isArray(settings.dockProvider.apps)) {
 		for (const appButton of settings.dockProvider.apps) {
 			if (!Array.isArray(appButton.tags)) {
-				console.error("You must specify an array for the tags parameter for an DockAppButton");
+				logger.error("Dock", "You must specify an array for the tags parameter for an DockAppButton");
 			} else {
 				const dockApps = await getAppsByTag(appButton.tags);
 
@@ -37,7 +35,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					}
 				} else if (appButton.display === "group") {
 					if (!appButton.tooltip) {
-						console.error("You must specify the tooltip for a grouped DockAppButton");
+						logger.error("Dock", "You must specify the tooltip for a grouped DockAppButton");
 					}
 					let iconUrl = appButton.iconUrl;
 					const options = [];
@@ -77,7 +75,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 			// Is this a dock drop down
 			if ("options" in dockButton) {
 				if (!dockButton.tooltip || !dockButton.iconUrl) {
-					console.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+					logger.error("Dock", "You must specify the tooltip and iconUrl for a DockButtonDropdown");
 				} else {
 					const options = [];
 
@@ -152,7 +150,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 		}
 	}
 
-	return Dock.register({
+	const registrationInfo = await Dock.register({
 		id: settings.dockProvider?.id,
 		title: settings.dockProvider?.title,
 		icon: settings.dockProvider?.icon,
@@ -166,6 +164,12 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 		},
 		buttons
 	});
+
+	logger.info("Dock", "Version:", registrationInfo);
+	isDockRegistered = true;
+	logger.info("Dock", "Dock provider initialized");
+
+	return registrationInfo;
 }
 
 export async function show() {
@@ -180,5 +184,5 @@ export async function deregister() {
 	if (isDockRegistered) {
 		return Dock.deregister();
 	}
-	console.warn("Unable to deregister home as there is an indication it was never registered");
+	logger.warn("Dock", "Unable to deregister home as there is an indication it was never registered");
 }

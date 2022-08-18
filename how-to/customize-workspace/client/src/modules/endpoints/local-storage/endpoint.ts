@@ -1,20 +1,24 @@
-import { EndpointDefinition } from "../../../endpoint-shapes";
+import type { EndpointDefinition } from "../../../endpoint-shapes";
+import type { Logger } from "../../../logger-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
-import { IPlatformStorage } from "./platform-storage-shapes";
+import type { IPlatformStorage } from "./platform-storage-shapes";
+
+let logger: Logger;
 
 const storage: { [key: string]: IPlatformStorage<unknown> } = {};
 
 function getStorage<T>(id: string): IPlatformStorage<T> {
 	let localStorage: IPlatformStorage<T> = storage[id] as PlatformLocalStorage<T>;
 	if (localStorage === undefined) {
-		localStorage = new PlatformLocalStorage<T>(id, id);
+		localStorage = new PlatformLocalStorage<T>(id, id, logger);
 		storage[id] = localStorage;
 	}
 	return localStorage;
 }
 
-export async function init(options: unknown): Promise<void> {
-	console.log("Was passed the following options:", options);
+export async function init(options: unknown, log: Logger): Promise<void> {
+	logger = log;
+	logger.info("LocalStorageEndpoint", "Was passed the following options", options);
 }
 
 export async function action(
@@ -22,11 +26,15 @@ export async function action(
 	request?: { id: string; payload?: unknown }
 ): Promise<boolean> {
 	if (request === undefined) {
-		console.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false.`);
+		logger.warn(
+			"LocalStorageEndpoint",
+			`A request is required for this action: ${endpointDefinition.id}. Returning false`
+		);
 		return false;
 	}
 	if (endpointDefinition.type !== "module") {
-		console.warn(
+		logger.warn(
+			"LocalStorageEndpoint",
 			`We only expect endpoints of type module. Unable to perform action: ${endpointDefinition.id}`
 		);
 		return false;
@@ -41,7 +49,10 @@ export async function action(
 		return true;
 	} else if (method === "SET") {
 		if (request.payload === undefined) {
-			console.warn(`The payload needs to be specified for this action: ${endpointDefinition.id}`);
+			logger.warn(
+				"LocalStorageEndpoint",
+				`The payload needs to be specified for this action: ${endpointDefinition.id}`
+			);
 			return false;
 		}
 		await localStorage.set(request.id, request.payload);
@@ -55,13 +66,15 @@ export async function requestResponse(
 	request?: { id?: string; query?: string }
 ): Promise<unknown | null> {
 	if (request === undefined) {
-		console.warn(
+		logger.warn(
+			"LocalStorageEndpoint",
 			`A request is required for this request response: ${endpointDefinition.id}. Returning null.`
 		);
 		return null;
 	}
 	if (endpointDefinition.type !== "module") {
-		console.warn(
+		logger.warn(
+			"LocalStorageEndpoint",
 			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 		);
 		return null;
@@ -72,7 +85,10 @@ export async function requestResponse(
 
 	if (method === "GET") {
 		if (request.id === undefined) {
-			console.warn(`An id is required for this request response: ${endpointDefinition.id}. Returning null.`);
+			logger.warn(
+				"LocalStorageEndpoint",
+				`An id is required for this request response: ${endpointDefinition.id}. Returning null`
+			);
 			return null;
 		}
 		return localStorage.get(request.id);

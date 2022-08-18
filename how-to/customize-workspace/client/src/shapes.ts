@@ -6,6 +6,7 @@ import { ConnectionProviderOptions } from "./connection-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
 import { InitOptionsProviderOptions } from "./init-options-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
+import { LoggerProviderOptions } from "./logger-shapes";
 
 interface PlatformProviderOptions {
 	rootUrl: string;
@@ -183,4 +184,5 @@ export interface CustomSettings {
 	platformProvider?: PlatformProviderOptions;
 	storefrontProvider?: StorefrontProviderOptions;
 	themeProvider?: ThemeProviderOptions;
+	loggerProvider?: LoggerProviderOptions;
 }

@@ -5,6 +5,7 @@ import {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./init-options-shapes";
+import { logger } from "./logger-provider";
 const actionListeners: Map<
 	string,
 	Map<string, <T>(requestedAction: string, payload?: T) => Promise<void>>
@@ -23,13 +24,13 @@ async function loadInitOptionsModule<T>(id: string, url: string, data: T): Promi
 			const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
 			const actionHandler = mod.handler;
 			if (actionHandler.init !== undefined) {
-				await actionHandler.init(data);
+				await actionHandler.init(data, logger);
 			}
 			modules[id] = actionHandler;
 		}
 		return true;
 	} catch (err) {
-		console.error(`Init Options: Error loading module ${id} with url ${url}`, err);
+		logger.error("InitOptions", `Error loading module ${id} with url ${url}`, err);
 		return false;
 	}
 }
@@ -39,11 +40,11 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
 		if (typeof initOptions?.payload === "string") {
 			const plainJson = atob(initOptions?.payload);
 			const payload = JSON.parse(plainJson) as T;
-			console.log("Init Options: Extracted payload", payload);
+			logger.info("InitOptions", "Extracted payload", payload);
 			return payload;
 		}
 	} catch (err) {
-		console.error("Init Options: Error decoding payload, it should be Base64 encoded", initOptions, err);
+		logger.error("InitOptions", "Error decoding payload, it should be Base64 encoded", initOptions, err);
 	}
 }
 
@@ -57,14 +58,16 @@ async function notifyActionListeners(initOptions: UserAppConfigArgs) {
 
 		for (let i = 0; i < subscriberIds.length; i++) {
 			const subscriberId = subscriberIds[i];
-			console.log(
-				`Init Options: Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`
+			logger.info(
+				"InitOptions",
+				`Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`
 			);
 			try {
 				await availableListeners.get(subscriberId)(action, payload);
 			} catch (error) {
-				console.error(
-					`Init Options: Error executing action: ${action} against registered listener: ${subscriberId}.`,
+				logger.error(
+					"InitOptions",
+					`Error executing action: ${action} against registered listener: ${subscriberId}.`,
 					error
 				);
 			}
@@ -82,8 +85,9 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 		}
 	}
 	if (listenerId !== undefined) {
-		console.log(
-			`Init Options: Init param has been passed and it has a matching listener (${listenerId}). Passing on init options to listeners`
+		logger.info(
+			"InitOptions",
+			`Init param has been passed and it has a matching listener (${listenerId}). Passing on init options to listeners`
 		);
 		const availableListeners = listeners.get(listenerId);
 		if (availableListeners !== undefined && availableListeners !== null) {
@@ -91,14 +95,16 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 
 			for (let l = 0; l < subscriberIds.length; l++) {
 				const subscriberId = subscriberIds[l];
-				console.log(
-					`Init Options: Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`
+				logger.info(
+					"InitOptions",
+					`Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`
 				);
 				try {
 					await availableListeners.get(subscriberId)(initOptions);
 				} catch (error) {
-					console.error(
-						`Init Options: Error executing handler for parameter: ${listenerId} against registered listener: ${subscriberId}.`,
+					logger.error(
+						"InitOptions",
+						`Error executing handler for parameter: ${listenerId} against registered listener: ${subscriberId}.`,
 						error
 					);
 				}
@@ -109,7 +115,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 
 async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
 	if (userAppConfigArgs !== undefined) {
-		console.log("Init Options: Received during startup:", userAppConfigArgs);
+		logger.info("InitOptions", "Received during startup", userAppConfigArgs);
 		if (userAppConfigArgs[actionParamName] !== undefined) {
 			await notifyActionListeners(userAppConfigArgs);
 		} else {
@@ -120,7 +126,7 @@ async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
 
 async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }) {
 	if (event?.userAppConfigArgs !== undefined) {
-		console.log("Init Options: Received while platform is running:", event.userAppConfigArgs);
+		logger.info("InitOptions", "Received while platform is running", event.userAppConfigArgs);
 		if (event.userAppConfigArgs[actionParamName] !== undefined) {
 			await notifyActionListeners(event.userAppConfigArgs);
 		} else {
@@ -145,11 +151,12 @@ export async function init(options?: InitOptionsProviderOptions) {
 						registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
 							const actionHandler = modules[module.id];
 							if (actionHandler !== undefined) {
-								console.log(`Init Options: Action: ${requestedAction} being handled by module ${module.id}`);
+								logger.info("InitOptions", `Action: ${requestedAction} being handled by module ${module.id}`);
 								await actionHandler.action(requestedAction, payload);
 							} else {
-								console.warn(
-									`Init Options: Unable to retrieve module with id: ${module.id} to execute action: ${requestedAction}`
+								logger.warn(
+									"InitOptions",
+									`Unable to retrieve module with id: ${module.id} to execute action: ${requestedAction}`
 								);
 							}
 						});
@@ -190,7 +197,7 @@ export function registerListener(
 	handler: (initOptions: UserAppConfigArgs) => Promise<void>
 ): string {
 	if (paramName === actionParamName) {
-		console.warn("Init Options: Please use registerActionListener if you wish to listen for an action.");
+		logger.warn("InitOptions", "Please use registerActionListener if you wish to listen for an action");
 		return null;
 	}
 	const key = crypto.randomUUID();

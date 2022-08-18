@@ -1,5 +1,7 @@
+import { Logger } from "./logger-shapes";
+
 export interface InitOptionsHandler {
-	init(data?: unknown): Promise<void>;
+	init(data: unknown, logger: Logger): Promise<void>;
 	action<T>(requestedAction: string, payload?: T): Promise<void>;
 }
 export interface InitOptionsModule {

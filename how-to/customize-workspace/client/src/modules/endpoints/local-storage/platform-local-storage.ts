@@ -1,24 +1,31 @@
-import { IPlatformStorage } from "./platform-storage-shapes";
+import type { Logger } from "../../../logger-shapes";
+import type { IPlatformStorage } from "./platform-storage-shapes";
 
 export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 	private readonly _storageTypeName: string;
 
 	private readonly _storageKey: string;
 
-	constructor(storageId: string, storageType: string) {
+	private readonly _logger: Logger;
+
+	constructor(storageId: string, storageType: string, logger: Logger) {
 		this._storageTypeName = storageType;
 		this._storageKey = `${fin.me.identity.uuid.toLowerCase().replaceAll(" ", "")}-${storageId}`;
+		this._logger = logger;
 	}
 
 	public async get(id: string): Promise<T> {
 		if (id === undefined) {
-			console.error(`No id was specified for getting a ${this._storageTypeName} entry.`);
+			this._logger.error(
+				"PlatformLocalStorage",
+				`No id was specified for getting a ${this._storageTypeName} entry`
+			);
 			return null;
 		}
 		const store = this.getCompleteStore();
 		const savedEntry = store[id];
 		if (savedEntry === undefined || savedEntry === null) {
-			console.warn(`No ${this._storageTypeName} entry was found for id ${id}.`);
+			this._logger.warn("PlatformLocalStorage", `No ${this._storageTypeName} entry was found for id ${id}`);
 			return null;
 		}
 		return savedEntry;
@@ -26,7 +33,10 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 
 	public async set(id: string, entry: T): Promise<void> {
 		if (id === undefined) {
-			console.error(`You need to provide a id for the ${this._storageTypeName} entry you wish to save.`);
+			this._logger.error(
+				"PlatformLocalStorage",
+				`You need to provide a id for the ${this._storageTypeName} entry you wish to save`
+			);
 		} else {
 			const store = this.getCompleteStore();
 
@@ -39,7 +49,7 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 	public async getAll(query?: string): Promise<T[]> {
 		const store = this.getCompleteStore();
 		if (Object.keys(store).length === 0) {
-			console.log(`Storage has no ${this._storageTypeName} entries.`);
+			this._logger.info("PlatformLocalStorage", `Storage has no ${this._storageTypeName} entries`);
 			return [];
 		}
 
@@ -48,7 +58,10 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 
 	public async remove(id: string): Promise<void> {
 		if (id === undefined) {
-			console.error(`An id to clear the saved ${this._storageTypeName} was not provided.`);
+			this._logger.error(
+				"PlatformLocalStorage",
+				`An id to clear the saved ${this._storageTypeName} was not provided`
+			);
 		} else {
 			const store = this.getCompleteStore();
 			const entry = store[id];
@@ -57,7 +70,10 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 				delete store[id];
 				this.setCompleteStore(store);
 			} else {
-				console.error(`You tried to delete a non-existent ${this._storageTypeName} with id ${id}`);
+				this._logger.error(
+					"PlatformLocalStorage",
+					`You tried to delete a non-existent ${this._storageTypeName} with id ${id}`
+				);
 			}
 		}
 	}
@@ -65,7 +81,10 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 	private getCompleteStore() {
 		const store = localStorage.getItem(this._storageKey);
 		if (store === null) {
-			console.log(`Storage has no ${this._storageTypeName} entries. Creating store.`);
+			this._logger.info(
+				"PlatformLocalStorage",
+				`Storage has no ${this._storageTypeName} entries. Creating store`
+			);
 			this.setCompleteStore({});
 			return {};
 		}

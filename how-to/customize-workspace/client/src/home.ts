@@ -19,6 +19,7 @@ import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
+import { logger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 import { share } from "./share";
@@ -212,7 +213,7 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
 			const instructions =
 				currentWorkspaceId === workspaces[i].workspaceId
-					? "This is the currently active workspace. You can use the Browser menu to update/rename this workspace."
+					? "This is the currently active workspace. You can use the Browser menu to update/rename this workspace"
 					: "Use the buttons below to interact with your saved Workspace:";
 			const entry: HomeSearchResult = {
 				key: entryWorkspaceId,
@@ -301,13 +302,15 @@ async function getResults(
 							) {
 								return true;
 							}
-							console.warn(
+							logger.warn(
+								"Home",
 								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
 							);
 						}
 					} else {
-						console.warn(
-							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings."
+						logger.warn(
+							"Home",
+							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
 						);
 					}
 					return false;
@@ -352,15 +355,16 @@ async function getResults(
 }
 
 export async function register(): Promise<RegistrationMetaInfo> {
-	console.log("Initialising home.");
+	logger.info("Home", "Initialising home");
 	const settings = await getSettings();
 	if (
 		settings.homeProvider === undefined ||
 		settings.homeProvider.id === undefined ||
 		settings.homeProvider.title === undefined
 	) {
-		console.warn(
-			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
+		logger.warn(
+			"Home",
+			"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);
 		return null;
 	}
@@ -468,7 +472,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 				return searchResults;
 			}
 		} catch (err) {
-			console.error("Exception while getting search list results", err);
+			logger.error("Home", "Exception while getting search list results", err);
 		}
 	};
 
@@ -527,7 +531,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 						) {
 							await share({ workspaceId: data.workspaceId });
 						} else {
-							console.warn(`Unrecognised action for workspace selection: ${data.workspaceId}`);
+							logger.warn("Home", `Unrecognized action for workspace selection: ${data.workspaceId}`);
 						}
 					}
 				} else if (data.pageId !== undefined) {
@@ -548,14 +552,14 @@ export async function register(): Promise<RegistrationMetaInfo> {
 						const bounds = await getPageBounds(data.pageId, true);
 						await share({ page, bounds });
 					} else {
-						console.warn(`Unknown action triggered on search result for page Id: ${data.pageId}`);
+						logger.warn("Home", `Unknown action triggered on search result for page Id: ${data.pageId}`);
 					}
 				} else {
 					await launch(data);
 				}
 			}
 		} else {
-			console.warn("Unable to execute result without data being passed");
+			logger.warn("Home", "Unable to execute result without data being passed");
 		}
 	};
 
@@ -568,8 +572,9 @@ export async function register(): Promise<RegistrationMetaInfo> {
 	};
 
 	registrationInfo = await Home.register(cliProvider);
+	logger.info("Home", "Version:", registrationInfo);
 	isHomeRegistered = true;
-	console.log("Home configured.");
+	logger.info("Home", "Home provider initialized");
 	return registrationInfo;
 }
 
@@ -586,5 +591,5 @@ export async function deregister() {
 		const settings = await getSettings();
 		return Home.deregister(settings.homeProvider.id);
 	}
-	console.warn("Unable to deregister home as there is an indication it was never registered");
+	logger.warn("Home", "Unable to deregister home as there is an indication it was never registered");
 }

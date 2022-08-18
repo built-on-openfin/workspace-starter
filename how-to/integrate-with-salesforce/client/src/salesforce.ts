@@ -184,7 +184,7 @@ export async function getBatchedResults<T>(batchRequests: SalesforceBatchRequest
 	const batch: SalesforceBatchRequest = { batchRequests, haltOnError: false };
 
 	const response = await sfConn.executeApiRequest<SalesforceBatchResponse>(
-		`/services/data/vXX.X/composite/batch/`,
+		"/services/data/vXX.X/composite/batch/",
 		"POST",
 		batch,
 		{ "Content-Type": "application/json" }
