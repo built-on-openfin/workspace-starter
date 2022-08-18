@@ -8,7 +8,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/v-next-extentions/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -31,7 +31,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/v-next-extentions/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
