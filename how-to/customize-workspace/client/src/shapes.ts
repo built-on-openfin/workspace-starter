@@ -1,6 +1,7 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
+import { ActionsProviderOptions } from "./actions-shapes";
 import { AuthProviderOptions } from "./auth-shapes";
 import { ConnectionProviderOptions } from "./connection-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
@@ -185,4 +186,5 @@ export interface CustomSettings {
 	storefrontProvider?: StorefrontProviderOptions;
 	themeProvider?: ThemeProviderOptions;
 	loggerProvider?: LoggerProviderOptions;
+	actionsProvider?: ActionsProviderOptions;
 }

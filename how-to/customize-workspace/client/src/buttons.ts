@@ -51,7 +51,7 @@ export async function updateToolbarButtons(
 	buttons: ToolbarButton[],
 	buttonId: string,
 	replacementButtonId: string
-) {
+): Promise<ToolbarButton[]> {
 	const index = buttons.findIndex((entry) => {
 		if (
 			entry.type === BrowserButtonType.Custom &&
