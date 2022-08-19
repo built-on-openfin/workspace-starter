@@ -1,0 +1,35 @@
+{
+	"name": "openfin-workspace--use-theming",
+	"version": "9.0.0",
+	"description": "OpenFin Workspace -- Use Theming",
+	"main": "index.js",
+	"scripts": {
+		"dos": "npm --prefix ../common/ run dos",
+		"build": "npm run build-server & npm run build-client",
+		"build-server": "tsc --project ./server",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
+		"start": "npm run server",
+		"client": "npm --prefix ../common/ run client",
+		"secondclient": "npm --prefix ../common/ run client \"http://localhost:8080/manifest.fin.json?$$action=apply-theme&$$payload=eyJwYWxldHRlIjp7ImJyYW5kUHJpbWFyeSI6IiM1MDRDRkYiLCJicmFuZFNlY29uZGFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMSI6IiNGRkZGRkYiLCJiYWNrZ3JvdW5kMiI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMyI6IiNGM0Y1RjgiLCJiYWNrZ3JvdW5kNCI6IiNFQ0VFRjEiLCJiYWNrZ3JvdW5kNSI6IiNERERGRTQiLCJiYWNrZ3JvdW5kNiI6IiNDOUNCRDIiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiNFQ0VFRjEiLCJpbnB1dENvbG9yIjoiIzFFMUYyMyIsImlucHV0UGxhY2Vob2xkZXIiOiIjMzgzQTQwIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjMUUxRjIzIiwidGV4dEhlbHAiOiIjMkYzMTM2IiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSJ9LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==\"",
+		"server": "node ./server/build/index.js",
+		"kill": "npm --prefix ../common/ run kill",
+		"setup": "cd ../../ && npm install && cd how-to/use-theming && npm run build && npm --prefix ../common/ run build",
+		"validate": "npm --prefix ../../ run validate"
+	},
+	"author": "martyn.janes@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/core": "^27.70.8",
+		"@openfin/workspace": "9.0.12"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/node": "^17.0.41",
+		"express": "^4.18.1",
+		"ts-loader": "^9.3.0",
+		"typescript": "^4.7.3",
+		"webpack": "^5.73.0",
+		"webpack-cli": "^4.9.2"
+	}
+}

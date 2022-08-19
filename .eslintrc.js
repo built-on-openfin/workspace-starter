@@ -12,7 +12,8 @@ module.exports = {
 		'plugin:unicorn/recommended'
 	],
 	globals: {
-		fin: 'readonly'
+		fin: 'readonly',
+		OpenFin: 'readonly'
 	},
 	ignorePatterns: [
 		'**/dist/*',

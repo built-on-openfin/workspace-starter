@@ -2,7 +2,9 @@ import { StorefrontFooter, Image } from "@openfin/workspace";
 import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
 import { AuthProviderOptions } from "./auth-shapes";
+import { ConnectionProviderOptions } from "./connection-shapes";
 import { EndpointProviderOptions } from "./endpoint-shapes";
+import { InitOptionsProviderOptions } from "./init-options-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface PlatformProviderOptions {
@@ -33,6 +35,17 @@ interface BrowserProviderOptions {
 	};
 	supportedMenuActions?: string[];
 }
+
+export type BootstrapComponents = "home" | "store" | "dock" | "notifications";
+
+export interface BootstrapOptions {
+	store: boolean;
+	home: boolean;
+	dock: boolean;
+	notifications: boolean;
+	autoShow: BootstrapComponents[];
+}
+
 interface HomeProviderOptions {
 	id: string;
 	title: string;
@@ -40,6 +53,49 @@ interface HomeProviderOptions {
 	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
+}
+
+interface DockButtonBase {
+	tooltip?: string;
+	iconUrl?: string;
+}
+
+interface DockButtonApp extends DockButtonBase {
+	display: "individual" | "group";
+	tags?: string[];
+}
+
+interface DockButtonAction extends DockButtonBase {
+	appId?: string;
+	action?: {
+		id: string;
+		customData: unknown;
+	};
+}
+
+interface DockButtonDropdown extends DockButtonBase {
+	options: {
+		appId?: string;
+		tooltip?: string;
+		action?: {
+			id: string;
+			customData: unknown;
+		};
+	}[];
+}
+
+interface DockProviderOptions {
+	id: string;
+	title: string;
+	icon: string;
+	workspaceComponents?: {
+		hideHomeButton?: boolean;
+		hideWorkspacesButton?: boolean;
+		hideNotificationsButton?: boolean;
+		hideStorefrontButton?: boolean;
+	};
+	apps?: DockButtonApp[];
+	buttons?: (DockButtonAction | DockButtonDropdown)[];
 }
 
 interface ThemeProviderOptions {
@@ -113,15 +169,18 @@ interface StorefrontProviderOptions {
 }
 
 export interface CustomSettings {
-	bootstrap?: { store: boolean; home: boolean; notifications: boolean };
-	authProvider?: AuthProviderOptions;
 	appProvider?: AppProviderOptions;
-	platformProvider?: PlatformProviderOptions;
+	authProvider?: AuthProviderOptions;
+	bootstrap?: BootstrapOptions;
 	browserProvider?: BrowserProviderOptions;
-	themeProvider?: ThemeProviderOptions;
-	homeProvider?: HomeProviderOptions;
-	storefrontProvider?: StorefrontProviderOptions;
-	notificationProvider?: NotificationProviderOptions;
-	integrationProvider?: IntegrationProviderOptions;
+	connectionProvider?: ConnectionProviderOptions;
+	dockProvider?: DockProviderOptions;
 	endpointProvider?: EndpointProviderOptions;
+	homeProvider?: HomeProviderOptions;
+	initOptionsProvider?: InitOptionsProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
+	notificationProvider?: NotificationProviderOptions;
+	platformProvider?: PlatformProviderOptions;
+	storefrontProvider?: StorefrontProviderOptions;
+	themeProvider?: ThemeProviderOptions;
 }

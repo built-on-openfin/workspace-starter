@@ -1,4 +1,3 @@
-import { fin } from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
 
 let windowIdentity: OpenFin.Identity;

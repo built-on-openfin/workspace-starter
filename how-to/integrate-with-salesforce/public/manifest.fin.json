@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
-		"version": "26.102.70.16"
+		"version": "26.102.71.5"
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
@@ -28,8 +28,14 @@
 		"company": "OpenFin",
 		"description": "An way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Salesforce - v8.0",
+		"name": "Integrate With Salesforce - v9.0",
 		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With SalesForce - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
 	},
 	"customSettings": {
 		"consumerKey": "",

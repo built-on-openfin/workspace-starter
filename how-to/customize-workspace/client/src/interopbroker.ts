@@ -1,8 +1,8 @@
-import OpenFin, { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
 import { launchSnapshot, launchView } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 
 const NO_APPS_FOUND = "NoAppsFound";
@@ -19,16 +19,16 @@ export function interopOverride(
 			console.log("Launching app with intent.");
 
 			if (
-				app.manifestType !== "view" &&
-				app.manifestType !== "inline-view" &&
-				app.manifestType !== "snapshot"
+				app.manifestType !== manifestTypes.view.id &&
+				app.manifestType !== manifestTypes.inlineView.id &&
+				app.manifestType !== manifestTypes.snapshot.id
 			) {
 				// optional logic show a prompt to the user to let them know
 				console.warn("Unable to raise intent against app as only view/snapshot based apps are supported.");
 				return null;
 			}
 
-			if (app.manifestType === "view" || app.manifestType === "inline-view") {
+			if (app.manifestType === manifestTypes.view.id || app.manifestType === manifestTypes.inlineView.id) {
 				console.log(`The supporting app is a view (${app.manifestType})`);
 
 				const identity = await launchView(app);
@@ -40,7 +40,7 @@ export function interopOverride(
 				await super.setIntentTarget(intent, identity);
 			}
 
-			if (app.manifestType === "snapshot") {
+			if (app.manifestType === manifestTypes.snapshot.id) {
 				console.log("The supporting app is a view.");
 
 				const identities = await launchSnapshot(app);

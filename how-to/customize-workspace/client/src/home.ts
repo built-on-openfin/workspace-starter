@@ -11,13 +11,15 @@ import {
 	HomeDispatchedSearchResult,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment
+	TemplateFragment,
+	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
-import { getApps } from "./apps";
+import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 import { share } from "./share";
 import { CURRENT_WORKSPACE_TEMPLATE, PAGE_TEMPLATE, WORKSPACE_TEMPLATE } from "./template";
@@ -33,6 +35,7 @@ const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 const HOME_TAG_FILTERS = "tags";
 
 let isHomeRegistered = false;
+let registrationInfo: RegistrationMetaInfo;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
@@ -72,42 +75,49 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 			};
 
 			switch (apps[i].manifestType) {
-				case "view":
-				case "inline-view": {
-					entry.label = "View";
+				case manifestTypes.view.id:
+				case manifestTypes.inlineView.id: {
+					entry.label = manifestTypes.view.label;
 					break;
 				}
-				case "window":
-				case "inline-window": {
-					entry.label = "Window";
+				case manifestTypes.window.id:
+				case manifestTypes.inlineWindow.id: {
+					entry.label = manifestTypes.window.label;
 					break;
 				}
-				case "desktop-browser": {
-					entry.label = "Desktop Browser Url";
+				case manifestTypes.desktopBrowser.id: {
+					entry.label = manifestTypes.desktopBrowser.label;
 					break;
 				}
-				case "snapshot": {
-					entry.label = "Snapshot";
+				case manifestTypes.snapshot.id: {
+					entry.label = manifestTypes.snapshot.label;
 					action.name = "Launch Snapshot";
 					break;
 				}
-				case "manifest": {
-					entry.label = "App";
+				case manifestTypes.manifest.id: {
+					entry.label = manifestTypes.manifest.label;
 					action.name = "Launch App";
 					break;
 				}
-				case "external": {
+				case manifestTypes.external.id: {
 					action.name = "Launch Native App";
-					entry.label = "Native App";
+					entry.label = manifestTypes.external.label;
+					break;
+				}
+				case manifestTypes.endpoint.id: {
+					action.name = "Launch";
+					entry.label = manifestTypes.endpoint.label;
+					break;
+				}
+				case manifestTypes.connection.id: {
+					action.name = "Launch Connected App";
+					entry.label = manifestTypes.connection.label;
 					break;
 				}
 			}
 
 			entry.actions = [action];
-
-			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-				entry.icon = apps[i].icons[0].src;
-			}
+			entry.icon = getAppIcon(apps[i]);
 
 			if (apps[i].description !== undefined) {
 				entry.description = apps[i].description;
@@ -341,7 +351,7 @@ async function getResults(
 	};
 }
 
-export async function register() {
+export async function register(): Promise<RegistrationMetaInfo> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (
@@ -352,7 +362,7 @@ export async function register() {
 		console.warn(
 			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);
-		return;
+		return null;
 	}
 
 	const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
@@ -557,9 +567,10 @@ export async function register() {
 		onResultDispatch: onSelection
 	};
 
-	await Home.register(cliProvider);
+	registrationInfo = await Home.register(cliProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
+	return registrationInfo;
 }
 
 export async function show() {

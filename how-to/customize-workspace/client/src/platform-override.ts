@@ -13,16 +13,18 @@ import {
 import { deletePageBounds, savePageBounds } from "./browser";
 import * as endpointProvider from "./endpoint";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
+import { decorateSnapshot, applyClientSnapshot } from "./snapshot-source";
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {
 		public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
 			const snapshot = await super.getSnapshot(...args);
-			return snapshot;
+
+			return decorateSnapshot(snapshot);
 		}
 
 		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
-			await super.applySnapshot(...args);
+			await Promise.all([super.applySnapshot(...args), applyClientSnapshot(args[0].snapshot)]);
 		}
 
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {

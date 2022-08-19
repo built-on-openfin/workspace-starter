@@ -8,10 +8,11 @@ import * as appProvider from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { getDefaultWindowOptions } from "./browser";
+import * as connectionProvider from "./connections";
 import * as endpointProvider from "./endpoint";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
-import { getSettings } from "./settings";
+import { getSettings, isValid as isSettingsValid } from "./settings";
 import { CustomSettings } from "./shapes";
 import { getThemes } from "./themes";
 
@@ -47,6 +48,7 @@ async function manageAuthFlow() {
 async function setupPlatform(settings: CustomSettings) {
 	console.log("Initializing Core Services");
 	await endpointProvider.init(settings?.endpointProvider);
+	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 
 	console.log("Initializing platform");
@@ -73,8 +75,14 @@ async function setupPlatform(settings: CustomSettings) {
 }
 
 export async function init() {
-	console.log("Initializing Auth Check");
+	if (!(await isSettingsValid())) {
+		console.error(
+			"The application cannot startup as the source of the setting used to bootstrap this application is not from a valid host. Please update the the list or this logic if required."
+		);
+		return;
+	}
 	const settings = await getSettings();
+	console.log("Initializing Auth Check");
 	await authProvider.init(settings.authProvider);
 	// in a real application you would feed in your own logger.
 	if (isAuthenticationEnabled()) {

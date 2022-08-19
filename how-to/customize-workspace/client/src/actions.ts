@@ -3,13 +3,18 @@ import {
 	CustomActionCallerType,
 	CustomActionPayload,
 	CustomActionsMap,
+	CustomButtonActionPayload,
+	CustomDropdownItemActionPayload,
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
+import { getApp } from "./apps";
 import * as authProvider from "./auth";
-import { getDefaultWindowOptions } from "./browser";
+import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
+import { launch } from "./launch";
+import { manifestTypes } from "./manifest-types";
 import { showShareOptions } from "./share";
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
@@ -39,7 +44,9 @@ export const ACTION_IDS = {
 	share: "share",
 	changeOpacity: "change-opacity",
 	restoreOpacity: "restore-opacity",
-	logoutAndQuit: "logout-and-quit"
+	logoutAndQuit: "logout-and-quit",
+	launchApp: "launch-app",
+	launchView: "launch-view"
 };
 
 export async function getActions(): Promise<CustomActionsMap> {
@@ -82,9 +89,9 @@ export async function getActions(): Promise<CustomActionsMap> {
 						name,
 						title: info.title,
 						description: info.title,
-						manifestType: "inline-view",
+						manifestType: manifestTypes.inlineView.id,
 						manifest,
-						tags: ["view"],
+						tags: [manifestTypes.view.id],
 						icons,
 						images: [],
 						publisher: "",
@@ -162,7 +169,7 @@ export async function getActions(): Promise<CustomActionsMap> {
 
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 			const platform = getCurrentSync();
-			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
+			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
 			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
 			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
@@ -248,6 +255,35 @@ export async function getActions(): Promise<CustomActionsMap> {
 
 	actionMap[ACTION_IDS.logoutAndQuit] = async () => {
 		await authProvider.logout();
+	};
+
+	actionMap[ACTION_IDS.launchApp] = async (
+		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
+	) => {
+		if (payload.customData?.appId) {
+			const app = await getApp(payload.customData.appId as string);
+			if (app) {
+				await launch(app);
+			} else {
+				console.error(
+					`Unable to find app with id '${
+						payload.customData.appId
+					}' in call to launchApp action from source '${payload.customData?.source ?? "unknown source"}'`
+				);
+			}
+		} else {
+			console.error(`No appId specified in payload.customData in launchApp action`);
+		}
+	};
+
+	actionMap[ACTION_IDS.launchView] = async (
+		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
+	) => {
+		if (payload.customData?.url) {
+			await launchView(payload.customData?.url as string);
+		} else {
+			console.error(`No url specified in payload.customData in launchView action`);
+		}
 	};
 
 	return actionMap;

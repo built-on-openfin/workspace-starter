@@ -1,6 +1,8 @@
-import { fin } from "@openfin/core";
 import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import { launchConnectedApp } from "./connections";
+import * as endpointProvider from "./endpoint";
+import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 
 async function getViewIdentities(name: string, uuid: string) {
@@ -60,13 +62,18 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 		return null;
 	}
 
-	if (windowApp.manifestType !== "window" && windowApp.manifestType !== "inline-window") {
-		console.warn("The app passed was not of manifestType window or inline-window.");
+	if (
+		windowApp.manifestType !== manifestTypes.window.id &&
+		windowApp.manifestType !== manifestTypes.inlineWindow.id
+	) {
+		console.warn(
+			`The app passed was not of manifestType ${manifestTypes.window.id} or ${manifestTypes.inlineWindow.id}.`
+		);
 		return null;
 	}
 	let manifest: OpenFin.WindowOptions;
 
-	if (windowApp.manifestType === "window") {
+	if (windowApp.manifestType === manifestTypes.window.id) {
 		const manifestResponse = await fetch(windowApp.manifest);
 		manifest = await manifestResponse.json();
 	} else {
@@ -105,17 +112,22 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 		return null;
 	}
 
-	if (viewApp.manifestType !== "view" && viewApp.manifestType !== "inline-view") {
-		console.warn("The app passed was not of manifestType view or inline-view.");
+	if (
+		viewApp.manifestType !== manifestTypes.view.id &&
+		viewApp.manifestType !== manifestTypes.inlineView.id
+	) {
+		console.warn(
+			`The app passed was not of manifestType ${manifestTypes.view.id} or ${manifestTypes.inlineView.id}.`
+		);
 		return null;
 	}
 	let manifest: OpenFin.ViewOptions;
 
-	if (viewApp.manifestType === "view") {
+	if (viewApp.manifestType === manifestTypes.view.id) {
 		const manifestResponse = await fetch(viewApp.manifest);
 		manifest = await manifestResponse.json();
 	} else {
-		// conversion because of manifestType. In most usecases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
+		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
 		// for passing the manifest inline
 		manifest = viewApp.manifest as unknown as OpenFin.ViewOptions;
 	}
@@ -148,8 +160,8 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 		return null;
 	}
 
-	if (snapshotApp.manifestType !== "snapshot") {
-		console.warn("The app passed was not of manifestType snapshot.");
+	if (snapshotApp.manifestType !== manifestTypes.snapshot.id) {
+		console.warn(`The app passed was not of manifestType ${manifestTypes.snapshot.id}.`);
 		return null;
 	}
 
@@ -211,7 +223,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 export async function launch(appEntry: App) {
 	try {
 		console.log("Application launch requested:", appEntry);
-		if (appEntry.manifestType === "external") {
+		if (appEntry.manifestType === manifestTypes.external.id) {
 			const settings = await getSettings();
 			const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
 
@@ -234,12 +246,33 @@ export async function launch(appEntry: App) {
 
 				await fin.System.launchExternalProcess(options);
 			}
-		} else if (appEntry.manifestType === "inline-view") {
+		} else if (appEntry.manifestType === manifestTypes.inlineView.id) {
 			await launchView(appEntry);
-		} else if (appEntry.manifestType === "window" || appEntry.manifestType === "inline-window") {
+		} else if (
+			appEntry.manifestType === manifestTypes.window.id ||
+			appEntry.manifestType === manifestTypes.inlineWindow.id
+		) {
 			await launchWindow(appEntry);
-		} else if (appEntry.manifestType === "desktop-browser") {
+		} else if (appEntry.manifestType === manifestTypes.desktopBrowser.id) {
 			await fin.System.openUrlWithBrowser(appEntry.manifest);
+		} else if (appEntry.manifestType === manifestTypes.endpoint.id) {
+			if (endpointProvider.hasEndpoint(appEntry.manifest)) {
+				const launched = await endpointProvider.action(appEntry.manifest, { payload: appEntry });
+				if (!launched) {
+					console.warn(
+						`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`
+					);
+				}
+			} else {
+				console.warn(
+					`App with id: ${appEntry.appId} could not be launched as it is of manifestType: ${appEntry.manifestType} and the endpoint: ${appEntry.manifest} is not available.`
+				);
+			}
+		} else if (appEntry.manifestType === manifestTypes.connection.id) {
+			console.log(
+				`An app defined by a connection (connected app) has been selected. Passing selection to connection.`
+			);
+			await launchConnectedApp(appEntry);
 		} else {
 			const platform = getCurrentSync();
 			await platform.launchApp({ app: appEntry });

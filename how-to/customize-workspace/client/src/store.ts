@@ -7,7 +7,8 @@ import {
 	StorefrontProvider,
 	StorefrontTemplate,
 	StorefrontNavigationItem,
-	StorefrontDetailedNavigationItem
+	StorefrontDetailedNavigationItem,
+	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
@@ -15,17 +16,21 @@ import { getSettings } from "./settings";
 import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
 
 let isStoreRegistered = false;
+let registrationInfo: RegistrationMetaInfo;
 
-export async function register() {
-	console.log("Initialising the storefront provider.");
+export async function register(): Promise<RegistrationMetaInfo> {
+	console.log("Initializing the storefront provider.");
 	const provider = await getStoreProvider();
 	if (provider !== null) {
 		try {
-			await Storefront.register(provider);
+			registrationInfo = await Storefront.register(provider);
+			console.log(`store version:`, registrationInfo);
 			isStoreRegistered = true;
-			console.log("Storefront provider initialised.");
+			console.log("Storefront provider initialized.");
+			return registrationInfo;
 		} catch (err) {
 			console.error("An error was encountered while trying to register the content store provider", err);
+			return null;
 		}
 	}
 }
