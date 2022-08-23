@@ -14,10 +14,10 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
-const logger = createGroupLogger("Integrations");
+const logger = createLogger("Integrations");
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -125,7 +125,7 @@ async function initializeIntegration(integration: Integration<unknown>) {
 			include: true
 		});
 		if (homeIntegration.register) {
-			await homeIntegration.register(passedIntegrationManager, integration, createGroupLogger);
+			await homeIntegration.register(passedIntegrationManager, integration, createLogger);
 		}
 	} else {
 		logger.error("Missing module in integration providers", integration.id);

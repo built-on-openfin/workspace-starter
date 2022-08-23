@@ -1,11 +1,11 @@
 import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
 import { ACTION_IDS } from "./actions";
 import { getApp, getAppIcon, getAppsByTag } from "./apps";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { BootstrapOptions } from "./shapes";
 
-const logger = createGroupLogger("Dock");
+const logger = createLogger("Dock");
 
 let isDockRegistered = false;
 

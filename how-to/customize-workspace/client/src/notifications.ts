@@ -2,10 +2,10 @@ import {
 	register as registerPlatform,
 	deregister as deregisterPlatform
 } from "@openfin/workspace/notifications";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 
-const logger = createGroupLogger("Notifications");
+const logger = createLogger("Notifications");
 
 let notificationsRegistered = false;
 

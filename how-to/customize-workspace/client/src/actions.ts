@@ -14,11 +14,11 @@ import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
 import { launch } from "./launch";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { showShareOptions } from "./share";
 
-const logger = createGroupLogger("Actions");
+const logger = createLogger("Actions");
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
 	const currentWindow = await view.getCurrentWindow();

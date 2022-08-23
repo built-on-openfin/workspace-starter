@@ -1,11 +1,11 @@
 import { App } from "@openfin/workspace";
 import { getConnectedApps } from "./connections";
 import { EndpointProvider } from "./endpoint-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { AppProviderOptions } from "./shapes";
 
-const logger = createGroupLogger("Apps");
+const logger = createLogger("Apps");
 
 let cachedApps: App[];
 let endpoints: EndpointProvider;

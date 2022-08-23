@@ -2,11 +2,11 @@ import { App } from "@openfin/workspace";
 import { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
 import { launchSnapshot, launchView } from "./launch";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 
-const logger = createGroupLogger("InteropBroker");
+const logger = createLogger("InteropBroker");
 
 const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";

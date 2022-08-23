@@ -1,10 +1,10 @@
 import type { EndpointDefinition } from "../../../endpoint-shapes";
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 
-let logger: GroupLogger;
+let logger: Logger;
 
-export async function init(options: unknown, groupLoggerCreator: GroupLoggerCreator): Promise<void> {
-	logger = groupLoggerCreator("ChannelEndpoint");
+export async function init(options: unknown, loggerCreator: LoggerCreator): Promise<void> {
+	logger = loggerCreator("ChannelEndpoint");
 	logger.info("Was passed the following options", options);
 }
 

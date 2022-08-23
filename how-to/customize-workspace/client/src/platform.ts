@@ -11,13 +11,13 @@ import { getDefaultWindowOptions } from "./browser";
 import * as connectionProvider from "./connections";
 import * as endpointProvider from "./endpoint";
 import { interopOverride } from "./interopbroker";
-import { createGroupLogger, loggerProvider } from "./logger-provider";
+import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
 import { getSettings, isValid as isSettingsValid } from "./settings";
 import { CustomSettings } from "./shapes";
 import { getThemes } from "./themes";
 
-const logger = createGroupLogger("Platform");
+const logger = createLogger("Platform");
 
 let platformInitialized = false;
 

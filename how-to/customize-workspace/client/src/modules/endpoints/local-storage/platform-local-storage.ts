@@ -1,4 +1,4 @@
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 import type { IPlatformStorage } from "./platform-storage-shapes";
 
 export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
@@ -6,12 +6,12 @@ export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
 
 	private readonly _storageKey: string;
 
-	private readonly _logger: GroupLogger;
+	private readonly _logger: Logger;
 
-	constructor(storageId: string, storageType: string, groupLoggerCreator: GroupLoggerCreator) {
+	constructor(storageId: string, storageType: string, loggerCreator: LoggerCreator) {
 		this._storageTypeName = storageType;
 		this._storageKey = `${fin.me.identity.uuid.toLowerCase().replaceAll(" ", "")}-${storageId}`;
-		this._logger = groupLoggerCreator("PlatformLocalStorage");
+		this._logger = loggerCreator("PlatformLocalStorage");
 	}
 
 	public async get(id: string): Promise<T> {

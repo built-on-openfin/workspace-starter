@@ -1,9 +1,9 @@
 import { CustomThemes } from "@openfin/workspace-platform";
 import { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 
-const logger = createGroupLogger("Themes");
+const logger = createLogger("Themes");
 
 const DEFAULT_PALETTES = {
 	light: {

@@ -1,4 +1,4 @@
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 
 interface RaiseIntentPayload {
 	name: string;
@@ -10,7 +10,7 @@ interface ShareContextPayload {
 	context: OpenFin.Context;
 }
 
-let logger: GroupLogger;
+let logger: Logger;
 
 async function raiseIntent(payload: RaiseIntentPayload) {
 	const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
@@ -35,8 +35,8 @@ async function shareContext(payload: ShareContextPayload) {
 	}
 }
 
-export async function init(options: unknown, groupLoggerCreator: GroupLoggerCreator) {
-	logger = groupLoggerCreator("InitOptionsInteropHandler");
+export async function init(options: unknown, loggerCreator: LoggerCreator) {
+	logger = loggerCreator("InitOptionsInteropHandler");
 	// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
 	logger.info("The handler has been loaded");
 }

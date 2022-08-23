@@ -3,11 +3,11 @@ import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/
 import { launchPage } from "./browser";
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 
-const logger = createGroupLogger("Share");
+const logger = createLogger("Share");
 
 let shareRegistered = false;
 let initOptionsListenerId: string;

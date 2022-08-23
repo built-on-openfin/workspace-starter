@@ -12,11 +12,11 @@ import {
 } from "@openfin/workspace-platform";
 import { deletePageBounds, savePageBounds } from "./browser";
 import * as endpointProvider from "./endpoint";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
 import { applyClientSnapshot, decorateSnapshot } from "./snapshot-source";
 
-const logger = createGroupLogger("PlatformOverride");
+const logger = createLogger("PlatformOverride");
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {

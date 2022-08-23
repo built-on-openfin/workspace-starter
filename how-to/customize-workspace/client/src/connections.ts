@@ -5,10 +5,10 @@ import {
 	ConnectionProviderOptions,
 	SnapshotSourceConnection
 } from "./connection-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 
-const logger = createGroupLogger("Connections");
+const logger = createLogger("Connections");
 
 let connectionService: OpenFin.ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};

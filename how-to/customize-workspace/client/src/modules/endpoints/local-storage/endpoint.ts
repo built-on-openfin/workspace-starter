@@ -1,10 +1,10 @@
 import type { EndpointDefinition } from "../../../endpoint-shapes";
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import type { IPlatformStorage } from "./platform-storage-shapes";
 
-let logger: GroupLogger;
-let loggerCreator: GroupLoggerCreator;
+let logger: Logger;
+let loggerCreator: LoggerCreator;
 
 const storage: { [key: string]: IPlatformStorage<unknown> } = {};
 
@@ -17,9 +17,9 @@ function getStorage<T>(id: string): IPlatformStorage<T> {
 	return localStorage;
 }
 
-export async function init(options: unknown, groupLoggerCreator: GroupLoggerCreator): Promise<void> {
-	loggerCreator = groupLoggerCreator;
-	logger = groupLoggerCreator("LocalStorageEndpoint");
+export async function init(options: unknown, logCreator: LoggerCreator): Promise<void> {
+	loggerCreator = logCreator;
+	logger = loggerCreator("LocalStorageEndpoint");
 	logger.info("Was passed the following options", options);
 }
 

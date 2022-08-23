@@ -6,9 +6,9 @@ import {
 	EndpointModule,
 	EndpointProviderOptions
 } from "./endpoint-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 
-const logger = createGroupLogger("Endpoint");
+const logger = createLogger("Endpoint");
 
 let endpointDefinitions: EndpointDefinition<unknown>[] = [];
 let moduleDefinitions: EndpointModuleDefinition[] = [];
@@ -31,7 +31,7 @@ async function getModuleEndpoint(moduleId: string): Promise<Endpoint> {
 	try {
 		const mod: EndpointModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
 		const endpoint = mod.endpoint;
-		await endpoint.init(moduleDefinition.data, createGroupLogger);
+		await endpoint.init(moduleDefinition.data, createLogger);
 		availableEndpoints[moduleDefinition.id] = endpoint;
 		return endpoint;
 	} catch (err) {

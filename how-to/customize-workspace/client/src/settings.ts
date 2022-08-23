@@ -1,8 +1,8 @@
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;
-const logger = createGroupLogger("Settings");
+const logger = createLogger("Settings");
 
 async function getConfiguredSettings(): Promise<CustomSettings> {
 	const app = await fin.Application.getCurrent();

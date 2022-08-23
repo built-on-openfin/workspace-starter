@@ -5,9 +5,9 @@ import {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./init-options-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 
-const logger = createGroupLogger("InitOptions");
+const logger = createLogger("InitOptions");
 
 const actionListeners: Map<
 	string,
@@ -27,7 +27,7 @@ async function loadInitOptionsModule<T>(id: string, url: string, data: T): Promi
 			const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
 			const actionHandler = mod.handler;
 			if (actionHandler.init !== undefined) {
-				await actionHandler.init(data, createGroupLogger);
+				await actionHandler.init(data, createLogger);
 			}
 			modules[id] = actionHandler;
 		}
