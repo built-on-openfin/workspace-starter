@@ -30,25 +30,27 @@ import {
 	show as showStore
 } from "./store";
 
+const LOGGER_GROUP = "Bootstrapper";
+
 let bootstrapOptions: BootstrapOptions;
 
 async function onReAuthenticationRequired() {
 	logger.info(
-		"Bootstrapper",
+		LOGGER_GROUP,
 		"The platform has detected that authentication is required (might be expired session)"
 	);
-	logger.info("Bootstrapper", "At this stage the platform can decide how to proceed:");
-	logger.info("Bootstrapper", " - Hide all visible windows?");
+	logger.info(LOGGER_GROUP, "At this stage the platform can decide how to proceed:");
+	logger.info(LOGGER_GROUP, " - Hide all visible windows?");
 	logger.info(
-		"Bootstrapper",
+		LOGGER_GROUP,
 		" - Disable results from showing in home by having the home provider check to see if authentication is required before showing results?"
 	);
 	logger.info(
-		"Bootstrapper",
+		LOGGER_GROUP,
 		" - Have Store check if authentication is required before returning store entries?"
 	);
-	logger.info("Bootstrapper", " - Have launch functions not launch if authentication is required?");
-	logger.info("Bootstrapper", " - If an intent is raised do not action it if authentication is required?");
+	logger.info(LOGGER_GROUP, " - Have launch functions not launch if authentication is required?");
+	logger.info(LOGGER_GROUP, " - If an intent is raised do not action it if authentication is required?");
 	if (bootstrapOptions.home) {
 		await hideHome();
 	}
@@ -64,7 +66,7 @@ async function onReAuthenticationRequired() {
 export async function init() {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
 	// gather reference data etc before starting workspace and interacting with it.
-	logger.info("Bootstrapper", "Initializing the bootstrapper");
+	logger.info(LOGGER_GROUP, "Initializing the bootstrapper");
 	const settings = await getSettings();
 	bootstrapOptions = { ...settings.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
@@ -156,7 +158,7 @@ export async function init() {
 	}
 
 	if (isAuthenticationEnabled()) {
-		logger.info("Bootstrapper", "Setting up listeners for authentication events");
+		logger.info(LOGGER_GROUP, "Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
 		authProvider.subscribe("logged-in", async () => {

@@ -5,6 +5,8 @@ import { logger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { BootstrapOptions } from "./shapes";
 
+const LOGGER_GROUP = "Dock";
+
 let isDockRegistered = false;
 
 export async function register(bootstrapOptions: BootstrapOptions): Promise<RegistrationMetaInfo> {
@@ -15,7 +17,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 	if (Array.isArray(settings.dockProvider.apps)) {
 		for (const appButton of settings.dockProvider.apps) {
 			if (!Array.isArray(appButton.tags)) {
-				logger.error("Dock", "You must specify an array for the tags parameter for an DockAppButton");
+				logger.error(LOGGER_GROUP, "You must specify an array for the tags parameter for an DockAppButton");
 			} else {
 				const dockApps = await getAppsByTag(appButton.tags);
 
@@ -35,7 +37,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					}
 				} else if (appButton.display === "group") {
 					if (!appButton.tooltip) {
-						logger.error("Dock", "You must specify the tooltip for a grouped DockAppButton");
+						logger.error(LOGGER_GROUP, "You must specify the tooltip for a grouped DockAppButton");
 					}
 					let iconUrl = appButton.iconUrl;
 					const options = [];
@@ -75,7 +77,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 			// Is this a dock drop down
 			if ("options" in dockButton) {
 				if (!dockButton.tooltip || !dockButton.iconUrl) {
-					logger.error("Dock", "You must specify the tooltip and iconUrl for a DockButtonDropdown");
+					logger.error(LOGGER_GROUP, "You must specify the tooltip and iconUrl for a DockButtonDropdown");
 				} else {
 					const options = [];
 
@@ -165,9 +167,9 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 		buttons
 	});
 
-	logger.info("Dock", "Version:", registrationInfo);
+	logger.info(LOGGER_GROUP, "Version:", registrationInfo);
 	isDockRegistered = true;
-	logger.info("Dock", "Dock provider initialized");
+	logger.info(LOGGER_GROUP, "Dock provider initialized");
 
 	return registrationInfo;
 }
@@ -184,5 +186,5 @@ export async function deregister() {
 	if (isDockRegistered) {
 		return Dock.deregister();
 	}
-	logger.warn("Dock", "Unable to deregister home as there is an indication it was never registered");
+	logger.warn(LOGGER_GROUP, "Unable to deregister home as there is an indication it was never registered");
 }
