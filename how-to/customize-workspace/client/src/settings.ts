@@ -1,3 +1,5 @@
+import { AuthProviderOptions } from "./auth-shapes";
+import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { CustomSettings } from "./shapes";
 
@@ -7,19 +9,29 @@ const logger = createLogger("Settings");
 async function getConfiguredSettings(): Promise<CustomSettings> {
 	const app = await fin.Application.getCurrent();
 	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
-
+	let manifestSettings = {};
 	if (manifest.customSettings !== undefined) {
-		settings = manifest.customSettings;
-	} else {
-		settings = {};
+		manifestSettings = manifest.customSettings;
 	}
 
-	return settings;
+	return manifestSettings;
 }
 
 export async function getSettings(): Promise<CustomSettings> {
 	if (settings === undefined) {
-		settings = await getConfiguredSettings();
+		const manifestSettings = await getConfiguredSettings();
+		await endpointProvider.init(manifestSettings.endpointProvider);
+		if (endpointProvider.hasEndpoint("platform-settings")) {
+			logger.info("platform-settings endpoint specified. Fetching platform settings.");
+			const serverSettings = await endpointProvider.requestResponse<unknown, CustomSettings>(
+				"platform-settings"
+			);
+			logger.info("Merging platform-settings over manifest settings.");
+			settings = { ...manifestSettings, ...serverSettings };
+		} else {
+			logger.info("Settings based on manifest settings.");
+			settings = manifestSettings;
+		}
 	}
 	return settings;
 }
@@ -32,15 +44,10 @@ export async function isValid() {
 	logger.info(`Source of initial settings: ${manifestUrl}`);
 	// this check could be removed or it could be dynamically generated as part of the code or passed made available from the server
 	// that hosts the code. It couldn't be from the manifest itself as it is validating where the manifest is coming from.
-	const validHosts = [
-		"localhost",
-		"127.0.0.1",
-		"built-on-openfin.github.io",
-		"openfin.github.io",
-		"samples.openfin.co",
-		"cdn.openfin.co"
-	];
+
 	const url = new URL(manifestUrl);
+	const sourceUrl = new URL(location.href);
+	const validHosts = ["localhost", "127.0.0.1", sourceUrl.hostname];
 	logger.info(`Checking host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
 	const isValidHost = validHosts.includes(url.hostname);
 	if (isValidHost) {
@@ -51,4 +58,9 @@ export async function isValid() {
 		);
 	}
 	return isValidHost;
+}
+
+export async function getAuthSettings(): Promise<AuthProviderOptions> {
+	const manifestSettings = await getConfiguredSettings();
+	return manifestSettings?.authProvider;
 }
