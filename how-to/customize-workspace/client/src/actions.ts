@@ -61,9 +61,12 @@ export async function getActions(actionsProviderOptions?: ActionsProviderOptions
 				try {
 					const mod: ActionsModule = await import(/* webpackIgnore: true */ module.url);
 					if (mod.actions.initialize) {
-						await mod.actions.initialize({
-							updateToolbarButtons
-						});
+						await mod.actions.initialize(
+							{
+								updateToolbarButtons
+							},
+							createGroupLogger
+						);
 					}
 					const modActions = await mod.actions.get(platform);
 					actionMap = {
@@ -71,7 +74,7 @@ export async function getActions(actionsProviderOptions?: ActionsProviderOptions
 						...modActions
 					};
 				} catch (err) {
-					this.error("Actions", `Error loading module ${module.id} with url ${module.url}`, err);
+					this.error(`Error loading module ${module.id} with url ${module.url}`, err);
 				}
 			}
 		}
