@@ -14,10 +14,10 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
-const LOGGER_GROUP = "Integrations";
+const logger = createGroupLogger("Integrations");
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -107,14 +107,14 @@ async function createResult(
 
 async function initializeIntegration(integration: Integration<unknown>) {
 	if (!passedIntegrationManager) {
-		logger.error(LOGGER_GROUP, "IntegrationManager is not available, make sure your have called register");
+		logger.error("IntegrationManager is not available, make sure your have called register");
 	}
 	if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
 		try {
 			const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
 			knownIntegrationProviders[integration.id] = mod.integration;
 		} catch (err) {
-			logger.error(LOGGER_GROUP, `Error loading module ${integration.moduleUrl}`, err);
+			logger.error(`Error loading module ${integration.moduleUrl}`, err);
 		}
 	}
 	if (knownIntegrationProviders[integration.id]) {
@@ -125,16 +125,16 @@ async function initializeIntegration(integration: Integration<unknown>) {
 			include: true
 		});
 		if (homeIntegration.register) {
-			await homeIntegration.register(passedIntegrationManager, integration, logger);
+			await homeIntegration.register(passedIntegrationManager, integration, createGroupLogger);
 		}
 	} else {
-		logger.error(LOGGER_GROUP, "Missing module in integration providers", integration.id);
+		logger.error("Missing module in integration providers", integration.id);
 	}
 }
 
 export async function getManagementResults(): Promise<HomeSearchResponse> {
 	if (!passedIntegrationProvider) {
-		logger.error(LOGGER_GROUP, "IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const homeResponse: HomeSearchResponse = {
@@ -188,7 +188,6 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 		};
 		homeResponse.results.push(noEntries);
 		logger.error(
-			LOGGER_GROUP,
 			"Integration management is enabled but you have no integrations listed in your settings or none of them are enabled"
 		);
 	}
@@ -205,12 +204,9 @@ async function setPreference(integrationId: string, include: boolean) {
 			{ id: integrationId, payload: { include } }
 		);
 		if (success) {
-			logger.info(LOGGER_GROUP, `Saved integration: ${integrationId} preference. Include: ${include}`);
+			logger.info(`Saved integration: ${integrationId} preference. Include: ${include}`);
 		} else {
-			logger.info(
-				LOGGER_GROUP,
-				`Unable to save integration: ${integrationId} preference. Include: ${include}`
-			);
+			logger.info(`Unable to save integration: ${integrationId} preference. Include: ${include}`);
 		}
 	}
 }
@@ -224,9 +220,9 @@ async function getPreference(integrationId: string): Promise<{ include: boolean 
 			{ id: integrationId }
 		);
 		if (preference !== undefined && preference !== null) {
-			logger.info(LOGGER_GROUP, `Retrieved preference for integration: ${integrationId}`);
+			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
-			logger.info(LOGGER_GROUP, `Unable to get preference for integration: ${integrationId}`);
+			logger.info(`Unable to get preference for integration: ${integrationId}`);
 		}
 		return preference;
 	}
@@ -239,7 +235,7 @@ async function updateIntegrationStatus(
 	include: boolean
 ): Promise<boolean> {
 	if (!passedIntegrationProvider) {
-		logger.error(LOGGER_GROUP, "IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const knownIntegration = knownIntegrationProviders[integrationId];
@@ -258,7 +254,7 @@ async function updateIntegrationStatus(
 			await setPreference(integration.id, !include);
 			return true;
 		}
-		logger.warn(LOGGER_GROUP, `Unable to find specified integration: ${integrationId} in settings`);
+		logger.warn(`Unable to find specified integration: ${integrationId} in settings`);
 		return false;
 	}
 	const index = homeIntegrations.findIndex((entry) => entry.integration.id === integrationId);
@@ -333,7 +329,7 @@ export async function getSearchResults(
 	lastResponse: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
 	if (!passedIntegrationProvider) {
-		logger.error(LOGGER_GROUP, "IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const homeResponse: HomeSearchResponse = {
@@ -370,7 +366,7 @@ export async function getSearchResults(
 				homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
 			}
 		} else {
-			logger.error(LOGGER_GROUP, promiseResult.reason);
+			logger.error(promiseResult.reason);
 		}
 	}
 
@@ -383,7 +379,7 @@ export async function getSearchResults(
  */
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	if (!passedIntegrationProvider) {
-		logger.error(LOGGER_GROUP, "IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	let results: HomeSearchResult[] = [];
@@ -452,11 +448,7 @@ export async function itemSelection(
 			);
 
 			if (!handled) {
-				logger.warn(
-					LOGGER_GROUP,
-					`Error while trying to handle ${foundIntegration.integration.id} entry`,
-					result.data
-				);
+				logger.warn(`Error while trying to handle ${foundIntegration.integration.id} entry`, result.data);
 			}
 
 			return handled;

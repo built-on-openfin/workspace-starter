@@ -5,9 +5,9 @@ import {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./init-options-shapes";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 
-const LOGGER_GROUP = "InitOptions";
+const logger = createGroupLogger("InitOptions");
 
 const actionListeners: Map<
 	string,
@@ -27,13 +27,13 @@ async function loadInitOptionsModule<T>(id: string, url: string, data: T): Promi
 			const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
 			const actionHandler = mod.handler;
 			if (actionHandler.init !== undefined) {
-				await actionHandler.init(data, logger);
+				await actionHandler.init(data, createGroupLogger);
 			}
 			modules[id] = actionHandler;
 		}
 		return true;
 	} catch (err) {
-		logger.error(LOGGER_GROUP, `Error loading module ${id} with url ${url}`, err);
+		logger.error(`Error loading module ${id} with url ${url}`, err);
 		return false;
 	}
 }
@@ -43,11 +43,11 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
 		if (typeof initOptions?.payload === "string") {
 			const plainJson = atob(initOptions?.payload);
 			const payload = JSON.parse(plainJson) as T;
-			logger.info(LOGGER_GROUP, "Extracted payload", payload);
+			logger.info("Extracted payload", payload);
 			return payload;
 		}
 	} catch (err) {
-		logger.error(LOGGER_GROUP, "Error decoding payload, it should be Base64 encoded", initOptions, err);
+		logger.error("Error decoding payload, it should be Base64 encoded", initOptions, err);
 	}
 }
 
@@ -61,15 +61,11 @@ async function notifyActionListeners(initOptions: UserAppConfigArgs) {
 
 		for (let i = 0; i < subscriberIds.length; i++) {
 			const subscriberId = subscriberIds[i];
-			logger.info(
-				LOGGER_GROUP,
-				`Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`
-			);
+			logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`);
 			try {
 				await availableListeners.get(subscriberId)(action, payload);
 			} catch (error) {
 				logger.error(
-					LOGGER_GROUP,
 					`Error executing action: ${action} against registered listener: ${subscriberId}.`,
 					error
 				);
@@ -89,7 +85,6 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 	}
 	if (listenerId !== undefined) {
 		logger.info(
-			LOGGER_GROUP,
 			`Init param has been passed and it has a matching listener (${listenerId}). Passing on init options to listeners`
 		);
 		const availableListeners = listeners.get(listenerId);
@@ -98,15 +93,11 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 
 			for (let l = 0; l < subscriberIds.length; l++) {
 				const subscriberId = subscriberIds[l];
-				logger.info(
-					LOGGER_GROUP,
-					`Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`
-				);
+				logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`);
 				try {
 					await availableListeners.get(subscriberId)(initOptions);
 				} catch (error) {
 					logger.error(
-						LOGGER_GROUP,
 						`Error executing handler for parameter: ${listenerId} against registered listener: ${subscriberId}.`,
 						error
 					);
@@ -118,7 +109,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 
 async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
 	if (userAppConfigArgs !== undefined) {
-		logger.info(LOGGER_GROUP, "Received during startup", userAppConfigArgs);
+		logger.info("Received during startup", userAppConfigArgs);
 		if (userAppConfigArgs[actionParamName] !== undefined) {
 			await notifyActionListeners(userAppConfigArgs);
 		} else {
@@ -129,7 +120,7 @@ async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
 
 async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }) {
 	if (event?.userAppConfigArgs !== undefined) {
-		logger.info(LOGGER_GROUP, "Received while platform is running", event.userAppConfigArgs);
+		logger.info("Received while platform is running", event.userAppConfigArgs);
 		if (event.userAppConfigArgs[actionParamName] !== undefined) {
 			await notifyActionListeners(event.userAppConfigArgs);
 		} else {
@@ -154,11 +145,10 @@ export async function init(options?: InitOptionsProviderOptions) {
 						registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
 							const actionHandler = modules[module.id];
 							if (actionHandler !== undefined) {
-								logger.info(LOGGER_GROUP, `Action: ${requestedAction} being handled by module ${module.id}`);
+								logger.info(`Action: ${requestedAction} being handled by module ${module.id}`);
 								await actionHandler.action(requestedAction, payload);
 							} else {
 								logger.warn(
-									LOGGER_GROUP,
 									`Unable to retrieve module with id: ${module.id} to execute action: ${requestedAction}`
 								);
 							}
@@ -200,7 +190,7 @@ export function registerListener(
 	handler: (initOptions: UserAppConfigArgs) => Promise<void>
 ): string {
 	if (paramName === actionParamName) {
-		logger.warn(LOGGER_GROUP, "Please use registerActionListener if you wish to listen for an action");
+		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return null;
 	}
 	const key = crypto.randomUUID();

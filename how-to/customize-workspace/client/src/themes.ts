@@ -1,7 +1,9 @@
 import { CustomThemes } from "@openfin/workspace-platform";
 import { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { getSettings } from "./settings";
+
+const logger = createGroupLogger("Themes");
 
 const DEFAULT_PALETTES = {
 	light: {
@@ -97,7 +99,6 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 			}
 			if (themeToValidate.label.toLowerCase() === preferredColorScheme) {
 				logger.info(
-					"Themes",
 					`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
 				);
 				customThemes.unshift(themeToValidate);
@@ -143,21 +144,18 @@ function validatePalette(
 
 	if (!themePalette[brandPrimaryKey]) {
 		logger.warn(
-			"Themes",
 			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
 		);
 	}
 
 	if (!themePalette[brandSecondaryKey]) {
 		logger.warn(
-			"Themes",
 			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandSecondary}`
 		);
 	}
 
 	if (!themePalette[backgroundPrimaryKey]) {
 		logger.warn(
-			"Themes",
 			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
 		);
 	}

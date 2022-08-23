@@ -1,7 +1,7 @@
-import { Logger } from "./logger-shapes";
+import type { GroupLoggerCreator } from "./logger-shapes";
 
 export interface AuthProvider {
-	init<T>(options: T, logger: Logger): Promise<void>;
+	init<T>(options: T, groupLoggerCreator: GroupLoggerCreator): Promise<void>;
 	subscribe(
 		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
 		callback: () => Promise<void>

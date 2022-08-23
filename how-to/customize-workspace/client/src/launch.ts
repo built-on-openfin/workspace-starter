@@ -2,11 +2,11 @@ import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 
-const LOGGER_GROUP = "Launch";
+const logger = createGroupLogger("Launch");
 
 async function getViewIdentities(name: string, uuid: string) {
 	const identity = { uuid, name };
@@ -61,7 +61,7 @@ function findViewNames(layout) {
 }
 export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 	if (windowApp === undefined || windowApp === null) {
-		logger.warn(LOGGER_GROUP, "No app was passed to launchWindow");
+		logger.warn("No app was passed to launchWindow");
 		return null;
 	}
 
@@ -70,7 +70,6 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 		windowApp.manifestType !== manifestTypes.inlineWindow.id
 	) {
 		logger.warn(
-			LOGGER_GROUP,
 			`The app passed was not of manifestType ${manifestTypes.window.id} or ${manifestTypes.inlineWindow.id}.`
 		);
 		return null;
@@ -103,7 +102,7 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 			const createdWindow = await fin.Window.create(manifest);
 			identity = createdWindow.identity;
 		} catch (err) {
-			logger.error(LOGGER_GROUP, "Error launching window", err);
+			logger.error("Error launching window", err);
 			return null;
 		}
 	}
@@ -112,7 +111,7 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 
 export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 	if (viewApp === undefined || viewApp === null) {
-		logger.warn(LOGGER_GROUP, "No app was passed to launchView");
+		logger.warn("No app was passed to launchView");
 		return null;
 	}
 
@@ -121,7 +120,6 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 		viewApp.manifestType !== manifestTypes.inlineView.id
 	) {
 		logger.warn(
-			LOGGER_GROUP,
 			`The app passed was not of manifestType ${manifestTypes.view.id} or ${manifestTypes.inlineView.id}.`
 		);
 		return null;
@@ -152,7 +150,7 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 			const createdView = await platform.createView(manifest);
 			identity = createdView.identity;
 		} catch (err) {
-			logger.error(LOGGER_GROUP, "Error launching view", err);
+			logger.error("Error launching view", err);
 			return null;
 		}
 	}
@@ -161,12 +159,12 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 
 export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity[]> {
 	if (snapshotApp === undefined || snapshotApp === null) {
-		logger.warn(LOGGER_GROUP, "No app was passed to launchSnapshot");
+		logger.warn("No app was passed to launchSnapshot");
 		return null;
 	}
 
 	if (snapshotApp.manifestType !== manifestTypes.snapshot.id) {
-		logger.warn(LOGGER_GROUP, `The app passed was not of manifestType ${manifestTypes.snapshot.id}`);
+		logger.warn(`The app passed was not of manifestType ${manifestTypes.snapshot.id}`);
 		return null;
 	}
 
@@ -210,7 +208,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 			try {
 				await platform.applySnapshot(manifest);
 			} catch (err) {
-				logger.error(LOGGER_GROUP, "Error trying to apply snapshot to platform", err, manifest);
+				logger.error("Error trying to apply snapshot to platform", err, manifest);
 			}
 		}
 
@@ -227,14 +225,13 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 
 export async function launch(appEntry: App) {
 	try {
-		logger.info(LOGGER_GROUP, "Application launch requested", appEntry);
+		logger.info("Application launch requested", appEntry);
 		if (appEntry.manifestType === manifestTypes.external.id) {
 			const settings = await getSettings();
 			const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
 
 			if (appEntry.tags?.includes(appAssetTag)) {
 				logger.info(
-					LOGGER_GROUP,
 					"Application requested is a native app with a tag of appasset so it is provided by this workspace platform. Managing request via platform and not Workspace"
 				);
 				const options: OpenFin.ExternalProcessRequestType = {};
@@ -243,10 +240,7 @@ export async function launch(appEntry: App) {
 
 				await fin.System.launchExternalProcess(options);
 			} else {
-				logger.info(
-					LOGGER_GROUP,
-					"Application requested is a native app. Managing request via platform and not Workspace"
-				);
+				logger.info("Application requested is a native app. Managing request via platform and not Workspace");
 				const options: OpenFin.ExternalProcessRequestType = {};
 				options.path = appEntry.manifest;
 				options.uuid = appEntry.appId;
@@ -267,19 +261,16 @@ export async function launch(appEntry: App) {
 				const launched = await endpointProvider.action(appEntry.manifest, { payload: appEntry });
 				if (!launched) {
 					logger.warn(
-						LOGGER_GROUP,
 						`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`
 					);
 				}
 			} else {
 				logger.warn(
-					LOGGER_GROUP,
 					`App with id: ${appEntry.appId} could not be launched as it is of manifestType: ${appEntry.manifestType} and the endpoint: ${appEntry.manifest} is not available.`
 				);
 			}
 		} else if (appEntry.manifestType === manifestTypes.connection.id) {
 			logger.info(
-				LOGGER_GROUP,
 				"An app defined by a connection (connected app) has been selected. Passing selection to connection"
 			);
 			await launchConnectedApp(appEntry);
@@ -287,8 +278,8 @@ export async function launch(appEntry: App) {
 			const platform = getCurrentSync();
 			await platform.launchApp({ app: appEntry });
 		}
-		logger.info(LOGGER_GROUP, "Finished application launch request");
+		logger.info("Finished application launch request");
 	} catch (err) {
-		logger.error(LOGGER_GROUP, "Failed during application launch request", err);
+		logger.error("Failed during application launch request", err);
 	}
 }

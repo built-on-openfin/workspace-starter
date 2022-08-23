@@ -1,23 +1,29 @@
-import { Logger, LoggerModule, LoggerProviderOptions } from "./logger-shapes";
+import { GroupLogger, Logger, LoggerModule, LoggerProviderOptions, LogLevel } from "./logger-shapes";
 
-export class LoggerProvider implements Logger<LoggerProviderOptions> {
+export class LoggerProvider {
 	/**
 	 * Multiple logger to send messages to.
 	 */
 	private readonly _loggers: Map<string, Logger>;
 
 	/**
+	 * The local identity.
+	 */
+	private readonly _identity: OpenFin.Identity;
+
+	/**
 	 * Create a new instance of LoggerProvider.
 	 */
 	constructor() {
 		this._loggers = new Map();
+		this._identity = fin.me.identity;
 	}
 
 	/**
 	 * Initialize the logger provider.
 	 * @param options The provider options.
 	 */
-	public async initialize(options: LoggerProviderOptions): Promise<void> {
+	public async initialize(options?: LoggerProviderOptions): Promise<void> {
 		if (Array.isArray(options.modules)) {
 			for (const module of options.modules) {
 				if (module.enabled) {
@@ -25,7 +31,12 @@ export class LoggerProvider implements Logger<LoggerProviderOptions> {
 						const mod: LoggerModule = await import(/* webpackIgnore: true */ module.url);
 						await this.addLogger(module.id, mod.logger, module.data);
 					} catch (err) {
-						this.error("LoggerProvider", `Error loading module ${module.id} with url ${module.url}`, err);
+						this.log(
+							"LoggerProvider",
+							"error",
+							`Error loading module ${module.id} with url ${module.url}`,
+							err
+						);
 					}
 				}
 			}
@@ -44,48 +55,17 @@ export class LoggerProvider implements Logger<LoggerProviderOptions> {
 
 	/**
 	 * Log data as information.
-	 * @param context The context sending the log message.
+	 * @param group The group sending the log message.
+	 * @param level The level of the message to log.
 	 * @param message The message to log.
 	 * @param optionalParams Optional parameters for details.
 	 */
-	public info(context: string, message: unknown, ...optionalParams: unknown[]): void {
+	public log(group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void {
 		if (this._loggers.size === 0) {
-			console.info(`[${context}]`, message, ...optionalParams);
+			console[level](`[${group}]`, `[${this._identity.name}]`, message, ...optionalParams);
 		} else {
 			for (const [, log] of this._loggers) {
-				log.info(context, message, ...optionalParams);
-			}
-		}
-	}
-
-	/**
-	 * Log data as error.
-	 * @param context The context sending the log message.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
-	 */
-	public error(context: string, message: unknown, ...optionalParams: unknown[]): void {
-		if (this._loggers.size === 0) {
-			console.error(`[${context}]`, message, ...optionalParams);
-		} else {
-			for (const [, log] of this._loggers) {
-				log.error(context, message, ...optionalParams);
-			}
-		}
-	}
-
-	/**
-	 * Log data as warning.
-	 * @param context The context sending the log message.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
-	 */
-	public warn(context: string, message: unknown, ...optionalParams: unknown[]): void {
-		if (this._loggers.size === 0) {
-			console.warn(`[${context}]`, message, ...optionalParams);
-		} else {
-			for (const [, log] of this._loggers) {
-				log.warn(context, message, ...optionalParams);
+				log.log(this._identity.name, group, level, message, ...optionalParams);
 			}
 		}
 	}
@@ -128,8 +108,23 @@ export class LoggerProvider implements Logger<LoggerProviderOptions> {
 			return this._loggers.get(name);
 		}
 
-		this.warn("LoggerProvider", `The logger named '${name}' does not exist`);
+		this.log("LoggerProvider", "warn", `The logger named '${name}' does not exist`);
 	}
 }
 
-export const logger: Logger = new LoggerProvider();
+export const loggerProvider = new LoggerProvider();
+
+export function createGroupLogger(group: string): GroupLogger {
+	return {
+		info: (message: unknown, ...optionalParams: unknown[]) =>
+			loggerProvider.log(group, "info", message, ...optionalParams),
+		warn: (message: unknown, ...optionalParams: unknown[]) =>
+			loggerProvider.log(group, "warn", message, ...optionalParams),
+		error: (message: unknown, ...optionalParams: unknown[]) =>
+			loggerProvider.log(group, "error", message, ...optionalParams),
+		trace: (message: unknown, ...optionalParams: unknown[]) =>
+			loggerProvider.log(group, "trace", message, ...optionalParams),
+		debug: (message: unknown, ...optionalParams: unknown[]) =>
+			loggerProvider.log(group, "debug", message, ...optionalParams)
+	};
+}
