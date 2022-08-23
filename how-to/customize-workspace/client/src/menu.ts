@@ -9,10 +9,10 @@ import {
 import { ACTION_IDS } from "./actions";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 
-const logger = createGroupLogger("Menu");
+const logger = createLogger("Menu");
 
 function updateGlobalMenuEntry(
 	menuEntries: GlobalContextMenuItemTemplate[],

@@ -1,7 +1,7 @@
 import { AuthModule, AuthProvider, AuthProviderOptions } from "./auth-shapes";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 
-const logger = createGroupLogger("Auth");
+const logger = createLogger("Auth");
 
 let authProvider: AuthProvider;
 let authOptions: AuthProviderOptions;
@@ -36,7 +36,7 @@ export async function init(options: AuthProviderOptions) {
 			try {
 				const mod: AuthModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
 				authProvider = mod.authProvider;
-				await authProvider.init(moduleDefinition.data, createGroupLogger);
+				await authProvider.init(moduleDefinition.data, createLogger);
 				authEnabled = true;
 				logger.info("Auth provider module initialized");
 			} catch (err) {

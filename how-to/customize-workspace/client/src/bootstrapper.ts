@@ -17,7 +17,7 @@ import {
 import { init as registerInitOptionsListener } from "./init-options";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
 import { getSettings } from "./settings";
@@ -30,7 +30,7 @@ import {
 	show as showStore
 } from "./store";
 
-const logger = createGroupLogger("Bootstrapper");
+const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions;
 

@@ -2,11 +2,11 @@ import { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 
-const logger = createGroupLogger("Launch");
+const logger = createLogger("Launch");
 
 async function getViewIdentities(name: string, uuid: string) {
 	const identity = { uuid, name };

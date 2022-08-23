@@ -1,9 +1,9 @@
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
 let sessionExpiryCheckId;
-let logger: GroupLogger;
+let logger: Logger;
 
 const subscribeIdMap: { [key: string]: string } = {};
 const loggedInSubscribers: Map<string, () => Promise<void>> = new Map();
@@ -210,7 +210,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 	}
 }
 
-export async function init(options: unknown, createLogger: GroupLoggerCreator) {
+export async function init(options: unknown, createLogger: LoggerCreator) {
 	logger = createLogger("AuthExample");
 	if (authOptions === undefined) {
 		logger.info(`Setting options: ${JSON.stringify(options, null, 4)}`);

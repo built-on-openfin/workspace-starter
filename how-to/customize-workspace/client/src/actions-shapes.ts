@@ -1,5 +1,5 @@
 import type { CustomActionsMap, ToolbarButton, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { GroupLoggerCreator } from "./logger-shapes";
+import type { LoggerCreator } from "./logger-shapes";
 
 export interface ActionHelpers {
 	updateToolbarButtons: (
@@ -13,9 +13,9 @@ export interface Actions {
 	/**
 	 * Initialize the actions passing any helper methods.
 	 * @param helper Helper methods.
-	 * @param groupLoggerCreator Method for creating loggers.
+	 * @param loggerCreator Method for creating loggers.
 	 */
-	initialize?(helpers: ActionHelpers, groupLoggerCreator: GroupLoggerCreator): Promise<void>;
+	initialize?(helpers: ActionHelpers, loggerCreator: LoggerCreator): Promise<void>;
 
 	/**
 	 * Get the actions from the module.

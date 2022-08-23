@@ -5,7 +5,7 @@ import type {
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { ActionHelpers, Actions } from "../../../actions-shapes";
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 
 /**
  * Implement the actions.
@@ -19,15 +19,15 @@ export class OpacityActions implements Actions {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: GroupLogger;
+	private _logger: Logger;
 
 	/**
 	 * Initialize the actions passing any helper methods.
 	 * @param helper Helper methods.
 	 */
-	public async initialize(helpers: ActionHelpers, groupLoggerCreator: GroupLoggerCreator): Promise<void> {
+	public async initialize(helpers: ActionHelpers, loggerCreator: LoggerCreator): Promise<void> {
 		this._helpers = helpers;
-		this._logger = groupLoggerCreator("OpacityActions");
+		this._logger = loggerCreator("OpacityActions");
 	}
 
 	/**

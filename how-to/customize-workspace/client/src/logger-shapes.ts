@@ -7,7 +7,7 @@ export interface LogOptions {
 	levels?: LogLevel[];
 }
 
-export interface Logger<T = unknown> {
+export interface LoggerCore<T = unknown> {
 	/**
 	 * Optionally initialize the logger.
 	 * @param options The custom options for the logger.
@@ -31,7 +31,7 @@ export interface Logger<T = unknown> {
 }
 
 export interface LoggerModule {
-	logger: Logger;
+	logger: LoggerCore;
 }
 
 export interface LoggerModuleDefinition {
@@ -63,7 +63,7 @@ export interface LoggerProviderOptions {
 	modules?: LoggerModuleDefinition[];
 }
 
-export interface GroupLogger {
+export interface Logger {
 	/**
 	 * Log data as information.
 	 * @param message The message to log.
@@ -100,4 +100,4 @@ export interface GroupLogger {
 	debug(message: unknown, ...optionalParams: unknown[]): void;
 }
 
-export type GroupLoggerCreator = (group: string) => GroupLogger;
+export type LoggerCreator = (group: string) => Logger;

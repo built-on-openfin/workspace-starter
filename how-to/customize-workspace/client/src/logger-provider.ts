@@ -1,10 +1,10 @@
-import { GroupLogger, Logger, LoggerModule, LoggerProviderOptions, LogLevel } from "./logger-shapes";
+import { Logger, LoggerCore, LoggerModule, LoggerProviderOptions, LogLevel } from "./logger-shapes";
 
 export class LoggerProvider {
 	/**
 	 * Multiple logger to send messages to.
 	 */
-	private readonly _loggers: Map<string, Logger>;
+	private readonly _loggers: Map<string, LoggerCore>;
 
 	/**
 	 * The local identity.
@@ -76,7 +76,7 @@ export class LoggerProvider {
 	 * @param log The logger.
 	 * @param data Additional data for initialization.
 	 */
-	public async addLogger(name: string, log: Logger, data?: unknown): Promise<void> {
+	public async addLogger(name: string, log: LoggerCore, data?: unknown): Promise<void> {
 		this._loggers.set(name, log);
 		if (log.initialize) {
 			await log.initialize(data);
@@ -103,7 +103,7 @@ export class LoggerProvider {
 	 * @returns The logger if it exists.
 	 */
 
-	public async getLogger<T>(name: string): Promise<Logger<T> | undefined> {
+	public async getLogger<T>(name: string): Promise<LoggerCore<T> | undefined> {
 		if (this._loggers.has(name)) {
 			return this._loggers.get(name);
 		}
@@ -114,7 +114,7 @@ export class LoggerProvider {
 
 export const loggerProvider = new LoggerProvider();
 
-export function createGroupLogger(group: string): GroupLogger {
+export function createLogger(group: string): Logger {
 	return {
 		info: (message: unknown, ...optionalParams: unknown[]) =>
 			loggerProvider.log(group, "info", message, ...optionalParams),

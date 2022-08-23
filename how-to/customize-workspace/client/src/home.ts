@@ -19,14 +19,14 @@ import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 import { share } from "./share";
 import { CURRENT_WORKSPACE_TEMPLATE, PAGE_TEMPLATE, WORKSPACE_TEMPLATE } from "./template";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
 
-const logger = createGroupLogger("Home");
+const logger = createLogger("Home");
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";

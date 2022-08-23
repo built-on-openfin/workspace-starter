@@ -19,7 +19,7 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../../integrations-shapes";
-import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,
@@ -78,22 +78,22 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * Logger for logging info.
 	 * @internal
 	 */
-	private _logger: GroupLogger;
+	private _logger: Logger;
 
 	/**
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
-	 * @param groupLoggerCreator for logging info.
+	 * @param loggerCreator for logging info.
 	 * @returns Nothing.
 	 */
 	public async register(
 		integrationManager: IntegrationManager,
 		integration: Integration<SalesforceSettings>,
-		groupLoggerCreator: GroupLoggerCreator
+		loggerCreator: LoggerCreator
 	): Promise<void> {
 		this._integrationManager = integrationManager;
-		this._logger = groupLoggerCreator("Salesforce");
+		this._logger = loggerCreator("Salesforce");
 		this._logger.info("Registering SalesForce");
 		try {
 			await this.openConnection(integration);

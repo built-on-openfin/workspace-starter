@@ -12,11 +12,11 @@ import {
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
 
-const logger = createGroupLogger("Store");
+const logger = createLogger("Store");
 
 let isStoreRegistered = false;
 let registrationInfo: RegistrationMetaInfo;

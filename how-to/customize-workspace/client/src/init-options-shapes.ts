@@ -1,7 +1,7 @@
-import type { GroupLoggerCreator } from "./logger-shapes";
+import type { LoggerCreator } from "./logger-shapes";
 
 export interface InitOptionsHandler {
-	init(data: unknown, groupLoggerCreator: GroupLoggerCreator): Promise<void>;
+	init(data: unknown, loggerCreator: LoggerCreator): Promise<void>;
 	action<T>(requestedAction: string, payload?: T): Promise<void>;
 }
 export interface InitOptionsModule {

@@ -1,10 +1,10 @@
-import { Logger, LogLevel } from "../../../logger-shapes";
+import { LoggerCore, LogLevel } from "../../../logger-shapes";
 import { ConsoleLoggerOptions } from "./shapes";
 
 /**
  * Implement the logger using the console.
  */
-export class ConsoleLogger implements Logger<ConsoleLoggerOptions> {
+export class ConsoleLogger implements LoggerCore<ConsoleLoggerOptions> {
 	/**
 	 * The levels of logging to include.
 	 */

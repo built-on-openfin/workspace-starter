@@ -1,7 +1,7 @@
 import { getConnectedSnapshotSourceClients } from "./connections";
-import { createGroupLogger } from "./logger-provider";
+import { createLogger } from "./logger-provider";
 
-const logger = createGroupLogger("SnapshotSource");
+const logger = createLogger("SnapshotSource");
 
 interface ClientSnapshot {
 	identity: OpenFin.ApplicationIdentity;

@@ -6,7 +6,7 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import type { GroupLoggerCreator } from "./logger-shapes";
+import type { LoggerCreator } from "./logger-shapes";
 
 /**
  * Integration manager provides environment methods and data.
@@ -137,13 +137,13 @@ export interface IntegrationModule<T> {
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
-	 * @param groupLoggerCreator for logging info.
+	 * @param loggerCreator for logging info.
 	 * @returns Nothing.
 	 */
 	register?(
 		integrationManager: IntegrationManager,
 		integration: Integration<T>,
-		groupLoggerCreator: GroupLoggerCreator
+		loggerCreator: LoggerCreator
 	): Promise<void>;
 
 	/**
