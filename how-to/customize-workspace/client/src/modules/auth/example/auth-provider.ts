@@ -1,5 +1,7 @@
 import type { Logger } from "../../../logger-shapes";
 
+const LOGGER_GROUP = "AuthExample";
+
 let authenticated: boolean;
 let authOptions: ExampleOptions;
 let sessionExpiryCheckId;
@@ -80,7 +82,7 @@ async function checkAuth(url: string): Promise<boolean> {
 			isAuthenticated = true;
 		}
 	} catch (error) {
-		logger.error("AuthExample", "Error encountered while checking session", error);
+		logger.error(LOGGER_GROUP, "Error encountered while checking session", error);
 	} finally {
 		if (windowToCheck !== undefined) {
 			await windowToCheck.close(true);
@@ -104,7 +106,7 @@ async function getAuthenticationFromUser(): Promise<boolean> {
 					}
 				} catch (error) {
 					logger.error(
-						"AuthExample",
+						LOGGER_GROUP,
 						`Error while checking if login window automatically redirected. Error ${error.message}`
 					);
 					if (win !== undefined) {
@@ -118,7 +120,7 @@ async function getAuthenticationFromUser(): Promise<boolean> {
 					if (win) {
 						window.clearInterval(statusCheck);
 						statusCheck = undefined;
-						logger.info("AuthExample", "Auth Window cancelled by user");
+						logger.info(LOGGER_GROUP, "Auth Window cancelled by user");
 						win = undefined;
 						return resolve(false);
 					}
@@ -139,7 +141,7 @@ async function getAuthenticationFromUser(): Promise<boolean> {
 				return true;
 			})
 			.catch((error) => {
-				logger.error("AuthExample", "Error while trying to authenticate the user", error);
+				logger.error(LOGGER_GROUP, "Error while trying to authenticate the user", error);
 			});
 	});
 }
@@ -154,11 +156,11 @@ function checkForSessionExpiry(force = false) {
 			sessionExpiryCheckId = undefined;
 			const stillAuthenticated = await checkAuth(authOptions.loginUrl);
 			if (stillAuthenticated) {
-				logger.info("AuthExample", "Session Still Active");
+				logger.info(LOGGER_GROUP, "Session Still Active");
 				checkForSessionExpiry();
 			} else {
 				logger.info(
-					"AuthExample",
+					LOGGER_GROUP,
 					"Session not valid. Killing session and notifying registered callback that authentication is required. This check is configured in the data for this example auth module. Set checkSessionValidityInSeconds to -1 in the authProvider module definition if you wish to disable this check"
 				);
 				authenticated = false;
@@ -176,7 +178,7 @@ async function notifySubscribers(eventType: string, subscribers: Map<string, () 
 	for (let i = 0; i < subscriberIds.length; i++) {
 		const subscriberId = subscriberIds[i];
 		logger.info(
-			"AuthExample",
+			LOGGER_GROUP,
 			`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
 		);
 		await subscribers.get(subscriberId)();
@@ -185,11 +187,11 @@ async function notifySubscribers(eventType: string, subscribers: Map<string, () 
 
 async function handleLogout(resolve: (success: boolean) => void): Promise<void> {
 	if (authenticated === undefined || !authenticated) {
-		logger.error("AuthExample", "You have requested to log out but are not logged in");
+		logger.error(LOGGER_GROUP, "You have requested to log out but are not logged in");
 		resolve(false);
 		return;
 	}
-	logger.info("AuthExample", "Log out requested");
+	logger.info(LOGGER_GROUP, "Log out requested");
 	await notifySubscribers("before-logged-out", beforeLoggedOutSubscribers);
 	authenticated = false;
 	localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
@@ -206,7 +208,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 				resolve(true);
 			}, 2000);
 		} catch (error) {
-			logger.error("AuthExample", `Error while launching logout window. ${error}`);
+			logger.error(LOGGER_GROUP, `Error while launching logout window. ${error}`);
 			return resolve(false);
 		}
 	} else {
@@ -218,14 +220,14 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 export async function init(options: unknown, log: Logger) {
 	logger = log;
 	if (authOptions === undefined) {
-		logger.info("AuthExample", `Setting options: ${JSON.stringify(options, null, 4)}`);
+		logger.info(LOGGER_GROUP, `Setting options: ${JSON.stringify(options, null, 4)}`);
 		authOptions = options as ExampleOptions;
 		authenticated = Boolean(localStorage.getItem(EXAMPLE_AUTH_AUTHENTICATED_KEY));
 		if (authenticated) {
 			checkForSessionExpiry();
 		}
 	} else {
-		logger.warn("AuthExample", "Options have already been set as init has already been called");
+		logger.warn(LOGGER_GROUP, "Options have already been set as init has already been called");
 	}
 }
 
@@ -260,7 +262,7 @@ export function subscribe(
 
 	if (matchFound) {
 		subscribeIdMap[key] = to;
-		logger.info("AuthExample", `Subscription to ${to} events registered. Subscription Id: ${key}`);
+		logger.info(LOGGER_GROUP, `Subscription to ${to} events registered. Subscription Id: ${key}`);
 		return key;
 	}
 	return null;
@@ -270,7 +272,7 @@ export function unsubscribe(from: string): boolean {
 	let matchFound = false;
 	const eventType = subscribeIdMap[from];
 	if (eventType === undefined) {
-		logger.warn("AuthExample", `You have tried to unsubscribe with a key ${from} that is invalid`);
+		logger.warn(LOGGER_GROUP, `You have tried to unsubscribe with a key ${from} that is invalid`);
 		return false;
 	}
 
@@ -300,27 +302,27 @@ export function unsubscribe(from: string): boolean {
 	delete subscribeIdMap[from];
 	if (matchFound) {
 		logger.info(
-			"AuthExample",
+			LOGGER_GROUP,
 			`Subscription to ${eventType} events with subscription Id: ${from} has been cleared`
 		);
 		return true;
 	}
 
 	logger.warn(
-		"AuthExample",
+		LOGGER_GROUP,
 		`Subscription to ${eventType} events with subscription Id: ${from} could not be cleared as we do not have a register of that event type.`
 	);
 	return false;
 }
 
 export async function login(): Promise<boolean> {
-	logger.info("AuthExample", "login requested");
+	logger.info(LOGGER_GROUP, "login requested");
 	if (authenticated) {
-		logger.info("AuthExample", "User already authenticated");
+		logger.info(LOGGER_GROUP, "User already authenticated");
 		return authenticated;
 	}
 	if (authOptions.autoLogin) {
-		logger.info("AuthExample", "autoLogin enabled in auth provide module settings. Fake logged in");
+		logger.info(LOGGER_GROUP, "autoLogin enabled in auth provide module settings. Fake logged in");
 		authenticated = true;
 	} else {
 		authenticated = await getAuthenticationFromUser();
@@ -339,11 +341,11 @@ export async function logout(): Promise<boolean> {
 	return new Promise<boolean>((resolve, reject) => {
 		handleLogout(resolve)
 			.then(async () => {
-				logger.info("AuthExample", "Log out called");
+				logger.info(LOGGER_GROUP, "Log out called");
 				return true;
 			})
 			.catch(async (error) => {
-				logger.error("AuthExample", `Error while trying to log out ${error}`);
+				logger.error(LOGGER_GROUP, `Error while trying to log out ${error}`);
 			});
 	});
 }
@@ -357,9 +359,9 @@ export async function isAuthenticationRequired(): Promise<boolean> {
 
 export async function getUserInfo<T>(): Promise<T> {
 	if (authenticated === undefined || !authenticated) {
-		logger.warn("AuthExample", "Unable to retrieve user info unless the user is authenticated");
+		logger.warn(LOGGER_GROUP, "Unable to retrieve user info unless the user is authenticated");
 	} else {
-		logger.info("AuthExample", "This example does not return any user info. Returning null");
+		logger.info(LOGGER_GROUP, "This example does not return any user info. Returning null");
 	}
 	return null;
 }

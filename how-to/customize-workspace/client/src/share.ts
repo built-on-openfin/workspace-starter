@@ -7,6 +7,8 @@ import { logger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 
+const LOGGER_GROUP = "Share";
+
 let shareRegistered = false;
 let initOptionsListenerId: string;
 
@@ -247,7 +249,7 @@ async function saveShareRequest(payload) {
 			finsLink = `${platformInfo.manifestUrl.replace("http", "fin")}?$$shareId=${id}`;
 		} else {
 			logger.error(
-				"Share",
+				LOGGER_GROUP,
 				"We do not support file based manifest launches. The manifest has to be served over http/https:",
 				platformInfo.manifestUrl
 			);
@@ -260,7 +262,7 @@ async function saveShareRequest(payload) {
 		});
 		await notifyOfSuccess(finsLink, expiryInHours);
 	} catch (error) {
-		logger.error("Share", "Error saving share request", error);
+		logger.error(LOGGER_GROUP, "Error saving share request", error);
 		await notifyOfFailure("The share request you raised could not be generated.");
 	}
 }
@@ -275,7 +277,7 @@ async function loadSharedEntry(id: string) {
 				const platform = getCurrentSync();
 				await platform.applySnapshot(shareEntry.data.snapshot);
 			} else {
-				logger.warn("Share", `Share entry of unknown type specified: ${shareEntry.type}`);
+				logger.warn(LOGGER_GROUP, `Share entry of unknown type specified: ${shareEntry.type}`);
 				await notifyOfFailure("The specified share link is not supported and cannot be loaded.");
 				return;
 			}
@@ -284,7 +286,7 @@ async function loadSharedEntry(id: string) {
 			await notifyOfExpiry();
 		}
 	} catch (error) {
-		logger.error("Share", "There has been an error trying to load and apply the share link", error);
+		logger.error(LOGGER_GROUP, "There has been an error trying to load and apply the share link", error);
 		await notifyOfFailure("The specified share link cannot be loaded.");
 	}
 }
@@ -293,15 +295,15 @@ export async function register() {
 	if (!shareRegistered) {
 		shareRegistered = true;
 		initOptionsListenerId = registerListener("shareId", async (initOptions) => {
-			logger.info("Share", "Received share request");
+			logger.info(LOGGER_GROUP, "Received share request");
 			if (typeof initOptions.shareId === "string") {
 				await loadSharedEntry(initOptions.shareId);
 			} else {
-				logger.warn("Share", "shareId passed but it wasn't a string");
+				logger.warn(LOGGER_GROUP, "shareId passed but it wasn't a string");
 			}
 		});
 	} else {
-		logger.warn("Share", "Share cannot be registered more than once");
+		logger.warn(LOGGER_GROUP, "Share cannot be registered more than once");
 	}
 }
 
@@ -310,13 +312,13 @@ export async function deregister() {
 		// any cleanup logic can go here
 		removeListener(initOptionsListenerId);
 	} else {
-		logger.warn("Share", "Share isn't registered yet so cannot be deregistered");
+		logger.warn(LOGGER_GROUP, "Share isn't registered yet so cannot be deregistered");
 	}
 }
 
 export async function showShareOptions(payload: { windowIdentity: OpenFin.Identity; x: number; y: number }) {
 	if (shareRegistered) {
-		logger.info("Share", "Share called with payload", payload);
+		logger.info(LOGGER_GROUP, "Share called with payload", payload);
 
 		const windowIdentity = payload.windowIdentity;
 		let pageId;
@@ -350,27 +352,27 @@ export async function showShareOptions(payload: { windowIdentity: OpenFin.Identi
 		});
 
 		if (r.result === "closed") {
-			logger.info("Share", "share menu dismissed");
+			logger.info(LOGGER_GROUP, "share menu dismissed");
 		} else if (r.data.type === "page") {
 			await saveSharedPage(r.data.identity as IShareCustomData);
 		} else if (r.data.type === "workspace") {
 			await saveSharedWorkspace();
 		}
 	} else {
-		logger.warn("Share", "Share cannot be triggered as it hasn't been registered yet");
+		logger.warn(LOGGER_GROUP, "Share cannot be triggered as it hasn't been registered yet");
 	}
 }
 
 export async function share(options?: IShareCustomData) {
 	if (shareRegistered) {
 		if (options === undefined || options.workspaceId !== undefined) {
-			logger.info("Share", "A request to share the workspace has been raised");
+			logger.info(LOGGER_GROUP, "A request to share the workspace has been raised");
 			await saveSharedWorkspace(options?.workspaceId);
 		} else {
-			logger.info("Share", "Share called with payload", options);
+			logger.info(LOGGER_GROUP, "Share called with payload", options);
 			await saveSharedPage(options);
 		}
 	} else {
-		logger.warn("Share", "Share cannot be triggered as it hasn't been registered yet");
+		logger.warn(LOGGER_GROUP, "Share cannot be triggered as it hasn't been registered yet");
 	}
 }
