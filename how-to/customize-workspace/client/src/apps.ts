@@ -125,7 +125,7 @@ async function getEntries(
 	cachedApps = await validateEntries(apps);
 
 	if (cache !== undefined && cache !== 0) {
-		setTimeout(async () => {
+		setTimeout(() => {
 			logger.info("Clearing cache of apps as cache duration has passed");
 			cachedApps = undefined;
 		}, cache);
