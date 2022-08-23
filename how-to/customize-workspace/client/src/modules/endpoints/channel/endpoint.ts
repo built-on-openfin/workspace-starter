@@ -1,11 +1,11 @@
 import type { EndpointDefinition } from "../../../endpoint-shapes";
-import type { Logger } from "../../../logger-shapes";
+import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
 
-let logger: Logger;
+let logger: GroupLogger;
 
-export async function init(options: unknown, log: Logger): Promise<void> {
-	logger = log;
-	logger.info("ChannelEndpoint", "Was passed the following options", options);
+export async function init(options: unknown, groupLoggerCreator: GroupLoggerCreator): Promise<void> {
+	logger = groupLoggerCreator("ChannelEndpoint");
+	logger.info("Was passed the following options", options);
 }
 
 export async function action(
@@ -22,15 +22,11 @@ export async function action(
 	request?: { payload?: unknown }
 ): Promise<boolean> {
 	if (request === undefined) {
-		logger.warn(
-			"ChannelEndpoint",
-			`A request is required for this action: ${endpointDefinition.id}. Returning false`
-		);
+		logger.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
 		return false;
 	}
 	if (endpointDefinition.type !== "module") {
 		logger.warn(
-			"ChannelEndpoint",
 			`We only expect endpoints of type module. Unable to perform action: ${endpointDefinition.id}`
 		);
 		return false;
@@ -45,10 +41,7 @@ export async function action(
 		endpointDefinition.options.channelName === undefined
 	) {
 		if (logWarn) {
-			logger.warn(
-				"ChannelEndpoint",
-				`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`
-			);
+			logger.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return false;
 	}
@@ -64,14 +57,13 @@ export async function action(
 		) {
 			if (logWarn) {
 				logger.warn(
-					"ChannelEndpoint",
 					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
 				);
 			}
 			return false;
 		}
 		if (logInfo) {
-			logger.info("ChannelEndpoint", `Sending action for endpoint id: ${endpointDefinition.id}`);
+			logger.info(`Sending action for endpoint id: ${endpointDefinition.id}`);
 		}
 		await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
 		await channel.disconnect();
@@ -79,7 +71,6 @@ export async function action(
 	} catch (error) {
 		if (logError) {
 			logger.error(
-				"ChannelEndpoint",
 				`Error executing/or connecting to action. Endpoint with id: ${endpointDefinition.id}`,
 				error
 			);
@@ -106,7 +97,6 @@ export async function requestResponse(
 
 	if (endpointDefinition.type !== "module") {
 		logger.warn(
-			"ChannelEndpoint",
 			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 		);
 		return defaultValue;
@@ -128,10 +118,7 @@ export async function requestResponse(
 		endpointDefinition.options.channelName === undefined
 	) {
 		if (logWarn) {
-			logger.warn(
-				"ChannelEndpoint",
-				`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`
-			);
+			logger.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return defaultValue;
 	}
@@ -146,14 +133,13 @@ export async function requestResponse(
 		) {
 			if (logWarn) {
 				logger.warn(
-					"ChannelEndpoint",
 					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
 				);
 			}
 			return defaultValue;
 		}
 		if (logInfo) {
-			logger.info("ChannelEndpoint", `Sending request response for endpoint: ${endpointDefinition.id}`);
+			logger.info(`Sending request response for endpoint: ${endpointDefinition.id}`);
 		}
 		const response: unknown = await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
 		await channel.disconnect();
@@ -161,7 +147,6 @@ export async function requestResponse(
 	} catch (error) {
 		if (logError) {
 			logger.error(
-				"ChannelEndpoint",
 				`Error executing request/response and connecting to endpoint with id: ${endpointDefinition.id}`,
 				error
 			);

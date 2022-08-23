@@ -2,9 +2,11 @@ import { App } from "@openfin/workspace";
 import { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
 import { launchSnapshot, launchView } from "./launch";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
+
+const logger = createGroupLogger("InteropBroker");
 
 const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
@@ -17,7 +19,7 @@ export function interopOverride(
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
 		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {
-			logger.info("InteropBroker", "Launching app with intent");
+			logger.info("Launching app with intent");
 
 			if (
 				app.manifestType !== manifestTypes.view.id &&
@@ -25,32 +27,29 @@ export function interopOverride(
 				app.manifestType !== manifestTypes.snapshot.id
 			) {
 				// optional logic show a prompt to the user to let them know
-				logger.warn(
-					"InteropBroker",
-					"Unable to raise intent against app as only view/snapshot based apps are supported"
-				);
+				logger.warn("Unable to raise intent against app as only view/snapshot based apps are supported");
 				return null;
 			}
 
 			if (app.manifestType === manifestTypes.view.id || app.manifestType === manifestTypes.inlineView.id) {
-				logger.info("InteropBroker", `The supporting app is a view (${app.manifestType})`);
+				logger.info(`The supporting app is a view (${app.manifestType})`);
 
 				const identity = await launchView(app);
 				if (identity === null) {
 					// optional logic show a prompt to the user to let them know
-					logger.warn("InteropBroker", "Unable to raise intent against view as no identity was returned");
+					logger.warn("Unable to raise intent against view as no identity was returned");
 					return null;
 				}
 				await super.setIntentTarget(intent, identity);
 			}
 
 			if (app.manifestType === manifestTypes.snapshot.id) {
-				logger.info("InteropBroker", "The supporting app is a view");
+				logger.info("The supporting app is a view");
 
 				const identities = await launchSnapshot(app);
 				if (identities === null) {
 					// optional logic show a prompt to the user to let them know
-					logger.warn("InteropBroker", "Unable to raise intent against target as no identity was returned");
+					logger.warn("Unable to raise intent against target as no identity was returned");
 					return null;
 				}
 				for (let i = 0; i < identities.length; i++) {
@@ -136,18 +135,13 @@ export function interopOverride(
 					intent: AppIntent;
 				};
 			} catch {
-				logger.error("InteropBroker", "App for intent not selected/launched", launchOptions.intent);
+				logger.error("App for intent not selected/launched", launchOptions.intent);
 				return null;
 			}
 		}
 
 		public async isConnectionAuthorized(id: OpenFin.Identity, payload?: unknown): Promise<boolean> {
-			logger.info(
-				"InteropBroker",
-				"Interop connection being made by the following identity with payload",
-				id,
-				payload
-			);
+			logger.info("Interop connection being made by the following identity with payload", id, payload);
 			// perform connection validation checks here if required and return false if it shouldn't be permissioned.
 			return true;
 		}
@@ -157,7 +151,7 @@ export function interopOverride(
 			payload: unknown,
 			identity: OpenFin.ClientIdentity
 		): Promise<boolean> {
-			logger.info("InteropBroker", "Is action authorized", action, payload, identity);
+			logger.info("Is action authorized", action, payload, identity);
 			// perform check here if you wish and return true/false accordingly
 			return true;
 		}
@@ -278,10 +272,10 @@ export function interopOverride(
 							}
 							return intentResolver;
 						}
-						logger.error("InteropBroker", "We were returned a non existent appId to launch with the intent");
+						logger.error("We were returned a non existent appId to launch with the intent");
 						throw new Error(NO_APPS_FOUND);
 					} catch {
-						logger.error("InteropBroker", "App for intent by context not selected/launched", intent);
+						logger.error("App for intent by context not selected/launched", intent);
 						throw new Error(RESOLVER_TIMEOUT);
 					}
 				}
@@ -298,7 +292,6 @@ export function interopOverride(
 
 					if (selectedIntent === undefined) {
 						logger.error(
-							"InteropBroker",
 							"The user selected an intent but it's name doesn't match the available intents",
 							userSelection
 						);
@@ -316,17 +309,17 @@ export function interopOverride(
 						}
 						return intentResolver;
 					}
-					logger.error("InteropBroker", "We were returned a non existent appId to launch with the intent");
+					logger.error("We were returned a non existent appId to launch with the intent");
 					throw new Error(NO_APPS_FOUND);
 				} catch {
-					logger.error("InteropBroker", "App for intent by context not selected/launched", intent);
+					logger.error("App for intent by context not selected/launched", intent);
 					throw new Error(RESOLVER_TIMEOUT);
 				}
 			}
 		}
 
 		public async handleFiredIntent(intent: OpenFin.Intent) {
-			logger.info("InteropBroker", "Received request for a raised intent", intent);
+			logger.info("Received request for a raised intent", intent);
 			let intentApps = await getAppsByIntent(intent.name);
 			let targetApp: App;
 
@@ -337,7 +330,6 @@ export function interopOverride(
 					const targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
 					if (targetIdentity !== undefined) {
 						logger.info(
-							"InteropBroker",
 							"We were passed a view identity instead of an app entry when raising/firing an intent. We will fire the intent at that as it exists and no app entry exists with that name.:",
 							targetIdentity,
 							intent
@@ -351,12 +343,12 @@ export function interopOverride(
 			}
 
 			if (intentApps.length === 0) {
-				logger.info("InteropBroker", "No apps support this intent");
+				logger.info("No apps support this intent");
 				throw new Error(NO_APPS_FOUND);
 			}
 
 			if (targetApp !== undefined && intentApps.includes(targetApp)) {
-				logger.info("InteropBroker", "Assigning selected application with intent", intent);
+				logger.info("Assigning selected application with intent", intent);
 				intentApps = [targetApp];
 			}
 
@@ -377,7 +369,7 @@ export function interopOverride(
 					intent
 				});
 				if (intentApps === undefined) {
-					logger.warn("InteropBroker", "We should have a list of apps to search from");
+					logger.warn("We should have a list of apps to search from");
 					intentApps = [];
 				}
 				const selectedApp = intentApps.find(
@@ -390,10 +382,10 @@ export function interopOverride(
 					}
 					return intentResolver;
 				}
-				logger.error("InteropBroker", "We were returned a non existent appId to launch with the intent");
+				logger.error("We were returned a non existent appId to launch with the intent");
 				throw new Error(NO_APPS_FOUND);
 			} catch {
-				logger.error("InteropBroker", "App for intent not selected/launched", intent);
+				logger.error("App for intent not selected/launched", intent);
 				throw new Error(RESOLVER_TIMEOUT);
 			}
 		}

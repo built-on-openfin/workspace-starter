@@ -1,9 +1,11 @@
 import { App } from "@openfin/workspace";
 import { getConnectedApps } from "./connections";
 import { EndpointProvider } from "./endpoint-shapes";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { AppProviderOptions } from "./shapes";
+
+const logger = createGroupLogger("Apps");
 
 let cachedApps: App[];
 let endpoints: EndpointProvider;
@@ -27,7 +29,7 @@ async function getCanLaunchExternalProcess() {
 
 			canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 		} catch (error) {
-			logger.error("Apps", "Error while querying for System.launchExternalProcess permission", error);
+			logger.error("Error while querying for System.launchExternalProcess permission", error);
 			canLaunchExternalProcess = false;
 		}
 	}
@@ -44,7 +46,7 @@ async function getCanDownloadAppAssets() {
 			);
 			canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 		} catch (error) {
-			logger.error("Apps", "Error while querying for System.downloadAsset permission", error);
+			logger.error("Error while querying for System.downloadAsset permission", error);
 			canDownloadAppAssets = false;
 		}
 	}
@@ -79,7 +81,6 @@ async function validateEntries(apps: App[]) {
 
 	if (rejectedAppIds.length > 0) {
 		logger.warn(
-			"Apps",
 			"Not passing the following list of applications as they will not be able to run on this machine due to missing permissions. Alternatively this logic could be moved to the launch function where a selection is not launched but the user is presented with a modal saying they can't launch it due to permissions",
 			rejectedAppIds
 		);
@@ -111,24 +112,21 @@ async function getEntries(
 				apps.push(...jsonResults);
 			}
 		} catch (error) {
-			logger.error("Apps", `Error fetching apps from endpoint ${endpointId}`, error);
+			logger.error(`Error fetching apps from endpoint ${endpointId}`, error);
 		}
 	}
 
 	const connectedApps = await getConnectedApps();
 	if (connectedApps.length > 0) {
-		logger.info(
-			"Apps",
-			`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
-		);
+		logger.info(`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`);
 		apps.push(...connectedApps);
 	}
 
 	cachedApps = await validateEntries(apps);
 
 	if (cache !== undefined && cache !== 0) {
-		setTimeout(async () => {
-			logger.info("Apps", "Clearing cache of apps as cache duration has passed");
+		setTimeout(() => {
+			logger.info("Clearing cache of apps as cache duration has passed");
 			cachedApps = undefined;
 		}, cache);
 	}
@@ -163,7 +161,7 @@ function updateEntry(
 
 export async function init(options: AppProviderOptions, endpointProvider: EndpointProvider) {
 	if (isInitialized) {
-		logger.warn("Apps", "The app service is already initialized");
+		logger.warn("The app service is already initialized");
 		return;
 	}
 	isInitialized = true;
@@ -171,19 +169,18 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 	if (options?.appsSourceUrl !== undefined) {
 		// backward compatibility support
 		logger.info(
-			"Apps",
 			"Using appsSourceUrl as it was specified. Backwards compatibility mode. Try to use the endpointIds setting instead and define some endpoints"
 		);
 		if (Array.isArray(options?.appsSourceUrl)) {
-			logger.info("Apps", "appsSourceUrl specified as an array of urls");
+			logger.info("appsSourceUrl specified as an array of urls");
 			const appUrls: string[] = options?.appsSourceUrl || [];
 			endpointIds.push(...appUrls);
 		} else {
-			logger.info("Apps", "appsSourceUrl specified as a single url");
+			logger.info("appsSourceUrl specified as a single url");
 			endpointIds.push(options?.appsSourceUrl);
 		}
 	} else if (Array.isArray(options?.endpointIds)) {
-		logger.info("Apps", "Using the following passed endpoints", options?.endpointIds);
+		logger.info("Using the following passed endpoints", options?.endpointIds);
 		endpointIds = options?.endpointIds || [];
 	}
 
@@ -201,12 +198,12 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 }
 
 export async function getApps(): Promise<App[]> {
-	logger.info("Apps", "Requesting apps");
+	logger.info("Requesting apps");
 	try {
 		const apps = cachedApps ?? (await getEntries(endpointIds, defaultCredentials, cacheDuration));
 		return apps;
 	} catch (err) {
-		logger.error("Apps", "Error retrieving apps. Returning empty list", err);
+		logger.error("Error retrieving apps. Returning empty list", err);
 		return [];
 	}
 }
@@ -300,18 +297,17 @@ export async function getIntent(
 
 		const results = Object.values(intents);
 		if (results.length === 0) {
-			logger.info("Apps", `No results found for findIntent for intent ${intent} and context ${contextType}`);
+			logger.info(`No results found for findIntent for intent ${intent} and context ${contextType}`);
 			return null;
 		} else if (results.length === 1) {
 			return results[0];
 		}
 		logger.warn(
-			"Apps",
 			`Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`
 		);
 		return results[0];
 	}
-	logger.warn("Apps", "There was no apps returned so we are unable to find apps that support an intent");
+	logger.warn("There was no apps returned so we are unable to find apps that support an intent");
 	return null;
 }
 
@@ -339,10 +335,7 @@ export async function getIntentsByContext(
 
 		return Object.values(intents);
 	}
-	logger.warn(
-		"Apps",
-		"Unable to get apps so we can not get apps and intents that support a particular context"
-	);
+	logger.warn("Unable to get apps so we can not get apps and intents that support a particular context");
 
 	return [];
 }

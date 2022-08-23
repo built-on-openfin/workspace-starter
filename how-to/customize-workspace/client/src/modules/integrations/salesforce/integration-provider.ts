@@ -19,7 +19,7 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import type { Integration, IntegrationManager, IntegrationModule } from "../../../integrations-shapes";
-import { Logger } from "../../../logger-shapes";
+import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,
@@ -78,27 +78,27 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * Logger for logging info.
 	 * @internal
 	 */
-	private _logger: Logger;
+	private _logger: GroupLogger;
 
 	/**
 	 * The module is being registered.
 	 * @param integrationManager The manager for the integration.
 	 * @param integration The integration details.
-	 * @param logger for logging info.
+	 * @param groupLoggerCreator for logging info.
 	 * @returns Nothing.
 	 */
 	public async register(
 		integrationManager: IntegrationManager,
 		integration: Integration<SalesforceSettings>,
-		logger: Logger
+		groupLoggerCreator: GroupLoggerCreator
 	): Promise<void> {
 		this._integrationManager = integrationManager;
-		this._logger = logger;
-		this._logger.info("Salesforce", "Registering SalesForce");
+		this._logger = groupLoggerCreator("Salesforce");
+		this._logger.info("Registering SalesForce");
 		try {
 			await this.openConnection(integration);
 		} catch (err) {
-			this._logger.error("Salesforce", "Error connecting to SalesForce", err);
+			this._logger.error("Error connecting to SalesForce", err);
 		}
 	}
 
@@ -337,7 +337,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				if (err instanceof ConnectionError) {
 					response.results.push(this.getReconnectSearchResult(integration, query, filters));
 				}
-				this._logger.error("Salesforce", "Error retrieving SalesForce search results", err);
+				this._logger.error("Error retrieving SalesForce search results", err);
 			}
 		}
 
@@ -406,7 +406,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			try {
 				await this._salesForceConnection.disconnect();
 			} catch (err) {
-				this._logger.error("Salesforce", "Error disconnecting SalesForce", err);
+				this._logger.error("Error disconnecting SalesForce", err);
 			} finally {
 				this._salesForceConnection = undefined;
 			}

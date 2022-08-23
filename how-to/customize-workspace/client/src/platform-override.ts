@@ -12,9 +12,11 @@ import {
 } from "@openfin/workspace-platform";
 import { deletePageBounds, savePageBounds } from "./browser";
 import * as endpointProvider from "./endpoint";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
-import { decorateSnapshot, applyClientSnapshot } from "./snapshot-source";
+import { applyClientSnapshot, decorateSnapshot } from "./snapshot-source";
+
+const logger = createGroupLogger("PlatformOverride");
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {
@@ -38,16 +40,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					{ query?: string },
 					{ data: Workspace[] }
 				>(getWorkspacesEndpointId, { query });
-				logger.info(
-					"PlatformOverride",
-					`Returning saved workspaces from custom storage for query: ${query ?? "none"}`
-				);
+				logger.info(`Returning saved workspaces from custom storage for query: ${query ?? "none"}`);
 				return workspacesResponse.data;
 			}
-			logger.info(
-				"PlatformOverride",
-				`Returning saved workspaces from default storage for query: ${query ?? "none"}`
-			);
+			logger.info(`Returning saved workspaces from default storage for query: ${query ?? "none"}`);
 			return super.getSavedWorkspaces(query);
 		}
 
@@ -62,16 +58,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					getWorkspaceEndpointId,
 					{ id }
 				);
-				logger.info(
-					"PlatformOverride",
-					`Returning saved workspace from custom storage for workspace id: ${id}`
-				);
+				logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
 				return workspaceResponse;
 			}
-			logger.info(
-				"PlatformOverride",
-				`Returning saved workspace from default storage for workspace id: ${id}`
-			);
+			logger.info(`Returning saved workspace from default storage for workspace id: ${id}`);
 			return super.getSavedWorkspace(id);
 		}
 
@@ -87,22 +77,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					{ id: req.workspace.workspaceId, payload: req.workspace }
 				);
 				if (success) {
-					logger.info(
-						"PlatformOverride",
-						`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`
-					);
+					logger.info(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				} else {
-					logger.info(
-						"PlatformOverride",
-						`Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`
-					);
+					logger.info(`Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				}
 				return;
 			}
-			logger.info(
-				"PlatformOverride",
-				`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`
-			);
+			logger.info(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
 			return super.createSavedWorkspace(req);
 		}
 
@@ -118,20 +99,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					{ id: req.workspace.workspaceId, payload: req.workspace }
 				);
 				if (success) {
-					logger.info(
-						"PlatformOverride",
-						`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`
-					);
+					logger.info(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
 				} else {
 					logger.info(
-						"PlatformOverride",
 						`Unable to update workspace with id: ${req.workspace.workspaceId} against custom storage`
 					);
 				}
 				return;
 			}
 			logger.info(
-				"PlatformOverride",
 				`Saving updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
 			);
 			return super.updateSavedWorkspace(req);
@@ -146,13 +122,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string }>(removeWorkspaceEndpointId, { id });
 				if (success) {
-					logger.info("PlatformOverride", `Removed workspace with id: ${id} from custom storage`);
+					logger.info(`Removed workspace with id: ${id} from custom storage`);
 				} else {
-					logger.info("PlatformOverride", `Unable to remove workspace with id: ${id} from custom storage`);
+					logger.info(`Unable to remove workspace with id: ${id} from custom storage`);
 				}
 				return;
 			}
-			logger.info("PlatformOverride", `Deleting workspace from default storage for workspace id: ${id}`);
+			logger.info(`Deleting workspace from default storage for workspace id: ${id}`);
 			return super.deleteSavedWorkspace(id);
 		}
 
@@ -167,16 +143,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					getPagesEndpointId,
 					{ query }
 				);
-				logger.info(
-					"PlatformOverride",
-					`Returning saved pages from custom storage for query: ${query ?? "none"}`
-				);
+				logger.info(`Returning saved pages from custom storage for query: ${query ?? "none"}`);
 				return pagesResponse.data;
 			}
-			logger.info(
-				"PlatformOverride",
-				`Returning saved pages from default storage for query: ${query ?? "none"}`
-			);
+			logger.info(`Returning saved pages from default storage for query: ${query ?? "none"}`);
 			return super.getSavedPages(query);
 		}
 
@@ -190,10 +160,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
 					id
 				});
-				logger.info("PlatformOverride", `Returning saved page from custom storage for page id: ${id}`);
+				logger.info(`Returning saved page from custom storage for page id: ${id}`);
 				return pageResponse;
 			}
-			logger.info("PlatformOverride", `Returning saved page with id ${id} from default storage`);
+			logger.info(`Returning saved page with id ${id} from default storage`);
 			return super.getSavedPage(id);
 		}
 
@@ -212,19 +182,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					payload: req.page
 				});
 				if (success) {
-					logger.info("PlatformOverride", `Saved page with id: ${req.page.pageId} to custom storage`);
+					logger.info(`Saved page with id: ${req.page.pageId} to custom storage`);
 				} else {
-					logger.info(
-						"PlatformOverride",
-						`Unable to save page with id: ${req.page.pageId} to custom storage`
-					);
+					logger.info(`Unable to save page with id: ${req.page.pageId} to custom storage`);
 				}
 				return;
 			}
-			logger.info(
-				"PlatformOverride",
-				`creating saved page and saving to default storage. PageId: ${req.page.pageId}`
-			);
+			logger.info(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
 			return super.createSavedPage(req);
 		}
 
@@ -243,19 +207,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					payload: req.page
 				});
 				if (success) {
-					logger.info("PlatformOverride", `Updated page with id: ${req.page.pageId} against custom storage`);
+					logger.info(`Updated page with id: ${req.page.pageId} against custom storage`);
 				} else {
-					logger.info(
-						"PlatformOverride",
-						`Unable to save page with id: ${req.page.pageId} against custom storage`
-					);
+					logger.info(`Unable to save page with id: ${req.page.pageId} against custom storage`);
 				}
 				return;
 			}
-			logger.info(
-				"PlatformOverride",
-				`updating saved page and saving to default storage with page id: ${req.page.pageId}`
-			);
+			logger.info(`updating saved page and saving to default storage with page id: ${req.page.pageId}`);
 			return super.updateSavedPage(req);
 		}
 
@@ -270,13 +228,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string }>(removePageEndpointId, { id });
 				if (success) {
-					logger.info("PlatformOverride", `Removed page with id: ${id} from custom storage`);
+					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {
-					logger.info("PlatformOverride", `Unable to remove page with id: ${id} from custom storage`);
+					logger.info(`Unable to remove page with id: ${id} from custom storage`);
 				}
 				return;
 			}
-			logger.info("PlatformOverride", `deleting saved page from default storage. PageId: ${id}`);
+			logger.info(`deleting saved page from default storage. PageId: ${id}`);
 			await super.deleteSavedPage(id);
 		}
 

@@ -1,4 +1,4 @@
-import type { Logger } from "../../../logger-shapes";
+import type { GroupLogger, GroupLoggerCreator } from "../../../logger-shapes";
 
 interface RaiseIntentPayload {
 	name: string;
@@ -10,14 +10,11 @@ interface ShareContextPayload {
 	context: OpenFin.Context;
 }
 
-let logger: Logger;
+let logger: GroupLogger;
 
 async function raiseIntent(payload: RaiseIntentPayload) {
 	const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
-	logger.info(
-		"InitOptionsInteropHandler",
-		`Received intent to raise. Intent Request ${JSON.stringify(payload, null, 4)}.`
-	);
+	logger.info(`Received intent to raise. Intent Request ${JSON.stringify(payload, null, 4)}.`);
 	await brokerClient.fireIntent(payload);
 }
 
@@ -28,7 +25,6 @@ async function shareContext(payload: ShareContextPayload) {
 	if (targetContextGroup !== undefined) {
 		await brokerClient.joinContextGroup(targetContextGroup.id);
 		logger.info(
-			"InitOptionsInteropHandler",
 			`Received context to send. Context Group ${targetContextGroup.id}. Context: ${JSON.stringify(
 				payload.context,
 				null,
@@ -39,10 +35,10 @@ async function shareContext(payload: ShareContextPayload) {
 	}
 }
 
-export async function init(options: unknown, log: Logger) {
-	logger = log;
+export async function init(options: unknown, groupLoggerCreator: GroupLoggerCreator) {
+	logger = groupLoggerCreator("InitOptionsInteropHandler");
 	// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
-	logger.info("InitOptionsInteropHandler", "The handler has been loaded");
+	logger.info("The handler has been loaded");
 }
 
 export async function action(
@@ -51,7 +47,6 @@ export async function action(
 ): Promise<void> {
 	if (payload === undefined) {
 		logger.warn(
-			"InitOptionsInteropHandler",
 			`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
 		);
 		return;
@@ -68,6 +63,6 @@ export async function action(
 			}
 		}
 	} catch (error) {
-		logger.error("InitOptionsInteropHandler", `Error trying to perform action ${requestedAction}.`, error);
+		logger.error(`Error trying to perform action ${requestedAction}.`, error);
 	}
 }

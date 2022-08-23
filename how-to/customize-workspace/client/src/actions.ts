@@ -15,9 +15,11 @@ import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
 import { show } from "./home";
 import { launch } from "./launch";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { showShareOptions } from "./share";
+
+const logger = createGroupLogger("Actions");
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
 	const currentWindow = await view.getCurrentWindow();
@@ -138,7 +140,6 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 					await brokerClient.fireIntent(intent);
 				} catch (error) {
 					logger.error(
-						"Actions",
 						`Error while trying to raise intent ${intentName} for view ${viewIdentity.name}`,
 						error
 					);
@@ -259,14 +260,13 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 				await launch(app);
 			} else {
 				logger.error(
-					"Actions",
 					`Unable to find app with id '${
 						payload.customData.appId
 					}' in call to launchApp action from source '${payload.customData?.source ?? "unknown source"}'`
 				);
 			}
 		} else {
-			logger.error("Actions", "No appId specified in payload.customData in launchApp action");
+			logger.error("No appId specified in payload.customData in launchApp action");
 		}
 	};
 
@@ -276,7 +276,7 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 		if (payload.customData?.url) {
 			await launchView(payload.customData?.url as string);
 		} else {
-			logger.error("Actions", "No url specified in payload.customData in launchView action");
+			logger.error("No url specified in payload.customData in launchView action");
 		}
 	};
 

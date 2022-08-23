@@ -19,12 +19,14 @@ import { getAppIcon, getApps } from "./apps";
 import { getPageBounds, launchPage } from "./browser";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
 import { share } from "./share";
 import { CURRENT_WORKSPACE_TEMPLATE, PAGE_TEMPLATE, WORKSPACE_TEMPLATE } from "./template";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
+
+const logger = createGroupLogger("Home");
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -303,13 +305,11 @@ async function getResults(
 								return true;
 							}
 							logger.warn(
-								"Home",
 								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
 							);
 						}
 					} else {
 						logger.warn(
-							"Home",
 							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
 						);
 					}
@@ -355,7 +355,7 @@ async function getResults(
 }
 
 export async function register(): Promise<RegistrationMetaInfo> {
-	logger.info("Home", "Initialising home");
+	logger.info("Initialising home");
 	const settings = await getSettings();
 	if (
 		settings.homeProvider === undefined ||
@@ -363,7 +363,6 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		settings.homeProvider.title === undefined
 	) {
 		logger.warn(
-			"Home",
 			"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);
 		return null;
@@ -472,7 +471,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 				return searchResults;
 			}
 		} catch (err) {
-			logger.error("Home", "Exception while getting search list results", err);
+			logger.error("Exception while getting search list results", err);
 		}
 	};
 
@@ -531,7 +530,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 						) {
 							await share({ workspaceId: data.workspaceId });
 						} else {
-							logger.warn("Home", `Unrecognized action for workspace selection: ${data.workspaceId}`);
+							logger.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
 						}
 					}
 				} else if (data.pageId !== undefined) {
@@ -552,14 +551,14 @@ export async function register(): Promise<RegistrationMetaInfo> {
 						const bounds = await getPageBounds(data.pageId, true);
 						await share({ page, bounds });
 					} else {
-						logger.warn("Home", `Unknown action triggered on search result for page Id: ${data.pageId}`);
+						logger.warn(`Unknown action triggered on search result for page Id: ${data.pageId}`);
 					}
 				} else {
 					await launch(data);
 				}
 			}
 		} else {
-			logger.warn("Home", "Unable to execute result without data being passed");
+			logger.warn("Unable to execute result without data being passed");
 		}
 	};
 
@@ -572,9 +571,9 @@ export async function register(): Promise<RegistrationMetaInfo> {
 	};
 
 	registrationInfo = await Home.register(cliProvider);
-	logger.info("Home", "Version:", registrationInfo);
+	logger.info("Version:", registrationInfo);
 	isHomeRegistered = true;
-	logger.info("Home", "Home provider initialized");
+	logger.info("Home provider initialized");
 	return registrationInfo;
 }
 
@@ -591,5 +590,5 @@ export async function deregister() {
 		const settings = await getSettings();
 		return Home.deregister(settings.homeProvider.id);
 	}
-	logger.warn("Home", "Unable to deregister home as there is an indication it was never registered");
+	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }

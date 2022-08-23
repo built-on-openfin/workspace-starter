@@ -1,45 +1,47 @@
-import { Logger } from "../../../logger-shapes";
+import { Logger, LogLevel } from "../../../logger-shapes";
+import { ConsoleLoggerOptions } from "./shapes";
 
 /**
  * Implement the logger using the console.
  */
-export class ConsoleLogger implements Logger {
+export class ConsoleLogger implements Logger<ConsoleLoggerOptions> {
 	/**
-	 * The last group output.
+	 * The levels of logging to include.
 	 */
-	private _lastGroup: string;
+	private _includeLevels: LogLevel[];
 
 	/**
-	 * Log data as information.
-	 * @param group The group sending the log message.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * The last group identity output.
 	 */
-	public info(group: string, message?: unknown, ...optionalParams: unknown[]): void {
-		this.handleGroup(group);
-		console.info(message, ...optionalParams);
+	private _lastGroupIdentity: string;
+
+	/**
+	 * Optionally initialize the logger.
+	 * @param options The custom options for the logger.
+	 */
+	public async initialize(options: ConsoleLoggerOptions): Promise<void> {
+		this._includeLevels = options?.includeLevels ?? ["info", "warn", "error", "debug", "trace"];
 	}
 
 	/**
-	 * Log data as error.
+	 * Log data.
+	 * @param identity The identity sending the message.
 	 * @param group The group sending the log message.
+	 * @param level The level of the message to log.
 	 * @param message The message to log.
 	 * @param optionalParams Optional parameters for details.
 	 */
-	public error(group: string, message?: unknown, ...optionalParams: unknown[]): void {
-		this.handleGroup(group);
-		console.error(message, ...optionalParams);
-	}
-
-	/**
-	 * Log data as warning.
-	 * @param group The group sending the log message.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
-	 */
-	public warn(group: string, message?: unknown, ...optionalParams: unknown[]): void {
-		this.handleGroup(group);
-		console.warn(message, ...optionalParams);
+	public log(
+		identity: string,
+		group: string,
+		level: LogLevel,
+		message: unknown,
+		...optionalParams: unknown[]
+	): void {
+		if (this._includeLevels.includes(level)) {
+			this.handleGroup(group, identity);
+			console[level](message, ...optionalParams);
+		}
 	}
 
 	/**
@@ -57,18 +59,22 @@ export class ConsoleLogger implements Logger {
 	 * Handle a group.
 	 * @param group The group.
 	 */
-	private handleGroup(group: string): void {
-		if (this._lastGroup !== group) {
-			this._lastGroup = group;
-			if (this._lastGroup) {
+	private handleGroup(group: string, identity: string): void {
+		const newGroupIdentity = `${group} ${identity}`;
+		if (this._lastGroupIdentity !== newGroupIdentity) {
+			this._lastGroupIdentity = newGroupIdentity;
+			if (this._lastGroupIdentity) {
 				console.groupEnd();
 			}
 			if (group.length > 0) {
 				console.group(
-					`%c${group}`,
+					`%c${group}%c${identity}`,
 					`color: #ffffff; background: ${this.stringToColor(
 						group
-					)}; font-size: 10px; font-weight: bold; padding: 2px`
+					)}; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 5px`,
+					`color: #ffffff; background: ${this.stringToColor(
+						identity
+					)}; font-size: 10px; font-weight: bold; padding: 2px 4px; margin-left: 4px; border-radius: 5px`
 				);
 			}
 		}

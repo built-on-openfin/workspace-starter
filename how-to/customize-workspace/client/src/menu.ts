@@ -9,8 +9,10 @@ import {
 import { ACTION_IDS } from "./actions";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
-import { logger } from "./logger-provider";
+import { createGroupLogger } from "./logger-provider";
 import { getSettings } from "./settings";
+
+const logger = createGroupLogger("Menu");
 
 function updateGlobalMenuEntry(
 	menuEntries: GlobalContextMenuItemTemplate[],
@@ -22,7 +24,7 @@ function updateGlobalMenuEntry(
 		(menuEntry) => menuEntry.data !== undefined && menuEntry.data.type === dataType
 	);
 	if (entryIndex === -1) {
-		logger.warn("Menu", `Unable to find global menu with entry type: ${dataType}`);
+		logger.warn(`Unable to find global menu with entry type: ${dataType}`);
 	} else {
 		switch (action) {
 			case "DELETE": {
@@ -32,7 +34,6 @@ function updateGlobalMenuEntry(
 			case "REPLACE-LABEL": {
 				if (entry === undefined || entry.label === undefined) {
 					logger.warn(
-						"Menu",
 						`Asked to replace label of menu entry but not provided an entry to grab a label from or given an empty label. Target menu data type: ${dataType}`
 					);
 				} else {
@@ -43,7 +44,6 @@ function updateGlobalMenuEntry(
 			case "INSERT-AFTER": {
 				if (entry === undefined) {
 					logger.warn(
-						"Menu",
 						`You cannot insert a menu entry after the menu entry with data type: ${dataType} if you do not specify a menu entry`
 					);
 				} else {
@@ -54,7 +54,6 @@ function updateGlobalMenuEntry(
 			case "INSERT-BEFORE": {
 				if (entry === undefined) {
 					logger.warn(
-						"Menu",
 						`You cannot insert a menu entry before the menu entry with data type: ${dataType} if you do not specify a menu entry`
 					);
 				} else if (entryIndex === 0) {
