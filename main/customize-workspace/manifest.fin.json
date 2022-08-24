@@ -604,6 +604,16 @@
 					"data": {}
 				}
 			]
+		},
+		"actionsProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "opacity",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/actions/opacity.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }
