@@ -1,23 +1,76 @@
 import { ButtonStyle, TemplateFragment, TemplateFragmentTypes } from "@openfin/workspace";
 
-const PAGE_ACTIONS = {
+export const PAGE_ACTION_IDS = {
 	delete: "page-delete",
 	share: "page-share",
 	launch: "page-launch"
 };
 
-const WORKSPACE_ACTIONS = {
+export const WORKSPACE_ACTION_IDS = {
 	delete: "workspace-delete",
 	share: "workspace-share",
 	launch: "workspace-launch"
 };
 
-export const PAGE_TEMPLATE: {
-	actions: { delete: string; share: string; launch: string };
-	template: TemplateFragment;
-} = {
-	actions: PAGE_ACTIONS,
-	template: {
+export function getPageTemplate(enableShare: boolean): TemplateFragment {
+	const actionButtons: TemplateFragment[] = [
+		{
+			type: TemplateFragmentTypes.Button,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px"
+			},
+			action: PAGE_ACTION_IDS.launch,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "openText",
+					optional: false
+				}
+			]
+		},
+		{
+			type: TemplateFragmentTypes.Button,
+			buttonStyle: ButtonStyle.Primary,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px",
+				marginLeft: "10px",
+				marginRight: "10px"
+			},
+			action: PAGE_ACTION_IDS.delete,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "deleteText",
+					optional: false
+				}
+			]
+		}
+	];
+
+	if (enableShare) {
+		actionButtons.push({
+			type: TemplateFragmentTypes.Button,
+			buttonStyle: ButtonStyle.Primary,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px"
+			},
+			action: PAGE_ACTION_IDS.share,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "shareText",
+					optional: false
+				}
+			]
+		});
+	}
+	return {
 		type: TemplateFragmentTypes.Container,
 		style: {
 			paddingTop: "10px",
@@ -63,71 +116,72 @@ export const PAGE_TEMPLATE: {
 					paddingTop: "10px",
 					paddingBottom: "10px"
 				},
-				children: [
-					{
-						type: TemplateFragmentTypes.Button,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px"
-						},
-						action: PAGE_ACTIONS.launch,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "openText",
-								optional: false
-							}
-						]
-					},
-					{
-						type: TemplateFragmentTypes.Button,
-						buttonStyle: ButtonStyle.Primary,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px",
-							marginLeft: "10px",
-							marginRight: "10px"
-						},
-						action: PAGE_ACTIONS.delete,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "deleteText",
-								optional: false
-							}
-						]
-					},
-					{
-						type: TemplateFragmentTypes.Button,
-						buttonStyle: ButtonStyle.Primary,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px"
-						},
-						action: PAGE_ACTIONS.share,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "shareText",
-								optional: false
-							}
-						]
-					}
-				]
+				children: actionButtons
 			}
 		]
-	}
-};
+	};
+}
 
-export const WORKSPACE_TEMPLATE: {
-	actions: { delete: string; share: string; launch: string };
-	template: TemplateFragment;
-} = {
-	actions: WORKSPACE_ACTIONS,
-	template: {
+export function getWorkspaceTemplate(enableShare: boolean): TemplateFragment {
+	const actionButtons: TemplateFragment[] = [
+		{
+			type: TemplateFragmentTypes.Button,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px"
+			},
+			action: WORKSPACE_ACTION_IDS.launch,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "openText",
+					optional: false
+				}
+			]
+		},
+		{
+			type: TemplateFragmentTypes.Button,
+			buttonStyle: ButtonStyle.Primary,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px",
+				marginLeft: "10px",
+				marginRight: "10px"
+			},
+			action: WORKSPACE_ACTION_IDS.delete,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "deleteText",
+					optional: false
+				}
+			]
+		}
+	];
+
+	if (enableShare) {
+		actionButtons.push({
+			type: TemplateFragmentTypes.Button,
+			buttonStyle: ButtonStyle.Primary,
+			style: {
+				display: "flex",
+				flexDirection: "column",
+				width: "80px"
+			},
+			action: WORKSPACE_ACTION_IDS.share,
+			children: [
+				{
+					type: TemplateFragmentTypes.Text,
+					dataKey: "shareText",
+					optional: false
+				}
+			]
+		});
+	}
+
+	return {
 		type: TemplateFragmentTypes.Container,
 		style: {
 			paddingTop: "10px",
@@ -165,69 +219,14 @@ export const WORKSPACE_TEMPLATE: {
 					paddingTop: "10px",
 					paddingBottom: "10px"
 				},
-				children: [
-					{
-						type: TemplateFragmentTypes.Button,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px"
-						},
-						action: WORKSPACE_ACTIONS.launch,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "openText",
-								optional: false
-							}
-						]
-					},
-					{
-						type: TemplateFragmentTypes.Button,
-						buttonStyle: ButtonStyle.Primary,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px",
-							marginLeft: "10px",
-							marginRight: "10px"
-						},
-						action: WORKSPACE_ACTIONS.delete,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "deleteText",
-								optional: false
-							}
-						]
-					},
-					{
-						type: TemplateFragmentTypes.Button,
-						buttonStyle: ButtonStyle.Primary,
-						style: {
-							display: "flex",
-							flexDirection: "column",
-							width: "80px"
-						},
-						action: WORKSPACE_ACTIONS.share,
-						children: [
-							{
-								type: TemplateFragmentTypes.Text,
-								dataKey: "shareText",
-								optional: false
-							}
-						]
-					}
-				]
+				children: actionButtons
 			}
 		]
-	}
-};
+	};
+}
 
-export const CURRENT_WORKSPACE_TEMPLATE: {
-	template: TemplateFragment;
-} = {
-	template: {
+export function getCurrentWorkspaceTemplate(): TemplateFragment {
+	return {
 		type: TemplateFragmentTypes.Container,
 		style: {
 			paddingTop: "10px",
@@ -257,5 +256,5 @@ export const CURRENT_WORKSPACE_TEMPLATE: {
 				}
 			}
 		]
-	}
-};
+	};
+}

@@ -9,6 +9,7 @@ import { getWorkspace } from "./workspace";
 
 const logger = createLogger("Share");
 
+export let isShareEnabled = false;
 let shareRegistered = false;
 let initOptionsListenerId: string;
 
@@ -261,7 +262,7 @@ async function saveShareRequest(payload) {
 		});
 		await notifyOfSuccess(finsLink, expiryInHours);
 	} catch (error) {
-		logger.error("Error saving share request", error);
+		logger.error("Error saving share request:", error);
 		await notifyOfFailure("The share request you raised could not be generated.");
 	}
 }
@@ -285,39 +286,45 @@ async function loadSharedEntry(id: string) {
 			await notifyOfExpiry();
 		}
 	} catch (error) {
-		logger.error("There has been an error trying to load and apply the share link", error);
+		logger.error("There has been an error trying to load and apply the share link.", error);
 		await notifyOfFailure("The specified share link cannot be loaded.");
 	}
 }
 
-export async function register() {
-	if (!shareRegistered) {
-		shareRegistered = true;
-		initOptionsListenerId = registerListener("shareId", async (initOptions) => {
-			logger.info("Received share request");
-			if (typeof initOptions.shareId === "string") {
-				await loadSharedEntry(initOptions.shareId);
-			} else {
-				logger.warn("shareId passed but it wasn't a string");
-			}
-		});
-	} else {
-		logger.warn("Share cannot be registered more than once");
+export async function register(bootstrapEnabled: boolean) {
+	isShareEnabled = bootstrapEnabled;
+
+	if (isShareEnabled) {
+		if (!shareRegistered) {
+			shareRegistered = true;
+			initOptionsListenerId = registerListener("shareId", async (initOptions) => {
+				logger.info("Received share request.");
+				if (typeof initOptions.shareId === "string") {
+					await loadSharedEntry(initOptions.shareId);
+				} else {
+					logger.warn("shareId passed but it wasn't a string");
+				}
+			});
+		} else {
+			logger.warn("Share cannot be registered more than once.");
+		}
 	}
 }
 
 export async function deregister() {
-	if (shareRegistered) {
-		// any cleanup logic can go here
-		removeListener(initOptionsListenerId);
-	} else {
-		logger.warn("Share isn't registered yet so cannot be deregistered");
+	if (isShareEnabled) {
+		if (shareRegistered) {
+			// any cleanup logic can go here
+			removeListener(initOptionsListenerId);
+		} else {
+			logger.warn("Share isn't registered yet so cannot be deregistered.");
+		}
 	}
 }
 
 export async function showShareOptions(payload: { windowIdentity: OpenFin.Identity; x: number; y: number }) {
 	if (shareRegistered) {
-		logger.info("Share called with payload", payload);
+		logger.info("Share called with payload:", payload);
 
 		const windowIdentity = payload.windowIdentity;
 		let pageId;
@@ -351,27 +358,27 @@ export async function showShareOptions(payload: { windowIdentity: OpenFin.Identi
 		});
 
 		if (r.result === "closed") {
-			logger.info("share menu dismissed");
+			logger.info("share menu dismissed.");
 		} else if (r.data.type === "page") {
 			await saveSharedPage(r.data.identity as IShareCustomData);
 		} else if (r.data.type === "workspace") {
 			await saveSharedWorkspace();
 		}
 	} else {
-		logger.warn("Share cannot be triggered as it hasn't been registered yet");
+		logger.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
 }
 
 export async function share(options?: IShareCustomData) {
 	if (shareRegistered) {
 		if (options === undefined || options.workspaceId !== undefined) {
-			logger.info("A request to share the workspace has been raised");
+			logger.info("A request to share the workspace has been raised.");
 			await saveSharedWorkspace(options?.workspaceId);
 		} else {
-			logger.info("Share called with payload", options);
+			logger.info("Share called with payload: =", options);
 			await saveSharedPage(options);
 		}
 	} else {
-		logger.warn("Share cannot be triggered as it hasn't been registered yet");
+		logger.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
 }

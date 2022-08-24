@@ -66,6 +66,7 @@ export async function init() {
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
+	bootstrapOptions.sharing = bootstrapOptions.sharing ?? true;
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
 	await registerIntegration(
@@ -128,7 +129,7 @@ export async function init() {
 		await registerNotifications();
 	}
 
-	await registerShare();
+	await registerShare(bootstrapOptions.sharing);
 
 	// Remove any entries from autoShow that have not been registered
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter((component) =>
@@ -172,11 +173,21 @@ export async function init() {
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
 		await deregisterIntegration();
-		await deregisterDock();
-		await deregisterStore();
-		await deregisterHome();
-		await deregisterShare();
-		await deregisterNotifications();
+		if (bootstrapOptions.dock) {
+			await deregisterDock();
+		}
+		if (bootstrapOptions.store) {
+			await deregisterStore();
+		}
+		if (bootstrapOptions.home) {
+			await deregisterHome();
+		}
+		if (bootstrapOptions.sharing) {
+			await deregisterShare();
+		}
+		if (bootstrapOptions.notifications) {
+			await deregisterNotifications();
+		}
 		await fin.Platform.getCurrentSync().quit();
 	});
 

@@ -1,6 +1,7 @@
 import { BrowserButtonType, CustomBrowserButtonConfig, ToolbarButton } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 import { ToolbarButtonDefinition } from "./shapes";
+import { isShareEnabled } from "./share";
 import { getCurrentTheme } from "./themes";
 
 let allToolbarButtons: ToolbarButtonDefinition[];
@@ -24,6 +25,7 @@ async function getAvailableToolbarButtons(): Promise<ToolbarButtonDefinition[]> 
 		) {
 			entry.button.iconUrl = entry.themes[theme.label];
 		}
+		entry.include = entry.id === "share" ? isShareEnabled : entry.include;
 		validatedToolbarButtons.push(entry);
 	}
 	allToolbarButtons = validatedToolbarButtons;
