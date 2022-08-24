@@ -594,6 +594,16 @@
 					"supportedActions": ["raise-intent", "share-context"]
 				}
 			]
+		},
+		"loggerProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "console",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/log/console.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }
