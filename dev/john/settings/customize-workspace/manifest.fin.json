@@ -599,7 +599,7 @@
 				{
 					"enabled": true,
 					"id": "console",
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/settings/customize-workspace/js/modules/logger/console.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/settings/customize-workspace/js/modules/log/console.bundle.js",
 					"data": {}
 				}
 			]
