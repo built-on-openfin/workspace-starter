@@ -1,4 +1,4 @@
-import { deregister, register } from "./home";
+import { deregister, register, show } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { getSettings } from "./settings";
 
@@ -9,6 +9,7 @@ export async function init() {
 	const settings = await getSettings();
 
 	await register();
+	await show();
 
 	await registerIntegration(
 		{

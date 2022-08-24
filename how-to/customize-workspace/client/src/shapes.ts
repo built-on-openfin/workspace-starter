@@ -44,6 +44,7 @@ export interface BootstrapOptions {
 	home: boolean;
 	dock: boolean;
 	notifications: boolean;
+	sharing: boolean;
 	autoShow: BootstrapComponents[];
 }
 
