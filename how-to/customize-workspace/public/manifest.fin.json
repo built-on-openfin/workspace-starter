@@ -75,6 +75,7 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
+			"sharing": true,
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
