@@ -12,24 +12,27 @@ import {
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
+
+const logger = createLogger("Store");
 
 let isStoreRegistered = false;
 let registrationInfo: RegistrationMetaInfo;
 
 export async function register(): Promise<RegistrationMetaInfo> {
-	console.log("Initializing the storefront provider.");
+	logger.info("Initializing the storefront provider");
 	const provider = await getStoreProvider();
 	if (provider !== null) {
 		try {
 			registrationInfo = await Storefront.register(provider);
-			console.log(`store version:`, registrationInfo);
+			logger.info("Version:", registrationInfo);
 			isStoreRegistered = true;
-			console.log("Storefront provider initialized.");
+			logger.info("Storefront provider initialized");
 			return registrationInfo;
 		} catch (err) {
-			console.error("An error was encountered while trying to register the content store provider", err);
+			logger.error("An error was encountered while trying to register the content store provider", err);
 			return null;
 		}
 	}
@@ -40,19 +43,19 @@ export async function deregister() {
 		const settings = await getSettings();
 		await Storefront.deregister(settings.storefrontProvider.id);
 	} else {
-		console.warn(
-			"Unable to call store deregister as there is an indication it was never registered successfully."
+		logger.warn(
+			"Unable to call store deregister as there is an indication it was never registered successfully"
 		);
 	}
 }
 
 export async function show() {
-	console.log("Showing the store.");
+	logger.info("Showing the store");
 	return Storefront.show();
 }
 
 export async function hide() {
-	console.log("Hiding the store.");
+	logger.info("Hiding the store");
 	return Storefront.hide();
 }
 
@@ -88,18 +91,18 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 			config.storefrontProvider.landingPage.bottomRow !== undefined &&
 			config.storefrontProvider.navigation !== undefined)
 	) {
-		console.error(
-			"StorefrontProvider is not correctly configured in the customSettings of this manifest. You must ensure that storefrontProvider is defined, that it has an id and title and that the footer, landingPage (top row, middle row and bottom row) and navigation sections have been defined."
+		logger.error(
+			"StorefrontProvider is not correctly configured in the customSettings of this manifest. You must ensure that storefrontProvider is defined, that it has an id and title and that the footer, landingPage (top row, middle row and bottom row) and navigation sections have been defined"
 		);
 		return false;
 	}
 
 	const validateId = (id: string, namespace: string, warning: string) => {
 		if (id === undefined) {
-			console.warn(`${namespace}: ${warning}`);
+			logger.warn(`${namespace}: ${warning}`);
 		} else if (idList.includes(id)) {
 			hasDuplicateIds = true;
-			console.error(
+			logger.error(
 				`${namespace}: The id is used in more than one place. Please have a unique and idempotent id: ${id}`
 			);
 		} else {
@@ -108,9 +111,9 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 	};
 
 	const warningMessage =
-		"The id is not defined. This demo will generate an id based on title but you should have a unique and idempotent id when building your own store.";
+		"The id is not defined. This demo will generate an id based on title but you should have a unique and idempotent id when building your own store";
 
-	console.log("Validating settings storefrontProvider navigation config");
+	logger.info("Validating settings storefrontProvider navigation config");
 	const navigation = config.storefrontProvider.navigation;
 	for (let i = 0; i < navigation.length; i++) {
 		validateId(navigation[i].id, `storefrontProvider.navigation[${i}].id`, warningMessage);
@@ -120,14 +123,14 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 		}
 	}
 
-	console.log("Validating settings storefrontProvider landing page hero config");
+	logger.info("Validating settings storefrontProvider landing page hero config");
 	const landingPage = config.storefrontProvider.landingPage;
 
 	if (landingPage?.hero?.cta !== undefined) {
 		validateId(landingPage.hero.cta.id, "storefrontProvider.landingPage.hero.cta.id", warningMessage);
 	}
 
-	console.log("Validating settings storefrontProvider landing page top row config");
+	logger.info("Validating settings storefrontProvider landing page top row config");
 	const topRow = landingPage.topRow;
 
 	if (topRow.items !== undefined) {
@@ -136,7 +139,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 		}
 	}
 
-	console.log("Validating settings storefrontProvider landing page bottom row config");
+	logger.info("Validating settings storefrontProvider landing page bottom row config");
 	const bottomRow = landingPage.bottomRow;
 	if (bottomRow.items !== undefined) {
 		for (let i = 0; i < bottomRow.items.length; i++) {
@@ -148,10 +151,10 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 		}
 	}
 
-	console.log("Validating ids, checking for duplicate ids.");
+	logger.info("Validating ids, checking for duplicate ids");
 	if (hasDuplicateIds) {
-		console.error(
-			"You have defined duplicate ids (please see the other error messages) which could result in strange behaviour (if we are routing by id and you have two or more items that resolve to the same id then it could navigate to something unexpected. Please ensure ids are unique and idempotent."
+		logger.error(
+			"You have defined duplicate ids (please see the other error messages) which could result in strange behaviour (if we are routing by id and you have two or more items that resolve to the same id then it could navigate to something unexpected. Please ensure ids are unique and idempotent"
 		);
 		return false;
 	}
@@ -160,7 +163,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 }
 
 async function getStoreProvider(): Promise<StorefrontProvider> {
-	console.log("Getting the store provider.");
+	logger.info("Getting the store provider");
 	const settings = await getSettings();
 	if (isStorefrontConfigurationValid(settings)) {
 		return {
@@ -178,7 +181,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 }
 
 async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
-	console.log("Showing the store navigation.");
+	logger.info("Showing the store navigation");
 	const navigationSectionItemLimit = 5;
 	const navigationSectionLimit = 2;
 	const settings = await getSettings();
@@ -190,8 +193,8 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 
 	for (let i = 0; i < settings.storefrontProvider.navigation.length; i++) {
 		if (navigationSections.length === navigationSectionLimit) {
-			console.log(
-				"More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken."
+			logger.info(
+				"More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken"
 			);
 			break;
 		}
@@ -218,7 +221,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 }
 
 async function getLandingPage(): Promise<StorefrontLandingPage> {
-	console.log("Getting the store landing page.");
+	logger.info("Getting the store landing page");
 	const landingPage: StorefrontLandingPage = {
 		topRow: null,
 		middleRow: null,
@@ -256,14 +259,14 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 			]
 		};
 	} else {
-		console.error("You need to have a topRow defined in your landing page.");
+		logger.error("You need to have a topRow defined in your landing page");
 	}
 
 	if (settings?.storefrontProvider?.landingPage?.middleRow !== undefined) {
 		const middleRow = settings.storefrontProvider.landingPage.middleRow;
 		const middleRowApps = await getAppsByTag(middleRow.tags);
 		if (middleRowApps.length > middleRowAppLimit) {
-			console.warn(
+			logger.warn(
 				`Too many apps (${
 					middleRowApps.length
 				}) have been returned by the middle row tag definition ${middleRow.tags.join(
@@ -284,7 +287,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 			apps: validatedMiddleRowApps
 		};
 	} else {
-		console.error("You need to have a middleRow defined in your landing page.");
+		logger.error("You need to have a middleRow defined in your landing page");
 	}
 
 	if (settings?.storefrontProvider?.landingPage?.bottomRow !== undefined) {
@@ -301,19 +304,19 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 			]
 		};
 	} else {
-		console.error("You need to have a bottomRow defined in your landing page.");
+		logger.error("You need to have a bottomRow defined in your landing page");
 	}
 
 	return landingPage;
 }
 
 async function getFooter(): Promise<StorefrontFooter> {
-	console.log("Getting the store footer.");
+	logger.info("Getting the store footer");
 	const settings = await getSettings();
 	if (settings?.storefrontProvider?.footer !== undefined) {
 		return settings.storefrontProvider.footer;
 	}
-	console.error("Storefront is being initialised without a footer configured.");
+	logger.error("Storefront is being initialised without a footer configured");
 	return null;
 }
 
@@ -361,7 +364,7 @@ async function getNavigationItems(items: StorefrontSettingsNavigationItem[], lim
 	}
 
 	if (navigationItems.length > limit) {
-		console.warn(
+		logger.warn(
 			`You have defined too many navigations items (${navigationItems.length}). Please limit it to ${limit} as we will only take the first ${limit}`
 		);
 	}
@@ -386,7 +389,7 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 	}
 
 	if (items.length > limit) {
-		console.warn(
+		logger.warn(
 			`You have defined too many storefront detailed navigation items (${items.length}). Please keep it to the limit of ${limit} as only the first ${limit} will be returned.`
 		);
 	}

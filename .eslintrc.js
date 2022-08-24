@@ -523,13 +523,7 @@ module.exports = {
 				'@typescript-eslint/prefer-string-starts-ends-with': ['error'],
 				'@typescript-eslint/prefer-ts-expect-error': ['error'],
 				'@typescript-eslint/promise-function-async': ['error'],
-				'@typescript-eslint/quotes': [
-					'error',
-					'double',
-					{
-						allowTemplateLiterals: true
-					}
-				],
+				'@typescript-eslint/quotes': ['error', 'double'],
 				'@typescript-eslint/require-array-sort-compare': ['off'],
 				'@typescript-eslint/require-await': ['off'],
 				'@typescript-eslint/restrict-plus-operands': ['error'],

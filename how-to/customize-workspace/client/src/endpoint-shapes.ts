@@ -1,12 +1,14 @@
+import type { LoggerCreator } from "./logger-shapes";
+
 export interface EndpointProvider {
-	init: (options: unknown) => Promise<void>;
+	init: (options: unknown, loggerCreator: LoggerCreator) => Promise<void>;
 	hasEndpoint(id: string): boolean;
 	action<T>(endpointId: string, request?: T): Promise<boolean>;
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null>;
 }
 
 export interface Endpoint {
-	init: (options: unknown) => Promise<void>;
+	init: (options: unknown, loggerCreator: LoggerCreator) => Promise<void>;
 	action<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
 	requestResponse<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
 }

@@ -1,5 +1,7 @@
+import type { LoggerCreator } from "./logger-shapes";
+
 export interface AuthProvider {
-	init<T>(options: T): Promise<void>;
+	init<T>(options: T, loggerCreator: LoggerCreator): Promise<void>;
 	subscribe(
 		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
 		callback: () => Promise<void>
@@ -8,11 +10,6 @@ export interface AuthProvider {
 	isAuthenticationRequired(): Promise<boolean>;
 	login(): Promise<boolean>;
 	logout(): Promise<boolean>;
-	setLogger(
-		info: (message: string) => void,
-		warn: (message: string) => void,
-		error: (message: string) => void
-	): void;
 	getUserInfo<T>(): Promise<T>;
 }
 

@@ -1,4 +1,8 @@
 import { getConnectedSnapshotSourceClients } from "./connections";
+import { createLogger } from "./logger-provider";
+
+const logger = createLogger("SnapshotSource");
+
 interface ClientSnapshot {
 	identity: OpenFin.ApplicationIdentity;
 	snapshot: unknown;
@@ -14,11 +18,11 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 		sources.map(async (entry) => {
 			const snapShotSource = await fin.SnapshotSource.wrap({ uuid: entry.identity.uuid });
 			try {
-				console.log(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot.`);
+				logger.info(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot`);
 				const sourceSnapshot = await snapShotSource.getSnapshot();
 				return { identity: entry.identity, snapshot: sourceSnapshot };
 			} catch {
-				console.log(`Snapshot source: ${entry.identity.uuid} was not available.`);
+				logger.info(`Snapshot source: ${entry.identity.uuid} was not available`);
 				return null;
 			}
 		})
@@ -47,15 +51,15 @@ export async function applyClientSnapshot(snapshot) {
 			if (clientSnapshot) {
 				try {
 					const snapShotSource = await fin.SnapshotSource.wrap(clientSnapshot.identity);
-					console.log(
+					logger.info(
 						`Snapshot source: ${entry.identity.uuid} is running and has a snapshot entry. Applying snapshot.`
 					);
 					await snapShotSource.applySnapshot(clientSnapshot.snapshot);
 				} catch {
-					console.log(`Snapshot source: ${entry.identity.uuid} is not able to apply the snapshot.`);
+					logger.info(`Snapshot source: ${entry.identity.uuid} is not able to apply the snapshot`);
 				}
 			} else {
-				console.log(`Snapshot source: ${entry.identity.uuid} but doesn't have any entries in this snapshot.`);
+				logger.info(`Snapshot source: ${entry.identity.uuid} but doesn't have any entries in this snapshot`);
 			}
 			return {};
 		})

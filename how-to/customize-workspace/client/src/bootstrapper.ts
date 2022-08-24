@@ -17,6 +17,7 @@ import {
 import { init as registerInitOptionsListener } from "./init-options";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
+import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
 import { getSettings } from "./settings";
@@ -29,18 +30,20 @@ import {
 	show as showStore
 } from "./store";
 
+const logger = createLogger("Bootstrapper");
+
 let bootstrapOptions: BootstrapOptions;
 
 async function onReAuthenticationRequired() {
-	console.log(`The platform has detected that authentication is required (might be expired session).`);
-	console.log(`At this stage the platform can decide how to proceed:`);
-	console.log(` - Hide all visible windows?`);
-	console.log(
-		` - Disable results from showing in home by having the home provider check to see if authentication is required before showing results?`
+	logger.info("The platform has detected that authentication is required (might be expired session)");
+	logger.info("At this stage the platform can decide how to proceed:");
+	logger.info(" - Hide all visible windows?");
+	logger.info(
+		" - Disable results from showing in home by having the home provider check to see if authentication is required before showing results?"
 	);
-	console.log(` - Have Store check if authentication is required before returning store entries?`);
-	console.log(` - Have launch functions not launch if authentication is required?`);
-	console.log(` - If an intent is raised do not action it if authentication is required?`);
+	logger.info(" - Have Store check if authentication is required before returning store entries?");
+	logger.info(" - Have launch functions not launch if authentication is required?");
+	logger.info(" - If an intent is raised do not action it if authentication is required?");
 	if (bootstrapOptions.home) {
 		await hideHome();
 	}
@@ -56,7 +59,7 @@ async function onReAuthenticationRequired() {
 export async function init() {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
 	// gather reference data etc before starting workspace and interacting with it.
-	console.log("Initializing the bootstrapper");
+	logger.info("Initializing the bootstrapper");
 	const settings = await getSettings();
 	bootstrapOptions = { ...settings.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
@@ -149,7 +152,7 @@ export async function init() {
 	}
 
 	if (isAuthenticationEnabled()) {
-		console.log("Setting up listeners for authentication events.");
+		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
 		authProvider.subscribe("logged-in", async () => {

@@ -1,7 +1,11 @@
-import { EndpointDefinition } from "../../../endpoint-shapes";
+import type { EndpointDefinition } from "../../../endpoint-shapes";
+import type { Logger, LoggerCreator } from "../../../logger-shapes";
 
-export async function init(options: unknown): Promise<void> {
-	console.log("Was passed the following options:", options);
+let logger: Logger;
+
+export async function init(options: unknown, loggerCreator: LoggerCreator): Promise<void> {
+	logger = loggerCreator("ChannelEndpoint");
+	logger.info("Was passed the following options", options);
 }
 
 export async function action(
@@ -18,11 +22,11 @@ export async function action(
 	request?: { payload?: unknown }
 ): Promise<boolean> {
 	if (request === undefined) {
-		console.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false.`);
+		logger.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
 		return false;
 	}
 	if (endpointDefinition.type !== "module") {
-		console.warn(
+		logger.warn(
 			`We only expect endpoints of type module. Unable to perform action: ${endpointDefinition.id}`
 		);
 		return false;
@@ -37,7 +41,7 @@ export async function action(
 		endpointDefinition.options.channelName === undefined
 	) {
 		if (logWarn) {
-			console.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
+			logger.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return false;
 	}
@@ -52,21 +56,21 @@ export async function action(
 			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
 		) {
 			if (logWarn) {
-				console.warn(
+				logger.warn(
 					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
 				);
 			}
 			return false;
 		}
 		if (logInfo) {
-			console.log(`Sending action for endpoint id: ${endpointDefinition.id}`);
+			logger.info(`Sending action for endpoint id: ${endpointDefinition.id}`);
 		}
 		await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
 		await channel.disconnect();
 		return true;
 	} catch (error) {
 		if (logError) {
-			console.error(
+			logger.error(
 				`Error executing/or connecting to action. Endpoint with id: ${endpointDefinition.id}`,
 				error
 			);
@@ -92,7 +96,7 @@ export async function requestResponse(
 	let defaultValue: unknown = null;
 
 	if (endpointDefinition.type !== "module") {
-		console.warn(
+		logger.warn(
 			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 		);
 		return defaultValue;
@@ -114,7 +118,7 @@ export async function requestResponse(
 		endpointDefinition.options.channelName === undefined
 	) {
 		if (logWarn) {
-			console.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
+			logger.warn(`You need to provide actionName and channelName for endpoint: ${endpointDefinition.id}`);
 		}
 		return defaultValue;
 	}
@@ -128,21 +132,21 @@ export async function requestResponse(
 			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
 		) {
 			if (logWarn) {
-				console.warn(
+				logger.warn(
 					`Endpoint Id: ${endpointDefinition.id} has the source running (${endpointDefinition.options.uuid}) but the provider of the channel: ${endpointDefinition.options.channelName} is not coming from the source. Returning false.`
 				);
 			}
 			return defaultValue;
 		}
 		if (logInfo) {
-			console.log(`Sending request response for endpoint: ${endpointDefinition.id}`);
+			logger.info(`Sending request response for endpoint: ${endpointDefinition.id}`);
 		}
 		const response: unknown = await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
 		await channel.disconnect();
 		return response;
 	} catch (error) {
 		if (logError) {
-			console.error(
+			logger.error(
 				`Error executing request/response and connecting to endpoint with id: ${endpointDefinition.id}`,
 				error
 			);

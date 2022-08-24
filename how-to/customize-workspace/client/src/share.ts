@@ -3,8 +3,11 @@ import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/
 import { launchPage } from "./browser";
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
+import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
+
+const logger = createLogger("Share");
 
 export let isShareEnabled = false;
 let shareRegistered = false;
@@ -246,7 +249,7 @@ async function saveShareRequest(payload) {
 		if (platformInfo.manifestUrl.startsWith("http")) {
 			finsLink = `${platformInfo.manifestUrl.replace("http", "fin")}?$$shareId=${id}`;
 		} else {
-			console.error(
+			logger.error(
 				"We do not support file based manifest launches. The manifest has to be served over http/https:",
 				platformInfo.manifestUrl
 			);
@@ -259,7 +262,7 @@ async function saveShareRequest(payload) {
 		});
 		await notifyOfSuccess(finsLink, expiryInHours);
 	} catch (error) {
-		console.error("Error saving share request:", error);
+		logger.error("Error saving share request:", error);
 		await notifyOfFailure("The share request you raised could not be generated.");
 	}
 }
@@ -274,7 +277,7 @@ async function loadSharedEntry(id: string) {
 				const platform = getCurrentSync();
 				await platform.applySnapshot(shareEntry.data.snapshot);
 			} else {
-				console.warn(`Share entry of unknown type specified: ${shareEntry.type}`);
+				logger.warn(`Share entry of unknown type specified: ${shareEntry.type}`);
 				await notifyOfFailure("The specified share link is not supported and cannot be loaded.");
 				return;
 			}
@@ -283,7 +286,7 @@ async function loadSharedEntry(id: string) {
 			await notifyOfExpiry();
 		}
 	} catch (error) {
-		console.error("There has been an error trying to load and apply the share link.", error);
+		logger.error("There has been an error trying to load and apply the share link.", error);
 		await notifyOfFailure("The specified share link cannot be loaded.");
 	}
 }
@@ -295,15 +298,15 @@ export async function register(bootstrapEnabled: boolean) {
 		if (!shareRegistered) {
 			shareRegistered = true;
 			initOptionsListenerId = registerListener("shareId", async (initOptions) => {
-				console.log("Received share request.");
+				logger.info("Received share request.");
 				if (typeof initOptions.shareId === "string") {
 					await loadSharedEntry(initOptions.shareId);
 				} else {
-					console.warn("shareId passed but it wasn't a string");
+					logger.warn("shareId passed but it wasn't a string");
 				}
 			});
 		} else {
-			console.warn("Share cannot be registered more than once.");
+			logger.warn("Share cannot be registered more than once.");
 		}
 	}
 }
@@ -314,14 +317,14 @@ export async function deregister() {
 			// any cleanup logic can go here
 			removeListener(initOptionsListenerId);
 		} else {
-			console.warn("Share isn't registered yet so cannot be deregistered.");
+			logger.warn("Share isn't registered yet so cannot be deregistered.");
 		}
 	}
 }
 
 export async function showShareOptions(payload: { windowIdentity: OpenFin.Identity; x: number; y: number }) {
 	if (shareRegistered) {
-		console.log("Share called with payload:", payload);
+		logger.info("Share called with payload:", payload);
 
 		const windowIdentity = payload.windowIdentity;
 		let pageId;
@@ -355,27 +358,27 @@ export async function showShareOptions(payload: { windowIdentity: OpenFin.Identi
 		});
 
 		if (r.result === "closed") {
-			console.log("share menu dismissed.");
+			logger.info("share menu dismissed.");
 		} else if (r.data.type === "page") {
 			await saveSharedPage(r.data.identity as IShareCustomData);
 		} else if (r.data.type === "workspace") {
 			await saveSharedWorkspace();
 		}
 	} else {
-		console.warn("Share cannot be triggered as it hasn't been registered yet.");
+		logger.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
 }
 
 export async function share(options?: IShareCustomData) {
 	if (shareRegistered) {
 		if (options === undefined || options.workspaceId !== undefined) {
-			console.log("A request to share the workspace has been raised.");
+			logger.info("A request to share the workspace has been raised.");
 			await saveSharedWorkspace(options?.workspaceId);
 		} else {
-			console.log("Share called with payload: =", options);
+			logger.info("Share called with payload: =", options);
 			await saveSharedPage(options);
 		}
 	} else {
-		console.warn("Share cannot be triggered as it hasn't been registered yet.");
+		logger.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
 }

@@ -6,6 +6,9 @@ import {
 	EndpointModule,
 	EndpointProviderOptions
 } from "./endpoint-shapes";
+import { createLogger } from "./logger-provider";
+
+const logger = createLogger("Endpoint");
 
 let endpointDefinitions: EndpointDefinition<unknown>[] = [];
 let moduleDefinitions: EndpointModuleDefinition[] = [];
@@ -21,18 +24,18 @@ async function getModuleEndpoint(moduleId: string): Promise<Endpoint> {
 	const moduleDefinition = moduleDefinitions.find((entry) => entry.id === moduleId);
 
 	if (moduleDefinition === undefined) {
-		console.warn(`Specified Endpoint Module Id: ${moduleId} is not available.`);
+		logger.warn(`Specified Endpoint Module Id: ${moduleId} is not available`);
 		return undefined;
 	}
 
 	try {
 		const mod: EndpointModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
 		const endpoint = mod.endpoint;
-		await endpoint.init(moduleDefinition.data);
+		await endpoint.init(moduleDefinition.data, createLogger);
 		availableEndpoints[moduleDefinition.id] = endpoint;
 		return endpoint;
 	} catch (err) {
-		console.error(`Error loading module ${moduleId} with url ${moduleDefinition.url}`, err);
+		logger.error(`Error loading module ${moduleId} with url ${moduleDefinition.url}`, err);
 		return undefined;
 	}
 }
@@ -41,7 +44,7 @@ function getEndpointDefinition(endpointId: string): EndpointDefinition<unknown> 
 	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
 	if (endpoint === undefined) {
-		console.warn(`Specified Endpoint Id ${endpointId} is not available.`);
+		logger.warn(`Specified Endpoint Id ${endpointId} is not available`);
 	}
 
 	return endpoint;
@@ -97,7 +100,7 @@ export async function action<T>(endpointId: string, request?: T): Promise<boolea
 		const { url, ...options } = endpoint.options;
 		const req = getRequestOptions(url, options, request);
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
-			console.warn(
+			logger.warn(
 				`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 			);
 			return false;
@@ -112,7 +115,7 @@ export async function action<T>(endpointId: string, request?: T): Promise<boolea
 		}
 		return resolvedEndpoint.action(endpoint, request);
 	}
-	console.warn(`${endpointId} specifies a type: ${endpointType} that is not supported.`);
+	logger.warn(`${endpointId} specifies a type: ${endpointType} that is not supported`);
 	return false;
 }
 
@@ -129,7 +132,7 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 		const { url, ...options } = endpoint.options;
 		const req = getRequestOptions(url, options, request);
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
-			console.warn(
+			logger.warn(
 				`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 			);
 			return null;
@@ -149,6 +152,6 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 		}
 		return resolvedEndpoint.requestResponse<T, R>(endpoint, request);
 	}
-	console.warn(`${endpointId} specifies a type: ${endpointType} that is not supported.`);
+	logger.warn(`${endpointId} specifies a type: ${endpointType} that is not supported`);
 	return null;
 }

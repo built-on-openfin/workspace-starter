@@ -39,9 +39,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 9.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
-   settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 9.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings). This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
@@ -655,6 +653,16 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
                 }
             }
         ]
+    },
+    "loggerProvider": {
+        "modules": [
+        {
+            "enabled": true,
+            "id": "console",
+            "url": "http://localhost:8080/js/modules/logger/console.bundle.js",
+            "data": {}
+            }
+        ]
     }
 }
 ```
@@ -770,6 +778,13 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | integrations.autoStart                                         | Should the integration automatically start if enabled (default: true) enabled                                                                                                                                                                                                                                                                                                                                                                                       |
 | integrations.moduleUrl                                         | Where should the module be loaded from                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | integrations.data                                              | Data/config that will be passed to the integration module (for this sample look at the description of the settings from the integrate-with-salesforce starter)                                                                                                                                                                                                                                                                                                      |
+| **loggerProvider**                                             | Config related to the loggers                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| modules                                                        | Array of modules to load for logging                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| modules.item                                                   | A module to load for logging                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| modules.item.enabled                                           | Is the module enabled                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| modules.item.id                                                | The id of the module                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| modules.item.url                                               | The url of the module to load                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| modules.item.data                                              | Any custom settings for the module                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ### Note About The Manifest
 

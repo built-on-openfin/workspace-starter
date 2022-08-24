@@ -14,7 +14,10 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
+import { createLogger } from "./logger-provider";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
+
+const logger = createLogger("Integrations");
 
 const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -104,14 +107,14 @@ async function createResult(
 
 async function initializeIntegration(integration: Integration<unknown>) {
 	if (!passedIntegrationManager) {
-		console.error("IntegrationManager is not available, make sure your have called register");
+		logger.error("IntegrationManager is not available, make sure your have called register");
 	}
 	if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
 		try {
 			const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
 			knownIntegrationProviders[integration.id] = mod.integration;
 		} catch (err) {
-			console.error(`Error loading module ${integration.moduleUrl}`, err);
+			logger.error(`Error loading module ${integration.moduleUrl}`, err);
 		}
 	}
 	if (knownIntegrationProviders[integration.id]) {
@@ -122,16 +125,16 @@ async function initializeIntegration(integration: Integration<unknown>) {
 			include: true
 		});
 		if (homeIntegration.register) {
-			await homeIntegration.register(passedIntegrationManager, integration);
+			await homeIntegration.register(passedIntegrationManager, integration, createLogger);
 		}
 	} else {
-		console.error("Missing module in integration providers", integration.id);
+		logger.error("Missing module in integration providers", integration.id);
 	}
 }
 
 export async function getManagementResults(): Promise<HomeSearchResponse> {
 	if (!passedIntegrationProvider) {
-		console.error("IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const homeResponse: HomeSearchResponse = {
@@ -171,7 +174,7 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 
 	if (homeResponse.results.length === 0) {
 		const description =
-			"You either have no integrations listed or none of them are enabled. Please check with support if you believe you should have access to integrations.";
+			"You either have no integrations listed or none of them are enabled. Please check with support if you believe you should have access to integrations";
 		const noEntries: HomeSearchResult = {
 			key: "integration-provider-no-results",
 			title: "No integrations available",
@@ -184,8 +187,8 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 			templateContent: description
 		};
 		homeResponse.results.push(noEntries);
-		console.error(
-			"Integration management is enabled but you have no integrations listed in your settings or none of them are enabled."
+		logger.error(
+			"Integration management is enabled but you have no integrations listed in your settings or none of them are enabled"
 		);
 	}
 
@@ -201,9 +204,9 @@ async function setPreference(integrationId: string, include: boolean) {
 			{ id: integrationId, payload: { include } }
 		);
 		if (success) {
-			console.log(`Saved integration: ${integrationId} preference. Include: ${include}`);
+			logger.info(`Saved integration: ${integrationId} preference. Include: ${include}`);
 		} else {
-			console.log(`Unable to save integration: ${integrationId} preference. Include: ${include}`);
+			logger.info(`Unable to save integration: ${integrationId} preference. Include: ${include}`);
 		}
 	}
 }
@@ -217,9 +220,9 @@ async function getPreference(integrationId: string): Promise<{ include: boolean 
 			{ id: integrationId }
 		);
 		if (preference !== undefined && preference !== null) {
-			console.log(`Retrieved preference for integration: ${integrationId}`);
+			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
-			console.log(`Unable to get preference for integration: ${integrationId}`);
+			logger.info(`Unable to get preference for integration: ${integrationId}`);
 		}
 		return preference;
 	}
@@ -232,7 +235,7 @@ async function updateIntegrationStatus(
 	include: boolean
 ): Promise<boolean> {
 	if (!passedIntegrationProvider) {
-		console.error("IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const knownIntegration = knownIntegrationProviders[integrationId];
@@ -251,7 +254,7 @@ async function updateIntegrationStatus(
 			await setPreference(integration.id, !include);
 			return true;
 		}
-		console.warn(`Unable to find specified integration: ${integrationId} in settings.`);
+		logger.warn(`Unable to find specified integration: ${integrationId} in settings`);
 		return false;
 	}
 	const index = homeIntegrations.findIndex((entry) => entry.integration.id === integrationId);
@@ -326,7 +329,7 @@ export async function getSearchResults(
 	lastResponse: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
 	if (!passedIntegrationProvider) {
-		console.error("IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	const homeResponse: HomeSearchResponse = {
@@ -363,7 +366,7 @@ export async function getSearchResults(
 				homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
 			}
 		} else {
-			console.error(promiseResult.reason);
+			logger.error(promiseResult.reason);
 		}
 	}
 
@@ -376,7 +379,7 @@ export async function getSearchResults(
  */
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	if (!passedIntegrationProvider) {
-		console.error("IntegrationProvider is not available, make sure your have called register");
+		logger.error("IntegrationProvider is not available, make sure your have called register");
 	}
 
 	let results: HomeSearchResult[] = [];
@@ -445,7 +448,7 @@ export async function itemSelection(
 			);
 
 			if (!handled) {
-				console.warn(`Error while trying to handle ${foundIntegration.integration.id} entry`, result.data);
+				logger.warn(`Error while trying to handle ${foundIntegration.integration.id} entry`, result.data);
 			}
 
 			return handled;
