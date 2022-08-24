@@ -1,5 +1,11 @@
 import { StorefrontFooter, Image } from "@openfin/workspace";
-import { CustomThemes, ToolbarButton } from "@openfin/workspace-platform";
+import {
+	CustomThemes,
+	GlobalContextMenuOptionType,
+	PageTabContextMenuOptionType,
+	ToolbarButton,
+	ViewTabMenuOptionType
+} from "@openfin/workspace-platform";
 import { NotificationsPlatform } from "@openfin/workspace/notifications";
 import { ActionsProviderOptions } from "./actions-shapes";
 import { AuthProviderOptions } from "./auth-shapes";
@@ -27,7 +33,33 @@ export interface ToolbarButtonDefinition {
 	themes?: { [key: string]: string };
 	button: ToolbarButton & { iconUrl?: string };
 }
-interface BrowserProviderOptions {
+
+export type MenuPositionOperation =
+	| "replaceLabel"
+	| "insertBefore"
+	| "insertAfter"
+	| "delete"
+	| "start"
+	| "end";
+export type MenuSeparatorPosition = "before" | "after";
+
+export interface MenuEntry<T> {
+	include: boolean;
+	label: string;
+	data?: {
+		type: T;
+	};
+	position?: {
+		operation: MenuPositionOperation;
+		type?: T;
+	};
+	conditions?: {
+		isAuthenticationEnabled?: boolean;
+	};
+	separator?: MenuSeparatorPosition;
+}
+
+export interface BrowserProviderOptions {
 	toolbarButtons?: ToolbarButtonDefinition[];
 	windowOptions: {
 		title?: string;
@@ -35,7 +67,9 @@ interface BrowserProviderOptions {
 		newTabUrl?: string;
 		newPageUrl?: string;
 	};
-	supportedMenuActions?: string[];
+	globalMenu?: MenuEntry<GlobalContextMenuOptionType>[];
+	pageMenu?: MenuEntry<PageTabContextMenuOptionType>[];
+	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];
 }
 
 export type BootstrapComponents = "home" | "store" | "dock" | "notifications";
