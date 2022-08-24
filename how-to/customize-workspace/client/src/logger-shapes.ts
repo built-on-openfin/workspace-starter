@@ -7,15 +7,15 @@ export interface LogOptions {
 	levels?: LogLevel[];
 }
 
-export interface LoggerCore<T = unknown> {
+export interface LogProvider<T = unknown> {
 	/**
-	 * Optionally initialize the logger.
-	 * @param options The custom options for the logger.
+	 * Optionally initialize the log provider.
+	 * @param options The custom options for the log provider.
 	 */
 	initialize?(options: T): Promise<void>;
 
 	/**
-	 * Optionally close down the logger.
+	 * Optionally close down the log provider.
 	 */
 	closedown?(): Promise<void>;
 
@@ -30,11 +30,11 @@ export interface LoggerCore<T = unknown> {
 	log(identity: string, group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void;
 }
 
-export interface LoggerModule {
-	logger: LoggerCore;
+export interface LogProviderModule {
+	logProvider: LogProvider;
 }
 
-export interface LoggerModuleDefinition {
+export interface LogProviderModuleDefinition {
 	/**
 	 * The id of the module.
 	 */
@@ -58,9 +58,9 @@ export interface LoggerModuleDefinition {
 
 export interface LoggerProviderOptions {
 	/**
-	 * The modules to load the loggers from.
+	 * The modules to load the log providers from.
 	 */
-	modules?: LoggerModuleDefinition[];
+	modules?: LogProviderModuleDefinition[];
 }
 
 export interface Logger {

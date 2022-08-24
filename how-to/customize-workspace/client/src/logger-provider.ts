@@ -1,10 +1,10 @@
-import { Logger, LoggerCore, LoggerModule, LoggerProviderOptions, LogLevel } from "./logger-shapes";
+import { Logger, LogProvider, LogProviderModule, LoggerProviderOptions, LogLevel } from "./logger-shapes";
 
 export class LoggerProvider {
 	/**
 	 * Multiple logger to send messages to.
 	 */
-	private readonly _loggers: Map<string, LoggerCore>;
+	private readonly _logProviders: Map<string, LogProvider>;
 
 	/**
 	 * The local identity.
@@ -15,7 +15,7 @@ export class LoggerProvider {
 	 * Create a new instance of LoggerProvider.
 	 */
 	constructor() {
-		this._loggers = new Map();
+		this._logProviders = new Map();
 		this._identity = fin.me.identity;
 	}
 
@@ -28,8 +28,8 @@ export class LoggerProvider {
 			for (const module of options.modules) {
 				if (module.enabled) {
 					try {
-						const mod: LoggerModule = await import(/* webpackIgnore: true */ module.url);
-						await this.addLogger(module.id, mod.logger, module.data);
+						const mod: LogProviderModule = await import(/* webpackIgnore: true */ module.url);
+						await this.addLogger(module.id, mod.logProvider, module.data);
 					} catch (err) {
 						this.log(
 							"LoggerProvider",
@@ -47,7 +47,7 @@ export class LoggerProvider {
 	 * Close down the logger provider.
 	 */
 	public async closedown(): Promise<void> {
-		const keys = this._loggers.keys();
+		const keys = this._logProviders.keys();
 		for (const key of keys) {
 			await this.removeLogger(key);
 		}
@@ -61,10 +61,10 @@ export class LoggerProvider {
 	 * @param optionalParams Optional parameters for details.
 	 */
 	public log(group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void {
-		if (this._loggers.size === 0) {
+		if (this._logProviders.size === 0) {
 			console[level](`[${group}]`, `[${this._identity.name}]`, message, ...optionalParams);
 		} else {
-			for (const [, log] of this._loggers) {
+			for (const [, log] of this._logProviders) {
 				log.log(this._identity.name, group, level, message, ...optionalParams);
 			}
 		}
@@ -76,8 +76,8 @@ export class LoggerProvider {
 	 * @param log The logger.
 	 * @param data Additional data for initialization.
 	 */
-	public async addLogger(name: string, log: LoggerCore, data?: unknown): Promise<void> {
-		this._loggers.set(name, log);
+	public async addLogger(name: string, log: LogProvider, data?: unknown): Promise<void> {
+		this._logProviders.set(name, log);
 		if (log.initialize) {
 			await log.initialize(data);
 		}
@@ -88,12 +88,12 @@ export class LoggerProvider {
 	 * @param name The name of the logger to remove.
 	 */
 	public async removeLogger(name: string): Promise<void> {
-		if (this._loggers.has(name)) {
-			const log = this._loggers.get(name);
+		if (this._logProviders.has(name)) {
+			const log = this._logProviders.get(name);
 			if (log?.closedown) {
 				await log?.closedown();
 			}
-			this._loggers.delete(name);
+			this._logProviders.delete(name);
 		}
 	}
 
@@ -103,9 +103,9 @@ export class LoggerProvider {
 	 * @returns The logger if it exists.
 	 */
 
-	public async getLogger<T>(name: string): Promise<LoggerCore<T> | undefined> {
-		if (this._loggers.has(name)) {
-			return this._loggers.get(name);
+	public async getLogger<T>(name: string): Promise<LogProvider<T> | undefined> {
+		if (this._logProviders.has(name)) {
+			return this._logProviders.get(name);
 		}
 
 		this.log("LoggerProvider", "warn", `The logger named '${name}' does not exist`);

@@ -599,7 +599,7 @@
 				{
 					"enabled": true,
 					"id": "console",
-					"url": "http://localhost:8080/js/modules/logger/console.bundle.js",
+					"url": "http://localhost:8080/js/modules/log/console.bundle.js",
 					"data": {}
 				}
 			]
