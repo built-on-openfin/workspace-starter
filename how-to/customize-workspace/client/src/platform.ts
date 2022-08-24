@@ -63,7 +63,7 @@ async function setupPlatform(settings: CustomSettings) {
 
 	logger.info("Specifying following browser options", browser);
 
-	const customActions = await getActions();
+	const customActions = await getActions(settings?.actionsProvider);
 	const theme = await getThemes();
 
 	await workspacePlatformInit({

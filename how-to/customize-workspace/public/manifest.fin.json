@@ -604,6 +604,16 @@
 					"data": {}
 				}
 			]
+		},
+		"actionsProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "opacity",
+					"url": "http://localhost:8080/js/modules/actions/opacity.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }

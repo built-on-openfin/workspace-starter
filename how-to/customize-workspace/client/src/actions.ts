@@ -8,6 +8,7 @@ import {
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
+import { ActionsModule, ActionsProviderOptions } from "./actions-shapes";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
 import { getDefaultWindowOptions, launchView } from "./browser";
@@ -45,14 +46,44 @@ export const ACTION_IDS = {
 	homeShow: "home-show",
 	notificationToggle: "notification-toggle",
 	share: "share",
-	changeOpacity: "change-opacity",
-	restoreOpacity: "restore-opacity",
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
 	launchView: "launch-view"
 };
 
-export async function getActions(): Promise<CustomActionsMap> {
+export async function getActions(actionsProviderOptions?: ActionsProviderOptions): Promise<CustomActionsMap> {
+	let actionMap: CustomActionsMap = await getDefaultActions();
+
+	if (Array.isArray(actionsProviderOptions.modules)) {
+		const platform = getCurrentSync();
+		for (const module of actionsProviderOptions.modules) {
+			if (module.enabled) {
+				try {
+					const mod: ActionsModule = await import(/* webpackIgnore: true */ module.url);
+					if (mod.actions.initialize) {
+						await mod.actions.initialize(
+							{
+								updateToolbarButtons
+							},
+							createLogger
+						);
+					}
+					const modActions = await mod.actions.get(platform);
+					actionMap = {
+						...actionMap,
+						...modActions
+					};
+				} catch (err) {
+					this.error(`Error loading module ${module.id} with url ${module.url}`, err);
+				}
+			}
+		}
+	}
+
+	return actionMap;
+}
+
+export async function getDefaultActions(): Promise<CustomActionsMap> {
 	const actionMap: CustomActionsMap = {};
 	actionMap[ACTION_IDS.raiseCreateAppDefinitionIntent] = async (payload: CustomActionPayload) => {
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
@@ -216,43 +247,6 @@ export async function getActions(): Promise<CustomActionsMap> {
 	actionMap[ACTION_IDS.share] = async (payload: CustomActionPayload) => {
 		if (payload.callerType === CustomActionCallerType.CustomButton) {
 			await showShareOptions(payload);
-		}
-	};
-
-	actionMap[ACTION_IDS.changeOpacity] = async (payload: CustomActionPayload) => {
-		if (payload.callerType === CustomActionCallerType.CustomButton) {
-			const platform = getCurrentSync();
-			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
-			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ opacity: 0.7 });
-			if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
-			}
-		}
-	};
-
-	actionMap[ACTION_IDS.restoreOpacity] = async (payload: CustomActionPayload) => {
-		if (payload.callerType === CustomActionCallerType.CustomButton) {
-			const platform = getCurrentSync();
-			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
-			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ opacity: 1 });
-
-			if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
-			}
 		}
 	};
 
