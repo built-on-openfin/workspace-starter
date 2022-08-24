@@ -157,7 +157,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/modules/logger/console/index.ts',
+		entry: './client/src/modules/log/console/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -177,7 +177,7 @@ module.exports = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'logger')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'log')
 		},
 		experiments: {
 			outputModule: true
