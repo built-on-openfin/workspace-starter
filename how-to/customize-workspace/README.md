@@ -180,7 +180,7 @@ const storeProvider = {
 await Storefront.register(storeProvider);
 ```
 
-The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
+The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json). Alternatively the second manifest shows a way of fetching settings from a rest endpoint if you specify an endpoint called 'platform-settings' (see [second.manifest.fin.json](public/second.manifest.fin.json) and [settings.json](public/settings.json)):
 
 ```javascript
 "customSettings": {

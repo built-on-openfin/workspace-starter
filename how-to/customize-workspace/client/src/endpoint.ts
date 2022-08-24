@@ -10,9 +10,8 @@ import { createLogger } from "./logger-provider";
 
 const logger = createLogger("Endpoint");
 
-let endpointDefinitions: EndpointDefinition<unknown>[] = [];
-let moduleDefinitions: EndpointModuleDefinition[] = [];
-let isInitialized = false;
+const endpointDefinitions: EndpointDefinition<unknown>[] = [];
+const moduleDefinitions: EndpointModuleDefinition[] = [];
 
 const availableEndpoints: { [key: string]: Endpoint } = {};
 
@@ -73,13 +72,21 @@ function getRequestOptions(
 }
 
 export async function init(options: EndpointProviderOptions) {
-	if (isInitialized) {
-		return;
-	}
-	isInitialized = true;
-	endpointDefinitions = options?.endpoints || [];
+	const newEndpoints = options?.endpoints || [];
 
-	moduleDefinitions = options?.modules || [];
+	if (newEndpoints.length > 0) {
+		logger.info("Adding the following endpoints to the endpoint provider", newEndpoints);
+		endpointDefinitions.push(...newEndpoints);
+	}
+
+	const newModuleDefinitions = options?.modules || [];
+	if (newModuleDefinitions.length > 0) {
+		logger.info(
+			"Adding the following endpoint module definitions to the endpoint provider",
+			newModuleDefinitions
+		);
+		moduleDefinitions.push(...newModuleDefinitions);
+	}
 }
 
 export function hasEndpoint(id: string) {

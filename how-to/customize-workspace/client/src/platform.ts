@@ -13,7 +13,7 @@ import * as endpointProvider from "./endpoint";
 import { interopOverride } from "./interopbroker";
 import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
-import { getSettings, isValid as isSettingsValid } from "./settings";
+import { getSettings, isValid as isSettingsValid, getAuthSettings } from "./settings";
 import { CustomSettings } from "./shapes";
 import { getThemes } from "./themes";
 
@@ -48,7 +48,9 @@ async function manageAuthFlow() {
 	logger.info("Logged in");
 }
 
-async function setupPlatform(settings: CustomSettings) {
+async function setupPlatform() {
+	const settings: CustomSettings = await getSettings();
+	await loggerProvider.initialize(settings?.loggerProvider);
 	logger.info("Initializing Core Services");
 	await endpointProvider.init(settings?.endpointProvider);
 	await connectionProvider.init(settings?.connectionProvider);
@@ -84,25 +86,23 @@ export async function init() {
 		);
 		return;
 	}
-	const settings = await getSettings();
-
-	await loggerProvider.initialize(settings?.loggerProvider);
+	const authProviderSettings = await getAuthSettings();
 
 	logger.info("Initializing Auth Check");
-	await authProvider.init(settings.authProvider);
+	await authProvider.init(authProviderSettings);
 	// in a real application you would feed in your own logger.
 	if (isAuthenticationEnabled()) {
 		const authenticationRequired = await authProvider.isAuthenticationRequired();
 		if (authenticationRequired) {
 			const loggedInSubscription = authProvider.subscribe("logged-in", async () => {
 				logger.info("Platform logged in. Setting up platform");
-				await setupPlatform(settings);
+				await setupPlatform();
 				logger.info("Unsubscribing from logged in events as platform has been initialized");
 				authProvider.unsubscribe(loggedInSubscription);
 			});
 			await manageAuthFlow();
 		} else {
-			await setupPlatform(settings);
+			await setupPlatform();
 		}
 
 		// check for session expiry
@@ -111,6 +111,6 @@ export async function init() {
 		// check for logout
 		authProvider.subscribe("logged-out", onLogOutOrCancel);
 	} else {
-		await setupPlatform(settings);
+		await setupPlatform();
 	}
 }
