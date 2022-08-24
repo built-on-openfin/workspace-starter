@@ -26,14 +26,12 @@ async function getValidHosts(): Promise<string[]> {
 			const resp = await fetch(manifestHostsPath);
 			const jsonResults: string[] = await resp.json();
 			validManifestHosts = jsonResults;
-			return validManifestHosts;
 		} catch (error) {
 			logger.error(`Error fetching valid hosts for initial settings from ${manifestHostsPath}.`, error);
 			validManifestHosts = [];
 		}
-	} else {
-		return validManifestHosts;
 	}
+	return validManifestHosts;
 }
 
 export async function getSettings(): Promise<CustomSettings> {
