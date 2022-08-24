@@ -60,7 +60,8 @@
 		"bootstrap": {
 			"home": true,
 			"store": true,
-			"notifications": true
+			"notifications": true,
+			"sharing": true
 		},
 		"authProvider": {
 			"modules": [
