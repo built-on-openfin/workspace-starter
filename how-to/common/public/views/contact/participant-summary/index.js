@@ -1,4 +1,7 @@
 function init() {
+	const contextPicker = document.querySelector('#context-group-picker');
+	contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
+
 	if (window.fdc3) {
 		const contextHandler = (ctx) => {
 			console.log('Context Received:', ctx);

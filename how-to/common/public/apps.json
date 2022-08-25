@@ -123,6 +123,32 @@
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "participant-summary-window",
+		"name": "participant-summary-window",
+		"title": "Participant Summary Window",
+		"description": "View summary of the participant",
+		"manifest": "http://localhost:8080/common/views/contact/participant-summary.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["window", "interop", "fdc3", "contact"]
+	},
+	{
 		"appId": "client-overview",
 		"name": "client-overview",
 		"title": "Client Overview",
