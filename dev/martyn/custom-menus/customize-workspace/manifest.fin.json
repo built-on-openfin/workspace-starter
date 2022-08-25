@@ -158,7 +158,7 @@
 					},
 					"position": {
 						"type": "OpenStorefront",
-						"operation": "insertAfter"
+						"operation": "after"
 					}
 				},
 				{
@@ -172,7 +172,7 @@
 					},
 					"position": {
 						"type": "OpenStorefront",
-						"operation": "insertAfter"
+						"operation": "after"
 					}
 				},
 				{
@@ -194,7 +194,7 @@
 					},
 					"position": {
 						"type": "Quit",
-						"operation": "insertAfter"
+						"operation": "after"
 					},
 					"conditions": {
 						"isAuthenticationEnabled": true
