@@ -205,6 +205,12 @@ interface StorefrontProviderOptions {
 	footer: StorefrontFooter;
 }
 
+export interface ManifestType {
+	id: string;
+	label: string;
+	description: string;
+}
+
 export interface CustomSettings {
 	appProvider?: AppProviderOptions;
 	authProvider?: AuthProviderOptions;

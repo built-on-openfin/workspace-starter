@@ -38,7 +38,6 @@ async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identi
 }
 
 export const ACTION_IDS = {
-	raiseCreateAppDefinitionIntent: "raise-create-app-definition-intent",
 	moveViewToNewWindow: "move-view-to-new-window",
 	movePageToNewWindow: "move-page-to-new-window",
 	pinWindow: "pin-window",
@@ -63,7 +62,9 @@ export async function getActions(actionsProviderOptions?: ActionsProviderOptions
 					if (mod.actions.initialize) {
 						await mod.actions.initialize(
 							{
-								updateToolbarButtons
+								updateToolbarButtons,
+								manifestTypes,
+								callerTypes: CustomActionCallerType
 							},
 							createLogger
 						);
@@ -85,71 +86,6 @@ export async function getActions(actionsProviderOptions?: ActionsProviderOptions
 
 export async function getDefaultActions(): Promise<CustomActionsMap> {
 	const actionMap: CustomActionsMap = {};
-	actionMap[ACTION_IDS.raiseCreateAppDefinitionIntent] = async (payload: CustomActionPayload) => {
-		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
-			const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
-			for (let i = 0; i < payload.selectedViews.length; i++) {
-				const viewIdentity = payload.selectedViews[i];
-				const intentName = "CreateAppDefinition";
-				try {
-					const view = fin.View.wrapSync(viewIdentity);
-					const options = await view.getOptions();
-					const info = await view.getInfo();
-					const name = options.name;
-					const fdc3InteropApi =
-						options.fdc3InteropApi !== undefined &&
-						options.fdc3InteropApi !== null &&
-						options.fdc3InteropApi.length > 0
-							? options.fdc3InteropApi
-							: "1.2";
-					const preloads =
-						Array.isArray(options.preloadScripts) && options.preloadScripts.length > 0
-							? options.preloadScripts
-							: undefined;
-					const manifest = {
-						url: info.url,
-						fdc3InteropApi,
-						interop: options.interop,
-						customData: options.customData,
-						preloadScripts: preloads
-					};
-					const icons = [];
-					const favicons = info.favicons || [];
-					for (let f = 0; f < favicons.length; f++) {
-						icons.push({ src: favicons[f] });
-					}
-					const app = {
-						appId: name,
-						name,
-						title: info.title,
-						description: info.title,
-						manifestType: manifestTypes.inlineView.id,
-						manifest,
-						tags: [manifestTypes.view.id],
-						icons,
-						images: [],
-						publisher: "",
-						contactEmail: "",
-						supportEmail: "",
-						intents: []
-					};
-					const intent = {
-						name: intentName,
-						context: {
-							type: "openfin.app",
-							app
-						}
-					};
-					await brokerClient.fireIntent(intent);
-				} catch (error) {
-					logger.error(
-						`Error while trying to raise intent ${intentName} for view ${viewIdentity.name}`,
-						error
-					);
-				}
-			}
-		}
-	};
 
 	actionMap[ACTION_IDS.moveViewToNewWindow] = async (payload: CustomActionPayload) => {
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
