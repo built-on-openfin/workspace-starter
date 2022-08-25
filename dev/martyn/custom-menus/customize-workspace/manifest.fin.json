@@ -712,6 +712,12 @@
 					"id": "opacity",
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/custom-menus/customize-workspace/js/modules/actions/opacity.bundle.js",
 					"data": {}
+				},
+				{
+					"enabled": true,
+					"id": "app-definition",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/custom-menus/customize-workspace/js/modules/actions/app-definition.bundle.js",
+					"data": {}
 				}
 			]
 		}
