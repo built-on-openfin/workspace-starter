@@ -34,13 +34,7 @@ export interface ToolbarButtonDefinition {
 	button: ToolbarButton & { iconUrl?: string };
 }
 
-export type MenuPositionOperation =
-	| "replaceLabel"
-	| "insertBefore"
-	| "insertAfter"
-	| "delete"
-	| "start"
-	| "end";
+export type MenuPositionOperation = "replaceLabel" | "before" | "after" | "delete" | "start" | "end";
 export type MenuSeparatorPosition = "before" | "after";
 
 export interface MenuEntry<T> {

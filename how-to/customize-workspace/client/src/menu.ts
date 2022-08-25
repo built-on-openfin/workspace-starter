@@ -55,7 +55,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 					}
 					break;
 				}
-				case "insertAfter": {
+				case "after": {
 					if (entry === undefined) {
 						logger.warn(
 							`You cannot insert a menu entry after the menu entry with data type: ${positionType} if you do not specify a menu entry`
@@ -65,7 +65,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 					}
 					break;
 				}
-				case "insertBefore": {
+				case "before": {
 					if (entry === undefined) {
 						logger.warn(
 							`You cannot insert a menu entry before the menu entry with data type: ${positionType} if you do not specify a menu entry`
