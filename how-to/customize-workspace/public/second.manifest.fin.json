@@ -57,12 +57,6 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"bootstrap": {
-			"home": true,
-			"store": true,
-			"notifications": true,
-			"sharing": true
-		},
 		"authProvider": {
 			"modules": [
 				{

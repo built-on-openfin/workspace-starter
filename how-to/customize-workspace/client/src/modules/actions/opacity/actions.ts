@@ -37,7 +37,7 @@ export class OpacityActions implements Actions {
 		const actionMap: CustomActionsMap = {};
 
 		actionMap["change-opacity"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === "CustomButton") {
+			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
 				this._logger.info("Change Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
@@ -56,7 +56,7 @@ export class OpacityActions implements Actions {
 		};
 
 		actionMap["restore-opacity"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === "CustomButton") {
+			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
 				this._logger.info("Restore Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
