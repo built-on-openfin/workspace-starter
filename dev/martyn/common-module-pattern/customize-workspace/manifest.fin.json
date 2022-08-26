@@ -688,7 +688,10 @@
 			"modules": [
 				{
 					"id": "interop",
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/init-options/interop.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/init-options/interop.bundle.js",
+					"data": {
+						"supportedActions": ["raise-intent", "share-context"]
+					}
 				}
 			]
 		},
