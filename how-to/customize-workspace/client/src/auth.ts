@@ -22,8 +22,8 @@ export async function init(options: AuthProviderOptions) {
 	}
 
 	if (authProvider === undefined) {
-		const authModules = await loadModules<never, AuthProvider>(authOptions, "auth");
-		await initializeModules<never, AuthProvider>(authModules);
+		const authModules = await loadModules<AuthProvider>(authOptions, "auth");
+		await initializeModules<AuthProvider>(authModules);
 
 		if (authModules.length > 1) {
 			logger.warn("You have more than one auth module loaded, only the first will be used");
