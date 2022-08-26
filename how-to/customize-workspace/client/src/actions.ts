@@ -63,7 +63,7 @@ export async function getActions(actionsProviderOptions?: ActionsProviderOptions
 	});
 
 	const platform = getCurrentSync();
-	for (const actionModule of actionModules.values()) {
+	for (const actionModule of actionModules) {
 		const modActions = await actionModule.implementation.get(platform);
 		actionMap = {
 			...actionMap,
