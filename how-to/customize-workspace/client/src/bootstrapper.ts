@@ -82,8 +82,7 @@ export async function init() {
 				icons: null,
 				publisher: null
 			}),
-		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-		showHome
+		openUrl: async (url) => fin.System.openUrlWithBrowser(url)
 	});
 
 	const registeredComponents: BootstrapComponents[] = [];
