@@ -9,7 +9,7 @@ import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
- * Integration manager provides environment methods and data.
+ * Integration helpers provides environment methods and data.
  */
 export interface IntegrationHelpers {
 	/**

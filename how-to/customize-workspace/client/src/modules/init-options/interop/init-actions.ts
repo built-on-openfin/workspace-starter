@@ -42,10 +42,6 @@ export async function initialize(definition: ModuleDefinition, createLogger: Log
 	logger.info("The handler has been loaded");
 }
 
-export function supportedActions(): string[] {
-	return ["raise-intent", "share-context"];
-}
-
 export async function action(
 	requestedAction: string,
 	payload?: RaiseIntentPayload | ShareContextPayload

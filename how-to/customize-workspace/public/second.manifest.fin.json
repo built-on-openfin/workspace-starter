@@ -71,8 +71,7 @@
 						"checkSessionValidityInSeconds": -1
 					}
 				}
-			],
-			"singleton": "example"
+			]
 		},
 		"endpointProvider": {
 			"modules": [],

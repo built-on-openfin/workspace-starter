@@ -1,6 +1,7 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import type {
 	InitOptionsHandler,
+	InitOptionsHandlerOptions,
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./init-options-shapes";
@@ -117,12 +118,15 @@ export async function init(options?: InitOptionsProviderOptions) {
 	}
 	initialized = true;
 
-	const initOptionsModules = await loadModules<InitOptionsHandler>(options, "initOptions");
+	const initOptionsModules = await loadModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(
+		options,
+		"initOptions"
+	);
 
-	await initializeModules<InitOptionsHandler>(initOptionsModules);
+	await initializeModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(initOptionsModules);
 
 	for (const initOptionsModule of initOptionsModules) {
-		const supportedActions = initOptionsModule.implementation.supportedActions();
+		const supportedActions = initOptionsModule.definition.data?.supportedActions ?? [];
 		for (const supportedAction of supportedActions) {
 			registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
 				logger.info(`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`);
