@@ -9,6 +9,7 @@
 	"authProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "example",
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/auth/example.bundle.js",
 				"data": {
@@ -20,8 +21,7 @@
 					"checkSessionValidityInSeconds": -1
 				}
 			}
-		],
-		"singleton": "example"
+		]
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace",
@@ -50,6 +50,7 @@
 	"endpointProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "local-storage",
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
 			}
@@ -801,9 +802,12 @@
 	"initOptionsProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "interop",
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/init-options/interop.bundle.js",
-				"supportedActions": ["raise-intent", "share-context"]
+				"data": {
+					"supportedActions": ["raise-intent", "share-context"]
+				}
 			}
 		]
 	},
