@@ -6,12 +6,12 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import type { LoggerCreator } from "./logger-shapes";
+import type { ModuleDefinition, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
- * Integration manager provides environment methods and data.
+ * Integration helpers provides environment methods and data.
  */
-export interface IntegrationManager {
+export interface IntegrationHelpers {
 	/**
 	 * The root url for the provider.
 	 */
@@ -47,22 +47,12 @@ export interface IntegrationManager {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
-
-	/**
-	 * Show the home UI.
-	 */
-	showHome?(): Promise<void>;
 }
 
 /**
  * Integration provider settings.
  */
-export interface IntegrationProviderOptions {
-	/**
-	 * The list of integrations.
-	 */
-	integrations?: Integration<unknown>[];
-
+export interface IntegrationProviderOptions extends ModuleList<IntegrationModuleDefinition> {
 	/**
 	 * Do you wish to expose an option of turning on/off integrations.
 	 */
@@ -85,84 +75,27 @@ export interface IntegrationProviderOptions {
 }
 
 /**
- * Integration details.
+ * Integration definition.
  */
-export interface Integration<T> {
-	/**
-	 * The id of the integration.
-	 */
-	id: string;
-
-	/**
-	 * The title of the integration.
-	 */
-	title: string;
-
-	/**
-	 * The description of the integration.
-	 */
-	description?: string;
-
-	/**
-	 * The icon of the integration.
-	 */
-	icon: string;
-
-	/**
-	 * Is the integration enabled.
-	 */
-	enabled: boolean;
-
+export interface IntegrationModuleDefinition extends ModuleDefinition {
 	/**
 	 * Does the integration start automatically if enabled (default is true).
 	 */
 	autoStart?: boolean;
-
-	/**
-	 * Module url to use if loading the module remotely.
-	 */
-	moduleUrl?: string;
-
-	/**
-	 * The data specific to the integration.
-	 */
-	data?: T;
 }
 
 /**
  * The methods provided by the integration module.
  */
-export interface IntegrationModule<T> {
-	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
-	 * @param loggerCreator for logging info.
-	 * @returns Nothing.
-	 */
-	register?(
-		integrationManager: IntegrationManager,
-		integration: Integration<T>,
-		loggerCreator: LoggerCreator
-	): Promise<void>;
-
-	/**
-	 * The module is being deregistered.
-	 * @param integration The integration details.
-	 * @returns Nothing.
-	 */
-	deregister?(integration: Integration<T>): Promise<void>;
-
+export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, IntegrationHelpers> {
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
-		integration: Integration<T>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
@@ -170,20 +103,17 @@ export interface IntegrationModule<T> {
 
 	/**
 	 * Get a list of the static help entries.
-	 * @param integration The integration details.
 	 * @returns The list of help entries.
 	 */
-	getHelpSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
+	getHelpSearchEntries?(): Promise<HomeSearchResult[]>;
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	itemSelection?(
-		integration: Integration<T>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean>;

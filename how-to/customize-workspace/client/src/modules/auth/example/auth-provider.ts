@@ -1,4 +1,5 @@
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
+import { ModuleDefinition } from "../../../module-shapes";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
@@ -210,11 +211,15 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 	}
 }
 
-export async function init(options: unknown, createLogger: LoggerCreator) {
+export async function initialize(
+	definition: ModuleDefinition<ExampleOptions>,
+	createLogger: LoggerCreator,
+	helpers?: never
+) {
 	logger = createLogger("AuthExample");
 	if (authOptions === undefined) {
-		logger.info(`Setting options: ${JSON.stringify(options, null, 4)}`);
-		authOptions = options as ExampleOptions;
+		logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
+		authOptions = definition.data;
 		authenticated = Boolean(localStorage.getItem(EXAMPLE_AUTH_AUTHENTICATED_KEY));
 		if (authenticated) {
 			checkForSessionExpiry();

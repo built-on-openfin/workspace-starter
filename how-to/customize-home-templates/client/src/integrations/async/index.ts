@@ -1,3 +1,5 @@
 import { AsyncIntegrationProvider } from "./integration-provider";
 
-export const integration = new AsyncIntegrationProvider();
+export const entryPoints: { [id: string]: AsyncIntegrationProvider } = {
+	integrations: new AsyncIntegrationProvider()
+};

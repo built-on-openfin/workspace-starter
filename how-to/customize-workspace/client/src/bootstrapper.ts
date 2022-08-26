@@ -15,7 +15,7 @@ import {
 	show as showHome
 } from "./home";
 import { init as registerInitOptionsListener } from "./init-options";
-import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
+import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
@@ -69,25 +69,22 @@ export async function init() {
 	bootstrapOptions.sharing = bootstrapOptions.sharing ?? true;
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
-	await registerIntegration(
-		{
-			rootUrl: settings?.platformProvider.rootUrl,
-			launchView,
-			launchPage,
-			launchSnapshot: async (manifestUrl) =>
-				launchSnapshot({
-					manifestType: manifestTypes.snapshot.id,
-					manifest: manifestUrl,
-					appId: "",
-					title: "",
-					icons: null,
-					publisher: null
-				}),
-			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			showHome
-		},
-		settings.integrationProvider
-	);
+	await registerIntegration(settings.integrationProvider, {
+		rootUrl: settings?.platformProvider.rootUrl,
+		launchView,
+		launchPage,
+		launchSnapshot: async (manifestUrl) =>
+			launchSnapshot({
+				manifestType: manifestTypes.snapshot.id,
+				manifest: manifestUrl,
+				appId: "",
+				title: "",
+				icons: null,
+				publisher: null
+			}),
+		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+		showHome
+	});
 
 	const registeredComponents: BootstrapComponents[] = [];
 

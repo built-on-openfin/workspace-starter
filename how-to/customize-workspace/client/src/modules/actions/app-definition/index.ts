@@ -1,3 +1,6 @@
+import type { ModuleImplementation, ModuleTypes } from "../../../module-shapes";
 import { AppDefinitionActions } from "./actions";
 
-export const actions = new AppDefinitionActions();
+export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
+	actions: new AppDefinitionActions()
+};

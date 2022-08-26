@@ -1,11 +1,12 @@
 import type { EndpointDefinition } from "../../../endpoint-shapes";
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
 
 let logger: Logger;
 
-export async function init(options: unknown, loggerCreator: LoggerCreator): Promise<void> {
-	logger = loggerCreator("ChannelEndpoint");
-	logger.info("Was passed the following options", options);
+export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+	logger = createLogger("ChannelEndpoint");
+	logger.info("Was passed the following options", definition.data);
 }
 
 export async function action(

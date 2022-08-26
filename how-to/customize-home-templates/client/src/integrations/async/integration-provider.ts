@@ -6,7 +6,7 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
@@ -27,37 +27,44 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	private static readonly _ASYNC_PROVIDER_DETAILS_ACTION = "Async Details";
 
 	/**
-	 * The integration manager.
+	 * The integration helpers.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _settings: AsyncSettings | undefined;
+
+	/**
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<AsyncSettings>
+	public async initialize(
+		definition: Integration<AsyncSettings>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._integrationHelpers = helpers;
+		this._settings = definition.data;
 	}
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<AsyncSettings>): Promise<void> {}
+	public async closedown(): Promise<void> {}
 
 	/**
 	 * Get a list of the static help entries.
-	 * @param integration The integration details.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(integration: Integration<AsyncSettings>): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${AsyncIntegrationProvider._PROVIDER_ID}-help1`,
@@ -122,13 +129,11 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<AsyncSettings>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
@@ -138,16 +143,16 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 			result.action.trigger === "user-action" &&
 			result.action.name === AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION &&
 			data.url &&
-			this._integrationManager.openUrl
+			this._integrationHelpers.openUrl
 		) {
-			await this._integrationManager.openUrl(data.url);
+			await this._integrationHelpers.openUrl(data.url);
 			return true;
 		} else if (
 			(result.action.trigger === "focus-change" && result.data?.state === "loading") ||
 			(result.action.trigger === "reload" && result.data?.state === "error")
 		) {
 			setTimeout(async () => {
-				const contactResponse = await fetch(`${integration.data?.rootUrl}${result.data.contact.id}.json`);
+				const contactResponse = await fetch(`${this._settings?.rootUrl}${result.data.contact.id}.json`);
 
 				const contactFull: ContactFull = await contactResponse.json();
 
@@ -160,14 +165,12 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<AsyncSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
@@ -175,11 +178,11 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 		const results: HomeSearchResult[] = [];
 
 		if (query.startsWith("/contacts-sync ")) {
-			await this.contactsSync(query.slice(15), integration, results);
+			await this.contactsSync(query.slice(15), results);
 		} else if (query.startsWith("/contacts-partial ")) {
-			await this.contactsPartial(query.slice(18), integration, results, lastResponse);
+			await this.contactsPartial(query.slice(18), results, lastResponse);
 		} else if (query.startsWith("/contacts ")) {
-			await this.contactsAsync(query.slice(10), integration, results, lastResponse);
+			await this.contactsAsync(query.slice(10), results, lastResponse);
 		}
 
 		return {
@@ -190,19 +193,14 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	/**
 	 * Retrieve the contacts in a synchronous manner.
 	 * @param query The query to search for
-	 * @param integration The integration details.
 	 * @param results The result list to populate.
 	 */
-	private async contactsSync(
-		query: string,
-		integration: Integration<AsyncSettings>,
-		results: HomeSearchResult[]
-	) {
+	private async contactsSync(query: string, results: HomeSearchResult[]) {
 		const wildcard = query.trim().toLowerCase();
 
 		if (wildcard.length > 0) {
 			try {
-				const response = await fetch(`${integration.data?.rootUrl}index.json`);
+				const response = await fetch(`${this._settings?.rootUrl}index.json`);
 
 				const json: ContactsResult = await response.json();
 
@@ -211,7 +209,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 						contact.firstName.toLowerCase().includes(wildcard) ||
 						contact.lastName.toLowerCase().includes(wildcard)
 					) {
-						const contactResponse = await fetch(`${integration.data?.rootUrl}${contact.id}.json`);
+						const contactResponse = await fetch(`${this._settings?.rootUrl}${contact.id}.json`);
 
 						const contactFull: ContactFull = await contactResponse.json();
 
@@ -227,13 +225,11 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	/**
 	 * Retrieve the contacts in a partially asynchronous manner.
 	 * @param query The query to search for
-	 * @param integration The integration details.
 	 * @param results The result list to populate.
 	 * @param lastResponse The last response to use for updating results.
 	 */
 	private async contactsPartial(
 		query: string,
-		integration: Integration<AsyncSettings>,
 		results: HomeSearchResult[],
 		lastResponse: HomeSearchListenerResponse
 	) {
@@ -241,7 +237,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 		if (wildcard.length > 0) {
 			try {
-				const response = await fetch(`${integration.data?.rootUrl}index.json`);
+				const response = await fetch(`${this._settings?.rootUrl}index.json`);
 
 				const json: ContactsResult = await response.json();
 				const finalContacts = [];
@@ -258,7 +254,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 				setTimeout(async () => {
 					for (const contact of finalContacts) {
-						const contactResponse = await fetch(`${integration.data?.rootUrl}${contact.id}.json`);
+						const contactResponse = await fetch(`${this._settings?.rootUrl}${contact.id}.json`);
 
 						const contactFull: ContactFull = await contactResponse.json();
 
@@ -274,13 +270,11 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	/**
 	 * Retrieve the contacts in an asynchronous manner.
 	 * @param query The query to search for
-	 * @param integration The integration details.
 	 * @param results The result list to populate.
 	 * @param lastResponse The last response to use for updating results.
 	 */
 	private async contactsAsync(
 		query: string,
-		integration: Integration<AsyncSettings>,
 		results: HomeSearchResult[],
 		lastResponse: HomeSearchListenerResponse
 	) {
@@ -288,7 +282,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 		if (wildcard.length > 0) {
 			try {
-				const response = await fetch(`${integration.data?.rootUrl}index.json`);
+				const response = await fetch(`${this._settings?.rootUrl}index.json`);
 
 				const json: ContactsResult = await response.json();
 				const finalContacts = [];

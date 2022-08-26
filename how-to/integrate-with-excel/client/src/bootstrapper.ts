@@ -11,12 +11,9 @@ export async function init() {
 	await register();
 	await show();
 
-	await registerIntegration(
-		{
-			launchAsset: async (options) => fin.System.launchExternalProcess(options)
-		},
-		settings.integrationProvider
-	);
+	await registerIntegration(settings.integrationProvider, {
+		launchAsset: async (options) => fin.System.launchExternalProcess(options)
+	});
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {

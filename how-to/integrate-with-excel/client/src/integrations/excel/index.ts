@@ -1,3 +1,5 @@
 import { ExcelIntegrationProvider } from "./integration-provider";
 
-export const integration = new ExcelIntegrationProvider();
+export const entryPoints: { [id: string]: ExcelIntegrationProvider } = {
+	integrations: new ExcelIntegrationProvider()
+};

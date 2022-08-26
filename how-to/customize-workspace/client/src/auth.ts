@@ -1,5 +1,6 @@
-import { AuthModule, AuthProvider, AuthProviderOptions } from "./auth-shapes";
+import { AuthProvider, AuthProviderOptions } from "./auth-shapes";
 import { createLogger } from "./logger-provider";
+import { initializeModules, loadModules } from "./modules";
 
 const logger = createLogger("Auth");
 
@@ -21,31 +22,16 @@ export async function init(options: AuthProviderOptions) {
 	}
 
 	if (authProvider === undefined) {
-		if (
-			authOptions.authProviderId !== undefined &&
-			authOptions.authProviderId !== null &&
-			authOptions.authProviderId.trim() !== "" &&
-			Array.isArray(authOptions.modules)
-		) {
-			const moduleDefinition = authOptions.modules.find((entry) => entry.id === authOptions.authProviderId);
-			if (moduleDefinition === undefined) {
-				logger.warn(`Specified Auth Module Id: ${authOptions.authProviderId} is not available`);
-				return;
-			}
+		const authModules = await loadModules<AuthProvider>(authOptions, "auth");
+		await initializeModules<AuthProvider>(authModules);
 
-			try {
-				const mod: AuthModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
-				authProvider = mod.authProvider;
-				await authProvider.init(moduleDefinition.data, createLogger);
-				authEnabled = true;
-				logger.info("Auth provider module initialized");
-			} catch (err) {
-				logger.error(
-					`Error loading module ${options.authProviderId} with url ${moduleDefinition.url}: ${err.message}`
-				);
-			}
-		} else {
-			logger.error("You must provide an authProvider id and a matching module to the auth init function");
+		if (authModules.length > 1) {
+			logger.warn("You have more than one auth module enabled, only the first will be used");
+		}
+
+		if (authModules.length > 0) {
+			authProvider = authModules[0].implementation;
+			authEnabled = true;
 		}
 	} else {
 		logger.warn("The auth provider has already been initialized");

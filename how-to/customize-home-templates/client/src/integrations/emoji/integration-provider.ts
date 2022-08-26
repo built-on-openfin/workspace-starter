@@ -7,7 +7,7 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import * as emoji from "node-emoji";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { EmojiSettings } from "./shapes";
 import { getEmojiTemplate } from "./templates";
@@ -41,43 +41,50 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	private static readonly _EMOJI_PROVIDER_COPY_EMOJI_ACTION = "Copy Emoji";
 
 	/**
-	 * The integration manager.
+	 * The integration helpers.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _definition: Integration<EmojiSettings> | undefined;
+
+	/**
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<EmojiSettings>
+	public async initialize(
+		definition: Integration<EmojiSettings>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._integrationHelpers = helpers;
+		this._definition = definition;
 	}
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<EmojiSettings>): Promise<void> {}
+	public async closedown(): Promise<void> {}
 
 	/**
 	 * Get a list of the static help entries.
-	 * @param integration The integration details.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(integration: Integration<EmojiSettings>): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${EmojiIntegrationProvider._PROVIDER_ID}-help`,
 				title: "/emoji",
 				label: "Help",
-				icon: integration.icon,
+				icon: this._definition?.icon,
 				actions: [],
 				data: {
 					providerId: EmojiIntegrationProvider._PROVIDER_ID
@@ -97,13 +104,11 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<EmojiSettings>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
@@ -125,9 +130,9 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 			} else if (
 				result.action.name === EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION &&
 				result.data.url &&
-				this._integrationManager.openUrl
+				this._integrationHelpers.openUrl
 			) {
-				await this._integrationManager.openUrl(data.url);
+				await this._integrationHelpers.openUrl(data.url);
 				return true;
 			}
 		}
@@ -137,14 +142,12 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<EmojiSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse

@@ -1,4 +1,5 @@
 import type { LoggerCreator } from "./logger-shapes";
+import type { ModuleImplementation, ModuleList } from "./module-shapes";
 
 export interface EndpointProvider {
 	init: (options: unknown, loggerCreator: LoggerCreator) => Promise<void>;
@@ -7,23 +8,12 @@ export interface EndpointProvider {
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null>;
 }
 
-export interface Endpoint {
-	init: (options: unknown, loggerCreator: LoggerCreator) => Promise<void>;
+export interface Endpoint extends ModuleImplementation {
 	action<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
 	requestResponse<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
 }
 
-export interface EndpointModule {
-	endpoint: Endpoint;
-}
-export interface EndpointModuleDefinition {
-	id: string;
-	url: string;
-	data?: unknown;
-}
-
-export interface EndpointProviderOptions {
-	modules?: EndpointModuleDefinition[];
+export interface EndpointProviderOptions extends ModuleList {
 	endpoints?: EndpointDefinition<unknown>[];
 }
 

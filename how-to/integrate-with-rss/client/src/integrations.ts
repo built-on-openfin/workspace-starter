@@ -7,12 +7,12 @@ import type {
 } from "@openfin/workspace";
 import type {
 	Integration,
-	IntegrationManager,
+	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
 
-const knownIntegrationProviders: { [id: string]: IntegrationModule<unknown> } = {};
+const integrationModules: { [id: string]: IntegrationModule<unknown> } = {};
 
 const homeIntegrations: {
 	module: IntegrationModule<unknown>;
@@ -21,33 +21,33 @@ const homeIntegrations: {
 
 /**
  * Register all the workspace integrations.
- * @param integrationManager The integration manager.
  * @param integrationProvider The integration provider settings.
+ * @param integrationHelpers The integration helpers.
  */
 export async function register(
-	integrationManager: IntegrationManager,
-	integrationProvider?: IntegrationProviderOptions
+	integrationProvider: IntegrationProviderOptions,
+	integrationHelpers: IntegrationHelpers
 ): Promise<void> {
-	const integrations = integrationProvider?.integrations;
+	const integrations = integrationProvider?.modules;
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
 			if (integration.enabled) {
-				if (!knownIntegrationProviders[integration.id] && integration.moduleUrl) {
+				if (!integrationModules[integration.id] && integration.url) {
 					try {
-						const mod = await import(/* webpackIgnore: true */ integration.moduleUrl);
-						knownIntegrationProviders[integration.id] = mod.integration;
+						const mod = await import(/* webpackIgnore: true */ integration.url);
+						integrationModules[integration.id] = mod.entryPoints.integrations;
 					} catch (err) {
-						console.error(`Error loading module ${integration.moduleUrl}`, err);
+						console.error(`Error loading module ${integration.url}`, err);
 					}
 				}
-				if (knownIntegrationProviders[integration.id]) {
-					const homeIntegration = knownIntegrationProviders[integration.id];
+				if (integrationModules[integration.id]) {
+					const homeIntegration = integrationModules[integration.id];
 					homeIntegrations.push({
 						module: homeIntegration,
 						integration
 					});
-					if (homeIntegration.register) {
-						await homeIntegration.register(integrationManager, integration);
+					if (homeIntegration.initialize) {
+						await homeIntegration.initialize(integration, () => {}, integrationHelpers);
 					}
 				} else {
 					console.error("Missing module in integration providers", integration.id);
@@ -63,8 +63,8 @@ export async function register(
  */
 export async function deregister(integrationProvider?: IntegrationProviderOptions): Promise<void> {
 	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.deregister) {
-			await homeIntegration.module.deregister(homeIntegration.integration);
+		if (homeIntegration.module.closedown) {
+			await homeIntegration.module.closedown();
 		}
 	}
 }
@@ -91,9 +91,7 @@ export async function getSearchResults(
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.getSearchResults) {
-			promises.push(
-				homeIntegration.module.getSearchResults(homeIntegration.integration, query, filters, lastResponse)
-			);
+			promises.push(homeIntegration.module.getSearchResults(query, filters, lastResponse));
 		}
 	}
 
@@ -124,9 +122,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.module.getHelpSearchEntries) {
-			const integrationResults = await homeIntegration.module.getHelpSearchEntries(
-				homeIntegration.integration
-			);
+			const integrationResults = await homeIntegration.module.getHelpSearchEntries();
 			results = results.concat(integrationResults);
 		}
 	}
@@ -148,11 +144,7 @@ export async function itemSelection(
 		const foundIntegration = homeIntegrations.find((hi) => hi.integration.id === result.data?.providerId);
 
 		if (foundIntegration?.module?.itemSelection) {
-			const handled = await foundIntegration.module.itemSelection(
-				foundIntegration.integration,
-				result,
-				lastResponse
-			);
+			const handled = await foundIntegration.module.itemSelection(result, lastResponse);
 
 			if (!handled) {
 				console.warn(`Error while trying to handle ${foundIntegration.integration.id} entry`, result.data);
@@ -163,13 +155,4 @@ export async function itemSelection(
 	}
 
 	return false;
-}
-
-/**
- * Add an integration module that was loaded manually.
- * @param id The id of the module.
- * @param module The module.
- */
-export function addKnownIntegrationProvider(id: string, module: IntegrationModule<unknown>): void {
-	knownIntegrationProviders[id] = module;
 }

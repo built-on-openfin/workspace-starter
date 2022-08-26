@@ -12,15 +12,12 @@ export async function init() {
 	await registerHome();
 	await showHome();
 
-	await registerIntegration(
-		{
-			launchView,
-			launchPage,
-			launchWindow,
-			findAndActivateView
-		},
-		settings.integrationProvider
-	);
+	await registerIntegration(settings.integrationProvider, {
+		launchView,
+		launchPage,
+		launchWindow,
+		findAndActivateView
+	});
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {

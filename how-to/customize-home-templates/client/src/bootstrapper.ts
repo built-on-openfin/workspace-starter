@@ -11,12 +11,9 @@ export async function init() {
 	await register();
 	await show();
 
-	await registerIntegration(
-		{
-			openUrl: async (url) => fin.System.openUrlWithBrowser(url)
-		},
-		settings.integrationProvider
-	);
+	await registerIntegration(settings.integrationProvider, {
+		openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+	});
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {

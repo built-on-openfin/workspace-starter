@@ -1,42 +1,22 @@
-import {
-	EndpointDefinition,
-	FetchOptions,
-	EndpointModuleDefinition,
-	Endpoint,
-	EndpointModule,
-	EndpointProviderOptions
-} from "./endpoint-shapes";
+import { EndpointDefinition, FetchOptions, Endpoint, EndpointProviderOptions } from "./endpoint-shapes";
 import { createLogger } from "./logger-provider";
+import { ModuleEntry } from "./module-shapes";
+import { initializeModules, loadModules } from "./modules";
 
 const logger = createLogger("Endpoint");
 
 const endpointDefinitions: EndpointDefinition<unknown>[] = [];
-const moduleDefinitions: EndpointModuleDefinition[] = [];
-
-const availableEndpoints: { [key: string]: Endpoint } = {};
+let endpointModules: ModuleEntry<Endpoint>[] = [];
 
 async function getModuleEndpoint(moduleId: string): Promise<Endpoint> {
-	const endpointModule = availableEndpoints[moduleId];
-	if (endpointModule !== undefined) {
-		return endpointModule;
-	}
-	const moduleDefinition = moduleDefinitions.find((entry) => entry.id === moduleId);
+	const endpoints = endpointModules.find((entry) => entry.definition.id === moduleId);
 
-	if (moduleDefinition === undefined) {
+	if (endpoints === undefined) {
 		logger.warn(`Specified Endpoint Module Id: ${moduleId} is not available`);
 		return undefined;
 	}
 
-	try {
-		const mod: EndpointModule = await import(/* webpackIgnore: true */ moduleDefinition.url);
-		const endpoint = mod.endpoint;
-		await endpoint.init(moduleDefinition.data, createLogger);
-		availableEndpoints[moduleDefinition.id] = endpoint;
-		return endpoint;
-	} catch (err) {
-		logger.error(`Error loading module ${moduleId} with url ${moduleDefinition.url}`, err);
-		return undefined;
-	}
+	return endpoints.implementation;
 }
 
 function getEndpointDefinition(endpointId: string): EndpointDefinition<unknown> {
@@ -79,14 +59,8 @@ export async function init(options: EndpointProviderOptions) {
 		endpointDefinitions.push(...newEndpoints);
 	}
 
-	const newModuleDefinitions = options?.modules || [];
-	if (newModuleDefinitions.length > 0) {
-		logger.info(
-			"Adding the following endpoint module definitions to the endpoint provider",
-			newModuleDefinitions
-		);
-		moduleDefinitions.push(...newModuleDefinitions);
-	}
+	endpointModules = await loadModules<never, Endpoint>(options, "endpoint");
+	await initializeModules(endpointModules);
 }
 
 export function hasEndpoint(id: string) {

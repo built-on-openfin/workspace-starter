@@ -1,23 +1,16 @@
-import type { LoggerCreator } from "./logger-shapes";
+import type { ModuleImplementation, ModuleList } from "./module-shapes";
 
-export interface InitOptionsHandler {
-	init(data: unknown, loggerCreator: LoggerCreator): Promise<void>;
-	action<T>(requestedAction: string, payload?: T): Promise<void>;
-}
-export interface InitOptionsModule {
-	handler: InitOptionsHandler;
-}
-
-export interface InitOptionsModuleDefinition {
-	id: string;
-	url: string;
-	data?: unknown;
+export interface InitOptionsHandlerOptions {
 	supportedActions: string[];
 }
-export interface InitOptionsProviderOptions {
-	modules?: InitOptionsModuleDefinition[];
+
+export interface InitOptionsHandler<O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions>
+	extends ModuleImplementation<O> {
+	action<T>(requestedAction: string, payload?: T): Promise<void>;
 }
 
 export interface UserAppConfigArgs {
 	[key: string]: string;
 }
+
+export type InitOptionsProviderOptions = ModuleList;

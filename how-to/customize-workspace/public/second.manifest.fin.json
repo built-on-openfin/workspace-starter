@@ -71,8 +71,7 @@
 						"checkSessionValidityInSeconds": -1
 					}
 				}
-			],
-			"authProviderId": "example"
+			]
 		},
 		"endpointProvider": {
 			"modules": [],

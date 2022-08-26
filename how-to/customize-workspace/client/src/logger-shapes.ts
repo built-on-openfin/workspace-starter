@@ -1,3 +1,5 @@
+import type { ModuleImplementation, ModuleList } from "./module-shapes";
+
 /**
  * The default log levels.
  */
@@ -7,18 +9,7 @@ export interface LogOptions {
 	levels?: LogLevel[];
 }
 
-export interface LogProvider<T = unknown> {
-	/**
-	 * Optionally initialize the log provider.
-	 * @param options The custom options for the log provider.
-	 */
-	initialize?(options: T): Promise<void>;
-
-	/**
-	 * Optionally close down the log provider.
-	 */
-	closedown?(): Promise<void>;
-
+export interface LogProvider<O = unknown, H = unknown> extends ModuleImplementation<O, H> {
 	/**
 	 * Log data as information.
 	 * @param identity The identity sending the message.
@@ -30,38 +21,7 @@ export interface LogProvider<T = unknown> {
 	log(identity: string, group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void;
 }
 
-export interface LogProviderModule {
-	logProvider: LogProvider;
-}
-
-export interface LogProviderModuleDefinition {
-	/**
-	 * The id of the module.
-	 */
-	id: string;
-
-	/**
-	 * The url to load the module from.
-	 */
-	url: string;
-
-	/**
-	 * Is the integration enabled.
-	 */
-	enabled: boolean;
-
-	/**
-	 * Custom data for the module.
-	 */
-	data?: unknown;
-}
-
-export interface LoggerProviderOptions {
-	/**
-	 * The modules to load the log providers from.
-	 */
-	modules?: LogProviderModuleDefinition[];
-}
+export type LoggerProviderOptions = ModuleList;
 
 export interface Logger {
 	/**
