@@ -1,17 +1,17 @@
 import {
 	App,
-	CLIDispatchedSearchResult,
 	CLIProvider,
 	CLISearchListenerRequest,
 	CLISearchListenerResponse,
 	CLISearchResponse,
 	CLITemplate,
 	Home,
+	HomeDispatchedSearchResult,
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
 import { getApps } from "./apps";
-import { getAppSearchEntries, getSearchResults, itemSelection } from "./integrations";
+import { getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
 
@@ -46,7 +46,7 @@ export async function register() {
 		lastResponse = response;
 		lastResponse.open();
 
-		let appSearchEntries = mapAppEntriesToSearchEntries(apps).concat(await getAppSearchEntries());
+		let appSearchEntries = mapAppEntriesToSearchEntries(apps);
 		if (query && query.length >= 3) {
 			appSearchEntries = appSearchEntries.filter((app) =>
 				app.title.toLowerCase().includes(query.toLowerCase())
@@ -73,7 +73,7 @@ export async function register() {
 		return searchResults;
 	};
 
-	const onSelection = async (result: CLIDispatchedSearchResult) => {
+	const onSelection = async (result: HomeDispatchedSearchResult) => {
 		if (result.data !== undefined) {
 			const handled = await itemSelection(result, lastResponse);
 

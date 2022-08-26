@@ -17,7 +17,7 @@ import {
 	TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 import { getQuoteTemplate } from "./templates";
@@ -42,36 +42,43 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	 * The integration manager.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _settings: QuoteSettings | undefined;
+
+	/**
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<QuoteSettings>
+	public async initialize(
+		definition: Integration<QuoteSettings>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._integrationHelpers = helpers;
+		this._settings = definition.data;
 
 		Chart.register(LineController, CategoryScale, LinearScale, LineElement, PointElement, TimeScale, Filler);
 	}
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<QuoteSettings>): Promise<void> {}
+	public async closedown(): Promise<void> {}
 
 	/**
 	 * Get a list of the static help entries.
-	 * @param integration The integration details.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(integration: Integration<QuoteSettings>): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${QuoteIntegrationProvider._PROVIDER_ID}-help`,
@@ -96,13 +103,11 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<QuoteSettings>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
@@ -110,9 +115,9 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 			result.action.trigger === "user-action" &&
 			result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION &&
 			result.data.url &&
-			this._integrationManager.openUrl
+			this._integrationHelpers.openUrl
 		) {
-			await this._integrationManager.openUrl(result.data.url as string);
+			await this._integrationHelpers.openUrl(result.data.url as string);
 			return true;
 		}
 
@@ -121,21 +126,19 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<QuoteSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> {
 		const results = [];
 
-		if (query.startsWith("/quote ") && integration?.data?.rootUrl) {
+		if (query.startsWith("/quote ") && this._settings?.rootUrl) {
 			let symbol = query.slice(7);
 
 			if (symbol.length > 0 && /^[a-z]+$/i.test(symbol)) {
@@ -144,7 +147,6 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 				const now = DateTime.now();
 
 				const quoteData = await this.getQuoteData(
-					integration?.data,
 					symbol,
 					now.minus({ months: 1 }).toFormat("yyyy-LL-dd"),
 					now.toFormat("yyyy-LL-dd")
@@ -204,20 +206,14 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 
 	/**
 	 * Get the quote data from the api.
-	 * @param settings The settings.
 	 * @param symbol The symbol to get.
 	 * @param from The date from.
 	 * @param to The date to.
 	 * @returns The result data.
 	 */
-	private async getQuoteData(
-		settings: QuoteSettings,
-		symbol: string,
-		from: string,
-		to: string
-	): Promise<QuoteResult | undefined> {
+	private async getQuoteData(symbol: string, from: string, to: string): Promise<QuoteResult | undefined> {
 		try {
-			const symbolUrl = `${settings?.rootUrl}${symbol}.json`;
+			const symbolUrl = `${this._settings?.rootUrl}${symbol}.json`;
 			const response = await fetch(symbolUrl);
 
 			const json: QuoteResult = await response.json();

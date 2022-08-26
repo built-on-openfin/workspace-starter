@@ -1,3 +1,5 @@
 import { EmojiIntegrationProvider } from "./integration-provider";
 
-export const integration = new EmojiIntegrationProvider();
+export const entryPoints: { [id: string]: EmojiIntegrationProvider } = {
+	integrations: new EmojiIntegrationProvider()
+};

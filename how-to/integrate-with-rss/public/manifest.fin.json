@@ -47,13 +47,13 @@
 			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"integrationProvider": {
-			"integrations": [
+			"modules": [
 				{
 					"id": "rss",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "RSS Provider",
 					"enabled": true,
-					"moduleUrl": "http://localhost:8080/js/integrations/rss.bundle.js",
+					"url": "http://localhost:8080/js/integrations/rss.bundle.js",
 					"data": {
 						"rootUrl": "http://localhost:8080/",
 						"proxyUrl": "http://localhost:8080/proxy",

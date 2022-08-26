@@ -47,11 +47,6 @@ export interface IntegrationHelpers {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
-
-	/**
-	 * Show the home UI.
-	 */
-	showHome?(): Promise<void>;
 }
 
 /**

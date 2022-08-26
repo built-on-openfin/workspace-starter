@@ -1,4 +1,4 @@
-import { IntegrationProvider } from "./integrations-shapes";
+import { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface HomeProvider {
 	id: string;
@@ -24,5 +24,5 @@ export interface CustomSettings {
 	homeProvider?: HomeProvider;
 	appProvider?: AppProvider;
 	browserProvider?: BrowserProvider;
-	integrationProvider?: IntegrationProvider;
+	integrationProvider?: IntegrationProviderOptions;
 }

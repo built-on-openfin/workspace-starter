@@ -7,7 +7,7 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import type { ExcelAssetSettings, ExcelSettings, ExcelWorksheetSettings } from "./shapes";
 
 /**
@@ -27,10 +27,22 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	private static readonly _EXCEL_PROVIDER_OPEN_KEY_ACTION = "Open Excel";
 
 	/**
-	 * The integration manager.
+	 * The integration helpers.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
+
+	/**
+	 * The module definition for the integration.
+	 * @internal
+	 */
+	private _moduleDefinition: Integration<ExcelSettings> | undefined;
+
+	/**
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _settings: ExcelSettings | undefined;
 
 	/**
 	 * The Excel application interop.
@@ -45,16 +57,20 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	private _interopClients: { [id: string]: OpenFin.InteropClient };
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<ExcelSettings>
+	public async initialize(
+		definition: Integration<ExcelSettings>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._integrationHelpers = helpers;
+		this._moduleDefinition = definition;
+		this._settings = definition.data;
 
 		const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 		const contextGroups = await brokerClient.getContextGroups();
@@ -63,7 +79,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 			const contextClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 			await contextClient.joinContextGroup(contextGroup.id);
 			await contextClient.addContextHandler(async (ctx) => {
-				await this.handleContext(integration, contextGroup.id, ctx);
+				await this.handleContext(contextGroup.id, ctx);
 			});
 			this._interopClients[contextGroup.id] = contextClient;
 		}
@@ -73,10 +89,9 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<ExcelSettings>): Promise<void> {
+	public async closedown(): Promise<void> {
 		for (const client in this._interopClients) {
 			await this._interopClients[client].removeFromContextGroup();
 		}
@@ -84,34 +99,23 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	}
 
 	/**
-	 * Get a list of the static application entries.
-	 * @param integration The integration details.
-	 * @returns The list of application entries.
-	 */
-	public async getAppSearchEntries(integration: Integration<ExcelSettings>): Promise<HomeSearchResult[]> {
-		return integration?.data?.assets.map((a) => this.createResult(integration, a));
-	}
-
-	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<ExcelSettings>,
 		result: CLIDispatchedSearchResult,
 		lastResponse: CLISearchListenerResponse
 	): Promise<boolean> {
 		if (
 			result.action.name === ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
 			result.data.workbook &&
-			this._integrationManager.launchAsset
+			this._integrationHelpers.launchAsset
 		) {
 			const excelAsset = result.data as ExcelAssetSettings;
 
-			await this._integrationManager.launchAsset({
+			await this._integrationHelpers.launchAsset({
 				alias: excelAsset.workbook
 			});
 
@@ -138,19 +142,17 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<ExcelSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: CLISearchListenerResponse
 	): Promise<HomeSearchResponse> {
-		const results = [];
+		const results = this._settings?.assets.map((a) => this.createResult(a));
 
 		return {
 			results
@@ -159,19 +161,15 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 
 	/**
 	 * Create a search result.
-	 * @param integration The integration details.
 	 * @param excelAsset The excel document asset alias.
 	 * @returns The search result.
 	 */
-	private createResult(
-		integration: Integration<ExcelSettings>,
-		excelAsset: ExcelAssetSettings
-	): HomeSearchResult {
+	private createResult(excelAsset: ExcelAssetSettings): HomeSearchResult {
 		return {
 			key: `excel-${excelAsset.workbook}`,
 			title: excelAsset.title,
 			label: "Excel",
-			icon: integration.icon,
+			icon: this._moduleDefinition.icon,
 			actions: [
 				{
 					name: ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION,
@@ -237,23 +235,18 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 
 	/**
 	 * Handle a context.
-	 * @param integration The integration details.
 	 * @param contextGroup The group receiving the context.
 	 * @param context The context being received.
 	 */
-	private async handleContext(
-		integration: Integration<ExcelSettings>,
-		contextGroup: string,
-		context: OpenFin.Context
-	): Promise<void> {
-		if (integration.data?.assets) {
+	private async handleContext(contextGroup: string, context: OpenFin.Context): Promise<void> {
+		if (this._settings?.assets) {
 			const excel = await this.getExcel();
 			if (excel) {
 				const workbooks = await excel.getWorkbooks();
 				for (const workbook of workbooks) {
 					const workbookName = await workbook.getName();
 
-					const connectedWorkbook = integration.data?.assets.find((a) => a.workbook === workbookName);
+					const connectedWorkbook = this._settings?.assets.find((a) => a.workbook === workbookName);
 					if (connectedWorkbook?.worksheets) {
 						for (const worksheetSettings of connectedWorkbook.worksheets) {
 							if (worksheetSettings.cellHandlers) {

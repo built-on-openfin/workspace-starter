@@ -14,7 +14,7 @@ import {
 	NotificationActionEvent
 } from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../integrations-shapes";
+import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import {
 	CHANNEL_ACTIONS,
 	RssCache,
@@ -61,10 +61,16 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	private static readonly _RSS_WINDOW_NAME = "internal-generated-window-rss-feed";
 
 	/**
-	 * The integration manager.
+	 * The integration helpers.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
+
+	/**
+	 * The integration settings.
+	 * @internal
+	 */
+	private _settings: RssFeedSettings | undefined;
 
 	/**
 	 * The id of the timer used to poll the feeds.
@@ -100,26 +106,29 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	}
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<RssFeedSettings>
+	public async initialize(
+		definition: Integration<RssFeedSettings>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._integrationHelpers = helpers;
+		this._settings = definition.data;
 
-		if (!Array.isArray(integration.data?.feeds) || integration.data.feeds.length === 0) {
+		if (!Array.isArray(this._settings?.feeds) || this._settings.feeds.length === 0) {
 			console.warn("The RSS Feed integration has no feeds");
 		} else {
 			await this.loadFeeds();
 			this._pollingTimerId = window.setInterval(
-				async () => this.updateFeeds(integration),
-				(integration.data?.pollingInterval ?? 60) * 1000
+				async () => this.updateFeeds(),
+				(this._settings?.pollingInterval ?? 60) * 1000
 			);
-			await this.updateFeeds(integration);
+			await this.updateFeeds();
 
 			addNotificationEventListener(
 				"notification-action",
@@ -134,7 +143,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 				) => {
 					if (event?.result.action === "view-entry") {
 						const payload = event.result.payload;
-						await this.launchFeedOrEntry(integration, payload.feed, payload.entry);
+						await this.launchFeedOrEntry(payload.feed, payload.entry);
 					}
 				}
 			);
@@ -190,10 +199,9 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<RssFeedSettings>): Promise<void> {
+	public async closedown(): Promise<void> {
 		this._feedsCache = {};
 		this._subscribers = [];
 		if (this._pollingTimerId) {
@@ -208,13 +216,11 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<RssFeedSettings>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
@@ -223,12 +229,11 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			((result.action.name === RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION && result.data.feed) ||
 				(result.action.name === RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION &&
 					result.data.entry)) &&
-			this._integrationManager.launchWindow &&
-			this._integrationManager.launchPage &&
-			this._integrationManager.launchView
+			this._integrationHelpers.launchWindow &&
+			this._integrationHelpers.launchPage &&
+			this._integrationHelpers.launchView
 		) {
 			await this.launchFeedOrEntry(
-				integration,
 				result.data.feed as Omit<RssFeedCache, "entries">,
 				result.data.entry as RssFeedCacheEntry
 			);
@@ -240,14 +245,12 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<RssFeedSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
@@ -263,7 +266,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 			for (const feed in this._feedsCache) {
 				if (re.test(this._feedsCache[feed].title)) {
-					results.push(await this.createFeedResult(integration, this._feedsCache[feed]));
+					results.push(await this.createFeedResult(this._feedsCache[feed]));
 				}
 				for (const entryKey in this._feedsCache[feed].entries) {
 					const entry = this._feedsCache[feed].entries[entryKey];
@@ -280,7 +283,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 			matches.sort((a, b) => b.entry.lastUpdated - a.entry.lastUpdated);
 
 			for (const match of matches) {
-				results.push(await this.createEntryResult(integration, match.feed, match.entry));
+				results.push(await this.createEntryResult(match.feed, match.entry));
 			}
 		}
 
@@ -291,16 +294,15 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * Update all the RSS feeds.
-	 * @param integration The integration details.
 	 */
-	private async updateFeeds(integration: Integration<RssFeedSettings>): Promise<void> {
-		for (const feed of integration.data.feeds) {
+	private async updateFeeds(): Promise<void> {
+		for (const feed of this._settings.feeds) {
 			try {
 				console.log(`Retrieving RSS feed '${feed.id}' from ${feed.url}`);
 
 				let feedResponse: Response;
-				if (integration.data?.proxyUrl) {
-					feedResponse = await fetch(integration.data?.proxyUrl, {
+				if (this._settings?.proxyUrl) {
+					feedResponse = await fetch(this._settings?.proxyUrl, {
 						method: "POST",
 						headers: {
 							"content-type": "application/json"
@@ -425,19 +427,15 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * Create a search result for a feed.
-	 * @param integration The integration details.
 	 * @param feed The RSS feed.
 	 * @returns The search result.
 	 */
-	private async createFeedResult(
-		integration: Integration<RssFeedSettings>,
-		feed: RssFeedCache
-	): Promise<HomeSearchResult> {
+	private async createFeedResult(feed: RssFeedCache): Promise<HomeSearchResult> {
 		return {
 			key: `rss-${feed.id}`,
 			title: feed.title,
 			label: "Feed",
-			icon: `${integration.data.rootUrl}assets/rss.svg`,
+			icon: `${this._settings.rootUrl}assets/rss.svg`,
 			actions: [
 				{
 					name: RssIntegrationProvider._RSS_PROVIDER_FEED_VIEW_ACTION,
@@ -467,21 +465,16 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * Create a search result for an entry.
-	 * @param integration The integration details.
 	 * @param feed The RSS feed.
 	 * @param entry The RSS feed entry.
 	 * @returns The search result.
 	 */
-	private async createEntryResult(
-		integration: Integration<RssFeedSettings>,
-		feed: RssFeedCache,
-		entry: RssFeedCacheEntry
-	): Promise<HomeSearchResult> {
+	private async createEntryResult(feed: RssFeedCache, entry: RssFeedCacheEntry): Promise<HomeSearchResult> {
 		return {
 			key: `rss-${entry.id}`,
 			title: entry.title,
 			label: "Information",
-			icon: `${integration.data.rootUrl}assets/rss-entry.svg`,
+			icon: `${this._settings.rootUrl}assets/rss-entry.svg`,
 			actions: [
 				{
 					name: RssIntegrationProvider._RSS_PROVIDER_ENTRY_VIEW_ACTION,
@@ -557,17 +550,15 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 	/**
 	 * Launch a feed or an entry.
-	 * @param integration The integration details.
 	 * @param feed The feed to launch.
 	 * @param entry The individual entry to launch.
 	 */
 	private async launchFeedOrEntry(
-		integration: Integration<RssFeedSettings>,
 		feed: Omit<RssFeedCache, "entries">,
 		entry?: RssFeedCacheEntry
 	): Promise<void> {
 		const platformId = fin.Platform.getCurrentSync().identity.uuid;
-		const viewUrl = entry?.url ?? `${integration.data?.feedView}?feedId=${feed.id}`;
+		const viewUrl = entry?.url ?? `${this._settings?.feedView}?feedId=${feed.id}`;
 		const viewTitle = entry ? undefined : feed.title;
 		const viewId = `rss-view-${entry?.id ?? feed.id}`;
 		const viewTargetIdentity = entry
@@ -579,7 +570,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 
 		const pageId = `rss-feed-page-${feed.id}`;
 
-		const viewDetails = await this._integrationManager.findAndActivateView(
+		const viewDetails = await this._integrationHelpers.findAndActivateView(
 			{ name: RssIntegrationProvider._RSS_WINDOW_NAME, uuid: platformId },
 			pageId,
 			{
@@ -591,7 +582,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 		const page: Page = {
 			title: feed.title,
 			pageId,
-			iconUrl: `${integration.data.rootUrl}assets/rss.svg`,
+			iconUrl: `${this._settings.rootUrl}assets/rss.svg`,
 			layout: {
 				content: [
 					{
@@ -614,13 +605,13 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 		};
 
 		if (!viewDetails.window) {
-			await this._integrationManager.launchWindow(
+			await this._integrationHelpers.launchWindow(
 				{
 					name: RssIntegrationProvider._RSS_WINDOW_NAME,
 					uuid: platformId,
-					icon: `${integration.data.rootUrl}assets/rss.svg`,
+					icon: `${this._settings.rootUrl}assets/rss.svg`,
 					workspacePlatform: {
-						favicon: `${integration.data.rootUrl}assets/rss.svg`,
+						favicon: `${this._settings.rootUrl}assets/rss.svg`,
 						title: "RSS Feeds",
 						pages: [page]
 					}
@@ -628,7 +619,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 				true
 			);
 		} else if (viewDetails.window && !viewDetails.page) {
-			await this._integrationManager.launchPage(page, {
+			await this._integrationHelpers.launchPage(page, {
 				uuid: platformId,
 				name: RssIntegrationProvider._RSS_WINDOW_NAME
 			});
@@ -639,7 +630,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 				url: viewUrl
 			};
 
-			await this._integrationManager.launchView(view, {
+			await this._integrationHelpers.launchView(view, {
 				uuid: platformId,
 				name: RssIntegrationProvider._RSS_WINDOW_NAME
 			});

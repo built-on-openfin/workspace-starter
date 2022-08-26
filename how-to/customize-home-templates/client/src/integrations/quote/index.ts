@@ -1,3 +1,5 @@
 import { QuoteIntegrationProvider } from "./integration-provider";
 
-export const integration = new QuoteIntegrationProvider();
+export const entryPoints: { [id: string]: QuoteIntegrationProvider } = {
+	integrations: new QuoteIntegrationProvider()
+};

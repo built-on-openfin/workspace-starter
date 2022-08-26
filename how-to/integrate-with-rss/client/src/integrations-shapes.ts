@@ -1,16 +1,16 @@
 import type {
-	CLIFilter,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
+	CLIFilter,
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserCreateWindowRequest, BrowserWindowModule, Page } from "@openfin/workspace-platform";
 
 /**
- * Integration manager provides environment methods and data.
+ * Integration helpers provides environment methods and data.
  */
-export interface IntegrationManager {
+export interface IntegrationHelpers {
 	/**
 	 * The root url for the provider.
 	 */
@@ -78,11 +78,6 @@ export interface IntegrationManager {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
-
-	/**
-	 * Show the home UI.
-	 */
-	showHome?(): Promise<void>;
 }
 
 /**
@@ -92,7 +87,7 @@ export interface IntegrationProviderOptions {
 	/**
 	 * The list of integrations.
 	 */
-	integrations?: Integration<unknown>[];
+	modules?: Integration<unknown>[];
 }
 
 /**
@@ -122,7 +117,7 @@ export interface Integration<T> {
 	/**
 	 * Module url to use if loading the module remotely.
 	 */
-	moduleUrl?: string;
+	url?: string;
 
 	/**
 	 * The data specific to the integration.
@@ -135,30 +130,32 @@ export interface Integration<T> {
  */
 export interface IntegrationModule<T> {
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
+	 * Initialize the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	register?(integrationManager: IntegrationManager, integration: Integration<T>): Promise<void>;
+	initialize?(
+		definition: Integration<T>,
+		loggerCreator: () => void,
+		helpers: IntegrationHelpers
+	): Promise<void>;
 
 	/**
-	 * The module is being deregistered.
-	 * @param integration The integration details.
+	 * The module is being closed down.
 	 * @returns Nothing.
 	 */
-	deregister?(integration: Integration<T>): Promise<void>;
+	closedown?(): Promise<void>;
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
-		integration: Integration<T>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
@@ -166,20 +163,17 @@ export interface IntegrationModule<T> {
 
 	/**
 	 * Get a list of the static help entries.
-	 * @param integration The integration details.
 	 * @returns The list of help entries.
 	 */
-	getHelpSearchEntries?(integration: Integration<T>): Promise<HomeSearchResult[]>;
+	getHelpSearchEntries?(): Promise<HomeSearchResult[]>;
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	itemSelection?(
-		integration: Integration<T>,
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean>;

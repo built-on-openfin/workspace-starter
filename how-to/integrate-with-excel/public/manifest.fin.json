@@ -75,13 +75,13 @@
 			}
 		},
 		"integrationProvider": {
-			"integrations": [
+			"modules": [
 				{
 					"id": "excel",
 					"icon": "http://localhost:8080/assets/excel.svg",
 					"title": "Excel Provider",
 					"enabled": true,
-					"moduleUrl": "http://localhost:8080/js/integrations/excel.bundle.js",
+					"url": "http://localhost:8080/js/integrations/excel.bundle.js",
 					"data": {
 						"assets": [
 							{
