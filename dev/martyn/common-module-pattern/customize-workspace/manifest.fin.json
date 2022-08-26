@@ -103,7 +103,13 @@
 			]
 		},
 		"endpointProvider": {
-			"modules": [],
+			"modules": [
+				{
+					"enabled": true,
+					"id": "local-storage",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/common-module-pattern/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
+				}
+			],
 			"endpoints": [
 				{
 					"id": "apps-get",
@@ -135,6 +141,24 @@
 					"options": {
 						"method": "POST",
 						"url": "https://workspace.openfin.co/api/share"
+					}
+				},
+				{
+					"id": "integration-preferences-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "integration-preferences"
+					}
+				},
+				{
+					"id": "integration-preferences-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "integration-preferences"
 					}
 				}
 			]
