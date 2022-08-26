@@ -121,12 +121,12 @@ export async function init(options?: InitOptionsProviderOptions) {
 
 	await initializeModules<InitOptionsHandler>(initOptionsModules);
 
-	for (const moduleEntry of initOptionsModules) {
-		const supportedActions = moduleEntry.implementation.supportedActions();
+	for (const initOptionsModule of initOptionsModules) {
+		const supportedActions = initOptionsModule.implementation.supportedActions();
 		for (const supportedAction of supportedActions) {
 			registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
-				logger.info(`Action: ${requestedAction} being handled by module ${moduleEntry.definition.id}`);
-				await moduleEntry.implementation.action(requestedAction, payload);
+				logger.info(`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`);
+				await initOptionsModule.implementation.action(requestedAction, payload);
 			});
 		}
 	}
