@@ -687,6 +687,7 @@
 		"initOptionsProvider": {
 			"modules": [
 				{
+					"enabled": true,
 					"id": "interop",
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
