@@ -75,13 +75,13 @@
 			}
 		},
 		"integrationProvider": {
-			"integrations": [
+			"modules": [
 				{
 					"id": "excel",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/assets/excel.svg",
 					"title": "Excel Provider",
 					"enabled": true,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/js/integrations/excel.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-excel/js/integrations/excel.bundle.js",
 					"data": {
 						"assets": [
 							{

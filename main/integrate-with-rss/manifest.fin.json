@@ -47,13 +47,13 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/favicon.ico"
 		},
 		"integrationProvider": {
-			"integrations": [
+			"modules": [
 				{
 					"id": "rss",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/favicon.ico",
 					"title": "RSS Provider",
 					"enabled": true,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/js/integrations/rss.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/js/integrations/rss.bundle.js",
 					"data": {
 						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/",
 						"proxyUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/proxy",

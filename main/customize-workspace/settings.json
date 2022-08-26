@@ -9,6 +9,7 @@
 	"authProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "example",
 				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/auth/example.bundle.js",
 				"data": {
@@ -20,8 +21,7 @@
 					"checkSessionValidityInSeconds": -1
 				}
 			}
-		],
-		"authProviderId": "example"
+		]
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace",
@@ -50,9 +50,9 @@
 	"endpointProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "local-storage",
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/endpoints/local-storage.bundle.js",
-				"data": {}
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
 			}
 		],
 		"endpoints": [
@@ -649,8 +649,14 @@
 						"title": "All Apps",
 						"tags": ["view", "page", "manifest", "native"]
 					},
-					{ "title": "Views", "tags": ["view"] },
-					{ "title": "Pages", "tags": ["page"] },
+					{
+						"title": "Views",
+						"tags": ["view"]
+					},
+					{
+						"title": "Pages",
+						"tags": ["page"]
+					},
 					{
 						"title": "Manifest",
 						"tags": ["manifest"]
@@ -767,7 +773,7 @@
 		"isManagementEnabled": true,
 		"command": "integrations",
 		"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
-		"integrations": [
+		"modules": [
 			{
 				"id": "salesforce",
 				"icon": "https://built-on-openfin.github.io/workspace-starter/main/common/images/salesforce/favicon.ico",
@@ -775,7 +781,7 @@
 				"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 				"enabled": false,
 				"autoStart": true,
-				"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
@@ -795,18 +801,19 @@
 				"title": "Emoji Provider",
 				"enabled": true,
 				"autoStart": false,
-				"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
-				"data": {}
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 			}
 		]
 	},
 	"initOptionsProvider": {
 		"modules": [
 			{
+				"enabled": true,
 				"id": "interop",
 				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/init-options/interop.bundle.js",
-				"data": {},
-				"supportedActions": ["raise-intent", "share-context"]
+				"data": {
+					"supportedActions": ["raise-intent", "share-context"]
+				}
 			}
 		]
 	},
@@ -815,8 +822,7 @@
 			{
 				"enabled": true,
 				"id": "console",
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/logger/console.bundle.js",
-				"data": {}
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/log/console.bundle.js"
 			}
 		]
 	},
@@ -825,14 +831,12 @@
 			{
 				"enabled": true,
 				"id": "opacity",
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/actions/opacity.bundle.js",
-				"data": {}
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/actions/opacity.bundle.js"
 			},
 			{
 				"enabled": true,
 				"id": "app-definition",
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/actions/app-definition.bundle.js",
-				"data": {}
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/actions/app-definition.bundle.js"
 			}
 		]
 	}
