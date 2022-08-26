@@ -121,10 +121,10 @@ export async function initializeModule<
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>, helpers?: H): Promise<M | undefined> {
 	if (!moduleEntry.isInitialised) {
-		if (moduleEntry?.implementation.initialize) {
+		if (moduleEntry.implementation.initialize) {
 			try {
 				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
-				await moduleEntry?.implementation.initialize(moduleEntry.definition, createLogger, helpers);
+				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
 				moduleEntry.isInitialised = true;
 			} catch (err) {
 				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
@@ -163,10 +163,10 @@ export async function closedownModule<
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>): Promise<void> {
 	if (moduleEntry.isInitialised) {
-		if (moduleEntry?.implementation.closedown) {
+		if (moduleEntry.implementation.closedown) {
 			try {
 				logger.info(`Closing down module '${moduleEntry.definition.id}'`);
-				await moduleEntry?.implementation.closedown();
+				await moduleEntry.implementation.closedown();
 				moduleEntry.isInitialised = false;
 			} catch (err) {
 				logger.error(`Error closing down module ${moduleEntry.definition.id}`, err);
