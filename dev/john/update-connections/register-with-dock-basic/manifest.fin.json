@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-dock-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-dock-basic/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-connections/register-with-dock-basic/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-dock-basic/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-connections/register-with-dock-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
@@ -22,5 +22,11 @@
 		"icon": "https://www.openfin.co/favicon.ico",
 		"name": "Launch Dock",
 		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Register With Dock Basic - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
 	}
 }

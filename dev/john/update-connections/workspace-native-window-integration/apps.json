@@ -6,14 +6,14 @@
 		"description": "A Winform application built in .NET 5 that shows the power of our interop api.",
 		"manifestType": "external",
 		"manifest": "winform-interop-example",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-winform-interop.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-connections/common/images/icon-winform-interop.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-connections/common/images/previews/openfin-winform-interop.png"
 			}
 		],
 		"tags": ["native", "appasset", "nwi"],
