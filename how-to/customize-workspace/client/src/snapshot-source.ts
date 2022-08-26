@@ -1,4 +1,6 @@
+import { App } from "@openfin/workspace";
 import { getConnectedSnapshotSourceClients } from "./connections";
+import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 
 const logger = createLogger("SnapshotSource");
@@ -18,11 +20,11 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 		sources.map(async (entry) => {
 			const snapShotSource = await fin.SnapshotSource.wrap({ uuid: entry.identity.uuid });
 			try {
-				logger.info(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot`);
+				logger.info(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot.`);
 				const sourceSnapshot = await snapShotSource.getSnapshot();
 				return { identity: entry.identity, snapshot: sourceSnapshot };
 			} catch {
-				logger.info(`Snapshot source: ${entry.identity.uuid} was not available`);
+				logger.info(`Snapshot source: ${entry.identity.uuid} was not available.`);
 				return null;
 			}
 		})
@@ -39,27 +41,40 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 }
 
 export async function applyClientSnapshot(snapshot) {
-	const sources = await getConnectedSnapshotSourceClients();
-	if (sources.length === 0) {
+	if (!Array.isArray(snapshot?.clientSnapshots)) {
 		return {};
 	}
+	const sources = await getConnectedSnapshotSourceClients();
 	await Promise.all(
-		sources.map(async (entry) => {
-			const clientSnapshot: ClientSnapshot = Array.isArray(snapshot.clientSnapshots)
-				? snapshot.clientSnapshots.find((s: ClientSnapshot) => s.identity.uuid === entry.identity.uuid)
-				: undefined;
+		snapshot.clientSnapshots.map(async (clientSnapshot: ClientSnapshot) => {
 			if (clientSnapshot) {
-				try {
-					const snapShotSource = await fin.SnapshotSource.wrap(clientSnapshot.identity);
-					logger.info(
-						`Snapshot source: ${entry.identity.uuid} is running and has a snapshot entry. Applying snapshot.`
+				if (sources.some((source) => source.identity.uuid === clientSnapshot.identity.uuid)) {
+					try {
+						const snapShotSource = await fin.SnapshotSource.wrap(clientSnapshot.identity);
+						logger.info(
+							`Snapshot source: ${clientSnapshot.identity.uuid} is running and has a snapshot entry. Applying snapshot.`
+						);
+						await snapShotSource.applySnapshot(clientSnapshot.snapshot);
+					} catch {
+						logger.warn(
+							`Snapshot source: ${clientSnapshot.identity.uuid} is not able to apply the snapshot.`
+						);
+					}
+				} else if (clientSnapshot?.snapshot !== undefined) {
+					// eslint-disable-next-line @typescript-eslint/dot-notation
+					const app: App = clientSnapshot.snapshot["App"] ?? clientSnapshot.snapshot["app"];
+					if (app !== undefined) {
+						logger.info(
+							`Client not connected but snapshot contains an app definition. Launching app definition for ${clientSnapshot.identity.uuid}`
+						);
+						logger.debug("Client app definition:", app);
+						await launch(app);
+					}
+				} else {
+					logger.warn(
+						`Client snapshot was available but the source ${clientSnapshot.identity.uuid} was not connected and it didn't provide an app/App entry as part of the snapshot to trigger a launch.`
 					);
-					await snapShotSource.applySnapshot(clientSnapshot.snapshot);
-				} catch {
-					logger.info(`Snapshot source: ${entry.identity.uuid} is not able to apply the snapshot`);
 				}
-			} else {
-				logger.info(`Snapshot source: ${entry.identity.uuid} but doesn't have any entries in this snapshot`);
 			}
 			return {};
 		})

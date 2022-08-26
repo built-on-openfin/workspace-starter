@@ -25,6 +25,12 @@ export const manifestTypes: { [id: string]: ManifestType } = {
 		description:
 			"This manifest type expects the manifest setting to have the classic window options inline rather than a url to a json file."
 	},
+	inlineExternal: {
+		id: "inline-external",
+		label: "Native App",
+		description:
+			"This manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request."
+	},
 	snapshot: {
 		id: "snapshot",
 		label: "Snapshot",
