@@ -649,8 +649,14 @@
 						"title": "All Apps",
 						"tags": ["view", "page", "manifest", "native"]
 					},
-					{ "title": "Views", "tags": ["view"] },
-					{ "title": "Pages", "tags": ["page"] },
+					{
+						"title": "Views",
+						"tags": ["view"]
+					},
+					{
+						"title": "Pages",
+						"tags": ["page"]
+					},
 					{
 						"title": "Manifest",
 						"tags": ["manifest"]
