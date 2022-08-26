@@ -775,7 +775,7 @@
 				"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 				"enabled": false,
 				"autoStart": true,
-				"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
+				"url": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
@@ -795,7 +795,7 @@
 				"title": "Emoji Provider",
 				"enabled": true,
 				"autoStart": false,
-				"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 			}
 		]
 	},
