@@ -50,7 +50,8 @@ async function manageAuthFlow() {
 
 async function setupPlatform() {
 	const settings: CustomSettings = await getSettings();
-	await loggerProvider.initialize(settings?.loggerProvider);
+	await loggerProvider.init(settings?.loggerProvider);
+
 	logger.info("Initializing Core Services");
 	await endpointProvider.init(settings?.endpointProvider);
 	await connectionProvider.init(settings?.connectionProvider);
@@ -90,7 +91,7 @@ export async function init() {
 
 	logger.info("Initializing Auth Check");
 	await authProvider.init(authProviderSettings);
-	// in a real application you would feed in your own logger.
+
 	if (isAuthenticationEnabled()) {
 		const authenticationRequired = await authProvider.isAuthenticationRequired();
 		if (authenticationRequired) {

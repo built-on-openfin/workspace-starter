@@ -1,4 +1,5 @@
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
 
 interface RaiseIntentPayload {
 	name: string;
@@ -35,10 +36,14 @@ async function shareContext(payload: ShareContextPayload) {
 	}
 }
 
-export async function init(options: unknown, loggerCreator: LoggerCreator) {
-	logger = loggerCreator("InitOptionsInteropHandler");
+export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+	logger = createLogger("InitOptionsInteropHandler");
 	// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
 	logger.info("The handler has been loaded");
+}
+
+export function supportedActions(): string[] {
+	return ["raise-intent", "share-context"];
 }
 
 export async function action(

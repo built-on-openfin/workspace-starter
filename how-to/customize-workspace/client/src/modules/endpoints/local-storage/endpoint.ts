@@ -1,5 +1,6 @@
 import type { EndpointDefinition } from "../../../endpoint-shapes";
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import type { IPlatformStorage } from "./platform-storage-shapes";
 
@@ -17,10 +18,10 @@ function getStorage<T>(id: string): IPlatformStorage<T> {
 	return localStorage;
 }
 
-export async function init(options: unknown, logCreator: LoggerCreator): Promise<void> {
-	loggerCreator = logCreator;
+export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+	loggerCreator = createLogger;
 	logger = loggerCreator("LocalStorageEndpoint");
-	logger.info("Was passed the following options", options);
+	logger.info("Was passed the following options", definition.data);
 }
 
 export async function action(

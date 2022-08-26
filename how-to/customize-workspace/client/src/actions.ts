@@ -8,7 +8,7 @@ import {
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
-import { ActionsModule, ActionsProviderOptions } from "./actions-shapes";
+import { ActionHelpers, Actions, ActionsProviderOptions } from "./actions-shapes";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
 import { getDefaultWindowOptions, launchView } from "./browser";
@@ -17,6 +17,7 @@ import { show } from "./home";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+import { initializeModules, loadModules } from "./modules";
 import { showShareOptions } from "./share";
 
 const logger = createLogger("Actions");
@@ -53,32 +54,21 @@ export const ACTION_IDS = {
 export async function getActions(actionsProviderOptions?: ActionsProviderOptions): Promise<CustomActionsMap> {
 	let actionMap: CustomActionsMap = await getDefaultActions();
 
-	if (Array.isArray(actionsProviderOptions.modules)) {
-		const platform = getCurrentSync();
-		for (const module of actionsProviderOptions.modules) {
-			if (module.enabled) {
-				try {
-					const mod: ActionsModule = await import(/* webpackIgnore: true */ module.url);
-					if (mod.actions.initialize) {
-						await mod.actions.initialize(
-							{
-								updateToolbarButtons,
-								manifestTypes,
-								callerTypes: CustomActionCallerType
-							},
-							createLogger
-						);
-					}
-					const modActions = await mod.actions.get(platform);
-					actionMap = {
-						...actionMap,
-						...modActions
-					};
-				} catch (err) {
-					this.error(`Error loading module ${module.id} with url ${module.url}`, err);
-				}
-			}
-		}
+	const actionModules = await loadModules<Actions, ActionHelpers>(actionsProviderOptions, "actions");
+
+	await initializeModules<Actions, ActionHelpers>(actionModules, {
+		updateToolbarButtons,
+		manifestTypes,
+		callerTypes: CustomActionCallerType
+	});
+
+	const platform = getCurrentSync();
+	for (const actionModule of actionModules.values()) {
+		const modActions = await actionModule.implementation.get(platform);
+		actionMap = {
+			...actionMap,
+			...modActions
+		};
 	}
 
 	return actionMap;

@@ -1,4 +1,6 @@
-import { AuthProvider } from "../../../auth-shapes";
+import type { ModuleImplementation, ModuleTypes } from "../../../module-shapes";
 import * as authImplementation from "./auth-provider";
 
-export const authProvider: AuthProvider = authImplementation;
+export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
+	auth: authImplementation
+};

@@ -1,7 +1,6 @@
-import type { LoggerCreator } from "./logger-shapes";
+import type { ModuleImplementation, ModuleList } from "./module-shapes";
 
-export interface AuthProvider {
-	init<T>(options: T, loggerCreator: LoggerCreator): Promise<void>;
+export interface AuthProvider extends ModuleImplementation {
 	subscribe(
 		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
 		callback: () => Promise<void>
@@ -13,17 +12,4 @@ export interface AuthProvider {
 	getUserInfo<T>(): Promise<T>;
 }
 
-export interface AuthModule {
-	authProvider: AuthProvider;
-}
-
-export interface AuthModuleDefinition {
-	id: string;
-	url: string;
-	data?: unknown;
-}
-
-export interface AuthProviderOptions {
-	modules?: AuthModuleDefinition[];
-	authProviderId?: string;
-}
+export type AuthProviderOptions = ModuleList;

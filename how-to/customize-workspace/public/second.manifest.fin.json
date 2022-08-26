@@ -72,7 +72,7 @@
 					}
 				}
 			],
-			"authProviderId": "example"
+			"singleton": "example"
 		},
 		"endpointProvider": {
 			"modules": [],

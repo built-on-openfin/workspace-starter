@@ -1,11 +1,11 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
-import {
+import type {
 	InitOptionsHandler,
-	InitOptionsModule,
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./init-options-shapes";
 import { createLogger } from "./logger-provider";
+import { initializeModules, loadModules } from "./modules";
 
 const logger = createLogger("InitOptions");
 
@@ -19,24 +19,6 @@ const listenerMap: { [key: string]: string } = {};
 let initialized = false;
 const actionParamName = "action";
 const actionPayloadParamName = "payload";
-const modules: { [key: string]: InitOptionsHandler } = {};
-
-async function loadInitOptionsModule<T>(id: string, url: string, data: T): Promise<boolean> {
-	try {
-		if (modules[id] === undefined) {
-			const mod: InitOptionsModule = await import(/* webpackIgnore: true */ url);
-			const actionHandler = mod.handler;
-			if (actionHandler.init !== undefined) {
-				await actionHandler.init(data, createLogger);
-			}
-			modules[id] = actionHandler;
-		}
-		return true;
-	} catch (err) {
-		logger.error(`Error loading module ${id} with url ${url}`, err);
-		return false;
-	}
-}
 
 function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
 	try {
@@ -134,30 +116,21 @@ export async function init(options?: InitOptionsProviderOptions) {
 		return;
 	}
 	initialized = true;
-	if (Array.isArray(options?.modules)) {
-		for (let i = 0; i < options.modules.length; i++) {
-			const module = options.modules[i];
-			if (Array.isArray(module?.supportedActions) && module.supportedActions.length > 0) {
-				const isModuleLoaded = await loadInitOptionsModule(module.id, module.url, module.data);
-				if (isModuleLoaded) {
-					for (let a = 0; a < module.supportedActions.length; a++) {
-						const supportedAction = module.supportedActions[a];
-						registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
-							const actionHandler = modules[module.id];
-							if (actionHandler !== undefined) {
-								logger.info(`Action: ${requestedAction} being handled by module ${module.id}`);
-								await actionHandler.action(requestedAction, payload);
-							} else {
-								logger.warn(
-									`Unable to retrieve module with id: ${module.id} to execute action: ${requestedAction}`
-								);
-							}
-						});
-					}
-				}
-			}
+
+	const initOptionsModules = await loadModules<InitOptionsHandler>(options, "initOptions");
+
+	await initializeModules<InitOptionsHandler>(initOptionsModules);
+
+	for (const moduleEntry of initOptionsModules) {
+		const supportedActions = moduleEntry.implementation.supportedActions();
+		for (const supportedAction of supportedActions) {
+			registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
+				logger.info(`Action: ${requestedAction} being handled by module ${moduleEntry.definition.id}`);
+				await moduleEntry.implementation.action(requestedAction, payload);
+			});
 		}
 	}
+
 	const app = fin.Application.getCurrentSync();
 	const appInfo = await app.getInfo();
 	const customInitOptions = appInfo.initialOptions as OpenFin.ApplicationCreationOptions & {

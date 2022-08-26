@@ -1,3 +1,6 @@
+import type { ModuleImplementation, ModuleTypes } from "../../../module-shapes";
 import { ConsoleLogProvider } from "./logProvider";
 
-export const logProvider = new ConsoleLogProvider();
+export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
+	log: new ConsoleLogProvider()
+};

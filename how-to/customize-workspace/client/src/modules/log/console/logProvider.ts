@@ -1,10 +1,11 @@
-import type { LogProvider, LogLevel } from "../../../logger-shapes";
-import type { ConsoleLogOptions as ConsoleLogProviderOptions } from "./shapes";
+import type { LogProvider, LogLevel, LoggerCreator } from "../../../logger-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
+import type { ConsoleLogOptions } from "./shapes";
 
 /**
  * Implement the log provider using the console.
  */
-export class ConsoleLogProvider implements LogProvider<ConsoleLogProviderOptions> {
+export class ConsoleLogProvider implements LogProvider<never, ConsoleLogOptions> {
 	/**
 	 * The levels of logging to include.
 	 */
@@ -16,11 +17,18 @@ export class ConsoleLogProvider implements LogProvider<ConsoleLogProviderOptions
 	private _lastGroupIdentity: string;
 
 	/**
-	 * Optionally initialize the log provider.
-	 * @param options The custom options for the log provider.
+	 * Initialise the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
+	 * @returns Nothing.
 	 */
-	public async initialize(options: ConsoleLogProviderOptions): Promise<void> {
-		this._includeLevels = options?.includeLevels ?? ["info", "warn", "error", "debug", "trace"];
+	public async initialize(
+		definition: ModuleDefinition<ConsoleLogOptions>,
+		loggerCreator: LoggerCreator,
+		helpers?: never
+	): Promise<void> {
+		this._includeLevels = definition.data?.includeLevels ?? ["info", "warn", "error", "debug", "trace"];
 	}
 
 	/**

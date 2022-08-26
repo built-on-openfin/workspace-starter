@@ -653,13 +653,13 @@
 			"isManagementEnabled": false,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
-			"integrations": [
+			"modules": [
 				{
 					"id": "salesforce",
 					"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
+					"url": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
@@ -680,8 +680,7 @@
 					"description": "Search for emojis by name",
 					"enabled": false,
 					"autoStart": false,
-					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
-					"data": {}
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				}
 			]
 		},
@@ -689,9 +688,7 @@
 			"modules": [
 				{
 					"id": "interop",
-					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
-					"data": {},
-					"supportedActions": ["raise-intent", "share-context"]
+					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js"
 				}
 			]
 		},
@@ -700,8 +697,7 @@
 				{
 					"enabled": true,
 					"id": "console",
-					"url": "http://localhost:8080/js/modules/log/console.bundle.js",
-					"data": {}
+					"url": "http://localhost:8080/js/modules/log/console.bundle.js"
 				}
 			]
 		},
@@ -710,14 +706,12 @@
 				{
 					"enabled": true,
 					"id": "opacity",
-					"url": "http://localhost:8080/js/modules/actions/opacity.bundle.js",
-					"data": {}
+					"url": "http://localhost:8080/js/modules/actions/opacity.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "app-definition",
-					"url": "http://localhost:8080/js/modules/actions/app-definition.bundle.js",
-					"data": {}
+					"url": "http://localhost:8080/js/modules/actions/app-definition.bundle.js"
 				}
 			]
 		}

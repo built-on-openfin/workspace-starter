@@ -18,8 +18,9 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationManager, IntegrationModule } from "../../../integrations-shapes";
+import type { IntegrationHelpers, IntegrationModule } from "../../../integrations-shapes";
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,
@@ -63,10 +64,22 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private static readonly _NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
 	/**
-	 * The integration manager.
+	 * The integration helpers.
 	 * @internal
 	 */
-	private _integrationManager: IntegrationManager | undefined;
+	private _integrationHelpers: IntegrationHelpers | undefined;
+
+	/**
+	 * The module definition.
+	 * @internal
+	 */
+	private _moduleDefinition: ModuleDefinition<SalesforceSettings>;
+
+	/**
+	 * The settings.
+	 * @internal
+	 */
+	private _settings: SalesforceSettings | undefined;
 
 	/**
 	 * The connection to SalesForce.
@@ -81,22 +94,24 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private _logger: Logger;
 
 	/**
-	 * The module is being registered.
-	 * @param integrationManager The manager for the integration.
-	 * @param integration The integration details.
-	 * @param loggerCreator for logging info.
+	 * Initialise the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async register(
-		integrationManager: IntegrationManager,
-		integration: Integration<SalesforceSettings>,
-		loggerCreator: LoggerCreator
+	public async initialize(
+		definition: ModuleDefinition<SalesforceSettings>,
+		loggerCreator: LoggerCreator,
+		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationManager = integrationManager;
+		this._moduleDefinition = definition;
+		this._integrationHelpers = helpers;
+		this._settings = definition.data;
 		this._logger = loggerCreator("Salesforce");
 		this._logger.info("Registering SalesForce");
 		try {
-			await this.openConnection(integration);
+			await this.openConnection();
 		} catch (err) {
 			this._logger.error("Error connecting to SalesForce", err);
 		}
@@ -104,32 +119,28 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 	/**
 	 * The module is being deregistered.
-	 * @param integration The integration details.
 	 * @returns Nothing.
 	 */
-	public async deregister(integration: Integration<SalesforceSettings>): Promise<void> {
+	public async closedown(): Promise<void> {
 		await this.closeConnection();
 	}
 
 	/**
 	 * An entry has been selected.
-	 * @param integration The integration details.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		integration: Integration<SalesforceSettings>,
 		result: CLIDispatchedSearchResult,
 		lastResponse: CLISearchListenerResponse
 	): Promise<boolean> {
 		// if the user clicked the reconnect result, reconnect to salesforce and re-run query
 		if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
-			await this.openConnection(integration);
+			await this.openConnection();
 
 			if (result.data?.query) {
 				const results = await this.getSearchResults(
-					integration,
 					result.data?.query as string,
 					result.data?.filters as CLIFilter[],
 					lastResponse
@@ -144,8 +155,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		// otherwise open the result page url in browser
 		const data = result.data as SalesforceResultData;
-		if (data !== undefined && this._integrationManager && this._integrationManager.launchView) {
-			const preload = integration?.data?.preload;
+		if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
+			const preload = this._settings?.preload;
 			const viewOptions = {
 				url: data.pageUrl,
 				fdc3InteropApi: "1.2",
@@ -156,7 +167,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				preloadScripts: [{ url: preload }],
 				target: { name: "", url: "", uuid: "" }
 			};
-			await this._integrationManager.launchView(viewOptions);
+			await this._integrationHelpers.launchView(viewOptions);
 			return true;
 		}
 		return false;
@@ -164,20 +175,18 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 	/**
 	 * Get a list of search results based on the query and filters.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
-		integration: Integration<SalesforceSettings>,
 		query: string,
 		filters: CLIFilter[],
 		lastResponse: CLISearchListenerResponse
 	): Promise<HomeSearchResponse> {
 		const response: HomeSearchResponse = {
-			results: await this.getDefaultEntries(integration, query)
+			results: await this.getDefaultEntries(query)
 		};
 
 		if (this._salesForceConnection) {
@@ -211,10 +220,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							label: searchResult.attributes.type,
 							key: searchResult.Id,
 							title: searchResult.Name,
-							icon: integration?.data?.iconMap.account,
+							icon: this._settings?.iconMap.account,
 							data: {
 								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
 								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 							},
 							template: CLITemplate.Contact,
@@ -236,10 +245,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							label: searchResult.attributes.type,
 							key: searchResult.Id,
 							title: searchResult.Name,
-							icon: integration?.data?.iconMap.contact,
+							icon: this._settings?.iconMap.contact,
 							data: {
 								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
 								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 							},
 							template: CLITemplate.Contact,
@@ -262,10 +271,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							label: searchResult.attributes.type,
 							key: searchResult.Id,
 							title: searchResult.Subject,
-							icon: integration?.data?.iconMap.task,
+							icon: this._settings?.iconMap.task,
 							data: {
 								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
 								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 							},
 							template: "List",
@@ -280,10 +289,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							label: "Note",
 							key: searchResult.Id,
 							title: searchResult.Title,
-							icon: integration?.data?.iconMap.note,
+							icon: this._settings?.iconMap.note,
 							data: {
 								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, integration.data?.orgUrl),
+								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
 								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 							},
 							template: "List",
@@ -301,10 +310,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							label: "Chatter",
 							key: searchResult.id,
 							title: searchResult.actor?.displayName,
-							icon: integration?.data?.iconMap.chatter,
+							icon: this._settings?.iconMap.chatter,
 							data: {
 								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.id, integration.data?.orgUrl),
+								pageUrl: this.getObjectUrl(searchResult.id, this._settings?.orgUrl),
 								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 							} as SalesforceResultData,
 							template: CLITemplate.Contact,
@@ -335,7 +344,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			} catch (err) {
 				await this.closeConnection();
 				if (err instanceof ConnectionError) {
-					response.results.push(this.getReconnectSearchResult(integration, query, filters));
+					response.results.push(this.getReconnectSearchResult(query, filters));
 				}
 				this._logger.error("Error retrieving SalesForce search results", err);
 			}
@@ -346,16 +355,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 	/**
 	 * Get a list of the default application entries.
-	 * @param integration The integration details.
 	 * @param query The query to search for.
 	 * @returns The list of application entries.
 	 */
-	private async getDefaultEntries(
-		integration: Integration<SalesforceSettings>,
-		query: string
-	): Promise<HomeSearchResult[]> {
+	private async getDefaultEntries(query: string): Promise<HomeSearchResult[]> {
 		const results: HomeSearchResult[] = [];
-		if (integration?.data?.orgUrl) {
+		if (this._settings?.orgUrl) {
 			const title = "Browse Salesforce";
 			if (
 				query === undefined ||
@@ -367,10 +372,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					actions: [{ name: "Browse", hotkey: "enter" }],
 					data: {
 						providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-						pageUrl: integration?.data?.orgUrl,
+						pageUrl: this._settings?.orgUrl,
 						tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 					} as SalesforceResultData,
-					icon: integration.icon,
+					icon: this._moduleDefinition.icon,
 					key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
 					template: CLITemplate.Plain,
 					templateContent: undefined,
@@ -378,7 +383,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				} as CLISearchResultPlain);
 			}
 			if (!this._salesForceConnection && (query === undefined || query === null || query === "")) {
-				results.push(this.getReconnectSearchResult(integration));
+				results.push(this.getReconnectSearchResult());
 			}
 		}
 
@@ -387,13 +392,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 	/**
 	 * Open the connection to SaleForce.
-	 * @param integration The integration details.
 	 * @internal
 	 */
-	private async openConnection(integration: Integration<SalesforceSettings>): Promise<void> {
-		if (integration?.data?.orgUrl && !this._salesForceConnection) {
+	private async openConnection(): Promise<void> {
+		if (this._settings?.orgUrl && !this._salesForceConnection) {
 			enableLogging();
-			this._salesForceConnection = await connect(integration?.data.orgUrl, integration?.data.consumerKey);
+			this._salesForceConnection = await connect(this._settings?.orgUrl, this._settings?.consumerKey);
 		}
 	}
 
@@ -551,21 +555,16 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 	/**
 	 * Get the search result to display when SalesForce needs to reconnect.
-	 * @param integration The integration details.
 	 * @param query The query that needs to reconnect.
 	 * @param filters The filter for the reconnect.
 	 * @returns The search result entry.
 	 * @internal
 	 */
-	private getReconnectSearchResult(
-		integration: Integration<SalesforceSettings>,
-		query?: string,
-		filters?: CLIFilter[]
-	) {
+	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]) {
 		return {
 			actions: [{ name: "Reconnect", hotkey: "enter" }],
 			key: SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY,
-			icon: integration?.icon,
+			icon: this._moduleDefinition?.icon,
 			title: "Reconnect to Salesforce",
 			data: {
 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
