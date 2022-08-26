@@ -45,12 +45,16 @@ export class LoggerProvider {
 	 * @param optionalParams Optional parameters for details.
 	 */
 	public log(group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void {
-		if (this._logProviders.length === 0) {
-			console[level](`[${group}]`, `[${this._identity.name}]`, message, ...optionalParams);
-		} else {
-			for (const logProviderEntry of this._logProviders) {
+		let hasLogged = false;
+		for (const logProviderEntry of this._logProviders) {
+			if (logProviderEntry.isInitialised) {
+				hasLogged = true;
 				logProviderEntry.implementation.log(this._identity.name, group, level, message, ...optionalParams);
 			}
+		}
+
+		if (!hasLogged) {
+			console[level](`[${group}]`, `[${this._identity.name}]`, message, ...optionalParams);
 		}
 	}
 }
