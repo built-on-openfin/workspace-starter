@@ -5,7 +5,7 @@ import type { ConsoleLogOptions } from "./shapes";
 /**
  * Implement the log provider using the console.
  */
-export class ConsoleLogProvider implements LogProvider<never, ConsoleLogOptions> {
+export class ConsoleLogProvider implements LogProvider<ConsoleLogOptions> {
 	/**
 	 * The levels of logging to include.
 	 */
