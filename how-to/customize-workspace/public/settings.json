@@ -767,7 +767,7 @@
 		"isManagementEnabled": true,
 		"command": "integrations",
 		"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
-		"integrations": [
+		"modules": [
 			{
 				"id": "salesforce",
 				"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
