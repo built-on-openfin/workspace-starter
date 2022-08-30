@@ -14,6 +14,7 @@ import { EndpointProviderOptions } from "./endpoint-shapes";
 import { InitOptionsProviderOptions } from "./init-options-shapes";
 import { IntegrationProviderOptions } from "./integrations-shapes";
 import { LoggerProviderOptions } from "./logger-shapes";
+import { ModuleList } from "./module-shapes";
 
 interface PlatformProviderOptions {
 	rootUrl: string;
@@ -27,6 +28,8 @@ interface PlatformProviderOptions {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface NotificationProviderOptions extends NotificationsPlatform {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HeadlessProviderOptions extends ModuleList {}
 export interface ToolbarButtonDefinition {
 	id: string;
 	include: boolean;
@@ -215,6 +218,7 @@ export interface CustomSettings {
 	connectionProvider?: ConnectionProviderOptions;
 	dockProvider?: DockProviderOptions;
 	endpointProvider?: EndpointProviderOptions;
+	headlessProvider?: HeadlessProviderOptions;
 	homeProvider?: HomeProviderOptions;
 	initOptionsProvider?: InitOptionsProviderOptions;
 	integrationProvider?: IntegrationProviderOptions;
