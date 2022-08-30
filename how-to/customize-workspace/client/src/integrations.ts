@@ -15,7 +15,7 @@ import type {
 	IntegrationProviderOptions
 } from "./integrations-shapes";
 import { createLogger } from "./logger-provider";
-import { ModuleEntry } from "./module-shapes";
+import type { ModuleEntry } from "./module-shapes";
 import {
 	closedownModule,
 	closedownModules,

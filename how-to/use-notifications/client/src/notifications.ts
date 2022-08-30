@@ -13,7 +13,7 @@ import {
 	UpdatableNotificationOptions,
 	update
 } from "@openfin/workspace/notifications";
-import * as CSS from "csstype";
+import type * as CSS from "csstype";
 import { addEventListener as providerEventListener } from "./provider-event-listener";
 
 let loggingElement: HTMLElement;

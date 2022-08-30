@@ -1,4 +1,4 @@
-import { LoggerCreator } from "./logger-shapes";
+import type { LoggerCreator } from "./logger-shapes";
 
 /**
  * List of modules.

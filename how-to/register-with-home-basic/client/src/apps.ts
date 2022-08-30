@@ -1,4 +1,4 @@
-import { App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 
 export async function getApps(): Promise<App[]> {
 	return [experoApp, notificationStudio, processManager, developerContent];

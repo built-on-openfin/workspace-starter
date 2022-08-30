@@ -12,7 +12,11 @@ import {
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
-import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
+import type {
+	CustomSettings,
+	StorefrontSettingsLandingPageRow,
+	StorefrontSettingsNavigationItem
+} from "./shapes";
 
 let isStoreRegistered = false;
 

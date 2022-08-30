@@ -1,19 +1,19 @@
-import { StorefrontFooter, Image } from "@openfin/workspace";
-import {
+import type { StorefrontFooter, Image } from "@openfin/workspace";
+import type {
 	CustomThemes,
 	GlobalContextMenuOptionType,
 	PageTabContextMenuOptionType,
 	ToolbarButton,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
-import { NotificationsPlatform } from "@openfin/workspace/notifications";
-import { ActionsProviderOptions } from "./actions-shapes";
-import { AuthProviderOptions } from "./auth-shapes";
-import { ConnectionProviderOptions } from "./connection-shapes";
-import { EndpointProviderOptions } from "./endpoint-shapes";
-import { InitOptionsProviderOptions } from "./init-options-shapes";
-import { IntegrationProviderOptions } from "./integrations-shapes";
-import { LoggerProviderOptions } from "./logger-shapes";
+import type { NotificationsPlatform } from "@openfin/workspace/notifications";
+import type { ActionsProviderOptions } from "./actions-shapes";
+import type { AuthProviderOptions } from "./auth-shapes";
+import type { ConnectionProviderOptions } from "./connection-shapes";
+import type { EndpointProviderOptions } from "./endpoint-shapes";
+import type { InitOptionsProviderOptions } from "./init-options-shapes";
+import type { IntegrationProviderOptions } from "./integrations-shapes";
+import type { LoggerProviderOptions } from "./logger-shapes";
 
 interface PlatformProviderOptions {
 	rootUrl: string;

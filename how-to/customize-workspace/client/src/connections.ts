@@ -1,5 +1,5 @@
-import { App } from "@openfin/workspace";
-import {
+import type { App } from "@openfin/workspace";
+import type {
 	AppSourceConnection,
 	Connection,
 	ConnectionProviderOptions,

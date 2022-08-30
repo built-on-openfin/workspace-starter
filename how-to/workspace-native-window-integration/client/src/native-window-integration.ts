@@ -3,7 +3,7 @@ import {
 	NativeWindowIntegrationClient
 } from "@openfin/native-window-integration-client";
 import asset from "@openfin/native-window-integration-client/lib/provider.zip";
-import { App } from "@openfin/workspace-platform";
+import type { App } from "@openfin/workspace-platform";
 import { getAppsByTag } from "./apps";
 
 let nwiClient: NativeWindowIntegrationClient;

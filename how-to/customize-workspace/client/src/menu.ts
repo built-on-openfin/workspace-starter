@@ -1,4 +1,4 @@
-import {
+import type {
 	GlobalContextMenuItemTemplate,
 	GlobalContextMenuOptionType,
 	PageTabContextMenuItemTemplate,
@@ -10,7 +10,7 @@ import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { MenuEntry, MenuPositionOperation } from "./shapes";
+import type { MenuEntry, MenuPositionOperation } from "./shapes";
 
 const logger = createLogger("Menu");
 

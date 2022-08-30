@@ -1,4 +1,4 @@
-import { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 
 export interface ThemeDisplayOptions {
 	home?: boolean;

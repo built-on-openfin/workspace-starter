@@ -11,7 +11,7 @@ import {
 	Home,
 	HomeSearchResult
 } from "@openfin/workspace";
-import { Page } from "@openfin/workspace-platform";
+import type { Page } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { deletePage, getPage, getPages, launchPage } from "./browser";
 import { launch } from "./launch";
