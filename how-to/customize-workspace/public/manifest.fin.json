@@ -102,11 +102,6 @@
 				"desktop-browser"
 			]
 		},
-		"headlessProvider": {
-			"modules": [
-				{ "id": "google", "url": "https://www.google.com", "enabled": false, "data": { "customData": { "test": true } } }
-			]
-		},
 		"endpointProvider": {
 			"modules": [
 				{
