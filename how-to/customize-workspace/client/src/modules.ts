@@ -60,7 +60,7 @@ export async function loadModule<
 		logger.warn("Module does not have an id defined");
 		return;
 	}
-	if (moduleDefinition.enabled) {
+	if (moduleDefinition.enabled ?? true) {
 		if (!moduleDefinition.url) {
 			logger.error(`Module '${moduleDefinition.id}' can not be loaded without a url`);
 			return;

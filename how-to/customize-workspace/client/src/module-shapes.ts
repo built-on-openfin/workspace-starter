@@ -47,7 +47,7 @@ export interface ModuleDefinition<O = unknown> {
 	/**
 	 * Is the module enabled.
 	 */
-	enabled: boolean;
+	enabled?: boolean;
 
 	/**
 	 * Custom data for the module.

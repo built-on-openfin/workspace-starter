@@ -42,8 +42,16 @@ let integrationHelpers: IntegrationHelpers;
  * @param integrationHelpers The integration helpers.
  */
 export async function init(options: IntegrationProviderOptions, helpers: IntegrationHelpers): Promise<void> {
+	options.modules = options.modules ?? options.integrations;
+
 	integrationProviderOptions = options;
 	integrationHelpers = helpers;
+
+	// Map the old moduleUrl properties to url
+	for (const integration of options.modules) {
+		integration.url = integration.url ?? integration.moduleUrl;
+		delete integration.moduleUrl;
+	}
 
 	// Load the modules
 	integrationModules = await loadModules<
