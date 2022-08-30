@@ -1,6 +1,6 @@
 import { BrowserButtonType, CustomBrowserButtonConfig, ToolbarButton } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
-import { ToolbarButtonDefinition } from "./shapes";
+import type { ToolbarButtonDefinition } from "./shapes";
 import { isShareEnabled } from "./share";
 import { getCurrentTheme } from "./themes";
 

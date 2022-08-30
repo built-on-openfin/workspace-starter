@@ -1,5 +1,5 @@
 import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import { ModuleDefinition } from "../../../module-shapes";
+import type { ModuleDefinition } from "../../../module-shapes";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;

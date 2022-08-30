@@ -1,5 +1,5 @@
-import { StorefrontFooter, Image } from "@openfin/workspace";
-import { CustomThemes } from "@openfin/workspace-platform";
+import type { StorefrontFooter, Image } from "@openfin/workspace";
+import type { CustomThemes } from "@openfin/workspace-platform";
 
 interface BrowserProvider {
 	windowOptions: {

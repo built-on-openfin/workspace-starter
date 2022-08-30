@@ -1,4 +1,4 @@
-import { App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 

@@ -1,5 +1,5 @@
-import { App } from "@openfin/workspace";
-import { AppIntent } from "@openfin/workspace-platform";
+import type { App } from "@openfin/workspace";
+import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
 import { launchSnapshot, launchView } from "./launch";
 import { getSettings } from "./settings";

@@ -27,7 +27,7 @@ import {
 	SalesforceTask
 } from "./salesforce";
 import { getSettings } from "./settings";
-import { SalesforceResultData } from "./shapes";
+import type { SalesforceResultData } from "./shapes";
 
 const BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
 const PROVIDER_ID = "integrate-with-salesforce";

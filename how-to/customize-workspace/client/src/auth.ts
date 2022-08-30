@@ -1,4 +1,4 @@
-import { AuthProvider, AuthProviderOptions } from "./auth-shapes";
+import type { AuthProvider, AuthProviderOptions } from "./auth-shapes";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 

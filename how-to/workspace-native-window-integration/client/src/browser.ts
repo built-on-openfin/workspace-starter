@@ -1,4 +1,4 @@
-import { BrowserOverrideCallback } from "@openfin/workspace-platform";
+import type { BrowserOverrideCallback } from "@openfin/workspace-platform";
 import { decorateSnapshot, applyDecoratedSnapshot } from "./native-window-integration";
 
 export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {

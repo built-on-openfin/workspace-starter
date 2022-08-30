@@ -1,4 +1,4 @@
-import { App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 import { getConnectedSnapshotSourceClients } from "./connections";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";

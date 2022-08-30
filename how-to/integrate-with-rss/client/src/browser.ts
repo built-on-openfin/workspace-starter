@@ -1,6 +1,6 @@
-import { LayoutComponentStateExtended, LayoutContentExtended, Page } from "@openfin/workspace";
+import type { LayoutComponentStateExtended, LayoutContentExtended, Page } from "@openfin/workspace";
 import { BrowserCreateWindowRequest, BrowserWindowModule, getCurrentSync } from "@openfin/workspace-platform";
-import { LayoutContentItemExtended } from "@openfin/workspace-platform/client-api/src";
+import type { LayoutContentItemExtended } from "@openfin/workspace-platform/client-api/src";
 
 export async function launchView(
 	view: OpenFin.PlatformViewCreationOptions | string,

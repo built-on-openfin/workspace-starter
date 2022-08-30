@@ -14,7 +14,11 @@ import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { CustomSettings, StorefrontSettingsLandingPageRow, StorefrontSettingsNavigationItem } from "./shapes";
+import type {
+	CustomSettings,
+	StorefrontSettingsLandingPageRow,
+	StorefrontSettingsNavigationItem
+} from "./shapes";
 
 const logger = createLogger("Store");
 

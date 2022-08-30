@@ -8,7 +8,7 @@ import {
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
-import { ActionHelpers, Actions, ActionsProviderOptions } from "./actions-shapes";
+import type { ActionHelpers, Actions, ActionsProviderOptions } from "./actions-shapes";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
 import { getDefaultWindowOptions, launchView } from "./browser";

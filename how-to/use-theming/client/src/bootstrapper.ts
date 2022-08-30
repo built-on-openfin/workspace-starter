@@ -7,7 +7,7 @@ import {
 	register as registerNotifications,
 	show as showNotifications
 } from "./notifications";
-import { ThemeDisplayOptions } from "./shapes";
+import type { ThemeDisplayOptions } from "./shapes";
 import { deregister as deregisterStore, register as registerStore, show as showStore } from "./store";
 
 export async function init(themeDisplayOptions?: ThemeDisplayOptions) {

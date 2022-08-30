@@ -1,4 +1,4 @@
-import { App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 import { getSettings } from "./settings";
 
 async function getRestEntries(url: string, credentials?: "omit" | "same-origin" | "include"): Promise<App[]> {
