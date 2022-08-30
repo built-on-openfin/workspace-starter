@@ -72,6 +72,11 @@ export interface IntegrationProviderOptions extends ModuleList<IntegrationModule
 	 * An icon representing the top level integration provider
 	 */
 	icon?: string;
+
+	/**
+	 * This is the old module list name, remove in future.
+	 */
+	integrations?: IntegrationModuleDefinition[];
 }
 
 /**
@@ -82,6 +87,11 @@ export interface IntegrationModuleDefinition extends ModuleDefinition {
 	 * Does the integration start automatically if enabled (default is true).
 	 */
 	autoStart?: boolean;
+
+	/**
+	 * This is the old property, it will be remapped to url.
+	 */
+	moduleUrl?: string;
 }
 
 /**
