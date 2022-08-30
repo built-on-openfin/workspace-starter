@@ -13,7 +13,7 @@ import {
 	HomeSearchResult,
 	TemplateFragment
 } from "@openfin/workspace";
-import { BrowserSnapshot } from "@openfin/workspace-platform";
+import type { BrowserSnapshot } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";

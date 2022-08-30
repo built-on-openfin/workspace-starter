@@ -1,4 +1,4 @@
-import { IntegrationProviderOptions } from "./integrations-shapes";
+import type { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface HomeProvider {
 	id: string;

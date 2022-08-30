@@ -7,7 +7,7 @@ import {
 	TemplateFragmentTypes,
 	TextTemplateFragment
 } from "@openfin/workspace";
-import * as CSS from "csstype";
+import type * as CSS from "csstype";
 import { getCurrentTheme } from "./themes";
 
 export async function createHelp(

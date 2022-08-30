@@ -1,5 +1,8 @@
-import { CustomThemes } from "@openfin/workspace-platform";
-import { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomThemes } from "@openfin/workspace-platform";
+import type {
+	CustomPaletteSet,
+	CustomThemeOptions
+} from "@openfin/workspace-platform/common/src/api/theming";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 

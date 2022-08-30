@@ -1,6 +1,6 @@
-import { EndpointDefinition, FetchOptions, Endpoint, EndpointProviderOptions } from "./endpoint-shapes";
+import type { EndpointDefinition, FetchOptions, Endpoint, EndpointProviderOptions } from "./endpoint-shapes";
 import { createLogger } from "./logger-provider";
-import { ModuleEntry } from "./module-shapes";
+import type { ModuleEntry } from "./module-shapes";
 import { initializeModules, loadModules } from "./modules";
 
 const logger = createLogger("Endpoint");

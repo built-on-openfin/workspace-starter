@@ -1,7 +1,7 @@
 import { ACTION_IDS } from "./actions";
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
-import { CustomUserAppArgs, InitParams, ThemingPayload } from "./shapes";
+import type { CustomUserAppArgs, InitParams, ThemingPayload } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	const themingPayload = await handleInitParams();

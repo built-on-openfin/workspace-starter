@@ -3,7 +3,7 @@ import { ACTION_IDS } from "./actions";
 import { getApp, getAppIcon, getAppsByTag } from "./apps";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { BootstrapOptions } from "./shapes";
+import type { BootstrapOptions } from "./shapes";
 
 const logger = createLogger("Dock");
 

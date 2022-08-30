@@ -1,5 +1,5 @@
 import { createLogger } from "./logger-provider";
-import {
+import type {
 	Module,
 	ModuleEntry,
 	ModuleEntryTypes,

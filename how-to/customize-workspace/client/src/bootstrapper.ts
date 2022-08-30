@@ -21,7 +21,7 @@ import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
 import { getSettings } from "./settings";
-import { BootstrapComponents, BootstrapOptions } from "./shapes";
+import type { BootstrapComponents, BootstrapOptions } from "./shapes";
 import { deregister as deregisterShare, register as registerShare } from "./share";
 import {
 	deregister as deregisterStore,

@@ -1,5 +1,5 @@
-import { CustomThemes } from "@openfin/workspace-platform";
-import { IntegrationProviderOptions } from "./integrations-shapes";
+import type { CustomThemes } from "@openfin/workspace-platform";
+import type { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface HomeProviderOptions {
 	id: string;

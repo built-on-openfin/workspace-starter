@@ -7,7 +7,7 @@ import {
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse
 } from "@openfin/workspace";
-import { LayoutComponentExtended } from "@openfin/workspace-platform/client-api/src";
+import type { LayoutComponentExtended } from "@openfin/workspace-platform/client-api/src";
 import {
 	addEventListener as addNotificationEventListener,
 	create as createNotification,

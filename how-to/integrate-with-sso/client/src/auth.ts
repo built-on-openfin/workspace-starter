@@ -1,5 +1,5 @@
 import * as auth0 from "auth0-js";
-import { AuthSettings } from "./shapes";
+import type { AuthSettings } from "./shapes";
 
 const STORAGE_REALM = "integrate-with-sso";
 const STORE_ACCESS_TOKEN = "token";

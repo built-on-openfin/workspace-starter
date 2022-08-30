@@ -14,7 +14,7 @@ import { interopOverride } from "./interopbroker";
 import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
 import { getSettings, isValid as isSettingsValid, getAuthSettings } from "./settings";
-import { CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 import { getThemes } from "./themes";
 
 const logger = createLogger("Platform");

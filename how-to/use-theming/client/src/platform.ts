@@ -1,5 +1,5 @@
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { ThemingPayload } from "./shapes";
+import type { ThemingPayload } from "./shapes";
 
 export async function init(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing platform");

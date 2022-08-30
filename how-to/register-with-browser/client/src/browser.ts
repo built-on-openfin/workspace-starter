@@ -1,4 +1,4 @@
-import { LayoutExtended } from "@openfin/workspace";
+import type { LayoutExtended } from "@openfin/workspace";
 import {
 	getCurrentSync,
 	PageLayout,
