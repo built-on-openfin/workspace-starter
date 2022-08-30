@@ -44,6 +44,8 @@ const HOME_TAG_FILTERS = "tags";
 
 let isHomeRegistered = false;
 let registrationInfo: RegistrationMetaInfo;
+let enablePageIntegration: boolean = true;
+let enableWorkspaceIntegration: boolean = true;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
@@ -107,7 +109,8 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 					action.name = "Launch App";
 					break;
 				}
-				case manifestTypes.external.id: {
+				case manifestTypes.external.id:
+				case manifestTypes.inlineExternal.id: {
 					action.name = "Launch Native App";
 					entry.label = manifestTypes.external.label;
 					break;
@@ -263,15 +266,27 @@ async function getResults(
 ): Promise<HomeSearchResponse> {
 	const platform = getCurrentSync();
 	const apps = await getApps();
-	const pages = await platform.Storage.getPages();
-	const workspaces = await getWorkspaces();
+	let pageSearchEntries = [];
+	let workspaceSearchEntries = [];
+
+	if (enablePageIntegration) {
+		const pages = await platform.Storage.getPages();
+		pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
+	}
+
+	if (enableWorkspaceIntegration) {
+		const workspaces = await getWorkspaces();
+		workspaceSearchEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
+	}
 
 	const tags: string[] = [];
 	const appSearchEntries = mapAppEntriesToSearchEntries(apps);
-	const pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
-	const workspaceEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
 
-	const initialResults: HomeSearchResult[] = [...appSearchEntries, ...pageSearchEntries, ...workspaceEntries];
+	const initialResults: HomeSearchResult[] = [
+		...appSearchEntries,
+		...pageSearchEntries,
+		...workspaceSearchEntries
+	];
 
 	if (initialResults.length > 0) {
 		const finalResults = initialResults.filter((entry) => {
@@ -367,7 +382,7 @@ async function getResults(
 }
 
 export async function register(): Promise<RegistrationMetaInfo> {
-	logger.info("Initialising home");
+	logger.info("Initializing home");
 	const settings = await getSettings();
 	if (
 		settings.homeProvider === undefined ||
@@ -382,6 +397,8 @@ export async function register(): Promise<RegistrationMetaInfo> {
 
 	const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
 	const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
+	enablePageIntegration = settings?.homeProvider?.enablePageIntegration ?? true;
+	enableWorkspaceIntegration = settings?.homeProvider?.enableWorkspaceIntegration ?? true;
 	let lastResponse: CLISearchListenerResponse;
 	let filters: CLIFilter[];
 
@@ -392,7 +409,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		try {
 			const query = request.query.toLowerCase();
 
-			if (query.toLowerCase().startsWith("/w ")) {
+			if (enableWorkspaceIntegration && query.toLowerCase().startsWith("/w ")) {
 				const workspaces = await getWorkspaces();
 				const title = request.query.replace("/w ", "");
 
@@ -498,7 +515,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 					workspaceDescription?: string;
 					pageId?: string;
 				} & App = result.data;
-				if (data.workspaceId !== undefined) {
+				if (enableWorkspaceIntegration && data.workspaceId !== undefined) {
 					if (data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
 						await saveWorkspace(data.workspaceId, data.workspaceTitle);
 						if (lastResponse !== undefined && lastResponse !== null) {
@@ -545,7 +562,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 							logger.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
 						}
 					}
-				} else if (data.pageId !== undefined) {
+				} else if (enablePageIntegration && data.pageId !== undefined) {
 					const pageAction = result.action.name;
 					if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_ACTION_IDS.launch) {
 						const platform = getCurrentSync();

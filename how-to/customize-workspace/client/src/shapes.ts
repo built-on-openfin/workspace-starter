@@ -84,6 +84,8 @@ interface HomeProviderOptions {
 	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
+	enablePageIntegration?: boolean;
+	enableWorkspaceIntegration?: boolean;
 }
 
 interface DockButtonBase {
