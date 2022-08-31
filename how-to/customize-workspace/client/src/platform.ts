@@ -10,6 +10,7 @@ import { isAuthenticationEnabled } from "./auth";
 import { getDefaultWindowOptions } from "./browser";
 import * as connectionProvider from "./connections";
 import * as endpointProvider from "./endpoint";
+import * as headlessProvider from "./headless";
 import { interopOverride } from "./interopbroker";
 import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
@@ -54,6 +55,7 @@ async function setupPlatform() {
 
 	logger.info("Initializing Core Services");
 	await endpointProvider.init(settings?.endpointProvider);
+	await headlessProvider.init(settings?.headlessProvider);
 	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 
