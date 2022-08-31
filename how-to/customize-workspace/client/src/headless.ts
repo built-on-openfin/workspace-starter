@@ -16,30 +16,27 @@ async function launchHeadlessEntry(headlessEntry: ModuleDefinition<OpenFin.Windo
 			backgroundThrottling: false,
 			...headlessEntry.data
 		};
-		return await fin.Window.create(windowOptions);
+		await fin.Window.create(windowOptions);
 	} catch (error) {
 		logger.error(`Error launching headless window with id ${headlessEntry.id}`, error);
-		return null;
 	}
 }
 export async function init(options?: HeadlessProviderOptions) {
-	if (options?.modules === undefined || options?.modules?.length === 0) {
+	if (!Array.isArray(options?.modules) || options?.modules?.length === 0) {
 		logger.info("There are no settings for the headless provider. No headless logic required.");
 		return;
 	}
 
 	logger.info("Initializing Headless Provider", options);
 
-	const numberOfModules = options?.modules?.length ?? 0;
-
-	for (let i = 0; i < numberOfModules; i++) {
-		if (options.modules[i].url.endsWith(".js")) {
+	for (const entry of options.modules) {
+		if (entry.url.endsWith(".js")) {
 			logger.error(
-				"Unable to process headless provider entry as current support is restricted to launching headless pages and not headless modules.",
-				options.modules[i]
+				"Unable to process headless provider entry as current support is restricted to launching headless html pages and not headless js modules.",
+				entry
 			);
-		} else if (options.modules[i].enabled ?? true) {
-			await launchHeadlessEntry(options.modules[i] as ModuleDefinition<OpenFin.WindowOptions>);
+		} else if (entry.enabled ?? true) {
+			await launchHeadlessEntry(entry as ModuleDefinition<OpenFin.WindowOptions>);
 		}
 	}
 }
