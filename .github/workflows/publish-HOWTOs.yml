@@ -112,6 +112,6 @@ jobs:
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ${{ secrets.AWS_S3_BUCKET }}/workspace-starter/${{ github.ref_name }}/
-          dest: ${{ secrets.AWS_S3_BUCKET }}/workspace-starter/
+          source: s3://samples.openfin.co/workspace-starter/${{ github.ref_name }}/
+          dest: s3://samples.openfin.co/workspace-starter/
           flags: --recursive --exclude "*" --include "v*.zip"
