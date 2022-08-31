@@ -114,4 +114,4 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           source: s3://samples.openfin.co/workspace-starter/${{ github.ref_name }}/
           dest: s3://samples.openfin.co/workspace-starter/
-          flags: --recursive --exclude "*" --include "v*.zip"
+          flags: --recursive --exclude "*" --include "v*.zip" --acl public-read
