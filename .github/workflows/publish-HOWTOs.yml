@@ -107,15 +107,10 @@ jobs:
           SOURCE_DIR: public-aws # Source folder to deploy
           DEST_DIR: workspace-starter/${{ github.ref_name }} # Target folder to deploy to
 
-      - name: Publish zip
-        uses: jakejarvis/s3-sync-action@master
+      - name: Copy zip to s3 folder
+        uses: prewk/s3-cp-action@v2
         with:
-          args: --acl public-read --follow-symlinks --delete
-        env:
-          # The bucket name should match the https host name in
-          # scripts/package.js:URLBaseMap['aws'].
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }} # Target bucket to deploy to
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: public-aws/*.zip # Source folder to deploy
-          DEST_DIR: workspace-starter/ # Target folder to deploy to
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          source: public-aws/*.zip
+          dest: ${{ secrets.AWS_S3_BUCKET }}/workspace-starter/
