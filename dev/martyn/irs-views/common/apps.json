@@ -1309,7 +1309,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/irs-views/common/images/previews/irs-rfq.png"
+			}
+		],
 		"tags": ["view", "irs"]
 	}
 ]
