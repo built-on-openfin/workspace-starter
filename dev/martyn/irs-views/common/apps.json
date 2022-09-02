@@ -1298,7 +1298,7 @@
 		"name": "irs-rfq",
 		"title": "IRS: Request For Quote",
 		"description": "Request for quote for Interest Rate Swaps.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/irs-views/common/views/irs/rfq.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/irs-views/common/windows/irs-rfq/irs-rfq.json",
 		"manifestType": "window",
 		"icons": [
 			{
