@@ -29,6 +29,33 @@ module.exports = [
 		}
 	},
 	{
+		entry: './client/src/windows/irs-rfq/irs-rfq.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'common.windows.irs-rfq.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
 		entry: './client/src/views/template/index.ts',
 		devtool: 'inline-source-map',
 		module: {

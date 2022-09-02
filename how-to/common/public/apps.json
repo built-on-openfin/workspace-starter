@@ -1298,7 +1298,7 @@
 		"name": "irs-rfq",
 		"title": "IRS: Request For Quote",
 		"description": "Request for quote for Interest Rate Swaps.",
-		"manifest": "http://localhost:8080/common/views/irs/rfq.json",
+		"manifest": "http://localhost:8080/common/windows/irs-rfq/irs-rfq.json",
 		"manifestType": "window",
 		"icons": [
 			{
