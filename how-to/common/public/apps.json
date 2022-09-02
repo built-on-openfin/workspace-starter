@@ -1292,5 +1292,24 @@
 		"intents": [],
 		"images": [],
 		"tags": ["page", "snapshot", "tool"]
+	},
+	{
+		"appId": "irs-rfq",
+		"name": "irs-rfq",
+		"title": "IRS: Request For Quote",
+		"description": "Request for quote for Interest Rate Swaps.",
+		"manifest": "http://localhost:8080/common/views/irs/rfq.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "irs"]
 	}
 ]

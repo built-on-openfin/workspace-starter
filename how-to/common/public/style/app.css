@@ -715,6 +715,10 @@ em {
 	padding: 20px;
 }
 
+.pad0 {
+	padding: 0px;
+}
+
 table {
 	width: 100%;
 	font-size: 10px;
