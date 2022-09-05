@@ -2,6 +2,7 @@ import {
 	addEventListener as addNotificationEventListener,
 	BodyTemplateOptions,
 	ButtonOptions,
+	clear,
 	create,
 	CustomTemplateData,
 	IndicatorColor,
@@ -22,8 +23,14 @@ interface IrsRfqData {
 	act: string;
 	account: string;
 	allocation: string;
-	effective: Date | null;
-	maturity: Date | null;
+	effective: number | null;
+	maturity: number | null;
+	ref: string | undefined;
+	executionTime: number | undefined;
+	deskExecuteStart: number | undefined;
+	deskExecuteEnd: number | undefined;
+	clientExecuteStart: number | undefined;
+	clientExecuteEnd: number | undefined;
 }
 
 let currencyElement: HTMLSelectElement;
@@ -36,7 +43,6 @@ let accountElement: HTMLSelectElement;
 let allocationElement: HTMLSelectElement;
 let rfqButton: HTMLButtonElement;
 let clearButton: HTMLButtonElement;
-let rfqNotificationId: string | undefined;
 
 const currencies: string[] = ["USD", "GBP", "EUR", "YEN"];
 
@@ -75,8 +81,7 @@ async function init() {
 
 	rfqButton = document.querySelector("#btnRfq");
 	rfqButton.addEventListener("click", async () => {
-		busyForm(true);
-		rfqNotificationId = await showInboundRFQ();
+		await showInboundRFQ(gatherData());
 	});
 
 	currencyElement.addEventListener("change", () => {
@@ -127,10 +132,25 @@ async function init() {
 
 	clearForm();
 
-	addNotificationEventListener("notification-closed", (event) => {
-		if (event.notification.id === rfqNotificationId) {
-			busyForm(false);
-			rfqNotificationId = undefined;
+	addNotificationEventListener("notification-action", async (event) => {
+		if (event?.result?.task === "accept-rate") {
+			window.setTimeout(async () => {
+				const id = await showQuote(event.result.customData as IrsRfqData);
+				window.setTimeout(async () => {
+					await clear(id);
+				}, 30000);
+			}, 5000);
+		} else if (event?.result?.task === "execute-trade") {
+			window.setTimeout(async () => {
+				const quoteData = event.result.customData as IrsRfqData;
+				quoteData.executionTime = Date.now();
+				quoteData.ref = crypto.randomUUID().slice(0, 10);
+				await showClientConfirmation(quoteData);
+			}, 5000);
+		} else if (event?.result?.task === "dismiss-quote-client") {
+			window.setTimeout(async () => {
+				await showTraderConfirmation(event.result.customData as IrsRfqData);
+			}, 5000);
 		}
 	});
 }
@@ -145,19 +165,6 @@ function clearForm() {
 	allocationElement.value = "TRD01";
 	updateMaturity();
 	updateSummary();
-}
-
-function busyForm(busy: boolean) {
-	currencyElement.disabled = busy;
-	notionalElement.disabled = busy;
-	frequencyElement.disabled = busy;
-	tenorElement.disabled = busy;
-	effectiveDateElement.disabled = busy;
-	maturityDateElement.disabled = busy;
-	accountElement.disabled = busy;
-	allocationElement.disabled = busy;
-	rfqButton.disabled = busy;
-	clearButton.disabled = busy;
 }
 
 function gatherData(): IrsRfqData {
@@ -210,8 +217,14 @@ function gatherData(): IrsRfqData {
 		act: "30/360",
 		account: accountElement.value,
 		allocation: allocationElement.value,
-		effective: effectiveDateElement.valueAsDate,
-		maturity: maturityDateElement.valueAsDate
+		effective: effectiveDateElement.valueAsDate ? effectiveDateElement.valueAsDate.getTime() : null,
+		maturity: maturityDateElement.valueAsDate ? maturityDateElement.valueAsDate.getTime() : null,
+		deskExecuteStart: undefined,
+		deskExecuteEnd: undefined,
+		clientExecuteStart: undefined,
+		clientExecuteEnd: undefined,
+		ref: undefined,
+		executionTime: undefined
 	};
 }
 
@@ -267,15 +280,29 @@ function updateSummary() {
 	rfqButton.disabled = rfqData.notional === undefined || effectiveDateElement.valueAsDate === null;
 }
 
-function formatShortDate(date: Date | null) {
-	if (!date) {
+function formatShortDate(timestamp: number | null) {
+	if (timestamp === null) {
 		return "";
 	}
+	const date = new Date(timestamp);
 	return `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })} ${date.getFullYear()}`;
 }
 
-async function showInboundRFQ(): Promise<string> {
-	const rfqData = gatherData();
+async function showNotification(
+	rfqData: IrsRfqData,
+	indicatorColor: IndicatorColor,
+	indicatorValue: string,
+	accountOrAllocation: "account" | "allocation",
+	summaryColor: string,
+	summaryTitle: string,
+	summaryValue: string,
+	isDeskRate: boolean,
+	actionButtons: {
+		label: string;
+		id: string;
+		cta: boolean;
+	}[]
+): Promise<string> {
 	const title = createTitle(rfqData);
 	const id = crypto.randomUUID();
 
@@ -286,26 +313,27 @@ async function showInboundRFQ(): Promise<string> {
 				layout: createContainer(
 					"column",
 					[
-						createLabelledForm("clientLabel", "clientValue"),
+						createLabelledForm("accountOrAllocationLabel", "accountOrAllocationValue"),
 						createLabelledForm("notionalLabel", "notionalValue"),
 						createLabelledForm("tenorLabel", "tenorValue"),
 						createLabelledForm("effectiveLabel", "effectiveValue"),
 						createLabelledForm("maturityLabel", "maturityValue"),
 						createLabelledForm("actLabel", "actValue"),
-						createLabelledForm("indicativeGivenLabel", "indicativeGivenValue"),
+						createLabelledForm("rateLabel", "rateValue"),
 						createContainer(
 							"column",
 							[
-								createText("indicativeRateTitle", 11.25, {
-									color: "#FF8C4C",
+								createText("summaryTitle", 11.25, {
+									color: summaryColor,
 									fontWeight: "700"
 								}),
-								createText("indicativeRateValue", 11, {
-									fontWeight: "600"
+								createText("summaryValue", 11, {
+									fontWeight: "600",
+									whiteSpace: "pre-line"
 								})
 							],
 							{
-								border: "1px solid #FF8C4C",
+								border: `1px solid ${summaryColor}`,
 								background: "#1E1F23",
 								padding: "10px",
 								borderRadius: "4px",
@@ -320,8 +348,9 @@ async function showInboundRFQ(): Promise<string> {
 	};
 
 	const templateData: CustomTemplateData = {
-		clientLabel: "Client",
-		clientValue: accounts.get(rfqData.account),
+		accountOrAllocationLabel: accountOrAllocation === "account" ? "Client" : "Provided by",
+		accountOrAllocationValue:
+			accountOrAllocation === "account" ? accounts.get(rfqData.account) : allocations.get(rfqData.allocation),
 		notionalLabel: "Notional",
 		notionalValue: `${rfqData.notionalFormatted} ${rfqData.currency} (${rfqData.notionalUnits})`,
 		tenorLabel: "Tenor",
@@ -332,24 +361,23 @@ async function showInboundRFQ(): Promise<string> {
 		maturityValue: formatShortDate(rfqData.maturity),
 		actLabel: "ACT",
 		actValue: rfqData.act,
-		indicativeGivenLabel: "Indicative given",
-		indicativeGivenValue: `${rfqData.libor.toFixed(3)}% libor`,
-		indicativeRateTitle: "INDICATIVE RATE PROVIDED",
-		indicativeRateValue: title
+		rateLabel: isDeskRate ? "Indicative given" : "Desk rate",
+		rateValue: `${rfqData.libor.toFixed(3)}% libor`,
+		summaryTitle,
+		summaryValue
 	};
 
-	const buttons: ButtonOptions[] = [
-		{
-			title: "Accept Rate & Respond",
-			type: "button",
-			cta: false
-		},
-		{
-			title: "View Blotter",
-			type: "button",
-			cta: true
+	const buttons: ButtonOptions[] = actionButtons.map((b) => ({
+		title: b.label,
+		type: "button",
+		cta: b.cta,
+		onClick: {
+			task: b.id,
+			customData: rfqData
 		}
-	];
+	}));
+
+	const webRoot = window.location.href.replace("windows/irs-rfq/irs-rfq.html", "");
 
 	const notification: NotificationOptions = {
 		title,
@@ -357,10 +385,10 @@ async function showInboundRFQ(): Promise<string> {
 		category: "default",
 		template: "custom",
 		id,
-		icon: "http://localhost:8080/common/images/icon-blue.png",
+		icon: `${webRoot}/images/icon-blue.png`,
 		indicator: {
-			color: IndicatorColor.GREEN,
-			text: "INBOUND RFQ"
+			color: indicatorColor,
+			text: indicatorValue
 		},
 		templateOptions: {
 			body: bodyTemplateOptions
@@ -372,6 +400,121 @@ async function showInboundRFQ(): Promise<string> {
 	await create(notification);
 
 	return id;
+}
+
+async function showInboundRFQ(rfqData: IrsRfqData): Promise<string> {
+	const title = createTitle(rfqData);
+	rfqData.deskExecuteStart = Date.now();
+	return showNotification(
+		rfqData,
+		IndicatorColor.YELLOW,
+		"INBOUND RFQ",
+		"account",
+		"#FF8C4C",
+		"INDICATIVE RATE PROVIDED",
+		title,
+		false,
+		[
+			{
+				label: "Accept Rate & respond",
+				id: "accept-rate",
+				cta: false
+			},
+			{
+				label: "View Blotter",
+				id: "view-blotter",
+				cta: true
+			}
+		]
+	);
+}
+
+async function showQuote(rfqData: IrsRfqData): Promise<string> {
+	rfqData.clientExecuteStart = Date.now();
+	return showNotification(
+		rfqData,
+		IndicatorColor.GREEN,
+		"YOUR QUOTE",
+		"allocation",
+		"green",
+		"ACTION REQUIRED",
+		"You have 30 seconds from receipt to complete order",
+		false,
+		[
+			{
+				label: "Reject quote",
+				id: "reject-quote",
+				cta: false
+			},
+			{
+				label: "Execute trade",
+				id: "execute-trade",
+				cta: true
+			}
+		]
+	);
+}
+
+async function showClientConfirmation(rfqData: IrsRfqData): Promise<string> {
+	const title = createTitle(rfqData);
+	rfqData.clientExecuteEnd = Date.now();
+	return showNotification(
+		rfqData,
+		IndicatorColor.GREEN,
+		"TRADE CONFIRMED",
+		"allocation",
+		"green",
+		"TRADE CONFIRMED",
+		`${title}
+		ref: ${rfqData.ref}
+		
+		Execution: ${new Date(rfqData.executionTime).toLocaleString()}`,
+		false,
+		[
+			{
+				label: "Dismiss",
+				id: "dismiss-quote-client",
+				cta: false
+			},
+			{
+				label: "View blotter",
+				id: "dismiss-quote-client",
+				cta: true
+			}
+		]
+	);
+}
+
+async function showTraderConfirmation(rfqData: IrsRfqData): Promise<string> {
+	const title = createTitle(rfqData);
+	rfqData.deskExecuteEnd = Date.now();
+	return showNotification(
+		rfqData,
+		IndicatorColor.GREEN,
+		"INBOUND RFQ",
+		"allocation",
+		"green",
+		"TRADE CONFIRMED",
+		`${title}
+		ref: ${rfqData.ref}
+		Response: Desk ${Math.round(
+			(rfqData.deskExecuteEnd - rfqData.deskExecuteStart) / 1000
+		)}s, Client ${Math.round((rfqData.clientExecuteEnd - rfqData.clientExecuteStart) / 1000)}s
+		Execution: ${new Date(rfqData.executionTime).toLocaleString()}`,
+		false,
+		[
+			{
+				label: "Dismiss",
+				id: "dismiss-quote-trader",
+				cta: false
+			},
+			{
+				label: "View blotter",
+				id: "dismiss-quote-trader",
+				cta: true
+			}
+		]
+	);
 }
 
 window.addEventListener("DOMContentLoaded", init);
