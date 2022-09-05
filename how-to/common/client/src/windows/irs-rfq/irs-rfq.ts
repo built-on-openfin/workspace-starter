@@ -160,7 +160,7 @@ function gatherData(): IrsRfqData {
 			notionalSuffix = "K";
 			localLibor += 1;
 		}
-		notionalUnits = `${Math.round(notionalDiv)} ${notionalSuffix}`.trim();
+		notionalUnits = `${notionalDiv.toFixed(2).replace(/\.0+$/, "")} ${notionalSuffix}`.trim();
 		notionalFormatted = notional.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	}
 
@@ -279,7 +279,7 @@ async function showInboundRFQ() {
 											color: "#FF8C4C",
 											fontWeight: "700"
 										}),
-										createText("indicativeRateValue", 12, {
+										createText("indicativeRateValue", 11, {
 											fontWeight: "600"
 										})
 									],
