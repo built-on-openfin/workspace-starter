@@ -1312,6 +1312,9 @@
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/irs-views/common/images/previews/irs-rfq.png"
+			},
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/irs-views/common/images/previews/irs-rfq-notification.png"
 			}
 		],
 		"tags": ["view", "irs"]
