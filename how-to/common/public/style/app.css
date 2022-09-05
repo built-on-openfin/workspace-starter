@@ -194,7 +194,9 @@ footer a {
 	text-decoration: none;
 	outline: 0;
 	white-space: nowrap;
-	transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition-property: background-color, color, opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 a.button:hover,
@@ -333,7 +335,9 @@ textarea {
 	min-width: 200px;
 	padding: 8px 12px;
 	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
-	transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition-property: background-color, color, opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 textarea {
@@ -484,7 +488,9 @@ input[type='range']::-webkit-slider-runnable-track {
 	background-color: var(--brand-input-background);
 	border-radius: 5px;
 	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
-	transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition-property: background-color, color, opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -497,7 +503,9 @@ input[type='range']::-webkit-slider-thumb {
 	background: var(--brand-input-background);
 	cursor: pointer;
 	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
-	transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition-property: background-color, color, opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input[type='range']:hover::-webkit-slider-runnable-track,
@@ -559,7 +567,9 @@ input[type='radio'] {
 	height: 20px;
 	margin: 2px;
 	box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
-	transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition-property: background-color, color, opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input[type='radio'] {

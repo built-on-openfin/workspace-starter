@@ -1,4 +1,12 @@
-import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
+import {
+	addEventListener as addNotificationEventListener,
+	BodyTemplateOptions,
+	ButtonOptions,
+	create,
+	CustomTemplateData,
+	IndicatorColor,
+	NotificationOptions
+} from "@openfin/workspace/notifications";
 import { createContainer, createLabelledForm, createText } from "./notifications";
 
 interface IrsRfqData {
@@ -27,6 +35,8 @@ let maturityDateElement: HTMLInputElement;
 let accountElement: HTMLSelectElement;
 let allocationElement: HTMLSelectElement;
 let rfqButton: HTMLButtonElement;
+let clearButton: HTMLButtonElement;
+let rfqNotificationId: string | undefined;
 
 const currencies: string[] = ["USD", "GBP", "EUR", "YEN"];
 
@@ -58,14 +68,15 @@ async function init() {
 		await me.close(true);
 	});
 
-	const clearButton = document.querySelector("#btnClear");
+	clearButton = document.querySelector("#btnClear");
 	clearButton.addEventListener("click", () => {
 		clearForm();
 	});
 
 	rfqButton = document.querySelector("#btnRfq");
 	rfqButton.addEventListener("click", async () => {
-		await showInboundRFQ();
+		busyForm(true);
+		rfqNotificationId = await showInboundRFQ();
 	});
 
 	currencyElement.addEventListener("change", () => {
@@ -115,6 +126,13 @@ async function init() {
 	}
 
 	clearForm();
+
+	addNotificationEventListener("notification-closed", (event) => {
+		if (event.notification.id === rfqNotificationId) {
+			busyForm(false);
+			rfqNotificationId = undefined;
+		}
+	});
 }
 
 function clearForm() {
@@ -127,6 +145,19 @@ function clearForm() {
 	allocationElement.value = "TRD01";
 	updateMaturity();
 	updateSummary();
+}
+
+function busyForm(busy: boolean) {
+	currencyElement.disabled = busy;
+	notionalElement.disabled = busy;
+	frequencyElement.disabled = busy;
+	tenorElement.disabled = busy;
+	effectiveDateElement.disabled = busy;
+	maturityDateElement.disabled = busy;
+	accountElement.disabled = busy;
+	allocationElement.disabled = busy;
+	rfqButton.disabled = busy;
+	clearButton.disabled = busy;
 }
 
 function gatherData(): IrsRfqData {
@@ -243,94 +274,104 @@ function formatShortDate(date: Date | null) {
 	return `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })} ${date.getFullYear()}`;
 }
 
-async function showInboundRFQ() {
+async function showInboundRFQ(): Promise<string> {
 	const rfqData = gatherData();
 	const title = createTitle(rfqData);
+	const id = crypto.randomUUID();
+
+	const bodyTemplateOptions: BodyTemplateOptions = {
+		compositions: [
+			{
+				minTemplateAPIVersion: "1",
+				layout: createContainer(
+					"column",
+					[
+						createLabelledForm("clientLabel", "clientValue"),
+						createLabelledForm("notionalLabel", "notionalValue"),
+						createLabelledForm("tenorLabel", "tenorValue"),
+						createLabelledForm("effectiveLabel", "effectiveValue"),
+						createLabelledForm("maturityLabel", "maturityValue"),
+						createLabelledForm("actLabel", "actValue"),
+						createLabelledForm("indicativeGivenLabel", "indicativeGivenValue"),
+						createContainer(
+							"column",
+							[
+								createText("indicativeRateTitle", 11.25, {
+									color: "#FF8C4C",
+									fontWeight: "700"
+								}),
+								createText("indicativeRateValue", 11, {
+									fontWeight: "600"
+								})
+							],
+							{
+								border: "1px solid #FF8C4C",
+								background: "#1E1F23",
+								padding: "10px",
+								borderRadius: "4px",
+								marginTop: "10px"
+							}
+						)
+					],
+					{ padding: "10px 0px" }
+				)
+			}
+		]
+	};
+
+	const templateData: CustomTemplateData = {
+		clientLabel: "Client",
+		clientValue: accounts.get(rfqData.account),
+		notionalLabel: "Notional",
+		notionalValue: `${rfqData.notionalFormatted} ${rfqData.currency} (${rfqData.notionalUnits})`,
+		tenorLabel: "Tenor",
+		tenorValue: rfqData.tenor,
+		effectiveLabel: "Effective",
+		effectiveValue: formatShortDate(rfqData.effective),
+		maturityLabel: "Maturity",
+		maturityValue: formatShortDate(rfqData.maturity),
+		actLabel: "ACT",
+		actValue: rfqData.act,
+		indicativeGivenLabel: "Indicative given",
+		indicativeGivenValue: `${rfqData.libor.toFixed(3)}% libor`,
+		indicativeRateTitle: "INDICATIVE RATE PROVIDED",
+		indicativeRateValue: title
+	};
+
+	const buttons: ButtonOptions[] = [
+		{
+			title: "Accept Rate & Respond",
+			type: "button",
+			cta: false
+		},
+		{
+			title: "View Blotter",
+			type: "button",
+			cta: true
+		}
+	];
+
 	const notification: NotificationOptions = {
 		title,
 		toast: "transient",
 		category: "default",
 		template: "custom",
-		id: crypto.randomUUID(),
+		id,
 		icon: "http://localhost:8080/common/images/icon-blue.png",
 		indicator: {
 			color: IndicatorColor.GREEN,
 			text: "INBOUND RFQ"
 		},
 		templateOptions: {
-			body: {
-				compositions: [
-					{
-						minTemplateAPIVersion: "1",
-						layout: createContainer(
-							"column",
-							[
-								createLabelledForm("clientLabel", "clientValue"),
-								createLabelledForm("notionalLabel", "notionalValue"),
-								createLabelledForm("tenorLabel", "tenorValue"),
-								createLabelledForm("effectiveLabel", "effectiveValue"),
-								createLabelledForm("maturityLabel", "maturityValue"),
-								createLabelledForm("actLabel", "actValue"),
-								createLabelledForm("indicativeGivenLabel", "indicativeGivenValue"),
-								createContainer(
-									"column",
-									[
-										createText("indicativeRateTitle", 11.25, {
-											color: "#FF8C4C",
-											fontWeight: "700"
-										}),
-										createText("indicativeRateValue", 11, {
-											fontWeight: "600"
-										})
-									],
-									{
-										border: "1px solid #FF8C4C",
-										background: "#1E1F23",
-										padding: "10px",
-										borderRadius: "4px",
-										marginTop: "10px"
-									}
-								)
-							],
-							{ padding: "10px 0px" }
-						)
-					}
-				]
-			}
+			body: bodyTemplateOptions
 		},
-		templateData: {
-			clientLabel: "Client",
-			clientValue: accounts.get(rfqData.account),
-			notionalLabel: "Notional",
-			notionalValue: `${rfqData.notionalFormatted} ${rfqData.currency} (${rfqData.notionalUnits})`,
-			tenorLabel: "Tenor",
-			tenorValue: rfqData.tenor,
-			effectiveLabel: "Effective",
-			effectiveValue: formatShortDate(rfqData.effective),
-			maturityLabel: "Maturity",
-			maturityValue: formatShortDate(rfqData.maturity),
-			actLabel: "ACT",
-			actValue: rfqData.act,
-			indicativeGivenLabel: "Indicative given",
-			indicativeGivenValue: `${rfqData.libor.toFixed(3)}% libor`,
-			indicativeRateTitle: "INDICATIVE RATE PROVIDED",
-			indicativeRateValue: title
-		},
-		buttons: [
-			{
-				title: "Accept Rate & Respond",
-				type: "button",
-				cta: false
-			},
-			{
-				title: "View Blotter",
-				type: "button",
-				cta: true
-			}
-		]
+		templateData,
+		buttons
 	};
 
 	await create(notification);
+
+	return id;
 }
 
 window.addEventListener("DOMContentLoaded", init);
