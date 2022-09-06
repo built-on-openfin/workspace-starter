@@ -44,6 +44,7 @@ If you build and start one of the other samples it will reference this project i
 - [Trading View](public/views/tradingview/) - An example of a third party site listening and reacting to shared context via preload scripts.
 - [Manager Portal](public/views/manager-portal/) - a collection of views that support fdc3.contact context and give an example of a manager's workflow managing their team.
 - [Hidden Window](public/windows/hidden-window/) - an example of a hidden window that can be launched that might be responsible for pushing out notifications (or it could be any role) and reacting to them.
+- [Interest Rate Swap - RFQ](public/windows/irs-rfq/) - an example of performing an Interest Rate Swap - Request for Quote using a ticket and then workflow with notifications.
 
 ### Workspace Platform
 
