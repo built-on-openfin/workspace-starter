@@ -170,6 +170,7 @@ export async function init() {
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
+		await fireLifecycleEvent(platform, "before-quit");
 		await deregisterIntegration();
 		if (bootstrapOptions.dock) {
 			await deregisterDock();
@@ -193,6 +194,7 @@ export async function init() {
 	// listener so that it is ready to handle initial params or subsequent requests.
 	await registerInitOptionsListener(settings?.initOptionsProvider);
 
+	// Let any other modules participate in the lifecycle
 	const platform = getCurrentSync();
-	await fireLifecycleEvent(platform, "bootstrapped");
+	await fireLifecycleEvent(platform, "after-bootstrap");
 }
