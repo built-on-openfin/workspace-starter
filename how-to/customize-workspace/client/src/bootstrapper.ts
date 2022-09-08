@@ -1,3 +1,4 @@
+import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { launchPage, launchView } from "./browser";
@@ -17,6 +18,7 @@ import {
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
@@ -128,8 +130,8 @@ export async function init() {
 	await registerShare(bootstrapOptions.sharing);
 
 	// Remove any entries from autoShow that have not been registered
-	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter((component) =>
-		registeredComponents.includes(component)
+	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter(
+		(component) => registeredComponents.includes(component) || component === "none"
 	);
 
 	// If the autoShow options is not empty, default to the first registered component.
@@ -190,4 +192,7 @@ export async function init() {
 	// Once the platform is started and everything is bootstrapped initialize the init options
 	// listener so that it is ready to handle initial params or subsequent requests.
 	await registerInitOptionsListener(settings?.initOptionsProvider);
+
+	const platform = getCurrentSync();
+	await fireLifecycleEvent(platform, "bootstrapped");
 }

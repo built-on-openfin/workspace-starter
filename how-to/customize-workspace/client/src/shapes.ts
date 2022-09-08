@@ -9,10 +9,12 @@ import type {
 import type { NotificationsPlatform } from "@openfin/workspace/notifications";
 import type { ActionsProviderOptions } from "./actions-shapes";
 import type { AuthProviderOptions } from "./auth-shapes";
+import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
 import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
+import type { LifecycleProviderOptions } from "./lifecycle-shapes";
 import type { LoggerProviderOptions } from "./logger-shapes";
 import type { ModuleList } from "./module-shapes";
 
@@ -35,6 +37,7 @@ export interface ToolbarButtonDefinition {
 	include: boolean;
 	themes?: { [key: string]: string };
 	button: ToolbarButton & { iconUrl?: string };
+	conditions?: string[];
 }
 
 export type MenuPositionOperation = "replaceLabel" | "before" | "after" | "delete" | "start" | "end";
@@ -50,9 +53,7 @@ export interface MenuEntry<T> {
 		operation: MenuPositionOperation;
 		type?: T;
 	};
-	conditions?: {
-		isAuthenticationEnabled?: boolean;
-	};
+	conditions?: string[];
 	separator?: MenuSeparatorPosition;
 }
 
@@ -69,7 +70,7 @@ export interface BrowserProviderOptions {
 	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];
 }
 
-export type BootstrapComponents = "home" | "store" | "dock" | "notifications";
+export type BootstrapComponents = "home" | "store" | "dock" | "notifications" | "none";
 
 export interface BootstrapOptions {
 	store: boolean;
@@ -228,4 +229,6 @@ export interface CustomSettings {
 	themeProvider?: ThemeProviderOptions;
 	loggerProvider?: LoggerProviderOptions;
 	actionsProvider?: ActionsProviderOptions;
+	conditionsProvider?: ConditionsProviderOptions;
+	lifecycleProvider?: LifecycleProviderOptions;
 }

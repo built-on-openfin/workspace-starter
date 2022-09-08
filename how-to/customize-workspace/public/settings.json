@@ -264,9 +264,7 @@
 					"type": "Quit",
 					"operation": "after"
 				},
-				"conditions": {
-					"isAuthenticationEnabled": true
-				}
+				"conditions": ["authenticated"]
 			}
 		],
 		"pageMenu": [
@@ -466,7 +464,8 @@
 						"id": "share",
 						"customData": {}
 					}
-				}
+				},
+				"conditions": ["sharing"]
 			},
 			{
 				"include": true,

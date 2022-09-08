@@ -71,22 +71,37 @@ export async function loadModule<
 				const mod: Module = await import(/* webpackIgnore: true */ moduleDefinition.url);
 				if (!mod.entryPoints) {
 					logger.error(`Module '${moduleDefinition.id}' has no exported entryPoints`);
+					return;
 				}
+				const entryPoints = Object.keys(mod.entryPoints);
+				if (!entryPoints.includes(moduleType)) {
+					logger.error(
+						`Module was loaded, but is does not contain an entry point for type ${moduleType}, it only contains ${entryPoints.join(
+							", "
+						)}`
+					);
+					return;
+				}
+				logger.info(`Module contains implementations for ${entryPoints.join(", ")}`);
 				loadedModules[moduleDefinition.url] = {};
-				const moduleTypes = Object.keys(mod.entryPoints);
-				logger.info(`Module contains implementations for '${moduleTypes.join(", ")}'`);
-				for (const type of moduleTypes) {
-					loadedModules[moduleDefinition.url][type] = {
-						definition: moduleDefinition,
+
+				for (const entryPoint of entryPoints) {
+					loadedModules[moduleDefinition.url][entryPoint] = {
+						definition: entryPoint === moduleType ? moduleDefinition : undefined,
 						isInitialised: false,
-						implementation: mod.entryPoints[type]
+						implementation: mod.entryPoints[entryPoint]
 					};
 				}
 			} catch (err) {
 				logger.error(`Error loading module ${moduleDefinition.url}`, err);
 			}
 		} else {
-			logger.info(`Module already loaded '${moduleDefinition.url}' for type ${moduleType}`);
+			logger.info(`Module already loaded '${moduleDefinition.url}' using cached version`);
+			if (!loadedModules[moduleDefinition.url][moduleType]) {
+				logger.error(`Module from cache does not contain an entry point for type ${moduleType}`);
+				return;
+			}
+			loadedModules[moduleDefinition.url][moduleType].definition = moduleDefinition;
 		}
 
 		return loadedModules[moduleDefinition.url][moduleType] as ModuleEntry<M, H, O, D>;

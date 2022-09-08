@@ -1,4 +1,5 @@
-import type {
+import {
+	getCurrentSync,
 	GlobalContextMenuItemTemplate,
 	GlobalContextMenuOptionType,
 	PageTabContextMenuItemTemplate,
@@ -6,8 +7,7 @@ import type {
 	ViewTabContextMenuTemplate,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
-import * as authProvider from "./auth";
-import { isAuthenticationEnabled } from "./auth";
+import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import type { MenuEntry, MenuPositionOperation } from "./shapes";
@@ -73,7 +73,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 					} else if (entryIndex === 0) {
 						menuEntries.unshift(entry);
 					} else {
-						menuEntries.splice(entryIndex + 1, 0, entry);
+						menuEntries.splice(entryIndex, 0, entry);
 					}
 					break;
 				}
@@ -90,13 +90,11 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 	const menuItems = defaultEntries ?? [];
 
 	if (Array.isArray(configEntries)) {
+		const platform = getCurrentSync();
+
 		for (const menuItem of configEntries) {
 			if (menuItem.include) {
-				let canShow = true;
-
-				if (menuItem.conditions?.isAuthenticationEnabled) {
-					canShow = isAuthenticationEnabled() && !(await authProvider.isAuthenticationRequired());
-				}
+				const canShow = await checkConditions(platform, menuItem.conditions);
 
 				if (canShow) {
 					const insertedIndex = updateMenuEntries(

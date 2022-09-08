@@ -13,7 +13,7 @@ async function launchFromNode(manifestUrl) {
 			nonPersistent: true // We want OpenFin to exit as our application exists.
 		});
 
-		// Once OpenFin exists we shut down the process.
+		// Once OpenFin exits we shut down the process.
 		fin.once('disconnected', process.exit);
 		return fin;
 	} catch (e) {

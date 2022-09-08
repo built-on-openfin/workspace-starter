@@ -28,7 +28,7 @@ export interface ActionHelpers {
 	};
 }
 
-export interface Actions extends ModuleImplementation<ActionHelpers> {
+export interface Actions<O = unknown> extends ModuleImplementation<O, ActionHelpers> {
 	/**
 	 * Get the actions from the module.
 	 * @param platform The platform module.

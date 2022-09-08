@@ -94,10 +94,12 @@ async function getAuthenticationFromUser(): Promise<boolean> {
 	return new Promise<boolean>((resolve, reject) => {
 		openLoginWindow(authOptions.loginUrl)
 			.then(async (win) => {
+				const authMatch = new RegExp(authOptions.authenticatedUrl, "i");
+
 				try {
 					if (win !== undefined) {
 						const info = await win.getInfo();
-						if (info.url === authOptions.authenticatedUrl) {
+						if (authMatch.test(info.url)) {
 							await win.close(true);
 							return resolve(true);
 						}
@@ -125,8 +127,8 @@ async function getAuthenticationFromUser(): Promise<boolean> {
 				});
 				statusCheck = window.setInterval(async () => {
 					if (win !== undefined) {
-						const winInfo = await win.getInfo();
-						if (winInfo.url === authOptions.authenticatedUrl) {
+						const info = await win.getInfo();
+						if (authMatch.test(info.url)) {
 							window.clearInterval(statusCheck);
 							await win.removeAllListeners();
 							await win.close(true);
@@ -192,7 +194,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 	if (
 		authOptions.logoutUrl !== undefined &&
 		authOptions.logoutUrl !== null &&
-		authOptions.loginUrl.trim().length > 0
+		authOptions.logoutUrl.trim().length > 0
 	) {
 		try {
 			const win = await openLogoutWindow(authOptions.logoutUrl);

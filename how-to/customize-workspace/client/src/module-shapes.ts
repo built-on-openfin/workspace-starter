@@ -78,7 +78,15 @@ export interface ModuleImplementation<O = unknown, H = unknown> {
 /**
  * The possible module types.
  */
-export type ModuleTypes = "actions" | "auth" | "endpoint" | "log" | "initOptions" | "integrations";
+export type ModuleTypes =
+	| "actions"
+	| "auth"
+	| "endpoint"
+	| "log"
+	| "initOptions"
+	| "integrations"
+	| "conditions"
+	| "lifecycle";
 
 /**
  * The definition of a module with typed entry points.

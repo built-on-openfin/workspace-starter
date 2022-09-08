@@ -8,13 +8,15 @@ import * as appProvider from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { getDefaultWindowOptions } from "./browser";
+import * as conditionsProvider from "./conditions";
 import * as connectionProvider from "./connections";
 import * as endpointProvider from "./endpoint";
 import * as headlessProvider from "./headless";
 import { interopOverride } from "./interopbroker";
+import * as lifecycleProvider from "./lifecycle";
 import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
-import { getSettings, isValid as isSettingsValid, getAuthSettings } from "./settings";
+import { getAuthSettings, getSettings, isValid as isSettingsValid } from "./settings";
 import type { CustomSettings } from "./shapes";
 import { getThemes } from "./themes";
 
@@ -58,6 +60,8 @@ async function setupPlatform() {
 	await headlessProvider.init(settings?.headlessProvider);
 	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
+	await conditionsProvider.init(settings?.conditionsProvider);
+	await lifecycleProvider.init(settings?.lifecycleProvider);
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};

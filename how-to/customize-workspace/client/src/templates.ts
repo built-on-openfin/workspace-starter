@@ -149,3 +149,68 @@ export async function createButton(
 		}
 	};
 }
+
+export async function createLabelledValue(
+	labelKey: string,
+	valueKey: string,
+	style?: CSS.Properties
+): Promise<PlainContainerTemplateFragment> {
+	const theme = await getCurrentTheme();
+	return {
+		type: TemplateFragmentTypes.Container,
+		style: {
+			display: "flex",
+			flexDirection: "column",
+			marginBottom: "9px",
+			...style
+		},
+		children: [
+			await createText(labelKey, 11, { fontWeight: "bold", color: theme.palette.brandPrimary }),
+			await createText(valueKey, 14)
+		]
+	};
+}
+
+export async function createTable(
+	tableData: string[][],
+	colSpans: number[],
+	tableIndex: number,
+	data: { [id: string]: string }
+): Promise<TemplateFragment> {
+	const theme = await getCurrentTheme();
+
+	const cells: TemplateFragment[] = [];
+	const finalColSpans = colSpans.slice();
+	for (let col = 0; col < tableData[0].length; col++) {
+		const headerKey = `table${tableIndex}_header${col}`;
+		data[headerKey] = tableData[0][col];
+		cells.push(
+			await createText(headerKey, 10, {
+				marginBottom: "10px",
+				padding: "3px",
+				whiteSpace: "nowrap",
+				fontWeight: "bold",
+				backgroundColor: theme.palette.brandPrimary
+			})
+		);
+
+		if (colSpans.length === 0) {
+			finalColSpans.push(1);
+		}
+	}
+
+	for (let row = 1; row < tableData.length; row++) {
+		for (let col = 0; col < tableData[0].length; col++) {
+			const rowColKey = `table${tableIndex}_col${col}_row${row}`;
+			data[rowColKey] = tableData[row][col];
+			cells.push(await createText(rowColKey, 10, { padding: "3px", whiteSpace: "nowrap" }));
+		}
+	}
+
+	return createContainer("row", cells, {
+		display: "grid",
+		gridTemplateColumns: finalColSpans.map((s) => `${s}fr`).join(" "),
+		marginBottom: "10px",
+		overflow: "auto"
+	});
+}
