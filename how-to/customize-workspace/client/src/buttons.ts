@@ -22,7 +22,7 @@ async function getAvailableToolbarButtons(): Promise<ToolbarButtonDefinition[]> 
 	const availableToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
 	const validatedToolbarButtons: ToolbarButtonDefinition[] = [];
 
-	for (const entry of availableToolbarButtons) {
+	for (const entry of availableToolbarButtons.filter((b) => b.include ?? true)) {
 		if (
 			entry.button.iconUrl !== undefined &&
 			theme?.label !== undefined &&
@@ -31,8 +31,9 @@ async function getAvailableToolbarButtons(): Promise<ToolbarButtonDefinition[]> 
 		) {
 			entry.button.iconUrl = entry.themes[theme.label];
 		}
-		entry.include = await checkConditions(platform, entry.conditions);
-		validatedToolbarButtons.push(entry);
+		if (await checkConditions(platform, entry.conditions)) {
+			validatedToolbarButtons.push(entry);
+		}
 	}
 	allToolbarButtons = validatedToolbarButtons;
 	return validatedToolbarButtons;
