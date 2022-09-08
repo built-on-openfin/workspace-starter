@@ -18,6 +18,8 @@ import { applyClientSnapshot, decorateSnapshot } from "./snapshot-source";
 
 const logger = createLogger("PlatformOverride");
 
+let isApplyingSnapshot: boolean = false;
+
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {
 		public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
@@ -27,7 +29,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 
 		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
+			// We set the is applying snapshot flag if closeExistingWindows is set so that
+			// we make sure the runtime doesn't quit when it thinks it no longer has windows open
+			// before the new snapshot is loaded
+			isApplyingSnapshot = args[0].options?.closeExistingWindows;
 			await Promise.all([super.applySnapshot(...args), applyClientSnapshot(args[0].snapshot)]);
+			isApplyingSnapshot = false;
 		}
 
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
@@ -278,7 +285,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 
 		public async quit(payload: undefined, callerIdentity: OpenFin.Identity) {
-			return super.quit(payload, callerIdentity);
+			// Only quit if we are not applying a snapshot
+			if (!isApplyingSnapshot) {
+				return super.quit(payload, callerIdentity);
+			}
 		}
 	}
 	return new Override();
