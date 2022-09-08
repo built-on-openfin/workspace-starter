@@ -1,0 +1,304 @@
+{
+	"windows": [
+		{
+			"defaultHeight": 994,
+			"defaultLeft": 286,
+			"defaultTop": 151,
+			"defaultWidth": 1460,
+			"layout": {
+				"content": [
+					{
+						"type": "column",
+						"content": [
+							{
+								"type": "row",
+								"height": 54,
+								"content": [
+									{
+										"type": "stack",
+										"width": 32,
+										"content": [
+											{
+												"type": "component",
+												"componentName": "view",
+												"componentState": {
+													"name": "factset-interactive-charting",
+													"uuid": "factset-interactive-charting",
+													"url": "https://my.apps.factset.com/interactive-charting-cosec/ic-popup.html?envComm=true",
+													"fdc3InteropApi": "1.2",
+													"interop": {
+														"currentContextGroup": "orange"
+													}
+												}
+											}
+										]
+									},
+									{
+										"type": "stack",
+										"width": 35,
+										"content": [
+											{
+												"type": "component",
+												"componentName": "view",
+												"componentState": {
+													"manifestUrl": "http://localhost:8080/views/factset/factset-full-quote.json",
+													"name": "factset-full-quote",
+													"uuid": "factset-full-quote",
+													"url": "https://my.apps.factset.com/full-quote/?envComm=true",
+													"fdc3InteropApi": "1.2",
+													"interop": {
+														"currentContextGroup": "orange"
+													}
+												}
+											}
+										]
+									},
+									{
+										"type": "stack",
+										"height": 100,
+										"width": 33,
+										"content": [
+											{
+												"type": "component",
+												"componentName": "view",
+												"componentState": {
+													"name": "factset-interactive-charting-cosec",
+													"uuid": "factset-interactive-charting-cosec",
+													"url": "https://my.apps.factset.com/interactive-charting-cosec/ic-popup.html?envComm=true",
+													"fdc3InteropApi": "1.2",
+													"interop": {
+														"currentContextGroup": "orange"
+													}
+												}
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "row",
+								"height": 46,
+								"content": [
+									{
+										"type": "stack",
+										"content": [
+											{
+												"type": "component",
+												"componentName": "view",
+												"componentState": {
+													"name": "factset-market-watch",
+													"url": "https://my.apps.factset.com/market-watch/?envComm=true",
+													"uuid": "factset-market-watch",
+													"fdc3InteropApi": "1.2",
+													"interop": {
+														"currentContextGroup": "orange"
+													}
+												}
+											}
+										]
+									},
+									{
+										"type": "stack",
+										"width": 50,
+										"content": [
+											{
+												"type": "component",
+												"componentName": "view",
+												"componentState": {
+													"name": "factset-news-headlines",
+													"url": "https://my.apps.factset.com/news-headlines/?envComm=true",
+													"uuid": "factset-news-headlines",
+													"fdc3InteropApi": "1.2",
+													"interop": {
+														"currentContextGroup": "orange"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"workspacePlatform": {
+				"pages": [
+					{
+						"pageId": "68719a37-b6c0-48ff-9d32-d99b77003972",
+						"title": "Watchlist",
+						"layout": {
+							"content": [
+								{
+									"type": "column",
+									"content": [
+										{
+											"type": "row",
+											"height": 54,
+											"content": [
+												{
+													"type": "stack",
+													"width": 32,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "factset-interactive-charting",
+																"uuid": "factset-interactive-charting",
+																"url": "https://my.apps.factset.com/interactive-charting-cosec/ic-popup.html?envComm=true",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																}
+															}
+														}
+													]
+												},
+												{
+													"type": "stack",
+													"width": 35,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"manifestUrl": "http://localhost:8080/views/factset/factset-full-quote.json",
+																"name": "factset-full-quote",
+																"uuid": "factset-full-quote",
+																"url": "https://my.apps.factset.com/full-quote/?envComm=true",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																}
+															}
+														}
+													]
+												},
+												{
+													"type": "stack",
+													"height": 100,
+													"width": 33,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "factset-interactive-charting-cosec",
+																"uuid": "factset-interactive-charting-cosec",
+																"url": "https://my.apps.factset.com/interactive-charting-cosec/ic-popup.html?envComm=true",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																}
+															}
+														}
+													]
+												}
+											]
+										},
+										{
+											"type": "row",
+											"height": 46,
+											"content": [
+												{
+													"type": "stack",
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "factset-market-watch",
+																"url": "https://my.apps.factset.com/market-watch/?envComm=true",
+																"uuid": "factset-market-watch",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																}
+															}
+														}
+													]
+												},
+												{
+													"type": "stack",
+													"width": 50,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "factset-news-headlines",
+																"url": "https://my.apps.factset.com/news-headlines/?envComm=true",
+																"uuid": "factset-news-headlines",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																}
+															}
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"pageId": "ecf723de-6fbb-492f-b3d2-90b44272c623",
+						"title": "Full FactSet",
+						"layout": {
+							"content": [
+								{
+									"type": "stack",
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"name": "factset-dashboard",
+												"url": "https://my.apps.factset.com/dashboard/eb871758-bb3d-421f-a440-2052e6af9f20/c79c76f7-b842-42e0-9bae-69ef29a116a9",
+												"uuid": "factset-dashboard"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"title": "FactSet",
+				"favicon": "http://localhost:8080/images/factset/favicon.ico",
+				"newTabUrl": "https://my.apps.factset.com/dashboard",
+				"newPageUrl": "https://my.apps.factset.com/dashboard"
+			}
+		}
+	],
+	"interopSnapshotDetails": {
+		"contextGroupStates": {
+			"green": {},
+			"purple": {},
+			"orange": {
+				"fdc3.instrument": {
+					"type": "fdc3.instrument",
+					"id": {
+						"CUSIP": "303075105",
+						"FDS_ID": "SQFMK3-R",
+						"ISIN": "US3030751057",
+						"SEDOL": "2329770",
+						"ticker": "FDS",
+						"FDS_TICKER_EXCHANGE": "FDS-USA",
+						"FDS_TICKER_REGION": "FDS-US"
+					},
+					"name": "FactSet Research Systems Inc.",
+					"exchangeMic": "XNYS",
+					"exchangeMicFds": "NYS"
+				}
+			},
+			"red": {},
+			"pink": {},
+			"yellow": {}
+		}
+	}
+}

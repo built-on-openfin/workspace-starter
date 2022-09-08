@@ -1,0 +1,161 @@
+[
+	{
+		"key": "factset",
+		"title": "FactSet Dashboard",
+		"label": "FactSet App",
+		"description": "Shows a collection of FactSet pages combined into a Dashboard.",
+		"manifestType": "snapshot",
+		"manifest": "http://localhost:8080/views/factset/home-snapshot.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"key": "factset-view",
+		"title": "FactSet",
+		"label": "FactSet App",
+		"description": "A full FactSet as a single page application.",
+		"manifestType": "view",
+		"manifest": "http://localhost:8080/views/factset/factset-view.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"key": "factset-full-quote",
+		"title": "FactSet Full Quote",
+		"label": "FactSet App",
+		"description": "The Full Quote display provides a summary of a company's trades, including bids and asks, along with some fundamental data, such as EPS, P/E, and Price to Book Value. You can also view a ticker tape of the latest trade details and a candlestick chart of the intraday performance.",
+		"manifestType": "view",
+		"manifest": "http://localhost:8080/views/factset/factset-full-quote.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"key": "factset-market-watch",
+		"title": "FactSet Market Watch",
+		"label": "FactSet App",
+		"description": "The Market Watch display allows you to simultaneously monitor streaming market data for different security types, such as equities, indices, treasuries, and futures.",
+		"manifest": "http://localhost:8080/views/factset/factset-market-watch.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"key": "factset-news",
+		"title": "FactSet News",
+		"label": "FactSet App",
+		"description": "A full FactSet as a single page application",
+		"manifestType": "view",
+		"manifest": "http://localhost:8080/views/factset/factset-news.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"key": "factset-chart",
+		"title": "FactSet Chart",
+		"label": "FactSet App",
+		"description": "The Chart display lets you chart market data in several different frequencies for a specific company. In addition, you can create indexed and relative price charts to perform company and benchmark comparisons.",
+		"manifestType": "view",
+		"manifest": "http://localhost:8080/views/factset/factset-chart.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/factset/appicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "factset"]
+	},
+	{
+		"appId": "interop-excel",
+		"name": "interop-excel",
+		"title": "Interop Excel",
+		"description": "This is an example of interoperability with Excel.",
+		"manifest": "https://built-on-openfin.github.io/sales-demos/deal-history/view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "excel"]
+	},
+	{
+		"appId": "winform-interop-example",
+		"name": "Winform Interop Example",
+		"title": "Winform Interop Example",
+		"description": "A Winform application built in .NET 5 that shows the power of our interop api.",
+		"manifestType": "external",
+		"manifest": "winform-interop-example",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/common/images/icon-winform-interop.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["native", "appasset", "nwi"],
+		"data": {
+			"nwi": {
+				"name": "OpenFin.Interop.Win.Sample",
+				"title": "Interop Example Tool",
+				"lifetime": "application"
+			}
+		}
+	}
+]
