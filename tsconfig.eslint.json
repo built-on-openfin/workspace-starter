@@ -9,9 +9,6 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"importsNotUsedAsValues": "error",
-		"moduleResolution": "node",
-		"paths": {
-			"@openfin/customize-workspace/*": ["how-to/customize-workspace/client/src/*"]
-		}
+		"moduleResolution": "node"
 	}
 }
