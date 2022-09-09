@@ -170,7 +170,6 @@ export async function init() {
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
-		await fireLifecycleEvent(platform, "before-quit");
 		await deregisterIntegration();
 		if (bootstrapOptions.dock) {
 			await deregisterDock();
