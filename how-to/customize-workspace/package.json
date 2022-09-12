@@ -15,7 +15,8 @@
 		"server": "node ./server/build/index.js",
 		"kill": "npm --prefix ../common/ run kill",
 		"setup": "cd ../../ && npm install && cd how-to/customize-workspace && npm run build && npm --prefix ../common/ run build",
-		"validate": "npm --prefix ../../ run validate"
+		"validate": "npm --prefix ../../ run validate",
+		"generate-types": "tsc --project ./client/tsconfig.types.json"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [
