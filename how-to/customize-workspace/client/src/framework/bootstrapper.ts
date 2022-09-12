@@ -10,7 +10,7 @@ import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { launchPage, launchView } from "./platform/browser";
 import { getSettings } from "./settings";
-import type { BootstrapComponents, BootstrapOptions } from "./shapes";
+import type { BootstrapComponents, BootstrapOptions } from "./shapes/framework-shapes";
 import { deregister as deregisterShare, register as registerShare } from "./share";
 import * as templateHelpers from "./templates";
 import {
