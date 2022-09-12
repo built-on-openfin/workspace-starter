@@ -86,7 +86,8 @@ export type ModuleTypes =
 	| "initOptions"
 	| "integrations"
 	| "conditions"
-	| "lifecycle";
+	| "lifecycle"
+	| "platformStorage";
 
 /**
  * The definition of a module with typed entry points.

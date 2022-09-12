@@ -1,8 +1,8 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { isAuthenticationEnabled, isAuthenticationRequired } from "./auth";
-import type { ConditionMap, Conditions, ConditionsProviderOptions } from "./conditions-shapes";
-import type { ModuleDefinition, ModuleEntry } from "./module-shapes";
 import { initializeModules, loadModules } from "./modules";
+import type { ConditionMap, Conditions, ConditionsProviderOptions } from "./shapes/conditions-shapes";
+import type { ModuleDefinition, ModuleEntry } from "./shapes/module-shapes";
 import { isShareEnabled } from "./share";
 
 let conditionsModules: ModuleEntry<Conditions, unknown, unknown, ModuleDefinition>[] = [];

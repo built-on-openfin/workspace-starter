@@ -11,12 +11,12 @@ import {
 	Workspace,
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
+import * as endpointProvider from "../endpoint";
+import { fireLifecycleEvent } from "../lifecycle";
+import { createLogger } from "../logger-provider";
+import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { deletePageBounds, savePageBounds } from "./browser";
-import * as endpointProvider from "./endpoint";
-import { fireLifecycleEvent } from "./lifecycle";
-import { createLogger } from "./logger-provider";
-import { getGlobalMenu, getPageMenu, getViewMenu } from "./menu";
-import { applyClientSnapshot, decorateSnapshot } from "./snapshot-source";
 
 const logger = createLogger("PlatformOverride");
 

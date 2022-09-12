@@ -3,22 +3,22 @@ import {
 	getCurrentSync,
 	init as workspacePlatformInit
 } from "@openfin/workspace-platform";
-import { getActions } from "./actions";
-import * as appProvider from "./apps";
-import * as authProvider from "./auth";
-import { isAuthenticationEnabled } from "./auth";
+import { getActions } from "../actions";
+import * as appProvider from "../apps";
+import * as authProvider from "../auth";
+import { isAuthenticationEnabled } from "../auth";
+import * as conditionsProvider from "../conditions";
+import * as connectionProvider from "../connections";
+import * as endpointProvider from "../endpoint";
+import * as headlessProvider from "../headless";
+import * as lifecycleProvider from "../lifecycle";
+import { createLogger, loggerProvider } from "../logger-provider";
+import { getAuthSettings, getSettings, isValid as isSettingsValid } from "../settings";
+import type { CustomSettings } from "../shapes";
+import { getThemes } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
-import * as conditionsProvider from "./conditions";
-import * as connectionProvider from "./connections";
-import * as endpointProvider from "./endpoint";
-import * as headlessProvider from "./headless";
 import { interopOverride } from "./interopbroker";
-import * as lifecycleProvider from "./lifecycle";
-import { createLogger, loggerProvider } from "./logger-provider";
 import { overrideCallback } from "./platform-override";
-import { getAuthSettings, getSettings, isValid as isSettingsValid } from "./settings";
-import type { CustomSettings } from "./shapes";
-import { getThemes } from "./themes";
 
 const logger = createLogger("Platform");
 

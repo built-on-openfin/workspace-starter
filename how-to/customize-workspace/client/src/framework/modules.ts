@@ -7,7 +7,7 @@ import type {
 	ModuleImplementation,
 	ModuleList,
 	ModuleTypes
-} from "./module-shapes";
+} from "./shapes/module-shapes";
 
 const logger = createLogger("Modules");
 

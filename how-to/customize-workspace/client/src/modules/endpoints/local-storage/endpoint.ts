@@ -1,6 +1,6 @@
-import type { EndpointDefinition } from "../../../endpoint-shapes";
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import type { IPlatformStorage } from "./platform-storage-shapes";
 
@@ -40,7 +40,7 @@ export async function action(
 	}
 
 	const { dataType, method } = endpointDefinition.options;
-	const localStorage = getStorage<unknown>(dataType);
+	const localStorage = getStorage<unknown>(dataType as string);
 
 	if (method === "REMOVE") {
 		const id: string = request.id;
@@ -73,7 +73,7 @@ export async function requestResponse(
 	}
 
 	const { dataType, method } = endpointDefinition.options;
-	const localStorage = getStorage<unknown>(dataType);
+	const localStorage = getStorage<unknown>(dataType as string);
 
 	if (method === "GET") {
 		if (request.id === undefined) {

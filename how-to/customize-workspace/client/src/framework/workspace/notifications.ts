@@ -2,8 +2,8 @@ import {
 	register as registerPlatform,
 	deregister as deregisterPlatform
 } from "@openfin/workspace/notifications";
-import { createLogger } from "./logger-provider";
-import { getSettings } from "./settings";
+import { createLogger } from "../logger-provider";
+import { getSettings } from "../settings";
 
 const logger = createLogger("Notifications");
 

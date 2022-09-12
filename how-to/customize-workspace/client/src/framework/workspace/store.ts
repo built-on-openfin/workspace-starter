@@ -10,15 +10,15 @@ import {
 	StorefrontDetailedNavigationItem,
 	RegistrationMetaInfo
 } from "@openfin/workspace";
-import { getApps, getAppsByTag } from "./apps";
-import { launch } from "./launch";
-import { createLogger } from "./logger-provider";
-import { getSettings } from "./settings";
+import { getApps, getAppsByTag } from "../apps";
+import { launch } from "../launch";
+import { createLogger } from "../logger-provider";
+import { getSettings } from "../settings";
 import type {
 	CustomSettings,
 	StorefrontSettingsLandingPageRow,
 	StorefrontSettingsNavigationItem
-} from "./shapes";
+} from "../shapes";
 
 const logger = createLogger("Store");
 

@@ -14,22 +14,22 @@ import {
 	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
-import { getAppIcon, getApps } from "./apps";
-import { getPageBounds, launchPage } from "./browser";
-import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
-import { launch } from "./launch";
-import { createLogger } from "./logger-provider";
-import { manifestTypes } from "./manifest-types";
-import { getSettings } from "./settings";
-import { isShareEnabled, share } from "./share";
+import { getAppIcon, getApps } from "../apps";
+import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
+import { launch } from "../launch";
+import { createLogger } from "../logger-provider";
+import { manifestTypes } from "../manifest-types";
+import { getPageBounds, launchPage } from "../platform/browser";
+import { getSettings } from "../settings";
+import { isShareEnabled, share } from "../share";
 import {
 	getCurrentWorkspaceTemplate,
 	getPageTemplate,
-	PAGE_ACTION_IDS,
 	getWorkspaceTemplate,
+	PAGE_ACTION_IDS,
 	WORKSPACE_ACTION_IDS
-} from "./template";
-import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
+} from "../template";
+import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "../workspace";
 
 const logger = createLogger("Home");
 

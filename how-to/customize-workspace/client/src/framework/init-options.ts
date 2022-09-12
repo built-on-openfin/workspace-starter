@@ -1,12 +1,12 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
+import { createLogger } from "./logger-provider";
+import { initializeModules, loadModules } from "./modules";
 import type {
 	InitOptionsHandler,
 	InitOptionsHandlerOptions,
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
-} from "./init-options-shapes";
-import { createLogger } from "./logger-provider";
-import { initializeModules, loadModules } from "./modules";
+} from "./shapes/init-options-shapes";
 
 const logger = createLogger("InitOptions");
 

@@ -1,10 +1,10 @@
 import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
-import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
-import { launchSnapshot, launchView } from "./launch";
-import { createLogger } from "./logger-provider";
-import { manifestTypes } from "./manifest-types";
-import { getSettings } from "./settings";
+import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
+import { launchSnapshot, launchView } from "../launch";
+import { createLogger } from "../logger-provider";
+import { manifestTypes } from "../manifest-types";
+import { getSettings } from "../settings";
 
 const logger = createLogger("InteropBroker");
 

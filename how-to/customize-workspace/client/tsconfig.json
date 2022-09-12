@@ -10,7 +10,10 @@
 		"forceConsistentCasingInFileNames": true,
 		"importsNotUsedAsValues": "error",
 		"moduleResolution": "node",
-		"types": ["../../common/types/fin"]
+		"types": ["../../common/types/fin"],
+		"paths": {
+			"customize-workspace/*": ["./src/framework/*"]
+		}
 	},
 	"include": ["./src/**/*.ts"]
 }

@@ -1,12 +1,12 @@
 import type { App } from "@openfin/workspace";
+import { createLogger } from "./logger-provider";
+import { manifestTypes } from "./manifest-types";
 import type {
 	AppSourceConnection,
 	Connection,
 	ConnectionProviderOptions,
 	SnapshotSourceConnection
-} from "./connection-shapes";
-import { createLogger } from "./logger-provider";
-import { manifestTypes } from "./manifest-types";
+} from "./shapes/connection-shapes";
 
 const logger = createLogger("Connections");
 

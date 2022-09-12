@@ -1,5 +1,5 @@
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 
 interface RaiseIntentPayload {
 	name: string;

@@ -1,6 +1,6 @@
 import { createLogger } from "./logger-provider";
-import type { ModuleDefinition } from "./module-shapes";
 import type { HeadlessProviderOptions } from "./shapes";
+import type { ModuleDefinition } from "./shapes/module-shapes";
 
 const logger = createLogger("HeadlessProvider");
 

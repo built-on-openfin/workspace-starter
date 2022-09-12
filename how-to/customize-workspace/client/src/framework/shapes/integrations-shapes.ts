@@ -7,6 +7,7 @@ import type {
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { TemplateHelpers } from "./template-shapes";
 
 /**
  * Integration helpers provides environment methods and data.
@@ -16,6 +17,11 @@ export interface IntegrationHelpers {
 	 * The root url for the provider.
 	 */
 	rootUrl?: string;
+
+	/**
+	 * Template helpers.
+	 */
+	templateHelpers: TemplateHelpers;
 
 	/**
 	 * Launch a view in the workspace.

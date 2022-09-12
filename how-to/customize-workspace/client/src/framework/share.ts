@@ -1,9 +1,9 @@
 import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
-import { launchPage } from "./browser";
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
+import { launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
 import { getWorkspace } from "./workspace";
 

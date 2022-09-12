@@ -1,6 +1,6 @@
-import type { AuthProvider, AuthProviderOptions } from "./auth-shapes";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
+import type { AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
 
 const logger = createLogger("Auth");
 

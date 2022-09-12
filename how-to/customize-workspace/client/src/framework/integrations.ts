@@ -1,21 +1,14 @@
 import {
-	HomeDispatchedSearchResult,
+	ButtonStyle,
 	CLIFilter,
+	CLITemplate,
+	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	CLITemplate,
-	ButtonStyle
+	HomeSearchResult
 } from "@openfin/workspace";
 import * as endpointProvider from "./endpoint";
-import type {
-	IntegrationHelpers,
-	IntegrationModule,
-	IntegrationModuleDefinition,
-	IntegrationProviderOptions
-} from "./integrations-shapes";
 import { createLogger } from "./logger-provider";
-import type { ModuleEntry } from "./module-shapes";
 import {
 	closedownModule,
 	closedownModules,
@@ -23,6 +16,13 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
+import type {
+	IntegrationHelpers,
+	IntegrationModule,
+	IntegrationModuleDefinition,
+	IntegrationProviderOptions
+} from "./shapes/integrations-shapes";
+import type { ModuleEntry } from "./shapes/module-shapes";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
 const logger = createLogger("Integrations");

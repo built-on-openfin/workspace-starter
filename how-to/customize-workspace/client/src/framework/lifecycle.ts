@@ -1,12 +1,12 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { initializeModules, loadModules } from "./modules";
 import type {
 	Lifecycle,
 	LifecycleEvents,
 	LifecycleHandler,
 	LifecycleProviderOptions
-} from "./lifecycle-shapes";
-import type { ModuleDefinition, ModuleEntry } from "./module-shapes";
-import { initializeModules, loadModules } from "./modules";
+} from "./shapes/lifecycle-shapes";
+import type { ModuleDefinition, ModuleEntry } from "./shapes/module-shapes";
 
 let lifecycleModules: ModuleEntry<Lifecycle, unknown, unknown, ModuleDefinition>[] = [];
 

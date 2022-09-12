@@ -1,5 +1,5 @@
-import { init as bootstrap } from "./bootstrapper";
-import { init as initialisePlatform } from "./platform";
+import { init as bootstrap } from "./framework/bootstrapper";
+import { init as initialisePlatform } from "./framework/platform/platform";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	const platform = fin.Platform.getCurrentSync();

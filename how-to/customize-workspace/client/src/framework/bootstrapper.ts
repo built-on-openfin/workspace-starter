@@ -1,36 +1,40 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
-import { launchPage, launchView } from "./browser";
 import { registerAction } from "./connections";
-import {
-	deregister as deregisterDock,
-	minimize as minimizeDock,
-	register as registerDock,
-	show as showDock
-} from "./dock";
-import {
-	deregister as deregisterHome,
-	hide as hideHome,
-	register as registerHome,
-	show as showHome
-} from "./home";
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
-import { deregister as deregisterNotifications, register as registerNotifications } from "./notifications";
+import { launchPage, launchView } from "./platform/browser";
 import { getSettings } from "./settings";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes";
 import { deregister as deregisterShare, register as registerShare } from "./share";
+import * as templateHelpers from "./templates";
+import {
+	deregister as deregisterDock,
+	minimize as minimizeDock,
+	register as registerDock,
+	show as showDock
+} from "./workspace/dock";
+import {
+	deregister as deregisterHome,
+	hide as hideHome,
+	register as registerHome,
+	show as showHome
+} from "./workspace/home";
+import {
+	deregister as deregisterNotifications,
+	register as registerNotifications
+} from "./workspace/notifications";
 import {
 	deregister as deregisterStore,
 	hide as hideStore,
 	register as registerStore,
 	show as showStore
-} from "./store";
+} from "./workspace/store";
 
 const logger = createLogger("Bootstrapper");
 
@@ -73,6 +77,7 @@ export async function init() {
 
 	await registerIntegration(settings.integrationProvider, {
 		rootUrl: settings?.platformProvider.rootUrl,
+		templateHelpers,
 		launchView,
 		launchPage,
 		launchSnapshot: async (manifestUrl) =>

@@ -8,17 +8,17 @@ import {
 	getCurrentSync
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
-import type { ActionHelpers, Actions, ActionsProviderOptions } from "./actions-shapes";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
-import { getDefaultWindowOptions, launchView } from "./browser";
 import { updateToolbarButtons } from "./buttons";
-import { show } from "./home";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { initializeModules, loadModules } from "./modules";
+import { getDefaultWindowOptions, launchView } from "./platform/browser";
+import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import { showShareOptions } from "./share";
+import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
 

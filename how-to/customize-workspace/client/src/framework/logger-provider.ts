@@ -1,6 +1,6 @@
-import type { Logger, LogProvider, LoggerProviderOptions, LogLevel } from "./logger-shapes";
-import type { ModuleEntry } from "./module-shapes";
 import { closedownModules, initializeModules, loadModules } from "./modules";
+import type { Logger, LoggerProviderOptions, LogLevel, LogProvider } from "./shapes/logger-shapes";
+import type { ModuleEntry } from "./shapes/module-shapes";
 
 export class LoggerProvider {
 	/**

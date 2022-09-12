@@ -1,7 +1,7 @@
-import type { AuthProviderOptions } from "./auth-shapes";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
+import type { AuthProviderOptions } from "./shapes/auth-shapes";
 
 let settings: CustomSettings;
 let validManifestHosts: string[];

@@ -1,15 +1,7 @@
 import { BrowserCreateWindowRequest, getCurrentSync, Page } from "@openfin/workspace-platform";
-import { getDefaultToolbarButtons } from "./buttons";
-import * as endpointProvider from "./endpoint";
-import { createLogger } from "./logger-provider";
-import { PlatformLocalStorage } from "./modules/endpoints/local-storage/platform-local-storage";
-import { getSettings } from "./settings";
-
-const DEFAULT_PAGE_BOUNDS_STORAGE = new PlatformLocalStorage<OpenFin.Bounds>(
-	"page-bounds",
-	"PageBounds",
-	createLogger
-);
+import { getDefaultToolbarButtons } from "../buttons";
+import * as endpointProvider from "../endpoint";
+import { getSettings } from "../settings";
 
 export async function savePageBounds(pageId: string) {
 	const bounds = await getPageBounds(pageId);
@@ -20,9 +12,7 @@ export async function savePageBounds(pageId: string) {
 				id: pageId,
 				payload: bounds
 			});
-			return;
 		}
-		await DEFAULT_PAGE_BOUNDS_STORAGE.set(pageId, bounds);
 	}
 }
 
@@ -30,9 +20,7 @@ export async function deletePageBounds(pageId: string) {
 	const removePageBoundsEndpointId = "page-bounds-remove";
 	if (endpointProvider.hasEndpoint(removePageBoundsEndpointId)) {
 		await endpointProvider.action<{ id: string }>(removePageBoundsEndpointId, { id: pageId });
-		return;
 	}
-	await DEFAULT_PAGE_BOUNDS_STORAGE.remove(pageId);
 }
 
 export async function getPageBounds(pageId: string, fromStorage = false): Promise<OpenFin.Bounds | null> {
@@ -45,8 +33,6 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 				getPageBoundsEndpointId,
 				{ id: pageId }
 			);
-		} else {
-			bounds = await DEFAULT_PAGE_BOUNDS_STORAGE.get(pageId);
 		}
 	} else {
 		const platform = getCurrentSync();
