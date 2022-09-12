@@ -5,7 +5,7 @@
 
 # What is a Platform Provider?
 
-A Platform Provider is one of personas you and your team may fall under (you can be more than one).
+A Platform Provider is one of the personas you and your team may fall under (you can be more than one).
 
 A Platform Provider is responsible for:
 
