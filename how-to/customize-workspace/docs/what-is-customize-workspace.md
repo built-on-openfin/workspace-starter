@@ -7,6 +7,8 @@
 
 ![What is customize workspace?](./customize-workspace.png)
 
+A Workspace Platform and it's use of the Browser component is it's own OpenFin application running under it's own process, Notification Center is another OpenFin application running under it's own process and Dock, Store and Home UI fall under a Workspace application under it's own process.
+
 By looking at [container](./what-is-container.md) and [workspace](./what-is-workspace.md) you can see that you have the ability to build a rich user experience using OpenFin's offering.
 
 If you have:
