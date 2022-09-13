@@ -2,3 +2,48 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+# How to customize the bootstrapping process
+
+The bootstrapping process has a number of options to determine what the application should initialize on startup.
+
+```json
+"customSettings": {
+    "bootstrap": {
+        "home": true,
+        "store": true,
+        "dock": true,
+        "notifications": true,
+        "sharing": true,
+        "autoShow": ["home"]
+    }
+}
+```
+
+The `home`, `store`, `dock`, and `notifications` options determine if a provider for each of those workspace components is registered. You can find more details on how to configure the providers for each of the component in their own sections.
+
+- home - [./how-to-customize-home.md](./how-to-customize-home.md)
+- store - [./how-to-customize-store.md](./how-to-customize-store.md)
+- dock - [./how-to-customize-dock.md](./how-to-customize-dock.md)
+- notifications - [./how-to-customize-notification-center.md](./how-to-customize-notification-center.md)
+
+A provider can be initialized without being displayed, so to automatically show the components on starting the app you can use the `autoShow` field. For example to show `home` and `dock`.
+
+```json
+"customSettings": {
+    "bootstrap": {
+        ...
+        "autoShow": ["home", "dock"]
+    }
+}
+```
+
+If you do not provide and `autoShow` property the first registered component in the order listed above will be used.
+
+The `sharing` option enables/disables sharing features within the platform (buttons, actions etc), it defaults to `true` if not provided.
+
+## Lifecycle
+
+[Lifecycle events](./how-to-use-lifecycle-events.md) are raised during the bootstrapping process.
+
+After all of the workspace components have been initialized the `after-bootstrap` event is fired. When the application is closing down the `before-quit` event is fired.
