@@ -23,6 +23,8 @@ To enable the dock component the following settings in the manifest must be set.
 
 You can also add `dock` to `customSettings:bootstrap:autoShow` to make the dock appear when the app launches.
 
+For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
+
 ## Configuring the dock
 
 All of the dock specific configuration options are stored in `customSettings:dockProvider`
