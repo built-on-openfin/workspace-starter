@@ -2,3 +2,160 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+# How To Add Context Support To You App
+
+If you have added a view (url based app) to an app directory/source (see [how to define apps](./how-to-define-apps.md)) you may want it to be able to share data with one or more apps within your platform.
+
+The first thing your app should do is to highlight that it supports the FDC3 standard by opting into the api through it's settings (this can either be inline e.g. manifestType inline-view or a json file manifestType: view). E.g.:
+
+```json
+{
+	"url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
+	"fdc3InteropApi": "1.2"
+},
+```
+
+A workspace platform can define a set of contextual groups (system channels). You can default to unassigned and let the end user assign your app to a group or you can default yourself to one of them:
+
+```json
+{
+	"url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
+	"fdc3InteropApi": "1.2",
+    "interop": {
+		"currentContextGroup": "green"
+	}
+},
+```
+
+## Do I need to reference an NPM module
+
+You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: https://www.npmjs.com/package/@finos/fdc3/v/1.2.0
+
+## How do I listen for Contextual Messages?
+
+In your app would check for the fdc3 api and then register a contextual listener:
+
+### Listen for all contextual messages
+
+```javascript
+// --------------------------------
+// Listening code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const systemHandler = (ctx) => {
+    console.log('System Context Received: ', ctx);
+  };
+  const systemListener = fdc3.addContextListener(null, systemHandler);
+}
+```
+
+### Listen for specific contextual messages
+
+```javascript
+// --------------------------------
+// Listening code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const contactHandler = (contact) => {
+    console.log('Contact Context Received: ', contact);
+  };
+  const systemListener = fdc3.addContextListener('fdc3.contact', contactHandler);
+}
+```
+
+## How do I send out Contextual Messages?
+
+In your app your would check for the fdc3 api and then use the broadcast function:
+
+```javascript
+// --------------------------------
+// Broadcasting code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const context = {
+    type: 'fdc3.contact',
+    name: 'John McHugh',
+    id: {
+      email: 'john.mchugh@notreal.com'
+    }
+  };
+
+  const systemChannel = await fdc3.getCurrentChannel();
+
+  if (systemChannel !== null) {
+    console.log('broadcasting on ' + systemChannel.type + ' channel: ' + systemChannel.id, context);
+    fdc3.broadcast(context);
+  } else {
+    console.log('You are not bound to a system channel');
+  }
+}
+```
+
+## How do I listen for Contextual Messages on App specific channels?
+
+Why use App Channels? Lets say you want to share specific contextual objects between views/apps you control or you want to ensure that your applications are listening regardless of user selection.
+
+```javascript
+// --------------------------------
+// Listening code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const appHandler = (ctx) => {
+    console.log('App Channel Context Received: ', ctx);
+  };
+
+  const channel = 'custom-app-channel';
+  const appChannel = await fdc3.getOrCreateChannel(channel);
+  const appListener = appChannel.addContextListener(null, appHandler);
+}
+```
+
+As you can see it is very similar with the one difference being you create a specific channel rather than using one you are bound to.
+
+## How do I send out Contextual Messages to a specific App channel?
+
+```javascript
+// --------------------------------
+// Broadcasting code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const context = {
+    type: 'fdc3.contact',
+    name: 'John McHugh',
+    id: {
+      email: 'john.mchugh@notreal.com'
+    }
+  };
+
+  const channel = 'custom-app-channel';
+
+  const appChannel = await fdc3.getOrCreateChannel(channel);
+
+  console.log('broadcasting on ' + appChannel.type + ' channel: ' + appChannel.id, context);
+
+  appChannel.broadcast(context);
+}
+```
+
+As you can see it is very similar to the system channel approach with the one difference being you create a specific channel to broadcast against instead of using the one you are bound to.
+
+## Test Harnesses
+
+It is useful to be able to test your app against something. When you reference the common apps feed in your instance of customize workspace you get a number of useful utilities. We provide two entries related to context sharing in FDC3:
+
+### Context Using FDC3
+
+This app supports FDC3 System and App Channels, lists all the supported context types and generates a code preview for you to copy or simply test against. We provide a similar tool for our Interop API which is compatible with the FDC3 API as well:
+
+![Context Using FDC3](./view-context-fdc3.png)
+
+### FDC3 Workbench
+
+This is the FinOS test harness to show our compatibility:
+
+![FDC3 Workbench](./fdc3-workbench.png)
+
+## More Resources
+
+- Please use our OpenFin Website for more information related to FDC3 and interop: https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin

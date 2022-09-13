@@ -7,7 +7,7 @@
 
 An App definition for a workspace platform is based on the FDC3 1.2 App definition with some additional extensions (such as tags).
 
-Using customize workspace and app definition can easily be added to an [apps.json](../public/apps.json) file and it will be automatically picked up alongside a collection of [common apps](../../common/public/apps.json).
+Using customize workspace an app definition can easily be added to an [apps.json](../public/apps.json) file and it will be automatically picked up alongside a collection of [common apps](../../common/public/apps.json).
 
 ## What does an App Definition Look Like?
 
