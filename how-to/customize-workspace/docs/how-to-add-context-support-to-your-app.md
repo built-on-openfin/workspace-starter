@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How To Add Context Support To You App
+# How To Add Context Support To Your App
 
 If you have added a view (url based app) to an app directory/source (see [how to define apps](./how-to-define-apps.md)) you may want it to be able to share data with one or more apps within your platform.
 
@@ -36,7 +36,7 @@ You don't need to reference an npm module for the API as we inject the API into 
 
 In your app would check for the fdc3 api and then register a contextual listener:
 
-### Listen for all contextual messages
+## How do I Listen for all contextual messages on a System Channel?
 
 ```javascript
 // --------------------------------
@@ -50,7 +50,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-### Listen for specific contextual messages
+## How do I Listen for specific contextual messages on a System Channel?
 
 ```javascript
 // --------------------------------
@@ -64,7 +64,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I send out Contextual Messages?
+## How do I send out Contextual Messages on a System Channel?
 
 In your app your would check for the fdc3 api and then use the broadcast function:
 

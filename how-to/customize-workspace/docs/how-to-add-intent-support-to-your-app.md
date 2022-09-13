@@ -2,3 +2,115 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+# How To Add Intent Support To Your App
+
+If you have added a view (url based app) to an app directory/source (see [how to define apps](./how-to-define-apps.md)) you may want it to be able to trigger a workflow/intent or to support one.
+
+The first thing your app should do is to highlight that it supports the FDC3 standard by opting into the api through it's settings (this can either be inline e.g. manifestType inline-view or a json file manifestType: view). E.g.:
+
+```json
+{
+	"url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
+	"fdc3InteropApi": "1.2"
+},
+```
+
+## Do I need to reference an NPM module
+
+You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: https://www.npmjs.com/package/@finos/fdc3/v/1.2.0
+
+## How do I raise an Intent?
+
+In your app would check for the fdc3 api and then trigger a workflow by raising the intent as follows:
+
+```javascript
+// --------------------------------
+// Raising Intent code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const context = {
+    type: 'fdc3.contact',
+    name: 'John McHugh',
+    id: {
+      email: 'john.mchugh@gmail.com'
+    }
+  };
+  const intent = 'StartCall';
+  await fdc3.raiseIntent(intent, context);
+}
+```
+
+## How do I Listen for Intents?
+
+```javascript
+// --------------------------------
+// Listening code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const intent = 'StartCall';
+  fdc3.addIntentListener(intent, (ctx) => {
+    console.log('Received Context For Intent: ' + intent, ctx);
+  });
+}
+```
+
+## How do I raise an Intent by Context?
+
+If you have a contextual object and you just want to raise the dialog to empower the user to make a decision on what supported workflow they want to action then you can do the following:
+
+```javascript
+// --------------------------------
+// Raising Intent code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const context = {
+    type: 'fdc3.contact',
+    name: 'John McHugh',
+    id: {
+      email: 'john.mchugh@gmail.com'
+    }
+  };
+  await fdc3.raiseIntentForContext(context);
+}
+```
+
+## How do I listen for intents triggered by raiseIntentForContext?
+
+The code is the same as listening for intents triggered by raiseIntent as it ends up resolving to a selected intent.
+
+```javascript
+// --------------------------------
+// Listening code
+// --------------------------------
+if (window.fdc3 !== undefined) {
+  const intent = 'StartCall';
+  fdc3.addIntentListener(intent, (ctx) => {
+    console.log('Received Context For Intent: ' + intent, ctx);
+  });
+}
+```
+
+## How do I flag what Intents my app supports?
+
+This would be done in your app definition. See [how to define an app](./how-to-define-apps.md). An app definition supports an array of intents and our App Definition Builder helps you select from the official list of intents when defining your app.
+
+## Test Harnesses
+
+It is useful to be able to test your app against something. When you reference the common apps feed in your instance of customize workspace you get a number of useful utilities. We provide two entries related to intent raising in FDC3:
+
+### Intents Using FDC3
+
+This app supports FDC3 raiseIntent and raiseIntentByContext, it lists all the supported intent and context types and generates a code preview for you to copy or simply test against. We provide a similar tool for our Interop API which is compatible with the FDC3 API as well:
+
+![Intents Using FDC3](./view-intents-fdc3.png)
+
+### FDC3 Workbench
+
+This is the FinOS test harness to show our compatibility:
+
+![FDC3 Workbench](./fdc3-workbench.png)
+
+## More Resources
+
+- Please use our OpenFin Website for more information related to FDC3 and interop: https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin
