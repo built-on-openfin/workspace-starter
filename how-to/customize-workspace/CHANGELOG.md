@@ -17,3 +17,4 @@
 - Change - Authentication example uses RegExp match for `authenticatedUrl` instead of exact match
 - Fixed - Authentication example used correct `logoutUrl` when determining if it can call logout
 - Change - Example modules reference the types using a local namespace `customize-workspace` instead of relative paths
+- Added - `package.json` has additional script command `generate-types` which can be used to generate a folder of TypeScript type definitions `.d.ts` files for the shapes, the types can imported when building modules instead of needing to reference the framework directly
