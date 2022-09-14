@@ -1,6 +1,6 @@
-import type { EndpointDefinition } from "../../../endpoint-shapes";
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 
 let logger: Logger;
 
@@ -48,10 +48,13 @@ export async function action(
 	}
 
 	try {
-		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
-			wait: endpointDefinition.options.wait,
-			payload: endpointDefinition.options.payload
-		});
+		const channel = await fin.InterApplicationBus.Channel.connect(
+			endpointDefinition.options.channelName as string,
+			{
+				wait: endpointDefinition.options.wait,
+				payload: endpointDefinition.options.payload
+			}
+		);
 		if (
 			endpointDefinition.options.uuid !== undefined &&
 			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
@@ -66,7 +69,7 @@ export async function action(
 		if (logInfo) {
 			logger.info(`Sending action for endpoint id: ${endpointDefinition.id}`);
 		}
-		await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
+		await channel.dispatch(endpointDefinition.options.actionName as string, request?.payload);
 		await channel.disconnect();
 		return true;
 	} catch (error) {
@@ -124,10 +127,13 @@ export async function requestResponse(
 		return defaultValue;
 	}
 	try {
-		const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
-			wait: endpointDefinition.options.wait,
-			payload: endpointDefinition.options.payload
-		});
+		const channel = await fin.InterApplicationBus.Channel.connect(
+			endpointDefinition.options.channelName as string,
+			{
+				wait: endpointDefinition.options.wait,
+				payload: endpointDefinition.options.payload
+			}
+		);
 		if (
 			endpointDefinition.options.uuid !== undefined &&
 			endpointDefinition.options.uuid !== channel.providerIdentity.uuid
@@ -142,7 +148,10 @@ export async function requestResponse(
 		if (logInfo) {
 			logger.info(`Sending request response for endpoint: ${endpointDefinition.id}`);
 		}
-		const response: unknown = await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
+		const response: unknown = await channel.dispatch(
+			endpointDefinition.options.actionName as string,
+			request?.payload
+		);
 		await channel.disconnect();
 		return response;
 	} catch (error) {
