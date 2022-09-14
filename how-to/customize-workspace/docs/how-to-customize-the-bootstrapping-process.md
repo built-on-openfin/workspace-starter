@@ -44,3 +44,16 @@ If you do not provide and `autoShow` property the first registered component in 
 [Lifecycle events](./how-to-use-lifecycle-events.md) are raised during the bootstrapping process.
 
 After all of the workspace components have been initialized the `after-bootstrap` event is fired. When the application is closing down the `before-quit` event is fired.
+
+If you don't want to display any of the built-in workspace components on startup you can set the config as follows:
+
+```json
+"customSettings": {
+    "bootstrap": {
+        ...
+        "autoShow": ["none"]
+    }
+}
+```
+
+You could then subscribe to the `after-bootstrap` event and launch your own view.
