@@ -115,32 +115,32 @@ You have your own [Workspace Platform](public/manifest.fin.json) that is defined
 npm run client
 ```
 
-The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform.
+The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/framework/platform/platform.ts) and initializes the platform.
 
-The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for OpenFin Browser based windows. This lets us specify the icons, title and theme for the Browser Windows. It also defines how the interop broker should work using [interopbroker.ts](client/src/interopbroker.ts).
+The [platform.ts](client/src/framework/platform/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for OpenFin Browser based windows. This lets us specify the icons, title and theme for the Browser Windows. It also defines how the interop broker should work using [interopbroker.ts](client/src/framework/platform/interopbroker.ts).
 
-Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts).
+Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/framework/bootstrapper.ts).
 
 The bootstrapper has the following responsibilities:
 
-1. Import [settings.ts](client/src/settings.ts) to see what should be bootstrapped. (That is, should it setup Store and Home?)
-2. Import [home.ts](client/src/home.ts) and ensure that a home provider is registered against home in order to provide a list of applications (if enabled).
-3. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
-4. Import [notifications.ts](client/src/notifications.ts) and ensure that you have registered your platform against notification center if enabled.
-5. Import [share.ts](client/src/share.ts) to enable custom share support.
+1. Import [settings.ts](client/src/framework/settings.ts) to see what should be bootstrapped. (That is, should it setup Store and Home?)
+2. Import [home.ts](client/src/framework/workspace/home.ts) and ensure that a home provider is registered against home in order to provide a list of applications (if enabled).
+3. Import [store.ts](client/src/framework/workspace/store.ts) and ensure that a store provider is registered if store is enabled.
+4. Import [notifications.ts](client/src/framework/workspace/notifications.ts) and ensure that you have registered your platform against notification center if enabled.
+5. Import [share.ts](client/src/framework/share.ts) to enable custom share support.
 6. Listen for when your workspace platform is about to close and deregister from home, store and notification center.
 
-The **home provider**([home.ts](client/src/home.ts)) imports the following:
+The **home provider**([home.ts](client/src/framework/workspace/home.ts)) imports the following:
 
 - [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
 - [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
-- [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
-- [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
-- [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
-- [workspace.ts](client/src/workspace.ts) to fetch saved workspaces and display them in the Home UI and launch/delete them when the action is executed.
-- [template.ts](client/src/template.ts) Workspace 6 supports custom templates for search results. This file exports a template for custom saved workspaces and pages.
-- [share.ts](client/src/share.ts) The custom template supports custom buttons and we have a share button when it comes to saved pages and workspaces.
-- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
+- [settings.ts](client/src/framework/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
+- [apps.ts](client/src/framework/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
+- [browser.ts](client/src/framework/platform/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
+- [workspace.ts](client/src/framework/workspace.ts) to fetch saved workspaces and display them in the Home UI and launch/delete them when the action is executed.
+- [template.ts](client/src/framework/template.ts) Workspace 6 supports custom templates for search results. This file exports a template for custom saved workspaces and pages.
+- [share.ts](client/src/framework/share.ts) The custom template supports custom buttons and we have a share button when it comes to saved pages and workspaces.
+- [launch.ts](client/src/framework/launch.ts) to launch the entry the user selects from OpenFin Home
 
 The registration of a provider against home will look like the following:
 
@@ -156,12 +156,12 @@ const cliProvider: CLIProvider = {
 await Home.register(cliProvider);
 ```
 
-The **store provider**([store.ts](client/src/store.ts)) imports the following:
+The **store provider**([store.ts](client/src/framework/workspace/store.ts)) imports the following:
 
 - [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
-- [settings.ts](client/src/settings.ts) to read settings (such as the how to configure the store)
-- [apps.ts](client/src/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections
-- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Store
+- [settings.ts](client/src/framework/settings.ts) to read settings (such as the how to configure the store)
+- [apps.ts](client/src/framework/apps.ts) to fetch a list of applications when searching and to provide a filtered set of applications for specific store sections
+- [launch.ts](client/src/framework/launch.ts) to launch the entry the user selects from OpenFin Store
 
 The registration of a provider against store will look like the following:
 
@@ -180,7 +180,7 @@ const storeProvider = {
 await Storefront.register(storeProvider);
 ```
 
-The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json). Alternatively the second manifest shows a way of fetching settings from a rest endpoint if you specify an endpoint called 'platform-settings' (see [second.manifest.fin.json](public/second.manifest.fin.json) and [settings.json](public/settings.json)):
+The [settings.ts](client/src/framework/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json). Alternatively the second manifest shows a way of fetching settings from a rest endpoint if you specify an endpoint called 'platform-settings' (see [second.manifest.fin.json](public/second.manifest.fin.json) and [settings.json](public/settings.json)):
 
 ```javascript
 "customSettings": {
@@ -738,7 +738,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
 | viewMenu[i].position.operation                                 | The operation for the positioning [replaceLabel, before, after, delete, start, end]                                                                                                                                                                                                                                                                                                                                                                                 |
 | viewMenu[i].conditions                                         | Additional conditions to check before displaying the entry                                                                                                                                                                                                                                                                                                                                                                                                          |
 | viewMenu[i].separator                                          | Display a separator adjacent to the menu item [before, after]                                                                                                                                                                                                                                                                                                                                                                                                       |
-| toolbarButtons                                                 | For this sample we let you add/remove buttons by adding them to this array. This works for the demo but a thing to note is that the actions referenced by the button need to be registered (see [actions.ts](client/src/actions.ts)). The object has two properties: include whether or not to include it (the first button is hidden but you can turn it on to experiment) and button which is in the toolbarbutton shape supported by the workspace-platform sdk. |
+| toolbarButtons                                                 | For this sample we let you add/remove buttons by adding them to this array. This works for the demo but a thing to note is that the actions referenced by the button need to be registered (see [actions.ts](client/src/framework/actions.ts)). The object has two properties: include whether or not to include it (the first button is hidden but you can turn it on to experiment) and button which is in the toolbarbutton shape supported by the workspace-platform sdk. |
 | **themeProvider**                                              | What themes should be passed to OpenFin Workspace (at the moment only one is supported)                                                                                                                                                                                                                                                                                                                                                                             |
 | themes                                                         | An array of custom themes to pass to OpenFin Workspace (at the moment only the first entry is used)                                                                                                                                                                                                                                                                                                                                                                 |
 | themes.label                                                   | A label to use to identify this theme                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -847,13 +847,13 @@ This is because the `id` represents the route that the user navigates to. So, if
 
 These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the Workspace Platform. Your server will need to support CORS).
 
-The home provider checks the [apps.ts](client/src/apps.ts) file for a list of applications and then it reads the apps directory REST endpoint and returns it. The home provider then maps the apps to an array of SearchResult objects. The apps file checks to see if it has permission to launch external processes or download app assets and filter out entries as appropriate. It logs a warning of the apps filtered out and in a real app you could move this logic to the launch action to then notify the user they can't launch that app on this machine.
+The home provider checks the [apps.ts](client/src/framework/apps.ts) file for a list of applications and then it reads the apps directory REST endpoint and returns it. The home provider then maps the apps to an array of SearchResult objects. The apps file checks to see if it has permission to launch external processes or download app assets and filter out entries as appropriate. It logs a warning of the apps filtered out and in a real app you could move this logic to the launch action to then notify the user they can't launch that app on this machine.
 
-When a user selects a result in OpenFin Home, it is returned to the home provider and the home provider uses [launch.ts](client/src/launch.ts) to launch the result.
+When a user selects a result in OpenFin Home, it is returned to the home provider and the home provider uses [launch.ts](client/src/framework/launch.ts) to launch the result.
 
-The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
+The [launch.ts](client/src/framework/launch.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
-The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both. We have an array that points to the common [apps.json](../common/public/apps.json)apps.json and a project specific [apps.json](public/apps.json) which is empty and ready for you to add to.
+The [store.ts](client/src/framework/workspace/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/framework/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](public/apps.json) file (simulating your server) will populate both. We have an array that points to the common [apps.json](../common/public/apps.json)apps.json and a project specific [apps.json](public/apps.json) which is empty and ready for you to add to.
 
 ### Note About This Example
 
@@ -886,7 +886,7 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 - Do I always need a view manifest if it just contains a url?
 
-  - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [../common/public/apps.json](../common/public/apps.json). The [launch.ts](client/src/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
+  - You have control of how you launch views, pages, OpenFin applications and native apps. This project has been updated to support a custom manifest type that is called "inline-view". The entry can be seen here: [../common/public/apps.json](../common/public/apps.json). The [launch.ts](client/src/framework/launch.ts#L196) file has been updated to check for this specific type and it calls it's own [launchView](client/src/framework/launch.ts#L49) function instead of using the launchApp function from the workspace-platform sdk. This function checks to ensure that the passed app is either a view or an inline view. If it is an inline view it will take the manifest object from the manifest setting in an app definition. If it is a standard view then the manifest setting points to the manifest url and it will fetch it. Since this is an intent and context sample this change also required updating [interopbroker.ts](client/src/framework/platform/interopbroker.ts#L28). We needed to support inline views in case an inline view supports intents (the entry added into apps.json has an intent definition inside of it).
 
 ---
 
