@@ -17,6 +17,7 @@ import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { deletePageBounds, savePageBounds } from "./browser";
+import { closedown as closedownPlatform } from "./platform";
 
 const logger = createLogger("PlatformOverride");
 
@@ -294,6 +295,8 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			if (!isApplyingSnapshot) {
 				const platform = getCurrentSync();
 				await fireLifecycleEvent(platform, "before-quit");
+
+				await closedownPlatform();
 
 				return super.quit(payload, callerIdentity);
 			}

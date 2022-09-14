@@ -14,7 +14,7 @@ export async function init(conditionsProviderOptions?: ConditionsProviderOptions
 	await initializeModules<Conditions>(conditionsModules);
 
 	allConditions.authenticated = async () => isAuthenticationEnabled() && !(await isAuthenticationRequired());
-	allConditions.sharing = async () => isShareEnabled;
+	allConditions.sharing = async () => isShareEnabled();
 
 	for (const conditionModule of conditionsModules) {
 		const conditions = await conditionModule.implementation.get();
@@ -44,5 +44,5 @@ export async function checkCondition(
 	platform: WorkspacePlatformModule,
 	conditionId: string
 ): Promise<boolean> {
-	return allConditions[conditionId](platform) ?? false;
+	return allConditions[conditionId](platform) ?? true;
 }

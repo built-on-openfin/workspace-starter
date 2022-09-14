@@ -15,6 +15,7 @@ import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
 import { getAuthSettings, getSettings, isValid as isSettingsValid } from "../settings";
 import type { CustomSettings } from "../shapes";
+import { deregister as deregisterShare, register as registerShare } from "../share";
 import { getThemes } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
@@ -62,6 +63,9 @@ async function setupPlatform() {
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider);
 	await lifecycleProvider.init(settings?.lifecycleProvider);
+
+	const sharing = settings.platformProvider?.sharing ?? true;
+	await registerShare(sharing);
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
@@ -120,4 +124,8 @@ export async function init() {
 	} else {
 		await setupPlatform();
 	}
+}
+
+export async function closedown(): Promise<void> {
+	await deregisterShare();
 }

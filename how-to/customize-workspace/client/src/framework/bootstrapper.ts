@@ -11,7 +11,6 @@ import { manifestTypes } from "./manifest-types";
 import { launchPage, launchView } from "./platform/browser";
 import { getSettings } from "./settings";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/framework-shapes";
-import { deregister as deregisterShare, register as registerShare } from "./share";
 import * as templateHelpers from "./templates";
 import {
 	deregister as deregisterDock,
@@ -72,7 +71,6 @@ export async function init() {
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
-	bootstrapOptions.sharing = bootstrapOptions.sharing ?? true;
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
 	await registerIntegration(settings.integrationProvider, {
@@ -132,8 +130,6 @@ export async function init() {
 		await registerNotifications();
 	}
 
-	await registerShare(bootstrapOptions.sharing);
-
 	// Remove any entries from autoShow that have not been registered
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter(
 		(component) => registeredComponents.includes(component) || component === "none"
@@ -184,9 +180,6 @@ export async function init() {
 		}
 		if (bootstrapOptions.home) {
 			await deregisterHome();
-		}
-		if (bootstrapOptions.sharing) {
-			await deregisterShare();
 		}
 		if (bootstrapOptions.notifications) {
 			await deregisterNotifications();

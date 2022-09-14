@@ -9,7 +9,7 @@ import { getWorkspace } from "./workspace";
 
 const logger = createLogger("Share");
 
-export let isShareEnabled = false;
+export let shareEnabled = false;
 let shareRegistered = false;
 let initOptionsListenerId: string;
 
@@ -292,9 +292,9 @@ async function loadSharedEntry(id: string) {
 }
 
 export async function register(bootstrapEnabled: boolean) {
-	isShareEnabled = bootstrapEnabled;
+	shareEnabled = bootstrapEnabled;
 
-	if (isShareEnabled) {
+	if (shareEnabled) {
 		if (!shareRegistered) {
 			shareRegistered = true;
 			initOptionsListenerId = registerListener("shareId", async (initOptions) => {
@@ -312,7 +312,7 @@ export async function register(bootstrapEnabled: boolean) {
 }
 
 export async function deregister() {
-	if (isShareEnabled) {
+	if (shareEnabled) {
 		if (shareRegistered) {
 			// any cleanup logic can go here
 			removeListener(initOptionsListenerId);
@@ -381,4 +381,8 @@ export async function share(options?: IShareCustomData) {
 	} else {
 		logger.warn("Share cannot be triggered as it hasn't been registered yet.");
 	}
+}
+
+export function isShareEnabled() {
+	return shareEnabled;
 }
