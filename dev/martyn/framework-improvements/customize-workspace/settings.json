@@ -25,6 +25,7 @@
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/framework-improvements/customize-workspace",
+		"sharing": true,
 		"intentPicker": {
 			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/framework-improvements/common/windows/intents/picker.html",
 			"height": 400,
