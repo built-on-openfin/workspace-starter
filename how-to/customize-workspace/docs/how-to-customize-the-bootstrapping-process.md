@@ -14,7 +14,6 @@ The bootstrapping process has a number of options to determine what the applicat
         "store": true,
         "dock": true,
         "notifications": true,
-        "sharing": true,
         "autoShow": ["home"]
     }
 }
@@ -39,8 +38,6 @@ A provider can be initialized without being displayed, so to automatically show 
 ```
 
 If you do not provide and `autoShow` property the first registered component in the order listed above will be used.
-
-The `sharing` option enables/disables sharing features within the platform (buttons, actions etc), it defaults to `true` if not provided.
 
 ## Lifecycle
 
