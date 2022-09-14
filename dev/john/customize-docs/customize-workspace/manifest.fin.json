@@ -75,11 +75,11 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"sharing": true,
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/customize-docs/customize-workspace",
+			"sharing": true,
 			"intentPicker": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/customize-docs/common/windows/intents/picker.html",
 				"height": 400,
