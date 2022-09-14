@@ -152,7 +152,8 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 	if (settings?.platformProvider?.rootUrl !== undefined) {
 		pageIcon = `${settings.platformProvider.rootUrl}/icons/page.svg`;
 	}
-	const pageTemplate = getPageTemplate(isShareEnabled);
+	const shareEnabled = isShareEnabled();
+	const pageTemplate = getPageTemplate(shareEnabled);
 
 	if (Array.isArray(pages)) {
 		for (let i = 0; i < pages.length; i++) {
@@ -161,13 +162,12 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 				title: pages[i].title,
 				label: "Page",
 				icon: pageIcon,
-				actions: (isShareEnabled
-					? [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" }]
-					: []
-				).concat([
-					{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
-					{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
-				]),
+				actions: (shareEnabled ? [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" }] : []).concat(
+					[
+						{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
+						{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
+					]
+				),
 				data: { tags: ["page"], pageId: pages[i].pageId },
 				template: CLITemplate.Custom,
 				templateContent: {
@@ -196,7 +196,8 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 	if (settings?.platformProvider?.rootUrl !== undefined) {
 		workspaceIcon = `${settings.platformProvider.rootUrl}/icons/workspaces.svg`;
 	}
-	const workspaceTemplate = getWorkspaceTemplate(isShareEnabled);
+	const shareEnabled = isShareEnabled();
+	const workspaceTemplate = getWorkspaceTemplate(shareEnabled);
 
 	const currentWorkspaceTemplate = getCurrentWorkspaceTemplate();
 
@@ -211,7 +212,7 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 			const actions =
 				entryWorkspaceId === currentWorkspaceId
 					? []
-					: (isShareEnabled
+					: (shareEnabled
 							? [
 									{
 										name: HOME_ACTION_SHARE_WORKSPACE,

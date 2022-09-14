@@ -25,6 +25,7 @@
 	},
 	"platformProvider": {
 		"rootUrl": "http://localhost:8080",
+		"sharing": true,
 		"intentPicker": {
 			"url": "http://localhost:8080/common/windows/intents/picker.html",
 			"height": 400,
