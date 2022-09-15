@@ -73,7 +73,7 @@ Some modules require additional settings, these can be provided through the `dat
 
 A module can contain entry points for more than one provider, so you could for example have `actions` and `conditions` in one module. You would still specify the entries in the section for each provider type, as they may require separate config, but they would point to the same `url`. The module will only get loaded once and reused if a further entry point is requested from it.
 
-## Creating a module
+## Writing a module
 
 If you want to implement a module you should take the following steps.
 
@@ -122,3 +122,7 @@ The module should be compiled as a JavaScript ESM module, an example webpack con
     }
 }
 ```
+
+## Module shapes
+
+When building a module you need to reference the TypeScript definitions for the shapes, the `.d.ts` files can be generated using the `npm generate-types` script command.

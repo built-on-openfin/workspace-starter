@@ -7,6 +7,8 @@
 
 The dock component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
 
+![Dock](./dock.png)
+
 The code for the dock can be found in [../client/src/framework/workspace/dock.ts](../client/src/framework/workspace/dock.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `minimize` methods as you would expect change the visibility of the dock on the desktop.
 
 ## Enabling the dock
@@ -15,17 +17,17 @@ To enable the dock component the following settings in the manifest must be set.
 
 ```json
 "bootstrap": {
-	"dock": true
+    "dock": true
 }
 ```
 
-You can also add `dock` to `customSettings:bootstrap:autoShow` to make the dock appear when the app launches.
+You can also add `dock` to `bootstrap:autoShow` to make the dock appear when the app launches.
 
 For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
 
 ## Configuring the dock
 
-All of the dock specific configuration options are stored in `customSettings:dockProvider`
+All of the dock specific configuration options are stored in `dockProvider`
 
 As with the other workspace components you can set the `id`, `title` and `icon` used when the platform launches the dock e.g.
 
