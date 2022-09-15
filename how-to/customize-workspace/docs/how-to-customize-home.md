@@ -5,7 +5,7 @@
 
 # How to customize home ?
 
-The home component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
+The home component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Home Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
 
 ![Home](./home.png)
 
@@ -29,7 +29,7 @@ For more details on the bootstrapping process see [./how-to-customize-the-bootst
 
 All of the home specific configuration options are stored in `homeProvider`
 
-As with the other workspace components you can set the `id`, `title` and `icon` used when the platform launches the dock e.g.
+As with the other workspace components you can set the `id`, `title` and `icon` used when the platform launches home e.g.
 
 ```json
 "homeProvider": {
@@ -57,6 +57,8 @@ There are some additional flags in the home configuration which can be used to t
 
 `enablePageIntegration` will enable listing, launching, deleting and sharing commands for interacting with Pages.
 `enableWorkspaceIntegration` will enable listing, launching, deleting and sharing commands for interacting with Workspaces and also the ability to save the current layout as a workspace using the `/w` command.
+
+Sharing for pages and workspaces will only be available if the `platformProvder.sharing` flag is enabled.
 
 ```json
 "homeProvider": {
