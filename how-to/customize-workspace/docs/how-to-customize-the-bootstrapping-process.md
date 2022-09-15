@@ -8,14 +8,12 @@
 The bootstrapping process has a number of options to determine what the application should initialize on startup.
 
 ```json
-"customSettings": {
-    "bootstrap": {
-        "home": true,
-        "store": true,
-        "dock": true,
-        "notifications": true,
-        "autoShow": ["home"]
-    }
+"bootstrap": {
+    "home": true,
+    "store": true,
+    "dock": true,
+    "notifications": true,
+    "autoShow": ["home"]
 }
 ```
 
@@ -29,11 +27,9 @@ The `home`, `store`, `dock`, and `notifications` options determine if a provider
 A provider can be initialized without being displayed, so to automatically show the components on starting the app you can use the `autoShow` field. For example to show `home` and `dock`.
 
 ```json
-"customSettings": {
-    "bootstrap": {
-        ...
-        "autoShow": ["home", "dock"]
-    }
+"bootstrap": {
+    ...
+    "autoShow": ["home", "dock"]
 }
 ```
 
@@ -48,11 +44,9 @@ After all of the workspace components have been initialized the `after-bootstrap
 If you don't want to display any of the built-in workspace components on startup you can set the config as follows:
 
 ```json
-"customSettings": {
-    "bootstrap": {
-        ...
-        "autoShow": ["none"]
-    }
+"bootstrap": {
+    ...
+    "autoShow": ["none"]
 }
 ```
 

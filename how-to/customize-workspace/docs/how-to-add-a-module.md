@@ -25,27 +25,23 @@ The configuration for the modules follows a standard pattern, we will illustrate
 Each of the configuration sections for the providers contains a `modules` list:
 
 ```json
-"customSettings": {
-    "loggerProvider": {
-        "modules": [
-        ]
-    }
+"loggerProvider": {
+    "modules": [
+    ]
 }
 ```
 
 Each module can then be configured, with an `enabled` flag which determines if the module is actually loaded, an `id` to uniquely identify the module and the `url` of the JavaScript to load.
 
 ```json
-"customSettings": {
-    "loggerProvider": {
-        "modules": [
-            {
-                "enabled": true,
-                "id": "console",
-                "url": "http://localhost:8080/js/modules/log/console.bundle.js"
-            }
-        ]
-    }
+"loggerProvider": {
+    "modules": [
+        {
+            "enabled": true,
+            "id": "console",
+            "url": "http://localhost:8080/js/modules/log/console.bundle.js"
+        }
+    ]
 }
 ```
 
@@ -59,19 +55,17 @@ There is additional optional metadata that we can provide for a module to help u
 Some modules require additional settings, these can be provided through the `data` field, this data is free-form and specific to the module implementation. For example when the module is configured as below it will have an object with an `includeLevels` property passed to its `initialization` method.
 
 ```json
-"customSettings": {
-    "loggerProvider": {
-        "modules": [
-            {
-                "enabled": true,
-                "id": "console",
-                "url": "http://localhost:8080/js/modules/log/console.bundle.js",
-                "data": {
-                    "includeLevels": ["error"]
-                }
+"loggerProvider": {
+    "modules": [
+        {
+            "enabled": true,
+            "id": "console",
+            "url": "http://localhost:8080/js/modules/log/console.bundle.js",
+            "data": {
+                "includeLevels": ["error"]
             }
-        ]
-    }
+        }
+    ]
 }
 ```
 

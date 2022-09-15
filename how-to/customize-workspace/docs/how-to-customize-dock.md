@@ -14,10 +14,8 @@ The code for the dock can be found in [../client/src/framework/workspace/dock.ts
 To enable the dock component the following settings in the manifest must be set.
 
 ```json
-"customSettings": {
-    "bootstrap": {
-        "dock": true
-    }
+"bootstrap": {
+	"dock": true
 }
 ```
 
