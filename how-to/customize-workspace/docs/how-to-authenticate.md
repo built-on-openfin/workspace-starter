@@ -144,7 +144,7 @@ entryPoints let you have more than one moduleType implemented in a single JavaSc
 
 ### Customizing Browser based on Authenticated Status
 
-When customizing browser (see [how to customize browser](./how-to-customize-browser.md)) with your own buttons and menu options you can specify a condition (see [how to add conditions](./how-to-add-conditions.md)) on whether or not that option should be shown. We provide a default condition out of the box: 
+When customizing browser (see [how to customize browser](./how-to-customize-browser.md)) with your own buttons and menu options you can specify a condition (see [how to add conditions](./how-to-add-conditions.md)) on whether or not that option should be shown. We provide a default condition out of the box:
 
 - authenticated
 
@@ -152,19 +152,20 @@ Here is a snippet of a browser menu entry definition that makes use of this cond
 
 ```json
 {
-    "include": true,
-    "label": "Log Out and Quit App",
-    "data": {
-        "type": "Custom",
-        "action": {
-            "id": "logout-and-quit"
-        }
-    },
-    "position": {
-        "type": "Quit",
-        "operation": "after"
-    },
-    "conditions": ["authenticated"]
+  "include": true,
+  "label": "Log Out and Quit App",
+  "data": {
+    "type": "Custom",
+    "action": {
+      "id": "logout-and-quit"
+    }
+  },
+  "position": {
+    "type": "Quit",
+    "operation": "after"
+  },
+  "conditions": ["authenticated"]
 }
 ```
+
 This would present the Log Out and Quit App menu option underneath the Quit menu option. Please see [how to customize browser](./how-to-customize-browser.md) if you want to know more.
