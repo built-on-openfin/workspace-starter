@@ -112,9 +112,9 @@ If you specify an `appId` it is looked up from your apps provider and is launche
 "dockProvider": {
     "buttons": [
         {
-            "tooltip": "My APp",
+            "tooltip": "My App",
             "iconUrl": "http://localhost:8080/favicon.ico",
-            "appId": "my-app
+            "appId": "my-app"
         }
     ]
 }
