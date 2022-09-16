@@ -96,7 +96,7 @@ You will need the following dependencies
                 }
 ```
 
-## Other Changes?
+## Other Changes
 
 The structure of the how-to samples has been updated. The views (content) and some of the common scripts to setup dos, start and kill the project and the apps.json file have been moved to a [how-to/common](../common) folder. The express.js code has been simplified so it most cases you just have an index.ts file. And the server now maps the sample folder and /common to the common how-to.
 

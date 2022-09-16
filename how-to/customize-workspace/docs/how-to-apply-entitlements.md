@@ -24,36 +24,36 @@ If you need to return different settings by user then you can have a cut down ma
 
 ```json
 "customSettings": {
-		"authProvider": {
-			"modules": [
-				{
-					"id": "example",
-					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
-					"data": {
-						"autoLogin": false,
-						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
-						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
-						"checkLoginStatusInSeconds": 1,
-						"checkSessionValidityInSeconds": -1
-					}
-				}
-			]
-		},
-		"endpointProvider": {
-			"modules": [],
-			"endpoints": [
-				{
-					"id": "platform-settings",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "http://localhost:8080/settings.json"
-					}
-				}
-			]
-		}
-	}
+    "authProvider": {
+        "modules": [
+            {
+                "id": "example",
+                "url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+                "data": {
+                    "autoLogin": false,
+                    "loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+                    "logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+                    "authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+                    "checkLoginStatusInSeconds": 1,
+                    "checkSessionValidityInSeconds": -1
+                }
+            }
+        ]
+    },
+    "endpointProvider": {
+        "modules": [],
+        "endpoints": [
+            {
+                "id": "platform-settings",
+                "type": "fetch",
+                "options": {
+                    "method": "GET",
+                    "url": "http://localhost:8080/settings.json"
+                }
+            }
+        ]
+    }
+}
 ```
 
 The customize workspace settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data). The above configuration is using the built in fetch endpoint implementation so you can pass fetch options as well as the url. The above example is doing a get request to the hosted [settings.json](../public/settings.json) file but this could be a rest endpoint instead.

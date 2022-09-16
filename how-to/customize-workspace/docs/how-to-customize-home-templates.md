@@ -13,47 +13,47 @@ The template helpers are in [templates.ts](../client/src/framework/templates.ts)
 
 All of the methods are strongly typed with the CSS properties so it is easy to provide additional styling to the entries.
 
-### createContainer
+## createContainer
 
 Uses CSS flex box to create either a row or column.
 
-### createTitle
+## createTitle
 
 Used for create a strong title at the top of a template.
 
 ![Template Title](./template-title.png)
 
-### createText
+## createText
 
 Used for create a strong title at the top of a template.
 
 ![Template Text](./template-text.png)
 
-### createImage
+## createImage
 
 Used for displaying an image in the template.
 
 ![Template Image](./template-image.png)
 
-### createButton
+## createButton
 
 Used for adding a button to a template.
 
 ![Template Button](./template-button.png)
 
-### createLabelledValue
+## createLabelledValue
 
 Used for displaying a label/value pair.
 
 ![Template Labelled Value](./template-labelledvalue.png)
 
-### createTable
+## createTable
 
 Used for displaying a table of data.
 
 ![Template Table](./template-table.png)
 
-### createHelp
+## createHelp
 
 Used for creating a help entry result for when `?` query is used in Home
 

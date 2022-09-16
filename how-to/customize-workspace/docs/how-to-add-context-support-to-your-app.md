@@ -11,8 +11,8 @@ The first thing your app should do is to highlight that it supports the FDC3 sta
 
 ```json
 {
-	"url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
-	"fdc3InteropApi": "1.2"
+    "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
+    "fdc3InteropApi": "1.2"
 },
 ```
 
@@ -20,17 +20,17 @@ A workspace platform can define a set of contextual groups (system channels). Yo
 
 ```json
 {
-	"url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
-	"fdc3InteropApi": "1.2",
+    "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
+    "fdc3InteropApi": "1.2",
     "interop": {
-		"currentContextGroup": "green"
-	}
+        "currentContextGroup": "green"
+    }
 },
 ```
 
 ## Do I need to reference an NPM module
 
-You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: https://www.npmjs.com/package/@finos/fdc3/v/1.2.0
+You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [https://www.npmjs.com/package/@finos/fdc3/v/1.2.0](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
 
 ## How do I listen for Contextual Messages?
 
@@ -158,4 +158,4 @@ This is the FinOS test harness to show our compatibility:
 
 ## More Resources
 
-- Please use our OpenFin Website for more information related to FDC3 and interop: https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin
+- Please use our OpenFin Website for more information related to FDC3 and interop: [https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin](https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin)

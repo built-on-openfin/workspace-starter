@@ -13,41 +13,41 @@ Using customize workspace an app definition can easily be added to an [apps.json
 
 ```json
 {
-		"appId": "fdc3-workbench",
-		"name": "fdc3-workbench",
-		"title": "FDC3 Workbench",
-		"description": "Launch the official FDC3 Workbench",
-		"manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-view.json",
-		"manifestType": "view",
-		"icons": [
-			{
-				"src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico"
-			}
-		],
-		"contactEmail": "contact@example.com",
-		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			},
-			{
-				"name": "ViewInstrument",
-				"displayName": "View Instrument",
-				"contexts": ["fdc3.instrument"],
-				"customConfig": {}
-			}
-		],
-		"images": [
-			{
-				"src": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
-			}
-		],
-		"tags": ["view", "interop", "fdc3", "contact", "instrument"]
-	},
+        "appId": "fdc3-workbench",
+        "name": "fdc3-workbench",
+        "title": "FDC3 Workbench",
+        "description": "Launch the official FDC3 Workbench",
+        "manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-view.json",
+        "manifestType": "view",
+        "icons": [
+            {
+                "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico"
+            }
+        ],
+        "contactEmail": "contact@example.com",
+        "supportEmail": "support@example.com",
+        "publisher": "OpenFin",
+        "intents": [
+            {
+                "name": "ViewContact",
+                "displayName": "View Contact",
+                "contexts": ["fdc3.contact"],
+                "customConfig": {}
+            },
+            {
+                "name": "ViewInstrument",
+                "displayName": "View Instrument",
+                "contexts": ["fdc3.instrument"],
+                "customConfig": {}
+            }
+        ],
+        "images": [
+            {
+                "src": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
+            }
+        ],
+        "tags": ["view", "interop", "fdc3", "contact", "instrument"]
+    },
 ```
 
 The following fields are mandatory:
@@ -116,49 +116,49 @@ The app provider definition can either come from your manifest or from an extern
 ### An example of what these settings would look like (taken from [manifest.fin.json](../public/manifest.fin.json))
 
 ```json
-	"appProvider": {
-			"endpointIds": ["apps-get", "common-apps-get"],
-			"cacheDurationInSeconds": 10,
-			"cacheDurationInMinutes": 0,
-			"appAssetTag": "appasset",
-			"manifestTypes": [
-				"view",
-				"snapshot",
-				"manifest",
-				"external",
-				"inline-view",
-				"window",
-				"inline-window",
-				"desktop-browser"
-			]
-		},
+    "appProvider": {
+            "endpointIds": ["apps-get", "common-apps-get"],
+            "cacheDurationInSeconds": 10,
+            "cacheDurationInMinutes": 0,
+            "appAssetTag": "appasset",
+            "manifestTypes": [
+                "view",
+                "snapshot",
+                "manifest",
+                "external",
+                "inline-view",
+                "window",
+                "inline-window",
+                "desktop-browser"
+            ]
+        },
 ```
 
 The configuration above shows that it doesn't enable all of the manifest types that customize-workspace supports. It is also using endpoints (see [how to define endpoints](./how-to-define-endpoints.md)) and says it wants to source apps from the endpoints defined as apps-get and common-apps-get. Here is a snippet of what that looks like in the settings:
 
 ```json
-		"endpointProvider": {
-			"modules": [
-			],
-			"endpoints": [
-				{
-					"id": "apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "http://localhost:8080/apps.json"
-					}
-				},
-				{
-					"id": "common-apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "http://localhost:8080/common/apps.json"
-					}
-				}
-			]
-		},
+"endpointProvider": {
+    "modules": [
+    ],
+    "endpoints": [
+        {
+            "id": "apps-get",
+            "type": "fetch",
+            "options": {
+                "method": "GET",
+                "url": "http://localhost:8080/apps.json"
+            }
+        },
+        {
+            "id": "common-apps-get",
+            "type": "fetch",
+            "options": {
+                "method": "GET",
+                "url": "http://localhost:8080/common/apps.json"
+            }
+        }
+    ]
+},
 ```
 
 These endpoints are using the built in fetch support and the options are passed to fetch options in order to get back the JSON list of app entries.

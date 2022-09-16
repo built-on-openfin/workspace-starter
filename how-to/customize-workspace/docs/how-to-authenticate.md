@@ -22,24 +22,24 @@ Customize workspace lets you plug in your own authentication logic via config an
 We provide a basic example authentication module to give you an idea of how it works and it is referenced in our [second.manifest.fin.json](../public/second.manifest.fin.json) example:
 
 ```json
-	"authProvider": {
-			"modules": [
-				{
-					"id": "example",
-					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
-					"data": {
-						"autoLogin": false,
-						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
-						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
-						"checkLoginStatusInSeconds": 1,
-						"checkSessionValidityInSeconds": -1,
-                        "loginHeight": 250,
-                        "loginWidth": 400
-					}
-				}
-			]
-		},
+"authProvider": {
+    "modules": [
+        {
+            "id": "example",
+            "url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+            "data": {
+                "autoLogin": false,
+                "loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+                "logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+                "authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+                "checkLoginStatusInSeconds": 1,
+                "checkSessionValidityInSeconds": -1,
+                "loginHeight": 250,
+                "loginWidth": 400
+            }
+        }
+    ]
+}
 ```
 
 This is an example of a module (see [how to add a module](./how-to-add-a-module.md)) that has been created and referenced in the authProvider modules array. Each module can be passed data in a format that the specific module understands.
@@ -74,57 +74,57 @@ export type AuthEventTypes = "logged-in" | "before-logged-out" | "logged-out" | 
  */
 export interface AuthProvider {
     /**
-	 * Initialise the module.
-	 * @param definition The definition of the module from configuration include custom options.
-	 * @param loggerCreator For logging entries.
-	 * @param helpers Helper methods for the module to interact with the application core.
-	 * @returns Nothing.
-	 */
-	initialize?(definition: ModuleDefinition<O>, loggerCreator: LoggerCreator, helpers?: H): Promise<void>;
+     * Initialise the module.
+     * @param definition The definition of the module from configuration include custom options.
+     * @param loggerCreator For logging entries.
+     * @param helpers Helper methods for the module to interact with the application core.
+     * @returns Nothing.
+     */
+    initialize?(definition: ModuleDefinition<O>, loggerCreator: LoggerCreator, helpers?: H): Promise<void>;
 
-	/**
-	 * Close down any resources being used by the module.
-	 * @returns Nothing.
-	 */
-	closedown?(): Promise<void>;
+    /**
+     * Close down any resources being used by the module.
+     * @returns Nothing.
+     */
+    closedown?(): Promise<void>;
 
-	/**
-	 * Subscribe to one of the auth events.
-	 * @param to The event to subscribe to.
-	 * @param callback The callback to fire when the event occurs.
-	 * @returns Subscription id for unsubscribing or undefined if event type is not available.
-	 */
-	subscribe(to: AuthEventTypes, callback: () => Promise<void>): string | undefined;
+    /**
+     * Subscribe to one of the auth events.
+     * @param to The event to subscribe to.
+     * @param callback The callback to fire when the event occurs.
+     * @returns Subscription id for unsubscribing or undefined if event type is not available.
+     */
+    subscribe(to: AuthEventTypes, callback: () => Promise<void>): string | undefined;
 
-	/**
-	 * Unsubscribe from an already subscribed event.
-	 * @param subscriptionId The id of the subscription returned from subscribe.
-	 * @returns True if the unsubscribe was successful.
-	 */
-	unsubscribe(subscriptionId: string): boolean;
+    /**
+     * Unsubscribe from an already subscribed event.
+     * @param subscriptionId The id of the subscription returned from subscribe.
+     * @returns True if the unsubscribe was successful.
+     */
+    unsubscribe(subscriptionId: string): boolean;
 
-	/**
-	 * Does the auth provider require authentication.
-	 * @returns True if authentication is required.
-	 */
-	isAuthenticationRequired(): Promise<boolean>;
+    /**
+     * Does the auth provider require authentication.
+     * @returns True if authentication is required.
+     */
+    isAuthenticationRequired(): Promise<boolean>;
 
-	/**
-	 * Perform the login operation on the auth provider.
-	 * @returns True if the login was successful.
-	 */
-	login(): Promise<boolean>;
+    /**
+     * Perform the login operation on the auth provider.
+     * @returns True if the login was successful.
+     */
+    login(): Promise<boolean>;
 
-	/**
-	 * Perform the logout operation on the auth provider.
-	 * @returns True if the logout was successful.
-	 */
-	logout(): Promise<boolean>;
+    /**
+     * Perform the logout operation on the auth provider.
+     * @returns True if the logout was successful.
+     */
+    logout(): Promise<boolean>;
 
-	/**
-	 * Get user information from the auth provider.
-	 */
-	getUserInfo<T>(): Promise<T>;
+    /**
+     * Get user information from the auth provider.
+     */
+    getUserInfo<T>(): Promise<T>;
 }
 ```
 
