@@ -97,7 +97,7 @@ As you can see from the configuration above:
 
 If you use the live launch section on the [main page](../README.md) and launch the second example and save a workspace you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your workspaces.
 
-## Can I see manage workspaces from home?
+## Can I manage workspaces from home?
 
 We include support for doing workspace management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [how to customize home](./how-to-customize-home.md)).
 
