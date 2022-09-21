@@ -103,13 +103,13 @@ It is useful to be able to test your app against something. When you reference t
 
 This app supports FDC3 raiseIntent and raiseIntentByContext, it lists all the supported intent and context types and generates a code preview for you to copy or simply test against. We provide a similar tool for our Interop API which is compatible with the FDC3 API as well:
 
-![Intents Using FDC3](./view-intents-fdc3.png)
+![Intents Using FDC3](./assets/view-intents-fdc3.png)
 
 ### FDC3 Workbench
 
 This is the FinOS test harness to show our compatibility:
 
-![FDC3 Workbench](./fdc3-workbench.png)
+![FDC3 Workbench](./assets/fdc3-workbench.png)
 
 ## More Resources
 

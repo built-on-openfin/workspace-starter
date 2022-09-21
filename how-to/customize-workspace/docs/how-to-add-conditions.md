@@ -53,7 +53,7 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 
 ## Using conditions
 
-At other points in the platform we can check conditions, for example deciding to show a button or menu entry. You can check that one or many conditions are true using the following code. See [menu.ts](../client/src/framework/menu.ts#97) and [buttons.ts](../client/src/framework/buttons.ts#34)
+At other points in the platform we can check conditions, for example deciding to show a button or menu entry. You can check that one or many conditions are true using the following code. See [menu.ts](../client/src/framework/menu.ts#97) and [buttons.ts](../client/src/framework/buttons.ts#34). Browser buttons and menus can be configured to use the conditions, see [How to Customize Browser Buttons](./how-to-customize-browser-buttons.md) and [How to Customize Browser Menus](./how-to-customize-browser-menus.md)
 
 ```ts
 const hasCondition = await checkConditions(['has-some-value']);

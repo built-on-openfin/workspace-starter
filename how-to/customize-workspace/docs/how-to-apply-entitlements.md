@@ -20,7 +20,7 @@ To return configuration related to a specific user then you need to ensure you h
 
 Customize Workspace lets you add all the settings for a workspace platform in the customSettings section of a manifest (see [manifest.fin.json](../public/manifest.fin.json)). This makes it useful if you wish to experiment with options easily and if you don't need to return different settings by user/group.
 
-If you need to return different settings by user then you can have a cut down manifest (see [second.manifest.fin.json]) which only includes the authProvider definition and an endpointProvider definition (see [how to define endpoints](./how-to-define-endpoints.md)) that includes an endpoint for returning the settings (this will override the settings in the manifest and will be the settings returned to the other parts of the platform).
+If you need to return different settings by user then you can have a cut down manifest (see [second.manifest.fin.json](../public/second.manifest.fin.json)) which only includes the authProvider definition and an endpointProvider definition (see [how to define endpoints](./how-to-define-endpoints.md)) that includes an endpoint for returning the settings (this will override the settings in the manifest and will be the settings returned to the other parts of the platform).
 
 ```json
 "customSettings": {

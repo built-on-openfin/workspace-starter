@@ -28,6 +28,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 	menuEntries: T[],
 	positionType?: U,
 	positionOperation?: MenuPositionOperation,
+	positionCustomId?: string,
 	entry?: T
 ): number {
 	if (positionOperation === "start") {
@@ -35,11 +36,30 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 	} else if (positionOperation === "end") {
 		menuEntries.push(entry);
 	} else {
-		const entryIndex = menuEntries.findIndex((menuEntry) => menuEntry.data?.type === positionType);
+		let entryIndex: number;
 
-		if (entryIndex === -1) {
-			logger.warn(`Unable to find global menu with entry type: ${positionType}`);
+		if (positionType === "Custom") {
+			if (positionCustomId === undefined) {
+				logger.warn("Entry type is specified as custom but no customId was provided");
+			}
+
+			entryIndex = menuEntries.findIndex(
+				(menuEntry) =>
+					menuEntry.data?.type === positionType && menuEntry.data?.action?.id === positionCustomId
+			);
+
+			if (entryIndex === -1) {
+				logger.warn(`Unable to find menu with entry type: ${positionType} and customId: ${positionCustomId}`);
+			}
 		} else {
+			entryIndex = menuEntries.findIndex((menuEntry) => menuEntry.data?.type === positionType);
+
+			if (entryIndex === -1) {
+				logger.warn(`Unable to find menu with entry type: ${positionType}`);
+			}
+		}
+
+		if (entryIndex !== -1) {
 			switch (positionOperation) {
 				case "delete": {
 					menuEntries.splice(entryIndex);
@@ -101,6 +121,7 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 						menuItems,
 						menuItem.position.type,
 						menuItem.position.operation,
+						menuItem.position.customId,
 						{
 							label: menuItem.label,
 							data: menuItem.data

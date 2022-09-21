@@ -7,7 +7,7 @@
 
 The home component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Home Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
 
-![Home](./home.png)
+![Home](./assets/home.png)
 
 The code for the home can be found in [../client/src/framework/workspace/home.ts](../client/src/framework/workspace/home.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `hide` methods as you would expect change the visibility of the home on the desktop.
 
@@ -58,7 +58,7 @@ There are some additional flags in the home configuration which can be used to t
 `enablePageIntegration` will enable listing, launching, deleting and sharing commands for interacting with Pages.
 `enableWorkspaceIntegration` will enable listing, launching, deleting and sharing commands for interacting with Workspaces and also the ability to save the current layout as a workspace using the `/w` command.
 
-Sharing for pages and workspaces will only be available if the `platformProvder.sharing` flag is enabled.
+Sharing for pages and workspaces will only be available if the `platformProvider.sharing` flag is enabled.
 
 ```json
 "homeProvider": {
@@ -78,11 +78,11 @@ The sources that provide the results for the home components fall into 2 categor
 
 Apps use a fixed template for display as a search result:
 
-![Apps Template](./home-apps.png)
+![Apps Template](./assets/home-apps.png)
 
 Whereas commands and search entries can have custom templates with richer layouts:
 
-![Commands Template](./home-commands.png)
+![Commands Template](./assets/home-commands.png)
 
 ## Integration management
 
@@ -99,10 +99,10 @@ You can use the `/integrations` command to determine which modules are available
 }
 ```
 
-![Home Integrations](./home-integrations.png)
+![Home Integrations](./assets/home-integrations.png)
 
 ## Help query
 
 Both `command` and `dynamic` integrations can additionally provide help entries, the help entries are retrieved from an integration when entering `?` into the query box.
 
-![Home Help](./home-help.png)
+![Home Help](./assets/home-help.png)

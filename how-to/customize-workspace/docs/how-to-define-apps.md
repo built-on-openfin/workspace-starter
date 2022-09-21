@@ -78,7 +78,7 @@ To create an app definition you could simply copy the json object above modify i
 
 If you launch the default instance of customize-workspace either locally or from the live launch section of our main [README.md](../README.md) then you will be able to type App Definition Builder into home and you will be presented with a UI to help you build the JSON. You can also type Getting Started if you want to see App Definition Builder alongside other utility apps.
 
-![App Definition Builder](app-definition-builder.png)
+![App Definition Builder](./assets/app-definition-builder.png)
 
 > **_:information_source: Manifest Types:_** If you use App Definition builder it will offer you a drop down of the manifest types supported (otherwise please see the list of supported manifest types below). If you are defining a view (url to load into browser) or a window (without the OpenFin Browser chrome) then there is the option of embedding the settings when you specify the manifest property. These would either be [window options](https://developer.openfin.co/docs/javascript/stable/Window.html#~options) or [view options](https://developer.openfin.co/docs/javascript/stable/View.html#~options). If you are simply using window or view then the manifest setting should point to a url that provides the settings in JSON format.
 

@@ -5,7 +5,7 @@
 
 # What is Customize Workspace?
 
-![What is customize workspace?](./customize-workspace.png)
+![What is customize workspace?](./assets/customize-workspace.png)
 
 A Workspace Platform and it's use of the Browser component is it's own OpenFin application running under it's own process, Notification Center is another OpenFin application running under it's own process and Dock, Store and Home UI fall under a Workspace application under it's own process.
 

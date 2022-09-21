@@ -108,7 +108,7 @@ You could use our Theme Builder App which is available when you launch the defau
 
 The Theme Definition Builder lets you pull a palette from a website or you can manually pick colors. You can then save the theme to file for sharing or copy it to the clipboard. Theme Definition Builder also lets you preview the theme by launching a second Theming platform and applying the palette against it.
 
-![Theme Definition Builder](./theme-definition-builder.png)
+![Theme Definition Builder](./assets/theme-definition-builder.png)
 
 ## More Resources
 

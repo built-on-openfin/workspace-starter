@@ -53,19 +53,20 @@ export interface MenuEntry<T> {
 	position?: {
 		operation: MenuPositionOperation;
 		type?: T;
+		customId?: string;
 	};
 	conditions?: string[];
 	separator?: MenuSeparatorPosition;
 }
 
 export interface BrowserProviderOptions {
-	toolbarButtons?: ToolbarButtonDefinition[];
 	windowOptions: {
 		title?: string;
 		icon?: string;
 		newTabUrl?: string;
 		newPageUrl?: string;
 	};
+	toolbarButtons?: ToolbarButtonDefinition[];
 	globalMenu?: MenuEntry<GlobalContextMenuOptionType>[];
 	pageMenu?: MenuEntry<PageTabContextMenuOptionType>[];
 	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];

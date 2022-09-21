@@ -5,9 +5,9 @@
 
 # What is Container?
 
-![What is container?](container.png)
+![What is container?](./assets/container.png)
 
-Container is the foundation on which all OpenFin apps are built. Workspace platforms are built ontop of a solid foundation. This foundation is made up of the:
+Container is the foundation on which all OpenFin apps are built. Workspace platforms are built on top of a solid foundation. This foundation is made up of the:
 
 - [RVM (Runtime Version Manager)](https://developers.openfin.co/of-docs/docs/rvm) - This application is used in the initial installation and manages the launching and fetching of OpenFin runtimes. If your Workspace Platform manifest is updated and references a version of the OpenFin runtime that isn't available it will fetch it from the OpenFin CDN (unless [Desktop Owner Settings (DOS)](https://developers.openfin.co/of-docs/docs/desktop-owner-settings) are used).
 - Container is the OpenFin runtime (which is a combination of Chromium, Electron and our OpenFin APIs which are injected into your HTML document). The container is what gives OpenFin applications the ability to communicate seamlessly with each other as well as native applications. The container also allows you to provide a Native experience to your HTML based applications. A version of Workspace is paired against a runtime. The OpenFin APIs give you access to functionality you wouldn't have in the browser. More information can be found here: [https://developers.openfin.co/of-docs/docs/container-overview](https://developers.openfin.co/of-docs/docs/container-overview)
