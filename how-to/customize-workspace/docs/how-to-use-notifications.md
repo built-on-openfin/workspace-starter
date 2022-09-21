@@ -2,3 +2,11 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+# How to use Notifications
+
+This document will be enhanced in the future.
+
+For now please see the following starter to get a better understanding of the notification api:
+
+- [how-to/use-notifications](../../use-notifications/README.md)
