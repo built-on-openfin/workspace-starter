@@ -49,7 +49,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/customize-docs/customize-workspace/favicon.ico",
 		"name": "Customize Workspace - v9.0",
 		"target": ["desktop", "start-menu"]
