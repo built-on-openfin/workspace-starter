@@ -5,7 +5,7 @@
 
 # How to customize home ?
 
-The home component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Home Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
+The home component is one of the standard components of OpenFin workspace, for an in depth look at the component see [Home Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
 
 ![Home](./assets/home.png)
 

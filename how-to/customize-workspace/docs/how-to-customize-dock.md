@@ -5,7 +5,7 @@
 
 # How to customize dock ?
 
-The dock component is one of the standard parts of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
+The dock component is one of the standard components of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
 
 ![Dock](./assets/dock.png)
 

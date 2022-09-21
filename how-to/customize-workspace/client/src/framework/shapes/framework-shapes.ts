@@ -72,7 +72,7 @@ export interface BrowserProviderOptions {
 	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];
 }
 
-export type BootstrapComponents = "home" | "store" | "dock" | "notifications" | "none";
+export type BootstrapComponents = "home" | "store" | "dock" | "none";
 
 export interface BootstrapOptions {
 	store: boolean;
