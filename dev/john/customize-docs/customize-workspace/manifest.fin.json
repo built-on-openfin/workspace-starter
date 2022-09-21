@@ -673,7 +673,7 @@
 		},
 		"integrationProvider": {
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/customize-docs/customize-workspace/favicon.ico",
-			"isManagementEnabled": true,
+			"isManagementEnabled": false,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
