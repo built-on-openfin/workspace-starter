@@ -5,7 +5,7 @@
 
 # What is Workspace?
 
-![What is workspace?](workspace.png)
+![What is workspace?](./assets/workspace.png)
 
 Workspace is a set of UI Components that you can reference from your workspace platform. They build on top of [container](./what-is-container.md) and can be used by referencing a set of NPM packages.
 
