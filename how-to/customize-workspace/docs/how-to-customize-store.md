@@ -151,6 +151,12 @@ The approach that we have taken is that you define your landing page properties 
   },
 ```
 
+## What does store look like?
+
+![Defined store](./assets/store.png)
+
+## What are the available settings for the store provider
+
 | Property                                   | Description                                                                                                                                                                                                                                          |
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **storefrontProvider**                     | Config settings that are used by the sample code to configure the store using the workspace APIs                                                                                                                                                     |
@@ -197,7 +203,15 @@ The approach that we have taken is that you define your landing page properties 
 
 ## Where does the search results in store come from?
 
-It comes from the list of all the applications that the user is entitled to.
+It comes from the list of all the [applications](./how-to-define-apps.md) that the user is [entitled](./how-to-apply-entitlements.md) to.
+
+## Anything else?
+
+The [manifest.fin.json](../public/manifest.fin.json)/[settings.json](../public/settings.json) configuration for the storefront does not include an `id` for the `cta`, `items` and `navigation` sections.
+
+This is to reduce noise in the example manifest and to prevent issues if an item or section is copied and pasted. The code has a fallback that uses the title or title plus tags to form an `id`. This works for the demo, as the manifest file is storing the configuration. If the configuration were ever fetched from a server, then it should return a unique (e.g., GUID) and idempotent ID.
+
+This is because the `id` represents the route that the user navigates to. So, if an `id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x".
 
 ## Source reference
 
