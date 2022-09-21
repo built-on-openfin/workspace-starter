@@ -86,7 +86,6 @@ interface HomeProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
-	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
 	enablePageIntegration?: boolean;
