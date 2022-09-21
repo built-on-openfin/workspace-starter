@@ -51,4 +51,4 @@ This runs the same code with slightly different settings to show a different the
 npm run build
 ```
 
-Once you have built the project it is easy to extend through config (either the manifest file or settings returned from a service) and custom Javascript Modules. The remaining guides will walk you through the process.
+Once you have built the project it is easy to extend through config (either the manifest file or settings returned from a service) and custom JavaScript Modules. The remaining guides will walk you through the process.
