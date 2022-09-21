@@ -182,3 +182,9 @@ public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 ## Custom templates
 
 For further information on customizing the home template see [Home To Customize Home Templates](./how-to-customize-home-templates.md).
+
+## Source reference
+
+- [home.ts](../client/src/framework/workspace/home.ts)
+- [integrations.ts](../client/src/framework/integrations.ts)
+- [integrations-shapes.ts](../client/src/framework/shapes/integrations-shapes.ts)

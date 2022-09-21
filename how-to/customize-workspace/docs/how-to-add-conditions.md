@@ -65,3 +65,8 @@ As part of the platform there are already some built-in conditions.
 
 - `authenticated` - Which determines that the current session is authenticated.
 - `sharing` - Is the sharing flag in the platform enabled.
+
+## Source reference
+
+- [conditions.ts](../client/src/framework/conditions.ts)
+- [conditions-shapes.ts](../client/src/framework/shapes/conditions-shapes.ts)

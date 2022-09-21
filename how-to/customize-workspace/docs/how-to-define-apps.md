@@ -177,3 +177,7 @@ Our guides show how to:
 - [Configure Dock](./how-to-customize-dock.md)
 - [Configure Home](./how-to-customize-home.md)
 - [Configure Store](./how-to-customize-store.md)
+
+## Source reference
+
+- [apps.ts](../client/src/framework/apps.ts)

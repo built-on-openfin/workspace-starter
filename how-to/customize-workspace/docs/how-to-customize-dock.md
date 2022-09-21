@@ -171,3 +171,8 @@ If you want to configure a drop down menu instead of a single button you can use
     ]
 }
 ```
+
+## Source reference
+
+- [dock.ts](../client/src/framework/workspace/dock.ts)
+- [actions.ts](../client/src/framework/actions.ts)

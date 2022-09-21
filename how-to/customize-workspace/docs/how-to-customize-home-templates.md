@@ -58,3 +58,8 @@ Used for displaying a table of data.
 Used for creating a help entry result for when `?` query is used in Home
 
 ![Template Help](./assets/template-help.png)
+
+## Source reference
+
+- [templates.ts](../client/src/framework/templates.ts)
+- [home.ts](../client/src/framework/workspace/home.ts)

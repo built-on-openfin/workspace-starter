@@ -61,74 +61,9 @@ This example module is there for you to test different auth flows (e.g. autoLogi
 
 ### Implementing your own Auth Module
 
-To implement your own auth module you just need to follow the following interface:
+To implement your own auth module you just need to follow the following interface defined in [auth-shapes](../client/src/framework/shapes/auth-shapes.ts):
 
-```javascript
-/**
- * The types of events that an auth provider can emit.
- */
-export type AuthEventTypes = "logged-in" | "before-logged-out" | "logged-out" | "session-expired";
-
-/**
- * Definition for module which provides authentication features.
- */
-export interface AuthProvider {
-    /**
-     * Initialise the module.
-     * @param definition The definition of the module from configuration include custom options.
-     * @param loggerCreator For logging entries.
-     * @param helpers Helper methods for the module to interact with the application core.
-     * @returns Nothing.
-     */
-    initialize?(definition: ModuleDefinition<O>, loggerCreator: LoggerCreator, helpers?: H): Promise<void>;
-
-    /**
-     * Close down any resources being used by the module.
-     * @returns Nothing.
-     */
-    closedown?(): Promise<void>;
-
-    /**
-     * Subscribe to one of the auth events.
-     * @param to The event to subscribe to.
-     * @param callback The callback to fire when the event occurs.
-     * @returns Subscription id for unsubscribing or undefined if event type is not available.
-     */
-    subscribe(to: AuthEventTypes, callback: () => Promise<void>): string | undefined;
-
-    /**
-     * Unsubscribe from an already subscribed event.
-     * @param subscriptionId The id of the subscription returned from subscribe.
-     * @returns True if the unsubscribe was successful.
-     */
-    unsubscribe(subscriptionId: string): boolean;
-
-    /**
-     * Does the auth provider require authentication.
-     * @returns True if authentication is required.
-     */
-    isAuthenticationRequired(): Promise<boolean>;
-
-    /**
-     * Perform the login operation on the auth provider.
-     * @returns True if the login was successful.
-     */
-    login(): Promise<boolean>;
-
-    /**
-     * Perform the logout operation on the auth provider.
-     * @returns True if the logout was successful.
-     */
-    logout(): Promise<boolean>;
-
-    /**
-     * Get user information from the auth provider.
-     */
-    getUserInfo<T>(): Promise<T>;
-}
-```
-
-The initialize and closedown functions come from a ModuleImplementation base interface but have been added to the example above to improve clarity. At this stage we do not pass helpers to the initialize function but that may be provided in the future based on use cases. To see what is included in a definition please read more about [how to add a module](./how-to-add-a-module.md). But one key thing to know is that the module definition includes a data property that can be used to provide your implementation with custom data as seen by the example module.
+The `initialize` and `closedown` methods come from a `ModuleImplementation` base interface but have been added to the example above to improve clarity. At this stage we do not pass helpers to the initialize function but that may be provided in the future based on use cases. To see what is included in a definition please read more about [how to add a module](./how-to-add-a-module.md). But one key thing to know is that the module definition includes a data property that can be used to provide your implementation with custom data as seen by the example module.
 
 The events are important as they are used by the platform to determine the flow of events (are they logged in, has the user's session expired etc). The [how to add a module](./how-to-add-a-module.md) will also cover how to generate the types for your module to make it easier to build your own without a dependency on the files within the src folder.
 
@@ -169,3 +104,7 @@ Here is a snippet of a browser menu entry definition that makes use of this cond
 ```
 
 This would present the Log Out and Quit App menu option underneath the Quit menu option. Please see [how to customize browser](./how-to-customize-browser.md) if you want to know more.
+
+## Source reference
+
+- [auth-shapes.ts](../client/src/framework/shapes/auth-shapes.ts)

@@ -114,3 +114,9 @@ The following example create a menu entry to display the Notification Center wit
     ]
 }
 ```
+
+## Source reference
+
+- [menu.ts](../client/src/framework/menu.ts)
+- [actions.ts](../client/src/framework/actions.ts)
+- [conditions.ts](../client/src/framework/conditions.ts)

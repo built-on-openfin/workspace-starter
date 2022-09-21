@@ -126,3 +126,8 @@ The module should be compiled as a JavaScript ESM module, an example webpack con
 ## Module shapes
 
 When building a module you need to reference the TypeScript definitions for the shapes, the `.d.ts` files can be generated using the `npm generate-types` script command.
+
+## Source reference
+
+- [modules.ts](../client/src/framework/modules.ts)
+- [module-shapes.ts](../client/src/framework/shapes/module-shapes.ts)

@@ -30,7 +30,7 @@ In the title bar of the window the pages are listed, by default the plus button 
 "browserProvider": {
     "windowOptions": {
         ...
-        "newPageUrl": "http://localhost:8080/common/views/platform/new-page.html".
+        "newPageUrl": "http://localhost:8080/common/views/platform/new-page.html",
         "newTabUrl": "http://localhost:8080/common/views/platform/new-tab.html"
     }
 }
@@ -41,3 +41,7 @@ The theming for the browser window is configured in the platform using a pallett
 ## Menu and Buttons
 
 In addition to the window itself the menus and buttons can be customized, see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md) and see [How To Customize Browser Menus](./how-to-customize-browser-menus.md).
+
+## Source reference
+
+- [browser.ts](../client/src/framework/platform/browser.ts)

@@ -51,3 +51,7 @@ If you don't want to display any of the built-in workspace components on startup
 ```
 
 You could then subscribe to the `after-bootstrap` event and launch your own view.
+
+## Source reference
+
+- [bootstrapper.ts](../client/src/framework/bootstrapper.ts)

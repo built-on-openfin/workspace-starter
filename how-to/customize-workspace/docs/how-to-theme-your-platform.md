@@ -100,7 +100,7 @@ Null can be used to show the palette setting in config but to opt out of overrid
 
 ### Manually
 
-You could use our [Website Theme Documentation](https://developers.openfin.co/of-docs/docs/workspace-themes-overview) and create a JSON Object representing your theme and apply it to the themeProvider either through a manifest or settings service. When you start your platform the theme will be picked up and applied.
+You could use our [Website Theme Documentation](https://developers.openfin.co/of-docs/docs/workspace-themes-overview) and create a JSON Object representing your theme and apply it to the `themeProvider` either through a manifest or settings service. When you start your platform the theme will be picked up and applied.
 
 ### Theme Definition Builder
 
@@ -113,3 +113,7 @@ The Theme Definition Builder lets you pull a palette from a website or you can m
 ## More Resources
 
 - <https://developers.openfin.co/of-docs/docs/workspace-themes-overview>
+
+## Source reference
+
+- [platform.ts](../client/src/framework/platform.ts)

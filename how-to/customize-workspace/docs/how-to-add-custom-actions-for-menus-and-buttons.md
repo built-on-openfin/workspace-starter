@@ -61,3 +61,8 @@ We can trigger actions from other parts of the platform by configuring the inter
 - Page Menu see [manifest.fin.json](../public/manifest.fin.json#233)
 - View Menu see [manifest.fin.json](../public/manifest.fin.json#249)
 - Buttons see [manifest.fin.json](../public/manifest.fin.json#281)
+
+## Source reference
+
+- [actions.ts](../client/src/framework/actions.ts)
+- [actions-shapes.ts](../client/src/framework/shapes/actions-shapes.ts)
