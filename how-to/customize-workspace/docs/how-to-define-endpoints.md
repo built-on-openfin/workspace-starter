@@ -14,7 +14,7 @@ E.g.:
 
 Endpoints are defined via an id and that is how they are looked up and executed.
 
-We have a built-in fetch implementation but you can provide a module (see [how to add a module](./how-to-add-a-module.md)) that can receive module level data (when it is initialized) as well as endpoint specific configuration.
+We have a built-in fetch implementation but you can provide a module (see [How To Add A Module](./how-to-add-a-module.md)) that can receive module level data (when it is initialized) as well as endpoint specific configuration.
 
 An endpoint provider module implementation would support the following interface (see source reference below for the latest representation):
 
@@ -25,7 +25,7 @@ export interface Endpoint extends ModuleImplementation {
 }
 ```
 
-The module interface specifies that an initialize and closedown function can also be provided (see [how to add a module](./how-to-add-a-module.md)).
+The module interface specifies that an initialize and closedown function can also be provided (see [How To Add A Module](./how-to-add-a-module.md)).
 
 # How To Define Endpoints
 
@@ -74,7 +74,7 @@ Endpoints are defined via settings and the endpointProvider:
 
 As you can see from the snippet above, we have built in fetch support (type: "fetch") with the option of creating a custom JavaScript module that provides a custom implementation for a specific type of action or request/response (you can see that we have a type: module and it references a module called local-storage to save and fetch integration preferences).
 
-To learn more about how to modules see [how to add a module](./how-to-add-a-module.md).
+To learn more about how to modules see [How To Add A Module](./how-to-add-a-module.md).
 
 We include two examples of endpoint modules in the modules folder:
 
@@ -83,12 +83,12 @@ We include two examples of endpoint modules in the modules folder:
 
 Endpoints can be defined as:
 
-- app sources - see [how to define apps](./how-to-define-apps.md)
-- workspaces source - see [how to customize workspace management](./how-to-customize-workspace-management.md)
-- page source - see [how to customize browser page management](./how-to-customize-browser-page-management.md)
-- page bounds source - see [how to customize browser page management](./how-to-customize-browser-page-management.md)
-- share source - see [how to customize workspace and browser sharing](./how-to-customize-workspace-browser-page-sharing.md)
-- integration preferences source - see [how to customize integrations](./how-to-add-integrations-to-home.md)
+- app sources - see [How To Define Apps](./how-to-define-apps.md)
+- workspaces source - see [How To Customize Workspace Management](./how-to-customize-workspace-management.md)
+- page source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
+- page bounds source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
+- share source - see [How To Customize Workspace And Browser Sharing](./how-to-customize-workspace-browser-page-sharing.md)
+- integration preferences source - see [How To Customize Integrations](./how-to-add-integrations-to-home.md)
 
 ## Source Reference
 

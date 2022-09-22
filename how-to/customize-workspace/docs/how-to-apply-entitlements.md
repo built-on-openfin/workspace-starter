@@ -10,17 +10,17 @@ Entitlements can be seen in two ways:
 - What information is the platform returning for the specific user
 - What are the entitlements a user has for a particular app that is launched
 
-Customize workspace does not provide support for the second option. That should be down to the individual content providers (see [what is a content provider](./what-is-a-content-provider.md)) unless your organization already has a centralized entitlements system.
+Customize workspace does not provide support for the second option. That should be down to the individual content providers (see [What Is A Content Provider](./what-is-a-content-provider.md)) unless your organization already has a centralized entitlements system.
 
 # What Information Is The Platform Returning For The Specific User
 
-To return configuration related to a specific user then you need to ensure you have authentication setup (see [how to authenticate](./how-to-authenticate.md)). Once authenticated your platform can call a service to receive configuration specific to that user.
+To return configuration related to a specific user then you need to ensure you have authentication setup (see [How To Authenticate](./how-to-authenticate.md)). Once authenticated your platform can call a service to receive configuration specific to that user.
 
 ## Configuring Dynamic Settings
 
 Customize Workspace lets you add all the settings for a workspace platform in the customSettings section of a manifest (see [manifest.fin.json](../public/manifest.fin.json)). This makes it useful if you wish to experiment with options easily and if you don't need to return different settings by user/group.
 
-If you need to return different settings by user then you can have a cut down manifest (see [second.manifest.fin.json](../public/second.manifest.fin.json)) which only includes the authProvider definition and an endpointProvider definition (see [how to define endpoints](./how-to-define-endpoints.md)) that includes an endpoint for returning the settings (this will override the settings in the manifest and will be the settings returned to the other parts of the platform).
+If you need to return different settings by user then you can have a cut down manifest (see [second.manifest.fin.json](../public/second.manifest.fin.json)) which only includes the authProvider definition and an endpointProvider definition (see [How To Define Endpoints](./how-to-define-endpoints.md)) that includes an endpoint for returning the settings (this will override the settings in the manifest and will be the settings returned to the other parts of the platform).
 
 ```json
 "customSettings": {
@@ -64,16 +64,16 @@ You now have the option of how many of the settings on offer will be user specif
 
 All settings could be customized for the user but here are some examples:
 
-- Store layout and categories (see [how to customize store](./how-to-customize-store.md))
-- Browser menu options (see [how to customize browser](./how-to-customize-browser.md))
-- Dock options (see [how to customize dock](./how-to-customize-dock.md))
-- Home options (see [how to customize home](./how-to-customize-home.md))
-- What types of apps they are allowed to launch (e.g. not allowed to launch/see native apps see [how to define apps](./how-to-define-apps.md))
-- What logging should a user have and at what log level (see [how to support your platform](./how-to-support-your-platform.md))
-- What theme they should be presented with (see [how to theme your platform](./how-to-theme-your-platform.md))
+- Store layout and categories (see [How To Customize Store](./how-to-customize-store.md))
+- Browser menu options (see [How To Customize Browser](./how-to-customize-browser.md))
+- Dock options (see [How To Customize Dock](./how-to-customize-dock.md))
+- Home options (see [How To Customize Home](./how-to-customize-home.md))
+- What types of apps they are allowed to launch (e.g. not allowed to launch/see native apps see [How To Define Apps](./how-to-define-apps.md))
+- What logging should a user have and at what log level (see [How To Support Your Platform](./how-to-support-your-platform.md))
+- What theme they should be presented with (see [How To Theme Your Platform](./how-to-theme-your-platform.md))
 
 ### Requesting Apps For Home, Store, Dock
 
-When we do a request for applications (see [how to define apps](./how-to-define-apps.md)) then that source could also filter the apps that are returned based on who the user is or the role/group they are in.
+When we do a request for applications (see [How To Define Apps](./how-to-define-apps.md)) then that source could also filter the apps that are returned based on who the user is or the role/group they are in.
 
 [<- Back to Table Of Contents](../README.md)

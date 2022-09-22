@@ -23,7 +23,7 @@ A workspace platform lets you override the platform implementation so you can co
 
 Instead of modifying this file directly we allow you to specify the destination and source of workspaces through config and the definition of [endpoints](./how-to-define-endpoints.md).
 
-Endpoints support an action and request/response function (see [how to defined endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints:
+Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints:
 
 - workspace-get
 - workspace-get-all
@@ -34,7 +34,7 @@ If you provide endpoints with these ids then customize workspace will use them i
 
 This frees you up to fetch and save your workspaces from/to anywhere in any way that works for you.
 
-Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [how to add a module](./how-to-add-a-module.md) that implements your own logic.
+Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [How To Add A Module](./how-to-add-a-module.md) that implements your own logic.
 
 ## Do You Have An Example Of A Custom Implementation?
 
@@ -95,11 +95,11 @@ As you can see from the configuration above:
 1. A custom endpoint module is defined that saves/gets data and uses localstorage as the source.
 2. Each endpoint definition references that module using type and typeId and passes options specific to the particular endpoint.
 
-If you use the live launch section on the [main page](../README.md) and launch the second example and save a workspace you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your workspaces.
+If you use the live launch section on the [Main Page](../README.md) and launch the second example and save a workspace you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your workspaces.
 
 ## Can I Manage Workspaces From Home?
 
-We include support for doing workspace management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [how to customize home](./how-to-customize-home.md)).
+We include support for doing workspace management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [How To Customize Home](./how-to-customize-home.md)).
 
 ```json
 enableWorkspaceIntegration?: boolean
@@ -109,7 +109,7 @@ enableWorkspaceIntegration?: boolean
 
 ### I See A Sharing Button, How Is That Configured?
 
-Please see [how to customize workspace and browser page sharing](./how-to-customize-workspace-browser-page-sharing.md).
+Please see [How To Customize Workspace And Browser Page Sharing](./how-to-customize-workspace-browser-page-sharing.md).
 
 ## Source Reference
 

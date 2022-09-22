@@ -5,9 +5,7 @@
 
 # How To Deploy Your Platform
 
-The OpenFin website has a section dedicated to deployment:
-
-[https://developers.openfin.co/of-docs/docs/deploying-applications](https://developers.openfin.co/of-docs/docs/deploying-applications)
+The OpenFin website has a section dedicated to deployment, see [Deploying Applications](https://developers.openfin.co/of-docs/docs/deploying-applications)
 
 ## Installer
 
@@ -15,9 +13,9 @@ If you have a manifest setup to your liking (e.g. a local setup would be [manife
 
 - [https://install.openfin.co](https://install.openfin.co)
 
-This page will take the url to your manifest (you can use localhost for testing) and give you a zipped installer. The zipped installer is our Runtime Version Manager (RVM see [installation with RVM](https://developers.openfin.co/of-docs/docs/installation-with-rvm)) and this will install without requiring admin rights and pull down the required OpenFin runtime from our CDN.
+This page will take the url to your manifest (you can use localhost for testing) and give you a zipped installer. The zipped installer is our Runtime Version Manager (RVM see [Installation With RVM](https://developers.openfin.co/of-docs/docs/installation-with-rvm)) and this will install without requiring admin rights and pull down the required OpenFin runtime from our CDN.
 
-Your manifest can add specify settings that can customize the download screen (see [customizing dialog settings](https://developers.openfin.co/of-docs/docs/application-configuration#section-dialogsettings-properties)) as well as present a splash screen (see [splash screen settings in top level properties](https://developers.openfin.co/of-docs/docs/application-configuration#section-top-level-properties)).
+Your manifest can add specify settings that can customize the download screen (see [Customizing Dialog Settings](https://developers.openfin.co/of-docs/docs/application-configuration#section-dialogsettings-properties)) as well as present a splash screen (see [Splash Screen Settings In Top Level Properties](https://developers.openfin.co/of-docs/docs/application-configuration#section-top-level-properties)).
 
 You can then create installers for your other environments (e.g. DEV, UAT) if you wish to have others install and test your Workspace Platform.
 
@@ -27,6 +25,6 @@ When you are deploying your application and an end user is visiting your site us
 
 With this knowledge you can present them with a link to click and launch if they are capable of doing so, or a download link so they can download and run the installer:
 
-[https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
+[Detect OpenFin support from a web browser](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
 
 [<- Back to Table Of Contents](../README.md)

@@ -64,9 +64,9 @@ The rest of the fields are self explanatory but the intents array deserves more 
 
 An application can specify that it supports being launched to support certain workflows. These are defined as intents.
 
-There are a number of intents supported by the FDC3 standard (ViewContact and ViewInstrument are shown in the example above) but you can also define custom intents for your organization. If your app meta data specifies that it supports an intent then it should listen for that intent and react to it. We cover more in the [How to add intent support to your app page](./how-to-add-intent-support-to-your-app.md).
+There are a number of intents supported by the FDC3 standard (ViewContact and ViewInstrument are shown in the example above) but you can also define custom intents for your organization. If your app meta data specifies that it supports an intent then it should listen for that intent and react to it. We cover more in the [How To Add Intent Support To Your App](./how-to-add-intent-support-to-your-app.md).
 
-If a second application raises an intent then the workspace platform will check to see if any applications support the workflow. If only one app entry supports it then the platform will launch it. If there is more than one option then it will present the list of options to the end user. You can customize the UI presented to the user and we will cover that in the [How to configure FDC3 Intents page](./how-to-configure-fdc3-intents.md).
+If a second application raises an intent then the workspace platform will check to see if any applications support the workflow. If only one app entry supports it then the platform will launch it. If there is more than one option then it will present the list of options to the end user. You can customize the UI presented to the user and we will cover that in the [How To Configure FDC3 Intents Page](./how-to-configure-fdc3-intents.md).
 
 ## How To Create An App Definition
 
@@ -80,7 +80,7 @@ If you launch the default instance of customize-workspace either locally or from
 
 ![App Definition Builder](./assets/app-definition-builder.png)
 
-> **_:information_source: Manifest Types:_** If you use App Definition builder it will offer you a drop down of the manifest types supported (otherwise please see the list of supported manifest types below). If you are defining a view (url to load into browser) or a window (without the OpenFin Browser chrome) then there is the option of embedding the settings when you specify the manifest property. These would either be [window options](https://developer.openfin.co/docs/javascript/stable/Window.html#~options) or [view options](https://developer.openfin.co/docs/javascript/stable/View.html#~options). If you are simply using window or view then the manifest setting should point to a url that provides the settings in JSON format.
+> **_:information_source: Manifest Types:_** If you use App Definition builder it will offer you a drop down of the manifest types supported (otherwise please see the list of supported manifest types below). If you are defining a view (url to load into browser) or a window (without the OpenFin Browser chrome) then there is the option of embedding the settings when you specify the manifest property. These would either be [Window Options](https://developer.openfin.co/docs/javascript/stable/Window.html#~options) or [View Options](https://developer.openfin.co/docs/javascript/stable/View.html#~options). If you are simply using window or view then the manifest setting should point to a url that provides the settings in JSON format.
 
 ### Manifest Types
 
@@ -90,17 +90,17 @@ Customize workspace supports the following manifest types (for the list in code 
 - **inline-view**: This manifest type expects the manifest setting to have the options inline rather than a url to a json file.
 - **window**: This manifest type expects the manifest setting to point to a json file that contains classic window options.
 - **inline-window**: This manifest type expects the manifest setting to have the classic window options inline rather than a url to a json file.
-- **external**: This manifest type expects the manifest setting to point to an exe or an app asset name. This requires launch External Process permissions to be enabled see [how to secure your platform](./how-to-secure-your-platform.md).
-- **inline-external**: this manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request. This requires launch External Process permissions to be enabled see [how to secure your platform](./how-to-secure-your-platform.md).
+- **external**: This manifest type expects the manifest setting to point to an exe or an app asset name. This requires launch External Process permissions to be enabled see [How To Secure Your Platform](./how-to-secure-your-platform.md).
+- **inline-external**: this manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request. This requires launch External Process permissions to be enabled see [How To Secure Your Platform](./how-to-secure-your-platform.md).
 - **snapshot**: This manifest type expects the manifest setting to point to a json file that contains a snapshot (one or more windows)
 - **manifest**: This manifest type expects the manifest setting to point to a json file that is an openfin manifest. An openfin app.
 - **desktop-browser**: This manifest type expects the manifest setting to point to a url which will be launched in the default desktop browser.
-- **endpoint**: An endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) is a generic target that supports an action or a request/response. This custom endpoint will be passed the app definition to the action implementation. What happens after that point is down to your own implementation. It is one way of extending launch behavior should you need to.
-- **connection**: A connected app (see [how to manage connections to your platform](./how-to-manage-connections-to-your-platform.md)) could have provided a list of child views that can be launched from home. If a selection is made against one of these entries then it will be sent to the connected app in order for it to launch the requested view.
+- **endpoint**: An endpoint (see [How To Define Endpoints](./how-to-define-endpoints.md)) is a generic target that supports an action or a request/response. This custom endpoint will be passed the app definition to the action implementation. What happens after that point is down to your own implementation. It is one way of extending launch behavior should you need to.
+- **connection**: A connected app (see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)) could have provided a list of child views that can be launched from home. If a selection is made against one of these entries then it will be sent to the connected app in order for it to launch the requested view.
 
-## How To Configure The Appprovider For Your Platform
+## How To Configure The AppProvider For Your Platform
 
-The app provider definition can either come from your manifest or from an external settings service (see [how-to-apply-entitlements](./how-to-apply-entitlements.md) and an example is available via [second.manifest.fin.json](../public/second.manifest.fin.json) and [settings.json](../public/settings.json)). The available settings are as follows:
+The app provider definition can either come from your manifest or from an external settings service (see [How To Apply Entitlements](./how-to-apply-entitlements.md) and an example is available via [second.manifest.fin.json](../public/second.manifest.fin.json) and [settings.json](../public/settings.json)). The available settings are as follows:
 
 | Property                                  | Description                                                                                                                                                                                                           |
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -134,7 +134,7 @@ The app provider definition can either come from your manifest or from an extern
         },
 ```
 
-The configuration above shows that it doesn't enable all of the manifest types that customize-workspace supports. It is also using endpoints (see [how to define endpoints](./how-to-define-endpoints.md)) and says it wants to source apps from the endpoints defined as apps-get and common-apps-get. Here is a snippet of what that looks like in the settings:
+The configuration above shows that it doesn't enable all of the manifest types that customize-workspace supports. It is also using endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)) and says it wants to source apps from the endpoints defined as apps-get and common-apps-get. Here is a snippet of what that looks like in the settings:
 
 ```json
 "endpointProvider": {

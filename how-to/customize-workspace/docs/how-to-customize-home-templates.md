@@ -5,7 +5,7 @@
 
 # How To Customize Home Templates ?
 
-Home templates can easily be customized, see [Customize search results in Home](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home).
+Home templates can easily be customized, see [Customize Search Results In Home](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home).
 
 To provide more consistency with the way search results are displayed we provide a few ready to use template fragments that will pick up the colors from your platforms palette.
 

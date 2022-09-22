@@ -23,7 +23,7 @@ Sharing can be enabled/disabled through the platform provider configuration:
 
 ## As A Condition For A Sharing Button
 
-It is used when you define a browser button (see [how to customize browser buttons](./how-to-customize-browser-buttons.md)) to allow your users to share and use conditions:
+It is used when you define a browser button (see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md)) to allow your users to share and use conditions:
 
 ```json
 "browserProvider": {
@@ -62,7 +62,7 @@ This would give you the following icon and menu in the browser:
 
 ## If You Have Opted Into Home Workspace Or Page Management
 
-If you have enabled workspace management (see [how to customize workspace management](./how-to-customize-workspace-management.md)) or page management (see [how to customize browser page management](./how-to-customize-browser-page-management.md)) through home then the template will check to see if it should provide the option of sharing the workspace/page.
+If you have enabled workspace management (see [How To Customize Workspace Management](./how-to-customize-workspace-management.md)) or page management (see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)) through home then the template will check to see if it should provide the option of sharing the workspace/page.
 
 # Where Are Shared Workspaces/Pages Saved?
 
@@ -70,7 +70,7 @@ By default in our two examples we save the json data to an OpenFin cloud service
 
 This service is not for production use and all saves are cleared after 24 hours. Please contact OpenFin if you would like to talk about this service.
 
-The service is configured via endpoints (see [how to define endpoints](./how-to-define-endpoints.md)). The examples have the following defined:
+The service is configured via endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)). The examples have the following defined:
 
 ```json
  "endpointProvider": {
@@ -99,7 +99,7 @@ The service is configured via endpoints (see [how to define endpoints](./how-to-
 
 ```
 
-Endpoints support an action and request/response function (see [how to defined endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints when implementing sharing:
+Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints when implementing sharing:
 
 - share-get
 - share-save

@@ -9,7 +9,7 @@ The home component is one of the standard components of OpenFin workspace, for a
 
 ![Home](./assets/home.png)
 
-The code for the home can be found in [../client/src/framework/workspace/home.ts](../client/src/framework/workspace/home.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `hide` methods as you would expect change the visibility of the home on the desktop.
+The code for the home can be found in [home.ts](../client/src/framework/workspace/home.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `hide` methods as you would expect change the visibility of the home on the desktop.
 
 ## Enabling Home
 
@@ -23,7 +23,7 @@ To enable the home component the following settings in the manifest must be set.
 
 You can also add `home` to `bootstrap:autoShow` to make the home appear when the app launches.
 
-For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
+For more details on the bootstrapping process see [How To Customize The Bootstrapping Process](./how-to-customize-the-bootstrapping-process.md)
 
 ## Configuring Home
 

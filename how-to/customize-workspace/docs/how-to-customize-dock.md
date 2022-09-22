@@ -9,7 +9,7 @@ The dock component is one of the standard components of OpenFin workspace, for a
 
 ![Dock](./assets/dock.png)
 
-The code for the dock can be found in [../client/src/framework/workspace/dock.ts](../client/src/framework/workspace/dock.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `minimize` methods as you would expect change the visibility of the dock on the desktop.
+The code for the dock can be found in [dock.ts](../client/src/framework/workspace/dock.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `minimize` methods as you would expect change the visibility of the dock on the desktop.
 
 ## Enabling The Dock
 
@@ -23,7 +23,7 @@ To enable the dock component the following settings in the manifest must be set.
 
 You can also add `dock` to `bootstrap:autoShow` to make the dock appear when the app launches.
 
-For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
+For more details on the bootstrapping process see [How To Customize The Bootstrapping Process](./how-to-customize-the-bootstrapping-process.md)
 
 ## Configuring The Dock
 
@@ -56,7 +56,7 @@ The rest of the elements shown on the dock are configured in one of two sections
 
 ## App Entries
 
-The `apps` can be used to show dock entries based on `apps` configured from your app provider (see [./how-to-define-apps.md](./how-to-define-apps.md)). This provides a convenient shortcut with minimum configuration to launch apps that you have already provided from your app source.
+The `apps` can be used to show dock entries based on `apps` configured from your app provider (see [How To Define Apps](./how-to-define-apps.md)). This provides a convenient shortcut with minimum configuration to launch apps that you have already provided from your app source.
 
 The dock can display either single buttons, or a drop down menu. You can override the icon and tooltip for the buttons, but by default they will use the metadata from the app definition. Each entry can pull apps from multiple tagged items.
 
@@ -120,7 +120,7 @@ If you specify an `appId` it is looked up from your apps provider and is launche
 }
 ```
 
-To launch a custom action you instead specify its `id`, and the `customData` specific to that action. For more information on custom actions see [How to add custom actions](./how-to-add-custom-actions-for-menus-and-buttons.md).
+To launch a custom action you instead specify its `id`, and the `customData` specific to that action. For more information on custom actions see [How To Add Custom Actions for Menus And Buttons](./how-to-add-custom-actions-for-menus-and-buttons.md).
 
 ```json
 "dockProvider": {

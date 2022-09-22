@@ -5,7 +5,7 @@
 
 # How To Add Context Support To Your App
 
-If you have added a view (url based app) to an app directory/source (see [how to define apps](./how-to-define-apps.md)) you may want it to be able to share data with one or more apps within your platform.
+If you have added a view (url based app) to an app directory/source (see [How To Define Apps](./how-to-define-apps.md)) you may want it to be able to share data with one or more apps within your platform.
 
 The first thing your app should do is to highlight that it supports the FDC3 standard by opting into the api through it's settings (this can either be inline e.g. manifestType inline-view or a json file manifestType: view). E.g.:
 
@@ -30,7 +30,7 @@ A workspace platform can define a set of contextual groups (system channels). Yo
 
 ## Do I Need To Reference An Npm Module
 
-You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [https://www.npmjs.com/package/@finos/fdc3/v/1.2.0](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
+You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [FDC3 Types NPM Package](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
 
 ## How Do I Listen For Contextual Messages?
 
@@ -158,6 +158,6 @@ This is the FinOS test harness to show our compatibility:
 
 ## More Resources
 
-- Please use our OpenFin Website for more information related to FDC3 and interop: [https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin](https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin)
+- Please use our OpenFin Website for more information related to FDC3 and interop: [OpenFin FDC3 support](https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin)
 
 [<- Back to Table Of Contents](../README.md)

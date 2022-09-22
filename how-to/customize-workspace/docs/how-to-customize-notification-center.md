@@ -19,7 +19,7 @@ To enable the notification center component the following settings in the manife
 }
 ```
 
-For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
+For more details on the bootstrapping process see [How To Customize The Bootstrapping Process](./how-to-customize-the-bootstrapping-process.md)
 
 ## Configuring Notification Center
 

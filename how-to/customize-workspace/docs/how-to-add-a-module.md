@@ -79,9 +79,9 @@ If you want to implement a module you should take the following steps.
 
 First you will need an implementation of the provider type you want in the module.
 
-In the case of the console logger it would be something like [../client/src/modules/log/console/log-provider.ts](../client/src/modules/log/console/log-provider.ts). This implementation is derived from `ModuleImplementation` which provides the optional `initialize` and `closedown` methods. The `initialization` method is passed the `data` from the manifest when they are loaded. The `closedown` method is called when the app is unloading.
+In the case of the console logger it would be something like [log-provider.ts](../client/src/modules/log/console/log-provider.ts). This implementation is derived from `ModuleImplementation` which provides the optional `initialize` and `closedown` methods. The `initialization` method is passed the `data` from the manifest when they are loaded. The `closedown` method is called when the app is unloading.
 
-The second piece of code that is required is an export of the entry points from the module, in the case of our logger example we have the following, see [../client/src/modules/log/console/index.ts](../client/src/modules/log/console/index.ts).
+The second piece of code that is required is an export of the entry points from the module, in the case of our logger example we have the following, see [index.ts](../client/src/modules/log/console/index.ts).
 
 ```ts
 export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
@@ -131,5 +131,6 @@ When building a module you need to reference the TypeScript definitions for the 
 
 - [modules.ts](../client/src/framework/modules.ts)
 - [module-shapes.ts](../client/src/framework/shapes/module-shapes.ts)
+- [log-provider.ts](../client/src/modules/log/console/log-provider.ts)
 
 [<- Back to Table Of Contents](../README.md)
