@@ -801,7 +801,7 @@
 				"title": "Emoji Provider",
 				"enabled": true,
 				"autoStart": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.1.0/customize-home-templates/js/integrations/emoji.bundle.js"
 			}
 		]
 	},
