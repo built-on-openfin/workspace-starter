@@ -73,7 +73,7 @@ logger.info('The platform has started');
 
 ## Additional settings
 
-As with any entity following the module pattern it can have custom settings, the default `ConsoleLogger` has some additional settings to specify which log levels it displays. By default it shows everything but you could reduce the noise to just `error` and `debug` messages with the following configuration.
+As with any entity following the module pattern it can have custom settings, the default `ConsoleLogger` has some additional settings to specify which log levels it displays. By default it shows everything, but you could reduce the noise to just `error` and `debug` messages with the following configuration.
 
 ```json
 "loggerProvider": {
@@ -92,11 +92,11 @@ As with any entity following the module pattern it can have custom settings, the
 
 Each log provider can have its own custom settings, so you could have a console logger showing all messages, and a remote logger which just gets sent error messages.
 
-Also since the logging level is driven from the manifest settings you could make this entitlements based, providing different levels of logging per user. If a specific user if have problems, you could increase the verbosity of the logging messages for just that user.
+Also since the logging level is driven from the manifest settings you could make this entitlements based, providing different levels of logging per user. If a specific user is having problems, you could increase the verbosity of the logging messages for just that user.
 
 ## Using logging in modules
 
-We don't want to include the logging code directly in external modules as it bloats their size, instead when the a module has it's `initialize` method called it is passed the `createLogger` methods, so it can use this to perform logging from within the module.
+We don't want to include the logging code directly in external modules as it bloats their size, instead when the a module has it's `initialize` method called it is passed the `createLogger` method, so it can use this create a logger and perform logging from within the module.
 
 ## Source reference
 
