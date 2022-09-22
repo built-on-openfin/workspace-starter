@@ -62,4 +62,4 @@ As a platform is a web application please consider the same security guidelines 
 
 It is a good idea to keep an eye out for Workspace releases, the runtime updates that come with them and the updates applied to this repo to reflect those updates.
 
-<https://developer.openfin.co/versions/?product=Services#/?product=Workspace>
+[https://developer.openfin.co/versions/?product=Services#/?product=Workspace](https://developer.openfin.co/versions/?product=Services#/?product=Workspace)
