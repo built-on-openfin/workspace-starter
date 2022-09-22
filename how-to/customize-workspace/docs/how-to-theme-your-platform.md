@@ -5,7 +5,7 @@
 
 # How To Theme Your Platform
 
-All of the OpenFin Workspace support branding. This means you can provide a palette of colors and an icon that is used. The icon used by each component is specified when you register against the component (see [how to customize home](./how-to-customize-home.md), [how to customize store](./how-to-customize-store.md), [how to customize dock](./how-to-customize-dock.md), [how to customize notification center](./how-to-customize-notification-center.md) and [how to customize browser](./how-to-customize-browser.md)).
+All of the OpenFin Workspace support branding. This means you can provide a palette of colors and an icon that is used. The icon used by each component is specified when you register against the component (see [How To Customize Home](./how-to-customize-home.md), [How To Customize Store](./how-to-customize-store.md), [How To Customize Dock](./how-to-customize-dock.md), [How To Customize Notification Center](./how-to-customize-notification-center.md) and [How To Customize Browser](./how-to-customize-browser.md)).
 
 The theme is defined in the themeProvider settings:
 
@@ -100,7 +100,7 @@ Null can be used to show the palette setting in config but to opt out of overrid
 
 ### Manually
 
-You could use our [Website Theme Documentation](https://developers.openfin.co/of-docs/docs/workspace-themes-overview) and create a JSON Object representing your theme and apply it to the `themeProvider` either through a manifest or settings service. When you start your platform the theme will be picked up and applied.
+You could use our [Workspace themes](https://developers.openfin.co/of-docs/docs/workspace-themes-overview) and create a JSON Object representing your theme and apply it to the `themeProvider` either through a manifest or settings service. When you start your platform the theme will be picked up and applied.
 
 ### Theme Definition Builder
 
@@ -112,7 +112,7 @@ The Theme Definition Builder lets you pull a palette from a website or you can m
 
 ## More Resources
 
-- <https://developers.openfin.co/of-docs/docs/workspace-themes-overview>
+- [Workspace themes](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
 
 ## Source reference
 

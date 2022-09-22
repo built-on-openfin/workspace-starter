@@ -19,10 +19,10 @@ The bootstrapping process has a number of options to determine what the applicat
 
 The `home`, `store`, `dock`, and `notifications` options determine if a provider for each of those workspace components is registered. You can find more details on how to configure the providers for each of the component in their own sections.
 
-- home - [./how-to-customize-home.md](./how-to-customize-home.md)
-- store - [./how-to-customize-store.md](./how-to-customize-store.md)
-- dock - [./how-to-customize-dock.md](./how-to-customize-dock.md)
-- notifications - [./how-to-customize-notification-center.md](./how-to-customize-notification-center.md)
+- [Home](./how-to-customize-home.md)
+- [Store](./how-to-customize-store.md)
+- [Dock](./how-to-customize-dock.md)
+- [Notifications](./how-to-customize-notification-center.md)
 
 A provider can be initialized without being displayed, so to automatically show the components on starting the app you can use the `autoShow` field. For example to show `home` and `dock`.
 

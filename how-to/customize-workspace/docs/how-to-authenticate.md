@@ -15,7 +15,7 @@ It may be that you have a platform that should return the same apps to every use
 
 ## What If I Need Authentication?
 
-Customize workspace lets you plug in your own authentication logic via config and a custom JavaScript Module (see [how to add a module](./how-to-add-a-module.md)) via the authProvider setting and adding it to the modules array. This array only supports a single module. If you add more than one then a warning will be logged and the auth flow will not take place.
+Customize workspace lets you plug in your own authentication logic via config and a custom JavaScript Module (see [How To Add A Module](./how-to-add-a-module.md)) via the authProvider setting and adding it to the modules array. This array only supports a single module. If you add more than one then a warning will be logged and the auth flow will not take place.
 
 ### Example Auth Module
 
@@ -42,9 +42,9 @@ We provide a basic example authentication module to give you an idea of how it w
 }
 ```
 
-This is an example of a module (see [how to add a module](./how-to-add-a-module.md)) that has been created and referenced in the authProvider modules array. Each module can be passed data in a format that the specific module understands.
+This is an example of a module (see [How To Add A Module](./how-to-add-a-module.md)) that has been created and referenced in the authProvider modules array. Each module can be passed data in a format that the specific module understands.
 
-The source for this example module can be found here: [client/src/modules/auth/example/auth-provider.ts](../client/src/modules/auth/example/auth-provider.ts). It is exported from [client/src/modules/auth/example/index.ts](../client/src/modules/auth/example/index.ts) and it is built on it's own via a [webpack](../client/webpack.config.js) entry.
+The source for this example module can be found here: [auth-provider.ts](../client/src/modules/auth/example/auth-provider.ts). It is exported from [index.ts](../client/src/modules/auth/example/index.ts) and it is built on it's own via a [webpack](../client/webpack.config.js) entry.
 
 This example module is there for you to test different auth flows (e.g. autoLogin) and to give an example of how a module could be built and plugged in. The settings are:
 
@@ -63,9 +63,9 @@ This example module is there for you to test different auth flows (e.g. autoLogi
 
 To implement your own auth module you just need to follow the following interface defined in [auth-shapes](../client/src/framework/shapes/auth-shapes.ts):
 
-The `initialize` and `closedown` methods come from a `ModuleImplementation` base interface but have been added to the example above to improve clarity. At this stage we do not pass helpers to the initialize function but that may be provided in the future based on use cases. To see what is included in a definition please read more about [how to add a module](./how-to-add-a-module.md). But one key thing to know is that the module definition includes a data property that can be used to provide your implementation with custom data as seen by the example module.
+The `initialize` and `closedown` methods come from a `ModuleImplementation` base interface but have been added to the example above to improve clarity. At this stage we do not pass helpers to the initialize function but that may be provided in the future based on use cases. To see what is included in a definition please read more about [How To Add A Module](./how-to-add-a-module.md). But one key thing to know is that the module definition includes a data property that can be used to provide your implementation with custom data as seen by the example module.
 
-The events are important as they are used by the platform to determine the flow of events (are they logged in, has the user's session expired etc). The [how to add a module](./how-to-add-a-module.md) will also cover how to generate the types for your module to make it easier to build your own without a dependency on the files within the src folder.
+The events are important as they are used by the platform to determine the flow of events (are they logged in, has the user's session expired etc). The [How To Add A Module](./how-to-add-a-module.md) will also cover how to generate the types for your module to make it easier to build your own without a dependency on the files within the src folder.
 
 To export your auth module it is important to export an entryPoints object with an auth property.
 
@@ -79,7 +79,7 @@ entryPoints let you have more than one moduleType implemented in a single JavaSc
 
 ### Customizing Browser Based On Authenticated Status
 
-When customizing browser (see [how to customize browser](./how-to-customize-browser.md)) with your own buttons and menu options you can specify a condition (see [how to add conditions](./how-to-add-conditions.md)) on whether or not that option should be shown. We provide a default condition out of the box:
+When customizing browser (see [How To Customize Browser](./how-to-customize-browser.md)) with your own buttons and menu options you can specify a condition (see [How To Add Conditions](./how-to-add-conditions.md)) on whether or not that option should be shown. We provide a default condition out of the box:
 
 - authenticated
 
@@ -103,7 +103,7 @@ Here is a snippet of a browser menu entry definition that makes use of this cond
 }
 ```
 
-This would present the Log Out and Quit App menu option underneath the Quit menu option. Please see [how to customize browser](./how-to-customize-browser.md) if you want to know more.
+This would present the Log Out and Quit App menu option underneath the Quit menu option. Please see [How To Customize Browser](./how-to-customize-browser.md) if you want to know more.
 
 ## Source Reference
 
@@ -113,7 +113,7 @@ This would present the Log Out and Quit App menu option underneath the Quit menu
 
 We also have a few other examples if you would like to know more about authentication and OpenFin in general:
 
-- [how to integrate with sso](../../integrate-with-sso/README.md)
-- [how to integrate server authentication](../../integrate-server-authentication/README.md)
+- [How To Integrate With SSO](../../integrate-with-sso/README.md)
+- [How To Integrate Server Authentication](../../integrate-server-authentication/README.md)
 
 [<- Back to Table Of Contents](../README.md)

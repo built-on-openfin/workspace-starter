@@ -5,13 +5,13 @@
 
 # How To See Intents In Action
 
-If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [setup](./how-to-setup-customize-workspace.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Picker UI:
+If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [How To Setup Customize Workspace](./how-to-setup-customize-workspace.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Picker UI:
 
 ![Default Intent Picker](./assets/intent-picker.png)
 
 # How To Configure Intents For Your Workspace Platform
 
-You can register applications (see [how to define apps](./how-to-define-apps.md)) that support specific intents. The platform will then check to see if any applications support a specific intent raised by applications (see [how to add intent support to your app](./how-to-add-intent-support-to-your-app.md)). When there is more than one application that supports an intent then customize workspace shows a UI so the user can make a selection.
+You can register applications (see [How To Define Apps](./how-to-define-apps.md)) that support specific intents. The platform will then check to see if any applications support a specific intent raised by applications (see [How To Add Intent Support To Your App](./how-to-add-intent-support-to-your-app.md)). When there is more than one application that supports an intent then customize workspace shows a UI so the user can make a selection.
 
 You can override the window that is presented to the user and here is how:
 

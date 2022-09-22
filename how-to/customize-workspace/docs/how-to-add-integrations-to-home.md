@@ -19,7 +19,7 @@ To add an integration you first need to create a module and configure the platfo
 }
 ```
 
-The module needs to implement the [`IntegrationModule`](../client/src/framework/shapes/integrations-shapes.ts#106) interface, and provide `entryPoints`.
+The module needs to implement the [IntegrationModule](../client/src/framework/shapes/integrations-shapes.ts#106) interface, and provide `entryPoints`.
 
 ```ts
 export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {

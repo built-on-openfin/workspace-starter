@@ -29,7 +29,7 @@ The default samples request the following permissions:
 
 These are required to demonstrate our native application integration but you should consider every permission your application will request when you have your own manifest. Do you need it? You should also review the permission you request at intervals to ensure that the requested permissions are still needed.
 
-Please review our api security documentation to see the available permissions and how they can be secured: [https://developers.openfin.co/of-docs/docs/api-security](https://developers.openfin.co/of-docs/docs/api-security)
+Please review our api security documentation to see the available permissions and how they can be secured: [API Security](https://developers.openfin.co/of-docs/docs/api-security)
 
 ## Security Realms
 
@@ -44,11 +44,11 @@ There are arguments you can specify that will isolate your application while sti
  },
 ```
 
-Please see our security page for more information about OpenFin Security: [https://developers.openfin.co/of-docs/docs/openfin-security](https://developers.openfin.co/of-docs/docs/openfin-security)
+Please see our security page for more information about OpenFin Security: [Security Overview](https://developers.openfin.co/of-docs/docs/openfin-security)
 
 ## Manifest Host
 
-Customize Workspace can fetch it's configuration solely from a manifest or from a manifest and a settings endpoint (see [how to apply entitlements](./how-to-apply-entitlements.md) defined in a manifest.
+Customize Workspace can fetch it's configuration solely from a manifest or from a manifest and a settings endpoint (see [How To Apply Entitlements](./how-to-apply-entitlements.md) defined in a manifest.
 
 You may have your code on one server and your manifest coming from another. Customize Workspace code looks for a [manifest-hosts.json](../public/manifest-hosts.json) file to see if the host from which the manifest comes is in the list of trusted hosts. It will only continue to run if it finds a match.
 
@@ -62,6 +62,6 @@ As a platform is a web application please consider the same security guidelines 
 
 It is a good idea to keep an eye out for Workspace releases, the runtime updates that come with them and the updates applied to this repo to reflect those updates.
 
-[https://developer.openfin.co/versions/?product=Services#/?product=Workspace](https://developer.openfin.co/versions/?product=Services#/?product=Workspace)
+[Workspace Versions](https://developer.openfin.co/versions/?product=Services#/?product=Workspace)
 
 [<- Back to Table Of Contents](../README.md)

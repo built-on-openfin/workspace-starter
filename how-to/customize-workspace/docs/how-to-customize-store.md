@@ -203,7 +203,7 @@ The approach that we have taken is that you define your landing page properties 
 
 ## Where Does The Search Results In Store Come From?
 
-It comes from the list of all the [applications](./how-to-define-apps.md) that the user is [entitled](./how-to-apply-entitlements.md) to.
+It comes from the list of all the [apps](./how-to-define-apps.md) that the user is [entitled](./how-to-apply-entitlements.md) to.
 
 ## Anything Else?
 
