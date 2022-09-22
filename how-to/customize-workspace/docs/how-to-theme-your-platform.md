@@ -112,7 +112,7 @@ The Theme Definition Builder lets you pull a palette from a website or you can m
 
 ## More Resources
 
-- <https://developers.openfin.co/of-docs/docs/workspace-themes-overview>
+- [Workspace themes](https://developers.openfin.co/of-docs/docs/workspace-themes-overview)
 
 ## Source reference
 
