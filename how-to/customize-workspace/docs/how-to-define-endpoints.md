@@ -88,7 +88,7 @@ Endpoints can be defined as:
 - page source - see [how to customize browser page management](./how-to-customize-browser-page-management.md)
 - page bounds source - see [how to customize browser page management](./how-to-customize-browser-page-management.md)
 - share source - see [how to customize workspace and browser sharing](./how-to-customize-workspace-browser-page-sharing.md)
-- Integration preferences source - see [how to customize integrations](./how-to-add-integrations-to-home.md)
+- integration preferences source - see [how to customize integrations](./how-to-add-integrations-to-home.md)
 
 ## Source reference
 

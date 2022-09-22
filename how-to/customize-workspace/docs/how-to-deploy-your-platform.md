@@ -2,3 +2,9 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+# How to deploy your platform
+
+The OpenFin website has a section dedicated to deployment:
+
+[https://developers.openfin.co/of-docs/docs/deploying-applications](https://developers.openfin.co/of-docs/docs/deploying-applications)

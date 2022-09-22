@@ -29,7 +29,7 @@ The default samples request the following permissions:
 
 These are required to demonstrate our native application integration but you should consider every permission your application will request when you have your own manifest. Do you need it? You should also review the permission you request at intervals to ensure that the requested permissions are still needed.
 
-Please review our api security documentation to see the available permissions and how they can be secured: <https://developers.openfin.co/of-docs/docs/api-security>
+Please review our api security documentation to see the available permissions and how they can be secured: [https://developers.openfin.co/of-docs/docs/api-security](https://developers.openfin.co/of-docs/docs/api-security)
 
 ## Security Realms
 
@@ -44,7 +44,7 @@ There are arguments you can specify that will isolate your application while sti
  },
 ```
 
-Please see our security page for more information about OpenFin Security: <https://developers.openfin.co/of-docs/docs/openfin-security>
+Please see our security page for more information about OpenFin Security: [https://developers.openfin.co/of-docs/docs/openfin-security](https://developers.openfin.co/of-docs/docs/openfin-security)
 
 ## Manifest Host
 
@@ -56,7 +56,7 @@ The json file is currently configured to support localhost manifests and OpenFin
 
 ## General Web Security
 
-As a platform is a web application please consider the same security guidelines that you would for a web application (e.g. trusting the javascript modules you import, using [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) etc).
+As a platform is a web application please consider the same security guidelines that you would for a web application (e.g. trusting the JavaScript modules you import, using [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) etc).
 
 ## Updates to Container, Workspace and Code
 
