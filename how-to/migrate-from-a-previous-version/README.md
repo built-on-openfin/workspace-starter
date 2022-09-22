@@ -36,8 +36,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^9.0.0",
-                    "@openfin/workspace-platform": "^9.0.0"
+                    "@openfin/workspace": "^9.1.0",
+                    "@openfin/workspace-platform": "^9.1.0"
                 }
 ```
 

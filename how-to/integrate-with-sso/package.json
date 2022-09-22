@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-sso",
-	"version": "9.0.0",
+	"version": "9.1.0",
 	"description": "OpenFin Workspace -- Integrate with SSO",
 	"main": "index.js",
 	"scripts": {
@@ -20,8 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "9.0.14",
-		"@openfin/workspace-platform": "9.0.14",
+		"@openfin/workspace": "9.1.17",
+		"@openfin/workspace-platform": "9.1.17",
 		"auth0-js": "^9.19.0"
 	},
 	"devDependencies": {
