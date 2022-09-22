@@ -108,3 +108,10 @@ This would present the Log Out and Quit App menu option underneath the Quit menu
 ## Source reference
 
 - [auth-shapes.ts](../client/src/framework/shapes/auth-shapes.ts)
+
+## Other Examples
+
+We also have a few other examples if you would like to know more about authentication and OpenFin in general:
+
+- [how to integrate with sso](../../integrate-with-sso/README.md)
+- [how to integrate server authentication](../../integrate-server-authentication/README.md)
