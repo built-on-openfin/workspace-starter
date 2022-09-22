@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to secure your platform
+# How To Secure Your Platform
 
 This provides some general guidance around things to consider when building a platform. Security considerations that you would consider for a Web Application still apply here and you need to ensure that you follow your organization's security guidelines.
 
@@ -58,7 +58,7 @@ The json file is currently configured to support localhost manifests and OpenFin
 
 As a platform is a web application please consider the same security guidelines that you would for a web application (e.g. trusting the JavaScript modules you import, using [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) etc).
 
-## Updates to Container, Workspace and Code
+## Updates To Container, Workspace And Code
 
 It is a good idea to keep an eye out for Workspace releases, the runtime updates that come with them and the updates applied to this repo to reflect those updates.
 

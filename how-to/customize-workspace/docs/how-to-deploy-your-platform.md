@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to deploy your platform
+# How To Deploy Your Platform
 
 The OpenFin website has a section dedicated to deployment:
 

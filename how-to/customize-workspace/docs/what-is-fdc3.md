@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is FDC3?
+# What Is Fdc3?
 
 [FDC3](https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin) is a standard that OpenFin contributed to [FinOS](https://www.finos.org/).
 

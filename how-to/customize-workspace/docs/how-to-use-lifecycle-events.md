@@ -60,14 +60,14 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 };
 ```
 
-## Platform lifecycle events
+## Platform Lifecycle Events
 
 The lifecycle events that are available to connect to are:
 
 - `after-bootstrap` - This lifecycle event is fired when all the other components have been bootstrapped, in your manifest you could disable the autoShow for all workspace components and launch a specific view for your platform.
 - `before-quit` - The event is called before all the modules and components are torn down during the quit process, this allows your modules to perform any persistence or cleanup operations of their own.
 
-## Source reference
+## Source Reference
 
 - [lifecycle.ts](../client/src/framework/lifecycle.ts)
 - [lifecycle-shapes.ts](../client/src/framework/shapes/lifecycle-shapes.ts)

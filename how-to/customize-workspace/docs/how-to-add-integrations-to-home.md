@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to add integrations to home ?
+# How To Add Integrations To Home ?
 
 The [Home](./how-to-customize-home.md) components can be customized with additional sources that provide commands or search results when queried.
 
@@ -79,7 +79,7 @@ public async getSearchResults(query: string, filters: CLIFilter[], lastResponse:
 }
 ```
 
-### Search result
+### Search Results
 
 We can also have more dynamic results which interrogate other sources for their information.
 The example below demonstrates a search that looks up data from a rest endpoint.
@@ -150,7 +150,7 @@ public async itemSelection(result: HomeDispatchedSearchResult, lastResponse: Hom
 
 As you can see with very little code we can provide home entries with actions. For more in depth examples you can take a look at the `customize-home-templates` example.
 
-## Help query
+## Help Query
 
 You can provide help for your commands by implementing the `getHelpSearchEntries` method.
 
@@ -179,11 +179,11 @@ public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 }
 ```
 
-## Custom templates
+## Custom Templates
 
 For further information on customizing the home template see [Home To Customize Home Templates](./how-to-customize-home-templates.md).
 
-## Source reference
+## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)
 - [integrations.ts](../client/src/framework/integrations.ts)

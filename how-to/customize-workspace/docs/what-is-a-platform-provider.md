@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is a Platform Provider?
+# What Is A Platform Provider?
 
 A Platform Provider is one of the personas you and your team may fall under (you can be more than one).
 

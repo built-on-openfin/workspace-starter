@@ -36,7 +36,7 @@ The customization process for all 3 types of menu follows the same pattern. The 
 }
 ```
 
-## Configuring the menu entries
+## Configuring The Menu Entries
 
 There is a standard set of menu entries for each of the menu types. You can add/remove or change all the menu entries.
 
@@ -115,7 +115,7 @@ The following example create a menu entry to display the Notification Center wit
 }
 ```
 
-## Source reference
+## Source Reference
 
 - [menu.ts](../client/src/framework/menu.ts)
 - [actions.ts](../client/src/framework/actions.ts)

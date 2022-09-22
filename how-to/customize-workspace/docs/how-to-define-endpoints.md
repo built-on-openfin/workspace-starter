@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is an Endpoint?
+# What Is An Endpoint?
 
 An endpoint is a term we use where your code/business logic wants to do something without needing to know how that thing is done.
 
@@ -90,7 +90,7 @@ Endpoints can be defined as:
 - share source - see [how to customize workspace and browser sharing](./how-to-customize-workspace-browser-page-sharing.md)
 - integration preferences source - see [how to customize integrations](./how-to-add-integrations-to-home.md)
 
-## Source reference
+## Source Reference
 
 - [endpoint.ts](../client/src/framework/endpoint.ts)
 - [endpoint-shapes.ts](../client/src/framework/shapes/endpoint-shapes.ts)

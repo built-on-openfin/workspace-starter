@@ -51,7 +51,7 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 };
 ```
 
-## Using conditions
+## Using Conditions
 
 At other points in the platform we can check conditions, for example deciding to show a button or menu entry. You can check that one or many conditions are true using the following code. See [menu.ts](../client/src/framework/menu.ts#97) and [buttons.ts](../client/src/framework/buttons.ts#34). Browser buttons and menus can be configured to use the conditions, see [How to Customize Browser Buttons](./how-to-customize-browser-buttons.md) and [How to Customize Browser Menus](./how-to-customize-browser-menus.md)
 
@@ -59,14 +59,14 @@ At other points in the platform we can check conditions, for example deciding to
 const hasCondition = await checkConditions(['has-some-value']);
 ```
 
-## In-built conditions
+## In-Built Conditions
 
 As part of the platform there are already some built-in conditions.
 
 - `authenticated` - Which determines that the current session is authenticated.
 - `sharing` - Is the sharing flag in the platform enabled.
 
-## Source reference
+## Source Reference
 
 - [conditions.ts](../client/src/framework/conditions.ts)
 - [conditions-shapes.ts](../client/src/framework/shapes/conditions-shapes.ts)

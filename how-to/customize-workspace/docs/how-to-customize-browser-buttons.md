@@ -43,7 +43,7 @@ The `themes` icons act as an override to the default `iconUrl` in the button def
 
 For more information on conditions see [How to Add Conditions](./how-to-add-conditions.md).
 
-## Button definition
+## Button Definition
 
 The button definitions can specify one of the built-in button types or a custom button.
 
@@ -98,7 +98,7 @@ When the custom button is clicked the `id` is used to look up one of the platfor
 }
 ```
 
-## Source reference
+## Source Reference
 
 - [buttons.ts](../client/src/framework/buttons.ts)
 - [actions.ts](../client/src/framework/actions.ts)

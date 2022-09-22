@@ -28,15 +28,15 @@ A workspace platform can define a set of contextual groups (system channels). Yo
 },
 ```
 
-## Do I need to reference an NPM module
+## Do I Need To Reference An Npm Module
 
 You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [https://www.npmjs.com/package/@finos/fdc3/v/1.2.0](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
 
-## How do I listen for Contextual Messages?
+## How Do I Listen For Contextual Messages?
 
 In your app would check for the fdc3 api and then register a contextual listener:
 
-## How do I Listen for all contextual messages on a System Channel?
+## How Do I Listen For All Contextual Messages On A System Channel?
 
 ```javascript
 // --------------------------------
@@ -50,7 +50,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I Listen for specific contextual messages on a System Channel?
+## How Do I Listen For Specific Contextual Messages On A System Channel?
 
 ```javascript
 // --------------------------------
@@ -64,7 +64,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I send out Contextual Messages on a System Channel?
+## How Do I Send Out Contextual Messages On A System Channel?
 
 In your app your would check for the fdc3 api and then use the broadcast function:
 
@@ -92,7 +92,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I listen for Contextual Messages on App specific channels?
+## How Do I Listen For Contextual Messages On App Specific Channels?
 
 Why use App Channels? Lets say you want to share specific contextual objects between views/apps you control or you want to ensure that your applications are listening regardless of user selection.
 
@@ -113,7 +113,7 @@ if (window.fdc3 !== undefined) {
 
 As you can see it is very similar with the one difference being you create a specific channel rather than using one you are bound to.
 
-## How do I send out Contextual Messages to a specific App channel?
+## How Do I Send Out Contextual Messages To A Specific App Channel?
 
 ```javascript
 // --------------------------------

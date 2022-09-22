@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is an Integration Provider?
+# What Is An Integration Provider?
 
 An Integration Provider is one of the personas you and your team may fall under (you can be more than one).
 

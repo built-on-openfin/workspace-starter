@@ -3,11 +3,11 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is Sharing?
+# What Is Sharing?
 
 Sharing is the ability for one user to generate a link that they can share with another user. On launching of the link then the workspace or page that was shared would be applied to the second user's desktop.
 
-# How can you enable/disable sharing?
+# How Can You Enable/Disable Sharing?
 
 Sharing can be enabled/disabled through the platform provider configuration:
 
@@ -19,9 +19,9 @@ Sharing can be enabled/disabled through the platform provider configuration:
 },
 ```
 
-# Where is this setting used?
+# Where Is This Setting Used?
 
-## As a condition for a sharing button
+## As A Condition For A Sharing Button
 
 It is used when you define a browser button (see [how to customize browser buttons](./how-to-customize-browser-buttons.md)) to allow your users to share and use conditions:
 
@@ -60,11 +60,11 @@ This would give you the following icon and menu in the browser:
 
 ![Sharing Button and Menu](./assets/browser-share-menu.png)
 
-## If you have opted into Home Workspace or Page Management
+## If You Have Opted Into Home Workspace Or Page Management
 
 If you have enabled workspace management (see [how to customize workspace management](./how-to-customize-workspace-management.md)) or page management (see [how to customize browser page management](./how-to-customize-browser-page-management.md)) through home then the template will check to see if it should provide the option of sharing the workspace/page.
 
-# Where are shared workspaces/pages saved?
+# Where Are Shared Workspaces/Pages Saved?
 
 By default in our two examples we save the json data to an OpenFin cloud service. This is because you need a server in order to be able to demonstrate this capability.
 
@@ -108,9 +108,9 @@ You can see we are using the default built in fetch support and passing fetch op
 
 Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [how to add a module](./how-to-add-a-module.md) that implements your own logic.
 
-## What would the share-save endpoint need to support?
+## What Would The Share-Save Endpoint Need To Support?
 
-### Request to your endpoint for sharing a page
+### Request To Your Endpoint For Sharing A Page
 
 Layout would be an object representing the page layout. It has been omitted to keep the snippet small:
 
@@ -135,7 +135,7 @@ Layout would be an object representing the page layout. It has been omitted to k
 }
 ```
 
-### Request to your endpoint for sharing a workspace
+### Request To Your Endpoint For Sharing A Workspace
 
 The snapshot is a workspace platform snapshot. MonitorInfo and Window details have been omitted for brevity.
 
@@ -166,7 +166,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
 }
 ```
 
-### Response from your endpoint
+### Response From Your Endpoint
 
 Your server should return a response in the following format:
 
@@ -182,7 +182,7 @@ or
 
 **Customize Workspace** will use the id if provided or will fall back to trimming the id from the returned **url**. The id will be passed to the endpoint that you have defined for **share-get**.
 
-### What would the user see after raising a share request?
+### What Would The User See After Raising A Share Request?
 
 When a share is successful or fails we use notifications to let the user know.
 
@@ -194,9 +194,9 @@ If a share is unsuccessful the user will see a notification:
 
 ![Failed Share](./assets/share-request-failed.png)
 
-## What would the share-get endpoint need to support?
+## What Would The Share-Get Endpoint Need To Support?
 
-### Request to your endpoint for getting share data
+### Request To Your Endpoint For Getting Share Data
 
 You can decide if this is going to be a get request or a post. The example we have configured as share-get swaps out [id] for the id passed via the fins link or you could create your own custom endpoint to take the id and apply it in any way you want.
 
@@ -204,7 +204,7 @@ You can decide if this is going to be a get request or a post. The example we ha
 https://workspace.openfin.co/api/share/UniqueIDRepresentingSavedShare
 ```
 
-### Response expected from customize workspace for a shared page
+### Response Expected From Customize Workspace For A Shared Page
 
 Layout would be an object representing the page layout. It has been omitted to keep the snippet small:
 
@@ -233,7 +233,7 @@ Layout would be an object representing the page layout. It has been omitted to k
 
 Here you can see that the response is similar to the request to share. The id you provided and a createdAt entry is returned as well.
 
-### Response expected from customize workspace for a shared workspace
+### Response Expected From Customize Workspace For A Shared Workspace
 
 The snapshot is a workspace platform snapshot. MonitorInfo and Window details have been omitted for brevity.
 
@@ -269,7 +269,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
 
 Here you can see that the response is similar to the request to share. The id you provided and a createdAt entry is returned as well.
 
-### What would the user see after applying a share request via the fins link?
+### What Would The User See After Applying A Share Request Via The Fins Link?
 
 If the share was applied successfully they would see the page/workspace launch and receive a notification:
 
@@ -279,6 +279,6 @@ If there is a problem fetching or applying the share then the user will be notif
 
 ![Share Apply Failure](./assets/share-applied-failed.png)
 
-## Source reference
+## Source Reference
 
 - [share.ts](../client/src/framework/share.ts)

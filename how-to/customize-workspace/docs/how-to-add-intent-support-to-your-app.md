@@ -16,11 +16,11 @@ The first thing your app should do is to highlight that it supports the FDC3 sta
 },
 ```
 
-## Do I need to reference an NPM module
+## Do I Need To Reference An Npm Module
 
 You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [https://www.npmjs.com/package/@finos/fdc3/v/1.2.0](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
 
-## How do I raise an Intent?
+## How Do I Raise An Intent?
 
 In your app would check for the fdc3 api and then trigger a workflow by raising the intent as follows:
 
@@ -55,7 +55,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I raise an Intent by Context?
+## How Do I Raise An Intent By Context?
 
 If you have a contextual object and you just want to raise the dialog to empower the user to make a decision on what supported workflow they want to action then you can do the following:
 
@@ -75,7 +75,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I listen for intents triggered by raiseIntentForContext?
+## How Do I Listen For Intents Triggered By raiseIntentForcontext?
 
 The code is the same as listening for intents triggered by raiseIntent as it ends up resolving to a selected intent.
 
@@ -91,7 +91,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How do I flag what Intents my app supports?
+## How Do I Flag What Intents My App Supports?
 
 This would be done in your app definition. See [how to define an app](./how-to-define-apps.md). An app definition supports an array of intents and our App Definition Builder helps you select from the official list of intents when defining your app.
 

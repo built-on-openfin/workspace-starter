@@ -21,7 +21,7 @@ For a detailed walk-through of process manager see [Process Manger](https://deve
 
 ![Process Manager](./assets/process-manager.png)
 
-## Crash Reporting and Runtime Logging
+## Crash Reporting And Runtime Logging
 
 The manifest also has additional settings which can enable crash reporting and logging. These settings can help when debugging issues with the runtime. See [Debugging](https://developers.openfin.co/of-docs/docs/debugging) for more information.
 

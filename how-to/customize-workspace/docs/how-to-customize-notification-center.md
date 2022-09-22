@@ -37,6 +37,6 @@ As with the other workspace components you can set the `id`, `title` and `icon` 
 
 The values will be passed in to the `register` method of the notifications.
 
-## Source reference
+## Source Reference
 
 - [notifications.ts](../client/src/framework/workspace/notifications.ts)

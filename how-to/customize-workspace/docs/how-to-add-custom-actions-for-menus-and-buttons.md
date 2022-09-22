@@ -53,7 +53,7 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 };
 ```
 
-## Using actions
+## Using Actions
 
 We can trigger actions from other parts of the platform by configuring the interactions to trigger the specific action ids:
 
@@ -62,7 +62,7 @@ We can trigger actions from other parts of the platform by configuring the inter
 - View Menu see [manifest.fin.json](../public/manifest.fin.json#249)
 - Buttons see [manifest.fin.json](../public/manifest.fin.json#281)
 
-## Source reference
+## Source Reference
 
 - [actions.ts](../client/src/framework/actions.ts)
 - [actions-shapes.ts](../client/src/framework/shapes/actions-shapes.ts)

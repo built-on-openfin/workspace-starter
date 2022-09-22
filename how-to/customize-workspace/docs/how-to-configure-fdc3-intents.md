@@ -3,13 +3,13 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to see Intents in action
+# How To See Intents In Action
 
 If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [setup](./how-to-setup-customize-workspace.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Picker UI:
 
 ![Default Intent Picker](./assets/intent-picker.png)
 
-# How to configure Intents for your Workspace Platform
+# How To Configure Intents For Your Workspace Platform
 
 You can register applications (see [how to define apps](./how-to-define-apps.md)) that support specific intents. The platform will then check to see if any applications support a specific intent raised by applications (see [how to add intent support to your app](./how-to-add-intent-support-to-your-app.md)). When there is more than one application that supports an intent then customize workspace shows a UI so the user can make a selection.
 
@@ -33,7 +33,7 @@ We have a platform provider defined in the settings and it contains some informa
 
 The url will be a window that you can design.
 
-### How will my custom window receive data?
+### How Will My Custom Window Receive Data?
 
 The window will be passed a list of applications and an intent or a list of intents (if raise intent by context is triggered).
 
@@ -49,7 +49,7 @@ if (data.customData !== undefined) {
 
 Your window can then use this information to build a list for your user to engage with.
 
-### How can I tell the platform that a user has selected an application or cancelled the selection?
+### How Can I Tell The Platform That A User Has Selected An Application Or Cancelled The Selection?
 
 Your window needs to expose a function that can be called by the platform:
 
@@ -65,7 +65,7 @@ window['getIntentSelection'] = async () => {
 };
 ```
 
-## Source reference
+## Source Reference
 
 - [picker.html](../../common/public/windows/intents/picker.html)
 - [picker.js](../../common/public/windows/intents/picker.js)
