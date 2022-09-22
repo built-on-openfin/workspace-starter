@@ -138,6 +138,10 @@ enablePageIntegration?: boolean
 
 ![Home Page Management](./assets/home-page-management.png)
 
+### I see a sharing button, how is that configured?
+
+Please see [how to customize workspace and browser page sharing](./how-to-customize-workspace-browser-page-sharing.md).
+
 ## Source reference
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
