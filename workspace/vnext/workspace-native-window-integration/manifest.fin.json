@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "26.102.71.5"
+		"version": "26.102.71.7"
 	},
 	"startup_app": {
 		"name": "workspace-native-window-integration"
@@ -43,7 +43,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-native-window-integration/favicon.ico",
 		"name": "Workspace Native Window Integration - v9.0",
 		"target": ["desktop", "start-menu"]

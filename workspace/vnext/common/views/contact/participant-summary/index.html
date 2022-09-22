@@ -6,10 +6,19 @@
 		<title>Participant Summary</title>
 		<link rel="stylesheet" href="../../../style/app.css" />
 		<script defer="defer" src="./index.js"></script>
+		<script type="module" src="../../../lib/wc-fin/wc-fin.esm.js"></script>
 	</head>
 
 	<body class="theme-light small col fill gap20">
-		<h3>Participant Summary</h3>
+		<div class="row spread">
+			<h3>Participant Summary</h3>
+			<fin-context-group-picker
+				id="context-group-picker"
+				show-list-on-click="false"
+				class="border"
+				style="min-height: 26px"
+			></fin-context-group-picker>
+		</div>
 
 		<main class="form col gap10 scroll-vertical">
 			<h4 id="username" class="primary">John McHugh</h4>

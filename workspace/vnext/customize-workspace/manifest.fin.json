@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "26.102.71.5"
+		"version": "26.102.71.7"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"
@@ -18,7 +18,6 @@
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
-				"enableNativeWindowIntegrationProvider": true,
 				"terminateExternalProcess": true,
 				"downloadAsset": true,
 				"openUrlWithBrowser": {
@@ -49,7 +48,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
 		"name": "Customize Workspace - v9.0",
 		"target": ["desktop", "start-menu"]
@@ -79,6 +78,7 @@
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace",
+			"sharing": true,
 			"intentPicker": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/intents/picker.html",
 				"height": 400,
@@ -102,7 +102,13 @@
 			]
 		},
 		"endpointProvider": {
-			"modules": [],
+			"modules": [
+				{
+					"enabled": true,
+					"id": "local-storage",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
+				}
+			],
 			"endpoints": [
 				{
 					"id": "apps-get",
@@ -135,6 +141,24 @@
 						"method": "POST",
 						"url": "https://workspace.openfin.co/api/share"
 					}
+				},
+				{
+					"id": "integration-preferences-get",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "integration-preferences"
+					}
+				},
+				{
+					"id": "integration-preferences-set",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "integration-preferences"
+					}
 				}
 			]
 		},
@@ -145,6 +169,104 @@
 				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
 			},
+			"globalMenu": [
+				{
+					"include": true,
+					"label": "Toggle Notification Center",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "notification-toggle"
+						}
+					},
+					"position": {
+						"type": "OpenStorefront",
+						"operation": "after"
+					}
+				},
+				{
+					"include": true,
+					"label": "Open Home",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "home-show"
+						}
+					},
+					"position": {
+						"type": "OpenStorefront",
+						"operation": "after"
+					}
+				},
+				{
+					"include": true,
+					"label": "Quit App",
+					"position": {
+						"type": "Quit",
+						"operation": "replaceLabel"
+					}
+				},
+				{
+					"include": true,
+					"label": "Log Out and Quit App",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "logout-and-quit"
+						}
+					},
+					"position": {
+						"type": "Quit",
+						"operation": "after"
+					},
+					"conditions": ["authenticated"]
+				}
+			],
+			"pageMenu": [
+				{
+					"include": true,
+					"label": "Move Page to new Window",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "move-page-to-new-window"
+						}
+					},
+					"position": {
+						"operation": "start"
+					},
+					"separator": "after"
+				}
+			],
+			"viewMenu": [
+				{
+					"include": true,
+					"label": "Move View(s) to new Window",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "move-view-to-new-window"
+						}
+					},
+					"position": {
+						"operation": "start"
+					},
+					"separator": "after"
+				},
+				{
+					"include": true,
+					"label": "Create App Definition",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "raise-create-app-definition-intent"
+						}
+					},
+					"position": {
+						"operation": "start"
+					}
+				}
+			],
 			"toolbarButtons": [
 				{
 					"include": false,
@@ -282,7 +404,8 @@
 							"id": "share",
 							"customData": {}
 						}
-					}
+					},
+					"conditions": ["sharing"]
 				},
 				{
 					"include": true,
@@ -552,13 +675,13 @@
 			"isManagementEnabled": false,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
-			"integrations": [
+			"modules": [
 				{
 					"id": "salesforce",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"moduleUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
@@ -579,18 +702,42 @@
 					"description": "Search for emojis by name",
 					"enabled": false,
 					"autoStart": false,
-					"moduleUrl": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js",
-					"data": {}
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				}
 			]
 		},
 		"initOptionsProvider": {
 			"modules": [
 				{
+					"enabled": true,
 					"id": "interop",
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/init-options/interop.bundle.js",
-					"data": {},
-					"supportedActions": ["raise-intent", "share-context"]
+					"data": {
+						"supportedActions": ["raise-intent", "share-context"]
+					}
+				}
+			]
+		},
+		"loggerProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "console",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/log/console.bundle.js"
+				}
+			]
+		},
+		"actionsProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "opacity",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/actions/opacity.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "app-definition",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/actions/app-definition.bundle.js"
 				}
 			]
 		}

@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
-		"version": "26.102.71.5"
+		"version": "26.102.71.7"
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
@@ -26,7 +26,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
 		"name": "Integrate With Salesforce - v9.0",
 		"target": ["desktop", "start-menu"]

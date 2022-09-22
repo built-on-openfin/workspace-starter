@@ -123,6 +123,32 @@
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "participant-summary-window",
+		"name": "participant-summary-window",
+		"title": "Participant Summary Window",
+		"description": "View summary of the participant",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-summary.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["window", "interop", "fdc3", "contact"]
+	},
+	{
 		"appId": "client-overview",
 		"name": "client-overview",
 		"title": "Client Overview",
@@ -1266,5 +1292,31 @@
 		"intents": [],
 		"images": [],
 		"tags": ["page", "snapshot", "tool"]
+	},
+	{
+		"appId": "irs-rfq",
+		"name": "irs-rfq",
+		"title": "IRS: Request For Quote",
+		"description": "Request for quote for Interest Rate Swaps.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/irs-rfq/irs-rfq.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/irs-rfq.png"
+			},
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/irs-rfq-notification1.png"
+			}
+		],
+		"tags": ["view", "irs"]
 	}
 ]
