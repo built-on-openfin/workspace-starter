@@ -18,7 +18,6 @@
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
-				"enableNativeWindowIntegrationProvider": true,
 				"terminateExternalProcess": true,
 				"downloadAsset": true,
 				"openUrlWithBrowser": {
