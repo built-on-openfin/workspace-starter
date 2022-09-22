@@ -9,7 +9,7 @@ The browser is the component of OF Workspace that displays your views, see [Brow
 
 ![Browser](./assets/browser-window.png)
 
-## Customizing the browser
+## Customizing The Browser
 
 In the customize example you can configure some features of the window, as well as the toolbar buttons and the menus.
 
@@ -38,10 +38,10 @@ In the title bar of the window the pages are listed, by default the plus button 
 
 The theming for the browser window is configured in the platform using a pallette, see [How To Theme Your Platform](./how-to-theme-your-platform.md).
 
-## Menu and Buttons
+## Menu And Buttons
 
 In addition to the window itself the menus and buttons can be customized, see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md) and see [How To Customize Browser Menus](./how-to-customize-browser-menus.md).
 
-## Source reference
+## Source Reference
 
 - [browser.ts](../client/src/framework/platform/browser.ts)

@@ -3,13 +3,13 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to customize store
+# How To Customize Store
 
 Customize workspace has a way of defining your store through configuration (**storefrontProvider**) that can either be inside of your manifest e.g. [manifest.fin.json](../public/manifest.fin.json) or within a JSON response returned by a server e.g. [settings.json](../public/settings.json).
 
 The approach that we have taken is that you define your landing page properties (sections, titles, images) and rather than directly link specific applications you specify tags that will be used to pull in applications for each part of the store. You are then free to tag applications and have them automatically appear in relevant sections of the store.
 
-## What does the storefrontProvider configuration look like
+## What Does The Storefront Configuration Look Like
 
 ```json
 "storefrontProvider": {
@@ -151,11 +151,11 @@ The approach that we have taken is that you define your landing page properties 
   },
 ```
 
-## What does store look like?
+## What Does Store Look Like?
 
 ![Defined store](./assets/store.png)
 
-## What are the available settings for the store provider
+## What Are The Available Settings For The Store Provider
 
 | Property                                   | Description                                                                                                                                                                                                                                          |
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -201,11 +201,11 @@ The approach that we have taken is that you define your landing page properties 
 | footer.text                                | The text to show in the footer                                                                                                                                                                                                                       |
 | footer.links                               | What links do you want to show in the footer (opens up using the default web browser.                                                                                                                                                                |
 
-## Where does the search results in store come from?
+## Where Does The Search Results In Store Come From?
 
 It comes from the list of all the [applications](./how-to-define-apps.md) that the user is [entitled](./how-to-apply-entitlements.md) to.
 
-## Anything else?
+## Anything Else?
 
 The [manifest.fin.json](../public/manifest.fin.json)/[settings.json](../public/settings.json) configuration for the storefront does not include an `id` for the `cta`, `items` and `navigation` sections.
 
@@ -213,7 +213,7 @@ This is to reduce noise in the example manifest and to prevent issues if an item
 
 This is because the `id` represents the route that the user navigates to. So, if an `id` for a navigation item was "x" and the user clicked on the link, then the store would call the `getNavigation()` or `getLandingPage()` function and look for a matching `id` of "x". If you regenerate the `id` for a navigation item, e.g., it becomes "y", then the store would not be able to render your page, as there are no items with the `id` of "x".
 
-## Source reference
+## Source Reference
 
 - [store.ts](../client/src/framework/workspace/store.ts)
 - [framework-shapes.ts](../client/src/framework/shapes/framework-shapes.ts) - Contains store related shapes.

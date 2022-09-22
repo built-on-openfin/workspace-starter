@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is Browser Page management
+# What Is Browser Page Management
 
 By default you get the ability to save, rename and delete pages in [Workspace Browser](./how-to-customize-browser.md).
 
@@ -11,11 +11,11 @@ When you **save** a Page it captures the layout (which views are present and how
 
 This lets you easily layout arrangements and the applications you work with an assign it a name.
 
-## Where are pages saved?
+## Where Are Pages Saved?
 
 By default this json data is saved to [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API). This lets you get up and running without any server requirement for the storage of this data.
 
-## What if I want to change where this information is stored?
+## What If I Want To Change Where This Information Is Stored?
 
 A workspace platform lets you override the platform implementation so you can come up with your own function implementations for the saving and fetching of pages. This is called a platform override and the customize workspace implementation exists here: [platform-override.ts](../client/src/framework/platform/platform-override.ts).
 
@@ -40,7 +40,7 @@ This frees you up to fetch and save your pages from/to anywhere in any way that 
 
 Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [how to add a module](./how-to-add-a-module.md) that implements your own logic.
 
-## Do you have an example of a custom implementation?
+## Do You Have An Example Of A Custom Implementation?
 
 Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) doesn't override the default behavior. Our second manifest ([second.manifest.fin.json](../public/second.manifest.fin.json)) loads configuration through a rest endpoint (see [settings.json](../public/settings.json)) and that defines the endpoints listed above in the **endpointProvider** definition.
 
@@ -128,7 +128,7 @@ As you can see from the configuration above:
 
 If you use the live launch section on the [main page](../README.md) and launch the second example and save a page you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your pages.
 
-## Can I manage pages from home?
+## Can I Manage Pages From Home?
 
 We include support for doing page management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [how to customize home](./how-to-customize-home.md)).
 
@@ -138,11 +138,11 @@ enablePageIntegration?: boolean
 
 ![Home Page Management](./assets/home-page-management.png)
 
-### I see a sharing button, how is that configured?
+### I See A Sharing Button, How Is That Configured?
 
 Please see [how to customize workspace and browser page sharing](./how-to-customize-workspace-browser-page-sharing.md).
 
-## Source reference
+## Source Reference
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
 - [platform-local-storage.ts](../client/src/modules/endpoints/local-storage/platform-local-storage.ts)

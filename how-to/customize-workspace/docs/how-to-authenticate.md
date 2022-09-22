@@ -7,13 +7,13 @@
 
 This section covers how you can configure authentication for your platform.
 
-## Do I need authentication?
+## Do I Need Authentication?
 
 It may be that your platform is internal and you are using windows authentication or a seamless SSO setup where your platform doesn't need to request authentication from the user as any requested services would be able to determine who the user is.
 
 It may be that you have a platform that should return the same apps to every user (they might need to log into individual apps) and you are happy storing preferences, workspaces and saved pages locally.
 
-## What if I need authentication?
+## What If I Need Authentication?
 
 Customize workspace lets you plug in your own authentication logic via config and a custom JavaScript Module (see [how to add a module](./how-to-add-a-module.md)) via the authProvider setting and adding it to the modules array. This array only supports a single module. If you add more than one then a warning will be logged and the auth flow will not take place.
 
@@ -59,7 +59,7 @@ This example module is there for you to test different auth flows (e.g. autoLogi
 | loginHeight                   | How tall should the login window be (default is 250px)                                                                   |
 | loginWidth                    | How wide should the login window be (default is 400px)                                                                   |
 
-### Implementing your own Auth Module
+### Implementing Your Own Auth Module
 
 To implement your own auth module you just need to follow the following interface defined in [auth-shapes](../client/src/framework/shapes/auth-shapes.ts):
 
@@ -77,7 +77,7 @@ export const entryPoints = {
 
 entryPoints let you have more than one moduleType implemented in a single JavaScript module or you could have a module per moduleType.
 
-### Customizing Browser based on Authenticated Status
+### Customizing Browser Based On Authenticated Status
 
 When customizing browser (see [how to customize browser](./how-to-customize-browser.md)) with your own buttons and menu options you can specify a condition (see [how to add conditions](./how-to-add-conditions.md)) on whether or not that option should be shown. We provide a default condition out of the box:
 
@@ -105,7 +105,7 @@ Here is a snippet of a browser menu entry definition that makes use of this cond
 
 This would present the Log Out and Quit App menu option underneath the Quit menu option. Please see [how to customize browser](./how-to-customize-browser.md) if you want to know more.
 
-## Source reference
+## Source Reference
 
 - [auth-shapes.ts](../client/src/framework/shapes/auth-shapes.ts)
 

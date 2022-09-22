@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is an Apps Provider?
+# What Is An Apps Provider?
 
 An Apps Provider is one of the personas you and your team may fall under (you can be more than one).
 

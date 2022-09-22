@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is Workspace?
+# What Is Workspace?
 
 ![What is workspace?](./assets/workspace.png)
 

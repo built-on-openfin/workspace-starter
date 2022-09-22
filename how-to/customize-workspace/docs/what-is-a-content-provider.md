@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is a Content Provider?
+# What Is A Content Provider?
 
 A Content Provider is one of the personas you and your team may fall under (you can be more than one).
 

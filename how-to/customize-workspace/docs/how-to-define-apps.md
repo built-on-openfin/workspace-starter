@@ -9,7 +9,7 @@ An App definition for a workspace platform is based on the FDC3 1.2 App definiti
 
 Using customize workspace an app definition can easily be added to an [apps.json](../public/apps.json) file and it will be automatically picked up alongside a collection of [common apps](../../common/public/apps.json).
 
-## What does an App Definition Look Like?
+## What Does An App Definition Look Like?
 
 ```json
 {
@@ -68,13 +68,13 @@ There are a number of intents supported by the FDC3 standard (ViewContact and Vi
 
 If a second application raises an intent then the workspace platform will check to see if any applications support the workflow. If only one app entry supports it then the platform will launch it. If there is more than one option then it will present the list of options to the end user. You can customize the UI presented to the user and we will cover that in the [How to configure FDC3 Intents page](./how-to-configure-fdc3-intents.md).
 
-## How To Create an App Definition
+## How To Create An App Definition
 
 ### Manually
 
 To create an app definition you could simply copy the json object above modify it and add it to [apps.json](../public/apps.json).
 
-### Using the App Definition Builder
+### Using The App Definition Builder
 
 If you launch the default instance of customize-workspace either locally or from the live launch section of our main [README.md](../README.md) then you will be able to type App Definition Builder into home and you will be presented with a UI to help you build the JSON. You can also type Getting Started if you want to see App Definition Builder alongside other utility apps.
 
@@ -98,7 +98,7 @@ Customize workspace supports the following manifest types (for the list in code 
 - **endpoint**: An endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) is a generic target that supports an action or a request/response. This custom endpoint will be passed the app definition to the action implementation. What happens after that point is down to your own implementation. It is one way of extending launch behavior should you need to.
 - **connection**: A connected app (see [how to manage connections to your platform](./how-to-manage-connections-to-your-platform.md)) could have provided a list of child views that can be launched from home. If a selection is made against one of these entries then it will be sent to the connected app in order for it to launch the requested view.
 
-## How to configure the appProvider for your platform
+## How To Configure The Appprovider For Your Platform
 
 The app provider definition can either come from your manifest or from an external settings service (see [how-to-apply-entitlements](./how-to-apply-entitlements.md) and an example is available via [second.manifest.fin.json](../public/second.manifest.fin.json) and [settings.json](../public/settings.json)). The available settings are as follows:
 
@@ -113,7 +113,7 @@ The app provider definition can either come from your manifest or from an extern
 | appAssetTag                               | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
 | manifestTypes                             | An array of the manifestTypes the app should support from the apps.json feed                                                                                                                                          |
 
-### An example of what these settings would look like (taken from [manifest.fin.json](../public/manifest.fin.json))
+### An Example Of What These Settings Would Look Like (Taken From [manifest.fin.json](../public/manifest.fin.json))
 
 ```json
     "appProvider": {
@@ -163,7 +163,7 @@ The configuration above shows that it doesn't enable all of the manifest types t
 
 These endpoints are using the built in fetch support and the options are passed to fetch options in order to get back the JSON list of app entries.
 
-## Where are apps used?
+## Where Are Apps Used?
 
 Apps can come from many sources but the feed can be used by:
 
@@ -178,6 +178,6 @@ Our guides show how to:
 - [Configure Home](./how-to-customize-home.md)
 - [Configure Store](./how-to-customize-store.md)
 
-## Source reference
+## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)

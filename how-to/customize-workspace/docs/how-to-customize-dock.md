@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to customize dock ?
+# How To Customize Dock ?
 
 The dock component is one of the standard components of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
 
@@ -11,7 +11,7 @@ The dock component is one of the standard components of OpenFin workspace, for a
 
 The code for the dock can be found in [../client/src/framework/workspace/dock.ts](../client/src/framework/workspace/dock.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `minimize` methods as you would expect change the visibility of the dock on the desktop.
 
-## Enabling the dock
+## Enabling The Dock
 
 To enable the dock component the following settings in the manifest must be set.
 
@@ -25,7 +25,7 @@ You can also add `dock` to `bootstrap:autoShow` to make the dock appear when the
 
 For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
 
-## Configuring the dock
+## Configuring The Dock
 
 All of the dock specific configuration options are stored in `dockProvider`
 
@@ -54,7 +54,7 @@ The dock component has some built in buttons for `Home`, `Workspaces`, `Notifica
 
 The rest of the elements shown on the dock are configured in one of two sections, `apps` or `buttons`.
 
-## App entries
+## App Entries
 
 The `apps` can be used to show dock entries based on `apps` configured from your app provider (see [./how-to-define-apps.md](./how-to-define-apps.md)). This provides a convenient shortcut with minimum configuration to launch apps that you have already provided from your app source.
 
@@ -102,7 +102,7 @@ In this second group example we override both the `tooltip` and `iconUrl` and it
 }
 ```
 
-## Button entries
+## Button Entries
 
 The `buttons` provide more flexibility than the `apps` and can be used to show dock entries which can launch apps or custom actions.
 
@@ -172,7 +172,7 @@ If you want to configure a drop down menu instead of a single button you can use
 }
 ```
 
-## Source reference
+## Source Reference
 
 - [dock.ts](../client/src/framework/workspace/dock.ts)
 - [actions.ts](../client/src/framework/actions.ts)

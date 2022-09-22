@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to customize home templates ?
+# How To Customize Home Templates ?
 
 Home templates can easily be customized, see [Customize search results in Home](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home).
 
@@ -59,7 +59,7 @@ Used for creating a help entry result for when `?` query is used in Home
 
 ![Template Help](./assets/template-help.png)
 
-## Source reference
+## Source Reference
 
 - [templates.ts](../client/src/framework/templates.ts)
 - [home.ts](../client/src/framework/workspace/home.ts)

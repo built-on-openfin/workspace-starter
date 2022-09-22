@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is Container?
+# What Is Container?
 
 ![What is container?](./assets/container.png)
 

@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to customize the bootstrapping process
+# How To Customize The Bootstrapping Process
 
 The bootstrapping process has a number of options to determine what the application should initialize on startup.
 
@@ -52,6 +52,6 @@ If you don't want to display any of the built-in workspace components on startup
 
 You could then subscribe to the `after-bootstrap` event and launch your own view.
 
-## Source reference
+## Source Reference
 
 - [bootstrapper.ts](../client/src/framework/bootstrapper.ts)

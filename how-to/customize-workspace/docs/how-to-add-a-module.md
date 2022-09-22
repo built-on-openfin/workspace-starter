@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to add a module ?
+# How To Add A Module ?
 
 Many of the features can be extended by adding custom modules containing code, which are configured in the manifest to be loaded at runtime.
 
@@ -69,11 +69,11 @@ Some modules require additional settings, these can be provided through the `dat
 }
 ```
 
-## Shared modules
+## Shared Modules
 
 A module can contain entry points for more than one provider, so you could for example have `actions` and `conditions` in one module. You would still specify the entries in the section for each provider type, as they may require separate config, but they would point to the same `url`. The module will only get loaded once and reused if a further entry point is requested from it.
 
-## Writing a module
+## Writing A Module
 
 If you want to implement a module you should take the following steps.
 
@@ -123,11 +123,11 @@ The module should be compiled as a JavaScript ESM module, an example webpack con
 }
 ```
 
-## Module shapes
+## Module Shapes
 
 When building a module you need to reference the TypeScript definitions for the shapes, the `.d.ts` files can be generated using the `npm generate-types` script command.
 
-## Source reference
+## Source Reference
 
 - [modules.ts](../client/src/framework/modules.ts)
 - [module-shapes.ts](../client/src/framework/shapes/module-shapes.ts)

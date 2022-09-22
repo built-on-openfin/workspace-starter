@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to apply entitlements
+# How To Apply Entitlements
 
 Entitlements can be seen in two ways:
 
@@ -12,11 +12,11 @@ Entitlements can be seen in two ways:
 
 Customize workspace does not provide support for the second option. That should be down to the individual content providers (see [what is a content provider](./what-is-a-content-provider.md)) unless your organization already has a centralized entitlements system.
 
-# What information is the platform returning for the specific user
+# What Information Is The Platform Returning For The Specific User
 
 To return configuration related to a specific user then you need to ensure you have authentication setup (see [how to authenticate](./how-to-authenticate.md)). Once authenticated your platform can call a service to receive configuration specific to that user.
 
-## Configuring dynamic settings
+## Configuring Dynamic Settings
 
 Customize Workspace lets you add all the settings for a workspace platform in the customSettings section of a manifest (see [manifest.fin.json](../public/manifest.fin.json)). This makes it useful if you wish to experiment with options easily and if you don't need to return different settings by user/group.
 
@@ -60,7 +60,7 @@ The customize workspace settings service will check for an endpoint with an id o
 
 You now have the option of how many of the settings on offer will be user specific vs general.
 
-### Example of settings that can be customized
+### Example Of Settings That Can Be Customized
 
 All settings could be customized for the user but here are some examples:
 
@@ -72,6 +72,6 @@ All settings could be customized for the user but here are some examples:
 - What logging should a user have and at what log level (see [how to support your platform](./how-to-support-your-platform.md))
 - What theme they should be presented with (see [how to theme your platform](./how-to-theme-your-platform.md))
 
-### Requesting Apps for Home, Store, Dock
+### Requesting Apps For Home, Store, Dock
 
 When we do a request for applications (see [how to define apps](./how-to-define-apps.md)) then that source could also filter the apps that are returned based on who the user is or the role/group they are in.

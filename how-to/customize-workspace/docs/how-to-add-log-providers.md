@@ -59,7 +59,7 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 };
 ```
 
-## Using logging
+## Using Logging
 
 To use a logger in your code you need to import the `createLogger` method from `log-provider.ts`, this allows you to create an object from which you can call all the logging methods. The logging methods are the same as you would normally expect from the `console` object `info`, `warn`, `error`, `trace`, `debug`.
 
@@ -71,7 +71,7 @@ const logger = createLogger('Bootstrapper');
 logger.info('The platform has started');
 ```
 
-## Additional settings
+## Additional Settings
 
 As with any entity following the module pattern it can have custom settings, the default `ConsoleLogger` has some additional settings to specify which log levels it displays. By default it shows everything, but you could reduce the noise to just `error` and `debug` messages with the following configuration.
 
@@ -94,11 +94,11 @@ Each log provider can have its own custom settings, so you could have a console 
 
 Also since the logging level is driven from the manifest settings you could make this entitlements based, providing different levels of logging per user. If a specific user is having problems, you could increase the verbosity of the logging messages for just that user.
 
-## Using logging in modules
+## Using Logging In Modules
 
 We don't want to include the logging code directly in external modules as it bloats their size, instead when the a module has it's `initialize` method called it is passed the `createLogger` method, so it can use this create a logger and perform logging from within the module.
 
-## Source reference
+## Source Reference
 
 - [logger-provider.ts](../client/src/framework/logger-provider.ts)
 - [logger-shapes.ts](../client/src/framework/shapes/logger-shapes.ts)

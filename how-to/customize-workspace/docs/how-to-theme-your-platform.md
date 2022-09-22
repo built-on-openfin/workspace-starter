@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to Theme your platform
+# How To Theme Your Platform
 
 All of the OpenFin Workspace support branding. This means you can provide a palette of colors and an icon that is used. The icon used by each component is specified when you register against the component (see [how to customize home](./how-to-customize-home.md), [how to customize store](./how-to-customize-store.md), [how to customize dock](./how-to-customize-dock.md), [how to customize notification center](./how-to-customize-notification-center.md) and [how to customize browser](./how-to-customize-browser.md)).
 
@@ -96,7 +96,7 @@ Null can be used to show the palette setting in config but to opt out of overrid
 - The framework will check your OS preference and if the preference is Light or Dark for applications and there is a theme label that matches then it will apply that theme.
 - If more than one theme and they don't match the OS Preference of Light or Dark then the first theme is used.
 
-## How to create a theme
+## How To Create A Theme
 
 ### Manually
 

@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to customize home ?
+# How To Customize Home ?
 
 The home component is one of the standard components of OpenFin workspace, for an in depth look at the component see [Home Overview](https://developers.openfin.co/of-docs/docs/cli-providers).
 
@@ -11,7 +11,7 @@ The home component is one of the standard components of OpenFin workspace, for a
 
 The code for the home can be found in [../client/src/framework/workspace/home.ts](../client/src/framework/workspace/home.ts), `register` is called as part of the app bootstrap process and `deregister` during the app closedown. The `show` and `hide` methods as you would expect change the visibility of the home on the desktop.
 
-## Enabling home
+## Enabling Home
 
 To enable the home component the following settings in the manifest must be set.
 
@@ -25,7 +25,7 @@ You can also add `home` to `bootstrap:autoShow` to make the home appear when the
 
 For more details on the bootstrapping process see [./how-to-customize-the-bootstrapping-process.md](./how-to-customize-the-bootstrapping-process.md)
 
-## Configuring home
+## Configuring Home
 
 All of the home specific configuration options are stored in `homeProvider`
 
@@ -68,7 +68,7 @@ Sharing for pages and workspaces will only be available if the `platformProvider
 }
 ```
 
-## Sources and results
+## Sources And Results
 
 The sources that provide the results for the home components fall into 2 categories, `apps`, `commands` and `search` results.
 
@@ -84,7 +84,7 @@ Whereas commands and search entries can have custom templates with richer layout
 
 ![Commands Template](./assets/home-commands.png)
 
-## Integration management
+## Integration Management
 
 The integrations for both `command` and `dynamic` results by default will start automatically if enabled in configuration. You can introduce finer grained control of this feature by enabling integration management. When this option is enabled you have the option to enable/disable integrations through home commands. The state of an integration is stored in local storage for the platform, so that when you restart the platform only the modules which are enabled will be initialized.
 
@@ -105,12 +105,12 @@ The endpoints `integration-preferences-get` and `integration-preferences-set` ar
 
 ![Home Integrations](./assets/home-integrations.png)
 
-## Help query
+## Help Query
 
 Both `command` and `dynamic` integrations can additionally provide help entries, the help entries are retrieved from an integration when entering `?` into the query box.
 
 ![Home Help](./assets/home-help.png)
 
-## Source reference
+## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)

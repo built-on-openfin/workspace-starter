@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What is Customize Workspace?
+# What Is Customize Workspace?
 
 ![What is customize workspace?](./assets/customize-workspace.png)
 

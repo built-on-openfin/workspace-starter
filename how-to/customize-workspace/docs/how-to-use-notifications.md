@@ -3,7 +3,7 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to use Notifications
+# How To Use Notifications
 
 This document will be enhanced in the future.
 
