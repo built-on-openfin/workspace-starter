@@ -114,3 +114,5 @@ Both `command` and `dynamic` integrations can additionally provide help entries,
 ## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)
+
+[<- Back to Table Of Contents](../README.md)

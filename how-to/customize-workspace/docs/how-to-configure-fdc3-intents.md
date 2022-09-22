@@ -69,3 +69,5 @@ window['getIntentSelection'] = async () => {
 
 - [picker.html](../../common/public/windows/intents/picker.html)
 - [picker.js](../../common/public/windows/intents/picker.js)
+
+[<- Back to Table Of Contents](../README.md)

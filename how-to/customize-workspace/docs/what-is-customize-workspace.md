@@ -25,3 +25,5 @@ If you wish to validate functionality and you want to get up and running quickly
 The customize-workspace platform allows you to have a platform in a box. It will not give you as much flexibility and power as building a platform yourself using the [workspace](./what-is-workspace.md) npm packages directly but it gives you an opinionated way of running a platform that can be extended by you or other teams within your organization.
 
 The documentation in this folder covers general concepts but the guides are built with customize-workspace in mind.
+
+[<- Back to Table Of Contents](../README.md)

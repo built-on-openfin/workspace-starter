@@ -282,3 +282,5 @@ If there is a problem fetching or applying the share then the user will be notif
 ## Source Reference
 
 - [share.ts](../client/src/framework/share.ts)
+
+[<- Back to Table Of Contents](../README.md)

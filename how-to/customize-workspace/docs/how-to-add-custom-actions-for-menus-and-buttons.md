@@ -66,3 +66,5 @@ We can trigger actions from other parts of the platform by configuring the inter
 
 - [actions.ts](../client/src/framework/actions.ts)
 - [actions-shapes.ts](../client/src/framework/shapes/actions-shapes.ts)
+
+[<- Back to Table Of Contents](../README.md)

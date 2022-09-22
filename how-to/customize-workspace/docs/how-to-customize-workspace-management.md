@@ -115,3 +115,5 @@ Please see [how to customize workspace and browser page sharing](./how-to-custom
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
 - [platform-local-storage.ts](../client/src/modules/endpoints/local-storage/platform-local-storage.ts)
+
+[<- Back to Table Of Contents](../README.md)

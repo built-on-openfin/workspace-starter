@@ -40,3 +40,5 @@ The values will be passed in to the `register` method of the notifications.
 ## Source Reference
 
 - [notifications.ts](../client/src/framework/workspace/notifications.ts)
+
+[<- Back to Table Of Contents](../README.md)

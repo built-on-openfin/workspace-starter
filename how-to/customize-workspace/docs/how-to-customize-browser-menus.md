@@ -120,3 +120,5 @@ The following example create a menu entry to display the Notification Center wit
 - [menu.ts](../client/src/framework/menu.ts)
 - [actions.ts](../client/src/framework/actions.ts)
 - [conditions.ts](../client/src/framework/conditions.ts)
+
+[<- Back to Table Of Contents](../README.md)

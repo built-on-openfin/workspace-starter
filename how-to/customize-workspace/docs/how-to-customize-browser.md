@@ -45,3 +45,5 @@ In addition to the window itself the menus and buttons can be customized, see [H
 ## Source Reference
 
 - [browser.ts](../client/src/framework/platform/browser.ts)
+
+[<- Back to Table Of Contents](../README.md)

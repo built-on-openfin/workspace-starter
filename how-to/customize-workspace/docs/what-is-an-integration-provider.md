@@ -20,3 +20,5 @@ This is the role of an Integration Provider. They can expose data or commands an
 For more information on customizing home see [How To Customize Home](./how-to-customize-home.md).
 
 Detailed explanations of using integrations can be found in [How to Add Integrations to Home](./how-to-add-integrations-to-home.md).
+
+[<- Back to Table Of Contents](../README.md)

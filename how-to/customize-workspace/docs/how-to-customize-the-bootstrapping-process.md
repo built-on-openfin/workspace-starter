@@ -55,3 +55,5 @@ You could then subscribe to the `after-bootstrap` event and launch your own view
 ## Source Reference
 
 - [bootstrapper.ts](../client/src/framework/bootstrapper.ts)
+
+[<- Back to Table Of Contents](../README.md)

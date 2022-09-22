@@ -188,3 +188,5 @@ For further information on customizing the home template see [Home To Customize 
 - [home.ts](../client/src/framework/workspace/home.ts)
 - [integrations.ts](../client/src/framework/integrations.ts)
 - [integrations-shapes.ts](../client/src/framework/shapes/integrations-shapes.ts)
+
+[<- Back to Table Of Contents](../README.md)

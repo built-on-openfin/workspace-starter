@@ -52,3 +52,5 @@ npm run build
 ```
 
 Once you have built the project it is easy to extend through config (either the manifest file or settings returned from a service) and custom JavaScript Modules. The remaining guides will walk you through the process.
+
+[<- Back to Table Of Contents](../README.md)

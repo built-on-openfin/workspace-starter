@@ -181,3 +181,5 @@ Our guides show how to:
 ## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)
+
+[<- Back to Table Of Contents](../README.md)

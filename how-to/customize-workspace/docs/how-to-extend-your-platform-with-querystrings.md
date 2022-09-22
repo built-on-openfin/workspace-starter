@@ -2,3 +2,7 @@
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
+
+This document will be enhanced in the future.
+
+[<- Back to Table Of Contents](../README.md)

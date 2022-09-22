@@ -16,3 +16,5 @@ A Content Provider is mainly concerned with:
 - Providing registration data so that their content can be discovered in Home, Store and Dock and whether it will participate in Intent based workflows.
 
 A Content Provider is mainly concerned about providing content (generally in a micro UI format) that can be used by one or more platforms or run within a Browser or native app using an embedded view.
+
+[<- Back to Table Of Contents](../README.md)

@@ -8,3 +8,5 @@
 How do you control who can connect to you and become a snapshot source, or to provide a list of apps for home/store that are included in the snapshot source? What if they also want to request a specific set of actions from your platform?
 
 We will be adding documentation related to this topic in a future update.
+
+[<- Back to Table Of Contents](../README.md)

@@ -103,3 +103,5 @@ When the custom button is clicked the `id` is used to look up one of the platfor
 - [buttons.ts](../client/src/framework/buttons.ts)
 - [actions.ts](../client/src/framework/actions.ts)
 - [conditions.ts](../client/src/framework/conditions.ts)
+
+[<- Back to Table Of Contents](../README.md)

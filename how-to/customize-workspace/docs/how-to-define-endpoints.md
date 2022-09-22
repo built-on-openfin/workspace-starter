@@ -96,3 +96,5 @@ Endpoints can be defined as:
 - [endpoint-shapes.ts](../client/src/framework/shapes/endpoint-shapes.ts)
 - local-storage [endpoint](../client/src/modules/endpoints/local-storage/endpoint.ts)
 - channel [endpoint](../client/src/modules/endpoints/channel/endpoint.ts)
+
+[<- Back to Table Of Contents](../README.md)

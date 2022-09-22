@@ -12,3 +12,5 @@ You have seen what a [Content Provider](./what-is-a-content-provider.md) is. The
 This is a choice the [Platform Provider](./what-is-a-platform-provider.md) makes but an Apps Provider is simply someone who aggregates and validates a list of App Definitions and makes them available to the [Platform Provider](./what-is-a-platform-provider.md).
 
 Customize Workspace lets you easily define a single or multiple App Providers via an appProvider configuration. This supports the **Launcher** and **Aggregate View** use cases mentioned in the [FDC3 App Directory Overview](https://fdc3.finos.org/docs/app-directory/overview) and and you can learn more by reading the guide [How To Define Apps](./how-to-define-apps.md).
+
+[<- Back to Table Of Contents](../README.md)

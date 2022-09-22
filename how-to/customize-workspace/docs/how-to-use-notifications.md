@@ -10,3 +10,5 @@ This document will be enhanced in the future.
 For now please see the following starter to get a better understanding of the notification api:
 
 - [how-to/use-notifications](../../use-notifications/README.md)
+
+[<- Back to Table Of Contents](../README.md)

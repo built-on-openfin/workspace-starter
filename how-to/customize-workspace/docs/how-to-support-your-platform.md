@@ -58,3 +58,5 @@ The result of adding the sources to the ignore list is that the console should n
 ![Logging Console Ignored](./assets/logging-console-ignored.png)
 
 If you use the `createLogger` method to perform logging you can also create your own log sinks, so you could for example send the messages to a remote service. For more information on creating your own log sink see [How to Add Log Providers](./how-to-add-log-providers.md).
+
+[<- Back to Table Of Contents](../README.md)

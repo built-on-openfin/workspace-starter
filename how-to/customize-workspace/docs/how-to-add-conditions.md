@@ -70,3 +70,5 @@ As part of the platform there are already some built-in conditions.
 
 - [conditions.ts](../client/src/framework/conditions.ts)
 - [conditions-shapes.ts](../client/src/framework/shapes/conditions-shapes.ts)
+
+[<- Back to Table Of Contents](../README.md)

@@ -117,3 +117,5 @@ The Theme Definition Builder lets you pull a palette from a website or you can m
 ## Source reference
 
 - [platform.ts](../client/src/framework/platform.ts)
+
+[<- Back to Table Of Contents](../README.md)

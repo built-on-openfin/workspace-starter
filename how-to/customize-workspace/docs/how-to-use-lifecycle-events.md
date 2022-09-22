@@ -71,3 +71,5 @@ The lifecycle events that are available to connect to are:
 
 - [lifecycle.ts](../client/src/framework/lifecycle.ts)
 - [lifecycle-shapes.ts](../client/src/framework/shapes/lifecycle-shapes.ts)
+
+[<- Back to Table Of Contents](../README.md)

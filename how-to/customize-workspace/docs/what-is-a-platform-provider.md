@@ -21,3 +21,5 @@ A Platform Provider is responsible for:
 These are some of the consideration the Platform Provider needs to consider. The platform is the host, the shell UI that the end user sees. The platform provides a consistent behavior to the end user and helps ensure that relevant content is presented.
 
 Customize Workspace provides help in defining this experience through config and the guide section will walk you through some of the choices available to you (and how you can extend them).
+
+[<- Back to Table Of Contents](../README.md)

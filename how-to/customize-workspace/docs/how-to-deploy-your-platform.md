@@ -28,3 +28,5 @@ When you are deploying your application and an end user is visiting your site us
 With this knowledge you can present them with a link to click and launch if they are capable of doing so, or a download link so they can download and run the installer:
 
 [https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
+
+[<- Back to Table Of Contents](../README.md)

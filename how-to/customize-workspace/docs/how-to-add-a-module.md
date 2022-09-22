@@ -131,3 +131,5 @@ When building a module you need to reference the TypeScript definitions for the 
 
 - [modules.ts](../client/src/framework/modules.ts)
 - [module-shapes.ts](../client/src/framework/shapes/module-shapes.ts)
+
+[<- Back to Table Of Contents](../README.md)

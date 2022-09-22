@@ -28,3 +28,5 @@ As a content creator:
 - What intents you wish to declare that you support in your app definition
 
 We provide guides on [how to configure contextual groups](./how-to-configure-fdc3-context-groups.md) and [how to configure intents](./how-to-configure-fdc3-intents.md) for your workspace platform and [how to add context support](./how-to-add-context-support-to-your-app.md) and [how to add intent support](./how-to-add-intent-support-to-your-app.md) to your content/app. We recommend going through the concepts and working your way down the guides if you are new to OpenFin and OpenFin Workspace.
+
+[<- Back to Table Of Contents](../README.md)

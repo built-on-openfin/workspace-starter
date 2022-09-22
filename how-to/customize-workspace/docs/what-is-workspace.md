@@ -33,3 +33,5 @@ With these NPM packages and the OpenFin runtime you can build a custom workspace
 If you are looking for an example of what a complete workspace platform platform then you have come to the right place. See [What is customize workspace](./what-is-customize-workspace.md)
 
 For more information about OpenFin Workspace please see the [Workspace Overview](https://developers.openfin.co/of-docs/docs/overview-of-workspace)
+
+[<- Back to Table Of Contents](../README.md)

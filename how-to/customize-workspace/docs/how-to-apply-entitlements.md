@@ -75,3 +75,5 @@ All settings could be customized for the user but here are some examples:
 ### Requesting Apps For Home, Store, Dock
 
 When we do a request for applications (see [how to define apps](./how-to-define-apps.md)) then that source could also filter the apps that are returned based on who the user is or the role/group they are in.
+
+[<- Back to Table Of Contents](../README.md)

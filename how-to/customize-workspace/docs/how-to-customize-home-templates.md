@@ -63,3 +63,5 @@ Used for creating a help entry result for when `?` query is used in Home
 
 - [templates.ts](../client/src/framework/templates.ts)
 - [home.ts](../client/src/framework/workspace/home.ts)
+
+[<- Back to Table Of Contents](../README.md)
