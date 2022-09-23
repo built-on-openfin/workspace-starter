@@ -35,7 +35,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-home-templates/favicon.ico",
 		"name": "Customize Home Templates - v9.0",
 		"target": ["desktop", "start-menu"]

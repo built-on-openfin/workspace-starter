@@ -25,6 +25,7 @@
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/customize-workspace",
+		"sharing": true,
 		"intentPicker": {
 			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/common/windows/intents/picker.html",
 			"height": 400,
@@ -264,9 +265,7 @@
 					"type": "Quit",
 					"operation": "after"
 				},
-				"conditions": {
-					"isAuthenticationEnabled": true
-				}
+				"conditions": ["authenticated"]
 			}
 		],
 		"pageMenu": [
@@ -466,7 +465,8 @@
 						"id": "share",
 						"customData": {}
 					}
-				}
+				},
+				"conditions": ["sharing"]
 			},
 			{
 				"include": true,
