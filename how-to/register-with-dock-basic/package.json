@@ -13,7 +13,7 @@
 		"client": "npm --prefix ../common/ run client",
 		"server": "node ./server/build/index.js",
 		"kill": "npm --prefix ../common/ run kill",
-		"setup": "cd ../../ && npm install && cd how-to/register-with-browser && npm run build && npm --prefix ../common/ run build",
+		"setup": "cd ../../ && npm install && cd how-to/register-with-dock-basic && npm run build && npm --prefix ../common/ run build",
 		"validate": "npm --prefix ../../ run validate"
 	},
 	"author": "martyn.janes@openfin.co",

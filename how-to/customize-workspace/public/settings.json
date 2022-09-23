@@ -25,6 +25,7 @@
 	},
 	"platformProvider": {
 		"rootUrl": "http://localhost:8080",
+		"sharing": true,
 		"intentPicker": {
 			"url": "http://localhost:8080/common/windows/intents/picker.html",
 			"height": 400,
@@ -264,9 +265,7 @@
 					"type": "Quit",
 					"operation": "after"
 				},
-				"conditions": {
-					"isAuthenticationEnabled": true
-				}
+				"conditions": ["authenticated"]
 			}
 		],
 		"pageMenu": [
@@ -466,7 +465,8 @@
 						"id": "share",
 						"customData": {}
 					}
-				}
+				},
+				"conditions": ["sharing"]
 			},
 			{
 				"include": true,

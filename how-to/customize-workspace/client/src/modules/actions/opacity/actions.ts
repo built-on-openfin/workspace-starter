@@ -4,9 +4,9 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { ActionHelpers, Actions } from "../../../actions-shapes";
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { ActionHelpers, Actions } from "customize-workspace/shapes/actions-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 
 /**
  * Implement the actions.
@@ -47,7 +47,7 @@ export class OpacityActions implements Actions {
 		actionMap["change-opacity"] = async (payload: CustomActionPayload) => {
 			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
 				this._logger.info("Change Opacity Triggered");
-				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
+				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
 					.toolbarOptions;
@@ -66,7 +66,7 @@ export class OpacityActions implements Actions {
 		actionMap["restore-opacity"] = async (payload: CustomActionPayload) => {
 			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
 				this._logger.info("Restore Opacity Triggered");
-				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
+				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
 					.toolbarOptions;

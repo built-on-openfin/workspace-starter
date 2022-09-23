@@ -1,5 +1,5 @@
-import type { LogProvider, LogLevel, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { LoggerCreator, LogLevel, LogProvider } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 import type { ConsoleLogOptions } from "./shapes";
 
 /**

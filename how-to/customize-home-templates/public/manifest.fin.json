@@ -35,7 +35,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Customize Home Templates - v9.0",
 		"target": ["desktop", "start-menu"]

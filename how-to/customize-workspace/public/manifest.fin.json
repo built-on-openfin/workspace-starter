@@ -18,7 +18,6 @@
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
-				"enableNativeWindowIntegrationProvider": true,
 				"terminateExternalProcess": true,
 				"downloadAsset": true,
 				"openUrlWithBrowser": {
@@ -49,7 +48,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Customize Workspace - v9.0",
 		"target": ["desktop", "start-menu"]
@@ -75,11 +74,11 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"sharing": true,
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
+			"sharing": true,
 			"intentPicker": {
 				"url": "http://localhost:8080/common/windows/intents/picker.html",
 				"height": 400,
@@ -220,9 +219,7 @@
 						"type": "Quit",
 						"operation": "after"
 					},
-					"conditions": {
-						"isAuthenticationEnabled": true
-					}
+					"conditions": ["authenticated"]
 				}
 			],
 			"pageMenu": [
@@ -407,7 +404,8 @@
 							"id": "share",
 							"customData": {}
 						}
-					}
+					},
+					"conditions": ["sharing"]
 				},
 				{
 					"include": true,

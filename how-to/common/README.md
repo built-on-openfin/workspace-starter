@@ -19,7 +19,7 @@ This folder supports building content written in TypeScript but the majority of 
 npm run setup
 ```
 
-2. Build the project (only needed if you have modified the Typescript code after setup).
+2. Build the project (only needed if you have modified the TypeScript code after setup).
 
 ```shell
 npm run build

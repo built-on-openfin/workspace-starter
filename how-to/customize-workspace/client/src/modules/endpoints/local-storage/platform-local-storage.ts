@@ -1,7 +1,7 @@
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { IPlatformStorage } from "./platform-storage-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { PlatformStorage } from "customize-workspace/shapes/platform-storage-shapes";
 
-export class PlatformLocalStorage<T> implements IPlatformStorage<T> {
+export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 	private readonly _storageTypeName: string;
 
 	private readonly _storageKey: string;

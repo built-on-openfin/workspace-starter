@@ -89,6 +89,7 @@ async function init() {
 	});
 
 	notionalElement.addEventListener("input", () => {
+		notionalElement.value = notionalElement.value.toUpperCase();
 		updateSummary();
 	});
 
@@ -171,35 +172,53 @@ function gatherData(): IrsRfqData {
 	const currency = currencyElement.value;
 	const tenor = tenorElement.value;
 
-	let notional: number = notionalElement.valueAsNumber;
+	const notionalInput: string = notionalElement.value.toLowerCase();
+	let notionalValue: number | undefined = Number.parseFloat(notionalInput);
 	let notionalUnits;
 	let notionalFormatted;
 	let localLibor = libor;
 
-	if (Number.isNaN(notional)) {
-		notional = undefined;
+	if (Number.isNaN(notionalValue) || !/^\d+(\.\d+)?[bkmt]?$/.test(notionalInput)) {
+		notionalValue = undefined;
 	} else {
-		let notionalSuffix = "";
-		let notionalDiv = notional;
-		if (notional >= 1000000000000) {
-			notionalDiv = notional / 1000000000000;
-			notionalSuffix = "T";
-			localLibor += 2;
-		} else if (notional >= 1000000000) {
-			notionalDiv = notional / 1000000000;
-			notionalSuffix = "B";
-			localLibor += 1.5;
-		} else if (notional >= 1000000) {
-			notionalDiv = notional / 1000000;
-			notionalSuffix = "M";
-			localLibor += 1.5;
-		} else if (notional >= 1000) {
-			notionalDiv = notional / 1000;
-			notionalSuffix = "K";
-			localLibor += 1;
+		let notionalSuffix: string = "";
+		let notionalDiv: number;
+
+		const units: Map<string, number> = new Map();
+		units.set("T", 1000000000000);
+		units.set("B", 1000000000);
+		units.set("M", 1000000);
+		units.set("K", 1000);
+		units.set("", 1);
+
+		if (/[bkmt]$/.test(notionalInput)) {
+			// Already in suffix mode, so just use that
+			// and multiply up the value
+			notionalSuffix = notionalInput[notionalInput.length - 1].toUpperCase();
+			notionalDiv = notionalValue;
+			notionalValue *= units.get(notionalSuffix);
+		} else {
+			for (const [unitKey, unitValue] of units) {
+				if (notionalValue >= unitValue) {
+					notionalDiv = notionalValue / unitValue;
+					notionalSuffix = unitKey;
+					break;
+				}
+			}
 		}
+
+		if (notionalSuffix === "K") {
+			localLibor += 1;
+		} else if (notionalSuffix === "M") {
+			localLibor += 1.5;
+		} else if (notionalSuffix === "B") {
+			localLibor += 2;
+		} else if (notionalSuffix === "T") {
+			localLibor += 2.5;
+		}
+
 		notionalUnits = `${notionalDiv.toFixed(2).replace(/\.0+$/, "")} ${notionalSuffix}`.trim();
-		notionalFormatted = notional.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+		notionalFormatted = notionalValue.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	}
 
 	const frequency = frequencyElement.value;
@@ -208,7 +227,7 @@ function gatherData(): IrsRfqData {
 		swapType: "fixed",
 		currency,
 		tenor,
-		notional,
+		notional: notionalValue,
 		notionalFormatted,
 		notionalUnits,
 		frequency,

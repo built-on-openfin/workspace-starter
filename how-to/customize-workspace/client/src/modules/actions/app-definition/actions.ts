@@ -3,9 +3,9 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { ActionHelpers, Actions } from "../../../actions-shapes";
-import type { Logger, LoggerCreator } from "../../../logger-shapes";
-import type { ModuleDefinition } from "../../../module-shapes";
+import type { ActionHelpers, Actions } from "customize-workspace/shapes/actions-shapes";
+import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
+import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 
 /**
  * Implement the actions.
@@ -50,7 +50,7 @@ export class AppDefinitionActions implements Actions {
 					const viewIdentity = payload.selectedViews[i];
 					const intentName = "CreateAppDefinition";
 					try {
-						const view = fin.View.wrapSync(viewIdentity);
+						const view = fin.View.wrapSync(viewIdentity as OpenFin.Identity);
 						const options = await view.getOptions();
 						const info = await view.getInfo();
 						const name = options.name;

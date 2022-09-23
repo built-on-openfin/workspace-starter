@@ -44,7 +44,14 @@
 				</fieldset>
 				<fieldset class="fill">
 					<label for="notional">Notional</label>
-					<input type="number" value="" placeholder="Enter desired amount" id="notional" class="full" />
+					<input
+						type="text"
+						value=""
+						placeholder="Enter desired amount"
+						id="notional"
+						class="full"
+						pattern="^\d+(\.\d+)?[KkMmBbTt]?$"
+					/>
 				</fieldset>
 			</div>
 			<div class="row fill">
