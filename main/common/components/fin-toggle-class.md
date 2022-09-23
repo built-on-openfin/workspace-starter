@@ -17,7 +17,7 @@ The web component saves the selection so that it is applied when any page using 
 
 The type is a button to aid in accessibility.
 
-## Example usage:
+## Example usage
 
 ```javascript
         <script src="/common/components/fin-toggle-class.js" defer></script>

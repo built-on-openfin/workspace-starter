@@ -35,7 +35,7 @@
 	},
 	"shortcut": {
 		"company": "OpenFin",
-		"description": "An way of showing examples of what OpenFin can do.",
+		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/favicon.ico",
 		"name": "Integrate with RSS - v9.0",
 		"target": ["desktop", "start-menu"]
