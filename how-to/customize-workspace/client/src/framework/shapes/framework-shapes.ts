@@ -53,25 +53,26 @@ export interface MenuEntry<T> {
 	position?: {
 		operation: MenuPositionOperation;
 		type?: T;
+		customId?: string;
 	};
 	conditions?: string[];
 	separator?: MenuSeparatorPosition;
 }
 
 export interface BrowserProviderOptions {
-	toolbarButtons?: ToolbarButtonDefinition[];
 	windowOptions: {
 		title?: string;
 		icon?: string;
 		newTabUrl?: string;
 		newPageUrl?: string;
 	};
+	toolbarButtons?: ToolbarButtonDefinition[];
 	globalMenu?: MenuEntry<GlobalContextMenuOptionType>[];
 	pageMenu?: MenuEntry<PageTabContextMenuOptionType>[];
 	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];
 }
 
-export type BootstrapComponents = "home" | "store" | "dock" | "notifications" | "none";
+export type BootstrapComponents = "home" | "store" | "dock" | "none";
 
 export interface BootstrapOptions {
 	store: boolean;
@@ -85,7 +86,6 @@ interface HomeProviderOptions {
 	id: string;
 	title: string;
 	icon: string;
-	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
 	enablePageIntegration?: boolean;

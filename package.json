@@ -10,7 +10,8 @@
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"prettier": "prettier --config .prettierrc --write .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
-		"validate": "npm run prettier & npm run eslint"
+		"markdownlint": "markdownlint **/*.md --ignore node_modules",
+		"validate": "npm run prettier & npm run eslint & npm run markdownlint"
 	},
 	"workspaces": [
 		"how-to/*"
@@ -44,6 +45,7 @@
 		"eslint-plugin-unused-imports": "^2.0.0",
 		"fast-glob": "^3.2.11",
 		"fs-extra": "^10.0.0",
+		"markdownlint-cli": "^0.32.2",
 		"prettier": "^2.6.2",
 		"replace-in-file": "^6.3.2",
 		"yargs": "^17.5.1"
