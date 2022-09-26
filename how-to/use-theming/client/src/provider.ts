@@ -9,6 +9,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => bootstrap());
 
+	await fin.InterApplicationBus.subscribe({ uuid: "*" }, "theme-restart", async (payload) => {
+		window.localStorage.setItem("customAction", ACTION_IDS.applyTheme);
+		window.localStorage.setItem("customPayload", JSON.stringify(payload));
+		await fin.Application.getCurrentSync().restart();
+	});
+
 	await initialisePlatform(themingPayload);
 });
 
