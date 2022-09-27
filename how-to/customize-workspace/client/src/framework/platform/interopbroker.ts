@@ -1,6 +1,7 @@
 import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
+import * as connectionProvider from "../connections";
 import { launchSnapshot, launchView } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
@@ -141,9 +142,13 @@ export function interopOverride(
 		}
 
 		public async isConnectionAuthorized(id: OpenFin.Identity, payload?: unknown): Promise<boolean> {
-			logger.info("Interop connection being made by the following identity with payload", id, payload);
-			// perform connection validation checks here if required and return false if it shouldn't be permissioned.
-			return true;
+			logger.info("Interop connection being made by the following identity. About to verify connection", id);
+			const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
+			if (!response.isValid) {
+				logger.warn(`Connection request from ${JSON.stringify(id)} was validated and rejected.`);
+			}
+			logger.info("Connection validation request was validated and is valid.");
+			return response.isValid;
 		}
 
 		public async isActionAuthorized(

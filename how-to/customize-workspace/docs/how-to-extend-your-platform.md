@@ -3,6 +3,11 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-This document will be enhanced in the future.
+# How to extend your platform
+
+If you want to add custom behavior to your platform then there are a number of options:
+
+- Hook in custom logic via our lifecycle support (see [how to use lifecycle events](./how-to-use-lifecycle-events.md))
+- Launch a custom window when the platform loads (could be launched via a lifecycle hook or using our headless)
 
 [<- Back to Table Of Contents](../README.md)
