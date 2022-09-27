@@ -45,7 +45,8 @@
 			"inline-view",
 			"window",
 			"inline-window",
-			"desktop-browser"
+			"desktop-browser",
+			"connection"
 		]
 	},
 	"endpointProvider": {
@@ -54,6 +55,11 @@
 				"enabled": true,
 				"id": "local-storage",
 				"url": "https://built-on-openfin.github.io/workspace-starter/john/dev/connection-extensions/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
+			},
+			{
+				"enabled": true,
+				"id": "example-connection-validation",
+				"url": "https://built-on-openfin.github.io/workspace-starter/john/dev/connection-extensions/customize-workspace/js/modules/endpoints/example.connection.validation.bundle.js"
 			}
 		],
 		"endpoints": [
@@ -205,6 +211,12 @@
 					"method": "SET",
 					"dataType": "integration-preferences"
 				}
+			},
+			{
+				"id": "connection-verification",
+				"type": "module",
+				"typeId": "example-connection-validation",
+				"options": {}
 			}
 		]
 	},
@@ -837,6 +849,28 @@
 				"enabled": true,
 				"id": "app-definition",
 				"url": "https://built-on-openfin.github.io/workspace-starter/john/dev/connection-extensions/customize-workspace/js/modules/actions/app-definition.bundle.js"
+			}
+		]
+	},
+	"connectionProvider": {
+		"connectionId": "second-customize-workspace-platform",
+		"connectionValidationEndpoint": "connection-verification",
+		"supportedActions": ["show-home", "show-store", "show-dock", "hide-home", "hide-store", "minimize-dock"],
+		"connections": [
+			{
+				"identity": { "uuid": "second-workspace-starter-how-to-customize-workspace" },
+				"validatePayload": false,
+				"connectionTypes": [{ "type": "broker" }]
+			},
+			{
+				"identity": { "uuid": "*" },
+				"validatePayload": true,
+				"connectionTypes": [
+					{ "type": "appSource" },
+					{ "type": "snapshotSource" },
+					{ "type": "actions" },
+					{ "type": "broker" }
+				]
 			}
 		]
 	}
