@@ -23,7 +23,7 @@
 		"how-to/integrate-with-sso",
 		"how-to/integrate-server-authentication"
 	],
-	"howToCustomFolder": "workspace/vnext",
+	"howToCustomFolder": "",
 	"contributors": [
 		"adam.saland@openfin.co",
 		"john.mandia@openfin.co",
