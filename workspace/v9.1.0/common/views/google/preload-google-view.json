@@ -4,5 +4,5 @@
 	"interop": {
 		"currentContextGroup": "green"
 	},
-	"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/google/preload-google.js" }]
+	"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.1.0/common/views/google/preload-google.js" }]
 }
