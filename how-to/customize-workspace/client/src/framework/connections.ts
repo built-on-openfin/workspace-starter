@@ -268,6 +268,13 @@ export async function isConnectionValid<T>(
 		}
 
 		if (connectionOptions === undefined || connectionOptions?.connections === undefined) {
+			if (options?.type === "broker") {
+				logger.info(
+					"No connection provider options specified and broker connection requested. Implementing default broker behavior."
+				);
+				responseToReturn.isValid = true;
+				return responseToReturn;
+			}
 			logger.warn(
 				"A connection verification request was made but connection provider options have not been defined so we cannot validate the connection request."
 			);
