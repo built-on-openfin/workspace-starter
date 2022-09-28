@@ -772,7 +772,7 @@
 				},
 				{
 					"identity": { "uuid": "*" },
-					"validatePayload": true,
+					"validatePayload": false,
 					"connectionTypes": [
 						{ "type": "appSource" },
 						{ "type": "snapshotSource" },

@@ -146,8 +146,9 @@ export function interopOverride(
 			const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
 			if (!response.isValid) {
 				logger.warn(`Connection request from ${JSON.stringify(id)} was validated and rejected.`);
+			} else {
+				logger.info("Connection validation request was validated and is valid.");
 			}
-			logger.info("Connection validation request was validated and is valid.");
 			return response.isValid;
 		}
 
