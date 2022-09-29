@@ -6,7 +6,7 @@ export interface InitOptionsHandlerOptions {
 
 export interface InitOptionsHandler<O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions>
 	extends ModuleImplementation<O> {
-	action<T>(requestedAction: string, payload?: T): Promise<void>;
+	action(requestedAction: string, payload?: unknown): Promise<void>;
 }
 
 export interface UserAppConfigArgs {
