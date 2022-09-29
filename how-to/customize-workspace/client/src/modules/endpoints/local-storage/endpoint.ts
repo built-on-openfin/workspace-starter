@@ -61,10 +61,6 @@ export async function requestResponse(
 	endpointDefinition: EndpointDefinition<{ dataType: string; method: "GET" | "GETALL" }>,
 	request?: { id?: string; query?: string }
 ): Promise<unknown | null> {
-	if (request === undefined) {
-		logger.warn(`A request is required for this request response: ${endpointDefinition.id}. Returning null.`);
-		return null;
-	}
 	if (endpointDefinition.type !== "module") {
 		logger.warn(
 			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
@@ -76,7 +72,7 @@ export async function requestResponse(
 	const localStorage = getStorage<unknown>(dataType as string);
 
 	if (method === "GET") {
-		if (request.id === undefined) {
+		if (request?.id === undefined) {
 			logger.warn(`An id is required for this request response: ${endpointDefinition.id}. Returning null`);
 			return null;
 		}
