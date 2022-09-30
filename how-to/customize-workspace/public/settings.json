@@ -4,7 +4,7 @@
 		"store": true,
 		"dock": true,
 		"notifications": true,
-		"autoShow": ["home", "dock"]
+		"autoShow": ["dock", "home"]
 	},
 	"authProvider": {
 		"modules": [
