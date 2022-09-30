@@ -1,25 +1,32 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
+import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type {
 	InitOptionsHandler,
 	InitOptionsHandlerOptions,
+	InitOptionsLifecycle,
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./shapes/init-options-shapes";
 
 const logger = createLogger("InitOptions");
 
-const actionListeners: Map<
+let actionListeners: Map<
 	string,
-	Map<string, <T>(requestedAction: string, payload?: T) => Promise<void>>
+	Map<
+		string,
+		{
+			lifecycle: InitOptionsLifecycle;
+			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
+		}
+	>
 > = new Map();
-const actionListenerMap: { [key: string]: string } = {};
+let actionListenerMap: { [key: string]: string } = {};
 const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map();
 const listenerMap: { [key: string]: string } = {};
-let initialized = false;
-const actionParamName = "action";
-const actionPayloadParamName = "payload";
+const ACTION_PARAM_NAME = "action";
+const ACTION_PAYLOAD_PARAM_NAME = "payload";
 
 function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
 	try {
@@ -34,10 +41,10 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
 	}
 }
 
-async function notifyActionListeners(initOptions: UserAppConfigArgs) {
-	const action = initOptions[actionParamName];
+async function notifyActionListeners(initOptions: UserAppConfigArgs, lifecycle: InitOptionsLifecycle) {
+	const action = initOptions[ACTION_PARAM_NAME];
 	const payload =
-		initOptions[actionPayloadParamName] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
+		initOptions[ACTION_PAYLOAD_PARAM_NAME] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
 	const availableListeners = actionListeners.get(action);
 	if (availableListeners !== undefined && availableListeners !== null) {
 		const subscriberIds = Array.from(availableListeners.keys());
@@ -45,13 +52,17 @@ async function notifyActionListeners(initOptions: UserAppConfigArgs) {
 		for (let i = 0; i < subscriberIds.length; i++) {
 			const subscriberId = subscriberIds[i];
 			logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`);
-			try {
-				await availableListeners.get(subscriberId)(action, payload);
-			} catch (error) {
-				logger.error(
-					`Error executing action: ${action} against registered listener: ${subscriberId}.`,
-					error
-				);
+			const listener = availableListeners.get(subscriberId);
+
+			if (listener?.lifecycle === lifecycle) {
+				try {
+					await availableListeners.get(subscriberId).actionHandler(action, payload);
+				} catch (error) {
+					logger.error(
+						`Error executing action: ${action} against registered listener: ${subscriberId}.`,
+						error
+					);
+				}
 			}
 		}
 	}
@@ -77,6 +88,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 			for (let l = 0; l < subscriberIds.length; l++) {
 				const subscriberId = subscriberIds[l];
 				logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`);
+
 				try {
 					await availableListeners.get(subscriberId)(initOptions);
 				} catch (error) {
@@ -90,33 +102,21 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 	}
 }
 
-async function queryOnLaunch(userAppConfigArgs?: UserAppConfigArgs) {
-	if (userAppConfigArgs !== undefined) {
-		logger.info("Received during startup", userAppConfigArgs);
-		if (userAppConfigArgs[actionParamName] !== undefined) {
-			await notifyActionListeners(userAppConfigArgs);
-		} else {
-			await notifyListeners(userAppConfigArgs);
-		}
-	}
-}
-
 async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }) {
 	if (event?.userAppConfigArgs !== undefined) {
 		logger.info("Received while platform is running", event.userAppConfigArgs);
-		if (event.userAppConfigArgs[actionParamName] !== undefined) {
-			await notifyActionListeners(event.userAppConfigArgs);
+		if (event.userAppConfigArgs[ACTION_PARAM_NAME] !== undefined) {
+			await notifyActionListeners(event.userAppConfigArgs, "after-bootstrap");
 		} else {
 			await notifyListeners(event.userAppConfigArgs);
 		}
 	}
 }
 
-export async function init(options?: InitOptionsProviderOptions) {
-	if (initialized) {
-		return;
-	}
-	initialized = true;
+export async function init(options: InitOptionsProviderOptions, lifecycle: InitOptionsLifecycle) {
+	// Init can be called multiple times, so reset any action listeners from modules
+	actionListeners = new Map();
+	actionListenerMap = {};
 
 	const initOptionsModules = await loadModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(
 		options,
@@ -125,13 +125,23 @@ export async function init(options?: InitOptionsProviderOptions) {
 
 	await initializeModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(initOptionsModules);
 
+	const platform = getCurrentSync();
+
 	for (const initOptionsModule of initOptionsModules) {
 		const supportedActions = initOptionsModule.definition.data?.supportedActions ?? [];
 		for (const supportedAction of supportedActions) {
-			registerActionListener(supportedAction, async (requestedAction: string, payload?: unknown) => {
-				logger.info(`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`);
-				await initOptionsModule.implementation.action(requestedAction, payload);
-			});
+			registerActionListener(
+				supportedAction,
+				initOptionsModule.definition.data?.lifecycle ?? "after-bootstrap",
+				async (requestedAction: string, payload?: unknown) => {
+					if (await checkConditions(platform, initOptionsModule.definition.data?.conditions)) {
+						logger.info(
+							`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`
+						);
+						await initOptionsModule.implementation.action(requestedAction, payload);
+					}
+				}
+			);
 		}
 	}
 
@@ -141,14 +151,23 @@ export async function init(options?: InitOptionsProviderOptions) {
 		userAppConfigArgs?: UserAppConfigArgs;
 	};
 
-	await queryOnLaunch(customInitOptions?.userAppConfigArgs);
+	if (customInitOptions?.userAppConfigArgs !== undefined) {
+		logger.info("Received during startup", customInitOptions?.userAppConfigArgs);
+		if (customInitOptions?.userAppConfigArgs[ACTION_PARAM_NAME] !== undefined) {
+			await notifyActionListeners(customInitOptions?.userAppConfigArgs, lifecycle);
+		} else {
+			await notifyListeners(customInitOptions?.userAppConfigArgs);
+		}
+	}
 
-	const platform = getCurrentSync();
-	await platform.Application.addListener("run-requested", queryWhileRunning);
+	if (lifecycle === "after-bootstrap") {
+		await platform.Application.addListener("run-requested", queryWhileRunning);
+	}
 }
 
 export function registerActionListener(
 	action: string,
+	lifecycle: InitOptionsLifecycle,
 	actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>
 ): string {
 	const key = crypto.randomUUID();
@@ -156,7 +175,10 @@ export function registerActionListener(
 		actionListeners.set(action, new Map());
 	}
 	const handlers = actionListeners.get(action);
-	handlers.set(key, actionHandler);
+	handlers.set(key, {
+		lifecycle,
+		actionHandler
+	});
 	actionListeners.set(action, handlers);
 	actionListenerMap[key] = action;
 	return key;
@@ -166,7 +188,7 @@ export function registerListener(
 	paramName: string,
 	handler: (initOptions: UserAppConfigArgs) => Promise<void>
 ): string {
-	if (paramName === actionParamName) {
+	if (paramName === ACTION_PARAM_NAME) {
 		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return null;
 	}

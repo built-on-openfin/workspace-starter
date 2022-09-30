@@ -1,7 +1,11 @@
 import type { ModuleImplementation, ModuleList } from "./module-shapes";
 
+export type InitOptionsLifecycle = "after-auth" | "after-bootstrap";
+
 export interface InitOptionsHandlerOptions {
 	supportedActions: string[];
+	conditions?: string[];
+	lifecycle?: InitOptionsLifecycle;
 }
 
 export interface InitOptionsHandler<O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions>
