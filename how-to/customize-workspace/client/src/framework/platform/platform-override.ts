@@ -51,10 +51,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
 				const workspacesResponse = await endpointProvider.requestResponse<
 					{ query?: string },
-					{ data: Workspace[] }
+					{ data: { [key: string]: Workspace } }
 				>(getWorkspacesEndpointId, { query });
 				logger.info(`Returning saved workspaces from custom storage for query: ${query ?? "none"}`);
-				return workspacesResponse.data;
+				return Object.values(workspacesResponse.data);
 			}
 			logger.info(`Returning saved workspaces from default storage for query: ${query ?? "none"}`);
 			return super.getSavedWorkspaces(query);
@@ -152,12 +152,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
 				// eslint-disable-next-line max-len
-				const pagesResponse = await endpointProvider.requestResponse<{ query: string }, { data: Page[] }>(
-					getPagesEndpointId,
-					{ query }
-				);
+				const pagesResponse = await endpointProvider.requestResponse<
+					{ query: string },
+					{ data: { [key: string]: Page } }
+				>(getPagesEndpointId, { query });
 				logger.info(`Returning saved pages from custom storage for query: ${query ?? "none"}`);
-				return pagesResponse.data;
+				return Object.values(pagesResponse.data);
 			}
 			logger.info(`Returning saved pages from default storage for query: ${query ?? "none"}`);
 			return super.getSavedPages(query);
