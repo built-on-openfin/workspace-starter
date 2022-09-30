@@ -58,7 +58,7 @@ export async function action(
 }
 
 export async function requestResponse(
-	endpointDefinition: EndpointDefinition<{ dataType: string; method: "GET" | "GETALL" }>,
+	endpointDefinition: EndpointDefinition<{ dataType: string; method: "GET" }>,
 	request?: { id?: string; query?: string }
 ): Promise<unknown | null> {
 	if (endpointDefinition.type !== "module") {
@@ -73,12 +73,9 @@ export async function requestResponse(
 
 	if (method === "GET") {
 		if (request?.id === undefined) {
-			logger.warn(`An id is required for this request response: ${endpointDefinition.id}. Returning null`);
-			return null;
+			return localStorage.getAll();
 		}
 		return localStorage.get(request.id);
-	} else if (method === "GETALL") {
-		return { data: await localStorage.getAll() };
 	}
 	return null;
 }
