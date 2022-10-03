@@ -138,10 +138,16 @@ interface DockProviderOptions {
 interface ThemeProviderOptions {
 	themes: CustomThemes;
 }
+export type AppEndpointOptions =
+	| string
+	| {
+			inputId: string;
+			outputId?: string;
+	  };
 
 export interface AppProviderOptions {
 	appsSourceUrl?: string | string[];
-	endpointIds?: string[];
+	endpointIds?: AppEndpointOptions[];
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
 	cacheDurationInMinutes?: number;
 	cacheDurationInSeconds?: number;

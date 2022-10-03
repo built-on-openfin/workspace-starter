@@ -102,16 +102,16 @@ Customize workspace supports the following manifest types (for the list in code 
 
 The app provider definition can either come from your manifest or from an external settings service (see [How To Apply Entitlements](./how-to-apply-entitlements.md) and an example is available via [second.manifest.fin.json](../public/second.manifest.fin.json) and [settings.json](../public/settings.json)). The available settings are as follows:
 
-| Property                                  | Description                                                                                                                                                                                                           |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **appProvider**                           | Config related to where the apps should be fetched from                                                                                                                                                               |
-| appsSourceUrl (legacy)                    | Where should we fetch the apps from. It is a url or an array of urls from which to get apps data from. If present it will be used instead of endpointIds (shown below).                                               |
-| includeCredentialOnSourceRequest (legacy) | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include". Used when appsSourceUrl is specified.                                                                         |
-| endpointIds                               | An array of endpoint ids that should be used to request a list of apps (this replaces appsSourceUrl)                                                                                                                  |
-| cacheDurationInMinutes                    | How many minutes should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInSeconds.                                                                                   |
-| cacheDurationInSeconds                    | How many seconds should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInMinutes.                                                                                   |
-| appAssetTag                               | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
-| manifestTypes                             | An array of the manifestTypes the app should support from the apps.json feed                                                                                                                                          |
+| Property                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **appProvider**                           | Config related to where the apps should be fetched from                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| appsSourceUrl (legacy)                    | Where should we fetch the apps from. It is a url or an array of urls from which to get apps data from. If present it will be used instead of endpointIds (shown below).                                                                                                                                                                                                                                                                                                                                                                |
+| includeCredentialOnSourceRequest (legacy) | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include". Used when appsSourceUrl is specified.                                                                                                                                                                                                                                                                                                                                                                                          |
+| endpointIds                               | An array of endpoint ids that should be used to request a list of apps (this replaces appsSourceUrl) or an object that provides an "inputId" and "outputId". If specified then the platform will fetch a response from an inputId endpoint and then pass it to the outputId endpoint which will return a list of Apps in the format we expect (this can be used to map app directories if the app directory supports a specific format e.g. fdc3 or custom and you decide to map that on the client side rather than the server side). |
+| cacheDurationInMinutes                    | How many minutes should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInSeconds.                                                                                                                                                                                                                                                                                                                                                                                                    |
+| cacheDurationInSeconds                    | How many seconds should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInMinutes.                                                                                                                                                                                                                                                                                                                                                                                                    |
+| appAssetTag                               | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed                                                                                                                                                                                                                                                                                                                  |
+| manifestTypes                             | An array of the manifestTypes the app should support from the apps.json feed                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ### An Example Of What These Settings Would Look Like (Taken From [manifest.fin.json](../public/manifest.fin.json))
 
@@ -163,6 +163,61 @@ The configuration above shows that it doesn't enable all of the manifest types t
 
 These endpoints are using the built in fetch support and the options are passed to fetch options in order to get back the JSON list of app entries.
 
+### How would I map a feed of custom or standard based apps?
+
+**The first option to consider is whether you want to do a conversion server side.**
+
+If you need to map an FDC3 1.2 / 2.0 App Entry so that it can be used by the platform then we have an endpoint module and a pattern to support it (module and endpoint ids can be anything you want).
+
+You would define two endpoints. One endpoint takes the source apps and the second app transforms that into the platform App shape you have seen above.
+
+```json
+"endpointProvider": {
+    "modules": [
+        {
+            "enabled": true,
+            "id": "fdc3-app",
+            "url": "http://localhost:8080/js/modules/endpoints/fdc3-app.bundle.js"
+        }
+    ],
+    "endpoints": [
+        {
+     "id": "fdc3-in",
+     "type": "fetch",
+     "options": {
+      "method": "GET",
+      "url": "http://localhost:8080/fdc3-apps.json"
+     }
+    },
+    {
+     "id": "fdc3-out",
+     "type": "module",
+     "typeId": "fdc3-app",
+     "options": {
+      "fdc3Version": "1.2"
+     }
+  },
+    ]
+},
+```
+
+The fdc3Version setting supports "1.2" or "2.0".
+
+In the above example we would have the following app endpointId definition (using an object instead of just a string id):
+
+```json
+    "appProvider": {
+            "endpointIds": [{ "inputId": "fdc3-in", "outputId": "fdc3-out" }],
+            ...
+        },
+```
+
+If you wanted to consume a 1.2 and 2.0 directory you could add an additional endpoint entry to the appProvider endpointIds array and ensure you had the inputId and outputId entry points listed in the endpointProvider endpoints array.
+
+If you had a custom format that you wanted to map you wouldn't need the inputId and outputId approach. You can either do the transformation server side or you can create you own custom endpoint module that takes in your custom format and returns platform Apps.
+
+The fdc3 endpoint module can be seen [here](../client/src/modules/endpoints/fdc3-app/endpoint.ts) and you could use a similar approach.
+
 ## Where Are Apps Used?
 
 Apps can come from many sources but the feed can be used by:
@@ -181,5 +236,6 @@ Our guides show how to:
 ## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)
+- [endpoint.ts](../client/src/modules/endpoints/fdc3-app/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
