@@ -7,7 +7,7 @@ let settings: CustomSettings;
 let validManifestHosts: string[];
 const logger = createLogger("Settings");
 
-async function getConfiguredSettings(): Promise<CustomSettings> {
+export async function getConfiguredSettings(): Promise<CustomSettings> {
 	const app = await fin.Application.getCurrent();
 	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 	return manifest.customSettings ?? {};

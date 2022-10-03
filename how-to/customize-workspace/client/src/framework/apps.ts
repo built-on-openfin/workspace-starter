@@ -194,7 +194,7 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 
 	defaultCredentials = options?.includeCredentialOnSourceRequest;
 	appAssetTag = options?.appAssetTag ?? "appasset";
-	supportedManifestTypes = options.manifestTypes || [];
+	supportedManifestTypes = options?.manifestTypes ?? [];
 }
 
 export async function getApps(): Promise<App[]> {
