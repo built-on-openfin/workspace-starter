@@ -45,7 +45,8 @@
 			"inline-view",
 			"window",
 			"inline-window",
-			"desktop-browser"
+			"desktop-browser",
+			"inline-external"
 		]
 	},
 	"endpointProvider": {
