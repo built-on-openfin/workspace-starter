@@ -3,14 +3,14 @@ import { getConnectedApps } from "./connections";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import type { AppProviderOptions } from "./shapes/framework-shapes";
+import type { AppEndpointOptions, AppProviderOptions } from "./shapes/framework-shapes";
 
 const logger = createLogger("Apps");
 
 let cachedApps: App[];
 let endpoints: EndpointProvider;
 let cacheDuration = 0;
-let endpointIds: string[] = [];
+let endpointIds: AppEndpointOptions[] = [];
 let isInitialized = false;
 let defaultCredentials: "omit" | "same-origin" | "include";
 let appAssetTag: string = "appasset";
@@ -90,7 +90,7 @@ async function validateEntries(apps: App[]) {
 }
 
 async function getEntries(
-	source: string[],
+	source: string[] | AppEndpointOptions[],
 	credentials?: "omit" | "same-origin" | "include",
 	cache?: number
 ): Promise<App[]> {
@@ -100,19 +100,58 @@ async function getEntries(
 	}
 	const apps: App[] = [];
 
-	for (let i = 0; i < endpointIds.length; i++) {
-		const endpointId = endpointIds[i];
+	for (let i = 0; i < source.length; i++) {
+		const endpoint = source[i];
 		try {
-			if (endpoints.hasEndpoint(endpointId)) {
-				const results = await endpoints.requestResponse<never, App[]>(endpointId);
+			if (typeof endpoint === "string") {
+				if (endpoints.hasEndpoint(endpoint)) {
+					logger.info(`Fetching apps from source: ${endpoint}`);
+					const results = await endpoints.requestResponse<never, App[]>(endpoint);
+					logger.info(`${results.length} app(s) received.`);
+					apps.push(...results);
+				} else if (endpoint.startsWith("http")) {
+					logger.info(`Fetching apps from url: ${endpoint}`);
+					const resp = await fetch(endpoint, options);
+					const jsonResults: App[] = await resp.json();
+					logger.info(`${jsonResults.length} app(s) received.`);
+					apps.push(...jsonResults);
+				} else {
+					logger.warn(
+						`Endpoint provided ${endpoint} that is not an available endpoint or a url. Unable to fetch apps.`
+					);
+				}
+			} else if (endpoint?.inputId !== undefined && endpoint?.outputId !== undefined) {
+				if (endpoints.hasEndpoint(endpoint.inputId) && endpoints.hasEndpoint(endpoint.outputId)) {
+					logger.info(
+						`Mapping from App Source: ${endpoint.inputId} to Platform App using: ${endpoint.outputId}`
+					);
+					const inputResults = await endpoints.requestResponse<never, unknown[]>(endpoint.inputId);
+					logger.info(`Received ${inputResults.length} result(s) from ${endpoint.inputId}.`);
+					const outputResults = await endpoints.requestResponse<unknown, App[]>(
+						endpoint.outputId,
+						inputResults
+					);
+					logger.info(`Mapped ${outputResults.length} app(s) using ${endpoint.outputId}`);
+					apps.push(...outputResults);
+				} else {
+					logger.warn(
+						`Unable to mapping from App Source: ${endpoint.inputId} to Platform App using: ${endpoint.outputId} as one or both of the endpoints are not defined.`
+					);
+				}
+			} else if (endpoint?.inputId !== undefined && endpoints.hasEndpoint(endpoint?.inputId)) {
+				logger.info(`Fetching apps from source: ${endpoint.inputId}`);
+				const results = await endpoints.requestResponse<never, App[]>(endpoint.inputId);
+				logger.info(`${results.length} app(s) received.`);
 				apps.push(...results);
 			} else {
-				const resp = await fetch(endpointId, options);
-				const jsonResults: App[] = await resp.json();
-				apps.push(...jsonResults);
+				logger.warn(
+					`Endpoint provided ${JSON.stringify(
+						endpoint
+					)} cannot be resolved. Please ensure that ids are provided and available.`
+				);
 			}
 		} catch (error) {
-			logger.error(`Error fetching apps from endpoint ${endpointId}`, error);
+			logger.error(`Error fetching apps from endpoint ${JSON.stringify(endpoint)}`, error);
 		}
 	}
 
@@ -194,7 +233,7 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 
 	defaultCredentials = options?.includeCredentialOnSourceRequest;
 	appAssetTag = options?.appAssetTag ?? "appasset";
-	supportedManifestTypes = options.manifestTypes || [];
+	supportedManifestTypes = options?.manifestTypes ?? [];
 }
 
 export async function getApps(): Promise<App[]> {

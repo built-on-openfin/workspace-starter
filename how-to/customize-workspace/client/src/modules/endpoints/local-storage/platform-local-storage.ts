@@ -40,14 +40,14 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 		}
 	}
 
-	public async getAll(query?: string): Promise<T[]> {
+	public async getAll(query?: string): Promise<{ [key: string]: T }> {
 		const store = this.getCompleteStore();
 		if (Object.keys(store).length === 0) {
 			this._logger.info(`Storage has no ${this._storageTypeName} entries`);
-			return [];
+			return {};
 		}
 
-		return Object.values(store);
+		return store;
 	}
 
 	public async remove(id: string): Promise<void> {

@@ -79,7 +79,8 @@ To learn more about how to modules see [How To Add A Module](./how-to-add-a-modu
 We include two examples of endpoint modules in the modules folder:
 
 - local-storage - shows how you can have an endpoint that can save and fetch from local storage
-- channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel.
+- channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel
+- fdc3-app - can be used to transform an array of fdc3 1.2 or 2.0 apps into platform apps. Generally used when importing apps from one or more app directories (see [how to define apps](./how-to-define-apps.md))
 
 Endpoints can be defined as:
 
@@ -96,5 +97,6 @@ Endpoints can be defined as:
 - [endpoint-shapes.ts](../client/src/framework/shapes/endpoint-shapes.ts)
 - local-storage [endpoint](../client/src/modules/endpoints/local-storage/endpoint.ts)
 - channel [endpoint](../client/src/modules/endpoints/channel/endpoint.ts)
+- fdc3-app [endpoint](../client/src/modules/endpoints/fdc3-app/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
