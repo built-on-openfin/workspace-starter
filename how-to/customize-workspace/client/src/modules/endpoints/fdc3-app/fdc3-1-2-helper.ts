@@ -3,7 +3,7 @@ import type { AppDefinition, AppIcon, AppImage } from "./fdc3-1-2-shapes";
 
 export function getIcons(icons: AppIcon[]): Image[] {
 	const appIcons: Image[] = [];
-	if (icons === undefined) {
+	if (!Array.isArray(icons)) {
 		return appIcons;
 	}
 	for (const appIcon of icons) {
@@ -14,7 +14,7 @@ export function getIcons(icons: AppIcon[]): Image[] {
 
 export function getImages(images: AppImage[]): Image[] {
 	const appImages: Image[] = [];
-	if (images === undefined) {
+	if (!Array.isArray(images)) {
 		return appImages;
 	}
 	for (const appImage of images) {

@@ -28,7 +28,7 @@ export async function requestResponse(
 		);
 		return results;
 	}
-	const fdc3Version = endpointDefinition?.options?.fdc3Version || "1.2";
+	const fdc3Version = endpointDefinition?.options?.fdc3Version ?? "1.2";
 	let applications;
 
 	if (Array.isArray(request)) {

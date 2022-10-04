@@ -182,21 +182,21 @@ You would define two endpoints. One endpoint takes the source apps and the secon
     ],
     "endpoints": [
         {
-     "id": "fdc3-in",
-     "type": "fetch",
-     "options": {
-      "method": "GET",
-      "url": "http://localhost:8080/fdc3-apps.json"
-     }
-    },
-    {
-     "id": "fdc3-out",
-     "type": "module",
-     "typeId": "fdc3-app",
-     "options": {
-      "fdc3Version": "1.2"
-     }
-  },
+            "id": "fdc3-in",
+            "type": "fetch",
+            "options": {
+                "method": "GET",
+                "url": "http://localhost:8080/fdc3-apps.json"
+            }
+        },
+        {
+            "id": "fdc3-out",
+            "type": "module",
+            "typeId": "fdc3-app",
+            "options": {
+                "fdc3Version": "1.2"
+            }
+        }
     ]
 },
 ```
