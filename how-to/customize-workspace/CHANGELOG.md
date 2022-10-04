@@ -1,5 +1,10 @@
 # Changelog
 
+## v9.1
+
+- Removed `GETALL` from endpoints to make it behave more like REST, instead use `GET` without an `id` which returns the whole object, not as an array, but as a keyed object
+- Add initOptions lifecycle property which defaults to `after-bootstrap`, but has an alternative value of `after-auth`
+
 ## v9
 
 - Added - Lifecycle modules with standard hooks of `after-bootstrap`, `before-quit`

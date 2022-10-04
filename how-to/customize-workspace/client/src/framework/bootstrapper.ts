@@ -74,7 +74,7 @@ export async function init() {
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
 	await registerIntegration(settings.integrationProvider, {
-		rootUrl: settings?.platformProvider.rootUrl,
+		rootUrl: settings?.platformProvider?.rootUrl,
 		templateHelpers,
 		launchView,
 		launchPage,
@@ -189,7 +189,7 @@ export async function init() {
 
 	// Once the platform is started and everything is bootstrapped initialize the init options
 	// listener so that it is ready to handle initial params or subsequent requests.
-	await registerInitOptionsListener(settings?.initOptionsProvider);
+	await registerInitOptionsListener(settings?.initOptionsProvider, "after-bootstrap");
 
 	// Let any other modules participate in the lifecycle
 	const platform = getCurrentSync();

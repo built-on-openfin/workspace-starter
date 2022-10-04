@@ -46,15 +46,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const getWorkspacesEndpointId = "workspace-get-all";
+			const getWorkspacesEndpointId = "workspace-get";
 
 			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
 				const workspacesResponse = await endpointProvider.requestResponse<
 					{ query?: string },
-					{ data: Workspace[] }
+					{ [key: string]: Workspace }
 				>(getWorkspacesEndpointId, { query });
 				logger.info(`Returning saved workspaces from custom storage for query: ${query ?? "none"}`);
-				return workspacesResponse.data;
+				return Object.values(workspacesResponse);
 			}
 			logger.info(`Returning saved workspaces from default storage for query: ${query ?? "none"}`);
 			return super.getSavedWorkspaces(query);
@@ -66,7 +66,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const getWorkspaceEndpointId = "workspace-get";
 
 			if (endpointProvider.hasEndpoint(getWorkspaceEndpointId)) {
-				// eslint-disable-next-line max-len
 				const workspaceResponse = await endpointProvider.requestResponse<{ id: string }, Workspace>(
 					getWorkspaceEndpointId,
 					{ id }
@@ -84,7 +83,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const setWorkspaceEndpointId = "workspace-set";
 
 			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
 					setWorkspaceEndpointId,
 					{ id: req.workspace.workspaceId, payload: req.workspace }
@@ -106,7 +104,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const setWorkspaceEndpointId = "workspace-set";
 
 			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
 					setWorkspaceEndpointId,
 					{ id: req.workspace.workspaceId, payload: req.workspace }
@@ -132,7 +129,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const removeWorkspaceEndpointId = "workspace-remove";
 
 			if (endpointProvider.hasEndpoint(removeWorkspaceEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string }>(removeWorkspaceEndpointId, { id });
 				if (success) {
 					logger.info(`Removed workspace with id: ${id} from custom storage`);
@@ -148,16 +144,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const getPagesEndpointId = "page-get-all";
+			const getPagesEndpointId = "page-get";
 
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
-				// eslint-disable-next-line max-len
-				const pagesResponse = await endpointProvider.requestResponse<{ query: string }, { data: Page[] }>(
-					getPagesEndpointId,
-					{ query }
-				);
+				const pagesResponse = await endpointProvider.requestResponse<
+					{ query: string },
+					{ [key: string]: Page }
+				>(getPagesEndpointId, { query });
 				logger.info(`Returning saved pages from custom storage for query: ${query ?? "none"}`);
-				return pagesResponse.data;
+				return Object.values(pagesResponse);
 			}
 			logger.info(`Returning saved pages from default storage for query: ${query ?? "none"}`);
 			return super.getSavedPages(query);
@@ -169,7 +164,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const getPageEndpointId = "page-get";
 
 			if (endpointProvider.hasEndpoint(getPageEndpointId)) {
-				// eslint-disable-next-line max-len
 				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
 					id
 				});
@@ -189,7 +183,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const setPageEndpointId = "page-set";
 
 			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
 					id: req.page.pageId,
 					payload: req.page
@@ -214,7 +207,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const setPageEndpointId = "page-set";
 
 			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
 					id: req.page.pageId,
 					payload: req.page
@@ -238,7 +230,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// in non-default location (e.g. on the server instead of locally)
 			const removePageEndpointId = "page-remove";
 			if (endpointProvider.hasEndpoint(removePageEndpointId)) {
-				// eslint-disable-next-line max-len
 				const success = await endpointProvider.action<{ id: string }>(removePageEndpointId, { id });
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
