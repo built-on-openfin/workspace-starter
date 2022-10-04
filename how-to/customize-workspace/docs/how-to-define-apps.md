@@ -186,7 +186,7 @@ You would define two endpoints. One endpoint takes the source apps and the secon
             "type": "fetch",
             "options": {
                 "method": "GET",
-                "url": "http://localhost:8080/fdc3-apps.json"
+                "url": "https://yourserver.com/fdc3/1.2/apps"
             }
         },
         {
