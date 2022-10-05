@@ -99,7 +99,6 @@ export async function init(options: ConnectionProviderOptions) {
 		connectionService.onConnection(async (identity, payload) => {
 			// can reject a connection here by throwing an error
 			logger.info("Client connection request identity", JSON.stringify(identity));
-
 			const validatedConnection = await getConnectionListing(identity);
 			let isValid = false;
 			let errorMessage =
@@ -146,6 +145,11 @@ export async function init(options: ConnectionProviderOptions) {
 			logger.info("Check for action permission received from client", identity, payload);
 			const result = isActionSupported(identity, payload as { action: string });
 			return { result };
+		});
+
+		connectionService.register("disconnect", async (payload, identity) => {
+			logger.info("Request for disconnection received from client", identity, payload);
+			await disconnect(identity);
 		});
 	} else {
 		logger.info("This platform is not configured to support a connectionProvider");
@@ -196,27 +200,34 @@ export async function getConnectedApps(): Promise<App[]> {
 	const connectedSources = await getConnectedAppSourceClients();
 	const apps: App[] = [];
 	for (let i = 0; i < connectedSources.length; i++) {
-		const returnedApplications: App[] = await connectionService.dispatch(
-			connectedSources[i].identity,
-			"getApps"
-		);
-		const supportedManifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
-		let validatedApps: App[] = [];
-		if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
-			validatedApps = returnedApplications.filter((entry) =>
-				supportedManifestTypes.includes(entry.manifestType)
+		try {
+			const returnedApplications: App[] = await connectionService.dispatch(
+				connectedSources[i].identity,
+				"getApps"
 			);
-		} else {
-			validatedApps = returnedApplications;
-		}
-		for (let v = 0; v < validatedApps.length; v++) {
-			if (validatedApps[v].manifestType === manifestTypes.connection.id) {
-				// ensure that if an app from a connection is marked as connection
-				// then it should only be sent to itself and not another uuid
-				validatedApps[v].manifest = connectedSources[i].identity.uuid;
+			const supportedManifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
+			let validatedApps: App[] = [];
+			if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
+				validatedApps = returnedApplications.filter((entry) =>
+					supportedManifestTypes.includes(entry.manifestType)
+				);
+			} else {
+				validatedApps = returnedApplications;
 			}
+			for (let v = 0; v < validatedApps.length; v++) {
+				if (validatedApps[v].manifestType === manifestTypes.connection.id) {
+					// ensure that if an app from a connection is marked as connection
+					// then it should only be sent to itself and not another uuid
+					validatedApps[v].manifest = connectedSources[i].identity.uuid;
+				}
+			}
+			apps.push(...validatedApps);
+		} catch (err) {
+			logger.error(
+				`Error while trying to get apps from connected app ${connectedSources[i].identity.uuid}`,
+				err
+			);
 		}
-		apps.push(...validatedApps);
 	}
 	return apps;
 }
