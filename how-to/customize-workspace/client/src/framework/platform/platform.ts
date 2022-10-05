@@ -11,9 +11,10 @@ import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
 import * as headlessProvider from "../headless";
+import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
-import { getAuthSettings, getSettings, isValid as isSettingsValid } from "../settings";
+import { getAuthSettings, getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
 import type { CustomSettings } from "../shapes";
 import { deregister as deregisterShare, register as registerShare } from "../share";
 import { getThemes } from "../themes";
@@ -53,10 +54,16 @@ async function manageAuthFlow() {
 }
 
 async function setupPlatform() {
+	// Load the init options from the initial manifest
+	// and notify any actions with the after auth lifecycle
+	const configuredSettings = await getConfiguredSettings();
+	await initOptionsProvider.init(configuredSettings?.initOptionsProvider, "after-auth");
+
 	const settings: CustomSettings = await getSettings();
 	await loggerProvider.init(settings?.loggerProvider);
 
 	logger.info("Initializing Core Services");
+
 	await endpointProvider.init(settings?.endpointProvider);
 	await headlessProvider.init(settings?.headlessProvider);
 	await connectionProvider.init(settings?.connectionProvider);
