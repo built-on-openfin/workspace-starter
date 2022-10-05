@@ -99,7 +99,8 @@
 				"window",
 				"inline-window",
 				"desktop-browser",
-				"connection"
+				"connection",
+				"inline-external"
 			]
 		},
 		"endpointProvider": {
@@ -754,7 +755,7 @@
 			]
 		},
 		"connectionProvider": {
-			"connectionId": "customize-workspace-platform",
+			"connectionId": "workspace-connection",
 			"connectionValidationEndpoint": "connection-verification",
 			"supportedActions": [
 				"show-home",

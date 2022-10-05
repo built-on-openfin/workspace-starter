@@ -46,7 +46,8 @@
 			"window",
 			"inline-window",
 			"desktop-browser",
-			"connection"
+			"connection",
+			"inline-external"
 		]
 	},
 	"endpointProvider": {
