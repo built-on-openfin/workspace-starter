@@ -163,6 +163,67 @@ The configuration above shows that it doesn't enable all of the manifest types t
 
 These endpoints are using the built in fetch support and the options are passed to fetch options in order to get back the JSON list of app entries.
 
+### Do I need a rest endpoint if I just want to add a few quick apps?
+
+Our local setup provides an apps.json file for you to use but we also provide an endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) module that lets you add inline apps via the manifest.
+
+The endpoint module is called **inline-apps** and it lets you specify an array of apps via the endpoint options setting:
+
+```json
+"endpointProvider": {
+    "modules": [
+        {
+            "enabled": true,
+            "id": "inline-apps",
+            "url": "http://localhost:8080/js/modules/endpoints/inline-apps.bundle.js"
+        }
+    ],
+    "endpoints": [
+        {
+            "id": "inline-apps-get",
+            "type": "module",
+            "typeId": "inline-apps",
+            "options": {
+                "apps": [
+                    {
+                        "appId": "inline-app-example",
+                        "name": "inline-app-example",
+                        "title": "Inline App Example",
+                        "description": "An application added via the manifest or a settings rest endpoint by using the inline-apps endpoint module.",
+                        "manifest": {
+                            "url": "https://www.openfin.co"
+                        },
+                        "manifestType": "inline-view",
+                        "icons": [
+                            {
+                            "src": "http://localhost:8080/common/images/icon-blue.png"
+                            }
+                        ],
+                        "contactEmail": "contact@example.com",
+                        "supportEmail": "support@example.com",
+                        "publisher": "OpenFin",
+                        "intents": [],
+                        "images": [],
+                        "tags": ["inline-app-example", "view"]
+                    }
+                ]
+            }
+        }
+    ]
+},
+```
+
+In the above example we would have the following app endpointId definition:
+
+```json
+    "appProvider": {
+            "endpointIds": ["inline-apps-get"],
+            ...
+        },
+```
+
+The inline-apps endpoint module can be seen [here](../client/src/modules/endpoints/inline-apps/endpoint.ts).
+
 ### How would I map a feed of custom or standard based apps?
 
 **The first option to consider is whether you want to do a conversion server side.**
@@ -236,6 +297,7 @@ Our guides show how to:
 ## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)
-- [endpoint.ts](../client/src/modules/endpoints/fdc3-app/endpoint.ts)
+- [inline-apps/endpoint.ts](../client/src/modules/endpoints/inline-apps/endpoint.ts)
+- [fdc3-app/endpoint.ts](../client/src/modules/endpoints/fdc3-app/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
