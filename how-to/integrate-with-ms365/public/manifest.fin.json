@@ -60,8 +60,8 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/integrations/ms365.bundle.js",
 					"data": {
-						"clientId": "7c5e94bc-247c-4850-98cf-ac3fbf2c4820",
-						"tenantId": "051d23bf-9257-4c0c-b503-512ae19844dc",
+						"clientId": "CLIENT-ID",
+						"tenantId": "TENANT-ID",
 						"images": {
 							"teamsLogo": "http://localhost:8080/images/teams.svg",
 							"email": "http://localhost:8080/images/email.svg",
