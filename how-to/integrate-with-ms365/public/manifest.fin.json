@@ -1,0 +1,77 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "26.102.71.7"
+	},
+	"platform": {
+		"uuid": "integrate-with-ms365",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["msteams", "mailto"]
+				}
+			}
+		},
+		"defaultViewOptions": {
+			"fdc3InteropApi": "1.2",
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/js/preload.js"
+				}
+			]
+		},
+		"defaultWindowOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Integrate With Microsoft 365 - v9.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With Microsoft 365 - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"homeProvider": {
+			"id": "integrate-with-ms365",
+			"title": "Integrate with Microsoft 365",
+			"icon": "http://localhost:8080/favicon.ico"
+		},
+		"integrationProvider": {
+			"modules": [
+				{
+					"id": "ms365",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Microsoft 365",
+					"enabled": true,
+					"url": "http://localhost:8080/js/integrations/ms365.bundle.js",
+					"data": {
+						"clientId": "7c5e94bc-247c-4850-98cf-ac3fbf2c4820",
+						"tenantId": "051d23bf-9257-4c0c-b503-512ae19844dc",
+						"images": {
+							"teamsLogo": "http://localhost:8080/images/teams.svg",
+							"email": "http://localhost:8080/images/email.svg",
+							"calendar": "http://localhost:8080/images/calendar.svg",
+							"share": "http://localhost:8080/images/share.svg",
+							"chat": "http://localhost:8080/images/chat.svg"
+						}
+					}
+				}
+			]
+		}
+	}
+}
