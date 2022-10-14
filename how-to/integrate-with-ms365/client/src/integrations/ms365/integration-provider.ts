@@ -1,4 +1,4 @@
-import type { Presence, Team, User } from "@microsoft/microsoft-graph-types";
+import type { Contact, Presence, Team, User } from "@microsoft/microsoft-graph-types";
 import {
 	connect,
 	enableLogging,
@@ -37,7 +37,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * The key to use for a call key action.
 	 * @internal
 	 */
-	private static readonly _ACTION_CALL = "Call";
+	private static readonly _ACTION_TEAMS_CALL = "Teams Call";
 
 	/**
 	 * The key to use for a email key action.
@@ -56,6 +56,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @internal
 	 */
 	private static readonly _ACTION_CHAT = "Chat";
+
+	/**
+	 * The key to use for a call key action.
+	 * @internal
+	 */
+	private static readonly _ACTION_CALL = "Call";
 
 	/**
 	 * The key to use for a copy key action.
@@ -110,9 +116,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._ms365Connection = await connect(
 				this._settings.clientId,
 				this._settings.tenantId,
-				"http://localhost:9999/redirect",
+				this._settings.redirectUri,
 				// https://learn.microsoft.com/en-us/graph/permissions-reference
-				["User.Read", "Presence.Read", "Presence.Read.All", "Directory.Read.All"]
+				[
+					"User.Read",
+					"Presence.Read",
+					"Presence.Read.All",
+					"Directory.Read.All",
+					"Mail.Read",
+					"Contacts.Read"
+				]
 			);
 			const result = await this._ms365Connection.executeApiRequest<User>("/v1.0/me");
 			if (result.status === 200) {
@@ -173,13 +186,43 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						}
 					} else if (query.length > 3) {
 						// try a user lookup instead
-						const searchFields: (keyof User)[] = ["displayName", "givenName", "surname"];
-						const searchQuery = searchFields.map((s) => `startsWith(${s},'${query}')`).join(" or ");
+						const userSearchFields: (keyof User)[] = ["displayName", "givenName", "surname"];
+						const userSearchQuery = userSearchFields.map((s) => `startsWith(${s},'${query}')`).join(" or ");
+						const usersRequest = `/users?$filter=${userSearchQuery}&$top=10`;
 
-						const response = await this._ms365Connection.executeApiRequest<GraphListResponse<User>>(
-							`/v1.0/users?$filter=${searchQuery}&$top=10`
+						const contactsRequest = `/me/contacts?$search=${query}&$top=10`;
+
+						const batchRequests: string[] = [usersRequest, contactsRequest];
+
+						const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+							"/v1.0/$batch",
+							"POST",
+							{
+								requests: batchRequests.map((r, idx) => ({
+									id: (idx + 1).toString(),
+									method: "GET",
+									url: r
+								}))
+							}
 						);
-						lastResponse.respond(response.data.value.map((c) => this.createLoadingResult(c)));
+
+						let homeResults: HomeSearchResult[] = [];
+
+						const userResponse = response.data?.responses.find((r) => r.id === "1");
+						if (userResponse?.status === 200) {
+							const users = userResponse.body as GraphListResponse<User>;
+							homeResults = homeResults.concat(users.value.map((u) => this.createLoadingResult(u, "User")));
+						}
+
+						const contactsResponse = response.data?.responses.find((r) => r.id === "2");
+						if (contactsResponse?.status === 200) {
+							const contacts = contactsResponse.body as GraphListResponse<Contact>;
+							homeResults = homeResults.concat(
+								contacts.value.map((c) => this.createLoadingResult(c, "Contact"))
+							);
+						}
+
+						lastResponse.respond(homeResults);
 					}
 				} catch (err) {
 					if (err instanceof Error) {
@@ -207,26 +250,34 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (result.action.trigger === "focus-change" && result.data?.state === "loading") {
 			setTimeout(async () => {
 				if (this._ms365Connection) {
-					const user: User = result.data?.user;
-					lastResponse.respond([await this.createUserResult(user)]);
+					if (result.data?.objType === "User") {
+						const user: User = result.data?.obj;
+						lastResponse.respond([await this.createUserResult(user)]);
+					} else if (result.data?.objType === "Contact") {
+						const contact: Contact = result.data?.obj;
+						lastResponse.respond([await this.createContactResult(contact)]);
+					}
 				}
 			}, 0);
 		} else if (result.action.trigger === "user-action") {
-			const { user, json }: { user?: User; json?: unknown } = result.data;
+			const { email, json }: { email?: string; json?: unknown } = result.data;
 
-			if (result.action.name === Microsoft365Provider._ACTION_CALL) {
+			if (result.action.name === Microsoft365Provider._ACTION_TEAMS_CALL) {
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
-				await teamsConnection.startCall([user.mail]);
+				await teamsConnection.startCall([email]);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_EMAIL) {
-				await fin.System.openUrlWithBrowser(`mailto:${user.mail}`);
+				await fin.System.openUrlWithBrowser(`mailto:${email}`);
+				return true;
+			} else if (result.action.name === Microsoft365Provider._ACTION_CALL) {
+				await fin.System.openUrlWithBrowser(`tel:${email}`);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_CALENDAR) {
-				await fin.System.openUrlWithBrowser(`msteams:/l/meeting/new?attendees=${this._me.mail},${user.mail}`);
+				await fin.System.openUrlWithBrowser(`msteams:/l/meeting/new?attendees=${this._me.mail},${email}`);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_CHAT) {
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
-				await teamsConnection.openGroupChat([this._me.mail, user.mail]);
+				await teamsConnection.openGroupChat([this._me.mail, email]);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_COPY) {
 				await fin.Clipboard.writeText({ data: JSON.stringify(json, undefined, "\t") });
@@ -273,16 +324,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		};
 	}
 
-	private createLoadingResult(user: User): HomeSearchResult {
+	private createLoadingResult(obj: User | Contact, objType: string): HomeSearchResult {
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
-			title: user.displayName,
-			label: user.department ?? "No Department",
-			icon: this._settings.images.teamsLogo,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
+			title: obj.displayName,
+			label: objType,
+			icon: objType === "User" ? this._settings.images.teamsLogo : this._settings.images.contact,
 			actions: [],
 			data: {
 				providerId: Microsoft365Provider._PROVIDER_ID,
-				user,
+				objType,
+				obj,
 				state: "loading"
 			},
 			template: CLITemplate.Loading,
@@ -296,7 +348,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		let availableColor: "red" | "green" | "orange" = "red";
 		let availableIcon: string = this.iconCross(16);
 		let availability: string = "Unknown";
-		let teams = ["No Teams"];
+		let teams = [];
 
 		const batchRequests: string[] = [
 			`/users/${user.id}/photo/$value`,
@@ -359,26 +411,53 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		const theme = await getCurrentTheme();
 
-		let phone = user.mobilePhone;
-		if (!phone && user.businessPhones?.length) {
-			phone = user.businessPhones[0];
+		const pairs: { label: string; value: string }[] = [];
+
+		if (user.jobTitle) {
+			pairs.push({ label: "Title", value: user.jobTitle });
+		}
+
+		if (user.department) {
+			pairs.push({ label: "Department", value: user.department });
+		}
+
+		let phone;
+		if (user.mobilePhone) {
+			pairs.push({ label: "Cell", value: user.mobilePhone });
+			phone = user.mobilePhone;
+		}
+
+		if (user.businessPhones?.length) {
+			pairs.push({ label: "Business", value: user.businessPhones[0] });
+			phone = phone ?? user.businessPhones[0];
+		}
+		if (teams.length > 0) {
+			pairs.push({ label: "Teams", value: teams.join(", ") });
+		}
+
+		const pairData = {};
+		for (const pair of pairs) {
+			pairData[`${pair.label}Title`] = pair.label;
+			pairData[pair.label] = pair.value;
 		}
 
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
 			title: user.displayName,
-			label: user.department ?? "No Department",
+			label: "User",
 			icon: this._settings.images.teamsLogo,
 			actions: [
 				{
-					name: Microsoft365Provider._ACTION_CALL,
+					name: Microsoft365Provider._ACTION_TEAMS_CALL,
 					hotkey: "Enter"
 				}
 			],
 			data: {
 				providerId: Microsoft365Provider._PROVIDER_ID,
-				user,
-				presence
+				objType: "user",
+				obj: user,
+				email: user.mail,
+				phone
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
@@ -417,64 +496,33 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						),
 						await createContainer(
 							"column",
-							[
-								await createContainer(
-									"row",
-									[
-										await createText("departmentTitle", 12, {
-											color: theme.palette.inputPlaceholder,
-											flex: 1
-										}),
-										await createText("department", 12, { flex: 2 })
-									],
-									{
-										justifyContent: "space-between",
-										gap: "10px"
-									}
-								),
-								await createContainer(
-									"row",
-									[
-										await createText("titleTitle", 12, { color: theme.palette.inputPlaceholder, flex: 1 }),
-										await createText("title", 12, { flex: 2 })
-									],
-									{
-										justifyContent: "space-between",
-										gap: "10px"
-									}
-								),
-								await createContainer(
-									"row",
-									[
-										await createText("phoneTitle", 12, { color: theme.palette.inputPlaceholder, flex: 1 }),
-										await createText("phone", 12, { flex: 2 })
-									],
-									{
-										justifyContent: "space-between",
-										gap: "10px"
-									}
-								),
-								await createContainer(
-									"row",
-									[
-										await createText("teamsTitle", 12, { color: theme.palette.inputPlaceholder, flex: 1 }),
-										await createText("teams", 12, { flex: 2 })
-									],
-									{
-										justifyContent: "space-between",
-										gap: "10px"
-									}
+							await Promise.all(
+								pairs.map(async (p) =>
+									createContainer(
+										"row",
+										[
+											await createText(`${p.label}Title`, 12, {
+												color: theme.palette.inputPlaceholder,
+												flex: 1
+											}),
+											await createText(`${p.label}`, 12, { flex: 2 })
+										],
+										{
+											justifyContent: "space-between",
+											gap: "10px"
+										}
+									)
 								)
-							],
-							{ gap: "5px" }
+							),
+							{ gap: "5px", flex: "1" }
 						),
 						await createContainer(
 							"row",
 							[
 								await createButton(
 									ButtonStyle.Secondary,
-									"teamCallTitle",
-									Microsoft365Provider._ACTION_CALL,
+									"callTitle",
+									Microsoft365Provider._ACTION_TEAMS_CALL,
 									{
 										border: "none",
 										borderRadius: "50%",
@@ -483,11 +531,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 										padding: "0px",
 										justifyContent: "center"
 									},
-									[await createImage("teamCallImage", "Teams Call", { width: "16px", height: "16px" })]
+									[await createImage("callImage", "Teams Call", { width: "16px", height: "16px" })]
 								),
 								await createButton(
 									ButtonStyle.Secondary,
-									"teamEmailTitle",
+									"emailTitle",
 									Microsoft365Provider._ACTION_EMAIL,
 									{
 										border: "none",
@@ -497,11 +545,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 										padding: "0px",
 										justifyContent: "center"
 									},
-									[await createImage("teamEmailImage", "Teams Email", { width: "16px", height: "16px" })]
+									[await createImage("emailImage", "Teams Email", { width: "16px", height: "16px" })]
 								),
 								await createButton(
 									ButtonStyle.Secondary,
-									"teamCalendarTitle",
+									"calendarTitle",
 									Microsoft365Provider._ACTION_CALENDAR,
 									{
 										border: "none",
@@ -512,7 +560,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 										justifyContent: "center"
 									},
 									[
-										await createImage("teamCalendarImage", "Teams Calendar", {
+										await createImage("calendarImage", "Teams Calendar", {
 											width: "16px",
 											height: "16px"
 										})
@@ -520,7 +568,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 								),
 								await createButton(
 									ButtonStyle.Secondary,
-									"teamChatTitle",
+									"chatTitle",
 									Microsoft365Provider._ACTION_CHAT,
 									{
 										border: "none",
@@ -530,7 +578,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 										padding: "0px",
 										justifyContent: "center"
 									},
-									[await createImage("teamChatImage", "Teams Chat", { width: "16px", height: "16px" })]
+									[await createImage("chatImage", "Teams Chat", { width: "16px", height: "16px" })]
 								)
 							],
 							{
@@ -540,7 +588,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					],
 					{
 						padding: "10px",
-						gap: "15px"
+						gap: "15px",
+						flex: "1"
 					}
 				),
 				data: {
@@ -548,23 +597,188 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					status: `data:image/svg+xml;utf8,${availableIcon}`,
 					displayName: user.displayName,
 					availability,
-					title: user.jobTitle ?? "Employee",
-					departmentTitle: "Department",
-					department: user.department ?? "No Department",
-					titleTitle: "Title",
-					phoneTitle: "Phone",
-					phone: phone ?? "No Phone",
-					teamsTitle: "Teams",
-					teams: teams.join(", "),
+					...pairData,
 					teamsLogo: this._settings.images.teamsLogo,
-					teamCallTitle: " ",
-					teamCallImage: this._settings.images.teamsLogo,
-					teamEmailTitle: " ",
-					teamEmailImage: this._settings.images.email,
-					teamCalendarTitle: " ",
-					teamCalendarImage: this._settings.images.calendar,
-					teamChatTitle: " ",
-					teamChatImage: this._settings.images.chat
+					callTitle: " ",
+					callImage: this._settings.images.teamsLogo,
+					emailTitle: " ",
+					emailImage: this._settings.images.email,
+					calendarTitle: " ",
+					calendarImage: this._settings.images.calendar,
+					chatTitle: " ",
+					chatImage: this._settings.images.chat
+				}
+			}
+		};
+	}
+
+	private async createContactResult(contact: Contact): Promise<HomeSearchResult> {
+		const theme = await getCurrentTheme();
+
+		const pairs: { label: string; value: string }[] = [];
+
+		if (contact.companyName) {
+			pairs.push({ label: "Company", value: contact.companyName });
+		}
+
+		if (contact.jobTitle) {
+			pairs.push({ label: "Title", value: contact.jobTitle });
+		}
+
+		if (contact.department) {
+			pairs.push({ label: "Department", value: contact.department });
+		}
+
+		let phone;
+		let email;
+
+		if (contact.mobilePhone) {
+			pairs.push({ label: "Cell", value: contact.mobilePhone });
+			phone = contact.mobilePhone;
+		}
+
+		if (contact.businessPhones?.length) {
+			pairs.push({ label: "Business", value: contact.businessPhones[0] });
+			phone = phone ?? contact.businessPhones[0];
+		}
+
+		if (contact.emailAddresses?.length) {
+			for (const e of contact.emailAddresses) {
+				if (e.address?.length) {
+					pairs.push({ label: "E-mail", value: e.address });
+					email = email ?? e.address;
+					break;
+				}
+			}
+		}
+
+		const pairData = {};
+		for (const pair of pairs) {
+			pairData[`${pair.label}Title`] = pair.label;
+			pairData[pair.label] = pair.value;
+		}
+
+		return {
+			key: `${Microsoft365Provider._PROVIDER_ID}-${contact.id}`,
+			title: contact.displayName,
+			label: "Contact",
+			icon: this._settings.images.contact,
+			actions: [
+				{
+					name: Microsoft365Provider._ACTION_CALL,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: Microsoft365Provider._PROVIDER_ID,
+				objType: "contact",
+				obj: contact,
+				email,
+				phone
+			},
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await createContainer(
+					"column",
+					[
+						await createContainer(
+							"row",
+							[
+								await createImage("profilePicData", contact.displayName, {
+									width: "44px",
+									height: "44px",
+									objectFit: "cover",
+									borderRadius: "50%"
+								}),
+								await createContainer("column", [
+									await createText("displayName", 14, { fontWeight: "bold" }),
+									await createText("company", 12, {})
+								])
+							],
+							{
+								paddingBottom: "15px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
+						await createContainer(
+							"column",
+							await Promise.all(
+								pairs.map(async (p) =>
+									createContainer(
+										"row",
+										[
+											await createText(`${p.label}Title`, 12, {
+												color: theme.palette.inputPlaceholder,
+												flex: 1
+											}),
+											await createText(`${p.label}`, 12, { flex: 2 })
+										],
+										{
+											justifyContent: "space-between",
+											gap: "10px"
+										}
+									)
+								)
+							),
+							{ gap: "5px", flex: "1" }
+						),
+						await createContainer(
+							"row",
+							[
+								phone
+									? await createButton(
+											ButtonStyle.Secondary,
+											"callTitle",
+											Microsoft365Provider._ACTION_TEAMS_CALL,
+											{
+												border: "none",
+												borderRadius: "50%",
+												width: "40px",
+												height: "40px",
+												padding: "0px",
+												justifyContent: "center"
+											},
+											[await createImage("callImage", "Call", { width: "16px", height: "16px" })]
+									  )
+									: undefined,
+								email
+									? await createButton(
+											ButtonStyle.Secondary,
+											"emailTitle",
+											Microsoft365Provider._ACTION_EMAIL,
+											{
+												border: "none",
+												borderRadius: "50%",
+												width: "40px",
+												height: "40px",
+												padding: "0px",
+												justifyContent: "center"
+											},
+											[await createImage("emailImage", "Email", { width: "16px", height: "16px" })]
+									  )
+									: undefined
+							].filter(Boolean),
+							{
+								justifyContent: "space-around",
+								gap: "20px"
+							}
+						)
+					],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					profilePicData: this._settings.images.contact,
+					displayName: contact.displayName,
+					...pairData,
+					callTitle: " ",
+					callImage: this._settings.images.call,
+					emailTitle: " ",
+					emailImage: this._settings.images.email
 				}
 			}
 		};

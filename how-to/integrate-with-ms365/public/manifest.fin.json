@@ -15,7 +15,7 @@
 			"System": {
 				"openUrlWithBrowser": {
 					"enabled": true,
-					"protocols": ["msteams", "mailto"]
+					"protocols": ["msteams", "mailto", "tel"]
 				}
 			}
 		},
@@ -62,12 +62,15 @@
 					"data": {
 						"clientId": "CLIENT-ID",
 						"tenantId": "TENANT-ID",
+						"redirectUri": "http://localhost:8080/redirect",
 						"images": {
 							"teamsLogo": "http://localhost:8080/images/teams.svg",
 							"email": "http://localhost:8080/images/email.svg",
 							"calendar": "http://localhost:8080/images/calendar.svg",
 							"share": "http://localhost:8080/images/share.svg",
-							"chat": "http://localhost:8080/images/chat.svg"
+							"chat": "http://localhost:8080/images/chat.svg",
+							"call": "http://localhost:8080/images/call.svg",
+							"contact": "http://localhost:8080/images/contact.svg"
 						}
 					}
 				}
