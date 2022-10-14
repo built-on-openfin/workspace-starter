@@ -8,6 +8,7 @@
 		"kill": "node ./scripts/kill.mjs",
 		"client": "node ./scripts/launch.mjs",
 		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
+		"thirdclient": "node ./scripts/launch.mjs http://localhost:8080/third.manifest.fin.json",
 		"build": "npm run build-client",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
