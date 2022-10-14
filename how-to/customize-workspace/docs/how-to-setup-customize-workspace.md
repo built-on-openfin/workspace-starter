@@ -39,6 +39,14 @@ npm run secondclient
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](../public/second.manifest.fin.json)
 
+If you want to see a third workspace platform that has been configured to use an FDC3 App Directory then you can fire up a copy using the following command:
+
+```shell
+npm run thirdclient
+```
+
+This runs the same code with slightly different settings to load an FDC3 directory and show a light theme: [third.manifest.fin.json](../public/third.manifest.fin.json)
+
 6. Type any character into the search box to show the default list of applications.
    The [apps](../../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
