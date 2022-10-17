@@ -11,6 +11,7 @@ import type {
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
+import type { Logger } from "./logger-shapes";
 
 const integrationModules: { [id: string]: IntegrationModule<unknown> } = {};
 
@@ -47,7 +48,19 @@ export async function register(
 						integration
 					});
 					if (homeIntegration.initialize) {
-						await homeIntegration.initialize(integration, () => {}, integrationHelpers);
+						const createLogger: (group: string) => Logger = (group) => ({
+							info: (message: unknown, ...optionalParams: unknown[]) =>
+								console.log(group, "info", message, ...optionalParams),
+							warn: (message: unknown, ...optionalParams: unknown[]) =>
+								console.log(group, "warn", message, ...optionalParams),
+							error: (message: unknown, ...optionalParams: unknown[]) =>
+								console.log(group, "error", message, ...optionalParams),
+							trace: (message: unknown, ...optionalParams: unknown[]) =>
+								console.log(group, "trace", message, ...optionalParams),
+							debug: (message: unknown, ...optionalParams: unknown[]) =>
+								console.log(group, "debug", message, ...optionalParams)
+						});
+						await homeIntegration.initialize(integration, createLogger, integrationHelpers);
 					}
 				} else {
 					console.error("Missing module in integration providers", integration.id);

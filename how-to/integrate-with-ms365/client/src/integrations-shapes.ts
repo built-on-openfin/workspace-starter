@@ -6,6 +6,7 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import type { LoggerCreator } from "./logger-shapes";
 
 /**
  * Integration helpers provides environment methods and data.
@@ -106,7 +107,7 @@ export interface IntegrationModule<T> {
 	 */
 	initialize?(
 		definition: Integration<T>,
-		loggerCreator: () => void,
+		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void>;
 

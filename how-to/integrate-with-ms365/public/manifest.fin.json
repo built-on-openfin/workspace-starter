@@ -63,6 +63,8 @@
 						"clientId": "CLIENT-ID",
 						"tenantId": "TENANT-ID",
 						"redirectUri": "http://localhost:8080/redirect",
+						"disableGraphExplorer": false,
+						"enableLibLogging": false,
 						"images": {
 							"teamsLogo": "http://localhost:8080/images/teams.svg",
 							"email": "http://localhost:8080/images/email.svg",

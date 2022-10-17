@@ -19,6 +19,7 @@ import {
 	TemplateFragmentTypes
 } from "@openfin/workspace";
 import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
+import type { Logger, LoggerCreator } from "../../logger-shapes";
 import { createButton, createContainer, createImage, createText } from "../../templates";
 import { getCurrentTheme } from "../../themes";
 import type { Microsoft365Settings } from "./shapes";
@@ -70,26 +71,21 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private static readonly _ACTION_COPY = "Copy JSON to Clipboard";
 
 	/**
-	 * The integration helpers.
-	 * @internal
-	 */
-	private _integrationHelpers: IntegrationHelpers | undefined;
-
-	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
 	private _settings: Microsoft365Settings | undefined;
 
 	/**
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _logger: Logger;
+
+	/**
 	 * The Microsoft 365 connection.
 	 */
 	private _ms365Connection?: Microsoft365Connection;
-
-	/**
-	 * The me object.
-	 */
-	private _me?: User;
 
 	/**
 	 * The debounce timer id.
@@ -105,14 +101,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 */
 	public async initialize(
 		definition: Integration<Microsoft365Settings>,
-		loggerCreator: () => void,
+		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationHelpers = helpers;
 		this._settings = definition.data;
+		this._logger = loggerCreator("Microsoft365Provider");
 
 		try {
-			enableLogging();
+			this._logger.info("Connecting to MS Graph API", {
+				clientId: this._settings.clientId,
+				tenantId: this._settings.tenantId,
+				redirectUri: this._settings.redirectUri
+			});
+
+			if (this._settings.enableLibLogging) {
+				enableLogging();
+			}
+
 			this._ms365Connection = await connect(
 				this._settings.clientId,
 				this._settings.tenantId,
@@ -127,12 +132,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Contacts.Read"
 				]
 			);
-			const result = await this._ms365Connection.executeApiRequest<User>("/v1.0/me");
-			if (result.status === 200) {
-				this._me = result.data;
-			}
 		} catch (err) {
-			console.error(err);
+			this._logger.error("Connecting to MS Graph API failed", err);
 		}
 	}
 
@@ -142,6 +143,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 */
 	public async closedown(): Promise<void> {
 		if (this._ms365Connection) {
+			this._logger.info("Disconnecting from MS Graph API");
 			await this._ms365Connection.disconnect();
 			this._ms365Connection = undefined;
 		}
@@ -178,10 +180,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			if (this._ms365Connection) {
 				try {
 					// If query starts with ms just do a passthrough to the graph API
-					if (query.startsWith("/ms/")) {
+					if (!this._settings.disableGraphExplorer && query.startsWith("/ms/")) {
 						const path = query.replace("/ms/", "");
 						if (path.length > 0) {
-							const response = await this._ms365Connection.executeApiRequest(`/v1.0/${path}`);
+							const fullPath = `/v1.0/${path}`;
+
+							this._logger.info("Graph API Request", fullPath);
+
+							const response = await this._ms365Connection.executeApiRequest(fullPath);
 							lastResponse.respond([this.createResult(response)]);
 						}
 					} else if (query.length > 3) {
@@ -193,6 +199,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const contactsRequest = `/me/contacts?$search=${query}&$top=10`;
 
 						const batchRequests: string[] = [usersRequest, contactsRequest];
+
+						this._logger.info("Graph API Batch Request", {
+							users: usersRequest,
+							contacts: contactsRequest
+						});
 
 						const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
 							"/v1.0/$batch",
@@ -210,16 +221,24 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 						const userResponse = response.data?.responses.find((r) => r.id === "1");
 						if (userResponse?.status === 200) {
+							this._logger.info("User Response", userResponse.body);
+
 							const users = userResponse.body as GraphListResponse<User>;
 							homeResults = homeResults.concat(users.value.map((u) => this.createLoadingResult(u, "User")));
+						} else {
+							this._logger.error("User Response Failed", userResponse.status, userResponse.body);
 						}
 
 						const contactsResponse = response.data?.responses.find((r) => r.id === "2");
 						if (contactsResponse?.status === 200) {
+							this._logger.info("Contacts Response", userResponse.body);
+
 							const contacts = contactsResponse.body as GraphListResponse<Contact>;
 							homeResults = homeResults.concat(
 								contacts.value.map((c) => this.createLoadingResult(c, "Contact"))
 							);
+						} else {
+							this._logger.error("Contacts Response Failed", contactsResponse.status, contactsResponse.body);
 						}
 
 						lastResponse.respond(homeResults);
@@ -247,39 +266,50 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
-		if (result.action.trigger === "focus-change" && result.data?.state === "loading") {
-			setTimeout(async () => {
-				if (this._ms365Connection) {
-					if (result.data?.objType === "User") {
-						const user: User = result.data?.obj;
-						lastResponse.respond([await this.createUserResult(user)]);
-					} else if (result.data?.objType === "Contact") {
-						const contact: Contact = result.data?.obj;
-						lastResponse.respond([await this.createContactResult(contact)]);
+		if (result.action.trigger === "focus-change") {
+			if (result.data?.state === "loading") {
+				setTimeout(async () => {
+					if (this._ms365Connection) {
+						if (result.data?.objType === "User") {
+							const user: User = result.data?.obj;
+							lastResponse.respond([await this.createUserResult(user)]);
+						} else if (result.data?.objType === "Contact") {
+							const contact: Contact = result.data?.obj;
+							lastResponse.respond([await this.createContactResult(contact)]);
+						}
 					}
-				}
-			}, 0);
+				}, 0);
+			}
+			return true;
 		} else if (result.action.trigger === "user-action") {
-			const { email, json }: { email?: string; json?: unknown } = result.data;
+			const { email, phone, json }: { email?: string; phone?: string; json?: unknown } = result.data;
 
 			if (result.action.name === Microsoft365Provider._ACTION_TEAMS_CALL) {
+				this._logger.info("Teams Call", email);
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
 				await teamsConnection.startCall([email]);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_EMAIL) {
+				this._logger.info("Open Mail", email);
 				await fin.System.openUrlWithBrowser(`mailto:${email}`);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_CALL) {
-				await fin.System.openUrlWithBrowser(`tel:${email}`);
+				this._logger.info("Phone Call", phone);
+				await fin.System.openUrlWithBrowser(`tel:${phone}`);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_CALENDAR) {
-				await fin.System.openUrlWithBrowser(`msteams:/l/meeting/new?attendees=${this._me.mail},${email}`);
+				this._logger.info("Create Meeting", this._ms365Connection.currentUser.mail, email);
+				await fin.System.openUrlWithBrowser(
+					`msteams:/l/meeting/new?attendees=${this._ms365Connection.currentUser.mail},${email}`
+				);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_CHAT) {
+				this._logger.info("Chat", this._ms365Connection.currentUser.mail, email);
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
-				await teamsConnection.openGroupChat([this._me.mail, email]);
+				await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, email]);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_COPY) {
+				this._logger.info("Copy JSON", json);
 				await fin.Clipboard.writeText({ data: JSON.stringify(json, undefined, "\t") });
 				return true;
 			}
@@ -357,6 +387,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		try {
+			this._logger.info("Graph API Batch Request", {
+				photo: batchRequests[0],
+				presence: batchRequests[1],
+				memberOf: batchRequests[2]
+			});
+
 			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
 				"/v1.0/$batch",
 				"POST",
@@ -372,6 +408,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			const profileResponse = response.data?.responses.find((r) => r.id === "1");
 			if (profileResponse?.status === 200) {
 				profilePicData = `data:image/jpeg;base64,${profileResponse.body as string}`;
+			} else {
+				// If the request failed the JSON error is still base64 encoded
+				this._logger.error(
+					"Failed getting user profile pic",
+					profileResponse.status,
+					atob(profileResponse.body as string)
+				);
 			}
 
 			const presenceResponse = response.data?.responses.find((r) => r.id === "2");
@@ -388,6 +431,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					availableColor = "orange";
 					availableIcon = this.iconClock(16);
 				}
+			} else {
+				this._logger.error("Failed getting user presense", presenceResponse.status, presenceResponse.body);
 			}
 
 			const teamsResponse = response.data?.responses.find((r) => r.id === "3");
@@ -404,9 +449,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					(m) => m["@odata.type"] === "#microsoft.graph.group" && !excludeGroups.includes(m.displayName)
 				);
 				teams = teamsMember.map((t) => t.displayName);
+			} else {
+				this._logger.error("Failed getting user teams", teamsResponse.status, teamsResponse.body);
 			}
 		} catch (err) {
-			console.error(err);
+			this._logger.error("Failed performing API batch request", err);
 		}
 
 		const theme = await getCurrentTheme();
@@ -593,7 +640,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				),
 				data: {
-					profilePicData: profilePicData ?? `data:image/svg+xml;utf8,${this.imageProfileNone(44)}`,
+					profilePicData: profilePicData ?? this._settings.images.contact,
 					status: `data:image/svg+xml;utf8,${availableIcon}`,
 					displayName: user.displayName,
 					availability,
@@ -613,6 +660,42 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createContactResult(contact: Contact): Promise<HomeSearchResult> {
+		let profilePicData: string;
+
+		const batchRequests: string[] = [`/me/contacts/${contact.id}/photo/$value`];
+
+		try {
+			this._logger.info("Graph API Batch Request", {
+				photo: batchRequests[0]
+			});
+
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+				"/v1.0/$batch",
+				"POST",
+				{
+					requests: batchRequests.map((r, idx) => ({
+						id: (idx + 1).toString(),
+						method: "GET",
+						url: r
+					}))
+				}
+			);
+
+			const profileResponse = response.data?.responses.find((r) => r.id === "1");
+			if (profileResponse?.status === 200) {
+				profilePicData = `data:image/jpeg;base64,${profileResponse.body as string}`;
+			} else {
+				// If the request failed the JSON error is still base64 encoded
+				this._logger.error(
+					"Failed getting contact profile pic",
+					profileResponse.status,
+					atob(profileResponse.body as string)
+				);
+			}
+		} catch (err) {
+			this._logger.error("Failed performing API batch request", err);
+		}
+
 		const theme = await getCurrentTheme();
 
 		const pairs: { label: string; value: string }[] = [];
@@ -730,7 +813,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 									? await createButton(
 											ButtonStyle.Secondary,
 											"callTitle",
-											Microsoft365Provider._ACTION_TEAMS_CALL,
+											Microsoft365Provider._ACTION_CALL,
 											{
 												border: "none",
 												borderRadius: "50%",
@@ -772,7 +855,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				),
 				data: {
-					profilePicData: this._settings.images.contact,
+					profilePicData: profilePicData ?? this._settings.images.contact,
 					displayName: contact.displayName,
 					...pairData,
 					callTitle: " ",
