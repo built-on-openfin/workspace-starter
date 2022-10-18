@@ -19,12 +19,15 @@ export function interopOverride(
 	...args: unknown[]
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
-		public async setContext(context: {
-		   context: OpenFin.Context;
-	   }, clientIdentity: OpenFin.ClientIdentity) {
+		public async setContext(
+			context: {
+				context: OpenFin.Context;
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		) {
 			// eslint-disable-next-line @typescript-eslint/await-thenable
 			await super.setContext(context, clientIdentity);
-	   }
+		}
 
 		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {
 			logger.info("Launching app with intent");
