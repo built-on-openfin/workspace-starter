@@ -5,7 +5,8 @@ export interface Microsoft365Settings {
 	enableLibLogging: boolean;
 	disableGraphExplorer: boolean;
 	images: {
-		teamsLogo: string;
+		teams: string;
+		outlook: string;
 		email: string;
 		calendar: string;
 		share: string;
@@ -14,3 +15,5 @@ export interface Microsoft365Settings {
 		contact: string;
 	};
 }
+
+export type Microsoft365ObjectTypes = "User" | "Contact" | "Message" | "Event";

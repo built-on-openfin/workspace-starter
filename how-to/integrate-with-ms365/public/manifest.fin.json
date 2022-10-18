@@ -15,7 +15,7 @@
 			"System": {
 				"openUrlWithBrowser": {
 					"enabled": true,
-					"protocols": ["msteams", "mailto", "tel"]
+					"protocols": ["msteams", "tel"]
 				}
 			}
 		},
@@ -51,6 +51,12 @@
 			"title": "Integrate with Microsoft 365",
 			"icon": "http://localhost:8080/favicon.ico"
 		},
+		"appProvider": {
+			"appsSourceUrl": "http://localhost:8080/apps.json",
+			"includeCredentialOnSourceRequest": "include",
+			"cacheDurationInMinutes": 1,
+			"appAssetTag": "appasset"
+		},
 		"integrationProvider": {
 			"modules": [
 				{
@@ -66,7 +72,8 @@
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
-							"teamsLogo": "http://localhost:8080/images/teams.svg",
+							"teams": "http://localhost:8080/images/teams.svg",
+							"outlook": "http://localhost:8080/images/outlook.svg",
 							"email": "http://localhost:8080/images/email.svg",
 							"calendar": "http://localhost:8080/images/calendar.svg",
 							"share": "http://localhost:8080/images/share.svg",

@@ -8,12 +8,20 @@ interface HomeProviderOptions {
 	hidden?: boolean;
 }
 
+interface AppProviderOptions {
+	appsSourceUrl: string;
+	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
+	cacheDurationInMinutes?: number;
+	appAssetTag?: string;
+}
+
 interface ThemeProviderOptions {
 	themes: CustomThemes;
 }
 
 export interface CustomSettings {
 	homeProvider?: HomeProviderOptions;
+	appProvider?: AppProviderOptions;
 	themeProvider?: ThemeProviderOptions;
 	integrationProvider?: IntegrationProviderOptions;
 }

@@ -1,4 +1,13 @@
-import type { Contact, Entity, Message, Presence, Team, User } from "@microsoft/microsoft-graph-types";
+import type {
+	Contact,
+	Entity,
+	Event,
+	Message,
+	Presence,
+	SearchResponse,
+	Team,
+	User
+} from "@microsoft/microsoft-graph-types";
 import {
 	connect,
 	enableLogging,
@@ -24,7 +33,7 @@ import type { Integration, IntegrationHelpers, IntegrationModule } from "../../i
 import type { Logger, LoggerCreator } from "../../logger-shapes";
 import { createButton, createContainer, createImage, createText } from "../../templates";
 import { getCurrentTheme } from "../../themes";
-import type { Microsoft365Settings } from "./shapes";
+import type { Microsoft365ObjectTypes, Microsoft365Settings } from "./shapes";
 
 /**
  * Implement the integration provider for microsoft 365 results.
@@ -43,22 +52,28 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private static readonly _ACTION_TEAMS_CALL = "Teams Call";
 
 	/**
-	 * The key to use for a email key action.
+	 * The key to use for a outlook email key action.
 	 * @internal
 	 */
-	private static readonly _ACTION_EMAIL = "Email";
+	private static readonly _ACTION_OUTLOOK_EMAIL = "Outlook Email";
 
 	/**
-	 * The key to use for a meeting key action.
+	 * The key to use for a teams meeting key action.
 	 * @internal
 	 */
-	private static readonly _ACTION_MEETING = "Meeting";
+	private static readonly _ACTION_TEAMS_MEETING = "Teams Meeting";
+
+	/**
+	 * The key to use for a outlook event key action.
+	 * @internal
+	 */
+	private static readonly _ACTION_OUTLOOK_EVENT = "Outlook Event";
 
 	/**
 	 * The key to use for a chat key action.
 	 * @internal
 	 */
-	private static readonly _ACTION_CHAT = "Chat";
+	private static readonly _ACTION_TEAMS_CHAT = "Teams Chat";
 
 	/**
 	 * The key to use for a call key action.
@@ -77,6 +92,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @internal
 	 */
 	private static readonly _ACTION_COPY = "Copy JSON to Clipboard";
+
+	/**
+	 * The key for the ms 365 filters.
+	 * @internal
+	 */
+	private static readonly _MS365_FILTERS = "MS365";
 
 	/**
 	 * The settings for the integration.
@@ -143,8 +164,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Presence.Read",
 					"Presence.Read.All",
 					"Directory.Read.All",
-					"Mail.Read",
-					"Contacts.Read"
+					"Mail.ReadWrite",
+					"Contacts.Read",
+					"Tasks.Read",
+					"Calendars.ReadWrite"
 				]
 			);
 		} catch (err) {
@@ -206,6 +229,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							lastResponse.respond([this.createResult(response)]);
 						}
 					} else if (query.length > 3) {
+						const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
+
+						let includeOptions: Microsoft365ObjectTypes[] = ["User", "Contact", "Event", "Message"];
+
+						if (Array.isArray(ms365Filter?.options)) {
+							includeOptions = ms365Filter.options
+								.filter((o) => o.isSelected)
+								.map((o) => o.value as Microsoft365ObjectTypes);
+						}
+
 						// try a user lookup instead
 						const encodedQuery = encodeURIComponent(query);
 
@@ -213,81 +246,177 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const userSearchQuery = userSearchFields
 							.map((s) => `startsWith(${s},'${encodedQuery}')`)
 							.join(" or ");
-						const usersRequest = `/users?$filter=${userSearchQuery}&$top=10`;
 
-						const contactsRequest = `/me/contacts?$search=${encodedQuery}&$top=10`;
+						const batchRequests: {
+							id: string;
+							url: string;
+							method: string;
+							body?: unknown;
+							headers?: unknown;
+						}[] = [
+							includeOptions.includes("User")
+								? {
+										id: "1",
+										method: "GET",
+										url: `/users?$filter=${userSearchQuery}&$top=10`
+								  }
+								: undefined,
+							includeOptions.includes("Contact")
+								? {
+										id: "2",
+										method: "GET",
+										url: `/me/contacts?$search=${encodedQuery}&$top=10`
+								  }
+								: undefined,
+							includeOptions.includes("Message")
+								? {
+										id: "3",
+										method: "GET",
+										url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
+								  }
+								: undefined,
+							includeOptions.includes("Event")
+								? {
+										id: "4",
+										url: "/search/query",
+										method: "POST",
+										body: {
+											requests: [
+												{
+													entityTypes: ["event"],
+													query: {
+														queryString: query
+													},
+													from: 0,
+													size: 10
+												}
+											]
+										},
+										headers: {
+											"Content-Type": "application/json"
+										}
+								  }
+								: undefined
+						].filter(Boolean);
 
-						const messagesRequest = `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}`;
-
-						const batchRequests: string[] = [usersRequest, contactsRequest, messagesRequest];
-
-						this._logger.info("Graph API Batch Request", {
-							users: usersRequest,
-							contacts: contactsRequest
-						});
+						this._logger.info("Graph API Batch Request", batchRequests);
 
 						const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
 							"/v1.0/$batch",
 							"POST",
 							{
-								requests: batchRequests.map((r, idx) => ({
-									id: (idx + 1).toString(),
-									method: "GET",
-									url: r
-								}))
+								requests: batchRequests
 							}
 						);
 
 						let homeResults: HomeSearchResult[] = [];
 
-						const userResponse = response.data?.responses.find((r) => r.id === "1");
-						if (userResponse?.status === 200) {
-							this._logger.info("User Response", userResponse.body);
+						if (includeOptions.includes("User")) {
+							const userResponse = response.data?.responses.find((r) => r.id === "1");
+							if (userResponse?.status === 200) {
+								this._logger.info("User Response", userResponse.body);
 
-							const users = (userResponse.body as GraphListResponse<User>).value;
-							homeResults = homeResults.concat(
-								users.map((u) => this.createLoadingResult(u, "displayName", "User"))
-							);
-						} else {
-							this._logger.error("User Response Failed", userResponse.status, userResponse.body);
+								const users = (userResponse.body as GraphListResponse<User>).value;
+
+								if (users.length > 0) {
+									homeResults = homeResults.concat(
+										users.map((u) => this.createLoadingResult(u, "displayName", "User"))
+									);
+								}
+							} else {
+								this._logger.error("User Response Failed", userResponse?.status, userResponse?.body);
+							}
 						}
 
-						const contactsResponse = response.data?.responses.find((r) => r.id === "2");
-						if (contactsResponse?.status === 200) {
-							this._logger.info("Contacts Response", userResponse.body);
+						if (includeOptions.includes("Contact")) {
+							const contactsResponse = response.data?.responses.find((r) => r.id === "2");
+							if (contactsResponse?.status === 200) {
+								this._logger.info("Contacts Response", contactsResponse.body);
 
-							const contacts = (contactsResponse.body as GraphListResponse<Contact>).value;
-							homeResults = homeResults.concat(
-								contacts.map((c) => this.createLoadingResult(c, "displayName", "Contact"))
-							);
-						} else {
-							this._logger.error("Contacts Response Failed", contactsResponse.status, contactsResponse.body);
+								const contacts = (contactsResponse.body as GraphListResponse<Contact>).value;
+								if (contacts.length > 0) {
+									homeResults = homeResults.concat(
+										contacts.map((c) => this.createLoadingResult(c, "displayName", "Contact"))
+									);
+								}
+							} else {
+								this._logger.error(
+									"Contacts Response Failed",
+									contactsResponse?.status,
+									contactsResponse?.body
+								);
+							}
 						}
 
-						const messagesResponse = response.data?.responses.find((r) => r.id === "3");
-						if (messagesResponse?.status === 200) {
-							this._logger.info("Messages Response", userResponse.body);
+						if (includeOptions.includes("Message")) {
+							const messagesResponse = response.data?.responses.find((r) => r.id === "3");
+							if (messagesResponse?.status === 200) {
+								this._logger.info("Messages Response", messagesResponse.body);
 
-							const messages = (messagesResponse.body as GraphListResponse<Message>).value;
-							homeResults = homeResults.concat(
-								messages.map((c) => this.createLoadingResult(c, "subject", "Message"))
-							);
-						} else {
-							this._logger.error("Messages Response Failed", messagesResponse.status, messagesResponse.body);
+								const messages = (messagesResponse.body as GraphListResponse<Message>).value;
+								if (messages.length > 0) {
+									homeResults = homeResults.concat(
+										messages
+											.filter((m) => m.subject)
+											.map((c) => this.createLoadingResult(c, "subject", "Message"))
+									);
+								}
+							} else {
+								this._logger.error(
+									"Messages Response Failed",
+									messagesResponse?.status,
+									messagesResponse?.body
+								);
+							}
+						}
+
+						if (includeOptions.includes("Event")) {
+							const eventsResponse = response.data?.responses.find((r) => r.id === "4");
+							if (eventsResponse?.status === 200) {
+								this._logger.info("Events Response", eventsResponse.body);
+								const graphResponse = eventsResponse.body as GraphListResponse<SearchResponse>;
+								const searchResponse = graphResponse?.value?.[0];
+								const events = searchResponse?.hitsContainers?.[0]?.hits;
+								if (events?.length) {
+									homeResults = homeResults.concat(
+										events.map((c) =>
+											this.createLoadingResult(
+												{
+													id: this.base64IdToUrl(c.hitId),
+													...c.resource
+												} as Event,
+												"subject",
+												"Event"
+											)
+										)
+									);
+								}
+							} else {
+								this._logger.error("Events Response Failed", eventsResponse?.status, eventsResponse?.body);
+							}
 						}
 
 						lastResponse.respond(homeResults);
 					}
 				} catch (err) {
 					if (err instanceof Error) {
-						lastResponse.respond([this.createResult({ status: 400, data: err })]);
+						lastResponse.respond([this.createResult({ status: 400, data: err.message })]);
 					}
 				}
 			}
 		}, 500);
 
 		return {
-			results
+			results,
+			context: {
+				filters: [
+					{
+						id: Microsoft365Provider._MS365_FILTERS as string,
+						title: "Microsoft 365",
+						options: ["User", "Contact", "Message", "Event"].map((o) => ({ value: o, isSelected: true }))
+					}
+				]
+			}
 		};
 	}
 
@@ -314,6 +443,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						} else if (result.data?.objType === "Message") {
 							const message: Message = result.data?.obj;
 							lastResponse.respond([await this.createMessageResult(message)]);
+						} else if (result.data?.objType === "Event") {
+							const event: Event = result.data?.obj;
+							lastResponse.respond([await this.createEventResult(event)]);
 						}
 					}
 				}, 0);
@@ -337,24 +469,68 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
 				await teamsConnection.startCall([email]);
 				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_EMAIL) {
-				this._logger.info("Open Mail", email);
-				await fin.System.openUrlWithBrowser(`mailto:${email}`);
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_CALL) {
-				this._logger.info("Phone Call", phone);
-				await fin.System.openUrlWithBrowser(`tel:${phone}`);
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_MEETING) {
+			} else if (result.action.name === Microsoft365Provider._ACTION_TEAMS_MEETING) {
 				this._logger.info("Create Meeting", this._ms365Connection.currentUser.mail, email);
 				await fin.System.openUrlWithBrowser(
 					`msteams:/l/meeting/new?attendees=${this._ms365Connection.currentUser.mail},${email}`
 				);
 				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_CHAT) {
+			} else if (result.action.name === Microsoft365Provider._ACTION_TEAMS_CHAT) {
 				this._logger.info("Chat", this._ms365Connection.currentUser.mail, email);
 				const teamsConnection = new TeamsConnection(this._ms365Connection);
 				await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, email]);
+				return true;
+			} else if (result.action.name === Microsoft365Provider._ACTION_OUTLOOK_EMAIL) {
+				this._logger.info("Open Mail", email);
+
+				const response = await this._ms365Connection.executeApiRequest<Message>("/v1.0/me/messages", "POST", {
+					toRecipients: [
+						{
+							emailAddress: {
+								address: email
+							}
+						}
+					]
+				});
+
+				const uri = new URL(response.data?.webLink);
+
+				if (uri.searchParams.has("ItemID")) {
+					const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
+					await this._integrationHelpers.launchView(
+						`https://outlook.office365.com/mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+					);
+				} else {
+					await this._integrationHelpers.launchView(response.data.webLink);
+				}
+				return true;
+			} else if (result.action.name === Microsoft365Provider._ACTION_OUTLOOK_EVENT) {
+				this._logger.info("Open Mail", email);
+
+				const response = await this._ms365Connection.executeApiRequest<Event>("/v1.0/me/events", "POST", {
+					attendees: [
+						{
+							emailAddress: {
+								address: email
+							}
+						}
+					]
+				});
+
+				const uri = new URL(response.data?.webLink);
+
+				if (uri.searchParams.has("itemid")) {
+					const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
+					await this._integrationHelpers.launchView(
+						`https://outlook.office365.com/calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+					);
+				} else {
+					await this._integrationHelpers.launchView(response.data.webLink);
+				}
+				return true;
+			} else if (result.action.name === Microsoft365Provider._ACTION_CALL) {
+				this._logger.info("Phone Call", phone);
+				await fin.System.openUrlWithBrowser(`tel:${phone}`);
 				return true;
 			} else if (result.action.name === Microsoft365Provider._ACTION_OPEN) {
 				this._logger.info("Open", url);
@@ -376,7 +552,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			key: `${Microsoft365Provider._PROVIDER_ID}-rest`,
 			title: "Graph Result",
 			label: response.status === 200 ? "JSON" : "Error",
-			icon: this._settings.images.teamsLogo,
+			icon: this._settings.images.teams,
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_COPY,
@@ -409,17 +585,18 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private createLoadingResult<T extends Entity>(
 		obj: T,
 		title: keyof T,
-		objType: "User" | "Contact" | "Message"
+		objType: Microsoft365ObjectTypes
 	): HomeSearchResult {
 		const icons = {
-			User: this._settings.images.teamsLogo,
+			User: this._settings.images.teams,
 			Contact: this._settings.images.contact,
-			Message: this._settings.images.email
+			Message: this._settings.images.email,
+			Event: this._settings.images.calendar
 		};
 
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
-			title: obj[title] as unknown as string,
+			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
 			label: objType,
 			icon: icons[objType],
 			actions: [],
@@ -564,19 +741,19 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			},
 			{
 				title: "emailTitle",
-				action: Microsoft365Provider._ACTION_EMAIL,
+				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
 				image: "emailImage",
 				imageAltText: "E-mail"
 			},
 			{
 				title: "meetingTitle",
-				action: Microsoft365Provider._ACTION_MEETING,
+				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
 				image: "meetingImage",
 				imageAltText: "Meeting"
 			},
 			{
 				title: "chatTitle",
-				action: Microsoft365Provider._ACTION_CHAT,
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
 				image: "chatImage",
 				imageAltText: "Chat"
 			}
@@ -586,7 +763,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
 			title: user.displayName,
 			label: "User",
-			icon: this._settings.images.teamsLogo,
+			icon: this._settings.images.teams,
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_TEAMS_CALL,
@@ -650,14 +827,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					displayName: user.displayName,
 					availability,
 					...pairData,
-					teamsLogo: this._settings.images.teamsLogo,
-					callTitle: " ",
-					callImage: this._settings.images.teamsLogo,
-					emailTitle: " ",
+					callTitle: "Teams Call",
+					callImage: this._settings.images.teams,
+					emailTitle: "Outlook E-mail",
 					emailImage: this._settings.images.email,
-					meetingTitle: " ",
+					meetingTitle: "Teams Meeting",
 					meetingImage: this._settings.images.calendar,
-					chatTitle: " ",
+					chatTitle: "Teams Chat",
 					chatImage: this._settings.images.chat
 				}
 			}
@@ -765,9 +941,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (email) {
 			buttons.push({
 				title: "emailTitle",
-				action: Microsoft365Provider._ACTION_EMAIL,
+				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
 				image: "emailImage",
 				imageAltText: "E-mail"
+			});
+			buttons.push({
+				title: "calendarTitle",
+				action: Microsoft365Provider._ACTION_OUTLOOK_EVENT,
+				image: "calendarImage",
+				imageAltText: "Calendar"
 			});
 		}
 
@@ -827,10 +1009,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					picData: picData ?? this._settings.images.contact,
 					displayName: contact.displayName,
 					...pairData,
-					callTitle: " ",
+					callTitle: "Call",
 					callImage: this._settings.images.call,
-					emailTitle: " ",
-					emailImage: this._settings.images.email
+					emailTitle: "Outlook E-mail",
+					emailImage: this._settings.images.email,
+					calendarTitle: "Outlook Calendar",
+					calendarImage: this._settings.images.calendar
 				}
 			}
 		};
@@ -841,21 +1025,27 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		const pairs: { label: string; value: string; hideLabel?: boolean }[] = [];
 
-		pairs.push({
-			label: "From",
-			value: message.sender.emailAddress.name ?? message.sender.emailAddress.address
-		});
+		if (message.sender) {
+			pairs.push({
+				label: "From",
+				value: message.sender.emailAddress.name ?? message.sender.emailAddress.address
+			});
+		}
 
-		pairs.push({
-			label: "Received",
-			value: new Date(message.receivedDateTime).toLocaleString()
-		});
+		if (message.receivedDateTime) {
+			pairs.push({
+				label: "Received",
+				value: new Date(message.receivedDateTime).toLocaleString()
+			});
+		}
 
-		pairs.push({
-			label: "Preview",
-			value: message.bodyPreview,
-			hideLabel: true
-		});
+		if (message.bodyPreview) {
+			pairs.push({
+				label: "Preview",
+				value: message.bodyPreview,
+				hideLabel: true
+			});
+		}
 
 		const pairData = {};
 		for (const pair of pairs) {
@@ -879,12 +1069,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${message.id}`,
-			title: message.subject,
+			title: message.subject ?? "Untitled Message",
 			label: "Message",
 			icon: this._settings.images.email,
 			actions: [
 				{
-					name: Microsoft365Provider._ACTION_CALL,
+					name: Microsoft365Provider._ACTION_OPEN,
 					hotkey: "Enter"
 				}
 			],
@@ -917,8 +1107,128 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				data: {
 					subject: message.subject,
 					...pairData,
-					openTitle: " ",
-					openImage: this._settings.images.email
+					openTitle: "Open Outlook",
+					openImage: this._settings.images.outlook
+				}
+			}
+		};
+	}
+
+	private async createEventResult(event: Event): Promise<HomeSearchResult> {
+		const batchRequests: string[] = [`/me/events/${event.id}`];
+
+		try {
+			this._logger.info("Graph API Batch Request", {
+				photo: batchRequests[0]
+			});
+
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+				"/v1.0/$batch",
+				"POST",
+				{
+					requests: batchRequests.map((r, idx) => ({
+						id: (idx + 1).toString(),
+						method: "GET",
+						url: r
+					}))
+				}
+			);
+
+			const eventResponse = response.data?.responses.find((r) => r.id === "1");
+			if (eventResponse?.status === 200) {
+				event = {
+					...event,
+					...eventResponse.body
+				};
+			} else {
+				this._logger.error("Failed getting event", eventResponse.status, eventResponse.body as string);
+			}
+		} catch (err) {
+			this._logger.error("Failed performing API batch request", err);
+		}
+
+		const theme = await getCurrentTheme();
+
+		const pairs: { label: string; value: string; hideLabel?: boolean }[] = [];
+
+		pairs.push({
+			label: "Start",
+			value: new Date(event.start?.dateTime).toLocaleString()
+		});
+
+		pairs.push({
+			label: "End",
+			value: new Date(event.end?.dateTime).toLocaleString()
+		});
+
+		pairs.push({
+			label: "Preview",
+			value: event.bodyPreview,
+			hideLabel: true
+		});
+
+		const pairData = {};
+		for (const pair of pairs) {
+			pairData[`${pair.label}Title`] = pair.label;
+			pairData[pair.label] = pair.value;
+		}
+
+		const buttons: {
+			title: string;
+			action: string;
+			image: string;
+			imageAltText: string;
+		}[] = [
+			{
+				title: "openTitle",
+				action: Microsoft365Provider._ACTION_OPEN,
+				image: "openImage",
+				imageAltText: "Open"
+			}
+		];
+
+		return {
+			key: `${Microsoft365Provider._PROVIDER_ID}-${event.id}`,
+			title: event.subject ?? "Untitled Event",
+			label: "Event",
+			icon: this._settings.images.calendar,
+			actions: [
+				{
+					name: Microsoft365Provider._ACTION_OPEN,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: Microsoft365Provider._PROVIDER_ID,
+				objType: "Event",
+				obj: event,
+				url: event.webLink
+			},
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await createContainer(
+					"column",
+					[
+						await createContainer("row", [await createText("subject", 14, { fontWeight: "bold" })], {
+							paddingBottom: "15px",
+							borderBottom: `1px solid ${theme.palette.background6}`,
+							gap: "10px"
+						}),
+						await this.createPairsLayout(theme, pairs),
+						await createText("preview"),
+						await this.createButtonsLayout(buttons)
+					],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					subject: event.subject ?? "Untitled Event",
+					...pairData,
+					openTitle: "Open Outlook",
+					openImage: this._settings.images.outlook
 				}
 			}
 		};
@@ -1005,5 +1315,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		return `<svg stroke="%23FFFFFF" fill="%23FFFFFF" stroke-width="2" viewBox="0 0 16 16" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
 		<polyline points="8 1 8 9 15 15"/>
 		</svg>`;
+	}
+
+	private base64IdToUrl(b64Id: string): string {
+		return b64Id.replace(/\+/g, "_").replace(/\//g, "-");
 	}
 }

@@ -1,0 +1,78 @@
+[
+	{
+		"appId": "ms-365-teams",
+		"name": "ms-365-teams",
+		"title": "Microsoft Teams",
+		"description": "Launch Microsoft Teams.",
+		"manifest": "msteams:",
+		"manifestType": "desktop-browser",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/teams.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "teams"]
+	},
+	{
+		"appId": "ms-365-outlook-mail",
+		"name": "ms-365-outlook-mail",
+		"title": "Microsoft Outlook Mail",
+		"description": "Launch Microsoft 365 Outlook Mail.",
+		"manifest": "http://localhost:8080/views/ms-365-outlook-mail-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/outlook.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "outlook", "mail"]
+	},
+	{
+		"appId": "ms-365-outlook-calendar",
+		"name": "ms-365-outlook-calendar",
+		"title": "Microsoft Outlook Calendar",
+		"description": "Launch Microsoft 365 Outlook Calendar.",
+		"manifest": "http://localhost:8080/views/ms-365-outlook-calendar-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/outlook.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "outlook", "calendar"]
+	},
+	{
+		"appId": "ms-365-outlook-contacts",
+		"name": "ms-365-outlook-contacts",
+		"title": "Microsoft Outlook Contacts",
+		"description": "Launch Microsoft 365 Outlook Contacts.",
+		"manifest": "http://localhost:8080/views/ms-365-outlook-contacts-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/outlook.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "outlook", "contacts"]
+	}
+]
