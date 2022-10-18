@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "26.102.71.7"
+		"version": "27.104.71.21"
 	},
 	"platform": {
 		"uuid": "integrate-server-authentication",
@@ -28,7 +28,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate Server Authentication - v9.0",
+		"name": "Integrate Server Authentication - v10.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

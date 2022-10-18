@@ -9,7 +9,7 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/common/images/icon-blue.png"
+					"icon": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
@@ -31,7 +31,7 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/common/images/icon-blue.png"
+					"icon": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
@@ -104,7 +104,7 @@
 			"name": "fdc3-workbench",
 			"title": "FDC3 Workbench",
 			"description": "Launch the official FDC3 Workbench",
-			"manifest": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/common/views/fdc3/workbench/fdc3-workbench-view.json",
+			"manifest": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/common/views/fdc3/workbench/fdc3-workbench-view.json",
 			"manifestType": "view",
 			"icons": [
 				{
@@ -130,7 +130,7 @@
 			],
 			"images": [
 				{
-					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/common/images/previews/fdc3-workbench.png"
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/common/images/previews/fdc3-workbench.png"
 				}
 			]
 		}
