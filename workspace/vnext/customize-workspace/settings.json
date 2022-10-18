@@ -4,7 +4,7 @@
 		"store": true,
 		"dock": true,
 		"notifications": true,
-		"autoShow": ["home"]
+		"autoShow": ["dock", "home"]
 	},
 	"authProvider": {
 		"modules": [
@@ -45,7 +45,8 @@
 			"inline-view",
 			"window",
 			"inline-window",
-			"desktop-browser"
+			"desktop-browser",
+			"inline-external"
 		]
 	},
 	"endpointProvider": {
@@ -99,15 +100,6 @@
 				}
 			},
 			{
-				"id": "workspace-get-all",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "GETALL",
-					"dataType": "workspace"
-				}
-			},
-			{
 				"id": "workspace-set",
 				"type": "module",
 				"typeId": "local-storage",
@@ -131,15 +123,6 @@
 				"typeId": "local-storage",
 				"options": {
 					"method": "GET",
-					"dataType": "page"
-				}
-			},
-			{
-				"id": "page-get-all",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "GETALL",
 					"dataType": "page"
 				}
 			},
@@ -801,7 +784,7 @@
 				"title": "Emoji Provider",
 				"enabled": true,
 				"autoStart": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.1.0/customize-home-templates/js/integrations/emoji.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 			}
 		]
 	},

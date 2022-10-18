@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "26.102.71.7"
+		"version": "27.104.71.21"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"
@@ -50,7 +50,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
-		"name": "Customize Workspace - v9.0",
+		"name": "Customize Workspace - v10.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
@@ -74,7 +74,7 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"autoShow": ["home"]
+			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace",
@@ -98,7 +98,8 @@
 				"inline-view",
 				"window",
 				"inline-window",
-				"desktop-browser"
+				"desktop-browser",
+				"inline-external"
 			]
 		},
 		"endpointProvider": {
@@ -702,7 +703,7 @@
 					"description": "Search for emojis by name",
 					"enabled": false,
 					"autoStart": false,
-					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/customize-home-templates/js/integrations/emoji.bundle.js"
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				}
 			]
 		},
