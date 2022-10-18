@@ -42,38 +42,40 @@ let integrationHelpers: IntegrationHelpers;
  * @param integrationHelpers The integration helpers.
  */
 export async function init(options: IntegrationProviderOptions, helpers: IntegrationHelpers): Promise<void> {
-	options.modules = options.modules ?? options.integrations;
+	if (options) {
+		options.modules = options.modules ?? options.integrations;
 
-	integrationProviderOptions = options;
-	integrationHelpers = helpers;
+		integrationProviderOptions = options;
+		integrationHelpers = helpers;
 
-	// Map the old moduleUrl properties to url
-	for (const integration of options.modules) {
-		integration.url = integration.url ?? integration.moduleUrl;
-		delete integration.moduleUrl;
-	}
-
-	// Load the modules
-	integrationModules = await loadModules<
-		IntegrationModule,
-		IntegrationHelpers,
-		unknown,
-		IntegrationModuleDefinition
-	>(options, "integrations");
-
-	// Now filter the list to those with autoStart set, or nothing set
-	const initModules: ModuleEntry<IntegrationModule, IntegrationHelpers>[] = [];
-	for (const integration of integrationModules) {
-		const integrationPreference = await getPreference(integration.definition.id);
-		integration.definition.autoStart =
-			integrationPreference?.autoStart ?? integration.definition.autoStart ?? true;
-		if (integration.definition.autoStart) {
-			initModules.push(integration);
+		// Map the old moduleUrl properties to url
+		for (const integration of options.modules) {
+			integration.url = integration.url ?? integration.moduleUrl;
+			delete integration.moduleUrl;
 		}
-	}
 
-	// Initialize just the auto start modules
-	await initializeModules(initModules, integrationHelpers);
+		// Load the modules
+		integrationModules = await loadModules<
+			IntegrationModule,
+			IntegrationHelpers,
+			unknown,
+			IntegrationModuleDefinition
+		>(options, "integrations");
+
+		// Now filter the list to those with autoStart set, or nothing set
+		const initModules: ModuleEntry<IntegrationModule, IntegrationHelpers>[] = [];
+		for (const integration of integrationModules) {
+			const integrationPreference = await getPreference(integration.definition.id);
+			integration.definition.autoStart =
+				integrationPreference?.autoStart ?? integration.definition.autoStart ?? true;
+			if (integration.definition.autoStart) {
+				initModules.push(integration);
+			}
+		}
+
+		// Initialize just the auto start modules
+		await initializeModules(initModules, integrationHelpers);
+	}
 }
 
 /**
@@ -95,16 +97,16 @@ export async function getSearchResults(
 	filters: CLIFilter[],
 	lastResponse: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
-	if (!integrationProviderOptions) {
-		logger.error("IntegrationProvider is not available, make sure your have called init");
-	}
-
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
 			filters: []
 		}
 	};
+
+	if (!integrationProviderOptions) {
+		return homeResponse;
+	}
 
 	if (
 		integrationProviderOptions.isManagementEnabled &&
@@ -267,7 +269,6 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 async function setPreference(integrationId: string, autoStart: boolean) {
 	const integrationPreferenceEndpointId = "integration-preferences-set";
 	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		// eslint-disable-next-line max-len
 		const success = await endpointProvider.action<{ id: string; payload: { autoStart: boolean } }>(
 			integrationPreferenceEndpointId,
 			{ id: integrationId, payload: { autoStart } }
@@ -283,7 +284,6 @@ async function setPreference(integrationId: string, autoStart: boolean) {
 async function getPreference(integrationId: string): Promise<{ autoStart: boolean }> {
 	const integrationPreferenceEndpointId = "integration-preferences-get";
 	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		// eslint-disable-next-line max-len
 		const preference = await endpointProvider.requestResponse<{ id: string }, { autoStart: boolean }>(
 			integrationPreferenceEndpointId,
 			{ id: integrationId }

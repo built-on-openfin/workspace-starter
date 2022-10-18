@@ -24,7 +24,6 @@ Instead of modifying this file directly we allow you to specify the destination 
 Endpoints support an action and request/response function (see [How To Defined Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints:
 
 - page-get
-- page-get-all
 - page-set
 - page-remove
 
@@ -60,15 +59,6 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
     "typeId": "local-storage",
     "options": {
      "method": "GET",
-     "dataType": "page"
-    }
-   },
-   {
-    "id": "page-get-all",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "GETALL",
      "dataType": "page"
     }
    },

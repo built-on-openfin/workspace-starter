@@ -18,7 +18,7 @@ export interface IPlatformStorage<T> {
 	 * @param query Optional parameter that can be used to filter the result set
 	 * @returns All available entries.
 	 */
-	getAll(query?: string): Promise<T[]>;
+	getAll(query?: string): Promise<{ [key: string]: T }>;
 
 	/**
 	 * Delete an entry from storage

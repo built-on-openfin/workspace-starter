@@ -74,7 +74,7 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"autoShow": ["home"]
+			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
@@ -98,7 +98,8 @@
 				"inline-view",
 				"window",
 				"inline-window",
-				"desktop-browser"
+				"desktop-browser",
+				"inline-external"
 			]
 		},
 		"endpointProvider": {
