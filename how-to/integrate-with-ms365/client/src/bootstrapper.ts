@@ -1,5 +1,6 @@
 import { deregister, register, show } from "./home";
 import { deregister as deregisterIntegration, register as registerIntegration } from "./integrations";
+import { launchView } from "./launch";
 import { getSettings } from "./settings";
 
 export async function init() {
@@ -12,7 +13,8 @@ export async function init() {
 	await show();
 
 	await registerIntegration(settings.integrationProvider, {
-		openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+		launchView
 	});
 
 	const providerWindow = fin.Window.getCurrentSync();
