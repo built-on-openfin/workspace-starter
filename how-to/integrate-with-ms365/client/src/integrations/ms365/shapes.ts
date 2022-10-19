@@ -13,7 +13,9 @@ export interface Microsoft365Settings {
 		chat: string;
 		call: string;
 		contact: string;
+		team: string;
+		channel: string;
 	};
 }
 
-export type Microsoft365ObjectTypes = "User" | "Contact" | "Message" | "Event";
+export type Microsoft365ObjectTypes = "User" | "Contact" | "Message" | "Event" | "Team" | "Channel";

@@ -79,7 +79,9 @@
 							"share": "http://localhost:8080/images/share.svg",
 							"chat": "http://localhost:8080/images/chat.svg",
 							"call": "http://localhost:8080/images/call.svg",
-							"contact": "http://localhost:8080/images/contact.svg"
+							"contact": "http://localhost:8080/images/contact.svg",
+							"team": "http://localhost:8080/images/team.svg",
+							"channel": "http://localhost:8080/images/channel.svg"
 						}
 					}
 				}
