@@ -469,6 +469,7 @@
 					"brandPrimary": "#504CFF",
 					"brandSecondary": "#383A40",
 					"backgroundPrimary": "#111214",
+					"contentBackground1": "#000000",
 					"functional1": null,
 					"functional2": null,
 					"functional3": null,
@@ -506,6 +507,7 @@
 					"brandPrimary": "#399BB8",
 					"brandSecondary": null,
 					"backgroundPrimary": "#111214",
+					"contentBackground1": "#DDDFE4",
 					"functional1": null,
 					"functional2": null,
 					"functional3": null,
@@ -784,7 +786,7 @@
 				"title": "Emoji Provider",
 				"enabled": true,
 				"autoStart": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js"
 			}
 		]
 	},

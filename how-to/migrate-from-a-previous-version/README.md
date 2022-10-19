@@ -23,11 +23,11 @@ The format of timestamps on notifications has improved. A notification that is a
 
 #### Monitor Selection
 
-End-users can now select a specific monitor for Notification Toasts and the Notification Center to appear on. 
+End-users can now select a specific monitor for Notification Toasts and the Notification Center to appear on.
 
 #### Default dismiss behavior for notifications changed
 
-We are changing the default behavior of notifications so that clicking on the body of a notification does nothing, rather than dismissing it; the user must click on the icon in the top right corner of a notification to dismiss or clear it.  Notification providers can override this behavior so that clicking does dismiss (the previous behavior).
+We are changing the default behavior of notifications so that clicking on the body of a notification does nothing, rather than dismissing it; the user must click on the icon in the top right corner of a notification to dismiss or clear it. Notification providers can override this behavior so that clicking does dismiss (the previous behavior).
 
 ## Migrate from a previous version - From v8.0 to v9.0
 
