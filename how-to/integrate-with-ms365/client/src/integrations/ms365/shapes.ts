@@ -1,3 +1,5 @@
+import type { Entity } from "@microsoft/microsoft-graph-types";
+
 export interface Microsoft365Settings {
 	clientId: string;
 	tenantId: string;
@@ -19,3 +21,22 @@ export interface Microsoft365Settings {
 }
 
 export type Microsoft365ObjectTypes = "User" | "Contact" | "Message" | "Event" | "Team" | "Channel";
+
+export interface ActionData {
+	providerId: string;
+	name?: string;
+	emails?: string[];
+	phone?: string;
+	url?: string;
+	urls?: { [id: string]: string };
+	teamId?: string;
+	channelId?: string;
+	json?: unknown;
+}
+
+export interface ActionLoadingData {
+	providerId: string;
+	objType: string;
+	obj: Entity;
+	state: string;
+}

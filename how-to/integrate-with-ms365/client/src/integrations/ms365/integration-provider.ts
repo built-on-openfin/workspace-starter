@@ -1,3 +1,4 @@
+import type { Contact as Fdc3Contact, Context as FDC3Context } from "@finos/fdc3";
 import type {
 	AadUserConversationMember,
 	Channel,
@@ -36,7 +37,7 @@ import type { Integration, IntegrationHelpers, IntegrationModule } from "../../i
 import type { Logger, LoggerCreator } from "../../logger-shapes";
 import { createButton, createContainer, createImage, createLink, createText } from "../../templates";
 import { getCurrentTheme } from "../../themes";
-import type { Microsoft365ObjectTypes, Microsoft365Settings } from "./shapes";
+import type { ActionData, ActionLoadingData, Microsoft365ObjectTypes, Microsoft365Settings } from "./shapes";
 
 /**
  * Implement the integration provider for microsoft 365 results.
@@ -82,13 +83,19 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * The key to use for a call key action.
 	 * @internal
 	 */
-	private static readonly _ACTION_CALL = "Call";
+	private static readonly _ACTION_PHONE_CALL = "Call";
 
 	/**
 	 * The key to use for an open key action.
 	 * @internal
 	 */
 	private static readonly _ACTION_OPEN = "Open";
+
+	/**
+	 * The key to use for an share contact.
+	 * @internal
+	 */
+	private static readonly _ACTION_SHARE_CONTACT = "Share Contact";
 
 	/**
 	 * The key to use for a copy key action.
@@ -188,9 +195,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Mail.ReadWrite",
 					"Contacts.Read",
 					"Tasks.Read",
-					"Calendars.ReadWrite",
-					"TeamMember.Read.All",
-					"ChannelMember.Read.All"
+					"Calendars.ReadWrite"
+					// "TeamMember.Read.All",
+					// "ChannelMember.Read.All"
 				]
 			);
 		} catch (err) {
@@ -249,7 +256,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							this._logger.info("Graph API Request", fullPath);
 
 							const response = await this._ms365Connection.executeApiRequest(fullPath);
-							lastResponse.respond([this.createResult(response)]);
+							lastResponse.respond([this.createGraphJsonResult(response)]);
 						}
 					} else if (query.length > 3) {
 						const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
@@ -342,7 +349,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				} catch (err) {
 					if (err instanceof Error) {
-						lastResponse.respond([this.createResult({ status: 400, data: err.message })]);
+						lastResponse.respond([this.createGraphJsonResult({ status: 400, data: err.message })]);
 					}
 				}
 			}
@@ -373,143 +380,179 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		if (result.action.trigger === "focus-change") {
-			if (result.data?.state === "loading") {
-				setTimeout(async () => {
-					if (this._ms365Connection) {
-						const objType = result.data?.objType as Microsoft365ObjectTypes;
-						if (objType === "User") {
-							const user: User = result.data?.obj;
-							lastResponse.respond([await this.createUserResult(user)]);
-						} else if (objType === "Contact") {
-							const contact: Contact = result.data?.obj;
-							lastResponse.respond([await this.createContactResult(contact)]);
-						} else if (objType === "Message") {
-							const message: Message = result.data?.obj;
-							lastResponse.respond([await this.createMessageResult(message)]);
-						} else if (objType === "Event") {
-							const event: Event = result.data?.obj;
-							lastResponse.respond([await this.createEventResult(event)]);
-						} else if (objType === "Channel") {
-							const channel: Channel & { team: Team } = result.data?.obj;
-							lastResponse.respond([await this.createChannelResult(channel)]);
-						} else if (objType === "Team") {
-							const team: Team = result.data?.obj;
-							lastResponse.respond([await this.createTeamResult(team)]);
-						}
-					}
-				}, 0);
+			if (result.data?.state === "loading" && this._ms365Connection) {
+				const actionData = result.data as ActionLoadingData;
+				const objType = actionData.objType as Microsoft365ObjectTypes;
+
+				const resultHandlers: { [key in Microsoft365ObjectTypes]?: () => Promise<HomeSearchResult> } = {
+					User: async () => this.createUserResult(actionData.obj as User),
+					Contact: async () => this.createContactResult(actionData.obj as Contact),
+					Message: async () => this.createMessageResult(actionData.obj as Message),
+					Event: async () => this.createEventResult(actionData.obj as Event),
+					Channel: async () => this.createChannelResult(actionData.obj as Channel & { team: Team }),
+					Team: async () => this.createTeamResult(actionData.obj as Team)
+				};
+
+				if (resultHandlers[objType]) {
+					lastResponse.respond([await resultHandlers[objType]()]);
+				}
 			}
 			return true;
 		} else if (result.action.trigger === "user-action") {
-			const {
-				emails,
-				phone,
-				url,
-				urls,
-				teamId,
-				channelId,
-				json
-			}: {
-				emails?: string[];
-				phone?: string;
-				url?: string;
-				urls?: { [id: string]: string };
-				teamId?: string;
-				channelId?: string;
-				json?: unknown;
-			} = result.data;
-
-			if (result.action.name === Microsoft365Provider._ACTION_TEAMS_CALL) {
-				this._logger.info("Teams Call", emails);
-				const teamsConnection = new TeamsConnection(this._ms365Connection);
-				await teamsConnection.startCall(emails);
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_TEAMS_MEETING) {
-				this._logger.info("Create Meeting", this._ms365Connection.currentUser.mail, emails);
-				await fin.System.openUrlWithBrowser(
-					`${Microsoft365Provider._TEAMS_PROTOCOL}/l/meeting/new?attendees=${
-						this._ms365Connection.currentUser.mail
-					},${emails.join(",")}`
-				);
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_TEAMS_CHAT) {
-				this._logger.info("Chat", this._ms365Connection.currentUser.mail, teamId, channelId, emails);
-				const teamsConnection = new TeamsConnection(this._ms365Connection);
-
-				if (teamId) {
-					await teamsConnection.openChannelChat(teamId, channelId);
-				} else {
-					await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, ...emails]);
-				}
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_OUTLOOK_EMAIL) {
-				this._logger.info("Open Mail", emails);
-
-				const response = await this._ms365Connection.executeApiRequest<Message>("/v1.0/me/messages", "POST", {
-					toRecipients: emails.map((e) => ({
-						emailAddress: {
-							address: e
-						}
-					}))
-				});
-
-				const uri = new URL(response.data?.webLink);
-
-				if (uri.searchParams.has("ItemID")) {
-					const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
-					await this._integrationHelpers.launchView(
-						`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
-					);
-				} else {
-					await this._integrationHelpers.launchView(response.data.webLink);
-				}
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_OUTLOOK_EVENT) {
-				this._logger.info("Open Mail", emails);
-
-				const response = await this._ms365Connection.executeApiRequest<Event>("/v1.0/me/events", "POST", {
-					attendees: emails.map((e) => ({
-						emailAddress: {
-							address: e
-						}
-					}))
-				});
-
-				const uri = new URL(response.data?.webLink);
-
-				if (uri.searchParams.has("itemid")) {
-					const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
-					await this._integrationHelpers.launchView(
-						`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
-					);
-				} else {
-					await this._integrationHelpers.launchView(response.data.webLink);
-				}
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_CALL) {
-				this._logger.info("Phone Call", phone);
-				await fin.System.openUrlWithBrowser(`tel:${phone}`);
-				return true;
-			} else if (result.action.name.startsWith(Microsoft365Provider._ACTION_OPEN)) {
-				const linkIndex = result.action.name.indexOf("_");
-				const u = linkIndex < 0 ? url : urls[result.action.name.slice(linkIndex + 1)];
-				this._logger.info("Open", u);
-				if (u.startsWith(Microsoft365Provider._TEAMS_URL)) {
-					await fin.System.openUrlWithBrowser(
-						u.replace(Microsoft365Provider._TEAMS_URL, Microsoft365Provider._TEAMS_PROTOCOL)
-					);
-				} else {
-					await this._integrationHelpers.launchView(u);
-				}
-				return true;
-			} else if (result.action.name === Microsoft365Provider._ACTION_COPY) {
-				this._logger.info("Copy JSON", json);
-				await fin.Clipboard.writeText({ data: JSON.stringify(json, undefined, "\t") });
-				return true;
-			}
+			return this.handleAction(result.action.name, result.data as ActionData);
 		}
 
 		return false;
+	}
+
+	private async handleAction(actionName: string, actionData: ActionData): Promise<boolean> {
+		switch (actionName) {
+			case Microsoft365Provider._ACTION_TEAMS_CALL:
+				return this.handleTeamsCall(actionData);
+			case Microsoft365Provider._ACTION_TEAMS_MEETING:
+				return this.handleTeamsMeeting(actionData);
+			case Microsoft365Provider._ACTION_TEAMS_CHAT:
+				return this.handleTeamsChat(actionData);
+			case Microsoft365Provider._ACTION_OUTLOOK_EMAIL:
+				return this.handleOutlookMail(actionData);
+			case Microsoft365Provider._ACTION_OUTLOOK_EVENT:
+				return this.handleOutlookEvent(actionData);
+			case Microsoft365Provider._ACTION_PHONE_CALL:
+				return this.handlePhoneCall(actionData);
+			case Microsoft365Provider._ACTION_SHARE_CONTACT:
+				return this.handleShareContact(actionData);
+			case Microsoft365Provider._ACTION_COPY:
+				return this.handleCopy(actionData);
+			default:
+				if (actionName.startsWith(Microsoft365Provider._ACTION_OPEN)) {
+					return this.handleOpen(actionName, actionData);
+				}
+				return false;
+		}
+	}
+
+	private async handleTeamsCall(actionData: ActionData) {
+		this._logger.info("Teams Call", actionData.emails);
+		const teamsConnection = new TeamsConnection(this._ms365Connection);
+		await teamsConnection.startCall(actionData.emails);
+		return true;
+	}
+
+	private async handleTeamsMeeting(actionData: ActionData) {
+		this._logger.info("Teams Meeting", this._ms365Connection.currentUser.mail, actionData.emails);
+		await fin.System.openUrlWithBrowser(
+			`${Microsoft365Provider._TEAMS_PROTOCOL}/l/meeting/new?attendees=${
+				this._ms365Connection.currentUser.mail
+			},${actionData.emails.join(",")}`
+		);
+		return true;
+	}
+
+	private async handleTeamsChat(actionData: ActionData) {
+		this._logger.info(
+			"Teams Chat",
+			this._ms365Connection.currentUser.mail,
+			actionData.teamId,
+			actionData.channelId,
+			actionData.emails
+		);
+		const teamsConnection = new TeamsConnection(this._ms365Connection);
+
+		if (actionData.teamId) {
+			await teamsConnection.openChannelChat(actionData.teamId, actionData.channelId);
+		} else {
+			await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, ...actionData.emails]);
+		}
+		return true;
+	}
+
+	private async handleOutlookMail(actionData: ActionData) {
+		this._logger.info("Open Outlook Mail", actionData.emails);
+
+		const response = await this._ms365Connection.executeApiRequest<Message>("/v1.0/me/messages", "POST", {
+			toRecipients: actionData.emails.map((e) => ({
+				emailAddress: {
+					address: e
+				}
+			}))
+		});
+
+		const uri = new URL(response.data?.webLink);
+
+		if (uri.searchParams.has("ItemID")) {
+			const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
+			await this._integrationHelpers.launchView(
+				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+			);
+		} else {
+			await this._integrationHelpers.launchView(response.data.webLink);
+		}
+		return true;
+	}
+
+	private async handleOutlookEvent(actionData: ActionData) {
+		this._logger.info("Open Outlook Event", actionData.emails);
+
+		const response = await this._ms365Connection.executeApiRequest<Event>("/v1.0/me/events", "POST", {
+			attendees: actionData.emails.map((e) => ({
+				emailAddress: {
+					address: e
+				}
+			}))
+		});
+
+		const uri = new URL(response.data?.webLink);
+
+		if (uri.searchParams.has("itemid")) {
+			const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
+			await this._integrationHelpers.launchView(
+				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+			);
+		} else {
+			await this._integrationHelpers.launchView(response.data.webLink);
+		}
+		return true;
+	}
+
+	private async handlePhoneCall(actionData: ActionData) {
+		this._logger.info("Phone Call", actionData.phone);
+		await fin.System.openUrlWithBrowser(`tel:${actionData.phone}`);
+		return true;
+	}
+
+	private async handleOpen(actionName: string, actionData: ActionData) {
+		const linkIndex = actionName.indexOf("_");
+		const u = linkIndex < 0 ? actionData.url : actionData.urls[actionName.slice(linkIndex + 1)];
+
+		this._logger.info("Open", u);
+
+		if (u.startsWith(Microsoft365Provider._TEAMS_URL)) {
+			await fin.System.openUrlWithBrowser(
+				u.replace(Microsoft365Provider._TEAMS_URL, Microsoft365Provider._TEAMS_PROTOCOL)
+			);
+		} else {
+			await this._integrationHelpers.launchView(u);
+		}
+		return true;
+	}
+
+	private async handleShareContact(actionData: ActionData) {
+		const fdc3Contact: Fdc3Contact = {
+			type: "fdc3.contact",
+			name: actionData.name,
+			id: {
+				email: actionData.emails[0]
+			}
+		};
+		this._logger.info("Share Contact", fdc3Contact);
+		await window.fdc3.raiseIntent("ViewContact", fdc3Contact as FDC3Context);
+		return true;
+	}
+
+	private async handleCopy(actionData: ActionData) {
+		this._logger.info("Copy JSON", actionData.json);
+		await fin.Clipboard.writeText({ data: JSON.stringify(actionData.json, undefined, "\t") });
+		return true;
 	}
 
 	private async sendBatchQuery(
@@ -587,7 +630,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				if (messages.length > 0) {
 					homeResults = homeResults.concat(
 						messages
-							.filter((m) => m.subject && !m.subject.startsWith("Canceled"))
+							.filter(
+								(m) =>
+									m.subject && !m.subject.startsWith("Canceled") && !m.subject.startsWith("Undeliverable")
+							)
 							.map((m) => this.createLoadingResult(m, "subject", "Message"))
 					);
 				}
@@ -682,7 +728,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private createResult(response: GraphResult<any>): HomeSearchResult {
+	private createGraphJsonResult(response: GraphResult<any>): HomeSearchResult {
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-rest`,
 			title: "Graph Result",
@@ -697,7 +743,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			data: {
 				providerId: Microsoft365Provider._PROVIDER_ID,
 				json: response.data
-			},
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: {
@@ -742,7 +788,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				objType,
 				obj,
 				state: "loading"
-			},
+			} as ActionLoadingData,
 			template: CLITemplate.Loading,
 			templateContent: undefined
 		};
@@ -887,6 +933,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
 				image: "chatImage",
 				imageAltText: "Chat"
+			},
+			{
+				title: "shareTitle",
+				action: Microsoft365Provider._ACTION_SHARE_CONTACT,
+				image: "shareImage",
+				imageAltText: "Share"
 			}
 		];
 
@@ -906,8 +958,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				objType: "User",
 				obj: user,
 				emails: [user.mail],
-				phone
-			},
+				phone,
+				name: user.displayName
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
@@ -965,7 +1018,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					meetingTitle: "Teams Meeting",
 					meetingImage: this._settings.images.calendar,
 					chatTitle: "Teams Chat",
-					chatImage: this._settings.images.chat
+					chatImage: this._settings.images.chat,
+					shareTitle: "Share Contact",
+					shareImage: this._settings.images.share
 				}
 			}
 		};
@@ -1057,7 +1112,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (phone) {
 			buttons.push({
 				title: "callTitle",
-				action: Microsoft365Provider._ACTION_CALL,
+				action: Microsoft365Provider._ACTION_PHONE_CALL,
 				image: "callImage",
 				imageAltText: "Call"
 			});
@@ -1078,6 +1133,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			});
 		}
 
+		buttons.push({
+			title: "shareTitle",
+			action: Microsoft365Provider._ACTION_SHARE_CONTACT,
+			image: "shareImage",
+			imageAltText: "Share Contact"
+		});
+
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${contact.id}`,
 			title: contact.displayName,
@@ -1085,7 +1147,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			icon: this._settings.images.contact,
 			actions: [
 				{
-					name: Microsoft365Provider._ACTION_CALL,
+					name: Microsoft365Provider._ACTION_PHONE_CALL,
 					hotkey: "Enter"
 				}
 			],
@@ -1094,8 +1156,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				objType: "Contact",
 				obj: contact,
 				emails: [email],
-				phone
-			},
+				phone,
+				name: contact.displayName
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
@@ -1139,7 +1202,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					emailTitle: "Outlook E-mail",
 					emailImage: this._settings.images.email,
 					calendarTitle: "Outlook Calendar",
-					calendarImage: this._settings.images.calendar
+					calendarImage: this._settings.images.calendar,
+					shareTitle: "Share Contact",
+					shareImage: this._settings.images.share
 				}
 			}
 		};
@@ -1202,7 +1267,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				objType: "Message",
 				obj: message,
 				url: message.webLink
-			},
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
@@ -1317,7 +1382,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				objType: "Event",
 				obj: event,
 				url: event.webLink
-			},
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
@@ -1433,7 +1498,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				urls,
 				emails: teamMembers.filter((t) => t.email).map((t) => t.email),
 				teamId: team.id
-			},
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
@@ -1548,7 +1613,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				emails: channelMembers.filter((m) => m.email).map((m) => m.email),
 				teamId: channel.team.id,
 				channelId: channel.id
-			},
+			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await createContainer(
