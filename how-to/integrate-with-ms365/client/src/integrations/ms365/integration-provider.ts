@@ -279,10 +279,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						// try a user lookup instead
 						const encodedQuery = encodeURIComponent(query);
 
-						const userSearchFields: (keyof User)[] = ["displayName", "givenName", "surname"];
-						const userSearchQuery = userSearchFields
-							.map((s) => `startsWith(${s},'${encodedQuery}')`)
-							.join(" or ");
+						const userSearchFields: (keyof User)[] = [
+							"displayName",
+							"givenName",
+							"surname",
+							"department",
+							"jobTitle",
+							"mobilePhone"
+						];
+						const userSearchQuery = userSearchFields.map((s) => `"${s}:${encodedQuery}"`).join(" OR ");
 
 						const batchRequests: {
 							id: string;
@@ -295,7 +300,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 								? {
 										id: "User",
 										method: "GET",
-										url: `/users?$filter=${userSearchQuery}&$top=10`
+										url: `/users?$search=${userSearchQuery}&$top=10`,
+										headers: {
+											ConsistencyLevel: "eventual"
+										}
 								  }
 								: undefined,
 							includeOptions.includes("Contact")
@@ -482,7 +490,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (uri.searchParams.has("ItemID")) {
 			const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
 			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${encodeURIComponent(
+					itemId
+				)}?ItemID=${encodeURIComponent(itemId)}&exvsurl=1`
 			);
 		} else {
 			await this._integrationHelpers.launchView(response.data.webLink);
@@ -506,7 +516,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (uri.searchParams.has("itemid")) {
 			const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
 			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
+				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${encodeURIComponent(
+					itemId
+				)}?ItemID=${encodeURIComponent(itemId)}&exvsurl=1`
 			);
 		} else {
 			await this._integrationHelpers.launchView(response.data.webLink);
@@ -778,7 +790,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		};
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder(objType)}-${obj.id}`,
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
 			label: objType,
 			icon: icons[objType],
@@ -890,6 +902,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			pairs.push({ label: "Department", value: user.department });
 		}
 
+		if (user.mail) {
+			pairs.push({ label: "E-mail", value: user.mail });
+		}
+
 		let phone;
 		if (user.mobilePhone) {
 			pairs.push({ label: "Cell", value: user.mobilePhone });
@@ -943,7 +959,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("User")}-${user.id}`,
 			title: user.displayName,
 			label: "User",
 			icon: this._settings.images.teams,
@@ -1141,7 +1157,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		});
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${contact.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Contact")}-${contact.id}`,
 			title: contact.displayName,
 			label: "Contact",
 			icon: this._settings.images.contact,
@@ -1252,7 +1268,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${message.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Message")}-${message.id}`,
 			title: message.subject ?? "Untitled Message",
 			label: "Message",
 			icon: this._settings.images.email,
@@ -1367,7 +1383,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${event.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Event")}-${event.id}`,
 			title: event.subject ?? "Untitled Event",
 			label: "Event",
 			icon: this._settings.images.calendar,
@@ -1480,7 +1496,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${team.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Team")}-${team.id}`,
 			title: team.displayName ?? "Untitled Team",
 			label: "Team",
 			icon: this._settings.images.team,
@@ -1595,7 +1611,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${channel.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}--${this.objectTypeToOrder("Channel")}${channel.id}`,
 			title: channel.displayName ?? "Untitled Channel",
 			label: "Channel",
 			icon: this._settings.images.channel,
@@ -1885,5 +1901,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 	private base64IdToUrl(b64Id: string): string {
 		return b64Id.replace(/\+/g, "_").replace(/\//g, "-");
+	}
+
+	private objectTypeToOrder(objType: Microsoft365ObjectTypes): number {
+		const objTypeOrder: { [key in Microsoft365ObjectTypes]: number } = {
+			User: 1,
+			Contact: 2,
+			Message: 3,
+			Event: 4,
+			Team: 5,
+			Channel: 6
+		};
+		return objTypeOrder[objType];
 	}
 }
