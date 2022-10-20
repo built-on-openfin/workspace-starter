@@ -56,8 +56,8 @@ export const processManager: App = {
 	manifestType: "manifest",
 	description:
 		"Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
-	manifest: "https://cdn.openfin.co/process-manager/app.json",
-	icons: [{ src: "https://cdn.openfin.co/process-manager/img/proc-mgr-icon.png" }],
+	manifest: "https://cdn.openfin.co/release/apps/openfin/processmanager/app.json",
+	icons: [{ src: "https://cdn.openfin.co/release/apps/openfin/processmanager/2.0.2/ofpm-icon.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
