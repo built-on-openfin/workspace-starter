@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--common",
-	"version": "10.0.0",
+	"version": "9.1.0",
 	"description": "Used to provide a common directory to host assets that apply across examples",
 	"main": "index.js",
 	"scripts": {
@@ -24,8 +24,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next",
+		"@openfin/workspace": "9.1.22",
+		"@openfin/workspace-platform": "9.1.22",
 		"csstype": "^3.0.11"
 	},
 	"devDependencies": {
