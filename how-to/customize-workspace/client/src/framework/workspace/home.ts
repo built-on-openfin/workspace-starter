@@ -495,14 +495,16 @@ export async function register(): Promise<RegistrationMetaInfo> {
 					}
 				}
 			}
-			searchResults.context.filters = finalFilters.length > 0 ? finalFilters : undefined;
-
-			if (searchResults.results.length > 0 || finalFilters.length > 0) {
-				return searchResults;
+			if (finalFilters.length > 0) {
+				searchResults.context.filters = finalFilters;
 			}
+
+			return searchResults;
 		} catch (err) {
 			logger.error("Exception while getting search list results", err);
 		}
+
+		return { results: [] };
 	};
 
 	const onSelection = async (result: HomeDispatchedSearchResult) => {
