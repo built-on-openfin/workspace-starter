@@ -67,6 +67,7 @@ btoa(
       brandPrimary: '#504CFF',
       brandSecondary: '#1E1F23',
       backgroundPrimary: '#FAFBFE',
+      contentBackground1: '#504CFF',
       background1: '#FFFFFF',
       background2: '#FAFBFE',
       background3: '#F3F5F8',

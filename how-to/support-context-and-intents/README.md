@@ -211,6 +211,7 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
                   "brandPrimary": "#504CFF",
                   "brandSecondary": "#383A40",
                   "backgroundPrimary": "#111214",
+                  "contentBackground1": "#504CFF",
                   "functional1": null,
                   "functional2": null,
                   "functional3": null,

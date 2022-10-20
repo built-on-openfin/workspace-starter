@@ -9,7 +9,7 @@ export async function init(themingPayload?: ThemingPayload): Promise<void> {
 		brandPrimary: "#504CFF",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
-		contentBackground1: "#000000",
+		contentBackground1: "#504CFF",
 		background1: "#111214",
 		background2: "#1E1F23",
 		background3: "#24262B",
