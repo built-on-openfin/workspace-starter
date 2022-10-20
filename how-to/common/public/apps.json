@@ -1009,7 +1009,7 @@
 		"manifest": "https://cdn.openfin.co/release/apps/openfin/processmanager/app.json",
 		"icons": [
 			{
-				"src": "https://cdn.openfin.co/release/apps/openfin/processmanager/ofpm-icon.png"
+				"src": "https://cdn.openfin.co/release/apps/openfin/processmanager/2.0.2/ofpm-icon.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
