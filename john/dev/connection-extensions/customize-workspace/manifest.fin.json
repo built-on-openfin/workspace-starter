@@ -715,7 +715,7 @@
 					"description": "Search for emojis by name",
 					"enabled": false,
 					"autoStart": false,
-					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				}
 			]
 		},
