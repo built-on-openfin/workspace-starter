@@ -3,6 +3,28 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v9.0 to v9.1
+
+The main focus of this release is:
+
+### Browser Enhancements
+
+You have the ability to hide favicons from the view tabs if you don't wish them to show.
+
+### Notification Enhancements
+
+#### Improved formatting of timestamps in Notifications
+
+The format of timestamps on notifications has improved. A notification that is at least 1 hour old will now display the absolute timestamp (e.g., “Jun 3, 11:59 PM”) of creation to users. A notification that is less than 1 hour old will continue showing the relative timestamp of creation (e.g., “36 min ago”) to users.
+
+#### Monitor Selection
+
+End-users can now select a specific monitor for Notification Toasts and the Notification Center to appear on.
+
+#### Default dismiss behavior for notifications changed
+
+We are changing the default behavior of notifications so that clicking on the body of a notification does nothing, rather than dismissing it; the user must click on the icon in the top right corner of a notification to dismiss or clear it. Notification providers can override this behavior so that clicking does dismiss (the previous behavior).
+
 ## Migrate from a previous version - From v8.0 to v9.0
 
 The main focus of this release is:
@@ -36,8 +58,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^9.0.0",
-                    "@openfin/workspace-platform": "^9.0.0"
+                    "@openfin/workspace": "^9.1.0",
+                    "@openfin/workspace-platform": "^9.1.0"
                 }
 ```
 
