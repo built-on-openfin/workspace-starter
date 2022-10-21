@@ -22,7 +22,7 @@
 		"appId": "ms-365-outlook-mail",
 		"name": "ms-365-outlook-mail",
 		"title": "Microsoft Outlook Mail",
-		"description": "Launch Microsoft 365 Outlook Mail.",
+		"description": "Launch Microsoft 365 Outlook Mail in a view.",
 		"manifest": "http://localhost:8080/views/ms-365-outlook-mail-view.json",
 		"manifestType": "view",
 		"icons": [
@@ -41,7 +41,7 @@
 		"appId": "ms-365-outlook-calendar",
 		"name": "ms-365-outlook-calendar",
 		"title": "Microsoft Outlook Calendar",
-		"description": "Launch Microsoft 365 Outlook Calendar.",
+		"description": "Launch Microsoft 365 Outlook Calendar in a view.",
 		"manifest": "http://localhost:8080/views/ms-365-outlook-calendar-view.json",
 		"manifestType": "view",
 		"icons": [
@@ -60,7 +60,7 @@
 		"appId": "ms-365-outlook-contacts",
 		"name": "ms-365-outlook-contacts",
 		"title": "Microsoft Outlook Contacts",
-		"description": "Launch Microsoft 365 Outlook Contacts.",
+		"description": "Launch Microsoft 365 Outlook Contacts in a view.",
 		"manifest": "http://localhost:8080/views/ms-365-outlook-contacts-view.json",
 		"manifestType": "view",
 		"icons": [
@@ -74,5 +74,100 @@
 		"intents": [],
 		"images": [],
 		"tags": ["view", "microsoft", "365", "outlook", "contacts"]
+	},
+	{
+		"appId": "ms-365-word",
+		"name": "ms-365-word",
+		"title": "Microsoft Word",
+		"description": "Launch Microsoft 365 Word in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-word-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/word.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "word"]
+	},
+	{
+		"appId": "ms-365-excel",
+		"name": "ms-365-excel",
+		"title": "Microsoft Excel",
+		"description": "Launch Microsoft 365 Excel in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-excel-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/excel.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "excel"]
+	},
+	{
+		"appId": "ms-365-powerpoint",
+		"name": "ms-365-powerpoint",
+		"title": "Microsoft PowerPoint",
+		"description": "Launch Microsoft 365 PowerPoint in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-powerpoint-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/powerpoint.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "powerpoint"]
+	},
+	{
+		"appId": "ms-365-sharepoint",
+		"name": "ms-365-sharepoint",
+		"title": "Microsoft SharePoint",
+		"description": "Launch Microsoft 365 SharePoint in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-sharepoint-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/sharepoint.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "sharepoint"]
+	},
+	{
+		"appId": "ms-365-onenote",
+		"name": "ms-365-onenote",
+		"title": "Microsoft OneNote",
+		"description": "Launch Microsoft 365 OneNote in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-onenote-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/images/onenote.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "onenote"]
 	}
 ]
