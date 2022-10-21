@@ -8,7 +8,7 @@
 		"manifestType": "desktop-browser",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/teams.svg"
+				"src": "http://localhost:8080/images/apps/teams.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -27,7 +27,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/outlook.svg"
+				"src": "http://localhost:8080/images/apps/outlook-mail.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -46,7 +46,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/outlook.svg"
+				"src": "http://localhost:8080/images/apps/outlook-calendar.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -57,15 +57,15 @@
 		"tags": ["view", "microsoft", "365", "outlook", "calendar"]
 	},
 	{
-		"appId": "ms-365-outlook-contacts",
-		"name": "ms-365-outlook-contacts",
-		"title": "Microsoft Outlook Contacts",
-		"description": "Launch Microsoft 365 Outlook Contacts in a view.",
-		"manifest": "http://localhost:8080/views/ms-365-outlook-contacts-view.json",
+		"appId": "ms-365-outlook-people",
+		"name": "ms-365-outlook-people",
+		"title": "Microsoft Outlook People",
+		"description": "Launch Microsoft 365 Outlook People in a view.",
+		"manifest": "http://localhost:8080/views/ms-365-outlook-people-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/outlook.svg"
+				"src": "http://localhost:8080/images/apps/outlook-people.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -73,7 +73,7 @@
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [],
-		"tags": ["view", "microsoft", "365", "outlook", "contacts"]
+		"tags": ["view", "microsoft", "365", "outlook", "people"]
 	},
 	{
 		"appId": "ms-365-word",
@@ -84,7 +84,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/word.svg"
+				"src": "http://localhost:8080/images/apps/word.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -103,7 +103,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/excel.svg"
+				"src": "http://localhost:8080/images/apps/excel.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -122,7 +122,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/powerpoint.svg"
+				"src": "http://localhost:8080/images/apps/powerpoint.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -141,7 +141,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/sharepoint.svg"
+				"src": "http://localhost:8080/images/apps/sharepoint.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -160,7 +160,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/images/onenote.svg"
+				"src": "http://localhost:8080/images/apps/onenote.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",

@@ -104,6 +104,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private static readonly _ACTION_COPY = "Copy JSON to Clipboard";
 
 	/**
+	 * The key to use for a connect key action.
+	 * @internal
+	 */
+	private static readonly _ACTION_CONNECT = "Connect";
+
+	/**
 	 * The key for the ms 365 filters.
 	 * @internal
 	 */
@@ -156,6 +162,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private _debounceTimerId?: number;
 
 	/**
+	 * Any errors during connection.
+	 */
+	private _connectionError?: string;
+
+	/**
+	 * The home response when the connect failure entry was created.
+	 */
+	private _connectLastResponse?: HomeSearchListenerResponse;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -171,38 +187,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("Microsoft365Provider");
 
-		try {
-			this._logger.info("Connecting to MS Graph API", {
-				clientId: this._settings.clientId,
-				tenantId: this._settings.tenantId,
-				redirectUri: this._settings.redirectUri
-			});
-
-			if (this._settings.enableLibLogging) {
-				enableLogging();
-			}
-
-			this._ms365Connection = await connect(
-				this._settings.clientId,
-				this._settings.tenantId,
-				this._settings.redirectUri,
-				// https://learn.microsoft.com/en-us/graph/permissions-reference
-				[
-					"User.Read",
-					"Presence.Read",
-					"Presence.Read.All",
-					"Directory.Read.All",
-					"Mail.ReadWrite",
-					"Contacts.Read",
-					"Tasks.Read",
-					"Calendars.ReadWrite"
-					// "TeamMember.Read.All",
-					// "ChannelMember.Read.All"
-				]
-			);
-		} catch (err) {
-			this._logger.error("Connecting to MS Graph API failed", err);
-		}
+		await this.connectProvider();
 	}
 
 	/**
@@ -237,7 +222,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> {
-		const results: HomeSearchResult[] = [];
+		if (!this._ms365Connection) {
+			this._connectLastResponse = lastResponse;
+			const results = [];
+			if (this._connectionError) {
+				results.push(await this.createConnectResult());
+			}
+			return {
+				results
+			};
+		}
 
 		if (this._debounceTimerId) {
 			window.clearTimeout(this._debounceTimerId);
@@ -245,132 +239,132 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._ms365Connection) {
-				try {
-					// If query starts with ms just do a passthrough to the graph API
-					if (!this._settings.disableGraphExplorer && query.startsWith("/ms/")) {
-						const path = query.replace("/ms/", "");
-						if (path.length > 0) {
-							const fullPath = `/v1.0/${path}`;
+			try {
+				// If query starts with ms just do a passthrough to the graph API
+				if (!this._settings.disableGraphExplorer && query.startsWith("/ms/")) {
+					const path = query.replace("/ms/", "");
+					if (path.length > 0) {
+						const fullPath = `/v1.0/${path}`;
 
-							this._logger.info("Graph API Request", fullPath);
+						this._logger.info("Graph API Request", fullPath);
 
-							const response = await this._ms365Connection.executeApiRequest(fullPath);
-							lastResponse.respond([this.createGraphJsonResult(response)]);
-						}
-					} else if (query.length > 3) {
-						const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
-
-						let includeOptions: Microsoft365ObjectTypes[] = [
-							"User",
-							"Contact",
-							"Event",
-							"Message",
-							"Channel",
-							"Team"
-						];
-
-						if (Array.isArray(ms365Filter?.options)) {
-							includeOptions = ms365Filter.options
-								.filter((o) => o.isSelected)
-								.map((o) => o.value as Microsoft365ObjectTypes);
-						}
-
-						// try a user lookup instead
-						const encodedQuery = encodeURIComponent(query);
-
-						const userSearchFields: (keyof User)[] = [
-							"displayName",
-							"givenName",
-							"surname",
-							"department",
-							"jobTitle",
-							"mobilePhone"
-						];
-						const userSearchQuery = userSearchFields.map((s) => `"${s}:${encodedQuery}"`).join(" OR ");
-
-						const batchRequests: {
-							id: string;
-							url: string;
-							method: string;
-							body?: unknown;
-							headers?: unknown;
-						}[] = [
-							includeOptions.includes("User")
-								? {
-										id: "User",
-										method: "GET",
-										url: `/users?$search=${userSearchQuery}&$top=10`,
-										headers: {
-											ConsistencyLevel: "eventual"
-										}
-								  }
-								: undefined,
-							includeOptions.includes("Contact")
-								? {
-										id: "Contact",
-										method: "GET",
-										url: `/me/contacts?$search=${encodedQuery}&$top=10`
-								  }
-								: undefined,
-							includeOptions.includes("Message")
-								? {
-										id: "Message",
-										method: "GET",
-										url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
-								  }
-								: undefined,
-							includeOptions.includes("Event")
-								? {
-										id: "Event",
-										url: "/search/query",
-										method: "POST",
-										body: {
-											requests: [
-												{
-													entityTypes: ["event"],
-													query: {
-														queryString: query
-													},
-													from: 0,
-													size: 10
-												}
-											]
-										},
-										headers: {
-											"Content-Type": "application/json"
-										}
-								  }
-								: undefined,
-							includeOptions.includes("Team") || includeOptions.includes("Channel")
-								? {
-										id: "Team",
-										url: "/me/joinedTeams",
-										method: "GET"
-								  }
-								: undefined
-						].filter(Boolean);
-
-						const homeResults = await this.sendBatchQuery(query, includeOptions, batchRequests);
-
-						lastResponse.respond(homeResults);
+						const response = await this._ms365Connection.executeApiRequest(fullPath);
+						lastResponse.respond([this.createGraphJsonResult(response)]);
 					}
-				} catch (err) {
-					if (err instanceof Error) {
-						lastResponse.respond([this.createGraphJsonResult({ status: 400, data: err.message })]);
+				} else if (query.length >= 3) {
+					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
+
+					let includeOptions: Microsoft365ObjectTypes[] = [
+						"User",
+						"Contact",
+						"Event",
+						"Message",
+						"Channel",
+						"Team"
+					];
+
+					if (Array.isArray(ms365Filter?.options)) {
+						includeOptions = ms365Filter.options
+							.filter((o) => o.isSelected)
+							.map((o) => o.value as Microsoft365ObjectTypes);
 					}
+
+					// try a user lookup instead
+					const encodedQuery = encodeURIComponent(query);
+
+					const userSearchFields: (keyof User)[] = [
+						"displayName",
+						"givenName",
+						"surname",
+						"department",
+						"jobTitle",
+						"mobilePhone"
+					];
+					const userSearchQuery = userSearchFields.map((s) => `"${s}:${encodedQuery}"`).join(" OR ");
+
+					const batchRequests: {
+						id: string;
+						url: string;
+						method: string;
+						body?: unknown;
+						headers?: unknown;
+					}[] = [
+						includeOptions.includes("User")
+							? {
+									id: "User",
+									method: "GET",
+									url: `/users?$search=${userSearchQuery}&$top=10`,
+									headers: {
+										ConsistencyLevel: "eventual"
+									}
+							  }
+							: undefined,
+						includeOptions.includes("Contact")
+							? {
+									id: "Contact",
+									method: "GET",
+									url: `/me/contacts?$search=${encodedQuery}&$top=10`
+							  }
+							: undefined,
+						includeOptions.includes("Message")
+							? {
+									id: "Message",
+									method: "GET",
+									url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
+							  }
+							: undefined,
+						includeOptions.includes("Event")
+							? {
+									id: "Event",
+									url: "/search/query",
+									method: "POST",
+									body: {
+										requests: [
+											{
+												entityTypes: ["event"],
+												query: {
+													queryString: query
+												},
+												from: 0,
+												size: 10
+											}
+										]
+									},
+									headers: {
+										"Content-Type": "application/json"
+									}
+							  }
+							: undefined,
+						includeOptions.includes("Team") || includeOptions.includes("Channel")
+							? {
+									id: "Team",
+									url: "/me/joinedTeams",
+									method: "GET"
+							  }
+							: undefined
+					].filter(Boolean);
+
+					const homeResults = await this.sendBatchQuery(query, includeOptions, batchRequests);
+					lastResponse.respond(homeResults);
 				}
+			} catch (err) {
+				const message = err instanceof Error ? err.message : err;
+				lastResponse.respond([this.createGraphJsonResult({ status: 400, data: message })]);
 			}
+			lastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-searching`);
 		}, 500);
 
 		return {
-			results,
+			results: query.length >= 3 ? [this.createSearchingResult()] : [],
 			context: {
 				filters: [
 					{
 						id: Microsoft365Provider._MS365_FILTERS as string,
 						title: "Microsoft 365",
-						options: ["User", "Contact", "Message", "Event"].map((o) => ({ value: o, isSelected: true }))
+						options: ["User", "Contact", "Message", "Event", "Team", "Channel"].map((o) => ({
+							value: o,
+							isSelected: true
+						}))
 					}
 				]
 			}
@@ -407,14 +401,67 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			}
 			return true;
 		} else if (result.action.trigger === "user-action") {
-			return this.handleAction(result.action.name, result.data as ActionData);
+			return this.handleAction(result.action.name, result.data as ActionData, lastResponse);
 		}
 
 		return false;
 	}
 
-	private async handleAction(actionName: string, actionData: ActionData): Promise<boolean> {
+	private async connectProvider() {
+		try {
+			this._logger.info("Connecting to MS Graph API", {
+				clientId: this._settings.clientId,
+				tenantId: this._settings.tenantId,
+				redirectUri: this._settings.redirectUri
+			});
+
+			if (this._settings.enableLibLogging) {
+				enableLogging();
+			}
+
+			this._connectionError = undefined;
+			this._ms365Connection = await connect(
+				this._settings.clientId,
+				this._settings.tenantId,
+				this._settings.redirectUri,
+				// https://learn.microsoft.com/en-us/graph/permissions-reference
+				[
+					"User.Read",
+					"Presence.Read",
+					"Presence.Read.All",
+					"Directory.Read.All",
+					"Mail.ReadWrite",
+					"Contacts.Read",
+					"Tasks.Read",
+					"Calendars.ReadWrite"
+					// "TeamMember.Read.All",
+					// "ChannelMember.Read.All"
+				]
+			);
+			if (this._connectLastResponse) {
+				this._connectLastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-connect`);
+				this._connectLastResponse = undefined;
+			}
+		} catch (err) {
+			this._ms365Connection = undefined;
+			this._connectionError = err instanceof Error ? err.message : err;
+			this._logger.error("Connecting to MS Graph API failed", err);
+			if (this._connectLastResponse) {
+				this._connectLastResponse.respond([await this.createConnectResult()]);
+			}
+		}
+	}
+
+	private async handleAction(
+		actionName: string,
+		actionData: ActionData,
+		lastResponse: HomeSearchListenerResponse
+	): Promise<boolean> {
 		switch (actionName) {
+			case Microsoft365Provider._ACTION_CONNECT:
+				lastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-connect`);
+				await this.connectProvider();
+				return true;
 			case Microsoft365Provider._ACTION_TEAMS_CALL:
 				return this.handleTeamsCall(actionData);
 			case Microsoft365Provider._ACTION_TEAMS_MEETING:
@@ -735,13 +782,74 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		return homeResults;
 	}
 
+	private async createConnectResult(): Promise<HomeSearchResult> {
+		const theme = await getCurrentTheme();
+
+		return {
+			key: `${Microsoft365Provider._PROVIDER_ID}-connect`,
+			title: "Microsoft 365",
+			label: "Connect",
+			icon: this._settings.images.microsoft365,
+			actions: [
+				{
+					name: Microsoft365Provider._ACTION_CONNECT,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: Microsoft365Provider._PROVIDER_ID
+			} as ActionData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await createContainer(
+					"column",
+					[
+						await createContainer("row", [await createText("title", 14, { fontWeight: "bold" })], {
+							paddingBottom: "10px",
+							borderBottom: `1px solid ${theme.palette.background6}`,
+							gap: "10px"
+						}),
+						await createText("description", 12),
+						await createText("error", 12, { fontFamily: "monospace", flex: 1 }),
+						await createButton(ButtonStyle.Primary, "connect", Microsoft365Provider._ACTION_CONNECT)
+					],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					title: "Microsoft 365 Connection",
+					description: "Microsoft 365 failed to connect due to the following error",
+					error: this._connectionError,
+					connect: "Connect"
+				}
+			}
+		};
+	}
+
+	private createSearchingResult(): HomeSearchResult {
+		return {
+			key: `${Microsoft365Provider._PROVIDER_ID}-searching`,
+			title: "Searching ...",
+			icon: this._settings.images.microsoft365,
+			actions: [],
+			data: {
+				providerId: Microsoft365Provider._PROVIDER_ID
+			} as ActionData,
+			template: CLITemplate.Loading,
+			templateContent: undefined
+		};
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private createGraphJsonResult(response: GraphResult<any>): HomeSearchResult {
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-rest`,
 			title: "Graph Result",
 			label: response.status === 200 ? "JSON" : "Error",
-			icon: this._settings.images.teams,
+			icon: this._settings.images.microsoft365,
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_COPY,

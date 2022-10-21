@@ -66,22 +66,23 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/integrations/ms365.bundle.js",
 					"data": {
-						"clientId": "7c5e94bc-247c-4850-98cf-ac3fbf2c4820",
-						"tenantId": "051d23bf-9257-4c0c-b503-512ae19844dc",
+						"clientId": "",
+						"tenantId": "",
 						"redirectUri": "http://localhost:8080/redirect",
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
-							"teams": "http://localhost:8080/images/teams.svg",
-							"outlook": "http://localhost:8080/images/outlook.svg",
-							"email": "http://localhost:8080/images/email.svg",
-							"calendar": "http://localhost:8080/images/calendar.svg",
-							"share": "http://localhost:8080/images/share.svg",
-							"chat": "http://localhost:8080/images/chat.svg",
-							"call": "http://localhost:8080/images/call.svg",
-							"contact": "http://localhost:8080/images/contact.svg",
-							"team": "http://localhost:8080/images/team.svg",
-							"channel": "http://localhost:8080/images/channel.svg"
+							"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
+							"teams": "http://localhost:8080/images/apps/teams.svg",
+							"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
+							"email": "http://localhost:8080/images/icons/email.svg",
+							"calendar": "http://localhost:8080/images/icons/calendar.svg",
+							"share": "http://localhost:8080/images/icons/share.svg",
+							"chat": "http://localhost:8080/images/icons/chat.svg",
+							"call": "http://localhost:8080/images/icons/call.svg",
+							"contact": "http://localhost:8080/images/icons/contact.svg",
+							"team": "http://localhost:8080/images/icons/team.svg",
+							"channel": "http://localhost:8080/images/icons/channel.svg"
 						}
 					}
 				}

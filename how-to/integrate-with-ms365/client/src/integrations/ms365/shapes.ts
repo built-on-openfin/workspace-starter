@@ -7,6 +7,7 @@ export interface Microsoft365Settings {
 	enableLibLogging: boolean;
 	disableGraphExplorer: boolean;
 	images: {
+		microsoft365: string;
 		teams: string;
 		outlook: string;
 		email: string;
