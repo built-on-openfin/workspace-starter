@@ -490,9 +490,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (uri.searchParams.has("ItemID")) {
 			const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
 			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${encodeURIComponent(
-					itemId
-				)}?ItemID=${encodeURIComponent(itemId)}&exvsurl=1`
+				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
 			);
 		} else {
 			await this._integrationHelpers.launchView(response.data.webLink);
@@ -516,9 +514,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (uri.searchParams.has("itemid")) {
 			const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
 			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${encodeURIComponent(
-					itemId
-				)}?ItemID=${encodeURIComponent(itemId)}&exvsurl=1`
+				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
 			);
 		} else {
 			await this._integrationHelpers.launchView(response.data.webLink);
@@ -949,12 +945,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
 				image: "chatImage",
 				imageAltText: "Chat"
-			},
-			{
-				title: "shareTitle",
-				action: Microsoft365Provider._ACTION_SHARE_CONTACT,
-				image: "shareImage",
-				imageAltText: "Share"
 			}
 		];
 
@@ -1034,9 +1024,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					meetingTitle: "Teams Meeting",
 					meetingImage: this._settings.images.calendar,
 					chatTitle: "Teams Chat",
-					chatImage: this._settings.images.chat,
-					shareTitle: "Share Contact",
-					shareImage: this._settings.images.share
+					chatImage: this._settings.images.chat
 				}
 			}
 		};
@@ -1149,13 +1137,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			});
 		}
 
-		buttons.push({
-			title: "shareTitle",
-			action: Microsoft365Provider._ACTION_SHARE_CONTACT,
-			image: "shareImage",
-			imageAltText: "Share Contact"
-		});
-
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Contact")}-${contact.id}`,
 			title: contact.displayName,
@@ -1218,9 +1199,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					emailTitle: "Outlook E-mail",
 					emailImage: this._settings.images.email,
 					calendarTitle: "Outlook Calendar",
-					calendarImage: this._settings.images.calendar,
-					shareTitle: "Share Contact",
-					shareImage: this._settings.images.share
+					calendarImage: this._settings.images.calendar
 				}
 			}
 		};
@@ -1611,7 +1590,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}--${this.objectTypeToOrder("Channel")}${channel.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Channel")}-${channel.id}`,
 			title: channel.displayName ?? "Untitled Channel",
 			label: "Channel",
 			icon: this._settings.images.channel,
