@@ -30,3 +30,13 @@ export function getManifest(app: AppDefinition): unknown {
 
 	return app.manifest;
 }
+
+export function getTags(app: AppDefinition): string[] {
+	// eslint-disable-next-line @typescript-eslint/dot-notation
+	const tags: string[] = app["tags"] ?? [];
+	if (tags.length === 0) {
+		tags.push(app.manifestType);
+	}
+
+	return tags;
+}
