@@ -46,7 +46,7 @@ export async function requestResponse(
 				manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
 				description: passedApp.description,
 				intents: passedApp.intents,
-				tags: [passedApp.manifestType],
+				tags: fdc3OnePointTwoHelper.getTags(passedApp),
 				version: passedApp.version,
 				publisher: passedApp.publisher,
 				contactEmail: passedApp.contactEmail,
