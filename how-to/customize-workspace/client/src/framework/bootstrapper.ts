@@ -2,6 +2,7 @@ import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { registerAction } from "./connections";
+import * as headlessProvider from "./headless";
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launchSnapshot } from "./launch";
@@ -190,6 +191,9 @@ export async function init() {
 	// Once the platform is started and everything is bootstrapped initialize the init options
 	// listener so that it is ready to handle initial params or subsequent requests.
 	await registerInitOptionsListener(settings?.initOptionsProvider, "after-bootstrap");
+
+	// fire up any windows that have been configured
+	await headlessProvider.init(settings?.headlessProvider);
 
 	// Let any other modules participate in the lifecycle
 	const platform = getCurrentSync();
