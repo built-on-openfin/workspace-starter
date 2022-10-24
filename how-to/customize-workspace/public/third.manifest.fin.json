@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=customize-workspace-for-fdc3",
-		"version": "27.104.71.21"
+		"version": "26.102.71.8"
 	},
 	"startup_app": {
 		"name": "customize-workspace-for-fdc3"
@@ -50,7 +50,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon-32x32.png",
-		"name": "Customize Workspace - v10.0 - FDC3 Workspace",
+		"name": "Customize Workspace - v9.2.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
