@@ -279,6 +279,8 @@ If you had a custom format that you wanted to map you wouldn't need the inputId 
 
 The fdc3 endpoint module can be seen [here](../client/src/modules/endpoints/fdc3-app/endpoint.ts) and you could use a similar approach.
 
+We have a manifest (see [third.manifest.fin.json](../public/third.manifest.fin.json) that has been configured to use this module and provide you with a workspace that imports an FDC3 App Directory (see [apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json)).
+
 ## Where Are Apps Used?
 
 Apps can come from many sources but the feed can be used by:

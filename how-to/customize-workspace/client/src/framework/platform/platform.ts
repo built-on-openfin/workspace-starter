@@ -10,7 +10,6 @@ import { isAuthenticationEnabled } from "../auth";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
-import * as headlessProvider from "../headless";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
@@ -65,7 +64,6 @@ async function setupPlatform() {
 	logger.info("Initializing Core Services");
 
 	await endpointProvider.init(settings?.endpointProvider);
-	await headlessProvider.init(settings?.headlessProvider);
 	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider);

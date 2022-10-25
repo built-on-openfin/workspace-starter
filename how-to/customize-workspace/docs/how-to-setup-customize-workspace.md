@@ -11,7 +11,7 @@
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 9.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/of-docs/docs/desktop-owner-settings). This example runs a utility [desktop-owner-settings.bat](../../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 9.1.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/of-docs/docs/desktop-owner-settings). This example runs a utility [desktop-owner-settings.bat](../../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
@@ -38,6 +38,14 @@ npm run secondclient
 ```
 
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](../public/second.manifest.fin.json)
+
+If you want to see a third workspace platform that has been configured to use an FDC3 App Directory then you can fire up a copy using the following command:
+
+```shell
+npm run thirdclient
+```
+
+This runs the same code with slightly different settings to load an FDC3 directory and show a light theme: [third.manifest.fin.json](../public/third.manifest.fin.json)
 
 6. Type any character into the search box to show the default list of applications.
    The [apps](../../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).

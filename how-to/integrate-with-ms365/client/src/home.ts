@@ -41,7 +41,7 @@ export async function register() {
 		response: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> => {
 		try {
-			const lowerQuery = request.query.toLowerCase();
+			const queryLower = request.query.toLowerCase();
 			filters = request?.context?.selectedFilters;
 			if (lastResponse !== undefined) {
 				lastResponse.close();
@@ -50,8 +50,8 @@ export async function register() {
 			lastResponse.open();
 
 			let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-			if (lowerQuery && lowerQuery.length >= 3) {
-				appSearchEntries = appSearchEntries.filter((app) => app.title.toLowerCase().includes(lowerQuery));
+			if (queryLower && queryLower.length >= 3) {
+				appSearchEntries = appSearchEntries.filter((app) => app.title.toLowerCase().includes(queryLower));
 			}
 
 			const searchResults: HomeSearchResponse = {
@@ -61,7 +61,7 @@ export async function register() {
 				}
 			};
 
-			if (lowerQuery === "?") {
+			if (queryLower === "?") {
 				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
 			} else {
 				const integrationResults = await getSearchResults(request.query, filters, lastResponse);
