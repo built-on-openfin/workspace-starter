@@ -128,7 +128,7 @@ function mapPageEntriesToSearchEntries(pages: Page[]) {
 }
 
 async function getResults(
-	query?: string,
+	queryLower: string,
 	queryMinLength = 3,
 	queryAgainst: string[] = ["title"],
 	filters?: CLIFilter[]
@@ -147,14 +147,14 @@ async function getResults(
 			let textMatchFound = true;
 			let filterMatchFound = true;
 
-			if (query !== undefined && query !== null && query.length >= queryMinLength) {
+			if (queryLower !== undefined && queryLower !== null && queryLower.length >= queryMinLength) {
 				textMatchFound = queryAgainst.some((target) => {
 					const path = target.split(".");
 					if (path.length === 1) {
 						const targetValue = entry[path[0]];
 
 						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(query);
+							return targetValue.toLowerCase().includes(queryLower);
 						}
 					} else if (path.length === 2) {
 						const targetEntry = entry[path[0]];
@@ -164,14 +164,14 @@ async function getResults(
 						}
 
 						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(query);
+							return targetValue.toLowerCase().includes(queryLower);
 						}
 
 						if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
 							if (
 								targetValue.length > 0 &&
 								typeof targetValue[0] === "string" &&
-								targetValue.some((target2) => target2.toLowerCase().startsWith(query))
+								targetValue.some((target2) => target2.toLowerCase().startsWith(queryLower))
 							) {
 								return true;
 							}
@@ -245,8 +245,8 @@ export async function register() {
 		request: CLISearchListenerRequest,
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
-		const query = request.query.toLowerCase();
-		if (query.startsWith("/")) {
+		const queryLower = request.query.toLowerCase();
+		if (queryLower.startsWith("/")) {
 			return { results: [] };
 		}
 
@@ -256,7 +256,7 @@ export async function register() {
 		}
 		lastResponse = response;
 		lastResponse.open();
-		const results = await getResults(query, queryMinLength, queryAgainst, filters);
+		const results = await getResults(queryLower, queryMinLength, queryAgainst, filters);
 		return results;
 	};
 
