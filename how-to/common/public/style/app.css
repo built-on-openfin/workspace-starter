@@ -367,31 +367,31 @@ textarea.full {
 }
 
 select:focus,
-select:not(:disabled):not(:invalid):hover,
-input[type='text']:not(:read-only):not(:invalid):focus,
-input[type='text']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='email']:not(:read-only):not(:invalid):focus,
-input[type='email']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='url']:not(:read-only):not(:invalid):focus,
-input[type='url']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='password']:not(:read-only):not(:invalid):focus,
-input[type='password']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='file']:not(:read-only):not(:invalid):focus,
-input[type='file']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='number']:not(:read-only):not(:invalid):focus,
-input[type='number']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='date']:not(:read-only):not(:invalid):focus,
-input[type='date']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='time']:not(:read-only):not(:invalid):focus,
-input[type='time']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='datetime-local']:not(:read-only):not(:invalid):focus,
-input[type='datetime-local']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='month']:not(:read-only):not(:invalid):focus,
-input[type='month']:not(:disabled):not(:read-only):not(:invalid):hover,
-input[type='week']:not(:read-only):not(:invalid):focus,
-input[type='week']:not(:disabled):not(:read-only):not(:invalid):hover,
-textarea:not(:read-only):not(:invalid):focus,
-textarea:not(:disabled):not(:read-only):not(:invalid):hover,
+select:not(:disabled):hover,
+input[type='text']:not(:read-only):focus,
+input[type='text']:not(:disabled):not(:read-only):hover,
+input[type='email']:not(:read-only):focus,
+input[type='email']:not(:disabled):not(:read-only):hover,
+input[type='url']:not(:read-only):focus,
+input[type='url']:not(:disabled):not(:read-only):hover,
+input[type='password']:not(:read-only):focus,
+input[type='password']:not(:disabled):not(:read-only):hover,
+input[type='file']:not(:read-only):focus,
+input[type='file']:not(:disabled):not(:read-only):hover,
+input[type='number']:not(:read-only):focus,
+input[type='number']:not(:disabled):not(:read-only):hover,
+input[type='date']:not(:read-only):focus,
+input[type='date']:not(:disabled):not(:read-only):hover,
+input[type='time']:not(:read-only):focus,
+input[type='time']:not(:disabled):not(:read-only):hover,
+input[type='datetime-local']:not(:read-only):focus,
+input[type='datetime-local']:not(:disabled):not(:read-only):hover,
+input[type='month']:not(:read-only):focus,
+input[type='month']:not(:disabled):not(:read-only):hover,
+input[type='week']:not(:read-only):focus,
+input[type='week']:not(:disabled):not(:read-only):hover,
+textarea:not(:read-only):focus,
+textarea:not(:disabled):not(:read-only):hover,
 input[type='checkbox']:focus,
 input[type='checkbox']:not(:disabled):hover,
 input[type='radio']:focus,
@@ -617,6 +617,26 @@ input[type='color']::-webkit-color-swatch {
 	border: none;
 }
 
+/* This disables the auto zoom on iDevices */
+@supports (-webkit-touch-callout: none) {
+	select,
+	input[type='text'],
+	input[type='url'],
+	input[type='email'],
+	input[type='password'],
+	input[type='file'],
+	input[type='number'],
+	input[type='date'],
+	input[type='time'],
+	input[type='datetime-local'],
+	input[type='month'],
+	input[type='week'],
+	input[type='color'],
+	textarea {
+		font-size: 16px;
+	}
+}
+
 hr {
 	width: 100%;
 	border: 0;
@@ -625,10 +645,28 @@ hr {
 
 ul {
 	font-size: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	list-style-type: none;
 }
 
 li {
 	font-size: 12px;
+	position: relative;
+	padding: 0 0 10px;
+}
+
+li::before {
+	content: ' ';
+	display: inline-block;
+	background-color: var(--brand-primary);
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+	position: absolute;
+	left: -13px;
+	top: 3px;
 }
 
 em {
@@ -686,14 +724,17 @@ em {
 }
 
 .left {
+	display: flex;
 	align-items: flex-start;
 }
 
 .center {
+	display: flex;
 	justify-content: center;
 }
 
 .right {
+	display: flex;
 	justify-content: flex-end;
 }
 
@@ -729,6 +770,13 @@ em {
 	padding: 0px;
 }
 
+.table {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	font-size: 10px;
+}
+
 table {
 	width: 100%;
 	font-size: 10px;
@@ -736,29 +784,85 @@ table {
 	border-collapse: collapse;
 }
 
-tr:first-child {
+.table-row {
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+}
+
+table > tr:first-child,
+thead > tr,
+.table-row.header {
 	background-color: var(--brand-table-header);
 }
 
-tr:nth-child(even) {
+table > tr:nth-child(even),
+.table > div:nth-child(even),
+tbody > tr:nth-child(odd) {
 	background-color: var(--brand-table-row-even);
 }
 
-tr:not(:first-child):nth-child(odd) {
+table > tr:nth-child(odd),
+.table > div:not(:first-child):nth-child(odd),
+tbody > tr:nth-child(even) {
 	background-color: var(--brand-table-row-odd);
 }
 
-th {
+th,
+.table-row.header > div {
 	color: var(--brand-table-header-text);
+	font-weight: bold;
 	padding: 10px 5px;
 	text-align: left;
 	word-break: break-word;
 }
 
-td {
+.table-row > div {
+	flex: 1;
+}
+
+td,
+.table-row:not(.header) > div {
 	padding: 5px;
 	word-break: break-word;
 	color: var(--brand-text);
+}
+
+.table-row:not(.header) > div {
+	display: flex;
+	align-items: center;
+}
+
+@media screen and (max-width: 736px) {
+	.table-row {
+		flex-direction: column;
+	}
+
+	.table-row.header {
+		display: none;
+	}
+
+	.table-row:not(.header) > div {
+		display: flex;
+		align-items: center;
+		flex: 1;
+		gap: 10px;
+	}
+
+	.table-row:not(.header) > div:before {
+		content: attr(data-name);
+		font-weight: bold;
+		white-space: nowrap;
+		width: 20%;
+	}
+
+	.table-row > div.right {
+		justify-content: flex-start;
+	}
+
+	.table-row > div.center {
+		justify-content: flex-start;
+	}
 }
 
 .border {
@@ -797,4 +901,20 @@ td {
 
 .width-full {
 	width: 100%;
+}
+
+.max-width-full {
+	max-width: 100%;
+}
+
+.width-responsive {
+	max-width: fit-content;
+}
+
+.hidden {
+	display: none;
+}
+
+.pointer {
+	cursor: pointer;
 }
