@@ -625,15 +625,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		this._logger.info("Graph API Batch Request", batchRequests);
 
-		const batchResponses = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
-			"/v1.0/$batch",
-			"POST",
-			{
-				requests: batchRequests
-			}
-		);
+		try {
+			const batchResponses = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+				"/v1.0/$batch",
+				"POST",
+				{
+					requests: batchRequests
+				}
+			);
 
-		if (batchResponses.status === 200) {
 			if (Array.isArray(batchResponses.data?.responses)) {
 				for (const batchResponse of batchResponses.data.responses) {
 					if (batchResponse.status === 200) {
@@ -649,8 +649,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				}
 			}
-		} else {
-			this._logger.error("Batch Response Failed", batchResponses?.status);
+		} catch (err) {
+			this._logger.error("Batch Response Failed", err);
 		}
 
 		return homeResults;
@@ -1760,11 +1760,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				GraphListResponse<AadUserConversationMember>
 			>(`/v1.0/teams/${teamId}/members`, "GET");
 
-			if (response.status === 200) {
-				this._logger.info("Get Team Members Response", response.data);
-				return response.data.value;
-			}
-			this._logger.error("Failed getting team members", response.status, response.data);
+			this._logger.info("Get Team Members Response", response.data);
+			return response.data.value;
 		} catch (err) {
 			this._logger.error("Failed getting team members", err);
 		}
@@ -1780,11 +1777,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				GraphListResponse<AadUserConversationMember>
 			>(`/v1.0/teams/${teamId}/channels/${channelId}/members`, "GET");
 
-			if (response.status === 200) {
-				this._logger.info("Get Channel Members Response", response.data);
-				return response.data.value;
-			}
-			this._logger.error("Failed getting channel members", response.status, response.data);
+			this._logger.info("Get Channel Members Response", response.data);
+			return response.data.value;
 		} catch (err) {
 			this._logger.error("Failed getting channel members", err);
 		}
@@ -1806,14 +1800,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			);
 
-			if (response.status === 200) {
-				return response.data.responses.map((r, idx) => {
-					if (r.status === 200) {
-						return `data:image/jpeg;base64,${r.body as string}`;
-					}
-					return `data:image/svg+xml;utf8,${this.imageProfileNone(16, users[idx].displayName)}`;
-				});
-			}
+			return response.data.responses.map((r, idx) => {
+				if (r.status === 200) {
+					return `data:image/jpeg;base64,${r.body as string}`;
+				}
+				return `data:image/svg+xml;utf8,${this.imageProfileNone(16, users[idx].displayName)}`;
+			});
 		} catch (err) {
 			this._logger.error("Failed getting user photos", err);
 		}
