@@ -61,4 +61,12 @@ npm run build
 
 Once you have built the project it is easy to extend through config (either the manifest file or settings returned from a service) and custom JavaScript Modules. The remaining guides will walk you through the process.
 
+## Live Reload
+
+If you want to undertake some development work in a live reload environment, which rebuilds and reloads the content when changes are detected, you can use the following command:
+
+```shell
+npm run dev
+```
+
 [<- Back to Table Of Contents](../README.md)
