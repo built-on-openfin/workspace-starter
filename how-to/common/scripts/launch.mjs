@@ -117,7 +117,7 @@ async function run(manifestUrl, manifestFiles) {
 		// If we have manifest files to watch we are in dev mode, so we perform a
 		// delayed startup to allow the live server to startup, to serve the manifest
 		manifestFiles = path.resolve(path.join(process.env.INIT_CWD, launchArgs[1]));
-		delayStartup = 1000;
+		delayStartup = 2000;
 	}
 
 	setTimeout(async () => {
