@@ -260,7 +260,7 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 }
 
 async function getResults(
-	query: string,
+	queryLower: string,
 	queryMinLength,
 	queryAgainst: string[],
 	filters: CLIFilter[]
@@ -294,9 +294,9 @@ async function getResults(
 			let textMatchFound = true;
 			let filterMatchFound = true;
 
-			const isCommand = query.startsWith("/");
+			const isCommand = queryLower.startsWith("/");
 
-			if (query.length >= queryMinLength || isCommand) {
+			if (queryLower.length >= queryMinLength || isCommand) {
 				textMatchFound = queryAgainst.some((target) => {
 					const path = target.split(".");
 					if (path.length === 1) {
@@ -305,9 +305,9 @@ async function getResults(
 						if (typeof targetValue === "string") {
 							const lowerTarget = targetValue.toLowerCase();
 							if (isCommand) {
-								return lowerTarget.startsWith(query);
+								return lowerTarget.startsWith(queryLower);
 							}
-							return lowerTarget.includes(query);
+							return lowerTarget.includes(queryLower);
 						}
 					} else if (path.length === 2) {
 						const specifiedTarget = entry[path[0]];
@@ -319,16 +319,16 @@ async function getResults(
 						if (typeof targetValue === "string") {
 							const lowerTarget = targetValue.toLowerCase();
 							if (isCommand) {
-								return lowerTarget.startsWith(query);
+								return lowerTarget.startsWith(queryLower);
 							}
-							return lowerTarget.includes(query);
+							return lowerTarget.includes(queryLower);
 						}
 
 						if (Array.isArray(targetValue)) {
 							if (
 								targetValue.length > 0 &&
 								typeof targetValue[0] === "string" &&
-								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(query))
+								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
 							) {
 								return true;
 							}
@@ -408,11 +408,11 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
 		try {
-			const query = request.query.toLowerCase();
+			const queryLower = request.query.toLowerCase();
 
-			if (enableWorkspaceIntegration && query.toLowerCase().startsWith("/w ")) {
+			if (enableWorkspaceIntegration && queryLower.startsWith("/w ")) {
 				const workspaces = await getWorkspaces();
-				const title = request.query.replace("/w ", "");
+				const title = queryLower.replace("/w ", "");
 
 				const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
 				if (foundMatch !== undefined && foundMatch !== null) {
@@ -460,7 +460,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 			lastResponse = response;
 			lastResponse.open();
 
-			if (query === "?") {
+			if (queryLower === "?") {
 				const integrationHelpSearchEntries = await getHelpSearchEntries();
 				const searchResults = {
 					results: integrationHelpSearchEntries,
@@ -471,8 +471,8 @@ export async function register(): Promise<RegistrationMetaInfo> {
 				return searchResults;
 			}
 
-			const searchResults = await getResults(query, queryMinLength, queryAgainst, filters);
-			const integrationResults = await getSearchResults(query, filters, lastResponse);
+			const searchResults = await getResults(queryLower, queryMinLength, queryAgainst, filters);
+			const integrationResults = await getSearchResults(request.query, filters, lastResponse);
 			if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
 				searchResults.results = searchResults.results.concat(integrationResults.results);
 			}
