@@ -3,8 +3,8 @@ import path from "path";
 
 const app = express();
 
-const mainPath = path.join(__dirname, "..", "..", "public");
-const commonPath = path.join(__dirname, "..", "..", "..", "common", "public");
+const mainPath = path.join(__dirname, "..", "..", "..", "public");
+const commonPath = path.join(__dirname, "..", "..", "..", "..", "common", "public");
 const port = 8080;
 
 console.log(`Main Path / = ${mainPath}`);

@@ -61,7 +61,7 @@ function getSearchFilters(objects: string[]): CLIFilter[] {
 }
 
 async function getResults(
-	query?: string,
+	queryLower: string,
 	queryMinLength = 3,
 	filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
@@ -82,7 +82,7 @@ async function getResults(
 	};
 
 	// Return default browse result if query less than minimum char length or starts with /
-	const searchQuery = query.trim();
+	const searchQuery = queryLower.trim();
 	if (searchQuery.length < queryMinLength || searchQuery.startsWith("/")) {
 		return { results: [browseResult] };
 	}
@@ -254,15 +254,15 @@ export async function register(): Promise<void> {
 	const settings = await getSettings();
 	const queryMinLength = settings.queryMinLength || 3;
 	let lastResponse: CLISearchListenerResponse;
-	let query: string;
+	let queryLower: string;
 	let filters: CLIFilter[];
 
 	const onUserInput = async (
 		request: CLISearchListenerRequest,
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
-		query = request.query.toLowerCase();
-		if (query.startsWith("/")) {
+		queryLower = request.query.toLowerCase();
+		if (queryLower.startsWith("/")) {
 			return { results: [] };
 		}
 
@@ -272,7 +272,7 @@ export async function register(): Promise<void> {
 		}
 		lastResponse = response;
 		lastResponse.open();
-		const results = await getResults(query, queryMinLength, filters);
+		const results = await getResults(queryLower, queryMinLength, filters);
 		return results;
 	};
 
@@ -280,7 +280,7 @@ export async function register(): Promise<void> {
 		// if the user clicked the reconnect result, reconnect to salesforce and re-run query
 		if (result.key === NOT_CONNECTED_SEARCH_RESULT_KEY) {
 			await connectToSalesforce();
-			const results = await getResults(query, queryMinLength, filters);
+			const results = await getResults(queryLower, queryMinLength, filters);
 			lastResponse.revoke(NOT_CONNECTED_SEARCH_RESULT_KEY);
 			lastResponse.respond(results.results);
 			await Home.show();
