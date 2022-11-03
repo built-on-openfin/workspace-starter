@@ -1,5 +1,9 @@
 # Changelog
 
+## v9.2
+
+- Added `dev` npm script which live build and reloads code for customize-workspace sample
+
 ## v9.1
 
 - Removed `GETALL` from endpoints to make it behave more like REST, instead use `GET` without an `id` which returns the whole object, not as an array, but as a keyed object

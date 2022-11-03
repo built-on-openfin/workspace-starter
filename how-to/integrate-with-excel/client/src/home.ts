@@ -39,7 +39,7 @@ export async function register() {
 		request: CLISearchListenerRequest,
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
-		const query = request.query.toLowerCase();
+		const queryLower = request.query.toLowerCase();
 		if (lastResponse !== undefined) {
 			lastResponse.close();
 		}
@@ -47,10 +47,8 @@ export async function register() {
 		lastResponse.open();
 
 		let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-		if (query && query.length >= 3) {
-			appSearchEntries = appSearchEntries.filter((app) =>
-				app.title.toLowerCase().includes(query.toLowerCase())
-			);
+		if (queryLower && queryLower.length >= 3) {
+			appSearchEntries = appSearchEntries.filter((app) => app.title.toLowerCase().includes(queryLower));
 		}
 
 		const searchResults: HomeSearchResponse = {
@@ -60,7 +58,7 @@ export async function register() {
 			}
 		};
 
-		const integrationResults = await getSearchResults(query, undefined, lastResponse);
+		const integrationResults = await getSearchResults(request.query, undefined, lastResponse);
 		if (Array.isArray(integrationResults.results)) {
 			searchResults.results = searchResults.results.concat(integrationResults.results);
 		}
