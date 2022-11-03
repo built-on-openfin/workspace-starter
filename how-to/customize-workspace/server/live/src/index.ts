@@ -1,8 +1,8 @@
 import liveServer from "live-server";
 import path from "path";
 
-const mainPath = path.join(__dirname, "..", "..", "public");
-const commonPath = path.join(__dirname, "..", "..", "..", "common", "public");
+const mainPath = path.join(__dirname, "..", "..", "..", "public");
+const commonPath = path.join(__dirname, "..", "..", "..", "..", "common", "public");
 
 console.log(`Main Path / = ${mainPath}`);
 console.log(`Common Path /common = ${commonPath}`);
