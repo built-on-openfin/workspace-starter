@@ -65,6 +65,14 @@ Once you have built the project it is easy to extend through config (either the 
 
 If you want to undertake some development work in a live reload environment, which rebuilds and reloads the content when changes are detected, you can use the following command:
 
+Run once:
+
+```shell
+npm run setup-dev
+```
+
+Run each time you want to start in development mode.
+
 ```shell
 npm run dev
 ```
