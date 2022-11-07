@@ -68,7 +68,7 @@
 					"data": {
 						"clientId": "",
 						"tenantId": "",
-						"redirectUri": "http://localhost:8080/redirect",
+						"redirectUri": "http://localhost:8080/oauth_redirect",
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {

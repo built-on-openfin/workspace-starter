@@ -459,8 +459,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Contacts.Read",
 					"Tasks.Read",
 					"Calendars.ReadWrite",
-					"Chat.Read",
-					"ChannelMessage.Read.All"
+					"Chat.Read"
+					// "ChannelMessage.Read.All"
 					// "TeamMember.Read.All",
 					// "ChannelMember.Read.All"
 				]
