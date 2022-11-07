@@ -2,6 +2,7 @@ import type { Contact as Fdc3Contact, Context as FDC3Context } from "@finos/fdc3
 import type {
 	AadUserConversationMember,
 	Channel,
+	ChatMessage,
 	Contact,
 	Entity,
 	Event,
@@ -260,7 +261,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						"Event",
 						"Message",
 						"Channel",
-						"Team"
+						"Team",
+						"ChatMessage"
 					];
 
 					if (Array.isArray(ms365Filter?.options)) {
@@ -335,6 +337,28 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 									}
 							  }
 							: undefined,
+						includeOptions.includes("ChatMessage")
+							? {
+									id: "ChatMessage",
+									url: "/search/query",
+									method: "POST",
+									body: {
+										requests: [
+											{
+												entityTypes: ["chatMessage"],
+												query: {
+													queryString: query
+												},
+												from: 0,
+												size: 10
+											}
+										]
+									},
+									headers: {
+										"Content-Type": "application/json"
+									}
+							  }
+							: undefined,
 						includeOptions.includes("Team") || includeOptions.includes("Channel")
 							? {
 									id: "Team",
@@ -361,7 +385,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					{
 						id: Microsoft365Provider._MS365_FILTERS as string,
 						title: "Microsoft 365",
-						options: ["User", "Contact", "Message", "Event", "Team", "Channel"].map((o) => ({
+						options: ["User", "Contact", "Message", "Event", "Team", "Channel", "ChatMessage"].map((o) => ({
 							value: o,
 							isSelected: true
 						}))
@@ -391,6 +415,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					Contact: async () => this.createContactResult(actionData.obj as Contact),
 					Message: async () => this.createMessageResult(actionData.obj as Message),
 					Event: async () => this.createEventResult(actionData.obj as Event),
+					ChatMessage: async () => this.createChatMessageResult(actionData.obj as ChatMessage),
 					Channel: async () => this.createChannelResult(actionData.obj as Channel & { team: Team }),
 					Team: async () => this.createTeamResult(actionData.obj as Team)
 				};
@@ -433,7 +458,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Mail.ReadWrite",
 					"Contacts.Read",
 					"Tasks.Read",
-					"Calendars.ReadWrite"
+					"Calendars.ReadWrite",
+					"Chat.Read",
+					"ChannelMessage.Read.All"
 					// "TeamMember.Read.All",
 					// "ChannelMember.Read.All"
 				]
@@ -513,7 +540,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		);
 		const teamsConnection = new TeamsConnection(this._ms365Connection);
 
-		if (actionData.teamId) {
+		if (actionData.chatId && actionData.messageId) {
+			await fin.System.openUrlWithBrowser(
+				`${Microsoft365Provider._TEAMS_PROTOCOL}/l/message/${actionData.chatId}/${actionData.messageId}`
+			);
+		} else if (actionData.teamId) {
 			await teamsConnection.openChannelChat(actionData.teamId, actionData.channelId);
 		} else {
 			await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, ...actionData.emails]);
@@ -712,6 +743,25 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							)
 					);
 				}
+			} else if (type === "ChatMessage") {
+				const graphResponse = batchResponse.body as GraphListResponse<SearchResponse>;
+				const searchResponse = graphResponse?.value?.[0];
+				const chatMessages = searchResponse?.hitsContainers?.[0]?.hits;
+				if (chatMessages?.length) {
+					homeResults = homeResults.concat(
+						chatMessages.map((e) =>
+							this.createLoadingResult(
+								{
+									id: this.base64IdToUrl(e.hitId),
+									...e.resource,
+									summary: e.summary
+								} as ChatMessage,
+								"summary",
+								"ChatMessage"
+							)
+						)
+					);
+				}
 			} else if (type === "Team") {
 				const joinedTeams = (batchResponse.body as GraphListResponse<Team>).value;
 
@@ -890,14 +940,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			Message: this._settings.images.email,
 			Event: this._settings.images.calendar,
 			Channel: this._settings.images.channel,
-			Team: this._settings.images.team
+			Team: this._settings.images.team,
+			ChatMessage: this._settings.images.chat
 		};
 
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
 			score: this.objectTypeToOrder(objType),
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
-			label: objType,
+			label: objType.split(/(?=[A-Z])/).join(" "),
 			icon: icons[objType],
 			actions: [],
 			data: {
@@ -1520,6 +1571,131 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		};
 	}
 
+	private async createChatMessageResult(chatMessage: ChatMessage): Promise<HomeSearchResult> {
+		const batchRequests: string[] = [`/chats/${chatMessage.chatId}/messages/${chatMessage.etag}`];
+
+		try {
+			this._logger.info("Graph API Batch Request", {
+				photo: batchRequests[0]
+			});
+
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+				"/v1.0/$batch",
+				"POST",
+				{
+					requests: batchRequests.map((r, idx) => ({
+						id: (idx + 1).toString(),
+						method: "GET",
+						url: r
+					}))
+				}
+			);
+
+			const chatMessageResponse = response.data?.responses.find((r) => r.id === "1");
+			if (chatMessageResponse?.status === 200) {
+				chatMessage = {
+					...chatMessage,
+					...chatMessageResponse.body,
+					summary: chatMessageResponse.body.summary ?? chatMessage.summary
+				};
+			} else {
+				this._logger.error(
+					"Failed getting event",
+					chatMessageResponse.status,
+					chatMessageResponse.body as string
+				);
+			}
+		} catch (err) {
+			this._logger.error("Failed performing API batch request", err);
+		}
+
+		const theme = await getCurrentTheme();
+
+		const pairs: { label: string; value: string; wide?: boolean }[] = [];
+
+		pairs.push({
+			label: "Date/Time",
+			value: new Date(chatMessage.lastModifiedDateTime).toLocaleString()
+		});
+
+		if (chatMessage.from?.user?.displayName) {
+			pairs.push({
+				label: "From",
+				value: chatMessage.from.user.displayName
+			});
+		}
+
+		if (chatMessage.body?.content) {
+			pairs.push({
+				label: "Preview",
+				value: chatMessage.body?.content,
+				wide: true
+			});
+		}
+
+		const buttons: {
+			title: string;
+			action: string;
+			image: string;
+			imageAltText: string;
+		}[] = [
+			{
+				title: "openTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
+				image: "openImage",
+				imageAltText: "Open"
+			}
+		];
+
+		return {
+			key: `${Microsoft365Provider._PROVIDER_ID}-${chatMessage.id}`,
+			score: this.objectTypeToOrder("ChatMessage"),
+			title: chatMessage.summary ?? "Untitled Chat Message",
+			label: "Chat Message",
+			icon: this._settings.images.chat,
+			actions: [
+				{
+					name: Microsoft365Provider._ACTION_TEAMS_CHAT,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: Microsoft365Provider._PROVIDER_ID,
+				objType: "Event",
+				obj: chatMessage,
+				url: chatMessage.webUrl,
+				chatId: chatMessage.chatId,
+				messageId: chatMessage.id
+			} as ActionData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await createContainer(
+					"column",
+					[
+						await createContainer("row", [await createText("summary", 14, { fontWeight: "bold" })], {
+							paddingBottom: "10px",
+							borderBottom: `1px solid ${theme.palette.background6}`,
+							gap: "10px"
+						}),
+						await this.createPairsLayout(theme, pairs),
+						await this.createButtonsLayout(buttons)
+					],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					summary: chatMessage.summary ?? "Untitled Chat Message",
+					...this.mapPairsToData(pairs),
+					openTitle: "Open Chat Message",
+					openImage: this._settings.images.teams
+				}
+			}
+		};
+	}
+
 	private async createTeamResult(team: Team): Promise<HomeSearchResult> {
 		const theme = await getCurrentTheme();
 
@@ -1995,9 +2171,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			User: 1,
 			Contact: 2,
 			Message: 3,
-			Event: 4,
-			Team: 5,
-			Channel: 6
+			ChatMessage: 4,
+			Event: 5,
+			Team: 6,
+			Channel: 7
 		};
 		return objTypeOrder[objType] * 1000;
 	}

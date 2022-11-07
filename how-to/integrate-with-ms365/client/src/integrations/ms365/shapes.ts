@@ -21,7 +21,14 @@ export interface Microsoft365Settings {
 	};
 }
 
-export type Microsoft365ObjectTypes = "User" | "Contact" | "Message" | "Event" | "Team" | "Channel";
+export type Microsoft365ObjectTypes =
+	| "User"
+	| "Contact"
+	| "Message"
+	| "Event"
+	| "Team"
+	| "Channel"
+	| "ChatMessage";
 
 export interface ActionData {
 	providerId: string;
@@ -32,6 +39,8 @@ export interface ActionData {
 	urls?: { [id: string]: string };
 	teamId?: string;
 	channelId?: string;
+	chatId?: string;
+	messageId?: string;
 	json?: unknown;
 }
 
