@@ -894,7 +894,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		};
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder(objType)}-${obj.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
+			score: this.objectTypeToOrder(objType),
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
 			label: objType,
 			icon: icons[objType],
@@ -1057,7 +1058,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("User")}-${user.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
+			score: this.objectTypeToOrder("User"),
 			title: user.displayName,
 			label: "User",
 			icon: this._settings.images.teams,
@@ -1246,7 +1248,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Contact")}-${contact.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${contact.id}`,
+			score: this.objectTypeToOrder("Contact"),
 			title: contact.displayName,
 			label: "Contact",
 			icon: this._settings.images.contact,
@@ -1355,7 +1358,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Message")}-${message.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${message.id}`,
+			score: this.objectTypeToOrder("Message"),
 			title: message.subject ?? "Untitled Message",
 			label: "Message",
 			icon: this._settings.images.email,
@@ -1470,7 +1474,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Event")}-${event.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${event.id}`,
+			score: this.objectTypeToOrder("Event"),
 			title: event.subject ?? "Untitled Event",
 			label: "Event",
 			icon: this._settings.images.calendar,
@@ -1583,7 +1588,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Team")}-${team.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${team.id}`,
+			score: this.objectTypeToOrder("Team"),
 			title: team.displayName ?? "Untitled Team",
 			label: "Team",
 			icon: this._settings.images.team,
@@ -1698,7 +1704,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${this.objectTypeToOrder("Channel")}-${channel.id}`,
+			key: `${Microsoft365Provider._PROVIDER_ID}-${channel.id}`,
+			score: this.objectTypeToOrder("Channel"),
 			title: channel.displayName ?? "Untitled Channel",
 			label: "Channel",
 			icon: this._settings.images.channel,
@@ -1867,9 +1874,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (pair.value) {
 			elements.push(
 				await createText(`${pair.label}`, 10, {
-					flex: pair.wide ? 1 : 2,
+					flex: pair.wide ? 1 : 3,
 					display: "flex",
-					justifyContent: pair.wide ? "flex-start" : "flex-end"
+					justifyContent: pair.wide ? "flex-start" : "flex-end",
+					wordBreak: "break-all"
 				})
 			);
 		}
@@ -1887,7 +1895,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							)
 						)
 					),
-					{ gap: "5px", flex: 2, justifyContent: "flex-end" }
+					{ gap: "5px", flex: 3, justifyContent: "flex-end" }
 				)
 			);
 		}
@@ -1906,7 +1914,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							})
 						)
 					),
-					{ gap: "5px", flex: 2, justifyContent: "flex-end" }
+					{ gap: "5px", flex: 3, justifyContent: "flex-end" }
 				)
 			);
 		}
@@ -1991,6 +1999,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			Team: 5,
 			Channel: 6
 		};
-		return objTypeOrder[objType];
+		return objTypeOrder[objType] * 1000;
 	}
 }
