@@ -1,5 +1,5 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 export type LifecycleEvents = "after-bootstrap" | "before-quit";
 
@@ -9,7 +9,7 @@ export type LifecycleEventMap = {
 	[key in LifecycleEvents]?: LifecycleHandler;
 };
 
-export interface Lifecycle<O = unknown, H = unknown> extends ModuleImplementation<O, H> {
+export interface Lifecycle<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
 	 * Get the lifecycle events.
 	 */

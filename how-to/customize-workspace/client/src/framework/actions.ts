@@ -16,6 +16,7 @@ import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { initializeModules, loadModules } from "./modules";
 import { getDefaultWindowOptions, launchView } from "./platform/browser";
+import type { ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import { showShareOptions } from "./share";
 import { show } from "./workspace/home";
@@ -51,12 +52,16 @@ export const ACTION_IDS = {
 	launchView: "launch-view"
 };
 
-export async function getActions(actionsProviderOptions?: ActionsProviderOptions): Promise<CustomActionsMap> {
+export async function getActions(
+	actionsProviderOptions: ActionsProviderOptions,
+	helpers: ModuleHelpers
+): Promise<CustomActionsMap> {
 	let actionMap: CustomActionsMap = await getDefaultActions();
 
 	const actionModules = await loadModules<Actions, ActionHelpers>(actionsProviderOptions, "actions");
 
 	await initializeModules<Actions, ActionHelpers>(actionModules, {
+		...helpers,
 		updateToolbarButtons,
 		manifestTypes,
 		callerTypes: CustomActionCallerType

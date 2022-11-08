@@ -1,6 +1,6 @@
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import type { Logger, LoggerProviderOptions, LogLevel, LogProvider } from "./shapes/logger-shapes";
-import type { ModuleEntry } from "./shapes/module-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 
 export class LoggerProvider {
 	/**
@@ -25,9 +25,9 @@ export class LoggerProvider {
 	 * Initialize the logger provider.
 	 * @param options The provider options.
 	 */
-	public async init(options?: LoggerProviderOptions): Promise<void> {
+	public async init(options: LoggerProviderOptions, helpers: ModuleHelpers): Promise<void> {
 		this._logProviders = await loadModules<LogProvider>(options, "log");
-		await initializeModules(this._logProviders);
+		await initializeModules(this._logProviders, helpers);
 	}
 
 	/**

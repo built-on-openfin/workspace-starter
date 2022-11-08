@@ -1,4 +1,4 @@
-import type { ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
  * The types of events that an auth provider can emit.
@@ -8,7 +8,7 @@ export type AuthEventTypes = "logged-in" | "before-logged-out" | "logged-out" | 
 /**
  * Definition for module which provides authentication features.
  */
-export interface AuthProvider<O = unknown, H = unknown> extends ModuleImplementation<O, H> {
+export interface AuthProvider<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
 	 * Subscribe to one of the auth events.
 	 * @param to The event to subscribe to.
