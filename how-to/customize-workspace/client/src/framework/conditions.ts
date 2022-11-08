@@ -2,16 +2,19 @@ import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { isAuthenticationEnabled, isAuthenticationRequired } from "./auth";
 import { initializeModules, loadModules } from "./modules";
 import type { ConditionMap, Conditions, ConditionsProviderOptions } from "./shapes/conditions-shapes";
-import type { ModuleDefinition, ModuleEntry } from "./shapes/module-shapes";
+import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isShareEnabled } from "./share";
 
 let conditionsModules: ModuleEntry<Conditions, unknown, unknown, ModuleDefinition>[] = [];
 
 const allConditions: ConditionMap = {};
 
-export async function init(conditionsProviderOptions?: ConditionsProviderOptions): Promise<void> {
+export async function init(
+	conditionsProviderOptions: ConditionsProviderOptions,
+	helpers: ModuleHelpers
+): Promise<void> {
 	conditionsModules = await loadModules<Conditions>(conditionsProviderOptions, "conditions");
-	await initializeModules<Conditions>(conditionsModules);
+	await initializeModules<Conditions>(conditionsModules, helpers);
 
 	allConditions.authenticated = async () => isAuthenticationEnabled() && !(await isAuthenticationRequired());
 	allConditions.sharing = async () => isShareEnabled();

@@ -5,9 +5,9 @@ import type {
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { ManifestType } from "../shapes";
-import type { ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
-export interface ActionHelpers {
+export interface ActionHelpers extends ModuleHelpers {
 	updateToolbarButtons: (
 		buttons: ToolbarButton[],
 		buttonId: string,
