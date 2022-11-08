@@ -6,18 +6,13 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import type { ModuleDefinition, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 
 /**
  * Integration helpers provides environment methods and data.
  */
-export interface IntegrationHelpers {
-	/**
-	 * The root url for the provider.
-	 */
-	rootUrl?: string;
-
+export interface IntegrationHelpers extends ModuleHelpers {
 	/**
 	 * Template helpers.
 	 */

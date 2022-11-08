@@ -1,10 +1,10 @@
 import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 
 let logger: Logger;
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
 	logger = createLogger("ChannelEndpoint");
 	logger.info("Was passed the following options", definition.data);
 }

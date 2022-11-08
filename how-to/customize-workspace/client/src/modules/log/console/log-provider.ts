@@ -1,5 +1,5 @@
 import type { LoggerCreator, LogLevel, LogProvider } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import type { ConsoleLogOptions } from "./shapes";
 
 /**
@@ -26,7 +26,7 @@ export class ConsoleLogProvider implements LogProvider<ConsoleLogOptions> {
 	public async initialize(
 		definition: ModuleDefinition<ConsoleLogOptions>,
 		loggerCreator: LoggerCreator,
-		helpers?: never
+		helpers: ModuleHelpers
 	): Promise<void> {
 		this._includeLevels = definition.data?.includeLevels ?? ["info", "warn", "error", "debug", "trace"];
 	}

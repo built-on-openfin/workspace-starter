@@ -2,6 +2,7 @@ import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
+import type { ModuleHelpers } from "./shapes";
 import type {
 	InitOptionsHandler,
 	InitOptionsHandlerOptions,
@@ -113,7 +114,11 @@ async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs 
 	}
 }
 
-export async function init(options: InitOptionsProviderOptions, lifecycle: InitOptionsLifecycle) {
+export async function init(
+	options: InitOptionsProviderOptions,
+	lifecycle: InitOptionsLifecycle,
+	helpers: ModuleHelpers
+) {
 	// Init can be called multiple times, so reset any action listeners from modules
 	actionListeners = new Map();
 	actionListenerMap = {};
@@ -123,7 +128,10 @@ export async function init(options: InitOptionsProviderOptions, lifecycle: InitO
 		"initOptions"
 	);
 
-	await initializeModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(initOptionsModules);
+	await initializeModules<InitOptionsHandler, ModuleHelpers, InitOptionsHandlerOptions>(
+		initOptionsModules,
+		helpers
+	);
 
 	const platform = getCurrentSync();
 

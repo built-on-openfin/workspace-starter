@@ -1,7 +1,7 @@
 import type { App } from "@openfin/workspace";
 import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import * as fdc3OnePointTwoHelper from "./fdc3-1-2-helper";
 import type { AppDefinition as AppDefinitionOnePointTwo } from "./fdc3-1-2-shapes";
 import * as fdc3TwoPointZeroHelper from "./fdc3-2-0-helper";
@@ -9,7 +9,7 @@ import type { AppDefinition as AppDefinitionTwoPointZero } from "./fdc3-2-0-shap
 
 let logger: Logger;
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
 	logger = createLogger("FDC3 App Mapper");
 	logger.info("Was passed the following options", definition.data);
 }
