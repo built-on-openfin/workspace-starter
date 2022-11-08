@@ -18,7 +18,11 @@ function getStorage<T>(id: string): IPlatformStorage<T> {
 	return localStorage;
 }
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
+export async function initialize(
+	definition: ModuleDefinition,
+	createLogger: LoggerCreator,
+	helpers: ModuleHelpers
+) {
 	loggerCreator = createLogger;
 	logger = loggerCreator("LocalStorageEndpoint");
 	logger.info("Was passed the following options", definition.data);

@@ -36,7 +36,11 @@ async function shareContext(payload: ShareContextPayload) {
 	}
 }
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
+export async function initialize(
+	definition: ModuleDefinition,
+	createLogger: LoggerCreator,
+	helpers: ModuleHelpers
+) {
 	logger = createLogger("InitOptionsInteropHandler");
 	// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
 	logger.info("The handler has been loaded");

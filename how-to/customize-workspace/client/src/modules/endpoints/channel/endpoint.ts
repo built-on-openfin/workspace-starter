@@ -4,7 +4,11 @@ import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes
 
 let logger: Logger;
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
+export async function initialize(
+	definition: ModuleDefinition,
+	createLogger: LoggerCreator,
+	helpers: ModuleHelpers
+) {
 	logger = createLogger("ChannelEndpoint");
 	logger.info("Was passed the following options", definition.data);
 }

@@ -9,7 +9,11 @@ import type { AppDefinition as AppDefinitionTwoPointZero } from "./fdc3-2-0-shap
 
 let logger: Logger;
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
+export async function initialize(
+	definition: ModuleDefinition,
+	createLogger: LoggerCreator,
+	helpers: ModuleHelpers
+) {
 	logger = createLogger("FDC3 App Mapper");
 	logger.info("Was passed the following options", definition.data);
 }
