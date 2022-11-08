@@ -4,6 +4,7 @@ export interface Microsoft365Settings {
 	clientId: string;
 	tenantId: string;
 	redirectUri: string;
+	permissions: string[];
 	enableLibLogging: boolean;
 	disableGraphExplorer: boolean;
 	images: {

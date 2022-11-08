@@ -68,7 +68,21 @@
 					"data": {
 						"clientId": "",
 						"tenantId": "",
-						"redirectUri": "http://localhost:8080/oauth_redirect",
+						"redirectUri": "http://localhost:8080/oauth_redirect.html",
+						"permissions": [
+							"User.Read",
+							"Presence.Read",
+							"Presence.Read.All",
+							"Directory.Read.All",
+							"Mail.ReadWrite",
+							"Contacts.Read",
+							"Tasks.Read",
+							"Calendars.ReadWrite",
+							"Chat.Read",
+							"ChannelMessage.Read.All",
+							"TeamMember.Read.All",
+							"ChannelMember.Read.All"
+						],
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {

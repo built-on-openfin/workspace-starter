@@ -449,21 +449,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				this._settings.clientId,
 				this._settings.tenantId,
 				this._settings.redirectUri,
-				// https://learn.microsoft.com/en-us/graph/permissions-reference
-				[
-					"User.Read",
-					"Presence.Read",
-					"Presence.Read.All",
-					"Directory.Read.All",
-					"Mail.ReadWrite",
-					"Contacts.Read",
-					"Tasks.Read",
-					"Calendars.ReadWrite",
-					"Chat.Read"
-					// "ChannelMessage.Read.All"
-					// "TeamMember.Read.All",
-					// "ChannelMember.Read.All"
-				]
+				this._settings.permissions
 			);
 			if (this._connectLastResponse) {
 				this._connectLastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-connect`);
