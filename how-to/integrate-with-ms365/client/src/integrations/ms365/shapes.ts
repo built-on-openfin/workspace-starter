@@ -50,3 +50,28 @@ export interface ActionLoadingData {
 	obj: Entity;
 	state: string;
 }
+
+export interface GraphListResponse<T> {
+	value?: T[];
+}
+
+export type GraphMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export interface GraphBatchRequest {
+	id: string;
+	url: string;
+	method: GraphMethod;
+	body?: unknown;
+	headers?: { [id: string]: string };
+}
+
+export interface GraphBatchResponse<T = unknown> {
+	responses: GraphBatchResponseItem<T>[];
+}
+
+export interface GraphBatchResponseItem<T = unknown> {
+	body: T;
+	headers: { [id: string]: string };
+	id: string;
+	status: number;
+}

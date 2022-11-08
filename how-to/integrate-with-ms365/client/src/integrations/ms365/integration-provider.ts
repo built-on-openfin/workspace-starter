@@ -15,9 +15,6 @@ import type {
 import {
 	connect,
 	enableLogging,
-	GraphBatchRequestResponse,
-	GraphBatchRequestResponseItem,
-	GraphListResponse,
 	GraphResult,
 	TeamsConnection,
 	type Microsoft365Connection
@@ -38,7 +35,16 @@ import type { Integration, IntegrationHelpers, IntegrationModule } from "../../i
 import type { Logger, LoggerCreator } from "../../logger-shapes";
 import { createButton, createContainer, createImage, createLink, createText } from "../../templates";
 import { getCurrentTheme } from "../../themes";
-import type { ActionData, ActionLoadingData, Microsoft365ObjectTypes, Microsoft365Settings } from "./shapes";
+import type {
+	ActionData,
+	ActionLoadingData,
+	GraphBatchRequest,
+	GraphBatchResponse,
+	GraphBatchResponseItem,
+	GraphListResponse,
+	Microsoft365ObjectTypes,
+	Microsoft365Settings
+} from "./shapes";
 
 /**
  * Implement the integration provider for microsoft 365 results.
@@ -284,89 +290,83 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					];
 					const userSearchQuery = userSearchFields.map((s) => `"${s}:${encodedQuery}"`).join(" OR ");
 
-					const batchRequests: {
-						id: string;
-						url: string;
-						method: string;
-						body?: unknown;
-						headers?: unknown;
-					}[] = [
-						includeOptions.includes("User")
-							? {
-									id: "User",
-									method: "GET",
-									url: `/users?$search=${userSearchQuery}&$top=10`,
-									headers: {
-										ConsistencyLevel: "eventual"
+					const batchRequests: GraphBatchRequest[] = [];
+
+					if (includeOptions.includes("User")) {
+						batchRequests.push({
+							id: "User",
+							method: "GET",
+							url: `/users?$search=${userSearchQuery}&$top=10`,
+							headers: {
+								ConsistencyLevel: "eventual"
+							}
+						});
+					}
+					if (includeOptions.includes("Contact")) {
+						batchRequests.push({
+							id: "Contact",
+							method: "GET",
+							url: `/me/contacts?$search=${encodedQuery}&$top=10`
+						});
+					}
+					if (includeOptions.includes("Message")) {
+						batchRequests.push({
+							id: "Message",
+							method: "GET",
+							url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
+						});
+					}
+					if (includeOptions.includes("Event")) {
+						batchRequests.push({
+							id: "Event",
+							url: "/search/query",
+							method: "POST",
+							body: {
+								requests: [
+									{
+										entityTypes: ["event"],
+										query: {
+											queryString: query
+										},
+										from: 0,
+										size: 10
 									}
-							  }
-							: undefined,
-						includeOptions.includes("Contact")
-							? {
-									id: "Contact",
-									method: "GET",
-									url: `/me/contacts?$search=${encodedQuery}&$top=10`
-							  }
-							: undefined,
-						includeOptions.includes("Message")
-							? {
-									id: "Message",
-									method: "GET",
-									url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
-							  }
-							: undefined,
-						includeOptions.includes("Event")
-							? {
-									id: "Event",
-									url: "/search/query",
-									method: "POST",
-									body: {
-										requests: [
-											{
-												entityTypes: ["event"],
-												query: {
-													queryString: query
-												},
-												from: 0,
-												size: 10
-											}
-										]
-									},
-									headers: {
-										"Content-Type": "application/json"
+								]
+							},
+							headers: {
+								"Content-Type": "application/json"
+							}
+						});
+					}
+					if (includeOptions.includes("ChatMessage")) {
+						batchRequests.push({
+							id: "ChatMessage",
+							url: "/search/query",
+							method: "POST",
+							body: {
+								requests: [
+									{
+										entityTypes: ["chatMessage"],
+										query: {
+											queryString: query
+										},
+										from: 0,
+										size: 10
 									}
-							  }
-							: undefined,
-						includeOptions.includes("ChatMessage")
-							? {
-									id: "ChatMessage",
-									url: "/search/query",
-									method: "POST",
-									body: {
-										requests: [
-											{
-												entityTypes: ["chatMessage"],
-												query: {
-													queryString: query
-												},
-												from: 0,
-												size: 10
-											}
-										]
-									},
-									headers: {
-										"Content-Type": "application/json"
-									}
-							  }
-							: undefined,
-						includeOptions.includes("Team") || includeOptions.includes("Channel")
-							? {
-									id: "Team",
-									url: "/me/joinedTeams",
-									method: "GET"
-							  }
-							: undefined
-					].filter(Boolean);
+								]
+							},
+							headers: {
+								"Content-Type": "application/json"
+							}
+						});
+					}
+					if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
+						batchRequests.push({
+							id: "Team",
+							url: "/me/joinedTeams",
+							method: "GET"
+						});
+					}
 
 					const homeResults = await this.sendBatchQuery(query, includeOptions, batchRequests);
 					lastResponse.respond(homeResults);
@@ -644,20 +644,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private async sendBatchQuery(
 		query: string,
 		includeOptions: Microsoft365ObjectTypes[],
-		batchRequests: {
-			id: string;
-			url: string;
-			method: string;
-			body?: unknown;
-			headers?: unknown;
-		}[]
+		batchRequests: GraphBatchRequest[]
 	): Promise<HomeSearchResult[]> {
 		let homeResults: HomeSearchResult[] = [];
 
 		this._logger.info("Graph API Batch Request", batchRequests);
 
 		try {
-			const batchResponses = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const batchResponses = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
 				"/v1.0/$batch",
 				"POST",
 				{
@@ -690,7 +684,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private async handleBatchQuery(
 		query: string,
 		includeOptions: Microsoft365ObjectTypes[],
-		batchResponse: GraphBatchRequestResponseItem,
+		batchResponse: GraphBatchResponseItem,
 		homeResults: HomeSearchResult[]
 	): Promise<HomeSearchResult[]> {
 		const type = batchResponse.id.split("-")[0] as Microsoft365ObjectTypes;
@@ -983,7 +977,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				memberOf: batchRequests[2]
 			});
 
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
 				"/v1.0/$batch",
 				"POST",
 				{
@@ -1201,7 +1195,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				photo: batchRequests[0]
 			});
 
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
 				"/v1.0/$batch",
 				"POST",
 				{
@@ -1463,7 +1457,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				photo: batchRequests[0]
 			});
 
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse<Event>>(
 				"/v1.0/$batch",
 				"POST",
 				{
@@ -1579,7 +1573,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				photo: batchRequests[0]
 			});
 
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse<ChatMessage>>(
 				"/v1.0/$batch",
 				"POST",
 				{
@@ -1971,7 +1965,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 	private async getUserPhotos(users: AadUserConversationMember[], size: number): Promise<string[]> {
 		try {
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchRequestResponse>(
+			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
 				"/v1.0/$batch",
 				"POST",
 				{
