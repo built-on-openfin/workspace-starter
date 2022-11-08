@@ -8,7 +8,7 @@ import { getSettings } from "./settings";
 
 const logger = createLogger("Themes");
 
-const DEFAULT_PALETTES = {
+const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	light: {
 		brandPrimary: "#504CFF",
 		brandSecondary: "#1E1F23",
@@ -77,6 +77,10 @@ export async function getCurrentTheme(): Promise<CustomThemeOptions> {
 		};
 	}
 	return themes[0];
+}
+
+export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
+	return DEFAULT_PALETTES;
 }
 
 export async function getThemes(): Promise<CustomThemes> {
