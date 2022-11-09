@@ -599,7 +599,8 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		id: settings.homeProvider.id,
 		icon: settings.homeProvider.icon,
 		onUserInput,
-		onResultDispatch: onSelection
+		onResultDispatch: onSelection,
+		dispatchFocusEvents: true
 	};
 
 	registrationInfo = await Home.register(cliProvider);
