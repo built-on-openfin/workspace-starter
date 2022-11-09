@@ -1,4 +1,5 @@
 import { createLogger } from "./logger-provider";
+import type { CustomSettings } from "./shapes";
 import type {
 	Module,
 	ModuleEntry,
@@ -6,8 +7,10 @@ import type {
 	ModuleDefinition,
 	ModuleImplementation,
 	ModuleList,
-	ModuleTypes
+	ModuleTypes,
+	ModuleHelpers
 } from "./shapes/module-shapes";
+import { getCurrentTheme, getDefaultPalettes } from "./themes";
 
 const logger = createLogger("Modules");
 
@@ -26,7 +29,7 @@ const loadedModules: {
  */
 export async function loadModules<
 	M extends ModuleImplementation<O, H>,
-	H = unknown,
+	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleList: ModuleList | undefined, moduleType: ModuleTypes): Promise<ModuleEntry<M, H, O, D>[]> {
@@ -52,7 +55,7 @@ export async function loadModules<
  */
 export async function loadModule<
 	M extends ModuleImplementation<O, H>,
-	H = unknown,
+	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleDefinition: ModuleDefinition, moduleType: ModuleTypes): Promise<ModuleEntry<M, H, O, D> | undefined> {
@@ -115,10 +118,10 @@ export async function loadModule<
  */
 export async function initializeModules<
 	M extends ModuleImplementation<O, H>,
-	H = unknown,
+	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
->(moduleEntries: ModuleEntry<M, H, O, D>[], helpers?: H): Promise<void> {
+>(moduleEntries: ModuleEntry<M, H, O, D>[], helpers: H): Promise<void> {
 	for (const moduleEntry of moduleEntries) {
 		await initializeModule<M, H, O, D>(moduleEntry, helpers);
 	}
@@ -131,10 +134,10 @@ export async function initializeModules<
  */
 export async function initializeModule<
 	M extends ModuleImplementation<O, H>,
-	H = unknown,
+	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
->(moduleEntry: ModuleEntry<M, H, O, D>, helpers?: H): Promise<M | undefined> {
+>(moduleEntry: ModuleEntry<M, H, O, D>, helpers: H): Promise<M | undefined> {
 	if (!moduleEntry.isInitialised) {
 		if (moduleEntry.implementation.initialize) {
 			try {
@@ -173,7 +176,7 @@ export async function closedownModules(moduleType: ModuleTypes): Promise<void> {
  */
 export async function closedownModule<
 	M extends ModuleImplementation<O, H>,
-	H = unknown,
+	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>): Promise<void> {
@@ -190,4 +193,12 @@ export async function closedownModule<
 			moduleEntry.isInitialised = false;
 		}
 	}
+}
+
+export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
+	return {
+		rootUrl: settings?.platformProvider?.rootUrl,
+		getDefaultPalettes,
+		getCurrentTheme
+	};
 }

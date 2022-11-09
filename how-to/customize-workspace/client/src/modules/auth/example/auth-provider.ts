@@ -1,5 +1,5 @@
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
@@ -216,7 +216,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 export async function initialize(
 	definition: ModuleDefinition<ExampleOptions>,
 	createLogger: LoggerCreator,
-	helpers?: never
+	helpers: ModuleHelpers
 ) {
 	logger = createLogger("AuthExample");
 	if (authOptions === undefined) {

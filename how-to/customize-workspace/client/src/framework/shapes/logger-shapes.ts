@@ -1,4 +1,4 @@
-import type { ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
  * The default log levels.
@@ -9,7 +9,7 @@ export interface LogOptions {
 	levels?: LogLevel[];
 }
 
-export interface LogProvider<O = unknown, H = unknown> extends ModuleImplementation<O, H> {
+export interface LogProvider<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
 	 * Log data as information.
 	 * @param identity The identity sending the message.

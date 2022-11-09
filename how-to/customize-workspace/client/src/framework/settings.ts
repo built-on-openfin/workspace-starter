@@ -1,6 +1,7 @@
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
-import type { AuthProviderOptions } from "./shapes/auth-shapes";
+import { getDefaultHelpers } from "./modules";
+import type { ModuleHelpers } from "./shapes";
 import type { CustomSettings } from "./shapes/framework-shapes";
 
 let settings: CustomSettings;
@@ -32,7 +33,8 @@ async function getValidHosts(): Promise<string[]> {
 export async function getSettings(): Promise<CustomSettings> {
 	if (settings === undefined) {
 		const manifestSettings = await getConfiguredSettings();
-		await endpointProvider.init(manifestSettings.endpointProvider);
+		const moduleHelpers: ModuleHelpers = getDefaultHelpers(manifestSettings);
+		await endpointProvider.init(manifestSettings.endpointProvider, moduleHelpers);
 		if (endpointProvider.hasEndpoint("platform-settings")) {
 			logger.info("platform-settings endpoint specified. Fetching platform settings.");
 			const serverSettings = await endpointProvider.requestResponse<unknown, CustomSettings>(
@@ -73,9 +75,4 @@ export async function isValid() {
 		);
 	}
 	return isValidHost;
-}
-
-export async function getAuthSettings(): Promise<AuthProviderOptions> {
-	const manifestSettings = await getConfiguredSettings();
-	return manifestSettings?.authProvider;
 }

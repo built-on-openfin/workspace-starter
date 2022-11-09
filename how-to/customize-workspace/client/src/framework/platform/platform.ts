@@ -13,8 +13,9 @@ import * as endpointProvider from "../endpoint";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
-import { getAuthSettings, getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
-import type { CustomSettings } from "../shapes";
+import { getDefaultHelpers } from "../modules";
+import { getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
+import type { CustomSettings, ModuleHelpers } from "../shapes";
 import { deregister as deregisterShare, register as registerShare } from "../share";
 import { getThemes } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
@@ -56,18 +57,23 @@ async function setupPlatform() {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const configuredSettings = await getConfiguredSettings();
-	await initOptionsProvider.init(configuredSettings?.initOptionsProvider, "after-auth");
+
+	let helpers: ModuleHelpers = getDefaultHelpers(configuredSettings);
+
+	await initOptionsProvider.init(configuredSettings?.initOptionsProvider, "after-auth", helpers);
 
 	const settings: CustomSettings = await getSettings();
-	await loggerProvider.init(settings?.loggerProvider);
+
+	helpers = getDefaultHelpers(settings);
+	await loggerProvider.init(settings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
 
-	await endpointProvider.init(settings?.endpointProvider);
+	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
 	await appProvider.init(settings?.appProvider, endpointProvider);
-	await conditionsProvider.init(settings?.conditionsProvider);
-	await lifecycleProvider.init(settings?.lifecycleProvider);
+	await conditionsProvider.init(settings?.conditionsProvider, helpers);
+	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
 
 	const sharing = settings.platformProvider?.sharing ?? true;
 	await registerShare(sharing);
@@ -81,7 +87,7 @@ async function setupPlatform() {
 
 	logger.info("Specifying following browser options", browser);
 
-	const customActions = await getActions(settings?.actionsProvider);
+	const customActions = await getActions(settings?.actionsProvider, helpers);
 	const theme = await getThemes();
 
 	await workspacePlatformInit({
@@ -102,10 +108,11 @@ export async function init() {
 		);
 		return;
 	}
-	const authProviderSettings = await getAuthSettings();
+	const settings = await getConfiguredSettings();
 
 	logger.info("Initializing Auth Check");
-	await authProvider.init(authProviderSettings);
+	const moduleHelpers: ModuleHelpers = getDefaultHelpers(settings);
+	await authProvider.init(settings?.authProvider, moduleHelpers);
 
 	if (isAuthenticationEnabled()) {
 		const authenticationRequired = await authProvider.isAuthenticationRequired();

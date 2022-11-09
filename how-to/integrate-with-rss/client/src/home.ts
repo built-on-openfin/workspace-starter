@@ -32,7 +32,7 @@ export async function register() {
 		response: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> => {
 		try {
-			const query = request.query.toLowerCase();
+			const queryLower = request.query.toLowerCase();
 			if (lastResponse !== undefined) {
 				lastResponse.close();
 			}
@@ -46,10 +46,10 @@ export async function register() {
 				}
 			};
 
-			if (query === "?") {
+			if (queryLower === "?") {
 				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
 			} else {
-				const integrationResults = await getSearchResults(query, undefined, lastResponse);
+				const integrationResults = await getSearchResults(request.query, undefined, lastResponse);
 				if (Array.isArray(integrationResults.results)) {
 					searchResults.results = searchResults.results.concat(integrationResults.results);
 				}

@@ -8,7 +8,9 @@ import {
 	HomeSearchResult
 } from "@openfin/workspace";
 import * as endpointProvider from "./endpoint";
+import { launchSnapshot } from "./launch";
 import { createLogger } from "./logger-provider";
+import { manifestTypes } from "./manifest-types";
 import {
 	closedownModule,
 	closedownModules,
@@ -16,13 +18,15 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
+import { launchPage, launchView } from "./platform/browser";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition,
 	IntegrationProviderOptions
 } from "./shapes/integrations-shapes";
-import type { ModuleEntry } from "./shapes/module-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
 const logger = createLogger("Integrations");
@@ -39,14 +43,28 @@ let integrationHelpers: IntegrationHelpers;
 /**
  * Initialise all the integrations.
  * @param integrationOptions The integration provider settings.
- * @param integrationHelpers The integration helpers.
  */
-export async function init(options: IntegrationProviderOptions, helpers: IntegrationHelpers): Promise<void> {
+export async function init(options: IntegrationProviderOptions, helpers: ModuleHelpers): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
 
 		integrationProviderOptions = options;
-		integrationHelpers = helpers;
+		integrationHelpers = {
+			...helpers,
+			templateHelpers,
+			launchView,
+			launchPage,
+			launchSnapshot: async (manifestUrl) =>
+				launchSnapshot({
+					manifestType: manifestTypes.snapshot.id,
+					manifest: manifestUrl,
+					appId: "",
+					title: "",
+					icons: null,
+					publisher: null
+				}),
+			openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+		};
 
 		// Map the old moduleUrl properties to url
 		for (const integration of options.modules) {
