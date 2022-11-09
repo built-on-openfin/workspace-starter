@@ -66,8 +66,8 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/integrations/ms365.bundle.js",
 					"data": {
-						"clientId": "",
-						"tenantId": "",
+						"clientId": "fd7ccadf-dc09-4ed5-aa04-e10855d757f7",
+						"tenantId": "f8e6c64e-926f-4470-96b3-fd26345f27ff",
 						"redirectUri": "http://localhost:8080/oauth_redirect.html",
 						"permissions": [
 							"User.Read",

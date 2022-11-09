@@ -1,21 +1,22 @@
 import type {
+	CLIFilter,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
-	CLIFilter,
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
-import type { LoggerCreator } from "./logger-shapes";
+import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { TemplateHelpers } from "./template-shapes";
 
 /**
  * Integration helpers provides environment methods and data.
  */
-export interface IntegrationHelpers {
+export interface IntegrationHelpers extends ModuleHelpers {
 	/**
-	 * The root url for the provider.
+	 * Template helpers.
 	 */
-	rootUrl?: string;
+	templateHelpers: TemplateHelpers;
 
 	/**
 	 * Launch a view in the workspace.
@@ -52,71 +53,52 @@ export interface IntegrationHelpers {
 /**
  * Integration provider settings.
  */
-export interface IntegrationProviderOptions {
+export interface IntegrationProviderOptions extends ModuleList<IntegrationModuleDefinition> {
 	/**
-	 * The list of integrations.
+	 * Do you wish to expose an option of turning on/off integrations.
 	 */
-	modules?: Integration<unknown>[];
+	isManagementEnabled?: boolean;
+
+	/**
+	 * What command should we look for in order to return the list of integrations
+	 */
+	command?: string;
+
+	/**
+	 * What description should accompany the command
+	 */
+	commandDescription?: string;
+
+	/**
+	 * An icon representing the top level integration provider
+	 */
+	icon?: string;
+
+	/**
+	 * This is the old module list name, remove in future.
+	 */
+	integrations?: IntegrationModuleDefinition[];
 }
 
 /**
- * Integration details.
+ * Integration definition.
  */
-export interface Integration<T> {
+export interface IntegrationModuleDefinition extends ModuleDefinition {
 	/**
-	 * The id of the integration.
+	 * Does the integration start automatically if enabled (default is true).
 	 */
-	id: string;
+	autoStart?: boolean;
 
 	/**
-	 * The title of the integration.
+	 * This is the old property, it will be remapped to url.
 	 */
-	title: string;
-
-	/**
-	 * The icon of the integration.
-	 */
-	icon: string;
-
-	/**
-	 * Is the integration enabled.
-	 */
-	enabled: boolean;
-
-	/**
-	 * Module url to use if loading the module remotely.
-	 */
-	url?: string;
-
-	/**
-	 * The data specific to the integration.
-	 */
-	data?: T;
+	moduleUrl?: string;
 }
 
 /**
  * The methods provided by the integration module.
  */
-export interface IntegrationModule<T> {
-	/**
-	 * Initialize the module.
-	 * @param definition The definition of the module from configuration include custom options.
-	 * @param loggerCreator For logging entries.
-	 * @param helpers Helper methods for the module to interact with the application core.
-	 * @returns Nothing.
-	 */
-	initialize?(
-		definition: Integration<T>,
-		loggerCreator: LoggerCreator,
-		helpers: IntegrationHelpers
-	): Promise<void>;
-
-	/**
-	 * The module is being closed down.
-	 * @returns Nothing.
-	 */
-	closedown?(): Promise<void>;
-
+export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, IntegrationHelpers> {
 	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.

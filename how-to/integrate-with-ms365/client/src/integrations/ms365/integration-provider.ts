@@ -31,10 +31,9 @@ import {
 	TemplateFragmentTypes
 } from "@openfin/workspace";
 import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
-import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
-import type { Logger, LoggerCreator } from "../../logger-shapes";
-import { createButton, createContainer, createImage, createLink, createText } from "../../templates";
-import { getCurrentTheme } from "../../themes";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
 	ActionData,
 	ActionLoadingData,
@@ -179,6 +178,28 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private _connectLastResponse?: HomeSearchListenerResponse;
 
 	/**
+	 * Maintain a cache of the profile images.
+	 */
+	private readonly _profileImageCache: {
+		[id: string]: {
+			added: number;
+			data: string;
+		};
+	};
+
+	/**
+	 * The cache cleanup timer id.
+	 */
+	private _cacheCleanerIntervalId?: number;
+
+	/**
+	 * Create a new instance of Microsoft365Provider.
+	 */
+	constructor() {
+		this._profileImageCache = {};
+	}
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -186,7 +207,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: Integration<Microsoft365Settings>,
+		definition: ModuleDefinition<Microsoft365Settings>,
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
@@ -195,6 +216,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		this._logger = loggerCreator("Microsoft365Provider");
 
 		await this.connectProvider();
+
+		this._cacheCleanerIntervalId = window.setInterval(() => this.cleanupCache(), 30000);
 	}
 
 	/**
@@ -206,6 +229,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.info("Disconnecting from MS Graph API");
 			await this._ms365Connection.disconnect();
 			this._ms365Connection = undefined;
+		}
+		if (this._cacheCleanerIntervalId) {
+			window.clearInterval(this._cacheCleanerIntervalId);
+			this._cacheCleanerIntervalId = undefined;
 		}
 	}
 
@@ -531,9 +558,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				`${Microsoft365Provider._TEAMS_PROTOCOL}/l/message/${actionData.chatId}/${actionData.messageId}`
 			);
 		} else if (actionData.teamId) {
-			await teamsConnection.openChannelChat(actionData.teamId, actionData.channelId);
+			await teamsConnection.startChat({ teamId: actionData.teamId, channelId: actionData.channelId });
 		} else {
-			await teamsConnection.openGroupChat([this._ms365Connection.currentUser.mail, ...actionData.emails]);
+			await teamsConnection.startChat({
+				emailAddresses: [this._ms365Connection.currentUser.mail, ...actionData.emails]
+			});
 		}
 		return true;
 	}
@@ -813,7 +842,37 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createConnectResult(): Promise<HomeSearchResult> {
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
+
+		const layout = await this._integrationHelpers.templateHelpers.createContainer(
+			"column",
+			[
+				await this._integrationHelpers.templateHelpers.createContainer(
+					"row",
+					[await this._integrationHelpers.templateHelpers.createText("title", 14, { fontWeight: "bold" })],
+					{
+						paddingBottom: "10px",
+						borderBottom: `1px solid ${theme.palette.background6}`,
+						gap: "10px"
+					}
+				),
+				await this._integrationHelpers.templateHelpers.createText("description", 12),
+				await this._integrationHelpers.templateHelpers.createText("error", 12, {
+					fontFamily: "monospace",
+					flex: 1
+				}),
+				await this._integrationHelpers.templateHelpers.createButton(
+					ButtonStyle.Primary,
+					"connect",
+					Microsoft365Provider._ACTION_CONNECT
+				)
+			],
+			{
+				padding: "10px",
+				gap: "15px",
+				flex: "1"
+			}
+		);
 
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-connect`,
@@ -831,24 +890,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
-					"column",
-					[
-						await createContainer("row", [await createText("title", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
-						await createText("description", 12),
-						await createText("error", 12, { fontFamily: "monospace", flex: 1 }),
-						await createButton(ButtonStyle.Primary, "connect", Microsoft365Provider._ACTION_CONNECT)
-					],
-					{
-						padding: "10px",
-						gap: "15px",
-						flex: "1"
-					}
-				),
+				layout,
 				data: {
 					title: "Microsoft 365 Connection",
 					description: "Microsoft 365 failed to connect due to the following error",
@@ -950,18 +992,18 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		let availability: string = "Unknown";
 		let teams = [];
 
-		const batchRequests: string[] = [
-			`/users/${user.id}/photo/$value`,
-			`/users/${user.id}/presence`,
-			`/users/${user.id}/memberOf`
-		];
+		const batchRequests: string[] = [];
+
+		batchRequests.push(`/users/${user.id}/presence`, `/users/${user.id}/memberOf`);
+
+		if (this._profileImageCache[user.id]) {
+			picData = this._profileImageCache[user.id].data;
+		} else {
+			batchRequests.push(`/users/${user.id}/photo/$value`);
+		}
 
 		try {
-			this._logger.info("Graph API Batch Request", {
-				photo: batchRequests[0],
-				presence: batchRequests[1],
-				memberOf: batchRequests[2]
-			});
+			this._logger.info("Graph API Batch Request", batchRequests);
 
 			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
 				"/v1.0/$batch",
@@ -975,19 +1017,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			);
 
-			const profileResponse = response.data?.responses.find((r) => r.id === "1");
-			if (profileResponse?.status === 200) {
-				picData = `data:image/jpeg;base64,${profileResponse.body as string}`;
-			} else {
-				// If the request failed the JSON error is still base64 encoded
-				this._logger.error(
-					"Failed getting user profile pic",
-					profileResponse.status,
-					atob(profileResponse.body as string)
-				);
-			}
-
-			const presenceResponse = response.data?.responses.find((r) => r.id === "2");
+			const presenceResponse = response.data?.responses.find((r) => r.id === "1");
 			if (presenceResponse?.status === 200) {
 				presence = presenceResponse.body as Presence;
 
@@ -1005,7 +1035,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				this._logger.error("Failed getting user presence", presenceResponse.status, presenceResponse.body);
 			}
 
-			const teamsResponse = response.data?.responses.find((r) => r.id === "3");
+			const teamsResponse = response.data?.responses.find((r) => r.id === "2");
 			if (teamsResponse?.status === 200) {
 				const memberOf = (
 					teamsResponse.body as GraphListResponse<
@@ -1022,11 +1052,29 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} else {
 				this._logger.error("Failed getting user teams", teamsResponse.status, teamsResponse.body);
 			}
+
+			const profileResponse = response.data?.responses.find((r) => r.id === "3");
+			if (profileResponse) {
+				if (profileResponse?.status === 200) {
+					picData = `data:image/jpeg;base64,${profileResponse.body as string}`;
+					this._profileImageCache[user.id] = {
+						data: picData,
+						added: Date.now()
+					};
+				} else {
+					// If the request failed the JSON error is still base64 encoded
+					this._logger.error(
+						"Failed getting user profile pic",
+						profileResponse.status,
+						atob(profileResponse.body as string)
+					);
+				}
+			}
 		} catch (err) {
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const pairs: { label: string; value: string }[] = [];
 
@@ -1110,19 +1158,19 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer(
+						await this._integrationHelpers.templateHelpers.createContainer(
 							"row",
 							[
-								await createImage("picData", user.displayName, {
+								await this._integrationHelpers.templateHelpers.createImage("picData", user.displayName, {
 									width: "44px",
 									height: "44px",
 									objectFit: "cover",
 									borderRadius: "50%"
 								}),
-								await createImage("status", availability, {
+								await this._integrationHelpers.templateHelpers.createImage("status", availability, {
 									width: "16px",
 									height: "16px",
 									backgroundColor: availableColor,
@@ -1133,9 +1181,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 									left: "-12px",
 									top: "32px"
 								}),
-								await createContainer("column", [
-									await createText("displayName", 14, { fontWeight: "bold" }),
-									await createText("availability", 12, {})
+								await this._integrationHelpers.templateHelpers.createContainer("column", [
+									await this._integrationHelpers.templateHelpers.createText("displayName", 14, {
+										fontWeight: "bold"
+									}),
+									await this._integrationHelpers.templateHelpers.createText("availability", 12, {})
 								])
 							],
 							{
@@ -1174,41 +1224,49 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private async createContactResult(contact: Contact): Promise<HomeSearchResult> {
 		let picData: string;
 
-		const batchRequests: string[] = [`/me/contacts/${contact.id}/photo/$value`];
-
 		try {
-			this._logger.info("Graph API Batch Request", {
-				photo: batchRequests[0]
-			});
-
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
-				"/v1.0/$batch",
-				"POST",
-				{
-					requests: batchRequests.map((r, idx) => ({
-						id: (idx + 1).toString(),
-						method: "GET",
-						url: r
-					}))
-				}
-			);
-
-			const profileResponse = response.data?.responses.find((r) => r.id === "1");
-			if (profileResponse?.status === 200) {
-				picData = `data:image/jpeg;base64,${profileResponse.body as string}`;
+			if (this._profileImageCache[contact.id]) {
+				picData = this._profileImageCache[contact.id].data;
 			} else {
-				// If the request failed the JSON error is still base64 encoded
-				this._logger.error(
-					"Failed getting contact profile pic",
-					profileResponse.status,
-					atob(profileResponse.body as string)
+				const batchRequests: string[] = [`/me/contacts/${contact.id}/photo/$value`];
+
+				this._logger.info("Graph API Batch Request", {
+					photo: batchRequests[0]
+				});
+
+				const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
+					"/v1.0/$batch",
+					"POST",
+					{
+						requests: batchRequests.map((r, idx) => ({
+							id: (idx + 1).toString(),
+							method: "GET",
+							url: r
+						}))
+					}
 				);
+
+				const profileResponse = response.data?.responses.find((r) => r.id === "1");
+				if (profileResponse?.status === 200) {
+					picData = `data:image/jpeg;base64,${profileResponse.body as string}`;
+					this._profileImageCache[contact.id] = {
+						data: picData,
+						added: Date.now()
+					};
+				} else {
+					// If the request failed the JSON error is still base64 encoded
+					this._logger.error(
+						"Failed getting contact profile pic",
+						profileResponse.status,
+						atob(profileResponse.body as string)
+					);
+				}
 			}
 		} catch (err) {
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const pairs: { label: string; value: string }[] = [];
 
@@ -1300,21 +1358,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer(
+						await this._integrationHelpers.templateHelpers.createContainer(
 							"row",
 							[
-								await createImage("picData", contact.displayName, {
+								await this._integrationHelpers.templateHelpers.createImage("picData", contact.displayName, {
 									width: "44px",
 									height: "44px",
 									objectFit: "cover",
 									borderRadius: "50%"
 								}),
-								await createContainer("column", [
-									await createText("displayName", 14, { fontWeight: "bold" }),
-									await createText("company", 12, {})
+								await this._integrationHelpers.templateHelpers.createContainer("column", [
+									await this._integrationHelpers.templateHelpers.createText("displayName", 14, {
+										fontWeight: "bold"
+									}),
+									await this._integrationHelpers.templateHelpers.createText("company", 12, {})
 								])
 							],
 							{
@@ -1348,7 +1408,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createMessageResult(message: Message): Promise<HomeSearchResult> {
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1408,14 +1468,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer("row", [await createText("subject", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("subject", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
 						await this.createPairsLayout(theme, pairs),
 						await this.createButtonsLayout(buttons)
 					],
@@ -1468,7 +1536,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1524,14 +1592,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer("row", [await createText("subject", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("subject", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
 						await this.createPairsLayout(theme, pairs),
 						await this.createButtonsLayout(buttons)
 					],
@@ -1589,7 +1665,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1605,10 +1681,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			});
 		}
 
-		if (chatMessage.body?.content) {
+		// Strip any HTML tags
+		const body = chatMessage.body?.content?.replace(/<[^>]*>/g, "");
+		if (body) {
 			pairs.push({
 				label: "Preview",
-				value: chatMessage.body?.content,
+				value: body,
 				wide: true
 			});
 		}
@@ -1649,14 +1727,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer("row", [await createText("summary", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("summary", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
 						await this.createPairsLayout(theme, pairs),
 						await this.createButtonsLayout(buttons)
 					],
@@ -1677,7 +1763,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createTeamResult(team: Team): Promise<HomeSearchResult> {
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const teamMembers = await this.getTeamMembers(team.id);
 
@@ -1766,14 +1852,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer("row", [await createText("displayName", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("displayName", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
 						await this.createPairsLayout(theme, pairs),
 						await this.createButtonsLayout(buttons)
 					],
@@ -1800,7 +1894,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createChannelResult(channel: Channel & { team: Team }): Promise<HomeSearchResult> {
-		const theme = await getCurrentTheme();
+		const theme = await this._integrationHelpers.getCurrentTheme();
 
 		const channelMembers = await this.getChannelMembers(channel.team.id, channel.id);
 
@@ -1882,14 +1976,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await createContainer(
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
 					"column",
 					[
-						await createContainer("row", [await createText("displayName", 14, { fontWeight: "bold" })], {
-							paddingBottom: "10px",
-							borderBottom: `1px solid ${theme.palette.background6}`,
-							gap: "10px"
-						}),
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("displayName", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${theme.palette.background6}`,
+								gap: "10px"
+							}
+						),
 						await this.createPairsLayout(theme, pairs),
 						await this.createButtonsLayout(buttons)
 					],
@@ -1951,24 +2053,42 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 	private async getUserPhotos(users: AadUserConversationMember[], size: number): Promise<string[]> {
 		try {
-			const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
-				"/v1.0/$batch",
-				"POST",
-				{
-					requests: users.map((u, idx) => ({
-						id: `photos${idx + 1}`,
-						method: "GET",
-						url: `/users/${u.userId}/photo/$value`
-					}))
-				}
-			);
+			const lookupUsers = users.filter((u) => !this._profileImageCache[u.id]);
 
-			return response.data.responses.map((r, idx) => {
-				if (r.status === 200) {
-					return `data:image/jpeg;base64,${r.body as string}`;
+			if (lookupUsers.length > 0) {
+				const chunkCount = Math.ceil(lookupUsers.length / 20);
+
+				for (let i = 0; i < chunkCount; i++) {
+					const response = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
+						"/v1.0/$batch",
+						"POST",
+						{
+							requests: lookupUsers.slice(i * 20, (i + 1) * 20).map((u, idx) => ({
+								id: `photos${idx + 1}`,
+								method: "GET",
+								url: `/users/${u.userId}/photo/$value`
+							}))
+						}
+					);
+
+					for (const r of response.data.responses) {
+						const lookupIdx = Number.parseInt(r.id.replace("photos", ""), 10);
+						const user = lookupUsers[lookupIdx - 1];
+						let picData;
+						if (r.status === 200) {
+							picData = `data:image/jpeg;base64,${r.body as string}`;
+						} else {
+							picData = `data:image/svg+xml;utf8,${this.imageProfileNone(size, user.displayName)}`;
+						}
+						this._profileImageCache[user.id] = {
+							data: picData,
+							added: Date.now()
+						};
+					}
 				}
-				return `data:image/svg+xml;utf8,${this.imageProfileNone(16, users[idx].displayName)}`;
-			});
+			}
+
+			return users.map((u) => this._profileImageCache[u.id].data);
 		} catch (err) {
 			this._logger.error("Failed getting user photos", err);
 		}
@@ -2009,7 +2129,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		theme: CustomThemeOptions,
 		pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[]
 	): Promise<TemplateFragment> {
-		return createContainer(
+		return this._integrationHelpers.templateHelpers.createContainer(
 			"column",
 			await Promise.all(pairs.map(async (p) => this.createPairLayout(theme, p))),
 			{ gap: "5px", flex: "1" }
@@ -2021,7 +2141,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		pair: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }
 	): Promise<TemplateFragment> {
 		const elements: TemplateFragment[] = [
-			await createText(`${pair.label}Title`, 10, {
+			await this._integrationHelpers.templateHelpers.createText(`${pair.label}Title`, 10, {
 				color: theme.palette.inputPlaceholder,
 				flex: 1
 			})
@@ -2029,9 +2149,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		if (pair.value) {
 			elements.push(
-				await createText(`${pair.label}`, 10, {
+				await this._integrationHelpers.templateHelpers.createText(`${pair.label}`, 10, {
 					flex: pair.wide ? 1 : 3,
 					display: "flex",
+					flexWrap: "wrap",
 					justifyContent: pair.wide ? "flex-start" : "flex-end",
 					wordBreak: "break-all"
 				})
@@ -2040,29 +2161,29 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		if (pair.links?.length) {
 			elements.push(
-				await createContainer(
+				await this._integrationHelpers.templateHelpers.createContainer(
 					"row",
 					await Promise.all(
 						pair.links.map(async (l, idx) =>
-							createLink(
+							this._integrationHelpers.templateHelpers.createLink(
 								`${pair.label}_link_${idx}`,
 								`${Microsoft365Provider._ACTION_OPEN}_${pair.label}_link_${idx}`,
 								10
 							)
 						)
 					),
-					{ gap: "5px", flex: 3, justifyContent: "flex-end" }
+					{ gap: "5px", flex: 3, justifyContent: "flex-end", flexWrap: "wrap" }
 				)
 			);
 		}
 
 		if (pair.srcs?.length) {
 			elements.push(
-				await createContainer(
+				await this._integrationHelpers.templateHelpers.createContainer(
 					"row",
 					await Promise.all(
 						pair.srcs.map(async (s, idx) =>
-							createImage(`${pair.label}_src_${idx}`, "Member", {
+							this._integrationHelpers.templateHelpers.createImage(`${pair.label}_src_${idx}`, "Member", {
 								width: "16px",
 								height: "16px",
 								objectFit: "cover",
@@ -2070,12 +2191,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							})
 						)
 					),
-					{ gap: "5px", flex: 3, justifyContent: "flex-end" }
+					{ gap: "5px", flex: 3, justifyContent: "flex-end", flexWrap: "wrap" }
 				)
 			);
 		}
 
-		return createContainer(pair.wide ? "column" : "row", elements, {
+		return this._integrationHelpers.templateHelpers.createContainer(pair.wide ? "column" : "row", elements, {
 			justifyContent: "space-between",
 			gap: pair.wide ? "5px" : "10px"
 		});
@@ -2089,11 +2210,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageAltText: string;
 		}[]
 	): Promise<TemplateFragment> {
-		return createContainer(
+		return this._integrationHelpers.templateHelpers.createContainer(
 			"row",
 			await Promise.all(
 				buttons.map(async (b) =>
-					createButton(
+					this._integrationHelpers.templateHelpers.createButton(
 						ButtonStyle.Secondary,
 						b.title,
 						b.action,
@@ -2105,7 +2226,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							padding: "0px",
 							justifyContent: "center"
 						},
-						[await createImage(b.image, b.imageAltText, { width: "16px", height: "16px" })]
+						[
+							await this._integrationHelpers.templateHelpers.createImage(b.image, b.imageAltText, {
+								width: "16px",
+								height: "16px"
+							})
+						]
 					)
 				)
 			),
@@ -2157,5 +2283,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			Channel: 7
 		};
 		return objTypeOrder[objType] * 1000;
+	}
+
+	private cleanupCache() {
+		const keys = Object.keys(this._profileImageCache);
+		const now = Date.now();
+		const ttl = keys.length > 50 ? 30000 : 300000;
+		for (const id of keys) {
+			if (now - this._profileImageCache[id].added > ttl) {
+				delete this._profileImageCache[id];
+			}
+		}
 	}
 }

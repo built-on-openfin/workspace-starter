@@ -6,18 +6,18 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type {
-	Integration,
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationProviderOptions
-} from "./integrations-shapes";
-import type { Logger } from "./logger-shapes";
+} from "./shapes/integrations-shapes";
+import type { Logger } from "./shapes/logger-shapes";
+import type { ModuleDefinition } from "./shapes/module-shapes";
 
-const integrationModules: { [id: string]: IntegrationModule<unknown> } = {};
+const integrationModules: { [id: string]: IntegrationModule } = {};
 
 const homeIntegrations: {
-	module: IntegrationModule<unknown>;
-	integration: Integration<unknown>;
+	module: IntegrationModule;
+	integration: ModuleDefinition;
 }[] = [];
 
 /**
