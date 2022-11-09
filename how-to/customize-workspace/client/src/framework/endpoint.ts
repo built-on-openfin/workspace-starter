@@ -6,7 +6,7 @@ import type {
 	EndpointProviderOptions,
 	FetchOptions
 } from "./shapes/endpoint-shapes";
-import type { ModuleEntry } from "./shapes/module-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 
 const logger = createLogger("Endpoint");
 
@@ -56,7 +56,7 @@ function getRequestOptions(
 	return { url, options };
 }
 
-export async function init(options: EndpointProviderOptions) {
+export async function init(options: EndpointProviderOptions, helpers: ModuleHelpers) {
 	const newEndpoints = options?.endpoints || [];
 
 	if (newEndpoints.length > 0) {
@@ -65,7 +65,7 @@ export async function init(options: EndpointProviderOptions) {
 	}
 
 	endpointModules = await loadModules<never, Endpoint>(options, "endpoint");
-	await initializeModules(endpointModules);
+	await initializeModules(endpointModules, helpers);
 }
 
 export function hasEndpoint(id: string) {

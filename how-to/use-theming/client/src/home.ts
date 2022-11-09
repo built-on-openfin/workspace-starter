@@ -14,7 +14,7 @@ import { getApps } from "./apps";
 
 const providerId = "use-theming";
 
-async function getResults(query?: string): Promise<CLISearchResponse> {
+async function getResults(queryLower: string): Promise<CLISearchResponse> {
 	const apps = await getApps();
 
 	if (Array.isArray(apps)) {
@@ -66,14 +66,14 @@ async function getResults(query?: string): Promise<CLISearchResponse> {
 
 		let finalResults;
 
-		if (query === undefined || query === null || query.length === 0) {
+		if (queryLower === undefined || queryLower === null || queryLower.length === 0) {
 			finalResults = initialResults;
 		} else {
 			finalResults = initialResults.filter((entry) => {
 				const targetValue = entry.title;
 
 				if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-					return targetValue.toLowerCase().includes(query);
+					return targetValue.toLowerCase().includes(queryLower);
 				}
 				return false;
 			});
@@ -99,16 +99,16 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		request: CLISearchListenerRequest,
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
-		const query = request.query.toLowerCase();
-		if (query.startsWith("/")) {
+		const queryLower = request.query.toLowerCase();
+		if (queryLower.startsWith("/")) {
 			return { results: [] };
 		}
 
-		if (query.length < queryMinLength) {
-			return getResults();
+		if (queryLower.length < queryMinLength) {
+			return getResults("");
 		}
 
-		return getResults(query);
+		return getResults(queryLower);
 	};
 
 	const onSelection = async (result: CLIDispatchedSearchResult) => {

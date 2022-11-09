@@ -1,8 +1,7 @@
-import type { LoggerCreator } from "./logger-shapes";
-import type { ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 export interface EndpointProvider {
-	init: (options: unknown, loggerCreator: LoggerCreator) => Promise<void>;
+	init: (options: unknown, helpers: ModuleHelpers) => Promise<void>;
 	hasEndpoint(id: string): boolean;
 	action<T>(endpointId: string, request?: T): Promise<boolean>;
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null>;

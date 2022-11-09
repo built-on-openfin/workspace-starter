@@ -1,6 +1,6 @@
 import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import type { IPlatformStorage } from "./platform-storage-shapes";
 
@@ -18,7 +18,11 @@ function getStorage<T>(id: string): IPlatformStorage<T> {
 	return localStorage;
 }
 
-export async function initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+export async function initialize(
+	definition: ModuleDefinition,
+	createLogger: LoggerCreator,
+	helpers: ModuleHelpers
+) {
 	loggerCreator = createLogger;
 	logger = loggerCreator("LocalStorageEndpoint");
 	logger.info("Was passed the following options", definition.data);

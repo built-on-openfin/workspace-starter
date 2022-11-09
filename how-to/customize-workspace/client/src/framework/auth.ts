@@ -1,5 +1,6 @@
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
+import type { ModuleHelpers } from "./shapes";
 import type { AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
 
 const logger = createLogger("Auth");
@@ -12,7 +13,7 @@ export function isAuthenticationEnabled() {
 	return authEnabled;
 }
 
-export async function init(options: AuthProviderOptions) {
+export async function init(options: AuthProviderOptions, helpers: ModuleHelpers) {
 	authOptions = options;
 	if (authOptions === undefined || authOptions === null) {
 		logger.info(
@@ -23,7 +24,7 @@ export async function init(options: AuthProviderOptions) {
 
 	if (authProvider === undefined) {
 		const authModules = await loadModules<AuthProvider>(authOptions, "auth");
-		await initializeModules<AuthProvider>(authModules);
+		await initializeModules<AuthProvider>(authModules, helpers);
 
 		if (authModules.length > 1) {
 			logger.warn("You have more than one auth module enabled, only the first will be used");

@@ -5,14 +5,12 @@ import { registerAction } from "./connections";
 import * as headlessProvider from "./headless";
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
-import { launchSnapshot } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
-import { manifestTypes } from "./manifest-types";
-import { launchPage, launchView } from "./platform/browser";
+import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
+import type { ModuleHelpers } from "./shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/framework-shapes";
-import * as templateHelpers from "./templates";
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,
@@ -74,22 +72,9 @@ export async function init() {
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
 
-	await registerIntegration(settings.integrationProvider, {
-		rootUrl: settings?.platformProvider?.rootUrl,
-		templateHelpers,
-		launchView,
-		launchPage,
-		launchSnapshot: async (manifestUrl) =>
-			launchSnapshot({
-				manifestType: manifestTypes.snapshot.id,
-				manifest: manifestUrl,
-				appId: "",
-				title: "",
-				icons: null,
-				publisher: null
-			}),
-		openUrl: async (url) => fin.System.openUrlWithBrowser(url)
-	});
+	const helpers: ModuleHelpers = getDefaultHelpers(settings);
+
+	await registerIntegration(settings.integrationProvider, helpers);
 
 	const registeredComponents: BootstrapComponents[] = [];
 
@@ -190,7 +175,7 @@ export async function init() {
 
 	// Once the platform is started and everything is bootstrapped initialize the init options
 	// listener so that it is ready to handle initial params or subsequent requests.
-	await registerInitOptionsListener(settings?.initOptionsProvider, "after-bootstrap");
+	await registerInitOptionsListener(settings?.initOptionsProvider, "after-bootstrap", helpers);
 
 	// fire up any windows that have been configured
 	await headlessProvider.init(settings?.headlessProvider);

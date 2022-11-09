@@ -13,7 +13,8 @@ export interface TemplateHelpers {
 		title: string,
 		description: string[],
 		examples: string[]
-	): Promise<{ layout: PlainContainerTemplateFragment; data: unknown }>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	): Promise<{ layout: PlainContainerTemplateFragment; data: any }>;
 
 	createContainer(
 		containerType: "column" | "row",
