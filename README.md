@@ -98,7 +98,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "next",
+        "version": "9.2.5",
         "customConfig": {}
       }
     }
@@ -113,7 +113,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "next",
+        "version": "9.2.5",
         "customConfig": {}
       }
     }

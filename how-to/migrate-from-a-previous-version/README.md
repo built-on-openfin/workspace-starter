@@ -3,9 +3,36 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
-## Migrate from a previous version - From v9.1 to v10
+## Migrate from a previous version - From v9.1 to v9.2
 
-- Coming once v10 enters beta.
+### Enhancements
+
+- Added Custom Background Color for Hero Section in Store
+- Workspace Platform Providers can now customize the background color of the Hero section in Workspace Store (by setting contentBackground1).
+
+### UI Improvements
+
+- Updated Workspace Store icon throughout OpenFin Workspace to be consistent and intuitive to end-users.
+- Updated Layout splitters in the Workspace Browser to inherit colors from the theme object. Previously, splitters were always black, regardless of the theme.
+- Updated the appearance of the minimize, maximize, close buttons in Workspace Store and the close button in Notifications to match the rest of Workspace components.
+
+### Resolved Issues
+
+- Resolved issue in Home where selecting a filter and then scrolling to select another filter caused the selection to revert back to the original filter
+- Resolved an issue where success indicators were located on the primary monitor when browser was maximized in the secondary monitor
+
+### Notifications Upgrade 1.18.0
+
+#### Notifications UI Improvements
+
+- Updated the appearance of the close button to match the rest of Workspace components.
+
+#### Notifications Resolved Issues
+
+- Resolved issue where switching position of notifications center is slower when Auto-Hide Center is on.
+- Resolved issue where notification-form-submitted event is not dispatched back to client if notification-action event listener is not registered.
+- Resolved issue where notifications center with auto-hide enabled would not properly launch through home.
+- Resolved issue when generating a sticky notification, then generating another sticky notification with same id but a different body, the first notification toast showed the updated body before it disappeared
 
 ## Migrate from a previous version - From v9.0 to v9.1
 
