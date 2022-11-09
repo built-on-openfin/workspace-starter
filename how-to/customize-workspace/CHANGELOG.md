@@ -3,6 +3,7 @@
 ## v9.2
 
 - Added `dev` npm script which live build and reloads code for customize-workspace sample
+- Added `dispatchFocusEvents: true` to Home provider so integrations should handle `result.action.trigger === "user-action"` to activate entries
 
 ## v9.1
 
