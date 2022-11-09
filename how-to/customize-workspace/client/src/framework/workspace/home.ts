@@ -511,7 +511,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		if (result.data !== undefined) {
 			const handled = await itemSelection(result, lastResponse);
 
-			if (!handled) {
+			if (!handled && result.action.trigger === "user-action") {
 				const data: {
 					workspaceId?: string;
 					workspaceTitle?: string;
