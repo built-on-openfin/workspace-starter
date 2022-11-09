@@ -135,40 +135,42 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		result: CLIDispatchedSearchResult,
 		lastResponse: CLISearchListenerResponse
 	): Promise<boolean> {
-		// if the user clicked the reconnect result, reconnect to salesforce and re-run query
-		if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
-			await this.openConnection();
+		if (result.action.trigger === "user-action") {
+			// if the user clicked the reconnect result, reconnect to salesforce and re-run query
+			if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
+				await this.openConnection();
 
-			if (result.data?.query) {
-				const results = await this.getSearchResults(
-					result.data?.query as string,
-					result.data?.filters as CLIFilter[],
-					lastResponse
-				);
-				if (lastResponse) {
-					lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
-					lastResponse.respond(results.results);
+				if (result.data?.query) {
+					const results = await this.getSearchResults(
+						result.data?.query as string,
+						result.data?.filters as CLIFilter[],
+						lastResponse
+					);
+					if (lastResponse) {
+						lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
+						lastResponse.respond(results.results);
+					}
 				}
+				return true;
 			}
-			return true;
-		}
 
-		// otherwise open the result page url in browser
-		const data = result.data as SalesforceResultData;
-		if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
-			const preload = this._settings?.preload;
-			const viewOptions = {
-				url: data.pageUrl,
-				fdc3InteropApi: "1.2",
-				interop: {
-					currentContextGroup: "green"
-				},
-				customData: { buttonLabel: "Process Participant" },
-				preloadScripts: [{ url: preload }],
-				target: { name: "", url: "", uuid: "" }
-			};
-			await this._integrationHelpers.launchView(viewOptions);
-			return true;
+			// otherwise open the result page url in browser
+			const data = result.data as SalesforceResultData;
+			if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
+				const preload = this._settings?.preload;
+				const viewOptions = {
+					url: data.pageUrl,
+					fdc3InteropApi: "1.2",
+					interop: {
+						currentContextGroup: "green"
+					},
+					customData: { buttonLabel: "Process Participant" },
+					preloadScripts: [{ url: preload }],
+					target: { name: "", url: "", uuid: "" }
+				};
+				await this._integrationHelpers.launchView(viewOptions);
+				return true;
+			}
 		}
 		return false;
 	}
