@@ -214,3 +214,24 @@ export async function createTable(
 		overflow: "auto"
 	});
 }
+
+export async function createLink(
+	labelKey: string,
+	action: string,
+	fontSize: number = 10,
+	style?: CSS.Properties
+): Promise<TemplateFragment> {
+	return {
+		type: TemplateFragmentTypes.Button,
+		buttonStyle: ButtonStyle.TextOnly,
+		children: [await createText(labelKey, fontSize)],
+		action,
+		style: {
+			padding: 0,
+			border: 0,
+			fontWeight: "normal",
+			textDecoration: "underline",
+			...style
+		}
+	};
+}
