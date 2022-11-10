@@ -22,33 +22,6 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/modules/integrations/salesforce/index.ts',
-		devtool: 'inline-source-map',
-		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'salesforce.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'integrations')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
 		entry: './client/src/modules/auth/example/index.ts',
 		devtool: 'inline-source-map',
 		module: {
