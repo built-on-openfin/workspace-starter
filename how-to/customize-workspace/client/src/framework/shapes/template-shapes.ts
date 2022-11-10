@@ -24,12 +24,13 @@ export interface TemplateHelpers {
 
 	createTitle(
 		dataKey: string,
-		fontSize: number,
-		fontWeight: string,
-		style?: CSS.Properties
+		fontSize?: number,
+		fontWeight?: string,
+		style?: CSS.Properties,
+		children?: TemplateFragment[]
 	): Promise<TextTemplateFragment>;
 
-	createText(dataKey: string, fontSize: number, style?: CSS.Properties): Promise<TextTemplateFragment>;
+	createText(dataKey: string, fontSize?: number, style?: CSS.Properties): Promise<TextTemplateFragment>;
 
 	createImage(
 		dataKey: string,
@@ -41,7 +42,8 @@ export interface TemplateHelpers {
 		buttonStyle: ButtonStyle,
 		titleKey: string,
 		action: string,
-		style?: CSS.Properties
+		style?: CSS.Properties,
+		children?: TemplateFragment[]
 	): Promise<ButtonTemplateFragment>;
 
 	createLabelledValue(
@@ -55,5 +57,12 @@ export interface TemplateHelpers {
 		colSpans: number[],
 		tableIndex: number,
 		data: { [id: string]: string }
+	): Promise<TemplateFragment>;
+
+	createLink(
+		labelKey: string,
+		action: string,
+		fontSize?: number,
+		style?: CSS.Properties
 	): Promise<TemplateFragment>;
 }
