@@ -18,9 +18,9 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
-import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,

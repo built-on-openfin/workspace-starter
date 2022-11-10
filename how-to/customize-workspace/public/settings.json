@@ -758,27 +758,6 @@
 		"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 		"modules": [
 			{
-				"id": "salesforce",
-				"icon": "http://localhost:8080/common/images/salesforce/favicon.ico",
-				"title": "Salesforce",
-				"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
-				"enabled": false,
-				"autoStart": true,
-				"url": "http://localhost:8080/js/modules/integrations/salesforce.bundle.js",
-				"data": {
-					"consumerKey": "",
-					"orgUrl": "",
-					"preload": "http://localhost:8080/common/views/salesforce/preload.js",
-					"iconMap": {
-						"contact": "http://localhost:8080/common/images/salesforce/contact.svg",
-						"account": "http://localhost:8080/common/images/salesforce/account.svg",
-						"chatter": "http://localhost:8080/common/images/salesforce/chatter.svg",
-						"note": "http://localhost:8080/common/images/salesforce/note.svg",
-						"task": "http://localhost:8080/common/images/salesforce/task.svg"
-					}
-				}
-			},
-			{
 				"id": "emoji",
 				"icon": "http://localhost:8080/favicon.ico",
 				"title": "Emoji Provider",
