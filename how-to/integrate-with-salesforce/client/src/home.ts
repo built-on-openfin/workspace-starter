@@ -10,7 +10,6 @@ import {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import { getApps } from "./apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
@@ -33,7 +32,6 @@ export async function register() {
 
 	let lastResponse: HomeSearchListenerResponse;
 
-	const apps = await getApps();
 	let filters: CLIFilter[];
 
 	const onUserInput = async (
@@ -49,13 +47,8 @@ export async function register() {
 			lastResponse = response;
 			lastResponse.open();
 
-			let appSearchEntries = mapAppEntriesToSearchEntries(apps);
-			if (queryLower && queryLower.length >= 3) {
-				appSearchEntries = appSearchEntries.filter((app) => app.title.toLowerCase().includes(queryLower));
-			}
-
 			const searchResults: HomeSearchResponse = {
-				results: appSearchEntries,
+				results: [],
 				context: {
 					filters: []
 				}
