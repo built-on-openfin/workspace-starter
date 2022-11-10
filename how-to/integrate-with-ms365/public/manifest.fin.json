@@ -18,16 +18,7 @@
 					"protocols": ["msteams", "tel"]
 				}
 			}
-		},
-		"defaultViewOptions": {
-			"fdc3InteropApi": "1.2",
-			"preloadScripts": [
-				{
-					"url": "http://localhost:8080/js/preload.js"
-				}
-			]
-		},
-		"defaultWindowOptions": {}
+		}
 	},
 	"snapshot": {
 		"windows": []
