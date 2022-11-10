@@ -18,9 +18,9 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
-import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
 	SalesforceAccount,
 	SalesforceBatchRequest,
@@ -123,6 +123,34 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 */
 	public async closedown(): Promise<void> {
 		await this.closeConnection();
+	}
+
+	/**
+	 * Get a list of the static help entries.
+	 * @returns The list of help entries.
+	 */
+	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+		return [
+			{
+				key: `${SalesForceIntegrationProvider._PROVIDER_ID}-help1`,
+				title: "Salesforce",
+				label: "Help",
+				icon: this._moduleDefinition.icon,
+				actions: [],
+				data: {
+					providerId: SalesForceIntegrationProvider._PROVIDER_ID
+				},
+				template: CLITemplate.Custom,
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+					"Salesforce",
+					[
+						"The Salesforce integration provides no individual commands",
+						"Using the home query it will search the content of your Salesforce platform for Accounts, Contacts, Tasks, Notes and Chatter"
+					],
+					[]
+				)
+			}
+		];
 	}
 
 	/**
