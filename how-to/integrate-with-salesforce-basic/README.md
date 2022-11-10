@@ -9,7 +9,7 @@ OpenFin Workspace empowers you to use our integration packages to connect to 3rd
 
 This example demonstrates connecting to Salesforce, retrieving data and opening a window.
 
-The integration package utilized by this example os [@openfin/salesforce](https://www.npmjs.com/package/@openfin/salesforce).
+The integration package utilized by this example is [@openfin/salesforce](https://www.npmjs.com/package/@openfin/salesforce).
 
 For more information on the Salesforce integration package and how you should configure your Salesforce platform to be accessible from the OpenFin integration package see [Salesforce Integration](https://developers.openfin.co/of-docs/docs/salesforce-integration).
 
