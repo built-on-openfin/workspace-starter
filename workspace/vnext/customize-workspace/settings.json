@@ -761,22 +761,20 @@
 		"modules": [
 			{
 				"id": "salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/favicon.ico",
+				"icon": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
 				"title": "Salesforce",
-				"description": "Provides access to information contained within SalesForce with the option of launching the result into the browser.",
 				"enabled": false,
-				"autoStart": true,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
-					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/salesforce/preload.js",
+					"preload": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/js/preload.js",
 					"iconMap": {
-						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/contact.svg",
-						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/account.svg",
-						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/chatter.svg",
-						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/note.svg",
-						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/salesforce/task.svg"
+						"contact": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/images/contact.svg",
+						"account": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
+						"task": "https://samples.openfin.co/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg"
 					}
 				}
 			},
