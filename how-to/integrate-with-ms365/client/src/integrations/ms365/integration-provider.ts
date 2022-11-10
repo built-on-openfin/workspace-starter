@@ -240,8 +240,28 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * Get a list of the static help entries.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
-		return [];
+	 public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+		return [
+			{
+				key: `${Microsoft365Provider._PROVIDER_ID}-help1`,
+				title: "Microsoft 365",
+				label: "Help",
+				icon: this._settings.images.microsoft365,
+				actions: [],
+				data: {
+					providerId: Microsoft365Provider._PROVIDER_ID
+				},
+				template: CLITemplate.Custom,
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+					"Microsoft 365",
+					[
+						"The Microsoft 365 integration can be used to search multiple data source in your platform.",
+						"Using the home query it will search the content of Users, Contacts, E-mail, Events, Chat Messages, Teams and Channels"
+					],
+					[]
+				)
+			}
+		];
 	}
 
 	/**

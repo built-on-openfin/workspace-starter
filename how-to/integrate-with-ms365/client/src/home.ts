@@ -55,7 +55,7 @@ export async function register() {
 			}
 
 			const searchResults: HomeSearchResponse = {
-				results: appSearchEntries,
+				results: [],
 				context: {
 					filters: []
 				}
@@ -64,6 +64,8 @@ export async function register() {
 			if (queryLower === "?") {
 				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
 			} else {
+				searchResults.results = appSearchEntries;
+
 				const integrationResults = await getSearchResults(request.query, filters, lastResponse);
 				if (Array.isArray(integrationResults.results)) {
 					searchResults.results = searchResults.results.concat(integrationResults.results);
