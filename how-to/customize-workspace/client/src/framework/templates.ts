@@ -129,7 +129,8 @@ export async function createButton(
 	buttonStyle: ButtonStyle,
 	titleKey: string,
 	action: string,
-	style?: CSS.Properties
+	style?: CSS.Properties,
+	children?: TemplateFragment[]
 ): Promise<ButtonTemplateFragment> {
 	const theme = await getCurrentTheme();
 	const buttonOptions =
@@ -141,7 +142,7 @@ export async function createButton(
 	return {
 		type: TemplateFragmentTypes.Button,
 		buttonStyle,
-		children: [await createText(titleKey, 12)],
+		children: children ?? [await createText(titleKey, 12)],
 		action,
 		style: {
 			...buttonOptions,
