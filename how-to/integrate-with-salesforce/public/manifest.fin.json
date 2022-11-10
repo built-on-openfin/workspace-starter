@@ -19,7 +19,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Salesforce - v9.0",
+		"name": "Integrate With Salesforce - v9.1",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
