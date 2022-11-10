@@ -129,7 +129,8 @@ export async function createButton(
 	buttonStyle: ButtonStyle,
 	titleKey: string,
 	action: string,
-	style?: CSS.Properties
+	style?: CSS.Properties,
+	children?: TemplateFragment[]
 ): Promise<ButtonTemplateFragment> {
 	const theme = await getCurrentTheme();
 	const buttonOptions =
@@ -141,7 +142,7 @@ export async function createButton(
 	return {
 		type: TemplateFragmentTypes.Button,
 		buttonStyle,
-		children: [await createText(titleKey, 12)],
+		children: children ?? [await createText(titleKey, 12)],
 		action,
 		style: {
 			...buttonOptions,
@@ -213,4 +214,25 @@ export async function createTable(
 		marginBottom: "10px",
 		overflow: "auto"
 	});
+}
+
+export async function createLink(
+	labelKey: string,
+	action: string,
+	fontSize: number = 10,
+	style?: CSS.Properties
+): Promise<TemplateFragment> {
+	return {
+		type: TemplateFragmentTypes.Button,
+		buttonStyle: ButtonStyle.TextOnly,
+		children: [await createText(labelKey, fontSize)],
+		action,
+		style: {
+			padding: 0,
+			border: 0,
+			fontWeight: "normal",
+			textDecoration: "underline",
+			...style
+		}
+	};
 }
