@@ -39,7 +39,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.1.0/register-with-store/favicon.ico",
-		"name": "Register With Store - v9.0",
+		"name": "Register With Store - v9.1",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
