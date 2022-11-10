@@ -26,11 +26,10 @@ export interface TemplateHelpers {
 		dataKey: string,
 		fontSize?: number,
 		fontWeight?: string,
-		style?: CSS.Properties,
-		children?: TemplateFragment[]
+		style?: CSS.Properties
 	): Promise<TextTemplateFragment>;
 
-	createText(dataKey: string, fontSize?: number, style?: CSS.Properties): Promise<TextTemplateFragment>;
+	createText(dataKey: string, fontSize: number, style?: CSS.Properties): Promise<TextTemplateFragment>;
 
 	createImage(
 		dataKey: string,
