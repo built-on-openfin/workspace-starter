@@ -165,7 +165,6 @@ async function openContact(contact: SalesforceContact) {
 			currentContextGroup: "green"
 		},
 		customData: { buttonLabel: "Process Participant" },
-		preloadScripts: [{ url: `${window.location.origin}/js/preload.js` }],
 		target: { name: "", url: "", uuid: "" }
 	};
 

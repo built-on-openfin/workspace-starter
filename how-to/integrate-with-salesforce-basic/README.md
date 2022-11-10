@@ -7,9 +7,9 @@
 
 OpenFin Workspace empowers you to use our integration packages to connect to 3rd party data sources, such as Salesforce.
 
-This example demonstrates connecting to Salesforce, retrieving data and opening a window with our embedded Salesforce Lightning component.
+This example demonstrates connecting to Salesforce, retrieving data and opening a window.
 
-The integration packages utilized by this example are [@openfin/salesforce](https://www.npmjs.com/package/@openfin/salesforce) and [@openfin/salesforce-lwc](https://www.npmjs.com/package/@openfin/salesforce-lwc).
+The integration package utilized by this example is [@openfin/salesforce](https://www.npmjs.com/package/@openfin/salesforce).
 
 For more information on the Salesforce integration package and how you should configure your Salesforce platform to be accessible from the OpenFin integration package see [Salesforce Integration](https://developers.openfin.co/of-docs/docs/salesforce-integration).
 
