@@ -21,7 +21,8 @@
 		"how-to/register-with-store-basic",
 		"how-to/migrate-from-a-previous-version",
 		"how-to/integrate-with-sso",
-		"how-to/integrate-server-authentication"
+		"how-to/integrate-server-authentication",
+		"how-to/integrate-with-salesforce-basic"
 	],
 	"howToCustomFolder": "workspace/vnext",
 	"contributors": [

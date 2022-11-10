@@ -87,7 +87,7 @@ export async function createTitle(
 		type: TemplateFragmentTypes.Text,
 		dataKey,
 		style: {
-			color: theme.palette.brandPrimary,
+			color: theme.palette.textDefault,
 			fontSize: `${fontSize ?? 16}px`,
 			fontWeight,
 			...style
