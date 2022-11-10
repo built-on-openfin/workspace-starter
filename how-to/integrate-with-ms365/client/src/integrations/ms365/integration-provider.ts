@@ -240,7 +240,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * Get a list of the static help entries.
 	 * @returns The list of help entries.
 	 */
-	 public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${Microsoft365Provider._PROVIDER_ID}-help1`,
