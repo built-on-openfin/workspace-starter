@@ -678,6 +678,25 @@
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
+					"id": "salesforce",
+					"icon": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/favicon.ico",
+					"title": "Salesforce",
+					"enabled": false,
+					"url": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"data": {
+						"consumerKey": "",
+						"orgUrl": "",
+						"preload": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/js/preload.js",
+						"iconMap": {
+							"contact": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://samples.openfin.co/workspace-starter/workspace/v9.1.0/integrate-with-salesforce/images/task.svg"
+						}
+					}
+				},
+				{
 					"id": "emoji",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Emoji Provider",
