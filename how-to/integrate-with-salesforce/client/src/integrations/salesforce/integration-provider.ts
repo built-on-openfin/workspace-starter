@@ -126,9 +126,9 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-		 * Get a list of the static help entries.
-		 * @returns The list of help entries.
-		 */
+	 * Get a list of the static help entries.
+	 * @returns The list of help entries.
+	 */
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
@@ -514,8 +514,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		const batchedResults = await this.getBatchedResults<
 			| SalesforceRestApiSearchResponse<
-				SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
-			>
+					SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
+			  >
 			| SalesforceFeedElementPage
 		>(batch);
 
