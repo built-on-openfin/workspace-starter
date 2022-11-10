@@ -126,6 +126,34 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
+		 * Get a list of the static help entries.
+		 * @returns The list of help entries.
+		 */
+	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+		return [
+			{
+				key: `${SalesForceIntegrationProvider._PROVIDER_ID}-help1`,
+				title: "Salesforce",
+				label: "Help",
+				icon: this._moduleDefinition.icon,
+				actions: [],
+				data: {
+					providerId: SalesForceIntegrationProvider._PROVIDER_ID
+				},
+				template: CLITemplate.Custom,
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+					"Salesforce",
+					[
+						"The Salesforce integration provides no individual commands",
+						"Using the home query it will search the content of your Salesforce platform for Accounts, Contacts, Tasks, Notes and Chatter"
+					],
+					[]
+				)
+			}
+		];
+	}
+
+	/**
 	 * An entry has been selected.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
@@ -486,8 +514,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		const batchedResults = await this.getBatchedResults<
 			| SalesforceRestApiSearchResponse<
-					SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
-			  >
+				SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
+			>
 			| SalesforceFeedElementPage
 		>(batch);
 
