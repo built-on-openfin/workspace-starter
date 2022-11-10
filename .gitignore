@@ -8,5 +8,5 @@ how-to/customize-workspace/client/types/
 # Bundle/builds
 **/*.bundle.js
 **/build
-
+preload.js
 ./public*/
