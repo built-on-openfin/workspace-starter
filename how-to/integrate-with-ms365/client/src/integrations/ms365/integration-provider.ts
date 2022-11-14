@@ -15,7 +15,7 @@ import type {
 import {
 	connect,
 	enableLogging,
-	GraphResult,
+	GraphResponse,
 	TeamsConnection,
 	type Microsoft365Connection
 } from "@openfin/microsoft365";
@@ -935,8 +935,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private createGraphJsonResult(response: GraphResult<any>): HomeSearchResult {
+	private createGraphJsonResult(response: GraphResponse): HomeSearchResult {
 		return {
 			key: `${Microsoft365Provider._PROVIDER_ID}-rest`,
 			title: "Graph Result",
