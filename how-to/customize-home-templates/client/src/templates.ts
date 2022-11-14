@@ -34,7 +34,8 @@ export async function createHelp(
 		additionalData[exampleKey] = examples[i];
 		exampleFragments.push(
 			await createText(exampleKey, 12, {
-				fontFamily: "monospace"
+				fontFamily: "monospace",
+				whiteSpace: "nowrap"
 			})
 		);
 	}
@@ -45,14 +46,25 @@ export async function createHelp(
 				marginTop: "6px",
 				backgroundColor: theme.palette.background5,
 				color: theme.palette.inputColor,
-				borderRadius: "5px"
+				borderRadius: "5px",
+				overflow: "auto"
 			})
 		);
 	}
 	return {
-		layout: await createContainer("column", [await createTitle("title"), ...fragments], {
-			padding: "10px"
-		}),
+		layout: await createContainer(
+			"column",
+			[
+				await createTitle("title", undefined, undefined, {
+					marginBottom: "10px",
+					borderBottom: `1px solid ${theme.palette.background6}`
+				}),
+				...fragments
+			],
+			{
+				padding: "10px"
+			}
+		),
 		data: {
 			title,
 			...additionalData
