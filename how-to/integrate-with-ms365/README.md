@@ -17,7 +17,7 @@ To run this sample you can:
 
 ### Configure Microsoft 365
 
-Before you can integrate your Microsoft 365 with OpenFin Home, you must following the required [configuration steps](https://developers.openfin.co/of-docs/docs/microsoft-openfin) for our Microsoft integration.
+Before you can integrate your Microsoft 365 with OpenFin Home, you must following the required [configuration steps](https://developers.openfin.co/of-docs/docs/ms365-integration) for our Microsoft integration.
 
 When configuring CORS, the URL that you need to add is: `http://localhost:8080`, corresponding to the hostname and port number that this sample uses.
 

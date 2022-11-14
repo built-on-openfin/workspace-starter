@@ -11,7 +11,7 @@ This example demonstrates connecting to Microsoft 365 and retrieving data.
 
 The integration package utilized by this example is [@openfin/microsoft365](https://www.npmjs.com/package/@openfin/microsoft365).
 
-For more information on the Microsoft 365 integration package and how you should configure your Microsoft 365 platform to be accessible from the OpenFin integration package see [Microsoft 365 Integration](https://developers.openfin.co/of-docs/docs/microsoft-365-integration).
+For more information on the Microsoft 365 integration package and how you should configure your Microsoft 365 platform to be accessible from the OpenFin integration package see [Microsoft 365 Integration](https://developers.openfin.co/of-docs/docs/ms365-integration).
 
 When you have finished configuring your Microsoft 365 platform for access by the integration you should modify `settings.ts` to include your `CLIENT_ID` and `TENANT_ID`
 
