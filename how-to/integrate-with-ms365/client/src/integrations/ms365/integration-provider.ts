@@ -241,6 +241,16 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @returns The list of help entries.
 	 */
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+		const additionalDescription: string[] = [];
+		const additionalHelp: string[] = [];
+
+		if (!this._settings.disableGraphExplorer) {
+			additionalDescription.push(
+				"You can also specify a query as a graph explorer path and parameters, by using the /ms prefix"
+			);
+			additionalHelp.push("/ms/me", "/ms/users?$filter=startsWith(displayName,'john')");
+		}
+
 		return [
 			{
 				key: `${Microsoft365Provider._PROVIDER_ID}-help1`,
@@ -256,9 +266,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					"Microsoft 365",
 					[
 						"The Microsoft 365 integration can be used to search multiple data source in your platform.",
-						"Using the home query it will search the content of Users, Contacts, E-mail, Events, Chat Messages, Teams and Channels"
-					],
-					[]
+						"Using a freeform query will search the content of Users, Contacts, E-mail, Events, Chat Messages, Teams and Channels"
+					].concat(additionalDescription),
+					additionalHelp
 				)
 			}
 		];
