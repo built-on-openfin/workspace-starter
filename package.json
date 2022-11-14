@@ -9,7 +9,7 @@
 		"package-for-github": "node ./scripts/package.js --location github",
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"prettier": "prettier --config .prettierrc --write .",
-		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"eslint": "eslint . --ext .js,.mjs,.ts --fix",
 		"markdownlint": "markdownlint **/*.md --ignore node_modules",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint"
 	},
