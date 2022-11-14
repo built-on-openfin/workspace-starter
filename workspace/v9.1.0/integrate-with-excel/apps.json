@@ -3,7 +3,7 @@
 		"appId": "fdc3-broadcast-view",
 		"name": "fdc3-broadcast-view",
 		"title": "Context using FDC3",
-		"description": "This is an example view used to demonstrate the broadcasting and listenting of passed context objects using the fdc3 api.",
+		"description": "This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
 		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
