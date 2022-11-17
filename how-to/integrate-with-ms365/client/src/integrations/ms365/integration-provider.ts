@@ -188,15 +188,27 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	};
 
 	/**
+	 * Maintain a cache of the users teams and channels.
+	 */
+	private _teamsAndChannelsCache: { team: Team; channels: Channel[] }[];
+
+	/**
 	 * The cache cleanup timer id.
 	 */
-	private _cacheCleanerIntervalId?: number;
+	private _cacheIntervalId?: number;
+
+	/**
+	 * The cache counter.
+	 */
+	private _cacheCounter: number;
 
 	/**
 	 * Create a new instance of Microsoft365Provider.
 	 */
 	constructor() {
 		this._profileImageCache = {};
+		this._teamsAndChannelsCache = [];
+		this._cacheCounter = 0;
 	}
 
 	/**
@@ -217,7 +229,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		await this.connectProvider();
 
-		this._cacheCleanerIntervalId = window.setInterval(() => this.cleanupCache(), 30000);
+		this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
+		window.setTimeout(async () => {
+			await this.updateCache();
+		}, 0);
 	}
 
 	/**
@@ -230,9 +245,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			await this._ms365Connection.disconnect();
 			this._ms365Connection = undefined;
 		}
-		if (this._cacheCleanerIntervalId) {
-			window.clearInterval(this._cacheCleanerIntervalId);
-			this._cacheCleanerIntervalId = undefined;
+		if (this._cacheIntervalId) {
+			window.clearInterval(this._cacheIntervalId);
+			this._cacheIntervalId = undefined;
 		}
 	}
 
@@ -334,43 +349,44 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							.map((o) => o.value as Microsoft365ObjectTypes);
 					}
 
-					// try a user lookup instead
-					const encodedQuery = encodeURIComponent(query);
-
-					const userSearchFields: (keyof User)[] = [
-						"displayName",
-						"givenName",
-						"surname",
-						"department",
-						"jobTitle",
-						"mobilePhone"
-					];
-					const userSearchQuery = userSearchFields.map((s) => `"${s}:${encodedQuery}"`).join(" OR ");
-
 					const batchRequests: GraphBatchRequest[] = [];
 
 					if (includeOptions.includes("User")) {
+						const userSearchFields: (keyof User)[] = [
+							"displayName",
+							"givenName",
+							"surname",
+							"department",
+							"jobTitle",
+							"mobilePhone"
+						];
+						const userSearchQuery = userSearchFields.map((s) => `"${s}:${query}"`).join(" OR ");
+
 						batchRequests.push({
 							id: "User",
 							method: "GET",
-							url: `/users?$search=${userSearchQuery}&$top=10`,
+							url: `/users?$search=${encodeURIComponent(userSearchQuery)}&$top=10`,
 							headers: {
 								ConsistencyLevel: "eventual"
 							}
 						});
 					}
 					if (includeOptions.includes("Contact")) {
+						const contactSearchQuery = `"${query}"`;
 						batchRequests.push({
 							id: "Contact",
 							method: "GET",
-							url: `/me/contacts?$search=${encodedQuery}&$top=10`
+							url: `/me/contacts?$search=${encodeURIComponent(contactSearchQuery)}&$top=10`
 						});
 					}
 					if (includeOptions.includes("Message")) {
+						const messageSearchQuery = `"${query}"`;
 						batchRequests.push({
 							id: "Message",
 							method: "GET",
-							url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodedQuery}&$top=10`
+							url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodeURIComponent(
+								messageSearchQuery
+							)}&$top=10`
 						});
 					}
 					if (includeOptions.includes("Event")) {
@@ -417,15 +433,42 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						});
 					}
-					if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
-						batchRequests.push({
-							id: "Team",
-							url: "/me/joinedTeams",
-							method: "GET"
-						});
-					}
 
 					const homeResults = await this.sendBatchQuery(query, includeOptions, batchRequests);
+
+					if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
+						const lowerQuery = query.toLowerCase();
+
+						for (const teamAndChannels of this._teamsAndChannelsCache) {
+							if (
+								includeOptions.includes("Team") &&
+								(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ||
+									teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
+							) {
+								homeResults.push(this.createLoadingResult(teamAndChannels.team, "displayName", "Team"));
+							}
+							if (includeOptions.includes("Channel")) {
+								for (const channel of teamAndChannels.channels) {
+									if (
+										channel.displayName?.toLowerCase().includes(lowerQuery) ||
+										channel.description?.toLowerCase().includes(lowerQuery)
+									) {
+										homeResults.push(
+											this.createLoadingResult(
+												{
+													...channel,
+													team: teamAndChannels.team
+												},
+												"displayName",
+												"Channel"
+											)
+										);
+									}
+								}
+							}
+						}
+					}
+
 					lastResponse.respond(homeResults);
 				}
 			} catch (err) {
@@ -801,70 +844,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						)
 					);
 				}
-			} else if (type === "Team") {
-				const joinedTeams = (batchResponse.body as GraphListResponse<Team>).value;
-
-				if (joinedTeams.length > 0) {
-					if (includeOptions.includes("Channel")) {
-						const lowerQuery = query.toLowerCase();
-
-						const batchChannels: string[] = joinedTeams.map((t) => `/teams/${t.id}/channels`);
-
-						const channelResults = await this.sendBatchQuery(
-							query,
-							includeOptions,
-							batchChannels.map((url, idx) => ({
-								id: `Channel-${(idx + 1).toString()}`,
-								method: "GET",
-								url
-							}))
-						);
-
-						for (const channelResult of channelResults) {
-							const channel = channelResult.data.obj as Channel & { team: Team };
-
-							const includeInResults =
-								channel.displayName?.toLowerCase().includes(lowerQuery) ||
-								channel.description?.toLowerCase().includes(lowerQuery);
-
-							// The webUrl for the teams management page needs constructing from the first channel in each team
-							// we also connect the team to the channels and vice versa
-							const webUrl = new URL(channel.webUrl);
-							if (webUrl.searchParams.has("groupId")) {
-								const groupId = webUrl.searchParams.get("groupId");
-								const team = joinedTeams.find((t) => t.id === groupId);
-								if (team) {
-									team.webUrl = channel.webUrl;
-									team.channels = team.channels ?? [];
-									// Make a copy of the channel without the team reference
-									// otherwise we end up with a circular reference when
-									// it is converted to JSON
-									if (includeInResults) {
-										team.channels.push({
-											...channel
-										});
-									}
-									channel.team = team;
-								}
-							}
-
-							if (includeInResults) {
-								homeResults.push(channelResult);
-							}
-						}
-					}
-
-					homeResults = homeResults.concat(
-						joinedTeams
-							.filter((t) => t?.channels?.length)
-							.map((t) => this.createLoadingResult(t, "displayName", "Team"))
-					);
-				}
-			} else if (type === "Channel") {
-				const channels = (batchResponse.body as GraphListResponse<Channel>).value;
-				homeResults = homeResults.concat(
-					channels.map((c) => this.createLoadingResult(c, "displayName", "Channel"))
-				);
 			}
 		}
 
@@ -970,7 +949,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						fontSize: "12px",
 						fontFamily: "monospace",
 						color: response.status === 200 ? "white" : "red",
-						whiteSpace: "pre"
+						whiteSpace: "pre",
+						overflow: "auto",
+						flex: 1
 					}
 				},
 				data: {
@@ -2314,7 +2295,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		return objTypeOrder[objType] * 1000;
 	}
 
-	private cleanupCache() {
+	private async updateCache(): Promise<void> {
+		// Cleanup any old cached profile images
 		const keys = Object.keys(this._profileImageCache);
 		const now = Date.now();
 		const ttl = keys.length > 50 ? 30000 : 300000;
@@ -2323,5 +2305,73 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				delete this._profileImageCache[id];
 			}
 		}
+
+		// Update the teams and channels
+		if (this._cacheCounter % 6 === 0) {
+			// Update every 3 minutes
+			try {
+				const response = await this._ms365Connection.executeApiRequest<GraphListResponse<Team>>(
+					"/v1.0/me/joinedTeams"
+				);
+
+				const joinedTeams = response.data?.value ?? [];
+				const channelsForTeam: { [id: string]: Channel[] } = {};
+
+				if (joinedTeams.length) {
+					const batchChannels: string[] = joinedTeams.map((t) => `/teams/${t.id}/channels`);
+
+					const batchResponses = await this._ms365Connection.executeApiRequest<GraphBatchResponse>(
+						"/v1.0/$batch",
+						"POST",
+						{
+							requests: batchChannels.map((url, idx) => ({
+								id: `TeamChannels-${(idx + 1).toString()}`,
+								method: "GET",
+								url
+							}))
+						}
+					);
+
+					if (Array.isArray(batchResponses.data?.responses)) {
+						for (const batchResponse of batchResponses.data.responses) {
+							if (batchResponse.status === 200) {
+								this._logger.info(`${batchResponse.id} Response`, batchResponse.body);
+
+								const channels = batchResponse.body as GraphListResponse<Channel>;
+
+								for (const channel of channels.value) {
+									// The webUrl for the teams management page needs constructing from the first channel in each team
+									// we also connect the team to the channels and vice versa
+									const webUrl = new URL(channel.webUrl);
+									if (webUrl.searchParams.has("groupId")) {
+										const groupId = webUrl.searchParams.get("groupId");
+										const team = joinedTeams.find((t) => t.id === groupId);
+										if (team) {
+											team.webUrl = channel.webUrl;
+											channelsForTeam[team.id] = channelsForTeam[team.id] ?? [];
+											channelsForTeam[team.id].push(channel);
+										}
+									}
+								}
+							} else {
+								this._logger.error(
+									`${batchResponse.id} Response Failed`,
+									batchResponse.status,
+									batchResponse.body
+								);
+							}
+						}
+					}
+				}
+
+				this._teamsAndChannelsCache = joinedTeams.map((t) => ({
+					team: t,
+					channels: channelsForTeam[t.id] ?? []
+				}));
+			} catch (err) {
+				this._logger.error("Error retrieving joined teams", err);
+			}
+		}
+		this._cacheCounter++;
 	}
 }
