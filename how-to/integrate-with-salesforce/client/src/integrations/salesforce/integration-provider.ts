@@ -616,7 +616,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			const uniqueObjects = [...new Set(objects.sort())];
 			const objectFilter: CLIFilter = {
 				id: SalesForceIntegrationProvider._OBJECTS_FILTER_ID,
-				title: "Objects",
+				title: "Salesforce",
 				type: CLIFilterOptionType.MultiSelect,
 				options: []
 			};
