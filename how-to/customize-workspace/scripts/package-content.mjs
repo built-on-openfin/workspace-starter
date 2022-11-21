@@ -75,6 +75,7 @@ async function packageContent(env, host) {
 				// the file and copy those as well
 				await copyFileWithReplace(
 					packageConfig,
+					env,
 					path.relative('.', expandedSrc),
 					outFile,
 					packagedDirectory,
@@ -99,7 +100,7 @@ async function packageContent(env, host) {
 	return packagedDirectory;
 }
 
-async function copyFileWithReplace(packageConfig, src, dest, packagedDirectory, host, cache) {
+async function copyFileWithReplace(packageConfig, env, src, dest, packagedDirectory, host, cache) {
 	if (!cache[src]) {
 		cache[src] = dest;
 
@@ -118,11 +119,19 @@ async function copyFileWithReplace(packageConfig, src, dest, packagedDirectory, 
 
 			// replace any host references
 			data = data.replace(new RegExp(packageConfig.manifestHost, 'g'), host);
+
+			// and any tokens
+			if (packageConfig?.tokens?.[env]) {
+				for (const token in packageConfig.tokens[env]) {
+					data = data.replace(new RegExp(`{OF-${token}}`, 'g'), packageConfig.tokens[env][token]);
+				}
+			}
+
 			await fs.writeFile(dest, data);
 
 			// now perform a recursive lookup to make sure any dependencies
 			// it references are also update and included in the package
-			await locateAssets(packageConfig, src, data, packagedDirectory, host, cache);
+			await locateAssets(packageConfig, env, src, data, packagedDirectory, host, cache);
 		} else {
 			// Not a file to process so just copy it
 			await fs.copyFile(src, dest);
@@ -130,7 +139,7 @@ async function copyFileWithReplace(packageConfig, src, dest, packagedDirectory, 
 	}
 }
 
-async function locateAssets(packageConfig, src, fileContent, packagedDirectory, host, cache) {
+async function locateAssets(packageConfig, env, src, fileContent, packagedDirectory, host, cache) {
 	// Find all entries that contain the host name
 	const reHost = new RegExp(`${host}(.*)"`, 'g');
 
@@ -142,7 +151,7 @@ async function locateAssets(packageConfig, src, fileContent, packagedDirectory, 
 			const p = new RegExp(`${host}(.*)"`, 'g').exec(m);
 
 			if (p?.length === 2 && p[1].length > 0) {
-				await copyAsset(packageConfig, p[1], packagedDirectory, host, cache);
+				await copyAsset(packageConfig, env, p[1], packagedDirectory, host, cache);
 			}
 		}
 	}
@@ -162,7 +171,7 @@ async function locateAssets(packageConfig, src, fileContent, packagedDirectory, 
 					p[1].startsWith('/') && publicPack
 						? path.join(publicPack.sourceRoot, p[1].slice(1))
 						: path.join(path.relative('.', path.dirname(src)), p[1]);
-				await copyAsset(packageConfig, fullSrc, packagedDirectory, host, cache);
+				await copyAsset(packageConfig, env, fullSrc, packagedDirectory, host, cache);
 			}
 		}
 	}
@@ -178,13 +187,13 @@ async function locateAssets(packageConfig, src, fileContent, packagedDirectory, 
 
 			if (p?.length === 2 && p[1].length > 0) {
 				const fullSrc = path.join(path.relative('.', path.dirname(src)), p[1]);
-				await copyAsset(packageConfig, fullSrc, packagedDirectory, host, cache);
+				await copyAsset(packageConfig, env, fullSrc, packagedDirectory, host, cache);
 			}
 		}
 	}
 }
 
-async function copyAsset(packageConfig, url, packagedDirectory, host, cache) {
+async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache) {
 	let srcName;
 	let destName;
 	url = url.replace(/\\/g, '/');
@@ -208,7 +217,7 @@ async function copyAsset(packageConfig, url, packagedDirectory, host, cache) {
 	}
 
 	if (srcName && destName) {
-		await copyFileWithReplace(packageConfig, srcName, destName, packagedDirectory, host, cache);
+		await copyFileWithReplace(packageConfig, env, srcName, destName, packagedDirectory, host, cache);
 	}
 }
 

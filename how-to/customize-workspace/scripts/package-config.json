@@ -20,5 +20,10 @@
 			"dest": "./common/views/manager-portal"
 		}
 	],
-	"replaceTypes": [".json", ".html", ".js"]
+	"replaceTypes": [".json", ".html", ".js"],
+	"tokens": {
+		"local": {
+			"MYKEY": "value"
+		}
+	}
 }
