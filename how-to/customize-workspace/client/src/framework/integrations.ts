@@ -218,9 +218,12 @@ export async function itemSelection(
 ): Promise<boolean> {
 	if (result.data) {
 		if (result.data?.providerId === "integration-provider") {
-			const integrationId: string = result.data.integrationId;
-			const autoStart: boolean = result.data.autoStart;
-			return updateIntegrationStatus(lastResponse, integrationId, !autoStart);
+			if (result.action.trigger === "user-action") {
+				const integrationId: string = result.data.integrationId;
+				const autoStart: boolean = result.data.autoStart;
+				return updateIntegrationStatus(lastResponse, integrationId, !autoStart);
+			}
+			return false;
 		}
 
 		const foundIntegration = integrationModules.find((hi) => hi.definition.id === result.data?.providerId);
