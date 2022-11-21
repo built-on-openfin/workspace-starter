@@ -3,6 +3,7 @@ build
 out
 .DS_STORE
 how-to/*/package-lock.json
+how-to/customize-workspace/packaged
 how-to/customize-workspace/public/js/assets/provider.zip
 how-to/customize-workspace/client/types/
 how-to/integrate-with-salesforce/public/js/preload.js

@@ -1,0 +1,24 @@
+{
+	"manifestHost": "http://localhost:8080",
+	"contentPacks": [
+		{
+			"id": "public",
+			"sourceRoot": "./public",
+			"sources": ["manifest.fin.json", "manifest-hosts.json"],
+			"dest": "./"
+		},
+		{
+			"id": "common",
+			"sourceRoot": "../common/public",
+			"sources": ["lib/**/*", "icons/**/*", "windows/intents/**/*"],
+			"dest": "./common"
+		},
+		{
+			"id": "manager-portal",
+			"sourceRoot": "../common/public/views/manager-portal",
+			"sources": ["images/**/*", "data/**/*"],
+			"dest": "./common/views/manager-portal"
+		}
+	],
+	"replaceTypes": [".json", ".html", ".js"]
+}
