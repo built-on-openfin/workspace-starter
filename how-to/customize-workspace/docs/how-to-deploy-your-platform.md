@@ -64,7 +64,7 @@ You can also substitute tokens based on the environment, the `tokens` property o
 }
 ```
 
-This will replace `{OF-APPTITLE}` anywhere in the content with `foo` if the environment is set to `local`, in a `uat` build it will substitute it with `bar`. The file types that will have this applied are specified by the `replaceTypes` entry in `package-config.json`, defaults to `.html`, `.js`, `.json`.
+This will replace `{OF-APPTITLE}` anywhere in the content with `My Local App` if the environment is set to `local`, in a `uat` build it will substitute it with `My UAT App`. The file types that will have this applied are specified by the `replaceTypes` entry in `package-config.json`, defaults to `.html`, `.js`, `.json`.
 
 Example as part of `customSettings` in manifest.
 
