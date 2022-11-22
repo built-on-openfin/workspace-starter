@@ -10,7 +10,7 @@
 		{
 			"id": "common",
 			"sourceRoot": "../common/public",
-			"sources": ["lib/**/*", "icons/**/*", "windows/intents/**/*"],
+			"sources": ["icons/**/*", "windows/intents/**/*"],
 			"dest": "./common"
 		},
 		{
@@ -26,5 +26,14 @@
 		"local": {
 			"MYKEY": "value"
 		}
+	},
+	"hosts": {
+		"local": [
+			"127.0.0.1",
+			"built-on-openfin.github.io",
+			"openfin.github.io",
+			"samples.openfin.co",
+			"cdn.openfin.co"
+		]
 	}
 }

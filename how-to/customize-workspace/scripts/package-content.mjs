@@ -111,9 +111,10 @@ async function packageContent(manifest, env, host) {
 	const hostUrl = new URL(host);
 
 	const hostsFilename = path.join(packagedDirectory, 'manifest-hosts.json');
-	let manifestHosts = await readJsonFile(hostsFilename);
-	manifestHosts = manifestHosts.filter((h) => h !== 'localhost' && h !== '127.0.0.1');
-	manifestHosts.push(hostUrl.hostname);
+	const manifestHosts = packageConfig.hosts?.[env] ?? [];
+	if (!manifestHosts.includes(hostUrl.hostname)) {
+		manifestHosts.unshift(hostUrl.hostname);
+	}
 	await fs.writeFile(hostsFilename, JSON.stringify(manifestHosts, undefined, '\t'));
 
 	return packagedDirectory;
