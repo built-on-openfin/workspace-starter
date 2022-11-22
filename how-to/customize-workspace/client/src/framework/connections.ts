@@ -62,6 +62,25 @@ async function disconnect(identity) {
 	}
 }
 
+async function getConnectionListing(identity: OpenFin.Identity): Promise<Connection> {
+	const listedConnection = connectionOptions.connections.find(
+		(entry) => entry.identity.uuid === identity.uuid
+	);
+
+	if (listedConnection !== undefined) {
+		return listedConnection;
+	}
+
+	const defaultConnection = connectionOptions.connections.find((entry) => entry.identity.uuid === "*");
+	if (defaultConnection !== undefined) {
+		logger.info(
+			`A specific listing for connection ${identity.uuid} isn't listed but there is a default * entry and it will be used for this connection.`
+		);
+		defaultConnection.identity = identity;
+	}
+	return defaultConnection;
+}
+
 export async function init(options: ConnectionProviderOptions) {
 	if (initialized) {
 		return;
@@ -71,14 +90,12 @@ export async function init(options: ConnectionProviderOptions) {
 	if (connectionOptions?.connectionId !== undefined) {
 		connectionService = await fin.InterApplicationBus.Channel.create(connectionOptions.connectionId);
 		logger.info("Configuring connection provider");
-		connectionService.onConnection((identity, payload) => {
+		connectionService.onConnection(async (identity, payload) => {
 			// can reject a connection here by throwing an error
 			logger.info("Client connection request identity", JSON.stringify(identity));
 			logger.info("Client connection request payload", JSON.stringify(payload));
 
-			const validatedConnection = connectionOptions.connections.find(
-				(entry) => entry.identity.uuid === identity.uuid
-			);
+			const validatedConnection = await getConnectionListing(identity);
 			let isValid = false;
 			let errorMessage =
 				"This connection has failed the validation check and cannot connect to the requested application";
@@ -126,6 +143,11 @@ export async function init(options: ConnectionProviderOptions) {
 			logger.info("Check for action permission received from client", identity, payload);
 			const result = isActionSupported(identity, payload as { action: string });
 			return { result };
+		});
+
+		connectionService.register("disconnect", async (payload, identity) => {
+			logger.info("Request for disconnection received from client", identity, payload);
+			await disconnect(identity);
 		});
 	} else {
 		logger.info("This platform is not configured to support a connectionProvider");
