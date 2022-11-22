@@ -4,7 +4,7 @@
 		{
 			"id": "public",
 			"sourceRoot": "./public",
-			"sources": ["manifest.fin.json", "manifest-hosts.json"],
+			"sources": ["manifest-hosts.json"],
 			"dest": "./"
 		},
 		{
@@ -17,7 +17,8 @@
 			"id": "manager-portal",
 			"sourceRoot": "../common/public/views/manager-portal",
 			"sources": ["images/**/*", "data/**/*"],
-			"dest": "./common/views/manager-portal"
+			"dest": "./common/views/manager-portal",
+			"dependsOn": "manager-portal/snapshot-manager-portal.json"
 		}
 	],
 	"replaceTypes": [".json", ".html", ".js"],
