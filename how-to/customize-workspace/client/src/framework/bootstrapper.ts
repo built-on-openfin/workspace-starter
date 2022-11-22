@@ -38,28 +38,6 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions;
 
-async function onReAuthenticationRequired() {
-	logger.info("The platform has detected that authentication is required (might be expired session)");
-	logger.info("At this stage the platform can decide how to proceed:");
-	logger.info(" - Hide all visible windows?");
-	logger.info(
-		" - Disable results from showing in home by having the home provider check to see if authentication is required before showing results?"
-	);
-	logger.info(" - Have Store check if authentication is required before returning store entries?");
-	logger.info(" - Have launch functions not launch if authentication is required?");
-	logger.info(" - If an intent is raised do not action it if authentication is required?");
-	if (bootstrapOptions.home) {
-		await hideHome();
-	}
-	if (bootstrapOptions.store) {
-		await hideStore();
-	}
-	if (bootstrapOptions.dock) {
-		await minimizeDock();
-	}
-	// login management handled by platform.
-}
-
 export async function init() {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
 	// gather reference data etc before starting workspace and interacting with it.
@@ -136,6 +114,8 @@ export async function init() {
 		}
 	}
 
+	const platform = getCurrentSync();
+
 	if (isAuthenticationEnabled()) {
 		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
@@ -143,16 +123,17 @@ export async function init() {
 		authProvider.subscribe("logged-in", async () => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
+			await fireLifecycleEvent(platform, "auth-logged-in");
+		});
+		authProvider.subscribe("session-expired", async () => {
+			// session expired. What do you want to do with the platform when the user needs to log back in.
+			await fireLifecycleEvent(platform, "auth-session-expired");
 		});
 		authProvider.subscribe("before-logged-out", async () => {
 			// what behavior do you want to do when someone logs in
 			// do you want to save anything before they log themselves out
+			await fireLifecycleEvent(platform, "auth-before-logged-out");
 		});
-		authProvider.subscribe("session-expired", onReAuthenticationRequired);
-		const authenticationRequired = await authProvider.isAuthenticationRequired();
-		if (authenticationRequired) {
-			await onReAuthenticationRequired();
-		}
 	}
 
 	const providerWindow = fin.Window.getCurrentSync();
@@ -181,6 +162,5 @@ export async function init() {
 	await headlessProvider.init(settings?.headlessProvider);
 
 	// Let any other modules participate in the lifecycle
-	const platform = getCurrentSync();
 	await fireLifecycleEvent(platform, "after-bootstrap");
 }
