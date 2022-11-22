@@ -2,8 +2,9 @@ import FastGlob from 'fast-glob';
 import * as fs from 'fs/promises';
 import path from 'path';
 
-// example command
-// npm run package-content --env=uat --host=https://openfin.mydomain.com
+// example commands
+// npm run package-content
+// npm run package-content --manifest=manifest.fin.json --env=uat --host=https://openfin.mydomain.com
 
 (async () => {
 	const manifest = process.env.npm_config_manifest ?? 'manifest.fin.json';
@@ -13,6 +14,7 @@ import path from 'path';
 	console.log('Package');
 	console.log('=======');
 	console.log();
+	console.log('Manifest:', manifest);
 	console.log('Env:', env);
 	console.log('Host:', host);
 	console.log();
@@ -21,6 +23,8 @@ import path from 'path';
 		const packagedDir = await packageContent(manifest, env, host);
 
 		if (host.includes('localhost')) {
+			console.log();
+			console.log('-------------------------------------------------');
 			console.log();
 			console.log('Execute the following command to serve locally');
 			const url = new URL(host);
@@ -37,7 +41,7 @@ async function packageContent(manifest, env, host) {
 	const packageConfig = await readJsonFile('./scripts/package-config.json');
 
 	const packagedDirectory = path.join(import.meta.url, '..', '..', 'packaged', env).replace('file:\\', '');
-	console.log('Packaged Directory', packagedDirectory);
+	console.log('Packaged Directory', forwardSlash(packagedDirectory));
 	console.log();
 
 	try {
@@ -57,25 +61,24 @@ async function packageContent(manifest, env, host) {
 
 	// Copy the list of content packs from the content
 	for (const contentPack of packageConfig.contentPacks) {
-		console.log('Copying content pack', contentPack.id);
-		console.log();
+		console.log('Processing content pack', contentPack.id);
 
 		let includePack = true;
 		if (contentPack.dependsOn) {
-			console.log('Depends On', contentPack.dependsOn);
+			console.log('   Depends On', contentPack.dependsOn);
 			includePack = cache.some((c) => c.endsWith(contentPack.dependsOn));
-			if (includePack) {
-				console.log('Dependency Found', includePack);
-			}
+			console.log('   Dependency Found', includePack);
 		}
 
 		if (includePack) {
-			const fullSourceDir = path.resolve(contentPack.sourceRoot).replace(/\\/g, '/');
+			console.log();
+
+			const fullSourceDir = forwardSlash(path.resolve(contentPack.sourceRoot));
 
 			for (const source of contentPack.sources) {
 				const fullSource = path.join(contentPack.sourceRoot, source);
 
-				const expandedGlob = await FastGlob(path.resolve(fullSource).replace(/\\/g, '/'));
+				const expandedGlob = await FastGlob(forwardSlash(path.resolve(fullSource)));
 
 				if (expandedGlob.length === 0) {
 					console.warn(`WARNING: The source '${source}' has no content`);
@@ -117,16 +120,31 @@ async function packageContent(manifest, env, host) {
 	}
 	await fs.writeFile(hostsFilename, JSON.stringify(manifestHosts, undefined, '\t'));
 
+	console.log();
+	console.log('Finished packaging');
+
 	return packagedDirectory;
 }
 
 async function copyFileWithReplace(packageConfig, env, src, dest, packagedDirectory, host, cache) {
-	const normalizedSrc = path.relative('.', src).replace(/\\/g, '/');
+	const normalizedSrc = forwardSlash(path.relative('.', src));
 	if (!cache.includes(normalizedSrc)) {
 		cache.push(normalizedSrc);
 
-		console.log('Copying', src);
-		console.log('To', path.relative('.', dest));
+		src = forwardSlash(src);
+		dest = forwardSlash(dest);
+
+		const exists = await fileExists(src);
+		if (!exists) {
+			console.warn(
+				`WARNING: Unable to find ${src}, if this asset is required please add it to your deployment manually`
+			);
+			console.log();
+			return;
+		}
+
+		console.log('   Copying', src);
+		console.log('   To', forwardSlash(path.relative('.', dest)));
 		console.log();
 
 		try {
@@ -220,7 +238,7 @@ async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache
 
 	// replace \ with //
 	// and remove any /public from the start of the url
-	url = url.replace(/\\/g, '/').replace(/^\/?public/, '');
+	url = forwardSlash(url).replace(/^\/?public/, '');
 
 	const commonPack = packageConfig.contentPacks.find((p) => p.id === 'common');
 	if (commonPack && (url.startsWith(commonPack.sourceRoot) || url.startsWith('/common/'))) {
@@ -240,6 +258,19 @@ async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache
 
 	if (srcName && destName) {
 		await copyFileWithReplace(packageConfig, env, srcName, destName, packagedDirectory, host, cache);
+	}
+}
+
+function forwardSlash(input) {
+	return input.replace(/\\/g, '/');
+}
+
+async function fileExists(filename) {
+	try {
+		const stats = await fs.stat(filename);
+		return stats.isFile();
+	} catch {
+		return false;
 	}
 }
 
