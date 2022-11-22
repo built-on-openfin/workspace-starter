@@ -66,6 +66,22 @@ You can also substitute tokens based on the environment, the `tokens` property o
 
 This will replace `{OF-MYKEY}` anywhere in the content with `foo` if the environment is set to `local`, in a `uat` build it will substitute it with `bar`.
 
+### Manifest hosts
+
+To add a small level of security the platform reads the `manifest-hosts.json` before loading settings. The file by default will contains just the `host` you specify on the command line. Should you wish to add more entries for use with different environments you can configure the `hosts` property of `package-config.json` mapped by environment.
+
+```json
+"hosts": {
+    "local": [
+        "127.0.0.1",
+        "built-on-openfin.github.io",
+        "openfin.github.io",
+        "samples.openfin.co",
+        "cdn.openfin.co"
+    ]
+}
+```
+
 ### Running the script
 
 Run the script with default parameters as follows.
