@@ -56,19 +56,34 @@ You can also substitute tokens based on the environment, the `tokens` property o
 ```json
 "tokens": {
     "local": {
-        "MYKEY": "foo"
+        "APPTITLE": "My Local App"
     },
     "uat": {
-        "MYKEY": "bar"
+        "APPTITLE": "My UAT App"
     }
 }
 ```
 
-This will replace `{OF-MYKEY}` anywhere in the content with `foo` if the environment is set to `local`, in a `uat` build it will substitute it with `bar`.
+This will replace `{OF-APPTITLE}` anywhere in the content with `foo` if the environment is set to `local`, in a `uat` build it will substitute it with `bar`. The file types that will have this applied are specified by the `replaceTypes` entry in `package-config.json`, defaults to `.html`, `.js`, `.json`.
+
+Example as part of `customSettings` in manifest.
+
+```json
+"customSettings": {
+    ...
+    "browserProvider": {
+        "windowOptions": {
+            "title": "{OF-APPTITLE}",
+            ...
+        }
+    }
+    ...
+}
+```
 
 ### Manifest hosts
 
-To add a small level of security the platform reads the `manifest-hosts.json` before loading settings. The file by default will contains just the `host` you specify on the command line. Should you wish to add more entries for use with different environments you can configure the `hosts` property of `package-config.json` mapped by environment.
+To add a small level of security the platform reads the `manifest-hosts.json` before loading settings, see [How To Secure Your Platform](./how-to-secure-your-platform.md). The file by default will contains just the `host` you specify on the command line. Should you wish to add more entries for use with different environments you can configure the `hosts` property of `package-config.json` mapped by environment.
 
 ```json
 "hosts": {
