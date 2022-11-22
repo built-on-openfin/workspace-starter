@@ -99,7 +99,8 @@
 				"window",
 				"inline-window",
 				"desktop-browser",
-				"inline-external"
+				"inline-external",
+				"connection"
 			]
 		},
 		"endpointProvider": {
@@ -740,6 +741,24 @@
 					"enabled": true,
 					"id": "app-definition",
 					"url": "http://localhost:8080/js/modules/actions/app-definition.bundle.js"
+				}
+			]
+		},
+		"connectionProvider": {
+			"connectionId": "workspace-connection",
+			"supportedActions": [
+				"show-home",
+				"show-store",
+				"show-dock",
+				"hide-home",
+				"hide-store",
+				"minimize-dock"
+			],
+			"connections": [
+				{
+					"identity": { "uuid": "*" },
+					"validatePayload": false,
+					"connectionTypes": [{ "type": "appSource" }, { "type": "snapshotSource" }, { "type": "actions" }]
 				}
 			]
 		}

@@ -27,4 +27,108 @@ With this knowledge you can present them with a link to click and launch if they
 
 [Detect OpenFin support from a web browser](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
 
+## Packaging your app for deployment
+
+The project has an npm script `package-config` which will read the data from a manifest and build a final set of files based on the included content.
+
+The script has 3 parameters.
+
+- `manifest` - Specifies the manifest to use as the source (default: `manifest.fin.json`)
+- `env` - The environment you are building for, could be local, prod, uat etc (default: `local`)
+- `host` - The host location you will be serving from e.g. `https://my.domain.com` (default: `http://localhost:8181`)
+
+The output from the script is stored in the `packaged/${env}` folder, which is created if it does not exist (it is also removed entirely on each run of the script).
+
+The script uses the manifest file as a starting point, the file is processed and then any dependencies are processed similarly in a recursive fashion.
+
+As each file is processed the development host references will be replaced with the `host` option, and environment substitutions are performed (see below).
+
+### Content Packs
+
+After the manifest file is processed the `contentPacks` from `./scripts/package-config.json` are processed in the same way. This can be useful if there are assets that are not directly referenced in the other files, but are still required at runtime.
+
+At a bare minimum the `public` and `common` sections are required, as they are used to locate other assets. Any pack can include a `dependsOn` field, specifying this means that it will only include the packs content if the file specified by the property has been included earlier in the processing.
+
+### Environment Substitutions
+
+You can also substitute tokens based on the environment, the `tokens` property of `package-config.json` is a map of variables by environment.
+
+```json
+"tokens": {
+    "local": {
+        "APPTITLE": "My Local App"
+    },
+    "uat": {
+        "APPTITLE": "My UAT App"
+    }
+}
+```
+
+This will replace `{OF-APPTITLE}` anywhere in the content with `My Local App` if the environment is set to `local`, in a `uat` build it will substitute it with `My UAT App`. The file types that will have this applied are specified by the `replaceTypes` entry in `package-config.json`, defaults to `.html`, `.js`, `.json`.
+
+Example as part of `customSettings` in manifest.
+
+```json
+"customSettings": {
+    ...
+    "browserProvider": {
+        "windowOptions": {
+            "title": "{OF-APPTITLE}",
+            ...
+        }
+    }
+    ...
+}
+```
+
+### Manifest hosts
+
+To add a small level of security the platform reads the `manifest-hosts.json` before loading settings, see [How To Secure Your Platform](./how-to-secure-your-platform.md). The file by default will contains just the `host` you specify on the command line. Should you wish to add more entries for use with different environments you can configure the `hosts` property of `package-config.json` mapped by environment.
+
+```json
+"hosts": {
+    "local": [
+        "127.0.0.1",
+        "built-on-openfin.github.io",
+        "openfin.github.io",
+        "samples.openfin.co",
+        "cdn.openfin.co"
+    ]
+}
+```
+
+### Running the script
+
+Run the script with default parameters as follows.
+
+```shell
+npm run package-content
+```
+
+This will use `manifest.fin.json` as the starting point for the content, store the output in `packaged/local`, and the domain will be served from `http://localhost:8081`
+
+Run the script with custom parameters as follows:
+
+```shell
+npm run package-content --manifest=second.manifest.fin.json --env=uat --host=https://openfin.mydomain.com
+```
+
+This will use `second-manifest.fin.json` as the starting point for the content, store the output in `packaged/uat`, and the domain will be served from `https://openfin.mydomain.com`
+
+### Testing local builds
+
+You can test a local build with the following commands (assuming defaults):
+
+Serve the content:
+
+```shell
+npx http-server packaged\local -p 8181
+```
+
+Start the OpenFin app:
+
+```shell
+start fin://localhost:8181/manifest.fin.json
+```
+
 [<- Back to Table Of Contents](../README.md)
