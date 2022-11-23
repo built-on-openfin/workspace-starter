@@ -153,7 +153,10 @@ export async function init(options: ConnectionProviderOptions) {
 				await disconnect(identity);
 			});
 		} catch (error) {
-			logger.error("There was an error trying to create the channel that will act as connection provider. This functionality will not be available", error);
+			logger.error(
+				"There was an error trying to create the channel that will act as connection provider. This functionality will not be available",
+				error
+			);
 		}
 	} else {
 		logger.info("This platform is not configured to support a connectionProvider");
