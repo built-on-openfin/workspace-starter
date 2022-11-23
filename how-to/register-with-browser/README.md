@@ -76,23 +76,31 @@ npm run client
 
 ![Initial browser window](./assets/Launch-Browser-Window.gif)
 
-3. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page-clicked` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
+3. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
 
-![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
+![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
 
-4. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
+4. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button.
+
+![Initial browser with no tab](./assets/Launch-Browser-No-Tab.gif)
+
+5. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
+
+![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
+
+6. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
 
 ![Launch multiple pages in browser window](./assets/Multiple-Pages.gif)
 
-5. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
-
-![Browser window page info](./assets/Page-Info.gif)
-
-6. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.
+7. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.
 
 ![Launch locked page](./assets/Launch-Locked-Page.gif)
 
-7. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
+8. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
+
+![Browser window page info](./assets/Page-Info.gif)
+
+9. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
 
 ### Note About This Example
 
