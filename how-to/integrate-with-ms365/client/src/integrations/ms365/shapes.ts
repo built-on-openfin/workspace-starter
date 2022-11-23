@@ -19,6 +19,9 @@ export interface Microsoft365Settings {
 		contact: string;
 		team: string;
 		channel: string;
+		cross: string;
+		check: string;
+		clock: string;
 	};
 }
 

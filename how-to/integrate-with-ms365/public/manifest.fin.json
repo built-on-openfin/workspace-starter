@@ -93,7 +93,10 @@
 							"call": "http://localhost:8080/images/icons/call.svg",
 							"contact": "http://localhost:8080/images/icons/contact.svg",
 							"team": "http://localhost:8080/images/icons/team.svg",
-							"channel": "http://localhost:8080/images/icons/channel.svg"
+							"channel": "http://localhost:8080/images/icons/channel.svg",
+							"clock": "http://localhost:8080/images/icons/clock.svg",
+							"check": "http://localhost:8080/images/icons/check.svg",
+							"cross": "http://localhost:8080/images/icons/cross.svg"
 						}
 					}
 				}
