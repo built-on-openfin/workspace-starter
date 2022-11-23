@@ -1,4 +1,5 @@
 import {
+	ActionBodyClickType,
 	addEventListener as addNotificationEventListener,
 	ContainerTemplateFragment,
 	create,
@@ -49,6 +50,14 @@ async function initDom() {
 
 	const btnNotificationSimple = document.querySelector("#btnNotificationSimple");
 	btnNotificationSimple.addEventListener("click", async () => showSimpleNotification());
+
+	const btnNotificationBodyDismiss = document.querySelector("#btnNotificationBodyDismiss");
+	btnNotificationBodyDismiss.addEventListener("click", async () => showSimpleNotificationBodyDismiss());
+
+	const btnNotificationBodyDismissAction = document.querySelector("#btnNotificationBodyDismissAction");
+	btnNotificationBodyDismissAction.addEventListener("click", async () =>
+		showSimpleNotificationBodyDismissAction()
+	);
 
 	const btnNotificationActionable = document.querySelector("#btnNotificationActionable");
 	btnNotificationActionable.addEventListener("click", async () => showActionableNotification());
@@ -124,12 +133,30 @@ async function initListener() {
 	});
 
 	addNotificationEventListener("notification-action", (event) => {
-		loggingAddEntry(
-			`\tData: ${event?.result?.customData ? JSON.stringify(event.result.customData) : "None"}`
-		);
-		loggingAddEntry(`\tTask: ${event?.result?.task ?? "None"}`);
-		loggingAddEntry(`Action: ${event.notification.id}`);
+		if (event?.result?.BODY_CLICK === "dismiss_event") {
+			if (event.notification?.customData?.action) {
+				loggingAddEntry(
+					`\tData: ${
+						event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
+					}`
+				);
+			} else {
+				loggingAddEntry("\tNo action");
+			}
+			loggingAddEntry("\tBody click dismiss");
+		} else {
+			loggingAddEntry(
+				`\tData: ${event?.result?.customData ? JSON.stringify(event.result.customData) : "None"}`
+			);
+			loggingAddEntry(`\tTask: ${event?.result?.task ?? "None"}`);
+			loggingAddEntry(`Action: ${event.notification.id}`);
+		}
+
 		console.log(event);
+	});
+
+	addNotificationEventListener("notification-toast-dismissed", (event) => {
+		loggingAddEntry(`Toast Dismissed: ${event.notification.id}`);
 	});
 
 	addNotificationEventListener("notification-form-submitted", (event) => {
@@ -187,6 +214,42 @@ async function showSimpleNotification() {
 		template: "markdown",
 		id: crypto.randomUUID(),
 		platform: activePlatform
+	};
+
+	await create(notification);
+}
+
+async function showSimpleNotificationBodyDismiss() {
+	const notification: NotificationOptions = {
+		title: "Simple Notification",
+		body: "This is a simple notification that be dismissed by clicking the body",
+		toast: "transient",
+		category: "default",
+		template: "markdown",
+		id: crypto.randomUUID(),
+		platform: activePlatform,
+		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT }
+	};
+
+	await create(notification);
+}
+
+async function showSimpleNotificationBodyDismissAction() {
+	const notification: NotificationOptions = {
+		title: "Simple Notification",
+		body: "This is a simple notification that be dismissed by clicking the body and trigger custom action",
+		toast: "transient",
+		category: "default",
+		template: "markdown",
+		id: crypto.randomUUID(),
+		platform: activePlatform,
+		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT },
+		customData: {
+			action: "custom-action",
+			data: {
+				message: "Body click custom action"
+			}
+		}
 	};
 
 	await create(notification);
