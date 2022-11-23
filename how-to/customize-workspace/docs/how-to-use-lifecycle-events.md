@@ -64,6 +64,9 @@ export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
 
 The lifecycle events that are available to connect to are:
 
+- `auth-logged-in` - The event is fired after logging in. We would recommend using after-bootstrap if you are looking to perform actions (as this would work regardless of whether or not they would need to log in). Use this if you want to reverse changes that you may have set when the auth-session-expired event happened (e.g. maybe you hid a window until they have logged back in as an example).
+- `auth-session-expired` - The event is called when the auth provider you have configured believes that the session has expired. The platform will trigger the auth providers login action but you might want to perform additional platform specific steps (e.g. hide windows until after they have logged back in).
+- `auth-before-logged-out` - The event is called just before the user logs out. You might want to use this instead of before quit in case you need to call an authenticated service (e.g. save an audit entry or something).
 - `after-bootstrap` - This lifecycle event is fired when all the other components have been bootstrapped, in your manifest you could disable the autoShow for all workspace components and launch a specific view for your platform.
 - `before-quit` - The event is called before all the modules and components are torn down during the quit process, this allows your modules to perform any persistence or cleanup operations of their own.
 

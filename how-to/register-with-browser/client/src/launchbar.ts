@@ -48,6 +48,18 @@ export async function createBrowserWindow(): Promise<BrowserWindowModule> {
 	return createdBrowserWin;
 }
 
+export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const pages: Page[] = [page];
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: { pages },
+		state: "maximized"
+	};
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	return createdBrowserWin;
+}
+
 export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
 	const pages: Page[] = [page];
@@ -112,7 +124,7 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 
 export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page1: Page = await createPageWithLayout("Untitled Page 1", defaultPageLayout);
+	const page1: Page = await createPageWithLayout("Locked Page", defaultPageLayout);
 	const lockPage1: Page = { isLocked: true, ...page1 };
 	const pages: Page[] = [page, lockPage1];
 	const toolbarOptions: ToolbarOptions = {
@@ -158,6 +170,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// CREATE BROWSER WINDOW WITH VIEW
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	createBrowserWinBtn.addEventListener("click", createBrowserWindow);
+
+	// CREATE BROWSER WINDOW MAXIMIZED
+	const createBrowserMaximized = document.querySelector("#launch-browser-window-maximized");
+	createBrowserMaximized.addEventListener("click", createBrowserWindowMaximized);
 
 	// CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON
 	const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");

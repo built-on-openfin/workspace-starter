@@ -62,6 +62,25 @@ async function disconnect(identity) {
 	}
 }
 
+async function getConnectionListing(identity: OpenFin.Identity): Promise<Connection> {
+	const listedConnection = connectionOptions.connections.find(
+		(entry) => entry.identity.uuid === identity.uuid
+	);
+
+	if (listedConnection !== undefined) {
+		return listedConnection;
+	}
+
+	const defaultConnection = connectionOptions.connections.find((entry) => entry.identity.uuid === "*");
+	if (defaultConnection !== undefined) {
+		logger.info(
+			`A specific listing for connection ${identity.uuid} isn't listed but there is a default * entry and it will be used for this connection.`
+		);
+		defaultConnection.identity = identity;
+	}
+	return defaultConnection;
+}
+
 export async function init(options: ConnectionProviderOptions) {
 	if (initialized) {
 		return;
@@ -69,64 +88,76 @@ export async function init(options: ConnectionProviderOptions) {
 	initialized = true;
 	connectionOptions = options;
 	if (connectionOptions?.connectionId !== undefined) {
-		connectionService = await fin.InterApplicationBus.Channel.create(connectionOptions.connectionId);
-		logger.info("Configuring connection provider");
-		connectionService.onConnection((identity, payload) => {
-			// can reject a connection here by throwing an error
-			logger.info("Client connection request identity", JSON.stringify(identity));
-			logger.info("Client connection request payload", JSON.stringify(payload));
-
-			const validatedConnection = connectionOptions.connections.find(
-				(entry) => entry.identity.uuid === identity.uuid
+		try {
+			connectionService = await fin.InterApplicationBus.Channel.create(
+				`${fin.me.identity.uuid}-${connectionOptions.connectionId}`
 			);
-			let isValid = false;
-			let errorMessage =
-				"This connection has failed the validation check and cannot connect to the requested application";
-			if (validatedConnection !== undefined) {
-				isValid = true;
-				if (validatedConnection.validatePayload) {
-					logger.warn(
-						`This connection has specified payload validation but that check needs to be implemented. UUID: ${validatedConnection.identity.uuid}`
-					);
+			logger.info("Configuring connection provider");
+			connectionService.onConnection(async (identity, payload) => {
+				// can reject a connection here by throwing an error
+				logger.info("Client connection request identity", JSON.stringify(identity));
+				logger.info("Client connection request payload", JSON.stringify(payload));
+
+				const validatedConnection = await getConnectionListing(identity);
+				let isValid = false;
+				let errorMessage =
+					"This connection has failed the validation check and cannot connect to the requested application";
+				if (validatedConnection !== undefined) {
 					isValid = true;
-				}
-				if (isValid) {
-					if (connectedClients[identity.uuid] !== undefined) {
-						isValid = false;
-						errorMessage = `This platform can only accept one connection from an external connection. The uuid (${identity.uuid}) is already registered.`;
-					} else {
-						// assign the passed identity
-						validatedConnection.identity = identity;
-						connectedClients[identity.uuid] = validatedConnection;
-						logger.info(`The following connection has been added to the connected list: ${identity.uuid}`);
+					if (validatedConnection.validatePayload) {
+						logger.warn(
+							`This connection has specified payload validation but that check needs to be implemented. UUID: ${validatedConnection.identity.uuid}`
+						);
+						isValid = true;
+					}
+					if (isValid) {
+						if (connectedClients[identity.uuid] !== undefined) {
+							isValid = false;
+							errorMessage = `This platform can only accept one connection from an external connection. The uuid (${identity.uuid}) is already registered.`;
+						} else {
+							// assign the passed identity
+							validatedConnection.identity = identity;
+							connectedClients[identity.uuid] = validatedConnection;
+							logger.info(`The following connection has been added to the connected list: ${identity.uuid}`);
+						}
 					}
 				}
-			}
 
-			if (!isValid) {
-				logger.warn(
-					`The following connection has not been added to the connected list: ${identity.uuid} as it failed validation`
-				);
-				throw new Error(errorMessage);
-			}
-		});
+				if (!isValid) {
+					logger.warn(
+						`The following connection has not been added to the connected list: ${identity.uuid} as it failed validation`
+					);
+					throw new Error(errorMessage);
+				}
+			});
 
-		connectionService.onDisconnection(async (identity) => {
-			logger.info(`Client disconnected uuid: ${identity.uuid}, name: ${identity.name}`);
-			await disconnect(identity);
-		});
+			connectionService.onDisconnection(async (identity) => {
+				logger.info(`Client disconnected uuid: ${identity.uuid}, name: ${identity.name}`);
+				await disconnect(identity);
+			});
 
-		connectionService.register("action", async (payload, identity) => {
-			logger.info("Action received from client", identity, payload);
-			const result = await executeAction(identity, payload as { action: string });
-			return { result };
-		});
+			connectionService.register("action", async (payload, identity) => {
+				logger.info("Action received from client", identity, payload);
+				const result = await executeAction(identity, payload as { action: string });
+				return { result };
+			});
 
-		connectionService.register("canAction", async (payload, identity) => {
-			logger.info("Check for action permission received from client", identity, payload);
-			const result = isActionSupported(identity, payload as { action: string });
-			return { result };
-		});
+			connectionService.register("canAction", async (payload, identity) => {
+				logger.info("Check for action permission received from client", identity, payload);
+				const result = isActionSupported(identity, payload as { action: string });
+				return { result };
+			});
+
+			connectionService.register("disconnect", async (payload, identity) => {
+				logger.info("Request for disconnection received from client", identity, payload);
+				await disconnect(identity);
+			});
+		} catch (error) {
+			logger.error(
+				"There was an error trying to create the channel that will act as connection provider. This functionality will not be available",
+				error
+			);
+		}
 	} else {
 		logger.info("This platform is not configured to support a connectionProvider");
 	}

@@ -11,5 +11,6 @@ export async function launchView(
 	} else {
 		viewOptions = view;
 	}
+
 	return platform.createView(viewOptions, targetIdentity);
 }

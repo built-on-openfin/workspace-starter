@@ -228,7 +228,7 @@ module.exports = {
 		'no-self-compare': ['error'],
 		'no-sequences': ['error'],
 		'no-setter-return': ['off'],
-		'no-shadow': ['error'],
+		'no-shadow': ['off'],
 		'no-shadow-restricted-names': ['error'],
 		'no-sparse-arrays': ['error'],
 		'no-tabs': ['off', { allowIndentationTabs: true }],
@@ -391,6 +391,12 @@ module.exports = {
 	},
 	overrides: [
 		{
+			files: ['*.js', '*.cjs', '*.mjs'],
+			rules: {
+				'no-shadow': ['error']
+			}
+		},
+		{
 			extends: [
 				'plugin:@typescript-eslint/recommended',
 				'plugin:@typescript-eslint/recommended-requiring-type-checking'
@@ -487,6 +493,7 @@ module.exports = {
 				'@typescript-eslint/no-non-null-assertion': ['error'],
 				'@typescript-eslint/no-parameter-properties': ['error'],
 				'@typescript-eslint/no-require-imports': ['error'],
+				'@typescript-eslint/no-shadow': ['error'],
 				'@typescript-eslint/no-this-alias': ['error'],
 				'@typescript-eslint/no-throw-literal': ['error'],
 				'@typescript-eslint/no-type-alias': ['off'],

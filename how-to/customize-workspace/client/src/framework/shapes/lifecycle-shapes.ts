@@ -1,7 +1,12 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
-export type LifecycleEvents = "after-bootstrap" | "before-quit";
+export type LifecycleEvents =
+	| "auth-logged-in"
+	| "auth-session-expired"
+	| "auth-before-logged-out"
+	| "after-bootstrap"
+	| "before-quit";
 
 export type LifecycleHandler = (platform: WorkspacePlatformModule) => Promise<void>;
 
