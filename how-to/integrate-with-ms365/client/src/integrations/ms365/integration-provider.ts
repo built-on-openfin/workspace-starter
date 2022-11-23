@@ -229,6 +229,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		await this.connectProvider();
 
+		const theme = await this._integrationHelpers.getCurrentTheme();
+
+		const themedIcons = ["calendar", "call", "channel", "chat", "contact", "email", "share", "team"];
+
+		for (const themedIcon of themedIcons) {
+			const response = await fetch(this._settings.images[themedIcon] as string);
+			let svg = await response.text();
+			svg = svg.replace(/rgb\(0,0,0\)/g, theme.palette.textDefault);
+			this._settings.images[themedIcon] = this.svgToInline(svg);
+		}
+
 		this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
 		window.setTimeout(async () => {
 			await this.updateCache();
@@ -998,7 +1009,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		let picData: string | undefined;
 		let presence: Presence | undefined;
 		let availableColor: "red" | "green" | "orange" = "red";
-		let availableIcon: string = this.iconCross(16);
+		let availableIcon: string = this._settings.images.cross;
 		let availability: string = "Unknown";
 		let teams = [];
 
@@ -1036,10 +1047,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 				if (presence?.availability === "Available") {
 					availableColor = "green";
-					availableIcon = this.iconCheck(16);
+					availableIcon = this._settings.images.check;
 				} else if (presence?.availability === "Away" || presence?.availability === "BeRightBack") {
 					availableColor = "orange";
-					availableIcon = this.iconClock(16);
+					availableIcon = this._settings.images.clock;
 				}
 			} else {
 				this._logger.error("Failed getting user presence", presenceResponse.status, presenceResponse.body);
@@ -1204,7 +1215,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -1214,7 +1225,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				),
 				data: {
 					picData: picData ?? this._settings.images.contact,
-					status: `data:image/svg+xml;utf8,${availableIcon}`,
+					status: availableIcon,
 					displayName: user.displayName,
 					availability,
 					...this.mapPairsToData(pairs),
@@ -1394,7 +1405,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -1495,7 +1506,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -1619,7 +1630,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -1754,7 +1765,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -1879,7 +1890,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -2003,7 +2014,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							}
 						),
 						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(buttons)
+						await this.createButtonsLayout(theme, buttons)
 					],
 					{
 						padding: "10px",
@@ -2088,7 +2099,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						if (r.status === 200) {
 							picData = `data:image/jpeg;base64,${r.body as string}`;
 						} else {
-							picData = `data:image/svg+xml;utf8,${this.imageProfileNone(size, user.displayName)}`;
+							picData = this.svgToInline(this.imageProfileNone(size, user.displayName));
 						}
 						this._profileImageCache[user.id] = {
 							data: picData,
@@ -2213,6 +2224,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createButtonsLayout(
+		theme: CustomThemeOptions,
 		buttons: {
 			title: string;
 			action: string;
@@ -2234,7 +2246,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							width: "40px",
 							height: "40px",
 							padding: "0px",
-							justifyContent: "center"
+							justifyContent: "center",
+							backgroundColor: theme.palette.background6
 						},
 						[
 							await this._integrationHelpers.templateHelpers.createImage(b.image, b.imageAltText, {
@@ -2253,29 +2266,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private imageProfileNone(size: number, name: string): string {
-		return `<svg fill="%23DDDDDD" viewBox="0 0 512 512" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg">
+		return `<svg fill="#DDDDDD" viewBox="0 0 512 512" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg">
 		<style>text{font: bold 350px sans-serif;fill: black;}</style>
 		<rect width="512" height="512" />
 		<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">${name[0]}</text>
 		</svg>`;
 	}
 
-	private iconCheck(size: number): string {
-		return `<svg stroke="%23FFFFFF" fill="%23FFFFFF" stroke-width="0" viewBox="0 0 512 512" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg">
-		<path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
-		</svg>`;
-	}
-
-	private iconCross(size: number): string {
-		return `<svg stroke="%23FFFFFF" fill="%23FFFFFF" stroke-width="0" viewBox="0 0 352 512" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg">
-		<path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
-		</svg>`;
-	}
-
-	private iconClock(size: number): string {
-		return `<svg stroke="%23FFFFFF" fill="%23FFFFFF" stroke-width="2" viewBox="0 0 16 16" height="${size}px" width="${size}px" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
-		<polyline points="8 1 8 9 15 15"/>
-		</svg>`;
+	private svgToInline(svg: string): string {
+		return `data:image/svg+xml;utf8,${svg.replace(/#/g, "%23")}`;
 	}
 
 	private base64IdToUrl(b64Id: string): string {
