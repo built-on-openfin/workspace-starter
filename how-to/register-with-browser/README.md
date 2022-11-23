@@ -80,13 +80,13 @@ npm run client
 
 ![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
 
-4. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button.
+4. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page-clicked` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
+
+![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
+
+5. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button.
 
 ![Initial browser with no tab](./assets/Launch-Browser-No-Tab.gif)
-
-5. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
-
-![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
 
 6. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
 
