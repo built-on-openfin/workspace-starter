@@ -55,7 +55,7 @@ Want to learn about specific workspace components? If you are starting out and w
 
 ## Integrations
 
-This section includes samples that utilize the official integrations listed on the OpenFin Website (see [Integration Docs](https://developers.openfin.co/of-docs/docs/salesforce-integration))
+This section includes samples that utilize the official integrations listed on the OpenFin Website (see [Integration Docs](https://developers.openfin.co/of-docs/#section-third-party-applications))
 
 | Example                                                                            | Description                                                                                                                                                                                              | Live Launch                                                                                                                                                                |
 | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
