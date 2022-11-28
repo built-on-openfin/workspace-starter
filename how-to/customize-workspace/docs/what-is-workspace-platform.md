@@ -3,11 +3,15 @@
 
 [<- Back to Table Of Contents](../README.md)
 
-# What Is Customize Workspace?
+# What Is A Workspace Platform?
 
-![What is customize workspace?](./assets/customize-workspace.png)
+![What is a workspace platform?](./assets/workspace-platform.png)
 
 A Workspace Platform and it's use of the Browser component is it's own OpenFin application running under it's own process, Notification Center is another OpenFin application running under it's own process and Dock, Store and Home UI fall under a Workspace application under it's own process.
+
+The workspace platform takes advantages of your servers to serve content, provide data (e.g. apps) or provide authentication. The following image may help to visualize it:
+
+![Workspace Platform with Services](./assets/workspace-platform-with-servers.png)
 
 By looking at [container](./what-is-container.md) and [workspace](./what-is-workspace.md) you can see that you have the ability to build a rich user experience using OpenFin's offering.
 
@@ -18,7 +22,7 @@ If you have:
 - Experience of building platforms
 - Time
 
-The you could take the starters in this repo and this how-to and use it as guidance for your PoC (Proof of Concept)/PoV (Proof of Value) and start fresh.
+Then you could take the starters in this repo and this how-to and use it as guidance for your PoC (Proof of Concept)/PoV (Proof of Value) and then start fresh with a fresh codebase when you are done.
 
 If you wish to validate functionality and you want to get up and running quickly then you can use customize-workspace. This is a workspace platform that has been built to let you get setup with a number of defaults while still allowing you a number of extension points that you can define via settings.
 
