@@ -93,7 +93,10 @@
 							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/call.svg",
 							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/contact.svg",
 							"team": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/team.svg",
-							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/channel.svg"
+							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/channel.svg",
+							"clock": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/clock.svg",
+							"check": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/check.svg",
+							"cross": "https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/integrate-with-ms365/images/icons/cross.svg"
 						}
 					}
 				}
