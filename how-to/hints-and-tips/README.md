@@ -7,6 +7,6 @@
 
 This section is where we will add small hints and tips that isn't specific to any one sample but may prove useful.
 
-| Topic                            | Description                                                            |
-| -------------------------------- | ---------------------------------------------------------------------- |
-| [Channel API](./doc/channel-api) | This section covers things related to the Channel API and it's use.use |
+| Topic                            | Description                                                         |
+| -------------------------------- | ------------------------------------------------------------------- |
+| [Channel API](./doc/channel-api) | This section covers things related to the Channel API and it's use. |

@@ -9,7 +9,7 @@ OpenFin’s Channel API on the InterApplicationBus (IAB) provides optionality fo
 
 ## Naming a Channel
 
-When naming a channel you should ensure that it will be unique. If it is something common e.g. "data" then you may come across conflicts where other OpenFin applications have also called their channel "data". So you should ensure that it is unique.
+When naming a channel you should ensure that it will be unique. If it is something common e.g. "data" then you may come across conflicts where other OpenFin applications have also called their channel "data".
 
 ### Suggestion
 
