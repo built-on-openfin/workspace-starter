@@ -630,7 +630,7 @@
 				"items": [
 					{
 						"title": "All Apps",
-						"tags": ["view", "page", "manifest", "native"]
+						"tags": ["view", "page", "manifest", "native", "desktop-browser"]
 					},
 					{
 						"title": "Views",
