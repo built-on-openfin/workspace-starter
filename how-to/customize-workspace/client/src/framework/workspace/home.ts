@@ -43,7 +43,6 @@ const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 const HOME_TAG_FILTERS = "tags";
 
 let isHomeRegistered = false;
-let registrationInfo: RegistrationMetaInfo;
 let enablePageIntegration: boolean = true;
 let enableWorkspaceIntegration: boolean = true;
 
@@ -382,7 +381,9 @@ async function getResults(
 	};
 }
 
-export async function register(): Promise<RegistrationMetaInfo> {
+export async function register(): Promise<
+	RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> }
+> {
 	logger.info("Initializing home");
 	const settings = await getSettings();
 	if (
@@ -603,7 +604,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		dispatchFocusEvents: true
 	};
 
-	registrationInfo = await Home.register(cliProvider);
+	const registrationInfo = await Home.register(cliProvider);
 	logger.info("Version:", registrationInfo);
 	isHomeRegistered = true;
 	logger.info("Home provider initialized");

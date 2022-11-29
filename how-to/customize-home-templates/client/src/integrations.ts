@@ -6,18 +6,22 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type {
-	Integration,
+	ModuleDefinition,
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationProviderOptions
 } from "./integrations-shapes";
 
-const integrationModules: { [id: string]: IntegrationModule<unknown> } = {};
+const integrationModules: { [id: string]: IntegrationModule } = {};
 
 const homeIntegrations: {
-	module: IntegrationModule<unknown>;
-	integration: Integration<unknown>;
+	implementation: IntegrationModule;
+	definition: ModuleDefinition;
 }[] = [];
+
+const POPULATE_QUERY = "Populate Query";
+
+let integrationHelpers: IntegrationHelpers;
 
 /**
  * Register all the workspace integrations.
@@ -26,8 +30,10 @@ const homeIntegrations: {
  */
 export async function register(
 	integrationProvider: IntegrationProviderOptions,
-	integrationHelpers: IntegrationHelpers
+	helpers: IntegrationHelpers
 ): Promise<void> {
+	integrationHelpers = helpers;
+
 	const integrations = integrationProvider?.modules;
 	if (Array.isArray(integrations)) {
 		for (const integration of integrations) {
@@ -43,8 +49,8 @@ export async function register(
 				if (integrationModules[integration.id]) {
 					const homeIntegration = integrationModules[integration.id];
 					homeIntegrations.push({
-						module: homeIntegration,
-						integration
+						implementation: homeIntegration,
+						definition: integration
 					});
 					if (homeIntegration.initialize) {
 						await homeIntegration.initialize(integration, () => {}, integrationHelpers);
@@ -63,8 +69,8 @@ export async function register(
  */
 export async function deregister(integrationProvider?: IntegrationProviderOptions): Promise<void> {
 	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.closedown) {
-			await homeIntegration.module.closedown();
+		if (homeIntegration.implementation.closedown) {
+			await homeIntegration.implementation.closedown();
 		}
 	}
 }
@@ -90,8 +96,8 @@ export async function getSearchResults(
 
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getSearchResults) {
-			promises.push(homeIntegration.module.getSearchResults(query, filters, lastResponse));
+		if (homeIntegration.implementation.getSearchResults) {
+			promises.push(homeIntegration.implementation.getSearchResults(query, filters, lastResponse));
 		}
 	}
 
@@ -120,10 +126,20 @@ export async function getSearchResults(
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	let results: HomeSearchResult[] = [];
 
-	for (const homeIntegration of homeIntegrations) {
-		if (homeIntegration.module.getHelpSearchEntries) {
-			const integrationResults = await homeIntegration.module.getHelpSearchEntries();
-			results = results.concat(integrationResults);
+	for (const integrationModule of homeIntegrations) {
+		if (integrationModule.implementation.getHelpSearchEntries) {
+			const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
+
+			if (integrationHelpers?.setSearchQuery) {
+				for (const helpEntry of helpSearchEntries) {
+					if (helpEntry.data?.populateQuery) {
+						helpEntry.actions = helpEntry.actions ?? [];
+						helpEntry.actions.push({ name: POPULATE_QUERY, hotkey: "enter" });
+					}
+				}
+			}
+
+			results = results.concat(helpSearchEntries);
 		}
 	}
 
@@ -141,13 +157,23 @@ export async function itemSelection(
 	lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
 	if (result.data) {
-		const foundIntegration = homeIntegrations.find((hi) => hi.integration.id === result.data?.providerId);
+		if (
+			integrationHelpers.setSearchQuery &&
+			result.action.trigger === "user-action" &&
+			result.key === POPULATE_QUERY &&
+			typeof result.data?.populateQuery === "string"
+		) {
+			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);
+			return true;
+		}
 
-		if (foundIntegration?.module?.itemSelection) {
-			const handled = await foundIntegration.module.itemSelection(result, lastResponse);
+		const foundIntegration = homeIntegrations.find((hi) => hi.definition.id === result.data?.providerId);
+
+		if (foundIntegration?.implementation?.itemSelection) {
+			const handled = await foundIntegration.implementation.itemSelection(result, lastResponse);
 
 			if (!handled) {
-				console.warn(`Error while trying to handle ${foundIntegration.integration.id} entry`, result.data);
+				console.warn(`Error while trying to handle ${foundIntegration.definition.id} entry`, result.data);
 			}
 
 			return handled;

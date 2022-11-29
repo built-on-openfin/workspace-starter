@@ -8,11 +8,14 @@ export async function init() {
 	console.log("Initialising the bootstrapper");
 	const settings = await getSettings();
 
-	await register();
+	const homeRegistration = await register();
 	await show();
 
 	await registerIntegration(settings.integrationProvider, {
-		openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+		setSearchQuery: homeRegistration.setSearchQuery
+			? async (query) => homeRegistration.setSearchQuery(query)
+			: undefined
 	});
 
 	const providerWindow = fin.Window.getCurrentSync();

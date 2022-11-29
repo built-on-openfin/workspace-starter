@@ -8,7 +8,8 @@ import {
 	HomeSearchListenerRequest,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult
+	HomeSearchResult,
+	RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getApps } from "./apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
@@ -17,7 +18,9 @@ import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
 
-export async function register() {
+export async function register(): Promise<
+	RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> }
+> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (
@@ -108,9 +111,10 @@ export async function register() {
 		dispatchFocusEvents: true
 	};
 
-	await Home.register(cliProvider);
+	const registrationInfo = await Home.register(cliProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
+	return registrationInfo;
 }
 
 export async function show() {
