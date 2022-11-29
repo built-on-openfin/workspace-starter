@@ -22,7 +22,8 @@
 		"how-to/migrate-from-a-previous-version",
 		"how-to/integrate-with-sso",
 		"how-to/integrate-server-authentication",
-		"how-to/integrate-with-salesforce-basic"
+		"how-to/integrate-with-salesforce-basic",
+		"how-to/hints-and-tips"
 	],
 	"howToCustomFolder": "workspace/vnext",
 	"contributors": [
