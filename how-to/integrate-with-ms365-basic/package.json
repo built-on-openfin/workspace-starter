@@ -20,7 +20,7 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.25.0",
-		"@openfin/core": "^27.70.8",
+		"@openfin/core": "^27.71.21",
 		"@openfin/microsoft365": "1.0.0",
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next"
