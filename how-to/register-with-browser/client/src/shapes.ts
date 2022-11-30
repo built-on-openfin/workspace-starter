@@ -1,4 +1,4 @@
-import type { CustomThemes } from "@openfin/workspace-platform";
+import type { CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
 
 interface BrowserProvider {
 	windowOptions: {
@@ -10,7 +10,7 @@ interface BrowserProvider {
 }
 
 interface ThemeProvider {
-	themes: CustomThemes;
+	themes: CustomThemeOptions[];
 }
 
 export interface LaunchBarWindowSettings extends OpenFin.WindowCreationOptions {

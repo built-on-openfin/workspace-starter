@@ -1,3 +1,4 @@
+import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import {
 	CLITemplate,
 	HomeSearchResult,
@@ -87,7 +88,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 	/**
 	 * The channel for issuing feed updates.
 	 */
-	private _channelProvider: OpenFin.ChannelProvider | undefined;
+	private _channelProvider: ChannelProvider | undefined;
 
 	/**
 	 * The subscribers for the feeds.

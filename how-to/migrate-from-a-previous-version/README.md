@@ -517,11 +517,11 @@ export async function init() {
 This is done when you initialize your platform:
 
 ```javascript
-import { init as workspacePlatformInit, CustomThemes } from '@openfin/workspace-platform';
+import { init as workspacePlatformInit, CustomThemeOptions } from '@openfin/workspace-platform';
 
 export async function init() {
   console.log('Initialising platform');
-  const theme: CustomThemes = [
+  const theme: CustomThemeOptions[] = [
     {
       label: 'Starter Theme',
       logoUrl: 'http://localhost:8080/favicon.ico',

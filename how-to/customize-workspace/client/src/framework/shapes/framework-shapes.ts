@@ -1,11 +1,11 @@
-import type { StorefrontFooter, Image } from "@openfin/workspace";
+import type { Image, StorefrontFooter } from "@openfin/workspace";
 import type {
-	CustomThemes,
 	GlobalContextMenuOptionType,
 	PageTabContextMenuOptionType,
 	ToolbarButton,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
+import type { CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
 import type { NotificationsPlatform } from "@openfin/workspace/notifications";
 import type { ActionsProviderOptions } from "./actions-shapes";
 import type { AuthProviderOptions } from "./auth-shapes";
@@ -136,7 +136,7 @@ interface DockProviderOptions {
 }
 
 interface ThemeProviderOptions {
-	themes: CustomThemes;
+	themes: CustomThemeOptions[];
 }
 export type AppEndpointOptions =
 	| string

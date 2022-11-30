@@ -1,4 +1,3 @@
-import type { CustomThemes } from "@openfin/workspace-platform";
 import type {
 	CustomPaletteSet,
 	CustomThemeOptions
@@ -54,7 +53,7 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	}
 };
 
-let validatedThemes: CustomThemes;
+let validatedThemes: CustomThemeOptions[];
 
 function getSystemPreferredColorScheme(): "light" | "dark" {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
@@ -78,7 +77,7 @@ export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPalett
 	return DEFAULT_PALETTES;
 }
 
-export async function getThemes(): Promise<CustomThemes> {
+export async function getThemes(): Promise<CustomThemeOptions[]> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);
@@ -86,8 +85,8 @@ export async function getThemes(): Promise<CustomThemes> {
 	return validatedThemes.slice();
 }
 
-export function validateThemes(themes: CustomThemes): CustomThemes {
-	const customThemes: CustomThemes = [];
+export function validateThemes(themes: CustomThemeOptions[]): CustomThemeOptions[] {
+	const customThemes: CustomThemeOptions[] = [];
 
 	if (Array.isArray(themes)) {
 		const preferredColorScheme = getSystemPreferredColorScheme();

@@ -1,5 +1,5 @@
 import type { StorefrontFooter, Image } from "@openfin/workspace";
-import type { CustomThemes } from "@openfin/workspace-platform";
+import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 
 interface HomeProvider {
 	id: string;
@@ -11,7 +11,7 @@ interface HomeProvider {
 }
 
 interface ThemeProvider {
-	themes: CustomThemes;
+	themes: CustomThemeOptions[];
 }
 
 interface AppProvider {
