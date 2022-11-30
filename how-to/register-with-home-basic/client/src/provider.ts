@@ -1,3 +1,4 @@
+import type { HomeRegistration } from "@openfin/workspace";
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
 import { register, show, hide, deregister } from "./home";
 
@@ -9,17 +10,25 @@ async function init() {
 	const deregisterHome = document.querySelector<HTMLButtonElement>("#deregister");
 	const showHome = document.querySelector<HTMLButtonElement>("#show");
 	const hideHome = document.querySelector<HTMLButtonElement>("#hide");
+	const query = document.querySelector<HTMLInputElement>("#query");
+	const go = document.querySelector<HTMLButtonElement>("#go");
 
 	showHome.disabled = true;
 	hideHome.disabled = true;
 	deregisterHome.disabled = true;
+	query.disabled = true;
+	go.disabled = true;
+
+	let homeRegistration: HomeRegistration;
 
 	registerHome.addEventListener("click", async () => {
-		await register();
+		homeRegistration = await register();
 		showHome.disabled = false;
 		hideHome.disabled = false;
 		deregisterHome.disabled = false;
 		registerHome.disabled = true;
+		query.disabled = false;
+		go.disabled = false;
 	});
 
 	deregisterHome.addEventListener("click", async () => {
@@ -27,6 +36,9 @@ async function init() {
 		hideHome.disabled = true;
 		deregisterHome.disabled = true;
 		registerHome.disabled = false;
+		query.disabled = true;
+		go.disabled = true;
+		homeRegistration = undefined;
 		await deregister();
 	});
 
@@ -36,6 +48,13 @@ async function init() {
 
 	hideHome.addEventListener("click", async () => {
 		await hide();
+	});
+
+	go.addEventListener("click", async () => {
+		if (homeRegistration) {
+			await show();
+			await homeRegistration.setSearchQuery(query.value);
+		}
 	});
 }
 

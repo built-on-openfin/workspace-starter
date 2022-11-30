@@ -73,7 +73,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				actions: [],
 				data: {
 					providerId: AsyncIntegrationProvider._PROVIDER_ID,
-					populateQuery: "/contacts-sync"
+					populateQuery: "/contacts-sync "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
@@ -93,7 +93,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				actions: [],
 				data: {
 					providerId: AsyncIntegrationProvider._PROVIDER_ID,
-					populateQuery: "/contacts-partial"
+					populateQuery: "/contacts-partial "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
@@ -113,7 +113,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				actions: [],
 				data: {
 					providerId: AsyncIntegrationProvider._PROVIDER_ID,
-					populateQuery: "/contacts"
+					populateQuery: "/contacts "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(

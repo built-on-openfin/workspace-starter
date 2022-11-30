@@ -212,20 +212,20 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 				entryWorkspaceId === currentWorkspaceId
 					? []
 					: (shareEnabled
-						? [
+							? [
+									{
+										name: HOME_ACTION_SHARE_WORKSPACE,
+										hotkey: "CmdOrCtrl+Shift+S"
+									}
+							  ]
+							: []
+					  ).concat([
 							{
-								name: HOME_ACTION_SHARE_WORKSPACE,
-								hotkey: "CmdOrCtrl+Shift+S"
-							}
-						]
-						: []
-					).concat([
-						{
-							name: HOME_ACTION_DELETE_WORKSPACE,
-							hotkey: "CmdOrCtrl+Shift+D"
-						},
-						{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
-					]);
+								name: HOME_ACTION_DELETE_WORKSPACE,
+								hotkey: "CmdOrCtrl+Shift+D"
+							},
+							{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
+					  ]);
 			const layout =
 				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
 			const instructions =

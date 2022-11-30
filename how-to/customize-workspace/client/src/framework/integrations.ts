@@ -197,7 +197,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 				command,
 				[
 					integrationProviderOptions.commandDescription ??
-					`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
+						`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
 				],
 				[command]
 			)

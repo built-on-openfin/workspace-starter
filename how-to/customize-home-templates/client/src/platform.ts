@@ -9,6 +9,6 @@ export async function init() {
 
 	await workspacePlatformInit({
 		browser,
-		theme
+		theme: theme.length === 0 ? undefined : []
 	});
 }

@@ -12,9 +12,7 @@ import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
 
-export async function register(): Promise<
-	HomeRegistration
-> {
+export async function register(): Promise<HomeRegistration> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (
