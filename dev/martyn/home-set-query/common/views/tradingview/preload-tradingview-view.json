@@ -6,7 +6,7 @@
 	},
 	"preloadScripts": [
 		{
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/views/tradingview/preload-tradingview.js"
+			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/tradingview/preload-tradingview.js"
 		}
 	]
 }

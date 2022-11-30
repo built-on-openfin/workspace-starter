@@ -3,13 +3,13 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "26.102.71.7"
+		"version": "26.102.71.8"
 	},
 	"platform": {
 		"uuid": "register-with-platform-windows",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -22,7 +22,7 @@
 			}
 		},
 		"defaultWindowOptions": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/windows/platform-window.html",
+			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/windows/platform-window.html",
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
@@ -39,15 +39,15 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico",
-		"name": "Register With Platform Windows - v9.0",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico",
+		"name": "Register With Platform Windows - v9.2.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
 		{
 			"alias": "winform-interop-example",
 			"version": "2.0.0",
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
@@ -64,7 +64,7 @@
 			"store": true
 		},
 		"appProvider": {
-			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/apps.json",
+			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json",
 			"includeCredentialOnSourceRequest": "include",
 			"cacheDurationInMinutes": 1,
 			"appAssetTag": "appasset",
@@ -74,11 +74,12 @@
 			"themes": [
 				{
 					"label": "Starter Theme",
-					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico",
+					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico",
 					"palette": {
 						"brandPrimary": "#504CFF",
 						"brandSecondary": "#383A40",
 						"backgroundPrimary": "#111214",
+						"contentBackground1": "#504CFF",
 						"functional1": null,
 						"functional2": null,
 						"functional3": null,
@@ -114,14 +115,14 @@
 		"homeProvider": {
 			"id": "register-with-platform-windows",
 			"title": "Platform Windows Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "register-with-platform-windows",
 			"title": "Platform Windows Storefront",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico",
 			"landingPage": {
 				"hero": {
 					"title": "Custom Hero Title",
@@ -131,7 +132,7 @@
 						"tags": ["hero"]
 					},
 					"image": {
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/superhero-unsplash.jpg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/superhero-unsplash.jpg"
 					}
 				},
 				"topRow": {
@@ -141,7 +142,7 @@
 							"title": "Expero",
 							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-1-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-1-unsplash.jpg"
 							},
 							"tags": ["expero"]
 						},
@@ -149,7 +150,7 @@
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-2-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-2-unsplash.jpg"
 							},
 							"tags": ["tools"]
 						},
@@ -157,7 +158,7 @@
 							"title": "Learning Resource",
 							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-3-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-3-unsplash.jpg"
 							},
 							"tags": ["page"]
 						}
@@ -174,7 +175,7 @@
 							"title": "Views",
 							"description": "A collection of views made available through our catalog.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-4-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-4-unsplash.jpg"
 							},
 							"tags": ["view"]
 						},
@@ -182,7 +183,7 @@
 							"title": "Web Apps",
 							"description": "A collection of web apps built using OpenFin.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-5-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-5-unsplash.jpg"
 							},
 							"tags": ["manifest"]
 						},
@@ -190,7 +191,7 @@
 							"title": "Native Apps",
 							"description": "A collection of native apps made available through our catalog.",
 							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/common/images/coding-6-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-6-unsplash.jpg"
 							},
 							"tags": ["native"]
 						}
@@ -232,7 +233,7 @@
 				}
 			],
 			"footer": {
-				"logo": { "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/home-set-query/register-with-platform-windows/favicon.ico", "size": "32" },
+				"logo": { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-platform-windows/favicon.ico", "size": "32" },
 				"text": "Welcome to the OpenFin Sample Footer",
 				"links": [
 					{
