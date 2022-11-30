@@ -1,5 +1,7 @@
-import type { CustomThemes } from "@openfin/workspace-platform";
-import type { CustomPaletteSet } from "@openfin/workspace-platform/common/src/api/theming";
+import type {
+	CustomPaletteSet,
+	CustomThemeOptions
+} from "@openfin/workspace-platform/common/src/api/theming";
 import type { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;
@@ -70,8 +72,8 @@ function validatePalette(themePalette: CustomPaletteSet, themeLabel: string): Cu
 	return palette as CustomPaletteSet;
 }
 
-export function validateThemes(themes: CustomThemes): CustomThemes {
-	const validatedThemes: CustomThemes = [];
+export function validateThemes(themes: CustomThemeOptions[]): CustomThemeOptions[] {
+	const validatedThemes: CustomThemeOptions[] = [];
 
 	if (Array.isArray(themes)) {
 		for (let i = 0; i < themes.length; i++) {

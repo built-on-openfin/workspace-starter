@@ -428,7 +428,7 @@ module.exports = {
 				'@typescript-eslint/func-call-spacing': ['error'],
 				'@typescript-eslint/indent': ['off'],
 				'@typescript-eslint/init-declarations': ['off'],
-				'@typescript-eslint/keyword-spacing': ['error'],
+				'@typescript-eslint/keyword-spacing': ['off'],
 				'@typescript-eslint/lines-between-class-members': ['error'],
 				'@typescript-eslint/member-delimiter-style': ['error'],
 				'@typescript-eslint/member-ordering': ['error'],
