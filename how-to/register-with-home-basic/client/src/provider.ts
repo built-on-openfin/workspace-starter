@@ -39,6 +39,7 @@ async function init() {
 		query.disabled = true;
 		go.disabled = true;
 		homeRegistration = undefined;
+		query.value = "";
 		await deregister();
 	});
 
