@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--customize-home-templates",
-	"version": "9.1.0",
+	"version": "9.2.0",
 	"description": "OpenFin Workspace -- Register with Home",
 	"main": "index.js",
 	"scripts": {
@@ -23,8 +23,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "9.1.22",
-		"@openfin/workspace-platform": "9.1.22",
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next",
 		"chart.js": "^3.7.1",
 		"csstype": "^3.0.11",
 		"luxon": "^2.3.1",

@@ -369,7 +369,7 @@ async function getResults(
 		return {
 			results: finalResults,
 			context: {
-				filters: getSearchFilters(tags)
+				filters: getSearchFilters(tags.filter(Boolean))
 			}
 		};
 	}
