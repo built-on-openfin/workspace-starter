@@ -160,7 +160,7 @@ export async function itemSelection(
 		if (
 			integrationHelpers.setSearchQuery &&
 			result.action.trigger === "user-action" &&
-			result.key === POPULATE_QUERY &&
+			result.action.name === POPULATE_QUERY &&
 			typeof result.data?.populateQuery === "string"
 		) {
 			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);

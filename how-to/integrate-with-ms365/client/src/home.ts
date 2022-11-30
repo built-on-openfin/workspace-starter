@@ -5,11 +5,11 @@ import {
 	Home,
 	HomeDispatchedSearchResult,
 	HomeProvider,
+	HomeRegistration,
 	HomeSearchListenerRequest,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	HomeSearchResult
 } from "@openfin/workspace";
 import { getApps } from "./apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
@@ -18,9 +18,7 @@ import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
 
-export async function register(): Promise<
-	RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> }
-> {
+export async function register(): Promise<HomeRegistration> {
 	console.log("Initialising home.");
 	const settings = await getSettings();
 	if (

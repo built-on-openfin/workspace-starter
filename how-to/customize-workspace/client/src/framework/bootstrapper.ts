@@ -1,4 +1,4 @@
-import type { RegistrationMetaInfo } from "@openfin/workspace";
+import type { HomeRegistration } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
@@ -54,7 +54,7 @@ export async function init() {
 	const helpers: ModuleHelpers = getDefaultHelpers(settings);
 
 	const registeredComponents: BootstrapComponents[] = [];
-	let homeRegistration: RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> };
+	let homeRegistration: HomeRegistration;
 
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running

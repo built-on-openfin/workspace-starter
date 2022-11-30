@@ -3,10 +3,10 @@ import {
 	CLIFilter,
 	CLITemplate,
 	HomeDispatchedSearchResult,
+	HomeRegistration,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	HomeSearchResult
 } from "@openfin/workspace";
 import * as endpointProvider from "./endpoint";
 import { launchSnapshot } from "./launch";
@@ -50,7 +50,7 @@ const POPULATE_QUERY = "Populate Query";
 export async function init(
 	options: IntegrationProviderOptions,
 	helpers: ModuleHelpers,
-	homeRegistration: RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> }
+	homeRegistration: HomeRegistration
 ): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
@@ -197,7 +197,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 				command,
 				[
 					integrationProviderOptions.commandDescription ??
-						`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
+					`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
 				],
 				[command]
 			)
@@ -240,7 +240,7 @@ export async function itemSelection(
 		if (
 			integrationHelpers.setSearchQuery &&
 			result.action.trigger === "user-action" &&
-			result.key === POPULATE_QUERY &&
+			result.action.name === POPULATE_QUERY &&
 			typeof result.data?.populateQuery === "string"
 		) {
 			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);

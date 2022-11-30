@@ -9,9 +9,9 @@ import {
 	CLITemplate,
 	Home,
 	HomeDispatchedSearchResult,
+	HomeRegistration,
 	HomeSearchResponse,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getAppIcon, getApps } from "../apps";
@@ -212,20 +212,20 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 				entryWorkspaceId === currentWorkspaceId
 					? []
 					: (shareEnabled
-							? [
-									{
-										name: HOME_ACTION_SHARE_WORKSPACE,
-										hotkey: "CmdOrCtrl+Shift+S"
-									}
-							  ]
-							: []
-					  ).concat([
+						? [
 							{
-								name: HOME_ACTION_DELETE_WORKSPACE,
-								hotkey: "CmdOrCtrl+Shift+D"
-							},
-							{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
-					  ]);
+								name: HOME_ACTION_SHARE_WORKSPACE,
+								hotkey: "CmdOrCtrl+Shift+S"
+							}
+						]
+						: []
+					).concat([
+						{
+							name: HOME_ACTION_DELETE_WORKSPACE,
+							hotkey: "CmdOrCtrl+Shift+D"
+						},
+						{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
+					]);
 			const layout =
 				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
 			const instructions =
@@ -381,9 +381,7 @@ async function getResults(
 	};
 }
 
-export async function register(): Promise<
-	RegistrationMetaInfo & { setSearchQuery?(query: string): Promise<void> }
-> {
+export async function register(): Promise<HomeRegistration> {
 	logger.info("Initializing home");
 	const settings = await getSettings();
 	if (
