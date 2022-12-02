@@ -5,14 +5,15 @@ import {
 	create,
 	deregisterPlatform,
 	getNotificationsCount,
+	hide as hideNotificationCenter,
 	NotificationOptions,
-	provider,
 	registerPlatform,
+	show as showNotificationCenter,
 	TemplateFragment,
 	TextTemplateFragment,
-	toggleNotificationCenter,
 	UpdatableNotificationOptions,
-	update
+	update,
+	VERSION
 } from "@openfin/workspace/notifications";
 import type * as CSS from "csstype";
 import { addEventListener as providerEventListener } from "./provider-event-listener";
@@ -22,6 +23,7 @@ const updatableNotifications = {};
 let updatableNotificationTimer: NodeJS.Timer;
 let activePlatform;
 let connected = false;
+let connectedVersion = "";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	console.log("Script loaded");
@@ -32,6 +34,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 async function initDom() {
 	loggingElement = document.querySelector("#logging");
+
+	loggingAddEntry(`Library Version: ${VERSION}`);
 
 	const btnLoggingClear = document.querySelector("#btnLoggingClear");
 	btnLoggingClear.addEventListener("click", () => {
@@ -90,15 +94,27 @@ async function initDom() {
 		activePlatform = undefined;
 	});
 
-	const btnNotificationsCenterToggle: HTMLButtonElement = document.querySelector(
-		"#btnNotificationsCenterToggle"
-	);
-	btnNotificationsCenterToggle.addEventListener("click", async () => {
+	const btnNotificationsCenterShow: HTMLButtonElement = document.querySelector("#btnNotificationsCenterShow");
+	btnNotificationsCenterShow.addEventListener("click", async () => {
 		try {
-			btnNotificationsCenterToggle.disabled = true;
-			await toggleNotificationCenter();
+			btnNotificationsCenterShow.disabled = true;
+			await showNotificationCenter();
+		} catch (err) {
+			loggingAddEntry(`${err}`);
 		} finally {
-			btnNotificationsCenterToggle.disabled = false;
+			btnNotificationsCenterShow.disabled = false;
+		}
+	});
+
+	const btnNotificationsCenterHide: HTMLButtonElement = document.querySelector("#btnNotificationsCenterHide");
+	btnNotificationsCenterHide.addEventListener("click", async () => {
+		try {
+			btnNotificationsCenterHide.disabled = true;
+			await hideNotificationCenter();
+		} catch (err) {
+			loggingAddEntry(`${err}`);
+		} finally {
+			btnNotificationsCenterHide.disabled = false;
 		}
 	});
 
@@ -170,14 +186,12 @@ async function initListener() {
 	});
 
 	providerEventListener("connection-changed", (status) => {
-		connected = status.connected;
-		updateConnectedState();
+		if (status.connected !== connected) {
+			connected = status.connected;
+			connectedVersion = status.version;
+			updateConnectedState();
+		}
 	});
-
-	const status = await provider.getStatus();
-	connected = status.connected;
-
-	updateConnectedState();
 }
 
 function loggingShowHide(): void {
@@ -191,8 +205,10 @@ function loggingAddEntry(entry: string): void {
 }
 
 function updateConnectedState(): void {
-	const isConnected = document.querySelector("#isConnected");
-	isConnected.textContent = connected ? "Yes" : "No";
+	loggingAddEntry(`Is Connected: ${connected}`);
+	if (connected) {
+		loggingAddEntry(`Connected Version: ${connectedVersion}`);
+	}
 
 	const buttons = document.querySelectorAll("button");
 	for (const button of buttons) {
@@ -201,8 +217,8 @@ function updateConnectedState(): void {
 }
 
 function showNotificationCount(count: number): void {
-	const btnNotificationsCenterToggle: HTMLElement = document.querySelector("#btnNotificationsCenterToggle");
-	btnNotificationsCenterToggle.textContent = `Notifications Center [${count}]`;
+	const btnNotificationsCenterShow: HTMLElement = document.querySelector("#btnNotificationsCenterShow");
+	btnNotificationsCenterShow.textContent = `Show [${count}]`;
 }
 
 async function showSimpleNotification() {
