@@ -1,4 +1,4 @@
-import type { LayoutComponentStateExtended, LayoutContentExtended, Page } from "@openfin/workspace";
+import type { LayoutComponentExtended, LayoutComponentStateExtended, LayoutContentExtended, Page } from "@openfin/workspace";
 import { BrowserCreateWindowRequest, BrowserWindowModule, getCurrentSync } from "@openfin/workspace-platform";
 import type { LayoutContentItemExtended } from "@openfin/workspace-platform/client-api/src";
 
@@ -156,11 +156,14 @@ function activateComponent(
 				activeComponents
 			);
 		} else {
-			const mainIdentityMatch =
-				component.componentState.name === viewIdentity.name &&
-				component.componentState.uuid === viewIdentity.uuid;
+			// If its not column, row or stack it must be extended
+			const extended: LayoutComponentExtended = component as LayoutComponentExtended;
 
-			const componentStateWithTarget = component.componentState as LayoutComponentStateExtended & {
+			const mainIdentityMatch =
+				extended.componentState.name === viewIdentity.name &&
+				extended.componentState.uuid === viewIdentity.uuid;
+
+			const componentStateWithTarget = extended.componentState as LayoutComponentStateExtended & {
 				target?: OpenFin.Identity;
 			};
 
