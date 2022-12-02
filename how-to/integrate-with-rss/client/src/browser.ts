@@ -1,4 +1,9 @@
-import type { LayoutComponentExtended, LayoutComponentStateExtended, LayoutContentExtended, Page } from "@openfin/workspace";
+import type {
+	LayoutComponentExtended,
+	LayoutComponentStateExtended,
+	LayoutContentExtended,
+	Page
+} from "@openfin/workspace";
 import { BrowserCreateWindowRequest, BrowserWindowModule, getCurrentSync } from "@openfin/workspace-platform";
 import type { LayoutContentItemExtended } from "@openfin/workspace-platform/client-api/src";
 
