@@ -22,14 +22,14 @@ For each button you must specify an `id`, a flag `include` which determines if i
             "button": {
                 "type": "Custom",
                 "tooltip": "Show Home",
-                "iconUrl": "http://localhost:8080/common/icons/search.svg",
+                "iconUrl": "http://localhost:8080/common/icons/dark/search.svg",
                 "action": {
                     "id": "home-show",
                     "customData": {}
                 }
             },
             "themes": {
-                "dark": "http://localhost:8080/common/icons/search-dark.svg"
+                "light": "http://localhost:8080/common/icons/light/search.svg"
             },
             "conditions": [
                 "authenticated"
@@ -85,7 +85,7 @@ When the custom button is clicked the `id` is used to look up one of the platfor
             "button": {
                 "type": "Custom",
                 "tooltip": "My Operation",
-                "iconUrl": "http://localhost:8080/common/icons/my-operation.svg",
+                "iconUrl": "http://localhost:8080/common/icons/dark/my-operation.svg",
                 "action": {
                     "id": "my-operation",
                     "customData": {

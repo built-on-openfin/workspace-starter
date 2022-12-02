@@ -311,7 +311,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/search.svg",
+						"iconUrl": "http://localhost:8080/common/icons/dark/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -325,7 +325,7 @@
 						"type": "Custom",
 						"tooltip": "Toggle Notification Center",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/bell.svg",
+						"iconUrl": "http://localhost:8080/common/icons/dark/bell.svg",
 						"action": {
 							"id": "notification-toggle",
 							"customData": {}
@@ -339,7 +339,7 @@
 						"type": "Custom",
 						"tooltip": "Pin this window",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/pin.svg",
+						"iconUrl": "http://localhost:8080/common/icons/dark/pin.svg",
 						"action": {
 							"id": "pin-window",
 							"customData": {
@@ -356,7 +356,7 @@
 						"type": "Custom",
 						"tooltip": "Unpin this window",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
+						"iconUrl": "http://localhost:8080/common/icons/dark/pin-vertical.svg",
 						"action": {
 							"id": "unpin-window",
 							"customData": {
@@ -401,7 +401,7 @@
 						"type": "Custom",
 						"tooltip": "Share",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/share.svg",
+						"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
 						"action": {
 							"id": "share",
 							"customData": {}
@@ -644,7 +644,7 @@
 				},
 				{
 					"tooltip": "Social",
-					"iconUrl": "http://localhost:8080/common/icons/share.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
 					"options": [
 						{
 							"tooltip": "Twitter",

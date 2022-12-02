@@ -334,14 +334,14 @@
 			{
 				"include": true,
 				"themes": {
-					"Light": "http://localhost:8080/common/icons/search-dark.svg"
+					"light": "http://localhost:8080/common/icons/light/search.svg"
 				},
 				"id": "home-show",
 				"button": {
 					"type": "Custom",
 					"tooltip": "Show Home",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/search.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/search.svg",
 					"action": {
 						"id": "home-show",
 						"customData": {}
@@ -352,13 +352,13 @@
 				"include": true,
 				"id": "notification-toggle",
 				"themes": {
-					"Light": "http://localhost:8080/common/icons/bell-dark.svg"
+					"light": "http://localhost:8080/common/icons/light/bell.svg"
 				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Toggle Notification Center",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/bell.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/bell.svg",
 					"action": {
 						"id": "notification-toggle",
 						"customData": {}
@@ -369,13 +369,13 @@
 				"include": true,
 				"id": "pin-window",
 				"themes": {
-					"Light": "http://localhost:8080/common/icons/pin-dark.svg"
+					"light": "http://localhost:8080/common/icons/light/pin.svg"
 				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Pin this window",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/pin.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/pin.svg",
 					"action": {
 						"id": "pin-window",
 						"customData": {
@@ -389,13 +389,13 @@
 				"include": false,
 				"id": "unpin-window",
 				"themes": {
-					"Light": "http://localhost:8080/common/icons/pin-vertical-dark.svg"
+					"light": "http://localhost:8080/common/icons/light/pin-vertical.svg"
 				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Unpin this window",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/pin-vertical.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/pin-vertical.svg",
 					"action": {
 						"id": "unpin-window",
 						"customData": {
@@ -437,13 +437,13 @@
 				"include": true,
 				"id": "share",
 				"themes": {
-					"Light": "http://localhost:8080/common/icons/share-dark.svg"
+					"light": "http://localhost:8080/common/icons/light/share.svg"
 				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Share",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/share.svg",
+					"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
 					"action": {
 						"id": "share",
 						"customData": {}
@@ -463,79 +463,78 @@
 	"themeProvider": {
 		"themes": [
 			{
-				"label": "Dark",
+				"label": "Default",
 				"logoUrl": "http://localhost:8080/favicon-32x32.png",
-				"palette": {
-					"brandPrimary": "#504CFF",
-					"brandSecondary": "#383A40",
-					"backgroundPrimary": "#111214",
-					"contentBackground1": "#504CFF",
-					"functional1": null,
-					"functional2": null,
-					"functional3": null,
-					"functional4": null,
-					"functional5": null,
-					"functional6": null,
-					"functional7": null,
-					"functional8": null,
-					"functional9": null,
-					"functional10": null,
-					"statusSuccess": null,
-					"statusWarning": null,
-					"statusCritical": null,
-					"statusActive": null,
-					"inputBackground": null,
-					"inputColor": null,
-					"inputPlaceholder": null,
-					"inputDisabled": null,
-					"inputFocused": null,
-					"textDefault": null,
-					"textHelp": null,
-					"textInactive": null,
-					"background1": null,
-					"background2": null,
-					"background3": null,
-					"background4": null,
-					"background5": null,
-					"background6": null
-				}
-			},
-			{
-				"label": "Light",
-				"logoUrl": "http://localhost:8080/favicon-32x32.png",
-				"palette": {
-					"brandPrimary": "#399BB8",
-					"brandSecondary": null,
-					"backgroundPrimary": "#111214",
-					"contentBackground1": "#504CFF",
-					"functional1": null,
-					"functional2": null,
-					"functional3": null,
-					"functional4": null,
-					"functional5": null,
-					"functional6": null,
-					"functional7": null,
-					"functional8": null,
-					"functional9": null,
-					"functional10": null,
-					"statusSuccess": null,
-					"statusWarning": null,
-					"statusCritical": null,
-					"statusActive": "#399BB8",
-					"inputBackground": "#ECEEF1",
-					"inputColor": "#1E1F23",
-					"inputPlaceholder": "#7D808A",
-					"inputDisabled": null,
-					"inputFocused": "#C9CBD2",
-					"textDefault": "#1E1F23",
-					"textHelp": "#111214",
-					"textInactive": null,
-					"background1": "#ECEEF1",
-					"background2": "#FAFBFE",
-					"background3": "#ECEEF1",
-					"background4": "#ECEEF1",
-					"background5": "#DDDFE4",
-					"background6": "#ffffff"
+				"default": "light",
+				"palettes": {
+					"dark": {
+						"brandPrimary": "#504CFF",
+						"brandSecondary": "#383A40",
+						"backgroundPrimary": "#111214",
+						"contentBackground1": "#504CFF",
+						"functional1": null,
+						"functional2": null,
+						"functional3": null,
+						"functional4": null,
+						"functional5": null,
+						"functional6": null,
+						"functional7": null,
+						"functional8": null,
+						"functional9": null,
+						"functional10": null,
+						"statusSuccess": null,
+						"statusWarning": null,
+						"statusCritical": null,
+						"statusActive": null,
+						"inputBackground": null,
+						"inputColor": null,
+						"inputPlaceholder": null,
+						"inputDisabled": null,
+						"inputFocused": null,
+						"textDefault": null,
+						"textHelp": null,
+						"textInactive": null,
+						"background1": null,
+						"background2": null,
+						"background3": null,
+						"background4": null,
+						"background5": null,
+						"background6": null
+					},
+					"light": {
+						"brandPrimary": "#399BB8",
+						"brandSecondary": null,
+						"backgroundPrimary": "#111214",
+						"contentBackground1": "#504CFF",
+						"functional1": null,
+						"functional2": null,
+						"functional3": null,
+						"functional4": null,
+						"functional5": null,
+						"functional6": null,
+						"functional7": null,
+						"functional8": null,
+						"functional9": null,
+						"functional10": null,
+						"statusSuccess": null,
+						"statusWarning": null,
+						"statusCritical": null,
+						"statusActive": "#399BB8",
+						"inputBackground": "#ECEEF1",
+						"inputColor": "#1E1F23",
+						"inputPlaceholder": "#7D808A",
+						"inputDisabled": null,
+						"inputFocused": "#C9CBD2",
+						"textDefault": "#1E1F23",
+						"textHelp": "#111214",
+						"textInactive": null,
+						"background1": "#ECEEF1",
+						"background2": "#FAFBFE",
+						"background3": "#ECEEF1",
+						"background4": "#ECEEF1",
+						"background5": "#DDDFE4",
+						"background6": "#ffffff"
+					}
 				}
 			}
 		]
@@ -724,7 +723,7 @@
 			},
 			{
 				"tooltip": "Social",
-				"iconUrl": "http://localhost:8080/common/icons/share.svg",
+				"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
 				"options": [
 					{
 						"tooltip": "Twitter",

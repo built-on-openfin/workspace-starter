@@ -7,6 +7,7 @@ import { getActions } from "../actions";
 import * as appProvider from "../apps";
 import * as authProvider from "../auth";
 import { isAuthenticationEnabled } from "../auth";
+import { updateButtonColorScheme } from "../buttons";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
@@ -97,6 +98,8 @@ async function setupPlatform() {
 		interopOverride,
 		overrideCallback
 	});
+
+	await updateButtonColorScheme();
 
 	platformInitialized = true;
 }

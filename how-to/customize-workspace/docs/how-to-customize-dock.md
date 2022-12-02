@@ -146,7 +146,7 @@ If you want to configure a drop down menu instead of a single button you can use
     "buttons": [
         {
             "tooltip": "Social",
-            "iconUrl": "http://localhost:8080/common/icons/share.svg",
+            "iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
             "options": [
                 {
                     "tooltip": "Twitter",

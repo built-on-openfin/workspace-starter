@@ -1,4 +1,5 @@
 import {
+	ColorSchemeOptionType,
 	CreateSavedPageRequest,
 	CreateSavedWorkspaceRequest,
 	getCurrentSync,
@@ -11,11 +12,13 @@ import {
 	Workspace,
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
+import { updateBrowserWindowButtonsColorScheme, updateButtonColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
+import { setCurrentColorSchemeMode } from "../themes";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -291,6 +294,36 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 				return super.quit(payload, callerIdentity);
 			}
+		}
+
+		public async createWindow(
+			options: OpenFin.PlatformWindowCreationOptions,
+			identity?: OpenFin.Identity
+		): Promise<OpenFin.Window> {
+			const window = await super.createWindow(options, identity);
+
+			try {
+				const platform = getCurrentSync();
+				const browserWindow = platform.Browser.wrapSync(window.identity);
+				await updateBrowserWindowButtonsColorScheme(browserWindow);
+			} catch {
+				// Probably not a browser window
+			}
+
+			return window;
+		}
+
+		// eslint-disable-next-line no-warning-comments
+		// TODO - waiting for fix in workspace to be able to use this
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+			// The color scheme has been updated, so update the theme
+			await setCurrentColorSchemeMode(schemeType);
+
+			// Also update toolbar buttons
+			await updateButtonColorScheme();
+
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			return super["setSelectedScheme"](schemeType) as Promise<void>;
 		}
 	}
 	return new Override();

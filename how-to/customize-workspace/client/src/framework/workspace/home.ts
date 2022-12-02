@@ -29,6 +29,7 @@ import {
 	PAGE_ACTION_IDS,
 	WORKSPACE_ACTION_IDS
 } from "../template";
+import { getCurrentColorSchemeMode } from "../themes";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "../workspace";
 
 const logger = createLogger("Home");
@@ -150,7 +151,8 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 	const settings = await getSettings();
 	let pageIcon;
 	if (settings?.platformProvider?.rootUrl !== undefined) {
-		pageIcon = `${settings.platformProvider.rootUrl}/icons/page.svg`;
+		const colorScheme = await getCurrentColorSchemeMode();
+		pageIcon = `${settings.platformProvider.rootUrl}/common/icons/${colorScheme}/page.svg`;
 	}
 	const shareEnabled = isShareEnabled();
 	const pageTemplate = getPageTemplate(shareEnabled);
@@ -194,7 +196,8 @@ async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Prom
 
 	let workspaceIcon;
 	if (settings?.platformProvider?.rootUrl !== undefined) {
-		workspaceIcon = `${settings.platformProvider.rootUrl}/icons/workspaces.svg`;
+		const colorScheme = await getCurrentColorSchemeMode();
+		workspaceIcon = `${settings.platformProvider.rootUrl}/common/icons/${colorScheme}/workspaces.svg`;
 	}
 	const shareEnabled = isShareEnabled();
 	const workspaceTemplate = getWorkspaceTemplate(shareEnabled);

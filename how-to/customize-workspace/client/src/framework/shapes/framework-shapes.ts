@@ -5,7 +5,7 @@ import type {
 	ToolbarButton,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
-import type { CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomThemes } from "@openfin/workspace/client-api-platform/src/shapes";
 import type { NotificationsPlatform } from "@openfin/workspace/notifications";
 import type { ActionsProviderOptions } from "./actions-shapes";
 import type { AuthProviderOptions } from "./auth-shapes";
@@ -36,7 +36,7 @@ export interface HeadlessProviderOptions extends ModuleList {}
 export interface ToolbarButtonDefinition {
 	id: string;
 	include: boolean;
-	themes?: { [key: string]: string };
+	themes?: { [key in ColorSchemeMode]: string };
 	button: ToolbarButton & { iconUrl?: string };
 	conditions?: string[];
 }
@@ -135,9 +135,15 @@ interface DockProviderOptions {
 	buttons?: (DockButtonAction | DockButtonDropdown)[];
 }
 
-interface ThemeProviderOptions {
-	themes: CustomThemeOptions[];
+export enum ColorSchemeMode {
+	Light = "light",
+	Dark = "dark"
 }
+
+export interface ThemeProviderOptions {
+	themes: CustomThemes;
+}
+
 export type AppEndpointOptions =
 	| string
 	| {

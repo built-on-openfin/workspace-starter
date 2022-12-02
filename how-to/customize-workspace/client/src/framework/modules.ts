@@ -2,15 +2,15 @@ import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
 import type {
 	Module,
+	ModuleDefinition,
 	ModuleEntry,
 	ModuleEntryTypes,
-	ModuleDefinition,
+	ModuleHelpers,
 	ModuleImplementation,
 	ModuleList,
-	ModuleTypes,
-	ModuleHelpers
+	ModuleTypes
 } from "./shapes/module-shapes";
-import { getCurrentTheme, getDefaultPalettes } from "./themes";
+import { getCurrentColorSchemeMode, getCurrentPalette, getDefaultPalettes } from "./themes";
 
 const logger = createLogger("Modules");
 
@@ -199,6 +199,7 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		getDefaultPalettes,
-		getCurrentTheme
+		getCurrentPalette,
+		getCurrentColorSchemeMode
 	};
 }
