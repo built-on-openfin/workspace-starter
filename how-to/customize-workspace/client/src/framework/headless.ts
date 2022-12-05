@@ -1,5 +1,5 @@
 import { createLogger } from "./logger-provider";
-import type { HeadlessProviderOptions } from "./shapes/framework-shapes";
+import type { HeadlessProviderOptions } from "./shapes/headless-shapes";
 import type { ModuleDefinition } from "./shapes/module-shapes";
 
 const logger = createLogger("HeadlessProvider");

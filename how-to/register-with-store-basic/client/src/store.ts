@@ -127,7 +127,8 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
 						apps: [experoApp]
-					}
+					},
+					buttonTitle: "Expero Apps"
 				},
 				{
 					id: "top-row-item-2",
@@ -140,7 +141,8 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
 						apps: [notificationStudio, processManager]
-					}
+					},
+					buttonTitle: "View Tools"
 				}
 			]
 		},
@@ -161,7 +163,8 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
 						apps: [experoApp]
-					}
+					},
+					buttonTitle: "See Views"
 				},
 				{
 					id: "bottom-row-item-2",
@@ -173,7 +176,8 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
 						apps: [notificationStudio, processManager]
-					}
+					},
+					buttonTitle: "See Web Apps"
 				}
 			]
 		}
