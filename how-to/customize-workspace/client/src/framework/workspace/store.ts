@@ -369,7 +369,7 @@ async function getNavigationItems(items: StorefrontSettingsNavigationItem[], lim
 
 	if (navigationItems.length > limit) {
 		logger.warn(
-			`You have defined too many navigations items (${navigationItems.length}). Please limit it to ${limit} as we will only take the first ${limit}`
+			`You have defined too many navigation items (${navigationItems.length}). Please limit it to ${limit} as we will only take the first ${limit}`
 		);
 	}
 	return navigationItems.slice(0, limit);
@@ -387,6 +387,7 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 		const item: StorefrontDetailedNavigationItem = {
 			description: definition.items[i].description,
 			image: definition.items[i].image,
+			buttonTitle: definition.items[i].buttonTitle,
 			...navigationItem
 		};
 		items.push(item);

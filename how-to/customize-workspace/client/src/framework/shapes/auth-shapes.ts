@@ -45,7 +45,7 @@ export interface AuthProvider<O = unknown, H = ModuleHelpers> extends ModuleImpl
 	/**
 	 * Get user information from the auth provider.
 	 */
-	getUserInfo<T>(): Promise<T>;
+	getUserInfo(): Promise<unknown>;
 }
 
 export type AuthProviderOptions = ModuleList;
