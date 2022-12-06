@@ -572,7 +572,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-1-unsplash.jpg"
 						},
-						"tags": ["expero"]
+						"tags": ["expero"],
+						"buttonTitle": "View"
 					},
 					{
 						"title": "Dev Tools",
@@ -580,7 +581,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-2-unsplash.jpg"
 						},
-						"tags": ["tools"]
+						"tags": ["tools"],
+						"buttonTitle": "View"
 					},
 					{
 						"title": "Learning Resource",
@@ -588,7 +590,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-3-unsplash.jpg"
 						},
-						"tags": ["page"]
+						"tags": ["page"],
+						"buttonTitle": "View"
 					}
 				]
 			},
@@ -605,7 +608,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-4-unsplash.jpg"
 						},
-						"tags": ["view"]
+						"tags": ["view"],
+						"buttonTitle": "View"
 					},
 					{
 						"title": "Web Apps",
@@ -613,7 +617,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-5-unsplash.jpg"
 						},
-						"tags": ["manifest"]
+						"tags": ["manifest"],
+						"buttonTitle": "View"
 					},
 					{
 						"title": "Native Apps",
@@ -621,7 +626,8 @@
 						"image": {
 							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/coding-6-unsplash.jpg"
 						},
-						"tags": ["native"]
+						"tags": ["native"],
+						"buttonTitle": "View"
 					}
 				]
 			}
