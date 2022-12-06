@@ -37,7 +37,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
        },
-       "tags": ["expero"]
+       "tags": ["expero"],
+      "buttonTitle": "View"
       },
       {
        "title": "Dev Tools",
@@ -45,7 +46,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
        },
-       "tags": ["tools"]
+       "tags": ["tools"],
+      "buttonTitle": "View"
       },
       {
        "title": "Learning Resource",
@@ -53,7 +55,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
        },
-       "tags": ["page"]
+       "tags": ["page"],
+      "buttonTitle": "View"
       }
      ]
     },
@@ -70,7 +73,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
        },
-       "tags": ["view"]
+       "tags": ["view"],
+      "buttonTitle": "View"
       },
       {
        "title": "Web Apps",
@@ -78,7 +82,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
        },
-       "tags": ["manifest"]
+       "tags": ["manifest"],
+      "buttonTitle": "View"
       },
       {
        "title": "Native Apps",
@@ -86,7 +91,8 @@ The approach that we have taken is that you define your landing page properties 
        "image": {
         "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
        },
-       "tags": ["native"]
+       "tags": ["native"],
+      "buttonTitle": "View"
       }
      ]
     }
@@ -179,6 +185,7 @@ The approach that we have taken is that you define your landing page properties 
 | landingPage.topRow.items[i].description    | Description of the section.                                                                                                                                                                                                                          |
 | landingPage.topRow.items[i].image.src      | The path to the image to display for this section.                                                                                                                                                                                                   |
 | landingPage.topRow.items[i].tags           | An array of tags that will be matched against the returned [apps](./how-to-define-apps.md).                                                                                                                                                          |
+| landingPage.topRow.items[i].buttonTitle    | A title for the button that exists on this landing page entry. If undefined then the default text will be used.                                                                                                                                      |
 | landingPage.middleRow                      | What do you want this row to be called and what [apps](./how-to-define-apps.md) do you want to show in the middle (use tags to determine what [apps](./how-to-define-apps.md) are included in this row). Limit of 6 [apps](./how-to-define-apps.md). |
 | landingPage.middleRow.title                | The title to display for the middle row [apps](./how-to-define-apps.md).                                                                                                                                                                             |
 | landingPage.middleRow.tags                 | An array of tags that will be used to fetch [apps](./how-to-define-apps.md) from the [apps](./how-to-define-apps.md) list. Only the first 6 will be used.                                                                                            |
@@ -189,6 +196,7 @@ The approach that we have taken is that you define your landing page properties 
 | landingPage.bottomRow.items[i].description | Description of the section.                                                                                                                                                                                                                          |
 | landingPage.bottomRow.items[i].image.src   | The path to the image to display for this section.                                                                                                                                                                                                   |
 | landingPage.bottomRow.items[i].tags        | An array of tags that will be matched against the returned [apps](./how-to-define-apps.md).                                                                                                                                                          |
+| landingPage.bottomRow.items[i].buttonTitle | A title for the button that exists on this landing page entry. If undefined then the default text will be used.                                                                                                                                      |
 | navigation                                 | How many navigation sections do you want on the left hand menu? Limit of 2.                                                                                                                                                                          |
 | navigation[i].id                           | A unique id that represents the page that this link will point to. Should remain the same throughout the session. If not provided then the title is used to generate the id.                                                                         |
 | navigation[i].title                        | What do you want as a title for these set of links?                                                                                                                                                                                                  |
@@ -216,6 +224,6 @@ This is because the `id` represents the route that the user navigates to. So, if
 ## Source Reference
 
 - [store.ts](../client/src/framework/workspace/store.ts)
-- [framework-shapes.ts](../client/src/framework/shapes/framework-shapes.ts) - Contains store related shapes.
+- [store-shapes.ts](../client/src/framework/shapes/store-shapes.ts) - Contains store related shapes.
 
 [<- Back to Table Of Contents](../README.md)

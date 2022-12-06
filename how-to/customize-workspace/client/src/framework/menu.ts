@@ -10,7 +10,7 @@ import {
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import type { MenuEntry, MenuPositionOperation } from "./shapes/framework-shapes";
+import type { MenuEntry, MenuPositionOperation } from "./shapes/browser-shapes";
 
 const logger = createLogger("Menu");
 
