@@ -313,8 +313,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return window;
 		}
 
-		// eslint-disable-next-line no-warning-comments
-		// TODO - waiting for fix in workspace to be able to use this
 		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
 			// The color scheme has been updated, so update the theme
 			await setCurrentColorSchemeMode(schemeType);
@@ -323,7 +321,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			await updateButtonColorScheme();
 
 			// eslint-disable-next-line @typescript-eslint/dot-notation
-			return super["setSelectedScheme"](schemeType) as Promise<void>;
+			return super.setSelectedScheme(schemeType);
 		}
 	}
 	return new Override();
