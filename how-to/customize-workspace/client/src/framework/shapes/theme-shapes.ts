@@ -1,5 +1,5 @@
-import type { CustomThemes } from "@openfin/workspace-platform";
+import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 
 export interface ThemeProviderOptions {
-	themes: CustomThemes;
+	themes: CustomThemeOptions[];
 }
