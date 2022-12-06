@@ -353,7 +353,7 @@ export async function isAuthenticationRequired(): Promise<boolean> {
 	return !authenticated;
 }
 
-export async function getUserInfo<T>(): Promise<T> {
+export async function getUserInfo(): Promise<unknown> {
 	if (authenticated === undefined || !authenticated) {
 		logger.warn("Unable to retrieve user info unless the user is authenticated");
 	} else {

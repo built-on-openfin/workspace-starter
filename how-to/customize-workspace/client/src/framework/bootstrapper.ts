@@ -11,7 +11,8 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
-import type { BootstrapComponents, BootstrapOptions } from "./shapes/framework-shapes";
+import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,

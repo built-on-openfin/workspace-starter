@@ -1,0 +1,41 @@
+import type { ActionsProviderOptions } from "./actions-shapes";
+import type { AppProviderOptions } from "./app-shapes";
+import type { AuthProviderOptions } from "./auth-shapes";
+import type { BootstrapOptions } from "./bootstrap-shapes";
+import type { BrowserProviderOptions } from "./browser-shapes";
+import type { ConditionsProviderOptions } from "./conditions-shapes";
+import type { ConnectionProviderOptions } from "./connection-shapes";
+import type { DockProviderOptions } from "./dock-shapes";
+import type { EndpointProviderOptions } from "./endpoint-shapes";
+import type { HeadlessProviderOptions } from "./headless-shapes";
+import type { HomeProviderOptions } from "./home-shapes";
+import type { InitOptionsProviderOptions } from "./init-options-shapes";
+import type { IntegrationProviderOptions } from "./integrations-shapes";
+import type { LifecycleProviderOptions } from "./lifecycle-shapes";
+import type { LoggerProviderOptions } from "./logger-shapes";
+import type { NotificationProviderOptions } from "./notification-shapes";
+import type { PlatformProviderOptions } from "./platform-shapes";
+import type { StorefrontProviderOptions } from "./store-shapes";
+import type { ThemeProviderOptions } from "./theme-shapes";
+
+export interface CustomSettings {
+	appProvider?: AppProviderOptions;
+	authProvider?: AuthProviderOptions;
+	bootstrap?: BootstrapOptions;
+	browserProvider?: BrowserProviderOptions;
+	connectionProvider?: ConnectionProviderOptions;
+	dockProvider?: DockProviderOptions;
+	endpointProvider?: EndpointProviderOptions;
+	headlessProvider?: HeadlessProviderOptions;
+	homeProvider?: HomeProviderOptions;
+	initOptionsProvider?: InitOptionsProviderOptions;
+	integrationProvider?: IntegrationProviderOptions;
+	notificationProvider?: NotificationProviderOptions;
+	platformProvider?: PlatformProviderOptions;
+	storefrontProvider?: StorefrontProviderOptions;
+	themeProvider?: ThemeProviderOptions;
+	loggerProvider?: LoggerProviderOptions;
+	actionsProvider?: ActionsProviderOptions;
+	conditionsProvider?: ConditionsProviderOptions;
+	lifecycleProvider?: LifecycleProviderOptions;
+}
