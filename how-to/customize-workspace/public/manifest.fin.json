@@ -751,7 +751,7 @@
 			]
 		},
 		"connectionProvider": {
-			"connectionId": "workspace-connection",
+			"connectionId": "customize-workspace-workspace-connection",
 			"supportedActions": [
 				"show-home",
 				"show-store",
@@ -764,7 +764,7 @@
 				{
 					"identity": { "uuid": "*" },
 					"validatePayload": false,
-					"connectionTypes": [{ "type": "appSource" }, { "type": "snapshotSource" }, { "type": "actions" }]
+					"connectionTypes": [{ "type": "appSource" }, { "type": "snapshotSource" }, { "type": "actions" },  { "type": "broker" }]
 				}
 			]
 		}
