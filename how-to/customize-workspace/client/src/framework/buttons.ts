@@ -6,7 +6,7 @@ import {
 } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { getSettings } from "./settings";
-import type { ToolbarButtonDefinition } from "./shapes/framework-shapes";
+import type { ToolbarButtonDefinition } from "./shapes/browser-shapes";
 import { getCurrentTheme } from "./themes";
 
 let allToolbarButtons: ToolbarButtonDefinition[];
