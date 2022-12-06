@@ -3,3 +3,8 @@ import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/themi
 export interface ThemeProviderOptions {
 	themes: CustomThemeOptions[];
 }
+
+export enum ColorSchemeMode {
+	Light = "light",
+	Dark = "dark"
+}

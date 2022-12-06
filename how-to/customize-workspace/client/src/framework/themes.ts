@@ -7,7 +7,7 @@ import type {
 } from "@openfin/workspace-platform/common/src/api/theming";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { ColorSchemeMode } from "./shapes";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
 
