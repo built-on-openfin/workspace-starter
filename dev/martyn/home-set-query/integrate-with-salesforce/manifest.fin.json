@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
-		"version": "26.102.71.8"
+		"version": "28.106.72.14"
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
