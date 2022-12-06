@@ -34,7 +34,8 @@ export async function createHelp(
 		additionalData[exampleKey] = examples[i];
 		exampleFragments.push(
 			await createText(exampleKey, 12, {
-				fontFamily: "monospace"
+				fontFamily: "monospace",
+				whiteSpace: "nowrap"
 			})
 		);
 	}
@@ -50,9 +51,19 @@ export async function createHelp(
 		);
 	}
 	return {
-		layout: await createContainer("column", [await createTitle("title"), ...fragments], {
-			padding: "10px"
-		}),
+		layout: await createContainer(
+			"column",
+			[
+				await createTitle("title", undefined, undefined, {
+					marginBottom: "10px",
+					borderBottom: `1px solid ${theme.palette.background6}`
+				}),
+				...fragments
+			],
+			{
+				padding: "10px"
+			}
+		),
 		data: {
 			title,
 			...additionalData
@@ -87,7 +98,7 @@ export async function createTitle(
 		type: TemplateFragmentTypes.Text,
 		dataKey,
 		style: {
-			color: theme.palette.brandPrimary,
+			color: theme.palette.textDefault,
 			fontSize: `${fontSize ?? 16}px`,
 			fontWeight,
 			...style

@@ -30,7 +30,7 @@ The browser component does fall under your workspace platform and is specific to
 
 With these NPM packages and the OpenFin runtime you can build a custom workspace platform specific to your needs.
 
-If you are looking for an example of what a complete workspace platform platform then you have come to the right place. See [What is customize workspace](./what-is-customize-workspace.md)
+If you are looking for an example of what a complete workspace platform looks like then you have come to the right place. See [What is a Workspace Platform](./what-is-workspace-platform.md)
 
 For more information about OpenFin Workspace please see the [Workspace Overview](https://developers.openfin.co/of-docs/docs/overview-of-workspace)
 

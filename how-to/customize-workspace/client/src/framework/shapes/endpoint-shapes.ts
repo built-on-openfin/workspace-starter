@@ -7,9 +7,9 @@ export interface EndpointProvider {
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | null>;
 }
 
-export interface Endpoint extends ModuleImplementation {
-	action<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
-	requestResponse<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
+export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
+	action?<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
+	requestResponse?<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
 }
 
 export interface EndpointProviderOptions extends ModuleList {
