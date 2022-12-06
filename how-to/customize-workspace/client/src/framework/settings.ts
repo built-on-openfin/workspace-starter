@@ -2,7 +2,7 @@ import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import type { ModuleHelpers } from "./shapes";
-import type { CustomSettings } from "./shapes/framework-shapes";
+import type { CustomSettings } from "./shapes/setting-shapes";
 
 let settings: CustomSettings;
 let validManifestHosts: string[];

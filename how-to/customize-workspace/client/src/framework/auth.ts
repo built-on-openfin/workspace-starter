@@ -87,11 +87,11 @@ export async function isAuthenticationRequired(): Promise<boolean> {
 	return authProvider.isAuthenticationRequired();
 }
 
-export async function getUserInfo<T>(): Promise<T> {
+export async function getUserInfo(): Promise<unknown> {
 	if (authProvider === undefined) {
 		logger.warn("Please initialize auth before trying to use getUserInfo");
 		return null;
 	}
 	logger.info("getUserInfo requested");
-	return getUserInfo<T>();
+	return authProvider.getUserInfo();
 }

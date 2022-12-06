@@ -2,8 +2,8 @@ import type { App } from "@openfin/workspace";
 import { getConnectedApps } from "./connections";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+import type { AppEndpointOptions, AppProviderOptions } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import type { AppEndpointOptions, AppProviderOptions } from "./shapes/framework-shapes";
 
 const logger = createLogger("Apps");
 
