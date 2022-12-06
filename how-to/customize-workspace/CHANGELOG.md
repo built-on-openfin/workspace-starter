@@ -1,5 +1,11 @@
 # Changelog
 
+## v10
+
+- Added support for new themes format with light and dark schemes
+- Added example of using setSearchQuery API for home integration
+- Use Notifications now uses Show/Hide APIs instead of toggle
+
 ## v9.2
 
 - Added `dev` npm script which live build and reloads code for customize-workspace sample
