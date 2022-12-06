@@ -320,7 +320,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// Also update toolbar buttons
 			await updateButtonColorScheme();
 
-			// eslint-disable-next-line @typescript-eslint/dot-notation
 			return super.setSelectedScheme(schemeType);
 		}
 	}
