@@ -14,6 +14,7 @@ import {
 	HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
+import { ofRandomUUID } from "../../polyfill";
 import { getAppIcon, getApps } from "../apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { launch } from "../launch";
@@ -444,7 +445,7 @@ export async function register(): Promise<HomeRegistration> {
 							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 							data: {
 								tags: ["workspace"],
-								workspaceId: crypto.randomUUID(),
+								workspaceId: ofRandomUUID(),
 								workspaceTitle: title
 							}
 						}

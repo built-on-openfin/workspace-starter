@@ -6,6 +6,7 @@ import {
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 import { getSettings } from "./settings";
+import "./polyfill";
 
 let appWin: OpenFin.Window;
 let authIsBusy: boolean;

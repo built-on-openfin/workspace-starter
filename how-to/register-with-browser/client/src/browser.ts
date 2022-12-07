@@ -5,6 +5,7 @@ import {
 	PageWithUpdatableRuntimeAttribs,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import { ofRandomUUID } from "./polyfill";
 
 const platform: WorkspacePlatformModule = getCurrentSync();
 
@@ -22,7 +23,7 @@ export async function launchView(
 }
 
 export async function createPageLayout(layout): Promise<PageLayout> {
-	const layoutId: string = `layout-${window.crypto.randomUUID()}`;
+	const layoutId: string = `layout-${ofRandomUUID()}`;
 	return {
 		...layout,
 		layoutDetails: { layoutId }
@@ -35,7 +36,7 @@ export async function createPageWithLayout(
 ): Promise<PageWithUpdatableRuntimeAttribs> {
 	const layoutWithDetails = await createPageLayout(layout);
 	return {
-		pageId: window.crypto.randomUUID(),
+		pageId: ofRandomUUID(),
 		title,
 		layout: layoutWithDetails,
 		isReadOnly: false,
@@ -46,7 +47,7 @@ export async function createPageWithLayout(
 export function createViewIdentity(uuid: string, name: string): OpenFin.Identity {
 	const viewIdentity: OpenFin.Identity = {
 		uuid,
-		name: `${window.crypto.randomUUID()}-${name}`
+		name: `${ofRandomUUID()}-${name}`
 	};
 	return viewIdentity;
 }

@@ -1,5 +1,6 @@
 import type { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import { ofRandomUUID } from "../polyfill";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
@@ -93,7 +94,7 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 	if (wasNameSpecified) {
 		windowExists = await doesWindowExist(identity.name, identity.uuid);
 	} else {
-		manifest.name = `classic-window-${crypto.randomUUID()}`;
+		manifest.name = `classic-window-${ofRandomUUID()}`;
 		identity.name = manifest.name;
 	}
 
@@ -181,7 +182,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 		for (let i = 0; i < windows.length; i++) {
 			const getViewIdsForLayout = findViewNames(windows[i].layout);
 			if (getViewIdsForLayout.length === 0) {
-				const uuid = window.crypto.randomUUID();
+				const uuid = ofRandomUUID();
 				const name = `internal-generated-window-${uuid}`;
 				windows[i].name = name;
 				windowsToCreate.push(windows[i]);

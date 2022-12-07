@@ -8,6 +8,7 @@ import {
 	IndicatorColor,
 	NotificationOptions
 } from "@openfin/workspace/notifications";
+import { ofRandomUUID } from "../../lib/polyfill";
 import { createContainer, createLabelledForm, createText } from "./notifications";
 
 interface IrsRfqData {
@@ -145,7 +146,7 @@ async function init() {
 			window.setTimeout(async () => {
 				const quoteData = event.result.customData as IrsRfqData;
 				quoteData.executionTime = Date.now();
-				quoteData.ref = crypto.randomUUID().slice(0, 10);
+				quoteData.ref = ofRandomUUID().slice(0, 10);
 				await showClientConfirmation(quoteData);
 			}, 5000);
 		} else if (event?.result?.task === "dismiss-quote-client") {
@@ -323,7 +324,7 @@ async function showNotification(
 	}[]
 ): Promise<string> {
 	const title = createTitle(rfqData);
-	const id = crypto.randomUUID();
+	const id = ofRandomUUID();
 
 	const bodyTemplateOptions: BodyTemplateOptions = {
 		compositions: [

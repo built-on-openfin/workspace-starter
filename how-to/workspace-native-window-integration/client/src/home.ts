@@ -16,6 +16,7 @@ import {
 import type { BrowserSnapshot } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { launch } from "./launch";
+import { ofRandomUUID } from "./polyfill";
 import { getSettings } from "./settings";
 import { WORKSPACE_TEMPLATE } from "./template";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
@@ -318,7 +319,7 @@ export async function register() {
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
 							tags: ["workspace"],
-							workspaceId: crypto.randomUUID(),
+							workspaceId: ofRandomUUID(),
 							workspaceTitle: title,
 							workspaceDescription: description
 						}
