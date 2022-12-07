@@ -112,7 +112,7 @@ The connectionProvider has a function that is used to see if a connection is lis
 
 ```json
 "connectionProvider": {
-   "connectionId": "customize-workspace-workspace-connection",
+   "connectionId": "workspace-connection",
    "connectionValidationEndpoint": "connection-verification",
    "supportedActions": [
     "show-home",
@@ -148,7 +148,7 @@ The connectionProvider has a function that is used to see if a connection is lis
 
 The settings are as follows:
 
-- **connectionId**: This is the id of the channel api apps will connect to (apps do not need to connect to it for the broker connection if that is all they are doing). Connected clients can explicitly call a disconnect function to let the workspace platform they are disconnecting e.g.
+- **connectionId**: This is the id of the channel api apps will connect to (apps do not need to connect to it for the broker connection if that is all they are doing). The channel name will be prefixed with the uuid of your platform. Given the example above the channel id will be {youruuid}-{connectionId}: **customize-workspace-workspace-connection**. Connected clients can explicitly call a disconnect function to let the workspace platform they are disconnecting e.g.
 
 ```csharp
 await _connectionService.DispatchAsync("disconnect");

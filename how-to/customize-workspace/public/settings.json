@@ -842,7 +842,7 @@
 		]
 	},
 	"connectionProvider": {
-		"connectionId": "second-workspace-starter-how-to-customize-workspace-workspace-connection",
+		"connectionId": "workspace-connection",
 		"connectionValidationEndpoint": "connection-verification",
 		"supportedActions": [
 			"show-home",

@@ -751,7 +751,7 @@
 			]
 		},
 		"connectionProvider": {
-			"connectionId": "customize-workspace-workspace-connection",
+			"connectionId": "workspace-connection",
 			"supportedActions": [
 				"show-home",
 				"show-store",
