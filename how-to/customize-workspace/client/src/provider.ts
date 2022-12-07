@@ -1,6 +1,5 @@
 import { init as bootstrap } from "./framework/bootstrapper";
 import { init as initialisePlatform } from "./framework/platform/platform";
-import "./polyfill";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	const platform = fin.Platform.getCurrentSync();
