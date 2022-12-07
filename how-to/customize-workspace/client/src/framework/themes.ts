@@ -248,7 +248,7 @@ function validatePalette(
 
 function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, scheme: string): boolean {
 	if ("palette" in theme) {
-		return theme.label.toLowerCase() === scheme;
+		return theme.label.toLowerCase().includes(scheme);
 	}
 
 	return theme.palettes[scheme] !== undefined;

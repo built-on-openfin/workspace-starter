@@ -34,6 +34,8 @@ export async function register() {
 
 export async function deregister() {
 	if (notificationsRegistered) {
+		notificationsRegistered = false;
+
 		const settings = await getSettings();
 		const notificationPlatform = settings.notificationProvider;
 		if (notificationPlatform !== undefined) {
