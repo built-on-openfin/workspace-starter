@@ -1,4 +1,4 @@
-export function ofRandomUUID(): string {
+export function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();

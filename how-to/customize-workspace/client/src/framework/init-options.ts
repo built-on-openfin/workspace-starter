@@ -1,5 +1,4 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { ofRandomUUID } from "../polyfill";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
@@ -11,6 +10,7 @@ import type {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./shapes/init-options-shapes";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("InitOptions");
 
@@ -179,7 +179,7 @@ export function registerActionListener(
 	lifecycle: InitOptionsLifecycle,
 	actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>
 ): string {
-	const key = ofRandomUUID();
+	const key = randomUUID();
 	if (!actionListeners.has(action)) {
 		actionListeners.set(action, new Map());
 	}
@@ -201,7 +201,7 @@ export function registerListener(
 		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return null;
 	}
-	const key = ofRandomUUID();
+	const key = randomUUID();
 	if (!listeners.has(paramName)) {
 		listeners.set(paramName, new Map());
 	}

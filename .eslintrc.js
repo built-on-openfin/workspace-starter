@@ -226,7 +226,7 @@ module.exports = {
 				selector:
 					":matches(MemberExpression[object.name='crypto'][property.name='randomUUID'],MemberExpression[object.object.name='window'][object.property.name='crypto'][property.name='randomUUID'])",
 				message:
-					'window.crypto.randomUUID is not allowed because it is not available in non-secure contexts, use ofRandomUUID instead'
+					'window.crypto.randomUUID is not allowed because it is not available in non-secure contexts, use randomUUID from the uuid module instead'
 			}
 		],
 		'no-return-assign': ['error'],

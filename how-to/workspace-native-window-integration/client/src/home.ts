@@ -16,9 +16,9 @@ import {
 import type { BrowserSnapshot } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
 import { launch } from "./launch";
-import { ofRandomUUID } from "./polyfill";
 import { getSettings } from "./settings";
 import { WORKSPACE_TEMPLATE } from "./template";
+import { randomUUID } from "./uuid";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
 
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
@@ -319,7 +319,7 @@ export async function register() {
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
 							tags: ["workspace"],
-							workspaceId: ofRandomUUID(),
+							workspaceId: randomUUID(),
 							workspaceTitle: title,
 							workspaceDescription: description
 						}

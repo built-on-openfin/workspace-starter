@@ -1,6 +1,6 @@
 import * as auth0 from "auth0-js";
-import { ofRandomUUID } from "./polyfill";
 import type { AuthSettings } from "./shapes";
+import { randomUUID } from "./uuid";
 
 const STORAGE_REALM = "integrate-with-sso";
 const STORE_ACCESS_TOKEN = "token";
@@ -52,7 +52,7 @@ export async function init(
 function createWebAuth(): { webAuth: auth0.WebAuth; state: string } {
 	let state = loadProperty(STORE_AUTH_STATE);
 	if (!loadProperty(STORE_AUTH_STATE)) {
-		state = ofRandomUUID();
+		state = randomUUID();
 		saveProperty(STORE_AUTH_STATE, state);
 	}
 

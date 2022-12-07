@@ -1,6 +1,6 @@
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
-import { ofRandomUUID } from "../../../polyfill";
+import { randomUUID } from "../../../framework/uuid";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
@@ -236,7 +236,7 @@ export function subscribe(
 	to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
 	callback: () => Promise<void>
 ): string {
-	const key = ofRandomUUID();
+	const key = randomUUID();
 	let matchFound = false;
 	switch (to) {
 		case "logged-in": {
