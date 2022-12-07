@@ -54,6 +54,10 @@ You may have your code on one server and your manifest coming from another. Cust
 
 The json file is currently configured to support localhost manifests and OpenFin related domains. Please update it to reflect your own host names.
 
+### Secure who can connect to your platform
+
+You may wish to allow other applications to connect to your broker, or provide apps or become part of a snapshot. An approach you can follow may be requiring a payload when someone connects to you alongside a UUID list. See [how to manage connections to your platform](./how-to-manage-connections-to-your-platform.md)
+
 ## General Web Security
 
 As a platform is a web application please consider the same security guidelines that you would for a web application (e.g. trusting the JavaScript modules you import, using [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) etc).

@@ -1,6 +1,9 @@
 import {
 	register as registerPlatform,
-	deregister as deregisterPlatform
+	deregister as deregisterPlatform,
+	show as showNotifications,
+	hide as hideNotifications,
+	ShowOptions
 } from "@openfin/workspace/notifications";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
@@ -42,4 +45,12 @@ export async function deregister() {
 			);
 		}
 	}
+}
+
+export async function show(options?: ShowOptions): Promise<void> {
+	return showNotifications(options);
+}
+
+export async function hide(): Promise<void> {
+	return hideNotifications();
 }
