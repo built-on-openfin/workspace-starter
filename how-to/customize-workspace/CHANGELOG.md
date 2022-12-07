@@ -5,6 +5,7 @@
 - Added support for new themes format with light and dark schemes
 - Added example of using setSearchQuery API for home integration
 - Use Notifications now uses Show/Hide APIs instead of toggle
+- Shim randomUUID so that it can be used in non secure contexts
 
 ## v9.2
 

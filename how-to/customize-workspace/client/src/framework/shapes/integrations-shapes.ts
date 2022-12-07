@@ -48,6 +48,12 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
+
+	/**
+	 * Set the home search query.
+	 * @param query The query to set.
+	 */
+	setSearchQuery?(query: string): Promise<void>;
 }
 
 /**
