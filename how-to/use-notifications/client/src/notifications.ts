@@ -17,6 +17,7 @@ import {
 } from "@openfin/workspace/notifications";
 import type * as CSS from "csstype";
 import { addEventListener as providerEventListener } from "./provider-event-listener";
+import { randomUUID } from "./uuid";
 
 let loggingElement: HTMLElement;
 const updatableNotifications = {};
@@ -228,7 +229,7 @@ async function showSimpleNotification() {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform
 	};
 
@@ -242,7 +243,7 @@ async function showSimpleNotificationBodyDismiss() {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform,
 		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT }
 	};
@@ -257,7 +258,7 @@ async function showSimpleNotificationBodyDismissAction() {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform,
 		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT },
 		customData: {
@@ -278,7 +279,7 @@ async function showActionableNotification() {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform,
 		buttons: [
 			{
@@ -309,7 +310,7 @@ async function showFormNotification() {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform,
 		form: [
 			{
@@ -363,7 +364,7 @@ async function showUpdatableNotification() {
 		customData: {
 			count: 0
 		},
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform
 	};
 
@@ -410,7 +411,7 @@ async function showCustomNotification() {
 		toast: "transient",
 		category: "default",
 		template: "custom",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform,
 		templateOptions: {
 			body: {
@@ -450,7 +451,7 @@ async function showSoundNotification(notificationSoundUrl: string) {
 		toast: "transient",
 		category: "default",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: randomUUID(),
 		platform: activePlatform
 	};
 

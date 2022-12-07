@@ -1,12 +1,12 @@
 import {
 	CLITemplate,
-	type HomeDispatchedSearchResult,
 	type CLIFilter,
+	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
+import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
@@ -46,7 +46,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: Integration<AsyncSettings>,
+		definition: ModuleDefinition<AsyncSettings>,
 		loggerCreator: () => void,
 		helpers: IntegrationHelpers
 	): Promise<void> {
@@ -72,7 +72,8 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID
+					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					populateQuery: "/contacts-sync "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
@@ -91,7 +92,8 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID
+					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					populateQuery: "/contacts-partial "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
@@ -110,7 +112,8 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID
+					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					populateQuery: "/contacts "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
