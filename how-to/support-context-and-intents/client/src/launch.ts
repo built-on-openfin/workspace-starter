@@ -1,6 +1,7 @@
 import type { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
+import { randomUUID } from "./uuid";
 
 async function getViewIdentities(name: string, uuid: string) {
 	const identity = { uuid, name };
@@ -106,7 +107,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 		for (let i = 0; i < windows.length; i++) {
 			const getViewIdsForLayout = findViewNames(windows[i].layout);
 			if (getViewIdsForLayout.length === 0) {
-				const uuid = window.crypto.randomUUID();
+				const uuid = randomUUID();
 				const name = `internal-generated-window-${uuid}`;
 				windows[i].name = name;
 				windowsToCreate.push(windows[i]);

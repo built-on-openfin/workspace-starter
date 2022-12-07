@@ -29,6 +29,7 @@ import {
 	PAGE_ACTION_IDS,
 	WORKSPACE_ACTION_IDS
 } from "../template";
+import { randomUUID } from "../uuid";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "../workspace";
 
 const logger = createLogger("Home");
@@ -444,7 +445,7 @@ export async function register(): Promise<HomeRegistration> {
 							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 							data: {
 								tags: ["workspace"],
-								workspaceId: crypto.randomUUID(),
+								workspaceId: randomUUID(),
 								workspaceTitle: title
 							}
 						}

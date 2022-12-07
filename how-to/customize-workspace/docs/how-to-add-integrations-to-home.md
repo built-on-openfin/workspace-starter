@@ -44,7 +44,7 @@ public async getSearchResults(query: string, filters: CLIFilter[], lastResponse:
     if (query.startsWith("/open-site ")) {
         const url = query.replace("/open-site ", "");
         results.push({
-            key: crypto.randomUUID(),
+            key: randomUUID(),
             title: `Open Web Site`,
             label: "Information",
             actions: [
