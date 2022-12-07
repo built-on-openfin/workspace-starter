@@ -1,3 +1,4 @@
+import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import type { App } from "@openfin/workspace";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
@@ -10,7 +11,7 @@ import type {
 
 const logger = createLogger("Connections");
 
-let connectionService: OpenFin.ChannelProvider;
+let connectionService: ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};
 const registeredActions: { [key: string]: () => Promise<void> } = {};
 const appSourceTypeId = "appSource";

@@ -3,6 +3,7 @@ import {
 	CLIFilter,
 	CLITemplate,
 	HomeDispatchedSearchResult,
+	HomeRegistration,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult
@@ -40,11 +41,17 @@ let integrationModules: ModuleEntry<
 >[] = [];
 let integrationHelpers: IntegrationHelpers;
 
+const POPULATE_QUERY = "Populate Query";
+
 /**
  * Initialise all the integrations.
  * @param integrationOptions The integration provider settings.
  */
-export async function init(options: IntegrationProviderOptions, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: IntegrationProviderOptions,
+	helpers: ModuleHelpers,
+	homeRegistration: HomeRegistration
+): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
 
@@ -63,7 +70,10 @@ export async function init(options: IntegrationProviderOptions, helpers: ModuleH
 					icons: null,
 					publisher: null
 				}),
-			openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+			setSearchQuery: homeRegistration.setSearchQuery
+				? async (query) => homeRegistration.setSearchQuery(query)
+				: undefined
 		};
 
 		// Map the old moduleUrl properties to url
@@ -198,8 +208,18 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 
 	for (const integrationModule of integrationModules) {
 		if (integrationModule.isInitialised && integrationModule.implementation.getHelpSearchEntries) {
-			const integrationResults = await integrationModule.implementation.getHelpSearchEntries();
-			results = results.concat(integrationResults);
+			const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
+
+			if (integrationHelpers?.setSearchQuery) {
+				for (const helpEntry of helpSearchEntries) {
+					if (helpEntry.data?.populateQuery) {
+						helpEntry.actions = helpEntry.actions ?? [];
+						helpEntry.actions.push({ name: POPULATE_QUERY, hotkey: "enter" });
+					}
+				}
+			}
+
+			results = results.concat(helpSearchEntries);
 		}
 	}
 
@@ -217,6 +237,16 @@ export async function itemSelection(
 	lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
 	if (result.data) {
+		if (
+			integrationHelpers.setSearchQuery &&
+			result.action.trigger === "user-action" &&
+			result.action.name === POPULATE_QUERY &&
+			typeof result.data?.populateQuery === "string"
+		) {
+			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);
+			return true;
+		}
+
 		if (result.data?.providerId === "integration-provider") {
 			if (result.action.trigger === "user-action") {
 				const integrationId: string = result.data.integrationId;

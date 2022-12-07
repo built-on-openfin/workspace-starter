@@ -1,3 +1,4 @@
+import type { HomeRegistration } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
@@ -53,13 +54,12 @@ export async function init() {
 
 	const helpers: ModuleHelpers = getDefaultHelpers(settings);
 
-	await registerIntegration(settings.integrationProvider, helpers);
-
 	const registeredComponents: BootstrapComponents[] = [];
+	let homeRegistration: HomeRegistration;
 
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running
-		await registerHome();
+		homeRegistration = await registerHome();
 		registeredComponents.push("home");
 		registerAction("show-home", async () => {
 			await showHome();
@@ -68,6 +68,8 @@ export async function init() {
 			await hideHome();
 		});
 	}
+
+	await registerIntegration(settings.integrationProvider, helpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
 		await registerStore();
