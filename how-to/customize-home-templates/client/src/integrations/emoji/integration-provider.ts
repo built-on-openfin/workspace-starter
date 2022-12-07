@@ -7,7 +7,7 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import * as emoji from "node-emoji";
-import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
+import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { EmojiSettings } from "./shapes";
 import { getEmojiTemplate } from "./templates";
@@ -50,7 +50,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _definition: Integration<EmojiSettings> | undefined;
+	private _definition: ModuleDefinition<EmojiSettings> | undefined;
 
 	/**
 	 * Initialize the module.
@@ -60,7 +60,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: Integration<EmojiSettings>,
+		definition: ModuleDefinition<EmojiSettings>,
 		loggerCreator: () => void,
 		helpers: IntegrationHelpers
 	): Promise<void> {
@@ -87,7 +87,8 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 				icon: this._definition?.icon,
 				actions: [],
 				data: {
-					providerId: EmojiIntegrationProvider._PROVIDER_ID
+					providerId: EmojiIntegrationProvider._PROVIDER_ID,
+					populateQuery: "/emoji "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(

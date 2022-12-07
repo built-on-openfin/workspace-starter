@@ -152,7 +152,7 @@ As you can see with very little code we can provide home entries with actions. F
 
 ## Help Query
 
-You can provide help for your commands by implementing the `getHelpSearchEntries` method.
+You can provide help for your commands by implementing the `getHelpSearchEntries` method. If you also add the `populateQuery` property in the data object the help entry will auto fill the home search query box when hitting enter.
 
 ```ts
 public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
@@ -164,7 +164,8 @@ public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
             icon: "http://localhost:8080/favicon.ico,
             actions: [],
             data: {
-                providerId: "my-integration"
+                providerId: "my-integration",
+                populateQuery: "/open-site"
             },
             template: CLITemplate.Custom,
             templateContent: await createHelp(

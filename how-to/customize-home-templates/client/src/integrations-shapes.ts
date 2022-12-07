@@ -46,6 +46,12 @@ export interface IntegrationHelpers {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
+
+	/**
+	 * Set the home search query.
+	 * @param query The query to set.
+	 */
+	setSearchQuery?(query: string): Promise<void>;
 }
 
 /**
@@ -55,13 +61,13 @@ export interface IntegrationProviderOptions {
 	/**
 	 * The list of integrations.
 	 */
-	modules?: Integration<unknown>[];
+	modules?: ModuleDefinition[];
 }
 
 /**
  * Integration details.
  */
-export interface Integration<T> {
+export interface ModuleDefinition<O = unknown> {
 	/**
 	 * The id of the integration.
 	 */
@@ -90,13 +96,13 @@ export interface Integration<T> {
 	/**
 	 * The data specific to the integration.
 	 */
-	data?: T;
+	data?: O;
 }
 
 /**
  * The methods provided by the integration module.
  */
-export interface IntegrationModule<T> {
+export interface IntegrationModule<O = unknown> {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
@@ -105,7 +111,7 @@ export interface IntegrationModule<T> {
 	 * @returns Nothing.
 	 */
 	initialize?(
-		definition: Integration<T>,
+		definition: ModuleDefinition<O>,
 		loggerCreator: () => void,
 		helpers: IntegrationHelpers
 	): Promise<void>;
