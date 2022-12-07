@@ -756,15 +756,27 @@
 				"show-home",
 				"show-store",
 				"show-dock",
+				"show-notifications",
 				"hide-home",
 				"hide-store",
-				"minimize-dock"
+				"minimize-dock",
+				"hide-notifications"
 			],
 			"connections": [
 				{
+					"identity": { "uuid": "customize-workspace" },
+					"validatePayload": false,
+					"connectionTypes": [{ "type": "broker" }]
+				},
+				{
 					"identity": { "uuid": "*" },
 					"validatePayload": false,
-					"connectionTypes": [{ "type": "appSource" }, { "type": "snapshotSource" }, { "type": "actions" },  { "type": "broker" }]
+					"connectionTypes": [
+						{ "type": "appSource" },
+						{ "type": "snapshotSource" },
+						{ "type": "actions" },
+						{ "type": "broker" }
+					]
 				}
 			]
 		}

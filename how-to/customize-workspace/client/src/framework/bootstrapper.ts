@@ -26,7 +26,9 @@ import {
 } from "./workspace/home";
 import {
 	deregister as deregisterNotifications,
-	register as registerNotifications
+	register as registerNotifications,
+	show as showNotifications,
+	hide as hideNotifications
 } from "./workspace/notifications";
 import {
 	deregister as deregisterStore,
@@ -93,6 +95,12 @@ export async function init() {
 
 	if (bootstrapOptions.notifications) {
 		await registerNotifications();
+		registerAction("show-notifications", async () => {
+			await showNotifications();
+		});
+		registerAction("hide-notifications", async () => {
+			await hideNotifications();
+		});
 	}
 
 	// Remove any entries from autoShow that have not been registered

@@ -1,4 +1,8 @@
-export type ConnectionTypes = AppSourceConnection | SnapshotSourceConnection | ActionConnection;
+export type ConnectionTypes =
+	| AppSourceConnection
+	| SnapshotSourceConnection
+	| ActionConnection
+	| BrokerConnection;
 
 export interface ConnectionValidationOptions<T> extends BaseConnection {
 	details?: T;

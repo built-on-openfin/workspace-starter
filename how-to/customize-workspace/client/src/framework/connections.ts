@@ -81,7 +81,9 @@ async function getConnectionListing(identity: OpenFin.Identity): Promise<Connect
 		logger.info(
 			`A specific listing for connection ${identity.uuid} isn't listed but there is a default * entry and it will be used for this connection.`
 		);
-		defaultConnection.identity = identity;
+		const identityWithDefaults: Connection = JSON.parse(JSON.stringify(defaultConnection));
+		identityWithDefaults.identity = identity;
+		return identityWithDefaults;
 	}
 	return defaultConnection;
 }
@@ -101,7 +103,7 @@ export async function init(options: ConnectionProviderOptions) {
 			connectionService.onConnection(async (identity, payload) => {
 				// can reject a connection here by throwing an error
 				logger.info("Client connection request identity", JSON.stringify(identity));
-				logger.info("Client connection request payload", JSON.stringify(payload));
+				logger.info("Client connection has request payload", payload !== undefined);
 
 				const validatedConnection = await getConnectionListing(identity);
 				let isValid = false;
@@ -187,7 +189,7 @@ export function clearAction(actionName: string): boolean {
 }
 
 export async function getConnectedAppSourceClients() {
-	const connections: {
+	const connectionsToReturn: {
 		identity: OpenFin.Identity;
 		connectionData: AppSourceConnection;
 	}[] = [];
@@ -199,11 +201,11 @@ export async function getConnectedAppSourceClients() {
 		);
 
 		if (matchedConnection?.type === appSourceTypeId) {
-			connections.push({ identity: connection.identity, connectionData: matchedConnection });
+			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
 
-	return connections;
+	return connectionsToReturn;
 }
 
 export async function getConnectedApps(): Promise<App[]> {
@@ -249,7 +251,7 @@ export async function launchConnectedApp(app: App) {
 }
 
 export async function getConnectedSnapshotSourceClients() {
-	const connections: { identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[] = [];
+	const connectionsToReturn: { identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[] = [];
 
 	const availableConnections = Object.values(connectedClients);
 	for (const connection of availableConnections) {
@@ -258,11 +260,11 @@ export async function getConnectedSnapshotSourceClients() {
 		);
 
 		if (matchedConnection?.type === snapshotSourceTypeId) {
-			connections.push({ identity: connection.identity, connectionData: matchedConnection });
+			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
 
-	return connections;
+	return connectionsToReturn;
 }
 export async function isConnectionValid<T>(
 	identity: OpenFin.Identity,
@@ -283,7 +285,7 @@ export async function isConnectionValid<T>(
 		if (connectionOptions === undefined || connectionOptions?.connections === undefined) {
 			if (options?.type === "broker") {
 				logger.info(
-					"No connection provider options specified and broker connection requested. Implementing default broker behavior."
+					"No connection provider options specified and broker connection requested. Implementing default broker behavior which is to allow a connection."
 				);
 				responseToReturn.isValid = true;
 				return responseToReturn;
@@ -301,15 +303,17 @@ export async function isConnectionValid<T>(
 			return responseToReturn;
 		}
 		if (listedConnection.validatePayload) {
-			if(connectionOptions.connectionValidationEndpoint === undefined ||
+			if (
+				connectionOptions.connectionValidationEndpoint === undefined ||
 				connectionOptions.connectionValidationEndpoint === null ||
-				connectionOptions.connectionValidationEndpoint.trim() === "") {
-					logger.warn(
-						"This connection has been defined as requiring payload verification but the platform has not provided a connection validation endpoint to use for the verification process. For backwards compatibility this connection is valid unless the broker specifies it wishes to validate."
-					);
-					responseToReturn.isValid = true;
-					return responseToReturn;
-				}
+				connectionOptions.connectionValidationEndpoint.trim() === ""
+			) {
+				logger.warn(
+					"This connection has been defined as requiring payload verification but the platform has not provided a connection validation endpoint to use for the verification process. For backwards compatibility this connection is valid unless the broker specifies it wishes to validate."
+				);
+				responseToReturn.isValid = true;
+				return responseToReturn;
+			}
 			if (endpointProvider.hasEndpoint(connectionOptions.connectionValidationEndpoint)) {
 				const request = { identity, payload, options };
 				logger.info(
