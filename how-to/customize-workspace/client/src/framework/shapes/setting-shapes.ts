@@ -1,4 +1,5 @@
 import type { ActionsProviderOptions } from "./actions-shapes";
+import type { AnalyticsProviderOptions } from "./analytics-shapes";
 import type { AppProviderOptions } from "./app-shapes";
 import type { AuthProviderOptions } from "./auth-shapes";
 import type { BootstrapOptions } from "./bootstrap-shapes";
@@ -38,4 +39,5 @@ export interface CustomSettings {
 	actionsProvider?: ActionsProviderOptions;
 	conditionsProvider?: ConditionsProviderOptions;
 	lifecycleProvider?: LifecycleProviderOptions;
+	analyticsProvider?: AnalyticsProviderOptions;
 }

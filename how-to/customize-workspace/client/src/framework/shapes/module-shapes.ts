@@ -69,6 +69,11 @@ export interface ModuleHelpers {
 	rootUrl?: string;
 
 	/**
+	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace platform or a restarted instance of the platform.
+	 */
+	sessionId: string;
+
+	/**
 	 * Get the default themes.
 	 */
 	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
@@ -110,7 +115,8 @@ export type ModuleTypes =
 	| "initOptions"
 	| "integrations"
 	| "conditions"
-	| "lifecycle";
+	| "lifecycle"
+	| "analytics";
 
 /**
  * The definition of a module with typed entry points.
