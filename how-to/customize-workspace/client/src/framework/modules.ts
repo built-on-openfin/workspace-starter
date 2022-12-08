@@ -1,16 +1,17 @@
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
 import type {
 	Module,
+	ModuleDefinition,
 	ModuleEntry,
 	ModuleEntryTypes,
-	ModuleDefinition,
+	ModuleHelpers,
 	ModuleImplementation,
 	ModuleList,
-	ModuleTypes,
-	ModuleHelpers
+	ModuleTypes
 } from "./shapes/module-shapes";
-import { getCurrentTheme, getDefaultPalettes } from "./themes";
+import { getCurrentColorSchemeMode, getCurrentPalette, getDefaultPalettes } from "./themes";
 import { randomUUID } from "./uuid";
 
 const logger = createLogger("Modules");
@@ -202,6 +203,9 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		sessionId,
 		getDefaultPalettes,
-		getCurrentTheme
+		getCurrentPalette,
+		getCurrentColorSchemeMode,
+		subscribeLifecycleEvent,
+		unsubscribeLifecycleEvent
 	};
 }

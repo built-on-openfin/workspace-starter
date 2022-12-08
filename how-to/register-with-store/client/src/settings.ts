@@ -1,5 +1,4 @@
-import type { CustomPaletteSet } from "@openfin/workspace-platform/common/src/api/theming";
-import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import type { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;

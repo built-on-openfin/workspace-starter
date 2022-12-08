@@ -1,5 +1,15 @@
 # Changelog
 
+## v10
+
+- Added support for new themes format with light and dark schemes
+  - toolbar button icons should now use `{theme}` substitution in icon url instead of `themes` property
+  - dock button icons can also use the `{theme}` syntax
+  - added `theme-changed` life cycle event
+- Added example of using setSearchQuery API for home integration
+- Use Notifications now uses Show/Hide APIs instead of toggle
+- Shim randomUUID so that it can be used in non secure contexts
+
 ## v9.2
 
 - Added `dev` npm script which live build and reloads code for customize-workspace sample

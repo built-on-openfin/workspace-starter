@@ -1,8 +1,7 @@
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions
-} from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
+import type { ColorSchemeMode } from "./theme-shapes";
 
 /**
  * List of modules.
@@ -79,9 +78,28 @@ export interface ModuleHelpers {
 	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
 
 	/**
-	 * Get the current theme.
+	 * Get the current palette.
 	 */
-	getCurrentTheme(): Promise<CustomThemeOptions>;
+	getCurrentPalette(): Promise<CustomPaletteSet>;
+
+	/**
+	 * Get the current color scheme.
+	 */
+	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
+
+	/**
+	 * Subscribe to lifecycle events.
+	 * @param lifecycleEvent The event to subscribe to.
+	 * @param lifecycleHandler The handle for the event.
+	 */
+	subscribeLifecycleEvent(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+
+	/**
+	 * Unsubscribe from lifecycle events.
+	 * @param subscriptionId The id of the subscription.
+	 * @param lifecycleEvent The event to subscribe to.
+	 */
+	unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
 }
 
 /**

@@ -11,7 +11,7 @@ The toolbar buttons on the browser window can be configured in the customize exa
 
 The list of buttons to display is configured in the manifest as an array.
 
-For each button you must specify an `id`, a flag `include` which determines if it should be shown and the `button` definition. Optional properties are `themes` which allows you to override the icon displayed for specific theme and `conditions` which also determines if the button should be shown based on additional logic.
+For each button you must specify an `id`, a flag `include` which determines if it should be shown and the `button` definition. The iconUrl can use the `{theme}` placeholder which will get substituted with light/dark depending on the chosen theme. The optional property of `conditions` which also determines if the button should be shown based on additional logic.
 
 ```json
 "browserProvider": {
@@ -22,14 +22,11 @@ For each button you must specify an `id`, a flag `include` which determines if i
             "button": {
                 "type": "Custom",
                 "tooltip": "Show Home",
-                "iconUrl": "http://localhost:8080/common/icons/search.svg",
+                "iconUrl": "http://localhost:8080/common/icons/{theme}/search.svg",
                 "action": {
                     "id": "home-show",
                     "customData": {}
                 }
-            },
-            "themes": {
-                "dark": "http://localhost:8080/common/icons/search-dark.svg"
             },
             "conditions": [
                 "authenticated"
@@ -85,7 +82,7 @@ When the custom button is clicked the `id` is used to look up one of the platfor
             "button": {
                 "type": "Custom",
                 "tooltip": "My Operation",
-                "iconUrl": "http://localhost:8080/common/icons/my-operation.svg",
+                "iconUrl": "http://localhost:8080/common/icons/{theme}/my-operation.svg",
                 "action": {
                     "id": "my-operation",
                     "customData": {

@@ -1,4 +1,5 @@
 import {
+	ColorSchemeOptionType,
 	CreateSavedPageRequest,
 	CreateSavedWorkspaceRequest,
 	getCurrentSync,
@@ -13,12 +14,14 @@ import {
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";
+import { updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
+import { setCurrentColorSchemeMode } from "../themes";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -294,6 +297,30 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 				return super.quit(payload, callerIdentity);
 			}
+		}
+
+		public async createWindow(
+			options: OpenFin.PlatformWindowCreationOptions,
+			identity?: OpenFin.Identity
+		): Promise<OpenFin.Window> {
+			const window = await super.createWindow(options, identity);
+
+			try {
+				const platform = getCurrentSync();
+				const browserWindow = platform.Browser.wrapSync(window.identity);
+				await updateBrowserWindowButtonsColorScheme(browserWindow);
+			} catch {
+				// Probably not a browser window
+			}
+
+			return window;
+		}
+
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+			// The color scheme has been updated, so update the theme
+			await setCurrentColorSchemeMode(schemeType);
+
+			return super.setSelectedScheme(schemeType);
 		}
 
 		public async handleAnalytics(events: AnalyticsEvent[]) {

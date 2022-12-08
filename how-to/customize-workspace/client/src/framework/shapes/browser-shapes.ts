@@ -8,7 +8,6 @@ import type {
 export interface ToolbarButtonDefinition {
 	id: string;
 	include: boolean;
-	themes?: { [key: string]: string };
 	button: ToolbarButton & { iconUrl?: string };
 	conditions?: string[];
 }

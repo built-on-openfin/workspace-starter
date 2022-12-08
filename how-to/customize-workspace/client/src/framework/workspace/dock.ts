@@ -1,18 +1,65 @@
 import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
 import { ACTION_IDS } from "../actions";
 import { getApp, getAppIcon, getAppsByTag } from "../apps";
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
-import type { BootstrapOptions } from "../shapes";
+import type { BootstrapOptions, CustomSettings } from "../shapes";
+import { getCurrentColorSchemeMode } from "../themes";
 
 const logger = createLogger("Dock");
 
-let isDockRegistered = false;
+let registrationInfo: RegistrationMetaInfo | undefined;
+let registeredBootstrapOptions: BootstrapOptions | undefined;
+let lifeCycleSubscriptionId: string;
+let registeredButtons: DockButton[];
 
-export async function register(bootstrapOptions: BootstrapOptions): Promise<RegistrationMetaInfo> {
-	const settings = await getSettings();
+export async function register(bootstrapOptions?: BootstrapOptions): Promise<RegistrationMetaInfo> {
+	if (!registrationInfo) {
+		const settings = await getSettings();
+
+		const buttons = await calculateButtons(settings, bootstrapOptions);
+
+		await finalizeRegistration(settings, buttons);
+	}
+
+	return registrationInfo;
+}
+
+async function finalizeRegistration(settings: CustomSettings, buttons: DockButton[]) {
+	registrationInfo = await Dock.register({
+		id: settings.dockProvider?.id,
+		title: settings.dockProvider?.title,
+		icon: settings.dockProvider?.icon,
+		workspaceComponents: {
+			hideWorkspacesButton: settings.dockProvider.workspaceComponents?.hideWorkspacesButton,
+			hideHomeButton:
+				!registeredBootstrapOptions.home || settings.dockProvider.workspaceComponents?.hideHomeButton,
+			hideStorefrontButton:
+				!registeredBootstrapOptions.store || settings.dockProvider.workspaceComponents?.hideStorefrontButton,
+			hideNotificationsButton:
+				!registeredBootstrapOptions.notifications ||
+				settings.dockProvider.workspaceComponents?.hideNotificationsButton
+		},
+		buttons
+	});
+
+	registeredButtons = buttons;
+
+	lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
+
+	logger.info("Version:", registrationInfo);
+	logger.info("Dock provider initialized");
+}
+
+async function calculateButtons(
+	settings: CustomSettings,
+	bootstrapOptions: BootstrapOptions
+): Promise<DockButton[]> {
+	registeredBootstrapOptions = registeredBootstrapOptions ?? bootstrapOptions;
 
 	const buttons: DockButton[] = [];
+	const colorSchemeMode = await getCurrentColorSchemeMode();
 
 	if (Array.isArray(settings.dockProvider.apps)) {
 		for (const appButton of settings.dockProvider.apps) {
@@ -25,7 +72,10 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					for (const dockApp of dockApps) {
 						buttons.push({
 							tooltip: appButton.tooltip ?? dockApp.title,
-							iconUrl: appButton.iconUrl ?? getAppIcon(dockApp),
+							iconUrl: (appButton.iconUrl ?? getAppIcon(dockApp)).replace(
+								/{theme}/g,
+								colorSchemeMode as string
+							),
 							action: {
 								id: ACTION_IDS.launchApp,
 								customData: {
@@ -63,7 +113,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: appButton.tooltip,
-						iconUrl,
+						iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 						options
 					});
 				}
@@ -111,7 +161,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: dockButton.tooltip,
-						iconUrl: dockButton.iconUrl,
+						iconUrl: dockButton.iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 						options
 					});
 				}
@@ -137,7 +187,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 				buttons.push({
 					type: DockButtonNames.ActionButton,
 					tooltip,
-					iconUrl,
+					iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 					action: dockButton.appId
 						? {
 								id: ACTION_IDS.launchApp,
@@ -151,27 +201,7 @@ export async function register(bootstrapOptions: BootstrapOptions): Promise<Regi
 			}
 		}
 	}
-
-	const registrationInfo = await Dock.register({
-		id: settings.dockProvider?.id,
-		title: settings.dockProvider?.title,
-		icon: settings.dockProvider?.icon,
-		workspaceComponents: {
-			hideWorkspacesButton: settings.dockProvider.workspaceComponents?.hideWorkspacesButton,
-			hideHomeButton: !bootstrapOptions.home || settings.dockProvider.workspaceComponents?.hideHomeButton,
-			hideStorefrontButton:
-				!bootstrapOptions.store || settings.dockProvider.workspaceComponents?.hideStorefrontButton,
-			hideNotificationsButton:
-				!bootstrapOptions.notifications || settings.dockProvider.workspaceComponents?.hideNotificationsButton
-		},
-		buttons
-	});
-
-	logger.info("Version:", registrationInfo);
-	isDockRegistered = true;
-	logger.info("Dock provider initialized");
-
-	return registrationInfo;
+	return buttons;
 }
 
 export async function show() {
@@ -183,8 +213,24 @@ export async function minimize() {
 }
 
 export async function deregister() {
-	if (isDockRegistered) {
+	if (registrationInfo) {
+		unsubscribeLifecycleEvent(lifeCycleSubscriptionId, "theme-changed");
+		lifeCycleSubscriptionId = undefined;
+		registrationInfo = undefined;
 		return Dock.deregister();
 	}
 	logger.warn("Unable to deregister home as there is an indication it was never registered");
+}
+
+async function updateDockColorScheme(): Promise<void> {
+	if (registrationInfo !== undefined) {
+		const settings = await getSettings();
+
+		const newButtons = await calculateButtons(settings, registeredBootstrapOptions);
+
+		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
+			await deregister();
+			await finalizeRegistration(settings, newButtons);
+		}
+	}
 }

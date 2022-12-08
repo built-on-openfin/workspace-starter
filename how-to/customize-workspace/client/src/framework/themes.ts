@@ -1,13 +1,18 @@
+import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
 import type {
 	CustomPaletteSet,
-	CustomThemeOptions
-} from "@openfin/workspace-platform/common/src/api/theming";
+	CustomThemeOptions,
+	CustomThemeOptionsWithScheme,
+	CustomThemes
+} from "@openfin/workspace/common/src/api/theming";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
 
-const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
+const DEFAULT_PALETTES: { [id in ColorSchemeMode]: CustomPaletteSet } = {
 	light: {
 		brandPrimary: "#504CFF",
 		brandSecondary: "#1E1F23",
@@ -58,31 +63,94 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	}
 };
 
-let validatedThemes: CustomThemeOptions[];
+let validatedThemes: CustomThemes;
+let colorSchemeMode: ColorSchemeMode;
 
-function getSystemPreferredColorScheme(): "light" | "dark" {
+function getSystemPreferredColorScheme(): ColorSchemeMode {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
-		return "dark";
+		return ColorSchemeMode.Dark;
 	}
-	return "light";
+	return ColorSchemeMode.Light;
 }
 
-export async function getCurrentTheme(): Promise<CustomThemeOptions> {
+export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
 	if (themes.length === 0) {
-		return {
-			label: "default",
-			palette: DEFAULT_PALETTES.dark
-		};
+		return DEFAULT_PALETTES[ColorSchemeMode.Dark];
 	}
-	return themes[0];
+
+	if ("palette" in themes[0]) {
+		return themes[0].palette;
+	}
+
+	const colorScheme = await getCurrentColorSchemeMode();
+	return themes[0].palettes[colorScheme];
+}
+
+export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
+	if (!colorSchemeMode) {
+		// No theme currently set so try and work it out
+		try {
+			const platform = getCurrentSync();
+			// Get the selected theme from the platform
+			const selectedTheme = await platform.Theme.getSelectedScheme();
+
+			if (selectedTheme === ColorSchemeOptionType.System) {
+				// If set to system then find out what that really means
+				colorSchemeMode = getSystemPreferredColorScheme();
+			} else if (selectedTheme === ColorSchemeOptionType.Dark) {
+				colorSchemeMode = ColorSchemeMode.Dark;
+			} else if (selectedTheme === ColorSchemeOptionType.Light) {
+				colorSchemeMode = ColorSchemeMode.Light;
+			}
+
+			// The theme from the platform could be null if none selected
+			// so use the themes config to work it out
+			if (!colorSchemeMode) {
+				colorSchemeMode = ColorSchemeMode.Dark;
+
+				const themes = await getThemes();
+				if (themes.length > 0) {
+					// If this is an old format theme just see if the label matches light
+					if ("palette" in themes[0]) {
+						if (themes[0].label.toLowerCase().includes("light")) {
+							colorSchemeMode = ColorSchemeMode.Light;
+						} else {
+							colorSchemeMode = ColorSchemeMode.Dark;
+						}
+					} else {
+						// Its new format so look at the default mode if it has one
+						colorSchemeMode = (themes[0].default as ColorSchemeMode) ?? ColorSchemeMode.Dark;
+					}
+				}
+			}
+		} catch {
+			// Platform probably not running yet, don't set a default as we want
+			// subsequent successful calls to populate it when the platform is running
+		}
+	}
+
+	return colorSchemeMode ?? ColorSchemeMode.Dark;
+}
+
+export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionType): Promise<void> {
+	if (colorScheme === ColorSchemeOptionType.System) {
+		colorSchemeMode = getSystemPreferredColorScheme();
+	} else if (colorScheme === ColorSchemeOptionType.Light) {
+		colorSchemeMode = ColorSchemeMode.Light;
+	} else {
+		colorSchemeMode = ColorSchemeMode.Dark;
+	}
+
+	const platform = getCurrentSync();
+	await fireLifecycleEvent(platform, "theme-changed");
 }
 
 export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
 	return DEFAULT_PALETTES;
 }
 
-export async function getThemes(): Promise<CustomThemeOptions[]> {
+export async function getThemes(): Promise<CustomThemes> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);
@@ -90,28 +158,40 @@ export async function getThemes(): Promise<CustomThemeOptions[]> {
 	return validatedThemes.slice();
 }
 
-export function validateThemes(themes: CustomThemeOptions[]): CustomThemeOptions[] {
-	const customThemes: CustomThemeOptions[] = [];
+export function validateThemes(themes: CustomThemes): CustomThemes {
+	const customThemes: CustomThemes = [];
 
 	if (Array.isArray(themes)) {
 		const preferredColorScheme = getSystemPreferredColorScheme();
 
 		for (let i = 0; i < themes.length; i++) {
 			const themeToValidate = themes[i];
-			const palette = validatePalette(themeToValidate.palette, themeToValidate.label);
-			if (palette !== null) {
-				themeToValidate.palette = palette;
+			if ("palette" in themeToValidate) {
+				themeToValidate.palette = validatePalette(
+					themeToValidate.palette,
+					themeToValidate.label,
+					DEFAULT_PALETTES[ColorSchemeMode.Dark]
+				);
 			} else {
-				// don't pass an empty object as there are no theme properties
-				themeToValidate.palette = undefined;
+				themeToValidate.palettes[ColorSchemeMode.Dark] = validatePalette(
+					themeToValidate.palettes[ColorSchemeMode.Dark],
+					themeToValidate.label,
+					DEFAULT_PALETTES[ColorSchemeMode.Dark]
+				);
+				themeToValidate.palettes[ColorSchemeMode.Light] = validatePalette(
+					themeToValidate.palettes[ColorSchemeMode.Light],
+					themeToValidate.label,
+					DEFAULT_PALETTES[ColorSchemeMode.Light]
+				);
 			}
-			if (themeToValidate.label.toLowerCase() === preferredColorScheme) {
+
+			if (hasScheme(themes[i], preferredColorScheme)) {
 				logger.info(
 					`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
 				);
-				customThemes.unshift(themeToValidate);
+				customThemes.unshift(themes[i]);
 			} else {
-				customThemes.push(themeToValidate);
+				customThemes.push(themes[i]);
 			}
 		}
 	}
@@ -121,28 +201,31 @@ export function validateThemes(themes: CustomThemeOptions[]): CustomThemeOptions
 
 function validatePalette(
 	themePalette: CustomPaletteSet | undefined,
-	themeLabel: string
-): CustomPaletteSet | null {
+	themeLabel: string,
+	defaultPalette: CustomPaletteSet
+): CustomPaletteSet | undefined {
 	if (!themePalette) {
-		return null;
+		return undefined;
 	}
 
 	const keys = Object.keys(themePalette);
 	if (keys.length === 0) {
-		return null;
+		return undefined;
 	}
 
-	const palette: CustomPaletteSet = {
-		...DEFAULT_PALETTES.dark
+	// Fill all the palette properties from the default palette as a default
+	const combinedPalette = {
+		...defaultPalette
 	};
 
+	// Then override with any from the theme palette
 	for (const key of keys) {
 		if (
 			themePalette[key] !== undefined &&
 			themePalette[key] !== null &&
 			themePalette[key].trim().length > 0
 		) {
-			palette[key] = themePalette[key];
+			combinedPalette[key] = themePalette[key];
 		}
 	}
 
@@ -152,21 +235,29 @@ function validatePalette(
 
 	if (!themePalette[brandPrimaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
+			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandPrimary}`
 		);
 	}
 
 	if (!themePalette[brandSecondaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandSecondary}`
+			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandSecondary}`
 		);
 	}
 
 	if (!themePalette[backgroundPrimaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
+			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandPrimary}`
 		);
 	}
 
-	return palette;
+	return combinedPalette;
+}
+
+function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, scheme: string): boolean {
+	if ("palette" in theme) {
+		return theme.label.toLowerCase().includes(scheme);
+	}
+
+	return theme.palettes[scheme] !== undefined;
 }
