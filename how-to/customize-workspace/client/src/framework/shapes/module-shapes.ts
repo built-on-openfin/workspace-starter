@@ -1,4 +1,4 @@
-import type { CustomPaletteSet } from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import type { LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
 

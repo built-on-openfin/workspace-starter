@@ -1,4 +1,4 @@
-import type { CustomThemeOptions } from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 
 interface BrowserProvider {
 	windowOptions: {

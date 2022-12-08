@@ -1,7 +1,4 @@
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions
-} from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { getSettings } from "./settings";
 
 const DEFAULT_PALETTES = {
