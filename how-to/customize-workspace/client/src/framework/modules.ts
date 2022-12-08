@@ -11,8 +11,10 @@ import type {
 	ModuleHelpers
 } from "./shapes/module-shapes";
 import { getCurrentTheme, getDefaultPalettes } from "./themes";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("Modules");
+const sessionId = randomUUID();
 
 /**
  * All the loaded modules.
@@ -198,6 +200,7 @@ export async function closedownModule<
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
+		sessionId,
 		getDefaultPalettes,
 		getCurrentTheme
 	};

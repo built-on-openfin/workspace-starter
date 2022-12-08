@@ -11,10 +11,13 @@ import {
 	Workspace,
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
+import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
+import * as analyticsProvider from "../analytics";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
@@ -290,6 +293,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				await closedownPlatform();
 
 				return super.quit(payload, callerIdentity);
+			}
+		}
+
+		public async handleAnalytics(events: AnalyticsEvent[]) {
+			if (analyticsProvider.isEnabled()) {
+				const platformEvents: PlatformAnalyticsEvent[] = [];
+				const timestamp = new Date().toISOString();
+				for (const analyticEvent of events) {
+					platformEvents.push({ timestamp, ...analyticEvent });
+				}
+				await analyticsProvider.handleAnalytics(platformEvents);
 			}
 		}
 	}

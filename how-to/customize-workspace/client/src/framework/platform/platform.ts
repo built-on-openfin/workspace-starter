@@ -4,6 +4,7 @@ import {
 	init as workspacePlatformInit
 } from "@openfin/workspace-platform";
 import { getActions } from "../actions";
+import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
 import * as authProvider from "../auth";
 import { isAuthenticationEnabled } from "../auth";
@@ -71,6 +72,7 @@ async function setupPlatform() {
 
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
+	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider, helpers);
 	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
