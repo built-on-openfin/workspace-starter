@@ -317,9 +317,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// The color scheme has been updated, so update the theme
 			await setCurrentColorSchemeMode(schemeType);
 
-			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "theme-changed");
-
 			return super.setSelectedScheme(schemeType);
 		}
 	}

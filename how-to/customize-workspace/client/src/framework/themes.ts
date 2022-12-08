@@ -5,6 +5,7 @@ import type {
 	CustomThemeOptionsWithScheme,
 	CustomThemes
 } from "@openfin/workspace/common/src/api/theming";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { ColorSchemeMode } from "./shapes/theme-shapes";
@@ -140,6 +141,9 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 	} else {
 		colorSchemeMode = ColorSchemeMode.Dark;
 	}
+
+	const platform = getCurrentSync();
+	await fireLifecycleEvent(platform, "theme-changed");
 }
 
 export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
