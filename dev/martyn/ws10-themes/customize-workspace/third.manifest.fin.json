@@ -139,7 +139,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/light/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/{theme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
