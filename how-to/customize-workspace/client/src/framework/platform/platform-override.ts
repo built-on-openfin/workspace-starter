@@ -19,11 +19,7 @@ import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import {
-	deregister as deregisterDock,
-	isRegistered as isRegisteredDock,
-	register as registerDock
-} from "../workspace/dock";
+import { updateDockColorScheme } from "../workspace/dock";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -326,10 +322,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			await updateButtonColorScheme();
 
 			// And relaunch the dock as we currently can't dynamically update buttons
-			if (isRegisteredDock()) {
-				await deregisterDock();
-				await registerDock();
-			}
+			await updateDockColorScheme();
 
 			return super.setSelectedScheme(schemeType);
 		}

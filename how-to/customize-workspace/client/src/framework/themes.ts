@@ -97,6 +97,10 @@ export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
 			if (selectedTheme === ColorSchemeOptionType.System) {
 				// If set to system then find out what that really means
 				colorSchemeMode = getSystemPreferredColorScheme();
+			} else if (selectedTheme === ColorSchemeOptionType.Dark) {
+				colorSchemeMode = ColorSchemeMode.Dark;
+			} else if (selectedTheme === ColorSchemeOptionType.Light) {
+				colorSchemeMode = ColorSchemeMode.Light;
 			}
 
 			// The theme from the platform could be null if none selected

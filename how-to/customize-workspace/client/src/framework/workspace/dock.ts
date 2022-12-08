@@ -4,6 +4,7 @@ import { getApp, getAppIcon, getAppsByTag } from "../apps";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { BootstrapOptions } from "../shapes";
+import { getCurrentColorSchemeMode } from "../themes";
 
 const logger = createLogger("Dock");
 
@@ -16,6 +17,7 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 		registeredBootstrapOptions = registeredBootstrapOptions ?? bootstrapOptions;
 
 		const buttons: DockButton[] = [];
+		const colorSchemeMode = await getCurrentColorSchemeMode();
 
 		if (Array.isArray(settings.dockProvider.apps)) {
 			for (const appButton of settings.dockProvider.apps) {
@@ -28,7 +30,10 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 						for (const dockApp of dockApps) {
 							buttons.push({
 								tooltip: appButton.tooltip ?? dockApp.title,
-								iconUrl: appButton.iconUrl ?? getAppIcon(dockApp),
+								iconUrl: (appButton.iconUrl ?? getAppIcon(dockApp)).replace(
+									/{theme}/g,
+									colorSchemeMode as string
+								),
 								action: {
 									id: ACTION_IDS.launchApp,
 									customData: {
@@ -66,7 +71,7 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 						buttons.push({
 							type: DockButtonNames.DropdownButton,
 							tooltip: appButton.tooltip,
-							iconUrl,
+							iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 							options
 						});
 					}
@@ -114,7 +119,7 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 						buttons.push({
 							type: DockButtonNames.DropdownButton,
 							tooltip: dockButton.tooltip,
-							iconUrl: dockButton.iconUrl,
+							iconUrl: dockButton.iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 							options
 						});
 					}
@@ -140,7 +145,7 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 					buttons.push({
 						type: DockButtonNames.ActionButton,
 						tooltip,
-						iconUrl,
+						iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
 						action: dockButton.appId
 							? {
 									id: ACTION_IDS.launchApp,
@@ -188,6 +193,30 @@ export async function minimize() {
 	return Dock.minimize();
 }
 
+export async function getWindowState(): Promise<"normal" | "minimized" | "none"> {
+	if (registrationInfo) {
+		try {
+			const win = fin.Window.wrapSync({ name: "openfin-dock", uuid: "openfin-browser" });
+			const state = await win.getState();
+			if (state === "normal") {
+				return "normal";
+			} else if (state === "minimized") {
+				return "minimized";
+			}
+		} catch {}
+	}
+
+	return "none";
+}
+
+export async function setWindowState(state: "normal" | "minimized" | "none"): Promise<void> {
+	if (state === "normal") {
+		await Dock.show();
+	} else if (state === "minimized") {
+		await Dock.minimize();
+	}
+}
+
 export async function deregister() {
 	if (registrationInfo) {
 		registrationInfo = undefined;
@@ -196,6 +225,11 @@ export async function deregister() {
 	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
-export function isRegistered(): boolean {
-	return registrationInfo !== undefined;
+export async function updateDockColorScheme(): Promise<void> {
+	if (registrationInfo !== undefined) {
+		const state = await getWindowState();
+		await deregister();
+		await register();
+		await setWindowState(state);
+	}
 }

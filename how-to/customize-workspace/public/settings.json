@@ -345,15 +345,12 @@
 			},
 			{
 				"include": true,
-				"themes": {
-					"light": "http://localhost:8080/common/icons/light/search.svg"
-				},
 				"id": "home-show",
 				"button": {
 					"type": "Custom",
 					"tooltip": "Show Home",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/dark/search.svg",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/search.svg",
 					"action": {
 						"id": "home-show",
 						"customData": {}
@@ -363,14 +360,11 @@
 			{
 				"include": true,
 				"id": "notification-toggle",
-				"themes": {
-					"light": "http://localhost:8080/common/icons/light/bell.svg"
-				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Toggle Notification Center",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/dark/bell.svg",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/bell.svg",
 					"action": {
 						"id": "notification-toggle",
 						"customData": {}
@@ -380,14 +374,11 @@
 			{
 				"include": true,
 				"id": "pin-window",
-				"themes": {
-					"light": "http://localhost:8080/common/icons/light/pin.svg"
-				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Pin this window",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/dark/pin.svg",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/pin.svg",
 					"action": {
 						"id": "pin-window",
 						"customData": {
@@ -400,14 +391,11 @@
 			{
 				"include": false,
 				"id": "unpin-window",
-				"themes": {
-					"light": "http://localhost:8080/common/icons/light/pin-vertical.svg"
-				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Unpin this window",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/dark/pin-vertical.svg",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/pin-vertical.svg",
 					"action": {
 						"id": "unpin-window",
 						"customData": {
@@ -448,14 +436,11 @@
 			{
 				"include": true,
 				"id": "share",
-				"themes": {
-					"light": "http://localhost:8080/common/icons/light/share.svg"
-				},
 				"button": {
 					"type": "Custom",
 					"tooltip": "Share",
 					"disabled": false,
-					"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/share.svg",
 					"action": {
 						"id": "share",
 						"customData": {}
@@ -741,7 +726,7 @@
 			},
 			{
 				"tooltip": "Social",
-				"iconUrl": "http://localhost:8080/common/icons/dark/share.svg",
+				"iconUrl": "http://localhost:8080/common/icons/{theme}/share.svg",
 				"options": [
 					{
 						"tooltip": "Twitter",
