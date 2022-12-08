@@ -21,8 +21,6 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 		const buttons = await calculateButtons(settings, bootstrapOptions);
 
 		await finalizeRegistration(settings, buttons);
-
-		lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
 	}
 
 	return registrationInfo;
@@ -47,6 +45,8 @@ async function finalizeRegistration(settings: CustomSettings, buttons: DockButto
 	});
 
 	registeredButtons = buttons;
+
+	lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
 
 	logger.info("Version:", registrationInfo);
 	logger.info("Dock provider initialized");
