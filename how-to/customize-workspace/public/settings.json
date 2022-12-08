@@ -879,7 +879,7 @@
 				"id": "analytics.console.example",
 				"url": "http://localhost:8080/js/modules/analytics/example.bundle.js",
 				"data": {
-					"eventLogLevel": "debug"
+					"eventLogLevel": "info"
 				}
 			}
 		]

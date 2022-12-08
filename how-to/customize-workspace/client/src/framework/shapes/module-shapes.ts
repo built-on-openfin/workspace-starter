@@ -71,7 +71,7 @@ export interface ModuleHelpers {
 	/**
 	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace platform or a restarted instance of the platform.
 	 */
-	sessionId?: string;
+	sessionId: string;
 
 	/**
 	 * Get the default themes.

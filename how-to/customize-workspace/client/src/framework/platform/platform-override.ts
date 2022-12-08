@@ -299,7 +299,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async handleAnalytics(events: AnalyticsEvent[]) {
 			if (analyticsProvider.isEnabled()) {
 				const platformEvents: PlatformAnalyticsEvent[] = [];
-				const timestamp = new Date().toISOString();
+				const timestamp = new Date();
 				for (const analyticEvent of events) {
 					platformEvents.push({ timestamp, ...analyticEvent });
 				}

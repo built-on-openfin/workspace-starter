@@ -24,42 +24,14 @@ export class ExampleConsoleAnalyticsModule implements AnalyticsModule<ExampleCon
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._logger = loggerCreator("ExampleConsoleAnalyticsModule");
-		this._logger.info("ExampleConsoleAnalyticsModule initialized");
+		this._logger.info("Initialized");
 		this._logger.info("Session Id: ", helpers.sessionId);
-		const logLevel = definition?.data?.eventLogLevel ?? "info";
-		switch (logLevel) {
-			case "trace": {
-				this._logEvent = (message, events) => {
-					// we don't want to trace the function so we log it as debug/verbose
-					this._logger.debug(message, JSON.stringify(events));
-				};
-				break;
-			}
-			case "debug": {
-				this._logEvent = (message, events) => {
-					this._logger.debug(message, JSON.stringify(events));
-				};
-				break;
-			}
-			case "info": {
-				this._logEvent = (message, events) => {
-					this._logger.info(message, JSON.stringify(events));
-				};
-				break;
-			}
-			case "warn": {
-				this._logEvent = (message, events) => {
-					this._logger.warn(message, JSON.stringify(events));
-				};
-				break;
-			}
-			case "error": {
-				this._logEvent = (message, events) => {
-					this._logger.error(message, JSON.stringify(events));
-				};
-				break;
-			}
-		}
+		const logLevel =
+			definition?.data?.eventLogLevel === "trace" ? "debug" : definition?.data?.eventLogLevel ?? "info";
+		this._logEvent = (message, events) => {
+			// we don't want to trace the function so we log it as debug/verbose
+			this._logger[logLevel](message, JSON.stringify(events));
+		};
 	}
 
 	/**
@@ -74,6 +46,6 @@ export class ExampleConsoleAnalyticsModule implements AnalyticsModule<ExampleCon
 	 * Closedown the module. If this module had any cached events it needed to process it could try and flush them here.
 	 */
 	public async closedown?(): Promise<void> {
-		this._logger.info("ConsoleAnalyticsModule closing down");
+		this._logger.info("closing down");
 	}
 }

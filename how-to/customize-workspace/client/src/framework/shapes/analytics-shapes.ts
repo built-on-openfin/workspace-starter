@@ -2,7 +2,7 @@ import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-r
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 export interface PlatformAnalyticsEvent extends AnalyticsEvent {
-	timestamp: string;
+	timestamp: Date;
 }
 
 export type AnalyticsProviderOptions = ModuleList;
