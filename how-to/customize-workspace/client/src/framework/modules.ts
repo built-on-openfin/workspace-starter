@@ -1,3 +1,4 @@
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
 import type {
@@ -200,6 +201,8 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		getDefaultPalettes,
 		getCurrentPalette,
-		getCurrentColorSchemeMode
+		getCurrentColorSchemeMode,
+		subscribeLifecycleEvent,
+		unsubscribeLifecycleEvent
 	};
 }

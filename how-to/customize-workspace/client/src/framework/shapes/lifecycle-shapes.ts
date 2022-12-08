@@ -6,7 +6,8 @@ export type LifecycleEvents =
 	| "auth-session-expired"
 	| "auth-before-logged-out"
 	| "after-bootstrap"
-	| "before-quit";
+	| "before-quit"
+	| "theme-changed";
 
 export type LifecycleHandler = (platform: WorkspacePlatformModule) => Promise<void>;
 

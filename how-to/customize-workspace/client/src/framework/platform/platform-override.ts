@@ -12,14 +12,13 @@ import {
 	Workspace,
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
-import { updateBrowserWindowButtonsColorScheme, updateButtonColorScheme } from "../buttons";
+import { updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import { updateDockColorScheme } from "../workspace/dock";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -318,11 +317,8 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// The color scheme has been updated, so update the theme
 			await setCurrentColorSchemeMode(schemeType);
 
-			// Also update toolbar buttons
-			await updateButtonColorScheme();
-
-			// And relaunch the dock as we currently can't dynamically update buttons
-			await updateDockColorScheme();
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "theme-changed");
 
 			return super.setSelectedScheme(schemeType);
 		}

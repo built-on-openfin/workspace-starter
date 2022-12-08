@@ -7,6 +7,7 @@ import {
 	ToolbarButton
 } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
+import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
 import type { ToolbarButtonDefinition } from "./shapes/browser-shapes";
 import { getCurrentColorSchemeMode } from "./themes";
@@ -20,6 +21,16 @@ async function getConfigToolbarButtons(): Promise<ToolbarButtonDefinition[]> {
 	}
 	const settings = await getSettings();
 	configToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
+
+	subscribeLifecycleEvent("theme-changed", async () => {
+		const platform = getCurrentSync();
+
+		const browserWindows = await platform.Browser.getAllWindows();
+		for (const browserWindow of browserWindows) {
+			await updateBrowserWindowButtonsColorScheme(browserWindow);
+		}
+	});
+
 	return configToolbarButtons;
 }
 
@@ -80,16 +91,6 @@ export async function updateToolbarButtons(
 	}
 
 	return buttons;
-}
-
-export async function updateButtonColorScheme(): Promise<void> {
-	const platform = getCurrentSync();
-
-	const browserWindows = await platform.Browser.getAllWindows();
-
-	for (const browserWindow of browserWindows) {
-		await updateBrowserWindowButtonsColorScheme(browserWindow);
-	}
 }
 
 export async function updateBrowserWindowButtonsColorScheme(

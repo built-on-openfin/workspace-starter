@@ -1,6 +1,7 @@
 import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
 import { ACTION_IDS } from "../actions";
 import { getApp, getAppIcon, getAppsByTag } from "../apps";
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { BootstrapOptions } from "../shapes";
@@ -10,6 +11,7 @@ const logger = createLogger("Dock");
 
 let registrationInfo: RegistrationMetaInfo | undefined;
 let registeredBootstrapOptions: BootstrapOptions | undefined;
+let lifeCycleSubscriptionId: string;
 
 export async function register(bootstrapOptions?: BootstrapOptions): Promise<RegistrationMetaInfo> {
 	if (!registrationInfo) {
@@ -180,6 +182,8 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 
 		logger.info("Version:", registrationInfo);
 		logger.info("Dock provider initialized");
+
+		lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
 	}
 
 	return registrationInfo;
@@ -193,43 +197,19 @@ export async function minimize() {
 	return Dock.minimize();
 }
 
-export async function getWindowState(): Promise<"normal" | "minimized" | "none"> {
-	if (registrationInfo) {
-		try {
-			const win = fin.Window.wrapSync({ name: "openfin-dock", uuid: "openfin-browser" });
-			const state = await win.getState();
-			if (state === "normal") {
-				return "normal";
-			} else if (state === "minimized") {
-				return "minimized";
-			}
-		} catch {}
-	}
-
-	return "none";
-}
-
-export async function setWindowState(state: "normal" | "minimized" | "none"): Promise<void> {
-	if (state === "normal") {
-		await Dock.show();
-	} else if (state === "minimized") {
-		await Dock.minimize();
-	}
-}
-
 export async function deregister() {
 	if (registrationInfo) {
+		unsubscribeLifecycleEvent(lifeCycleSubscriptionId, "theme-changed");
+		lifeCycleSubscriptionId = undefined;
 		registrationInfo = undefined;
 		return Dock.deregister();
 	}
 	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
-export async function updateDockColorScheme(): Promise<void> {
+async function updateDockColorScheme(): Promise<void> {
 	if (registrationInfo !== undefined) {
-		const state = await getWindowState();
 		await deregister();
 		await register();
-		await setWindowState(state);
 	}
 }
