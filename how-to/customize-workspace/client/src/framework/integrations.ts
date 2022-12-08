@@ -238,7 +238,7 @@ export async function itemSelection(
 ): Promise<boolean> {
 	if (result.data) {
 		if (
-			integrationHelpers.setSearchQuery &&
+			integrationHelpers?.setSearchQuery &&
 			result.action.trigger === "user-action" &&
 			result.action.name === POPULATE_QUERY &&
 			typeof result.data?.populateQuery === "string"

@@ -12,8 +12,10 @@ import type {
 	ModuleTypes
 } from "./shapes/module-shapes";
 import { getCurrentColorSchemeMode, getCurrentPalette, getDefaultPalettes } from "./themes";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("Modules");
+const sessionId = randomUUID();
 
 /**
  * All the loaded modules.
@@ -199,6 +201,7 @@ export async function closedownModule<
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
+		sessionId,
 		getDefaultPalettes,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
