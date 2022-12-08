@@ -871,5 +871,17 @@
 				]
 			}
 		]
+	},
+	"analyticsProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "analytics.console.example",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/analytics/example.bundle.js",
+				"data": {
+					"eventLogLevel": "info"
+				}
+			}
+		]
 	}
 }
