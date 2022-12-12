@@ -27,7 +27,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365-basic/favicon.ico",
-		"name": "Integrate with Microsoft 365 - Basic - v9.0",
+		"name": "Integrate with Microsoft 365 - Basic - v10.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
