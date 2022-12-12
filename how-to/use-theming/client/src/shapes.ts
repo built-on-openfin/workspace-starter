@@ -9,7 +9,11 @@ export interface ThemeDisplayOptions {
 }
 
 export interface ThemingPayload {
-	palette: Partial<CustomPaletteSet>;
+	palette?: Partial<CustomPaletteSet>;
+	palettes?: {
+		dark: Partial<CustomPaletteSet>;
+		light: Partial<CustomPaletteSet>;
+	};
 	options?: ThemeDisplayOptions;
 }
 
