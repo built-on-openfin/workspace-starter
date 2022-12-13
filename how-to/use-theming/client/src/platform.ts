@@ -1,5 +1,8 @@
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
-import type { CustomThemeOptions, CustomThemeOptionsWithScheme } from "@openfin/workspace/client-api-platform/src/shapes";
+import type {
+	CustomThemeOptions,
+	CustomThemeOptionsWithScheme
+} from "@openfin/workspace/client-api-platform/src/shapes";
 import { DEFAULT_PALETTES } from "./defaultPalettes";
 import type { ThemingPayload } from "./shapes";
 
