@@ -3,9 +3,23 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
-## Migrate from a previous version - From v9.1 to v10
+## Migrate from a previous version - From v9.2 to v10
 
-- Coming once v10 enters beta.
+- Available once v10 enters beta
+
+## Migrate from a previous version - From v9.1 to v9.2
+
+### Store Enhancement
+
+Added Custom Background Color for Hero Section in Store.
+
+The background color of the hero section of the store by specifying **contentBackground1** in your palette.
+
+### UI Enhancements
+
+- Updated Workspace Store icon throughout OpenFin Workspace to be consistent and intuitive to end-users.
+- Updated Layout splitters in the Workspace Browser to inherit colors from the theme object. Previously, splitters were always black, regardless of the theme.
+- Updated the appearance of the minimize, maximize, close buttons in Workspace Store and the close button in Notifications to match the rest of Workspace components.
 
 ## Migrate from a previous version - From v9.0 to v9.1
 
@@ -62,8 +76,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^9.2.0",
-                    "@openfin/workspace-platform": "^9.2.0"
+                    "@openfin/workspace": "^10.0.0",
+                    "@openfin/workspace-platform": "^10.0.0"
                 }
 ```
 

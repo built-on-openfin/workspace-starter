@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-store-basic",
-	"version": "9.2.0",
+	"version": "10.0.0",
 	"description": "OpenFin Workspace -- Register with store basic",
 	"main": "index.js",
 	"scripts": {

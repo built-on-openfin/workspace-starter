@@ -28,7 +28,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate Server Authentication - v9.2.0",
+		"name": "Integrate Server Authentication - v10.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
