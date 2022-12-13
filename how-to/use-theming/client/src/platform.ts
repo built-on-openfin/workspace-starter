@@ -7,22 +7,24 @@ export async function init(themingPayload?: ThemingPayload): Promise<void> {
 
 	let palette;
 	let palettes;
-	if ("palette" in themingPayload) {
-		palette = {
-			...DEFAULT_PALETTES.dark,
-			...themingPayload?.palette
-		};
-	} else {
-		palettes = {
-			dark: {
+	if (themingPayload) {
+		if ("palette" in themingPayload) {
+			palette = {
 				...DEFAULT_PALETTES.dark,
-				...themingPayload.palettes?.dark
-			},
-			light: {
-				...DEFAULT_PALETTES.light,
-				...themingPayload.palettes?.light
-			}
-		};
+				...themingPayload?.palette
+			};
+		} else {
+			palettes = {
+				dark: {
+					...DEFAULT_PALETTES.dark,
+					...themingPayload.palettes?.dark
+				},
+				light: {
+					...DEFAULT_PALETTES.light,
+					...themingPayload.palettes?.light
+				}
+			};
+		}
 	}
 
 	await workspacePlatformInit({
