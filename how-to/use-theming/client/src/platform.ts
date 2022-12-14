@@ -1,10 +1,13 @@
-import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { init as workspacePlatformInit, CustomActionCallerType } from "@openfin/workspace-platform";
 import type {
+	CustomActionPayload,
 	CustomThemeOptions,
 	CustomThemeOptionsWithScheme
 } from "@openfin/workspace/client-api-platform/src/shapes";
 import { DEFAULT_PALETTES } from "./defaultPalettes";
+import { overrideCallback } from "./platform-override";
 import type { ThemingPayload } from "./shapes";
+import { getThemeButton, initColorScheme, themeToggle } from "./themes";
 
 export async function init(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing platform");
@@ -35,7 +38,26 @@ export async function init(themingPayload?: ThemingPayload): Promise<void> {
 	}
 
 	await workspacePlatformInit({
-		browser: {},
-		theme: [customTheme]
+		browser: {
+			defaultWindowOptions: {
+				workspacePlatform: {
+					pages: null,
+					toolbarOptions: {
+						buttons: [getThemeButton()]
+					}
+				}
+			}
+		},
+		overrideCallback,
+		theme: [customTheme],
+		customActions: {
+			"change-theme": async (payload: CustomActionPayload) => {
+				if (payload.callerType === CustomActionCallerType.CustomButton) {
+					await themeToggle();
+				}
+			}
+		}
 	});
+
+	await initColorScheme();
 }

@@ -19,6 +19,7 @@ import { getDefaultWindowOptions, launchView } from "./platform/browser";
 import type { ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import { showShareOptions } from "./share";
+import { toggleTheme } from "./themes";
 import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
@@ -49,7 +50,8 @@ export const ACTION_IDS = {
 	share: "share",
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
-	launchView: "launch-view"
+	launchView: "launch-view",
+	toggleTheme: "toggle-theme"
 };
 
 export async function getActions(
@@ -212,6 +214,12 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 		} else {
 			logger.error("No url specified in payload.customData in launchView action");
 		}
+	};
+
+	actionMap[ACTION_IDS.toggleTheme] = async (
+		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
+	) => {
+		await toggleTheme();
 	};
 
 	return actionMap;

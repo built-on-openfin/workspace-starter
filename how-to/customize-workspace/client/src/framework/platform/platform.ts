@@ -18,7 +18,7 @@ import { getDefaultHelpers } from "../modules";
 import { getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import { deregister as deregisterShare, register as registerShare } from "../share";
-import { getThemes } from "../themes";
+import { getThemes, notifyColorScheme } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
@@ -101,6 +101,7 @@ async function setupPlatform() {
 	});
 
 	platformInitialized = true;
+	await notifyColorScheme();
 }
 
 export async function init() {
