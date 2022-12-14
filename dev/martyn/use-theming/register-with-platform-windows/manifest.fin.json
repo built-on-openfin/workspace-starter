@@ -30,7 +30,19 @@
 						"protocols": ["mailto"]
 					}
 				}
-			}
+			},
+			"preloadScripts": [
+				{
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/style/style-changed-preload.js"
+				}
+			]
+		},
+		"defaultViewOptions": {
+			"preloadScripts": [
+				{
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/style/style-changed-preload.js"
+				}
+			]
 		}
 	},
 	"snapshot": {
