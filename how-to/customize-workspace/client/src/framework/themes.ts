@@ -25,15 +25,16 @@ function getSystemPreferredColorScheme(): ColorSchemeMode {
 
 export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
+	const colorScheme = await getCurrentColorSchemeMode();
+
 	if (themes.length === 0) {
-		return DEFAULT_PALETTES[ColorSchemeMode.Dark];
+		return DEFAULT_PALETTES[colorScheme];
 	}
 
 	if ("palette" in themes[0]) {
 		return themes[0].palette;
 	}
-
-	const colorScheme = await getCurrentColorSchemeMode();
+	
 	return themes[0].palettes[colorScheme];
 }
 
