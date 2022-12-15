@@ -39,7 +39,7 @@ export const commonStylesApp: App = {
 	intents: [],
 	images: [
 		{
-			src: `${webRoot}common/images/previews/starter-style-guide`
+			src: `${webRoot}common/images/previews/starter-style-guide.png`
 		}
 	],
 	tags: ["view", "theme", "tool"]
