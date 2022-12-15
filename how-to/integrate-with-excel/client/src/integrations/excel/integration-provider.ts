@@ -111,6 +111,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	): Promise<boolean> {
 		if (
 			result.action.name === ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
+			result.action.trigger === "user-action" &&
 			result.data.workbook &&
 			this._integrationHelpers.launchAsset
 		) {
