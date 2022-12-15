@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	try {
 		console.log('Style Change Preload activated');
 
-		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform-app-channel');
+		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform/events');
 
 		appSessionContextGroup.addContextHandler((context) => {
 			if (context.type === 'platform.theme') {
