@@ -162,6 +162,7 @@ function activateComponent(
 			);
 		} else {
 			// If its not column, row or stack it must be extended
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			const extended: LayoutComponentExtended = component as LayoutComponentExtended;
 
 			const mainIdentityMatch =
