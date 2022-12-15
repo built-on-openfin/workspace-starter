@@ -5,7 +5,7 @@ import type {
 	CustomThemeOptionsWithScheme,
 	CustomThemes
 } from "@openfin/workspace/common/src/api/theming";
-import { DEFAULT_PALETTES } from "./defaultPalettes";
+import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
@@ -101,7 +101,7 @@ export async function notifyColorScheme(): Promise<void> {
 
 	await fireLifecycleEvent(platform, "theme-changed");
 
-	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform-app-channel");
+	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
 	await appSessionContextGroup.setContext({
 		type: "platform.theme",

@@ -4,7 +4,7 @@ import type {
 	CustomThemeOptions,
 	CustomThemeOptionsWithScheme
 } from "@openfin/workspace/client-api-platform/src/shapes";
-import { DEFAULT_PALETTES } from "./defaultPalettes";
+import { DEFAULT_PALETTES } from "./default-palettes";
 import { overrideCallback } from "./platform-override";
 import type { ThemingPayload } from "./shapes";
 import { getThemeButton, initColorScheme, themeToggle } from "./themes";
@@ -59,5 +59,6 @@ export async function init(themingPayload?: ThemingPayload): Promise<void> {
 		}
 	});
 
+	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
 	await initColorScheme();
 }

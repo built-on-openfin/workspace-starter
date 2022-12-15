@@ -6,7 +6,7 @@ import {
 	ToolbarButton
 } from "@openfin/workspace-platform";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
-import { DEFAULT_PALETTES } from "./defaultPalettes";
+import { DEFAULT_PALETTES } from "./default-palettes";
 
 let currentColorScheme: Omit<ColorSchemeOptionType, "system">;
 let currentPalette: CustomPaletteSet;
@@ -67,7 +67,7 @@ export async function notifyColorScheme(): Promise<void> {
 		await updateBrowserWindowButtonsColorScheme(browserWindow);
 	}
 
-	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform-app-channel");
+	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
 	await appSessionContextGroup.setContext({
 		type: "platform.theme",

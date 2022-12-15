@@ -100,6 +100,8 @@ async function setupPlatform() {
 		overrideCallback
 	});
 
+	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
+
 	platformInitialized = true;
 	await notifyColorScheme();
 }

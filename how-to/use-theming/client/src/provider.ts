@@ -4,8 +4,6 @@ import { init as initialisePlatform } from "./platform";
 import type { CustomUserAppArgs, InitParams, ThemingPayload } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
-
 	const themingPayload = await handleInitParams();
 
 	const platform = fin.Platform.getCurrentSync();
