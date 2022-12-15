@@ -104,7 +104,7 @@ export async function notifyColorScheme(): Promise<void> {
 	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
 	await appSessionContextGroup.setContext({
-		type: "platform.theme",
+		type: "fin.theme",
 		prefix: settings?.themeProvider?.cssVarPrefix,
 		schemeNames: settings?.themeProvider?.schemaNames,
 		schemeType: await getCurrentColorSchemeMode(),

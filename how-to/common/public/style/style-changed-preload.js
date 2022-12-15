@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform/events');
 
 		appSessionContextGroup.addContextHandler((context) => {
-			if (context.type === 'platform.theme') {
-				console.log('Received platform.theme context', context);
+			if (context.type === 'fin.theme') {
+				console.log('Received fin.theme context', context);
 				const prefix = context?.prefix ?? 'theme';
 				const darkScheme = context?.schemeNames?.dark ?? 'theme-dark';
 				const lightScheme = context?.schemeNames?.light ?? 'theme-light';
