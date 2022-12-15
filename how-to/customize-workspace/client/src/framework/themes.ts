@@ -34,7 +34,7 @@ export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	if ("palette" in themes[0]) {
 		return themes[0].palette;
 	}
-	
+
 	return themes[0].palettes[colorScheme];
 }
 
