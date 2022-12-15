@@ -11,9 +11,9 @@
 	"platform": {
 		"uuid": "second-workspace-starter-how-to-customize-workspace",
 		"name": "second-workspace-starter-how-to-customize-workspace",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -39,7 +39,7 @@
 		"defaultViewOptions": {
 			"preloadScripts": [
 				{
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/style/style-changed-preload.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/style/style-changed-preload.js"
 				}
 			]
 		}
@@ -51,7 +51,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.0",
-			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
@@ -67,12 +67,12 @@
 			"modules": [
 				{
 					"id": "example",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/auth/example.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/js/modules/auth/example.bundle.js",
 					"data": {
 						"autoLogin": false,
-						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-login.html",
-						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/windows/modules/auth/example-logged-in.html",
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/windows/modules/auth/example-logged-in.html",
 						"checkLoginStatusInSeconds": 1,
 						"checkSessionValidityInSeconds": -1
 					}
@@ -87,7 +87,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/settings.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/settings.json"
 					}
 				}
 			]

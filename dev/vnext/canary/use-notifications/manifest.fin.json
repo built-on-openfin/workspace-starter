@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "use-notifications",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/use-notifications/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/notifications/notifications.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/use-notifications/notifications/notifications.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
@@ -19,7 +19,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/use-notifications/favicon.ico",
 		"name": "Use Notifications - v10.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -30,7 +30,7 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"customProviderIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/images/icon-dot.png",
-		"notificationSoundUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/assets/notification.mp3"
+		"customProviderIcon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/use-notifications/images/icon-dot.png",
+		"notificationSoundUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/use-notifications/assets/notification.mp3"
 	}
 }

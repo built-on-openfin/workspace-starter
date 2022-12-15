@@ -11,9 +11,9 @@
 	"platform": {
 		"name": "customize-workspace-for-fdc3",
 		"uuid": "customize-workspace-for-fdc3",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -49,7 +49,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/favicon-32x32.png",
 		"name": "Customize Workspace - v10.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
@@ -68,10 +68,10 @@
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
-			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace",
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace",
 			"sharing": true,
 			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/intents/picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			}
@@ -95,7 +95,7 @@
 				{
 					"enabled": true,
 					"id": "fdc3-app",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/endpoints/fdc3-app.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/js/modules/endpoints/fdc3-app.bundle.js"
 				}
 			],
 			"endpoints": [
@@ -104,7 +104,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/apps-fdc3-1-2.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/apps-fdc3-1-2.json"
 					}
 				},
 				{
@@ -120,16 +120,16 @@
 		"homeProvider": {
 			"id": "custom-fdc3-workspace",
 			"title": "FDC3 Workspace",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/favicon-32x32.png",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
 			"windowOptions": {
 				"title": "FDC3 Workspace",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/favicon-32x32.png",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/favicon-32x32.png",
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/views/platform/new-tab/new-tab.html"
 			},
 			"toolbarButtons": [
 				{
@@ -139,7 +139,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/{theme}/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/common/icons/{theme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -159,7 +159,7 @@
 			"themes": [
 				{
 					"label": "Light",
-					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
+					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/favicon-32x32.png",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,
@@ -202,7 +202,7 @@
 				{
 					"enabled": true,
 					"id": "interop",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/init-options/interop.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
 					}
@@ -214,7 +214,7 @@
 				{
 					"enabled": true,
 					"id": "console",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/log/console.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/customize-workspace/js/modules/log/console.bundle.js"
 				}
 			]
 		}

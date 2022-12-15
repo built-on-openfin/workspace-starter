@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"snapshot": {
@@ -18,7 +18,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/favicon.ico",
 		"name": "Integrate With Salesforce - v10.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -32,12 +32,12 @@
 		"homeProvider": {
 			"id": "integrate-with-salesforce",
 			"title": "Integrate with Salesforce",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/favicon.ico"
 		},
 		"browserProvider": {
 			"windowOptions": {
 				"title": "Salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico"
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/favicon.ico"
 			}
 		},
 		"themeProvider": {
@@ -62,20 +62,20 @@
 			"modules": [
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/js/preload.js",
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg"
+							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-salesforce/images/task.svg"
 						}
 					}
 				}

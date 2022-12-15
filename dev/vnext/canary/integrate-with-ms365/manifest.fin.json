@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -26,7 +26,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/favicon.ico",
 		"name": "Integrate With Microsoft 365 - v10.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -40,16 +40,16 @@
 		"homeProvider": {
 			"id": "integrate-with-ms365",
 			"title": "Integrate with Microsoft 365",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/favicon.ico"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/favicon.ico"
 		},
 		"browserProvider": {
 			"windowOptions": {
 				"title": "Microsoft 365",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/favicon.ico"
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/favicon.ico"
 			}
 		},
 		"appProvider": {
-			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/apps.json",
+			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/apps.json",
 			"includeCredentialOnSourceRequest": "include",
 			"cacheDurationInMinutes": 1,
 			"appAssetTag": "appasset"
@@ -58,14 +58,14 @@
 			"modules": [
 				{
 					"id": "ms365",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/favicon.ico",
 					"title": "Microsoft 365",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/js/integrations/ms365.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/js/integrations/ms365.bundle.js",
 					"data": {
 						"clientId": "",
 						"tenantId": "",
-						"redirectUri": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/oauth_redirect.html",
+						"redirectUri": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/oauth_redirect.html",
 						"permissions": [
 							"User.Read",
 							"Presence.Read",
@@ -83,20 +83,20 @@
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
-							"microsoft365": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/apps/microsoft365.svg",
-							"teams": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/apps/teams.svg",
-							"outlook": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/apps/outlook-mail.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/email.svg",
-							"calendar": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/calendar.svg",
-							"share": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/share.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/chat.svg",
-							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/call.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/contact.svg",
-							"team": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/team.svg",
-							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/channel.svg",
-							"clock": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/clock.svg",
-							"check": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/check.svg",
-							"cross": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-ms365/images/icons/cross.svg"
+							"microsoft365": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/apps/microsoft365.svg",
+							"teams": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/apps/teams.svg",
+							"outlook": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/apps/outlook-mail.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/email.svg",
+							"calendar": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/calendar.svg",
+							"share": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/share.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/chat.svg",
+							"call": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/call.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/contact.svg",
+							"team": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/team.svg",
+							"channel": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/channel.svg",
+							"clock": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/clock.svg",
+							"check": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/check.svg",
+							"cross": "https://built-on-openfin.github.io/workspace-starter/dev/vnext/canary/integrate-with-ms365/images/icons/cross.svg"
 						}
 					}
 				}
