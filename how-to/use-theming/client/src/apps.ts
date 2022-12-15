@@ -1,7 +1,7 @@
 import type { App } from "@openfin/workspace";
 
 export async function getApps(): Promise<App[]> {
-	return [themeBuilderApp, notificationStudio, processManager, developerContent];
+	return [themeBuilderApp, commonStylesApp, notificationStudio, processManager, developerContent];
 }
 
 const webRoot = window.location.href.replace("platform/provider.html", "");
@@ -21,6 +21,25 @@ export const themeBuilderApp: App = {
 	images: [
 		{
 			src: "https://samples.openfin.co/dev-extensions/extensions/vnext/branding/images/previews/theme-definition-builder.png"
+		}
+	],
+	tags: ["view", "theme", "tool"]
+};
+
+export const commonStylesApp: App = {
+	appId: "common-styles",
+	title: "Common Styles Example",
+	description: "A view demonstrating the common styles.",
+	manifest: `${webRoot}common/style/style-view.json`,
+	manifestType: "view",
+	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: `${webRoot}common/images/previews/starter-style-guide.png`
 		}
 	],
 	tags: ["view", "theme", "tool"]
