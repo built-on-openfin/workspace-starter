@@ -311,6 +311,20 @@
 		"toolbarButtons": [
 			{
 				"include": true,
+				"id": "toggle-theme",
+				"button": {
+					"type": "Custom",
+					"tooltip": "Toggle Theme",
+					"disabled": false,
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/theme.svg",
+					"action": {
+						"id": "toggle-theme",
+						"customData": {}
+					}
+				}
+			},
+			{
+				"include": true,
 				"id": "change-opacity",
 				"button": {
 					"type": "Custom",
@@ -464,73 +478,61 @@
 				"logoUrl": "http://localhost:8080/favicon-32x32.png",
 				"default": "light",
 				"palettes": {
+					"light": {
+						"brandPrimary": "#504CFF",
+						"brandSecondary": "#1E1F23",
+						"backgroundPrimary": "#FAFBFE",
+						"background1": "#FFFFFF",
+						"background2": "#FAFBFE",
+						"background3": "#F3F5F8",
+						"background4": "#ECEEF1",
+						"background5": "#DDDFE4",
+						"background6": "#C9CBD2",
+						"statusSuccess": "#35C759",
+						"statusWarning": "#F48F00",
+						"statusCritical": "#BE1D1F",
+						"statusActive": "#0498FB",
+						"inputBackground": "#ECEEF1",
+						"inputColor": "#1E1F23",
+						"inputPlaceholder": "#383A40",
+						"inputDisabled": "#7D808A",
+						"inputFocused": "#C9CBD2",
+						"textDefault": "#111214",
+						"textHelp": "#2F3136",
+						"textInactive": "#7D808A",
+						"contentBackground1": "#504CFF",
+						"contentBackground2": "#000000",
+						"contentBackground3": "#000000",
+						"contentBackground4": "#000000",
+						"contentBackground5": "#000000"
+					},
 					"dark": {
 						"brandPrimary": "#504CFF",
 						"brandSecondary": "#383A40",
-						"backgroundPrimary": "#111214",
-						"contentBackground1": "#504CFF",
-						"functional1": null,
-						"functional2": null,
-						"functional3": null,
-						"functional4": null,
-						"functional5": null,
-						"functional6": null,
-						"functional7": null,
-						"functional8": null,
-						"functional9": null,
-						"functional10": null,
-						"statusSuccess": null,
-						"statusWarning": null,
-						"statusCritical": null,
-						"statusActive": null,
-						"inputBackground": null,
-						"inputColor": null,
-						"inputPlaceholder": null,
-						"inputDisabled": null,
-						"inputFocused": null,
-						"textDefault": null,
-						"textHelp": null,
-						"textInactive": null,
-						"background1": null,
-						"background2": null,
-						"background3": null,
-						"background4": null,
-						"background5": null,
-						"background6": null
-					},
-					"light": {
-						"brandPrimary": "#399BB8",
-						"brandSecondary": null,
-						"backgroundPrimary": "#111214",
-						"contentBackground1": "#504CFF",
-						"functional1": null,
-						"functional2": null,
-						"functional3": null,
-						"functional4": null,
-						"functional5": null,
-						"functional6": null,
-						"functional7": null,
-						"functional8": null,
-						"functional9": null,
-						"functional10": null,
-						"statusSuccess": null,
-						"statusWarning": null,
-						"statusCritical": null,
-						"statusActive": "#399BB8",
-						"inputBackground": "#ECEEF1",
-						"inputColor": "#1E1F23",
-						"inputPlaceholder": "#7D808A",
-						"inputDisabled": null,
+						"backgroundPrimary": "#1E1F23",
+						"background1": "#111214",
+						"background2": "#1E1F23",
+						"background3": "#24262B",
+						"background4": "#2F3136",
+						"background5": "#383A40",
+						"background6": "#53565F",
+						"statusSuccess": "#35C759",
+						"statusWarning": "#F48F00",
+						"statusCritical": "#BE1D1F",
+						"statusActive": "#0498FB",
+						"inputBackground": "#53565F",
+						"inputColor": "#FFFFFF",
+						"inputPlaceholder": "#C9CBD2",
+						"inputDisabled": "#7D808A",
 						"inputFocused": "#C9CBD2",
-						"textDefault": "#1E1F23",
-						"textHelp": "#111214",
-						"textInactive": null,
-						"background1": "#ECEEF1",
-						"background2": "#FAFBFE",
-						"background3": "#ECEEF1",
-						"background4": "#ECEEF1",
-						"background5": "#DDDFE4",
-						"background6": "#ffffff"
+						"textDefault": "#FFFFFF",
+						"textHelp": "#C9CBD2",
+						"textInactive": "#7D808A",
+						"contentBackground1": "#504CFF",
+						"contentBackground2": "#000000",
+						"contentBackground3": "#000000",
+						"contentBackground4": "#000000",
+						"contentBackground5": "#000000"
 					}
 				}
 			}
@@ -840,18 +842,34 @@
 		],
 		"connections": [
 			{
-				"identity": { "uuid": "second-workspace-starter-how-to-customize-workspace" },
+				"identity": {
+					"uuid": "second-workspace-starter-how-to-customize-workspace"
+				},
 				"validatePayload": false,
-				"connectionTypes": [{ "type": "broker" }]
+				"connectionTypes": [
+					{
+						"type": "broker"
+					}
+				]
 			},
 			{
-				"identity": { "uuid": "*" },
+				"identity": {
+					"uuid": "*"
+				},
 				"validatePayload": true,
 				"connectionTypes": [
-					{ "type": "appSource" },
-					{ "type": "snapshotSource" },
-					{ "type": "actions" },
-					{ "type": "broker" }
+					{
+						"type": "appSource"
+					},
+					{
+						"type": "snapshotSource"
+					},
+					{
+						"type": "actions"
+					},
+					{
+						"type": "broker"
+					}
 				]
 			}
 		]

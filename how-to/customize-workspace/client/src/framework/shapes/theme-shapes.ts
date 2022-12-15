@@ -2,6 +2,11 @@ import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/themi
 
 export interface ThemeProviderOptions {
 	themes: CustomThemeOptions[];
+	cssVarPrefix?: string;
+	schemaNames?: {
+		dark?: string;
+		light?: string;
+	};
 }
 
 export enum ColorSchemeMode {

@@ -63,29 +63,63 @@ You could produce a similar encoding for your palette by doing the following:
 ```js
 btoa(
   JSON.stringify({
-    palette: {
-      brandPrimary: '#504CFF',
-      brandSecondary: '#1E1F23',
-      backgroundPrimary: '#FAFBFE',
-      contentBackground1: '#504CFF',
-      background1: '#FFFFFF',
-      background2: '#FAFBFE',
-      background3: '#F3F5F8',
-      background4: '#ECEEF1',
-      background5: '#DDDFE4',
-      background6: '#C9CBD2',
-      statusSuccess: '#35C759',
-      statusWarning: '#F48F00',
-      statusCritical: '#BE1D1F',
-      statusActive: '#0498FB',
-      inputBackground: '#ECEEF1',
-      inputColor: '#1E1F23',
-      inputPlaceholder: '#383A40',
-      inputDisabled: '#7D808A',
-      inputFocused: '#C9CBD2',
-      textDefault: '#1E1F23',
-      textHelp: '#2F3136',
-      textInactive: '#7D808A'
+    palettes: {
+      light: {
+        brandPrimary: '#504CFF',
+        brandSecondary: '#1E1F23',
+        backgroundPrimary: '#FAFBFE',
+        background1: '#FFFFFF',
+        background2: '#FAFBFE',
+        background3: '#F3F5F8',
+        background4: '#ECEEF1',
+        background5: '#DDDFE4',
+        background6: '#C9CBD2',
+        statusSuccess: '#35C759',
+        statusWarning: '#F48F00',
+        statusCritical: '#BE1D1F',
+        statusActive: '#0498FB',
+        inputBackground: '#ECEEF1',
+        inputColor: '#1E1F23',
+        inputPlaceholder: '#383A40',
+        inputDisabled: '#7D808A',
+        inputFocused: '#C9CBD2',
+        textDefault: '#111214',
+        textHelp: '#2F3136',
+        textInactive: '#7D808A',
+        contentBackground1: '#504CFF',
+        contentBackground2: '#000000',
+        contentBackground3: '#000000',
+        contentBackground4: '#000000',
+        contentBackground5: '#000000'
+      },
+      dark: {
+        brandPrimary: '#504CFF',
+        brandSecondary: '#383A40',
+        backgroundPrimary: '#1E1F23',
+        background1: '#111214',
+        background2: '#1E1F23',
+        background3: '#24262B',
+        background4: '#2F3136',
+        background5: '#383A40',
+        background6: '#53565F',
+        statusSuccess: '#35C759',
+        statusWarning: '#F48F00',
+        statusCritical: '#BE1D1F',
+        statusActive: '#0498FB',
+        inputBackground: '#53565F',
+        inputColor: '#FFFFFF',
+        inputPlaceholder: '#C9CBD2',
+        inputDisabled: '#7D808A',
+        inputFocused: '#C9CBD2',
+        textDefault: '#FFFFFF',
+        textHelp: '#C9CBD2',
+        textInactive: '#7D808A',
+        contentBackground1: '#504CFF',
+        contentBackground2: '#000000',
+        contentBackground3: '#000000',
+        contentBackground4: '#000000',
+        contentBackground5: '#000000'
+      }
     },
     options: {
       showHome: true,
@@ -101,7 +135,7 @@ btoa(
 Which outputs:
 
 ```shell
-eyJwYWxldHRlIjp7ImJyYW5kUHJpbWFyeSI6IiM1MDRDRkYiLCJicmFuZFNlY29uZGFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMSI6IiNGRkZGRkYiLCJiYWNrZ3JvdW5kMiI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMyI6IiNGM0Y1RjgiLCJiYWNrZ3JvdW5kNCI6IiNFQ0VFRjEiLCJiYWNrZ3JvdW5kNSI6IiNERERGRTQiLCJiYWNrZ3JvdW5kNiI6IiNDOUNCRDIiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiNFQ0VFRjEiLCJpbnB1dENvbG9yIjoiIzFFMUYyMyIsImlucHV0UGxhY2Vob2xkZXIiOiIjMzgzQTQwIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjMUUxRjIzIiwidGV4dEhlbHAiOiIjMkYzMTM2IiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSJ9LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==
+eyJwYWxldHRlcyI6eyJsaWdodCI6eyJicmFuZFByaW1hcnkiOiIjNTA0Q0ZGIiwiYnJhbmRTZWNvbmRhcnkiOiIjMUUxRjIzIiwiYmFja2dyb3VuZFByaW1hcnkiOiIjRkFGQkZFIiwiYmFja2dyb3VuZDEiOiIjRkZGRkZGIiwiYmFja2dyb3VuZDIiOiIjRkFGQkZFIiwiYmFja2dyb3VuZDMiOiIjRjNGNUY4IiwiYmFja2dyb3VuZDQiOiIjRUNFRUYxIiwiYmFja2dyb3VuZDUiOiIjRERERkU0IiwiYmFja2dyb3VuZDYiOiIjQzlDQkQyIiwic3RhdHVzU3VjY2VzcyI6IiMzNUM3NTkiLCJzdGF0dXNXYXJuaW5nIjoiI0Y0OEYwMCIsInN0YXR1c0NyaXRpY2FsIjoiI0JFMUQxRiIsInN0YXR1c0FjdGl2ZSI6IiMwNDk4RkIiLCJpbnB1dEJhY2tncm91bmQiOiIjRUNFRUYxIiwiaW5wdXRDb2xvciI6IiMxRTFGMjMiLCJpbnB1dFBsYWNlaG9sZGVyIjoiIzM4M0E0MCIsImlucHV0RGlzYWJsZWQiOiIjN0Q4MDhBIiwiaW5wdXRGb2N1c2VkIjoiI0M5Q0JEMiIsInRleHREZWZhdWx0IjoiIzExMTIxNCIsInRleHRIZWxwIjoiIzJGMzEzNiIsInRleHRJbmFjdGl2ZSI6IiM3RDgwOEEiLCJjb250ZW50QmFja2dyb3VuZDEiOiIjNTA0Q0ZGIiwiY29udGVudEJhY2tncm91bmQyIjoiIzAwMDAwMCIsImNvbnRlbnRCYWNrZ3JvdW5kMyI6IiMwMDAwMDAiLCJjb250ZW50QmFja2dyb3VuZDQiOiIjMDAwMDAwIiwiY29udGVudEJhY2tncm91bmQ1IjoiIzAwMDAwMCJ9LCJkYXJrIjp7ImJyYW5kUHJpbWFyeSI6IiM1MDRDRkYiLCJicmFuZFNlY29uZGFyeSI6IiMzODNBNDAiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kMSI6IiMxMTEyMTQiLCJiYWNrZ3JvdW5kMiI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kMyI6IiMyNDI2MkIiLCJiYWNrZ3JvdW5kNCI6IiMyRjMxMzYiLCJiYWNrZ3JvdW5kNSI6IiMzODNBNDAiLCJiYWNrZ3JvdW5kNiI6IiM1MzU2NUYiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiM1MzU2NUYiLCJpbnB1dENvbG9yIjoiI0ZGRkZGRiIsImlucHV0UGxhY2Vob2xkZXIiOiIjQzlDQkQyIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjRkZGRkZGIiwidGV4dEhlbHAiOiIjQzlDQkQyIiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSIsImNvbnRlbnRCYWNrZ3JvdW5kMSI6IiM1MDRDRkYiLCJjb250ZW50QmFja2dyb3VuZDIiOiIjMDAwMDAwIiwiY29udGVudEJhY2tncm91bmQzIjoiIzAwMDAwMCIsImNvbnRlbnRCYWNrZ3JvdW5kNCI6IiMwMDAwMDAiLCJjb250ZW50QmFja2dyb3VuZDUiOiIjMDAwMDAwIn19LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==
 ```
 
 ---

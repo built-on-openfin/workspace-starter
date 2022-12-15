@@ -5,63 +5,13 @@ import type {
 	CustomThemeOptionsWithScheme,
 	CustomThemes
 } from "@openfin/workspace/common/src/api/theming";
+import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
-
-const DEFAULT_PALETTES: { [id in ColorSchemeMode]: CustomPaletteSet } = {
-	light: {
-		brandPrimary: "#504CFF",
-		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#FAFBFE",
-		contentBackground1: "#504CFF",
-		background1: "#FFFFFF",
-		background2: "#FAFBFE",
-		background3: "#F3F5F8",
-		background4: "#ECEEF1",
-		background5: "#DDDFE4",
-		background6: "#C9CBD2",
-		statusSuccess: "#35C759",
-		statusWarning: "#F48F00",
-		statusCritical: "#BE1D1F",
-		statusActive: "#0498FB",
-		inputBackground: "#ECEEF1",
-		inputColor: "#1E1F23",
-		inputPlaceholder: "#383A40",
-		inputDisabled: "#7D808A",
-		inputFocused: "#C9CBD2",
-		textDefault: "#1E1F23",
-		textHelp: "#2F3136",
-		textInactive: "#7D808A"
-	},
-	dark: {
-		brandPrimary: "#504CFF",
-		brandSecondary: "#383A40",
-		backgroundPrimary: "#1E1F23",
-		contentBackground1: "#504CFF",
-		background1: "#111214",
-		background2: "#1E1F23",
-		background3: "#24262B",
-		background4: "#2F3136",
-		background5: "#383A40",
-		background6: "#53565F",
-		statusSuccess: "#35C759",
-		statusWarning: "#F48F00",
-		statusCritical: "#BE1D1F",
-		statusActive: "#0498FB",
-		inputBackground: "#53565F",
-		inputColor: "#FFFFFF",
-		inputPlaceholder: "#C9CBD2",
-		inputDisabled: "#7D808A",
-		inputFocused: "#C9CBD2",
-		textDefault: "#FFFFFF",
-		textHelp: "#C9CBD2",
-		textInactive: "#7D808A"
-	}
-};
 
 let validatedThemes: CustomThemes;
 let colorSchemeMode: ColorSchemeMode;
@@ -142,8 +92,24 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 		colorSchemeMode = ColorSchemeMode.Dark;
 	}
 
+	await notifyColorScheme();
+}
+
+export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
+	const settings = await getSettings();
+
 	await fireLifecycleEvent(platform, "theme-changed");
+
+	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
+
+	await appSessionContextGroup.setContext({
+		type: "fin.theme",
+		prefix: settings?.themeProvider?.cssVarPrefix,
+		schemeNames: settings?.themeProvider?.schemaNames,
+		schemeType: await getCurrentColorSchemeMode(),
+		palette: await getCurrentPalette()
+	} as OpenFin.Context);
 }
 
 export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
@@ -260,4 +226,13 @@ function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, sch
 	}
 
 	return theme.palettes[scheme] !== undefined;
+}
+
+export async function toggleTheme(): Promise<void> {
+	const platform = getCurrentSync();
+	if (colorSchemeMode === ColorSchemeMode.Light) {
+		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);
+	} else {
+		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Light);
+	}
 }
