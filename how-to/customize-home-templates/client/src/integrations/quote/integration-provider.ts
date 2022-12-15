@@ -253,7 +253,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 				animation: false,
 				responsive: false,
 				scales: {
-					xAxis: {
+					x: {
 						display: false
 					}
 				},
