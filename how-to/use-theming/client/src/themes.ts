@@ -70,7 +70,7 @@ export async function notifyColorScheme(): Promise<void> {
 	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
 	await appSessionContextGroup.setContext({
-		type: "fin.theme",
+		type: "platform.theme",
 		schemeType: currentColorScheme,
 		palette: currentPalette
 	} as OpenFin.Context);
