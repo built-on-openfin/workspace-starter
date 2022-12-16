@@ -133,32 +133,43 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 
 		for (let i = 0; i < themes.length; i++) {
 			const themeToValidate = themes[i];
-			if ("palette" in themeToValidate) {
-				themeToValidate.palette = validatePalette(
-					themeToValidate.palette,
-					themeToValidate.label,
-					DEFAULT_PALETTES[ColorSchemeMode.Dark]
-				);
-			} else {
-				themeToValidate.palettes[ColorSchemeMode.Dark] = validatePalette(
-					themeToValidate.palettes[ColorSchemeMode.Dark],
-					themeToValidate.label,
-					DEFAULT_PALETTES[ColorSchemeMode.Dark]
-				);
-				themeToValidate.palettes[ColorSchemeMode.Light] = validatePalette(
-					themeToValidate.palettes[ColorSchemeMode.Light],
-					themeToValidate.label,
-					DEFAULT_PALETTES[ColorSchemeMode.Light]
-				);
+
+			// perform defensive check in case null is specified.
+			if (themes[i].palette === null) {
+				delete themes[i].palette;
+			}
+			if (themes[i].palettes === null) {
+				delete themes[i].palettes;
 			}
 
-			if (hasScheme(themes[i], preferredColorScheme)) {
-				logger.info(
-					`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
-				);
-				customThemes.unshift(themes[i]);
-			} else {
-				customThemes.push(themes[i]);
+			if (themes[i].palette !== undefined || themes[i].palettes !== undefined) {
+				if ("palette" in themeToValidate) {
+					themeToValidate.palette = validatePalette(
+						themeToValidate.palette,
+						themeToValidate.label,
+						DEFAULT_PALETTES[ColorSchemeMode.Dark]
+					);
+				} else {
+					themeToValidate.palettes[ColorSchemeMode.Dark] = validatePalette(
+						themeToValidate.palettes[ColorSchemeMode.Dark],
+						themeToValidate.label,
+						DEFAULT_PALETTES[ColorSchemeMode.Dark]
+					);
+					themeToValidate.palettes[ColorSchemeMode.Light] = validatePalette(
+						themeToValidate.palettes[ColorSchemeMode.Light],
+						themeToValidate.label,
+						DEFAULT_PALETTES[ColorSchemeMode.Light]
+					);
+				}
+
+				if (hasScheme(themes[i], preferredColorScheme)) {
+					logger.info(
+						`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
+					);
+					customThemes.unshift(themes[i]);
+				} else {
+					customThemes.push(themes[i]);
+				}
 			}
 		}
 	}
