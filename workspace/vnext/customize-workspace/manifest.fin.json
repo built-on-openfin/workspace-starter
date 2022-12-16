@@ -279,6 +279,20 @@
 			"toolbarButtons": [
 				{
 					"include": false,
+					"id": "toggle-theme",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Toggle Theme",
+						"disabled": false,
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/icons/{theme}/theme.svg",
+						"action": {
+							"id": "toggle-theme",
+							"customData": {}
+						}
+					}
+				},
+				{
+					"include": false,
 					"id": "change-opacity",
 					"button": {
 						"type": "Custom",
