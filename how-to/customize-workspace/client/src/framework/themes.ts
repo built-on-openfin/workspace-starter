@@ -135,14 +135,19 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 			const themeToValidate = themes[i];
 
 			// perform defensive check in case null is specified.
-			if (themes[i].palette === null) {
-				delete themes[i].palette;
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			if (themes[i]["palette"] === null) {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				delete themes[i]["palette"];
 			}
-			if (themes[i].palettes === null) {
-				delete themes[i].palettes;
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			if (themes[i]["palettes"] === null) {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				delete themes[i]["palettes"];
 			}
 
-			if (themes[i].palette !== undefined || themes[i].palettes !== undefined) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			if (themes[i]["palette"] !== undefined || themes[i]["palettes"] !== undefined) {
 				if ("palette" in themeToValidate) {
 					themeToValidate.palette = validatePalette(
 						themeToValidate.palette,
