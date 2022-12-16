@@ -19,6 +19,13 @@
 			"sources": ["images/**/*", "data/**/*"],
 			"dest": "./common/views/manager-portal",
 			"dependsOn": "manager-portal/snapshot-manager-portal.json"
+		},
+		{
+			"id": "package",
+			"sourceRoot": "./",
+			"sources": ["package.json","docs/**/*", "README.md", "LICENSE.md", "CHANGELOG.md", "client/types/**"],
+			"dest": "../",
+			"dependsOn": "package"
 		}
 	],
 	"replaceTypes": [".json", ".html", ".js"],
