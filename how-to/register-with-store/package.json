@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-store",
-	"version": "9.1.0",
+	"version": "9.2.0",
 	"description": "OpenFin Workspace -- Register with store",
 	"main": "index.js",
 	"scripts": {
@@ -20,8 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "9.1.22",
-		"@openfin/workspace-platform": "9.1.22"
+		"@openfin/workspace": "9.2.5",
+		"@openfin/workspace-platform": "9.2.5"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",
