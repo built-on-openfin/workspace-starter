@@ -1,12 +1,12 @@
 import type { Logger, LoggerCreator } from "customize-workspace/shapes";
 import type { AnalyticsModule, PlatformAnalyticsEvent } from "customize-workspace/shapes/analytics-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
-import type { ExampleConsoleAnalyticsOptions } from "./shapes";
+import type { ConsoleAnalyticsOptions } from "./shapes";
 
 /**
- * Implement the log provider using the console.
+ * Implement the analytics module using the console.
  */
-export class ExampleConsoleAnalyticsModule implements AnalyticsModule<ExampleConsoleAnalyticsOptions> {
+export class ConsoleAnalyticsModule implements AnalyticsModule<ConsoleAnalyticsOptions> {
 	private _logger: Logger;
 
 	private _logEvent: (message: string, events: PlatformAnalyticsEvent[]) => void;
@@ -19,11 +19,11 @@ export class ExampleConsoleAnalyticsModule implements AnalyticsModule<ExampleCon
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleConsoleAnalyticsOptions>,
+		definition: ModuleDefinition<ConsoleAnalyticsOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = loggerCreator("ExampleConsoleAnalyticsModule");
+		this._logger = loggerCreator("ConsoleAnalyticsModule");
 		this._logger.info("Initialized");
 		this._logger.info("Session Id: ", helpers.sessionId);
 		const logLevel =

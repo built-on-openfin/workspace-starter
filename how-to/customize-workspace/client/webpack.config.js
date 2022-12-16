@@ -292,7 +292,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/modules/analytics/example/index.ts',
+		entry: './client/src/modules/analytics/console/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -308,7 +308,7 @@ module.exports = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'example.bundle.js',
+			filename: 'console.bundle.js',
 			library: {
 				type: 'module'
 			},
