@@ -279,6 +279,20 @@
 			"toolbarButtons": [
 				{
 					"include": false,
+					"id": "toggle-theme",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Toggle Theme",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/common/icons/{theme}/theme.svg",
+						"action": {
+							"id": "toggle-theme",
+							"customData": {}
+						}
+					}
+				},
+				{
+					"include": false,
 					"id": "change-opacity",
 					"button": {
 						"type": "Custom",
