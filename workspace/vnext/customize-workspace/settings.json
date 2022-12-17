@@ -878,8 +878,8 @@
 		"modules": [
 			{
 				"enabled": true,
-				"id": "analytics.console.example",
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/analytics/example.bundle.js",
+				"id": "analytics.console",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/analytics/console.bundle.js",
 				"data": {
 					"eventLogLevel": "info"
 				}
