@@ -25,7 +25,7 @@
 		"how-to/integrate-with-salesforce-basic",
 		"how-to/hints-and-tips"
 	],
-	"howToCustomFolder": "workspace/vnext",
+	"howToCustomFolder": "",
 	"contributors": [
 		"adam.saland@openfin.co",
 		"john.mandia@openfin.co",
