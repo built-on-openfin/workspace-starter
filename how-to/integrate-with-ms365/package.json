@@ -21,7 +21,7 @@
 	"dependencies": {
 		"@finos/fdc3": "^2.0.0-beta.2",
 		"@microsoft/microsoft-graph-types": "^2.25.0",
-		"@openfin/core": "^28.72.14",
+		"@openfin/core": "^28.72.17",
 		"@openfin/microsoft365": "1.0.0",
 		"@openfin/workspace": "10.3.8",
 		"@openfin/workspace-platform": "10.3.8"

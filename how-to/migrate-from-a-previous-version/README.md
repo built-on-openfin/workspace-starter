@@ -8,7 +8,7 @@
 ### Workspace Enhancements
 
 - Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
-- New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward. 
+- New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
 - API Control Over Home Search String - You can now trigger an update to the text shown in the Home Search Box. We provide examples of this in the customize-home-templates example (where the help search entry can update the search box when selected).
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
 - Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
@@ -19,7 +19,7 @@
 
 These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
 
-## What dependencies will I need for v9
+## What dependencies will I need for v10
 
 You will need the following dependencies
 
@@ -52,7 +52,7 @@ The main focus of this release is:
 
 You have the ability to hide favicons from the view tabs if you don't wish them to show.
 
-### Notification Enhancements
+### 9.1 Notification Enhancements
 
 #### Improved formatting of timestamps in Notifications
 
