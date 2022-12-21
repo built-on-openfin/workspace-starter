@@ -4,11 +4,11 @@
 		"name": "call-app",
 		"title": "Call Application",
 		"description": "Start a call.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/call-app.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/call-app.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -30,11 +30,11 @@
 		"name": "participant-selection",
 		"title": "Participant Selection",
 		"description": "Select a participant.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-selection.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/participant-selection.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -49,11 +49,11 @@
 		"name": "participant-history",
 		"title": "Participant History",
 		"description": "View participant history.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-history.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/participant-history.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -75,11 +75,11 @@
 		"name": "investments-and-models",
 		"title": "Investments and Models",
 		"description": "View investments and models.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/investments-and-models.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/investments-and-models.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -101,11 +101,11 @@
 		"name": "participant-summary-view",
 		"title": "Participant Summary",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/participant-summary.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -127,11 +127,11 @@
 		"name": "participant-summary-window",
 		"title": "Participant Summary Window",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/contact/participant-summary.json",
 		"manifestType": "window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -154,10 +154,10 @@
 		"title": "Client Overview",
 		"manifestType": "snapshot",
 		"description": "Provides a summary of the current client",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/snapshots/snapshot-contact-overview.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/snapshots/snapshot-contact-overview.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -179,7 +179,7 @@
 		"name": "fdc3-workbench",
 		"title": "FDC3 Workbench",
 		"description": "Launch the official FDC3 Workbench",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/fdc3/workbench/fdc3-workbench-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/fdc3/workbench/fdc3-workbench-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -205,7 +205,7 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/fdc3-workbench.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/fdc3-workbench.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact", "instrument"]
@@ -215,11 +215,11 @@
 		"name": "fdc3-broadcast-view",
 		"title": "Context using FDC3",
 		"description": "This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/fdc3/context/fdc3-broadcast-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -228,7 +228,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-context-fdc3.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "tools"]
@@ -238,11 +238,11 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -251,7 +251,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-context-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -262,10 +262,10 @@
 		"title": "Context using FDC3 & Interop API (Multi)",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can share context. This page can be launched multiple times. This entry has a manifest type of 'snapshot' and includes an example of fdc3 and interop api usage.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/snapshots/snapshot-context-multi-instance.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-context-multi-instance.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -274,7 +274,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/page-context-fdc3-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/page-context-fdc3-interop-api.png"
 			}
 		],
 		"tags": ["page", "openfin"]
@@ -284,11 +284,11 @@
 		"name": "fdc3-intent-view",
 		"title": "Intents using FDC3",
 		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 api.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/fdc3/intent/fdc3-intent-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/fdc3/intent/fdc3-intent-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -352,7 +352,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-intents-fdc3.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "intent", "tools"]
@@ -362,11 +362,11 @@
 		"name": "fdc3-intent-view-multi",
 		"title": "Intents using FDC3 (Multi)",
 		"description": "An example of raising and listening to fdc3 intents and the code needed to implement it. This view can be launched multiple times.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/fdc3/intent/fdc3-intent-multi-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/fdc3/intent/fdc3-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -430,7 +430,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-intents-fdc3.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "intent", "tools"]
@@ -440,11 +440,11 @@
 		"name": "interop-intent-view",
 		"title": "Intents using Interop API",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/interop-api/intent/interop-intent-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/interop-api/intent/interop-intent-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -508,7 +508,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -518,11 +518,11 @@
 		"name": "interop-intent-view-multi",
 		"title": "Intents using Interop API (Multi)",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -586,7 +586,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -597,10 +597,10 @@
 		"title": "Intents using FDC & Interop",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/snapshots/snapshot-intent-single-instance.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-intent-single-instance.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -664,7 +664,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/page-intents-fdc3-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/page-intents-fdc3-interop-api.png"
 			}
 		],
 		"tags": ["page", "openfin"]
@@ -675,10 +675,10 @@
 		"title": "Intents using FDC & Interop API (Multi)",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This page can be launched multiple times. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/snapshots/snapshot-intent-multi-instance.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-intent-multi-instance.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -742,7 +742,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/interop/images/previews/page-intents-fdc3-interop-api.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/page-intents-fdc3-interop-api.png"
 			}
 		],
 		"tags": ["page", "openfin", "tools"]
@@ -752,9 +752,9 @@
 		"name": "app-definition-builder",
 		"title": "App Definition Builder",
 		"description": "A developer tool to help build an app definition",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/app/app-definition-builder/app-definition-builder-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/app/app-definition-builder/app-definition-builder-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
@@ -768,7 +768,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/app/images/previews/app-definition-builder.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/app/images/previews/app-definition-builder.png"
 			}
 		],
 		"tags": ["view", "app", "tool"]
@@ -778,16 +778,16 @@
 		"name": "theme-definition-builder",
 		"title": "Theme Definition Builder",
 		"description": "A tool to help in the building of a theme.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/vnext/branding/images/previews/theme-definition-builder.png"
+				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/branding/images/previews/theme-definition-builder.png"
 			}
 		],
 		"tags": ["view", "theme", "tool"]
@@ -797,16 +797,16 @@
 		"name": "starter-style-guide",
 		"title": "Starter Style Guide",
 		"description": "A style guide used to aid in the building of workspace starter samples.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/style/style-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/style/style-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/starter-style-guide.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/starter-style-guide.png"
 			}
 		],
 		"tags": ["view", "style", "tool"]
@@ -823,7 +823,7 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -844,7 +844,7 @@
 		"manifestType": "inline-window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -863,7 +863,7 @@
 		"manifestType": "desktop-browser",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -878,11 +878,11 @@
 		"name": "preload-tradingview-view",
 		"title": "Trading View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/tradingview/preload-tradingview-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/tradingview/preload-tradingview-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -897,11 +897,11 @@
 		"name": "preload-google-view",
 		"title": "Google View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/google/preload-google-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/google/preload-google-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -928,7 +928,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/expero-news-view.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/expero-news-view.png"
 			}
 		],
 		"tags": ["expero", "view", "interop"]
@@ -950,7 +950,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/expero-description-view.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/expero-description-view.png"
 			}
 		],
 		"tags": ["expero", "view", "interop"]
@@ -972,7 +972,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/expero-stock-view.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/expero-stock-view.png"
 			}
 		],
 		"tags": ["expero", "view", "interop"]
@@ -995,7 +995,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-notification-studio.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/openfin-notification-studio.png"
 			}
 		],
 		"tags": ["hero", "manifest", "tools"]
@@ -1018,7 +1018,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-process-manager.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/openfin-process-manager.png"
 			}
 		],
 		"tags": ["hero", "manifest", "tools"]
@@ -1029,10 +1029,10 @@
 		"title": "OpenFin Developer Docs",
 		"manifestType": "snapshot",
 		"description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/snapshots/snapshot.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/snapshots/snapshot.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1041,7 +1041,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-page-docs.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/openfin-page-docs.png"
 			}
 		],
 		"tags": ["page"]
@@ -1055,7 +1055,7 @@
 		"manifest": "winform-interop-example",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-winform-interop.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1064,7 +1064,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/openfin-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/openfin-winform-interop.png"
 			}
 		],
 		"tags": ["native", "appasset", "nwi", "dock"],
@@ -1085,7 +1085,7 @@
 		"manifest": "notepad.exe",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-notepad.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-notepad.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1094,7 +1094,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/microsoft-notepad-native.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/microsoft-notepad-native.png"
 			}
 		],
 		"tags": ["native", "dock"]
@@ -1105,10 +1105,10 @@
 		"title": "Hidden/Headless Window Example",
 		"manifestType": "window",
 		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/hidden-window/hidden.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/windows/hidden-window/hidden.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1124,10 +1124,10 @@
 		"title": "Manager Portal",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/snapshot-manager-portal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/snapshot-manager-portal.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1143,7 +1143,7 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/page-manager-portal.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/page-manager-portal.png"
 			}
 		],
 		"tags": ["page", "openfin", "manager", "fcd3"]
@@ -1153,11 +1153,11 @@
 		"name": "my-team",
 		"title": "My Team",
 		"description": "View my team.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/my-team.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/my-team.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1179,11 +1179,11 @@
 		"name": "annual-leave",
 		"title": "Annual Leave",
 		"description": "View the annual leave for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/annual-leave.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/annual-leave.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/annual-leave/favicon.ico"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/annual-leave/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1205,11 +1205,11 @@
 		"name": "manager-paths",
 		"title": "Manager Paths",
 		"description": "View the manager paths for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/manager-paths.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/manager-paths.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/manager-paths/favicon.ico"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/manager-paths/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1231,11 +1231,11 @@
 		"name": "company-comms",
 		"title": "Company Comms",
 		"description": "View the communications for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/company-comms.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/company-comms.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/company-comms/favicon.ico"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/company-comms/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1257,11 +1257,11 @@
 		"name": "company-cal",
 		"title": "Company Calendar",
 		"description": "View the calendar for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/company-cal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/company-cal.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/manager-portal/company-cal/favicon.ico"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/views/manager-portal/company-cal/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1283,9 +1283,9 @@
 		"name": "getting-started",
 		"title": "Getting Started Guide",
 		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/vnext/common/snapshots/snapshot-getting-started.json",
+		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
@@ -1298,11 +1298,11 @@
 		"name": "irs-rfq",
 		"title": "IRS: Request For Quote",
 		"description": "Request for quote for Interest Rate Swaps.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/windows/irs-rfq/irs-rfq.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/windows/irs-rfq/irs-rfq.json",
 		"manifestType": "window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -1311,10 +1311,10 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/irs-rfq.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/irs-rfq.png"
 			},
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/irs-rfq-notification1.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/irs-rfq-notification1.png"
 			}
 		],
 		"tags": ["view", "irs"]
