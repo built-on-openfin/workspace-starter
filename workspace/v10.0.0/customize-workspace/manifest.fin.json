@@ -323,7 +323,8 @@
 							"id": "toggle-theme",
 							"customData": {}
 						}
-					}
+					},
+					"conditions": ["themed"]
 				},
 				{
 					"include": false,
