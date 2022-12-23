@@ -23,6 +23,21 @@ function getSystemPreferredColorScheme(): ColorSchemeMode {
 	return ColorSchemeMode.Light;
 }
 
+export async function supportsColorSchemes(): Promise<boolean> {
+	const themes = await getThemes();
+	if (themes.length === 0) {
+		// out of the box we support a light and dark color scheme
+		return true;
+	}
+
+	if ("palette" in themes[0]) {
+		// the old palette structure doesn't support light and dark color schemes
+		return false;
+	}
+
+	return true;
+}
+
 export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
 	const colorScheme = await getCurrentColorSchemeMode();
