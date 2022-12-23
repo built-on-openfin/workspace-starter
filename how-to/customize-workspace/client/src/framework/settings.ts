@@ -14,9 +14,9 @@ export async function getConfiguredSettings(): Promise<CustomSettings> {
 	return manifest.customSettings ?? {};
 }
 
-async function getValidHosts(): Promise<string[]> {
+async function getValidHosts(validationUrl: string): Promise<string[]> {
 	if (validManifestHosts === undefined) {
-		const manifestHostsPath = window.location.href.replace("platform/provider.html", "manifest-hosts.json");
+		const manifestHostsPath = validationUrl;
 		try {
 			logger.info(`Getting valid hosts for initial settings from ${manifestHostsPath}`);
 			const resp = await fetch(manifestHostsPath);
@@ -52,16 +52,38 @@ export async function getSettings(): Promise<CustomSettings> {
 
 export async function isValid() {
 	logger.info("Validating source of initial settings");
+	const host = window.location.href.toLowerCase();
+	let hostPage = "";
+	const validHost1 = "platform/provider.html";
+	const validHost2 = "provider.html";
+	const validHost3 = "shell/shell.html";
+	const validHost4 = "shell.html";
+
+	if (host.endsWith(validHost1)) {
+		hostPage = validHost1;
+	} else if (host.endsWith(validHost2)) {
+		hostPage = validHost2;
+	} else if (host.endsWith(validHost3)) {
+		hostPage = validHost3;
+	} else if (host.endsWith(validHost4)) {
+		hostPage = validHost4;
+	} else {
+		return false;
+	}
+
+	const validationUrl = host.replace(hostPage, "manifest-hosts.json");
+
+	if (validationUrl !== undefined) {
+		logger.info("Using hosts validation url:", validationUrl);
+	}
 	const app = await fin.Application.getCurrent();
 	const info = await app.getInfo();
 	const manifestUrl = info.manifestUrl;
 	logger.info(`Source of initial settings: ${manifestUrl}`);
-	// this check could be removed or it could be dynamically generated as part of the code or passed made available from the server
-	// that hosts the code. It couldn't be from the manifest itself as it is validating where the manifest is coming from.
 
 	const url = new URL(manifestUrl);
 	const sourceUrl = new URL(location.href);
-	const validHosts = await getValidHosts();
+	const validHosts = await getValidHosts(validationUrl);
 	if (!validHosts.includes(sourceUrl.hostname)) {
 		validHosts.push(sourceUrl.hostname);
 	}

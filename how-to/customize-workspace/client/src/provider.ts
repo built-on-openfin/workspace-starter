@@ -1,8 +1,8 @@
 import { init as bootstrap } from "./framework/bootstrapper";
-import { init as initialisePlatform } from "./framework/platform/platform";
+import { init as initializePlatform } from "./framework/platform/platform";
 
-window.addEventListener("DOMContentLoaded", async () => {
+export async function init(): Promise<void> {
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => bootstrap());
-	await initialisePlatform();
-});
+	await initializePlatform();
+}

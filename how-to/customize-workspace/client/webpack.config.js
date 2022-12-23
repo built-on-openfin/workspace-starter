@@ -16,9 +16,43 @@ module.exports = [
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js']
 		},
+		externals: { fin: 'fin' },
 		output: {
 			filename: 'provider.bundle.js',
+			library: {
+				type: 'module'
+			},
 			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/shell.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'shell.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
 		}
 	},
 	{
