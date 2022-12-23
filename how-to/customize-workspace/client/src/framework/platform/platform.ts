@@ -7,7 +7,7 @@ import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
 import * as authProvider from "../auth";
-import { isAuthenticationEnabled } from "../auth";
+import { isAuthenticationEnabled, isAuthenticationRequired } from "../auth";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
@@ -17,8 +17,8 @@ import { createLogger, loggerProvider } from "../logger-provider";
 import { getDefaultHelpers } from "../modules";
 import { getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
-import { deregister as deregisterShare, register as registerShare } from "../share";
-import { getThemes, notifyColorScheme } from "../themes";
+import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
+import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
@@ -75,6 +75,14 @@ async function setupPlatform() {
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider, helpers);
+	conditionsProvider.registerCondition(
+		"authenticated",
+		async () => isAuthenticationEnabled() && !(await isAuthenticationRequired()),
+		false
+	);
+	conditionsProvider.registerCondition("sharing", async () => isShareEnabled(), false);
+	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
+
 	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
 
 	const sharing = settings.platformProvider?.sharing ?? true;
