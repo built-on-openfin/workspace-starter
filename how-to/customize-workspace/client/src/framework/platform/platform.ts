@@ -21,7 +21,7 @@ import { overrideCallback } from "./platform-override";
 
 const logger = createLogger("Platform");
 
-async function setupPlatform(platformSettings?: PlatformProviderOptions): Promise<boolean> {
+async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const configuredSettings = await getConfiguredSettings();
@@ -73,13 +73,14 @@ async function setupPlatform(platformSettings?: PlatformProviderOptions): Promis
 	return true;
 }
 
-export async function init() {
+export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);
 	if (!isValid) {
 		logger.error(
 			"The platform cannot startup as their was a problem with the initialization of the auth flow."
 		);
 	}
+	return isValid;
 }
 
 export async function closedown(): Promise<void> {

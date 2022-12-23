@@ -54,18 +54,6 @@ export async function init(
 
 	if (authProvider.isAuthenticationEnabled()) {
 		const authenticationRequired = await authProvider.isAuthenticationRequired();
-		if (authenticationRequired) {
-			const loggedInSubscription = authProvider.subscribe("logged-in", async () => {
-				providedLogger.info("Platform logged in. Setting up platform");
-				platformInitialized = await next(settings.platformProvider);
-				providedLogger.info("Unsubscribing from logged in events as platform has been initialized");
-				authProvider.unsubscribe(loggedInSubscription);
-			});
-			await manageAuthFlow();
-		} else {
-			platformInitialized = await next(settings.platformProvider);
-		}
-
 		if (listenForAuthChanges) {
 			// check for session expiry
 			authProvider.subscribe("session-expired", manageAuthFlow);
@@ -73,8 +61,28 @@ export async function init(
 			// check for logout
 			authProvider.subscribe("logged-out", onLogOutOrCancel);
 		}
+		if (authenticationRequired) {
+			return new Promise<boolean>((resolve, reject) => {
+				const loggedInSubscription = authProvider.subscribe("logged-in", async () => {
+					providedLogger.info("Platform logged in. Setting up platform");
+					platformInitialized = await next(settings.platformProvider);
+					providedLogger.info("Unsubscribing from logged in events as platform has been initialized");
+					authProvider.unsubscribe(loggedInSubscription);
+					resolve(platformInitialized);
+				});
+				manageAuthFlow()
+					.then((_) => {
+						logger.info("Manage Auth Flow executed.");
+						return true;
+					})
+					.catch((reason) => {
+						reject(reason);
+					});
+			});
+		}
+		platformInitialized = await next(settings.platformProvider);
 	} else {
 		platformInitialized = await next(settings.platformProvider);
 	}
-	return true;
+	return platformInitialized;
 }

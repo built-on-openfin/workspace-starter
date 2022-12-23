@@ -18,7 +18,7 @@ async function initProvider(platformSettings?: PlatformProviderOptions): Promise
 	}
 
 	try {
-		const mod: { init: () => Promise<void> } = await import(
+		const mod: { init: () => Promise<boolean> } = await import(
 			/* webpackIgnore: true */ platformSettings.initUrl
 		);
 
@@ -26,18 +26,17 @@ async function initProvider(platformSettings?: PlatformProviderOptions): Promise
 			logger.error(
 				`The specified provider module '${platformSettings.initUrl}' has no exported init function`
 			);
-			return;
+			return false;
 		}
 
-		await mod.init();
+		return await mod.init();
 	} catch (err) {
 		logger.error("An error occurred while trying to initialize the provider.", err);
 		return false;
 	}
-	return true;
 }
 
-export async function init(): Promise<void> {
+export async function init(): Promise<boolean> {
 	logger = createLogger("Shell");
 	const isValid = await initAuthFlow(initProvider, logger);
 	if (!isValid) {
@@ -45,4 +44,5 @@ export async function init(): Promise<void> {
 			"The platform cannot startup as their was a problem with the initialization of the auth flow."
 		);
 	}
+	return isValid;
 }

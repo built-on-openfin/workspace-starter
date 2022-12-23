@@ -22,8 +22,8 @@ async function getValidHosts(validationUrl: string): Promise<string[]> {
 			const resp = await fetch(manifestHostsPath);
 			const jsonResults: string[] = await resp.json();
 			validManifestHosts = jsonResults;
-		} catch (error) {
-			logger.error(`Error fetching valid hosts for initial settings from ${manifestHostsPath}.`, error);
+		} catch {
+			logger.info(`Valid hosts endpoint (${manifestHostsPath}) not provided.`);
 			validManifestHosts = [];
 		}
 	}
@@ -67,15 +67,17 @@ export async function isValid() {
 		hostPage = validHost3;
 	} else if (host.endsWith(validHost4)) {
 		hostPage = validHost4;
-	} else {
-		return false;
 	}
 
-	const validationUrl = host.replace(hostPage, "manifest-hosts.json");
+	let validationUrl: string;
+	let validHosts: string[] = [];
 
-	if (validationUrl !== undefined) {
+	if (hostPage !== "") {
+		validationUrl = host.replace(hostPage, "manifest-hosts.json");
 		logger.info("Using hosts validation url:", validationUrl);
+		validHosts = await getValidHosts(validationUrl);
 	}
+
 	const app = await fin.Application.getCurrent();
 	const info = await app.getInfo();
 	const manifestUrl = info.manifestUrl;
@@ -83,11 +85,11 @@ export async function isValid() {
 
 	const url = new URL(manifestUrl);
 	const sourceUrl = new URL(location.href);
-	const validHosts = await getValidHosts(validationUrl);
 	if (!validHosts.includes(sourceUrl.hostname)) {
+		logger.info("Adding current host to the list of valid hosts:", sourceUrl.hostname);
 		validHosts.push(sourceUrl.hostname);
 	}
-	logger.info(`Checking host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
+	logger.info(`Checking manifest host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
 	const isValidHost = validHosts.includes(url.hostname);
 	if (isValidHost) {
 		logger.info("The source of the initial settings is valid");
