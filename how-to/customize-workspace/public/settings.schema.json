@@ -1,0 +1,1832 @@
+{
+  "$ref": "#/definitions/CustomSettings",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ActionConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "supportedActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "actions",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ActionsProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "AnalyticsProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "AppEndpointOptions": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "inputId": {
+              "type": "string"
+            },
+            "outputId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "inputId"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "AppProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "appAssetTag": {
+          "type": "string"
+        },
+        "appsSourceUrl": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "cacheDurationInMinutes": {
+          "type": "number"
+        },
+        "cacheDurationInSeconds": {
+          "type": "number"
+        },
+        "endpointIds": {
+          "items": {
+            "$ref": "#/definitions/AppEndpointOptions"
+          },
+          "type": "array"
+        },
+        "includeCredentialOnSourceRequest": {
+          "enum": [
+            "omit",
+            "same-origin",
+            "include"
+          ],
+          "type": "string"
+        },
+        "manifestTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "AppSourceConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "manifestTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "appSource",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "AuthProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "BootstrapComponents": {
+      "enum": [
+        "home",
+        "store",
+        "dock",
+        "none"
+      ],
+      "type": "string"
+    },
+    "BootstrapOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "autoShow": {
+          "items": {
+            "$ref": "#/definitions/BootstrapComponents"
+          },
+          "type": "array"
+        },
+        "dock": {
+          "type": "boolean"
+        },
+        "home": {
+          "type": "boolean"
+        },
+        "notifications": {
+          "type": "boolean"
+        },
+        "store": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "store",
+        "home",
+        "dock",
+        "notifications",
+        "autoShow"
+      ],
+      "type": "object"
+    },
+    "BrokerConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "broker",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "BrowserButtonType": {
+      "description": "Types of buttons on browser windows",
+      "enum": [
+        "ShowHideTabs",
+        "ColorLinking",
+        "PresetLayouts",
+        "LockUnlockPage",
+        "SaveMenu",
+        "SavePage",
+        "Minimise",
+        "Maximise",
+        "Close",
+        "Custom"
+      ],
+      "type": "string"
+    },
+    "BrowserProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "globalMenu": {
+          "items": {
+            "$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
+          },
+          "type": "array"
+        },
+        "pageMenu": {
+          "items": {
+            "$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
+          },
+          "type": "array"
+        },
+        "toolbarButtons": {
+          "items": {
+            "$ref": "#/definitions/ToolbarButtonDefinition"
+          },
+          "type": "array"
+        },
+        "viewMenu": {
+          "items": {
+            "$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
+          },
+          "type": "array"
+        },
+        "windowOptions": {
+          "additionalProperties": false,
+          "properties": {
+            "icon": {
+              "type": "string"
+            },
+            "newPageUrl": {
+              "type": "string"
+            },
+            "newTabUrl": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "windowOptions"
+      ],
+      "type": "object"
+    },
+    "ColorSchemeOption": {
+      "enum": [
+        "light",
+        "dark",
+        "system"
+      ],
+      "type": "string"
+    },
+    "ConditionsProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "Connection": {
+      "additionalProperties": false,
+      "properties": {
+        "connectionTypes": {
+          "items": {
+            "$ref": "#/definitions/ConnectionTypes"
+          },
+          "type": "array"
+        },
+        "identity": {
+          "$ref": "#/definitions/OpenFin.Identity"
+        },
+        "validatePayload": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "identity",
+        "connectionTypes"
+      ],
+      "type": "object"
+    },
+    "ConnectionProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "connectionId": {
+          "type": "string"
+        },
+        "connectionValidationEndpoint": {
+          "type": "string"
+        },
+        "connections": {
+          "items": {
+            "$ref": "#/definitions/Connection"
+          },
+          "type": "array"
+        },
+        "supportedActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "connectionId",
+        "connectionValidationEndpoint",
+        "supportedActions",
+        "connections"
+      ],
+      "type": "object"
+    },
+    "ConnectionTypes": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AppSourceConnection"
+        },
+        {
+          "$ref": "#/definitions/SnapshotSourceConnection"
+        },
+        {
+          "$ref": "#/definitions/ActionConnection"
+        },
+        {
+          "$ref": "#/definitions/BrokerConnection"
+        }
+      ]
+    },
+    "CustomActionSpecifier": {
+      "additionalProperties": false,
+      "description": "Configures a custom action when the control is invoked",
+      "properties": {
+        "customData": {
+          "description": "Any data necessary for the functioning of specified custom action"
+        },
+        "id": {
+          "description": "Identifier of a custom action defined at platform initialization",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "CustomBrowserButtonConfig": {
+      "additionalProperties": false,
+      "description": "Custom browser buttons",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/CustomActionSpecifier",
+          "description": "Custom action once the button is clicked"
+        },
+        "disabled": {
+          "description": "Disable custom button true or false",
+          "type": "boolean"
+        },
+        "iconUrl": {
+          "description": "icon URL for icon image",
+          "type": "string"
+        },
+        "tooltip": {
+          "description": "Button name text when hovered over",
+          "type": "string"
+        },
+        "type": {
+          "const": "Custom",
+          "description": "Type of cutom browser button",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "tooltip",
+        "type"
+      ],
+      "type": "object"
+    },
+    "CustomPaletteSet": {
+      "additionalProperties": false,
+      "properties": {
+        "background1": {
+          "type": "string"
+        },
+        "background2": {
+          "type": "string"
+        },
+        "background3": {
+          "type": "string"
+        },
+        "background4": {
+          "type": "string"
+        },
+        "background5": {
+          "type": "string"
+        },
+        "background6": {
+          "type": "string"
+        },
+        "backgroundPrimary": {
+          "type": "string"
+        },
+        "brandPrimary": {
+          "type": "string"
+        },
+        "brandSecondary": {
+          "type": "string"
+        },
+        "contentBackground1": {
+          "type": "string"
+        },
+        "contentBackground2": {
+          "type": "string"
+        },
+        "contentBackground3": {
+          "type": "string"
+        },
+        "contentBackground4": {
+          "type": "string"
+        },
+        "contentBackground5": {
+          "type": "string"
+        },
+        "functional1": {
+          "type": "string"
+        },
+        "functional10": {
+          "type": "string"
+        },
+        "functional2": {
+          "type": "string"
+        },
+        "functional3": {
+          "type": "string"
+        },
+        "functional4": {
+          "type": "string"
+        },
+        "functional5": {
+          "type": "string"
+        },
+        "functional6": {
+          "type": "string"
+        },
+        "functional7": {
+          "type": "string"
+        },
+        "functional8": {
+          "type": "string"
+        },
+        "functional9": {
+          "type": "string"
+        },
+        "inputBackground": {
+          "type": "string"
+        },
+        "inputColor": {
+          "type": "string"
+        },
+        "inputDisabled": {
+          "type": "string"
+        },
+        "inputFocused": {
+          "type": "string"
+        },
+        "inputPlaceholder": {
+          "type": "string"
+        },
+        "statusActive": {
+          "type": "string"
+        },
+        "statusCritical": {
+          "type": "string"
+        },
+        "statusSuccess": {
+          "type": "string"
+        },
+        "statusWarning": {
+          "type": "string"
+        },
+        "textDefault": {
+          "type": "string"
+        },
+        "textHelp": {
+          "type": "string"
+        },
+        "textInactive": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "backgroundPrimary",
+        "brandPrimary",
+        "brandSecondary"
+      ],
+      "type": "object"
+    },
+    "CustomSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "actionsProvider": {
+          "$ref": "#/definitions/ActionsProviderOptions"
+        },
+        "analyticsProvider": {
+          "$ref": "#/definitions/AnalyticsProviderOptions"
+        },
+        "appProvider": {
+          "$ref": "#/definitions/AppProviderOptions"
+        },
+        "authProvider": {
+          "$ref": "#/definitions/AuthProviderOptions"
+        },
+        "bootstrap": {
+          "$ref": "#/definitions/BootstrapOptions"
+        },
+        "browserProvider": {
+          "$ref": "#/definitions/BrowserProviderOptions"
+        },
+        "conditionsProvider": {
+          "$ref": "#/definitions/ConditionsProviderOptions"
+        },
+        "connectionProvider": {
+          "$ref": "#/definitions/ConnectionProviderOptions"
+        },
+        "dockProvider": {
+          "$ref": "#/definitions/DockProviderOptions"
+        },
+        "endpointProvider": {
+          "$ref": "#/definitions/EndpointProviderOptions"
+        },
+        "headlessProvider": {
+          "$ref": "#/definitions/HeadlessProviderOptions"
+        },
+        "homeProvider": {
+          "$ref": "#/definitions/HomeProviderOptions"
+        },
+        "initOptionsProvider": {
+          "$ref": "#/definitions/InitOptionsProviderOptions"
+        },
+        "integrationProvider": {
+          "$ref": "#/definitions/IntegrationProviderOptions"
+        },
+        "lifecycleProvider": {
+          "$ref": "#/definitions/LifecycleProviderOptions"
+        },
+        "loggerProvider": {
+          "$ref": "#/definitions/LoggerProviderOptions"
+        },
+        "notificationProvider": {
+          "$ref": "#/definitions/NotificationProviderOptions"
+        },
+        "platformProvider": {
+          "$ref": "#/definitions/PlatformProviderOptions"
+        },
+        "storefrontProvider": {
+          "$ref": "#/definitions/StorefrontProviderOptions"
+        },
+        "themeProvider": {
+          "$ref": "#/definitions/ThemeProviderOptions"
+        }
+      },
+      "type": "object"
+    },
+    "CustomThemeOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "palette": {
+          "$ref": "#/definitions/CustomPaletteSet"
+        }
+      },
+      "required": [
+        "label",
+        "palette"
+      ],
+      "type": "object"
+    },
+    "CustomThemeOptionsWithScheme": {
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "palettes": {
+          "additionalProperties": false,
+          "properties": {
+            "dark": {
+              "$ref": "#/definitions/CustomPaletteSet"
+            },
+            "light": {
+              "$ref": "#/definitions/CustomPaletteSet"
+            }
+          },
+          "required": [
+            "light",
+            "dark"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "label",
+        "palettes"
+      ],
+      "type": "object"
+    },
+    "CustomThemes": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/CustomThemeOptions"
+          },
+          {
+            "$ref": "#/definitions/CustomThemeOptionsWithScheme"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "DockProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "apps": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "display": {
+                "enum": [
+                  "individual",
+                  "group"
+                ],
+                "type": "string"
+              },
+              "iconUrl": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "tooltip": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "display"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "buttons": {
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "action": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "customData": {},
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "customData"
+                    ],
+                    "type": "object"
+                  },
+                  "appId": {
+                    "type": "string"
+                  },
+                  "iconUrl": {
+                    "type": "string"
+                  },
+                  "tooltip": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "iconUrl": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "action": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "customData": {},
+                            "id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "customData"
+                          ],
+                          "type": "object"
+                        },
+                        "appId": {
+                          "type": "string"
+                        },
+                        "tooltip": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "tooltip": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "options"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "workspaceComponents": {
+          "additionalProperties": false,
+          "properties": {
+            "hideHomeButton": {
+              "type": "boolean"
+            },
+            "hideNotificationsButton": {
+              "type": "boolean"
+            },
+            "hideStorefrontButton": {
+              "type": "boolean"
+            },
+            "hideWorkspacesButton": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "icon"
+      ],
+      "type": "object"
+    },
+    "EndpointDefinition<unknown>": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "options": {
+              "$ref": "#/definitions/FetchOptions"
+            },
+            "type": {
+              "const": "fetch",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "options": {},
+            "type": {
+              "const": "module",
+              "type": "string"
+            },
+            "typeId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type",
+            "typeId"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "EndpointProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "endpoints": {
+          "items": {
+            "$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
+          },
+          "type": "array"
+        },
+        "modules": {
+          "description": "The list of modules.",
+          "items": {
+            "$ref": "#/definitions/ModuleDefinition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "FetchOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "string"
+        },
+        "cache": {
+          "enum": [
+            "default",
+            "no-cache",
+            "reload",
+            "force-cache",
+            "only-if-cached"
+          ],
+          "type": "string"
+        },
+        "credentials": {
+          "enum": [
+            "omit",
+            "same-origin",
+            "include"
+          ],
+          "type": "string"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "method": {
+          "enum": [
+            "GET",
+            "POST"
+          ],
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "no-cors",
+            "cors",
+            "same-origin"
+          ],
+          "type": "string"
+        },
+        "redirect": {
+          "enum": [
+            "manual",
+            "follow",
+            "error"
+          ],
+          "type": "string"
+        },
+        "referrerPolicy": {
+          "enum": [
+            "no-referrer",
+            "no-referrer-when-downgrade",
+            "origin",
+            "origin-when-cross-origin",
+            "same-origin",
+            "strict-origin",
+            "strict-origin-when-cross-origin",
+            "unsafe-url"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GlobalContextMenuOptionType": {
+      "description": "Types of global context menu options, including pre-defined ones. User-defined context menu items should use the value `Custom`",
+      "enum": [
+        "NewWindow",
+        "NewPage",
+        "SavePage",
+        "SavePageAs",
+        "CloseWindow",
+        "RestoreChanges",
+        "SaveWorkspace",
+        "SaveWorkspaceAs",
+        "RenameWorkspace",
+        "SwitchWorkspace",
+        "DeleteWorkspace",
+        "OpenStorefront",
+        "Appearance",
+        "Quit",
+        "Custom"
+      ],
+      "type": "string"
+    },
+    "HeadlessProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "modules": {
+          "description": "The list of modules.",
+          "items": {
+            "$ref": "#/definitions/ModuleDefinition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "HomeProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "enablePageIntegration": {
+          "type": "boolean"
+        },
+        "enableWorkspaceIntegration": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "queryAgainst": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "queryMinLength": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "icon"
+      ],
+      "type": "object"
+    },
+    "Image": {
+      "additionalProperties": false,
+      "description": "Detailed metadata describing an image.",
+      "properties": {
+        "purpose": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "src": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "src"
+      ],
+      "type": "object"
+    },
+    "InitOptionsProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "IntegrationModuleDefinition": {
+      "additionalProperties": false,
+      "description": "Integration definition.",
+      "properties": {
+        "autoStart": {
+          "description": "Does the integration start automatically if enabled (default is true).",
+          "type": "boolean"
+        },
+        "data": {
+          "description": "Custom data for the module."
+        },
+        "description": {
+          "description": "The description of the module.",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Is the module enabled.",
+          "type": "boolean"
+        },
+        "icon": {
+          "description": "The icon for the module.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The id of the module.",
+          "type": "string"
+        },
+        "info": {
+          "description": "Url to more information.",
+          "type": "string"
+        },
+        "moduleUrl": {
+          "description": "This is the old property, it will be remapped to url.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the module.",
+          "type": "string"
+        },
+        "url": {
+          "description": "The url to load the module from.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ],
+      "type": "object"
+    },
+    "IntegrationProviderOptions": {
+      "additionalProperties": false,
+      "description": "Integration provider settings.",
+      "properties": {
+        "command": {
+          "description": "What command should we look for in order to return the list of integrations",
+          "type": "string"
+        },
+        "commandDescription": {
+          "description": "What description should accompany the command",
+          "type": "string"
+        },
+        "icon": {
+          "description": "An icon representing the top level integration provider",
+          "type": "string"
+        },
+        "integrations": {
+          "description": "This is the old module list name, remove in future.",
+          "items": {
+            "$ref": "#/definitions/IntegrationModuleDefinition"
+          },
+          "type": "array"
+        },
+        "isManagementEnabled": {
+          "description": "Do you wish to expose an option of turning on/off integrations.",
+          "type": "boolean"
+        },
+        "modules": {
+          "description": "The list of modules.",
+          "items": {
+            "$ref": "#/definitions/IntegrationModuleDefinition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "LifecycleProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "LoggerProviderOptions": {
+      "$ref": "#/definitions/ModuleList"
+    },
+    "MenuEntry<GlobalContextMenuOptionType>": {
+      "additionalProperties": false,
+      "properties": {
+        "conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "data": {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "$ref": "#/definitions/CustomActionSpecifier"
+            },
+            "type": {
+              "$ref": "#/definitions/GlobalContextMenuOptionType"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "include": {
+          "type": "boolean"
+        },
+        "label": {
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "properties": {
+            "customId": {
+              "type": "string"
+            },
+            "operation": {
+              "$ref": "#/definitions/MenuPositionOperation"
+            },
+            "type": {
+              "$ref": "#/definitions/GlobalContextMenuOptionType"
+            }
+          },
+          "required": [
+            "operation"
+          ],
+          "type": "object"
+        },
+        "separator": {
+          "$ref": "#/definitions/MenuSeparatorPosition"
+        }
+      },
+      "required": [
+        "include",
+        "label"
+      ],
+      "type": "object"
+    },
+    "MenuEntry<PageTabContextMenuOptionType>": {
+      "additionalProperties": false,
+      "properties": {
+        "conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "data": {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "$ref": "#/definitions/CustomActionSpecifier"
+            },
+            "type": {
+              "$ref": "#/definitions/PageTabContextMenuOptionType"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "include": {
+          "type": "boolean"
+        },
+        "label": {
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "properties": {
+            "customId": {
+              "type": "string"
+            },
+            "operation": {
+              "$ref": "#/definitions/MenuPositionOperation"
+            },
+            "type": {
+              "$ref": "#/definitions/PageTabContextMenuOptionType"
+            }
+          },
+          "required": [
+            "operation"
+          ],
+          "type": "object"
+        },
+        "separator": {
+          "$ref": "#/definitions/MenuSeparatorPosition"
+        }
+      },
+      "required": [
+        "include",
+        "label"
+      ],
+      "type": "object"
+    },
+    "MenuEntry<ViewTabMenuOptionType>": {
+      "additionalProperties": false,
+      "properties": {
+        "conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "data": {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "$ref": "#/definitions/CustomActionSpecifier"
+            },
+            "type": {
+              "$ref": "#/definitions/ViewTabMenuOptionType"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "include": {
+          "type": "boolean"
+        },
+        "label": {
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "properties": {
+            "customId": {
+              "type": "string"
+            },
+            "operation": {
+              "$ref": "#/definitions/MenuPositionOperation"
+            },
+            "type": {
+              "$ref": "#/definitions/ViewTabMenuOptionType"
+            }
+          },
+          "required": [
+            "operation"
+          ],
+          "type": "object"
+        },
+        "separator": {
+          "$ref": "#/definitions/MenuSeparatorPosition"
+        }
+      },
+      "required": [
+        "include",
+        "label"
+      ],
+      "type": "object"
+    },
+    "MenuPositionOperation": {
+      "enum": [
+        "replaceLabel",
+        "before",
+        "after",
+        "delete",
+        "start",
+        "end"
+      ],
+      "type": "string"
+    },
+    "MenuSeparatorPosition": {
+      "enum": [
+        "before",
+        "after"
+      ],
+      "type": "string"
+    },
+    "ModuleDefinition": {
+      "additionalProperties": false,
+      "description": "The definition of a module with generic data for options.",
+      "properties": {
+        "data": {
+          "description": "Custom data for the module."
+        },
+        "description": {
+          "description": "The description of the module.",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Is the module enabled.",
+          "type": "boolean"
+        },
+        "icon": {
+          "description": "The icon for the module.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The id of the module.",
+          "type": "string"
+        },
+        "info": {
+          "description": "Url to more information.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the module.",
+          "type": "string"
+        },
+        "url": {
+          "description": "The url to load the module from.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ],
+      "type": "object"
+    },
+    "ModuleList": {
+      "additionalProperties": false,
+      "description": "List of modules.",
+      "properties": {
+        "modules": {
+          "description": "The list of modules.",
+          "items": {
+            "$ref": "#/definitions/ModuleDefinition"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "NotificationProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "icon": {
+          "description": "URL of the icon to be displayed for this platform.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier of the platform.",
+          "type": "string"
+        },
+        "scheme": {
+          "$ref": "#/definitions/ColorSchemeOption",
+          "description": "This is the scheme associated with this platform."
+        },
+        "title": {
+          "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the displayName of the stream stored in Notification Center.",
+          "type": "string"
+        },
+        "workspacePlatform": {
+          "additionalProperties": false,
+          "description": "Workspace platform that registers this platform",
+          "properties": {
+            "analytics": {
+              "additionalProperties": false,
+              "properties": {
+                "isSupported": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "isSupported"
+              ],
+              "type": "object"
+            },
+            "identity": {
+              "$ref": "#/definitions/OpenFin.ApplicationIdentity"
+            }
+          },
+          "required": [
+            "identity",
+            "analytics"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "icon",
+        "id",
+        "title"
+      ],
+      "type": "object"
+    },
+    "OpenFin.ApplicationIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "uuid"
+      ],
+      "type": "object"
+    },
+    "OpenFin.Identity": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "uuid",
+        "name"
+      ],
+      "type": "object"
+    },
+    "PageTabContextMenuOptionType": {
+      "description": "Types of page tab context menu options, including pre-defined ones. User-defined context menu items should use the value `Custom`",
+      "enum": [
+        "Close",
+        "Duplicate",
+        "Rename",
+        "Save",
+        "Save As",
+        "Custom"
+      ],
+      "type": "string"
+    },
+    "PlatformProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "initUrl": {
+          "type": "string"
+        },
+        "intentPicker": {
+          "additionalProperties": false,
+          "properties": {
+            "height": {
+              "type": "number"
+            },
+            "url": {
+              "type": "string"
+            },
+            "width": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "type": "object"
+        },
+        "rootUrl": {
+          "type": "string"
+        },
+        "sharing": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rootUrl",
+        "sharing"
+      ],
+      "type": "object"
+    },
+    "SnapshotSourceConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "snapshotSource",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "StorefrontFooter": {
+      "additionalProperties": false,
+      "properties": {
+        "links": {
+          "description": "A set of links to display on Storefront's footer.",
+          "items": {
+            "$ref": "#/definitions/StorefrontLink"
+          },
+          "maxItems": 3,
+          "minItems": 0,
+          "type": "array"
+        },
+        "logo": {
+          "$ref": "#/definitions/Image",
+          "description": "A logo to be displayed on the Storefront's footer."
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "logo",
+        "links",
+        "text"
+      ],
+      "type": "object"
+    },
+    "StorefrontLink": {
+      "additionalProperties": false,
+      "description": "Represents a link to be rendered inside Storefront.",
+      "properties": {
+        "title": {
+          "description": "A UI friendly title to render the link as.",
+          "type": "string"
+        },
+        "url": {
+          "description": "When the rendered `title` text is clicked, the user will be navigated to this URL.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "type": "object"
+    },
+    "StorefrontProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "footer": {
+          "$ref": "#/definitions/StorefrontFooter"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "landingPage": {
+          "additionalProperties": false,
+          "properties": {
+            "bottomRow": {
+              "$ref": "#/definitions/StorefrontSettingsLandingPageRow"
+            },
+            "hero": {
+              "additionalProperties": false,
+              "properties": {
+                "cta": {
+                  "$ref": "#/definitions/StorefrontSettingsNavigationItem"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "image": {
+                  "$ref": "#/definitions/Image"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "cta",
+                "image"
+              ],
+              "type": "object"
+            },
+            "middleRow": {
+              "additionalProperties": false,
+              "properties": {
+                "tags": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "tags"
+              ],
+              "type": "object"
+            },
+            "topRow": {
+              "$ref": "#/definitions/StorefrontSettingsLandingPageRow"
+            }
+          },
+          "required": [
+            "topRow",
+            "middleRow",
+            "bottomRow"
+          ],
+          "type": "object"
+        },
+        "navigation": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation section regardless of how many times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same). As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation section has a different ID then the store will not be able to find a match and it won't be able to render the navigation items.",
+                "type": "string"
+              },
+              "items": {
+                "items": {
+                  "$ref": "#/definitions/StorefrontSettingsNavigationItem"
+                },
+                "type": "array"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "items"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "icon",
+        "landingPage",
+        "navigation",
+        "footer"
+      ],
+      "type": "object"
+    },
+    "StorefrontSettingsLandingPageRow": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "buttonTitle": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "id": {
+                "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how many times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same). As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has a different ID then the store will not be able to find a match and it won't be able to render the navigation item.",
+                "type": "string"
+              },
+              "image": {
+                "$ref": "#/definitions/Image"
+              },
+              "tags": {
+                "description": "The Storefront API has a collection of apps for a navigation item. Tags is an example of how you can determine what apps should be included in a navigation item. i.e we filter the apps list by one or more tags and assign those apps to the navigation item.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "description",
+              "id",
+              "image",
+              "tags",
+              "title"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "items"
+      ],
+      "type": "object"
+    },
+    "StorefrontSettingsNavigationItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how many times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same). As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has a different ID then the store will not be able to find a match and it won't be able to render the navigation item.",
+          "type": "string"
+        },
+        "tags": {
+          "description": "The Storefront API has a collection of apps for a navigation item. Tags is an example of how you can determine what apps should be included in a navigation item. i.e we filter the apps list by one or more tags and assign those apps to the navigation item.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "tags"
+      ],
+      "type": "object"
+    },
+    "ThemeProviderOptions": {
+      "additionalProperties": false,
+      "description": "Platform theme configuration",
+      "properties": {
+        "cssVarPrefix": {
+          "description": "If providing the pallette through css variables would you  like a specific custom prefix?",
+          "type": "string"
+        },
+        "schemaNames": {
+          "additionalProperties": false,
+          "description": "If providing a class at the root document for content providers to indicate light/dark would you like to provide something other than the default.",
+          "properties": {
+            "dark": {
+              "type": "string"
+            },
+            "light": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "themes": {
+          "$ref": "#/definitions/CustomThemes"
+        }
+      },
+      "required": [
+        "themes"
+      ],
+      "type": "object"
+    },
+    "ToolbarButtonDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "button": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/CustomBrowserButtonConfig"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "disabled": {
+                  "type": "boolean"
+                },
+                "iconUrl": {
+                  "description": "icon URL for icon image",
+                  "type": "string"
+                },
+                "tooltip": {
+                  "description": "Button name text when hovered over",
+                  "type": "string"
+                },
+                "type": {
+                  "$ref": "#/definitions/BrowserButtonType",
+                  "description": "Type of default browser button"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "include": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "include",
+        "button"
+      ],
+      "type": "object"
+    },
+    "ViewTabMenuOptionType": {
+      "description": "View tab context menu types for  {@link  WorkspacePlatformProvider.openViewTabContextMenu }  override.",
+      "enum": [
+        "NewView",
+        "DuplicateView",
+        "OpenWithDefaultBrowser",
+        "ReloadTab",
+        "CloseTab",
+        "AddToChannel",
+        "RemoveFromChannel",
+        "Back",
+        "Forward",
+        "Print",
+        "Custom"
+      ],
+      "type": "string"
+    }
+  }
+}
