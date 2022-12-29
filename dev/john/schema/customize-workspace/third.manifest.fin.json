@@ -1,4 +1,5 @@
 {
+	"$schema": "./manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
