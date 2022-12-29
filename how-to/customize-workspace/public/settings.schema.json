@@ -1732,7 +1732,7 @@
       "description": "Platform theme configuration",
       "properties": {
         "cssVarPrefix": {
-          "description": "If providing the pallette through css variables would you  like a specific custom prefix?",
+          "description": "If providing the pallette through css variables would you like a specific custom prefix?",
           "type": "string"
         },
         "schemaNames": {

@@ -4,10 +4,10 @@ import type {
 	CustomBrowserButtonConfig,
 	GlobalContextMenuOptionType,
 	PageTabContextMenuOptionType,
-	ViewTabMenuOptionType,
+	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
 
-type PreDefinedButtonConfig = {
+interface PreDefinedButtonConfig {
 	/** Type of default browser button */
 	type: BrowserButtonType;
 	/** Button name text when hovered over */
@@ -15,7 +15,7 @@ type PreDefinedButtonConfig = {
 	/** icon URL for icon image */
 	iconUrl?: string;
 	disabled?: boolean;
-};
+}
 
 type ToolbarButton = CustomBrowserButtonConfig | PreDefinedButtonConfig;
 
@@ -34,7 +34,7 @@ export interface MenuEntry<T> {
 	label: string;
 	data?: {
 		type: T;
-		action?: CustomActionSpecifier
+		action?: CustomActionSpecifier;
 	};
 	position?: {
 		operation: MenuPositionOperation;

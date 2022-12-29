@@ -6,7 +6,7 @@ import type { CustomThemes } from "@openfin/workspace/common/src/api/theming";
 export interface ThemeProviderOptions {
 	themes: CustomThemes;
 	/**
-	 * If providing the pallette through css variables would you 
+	 * If providing the pallette through css variables would you
 	 * like a specific custom prefix?
 	 */
 	cssVarPrefix?: string;
