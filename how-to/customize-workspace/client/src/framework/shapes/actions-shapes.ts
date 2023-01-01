@@ -35,5 +35,5 @@ export interface Actions<O = unknown> extends ModuleImplementation<O, ActionHelp
 	 */
 	get(platform: WorkspacePlatformModule): Promise<CustomActionsMap>;
 }
-
+/** A list of modules that provide actions that can be used by the platform */
 export type ActionsProviderOptions = ModuleList;

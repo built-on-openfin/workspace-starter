@@ -4,6 +4,7 @@ import type { CustomThemes } from "@openfin/workspace/common/src/api/theming";
  *  Platform theme configuration
  **/
 export interface ThemeProviderOptions {
+	/** The Themes you wish your platform to support */
 	themes: CustomThemes;
 	/**
 	 * If providing the pallette through css variables would you

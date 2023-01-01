@@ -20,7 +20,7 @@ export interface LogProvider<O = unknown, H = ModuleHelpers> extends ModuleImple
 	 */
 	log(identity: string, group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void;
 }
-
+/** Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform */
 export type LoggerProviderOptions = ModuleList;
 
 export interface Logger {

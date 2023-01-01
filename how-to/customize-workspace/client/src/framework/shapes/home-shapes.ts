@@ -1,9 +1,34 @@
+/** HomeProvider Options */
 export interface HomeProviderOptions {
+	/** The id to use when registering against the Workspace Home component */
 	id: string;
+	/** The title to show in the Home component UI */
 	title: string;
+	/** The icon to show in the Home component UI */
 	icon: string;
+	/**
+	 * How many characters need to be entered before passing the query onto the search
+	 * logic
+	 */
 	queryMinLength?: number;
+	/**
+	 * What do you wish to run the query against when filtering apps.
+	 * An array of entries. If not specified it will default to ["title"].
+	 * Since we store the app definition inside of a cli search result's
+	 * data field you can add data.tags to the array so that it will see if
+	 * the query matches the start of a tag e.g. ["title","data.tags"]
+	 */
 	queryAgainst?: string[];
+	/**
+	 * Default is true. Enable our default page integration in home so that
+	 * you can discover, launch and delete pages from home. Disable if you want
+	 * to plug in your own implementation using the integration provider. */
 	enablePageIntegration?: boolean;
+	/**
+	 * Default is true. Enable our default workspace integration in home that
+	 * lets you save a workspace by typing /w workspace name as well as discovering
+	 * and launching and deleting workspaces. Disable if you want to use your own
+	 * implementation using the integration provider.
+	 */
 	enableWorkspaceIntegration?: boolean;
 }
