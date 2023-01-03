@@ -856,6 +856,7 @@
             },
             "type": {
               "const": "fetch",
+              "description": "Indicates the type of endpoint that this is. Is it a module based endpoint or does it use an endpoint type supported by the platform",
               "type": "string"
             }
           },
@@ -877,6 +878,7 @@
             },
             "type": {
               "const": "module",
+              "description": "Indicates the type of endpoint that this is. Is it a module based endpoint or does it use an endpoint type supported by the platform",
               "type": "string"
             },
             "typeId": {
@@ -1009,18 +1011,8 @@
       "type": "string"
     },
     "HeadlessProviderOptions": {
-      "additionalProperties": false,
-      "description": "The headless provider supports a list of modules. Right now the url must be to a html page as we will be launching a window after the bootstrapping process has run. A js extension will log an error. The data setting of the module can be a WindowsOptions object with settings (our defaults should be enough if you want a hidden window to run logic in the background)",
-      "properties": {
-        "modules": {
-          "description": "The list of modules.",
-          "items": {
-            "$ref": "#/definitions/ModuleDefinition"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
+      "$ref": "#/definitions/ModuleList",
+      "description": "The headless provider supports a list of modules. Right now the url must be to a html page as we will be launching a window after the bootstrapping process has run. A js extension will log an error. The data setting of the module can be a WindowsOptions object with settings (our defaults should be enough if you want a hidden window to run logic in the background)"
     },
     "HomeProviderOptions": {
       "additionalProperties": false,
@@ -1050,7 +1042,7 @@
           "type": "array"
         },
         "queryMinLength": {
-          "description": "How many characters need to be entered before passing the query onto the search logic",
+          "description": "How many characters need to be entered before filtering the available apps",
           "type": "number"
         },
         "title": {
@@ -1890,7 +1882,7 @@
       "description": "Platform theme configuration",
       "properties": {
         "cssVarPrefix": {
-          "description": "If providing the pallette through css variables would you like a specific custom prefix?",
+          "description": "If providing the palette through css variables would you like a specific custom prefix?",
           "type": "string"
         },
         "schemaNames": {

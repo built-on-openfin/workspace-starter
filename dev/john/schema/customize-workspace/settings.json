@@ -1,5 +1,5 @@
 {
-	"$schema": "./settings.schema.json",
+	"$schema": "./schemas/settings.schema.json",
 	"bootstrap": {
 		"home": true,
 		"store": true,
