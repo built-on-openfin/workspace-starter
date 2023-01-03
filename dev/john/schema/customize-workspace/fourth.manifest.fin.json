@@ -65,6 +65,8 @@
 	},
 	"customSettings": {
 		"platformProvider": {
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/schema/customize-workspace",
+			"sharing": true,
 			"initUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/schema/customize-workspace/js/provider.bundle.js"
 		},
 		"authProvider": {
