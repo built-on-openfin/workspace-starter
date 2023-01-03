@@ -21,10 +21,9 @@
 		"setup": "cd ../../ && npm install && cd how-to/customize-workspace && npm run build && npm --prefix ../common/ run build",
 		"setup-dev": "npm install concurrently live-server --save-dev && npm run build-server-live",
 		"validate": "npm --prefix ../../ run validate",
-		"generate-types": "tsc --project ./client/tsconfig.types.json",
-		"generate-types-module": "tsc --project ./client/tsconfig.types-module.json",
+		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json",
 		"package-content": "node ./scripts/package-content.mjs",
-		"prepare-package": "npm run generate-types && npm run generate-types-module && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
+		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [

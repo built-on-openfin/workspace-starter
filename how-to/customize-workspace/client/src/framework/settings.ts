@@ -53,26 +53,13 @@ export async function getSettings(): Promise<CustomSettings> {
 export async function isValid() {
 	logger.info("Validating source of initial settings");
 	const host = window.location.href.toLowerCase();
-	let hostPage = "";
-	const validHost1 = "platform/provider.html";
-	const validHost2 = "provider.html";
-	const validHost3 = "shell/shell.html";
-	const validHost4 = "shell.html";
-
-	if (host.endsWith(validHost1)) {
-		hostPage = validHost1;
-	} else if (host.endsWith(validHost2)) {
-		hostPage = validHost2;
-	} else if (host.endsWith(validHost3)) {
-		hostPage = validHost3;
-	} else if (host.endsWith(validHost4)) {
-		hostPage = validHost4;
-	}
+	const possibleHosts = ["platform/provider.html", "provider.html", "shell/shell.html", "shell.html"];
+	const hostPage = possibleHosts.find((h) => host.endsWith(h));
 
 	let validationUrl: string;
 	let validHosts: string[] = [];
 
-	if (hostPage !== "") {
+	if (hostPage !== undefined) {
 		validationUrl = host.replace(hostPage, "manifest-hosts.json");
 		logger.info("Using hosts validation url:", validationUrl);
 		validHosts = await getValidHosts(validationUrl);

@@ -86,7 +86,7 @@ export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);
 	if (!isValid) {
 		logger.error(
-			"The platform cannot startup as their was a problem with the initialization of the auth flow."
+			"The platform cannot startup as there was a problem with the initialization of the auth flow."
 		);
 	}
 	return isValid;
