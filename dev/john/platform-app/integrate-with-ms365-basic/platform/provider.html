@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Integrate with Microsoft 365 Basic Example</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://built-on-openfin.github.io/workspace-starter/dev/john/platform-app/common/style/app.css" />
+		<script src="../js/provider.bundle.js"></script>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Integrate with Microsoft 365 Basic Example</h1>
+				<h1 class="tag">Demonstrates integrating with Microsoft 365.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="https://built-on-openfin.github.io/workspace-starter/dev/john/platform-app/common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap20 scroll-vertical">
+			<p>
+				Clicking the connect button should launch a separate window to login to Microsoft 365. You can
+				disconnect at any point by clicking the disconnect button.
+			</p>
+			<div class="row gap10 middle">
+				<button id="btnConnect">Connect to Microsoft 365</button>
+				<button id="btnDisconnect">Disconnect from Microsoft 365</button>
+				<p id="connectionStatus"></p>
+			</div>
+			<hr />
+			<p>
+				Once you have connected to Microsoft 365 you can perform a query on the data using the search box.
+				Search results can then be selected to chat with in Microsoft Teams.
+			</p>
+			<div class="col gap10">
+				<fieldset class="row">
+					<label for="query">Search Query</label>
+
+					<input type="text" id="txtQuery" />
+					<button type="button" id="btnQuery">Go</button>
+				</fieldset>
+				<table id="tableResults">
+					<thead>
+						<tr>
+							<th>Contact</th>
+							<th>E-mail</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="bodyResults"></tbody>
+				</table>
+			</div>
+			<p id="errorStatus" class="error"></p>
+		</main>
+	</body>
+</html>
