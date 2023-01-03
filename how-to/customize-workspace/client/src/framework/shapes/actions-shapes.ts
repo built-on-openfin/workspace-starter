@@ -4,7 +4,7 @@ import type {
 	ToolbarButton,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { ManifestType } from "../shapes";
+import type { ManifestType } from "./app-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 export interface ActionHelpers extends ModuleHelpers {
