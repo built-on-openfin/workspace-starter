@@ -80,9 +80,6 @@ export async function init(
 					});
 			});
 		}
-		platformInitialized = await next(settings.platformProvider);
-	} else {
-		platformInitialized = await next(settings.platformProvider);
 	}
-	return platformInitialized;
+	return next(settings.platformProvider);
 }
