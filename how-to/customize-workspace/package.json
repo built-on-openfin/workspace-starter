@@ -3,7 +3,7 @@
 	"version": "10.0.0",
 	"description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
 	"main": "dist/js/provider.bundle.js",
-  	"types": "client/types/provider.d.ts",
+	"types": "client/types/provider.d.ts",
 	"scripts": {
 		"dos": "npm --prefix ../common/ run dos",
 		"build": "npm run build-server & npm run build-client",
