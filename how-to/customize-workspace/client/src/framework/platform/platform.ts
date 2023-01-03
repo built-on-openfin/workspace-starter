@@ -1,13 +1,9 @@
-import {
-	BrowserInitConfig,
-	getCurrentSync,
-	init as workspacePlatformInit
-} from "@openfin/workspace-platform";
+import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
 import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
-import * as authProvider from "../auth";
 import { isAuthenticationEnabled, isAuthenticationRequired } from "../auth";
+import { init as initAuthFlow } from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
@@ -15,8 +11,9 @@ import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
 import { getDefaultHelpers } from "../modules";
-import { getConfiguredSettings, getSettings, isValid as isSettingsValid } from "../settings";
+import { getConfiguredSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
+import type { PlatformProviderOptions } from "../shapes/platform-shapes";
 import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { getDefaultWindowOptions } from "./browser";
@@ -25,36 +22,7 @@ import { overrideCallback } from "./platform-override";
 
 const logger = createLogger("Platform");
 
-let platformInitialized = false;
-
-async function onLogOutOrCancel() {
-	if (platformInitialized) {
-		logger.info("Calling quit on platform");
-		const plat = getCurrentSync();
-		await plat.quit();
-	} else {
-		logger.info("Platform not yet initialized. Closing provider window");
-		const platformWindow = fin.Window.wrapSync(fin.me.identity);
-		await platformWindow.close(true);
-	}
-}
-
-async function manageAuthFlow() {
-	logger.info("Authentication required. Requesting login");
-	const userLoggedIn = await authProvider.login();
-	if (!userLoggedIn) {
-		// user cancelled the login process.
-		// or exceeded tries.
-		// stop the platform from starting.
-		logger.warn(
-			"User process was cancelled. At this point you should close the application so that the user can relaunch and try again. We are closing the platform"
-		);
-		await onLogOutOrCancel();
-	}
-	logger.info("Logged in");
-}
-
-async function setupPlatform() {
+async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const configuredSettings = await getConfiguredSettings();
@@ -110,45 +78,18 @@ async function setupPlatform() {
 
 	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
 
-	platformInitialized = true;
 	await notifyColorScheme();
+	return true;
 }
 
-export async function init() {
-	if (!(await isSettingsValid())) {
+export async function init(): Promise<boolean> {
+	const isValid = await initAuthFlow(setupPlatform, logger, true);
+	if (!isValid) {
 		logger.error(
-			"The application cannot startup as the source of the setting used to bootstrap this application is not from a valid host. Please update the the list or this logic if required"
+			"The platform cannot startup as there was a problem with the initialization of the auth flow."
 		);
-		return;
 	}
-	const settings = await getConfiguredSettings();
-
-	logger.info("Initializing Auth Check");
-	const moduleHelpers: ModuleHelpers = getDefaultHelpers(settings);
-	await authProvider.init(settings?.authProvider, moduleHelpers);
-
-	if (isAuthenticationEnabled()) {
-		const authenticationRequired = await authProvider.isAuthenticationRequired();
-		if (authenticationRequired) {
-			const loggedInSubscription = authProvider.subscribe("logged-in", async () => {
-				logger.info("Platform logged in. Setting up platform");
-				await setupPlatform();
-				logger.info("Unsubscribing from logged in events as platform has been initialized");
-				authProvider.unsubscribe(loggedInSubscription);
-			});
-			await manageAuthFlow();
-		} else {
-			await setupPlatform();
-		}
-
-		// check for session expiry
-		authProvider.subscribe("session-expired", manageAuthFlow);
-
-		// check for logout
-		authProvider.subscribe("logged-out", onLogOutOrCancel);
-	} else {
-		await setupPlatform();
-	}
+	return isValid;
 }
 
 export async function closedown(): Promise<void> {

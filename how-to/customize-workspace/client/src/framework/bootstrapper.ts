@@ -42,7 +42,7 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions;
 
-export async function init() {
+export async function init(): Promise<boolean> {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
 	// gather reference data etc before starting workspace and interacting with it.
 	logger.info("Initializing the bootstrapper");
@@ -174,4 +174,6 @@ export async function init() {
 
 	// Let any other modules participate in the lifecycle
 	await fireLifecycleEvent(platform, "after-bootstrap");
+
+	return true;
 }
