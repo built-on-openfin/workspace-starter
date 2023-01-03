@@ -1,4 +1,3 @@
-import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
@@ -6,6 +5,7 @@ import { launchSnapshot, launchView } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
+import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("InteropBroker");
 
@@ -19,7 +19,7 @@ export function interopOverride(
 	...args: unknown[]
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
-		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {
+		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent) {
 			logger.info("Launching app with intent");
 
 			if (
@@ -87,9 +87,9 @@ export function interopOverride(
 		}
 
 		public async launchAppPicker(launchOptions: {
-			apps?: App[];
+			apps?: PlatformApp[];
 			intent?: Partial<AppIntent>;
-			intents?: { intent: Partial<AppIntent>; apps: App[] }[];
+			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
 		}): Promise<{
 			appId: string;
 			intent: Partial<AppIntent>;
@@ -217,7 +217,7 @@ export function interopOverride(
 				name: undefined,
 				displayName: undefined
 			};
-			let targetApp: App;
+			let targetApp: PlatformApp;
 			let targetAppIntent;
 			let targetAppIntentCount = 0;
 
@@ -327,12 +327,12 @@ export function interopOverride(
 		public async handleFiredIntent(intent: OpenFin.Intent) {
 			logger.info("Received request for a raised intent", intent);
 			let intentApps = await getAppsByIntent(intent.name);
-			let targetApp: App;
+			let targetApp: PlatformApp;
 
 			if (intent.metadata?.target !== undefined) {
 				targetApp = await getApp(intent.metadata?.target as string);
 				if (targetApp === undefined) {
-					// check to see if you have been passed a specific identity for a view that should be targetted instead of an app
+					// check to see if you have been passed a specific identity for a view that should be targeted instead of an app
 					const targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
 					if (targetIdentity !== undefined) {
 						logger.info(

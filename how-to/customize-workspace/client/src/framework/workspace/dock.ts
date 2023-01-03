@@ -66,7 +66,7 @@ async function calculateButtons(
 			if (!Array.isArray(appButton.tags)) {
 				logger.error("You must specify an array for the tags parameter for an DockAppButton");
 			} else {
-				const dockApps = await getAppsByTag(appButton.tags);
+				const dockApps = await getAppsByTag(appButton.tags, false, { private: false });
 
 				if (appButton.display === "individual") {
 					for (const dockApp of dockApps) {

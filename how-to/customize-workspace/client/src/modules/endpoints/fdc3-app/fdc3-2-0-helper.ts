@@ -90,3 +90,25 @@ export function getIntents(app: AppDefinition): AppIntent[] {
 
 	return intents;
 }
+
+export function getPrivate(app: AppDefinition): boolean {
+	let privateApp: unknown;
+
+	if (app?.hostManifests?.OpenFin?.config?.private !== undefined) {
+		privateApp = app?.hostManifests?.OpenFin?.config?.private;
+	} else if (app?.customConfig?.private !== undefined) {
+		privateApp = app?.customConfig?.private;
+	}
+
+	if (privateApp !== undefined) {
+		switch (privateApp) {
+			case "False":
+			case "false":
+			case false:
+				return false;
+			default:
+				// if someone has defined private then the likely hood was to override the default of false.
+				return true;
+		}
+	}
+}
