@@ -1,4 +1,5 @@
 {
+	"$schema": "./manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
@@ -64,6 +65,8 @@
 	},
 	"customSettings": {
 		"platformProvider": {
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace",
+			"sharing": true,
 			"initUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/js/provider.bundle.js"
 		},
 		"authProvider": {
