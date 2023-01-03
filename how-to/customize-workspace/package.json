@@ -22,6 +22,7 @@
 		"setup-dev": "npm install concurrently live-server --save-dev && npm run build-server-live",
 		"validate": "npm --prefix ../../ run validate",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
+		"generate-schema": "npx ts-json-schema-generator@1.1.2 --path client/src/framework/shapes/setting-shapes.ts --tsconfig client/tsconfig.json --no-type-check --out public/schemas/settings.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
 	},

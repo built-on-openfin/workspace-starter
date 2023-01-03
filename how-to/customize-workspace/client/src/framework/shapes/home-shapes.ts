@@ -7,8 +7,7 @@ export interface HomeProviderOptions {
 	/** The icon to show in the Home component UI */
 	icon: string;
 	/**
-	 * How many characters need to be entered before passing the query onto the search
-	 * logic
+	 * How many characters need to be entered before filtering the available apps
 	 */
 	queryMinLength?: number;
 	/**
