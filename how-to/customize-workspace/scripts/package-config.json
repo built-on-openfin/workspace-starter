@@ -30,7 +30,8 @@
 				"LICENSE.md",
 				"CHANGELOG.md",
 				"client/types/*.*",
-				"client/types/module/**"
+				"client/types/module/**",
+				"public/schemas/**"
 			],
 			"dest": "../",
 			"dependsOn": "package"
