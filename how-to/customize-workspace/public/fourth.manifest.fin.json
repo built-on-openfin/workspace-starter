@@ -1,4 +1,5 @@
 {
+	"$schema": "./manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
@@ -64,6 +65,8 @@
 	},
 	"customSettings": {
 		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
+			"sharing": true,
 			"initUrl": "http://localhost:8080/js/provider.bundle.js"
 		},
 		"authProvider": {

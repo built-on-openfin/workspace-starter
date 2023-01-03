@@ -47,5 +47,8 @@ export interface AuthProvider<O = unknown, H = ModuleHelpers> extends ModuleImpl
 	 */
 	getUserInfo(): Promise<unknown>;
 }
-
+/**
+ * Auth Provider Options. Specify a single auth module if your application requires authentication
+ * before allowing the user to use the platform.
+ * */
 export type AuthProviderOptions = ModuleList;

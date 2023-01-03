@@ -11,29 +11,39 @@ export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplemen
 	action?<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
 	requestResponse?<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
 }
-
+/** Endpoint provider options */
 export interface EndpointProviderOptions extends ModuleList {
+	/** An array of endpoint definitions that can either use the built in fetch support or load modules that provide different implementations for executing actions or performing request/response actions */
 	endpoints?: EndpointDefinition<unknown>[];
 }
 
 interface BaseEndpointDefinition<O> {
+	/**
+	 * A unique id for this endpoint. This ID will be called by the platform.
+	 * In the future you may change what the implementation for this endpoint
+	 * is but you can keep the same endpoint id and request/response objects
+	 * in order to not require changes from the platform.
+	 * */
 	id: string;
-	type: string;
+	/** Indicates the type of endpoint that this is. Is it a module based endpoint or does it use an endpoint type supported by the platform */
+	type: "module" | "fetch";
+	/** The data to be passed to this endpoint when it is called so that it knows how to act */
 	options?: O;
 }
 
 type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
+	/** This indicates that this endpoint depends on a module that needs to be loaded in order for it to work */
 	type: "module";
+	/** The id of the module that should be loaded */
 	typeId: string;
 };
 
-// We could include more in this type
-
 type FetchEndpointDefinition<O> = BaseEndpointDefinition<O> & {
+	/** This uses the built in support for fetch and the options will be the fetch options */
 	type: "fetch";
 };
 
-// We could include more in this type
+/** An endpoint entry definition */
 export type EndpointDefinition<O> = FetchEndpointDefinition<FetchOptions> | ModuleEndpointDefinition<O>;
 
 export interface FetchOptions {

@@ -20,6 +20,7 @@ import type { StorefrontProviderOptions } from "./store-shapes";
 import type { ThemeProviderOptions } from "./theme-shapes";
 
 export interface CustomSettings {
+	$schema?: string;
 	appProvider?: AppProviderOptions;
 	authProvider?: AuthProviderOptions;
 	bootstrap?: BootstrapOptions;

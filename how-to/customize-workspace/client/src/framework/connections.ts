@@ -217,7 +217,7 @@ export async function getConnectedApps(): Promise<App[]> {
 			connectedSources[i].identity,
 			"getApps"
 		);
-		const supportedManifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
+		const supportedManifestTypes: string[] = connectedSources[i]?.connectionData?.manifestTypes;
 		let validatedApps: App[] = [];
 		if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
 			validatedApps = returnedApplications.filter((entry) =>

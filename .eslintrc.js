@@ -23,7 +23,8 @@ module.exports = {
 		'preload.js',
 		'**/wc-fin/*.js',
 		'**/3rd-party/*',
-		'**/*.d.ts'
+		'**/*.d.ts',
+		'**/settings.schema.json'
 	],
 	parserOptions: {
 		ecmaVersion: 2020,
