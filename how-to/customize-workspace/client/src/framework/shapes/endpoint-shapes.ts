@@ -25,7 +25,8 @@ interface BaseEndpointDefinition<O> {
 	 * in order to not require changes from the platform.
 	 * */
 	id: string;
-	type: string;
+	/** Indicates the type of endpoint that this is. Is it a module based endpoint or does it use an endpoint type supported by the platform */
+	type: "module" | "fetch";
 	/** The data to be passed to this endpoint when it is called so that it knows how to act */
 	options?: O;
 }

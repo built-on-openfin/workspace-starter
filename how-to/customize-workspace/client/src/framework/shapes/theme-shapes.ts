@@ -7,7 +7,7 @@ export interface ThemeProviderOptions {
 	/** The Themes you wish your platform to support */
 	themes: CustomThemes;
 	/**
-	 * If providing the pallette through css variables would you
+	 * If providing the palette through css variables would you
 	 * like a specific custom prefix?
 	 */
 	cssVarPrefix?: string;
