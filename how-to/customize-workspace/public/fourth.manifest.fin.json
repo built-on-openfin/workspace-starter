@@ -65,6 +65,8 @@
 	},
 	"customSettings": {
 		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
+			"sharing": true,
 			"initUrl": "http://localhost:8080/js/provider.bundle.js"
 		},
 		"authProvider": {
