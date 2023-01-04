@@ -3,7 +3,7 @@ import { deregister as deregisterIntegration, register as registerIntegration } 
 import { launchView } from "./launch";
 import { getSettings } from "./settings";
 import * as templateHelpers from "./templates";
-import { getCurrentTheme, getDefaultPalettes } from "./themes";
+import { getCurrentPalette, getCurrentColorSchemeMode, getDefaultPalettes } from "./themes";
 
 export async function init() {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
@@ -16,7 +16,8 @@ export async function init() {
 
 	await registerIntegration(settings.integrationProvider, {
 		getDefaultPalettes,
-		getCurrentTheme,
+		getCurrentPalette,
+		getCurrentColorSchemeMode,
 		templateHelpers,
 		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 		launchView,
