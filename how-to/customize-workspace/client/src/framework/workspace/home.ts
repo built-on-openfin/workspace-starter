@@ -43,6 +43,13 @@ const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
 const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 
 const HOME_TAG_FILTERS = "tags";
+const HOME_SOURCE_FILTERS = "sources";
+
+const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
+
+const HOME_WORKSPACES_FILTER = "Workspaces";
+const HOME_PAGES_FILTER = "Pages";
+const HOME_APPS_FILTER = "Apps";
 
 let registrationInfo: HomeRegistration | undefined;
 let enablePageIntegration: boolean = true;
@@ -266,25 +273,36 @@ async function getResults(
 	queryLower: string,
 	queryMinLength,
 	queryAgainst: string[],
-	filters: CLIFilter[]
+	filters: CLIFilter[],
+	selectedSources: string[]
 ): Promise<HomeSearchResponse> {
 	const platform = getCurrentSync();
 	const apps = await getApps({ private: false });
 	let pageSearchEntries = [];
 	let workspaceSearchEntries = [];
+	let appSearchEntries = [];
 
-	if (enablePageIntegration) {
+	if (
+		enablePageIntegration &&
+		(selectedSources.length === 0 || selectedSources.includes(HOME_PAGES_FILTER))
+	) {
 		const pages = await platform.Storage.getPages();
 		pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
 	}
 
-	if (enableWorkspaceIntegration) {
+	if (
+		enableWorkspaceIntegration &&
+		(selectedSources.length === 0 || selectedSources.includes(HOME_WORKSPACES_FILTER))
+	) {
 		const workspaces = await getWorkspaces();
 		workspaceSearchEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
 	}
 
 	const tags: string[] = [];
-	const appSearchEntries = mapAppEntriesToSearchEntries(apps);
+
+	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
+		appSearchEntries = mapAppEntriesToSearchEntries(apps);
+	}
 
 	const initialResults: HomeSearchResult[] = [
 		...appSearchEntries,
@@ -404,6 +422,7 @@ export async function register(): Promise<HomeRegistration> {
 		const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
 		enablePageIntegration = settings?.homeProvider?.enablePageIntegration ?? true;
 		enableWorkspaceIntegration = settings?.homeProvider?.enableWorkspaceIntegration ?? true;
+		const enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
 		let lastResponse: CLISearchListenerResponse;
 		let filters: CLIFilter[];
 
@@ -475,8 +494,45 @@ export async function register(): Promise<HomeRegistration> {
 					return searchResults;
 				}
 
-				const searchResults = await getResults(queryLower, queryMinLength, queryAgainst, filters);
-				const integrationResults = await getSearchResults(request.query, filters, lastResponse);
+				let selectedSourceFilterOptions: string[] = [];
+				if (enableSourceFilter && filters) {
+					const sourceFilter = filters.find((f) => f.id === HOME_SOURCE_FILTERS);
+					if (sourceFilter) {
+						if (Array.isArray(sourceFilter.options)) {
+							selectedSourceFilterOptions = sourceFilter.options
+								.filter((o) => o.isSelected)
+								.map((o) => o.value);
+						} else if (sourceFilter.options.isSelected) {
+							selectedSourceFilterOptions.push(sourceFilter.options.value);
+						}
+					}
+				}
+
+				const searchResults = await getResults(
+					queryLower,
+					queryMinLength,
+					queryAgainst,
+					filters,
+					selectedSourceFilterOptions
+				);
+
+				let sourceFilterOptions: string[] = [];
+				if (enableSourceFilter) {
+					sourceFilterOptions.push(HOME_APPS_FILTER);
+					if (enablePageIntegration) {
+						sourceFilterOptions.push(HOME_PAGES_FILTER);
+					}
+					if (enableWorkspaceIntegration) {
+						sourceFilterOptions.push(HOME_WORKSPACES_FILTER);
+					}
+				}
+
+				const integrationResults = await getSearchResults(
+					request.query,
+					filters,
+					lastResponse,
+					selectedSourceFilterOptions
+				);
 				if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
 					searchResults.results = searchResults.results.concat(integrationResults.results);
 				}
@@ -487,6 +543,20 @@ export async function register(): Promise<HomeRegistration> {
 					searchResults.context.filters = searchResults.context.filters.concat(
 						integrationResults.context.filters
 					);
+				}
+
+				if (Array.isArray(integrationResults.sourceFilters) && integrationResults.sourceFilters.length > 0) {
+					sourceFilterOptions = sourceFilterOptions.concat(integrationResults.sourceFilters);
+				}
+
+				if (enableSourceFilter && sourceFilterOptions.length > 0) {
+					searchResults.context = searchResults.context ?? {};
+					searchResults.context.filters = searchResults.context.filters ?? [];
+					searchResults.context.filters.push({
+						id: HOME_SOURCE_FILTERS,
+						title: settings?.homeProvider?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
+						options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
+					});
 				}
 
 				// Remove any empty filter lists as these can cause the UI to continually
