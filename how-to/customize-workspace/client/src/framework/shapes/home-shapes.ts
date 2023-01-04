@@ -30,4 +30,17 @@ export interface HomeProviderOptions {
 	 * implementation using the integration provider.
 	 */
 	enableWorkspaceIntegration?: boolean;
+	/**
+	 * Options for the source filters displayed in home.
+	 */
+	sourceFilter?: {
+		/**
+		 * Should we disable the source filters, defaults to false.
+		 */
+		disabled?: boolean;
+		/**
+		 * The label to display in home, defaults to Source.
+		 */
+		label?: string;
+	};
 }

@@ -96,6 +96,12 @@ export interface IntegrationModuleDefinition extends ModuleDefinition {
 	autoStart?: boolean;
 
 	/**
+	 * If this property is set then the module will not show in the source filter
+	 * and its results will always be included.
+	 */
+	excludeFromSourceFilter?: boolean;
+
+	/**
 	 * This is the old property, it will be remapped to url.
 	 */
 	moduleUrl?: string;

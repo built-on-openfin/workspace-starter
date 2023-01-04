@@ -30,7 +30,7 @@ import {
 	TemplateFragment,
 	TemplateFragmentTypes
 } from "@openfin/workspace";
-import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
 import type { ModuleDefinition } from "../../shapes/module-shapes";
@@ -229,14 +229,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		await this.connectProvider();
 
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const themedIcons = ["calendar", "call", "channel", "chat", "contact", "email", "share", "team"];
 
 		for (const themedIcon of themedIcons) {
 			const response = await fetch(this._settings.images[themedIcon] as string);
 			let svg = await response.text();
-			svg = svg.replace(/rgb\(0,0,0\)/g, theme.palette.textDefault);
+			svg = svg.replace(/rgb\(0,0,0\)/g, palette.textDefault);
 			this._settings.images[themedIcon] = this.svgToInline(svg);
 		}
 
@@ -862,7 +862,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createConnectResult(): Promise<HomeSearchResult> {
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const layout = await this._integrationHelpers.templateHelpers.createContainer(
 			"column",
@@ -872,7 +872,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					[await this._integrationHelpers.templateHelpers.createText("title", 14, { fontWeight: "bold" })],
 					{
 						paddingBottom: "10px",
-						borderBottom: `1px solid ${theme.palette.background6}`,
+						borderBottom: `1px solid ${palette.background6}`,
 						gap: "10px"
 					}
 				),
@@ -1095,7 +1095,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const pairs: { label: string; value: string }[] = [];
 
@@ -1211,11 +1211,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`
+								borderBottom: `1px solid ${palette.background6}`
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1287,7 +1287,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const pairs: { label: string; value: string }[] = [];
 
@@ -1400,12 +1400,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1429,7 +1429,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createMessageResult(message: Message): Promise<HomeSearchResult> {
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1501,12 +1501,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1557,7 +1557,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1625,12 +1625,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1686,7 +1686,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._logger.error("Failed performing API batch request", err);
 		}
 
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
@@ -1760,12 +1760,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1784,7 +1784,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createTeamResult(team: Team): Promise<HomeSearchResult> {
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const teamMembers = await this.getTeamMembers(team.id);
 
@@ -1885,12 +1885,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -1915,7 +1915,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createChannelResult(channel: Channel & { team: Team }): Promise<HomeSearchResult> {
-		const theme = await this._integrationHelpers.getCurrentTheme();
+		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const channelMembers = await this.getChannelMembers(channel.team.id, channel.id);
 
@@ -2009,12 +2009,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							],
 							{
 								paddingBottom: "10px",
-								borderBottom: `1px solid ${theme.palette.background6}`,
+								borderBottom: `1px solid ${palette.background6}`,
 								gap: "10px"
 							}
 						),
-						await this.createPairsLayout(theme, pairs),
-						await this.createButtonsLayout(theme, buttons)
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
 					],
 					{
 						padding: "10px",
@@ -2147,23 +2147,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createPairsLayout(
-		theme: CustomThemeOptions,
+		palette: CustomPaletteSet,
 		pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[]
 	): Promise<TemplateFragment> {
 		return this._integrationHelpers.templateHelpers.createContainer(
 			"column",
-			await Promise.all(pairs.map(async (p) => this.createPairLayout(theme, p))),
+			await Promise.all(pairs.map(async (p) => this.createPairLayout(palette, p))),
 			{ gap: "5px", flex: "1" }
 		);
 	}
 
 	private async createPairLayout(
-		theme: CustomThemeOptions,
+		palette: CustomPaletteSet,
 		pair: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }
 	): Promise<TemplateFragment> {
 		const elements: TemplateFragment[] = [
 			await this._integrationHelpers.templateHelpers.createText(`${pair.label}Title`, 10, {
-				color: theme.palette.inputPlaceholder,
+				color: palette.inputPlaceholder,
 				flex: 1
 			})
 		];
@@ -2224,7 +2224,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private async createButtonsLayout(
-		theme: CustomThemeOptions,
+		palette: CustomPaletteSet,
 		buttons: {
 			title: string;
 			action: string;
@@ -2247,7 +2247,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							height: "40px",
 							padding: "0px",
 							justifyContent: "center",
-							backgroundColor: theme.palette.background6
+							backgroundColor: palette.background6
 						},
 						[
 							await this._integrationHelpers.templateHelpers.createImage(b.image, b.imageAltText, {

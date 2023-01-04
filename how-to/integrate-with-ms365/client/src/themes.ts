@@ -1,5 +1,7 @@
+import type { CustomThemes } from "@openfin/workspace-platform";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { getSettings } from "./settings";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	light: {
@@ -59,22 +61,30 @@ function getSystemPreferredColorScheme(): "light" | "dark" {
 	return "light";
 }
 
-export async function getCurrentTheme(): Promise<CustomThemeOptions> {
+export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
+	return ColorSchemeMode.Dark;
+}
+
+export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
+	const colorScheme = await getCurrentColorSchemeMode();
+
 	if (themes.length === 0) {
-		return {
-			label: "default",
-			palette: DEFAULT_PALETTES.dark
-		};
+		return DEFAULT_PALETTES[colorScheme];
 	}
-	return themes[0];
+
+	if ("palette" in themes[0]) {
+		return themes[0].palette;
+	}
+
+	return themes[0].palettes[colorScheme];
 }
 
 export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
 	return DEFAULT_PALETTES;
 }
 
-export async function getThemes(): Promise<CustomThemeOptions[]> {
+export async function getThemes(): Promise<CustomThemes> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);

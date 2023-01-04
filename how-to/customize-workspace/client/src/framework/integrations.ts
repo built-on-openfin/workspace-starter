@@ -118,18 +118,21 @@ export async function closedown(): Promise<void> {
  * @param query The query to get the search results for.
  * @param filters The filters to apply to the search results.
  * @param lastResponse The last search response used for updating existing results.
+ * @param selectedSources Selected sources filters list.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
-	lastResponse: HomeSearchListenerResponse
-): Promise<HomeSearchResponse> {
-	const homeResponse: HomeSearchResponse = {
+	lastResponse: HomeSearchListenerResponse,
+	selectedSources: string[]
+): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
+	const homeResponse: HomeSearchResponse & { sourceFilters?: string[] } = {
 		results: [],
 		context: {
 			filters: []
-		}
+		},
+		sourceFilters: []
 	};
 
 	if (!integrationProviderOptions) {
@@ -144,9 +147,19 @@ export async function getSearchResults(
 	}
 
 	const promises: Promise<HomeSearchResponse>[] = [];
+	const sourceFilters: string[] = [];
 	for (const integrationModule of integrationModules) {
-		if (integrationModule.isInitialised && integrationModule.implementation.getSearchResults) {
+		if (
+			integrationModule.isInitialised &&
+			integrationModule.implementation.getSearchResults &&
+			(integrationModule.definition.excludeFromSourceFilter ||
+				selectedSources.length === 0 ||
+				selectedSources.includes(integrationModule.definition.title))
+		) {
 			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse));
+		}
+		if (!integrationModule.definition.excludeFromSourceFilter) {
+			sourceFilters.push(integrationModule.definition.title);
 		}
 	}
 
@@ -165,7 +178,10 @@ export async function getSearchResults(
 		}
 	}
 
-	return homeResponse;
+	return {
+		...homeResponse,
+		sourceFilters
+	};
 }
 
 /**

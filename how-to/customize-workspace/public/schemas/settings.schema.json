@@ -1045,6 +1045,21 @@
           "description": "How many characters need to be entered before filtering the available apps",
           "type": "number"
         },
+        "sourceFilter": {
+          "additionalProperties": false,
+          "description": "Options for the source filters displayed in home.",
+          "properties": {
+            "disabled": {
+              "description": "Should we disable the source filters, defaults to false.",
+              "type": "boolean"
+            },
+            "label": {
+              "description": "The label to display in home, defaults to Source.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "title": {
           "description": "The title to show in the Home component UI",
           "type": "string"
@@ -1100,6 +1115,10 @@
         },
         "enabled": {
           "description": "Is the module enabled.",
+          "type": "boolean"
+        },
+        "excludeFromSourceFilter": {
+          "description": "If this property is set then the module will not show in the source filter and its results will always be included.",
           "type": "boolean"
         },
         "icon": {
