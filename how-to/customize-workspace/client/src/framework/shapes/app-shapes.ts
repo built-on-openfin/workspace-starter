@@ -1,3 +1,18 @@
+import type { App } from "@openfin/workspace";
+
+export type PlatformApp = App & {
+	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
+	private?: boolean;
+};
+
+/**
+ * When fetching apps you can optionally provide a filter
+ */
+export interface AppFilterOptions {
+	/** Should the list be public apps, private apps or all apps if undefined */
+	private?: boolean;
+}
+
 export type ManifestTypeId =
 	| "view"
 	| "inline-view"

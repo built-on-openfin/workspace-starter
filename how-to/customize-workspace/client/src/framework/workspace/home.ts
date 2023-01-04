@@ -1,5 +1,4 @@
 import {
-	App,
 	CLIFilter,
 	CLIFilterOptionType,
 	CLIProvider,
@@ -21,6 +20,7 @@ import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getPageBounds, launchPage } from "../platform/browser";
 import { getSettings } from "../settings";
+import type { PlatformApp } from "../shapes/app-shapes";
 import { isShareEnabled, share } from "../share";
 import {
 	getCurrentWorkspaceTemplate,
@@ -74,7 +74,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 	return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
+function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
 	const appResults: HomeSearchResult[] = [];
 	if (Array.isArray(apps)) {
 		for (let i = 0; i < apps.length; i++) {
@@ -269,7 +269,7 @@ async function getResults(
 	filters: CLIFilter[]
 ): Promise<HomeSearchResponse> {
 	const platform = getCurrentSync();
-	const apps = await getApps();
+	const apps = await getApps({ private: false });
 	let pageSearchEntries = [];
 	let workspaceSearchEntries = [];
 
@@ -521,7 +521,7 @@ export async function register(): Promise<HomeRegistration> {
 						workspaceTitle?: string;
 						workspaceDescription?: string;
 						pageId?: string;
-					} & App = result.data;
+					} & PlatformApp = result.data;
 					if (enableWorkspaceIntegration && data.workspaceId !== undefined) {
 						if (data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
 							await saveWorkspace(data.workspaceId, data.workspaceTitle);

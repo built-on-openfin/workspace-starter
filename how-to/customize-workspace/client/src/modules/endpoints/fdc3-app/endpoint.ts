@@ -1,4 +1,4 @@
-import type { App } from "@openfin/workspace";
+import type { PlatformApp } from "customize-workspace/shapes/app-shapes";
 import type { EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
@@ -23,13 +23,14 @@ export async function requestResponse(
 		fdc3Version: string;
 	}>,
 	request?: unknown[] | { applications: unknown[] }
-): Promise<App[]> {
-	const results: App[] = [];
+): Promise<PlatformApp[]> {
+	const results: PlatformApp[] = [];
 
 	if (endpointDefinition.type !== "module") {
 		logger.warn(
 			`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 		);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return results;
 	}
 	const fdc3Version = endpointDefinition?.options?.fdc3Version ?? "1.2";
@@ -43,7 +44,7 @@ export async function requestResponse(
 	if (fdc3Version === "1.2") {
 		for (let i = 0; i < applications.length; i++) {
 			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
-			const platformApp: App = {
+			const platformApp: PlatformApp = {
 				appId: passedApp.appId,
 				title: passedApp.title || passedApp.name,
 				manifestType: passedApp.manifestType,
@@ -56,14 +57,15 @@ export async function requestResponse(
 				contactEmail: passedApp.contactEmail,
 				supportEmail: passedApp.supportEmail,
 				icons: fdc3OnePointTwoHelper.getIcons(passedApp.icons),
-				images: fdc3OnePointTwoHelper.getImages(passedApp.images)
+				images: fdc3OnePointTwoHelper.getImages(passedApp.images),
+				private: fdc3OnePointTwoHelper.getPrivate(passedApp)
 			};
 			results.push(platformApp);
 		}
 	} else if (fdc3Version === "2.0") {
 		for (let i = 0; i < applications.length; i++) {
 			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
-			const platformApp: App = {
+			const platformApp: PlatformApp = {
 				appId: passedApp.appId,
 				title: passedApp.title || passedApp.name,
 				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
@@ -76,12 +78,14 @@ export async function requestResponse(
 				contactEmail: passedApp.contactEmail,
 				supportEmail: passedApp.supportEmail,
 				icons: passedApp.icons,
-				images: passedApp.screenshots
+				images: passedApp.screenshots,
+				private: fdc3TwoPointZeroHelper.getPrivate(passedApp)
 			};
 			results.push(platformApp);
 		}
 	} else {
 		logger.warn(`Unsupported FDC3 version passed: ${fdc3Version}. Unable to map apps.`);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	return results;
 }

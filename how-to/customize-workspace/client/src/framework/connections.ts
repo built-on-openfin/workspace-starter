@@ -1,8 +1,8 @@
 import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
-import type { App } from "@openfin/workspace";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+import type { PlatformApp } from "./shapes/app-shapes";
 import type {
 	AppSourceConnection,
 	Connection,
@@ -209,16 +209,16 @@ export async function getConnectedAppSourceClients() {
 	return connectionsToReturn;
 }
 
-export async function getConnectedApps(): Promise<App[]> {
+export async function getConnectedApps(): Promise<PlatformApp[]> {
 	const connectedSources = await getConnectedAppSourceClients();
-	const apps: App[] = [];
+	const apps: PlatformApp[] = [];
 	for (let i = 0; i < connectedSources.length; i++) {
-		const returnedApplications: App[] = await connectionService.dispatch(
+		const returnedApplications: PlatformApp[] = await connectionService.dispatch(
 			connectedSources[i].identity,
 			"getApps"
 		);
 		const supportedManifestTypes: string[] = connectedSources[i]?.connectionData?.manifestTypes;
-		let validatedApps: App[] = [];
+		let validatedApps: PlatformApp[] = [];
 		if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
 			validatedApps = returnedApplications.filter((entry) =>
 				supportedManifestTypes.includes(entry.manifestType)
@@ -238,7 +238,7 @@ export async function getConnectedApps(): Promise<App[]> {
 	return apps;
 }
 
-export async function launchConnectedApp(app: App) {
+export async function launchConnectedApp(app: PlatformApp) {
 	const connectedSources = await getConnectedAppSourceClients();
 	const connectedSource = connectedSources.find((entry) => entry.identity.uuid === app.manifest);
 	if (app.manifestType === manifestTypes.connection.id && connectedSource !== undefined) {

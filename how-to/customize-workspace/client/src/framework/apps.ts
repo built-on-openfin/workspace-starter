@@ -1,13 +1,17 @@
-import type { App } from "@openfin/workspace";
 import { getConnectedApps } from "./connections";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
-import type { AppEndpointOptions, AppProviderOptions } from "./shapes/app-shapes";
+import type {
+	AppEndpointOptions,
+	AppFilterOptions,
+	AppProviderOptions,
+	PlatformApp
+} from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
 
 const logger = createLogger("Apps");
 
-let cachedApps: App[];
+let cachedApps: PlatformApp[];
 let endpoints: EndpointProvider;
 let cacheDuration = 0;
 let endpointIds: AppEndpointOptions[] = [];
@@ -53,11 +57,11 @@ async function getCanDownloadAppAssets() {
 	return canDownloadAppAssets;
 }
 
-async function validateEntries(apps: App[]) {
+async function validateEntries(apps: PlatformApp[]) {
 	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
 	const hasDownloadAppAssets = await getCanDownloadAppAssets();
 
-	const validatedApps: App[] = [];
+	const validatedApps: PlatformApp[] = [];
 	const rejectedAppIds = [];
 
 	for (let i = 0; i < apps.length; i++) {
@@ -93,12 +97,12 @@ async function getEntries(
 	source: string[] | AppEndpointOptions[],
 	credentials?: "omit" | "same-origin" | "include",
 	cache?: number
-): Promise<App[]> {
+): Promise<PlatformApp[]> {
 	const options = credentials !== undefined ? { credentials } : undefined;
 	if (!Array.isArray(source)) {
 		return [];
 	}
-	const apps: App[] = [];
+	const apps: PlatformApp[] = [];
 
 	for (let i = 0; i < source.length; i++) {
 		const endpoint = source[i];
@@ -106,13 +110,13 @@ async function getEntries(
 			if (typeof endpoint === "string") {
 				if (endpoints.hasEndpoint(endpoint)) {
 					logger.info(`Fetching apps from source: ${endpoint}`);
-					const results = await endpoints.requestResponse<never, App[]>(endpoint);
+					const results = await endpoints.requestResponse<never, PlatformApp[]>(endpoint);
 					logger.info(`${results.length} app(s) received.`);
 					apps.push(...results);
 				} else if (endpoint.startsWith("http")) {
 					logger.info(`Fetching apps from url: ${endpoint}`);
 					const resp = await fetch(endpoint, options);
-					const jsonResults: App[] = await resp.json();
+					const jsonResults: PlatformApp[] = await resp.json();
 					logger.info(`${jsonResults.length} app(s) received.`);
 					apps.push(...jsonResults);
 				} else {
@@ -127,7 +131,7 @@ async function getEntries(
 					);
 					const inputResults = await endpoints.requestResponse<never, unknown[]>(endpoint.inputId);
 					logger.info(`Received ${inputResults.length} result(s) from ${endpoint.inputId}.`);
-					const outputResults = await endpoints.requestResponse<unknown, App[]>(
+					const outputResults = await endpoints.requestResponse<unknown, PlatformApp[]>(
 						endpoint.outputId,
 						inputResults
 					);
@@ -140,7 +144,7 @@ async function getEntries(
 				}
 			} else if (endpoint?.inputId !== undefined && endpoints.hasEndpoint(endpoint?.inputId)) {
 				logger.info(`Fetching apps from source: ${endpoint.inputId}`);
-				const results = await endpoints.requestResponse<never, App[]>(endpoint.inputId);
+				const results = await endpoints.requestResponse<never, PlatformApp[]>(endpoint.inputId);
 				logger.info(`${results.length} app(s) received.`);
 				apps.push(...results);
 			} else {
@@ -177,11 +181,11 @@ function updateEntry(
 	source: {
 		[key: string]: {
 			intent: { name: string; displayName: string };
-			apps: App[];
+			apps: PlatformApp[];
 		};
 	},
 	intent,
-	app: App
+	app: PlatformApp
 ) {
 	if (source[intent.name] === undefined) {
 		// in a production app you would either need to ensure that every app was populated with the same name & displayName for an intent from a golden source (e.g. intents table) so picking the first entry wouldn't make a difference.
@@ -236,10 +240,16 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 	supportedManifestTypes = options?.manifestTypes ?? [];
 }
 
-export async function getApps(): Promise<App[]> {
+export async function getApps(appFilter: AppFilterOptions = {}): Promise<PlatformApp[]> {
 	logger.info("Requesting apps");
 	try {
 		const apps = cachedApps ?? (await getEntries(endpointIds, defaultCredentials, cacheDuration));
+		if (appFilter.private !== undefined) {
+			return apps.filter((appToFilter) => {
+				const isPrivate = appToFilter.private ?? false;
+				return appFilter.private === isPrivate;
+			});
+		}
 		return apps;
 	} catch (err) {
 		logger.error("Error retrieving apps. Returning empty list", err);
@@ -247,8 +257,12 @@ export async function getApps(): Promise<App[]> {
 	}
 }
 
-export async function getAppsByTag(tags: string[], mustMatchAll = false): Promise<App[]> {
-	const apps = await getApps();
+export async function getAppsByTag(
+	tags: string[],
+	mustMatchAll = false,
+	appFilter: AppFilterOptions = {}
+): Promise<PlatformApp[]> {
+	const apps = await getApps(appFilter);
 	const filteredApps = apps.filter((value) => {
 		if (value.tags === undefined) {
 			return false;
@@ -270,7 +284,7 @@ export async function getAppsByTag(tags: string[], mustMatchAll = false): Promis
 	return filteredApps;
 }
 
-export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
+export async function getApp(requestedApp: string | { appId: string }): Promise<PlatformApp> {
 	const apps = await getApps();
 	let appId;
 	if (requestedApp !== undefined) {
@@ -288,7 +302,7 @@ export async function getApp(requestedApp: string | { appId: string }): Promise<
 	return app;
 }
 
-export async function getAppsByIntent(intent: string): Promise<App[]> {
+export async function getAppsByIntent(intent: string): Promise<PlatformApp[]> {
 	const apps = await getApps();
 	const filteredApps = apps.filter((value) => {
 		if (value.intents === undefined) {
@@ -307,12 +321,12 @@ export async function getAppsByIntent(intent: string): Promise<App[]> {
 export async function getIntent(
 	intent: string,
 	contextType?: string
-): Promise<{ intent: { name: string; displayName: string }; apps: App[] }> {
+): Promise<{ intent: { name: string; displayName: string }; apps: PlatformApp[] }> {
 	const apps = await getApps();
 	let intents: {
 		[key: string]: {
 			intent: { name: string; displayName: string };
-			apps: App[];
+			apps: PlatformApp[];
 		};
 	} = {};
 
@@ -352,12 +366,12 @@ export async function getIntent(
 
 export async function getIntentsByContext(
 	contextType: string
-): Promise<{ intent: { name: string; displayName: string }; apps: App[] }[]> {
+): Promise<{ intent: { name: string; displayName: string }; apps: PlatformApp[] }[]> {
 	const apps = await getApps();
 	let intents: {
 		[key: string]: {
 			intent: { name: string; displayName: string };
-			apps: App[];
+			apps: PlatformApp[];
 		};
 	} = {};
 
@@ -379,7 +393,7 @@ export async function getIntentsByContext(
 	return [];
 }
 
-export function getAppIcon(app: App): string | undefined {
+export function getAppIcon(app: PlatformApp): string | undefined {
 	if (Array.isArray(app.icons) && app.icons.length > 0) {
 		return app.icons[0].src;
 	}

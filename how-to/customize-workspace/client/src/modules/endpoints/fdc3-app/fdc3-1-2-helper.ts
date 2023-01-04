@@ -40,3 +40,17 @@ export function getTags(app: AppDefinition): string[] {
 
 	return tags;
 }
+
+export function getPrivate(app: AppDefinition): boolean {
+	if (app?.customConfig?.private !== undefined) {
+		switch (app?.customConfig?.private) {
+			case "False":
+			case "false":
+			case false:
+				return false;
+			default:
+				// if someone has defined private then the likely hood was to override the default of false.
+				return true;
+		}
+	}
+}
