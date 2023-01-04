@@ -9,6 +9,7 @@ import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("InteropBroker");
 
+const OPEN_APP_NOT_FOUND = "AppNotFound";
 const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
 
@@ -328,9 +329,13 @@ export function interopOverride(
 			logger.info("Received request for a raised intent", intent);
 			let intentApps = await getAppsByIntent(intent.name);
 			let targetApp: PlatformApp;
+			let targetAppSpecified: boolean = false;
+			let targetAppId: string;
 
 			if (intent.metadata?.target !== undefined) {
-				targetApp = await getApp(intent.metadata?.target as string);
+				targetAppSpecified = true;
+				targetAppId = intent.metadata?.target as string;
+				targetApp = await getApp(targetAppId);
 				if (targetApp === undefined) {
 					// check to see if you have been passed a specific identity for a view that should be targeted instead of an app
 					const targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
@@ -353,7 +358,19 @@ export function interopOverride(
 				throw new Error(NO_APPS_FOUND);
 			}
 
-			if (targetApp !== undefined && intentApps.includes(targetApp)) {
+			if (targetAppSpecified && targetApp === undefined) {
+				logger.info(`Selected appId was specified: ${targetAppId} but does not exist. Returning error.`);
+				throw new Error(NO_APPS_FOUND);
+			}
+
+			if (targetApp !== undefined) {
+				if (!intentApps.includes(targetApp)) {
+					logger.info(
+						`Selected appId was specified: ${targetAppId} but does it does not support the intent`,
+						intent
+					);
+					throw new Error(NO_APPS_FOUND);
+				}
 				logger.info("Assigning selected application with intent", intent);
 				intentApps = [targetApp];
 			}
@@ -393,6 +410,42 @@ export function interopOverride(
 			} catch {
 				logger.error("App for intent not selected/launched", intent);
 				throw new Error(RESOLVER_TIMEOUT);
+			}
+		}
+
+		public async fdc3HandleOpen(
+			fdc3OpenOptions: { app: PlatformApp | string; context: OpenFin.Context },
+			clientIdentity: OpenFin.ClientIdentity
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		): Promise<any> {
+			if (fdc3OpenOptions?.app === undefined || fdc3OpenOptions?.app === null) {
+				logger.error("A request to fdc3.open did not pass an fdc3OpenOptions object");
+				throw new Error(OPEN_APP_NOT_FOUND);
+			}
+
+			const requestedId =
+				typeof fdc3OpenOptions.app === "string"
+					? fdc3OpenOptions.app
+					: fdc3OpenOptions.app.appId || fdc3OpenOptions.app.name;
+			const openAppIntent: OpenFin.Intent = {
+				context: fdc3OpenOptions.context,
+				name: "OpenApp",
+				metadata: {
+					target: requestedId
+				}
+			};
+			logger.info(
+				`A request to Open has been sent to the platform by uuid: ${clientIdentity?.uuid}, name: ${clientIdentity?.name}, endpointId: ${clientIdentity.endpointId} with passed context:`,
+				fdc3OpenOptions.context
+			);
+			try {
+				const result = await this.handleFiredIntent(openAppIntent);
+				return { appId: result.source };
+			} catch (intentError) {
+				if (intentError?.message !== undefined && intentError.message === NO_APPS_FOUND) {
+					throw new Error(OPEN_APP_NOT_FOUND);
+				}
+				throw intentError;
 			}
 		}
 	}

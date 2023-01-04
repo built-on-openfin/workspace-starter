@@ -46,6 +46,7 @@ export async function requestResponse(
 			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
 			const platformApp: PlatformApp = {
 				appId: passedApp.appId,
+				name: passedApp.name,
 				title: passedApp.title || passedApp.name,
 				manifestType: passedApp.manifestType,
 				manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
@@ -67,6 +68,7 @@ export async function requestResponse(
 			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
 			const platformApp: PlatformApp = {
 				appId: passedApp.appId,
+				name: passedApp.name,
 				title: passedApp.title || passedApp.name,
 				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
 				manifest: fdc3TwoPointZeroHelper.getManifest(passedApp) as string,
