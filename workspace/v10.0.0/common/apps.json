@@ -18,7 +18,13 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			},
+			{
+				"name": "OpenApp",
+				"displayName": "Open App",
+				"contexts": ["fdc3.contact"],
 				"customConfig": {}
 			}
 		],
