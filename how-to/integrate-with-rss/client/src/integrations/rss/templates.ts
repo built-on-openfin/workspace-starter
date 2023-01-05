@@ -1,14 +1,14 @@
 import { ButtonStyle, TemplateFragment } from "@openfin/workspace";
 import { createButton, createContainer, createImage, createText } from "../../templates";
-import { getCurrentTheme } from "../../themes";
+import { getCurrentPalette } from "../../themes";
 
 export async function getRssFeedTemplate(actions: { viewAction: string }): Promise<TemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 
 	return createContainer(
 		"column",
 		[
-			await createText("titleLabel", 12, { color: theme.palette.brandPrimary, fontWeight: "bold" }),
+			await createText("titleLabel", 12, { color: palette.brandPrimary, fontWeight: "bold" }),
 			await createText("title", 10),
 			await createContainer(
 				"row",
@@ -28,14 +28,14 @@ export async function getRssFeedTemplate(actions: { viewAction: string }): Promi
 }
 
 export async function getRssEntryTemplate(actions: { viewAction: string }): Promise<TemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 
 	return createContainer(
 		"column",
 		[
-			await createText("titleLabel", 12, { color: theme.palette.brandPrimary, fontWeight: "bold" }),
+			await createText("titleLabel", 12, { color: palette.brandPrimary, fontWeight: "bold" }),
 			await createText("title", 10),
-			await createText("descriptionLabel", 12, { color: theme.palette.brandPrimary, fontWeight: "bold" }),
+			await createText("descriptionLabel", 12, { color: palette.brandPrimary, fontWeight: "bold" }),
 			await createText("description", 10, { whiteSpace: "pre-wrap" }),
 			await createImage("thumbnailUrl", "Thumbnail"),
 			await createContainer(

@@ -1,19 +1,14 @@
 import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions,
-	CustomThemeOptionsWithScheme,
-	CustomThemes
-} from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { ColorSchemeMode } from "./shapes/theme-shapes";
+import { ColorSchemeMode, PlatformCustomTheme, PlatformCustomThemes } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
 
-let validatedThemes: CustomThemes;
+let validatedThemes: PlatformCustomThemes;
 let colorSchemeMode: ColorSchemeMode;
 
 function getSystemPreferredColorScheme(): ColorSchemeMode {
@@ -111,6 +106,15 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 	await notifyColorScheme();
 }
 
+export async function getCurrentThemeId(): Promise<string> {
+	const themes = await getThemes();
+	if (themes.length === 0) {
+		return "default";
+	}
+
+	return themes[0].id ?? themes[0].label;
+}
+
 export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	const settings = await getSettings();
@@ -128,11 +132,7 @@ export async function notifyColorScheme(): Promise<void> {
 	} as OpenFin.Context);
 }
 
-export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
-	return DEFAULT_PALETTES;
-}
-
-export async function getThemes(): Promise<CustomThemes> {
+export async function getThemes(): Promise<PlatformCustomThemes> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);
@@ -140,8 +140,8 @@ export async function getThemes(): Promise<CustomThemes> {
 	return validatedThemes.slice();
 }
 
-export function validateThemes(themes: CustomThemes): CustomThemes {
-	const customThemes: CustomThemes = [];
+export function validateThemes(themes: PlatformCustomThemes): PlatformCustomThemes {
+	const platformThemes: PlatformCustomThemes = [];
 
 	if (Array.isArray(themes)) {
 		const preferredColorScheme = getSystemPreferredColorScheme();
@@ -186,15 +186,15 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 					logger.info(
 						`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
 					);
-					customThemes.unshift(themes[i]);
+					platformThemes.unshift(themes[i]);
 				} else {
-					customThemes.push(themes[i]);
+					platformThemes.push(themes[i]);
 				}
 			}
 		}
 	}
 
-	return customThemes;
+	return platformThemes;
 }
 
 function validatePalette(
@@ -252,7 +252,7 @@ function validatePalette(
 	return combinedPalette;
 }
 
-function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, scheme: string): boolean {
+function hasScheme(theme: PlatformCustomTheme, scheme: string): boolean {
 	if ("palette" in theme) {
 		return theme.label.toLowerCase().includes(scheme);
 	}
@@ -260,7 +260,7 @@ function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, sch
 	return theme.palettes[scheme] !== undefined;
 }
 
-export async function toggleTheme(): Promise<void> {
+export async function toggleScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	if (colorSchemeMode === ColorSchemeMode.Light) {
 		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);

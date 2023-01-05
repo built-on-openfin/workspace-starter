@@ -140,7 +140,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/search.svg",
+						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -159,13 +159,14 @@
 		"themeProvider": {
 			"themes": [
 				{
+					"id": "default",
 					"label": "Light",
 					"logoUrl": "http://localhost:8080/favicon-32x32.png",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,
 						"backgroundPrimary": "#111214",
-						"contentBackground1": "#504CFF",
+						"contentBackground1": "#0A76D3",
 						"functional1": null,
 						"functional2": null,
 						"functional3": null,

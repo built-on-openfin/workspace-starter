@@ -208,10 +208,10 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
               "label": "Starter Theme",
               "logoUrl": "http://localhost:8080/favicon.ico",
               "palette": {
-                  "brandPrimary": "#504CFF",
+                  "brandPrimary": "#0A76D3",
                   "brandSecondary": "#383A40",
                   "backgroundPrimary": "#111214",
-                  "contentBackground1": "#504CFF",
+                  "contentBackground1": "#0A76D3",
                   "functional1": null,
                   "functional2": null,
                   "functional3": null,

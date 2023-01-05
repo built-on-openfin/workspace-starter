@@ -563,7 +563,7 @@ export async function init() {
       label: 'Starter Theme',
       logoUrl: 'http://localhost:8080/favicon.ico',
       palette: {
-        brandPrimary: '#504CFF',
+        brandPrimary: '#0A76D3',
         brandSecondary: '#383A40',
         backgroundPrimary: '#111214'
       }

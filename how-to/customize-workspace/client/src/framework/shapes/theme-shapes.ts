@@ -1,11 +1,11 @@
-import type { CustomThemes } from "@openfin/workspace/common/src/api/theming";
+import type { CustomThemeOptions, CustomThemeOptionsWithScheme } from "@openfin/workspace-platform";
 
 /**
  *  Platform theme configuration
  **/
 export interface ThemeProviderOptions {
 	/** The Themes you wish your platform to support */
-	themes: CustomThemes;
+	themes: PlatformCustomThemes;
 	/**
 	 * If providing the palette through css variables would you
 	 * like a specific custom prefix?
@@ -25,3 +25,9 @@ export enum ColorSchemeMode {
 	Light = "light",
 	Dark = "dark"
 }
+
+export type PlatformCustomThemeOptions = CustomThemeOptions & { id: string };
+export type PlatformCustomThemeOptionsWithScheme = CustomThemeOptionsWithScheme & { id: string };
+export type PlatformCustomTheme = PlatformCustomThemeOptions | PlatformCustomThemeOptionsWithScheme;
+
+export type PlatformCustomThemes = PlatformCustomTheme[];

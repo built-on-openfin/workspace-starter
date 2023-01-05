@@ -595,77 +595,6 @@
       },
       "type": "object"
     },
-    "CustomThemeOptions": {
-      "additionalProperties": false,
-      "properties": {
-        "label": {
-          "type": "string"
-        },
-        "logoUrl": {
-          "type": "string"
-        },
-        "palette": {
-          "$ref": "#/definitions/CustomPaletteSet"
-        }
-      },
-      "required": [
-        "label",
-        "palette"
-      ],
-      "type": "object"
-    },
-    "CustomThemeOptionsWithScheme": {
-      "additionalProperties": false,
-      "properties": {
-        "default": {
-          "enum": [
-            "light",
-            "dark"
-          ],
-          "type": "string"
-        },
-        "label": {
-          "type": "string"
-        },
-        "logoUrl": {
-          "type": "string"
-        },
-        "palettes": {
-          "additionalProperties": false,
-          "properties": {
-            "dark": {
-              "$ref": "#/definitions/CustomPaletteSet"
-            },
-            "light": {
-              "$ref": "#/definitions/CustomPaletteSet"
-            }
-          },
-          "required": [
-            "light",
-            "dark"
-          ],
-          "type": "object"
-        }
-      },
-      "required": [
-        "label",
-        "palettes"
-      ],
-      "type": "object"
-    },
-    "CustomThemes": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/definitions/CustomThemeOptions"
-          },
-          {
-            "$ref": "#/definitions/CustomThemeOptionsWithScheme"
-          }
-        ]
-      },
-      "type": "array"
-    },
     "DockProviderOptions": {
       "additionalProperties": false,
       "properties": {
@@ -1582,6 +1511,88 @@
       ],
       "type": "string"
     },
+    "PlatformCustomTheme": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PlatformCustomThemeOptions"
+        },
+        {
+          "$ref": "#/definitions/PlatformCustomThemeOptionsWithScheme"
+        }
+      ]
+    },
+    "PlatformCustomThemeOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "palette": {
+          "$ref": "#/definitions/CustomPaletteSet"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "palette"
+      ],
+      "type": "object"
+    },
+    "PlatformCustomThemeOptionsWithScheme": {
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "palettes": {
+          "additionalProperties": false,
+          "properties": {
+            "dark": {
+              "$ref": "#/definitions/CustomPaletteSet"
+            },
+            "light": {
+              "$ref": "#/definitions/CustomPaletteSet"
+            }
+          },
+          "required": [
+            "light",
+            "dark"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "palettes"
+      ],
+      "type": "object"
+    },
+    "PlatformCustomThemes": {
+      "items": {
+        "$ref": "#/definitions/PlatformCustomTheme"
+      },
+      "type": "array"
+    },
     "PlatformProviderOptions": {
       "additionalProperties": false,
       "properties": {
@@ -1918,7 +1929,7 @@
           "type": "object"
         },
         "themes": {
-          "$ref": "#/definitions/CustomThemes",
+          "$ref": "#/definitions/PlatformCustomThemes",
           "description": "The Themes you wish your platform to support"
         }
       },

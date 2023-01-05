@@ -5,9 +5,9 @@ import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	light: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#FAFBFE",
+		backgroundPrimary: "#1E1F23",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -28,7 +28,7 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 		textInactive: "#7D808A"
 	},
 	dark: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
 		background1: "#111214",
@@ -78,10 +78,6 @@ export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	}
 
 	return themes[0].palettes[colorScheme];
-}
-
-export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
-	return DEFAULT_PALETTES;
 }
 
 export async function getThemes(): Promise<CustomThemes> {

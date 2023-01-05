@@ -3,8 +3,8 @@
 ## v10
 
 - Added support for new themes format with light and dark schemes
-  - toolbar button icons should now use `{theme}` substitution in icon url instead of `themes` property
-  - dock button icons can also use the `{theme}` syntax
+  - toolbar button icons should now use `{theme}` and `{scheme}` substitution in icon url instead of `themes` property
+  - dock button icons can also use the `{theme}` and `{scheme}` syntax
   - added `theme-changed` life cycle event
 - Added example of using setSearchQuery API for home integration
 - Use Notifications now uses Show/Hide APIs instead of toggle

@@ -1,11 +1,12 @@
 import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
+import type { ColorSchemeMode } from "customize-workspace/shapes/theme-shapes";
 import { ACTION_IDS } from "../actions";
 import { getApp, getAppIcon, getAppsByTag } from "../apps";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { BootstrapOptions, CustomSettings } from "../shapes";
-import { getCurrentColorSchemeMode } from "../themes";
+import { getCurrentColorSchemeMode, getCurrentThemeId } from "../themes";
 
 const logger = createLogger("Dock");
 
@@ -59,6 +60,7 @@ async function calculateButtons(
 	registeredBootstrapOptions = registeredBootstrapOptions ?? bootstrapOptions;
 
 	const buttons: DockButton[] = [];
+	const themeId = await getCurrentThemeId();
 	const colorSchemeMode = await getCurrentColorSchemeMode();
 
 	if (Array.isArray(settings.dockProvider.apps)) {
@@ -72,10 +74,7 @@ async function calculateButtons(
 					for (const dockApp of dockApps) {
 						buttons.push({
 							tooltip: appButton.tooltip ?? dockApp.title,
-							iconUrl: (appButton.iconUrl ?? getAppIcon(dockApp)).replace(
-								/{theme}/g,
-								colorSchemeMode as string
-							),
+							iconUrl: themeUrl(appButton.iconUrl ?? getAppIcon(dockApp), themeId, colorSchemeMode),
 							action: {
 								id: ACTION_IDS.launchApp,
 								customData: {
@@ -113,7 +112,7 @@ async function calculateButtons(
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: appButton.tooltip,
-						iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
+						iconUrl: themeUrl(iconUrl, themeId, colorSchemeMode),
 						options
 					});
 				}
@@ -161,7 +160,7 @@ async function calculateButtons(
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: dockButton.tooltip,
-						iconUrl: dockButton.iconUrl.replace(/{theme}/g, colorSchemeMode as string),
+						iconUrl: themeUrl(dockButton.iconUrl, themeId, colorSchemeMode),
 						options
 					});
 				}
@@ -187,7 +186,7 @@ async function calculateButtons(
 				buttons.push({
 					type: DockButtonNames.ActionButton,
 					tooltip,
-					iconUrl: iconUrl.replace(/{theme}/g, colorSchemeMode as string),
+					iconUrl: themeUrl(iconUrl, themeId, colorSchemeMode),
 					action: dockButton.appId
 						? {
 								id: ACTION_IDS.launchApp,
@@ -233,4 +232,12 @@ async function updateDockColorScheme(): Promise<void> {
 			await finalizeRegistration(settings, newButtons);
 		}
 	}
+}
+
+function themeUrl(
+	url: string | undefined,
+	themeId: string,
+	colorSchemeMode: ColorSchemeMode
+): string | undefined {
+	return url ? url.replace(/{theme}/g, themeId).replace(/{scheme}/g, colorSchemeMode as string) : undefined;
 }
