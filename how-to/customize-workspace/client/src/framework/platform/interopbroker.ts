@@ -414,7 +414,7 @@ export function interopOverride(
 		}
 
 		public async fdc3HandleOpen(
-			fdc3OpenOptions: { app: PlatformApp | string; context: OpenFin.Context },
+			fdc3OpenOptions: { app: (PlatformApp & { name?: string }) | string; context: OpenFin.Context },
 			clientIdentity: OpenFin.ClientIdentity
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		): Promise<any> {
@@ -426,7 +426,7 @@ export function interopOverride(
 			const requestedId =
 				typeof fdc3OpenOptions.app === "string"
 					? fdc3OpenOptions.app
-					: fdc3OpenOptions.app.appId || fdc3OpenOptions.app.name;
+					: fdc3OpenOptions.app.appId ?? fdc3OpenOptions.app.name;
 			const openAppIntent: OpenFin.Intent = {
 				context: fdc3OpenOptions.context,
 				name: "OpenApp",
@@ -442,7 +442,7 @@ export function interopOverride(
 				const result = await this.handleFiredIntent(openAppIntent);
 				return { appId: result.source };
 			} catch (intentError) {
-				if (intentError?.message !== undefined && intentError.message === NO_APPS_FOUND) {
+				if (intentError?.message === NO_APPS_FOUND) {
 					throw new Error(OPEN_APP_NOT_FOUND);
 				}
 				throw intentError;
