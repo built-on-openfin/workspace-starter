@@ -10,6 +10,7 @@ import { checkConditions } from "./conditions";
 import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
 import type { ToolbarButtonDefinition } from "./shapes/browser-shapes";
+import type { ColorSchemeMode } from "./shapes/theme-shapes";
 import { getCurrentColorSchemeMode } from "./themes";
 
 let configToolbarButtons: ToolbarButtonDefinition[];
@@ -47,15 +48,7 @@ export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
 
 	for (const entry of availableToolbarButtons) {
 		if (entry.include && (await checkConditions(platform, entry.conditions))) {
-			// We need to duplicate the button, as we don't want to lose
-			// any placeholders in the iconUrl
-			const buttonCopy = JSON.parse(JSON.stringify(entry.button)) as ToolbarButton & { iconUrl?: string };
-
-			if (buttonCopy.iconUrl) {
-				buttonCopy.iconUrl = buttonCopy.iconUrl.replace(/{theme}/g, colorSchemeMode);
-			}
-
-			defaultButtons.push(buttonCopy);
+			defaultButtons.push(themeButton(entry.button, colorSchemeMode));
 		}
 	}
 	defaultToolbarButtons = defaultButtons;
@@ -86,7 +79,10 @@ export async function updateToolbarButtons(
 			}
 			return false;
 		});
-		buttons[index] = replacement.button;
+		if (replacement) {
+			const colorSchemeMode = await getCurrentColorSchemeMode();
+			buttons[index] = themeButton(replacement.button, colorSchemeMode);
+		}
 		return buttons;
 	}
 
@@ -113,7 +109,7 @@ export async function updateBrowserWindowButtonsColorScheme(
 						(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
 					);
 					if (configButton?.button.iconUrl) {
-						button.iconUrl = configButton.button.iconUrl.replace(/{theme}/g, colorSchemeMode);
+						button.iconUrl = themeUrl(configButton.button.iconUrl, colorSchemeMode);
 					}
 				}
 			}
@@ -122,4 +118,21 @@ export async function updateBrowserWindowButtonsColorScheme(
 
 		await browserWindow.replaceToolbarOptions({ buttons: updatedButtons });
 	}
+}
+
+function themeButton(
+	button: ToolbarButton & { iconUrl?: string },
+	colorSchemeMode: ColorSchemeMode
+): ToolbarButton & { iconUrl?: string } {
+	// We need to duplicate the button, as we don't want to lose
+	// any placeholders in the iconUrl
+	const buttonCopy: ToolbarButton & { iconUrl?: string } = JSON.parse(JSON.stringify(button));
+
+	buttonCopy.iconUrl = themeUrl(buttonCopy.iconUrl, colorSchemeMode);
+
+	return buttonCopy;
+}
+
+function themeUrl(url: string | undefined, colorSchemeMode: ColorSchemeMode): string | undefined {
+	return url ? url.replace(/{theme}/g, colorSchemeMode) : undefined;
 }
