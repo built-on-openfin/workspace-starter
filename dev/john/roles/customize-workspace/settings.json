@@ -214,6 +214,34 @@
 		"globalMenu": [
 			{
 				"include": true,
+				"label": "Inspect Platform",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "developer-inspect",
+						"customData": { "target": "platform" }
+					}
+				},
+				"position": {
+					"operation": "start"
+				},
+				"separator": "after"
+			},
+			{
+				"include": true,
+				"label": "Inspect Window",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "developer-inspect"
+					}
+				},
+				"position": {
+					"operation": "start"
+				}
+			},
+			{
+				"include": true,
 				"label": "Toggle Notification Center",
 				"data": {
 					"type": "Custom",
@@ -278,6 +306,20 @@
 					"operation": "start"
 				},
 				"separator": "after"
+			},
+			{
+				"include": true,
+				"label": "Inspect Window",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "developer-inspect"
+					}
+				},
+				"position": {
+					"operation": "start"
+				},
+				"separator": "after"
 			}
 		],
 		"viewMenu": [
@@ -302,6 +344,19 @@
 					"type": "Custom",
 					"action": {
 						"id": "raise-create-app-definition-intent"
+					}
+				},
+				"position": {
+					"operation": "start"
+				}
+			},
+			{
+				"include": true,
+				"label": "Inspect View",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "developer-inspect"
 					}
 				},
 				"position": {
@@ -826,6 +881,11 @@
 				"enabled": true,
 				"id": "app-definition",
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/customize-workspace/js/modules/actions/app-definition.bundle.js"
+			},
+			{
+				"enabled": true,
+				"id": "developer-actions",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/customize-workspace/js/modules/actions/developer.bundle.js"
 			}
 		]
 	},

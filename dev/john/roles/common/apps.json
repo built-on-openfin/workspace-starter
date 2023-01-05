@@ -178,7 +178,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3"]
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "fdc3-workbench",
@@ -214,7 +214,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/common/images/previews/fdc3-workbench.png"
 			}
 		],
-		"tags": ["view", "interop", "fdc3", "contact", "instrument"]
+		"tags": ["view", "interop", "fdc3", "contact", "instrument", "tools"]
 	},
 	{
 		"appId": "fdc3-broadcast-view",
@@ -283,7 +283,7 @@
 				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/page-context-fdc3-interop-api.png"
 			}
 		],
-		"tags": ["page", "openfin"]
+		"tags": ["page", "openfin", "tools"]
 	},
 	{
 		"appId": "fdc3-intent-view",
@@ -673,7 +673,7 @@
 				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/page-intents-fdc3-interop-api.png"
 			}
 		],
-		"tags": ["page", "openfin"]
+		"tags": ["page", "openfin", "tools"]
 	},
 	{
 		"appId": "openfin-intent-page-multi",
@@ -777,7 +777,7 @@
 				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/app/images/previews/app-definition-builder.png"
 			}
 		],
-		"tags": ["view", "app", "tool"]
+		"tags": ["view", "app", "tools"]
 	},
 	{
 		"appId": "theme-definition-builder",
@@ -796,7 +796,7 @@
 				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/branding/images/previews/theme-definition-builder.png"
 			}
 		],
-		"tags": ["view", "theme", "tool"]
+		"tags": ["view", "theme", "tools"]
 	},
 	{
 		"appId": "starter-style-guide",
@@ -815,7 +815,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/common/images/previews/starter-style-guide.png"
 			}
 		],
-		"tags": ["view", "style", "tool"]
+		"tags": ["view", "style", "tools"]
 	},
 	{
 		"appId": "openfin-versions-workspace",
@@ -1050,7 +1050,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/common/images/previews/openfin-page-docs.png"
 			}
 		],
-		"tags": ["page"]
+		"tags": ["page", "developer"]
 	},
 	{
 		"appId": "winform-interop-example",
@@ -1073,7 +1073,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/roles/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi", "dock"],
+		"tags": ["native", "appasset", "nwi", "dock", "developer"],
 		"data": {
 			"nwi": {
 				"name": "OpenFin.Interop.Win.Sample",
@@ -1122,7 +1122,7 @@
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [],
-		"tags": ["window", "headless"]
+		"tags": ["window", "headless", "developer"]
 	},
 	{
 		"appId": "manager-portal",
@@ -1297,7 +1297,7 @@
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "snapshot", "tool"]
+		"tags": ["page", "snapshot", "tools"]
 	},
 	{
 		"appId": "irs-rfq",
