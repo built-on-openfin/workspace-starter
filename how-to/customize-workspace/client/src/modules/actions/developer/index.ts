@@ -1,8 +1,6 @@
 import type { ModuleImplementation, ModuleTypes } from "customize-workspace/shapes/module-shapes";
-import * as authImplementation from "./auth-provider";
-import * as endpointImplementation from "./endpoint";
+import { DeveloperActions } from "./actions";
 
 export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
-	auth: authImplementation,
-	endpoint: endpointImplementation
+	actions: new DeveloperActions()
 };

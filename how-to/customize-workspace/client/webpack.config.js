@@ -351,5 +351,32 @@ module.exports = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/actions/developer/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'developer.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];

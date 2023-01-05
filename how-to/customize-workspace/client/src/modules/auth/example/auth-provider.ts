@@ -1,9 +1,13 @@
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import { randomUUID } from "../../../framework/uuid";
+import type { ExampleOptions, ExampleUser } from "./shapes";
+import { clearCurrentUser, getCurrentUser } from "./util";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
+let currentUser: ExampleUser;
+let userSessionKey: string;
 let sessionExpiryCheckId;
 let logger: Logger;
 
@@ -12,16 +16,6 @@ const loggedInSubscribers: Map<string, () => Promise<void>> = new Map();
 const beforeLoggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
 const loggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
 const sessionExpiredSubscribers: Map<string, () => Promise<void>> = new Map();
-interface ExampleOptions {
-	autoLogin: boolean;
-	authenticatedUrl: string;
-	loginUrl: string;
-	logoutUrl: string;
-	loginHeight: number;
-	loginWidth: number;
-	checkLoginStatusInSeconds: number;
-	checkSessionValidityInSeconds: number;
-}
 
 const EXAMPLE_AUTH_AUTHENTICATED_KEY = "EXAMPLE_AUTH_IS_AUTHENTICATED";
 
@@ -33,13 +27,14 @@ async function openLoginWindow(url: string): Promise<OpenFin.Window> {
 		minimizable: false,
 		autoShow: false,
 		defaultCentered: true,
-		defaultHeight: authOptions.loginHeight ?? 250,
+		defaultHeight: authOptions.loginHeight ?? 325,
 		defaultWidth: authOptions.loginWidth ?? 400,
 		includeInSnapshots: false,
 		resizable: false,
 		showTaskbarIcon: false,
 		saveWindowState: false,
-		url
+		url,
+		customData: authOptions.customData
 	});
 }
 
@@ -50,7 +45,7 @@ async function openLogoutWindow(url: string): Promise<OpenFin.Window> {
 		minimizable: false,
 		autoShow: false,
 		defaultCentered: true,
-		defaultHeight: authOptions.loginHeight ?? 250,
+		defaultHeight: authOptions.loginHeight ?? 325,
 		defaultWidth: authOptions.loginWidth ?? 400,
 		includeInSnapshots: false,
 		resizable: false,
@@ -67,7 +62,7 @@ async function checkAuth(url: string): Promise<boolean> {
 		maximizable: false,
 		minimizable: false,
 		autoShow: false,
-		defaultHeight: authOptions.loginHeight ?? 250,
+		defaultHeight: authOptions.loginHeight ?? 325,
 		defaultWidth: authOptions.loginWidth ?? 400,
 		includeInSnapshots: false,
 		resizable: false,
@@ -165,6 +160,7 @@ function checkForSessionExpiry(force = false) {
 				);
 				authenticated = false;
 				localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
+				clearCurrentUser(userSessionKey);
 				await notifySubscribers("session-expired", sessionExpiredSubscribers);
 			}
 		}, authOptions.checkSessionValidityInSeconds * 1000);
@@ -192,6 +188,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 	await notifySubscribers("before-logged-out", beforeLoggedOutSubscribers);
 	authenticated = false;
 	localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
+	clearCurrentUser(userSessionKey);
 	if (
 		authOptions.logoutUrl !== undefined &&
 		authOptions.logoutUrl !== null &&
@@ -224,7 +221,11 @@ export async function initialize(
 		logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
 		authOptions = definition.data;
 		authenticated = Boolean(localStorage.getItem(EXAMPLE_AUTH_AUTHENTICATED_KEY));
+		if (authOptions?.customData?.userSessionId !== undefined) {
+			userSessionKey = authOptions?.customData?.userSessionId;
+		}
 		if (authenticated) {
+			currentUser = getCurrentUser(userSessionKey);
 			checkForSessionExpiry();
 		}
 	} else {
@@ -329,6 +330,8 @@ export async function login(): Promise<boolean> {
 		localStorage.setItem(EXAMPLE_AUTH_AUTHENTICATED_KEY, authenticated.toString());
 		checkForSessionExpiry();
 		await notifySubscribers("logged-in", loggedInSubscribers);
+	} else {
+		clearCurrentUser(userSessionKey);
 	}
 
 	return authenticated;
@@ -357,8 +360,9 @@ export async function isAuthenticationRequired(): Promise<boolean> {
 export async function getUserInfo(): Promise<unknown> {
 	if (authenticated === undefined || !authenticated) {
 		logger.warn("Unable to retrieve user info unless the user is authenticated");
-	} else {
-		logger.info("This example does not return any user info. Returning null");
+		return null;
 	}
-	return null;
+	logger.info("This example returns a user if it was provided to the example login");
+
+	return currentUser;
 }
