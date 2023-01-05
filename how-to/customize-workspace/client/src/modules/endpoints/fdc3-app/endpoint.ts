@@ -45,8 +45,8 @@ export async function requestResponse(
 		for (let i = 0; i < applications.length; i++) {
 			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
 			const platformApp: PlatformApp = {
-				appId: passedApp.appId,
-				title: passedApp.title || passedApp.name,
+				appId: passedApp.appId ?? passedApp.name,
+				title: passedApp.title ?? passedApp.name,
 				manifestType: passedApp.manifestType,
 				manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
 				description: passedApp.description,
@@ -66,8 +66,8 @@ export async function requestResponse(
 		for (let i = 0; i < applications.length; i++) {
 			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
 			const platformApp: PlatformApp = {
-				appId: passedApp.appId,
-				title: passedApp.title || passedApp.name,
+				appId: passedApp.appId ?? passedApp.name,
+				title: passedApp.title ?? passedApp.name,
 				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
 				manifest: fdc3TwoPointZeroHelper.getManifest(passedApp) as string,
 				description: passedApp.description,
