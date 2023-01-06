@@ -40,7 +40,13 @@ import path from 'path';
 async function packageContent(manifest, env, host) {
 	const packageConfig = await readJsonFile('./scripts/package-config.json');
 
-	const packagedDirectory = path.join(import.meta.url, '..', '..', 'packaged', env).replace('file:\\', '');
+	const packagedDirectory = path.join(
+		import.meta.url.replace('file:/', '').replace('file:\\', ''),
+		'..',
+		'..',
+		'packaged',
+		env
+	);
 	console.log('Packaged Directory', forwardSlash(packagedDirectory));
 	console.log();
 
