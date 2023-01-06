@@ -1,0 +1,17 @@
+name: Publish Package to npmjs
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19'
+          registry-url: 'https://registry.npmjs.org'
+      - run: cd ./how-to/customize-workspace && npm run setup
+      - run: NAME=@openfin/default-workspace-platform npm run prepare-package
+      - run: cd ./packaged && npm publish --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
