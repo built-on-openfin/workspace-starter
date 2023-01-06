@@ -24,39 +24,73 @@ If you need to return different settings by user then you can have a cut down ma
 
 ```json
 "customSettings": {
-    "authProvider": {
-        "modules": [
-            {
-                "id": "example",
-                "url": "http://localhost:8080/js/modules/auth/example.bundle.js",
-                "data": {
-                    "autoLogin": false,
-                    "loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
-                    "logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
-                    "authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
-                    "checkLoginStatusInSeconds": 1,
-                    "checkSessionValidityInSeconds": -1
-                }
-            }
-        ]
-    },
-    "endpointProvider": {
-        "modules": [],
-        "endpoints": [
-            {
-                "id": "platform-settings",
-                "type": "fetch",
-                "options": {
-                    "method": "GET",
-                    "url": "http://localhost:8080/settings.json"
-                }
-            }
-        ]
+  "authProvider": {
+   "modules": [
+    {
+     "id": "auth-example",
+     "url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+     "data": {
+      "autoLogin": false,
+      "loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+      "logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+      "authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+      "checkLoginStatusInSeconds": 1,
+      "checkSessionValidityInSeconds": -1,
+      "customData": {
+       "userSessionId": "example-auth-data",
+       "users": [
+        { "name": "Josh Smith (Developer)", "email": "josh@smith.com", "role": "developer" },
+        { "name": "Sam Barns (Sales)", "email": "sam@barns.com", "role": "sales" }
+       ]
+      }
+     }
     }
-}
+   ]
+  },
+  "endpointProvider": {
+   "modules": [
+    {
+     "id": "auth-example-endpoint",
+     "url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+     "data": {
+      "userSessionId": "example-auth-data",
+      "roleMapping": {
+       "developer": {
+        "excludeAppsWithTag": ["expero", "contact", "manager", "irs"],
+        "preferredScheme": "dark"
+       },
+       "sales": {
+        "excludeAppsWithTag": ["tools", "developer", "versions"],
+        "preferredScheme": "light",
+        "excludeMenuAction": ["developer-inspect", "raise-create-app-definition-intent"]
+       }
+      }
+     }
+    }
+   ],
+   "endpoints": [
+    {
+     "id": "platform-settings",
+     "type": "module",
+     "typeId": "auth-example-endpoint",
+     "options": {
+      "method": "GET",
+      "url": "http://localhost:8080/settings.json"
+     }
+    }
+   ]
+  }
+ }
 ```
 
-The customize workspace settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data). The above configuration is using the built in fetch endpoint implementation so you can pass fetch options as well as the url. The above example is doing a get request to the hosted [settings.json](../public/settings.json) file but this could be a rest endpoint instead.
+The customize workspace settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data).
+
+We have an example auth module that contains an auth provider and an endpoint provider. The purpose of this setup is to let you simulate server side filtering via the client side (so there is no server side logic dependency required in order to get an idea of how it could work). The auth module above has a customData setting that specifies a id to store the selected example user and a list of example users and associated role.
+
+The same module is referenced in endpoints and has configuration that specifies the key for the current user and has a role mapping section to exclude things based on role.
+
+The example auth module with auth provider and endpoint is not production code and is purely for demonstration purposes.
+With this setup it will update the default [settings.json](../public/settings.json) file and the configured app endpoints based on the role.
 
 You now have the option of how many of the settings on offer will be user specific vs general.
 

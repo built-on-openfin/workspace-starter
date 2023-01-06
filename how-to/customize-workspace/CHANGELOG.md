@@ -15,6 +15,8 @@
 - Added example of extending the App definition in order to keep compatibility with Workspace components while also proving data specific to a platform implementation. App definition now has an optional private setting. When set to true the app will no longer show up in Home, Store or Dock but can still be launched via fdc3/interop.
 - Add source filter to home with Apps, Pages, Workspaces and integration modules
 - Added opinionated support for fdc3.open (see [How To Add Open Support To Your App](./docs/how-to-add-open-support-to-your-app.md))
+- Updated example auth to give an example of how workspace can present entitled based data by letting you pick from two users and each user has a role (developer or sales) and the developer role has an apps feed that consists of developer related apps and has menu options that help developers (inspect view, window, platform etc) where as the sales role keeps the demo apps but filters out developer related menu options and apps. **npm run secondclient** will run the demo.
+- Moved the create app definition action logic from the app definition module (which has been deleted) into a developer action module which also has inspect menu actions.
 
 ## v9.2
 

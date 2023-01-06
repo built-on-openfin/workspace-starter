@@ -67,7 +67,7 @@
 		"authProvider": {
 			"modules": [
 				{
-					"id": "example",
+					"id": "auth-example",
 					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
 					"data": {
 						"autoLogin": false,
@@ -75,17 +75,42 @@
 						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
 						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
 						"checkLoginStatusInSeconds": 1,
-						"checkSessionValidityInSeconds": -1
+						"checkSessionValidityInSeconds": -1,
+						"customData": {
+							"users": [
+								{ "name": "Josh Smith (Developer)", "email": "josh@smith.com", "role": "developer" },
+								{ "name": "Sam Barns (Sales)", "email": "sam@barns.com", "role": "sales" }
+							]
+						}
 					}
 				}
 			]
 		},
 		"endpointProvider": {
-			"modules": [],
+			"modules": [
+				{
+					"id": "auth-example-endpoint",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"data": {
+						"roleMapping": {
+							"developer": {
+								"excludeAppsWithTag": ["expero", "contact", "manager", "irs"],
+								"preferredScheme": "dark"
+							},
+							"sales": {
+								"excludeAppsWithTag": ["tools", "developer", "versions"],
+								"preferredScheme": "light",
+								"excludeMenuAction": ["developer-inspect", "raise-create-app-definition-intent"]
+							}
+						}
+					}
+				}
+			],
 			"endpoints": [
 				{
 					"id": "platform-settings",
-					"type": "fetch",
+					"type": "module",
+					"typeId": "auth-example-endpoint",
 					"options": {
 						"method": "GET",
 						"url": "http://localhost:8080/settings.json"
