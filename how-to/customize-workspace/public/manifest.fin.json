@@ -446,7 +446,7 @@
 				{
 					"label": "Default",
 					"logoUrl": "http://localhost:8080/favicon.ico",
-					"default": "light",
+					"default": "dark",
 					"palettes": {
 						"light": {
 							"brandPrimary": "#0A76D3",
