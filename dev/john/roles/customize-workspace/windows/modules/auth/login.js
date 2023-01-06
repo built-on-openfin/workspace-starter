@@ -1,12 +1,13 @@
 async function init() {
 	const options = await fin.Window.getCurrentSync().getOptions();
+	const EXAMPLE_AUTH_CURRENT_USER_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_CURRENT_USER`;
 	let users = [];
 	let key;
 	if (options?.customData !== undefined) {
 		if (Array.isArray(options.customData?.users)) {
 			users = options.customData.users;
 		}
-		key = options.customData.userSessionId ?? 'default-session';
+		key = options.customData.currentUserKey ?? EXAMPLE_AUTH_CURRENT_USER_KEY;
 	}
 
 	const availableUsers = document.querySelector('#users');
