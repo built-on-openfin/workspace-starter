@@ -159,9 +159,11 @@
 		"themeProvider": {
 			"themes": [
 				{
-					"id": "default",
+					"id": "fdc3-light",
 					"label": "Light",
 					"logoUrl": "http://localhost:8080/favicon-32x32.png",
+					"default": "light",
+					"iconFolder": "default",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,

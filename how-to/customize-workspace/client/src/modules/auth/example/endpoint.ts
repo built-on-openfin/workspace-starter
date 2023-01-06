@@ -107,8 +107,8 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 		settings.themeProvider.themes.length > 0 &&
 		roleMapping[currentUser.role].preferredScheme !== undefined
 	) {
-		// eslint-disable-next-line @typescript-eslint/dot-notation
-		settings.themeProvider.themes[0]["default"] = roleMapping[currentUser.role].preferredScheme;
+		settings.themeProvider.themes[0].default =
+			roleMapping[currentUser.role].preferredScheme === "dark" ? "dark" : "light";
 		const storedSchemePreference = `${fin.me.identity.uuid}-SelectedColorScheme`;
 		logger.warn(
 			"This is a demo module where we are clearing the locally stored scheme preference in order to show different scheme's light/dark based on user selection. This means that it will always be set to what is in the role mapping initially and not what it is set to locally on restart."

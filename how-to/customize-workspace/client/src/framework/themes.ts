@@ -72,16 +72,15 @@ export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
 
 				const themes = await getThemes();
 				if (themes.length > 0) {
+					// we want to check for default regardless of palette or palettes as a way of indicating
+					// what scheme the palette follows if it is a single palette or the one to pick if there
+					// is a light and dark palette rather than just defaulting to dark if the label match is
+					// unsuccessful
+					colorSchemeMode = (themes[0].default as ColorSchemeMode) ?? ColorSchemeMode.Dark;
+
 					// If this is an old format theme just see if the label matches light
-					if ("palette" in themes[0]) {
-						if (themes[0].label.toLowerCase().includes("light")) {
-							colorSchemeMode = ColorSchemeMode.Light;
-						} else {
-							colorSchemeMode = ColorSchemeMode.Dark;
-						}
-					} else {
-						// Its new format so look at the default mode if it has one
-						colorSchemeMode = (themes[0].default as ColorSchemeMode) ?? ColorSchemeMode.Dark;
+					if ("palette" in themes[0] && themes[0].label.toLowerCase().includes("light")) {
+						colorSchemeMode = ColorSchemeMode.Light;
 					}
 				}
 			}

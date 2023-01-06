@@ -531,6 +531,7 @@
 	"themeProvider": {
 		"themes": [
 			{
+				"id": "default",
 				"label": "Default",
 				"logoUrl": "http://localhost:8080/favicon-32x32.png",
 				"default": "light",
