@@ -1,9 +1,9 @@
 import { ButtonStyle, TemplateFragment } from "@openfin/workspace";
 import { createButton, createContainer, createImage, createText } from "../../templates";
-import { getCurrentTheme } from "../../themes";
+import { getCurrentPalette } from "../../themes";
 
 export async function getQuoteTemplate(actions: { detailsAction: string }): Promise<TemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 
 	return createContainer(
 		"column",
@@ -15,7 +15,7 @@ export async function getQuoteTemplate(actions: { detailsAction: string }): Prom
 					justifyContent: "space-between"
 				}
 			),
-			await createText("company", 12, { color: theme.palette.textDefault, margin: "5px 0px" }),
+			await createText("company", 12, { color: palette.textDefault, margin: "5px 0px" }),
 			await createContainer("column", [await createImage("graph", "History")], {
 				backgroundColor: "black",
 				borderRadius: "5px",

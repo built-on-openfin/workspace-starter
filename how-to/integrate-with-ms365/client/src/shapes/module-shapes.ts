@@ -67,11 +67,6 @@ export interface ModuleHelpers {
 	rootUrl?: string;
 
 	/**
-	 * Get the default themes.
-	 */
-	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
-
-	/**
 	 * Get the current palette.
 	 */
 	getCurrentPalette(): Promise<CustomPaletteSet>;

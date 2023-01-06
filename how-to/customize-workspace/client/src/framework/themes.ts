@@ -1,19 +1,14 @@
 import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions,
-	CustomThemeOptionsWithScheme,
-	CustomThemes
-} from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { ColorSchemeMode } from "./shapes/theme-shapes";
+import { ColorSchemeMode, PlatformCustomTheme, PlatformCustomThemes } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
 
-let validatedThemes: CustomThemes;
+let validatedThemes: PlatformCustomThemes;
 let colorSchemeMode: ColorSchemeMode;
 
 function getSystemPreferredColorScheme(): ColorSchemeMode {
@@ -77,16 +72,15 @@ export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
 
 				const themes = await getThemes();
 				if (themes.length > 0) {
+					// we want to check for default regardless of palette or palettes as a way of indicating
+					// what scheme the palette follows if it is a single palette or the one to pick if there
+					// is a light and dark palette rather than just defaulting to dark if the label match is
+					// unsuccessful
+					colorSchemeMode = (themes[0].default as ColorSchemeMode) ?? ColorSchemeMode.Dark;
+
 					// If this is an old format theme just see if the label matches light
-					if ("palette" in themes[0]) {
-						if (themes[0].label.toLowerCase().includes("light")) {
-							colorSchemeMode = ColorSchemeMode.Light;
-						} else {
-							colorSchemeMode = ColorSchemeMode.Dark;
-						}
-					} else {
-						// Its new format so look at the default mode if it has one
-						colorSchemeMode = (themes[0].default as ColorSchemeMode) ?? ColorSchemeMode.Dark;
+					if ("palette" in themes[0] && themes[0].label.toLowerCase().includes("light")) {
+						colorSchemeMode = ColorSchemeMode.Light;
 					}
 				}
 			}
@@ -111,6 +105,24 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 	await notifyColorScheme();
 }
 
+export async function getCurrentThemeId(): Promise<string> {
+	const themes = await getThemes();
+	if (themes.length === 0) {
+		return "default";
+	}
+
+	return themes[0].id ?? themes[0].label;
+}
+
+export async function getCurrentIconFolder(): Promise<string> {
+	const themes = await getThemes();
+	if (themes.length === 0) {
+		return "default";
+	}
+
+	return themes[0].iconFolder ?? themes[0].id ?? themes[0].label;
+}
+
 export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	const settings = await getSettings();
@@ -128,11 +140,7 @@ export async function notifyColorScheme(): Promise<void> {
 	} as OpenFin.Context);
 }
 
-export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
-	return DEFAULT_PALETTES;
-}
-
-export async function getThemes(): Promise<CustomThemes> {
+export async function getThemes(): Promise<PlatformCustomThemes> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);
@@ -140,8 +148,8 @@ export async function getThemes(): Promise<CustomThemes> {
 	return validatedThemes.slice();
 }
 
-export function validateThemes(themes: CustomThemes): CustomThemes {
-	const customThemes: CustomThemes = [];
+export function validateThemes(themes: PlatformCustomThemes): PlatformCustomThemes {
+	const platformThemes: PlatformCustomThemes = [];
 
 	if (Array.isArray(themes)) {
 		const preferredColorScheme = getSystemPreferredColorScheme();
@@ -163,12 +171,14 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 
 			// eslint-disable-next-line @typescript-eslint/dot-notation
 			if (themes[i]["palette"] !== undefined || themes[i]["palettes"] !== undefined) {
+				let isValid = false;
 				if ("palette" in themeToValidate) {
 					themeToValidate.palette = validatePalette(
 						themeToValidate.palette,
 						themeToValidate.label,
 						DEFAULT_PALETTES[ColorSchemeMode.Dark]
 					);
+					isValid = themeToValidate.palette !== undefined;
 				} else {
 					themeToValidate.palettes[ColorSchemeMode.Dark] = validatePalette(
 						themeToValidate.palettes[ColorSchemeMode.Dark],
@@ -180,21 +190,28 @@ export function validateThemes(themes: CustomThemes): CustomThemes {
 						themeToValidate.label,
 						DEFAULT_PALETTES[ColorSchemeMode.Light]
 					);
+					isValid =
+						themeToValidate.palettes[ColorSchemeMode.Dark] !== undefined &&
+						themeToValidate.palettes[ColorSchemeMode.Light] !== undefined;
 				}
 
-				if (hasScheme(themes[i], preferredColorScheme)) {
-					logger.info(
-						`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
-					);
-					customThemes.unshift(themes[i]);
+				if (isValid) {
+					if (hasScheme(themes[i], preferredColorScheme)) {
+						logger.info(
+							`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
+						);
+						platformThemes.unshift(themes[i]);
+					} else {
+						platformThemes.push(themes[i]);
+					}
 				} else {
-					customThemes.push(themes[i]);
+					logger.warn(`Found a theme that does not contain any colors: ${themes[i].id ?? themes[i].label}`);
 				}
 			}
 		}
 	}
 
-	return customThemes;
+	return platformThemes;
 }
 
 function validatePalette(
@@ -252,7 +269,7 @@ function validatePalette(
 	return combinedPalette;
 }
 
-function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, scheme: string): boolean {
+function hasScheme(theme: PlatformCustomTheme, scheme: string): boolean {
 	if ("palette" in theme) {
 		return theme.label.toLowerCase().includes(scheme);
 	}
@@ -260,7 +277,7 @@ function hasScheme(theme: CustomThemeOptions | CustomThemeOptionsWithScheme, sch
 	return theme.palettes[scheme] !== undefined;
 }
 
-export async function toggleTheme(): Promise<void> {
+export async function toggleScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	if (colorSchemeMode === ColorSchemeMode.Light) {
 		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);

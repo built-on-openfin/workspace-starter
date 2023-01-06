@@ -1,4 +1,3 @@
-import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import type { LoggerCreator } from "./logger-shapes";
 
 /**
@@ -64,16 +63,6 @@ export interface ModuleHelpers {
 	 * The root url for the provider.
 	 */
 	rootUrl?: string;
-
-	/**
-	 * Get the default themes.
-	 */
-	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
-
-	/**
-	 * Get the current theme.
-	 */
-	getCurrentTheme(): Promise<CustomThemeOptions>;
 }
 
 /**
