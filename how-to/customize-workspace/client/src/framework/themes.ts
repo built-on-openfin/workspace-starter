@@ -205,6 +205,8 @@ export function validateThemes(themes: PlatformCustomThemes): PlatformCustomThem
 					} else {
 						platformThemes.push(themes[i]);
 					}
+				} else {
+					logger.warn(`Found a theme that does not contain any colors: ${themes[i].id ?? themes[i].label}`);
 				}
 			}
 		}
