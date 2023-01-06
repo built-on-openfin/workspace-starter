@@ -367,14 +367,14 @@
 		"toolbarButtons": [
 			{
 				"include": true,
-				"id": "toggle-theme",
+				"id": "toggle-scheme",
 				"button": {
 					"type": "Custom",
-					"tooltip": "Toggle Theme",
+					"tooltip": "Toggle Scheme",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/theme.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/theme.svg",
 					"action": {
-						"id": "toggle-theme",
+						"id": "toggle-scheme",
 						"customData": {}
 					}
 				},
@@ -421,7 +421,7 @@
 					"type": "Custom",
 					"tooltip": "Show Home",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/search.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/search.svg",
 					"action": {
 						"id": "home-show",
 						"customData": {}
@@ -435,7 +435,7 @@
 					"type": "Custom",
 					"tooltip": "Toggle Notification Center",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/bell.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/bell.svg",
 					"action": {
 						"id": "notification-toggle",
 						"customData": {}
@@ -449,7 +449,7 @@
 					"type": "Custom",
 					"tooltip": "Pin this window",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/pin.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/pin.svg",
 					"action": {
 						"id": "pin-window",
 						"customData": {
@@ -466,7 +466,7 @@
 					"type": "Custom",
 					"tooltip": "Unpin this window",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/pin-vertical.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/pin-vertical.svg",
 					"action": {
 						"id": "unpin-window",
 						"customData": {
@@ -511,7 +511,7 @@
 					"type": "Custom",
 					"tooltip": "Share",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/share.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/share.svg",
 					"action": {
 						"id": "share",
 						"customData": {}
@@ -531,12 +531,13 @@
 	"themeProvider": {
 		"themes": [
 			{
+				"id": "default",
 				"label": "Default",
 				"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/favicon-32x32.png",
 				"default": "light",
 				"palettes": {
 					"light": {
-						"brandPrimary": "#504CFF",
+						"brandPrimary": "#0A76D3",
 						"brandSecondary": "#1E1F23",
 						"backgroundPrimary": "#FAFBFE",
 						"background1": "#FFFFFF",
@@ -557,14 +558,14 @@
 						"textDefault": "#111214",
 						"textHelp": "#2F3136",
 						"textInactive": "#7D808A",
-						"contentBackground1": "#504CFF",
+						"contentBackground1": "#0A76D3",
 						"contentBackground2": "#000000",
 						"contentBackground3": "#000000",
 						"contentBackground4": "#000000",
 						"contentBackground5": "#000000"
 					},
 					"dark": {
-						"brandPrimary": "#504CFF",
+						"brandPrimary": "#0A76D3",
 						"brandSecondary": "#383A40",
 						"backgroundPrimary": "#1E1F23",
 						"background1": "#111214",
@@ -585,7 +586,7 @@
 						"textDefault": "#FFFFFF",
 						"textHelp": "#C9CBD2",
 						"textInactive": "#7D808A",
-						"contentBackground1": "#504CFF",
+						"contentBackground1": "#0A76D3",
 						"contentBackground2": "#000000",
 						"contentBackground3": "#000000",
 						"contentBackground4": "#000000",
@@ -785,7 +786,7 @@
 			},
 			{
 				"tooltip": "Social",
-				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/share.svg",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/share.svg",
 				"options": [
 					{
 						"tooltip": "Twitter",

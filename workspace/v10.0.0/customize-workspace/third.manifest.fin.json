@@ -140,7 +140,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/icons/{theme}/{scheme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -159,13 +159,16 @@
 		"themeProvider": {
 			"themes": [
 				{
+					"id": "fdc3-light",
 					"label": "Light",
 					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/favicon-32x32.png",
+					"default": "light",
+					"iconFolder": "default",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,
 						"backgroundPrimary": "#111214",
-						"contentBackground1": "#504CFF",
+						"contentBackground1": "#0A76D3",
 						"functional1": null,
 						"functional2": null,
 						"functional3": null,
