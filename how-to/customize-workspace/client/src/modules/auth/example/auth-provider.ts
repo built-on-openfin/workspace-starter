@@ -2,12 +2,11 @@ import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-sh
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import { randomUUID } from "../../../framework/uuid";
 import type { ExampleOptions, ExampleUser } from "./shapes";
-import { clearCurrentUser, getCurrentUser } from "./util";
+import { clearCurrentUser, EXAMPLE_AUTH_CURRENT_USER_KEY, getCurrentUser } from "./util";
 
 let authenticated: boolean;
 let authOptions: ExampleOptions;
 let currentUser: ExampleUser;
-let userSessionKey: string;
 let sessionExpiryCheckId;
 let logger: Logger;
 
@@ -17,9 +16,10 @@ const beforeLoggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
 const loggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
 const sessionExpiredSubscribers: Map<string, () => Promise<void>> = new Map();
 
-const EXAMPLE_AUTH_AUTHENTICATED_KEY = "EXAMPLE_AUTH_IS_AUTHENTICATED";
+const EXAMPLE_AUTH_AUTHENTICATED_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_IS_AUTHENTICATED`;
 
 async function openLoginWindow(url: string): Promise<OpenFin.Window> {
+	const enrichedCustomData = { currentUserKey: EXAMPLE_AUTH_CURRENT_USER_KEY, ...authOptions?.customData };
 	return fin.Window.create({
 		name: "example-auth-log-in",
 		alwaysOnTop: true,
@@ -34,7 +34,7 @@ async function openLoginWindow(url: string): Promise<OpenFin.Window> {
 		showTaskbarIcon: false,
 		saveWindowState: false,
 		url,
-		customData: authOptions.customData
+		customData: enrichedCustomData
 	});
 }
 
@@ -160,7 +160,7 @@ function checkForSessionExpiry(force = false) {
 				);
 				authenticated = false;
 				localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
-				clearCurrentUser(userSessionKey);
+				clearCurrentUser();
 				await notifySubscribers("session-expired", sessionExpiredSubscribers);
 			}
 		}, authOptions.checkSessionValidityInSeconds * 1000);
@@ -188,7 +188,7 @@ async function handleLogout(resolve: (success: boolean) => void): Promise<void> 
 	await notifySubscribers("before-logged-out", beforeLoggedOutSubscribers);
 	authenticated = false;
 	localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
-	clearCurrentUser(userSessionKey);
+	clearCurrentUser();
 	if (
 		authOptions.logoutUrl !== undefined &&
 		authOptions.logoutUrl !== null &&
@@ -221,11 +221,8 @@ export async function initialize(
 		logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
 		authOptions = definition.data;
 		authenticated = Boolean(localStorage.getItem(EXAMPLE_AUTH_AUTHENTICATED_KEY));
-		if (authOptions?.customData?.userSessionId !== undefined) {
-			userSessionKey = authOptions?.customData?.userSessionId;
-		}
 		if (authenticated) {
-			currentUser = getCurrentUser(userSessionKey);
+			currentUser = getCurrentUser();
 			checkForSessionExpiry();
 		}
 	} else {
@@ -331,7 +328,7 @@ export async function login(): Promise<boolean> {
 		checkForSessionExpiry();
 		await notifySubscribers("logged-in", loggedInSubscribers);
 	} else {
-		clearCurrentUser(userSessionKey);
+		clearCurrentUser();
 	}
 
 	return authenticated;

@@ -5,22 +5,20 @@ export interface ExampleUser {
 }
 
 export interface ExampleOptions {
-	autoLogin: boolean;
+	autoLogin?: boolean;
 	authenticatedUrl: string;
 	loginUrl: string;
 	logoutUrl: string;
-	loginHeight: number;
-	loginWidth: number;
-	checkLoginStatusInSeconds: number;
-	checkSessionValidityInSeconds: number;
+	loginHeight?: number;
+	loginWidth?: number;
+	checkLoginStatusInSeconds?: number;
+	checkSessionValidityInSeconds?: number;
 	customData?: {
-		userSessionId?: string;
 		users?: ExampleUser[];
 	};
 }
 
 export interface ExampleEndpointOptions {
-	userSessionId?: string;
 	roleMapping: { [key: string]: ExampleUserRoleMapping };
 }
 

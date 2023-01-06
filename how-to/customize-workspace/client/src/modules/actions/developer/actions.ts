@@ -50,13 +50,11 @@ export class DeveloperActions implements Actions {
 					const view = fin.View.wrapSync(identity);
 					await view.showDeveloperTools();
 				}
-			}
-			if (payload.callerType === this._helpers.callerTypes.PageTabContextMenu) {
+			} else if (payload.callerType === this._helpers.callerTypes.PageTabContextMenu) {
 				const pageWindowIdentity: OpenFin.Identity = payload.windowIdentity;
 				const pageWindow = fin.Window.wrapSync(pageWindowIdentity);
 				await pageWindow.showDeveloperTools();
-			}
-			if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
+			} else if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
 				const target = payload?.customData?.target === "platform" ? "platform" : "window";
 				const targetIdentity: OpenFin.Identity =
 					target === "window"
@@ -64,6 +62,72 @@ export class DeveloperActions implements Actions {
 						: { uuid: payload.windowIdentity.uuid, name: payload.windowIdentity.uuid };
 				const targetWindow = fin.Window.wrapSync(targetIdentity);
 				await targetWindow.showDeveloperTools();
+			}
+		};
+
+		actionMap["raise-create-app-definition-intent"] = async (payload: CustomActionPayload) => {
+			if (payload.callerType === this._helpers.callerTypes.ViewTabContextMenu) {
+				const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
+				for (let i = 0; i < payload.selectedViews.length; i++) {
+					const viewIdentity = payload.selectedViews[i];
+					const intentName = "CreateAppDefinition";
+					try {
+						const view = fin.View.wrapSync(viewIdentity as OpenFin.Identity);
+						const options = await view.getOptions();
+						const info = await view.getInfo();
+						const name = options.name;
+						const fdc3InteropApi =
+							options.fdc3InteropApi !== undefined &&
+							options.fdc3InteropApi !== null &&
+							options.fdc3InteropApi.length > 0
+								? options.fdc3InteropApi
+								: "1.2";
+						const preloads =
+							Array.isArray(options.preloadScripts) && options.preloadScripts.length > 0
+								? options.preloadScripts
+								: undefined;
+						const manifest = {
+							url: info.url,
+							fdc3InteropApi,
+							interop: options.interop,
+							customData: options.customData,
+							preloadScripts: preloads
+						};
+						const icons = [];
+						const favicons = info.favicons || [];
+						for (let f = 0; f < favicons.length; f++) {
+							icons.push({ src: favicons[f] });
+						}
+						const app = {
+							appId: name,
+							name,
+							title: info.title,
+							description: info.title,
+							manifestType: this._helpers.manifestTypes.inlineView.id,
+							manifest,
+							tags: [this._helpers.manifestTypes.view.id],
+							icons,
+							images: [],
+							publisher: "",
+							contactEmail: "",
+							supportEmail: "",
+							intents: []
+						};
+						const intent = {
+							name: intentName,
+							context: {
+								type: "openfin.app",
+								app
+							}
+						};
+						await brokerClient.fireIntent(intent);
+					} catch (error) {
+						this._logger.error(
+							`Error while trying to raise intent ${intentName} for view ${viewIdentity.name}`,
+							error
+						);
+					}
+				}
 			}
 		};
 

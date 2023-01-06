@@ -6,7 +6,6 @@ import type { ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
 let logger: Logger;
-let userSessionKey: string;
 let roleMapping: { [key: string]: ExampleUserRoleMapping };
 let definitionData: ModuleDefinition<ExampleEndpointOptions>;
 
@@ -33,7 +32,7 @@ function getRequestOptions(
 }
 
 function applyCurrentUserToApps(apps: PlatformApp[] = []): PlatformApp[] {
-	const currentUser = getCurrentUser(userSessionKey);
+	const currentUser = getCurrentUser();
 	if (
 		currentUser === null ||
 		roleMapping === undefined ||
@@ -65,7 +64,7 @@ function applyCurrentUserToApps(apps: PlatformApp[] = []): PlatformApp[] {
 }
 
 function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
-	const currentUser = getCurrentUser(userSessionKey);
+	const currentUser = getCurrentUser();
 	if (currentUser === null || roleMapping === undefined || roleMapping[currentUser.role] === undefined) {
 		return settings;
 	}
@@ -91,9 +90,12 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 					const endpointToUpdate = settings.endpointProvider.endpoints.find(
 						(endpointEntry) => endpointEntry.id === appEndpoints[i] && endpointEntry.type === "fetch"
 					);
-					endpointToUpdate.type = "module";
-					if (endpointToUpdate.type === "module") {
-						endpointToUpdate.typeId = definitionData.id;
+					if (endpointToUpdate !== undefined) {
+						endpointToUpdate.type = "module";
+						// this if condition check is here to make typescript happy with the endpoint so that typeId can be set
+						if (endpointToUpdate.type === "module") {
+							endpointToUpdate.typeId = definitionData.id;
+						}
 					}
 				}
 			}
@@ -102,11 +104,16 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 
 	if (
 		Array.isArray(settings?.themeProvider?.themes) &&
-		settings?.themeProvider?.themes.length > 0 &&
+		settings.themeProvider.themes.length > 0 &&
 		roleMapping[currentUser.role].preferredScheme !== undefined
 	) {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		settings.themeProvider.themes[0]["default"] = roleMapping[currentUser.role].preferredScheme;
+		const storedSchemePreference = `${fin.me.identity.uuid}-SelectedColorScheme`;
+		logger.warn(
+			"This is a demo module where we are clearing the locally stored scheme preference in order to show different scheme's light/dark based on user selection. This means that it will always be set to what is in the role mapping initially and not what it is set to locally on restart."
+		);
+		localStorage.removeItem(storedSchemePreference);
 	}
 
 	const excludeMenuActionIds = roleMapping[currentUser.role].excludeMenuAction;
@@ -114,9 +121,9 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 	if (Array.isArray(excludeMenuActionIds)) {
 		if (
 			Array.isArray(settings?.browserProvider?.globalMenu) &&
-			settings?.browserProvider?.globalMenu.length > 0
+			settings.browserProvider.globalMenu.length > 0
 		) {
-			for (let i = 0; i < settings?.browserProvider?.globalMenu.length; i++) {
+			for (let i = 0; i < settings.browserProvider.globalMenu.length; i++) {
 				const globalMenuActionId: string = settings.browserProvider.globalMenu[i]?.data?.action?.id;
 				if (excludeMenuActionIds.includes(globalMenuActionId)) {
 					settings.browserProvider.globalMenu[i].include = false;
@@ -124,11 +131,8 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 			}
 		}
 
-		if (
-			Array.isArray(settings?.browserProvider?.pageMenu) &&
-			settings?.browserProvider?.pageMenu.length > 0
-		) {
-			for (let i = 0; i < settings?.browserProvider?.pageMenu.length; i++) {
+		if (Array.isArray(settings?.browserProvider?.pageMenu) && settings.browserProvider.pageMenu.length > 0) {
+			for (let i = 0; i < settings.browserProvider.pageMenu.length; i++) {
 				const pageMenuActionId: string = settings.browserProvider.pageMenu[i]?.data?.action?.id;
 				if (excludeMenuActionIds.includes(pageMenuActionId)) {
 					settings.browserProvider.pageMenu[i].include = false;
@@ -136,11 +140,8 @@ function applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 			}
 		}
 
-		if (
-			Array.isArray(settings?.browserProvider?.viewMenu) &&
-			settings?.browserProvider?.viewMenu.length > 0
-		) {
-			for (let i = 0; i < settings?.browserProvider?.viewMenu.length; i++) {
+		if (Array.isArray(settings?.browserProvider?.viewMenu) && settings.browserProvider.viewMenu.length > 0) {
+			for (let i = 0; i < settings.browserProvider.viewMenu.length; i++) {
 				const viewMenuActionId: string = settings.browserProvider.viewMenu[i]?.data?.action?.id;
 				if (excludeMenuActionIds.includes(viewMenuActionId)) {
 					settings.browserProvider.viewMenu[i].include = false;
@@ -159,7 +160,6 @@ export async function initialize(
 ) {
 	logger = createLogger("ExampleAuthEndpoint");
 	logger.info("Was passed the following options", definition.data);
-	userSessionKey = definition?.data?.userSessionId;
 	roleMapping = definition?.data?.roleMapping;
 	definitionData = definition;
 }
