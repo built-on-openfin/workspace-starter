@@ -115,6 +115,15 @@ export async function getCurrentThemeId(): Promise<string> {
 	return themes[0].id ?? themes[0].label;
 }
 
+export async function getCurrentIconFolder(): Promise<string> {
+	const themes = await getThemes();
+	if (themes.length === 0) {
+		return "default";
+	}
+
+	return themes[0].iconFolder ?? themes[0].id ?? themes[0].label;
+}
+
 export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	const settings = await getSettings();

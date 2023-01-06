@@ -1524,6 +1524,9 @@
     "PlatformCustomThemeOptions": {
       "additionalProperties": false,
       "properties": {
+        "iconFolder": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -1552,6 +1555,9 @@
             "light",
             "dark"
           ],
+          "type": "string"
+        },
+        "iconFolder": {
           "type": "string"
         },
         "id": {

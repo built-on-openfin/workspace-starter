@@ -26,8 +26,12 @@ export enum ColorSchemeMode {
 	Dark = "dark"
 }
 
-export type PlatformCustomThemeOptions = CustomThemeOptions & { id: string };
-export type PlatformCustomThemeOptionsWithScheme = CustomThemeOptionsWithScheme & { id: string };
+export interface PlatformCustomThemeExtended {
+	id: string;
+	iconFolder?: string;
+}
+export type PlatformCustomThemeOptions = CustomThemeOptions & PlatformCustomThemeExtended;
+export type PlatformCustomThemeOptionsWithScheme = CustomThemeOptionsWithScheme & PlatformCustomThemeExtended;
 export type PlatformCustomTheme = PlatformCustomThemeOptions | PlatformCustomThemeOptionsWithScheme;
 
 export type PlatformCustomThemes = PlatformCustomTheme[];

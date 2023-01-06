@@ -11,7 +11,7 @@ import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
 import type { ToolbarButtonDefinition } from "./shapes/browser-shapes";
 import type { ColorSchemeMode } from "./shapes/theme-shapes";
-import { getCurrentColorSchemeMode, getCurrentThemeId } from "./themes";
+import { getCurrentColorSchemeMode, getCurrentIconFolder } from "./themes";
 
 let configToolbarButtons: ToolbarButtonDefinition[];
 let defaultToolbarButtons: ToolbarButton[];
@@ -44,12 +44,12 @@ export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
 	const availableToolbarButtons = await getConfigToolbarButtons();
 	const platform = getCurrentSync();
 
-	const themeId = await getCurrentThemeId();
+	const iconFolder = await getCurrentIconFolder();
 	const colorSchemeMode = await getCurrentColorSchemeMode();
 
 	for (const entry of availableToolbarButtons) {
 		if (entry.include && (await checkConditions(platform, entry.conditions))) {
-			defaultButtons.push(themeButton(entry.button, themeId, colorSchemeMode));
+			defaultButtons.push(themeButton(entry.button, iconFolder, colorSchemeMode));
 		}
 	}
 	defaultToolbarButtons = defaultButtons;
@@ -81,9 +81,9 @@ export async function updateToolbarButtons(
 			return false;
 		});
 		if (replacement) {
-			const themeId = await getCurrentThemeId();
+			const iconFolder = await getCurrentIconFolder();
 			const colorSchemeMode = await getCurrentColorSchemeMode();
-			buttons[index] = themeButton(replacement.button, themeId, colorSchemeMode);
+			buttons[index] = themeButton(replacement.button, iconFolder, colorSchemeMode);
 		}
 		return buttons;
 	}
@@ -99,7 +99,7 @@ export async function updateBrowserWindowButtonsColorScheme(
 
 	if (Array.isArray(currentToolbarOptions.buttons)) {
 		const updatedButtons = [];
-		const themeId = await getCurrentThemeId();
+		const iconFolder = await getCurrentIconFolder();
 		const colorSchemeMode = await getCurrentColorSchemeMode();
 
 		for (const button of currentToolbarOptions.buttons) {
@@ -112,7 +112,7 @@ export async function updateBrowserWindowButtonsColorScheme(
 						(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
 					);
 					if (configButton?.button.iconUrl) {
-						button.iconUrl = themeUrl(configButton.button.iconUrl, themeId, colorSchemeMode);
+						button.iconUrl = themeUrl(configButton.button.iconUrl, iconFolder, colorSchemeMode);
 					}
 				}
 			}
@@ -125,22 +125,22 @@ export async function updateBrowserWindowButtonsColorScheme(
 
 function themeButton(
 	button: ToolbarButton & { iconUrl?: string },
-	themeId: string,
+	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): ToolbarButton & { iconUrl?: string } {
 	// We need to duplicate the button, as we don't want to lose
 	// any placeholders in the iconUrl
 	const buttonCopy: ToolbarButton & { iconUrl?: string } = JSON.parse(JSON.stringify(button));
 
-	buttonCopy.iconUrl = themeUrl(buttonCopy.iconUrl, themeId, colorSchemeMode);
+	buttonCopy.iconUrl = themeUrl(buttonCopy.iconUrl, iconFolder, colorSchemeMode);
 
 	return buttonCopy;
 }
 
 function themeUrl(
 	url: string | undefined,
-	themeId: string,
+	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): string | undefined {
-	return url ? url.replace(/{theme}/g, themeId).replace(/{scheme}/g, colorSchemeMode) : undefined;
+	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode) : undefined;
 }

@@ -6,7 +6,7 @@ import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { BootstrapOptions, CustomSettings } from "../shapes";
-import { getCurrentColorSchemeMode, getCurrentThemeId } from "../themes";
+import { getCurrentColorSchemeMode, getCurrentIconFolder } from "../themes";
 
 const logger = createLogger("Dock");
 
@@ -60,7 +60,7 @@ async function calculateButtons(
 	registeredBootstrapOptions = registeredBootstrapOptions ?? bootstrapOptions;
 
 	const buttons: DockButton[] = [];
-	const themeId = await getCurrentThemeId();
+	const iconFolder = await getCurrentIconFolder();
 	const colorSchemeMode = await getCurrentColorSchemeMode();
 
 	if (Array.isArray(settings.dockProvider.apps)) {
@@ -74,7 +74,7 @@ async function calculateButtons(
 					for (const dockApp of dockApps) {
 						buttons.push({
 							tooltip: appButton.tooltip ?? dockApp.title,
-							iconUrl: themeUrl(appButton.iconUrl ?? getAppIcon(dockApp), themeId, colorSchemeMode),
+							iconUrl: themeUrl(appButton.iconUrl ?? getAppIcon(dockApp), iconFolder, colorSchemeMode),
 							action: {
 								id: ACTION_IDS.launchApp,
 								customData: {
@@ -112,7 +112,7 @@ async function calculateButtons(
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: appButton.tooltip,
-						iconUrl: themeUrl(iconUrl, themeId, colorSchemeMode),
+						iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
 						options
 					});
 				}
@@ -160,7 +160,7 @@ async function calculateButtons(
 					buttons.push({
 						type: DockButtonNames.DropdownButton,
 						tooltip: dockButton.tooltip,
-						iconUrl: themeUrl(dockButton.iconUrl, themeId, colorSchemeMode),
+						iconUrl: themeUrl(dockButton.iconUrl, iconFolder, colorSchemeMode),
 						options
 					});
 				}
@@ -186,7 +186,7 @@ async function calculateButtons(
 				buttons.push({
 					type: DockButtonNames.ActionButton,
 					tooltip,
-					iconUrl: themeUrl(iconUrl, themeId, colorSchemeMode),
+					iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
 					action: dockButton.appId
 						? {
 								id: ACTION_IDS.launchApp,
@@ -236,8 +236,10 @@ async function updateDockColorScheme(): Promise<void> {
 
 function themeUrl(
 	url: string | undefined,
-	themeId: string,
+	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): string | undefined {
-	return url ? url.replace(/{theme}/g, themeId).replace(/{scheme}/g, colorSchemeMode as string) : undefined;
+	return url
+		? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode as string)
+		: undefined;
 }
