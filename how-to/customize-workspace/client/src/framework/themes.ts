@@ -163,12 +163,14 @@ export function validateThemes(themes: PlatformCustomThemes): PlatformCustomThem
 
 			// eslint-disable-next-line @typescript-eslint/dot-notation
 			if (themes[i]["palette"] !== undefined || themes[i]["palettes"] !== undefined) {
+				let isValid = false;
 				if ("palette" in themeToValidate) {
 					themeToValidate.palette = validatePalette(
 						themeToValidate.palette,
 						themeToValidate.label,
 						DEFAULT_PALETTES[ColorSchemeMode.Dark]
 					);
+					isValid = themeToValidate.palette !== undefined;
 				} else {
 					themeToValidate.palettes[ColorSchemeMode.Dark] = validatePalette(
 						themeToValidate.palettes[ColorSchemeMode.Dark],
@@ -180,15 +182,20 @@ export function validateThemes(themes: PlatformCustomThemes): PlatformCustomThem
 						themeToValidate.label,
 						DEFAULT_PALETTES[ColorSchemeMode.Light]
 					);
+					isValid =
+						themeToValidate.palettes[ColorSchemeMode.Dark] !== undefined &&
+						themeToValidate.palettes[ColorSchemeMode.Light] !== undefined;
 				}
 
-				if (hasScheme(themes[i], preferredColorScheme)) {
-					logger.info(
-						`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
-					);
-					platformThemes.unshift(themes[i]);
-				} else {
-					platformThemes.push(themes[i]);
+				if (isValid) {
+					if (hasScheme(themes[i], preferredColorScheme)) {
+						logger.info(
+							`Found a theme that matches system color scheme preferences and making it the default theme: ${preferredColorScheme}`
+						);
+						platformThemes.unshift(themes[i]);
+					} else {
+						platformThemes.push(themes[i]);
+					}
 				}
 			}
 		}
