@@ -159,9 +159,11 @@
 		"themeProvider": {
 			"themes": [
 				{
-					"id": "default",
+					"id": "fdc3-light",
 					"label": "Light",
 					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/theme-scheme-consistency/customize-workspace/favicon-32x32.png",
+					"default": "light",
+					"iconFolder": "default",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,

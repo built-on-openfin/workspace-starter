@@ -485,6 +485,7 @@
 		"themeProvider": {
 			"themes": [
 				{
+					"id": "default",
 					"label": "Default",
 					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/theme-scheme-consistency/customize-workspace/favicon.ico",
 					"default": "dark",
