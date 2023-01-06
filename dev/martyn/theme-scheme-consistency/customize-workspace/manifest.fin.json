@@ -446,7 +446,7 @@
 				{
 					"label": "Default",
 					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/theme-scheme-consistency/customize-workspace/favicon.ico",
-					"default": "light",
+					"default": "dark",
 					"palettes": {
 						"light": {
 							"brandPrimary": "#0A76D3",
