@@ -25,6 +25,11 @@
 											"interop": {
 												"currentContextGroup": "orange"
 											},
+											"preloadScripts": [
+												{
+													"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+												}
+											],
 											"permissions": {
 												"System": {
 													"openUrlWithBrowser": {
@@ -59,6 +64,11 @@
 													"interop": {
 														"currentContextGroup": "orange"
 													},
+													"preloadScripts": [
+														{
+															"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+														}
+													],
 													"componentName": "view"
 												}
 											},
@@ -73,6 +83,11 @@
 													"interop": {
 														"currentContextGroup": "orange"
 													},
+													"preloadScripts": [
+														{
+															"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+														}
+													],
 													"componentName": "view"
 												}
 											},
@@ -87,6 +102,11 @@
 													"interop": {
 														"currentContextGroup": "orange"
 													},
+													"preloadScripts": [
+														{
+															"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+														}
+													],
 													"componentName": "view"
 												}
 											}
@@ -115,6 +135,11 @@
 															"interop": {
 																"currentContextGroup": "orange"
 															},
+															"preloadScripts": [
+																{
+																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+																}
+															],
 															"componentName": "view"
 														}
 													}
@@ -135,6 +160,11 @@
 															"interop": {
 																"currentContextGroup": "orange"
 															},
+															"preloadScripts": [
+																{
+																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+																}
+															],
 															"componentName": "view"
 														}
 													},
@@ -149,6 +179,11 @@
 															"interop": {
 																"currentContextGroup": "orange"
 															},
+															"preloadScripts": [
+																{
+																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+																}
+															],
 															"componentName": "view"
 														}
 													},
@@ -163,6 +198,11 @@
 															"interop": {
 																"currentContextGroup": "orange"
 															},
+															"preloadScripts": [
+																{
+																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+																}
+															],
 															"componentName": "view"
 														}
 													}

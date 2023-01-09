@@ -1,4 +1,9 @@
 {
 	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/views/contact/call-app/index.html",
-	"fdc3InteropApi": "1.2"
+	"fdc3InteropApi": "1.2",
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
+		}
+	]
 }
