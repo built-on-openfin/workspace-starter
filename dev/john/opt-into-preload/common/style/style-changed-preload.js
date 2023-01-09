@@ -37,9 +37,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	try {
 		console.log('Style Change Preload activated');
 
-		if(window.fin !== undefined &&
+		if (
+			window.fin !== undefined &&
 			fin.me.interop !== undefined &&
-			fin.me.interop.joinSessionContextGroup !== undefined) {
+			fin.me.interop.joinSessionContextGroup !== undefined
+		) {
 			const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform/events');
 
 			appSessionContextGroup.addContextHandler((context) => {
@@ -54,6 +56,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 			});
 		}
 	} catch (err) {
-		console.error("Error encountered while listening for platform events via interop.", err);
+		console.error('Error encountered while listening for platform events via interop.', err);
 	}
 });

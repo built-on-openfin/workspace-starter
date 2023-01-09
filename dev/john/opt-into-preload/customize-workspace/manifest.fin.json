@@ -43,13 +43,7 @@
 				}
 			}
 		},
-		"defaultViewOptions": {
-			"preloadScripts": [
-				{
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/style/style-changed-preload.js"
-				}
-			]
-		}
+		"defaultViewOptions": {}
 	},
 	"snapshot": {
 		"windows": []
