@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Platform Window</title>
+		<script type="module" src="https://built-on-openfin.github.io/workspace-starter/dev/john/opt-into-preload/common/lib/wc-fin/wc-fin.esm.js"></script>
+		<script type="module" src="../js/platform-window.bundle.js"></script>
+	</head>
+
+	<body>
+		<div id="of-frame-main">
+			<title-bar id="title-bar">
+				<!-- component options available here: https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker -->
+				<fin-context-group-picker show-list-on-click="false"></fin-context-group-picker>
+				<div class="title-bar-draggable">
+					<p id="title"></p>
+				</div>
+				<div id="buttons-wrapper">
+					<div class="button" title="Minimize Window" id="minimize-button"></div>
+					<div class="button" title="Maximize Window" id="expand-button"></div>
+					<div class="button" title="Close Window" id="close-button"></div>
+				</div>
+			</title-bar>
+			<div id="body-container">
+				<div id="layout-container"></div>
+			</div>
+		</div>
+	</body>
+</html>
