@@ -12,7 +12,7 @@ import {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
+import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { getAppIcon, getApps } from "../apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { launch } from "../launch";
@@ -22,38 +22,25 @@ import { getPageBounds, launchPage } from "../platform/browser";
 import { getSettings } from "../settings";
 import type { PlatformApp } from "../shapes/app-shapes";
 import { isShareEnabled, share } from "../share";
-import {
-	getCurrentWorkspaceTemplate,
-	getPageTemplate,
-	getWorkspaceTemplate,
-	PAGE_ACTION_IDS,
-	WORKSPACE_ACTION_IDS
-} from "../template";
+import { getPageTemplate, PAGE_ACTION_IDS } from "../template";
 import { getCurrentColorSchemeMode } from "../themes";
-import { randomUUID } from "../uuid";
-import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "../workspace";
 
 const logger = createLogger("Home");
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
 const HOME_ACTION_SHARE_PAGE = "Share Page";
-const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
-const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
-const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
 
 const HOME_TAG_FILTERS = "tags";
 const HOME_SOURCE_FILTERS = "sources";
 
 const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 
-const HOME_WORKSPACES_FILTER = "Workspaces";
 const HOME_PAGES_FILTER = "Pages";
 const HOME_APPS_FILTER = "Apps";
 
 let registrationInfo: HomeRegistration | undefined;
 let enablePageIntegration: boolean = true;
-let enableWorkspaceIntegration: boolean = true;
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
@@ -198,77 +185,6 @@ async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchR
 	return pageResults;
 }
 
-async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Promise<HomeSearchResult[]> {
-	const settings = await getSettings();
-
-	let workspaceIcon;
-	if (settings?.platformProvider?.rootUrl !== undefined) {
-		const colorScheme = await getCurrentColorSchemeMode();
-		workspaceIcon = `${settings.platformProvider.rootUrl}/common/icons/${colorScheme}/workspaces.svg`;
-	}
-	const shareEnabled = isShareEnabled();
-	const workspaceTemplate = getWorkspaceTemplate(shareEnabled);
-
-	const currentWorkspaceTemplate = getCurrentWorkspaceTemplate();
-
-	const workspaceResults: HomeSearchResult[] = [];
-	if (Array.isArray(workspaces)) {
-		const platform = getCurrentSync();
-		const currentWorkspace = await platform.getCurrentWorkspace();
-		const currentWorkspaceId = currentWorkspace?.workspaceId;
-
-		for (let i = 0; i < workspaces.length; i++) {
-			const entryWorkspaceId = workspaces[i].workspaceId;
-			const actions =
-				entryWorkspaceId === currentWorkspaceId
-					? []
-					: (shareEnabled
-							? [
-									{
-										name: HOME_ACTION_SHARE_WORKSPACE,
-										hotkey: "CmdOrCtrl+Shift+S"
-									}
-							  ]
-							: []
-					  ).concat([
-							{
-								name: HOME_ACTION_DELETE_WORKSPACE,
-								hotkey: "CmdOrCtrl+Shift+D"
-							},
-							{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
-					  ]);
-			const layout =
-				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
-			const instructions =
-				currentWorkspaceId === workspaces[i].workspaceId
-					? "This is the currently active workspace. You can use the Browser menu to update/rename this workspace"
-					: "Use the buttons below to interact with your saved Workspace:";
-			const entry: HomeSearchResult = {
-				key: entryWorkspaceId,
-				title: workspaces[i].title,
-				label: "Workspace",
-				icon: workspaceIcon,
-				actions,
-				data: { tags: ["workspace"], workspaceId: entryWorkspaceId },
-				template: CLITemplate.Custom,
-				templateContent: {
-					layout,
-					data: {
-						title: workspaces[i].title,
-						instructions,
-						openText: "Launch",
-						deleteText: "Delete",
-						shareText: "Share"
-					}
-				}
-			};
-
-			workspaceResults.push(entry);
-		}
-	}
-	return workspaceResults;
-}
-
 async function getResults(
 	queryLower: string,
 	queryMinLength,
@@ -279,7 +195,6 @@ async function getResults(
 	const platform = getCurrentSync();
 	const apps = await getApps({ private: false });
 	let pageSearchEntries = [];
-	let workspaceSearchEntries = [];
 	let appSearchEntries = [];
 
 	if (
@@ -290,25 +205,13 @@ async function getResults(
 		pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
 	}
 
-	if (
-		enableWorkspaceIntegration &&
-		(selectedSources.length === 0 || selectedSources.includes(HOME_WORKSPACES_FILTER))
-	) {
-		const workspaces = await getWorkspaces();
-		workspaceSearchEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
-	}
-
 	const tags: string[] = [];
 
 	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
 		appSearchEntries = mapAppEntriesToSearchEntries(apps);
 	}
 
-	const initialResults: HomeSearchResult[] = [
-		...appSearchEntries,
-		...pageSearchEntries,
-		...workspaceSearchEntries
-	];
+	const initialResults: HomeSearchResult[] = [...appSearchEntries, ...pageSearchEntries];
 
 	if (initialResults.length > 0) {
 		const finalResults = initialResults.filter((entry) => {
@@ -421,7 +324,6 @@ export async function register(): Promise<HomeRegistration> {
 		const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
 		const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
 		enablePageIntegration = settings?.homeProvider?.enablePageIntegration ?? true;
-		enableWorkspaceIntegration = settings?.homeProvider?.enableWorkspaceIntegration ?? true;
 		const enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
 		let lastResponse: CLISearchListenerResponse;
 		let filters: CLIFilter[];
@@ -432,49 +334,6 @@ export async function register(): Promise<HomeRegistration> {
 		): Promise<CLISearchResponse> => {
 			try {
 				const queryLower = request.query.toLowerCase();
-
-				if (enableWorkspaceIntegration && queryLower.startsWith("/w ")) {
-					const workspaces = await getWorkspaces();
-					const title = queryLower.replace("/w ", "");
-
-					const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
-					if (foundMatch !== undefined && foundMatch !== null) {
-						// we have a match
-						return {
-							results: [
-								{
-									key: "WORKSPACE-EXISTS",
-									title: `Workspace ${foundMatch.title} already exists.`,
-									actions: [],
-									data: {
-										tags: ["workspace"],
-										workspaceId: foundMatch.workspaceId
-									}
-								}
-							]
-						};
-					}
-					if (lastResponse !== undefined) {
-						lastResponse.close();
-					}
-					lastResponse = response;
-					lastResponse.open();
-					return {
-						results: [
-							{
-								key: "WORKSPACE-SAVE",
-								title: `Save Current Workspace as ${title}`,
-								label: "Suggestion",
-								actions: [{ name: "Save Workspace", hotkey: "Enter" }],
-								data: {
-									tags: ["workspace"],
-									workspaceId: randomUUID(),
-									workspaceTitle: title
-								}
-							}
-						]
-					};
-				}
 
 				filters = request?.context?.selectedFilters;
 				if (lastResponse !== undefined) {
@@ -522,16 +381,17 @@ export async function register(): Promise<HomeRegistration> {
 					if (enablePageIntegration) {
 						sourceFilterOptions.push(HOME_PAGES_FILTER);
 					}
-					if (enableWorkspaceIntegration) {
-						sourceFilterOptions.push(HOME_WORKSPACES_FILTER);
-					}
 				}
 
 				const integrationResults = await getSearchResults(
 					request.query,
 					filters,
 					lastResponse,
-					selectedSourceFilterOptions
+					selectedSourceFilterOptions,
+					{
+						queryMinLength,
+						queryAgainst
+					}
 				);
 				if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
 					searchResults.results = searchResults.results.concat(integrationResults.results);
@@ -587,59 +447,9 @@ export async function register(): Promise<HomeRegistration> {
 
 				if (!handled && result.action.trigger === "user-action") {
 					const data: {
-						workspaceId?: string;
-						workspaceTitle?: string;
-						workspaceDescription?: string;
 						pageId?: string;
 					} & PlatformApp = result.data;
-					if (enableWorkspaceIntegration && data.workspaceId !== undefined) {
-						if (data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
-							await saveWorkspace(data.workspaceId, data.workspaceTitle);
-							if (lastResponse !== undefined && lastResponse !== null) {
-								lastResponse.revoke(result.key);
-								lastResponse.respond([
-									{
-										key: "WORKSPACE-SAVED",
-										title: `Workspace ${data.workspaceTitle} saved.`,
-										actions: [],
-										data: {
-											tags: ["workspace"],
-											workspaceId: data.workspaceId,
-											workspaceTitle: data.workspaceTitle,
-											workspaceDescription: data.workspaceDescription
-										}
-									}
-								]);
-							}
-						} else if (data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
-							if (lastResponse !== undefined && lastResponse !== null) {
-								lastResponse.revoke(result.key);
-							}
-						} else if (data.workspaceId !== undefined) {
-							const workspaceAction = result.action.name;
-							if (
-								workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-								workspaceAction === WORKSPACE_ACTION_IDS.launch
-							) {
-								await launchWorkspace(data.workspaceId);
-							} else if (
-								workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-								workspaceAction === WORKSPACE_ACTION_IDS.delete
-							) {
-								await deleteWorkspace(data.workspaceId);
-								if (lastResponse !== undefined && lastResponse !== null) {
-									lastResponse.revoke(result.key);
-								}
-							} else if (
-								workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
-								workspaceAction === WORKSPACE_ACTION_IDS.share
-							) {
-								await share({ workspaceId: data.workspaceId });
-							} else {
-								logger.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
-							}
-						}
-					} else if (enablePageIntegration && data.pageId !== undefined) {
+					if (enablePageIntegration && data.pageId !== undefined) {
 						const pageAction = result.action.name;
 						if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_ACTION_IDS.launch) {
 							const platform = getCurrentSync();

@@ -89,11 +89,7 @@ If you use the live launch section on the [Main Page](../README.md) and launch t
 
 ## Can I Manage Workspaces From Home?
 
-We include support for doing workspace management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [How To Customize Home](./how-to-customize-home.md)).
-
-```json
-enableWorkspaceIntegration?: boolean
-```
+We include support for doing workspace management from home in customize workspace. It is enabled by default as an integration provider.
 
 ![Home Workspace Management](./assets/home-workspace-management.png)
 

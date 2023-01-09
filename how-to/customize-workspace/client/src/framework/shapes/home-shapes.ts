@@ -24,13 +24,6 @@ export interface HomeProviderOptions {
 	 * to plug in your own implementation using the integration provider. */
 	enablePageIntegration?: boolean;
 	/**
-	 * Default is true. Enable our default workspace integration in home that
-	 * lets you save a workspace by typing /w workspace name as well as discovering
-	 * and launching and deleting workspaces. Disable if you want to use your own
-	 * implementation using the integration provider.
-	 */
-	enableWorkspaceIntegration?: boolean;
-	/**
 	 * Options for the source filters displayed in home.
 	 */
 	sourceFilter?: {

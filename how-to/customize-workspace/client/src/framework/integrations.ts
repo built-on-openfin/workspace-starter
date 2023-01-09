@@ -8,6 +8,8 @@ import {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
+import { getCurrentSync } from "@openfin/workspace-platform";
+import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
 import { launchSnapshot } from "./launch";
 import { createLogger } from "./logger-provider";
@@ -27,8 +29,10 @@ import type {
 	IntegrationProviderOptions
 } from "./shapes/integrations-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("Integrations");
 
@@ -73,7 +77,13 @@ export async function init(
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 			setSearchQuery: homeRegistration.setSearchQuery
 				? async (query) => homeRegistration.setSearchQuery(query)
-				: undefined
+				: undefined,
+			condition: async (conditionId) => {
+				const platform = getCurrentSync();
+				return checkCondition(platform, conditionId);
+			},
+			share,
+			randomUUID
 		};
 
 		// Map the old moduleUrl properties to url
@@ -119,13 +129,18 @@ export async function closedown(): Promise<void> {
  * @param filters The filters to apply to the search results.
  * @param lastResponse The last search response used for updating existing results.
  * @param selectedSources Selected sources filters list.
+ * @param options Options for the search query.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
 	lastResponse: HomeSearchListenerResponse,
-	selectedSources: string[]
+	selectedSources: string[],
+	options: {
+		queryMinLength: number;
+		queryAgainst: string[];
+	}
 ): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
 	const homeResponse: HomeSearchResponse & { sourceFilters?: string[] } = {
 		results: [],
@@ -156,7 +171,7 @@ export async function getSearchResults(
 				selectedSources.length === 0 ||
 				selectedSources.includes(integrationModule.definition.title))
 		) {
-			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse));
+			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse, options));
 		}
 		if (!integrationModule.definition.excludeFromSourceFilter) {
 			sourceFilters.push(integrationModule.definition.title);

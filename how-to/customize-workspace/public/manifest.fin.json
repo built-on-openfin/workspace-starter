@@ -776,6 +776,14 @@
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
+					"id": "workspaces",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Workspaces",
+					"description": "Manage workspaces",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js"
+				},
+				{
 					"id": "salesforce",
 					"icon": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",

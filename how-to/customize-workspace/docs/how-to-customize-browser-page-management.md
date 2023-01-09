@@ -120,11 +120,7 @@ If you use the live launch section on the [Main Page](../README.md) and launch t
 
 ## Can I Manage Pages From Home?
 
-We include support for doing page management from home in customize workspace. It is enabled by default but can be controlled through the home provider (see [How To Customize Home](./how-to-customize-home.md)).
-
-```json
-enablePageIntegration?: boolean
-```
+We include support for doing page management from home in customize workspace. It is enabled by default as an integration provider.
 
 ![Home Page Management](./assets/home-page-management.png)
 

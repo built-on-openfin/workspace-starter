@@ -11,7 +11,12 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
-import { getCurrentColorSchemeMode, getCurrentPalette, getCurrentThemeId } from "./themes";
+import {
+	getCurrentColorSchemeMode,
+	getCurrentPalette,
+	getCurrentIconFolder,
+	getCurrentThemeId
+} from "./themes";
 import { randomUUID } from "./uuid";
 
 const logger = createLogger("Modules");
@@ -203,6 +208,7 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		sessionId,
 		getCurrentThemeId,
+		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
 		subscribeLifecycleEvent,

@@ -53,21 +53,6 @@ For example, to only show results after a minimum of 3 characters have been ente
 }
 ```
 
-There are some additional flags in the home configuration which can be used to turn on and off specific features.
-
-`enablePageIntegration` will enable listing, launching, deleting and sharing commands for interacting with Pages.
-`enableWorkspaceIntegration` will enable listing, launching, deleting and sharing commands for interacting with Workspaces and also the ability to save the current layout as a workspace using the `/w` command.
-
-Sharing for pages and workspaces will only be available if the `platformProvider.sharing` flag is enabled.
-
-```json
-"homeProvider": {
-    ...
-    "enablePageIntegration": true,
-    "enableWorkspaceIntegration": true
-}
-```
-
 ## Sources And Results
 
 The sources that provide the results for the home components fall into 3 categories, `apps`, `commands` and `search` results.
@@ -90,7 +75,7 @@ To aid in reducing the number of results returned from the different sources we 
 
 ![Sources Filter](./assets/home-sources-filter.png)
 
-The filter will show `Apps`, `Pages` (if `enablePageIntegration` is `true`), `Workspaces` (if `enableWorkspaceIntegration` is `true`) and an entry for each integration (can be disabled per integration by setting `excludeFromSourceFilter` to `true` in the individual integrations configuration).
+The filter will show `Apps`, `Pages` (if `Pages` integration is enabled), `Workspaces` (if `Workspaces` integration is enabled) and an entry for each integration (can be disabled per integration by setting `excludeFromSourceFilter` to `true` in the individual integrations configuration).
 
 Options for the source filter are set in the `homeProvider.sourceFilter` configuration as follows.
 

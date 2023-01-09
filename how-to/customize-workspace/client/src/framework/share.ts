@@ -5,7 +5,6 @@ import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
 import { launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
-import { getWorkspace } from "./workspace";
 
 const logger = createLogger("Share");
 
@@ -206,7 +205,8 @@ async function saveSharedWorkspace(workspaceId?: string) {
 		const platform = getCurrentSync();
 		snapshot = await platform.getSnapshot();
 	} else {
-		const savedWorkspace = await getWorkspace(workspaceId);
+		const platform = getCurrentSync();
+		const savedWorkspace = await platform.Storage.getWorkspace(workspaceId);
 		if (savedWorkspace !== null) {
 			snapshot = savedWorkspace.snapshot;
 		}
