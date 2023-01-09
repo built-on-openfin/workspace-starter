@@ -50,12 +50,6 @@ export class WorkspacesProvider implements IntegrationModule {
 	private static readonly _ACTION_SAVE_WORKSPACE = "Save Workspace";
 
 	/**
-	 * The key to use for a saved a workspace.
-	 * @internal
-	 */
-	private static readonly _ACTION_SAVED_WORKSPACE = "Saved Workspace";
-
-	/**
 	 * The key to use for a workspace exists.
 	 * @internal
 	 */
@@ -187,13 +181,17 @@ export class WorkspacesProvider implements IntegrationModule {
 
 		let workspaceResults: HomeSearchResult[] = [];
 
-		if (query.length >= options.queryMinLength && Array.isArray(workspaces)) {
+		if (Array.isArray(workspaces)) {
 			const currentWorkspace = await platform.getCurrentWorkspace();
 			const currentWorkspaceId = currentWorkspace?.workspaceId;
 			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
 
 			workspaceResults = workspaces
-				.filter((ws) => ws.title.toLowerCase().includes(queryLower))
+				.filter(
+					(pg) =>
+						query.length === 0 ||
+						(query.length >= options.queryMinLength && pg.title.toLowerCase().includes(queryLower))
+				)
 				.map((ws) =>
 					this.getWorkspaceTemplate(
 						ws.workspaceId,
@@ -226,7 +224,6 @@ export class WorkspacesProvider implements IntegrationModule {
 			const data: {
 				workspaceId?: string;
 				workspaceTitle?: string;
-				workspaceDescription?: string;
 			} = result.data;
 
 			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
@@ -238,7 +235,19 @@ export class WorkspacesProvider implements IntegrationModule {
 
 				if (result.key === WorkspacesProvider._ACTION_SAVE_WORKSPACE) {
 					lastResponse.revoke(result.key);
-					await this.saveWorkspace(data.workspaceId, data.workspaceTitle);
+
+					const platform = getCurrentSync();
+					const snapshot = await platform.getSnapshot();
+					const currentWorkspace = await platform.getCurrentWorkspace();
+					const currentMetaData = currentWorkspace?.metadata;
+
+					const workspace = {
+						workspaceId: data.workspaceId,
+						title: data.workspaceTitle,
+						metadata: currentMetaData,
+						snapshot
+					};
+					await platform.Storage.saveWorkspace(workspace);
 
 					const savedTemplate = this.getWorkspaceTemplate(
 						data.workspaceId,
@@ -254,7 +263,10 @@ export class WorkspacesProvider implements IntegrationModule {
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === WorkspacesProvider._ACTION_LAUNCH_WORKSPACE) {
 					lastResponse.revoke(result.key);
-					await this.launchWorkspace(data.workspaceId);
+					const platform = getCurrentSync();
+					const workspace = await platform.Storage.getWorkspace(data.workspaceId);
+					await platform.applyWorkspace(workspace);
+
 					const savedTemplate = this.getWorkspaceTemplate(
 						data.workspaceId,
 						data.workspaceTitle,
@@ -266,7 +278,8 @@ export class WorkspacesProvider implements IntegrationModule {
 
 					lastResponse.respond([savedTemplate]);
 				} else if (result.action.name === WorkspacesProvider._ACTION_DELETE_WORKSPACE) {
-					await this.deleteWorkspace(data.workspaceId);
+					const platform = getCurrentSync();
+					await platform.Storage.deleteWorkspace(data.workspaceId);
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === WorkspacesProvider._ACTION_SHARE_WORKSPACE) {
 					await this._integrationHelpers.share({ workspaceId: data.workspaceId });
@@ -481,31 +494,5 @@ export class WorkspacesProvider implements IntegrationModule {
 				}
 			]
 		};
-	}
-
-	private async saveWorkspace(workspaceId: string, title: string): Promise<void> {
-		const platform = getCurrentSync();
-		const snapshot = await platform.getSnapshot();
-		const currentWorkspace = await platform.getCurrentWorkspace();
-		const currentMetaData = currentWorkspace?.metadata;
-
-		const workspace = {
-			workspaceId,
-			title,
-			metadata: currentMetaData,
-			snapshot
-		};
-		await platform.Storage.saveWorkspace(workspace);
-	}
-
-	private async launchWorkspace(workspaceId: string): Promise<void> {
-		const platform = getCurrentSync();
-		const workspace = await platform.Storage.getWorkspace(workspaceId);
-		await platform.applyWorkspace(workspace);
-	}
-
-	private async deleteWorkspace(workspaceId: string): Promise<void> {
-		const platform = getCurrentSync();
-		await platform.Storage.deleteWorkspace(workspaceId);
 	}
 }

@@ -12,35 +12,302 @@ import {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { getAppIcon, getApps } from "../apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
-import { getPageBounds, launchPage } from "../platform/browser";
 import { getSettings } from "../settings";
 import type { PlatformApp } from "../shapes/app-shapes";
-import { isShareEnabled, share } from "../share";
-import { getPageTemplate, PAGE_ACTION_IDS } from "../template";
-import { getCurrentColorSchemeMode } from "../themes";
 
 const logger = createLogger("Home");
-
-const HOME_ACTION_DELETE_PAGE = "Delete Page";
-const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
-const HOME_ACTION_SHARE_PAGE = "Share Page";
 
 const HOME_TAG_FILTERS = "tags";
 const HOME_SOURCE_FILTERS = "sources";
 
 const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 
-const HOME_PAGES_FILTER = "Pages";
 const HOME_APPS_FILTER = "Apps";
 
 let registrationInfo: HomeRegistration | undefined;
-let enablePageIntegration: boolean = true;
+let queryMinLength = 3;
+let queryAgainst = ["title"];
+let enableSourceFilter = true;
+let lastResponse: CLISearchListenerResponse;
+let sourceFilterLabel = HOME_SOURCE_DEFAULT_FILTER_LABEL;
+
+export async function register(): Promise<HomeRegistration> {
+	if (!registrationInfo) {
+		logger.info("Initializing home");
+		const settings = await getSettings();
+		if (
+			settings.homeProvider === undefined ||
+			settings.homeProvider.id === undefined ||
+			settings.homeProvider.title === undefined
+		) {
+			logger.warn(
+				"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
+			);
+			return null;
+		}
+
+		queryMinLength = settings?.homeProvider?.queryMinLength ?? queryMinLength;
+		queryAgainst = settings?.homeProvider?.queryAgainst ?? queryAgainst;
+		enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? enableSourceFilter);
+		sourceFilterLabel = settings?.homeProvider?.sourceFilter?.label ?? sourceFilterLabel;
+
+		const cliProvider: CLIProvider = {
+			title: settings.homeProvider.title,
+			id: settings.homeProvider.id,
+			icon: settings.homeProvider.icon,
+			onUserInput,
+			onResultDispatch: onSelection,
+			dispatchFocusEvents: true
+		};
+
+		registrationInfo = await Home.register(cliProvider);
+		logger.info("Version:", registrationInfo);
+		logger.info("Home provider initialized");
+	}
+
+	return registrationInfo;
+}
+
+export async function show() {
+	return Home.show();
+}
+
+export async function hide() {
+	return Home.hide();
+}
+
+export async function deregister() {
+	if (registrationInfo) {
+		registrationInfo = undefined;
+		const settings = await getSettings();
+		return Home.deregister(settings.homeProvider.id);
+	}
+	logger.warn("Unable to deregister home as there is an indication it was never registered");
+}
+
+async function onUserInput(
+	request: CLISearchListenerRequest,
+	response: CLISearchListenerResponse
+): Promise<CLISearchResponse> {
+	try {
+		const filters: CLIFilter[] = request?.context?.selectedFilters;
+
+		if (lastResponse !== undefined) {
+			lastResponse.close();
+		}
+		lastResponse = response;
+		lastResponse.open();
+
+		const queryLower = request.query.toLowerCase();
+
+		if (queryLower === "?") {
+			const integrationHelpSearchEntries = await getHelpSearchEntries();
+			const searchResults = {
+				results: integrationHelpSearchEntries,
+				context: {
+					filters: []
+				}
+			};
+			return searchResults;
+		}
+
+		let selectedSourceFilterOptions: string[] = [];
+		if (enableSourceFilter && filters) {
+			const sourceFilter = filters.find((f) => f.id === HOME_SOURCE_FILTERS);
+			if (sourceFilter) {
+				if (Array.isArray(sourceFilter.options)) {
+					selectedSourceFilterOptions = sourceFilter.options.filter((o) => o.isSelected).map((o) => o.value);
+				} else if (sourceFilter.options.isSelected) {
+					selectedSourceFilterOptions.push(sourceFilter.options.value);
+				}
+			}
+		}
+
+		const searchResults = await getResults(queryLower, filters, selectedSourceFilterOptions);
+
+		let sourceFilterOptions: string[] = [];
+		if (enableSourceFilter) {
+			sourceFilterOptions.push(HOME_APPS_FILTER);
+		}
+
+		const integrationResults = await getSearchResults(
+			request.query,
+			filters,
+			lastResponse,
+			selectedSourceFilterOptions,
+			{
+				queryMinLength,
+				queryAgainst
+			}
+		);
+		if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
+			searchResults.results = searchResults.results.concat(integrationResults.results);
+		}
+		if (Array.isArray(integrationResults.context.filters) && integrationResults.context.filters.length > 0) {
+			searchResults.context.filters = searchResults.context.filters.concat(
+				integrationResults.context.filters
+			);
+		}
+
+		if (Array.isArray(integrationResults.sourceFilters) && integrationResults.sourceFilters.length > 0) {
+			sourceFilterOptions = sourceFilterOptions.concat(integrationResults.sourceFilters);
+		}
+
+		if (enableSourceFilter && sourceFilterOptions.length > 0) {
+			searchResults.context = searchResults.context ?? {};
+			searchResults.context.filters = searchResults.context.filters ?? [];
+			searchResults.context.filters.push({
+				id: HOME_SOURCE_FILTERS,
+				title: sourceFilterLabel,
+				options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
+			});
+		}
+
+		// Remove any empty filter lists as these can cause the UI to continually
+		// expand and collapse as you type
+		const finalFilters = [];
+		if (Array.isArray(searchResults.context?.filters)) {
+			for (const filter of searchResults.context.filters) {
+				if (Array.isArray(filter.options) && filter.options.length > 0) {
+					finalFilters.push(filter);
+				}
+			}
+		}
+		if (finalFilters.length > 0) {
+			searchResults.context.filters = finalFilters;
+		}
+
+		return searchResults;
+	} catch (err) {
+		logger.error("Exception while getting search list results", err);
+	}
+
+	return { results: [] };
+}
+
+async function onSelection(result: HomeDispatchedSearchResult) {
+	if (result.data !== undefined) {
+		const handled = await itemSelection(result, lastResponse);
+
+		if (!handled && result.action.trigger === "user-action") {
+			await launch(result.data as PlatformApp);
+		}
+	} else {
+		logger.warn("Unable to execute result without data being passed");
+	}
+}
+
+async function getResults(
+	queryLower: string,
+	filters: CLIFilter[],
+	selectedSources: string[]
+): Promise<HomeSearchResponse> {
+	const apps = await getApps({ private: false });
+	let appSearchEntries = [];
+
+	const tags: string[] = [];
+
+	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
+		appSearchEntries = mapAppEntriesToSearchEntries(apps);
+	}
+
+	if (appSearchEntries.length > 0) {
+		const finalResults = appSearchEntries.filter((entry) => {
+			let textMatchFound = true;
+			let filterMatchFound = true;
+
+			const isCommand = queryLower.startsWith("/");
+
+			if (queryLower.length >= queryMinLength || isCommand) {
+				textMatchFound = queryAgainst.some((target) => {
+					const path = target.split(".");
+					if (path.length === 1) {
+						const targetValue = entry[path[0]];
+
+						if (typeof targetValue === "string") {
+							const lowerTarget = targetValue.toLowerCase();
+							if (isCommand) {
+								return lowerTarget.startsWith(queryLower);
+							}
+							return lowerTarget.includes(queryLower);
+						}
+					} else if (path.length === 2) {
+						const specifiedTarget = entry[path[0]];
+						let targetValue: string | string[];
+						if (specifiedTarget !== undefined && specifiedTarget !== null) {
+							targetValue = specifiedTarget[path[1]];
+						}
+
+						if (typeof targetValue === "string") {
+							const lowerTarget = targetValue.toLowerCase();
+							if (isCommand) {
+								return lowerTarget.startsWith(queryLower);
+							}
+							return lowerTarget.includes(queryLower);
+						}
+
+						if (Array.isArray(targetValue)) {
+							if (
+								targetValue.length > 0 &&
+								typeof targetValue[0] === "string" &&
+								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
+							) {
+								return true;
+							}
+							logger.warn(
+								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
+							);
+						}
+					} else {
+						logger.warn(
+							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
+						);
+					}
+					return false;
+				});
+			}
+
+			const tagFilters = Array.isArray(filters) ? filters.filter((f) => f.id === HOME_TAG_FILTERS) : [];
+			if (tagFilters.length > 0) {
+				filterMatchFound = tagFilters.some((filter) => {
+					if (Array.isArray(filter.options)) {
+						if (entry.data?.tags !== undefined) {
+							return filter.options.every(
+								(option) => !option.isSelected || entry.data.tags.includes(option.value)
+							);
+						}
+					} else if (filter.options.isSelected && entry.data?.tags !== undefined) {
+						return entry.data?.tags.indexOf(filter.options.value) > -1;
+					}
+					return true;
+				});
+			}
+
+			if (textMatchFound && Array.isArray(entry.data?.tags)) {
+				tags.push(...(entry.data.tags as string[]));
+			}
+			return textMatchFound && filterMatchFound;
+		});
+
+		return {
+			results: finalResults,
+			context: {
+				filters: getSearchFilters(tags.filter(Boolean))
+			}
+		};
+	}
+	return {
+		results: [],
+		context: {
+			filters: []
+		}
+	};
+}
 
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
@@ -138,376 +405,4 @@ function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
 		}
 	}
 	return appResults;
-}
-
-async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchResult[]> {
-	const pageResults: HomeSearchResult[] = [];
-	const settings = await getSettings();
-	let pageIcon;
-	if (settings?.platformProvider?.rootUrl !== undefined) {
-		const colorScheme = await getCurrentColorSchemeMode();
-		pageIcon = `${settings.platformProvider.rootUrl}/common/icons/${colorScheme}/page.svg`;
-	}
-	const shareEnabled = isShareEnabled();
-	const pageTemplate = getPageTemplate(shareEnabled);
-
-	if (Array.isArray(pages)) {
-		for (let i = 0; i < pages.length; i++) {
-			const entry: HomeSearchResult = {
-				key: pages[i].pageId,
-				title: pages[i].title,
-				label: "Page",
-				icon: pageIcon,
-				actions: (shareEnabled ? [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" }] : []).concat(
-					[
-						{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
-						{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
-					]
-				),
-				data: { tags: ["page"], pageId: pages[i].pageId },
-				template: CLITemplate.Custom,
-				templateContent: {
-					layout: pageTemplate,
-					data: {
-						title: pages[i].title,
-						description: pages[i].description,
-						instructions: "Use the buttons below to interact with your saved page:",
-						openText: "Launch",
-						deleteText: "Delete",
-						shareText: "Share"
-					}
-				}
-			};
-
-			pageResults.push(entry);
-		}
-	}
-	return pageResults;
-}
-
-async function getResults(
-	queryLower: string,
-	queryMinLength,
-	queryAgainst: string[],
-	filters: CLIFilter[],
-	selectedSources: string[]
-): Promise<HomeSearchResponse> {
-	const platform = getCurrentSync();
-	const apps = await getApps({ private: false });
-	let pageSearchEntries = [];
-	let appSearchEntries = [];
-
-	if (
-		enablePageIntegration &&
-		(selectedSources.length === 0 || selectedSources.includes(HOME_PAGES_FILTER))
-	) {
-		const pages = await platform.Storage.getPages();
-		pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
-	}
-
-	const tags: string[] = [];
-
-	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
-		appSearchEntries = mapAppEntriesToSearchEntries(apps);
-	}
-
-	const initialResults: HomeSearchResult[] = [...appSearchEntries, ...pageSearchEntries];
-
-	if (initialResults.length > 0) {
-		const finalResults = initialResults.filter((entry) => {
-			let textMatchFound = true;
-			let filterMatchFound = true;
-
-			const isCommand = queryLower.startsWith("/");
-
-			if (queryLower.length >= queryMinLength || isCommand) {
-				textMatchFound = queryAgainst.some((target) => {
-					const path = target.split(".");
-					if (path.length === 1) {
-						const targetValue = entry[path[0]];
-
-						if (typeof targetValue === "string") {
-							const lowerTarget = targetValue.toLowerCase();
-							if (isCommand) {
-								return lowerTarget.startsWith(queryLower);
-							}
-							return lowerTarget.includes(queryLower);
-						}
-					} else if (path.length === 2) {
-						const specifiedTarget = entry[path[0]];
-						let targetValue: string | string[];
-						if (specifiedTarget !== undefined && specifiedTarget !== null) {
-							targetValue = specifiedTarget[path[1]];
-						}
-
-						if (typeof targetValue === "string") {
-							const lowerTarget = targetValue.toLowerCase();
-							if (isCommand) {
-								return lowerTarget.startsWith(queryLower);
-							}
-							return lowerTarget.includes(queryLower);
-						}
-
-						if (Array.isArray(targetValue)) {
-							if (
-								targetValue.length > 0 &&
-								typeof targetValue[0] === "string" &&
-								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
-							) {
-								return true;
-							}
-							logger.warn(
-								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
-							);
-						}
-					} else {
-						logger.warn(
-							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
-						);
-					}
-					return false;
-				});
-			}
-
-			const tagFilters = Array.isArray(filters) ? filters.filter((f) => f.id === HOME_TAG_FILTERS) : [];
-			if (tagFilters.length > 0) {
-				filterMatchFound = tagFilters.some((filter) => {
-					if (Array.isArray(filter.options)) {
-						if (entry.data?.tags !== undefined) {
-							return filter.options.every(
-								(option) => !option.isSelected || entry.data.tags.includes(option.value)
-							);
-						}
-					} else if (filter.options.isSelected && entry.data?.tags !== undefined) {
-						return entry.data?.tags.indexOf(filter.options.value) > -1;
-					}
-					return true;
-				});
-			}
-
-			if (textMatchFound && Array.isArray(entry.data?.tags)) {
-				tags.push(...(entry.data.tags as string[]));
-			}
-			return textMatchFound && filterMatchFound;
-		});
-
-		return {
-			results: finalResults,
-			context: {
-				filters: getSearchFilters(tags.filter(Boolean))
-			}
-		};
-	}
-	return {
-		results: [],
-		context: {
-			filters: []
-		}
-	};
-}
-
-export async function register(): Promise<HomeRegistration> {
-	if (!registrationInfo) {
-		logger.info("Initializing home");
-		const settings = await getSettings();
-		if (
-			settings.homeProvider === undefined ||
-			settings.homeProvider.id === undefined ||
-			settings.homeProvider.title === undefined
-		) {
-			logger.warn(
-				"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
-			);
-			return null;
-		}
-
-		const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
-		const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
-		enablePageIntegration = settings?.homeProvider?.enablePageIntegration ?? true;
-		const enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
-		let lastResponse: CLISearchListenerResponse;
-		let filters: CLIFilter[];
-
-		const onUserInput = async (
-			request: CLISearchListenerRequest,
-			response: CLISearchListenerResponse
-		): Promise<CLISearchResponse> => {
-			try {
-				const queryLower = request.query.toLowerCase();
-
-				filters = request?.context?.selectedFilters;
-				if (lastResponse !== undefined) {
-					lastResponse.close();
-				}
-				lastResponse = response;
-				lastResponse.open();
-
-				if (queryLower === "?") {
-					const integrationHelpSearchEntries = await getHelpSearchEntries();
-					const searchResults = {
-						results: integrationHelpSearchEntries,
-						context: {
-							filters: []
-						}
-					};
-					return searchResults;
-				}
-
-				let selectedSourceFilterOptions: string[] = [];
-				if (enableSourceFilter && filters) {
-					const sourceFilter = filters.find((f) => f.id === HOME_SOURCE_FILTERS);
-					if (sourceFilter) {
-						if (Array.isArray(sourceFilter.options)) {
-							selectedSourceFilterOptions = sourceFilter.options
-								.filter((o) => o.isSelected)
-								.map((o) => o.value);
-						} else if (sourceFilter.options.isSelected) {
-							selectedSourceFilterOptions.push(sourceFilter.options.value);
-						}
-					}
-				}
-
-				const searchResults = await getResults(
-					queryLower,
-					queryMinLength,
-					queryAgainst,
-					filters,
-					selectedSourceFilterOptions
-				);
-
-				let sourceFilterOptions: string[] = [];
-				if (enableSourceFilter) {
-					sourceFilterOptions.push(HOME_APPS_FILTER);
-					if (enablePageIntegration) {
-						sourceFilterOptions.push(HOME_PAGES_FILTER);
-					}
-				}
-
-				const integrationResults = await getSearchResults(
-					request.query,
-					filters,
-					lastResponse,
-					selectedSourceFilterOptions,
-					{
-						queryMinLength,
-						queryAgainst
-					}
-				);
-				if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
-					searchResults.results = searchResults.results.concat(integrationResults.results);
-				}
-				if (
-					Array.isArray(integrationResults.context.filters) &&
-					integrationResults.context.filters.length > 0
-				) {
-					searchResults.context.filters = searchResults.context.filters.concat(
-						integrationResults.context.filters
-					);
-				}
-
-				if (Array.isArray(integrationResults.sourceFilters) && integrationResults.sourceFilters.length > 0) {
-					sourceFilterOptions = sourceFilterOptions.concat(integrationResults.sourceFilters);
-				}
-
-				if (enableSourceFilter && sourceFilterOptions.length > 0) {
-					searchResults.context = searchResults.context ?? {};
-					searchResults.context.filters = searchResults.context.filters ?? [];
-					searchResults.context.filters.push({
-						id: HOME_SOURCE_FILTERS,
-						title: settings?.homeProvider?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
-						options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
-					});
-				}
-
-				// Remove any empty filter lists as these can cause the UI to continually
-				// expand and collapse as you type
-				const finalFilters = [];
-				if (Array.isArray(searchResults.context?.filters)) {
-					for (const filter of searchResults.context.filters) {
-						if (Array.isArray(filter.options) && filter.options.length > 0) {
-							finalFilters.push(filter);
-						}
-					}
-				}
-				if (finalFilters.length > 0) {
-					searchResults.context.filters = finalFilters;
-				}
-
-				return searchResults;
-			} catch (err) {
-				logger.error("Exception while getting search list results", err);
-			}
-
-			return { results: [] };
-		};
-
-		const onSelection = async (result: HomeDispatchedSearchResult) => {
-			if (result.data !== undefined) {
-				const handled = await itemSelection(result, lastResponse);
-
-				if (!handled && result.action.trigger === "user-action") {
-					const data: {
-						pageId?: string;
-					} & PlatformApp = result.data;
-					if (enablePageIntegration && data.pageId !== undefined) {
-						const pageAction = result.action.name;
-						if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_ACTION_IDS.launch) {
-							const platform = getCurrentSync();
-							const pageToLaunch = await platform.Storage.getPage(data.pageId);
-							await launchPage(pageToLaunch);
-						} else if (pageAction === HOME_ACTION_DELETE_PAGE || pageAction === PAGE_ACTION_IDS.delete) {
-							const platform = getCurrentSync();
-							await platform.Storage.deletePage(data.pageId);
-							if (lastResponse !== undefined && lastResponse !== null) {
-								lastResponse.revoke(result.key);
-							}
-						} else if (pageAction === HOME_ACTION_SHARE_PAGE || pageAction === PAGE_ACTION_IDS.share) {
-							const platform = getCurrentSync();
-							const page = await platform.Storage.getPage(data.pageId);
-							const bounds = await getPageBounds(data.pageId, true);
-							await share({ page, bounds });
-						} else {
-							logger.warn(`Unknown action triggered on search result for page Id: ${data.pageId}`);
-						}
-					} else {
-						await launch(data);
-					}
-				}
-			} else {
-				logger.warn("Unable to execute result without data being passed");
-			}
-		};
-
-		const cliProvider: CLIProvider = {
-			title: settings.homeProvider.title,
-			id: settings.homeProvider.id,
-			icon: settings.homeProvider.icon,
-			onUserInput,
-			onResultDispatch: onSelection,
-			dispatchFocusEvents: true
-		};
-
-		registrationInfo = await Home.register(cliProvider);
-		logger.info("Version:", registrationInfo);
-		logger.info("Home provider initialized");
-	}
-
-	return registrationInfo;
-}
-
-export async function show() {
-	return Home.show();
-}
-
-export async function hide() {
-	return Home.hide();
-}
-
-export async function deregister() {
-	if (registrationInfo) {
-		registrationInfo = undefined;
-		const settings = await getSettings();
-		return Home.deregister(settings.homeProvider.id);
-	}
-	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }

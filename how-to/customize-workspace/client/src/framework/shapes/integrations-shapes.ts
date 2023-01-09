@@ -39,6 +39,13 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 
 	/**
+	 * Get the bounds for the page.
+	 * @param pageId The page to get the bounds for.
+	 * @param fromStorage Get the bounds from storage, default to false.
+	 */
+	getPageBounds(pageId: string, fromStorage?: boolean): Promise<OpenFin.Bounds | null>;
+
+	/**
 	 * Launch a snapshot.
 	 * @param snapshotUrl The snapshot url
 	 */

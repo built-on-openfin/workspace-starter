@@ -21,7 +21,7 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
-import { launchPage, launchView } from "./platform/browser";
+import { launchPage, launchView, getPageBounds } from "./platform/browser";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -65,6 +65,7 @@ export async function init(
 			templateHelpers,
 			launchView,
 			launchPage,
+			getPageBounds,
 			launchSnapshot: async (manifestUrl) =>
 				launchSnapshot({
 					manifestType: manifestTypes.snapshot.id,

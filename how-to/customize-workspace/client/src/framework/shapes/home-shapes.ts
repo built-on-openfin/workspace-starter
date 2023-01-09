@@ -19,11 +19,6 @@ export interface HomeProviderOptions {
 	 */
 	queryAgainst?: string[];
 	/**
-	 * Default is true. Enable our default page integration in home so that
-	 * you can discover, launch and delete pages from home. Disable if you want
-	 * to plug in your own implementation using the integration provider. */
-	enablePageIntegration?: boolean;
-	/**
 	 * Options for the source filters displayed in home.
 	 */
 	sourceFilter?: {
