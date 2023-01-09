@@ -3,7 +3,7 @@
 :root {
 	--brand-background: var(--theme-background-primary, #1e1f23);
 	--brand-border: var(--theme-background4, #2f3136);
-	--brand-primary: var(--theme-brand-primary, #504cff);
+	--brand-primary: var(--theme-brand-primary, #0a76d3);
 	--brand-text: var(--theme-text-default, #ffffff);
 	--brand-text-secondary: var(--theme-text-help, #c9cbd2);
 	--brand-input-background: var(--theme-background5, #383a40);
@@ -22,7 +22,7 @@
 .theme-light {
 	--brand-background: var(--theme-background-primary, #ffffff);
 	--brand-border: var(--theme-background4, #eceef1);
-	--brand-primary: var(--theme-brand-primary, #504cff);
+	--brand-primary: var(--theme-brand-primary, #0a76d3);
 	--brand-text: var(--theme-text-default, #111214);
 	--brand-text-secondary: var(--theme-text-help, #2f3136);
 	--brand-input-background: var(--theme-background5, #dddfe4);
@@ -217,7 +217,7 @@ footer a:focus,
 footer a:not(:disabled):hover,
 button:not(:disabled):focus,
 button:not(:disabled):hover {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0 0);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.1) 0 0);
 }
 
 button.image {

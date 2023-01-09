@@ -34,13 +34,13 @@ It is used when you define a browser button (see [How To Customize Browser Butto
     "include": true,
     "id": "share",
     "themes": {
-     "light": "http://localhost:8080/common/icons/{theme}/share.svg"
+     "light": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg"
     },
     "button": {
      "type": "Custom",
      "tooltip": "Share",
      "disabled": false,
-     "iconUrl": "http://localhost:8080/common/icons/{theme}/share.svg",
+     "iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
      "action": {
       "id": "share",
       "customData": {}

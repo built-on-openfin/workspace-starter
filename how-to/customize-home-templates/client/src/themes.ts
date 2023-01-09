@@ -1,12 +1,12 @@
+import type { CustomThemes } from "@openfin/workspace-platform";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { getSettings } from "./settings";
 
 const DEFAULT_PALETTES = {
 	light: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#FAFBFE",
-		contentBackground1: "#504CFF",
+		backgroundPrimary: "#1E1F23",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -24,13 +24,13 @@ const DEFAULT_PALETTES = {
 		inputFocused: "#C9CBD2",
 		textDefault: "#1E1F23",
 		textHelp: "#2F3136",
-		textInactive: "#7D808A"
+		textInactive: "#7D808A",
+		contentBackground1: "#0A76D3"
 	},
 	dark: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
-		contentBackground1: "#504CFF",
 		background1: "#111214",
 		background2: "#1E1F23",
 		background3: "#24262B",
@@ -48,7 +48,8 @@ const DEFAULT_PALETTES = {
 		inputFocused: "#C9CBD2",
 		textDefault: "#FFFFFF",
 		textHelp: "#C9CBD2",
-		textInactive: "#7D808A"
+		textInactive: "#7D808A",
+		contentBackground1: "#0A76D3"
 	}
 };
 
@@ -61,18 +62,18 @@ function getSystemPreferredColorScheme(): "light" | "dark" {
 	return "light";
 }
 
-export async function getCurrentTheme(): Promise<CustomThemeOptions> {
+export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
 	if (themes.length === 0) {
-		return {
-			label: "default",
-			palette: DEFAULT_PALETTES.dark
-		};
+		return DEFAULT_PALETTES.dark;
 	}
-	return themes[0];
+	if ("palette" in themes[0]) {
+		return themes[0].palette;
+	}
+	return themes[0].palettes.dark;
 }
 
-export async function getThemes(): Promise<CustomThemeOptions[]> {
+export async function getThemes(): Promise<CustomThemes> {
 	if (!validatedThemes) {
 		const settings = await getSettings();
 		validatedThemes = validateThemes(settings?.themeProvider?.themes);

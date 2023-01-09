@@ -39,7 +39,7 @@ function validatePalette(themePalette: CustomPaletteSet, themeLabel: string): Cu
 	}
 
 	const brandPrimaryKey = "brandPrimary";
-	const brandPrimaryValue = "#504CFF";
+	const brandPrimaryValue = "#0A76D3";
 	const brandSecondaryKey = "brandSecondary";
 	const brandSecondaryValue = "#383A40";
 	const backgroundPrimaryKey = "backgroundPrimary";

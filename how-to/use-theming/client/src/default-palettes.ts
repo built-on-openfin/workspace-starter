@@ -5,9 +5,9 @@ export const DEFAULT_PALETTES: {
 	light: CustomPaletteSet;
 } = {
 	light: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#FAFBFE",
+		backgroundPrimary: "#1E1F23",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -26,14 +26,14 @@ export const DEFAULT_PALETTES: {
 		textDefault: "#111214",
 		textHelp: "#2F3136",
 		textInactive: "#7D808A",
-		contentBackground1: "#504CFF",
+		contentBackground1: "#0A76D3",
 		contentBackground2: "#000000",
 		contentBackground3: "#000000",
 		contentBackground4: "#000000",
 		contentBackground5: "#000000"
 	},
 	dark: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
 		background1: "#111214",
@@ -54,7 +54,7 @@ export const DEFAULT_PALETTES: {
 		textDefault: "#FFFFFF",
 		textHelp: "#C9CBD2",
 		textInactive: "#7D808A",
-		contentBackground1: "#504CFF",
+		contentBackground1: "#0A76D3",
 		contentBackground2: "#000000",
 		contentBackground3: "#000000",
 		contentBackground4: "#000000",

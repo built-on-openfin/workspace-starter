@@ -19,7 +19,7 @@ import { getDefaultWindowOptions, launchView } from "./platform/browser";
 import type { ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import { showShareOptions } from "./share";
-import { toggleTheme } from "./themes";
+import { toggleScheme } from "./themes";
 import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
@@ -51,7 +51,7 @@ export const ACTION_IDS = {
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
 	launchView: "launch-view",
-	toggleTheme: "toggle-theme"
+	toggleScheme: "toggle-scheme"
 };
 
 export async function getActions(
@@ -216,10 +216,10 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 		}
 	};
 
-	actionMap[ACTION_IDS.toggleTheme] = async (
+	actionMap[ACTION_IDS.toggleScheme] = async (
 		payload: CustomButtonActionPayload | CustomDropdownItemActionPayload
 	) => {
-		await toggleTheme();
+		await toggleScheme();
 	};
 
 	return actionMap;

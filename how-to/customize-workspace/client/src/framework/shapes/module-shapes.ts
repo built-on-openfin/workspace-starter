@@ -73,9 +73,9 @@ export interface ModuleHelpers {
 	sessionId: string;
 
 	/**
-	 * Get the default themes.
+	 * Get the current theme id.
 	 */
-	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
+	getCurrentThemeId(): Promise<string>;
 
 	/**
 	 * Get the current palette.
