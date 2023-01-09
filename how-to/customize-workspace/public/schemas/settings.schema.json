@@ -591,6 +591,9 @@
         },
         "themeProvider": {
           "$ref": "#/definitions/ThemeProviderOptions"
+        },
+        "versionProvider": {
+          "$ref": "#/definitions/VersionProviderOptions"
         }
       },
       "type": "object"
@@ -1361,6 +1364,40 @@
       ],
       "type": "string"
     },
+    "MinimumVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "notificationCenter": {
+          "description": "The version of the notification center that this platform instance has connected to",
+          "type": "string"
+        },
+        "platformClient": {
+          "description": "The version of the code of this platform",
+          "type": "string"
+        },
+        "runtime": {
+          "description": "The version of the runtime this platform instance is running against",
+          "type": "string"
+        },
+        "rvm": {
+          "description": "The version of the rvm that was used to launch this platform",
+          "type": "string"
+        },
+        "workspace": {
+          "description": "The version of the workspace components this platform is currently connected to",
+          "type": "string"
+        },
+        "workspaceClient": {
+          "description": "The version of the workspace client code",
+          "type": "string"
+        },
+        "workspacePlatformClient": {
+          "description": "The version of the workspace platform client code",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ModuleDefinition": {
       "additionalProperties": false,
       "description": "The definition of a module with generic data for options.",
@@ -2013,6 +2050,27 @@
         "include",
         "button"
       ],
+      "type": "object"
+    },
+    "VersionProviderOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "appVersion": {
+          "description": "The version of the the instance of this platform",
+          "type": "string"
+        },
+        "maximumVersion": {
+          "$ref": "#/definitions/MinimumVersion",
+          "description": "You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions"
+        },
+        "minimumVersion": {
+          "$ref": "#/definitions/MinimumVersion",
+          "description": "You can specify if the platform should stop initializing if the version is less than any of the specified minimum versions"
+        },
+        "versionWindow": {
+          "description": "If the minimum version is not met and a window is configured then:\n- any workspace component registrations will be un-registered\n- the configured window will be shown and passed the current version and minimum version as customData Otherwise the platform will continue to load and the version information will be passed onto loaded modules through the getVersionInfo function exposed through the passed helper."
+        }
+      },
       "type": "object"
     },
     "ViewTabMenuOptionType": {
