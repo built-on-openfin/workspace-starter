@@ -37,19 +37,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 	try {
 		console.log('Style Change Preload activated');
 
-		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform/events');
+		if(window.fin !== undefined) {
+			console.log("Window.Fin is available. Listening for platform events.");
+			const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup('platform/events');
 
-		appSessionContextGroup.addContextHandler((context) => {
-			if (context.type === 'platform.theme') {
-				console.log('Received platform.theme context', context);
-				const prefix = context?.prefix ?? 'theme';
-				const darkScheme = context?.schemeNames?.dark ?? 'theme-dark';
-				const lightScheme = context?.schemeNames?.light ?? 'theme-light';
-				setColorScheme(context.schemeType, darkScheme, lightScheme);
-				createCssVars(prefix, context.schemeType, context.palette);
-			}
-		});
+			appSessionContextGroup.addContextHandler((context) => {
+				if (context.type === 'platform.theme') {
+					console.log('Received platform.theme context', context);
+					const prefix = context?.prefix ?? 'theme';
+					const darkScheme = context?.schemeNames?.dark ?? 'theme-dark';
+					const lightScheme = context?.schemeNames?.light ?? 'theme-light';
+					setColorScheme(context.schemeType, darkScheme, lightScheme);
+					createCssVars(prefix, context.schemeType, context.palette);
+				}
+			});
+		}
 	} catch (err) {
-		console.error(err);
+		console.error("Error while trying to listen to platform events via interop.", err);
 	}
 });
