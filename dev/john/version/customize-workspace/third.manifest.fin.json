@@ -221,6 +221,15 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version/customize-workspace/js/modules/log/console.bundle.js"
 				}
 			]
+		},
+		"versionProvider": {
+			"minimumVersion": {
+				"workspace": "10.0.0"
+			},
+			"versionWindow": {
+				"name": "versioning",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version/customize-workspace/windows/version/version.html"
+			}
 		}
 	}
 }
