@@ -106,6 +106,7 @@ export async function loadModule<
 				}
 			} catch (err) {
 				logger.error(`Error loading module ${moduleDefinition.url}`, err);
+				return;
 			}
 		} else {
 			logger.info(`Module already loaded '${moduleDefinition.url}' using cached version`);
