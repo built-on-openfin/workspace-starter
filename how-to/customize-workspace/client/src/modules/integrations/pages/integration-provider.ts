@@ -6,6 +6,7 @@ import type {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
+	Page,
 	TemplateFragment
 } from "@openfin/workspace";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
@@ -111,7 +112,7 @@ export class PagesProvider implements IntegrationModule {
 						query.length === 0 ||
 						(query.length >= options.queryMinLength && pg.title.toLowerCase().includes(queryLower))
 				)
-				.map((pg) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, iconFolder, colorScheme));
+				.map((pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, iconFolder, colorScheme));
 		}
 
 		return {
