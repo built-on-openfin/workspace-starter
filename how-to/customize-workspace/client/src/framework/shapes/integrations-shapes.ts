@@ -25,7 +25,7 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @param targetIdentity The optional target identity of the launch with.
 	 * @returns The launched view.
 	 */
-	launchView(
+	launchView?(
 		view: OpenFin.PlatformViewCreationOptions | string,
 		targetIdentity?: OpenFin.Identity
 	): Promise<OpenFin.View>;
@@ -36,43 +36,43 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @param bounds The optional bounds for the page.
 	 * @returns The window created.
 	 */
-	launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 
 	/**
 	 * Launch a snapshot.
 	 * @param snapshotUrl The snapshot url
 	 */
-	launchSnapshot(snapshotUrl: string): Promise<OpenFin.Identity[]>;
+	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 
 	/**
 	 * Open a url with the browser.
 	 * @param url The url to open.
 	 */
-	openUrl(url: string): Promise<void>;
+	openUrl?(url: string): Promise<void>;
 
 	/**
 	 * Set the home search query.
 	 * @param query The query to set.
 	 */
-	setSearchQuery(query: string): Promise<void>;
+	setSearchQuery?(query: string): Promise<void>;
 
 	/**
 	 * Get the value of a condition.
 	 * @param conditionId The id of the condition.
 	 * @returns True if the condition is set.
 	 */
-	condition(conditionId: string): Promise<boolean>;
+	condition?(conditionId: string): Promise<boolean>;
 
 	/**
 	 * Share data.
 	 * @param options The sharing options.
 	 */
-	share(options?: IShareCustomData): Promise<void>;
+	share?(options?: IShareCustomData): Promise<void>;
 
 	/**
 	 * Get the current platform.
 	 */
-	getPlatform(): WorkspacePlatformModule;
+	getPlatform?(): WorkspacePlatformModule;
 }
 
 /**
