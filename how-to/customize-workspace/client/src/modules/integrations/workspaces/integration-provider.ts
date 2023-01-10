@@ -13,6 +13,7 @@ import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 import type { ColorSchemeMode } from "customize-workspace/shapes/theme-shapes";
+import { randomUUID } from "../../../framework/uuid";
 
 /**
  * Implement the integration provider for workspaces.
@@ -168,7 +169,7 @@ export class WorkspacesProvider implements IntegrationModule {
 						data: {
 							providerId: WorkspacesProvider._PROVIDER_ID,
 							tags: ["workspace"],
-							workspaceId: this._integrationHelpers.randomUUID(),
+							workspaceId: randomUUID(),
 							workspaceTitle: title
 						},
 						template: null,

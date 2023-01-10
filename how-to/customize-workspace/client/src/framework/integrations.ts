@@ -84,7 +84,6 @@ export async function init(
 				return checkCondition(platform, conditionId);
 			},
 			share,
-			randomUUID,
 			getPlatform: getCurrentSync
 		};
 

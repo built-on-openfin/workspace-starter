@@ -77,11 +77,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	share(options?: IShareCustomData): Promise<void>;
 
 	/**
-	 * Create a random UUID.
-	 */
-	randomUUID(): string;
-
-	/**
 	 * Get the current platform.
 	 */
 	getPlatform(): WorkspacePlatformModule;
