@@ -21,6 +21,7 @@ export async function initialize(
 export async function requestResponse(
 	endpointDefinition: EndpointDefinition<{
 		fdc3Version: string;
+		fallbackIcon: string;
 	}>,
 	request?: unknown[] | { applications: unknown[] }
 ): Promise<App[]> {
@@ -40,10 +41,11 @@ export async function requestResponse(
 	} else {
 		applications = request.applications;
 	}
-	if (fdc3Version === "1.2") {
-		for (let i = 0; i < applications.length; i++) {
+	for (let i = 0; i < applications.length; i++) {
+		let platformApp: App;
+		if (fdc3Version === "1.2") {
 			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
-			const platformApp: App = {
+			platformApp = {
 				appId: passedApp.appId,
 				title: passedApp.title || passedApp.name,
 				manifestType: passedApp.manifestType,
@@ -58,12 +60,9 @@ export async function requestResponse(
 				icons: fdc3OnePointTwoHelper.getIcons(passedApp.icons),
 				images: fdc3OnePointTwoHelper.getImages(passedApp.images)
 			};
-			results.push(platformApp);
-		}
-	} else if (fdc3Version === "2.0") {
-		for (let i = 0; i < applications.length; i++) {
+		} else if (fdc3Version === "2.0") {
 			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
-			const platformApp: App = {
+			platformApp = {
 				appId: passedApp.appId,
 				title: passedApp.title || passedApp.name,
 				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
@@ -78,9 +77,16 @@ export async function requestResponse(
 				icons: passedApp.icons,
 				images: passedApp.screenshots
 			};
-			results.push(platformApp);
 		}
-	} else {
+		if (!Array.isArray(platformApp.icons)) {
+			platformApp.icons = [];
+		}
+		if (platformApp.icons.length === 0 && endpointDefinition.options?.fallbackIcon !== undefined) {
+			platformApp.icons.push({ src: endpointDefinition.options.fallbackIcon });
+		}
+		results.push(platformApp);
+	}
+	if (applications.length > 0 && results.length === 0) {
 		logger.warn(`Unsupported FDC3 version passed: ${fdc3Version}. Unable to map apps.`);
 	}
 	return results;
