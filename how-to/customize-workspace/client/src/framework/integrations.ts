@@ -32,7 +32,6 @@ import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
-import { randomUUID } from "./uuid";
 
 const logger = createLogger("Integrations");
 
