@@ -32,7 +32,7 @@ const HOME_APPS_FILTER = "Apps";
 let registrationInfo: HomeRegistration | undefined;
 let queryMinLength = 3;
 let queryAgainst = ["title"];
-let enableSourceFilter = true;
+let enableSourceFilter;
 let lastResponse: CLISearchListenerResponse;
 let sourceFilterLabel = HOME_SOURCE_DEFAULT_FILTER_LABEL;
 
@@ -53,7 +53,7 @@ export async function register(): Promise<HomeRegistration> {
 
 		queryMinLength = settings?.homeProvider?.queryMinLength ?? queryMinLength;
 		queryAgainst = settings?.homeProvider?.queryAgainst ?? queryAgainst;
-		enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? enableSourceFilter);
+		enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
 		sourceFilterLabel = settings?.homeProvider?.sourceFilter?.label ?? sourceFilterLabel;
 
 		const cliProvider: CLIProvider = {
