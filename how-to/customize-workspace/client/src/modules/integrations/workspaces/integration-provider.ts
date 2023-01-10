@@ -1,4 +1,4 @@
-import {
+import type {
 	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
@@ -6,10 +6,8 @@ import {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment,
-	TemplateFragmentTypes
+	TemplateFragment, Workspace
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
@@ -101,7 +99,7 @@ export class WorkspacesProvider implements IntegrationModule {
 				data: {
 					providerId: WorkspacesProvider._PROVIDER_ID
 				},
-				template: CLITemplate.Custom,
+				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"Workspaces",
 					["Use the workspaces command to save your current layout."],
@@ -128,7 +126,7 @@ export class WorkspacesProvider implements IntegrationModule {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const platform = getCurrentSync();
+		const platform = this._integrationHelpers.getPlatform();
 		const workspaces = await platform.Storage.getWorkspaces();
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 		const iconFolder: string = await this._integrationHelpers.getCurrentIconFolder();
@@ -192,7 +190,7 @@ export class WorkspacesProvider implements IntegrationModule {
 						query.length === 0 ||
 						(query.length >= options.queryMinLength && pg.title.toLowerCase().includes(queryLower))
 				)
-				.map((ws) =>
+				.map((ws: Workspace) =>
 					this.getWorkspaceTemplate(
 						ws.workspaceId,
 						ws.title,
@@ -236,7 +234,7 @@ export class WorkspacesProvider implements IntegrationModule {
 				if (result.key === WorkspacesProvider._ACTION_SAVE_WORKSPACE) {
 					lastResponse.revoke(result.key);
 
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					const snapshot = await platform.getSnapshot();
 					const currentWorkspace = await platform.getCurrentWorkspace();
 					const currentMetaData = currentWorkspace?.metadata;
@@ -263,7 +261,7 @@ export class WorkspacesProvider implements IntegrationModule {
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === WorkspacesProvider._ACTION_LAUNCH_WORKSPACE) {
 					lastResponse.revoke(result.key);
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					const workspace = await platform.Storage.getWorkspace(data.workspaceId);
 					await platform.applyWorkspace(workspace);
 
@@ -278,7 +276,7 @@ export class WorkspacesProvider implements IntegrationModule {
 
 					lastResponse.respond([savedTemplate]);
 				} else if (result.action.name === WorkspacesProvider._ACTION_DELETE_WORKSPACE) {
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					await platform.Storage.deleteWorkspace(data.workspaceId);
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === WorkspacesProvider._ACTION_SHARE_WORKSPACE) {
@@ -351,7 +349,7 @@ export class WorkspacesProvider implements IntegrationModule {
 				workspaceId: id,
 				tags: ["workspace"]
 			},
-			template: CLITemplate.Custom,
+			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
 				layout,
 				data
@@ -362,7 +360,7 @@ export class WorkspacesProvider implements IntegrationModule {
 	private getOtherWorkspaceTemplate(enableShare: boolean): TemplateFragment {
 		const actionButtons: TemplateFragment[] = [
 			{
-				type: TemplateFragmentTypes.Button,
+				type: "Button",
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -371,15 +369,15 @@ export class WorkspacesProvider implements IntegrationModule {
 				action: WorkspacesProvider._ACTION_LAUNCH_WORKSPACE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "openText",
 						optional: false
 					}
 				]
 			},
 			{
-				type: TemplateFragmentTypes.Button,
-				buttonStyle: ButtonStyle.Primary,
+				type: "Button",
+				buttonStyle: "primary" as ButtonStyle.Primary,
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -390,7 +388,7 @@ export class WorkspacesProvider implements IntegrationModule {
 				action: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "deleteText",
 						optional: false
 					}
@@ -400,8 +398,8 @@ export class WorkspacesProvider implements IntegrationModule {
 
 		if (enableShare) {
 			actionButtons.push({
-				type: TemplateFragmentTypes.Button,
-				buttonStyle: ButtonStyle.Primary,
+				type: "Button",
+				buttonStyle: "primary" as ButtonStyle.Primary,
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -410,7 +408,7 @@ export class WorkspacesProvider implements IntegrationModule {
 				action: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "shareText",
 						optional: false
 					}
@@ -419,7 +417,7 @@ export class WorkspacesProvider implements IntegrationModule {
 		}
 
 		return {
-			type: TemplateFragmentTypes.Container,
+			type: "Container",
 			style: {
 				paddingTop: "10px",
 				display: "flex",
@@ -427,7 +425,7 @@ export class WorkspacesProvider implements IntegrationModule {
 			},
 			children: [
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "title",
 					style: {
 						fontWeight: "bold",
@@ -436,7 +434,7 @@ export class WorkspacesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "instructions",
 					optional: true,
 					style: {
@@ -448,7 +446,7 @@ export class WorkspacesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Container,
+					type: "Container",
 					style: {
 						display: "flex",
 						flexFlow: "row wrap",
@@ -464,7 +462,7 @@ export class WorkspacesProvider implements IntegrationModule {
 
 	private getCurrentWorkspaceTemplate(): TemplateFragment {
 		return {
-			type: TemplateFragmentTypes.Container,
+			type: "Container",
 			style: {
 				paddingTop: "10px",
 				display: "flex",
@@ -472,7 +470,7 @@ export class WorkspacesProvider implements IntegrationModule {
 			},
 			children: [
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "title",
 					style: {
 						fontWeight: "bold",
@@ -481,7 +479,7 @@ export class WorkspacesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "instructions",
 					optional: true,
 					style: {

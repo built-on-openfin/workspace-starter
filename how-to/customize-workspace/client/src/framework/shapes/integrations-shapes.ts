@@ -5,7 +5,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { IShareCustomData } from "customize-workspace/share";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { TemplateHelpers } from "./template-shapes";
@@ -80,6 +80,11 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * Create a random UUID.
 	 */
 	randomUUID(): string;
+
+	/**
+	 * Get the current platform.
+	 */
+	getPlatform(): WorkspacePlatformModule;
 }
 
 /**

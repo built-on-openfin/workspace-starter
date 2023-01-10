@@ -1,4 +1,4 @@
-import {
+import type {
 	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
@@ -6,10 +6,8 @@ import {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment,
-	TemplateFragmentTypes
+	TemplateFragment
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
@@ -96,7 +94,7 @@ export class PagesProvider implements IntegrationModule {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const platform = getCurrentSync();
+		const platform = this._integrationHelpers.getPlatform();
 		const pages = await platform.Storage.getPages();
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 		const iconFolder: string = await this._integrationHelpers.getCurrentIconFolder();
@@ -141,15 +139,15 @@ export class PagesProvider implements IntegrationModule {
 				handled = true;
 
 				if (result.action.name === PagesProvider._ACTION_LAUNCH_PAGE) {
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					const pageToLaunch = await platform.Storage.getPage(data.pageId);
 					await this._integrationHelpers.launchPage(pageToLaunch);
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					await platform.Storage.deletePage(data.pageId);
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
-					const platform = getCurrentSync();
+					const platform = this._integrationHelpers.getPlatform();
 					const page = await platform.Storage.getPage(data.pageId);
 					const bounds = await this._integrationHelpers.getPageBounds(data.pageId, true);
 					await this._integrationHelpers.share({ page, bounds });
@@ -202,7 +200,7 @@ export class PagesProvider implements IntegrationModule {
 				pageId: id,
 				tags: ["page"]
 			},
-			template: CLITemplate.Custom,
+			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
 				layout,
 				data: {
@@ -219,7 +217,7 @@ export class PagesProvider implements IntegrationModule {
 	private getOtherPageTemplate(enableShare: boolean): TemplateFragment {
 		const actionButtons: TemplateFragment[] = [
 			{
-				type: TemplateFragmentTypes.Button,
+				type: "Button",
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -228,15 +226,15 @@ export class PagesProvider implements IntegrationModule {
 				action: PagesProvider._ACTION_LAUNCH_PAGE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "openText",
 						optional: false
 					}
 				]
 			},
 			{
-				type: TemplateFragmentTypes.Button,
-				buttonStyle: ButtonStyle.Primary,
+				type: "Button",
+				buttonStyle: "primary" as ButtonStyle.Primary,
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -247,7 +245,7 @@ export class PagesProvider implements IntegrationModule {
 				action: PagesProvider._ACTION_DELETE_PAGE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "deleteText",
 						optional: false
 					}
@@ -257,8 +255,8 @@ export class PagesProvider implements IntegrationModule {
 
 		if (enableShare) {
 			actionButtons.push({
-				type: TemplateFragmentTypes.Button,
-				buttonStyle: ButtonStyle.Primary,
+				type: "Button",
+				buttonStyle: "primary" as ButtonStyle.Primary,
 				style: {
 					display: "flex",
 					flexDirection: "column",
@@ -267,7 +265,7 @@ export class PagesProvider implements IntegrationModule {
 				action: PagesProvider._ACTION_SHARE_PAGE,
 				children: [
 					{
-						type: TemplateFragmentTypes.Text,
+						type: "Text",
 						dataKey: "shareText",
 						optional: false
 					}
@@ -275,7 +273,7 @@ export class PagesProvider implements IntegrationModule {
 			});
 		}
 		return {
-			type: TemplateFragmentTypes.Container,
+			type: "Container",
 			style: {
 				paddingTop: "10px",
 				display: "flex",
@@ -283,7 +281,7 @@ export class PagesProvider implements IntegrationModule {
 			},
 			children: [
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "title",
 					style: {
 						fontWeight: "bold",
@@ -292,7 +290,7 @@ export class PagesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "description",
 					optional: true,
 					style: {
@@ -301,7 +299,7 @@ export class PagesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Text,
+					type: "Text",
 					dataKey: "instructions",
 					style: {
 						fontWeight: "bold",
@@ -312,7 +310,7 @@ export class PagesProvider implements IntegrationModule {
 					}
 				},
 				{
-					type: TemplateFragmentTypes.Container,
+					type: "Container",
 					style: {
 						display: "flex",
 						flexFlow: "row wrap",

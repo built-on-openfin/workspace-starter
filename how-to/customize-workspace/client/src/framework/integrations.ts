@@ -84,7 +84,8 @@ export async function init(
 				return checkCondition(platform, conditionId);
 			},
 			share,
-			randomUUID
+			randomUUID,
+			getPlatform: getCurrentSync
 		};
 
 		// Map the old moduleUrl properties to url
