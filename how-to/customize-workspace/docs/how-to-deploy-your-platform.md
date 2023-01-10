@@ -27,6 +27,10 @@ With this knowledge you can present them with a link to click and launch if they
 
 [Detect OpenFin support from a web browser](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
 
+## Versioning - Determining the version of Workspace and Notification Center you are running against
+
+If you want to confirm the version of the different parts that make up your application then you can take advantage of the new Version Provider ([see how to add versioning support](./how-to-add-versioning-support.md)). The Version Provider lets you specify the minimum and maximum versions of components such as Workspace and gives you the option of stopping the platform from fully initializing and displaying your own warning window to notify the end user of the next steps (we include an example but it is only an example warning page and you should develop one suitable for your platform).
+
 ## Packaging your app for deployment
 
 The project has an npm script `package-config` which will read the data from a manifest and build a final set of files based on the included content.

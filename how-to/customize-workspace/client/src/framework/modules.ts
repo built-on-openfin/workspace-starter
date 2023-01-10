@@ -18,6 +18,7 @@ import {
 	getCurrentThemeId
 } from "./themes";
 import { randomUUID } from "./uuid";
+import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
 const sessionId = randomUUID();
@@ -211,6 +212,7 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
+		getVersionInfo,
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent
 	};

@@ -43,13 +43,7 @@
 				}
 			}
 		},
-		"defaultViewOptions": {
-			"preloadScripts": [
-				{
-					"url": "http://localhost:8080/common/style/style-changed-preload.js"
-				}
-			]
-		}
+		"defaultViewOptions": {}
 	},
 	"snapshot": {
 		"windows": []
@@ -897,6 +891,15 @@
 					}
 				}
 			]
+		},
+		"versionProvider": {
+			"minimumVersion": {
+				"workspace": "10.0.0"
+			},
+			"versionWindow": {
+				"name": "versioning",
+				"url": "http://localhost:8080/windows/version/version.html"
+			}
 		}
 	}
 }

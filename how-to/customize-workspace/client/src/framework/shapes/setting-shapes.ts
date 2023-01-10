@@ -18,6 +18,7 @@ import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
 import type { ThemeProviderOptions } from "./theme-shapes";
+import type { VersionProviderOptions } from "./version-shapes";
 
 export interface CustomSettings {
 	$schema?: string;
@@ -41,4 +42,5 @@ export interface CustomSettings {
 	conditionsProvider?: ConditionsProviderOptions;
 	lifecycleProvider?: LifecycleProviderOptions;
 	analyticsProvider?: AnalyticsProviderOptions;
+	versionProvider?: VersionProviderOptions;
 }

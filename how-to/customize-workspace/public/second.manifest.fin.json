@@ -37,13 +37,7 @@
 				}
 			}
 		},
-		"defaultViewOptions": {
-			"preloadScripts": [
-				{
-					"url": "http://localhost:8080/common/style/style-changed-preload.js"
-				}
-			]
-		}
+		"defaultViewOptions": {}
 	},
 	"snapshot": {
 		"windows": []

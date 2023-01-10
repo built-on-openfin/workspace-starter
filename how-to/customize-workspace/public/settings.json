@@ -961,5 +961,14 @@
 				}
 			}
 		]
+	},
+	"versionProvider": {
+		"minimumVersion": {
+			"workspace": "10.0.0"
+		},
+		"versionWindow": {
+			"name": "versioning",
+			"url": "http://localhost:8080/windows/version/version.html"
+		}
 	}
 }

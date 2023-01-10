@@ -2,6 +2,7 @@ import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
+import type { VersionInfo } from "./version-shapes";
 
 /**
  * List of modules.
@@ -91,6 +92,11 @@ export interface ModuleHelpers {
 	 * Get the current color scheme.
 	 */
 	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
+
+	/**
+	 * Get the version information related to the platform you are running in.
+	 */
+	getVersionInfo(): Promise<VersionInfo>;
 
 	/**
 	 * Subscribe to lifecycle events.
