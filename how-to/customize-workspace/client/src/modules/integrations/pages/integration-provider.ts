@@ -148,10 +148,7 @@ export class PagesProvider implements IntegrationModule {
 					await platform.Storage.deletePage(data.pageId);
 					lastResponse.revoke(result.key);
 				} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
-					const platform = this._integrationHelpers.getPlatform();
-					const page = await platform.Storage.getPage(data.pageId);
-					const bounds = await this._integrationHelpers.getPageBounds(data.pageId, true);
-					await this._integrationHelpers.share({ page, bounds });
+					await this._integrationHelpers.share({ pageId: data.pageId });
 				} else {
 					handled = false;
 					this._logger.warn(`Unrecognized action for page selection: ${data.pageId}`);

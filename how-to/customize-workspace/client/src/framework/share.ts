@@ -3,7 +3,7 @@ import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
-import { launchPage } from "./platform/browser";
+import { getPageBounds, launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
 
 const logger = createLogger("Share");
@@ -184,9 +184,19 @@ async function saveSharedPage(data: IShareCustomData) {
 		bounds = data.bounds;
 	} else {
 		const platform = getCurrentSync();
-		const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
-		page = await targetWindow.getPage(data.pageId);
-		bounds = await targetWindow.openfinWindow.getBounds();
+		let useStorage = true;
+		try {
+			if (data.windowIdentity) {
+				const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
+				page = await targetWindow.getPage(data.pageId);
+				bounds = await targetWindow.openfinWindow.getBounds();
+				useStorage = false;
+			}
+		} catch {}
+		if (useStorage) {
+			page = await platform.Storage.getPage(data.pageId);
+			bounds = await getPageBounds(data.pageId, true);
+		}
 	}
 	const payload = {
 		type: "page",
