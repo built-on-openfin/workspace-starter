@@ -249,13 +249,13 @@ function compareVersion(
 		return true;
 	}
 
-	const versionTypes = ["Major", "Minor", "Patch", "Build"];
+	const versionParts = ["Major", "Minor", "Patch", "Build"];
 
 	for (let i = 0; i < currentVersion.length; i++) {
 		const isValid = isGreaterThanOrLessThan(
 			versionToCheck,
 			isMinLimit,
-			versionTypes[i],
+			versionParts[i],
 			currentVersionList[i],
 			limitVersionList[i]
 		);
