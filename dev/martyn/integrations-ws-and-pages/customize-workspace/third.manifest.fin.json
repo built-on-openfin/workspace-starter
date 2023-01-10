@@ -221,6 +221,39 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/js/modules/log/console.bundle.js"
 				}
 			]
+		},
+		"versionProvider": {
+			"minimumVersion": {
+				"workspace": "10.0.0"
+			},
+			"versionWindow": {
+				"name": "versioning",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/windows/version/version.html"
+			}
+		},
+		"integrationProvider": {
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/favicon.ico",
+			"isManagementEnabled": false,
+			"command": "integrations",
+			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
+			"modules": [
+				{
+					"id": "workspaces",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/favicon.ico",
+					"title": "Workspaces",
+					"description": "Manage workspaces",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/js/modules/integrations/workspaces.bundle.js"
+				},
+				{
+					"id": "pages",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/favicon.ico",
+					"title": "Pages",
+					"description": "Manage Pages",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrations-ws-and-pages/customize-workspace/js/modules/integrations/pages.bundle.js"
+				}
+			]
 		}
 	}
 }
