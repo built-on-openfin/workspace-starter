@@ -1145,6 +1145,40 @@
       ],
       "type": "string"
     },
+    "MaximumVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "notificationCenter": {
+          "description": "The version of the notification center that this platform instance has connected to",
+          "type": "string"
+        },
+        "platformClient": {
+          "description": "The version of the code of this platform",
+          "type": "string"
+        },
+        "runtime": {
+          "description": "The version of the runtime this platform instance is running against",
+          "type": "string"
+        },
+        "rvm": {
+          "description": "The version of the rvm that was used to launch this platform",
+          "type": "string"
+        },
+        "workspace": {
+          "description": "The version of the workspace components this platform is currently connected to",
+          "type": "string"
+        },
+        "workspaceClient": {
+          "description": "The version of the workspace client code",
+          "type": "string"
+        },
+        "workspacePlatformClient": {
+          "description": "The version of the workspace platform client code",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "MenuEntry<GlobalContextMenuOptionType>": {
       "additionalProperties": false,
       "properties": {
@@ -2060,7 +2094,7 @@
           "type": "string"
         },
         "maximumVersion": {
-          "$ref": "#/definitions/MinimumVersion",
+          "$ref": "#/definitions/MaximumVersion",
           "description": "You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions"
         },
         "minimumVersion": {
