@@ -1,4 +1,4 @@
-import type { HomeRegistration } from "@openfin/workspace";
+import type { HomeRegistration, RegistrationMetaInfo } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
@@ -12,7 +12,7 @@ import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
-
+import * as versionProvider from "./version";
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,
@@ -41,6 +41,7 @@ import {
 const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions;
+let deregistered = false;
 
 export async function init(): Promise<boolean> {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
@@ -58,10 +59,16 @@ export async function init(): Promise<boolean> {
 
 	const registeredComponents: BootstrapComponents[] = [];
 	let homeRegistration: HomeRegistration;
+	let workspaceMetaInfo: RegistrationMetaInfo;
+	let notificationMetaInfo: RegistrationMetaInfo;
 
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running
 		homeRegistration = await registerHome();
+		workspaceMetaInfo = {
+			workspaceVersion: homeRegistration.workspaceVersion,
+			clientAPIVersion: homeRegistration.clientAPIVersion
+		};
 		registeredComponents.push("home");
 		registerAction("show-home", async () => {
 			await showHome();
@@ -74,7 +81,7 @@ export async function init(): Promise<boolean> {
 	await registerIntegration(settings.integrationProvider, helpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
-		await registerStore();
+		workspaceMetaInfo = await registerStore();
 		registeredComponents.push("store");
 		registerAction("show-store", async () => {
 			await showStore();
@@ -85,7 +92,7 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.dock) {
-		await registerDock(bootstrapOptions);
+		workspaceMetaInfo = await registerDock(bootstrapOptions);
 		registeredComponents.push("dock");
 		registerAction("show-dock", async () => {
 			await showDock();
@@ -96,13 +103,40 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.notifications) {
-		await registerNotifications();
+		notificationMetaInfo = await registerNotifications();
 		registerAction("show-notifications", async () => {
 			await showNotifications();
 		});
 		registerAction("hide-notifications", async () => {
 			await hideNotifications();
 		});
+	}
+
+	if (workspaceMetaInfo !== undefined) {
+		// we match the versions of workspace related packages
+		versionProvider.setVersion("WorkspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("WorkspaceClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("Workspace", workspaceMetaInfo.workspaceVersion);
+	}
+
+	if (notificationMetaInfo !== undefined) {
+		versionProvider.setVersion("NotificationCenter", notificationMetaInfo.workspaceVersion);
+	}
+
+	if (!versionProvider.isSupported()) {
+		const warningWindow = versionProvider.getVersionWindowConfiguration();
+		if (warningWindow !== undefined) {
+			logger.info(
+				"Unable to meet minimum version requirements and a warning window has been provided. Bootstrapping process has been stopped."
+			);
+			await deregister();
+			const openWarningWindow = await fin.Window.create(warningWindow);
+			await openWarningWindow.setAsForeground();
+			return false;
+		}
+	} else {
+		const versionInfo = await versionProvider.getVersionInfo();
+		logger.info("Bootstrapped with following versions.", versionInfo);
 	}
 
 	// Remove any entries from autoShow that have not been registered
@@ -149,19 +183,7 @@ export async function init(): Promise<boolean> {
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
-		await deregisterIntegration();
-		if (bootstrapOptions.dock) {
-			await deregisterDock();
-		}
-		if (bootstrapOptions.store) {
-			await deregisterStore();
-		}
-		if (bootstrapOptions.home) {
-			await deregisterHome();
-		}
-		if (bootstrapOptions.notifications) {
-			await deregisterNotifications();
-		}
+		await deregister();
 		await fin.Platform.getCurrentSync().quit();
 	});
 
@@ -176,4 +198,23 @@ export async function init(): Promise<boolean> {
 	await fireLifecycleEvent(platform, "after-bootstrap");
 
 	return true;
+}
+
+async function deregister() {
+	if (!deregistered) {
+		await deregisterIntegration();
+		if (bootstrapOptions.dock) {
+			await deregisterDock();
+		}
+		if (bootstrapOptions.store) {
+			await deregisterStore();
+		}
+		if (bootstrapOptions.home) {
+			await deregisterHome();
+		}
+		if (bootstrapOptions.notifications) {
+			await deregisterNotifications();
+		}
+		deregistered = true;
+	}
 }

@@ -16,6 +16,7 @@ import type { CustomSettings, ModuleHelpers } from "../shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
 import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
+import * as versionProvider from "../version";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
@@ -37,6 +38,14 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	await loggerProvider.init(settings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
+
+	await versionProvider.init(settings?.versionProvider);
+
+	const runtimeVersion = await fin.System.getVersion();
+	const rvmInfo = await fin.System.getRvmInfo();
+	versionProvider.setVersion("Runtime", runtimeVersion);
+	versionProvider.setVersion("RVM", rvmInfo.version);
+	versionProvider.setVersion("PlatformClient", VERSION);
 
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
@@ -81,6 +90,8 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	await notifyColorScheme();
 	return true;
 }
+
+export const VERSION = "10.3.0";
 
 export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);

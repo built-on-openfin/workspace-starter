@@ -81,5 +81,5 @@ export async function init(
 			});
 		}
 	}
-	return next(settings.platformProvider);
+	return next(settings?.platformProvider);
 }
