@@ -6,7 +6,8 @@ import type {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment, Workspace
+	TemplateFragment,
+	Workspace
 } from "@openfin/workspace";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
