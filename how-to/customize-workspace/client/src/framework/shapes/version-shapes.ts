@@ -25,7 +25,7 @@ export interface VersionProviderOptions {
 	minimumVersion?: MinimumVersion;
 
 	/** You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions */
-	maximumVersion?: MinimumVersion;
+	maximumVersion?: MaximumVersion;
 
 	/**
 	 * If the minimum version is not met and a window is configured then:

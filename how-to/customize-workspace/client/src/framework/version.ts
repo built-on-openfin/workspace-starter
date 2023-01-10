@@ -248,87 +248,27 @@ function compareVersion(
 		);
 		return true;
 	}
-	if (currentVersionList.length > 0) {
-		const isMajorValid = isGreaterThanOrLessThan(
+
+	const versionTypes = ["Major", "Minor", "Patch", "Build"];
+
+	for (let i = 0; i < currentVersion.length; i++) {
+		const isValid = isGreaterThanOrLessThan(
 			versionToCheck,
 			isMinLimit,
-			"Major",
-			currentVersionList[0],
-			limitVersionList[0]
+			versionTypes[i],
+			currentVersionList[i],
+			limitVersionList[i]
 		);
 
-		if (isMajorValid !== null) {
-			if (!isMajorValid) {
+		if (isValid !== null) {
+			if (!isValid) {
 				if (isMinLimit) {
 					minFail.push(versionToCheck);
 				} else {
 					maxFail.push(versionToCheck);
 				}
 			}
-			return isMajorValid;
-		}
-	}
-
-	if (currentVersionList.length > 1) {
-		const isMinorValid = isGreaterThanOrLessThan(
-			versionToCheck,
-			isMinLimit,
-			"Minor",
-			currentVersionList[1],
-			limitVersionList[1]
-		);
-
-		if (isMinorValid !== null) {
-			if (!isMinorValid) {
-				if (isMinLimit) {
-					minFail.push(versionToCheck);
-				} else {
-					maxFail.push(versionToCheck);
-				}
-			}
-			return isMinorValid;
-		}
-	}
-
-	if (currentVersionList.length > 2) {
-		const isPatchValid = isGreaterThanOrLessThan(
-			versionToCheck,
-			isMinLimit,
-			"Patch",
-			currentVersionList[2],
-			limitVersionList[2]
-		);
-
-		if (isPatchValid !== null) {
-			if (!isPatchValid) {
-				if (isMinLimit) {
-					minFail.push(versionToCheck);
-				} else {
-					maxFail.push(versionToCheck);
-				}
-			}
-			return isPatchValid;
-		}
-	}
-
-	if (currentVersionList.length > 3) {
-		const isBuildValid = isGreaterThanOrLessThan(
-			versionToCheck,
-			isMinLimit,
-			"Build",
-			currentVersionList[3],
-			limitVersionList[3]
-		);
-
-		if (isBuildValid !== null) {
-			if (!isBuildValid) {
-				if (isMinLimit) {
-					minFail.push(versionToCheck);
-				} else {
-					maxFail.push(versionToCheck);
-				}
-			}
-			return isBuildValid;
+			return isValid;
 		}
 	}
 
