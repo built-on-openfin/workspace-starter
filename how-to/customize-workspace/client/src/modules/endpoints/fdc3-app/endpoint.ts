@@ -21,6 +21,7 @@ export async function initialize(
 export async function requestResponse(
 	endpointDefinition: EndpointDefinition<{
 		fdc3Version: string;
+		fallbackIcon: string;
 	}>,
 	request?: unknown[] | { applications: unknown[] }
 ): Promise<App[]> {
@@ -40,47 +41,52 @@ export async function requestResponse(
 	} else {
 		applications = request.applications;
 	}
-	if (fdc3Version === "1.2") {
-		for (let i = 0; i < applications.length; i++) {
-			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
-			const platformApp: App = {
-				appId: passedApp.appId,
-				title: passedApp.title || passedApp.name,
-				manifestType: passedApp.manifestType,
-				manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
-				description: passedApp.description,
-				intents: passedApp.intents,
-				tags: fdc3OnePointTwoHelper.getTags(passedApp),
-				version: passedApp.version,
-				publisher: passedApp.publisher,
-				contactEmail: passedApp.contactEmail,
-				supportEmail: passedApp.supportEmail,
-				icons: fdc3OnePointTwoHelper.getIcons(passedApp.icons),
-				images: fdc3OnePointTwoHelper.getImages(passedApp.images)
-			};
-			results.push(platformApp);
+	for (let i = 0; i < applications.length; i++) {
+		let platformApp: App;
+		if (fdc3Version === "1.2") {
+				const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
+				platformApp = {
+					appId: passedApp.appId,
+					title: passedApp.title || passedApp.name,
+					manifestType: passedApp.manifestType,
+					manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
+					description: passedApp.description,
+					intents: passedApp.intents,
+					tags: fdc3OnePointTwoHelper.getTags(passedApp),
+					version: passedApp.version,
+					publisher: passedApp.publisher,
+					contactEmail: passedApp.contactEmail,
+					supportEmail: passedApp.supportEmail,
+					icons: fdc3OnePointTwoHelper.getIcons(passedApp.icons),
+					images: fdc3OnePointTwoHelper.getImages(passedApp.images)
+				};
+		} else if (fdc3Version === "2.0") {
+				const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
+				platformApp = {
+					appId: passedApp.appId,
+					title: passedApp.title || passedApp.name,
+					manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
+					manifest: fdc3TwoPointZeroHelper.getManifest(passedApp) as string,
+					description: passedApp.description,
+					intents: fdc3TwoPointZeroHelper.getIntents(passedApp),
+					tags: passedApp.categories,
+					version: passedApp.version,
+					publisher: passedApp.publisher,
+					contactEmail: passedApp.contactEmail,
+					supportEmail: passedApp.supportEmail,
+					icons: passedApp.icons,
+					images: passedApp.screenshots
+				};
 		}
-	} else if (fdc3Version === "2.0") {
-		for (let i = 0; i < applications.length; i++) {
-			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
-			const platformApp: App = {
-				appId: passedApp.appId,
-				title: passedApp.title || passedApp.name,
-				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
-				manifest: fdc3TwoPointZeroHelper.getManifest(passedApp) as string,
-				description: passedApp.description,
-				intents: fdc3TwoPointZeroHelper.getIntents(passedApp),
-				tags: passedApp.categories,
-				version: passedApp.version,
-				publisher: passedApp.publisher,
-				contactEmail: passedApp.contactEmail,
-				supportEmail: passedApp.supportEmail,
-				icons: passedApp.icons,
-				images: passedApp.screenshots
-			};
-			results.push(platformApp);
+		if (!Array.isArray(platformApp.icons)) {
+			platformApp.icons = [];
 		}
-	} else {
+		if (platformApp.icons.length === 0 && endpointDefinition.options?.fallbackIcon !== undefined) {
+			platformApp.icons.push({ src: endpointDefinition.options.fallbackIcon });
+		}
+		results.push(platformApp);
+	}
+	if (applications.length > 0 && results.length === 0) {
 		logger.warn(`Unsupported FDC3 version passed: ${fdc3Version}. Unable to map apps.`);
 	}
 	return results;
