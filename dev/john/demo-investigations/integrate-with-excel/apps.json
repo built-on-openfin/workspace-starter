@@ -4,7 +4,7 @@
 		"name": "fdc3-broadcast-view",
 		"title": "Context using FDC3",
 		"description": "This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -17,7 +17,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "tools"]
@@ -27,7 +27,7 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -40,7 +40,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
