@@ -21,6 +21,7 @@ export async function initialize(
 export async function requestResponse(
 	endpointDefinition: EndpointDefinition<{
 		fdc3Version: string;
+		fallbackIcon: string;
 	}>,
 	request?: unknown[] | { applications: unknown[] }
 ): Promise<PlatformApp[]> {
@@ -41,12 +42,13 @@ export async function requestResponse(
 	} else {
 		applications = request.applications;
 	}
-	if (fdc3Version === "1.2") {
-		for (let i = 0; i < applications.length; i++) {
+	for (let i = 0; i < applications.length; i++) {
+		let platformApp: PlatformApp;
+		if (fdc3Version === "1.2") {
 			const passedApp: AppDefinitionOnePointTwo = applications[i] as AppDefinitionOnePointTwo;
-			const platformApp: PlatformApp = {
-				appId: passedApp.appId ?? passedApp.name,
-				title: passedApp.title ?? passedApp.name,
+			platformApp = {
+				appId: passedApp.appId,
+				title: passedApp.title || passedApp.name,
 				manifestType: passedApp.manifestType,
 				manifest: fdc3OnePointTwoHelper.getManifest(passedApp) as string,
 				description: passedApp.description,
@@ -60,14 +62,11 @@ export async function requestResponse(
 				images: fdc3OnePointTwoHelper.getImages(passedApp.images),
 				private: fdc3OnePointTwoHelper.getPrivate(passedApp)
 			};
-			results.push(platformApp);
-		}
-	} else if (fdc3Version === "2.0") {
-		for (let i = 0; i < applications.length; i++) {
+		} else if (fdc3Version === "2.0") {
 			const passedApp: AppDefinitionTwoPointZero = applications[i] as AppDefinitionTwoPointZero;
-			const platformApp: PlatformApp = {
-				appId: passedApp.appId ?? passedApp.name,
-				title: passedApp.title ?? passedApp.name,
+			platformApp = {
+				appId: passedApp.appId,
+				title: passedApp.title || passedApp.name,
 				manifestType: fdc3TwoPointZeroHelper.getManifestType(passedApp),
 				manifest: fdc3TwoPointZeroHelper.getManifest(passedApp) as string,
 				description: passedApp.description,
@@ -81,9 +80,16 @@ export async function requestResponse(
 				images: passedApp.screenshots,
 				private: fdc3TwoPointZeroHelper.getPrivate(passedApp)
 			};
-			results.push(platformApp);
 		}
-	} else {
+		if (!Array.isArray(platformApp.icons)) {
+			platformApp.icons = [];
+		}
+		if (platformApp.icons.length === 0 && endpointDefinition.options?.fallbackIcon !== undefined) {
+			platformApp.icons.push({ src: endpointDefinition.options.fallbackIcon });
+		}
+		results.push(platformApp);
+	}
+	if (applications.length > 0 && results.length === 0) {
 		logger.warn(`Unsupported FDC3 version passed: ${fdc3Version}. Unable to map apps.`);
 	}
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
