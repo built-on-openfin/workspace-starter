@@ -770,6 +770,22 @@
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
+					"id": "workspaces",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/favicon.ico",
+					"title": "Workspaces",
+					"description": "Manage workspaces",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/js/modules/integrations/workspaces.bundle.js"
+				},
+				{
+					"id": "pages",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/favicon.ico",
+					"title": "Pages",
+					"description": "Manage Pages",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-workspace/js/modules/integrations/pages.bundle.js"
+				},
+				{
 					"id": "salesforce",
 					"icon": "https://samples.openfin.co/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
