@@ -1,0 +1,832 @@
+{
+	"bootstrap": {
+		"home": true,
+		"store": true,
+		"dock": true,
+		"notifications": true,
+		"autoShow": ["dock", "home"]
+	},
+	"authProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "example",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/auth/example.bundle.js",
+				"data": {
+					"autoLogin": false,
+					"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/windows/modules/auth/example-login.html",
+					"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/windows/modules/auth/example-logged-out.html",
+					"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/windows/modules/auth/example-logged-in.html",
+					"checkLoginStatusInSeconds": 1,
+					"checkSessionValidityInSeconds": -1
+				}
+			}
+		]
+	},
+	"platformProvider": {
+		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace",
+		"sharing": true,
+		"intentPicker": {
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/windows/intents/picker.html",
+			"height": 400,
+			"width": 400
+		}
+	},
+	"appProvider": {
+		"endpointIds": ["apps-get", "common-apps-get"],
+		"cacheDurationInSeconds": 10,
+		"cacheDurationInMinutes": 0,
+		"appAssetTag": "appasset",
+		"manifestTypes": [
+			"view",
+			"snapshot",
+			"manifest",
+			"external",
+			"inline-view",
+			"window",
+			"inline-window",
+			"desktop-browser",
+			"inline-external"
+		]
+	},
+	"endpointProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "local-storage",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
+			}
+		],
+		"endpoints": [
+			{
+				"id": "apps-get",
+				"type": "fetch",
+				"options": {
+					"method": "GET",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/apps.json"
+				}
+			},
+			{
+				"id": "common-apps-get",
+				"type": "fetch",
+				"options": {
+					"method": "GET",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/apps.json"
+				}
+			},
+			{
+				"id": "share-get",
+				"type": "fetch",
+				"options": {
+					"method": "GET",
+					"url": "https://workspace.openfin.co/api/share/[id]"
+				}
+			},
+			{
+				"id": "share-save",
+				"type": "fetch",
+				"options": {
+					"method": "POST",
+					"url": "https://workspace.openfin.co/api/share"
+				}
+			},
+			{
+				"id": "workspace-get",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "workspace"
+				}
+			},
+			{
+				"id": "workspace-set",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "SET",
+					"dataType": "workspace"
+				}
+			},
+			{
+				"id": "workspace-remove",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "REMOVE",
+					"dataType": "workspace"
+				}
+			},
+			{
+				"id": "page-get",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "page"
+				}
+			},
+			{
+				"id": "page-set",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "SET",
+					"dataType": "page"
+				}
+			},
+			{
+				"id": "page-remove",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "REMOVE",
+					"dataType": "page"
+				}
+			},
+			{
+				"id": "page-bounds-get",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "page-bounds"
+				}
+			},
+			{
+				"id": "page-bounds-set",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "SET",
+					"dataType": "page-bounds"
+				}
+			},
+			{
+				"id": "page-bounds-remove",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "REMOVE",
+					"dataType": "page-bounds"
+				}
+			},
+			{
+				"id": "integration-preferences-get",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "integration-preferences"
+				}
+			},
+			{
+				"id": "integration-preferences-set",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "SET",
+					"dataType": "integration-preferences"
+				}
+			}
+		]
+	},
+	"browserProvider": {
+		"windowOptions": {
+			"title": "Second Browser Starter",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+			"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/views/platform/new-tab/new-tab.html",
+			"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/views/platform/new-tab/new-tab.html"
+		},
+		"globalMenu": [
+			{
+				"include": true,
+				"label": "Toggle Notification Center",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "notification-toggle"
+					}
+				},
+				"position": {
+					"type": "OpenStorefront",
+					"operation": "after"
+				}
+			},
+			{
+				"include": true,
+				"label": "Open Home",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "home-show"
+					}
+				},
+				"position": {
+					"type": "OpenStorefront",
+					"operation": "after"
+				}
+			},
+			{
+				"include": true,
+				"label": "Quit App",
+				"position": {
+					"type": "Quit",
+					"operation": "replaceLabel"
+				}
+			},
+			{
+				"include": true,
+				"label": "Log Out and Quit App",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "logout-and-quit"
+					}
+				},
+				"position": {
+					"type": "Quit",
+					"operation": "after"
+				},
+				"conditions": ["authenticated"]
+			}
+		],
+		"pageMenu": [
+			{
+				"include": true,
+				"label": "Move Page to new Window",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "move-page-to-new-window"
+					}
+				},
+				"position": {
+					"operation": "start"
+				},
+				"separator": "after"
+			}
+		],
+		"viewMenu": [
+			{
+				"include": true,
+				"label": "Move View(s) to new Window",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "move-view-to-new-window"
+					}
+				},
+				"position": {
+					"operation": "start"
+				},
+				"separator": "after"
+			},
+			{
+				"include": true,
+				"label": "Create App Definition",
+				"data": {
+					"type": "Custom",
+					"action": {
+						"id": "raise-create-app-definition-intent"
+					}
+				},
+				"position": {
+					"operation": "start"
+				}
+			}
+		],
+		"toolbarButtons": [
+			{
+				"include": true,
+				"id": "change-opacity",
+				"button": {
+					"type": "Custom",
+					"tooltip": "Change Opacity",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon.ico",
+					"action": {
+						"id": "change-opacity",
+						"customData": {
+							"sourceId": "change-opacity",
+							"replacementId": "restore-opacity"
+						}
+					}
+				}
+			},
+			{
+				"include": false,
+				"id": "restore-opacity",
+				"button": {
+					"type": "Custom",
+					"tooltip": "Restore Opacity",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon.ico",
+					"action": {
+						"id": "restore-opacity",
+						"customData": {
+							"sourceId": "restore-opacity",
+							"replacementId": "change-opacity"
+						}
+					}
+				}
+			},
+			{
+				"include": true,
+				"themes": {
+					"Light": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/search-dark.svg"
+				},
+				"id": "home-show",
+				"button": {
+					"type": "Custom",
+					"tooltip": "Show Home",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/search.svg",
+					"action": {
+						"id": "home-show",
+						"customData": {}
+					}
+				}
+			},
+			{
+				"include": true,
+				"id": "notification-toggle",
+				"themes": {
+					"Light": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/bell-dark.svg"
+				},
+				"button": {
+					"type": "Custom",
+					"tooltip": "Toggle Notification Center",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/bell.svg",
+					"action": {
+						"id": "notification-toggle",
+						"customData": {}
+					}
+				}
+			},
+			{
+				"include": true,
+				"id": "pin-window",
+				"themes": {
+					"Light": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/pin-dark.svg"
+				},
+				"button": {
+					"type": "Custom",
+					"tooltip": "Pin this window",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/pin.svg",
+					"action": {
+						"id": "pin-window",
+						"customData": {
+							"sourceId": "pin-window",
+							"replacementId": "unpin-window"
+						}
+					}
+				}
+			},
+			{
+				"include": false,
+				"id": "unpin-window",
+				"themes": {
+					"Light": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/pin-vertical-dark.svg"
+				},
+				"button": {
+					"type": "Custom",
+					"tooltip": "Unpin this window",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/pin-vertical.svg",
+					"action": {
+						"id": "unpin-window",
+						"customData": {
+							"sourceId": "unpin-window",
+							"replacementId": "pin-window"
+						}
+					}
+				}
+			},
+			{
+				"include": true,
+				"id": "lock-unlock",
+				"button": {
+					"type": "LockUnlockPage"
+				}
+			},
+			{
+				"include": true,
+				"id": "show-hide-tabs",
+				"button": {
+					"type": "ShowHideTabs"
+				}
+			},
+			{
+				"include": true,
+				"id": "color-linking",
+				"button": {
+					"type": "ColorLinking"
+				}
+			},
+			{
+				"include": true,
+				"id": "preset-layouts",
+				"button": {
+					"type": "PresetLayouts"
+				}
+			},
+			{
+				"include": true,
+				"id": "share",
+				"themes": {
+					"Light": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/share-dark.svg"
+				},
+				"button": {
+					"type": "Custom",
+					"tooltip": "Share",
+					"disabled": false,
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/share.svg",
+					"action": {
+						"id": "share",
+						"customData": {}
+					}
+				},
+				"conditions": ["sharing"]
+			},
+			{
+				"include": true,
+				"id": "save-menu",
+				"button": {
+					"type": "SaveMenu"
+				}
+			}
+		]
+	},
+	"themeProvider": {
+		"themes": [
+			{
+				"label": "Dark",
+				"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+				"palette": {
+					"brandPrimary": "#504CFF",
+					"brandSecondary": "#383A40",
+					"backgroundPrimary": "#111214",
+					"contentBackground1": "#504CFF",
+					"functional1": null,
+					"functional2": null,
+					"functional3": null,
+					"functional4": null,
+					"functional5": null,
+					"functional6": null,
+					"functional7": null,
+					"functional8": null,
+					"functional9": null,
+					"functional10": null,
+					"statusSuccess": null,
+					"statusWarning": null,
+					"statusCritical": null,
+					"statusActive": null,
+					"inputBackground": null,
+					"inputColor": null,
+					"inputPlaceholder": null,
+					"inputDisabled": null,
+					"inputFocused": null,
+					"textDefault": null,
+					"textHelp": null,
+					"textInactive": null,
+					"background1": null,
+					"background2": null,
+					"background3": null,
+					"background4": null,
+					"background5": null,
+					"background6": null
+				}
+			},
+			{
+				"label": "Light",
+				"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+				"palette": {
+					"brandPrimary": "#399BB8",
+					"brandSecondary": null,
+					"backgroundPrimary": "#111214",
+					"contentBackground1": "#504CFF",
+					"functional1": null,
+					"functional2": null,
+					"functional3": null,
+					"functional4": null,
+					"functional5": null,
+					"functional6": null,
+					"functional7": null,
+					"functional8": null,
+					"functional9": null,
+					"functional10": null,
+					"statusSuccess": null,
+					"statusWarning": null,
+					"statusCritical": null,
+					"statusActive": "#399BB8",
+					"inputBackground": "#ECEEF1",
+					"inputColor": "#1E1F23",
+					"inputPlaceholder": "#7D808A",
+					"inputDisabled": null,
+					"inputFocused": "#C9CBD2",
+					"textDefault": "#1E1F23",
+					"textHelp": "#111214",
+					"textInactive": null,
+					"background1": "#ECEEF1",
+					"background2": "#FAFBFE",
+					"background3": "#ECEEF1",
+					"background4": "#ECEEF1",
+					"background5": "#DDDFE4",
+					"background6": "#ffffff"
+				}
+			}
+		]
+	},
+	"homeProvider": {
+		"id": "second-customize-workspace",
+		"title": "Second Home Starter",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+		"queryMinLength": 3,
+		"queryAgainst": ["title"]
+	},
+	"storefrontProvider": {
+		"id": "second-customize-workspace",
+		"title": "Second Custom Storefront",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+		"landingPage": {
+			"hero": {
+				"title": "Second Custom Hero Title",
+				"description": "This is a demonstration of the hero section that you can configure for your store and a demonstration that different stores can have different content.",
+				"cta": {
+					"title": "Second Hero Apps!",
+					"tags": ["hero"]
+				},
+				"image": {
+					"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/superhero-unsplash.jpg"
+				}
+			},
+			"topRow": {
+				"title": "Custom Top Row Content",
+				"items": [
+					{
+						"title": "Expero",
+						"description": "A collection of example views from Expero showing the power of interop and context sharing.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-1-unsplash.jpg"
+						},
+						"tags": ["expero"],
+						"buttonTitle": "View"
+					},
+					{
+						"title": "Dev Tools",
+						"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-2-unsplash.jpg"
+						},
+						"tags": ["tools"],
+						"buttonTitle": "View"
+					},
+					{
+						"title": "Learning Resource",
+						"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-3-unsplash.jpg"
+						},
+						"tags": ["page"],
+						"buttonTitle": "View"
+					}
+				]
+			},
+			"middleRow": {
+				"title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
+				"tags": ["fdc3", "interop"]
+			},
+			"bottomRow": {
+				"title": "Quick Access",
+				"items": [
+					{
+						"title": "Views",
+						"description": "A collection of views made available through our catalog.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-4-unsplash.jpg"
+						},
+						"tags": ["view"],
+						"buttonTitle": "View"
+					},
+					{
+						"title": "Web Apps",
+						"description": "A collection of web apps built using OpenFin.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-5-unsplash.jpg"
+						},
+						"tags": ["manifest"],
+						"buttonTitle": "View"
+					},
+					{
+						"title": "Native Apps",
+						"description": "A collection of native apps made available through our catalog.",
+						"image": {
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/coding-6-unsplash.jpg"
+						},
+						"tags": ["native"],
+						"buttonTitle": "View"
+					}
+				]
+			}
+		},
+		"navigation": [
+			{
+				"title": "Applications",
+				"items": [
+					{
+						"title": "All Apps",
+						"tags": ["view", "page", "manifest", "native", "desktop-browser"]
+					},
+					{
+						"title": "Views",
+						"tags": ["view"]
+					},
+					{
+						"title": "Pages",
+						"tags": ["page"]
+					},
+					{
+						"title": "Manifest",
+						"tags": ["manifest"]
+					},
+					{
+						"title": "Native",
+						"tags": ["native"]
+					}
+				]
+			},
+			{
+				"title": "Context Sharing",
+				"items": [
+					{
+						"title": "FDC3 API",
+						"tags": ["fdc3"]
+					},
+					{
+						"title": "Interop API",
+						"tags": ["interop"]
+					}
+				]
+			}
+		],
+		"footer": {
+			"logo": {
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png",
+				"size": "32"
+			},
+			"text": "Welcome to the OpenFin Sample Footer",
+			"links": [
+				{
+					"title": "Github",
+					"url": "https://github.com/built-on-openfin/workspace-starter"
+				},
+				{
+					"title": "YouTube",
+					"url": "https://www.youtube.com/user/OpenFinTech"
+				}
+			]
+		}
+	},
+	"dockProvider": {
+		"id": "customize-workspace",
+		"title": "Home Starter",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon.ico",
+		"workspaceComponents": {
+			"hideHomeButton": false,
+			"hideWorkspacesButton": false,
+			"hideNotificationsButton": false,
+			"hideStorefrontButton": false
+		},
+		"apps": [
+			{
+				"display": "individual",
+				"tags": ["dock"]
+			},
+			{
+				"display": "group",
+				"tooltip": "FDC3",
+				"tags": ["fdc3"]
+			},
+			{
+				"display": "group",
+				"tooltip": "Manager",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/images/icon-gradient.png",
+				"tags": ["manager"]
+			}
+		],
+		"buttons": [
+			{
+				"tooltip": "Google",
+				"iconUrl": "https://www.google.com/favicon.ico",
+				"action": {
+					"id": "launch-view",
+					"customData": {
+						"url": "https://www.google.com"
+					}
+				}
+			},
+			{
+				"tooltip": "Social",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/common/icons/share.svg",
+				"options": [
+					{
+						"tooltip": "Twitter",
+						"action": {
+							"id": "launch-view",
+							"customData": {
+								"url": "https://twitter.com/openfintech"
+							}
+						}
+					},
+					{
+						"tooltip": "YouTube",
+						"action": {
+							"id": "launch-view",
+							"customData": {
+								"url": "https://www.youtube.com/user/OpenFinTech"
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"notificationProvider": {
+		"id": "second-customize-workspace",
+		"title": "Second Notification Starter",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon-32x32.png"
+	},
+	"integrationProvider": {
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon.ico",
+		"isManagementEnabled": true,
+		"command": "integrations",
+		"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
+		"modules": [
+			{
+				"id": "salesforce",
+				"icon": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/favicon.ico",
+				"title": "Salesforce",
+				"enabled": false,
+				"url": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+				"data": {
+					"consumerKey": "",
+					"orgUrl": "",
+					"preload": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/js/preload.js",
+					"iconMap": {
+						"contact": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/images/contact.svg",
+						"account": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/images/note.svg",
+						"task": "https://samples.openfin.co/workspace-starter/workspace/v9.2.0/integrate-with-salesforce/images/task.svg"
+					}
+				}
+			},
+			{
+				"id": "emoji",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/favicon.ico",
+				"title": "Emoji Provider",
+				"enabled": true,
+				"autoStart": false,
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js"
+			}
+		]
+	},
+	"initOptionsProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "interop",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/init-options/interop.bundle.js",
+				"data": {
+					"supportedActions": ["raise-intent", "share-context"]
+				}
+			}
+		]
+	},
+	"loggerProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "console",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/log/console.bundle.js"
+			}
+		]
+	},
+	"actionsProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "opacity",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/actions/opacity.bundle.js"
+			},
+			{
+				"enabled": true,
+				"id": "app-definition",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/concurrency/customize-workspace/js/modules/actions/app-definition.bundle.js"
+			}
+		]
+	}
+}
