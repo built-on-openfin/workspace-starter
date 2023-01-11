@@ -243,7 +243,12 @@
 					"title": "Workspaces",
 					"description": "Manage workspaces",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js"
+					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
+					"data": {
+						"images": {
+							"workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+						}
+					}
 				},
 				{
 					"id": "pages",
@@ -251,7 +256,12 @@
 					"title": "Pages",
 					"description": "Manage Pages",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/pages.bundle.js"
+					"url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
+					"data": {
+						"images": {
+							"page": "http://localhost:8080/icons/{scheme}/page.svg"
+						}
+					}
 				}
 			]
 		}
