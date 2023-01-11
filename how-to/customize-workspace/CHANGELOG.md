@@ -20,8 +20,8 @@
 - Added ability to specify a minimum and/or maximum version for something your platform depends on (see [How To Add Version Support](./docs/how-to-add-versioning-support.md))
 - Moved the workspaces home logic into the Workspaces integration provider
 - Moved the pages home logic into the Pages integration provider
-- Removed `enableWorkspaceIntegration` from `homeProvider` - enable/disable the Workspaces integration instead
-- Removed `enablePageIntegration` from `homeProvider` - enable/disable the Pages integration instead
+- Removed `enableWorkspaceIntegration` from `homeProvider`, enable/disable the Workspaces integration instead
+- Removed `enablePageIntegration` from `homeProvider`, enable/disable the Pages integration instead
 
 ## v9.2
 
