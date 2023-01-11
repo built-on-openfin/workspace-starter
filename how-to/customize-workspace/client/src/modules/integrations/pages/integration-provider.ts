@@ -13,11 +13,12 @@ import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 import type { ColorSchemeMode } from "customize-workspace/shapes/theme-shapes";
+import type { PagesSettings } from "./shapes";
 
 /**
  * Implement the integration provider for pages.
  */
-export class PagesProvider implements IntegrationModule {
+export class PagesProvider implements IntegrationModule<PagesSettings> {
 	/**
 	 * Provider id.
 	 * @internal
@@ -43,6 +44,11 @@ export class PagesProvider implements IntegrationModule {
 	private static readonly _ACTION_SHARE_PAGE = "Share Page";
 
 	/**
+	 * The settings from config.
+	 */
+	private _settings: PagesSettings;
+
+	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
@@ -62,10 +68,11 @@ export class PagesProvider implements IntegrationModule {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition,
+		definition: ModuleDefinition<PagesSettings>,
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
+		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
 	}
@@ -190,7 +197,7 @@ export class PagesProvider implements IntegrationModule {
 			key: id,
 			title,
 			label: "Page",
-			icon: `${this._integrationHelpers.rootUrl}/common/icons/${iconFolder}/${colorScheme}/page.svg`,
+			icon: this._settings.images.page.replace("{scheme}", colorScheme as string),
 			actions,
 			data: {
 				providerId: PagesProvider._PROVIDER_ID,

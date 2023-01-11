@@ -14,11 +14,12 @@ import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-sh
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 import type { ColorSchemeMode } from "customize-workspace/shapes/theme-shapes";
 import { randomUUID } from "../../../framework/uuid";
+import type { WorkspacesSettings } from "./shapes";
 
 /**
  * Implement the integration provider for workspaces.
  */
-export class WorkspacesProvider implements IntegrationModule {
+export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings> {
 	/**
 	 * Provider id.
 	 * @internal
@@ -56,6 +57,11 @@ export class WorkspacesProvider implements IntegrationModule {
 	private static readonly _ACTION_EXISTS_WORKSPACE = "Workspace Exists";
 
 	/**
+	 * The settings from config.
+	 */
+	private _settings: WorkspacesSettings;
+
+	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
@@ -75,10 +81,11 @@ export class WorkspacesProvider implements IntegrationModule {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition,
+		definition: ModuleDefinition<WorkspacesSettings>,
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
+		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("WorkspacesProvider");
 	}
@@ -89,14 +96,13 @@ export class WorkspacesProvider implements IntegrationModule {
 	 */
 	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-		const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
 
 		return [
 			{
 				key: `${WorkspacesProvider._PROVIDER_ID}-help1`,
 				title: "Workspaces",
 				label: "Help",
-				icon: `${this._integrationHelpers.rootUrl}/common/icons/${iconFolder}/${colorScheme}/workspaces.svg`,
+				icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 				actions: [],
 				data: {
 					providerId: WorkspacesProvider._PROVIDER_ID
@@ -145,7 +151,7 @@ export class WorkspacesProvider implements IntegrationModule {
 						{
 							key: WorkspacesProvider._ACTION_EXISTS_WORKSPACE,
 							title: `Workspace ${foundMatch.title} already exists.`,
-							icon: `${this._integrationHelpers.rootUrl}/common/icons/${iconFolder}/${colorScheme}/workspaces.svg`,
+							icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 							actions: [],
 							data: {
 								providerId: WorkspacesProvider._PROVIDER_ID,
@@ -163,7 +169,7 @@ export class WorkspacesProvider implements IntegrationModule {
 					{
 						key: WorkspacesProvider._ACTION_SAVE_WORKSPACE,
 						title: `Save Current Workspace as ${title}`,
-						icon: `${this._integrationHelpers.rootUrl}/common/icons/${iconFolder}/${colorScheme}/workspaces.svg`,
+						icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 						label: "Suggestion",
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
@@ -343,7 +349,7 @@ export class WorkspacesProvider implements IntegrationModule {
 			key: id,
 			title,
 			label: "Workspace",
-			icon: `${this._integrationHelpers.rootUrl}/common/icons/${iconFolder}/${colorScheme}/workspaces.svg`,
+			icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 			actions,
 			data: {
 				providerId: WorkspacesProvider._PROVIDER_ID,
