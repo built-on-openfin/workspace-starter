@@ -18,6 +18,10 @@
 - Updated example auth to give an example of how workspace can present entitled based data by letting you pick from two users and each user has a role (developer or sales) and the developer role has an apps feed that consists of developer related apps and has menu options that help developers (inspect view, window, platform etc) where as the sales role keeps the demo apps but filters out developer related menu options and apps. **npm run secondclient** will run the demo.
 - Moved the create app definition action logic from the app definition module (which has been deleted) into a developer action module which also has inspect menu actions.
 - Added ability to specify a minimum and/or maximum version for something your platform depends on (see [How To Add Version Support](./docs/how-to-add-versioning-support.md))
+- Moved the workspaces home logic into the Workspaces integration provider
+- Moved the pages home logic into the Pages integration provider
+- Removed `enableWorkspaceIntegration` from `homeProvider`, enable/disable the Workspaces integration instead
+- Removed `enablePageIntegration` from `homeProvider`, enable/disable the Pages integration instead
 
 ## v9.2
 

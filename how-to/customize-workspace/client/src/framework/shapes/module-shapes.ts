@@ -79,6 +79,11 @@ export interface ModuleHelpers {
 	getCurrentThemeId(): Promise<string>;
 
 	/**
+	 * Get the current icon folder.
+	 */
+	getCurrentIconFolder(): Promise<string>;
+
+	/**
 	 * Get the current palette.
 	 */
 	getCurrentPalette(): Promise<CustomPaletteSet>;

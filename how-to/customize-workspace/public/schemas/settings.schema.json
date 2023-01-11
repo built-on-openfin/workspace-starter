@@ -950,14 +950,6 @@
       "additionalProperties": false,
       "description": "HomeProvider Options",
       "properties": {
-        "enablePageIntegration": {
-          "description": "Default is true. Enable our default page integration in home so that you can discover, launch and delete pages from home. Disable if you want to plug in your own implementation using the integration provider.",
-          "type": "boolean"
-        },
-        "enableWorkspaceIntegration": {
-          "description": "Default is true. Enable our default workspace integration in home that lets you save a workspace by typing /w workspace name as well as discovering and launching and deleting workspaces. Disable if you want to use your own implementation using the integration provider.",
-          "type": "boolean"
-        },
         "icon": {
           "description": "The icon to show in the Home component UI",
           "type": "string"
