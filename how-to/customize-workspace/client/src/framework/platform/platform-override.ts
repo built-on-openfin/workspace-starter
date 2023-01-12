@@ -14,7 +14,7 @@ import {
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";
-import { updateBrowserWindowButtonsColorScheme } from "../buttons";
+import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
@@ -303,14 +303,32 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			options: OpenFin.PlatformWindowCreationOptions,
 			identity?: OpenFin.Identity
 		): Promise<OpenFin.Window> {
+			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
+
+			if (!overrideDefaultButtons) {
+				// The window options don't override the toolbar buttons
+				// so we assume we are using the workspace defaults
+				// Since the defaults were created using the theme at startup
+				// we need to replace them with the current set of default
+				// buttons which are theme aware
+				options.workspacePlatform = options.workspacePlatform ?? {};
+				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
+				options.workspacePlatform.toolbarOptions.buttons = await getDefaultToolbarButtons();
+			}
+
 			const window = await super.createWindow(options, identity);
 
-			try {
-				const platform = getCurrentSync();
-				const browserWindow = platform.Browser.wrapSync(window.identity);
-				await updateBrowserWindowButtonsColorScheme(browserWindow);
-			} catch {
-				// Probably not a browser window
+			// If the default buttons were overwritten then hopefully the creator
+			// used correctly themed versions, but in case they didn't we send
+			// an update for the colors.
+			if (overrideDefaultButtons) {
+				try {
+					const platform = getCurrentSync();
+					const browserWindow = platform.Browser.wrapSync(window.identity);
+					await updateBrowserWindowButtonsColorScheme(browserWindow);
+				} catch {
+					// Probably not a browser window
+				}
 			}
 
 			return window;
