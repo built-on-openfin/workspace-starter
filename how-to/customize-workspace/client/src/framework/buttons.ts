@@ -24,6 +24,10 @@ async function getConfigToolbarButtons(): Promise<ToolbarButtonDefinition[]> {
 	configToolbarButtons = settings?.browserProvider?.toolbarButtons || [];
 
 	subscribeLifecycleEvent("theme-changed", async () => {
+		// Reset the default toolbar buttons as the icon might have changed
+		defaultToolbarButtons = undefined;
+		await getDefaultToolbarButtons();
+
 		const platform = getCurrentSync();
 
 		const browserWindows = await platform.Browser.getAllWindows();
