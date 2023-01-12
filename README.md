@@ -65,6 +65,18 @@ This section includes samples that utilize the official integrations listed on t
 | [How To Integrate With Microsoft 365](./how-to/integrate-with-ms365)               | This example demonstrates how to implement Microsoft 365 integration in OpenFin Workspace using our Microsoft 365 integration API, enabling you to browse and search Microsoft 365 data in OpenFin Home. |                                                                                                                                                                            |
 | [How To Integrate With Excel](./how-to/integrate-with-excel)                       | This example demonstrates how to implement Excel integration in OpenFin Workspace using our Excel integration API, enabling you to browse monitor and update Excel data.                                 | [Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv9.2.0%2Fintegrate-with-excel%2Fmanifest.fin.json) |
 
+## Automation Testing
+
+OpenFin provides some packages to assist in automation testing of yours apps.
+
+- [@openfin/automation-cli](https://www.npmjs.com/package/@openfin/automation-cli) - A command line tool for running tests in an OpenFin environment.
+- [@openfin/automation-helpers](https://www.npmjs.com/package/@openfin/automation-helpers) - A package of helper methods for interacting with OpenFin components.
+- [@openfin/automation-native](https://www.npmjs.com/package/@openfin/automation-native) - Helper methods to help interacting with native mouse and keyboard elements, such as context menus.
+
+| Example                                           | Description                                                                                    | Live Launch |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- |
+| [Automation Testing](./how-to/automation-testing) | This howto contains multiple examples of using the OpenFin automation testing CLI and helpers. |             |
+
 ## Other Integrations
 
 OpenFin is a very easy platform to integrate with. If you need to integrate with something that has a REST API, JavaScript API, .NET API or Java API then then you can create your own integration easily. This section will contain examples of custom integrations to give you an idea of what is possible.

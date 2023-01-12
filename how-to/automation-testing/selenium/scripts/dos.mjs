@@ -1,7 +1,7 @@
 import { spawnSync } from 'child_process';
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import fs from 'fs';
 
 const tempDir = os.tmpdir();
 const tempDosFile = path.join(tempDir, `openfin-dos-${Date.now()}.json`);
@@ -11,7 +11,7 @@ const DOS = {
 		securedAPIDefaultPermission: 'allow',
 		systemApps: {
 			workspace: {
-				version: '9.0.14'
+				version: '9.2.5'
 			}
 		}
 	}

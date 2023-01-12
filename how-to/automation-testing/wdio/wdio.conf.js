@@ -1,15 +1,15 @@
-const { getValue, setValue } = require('@wdio/shared-store-service');
 const { OpenFinSystem, NodeWebDriver } = require('@openfin/automation-helpers');
+const { getValue, setValue } = require('@wdio/shared-store-service');
 const childProcess = require('child_process');
-const path = require('path');
+const fkill = require('fkill');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
-const fkill = require('fkill');
+const path = require('path');
 
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
 // e.g. if the manifest runtime version is 26.102.71.8 then the chromedriver version should be '102.0.0'
 const manifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5843;
 const devToolsPort = 9123;
 
@@ -25,6 +25,7 @@ try {
 } catch {}
 if (!isFile) {
 	console.error('ERROR: OpenFinRVM is missing, exiting...');
+	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(1);
 }
 
@@ -52,7 +53,7 @@ exports.config = {
 		console.log('Launching OpenFinRVM');
 		const openFinRVMProcess = childProcess.spawn(
 			openFinRVM,
-			['--config=' + manifestUrl, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
+			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
 			{
 				shell: true
 			}

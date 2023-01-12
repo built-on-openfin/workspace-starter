@@ -46,7 +46,7 @@ describe('Register with Home', () => {
 		expect(windows.length).to.greaterThan(0);
 	});
 
-	it('Can launch notification in a security realm', async () => {
+	it('Can launch notification center in a security realm', async () => {
 		const launched = await OpenFinNotifications.launchInSecurityRealm('');
 		expect(launched).to.equal(true);
 

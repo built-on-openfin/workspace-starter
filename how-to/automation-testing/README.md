@@ -31,8 +31,8 @@ In addition to the JavaScript test examples there is also a duplicate set of exa
 
 ## Selenium
 
-The `@openfin/automation-helpers` can also be used with a [Selenium](https://www.selenium.dev/) setup, see the [selenium](./examples/selenium/) example for more details.
+The `@openfin/automation-helpers` can also be used with a [Selenium](https://www.selenium.dev/) setup, see the [selenium](./selenium/selenium.js) example for more details.
 
 ## WebDriverIO
 
-The `@openfin/automation-helpers` can also be used with a [WebDriverIO](https://webdriver.io/) setup, see the [wdio](./examples/wdio/) example for more details.
+The `@openfin/automation-helpers` can also be used with a [WebDriverIO](https://webdriver.io/) setup, see the [wdio](./wdio/wdio.conf.js) example for more details.

@@ -1,23 +1,24 @@
 {
 	"name": "automation-testing-register-with-home",
-	"version": "1.0.0",
+	"version": "9.2.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
-		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --workspace 9.0.14",
-		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --workspace 9.0.14",
-		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 9.0.14",
-		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 9.0.14",
-		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 9.0.14",
-		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 9.0.14",
-		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --workspace 9.0.14",
-		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 9.0.14",
-		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 9.0.14"
+		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --workspace 9.2.5",
+		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --workspace 9.2.5",
+		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 9.2.5",
+		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 9.2.5",
+		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 9.2.5",
+		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 9.2.5",
+		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --workspace 9.2.5",
+		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 9.2.5",
+		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 9.2.5"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
 		"@openfin/automation-cli": "^0.3.9",
 		"@openfin/automation-helpers": "^0.3.9",
+		"@openfin/automation-native": "^0.3.9",
 		"@types/chai": "4.3.3",
 		"chai": "4.3.6"
 	}

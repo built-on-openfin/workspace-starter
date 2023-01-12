@@ -1,12 +1,12 @@
-const path = require('path');
+const { SeleniumWebDriver, OpenFinSystem } = require('@openfin/automation-helpers');
+const childProcess = require('child_process');
+const chromedriver = require('chromedriver');
+const fkill = require('fkill');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
-const { Builder } = require('selenium-webdriver');
-const chromedriver = require('chromedriver');
-const childProcess = require('child_process');
-const { SeleniumWebDriver, OpenFinSystem } = require('@openfin/automation-helpers');
 const Mocha = require('mocha');
-const fkill = require('fkill');
+const path = require('path');
+const { Builder } = require('selenium-webdriver');
 
 async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
@@ -17,7 +17,7 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 		console.log('Start OpenFin Runtime');
 		openFinRVMProcess = childProcess.spawn(
 			openFinRVM,
-			['--config=' + manifestUrl, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
+			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
 			{ shell: true }
 		);
 
@@ -35,10 +35,10 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 		// but you could just call startSession on the SeleniumWebDriver
 		console.log('Building the selenium webdriver');
 		seleniumDriver = new Builder()
-			.usingServer('http://localhost:' + chromeDriverPort)
+			.usingServer(`http://localhost:${chromeDriverPort}`)
 			.withCapabilities({
 				'goog:chromeOptions': {
-					debuggerAddress: 'localhost:' + devToolsPort
+					debuggerAddress: `localhost:${devToolsPort}`
 				}
 			})
 			.forBrowser('chrome')
@@ -91,7 +91,7 @@ async function runMochaTests() {
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
 // e.g. if the manifest runtime version is 26.102.71.8 then the chromedriver version should be "102.0.0"
 const testManifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5678;
 const devToolsPort = 9122;
 
@@ -107,6 +107,7 @@ try {
 } catch {}
 if (!isFile) {
 	console.error('ERROR: OpenFinRVM is missing, exiting...');
+	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(1);
 }
 

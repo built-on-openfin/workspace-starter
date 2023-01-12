@@ -10,7 +10,7 @@
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"prettier": "prettier --config .prettierrc --write .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
-		"markdownlint": "markdownlint **/*.md --ignore node_modules",
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint"
 	},
 	"workspaces": [
@@ -24,7 +24,8 @@
 		"how-to/integrate-with-sso",
 		"how-to/integrate-server-authentication",
 		"how-to/integrate-with-salesforce-basic",
-		"how-to/hints-and-tips"
+		"how-to/hints-and-tips",
+		"how-to/automation-testing"
 	],
 	"howToCustomFolder": "",
 	"contributors": [

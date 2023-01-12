@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
 	MouseButton,
 	OpenFinHome,
@@ -11,7 +12,7 @@ import { NativeDriver, NativeDriverKeys } from "@openfin/automation-native";
 import { expect } from "chai";
 import { By } from "selenium-webdriver";
 
-let providerWindowUrl;
+let providerWindowUrl: string;
 
 describe("Register with Home", () => {
 	it("The runtime is ready", async () => {
@@ -48,7 +49,7 @@ describe("Register with Home", () => {
 		expect(windows.length).to.greaterThan(0);
 	});
 
-	it("Can launch notification in a security realm", async () => {
+	it("Can launch notification center in a security realm", async () => {
 		const launched = await OpenFinNotifications.launchInSecurityRealm("");
 		expect(launched).to.equal(true);
 

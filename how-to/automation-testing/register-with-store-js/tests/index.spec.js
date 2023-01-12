@@ -1,5 +1,5 @@
-const { expect } = require('chai');
 const { OpenFinProxy, OpenFinSystem, OpenFinStore, WebDriver } = require('@openfin/automation-helpers');
+const { expect } = require('chai');
 
 describe('Register with Store', () => {
 	it('The runtime is ready', async () => {
