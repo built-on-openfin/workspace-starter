@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"devDependencies": {
-		"@openfin/automation-helpers": "^0.3.9",
+		"@openfin/automation-helpers": "^0.3.10",
 		"@wdio/cli": "7.25.1",
 		"@wdio/local-runner": "7.25.1",
 		"@wdio/mocha-framework": "7.25.1",
