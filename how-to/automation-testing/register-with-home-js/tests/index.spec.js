@@ -15,6 +15,8 @@ let providerWindowUrl;
 
 describe('Register with Home', () => {
 	it('The runtime is ready', async () => {
+		console.log('Tests Started', globalThis.automation.globalVars?.startTime);
+
 		const isReady = await OpenFinSystem.waitForReady(10000);
 		expect(isReady).to.equal(true);
 	});
@@ -32,7 +34,7 @@ describe('Register with Home', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('26.102.70.16');
+		expect(version).to.equal('26.102.71.8');
 	});
 
 	it('The identity should be set', async () => {

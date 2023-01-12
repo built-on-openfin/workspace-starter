@@ -3,20 +3,19 @@
 	"version": "1.0.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
-		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/9.0.0/**/*.spec.js --workspace 9.0.14",
-		"test-remote-mocha-v8": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v8.0.0/register-with-store/manifest.fin.json ./tests/8.0.0/**/*.spec.js --workspace 8.1.7",
-		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/9.0.0/**/*.spec.js --workspace 9.0.14",
-		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/9.0.0/**/*.spec.js --framework jasmine --workspace 9.0.14",
-		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/9.0.0/**/*.spec.js --framework jasmine --workspace 9.0.14",
-		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/9.0.0/**/*.spec.js --framework jest --workspace 9.0.14",
-		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/9.0.0/**/*.spec.js --framework jest --workspace 9.0.14",
-		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/9.0.0/**/*.spec.js --offline --storageFolder=./offline-storage --workspace 9.0.14"
+		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace 9.0.14",
+		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace 9.0.14",
+		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 9.0.14",
+		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 9.0.14",
+		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace 9.0.14",
+		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace 9.0.14",
+		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage --workspace 9.0.14"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-cli": "file:../packages/automation-cli",
-		"@openfin/automation-helpers": "file:../packages/automation-helpers",
+		"@openfin/automation-cli": "^0.3.9",
+		"@openfin/automation-helpers": "^0.3.9",
 		"chai": "4.3.6"
 	}
 }
