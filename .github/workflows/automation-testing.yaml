@@ -19,6 +19,8 @@ jobs:
       - name: Install Packages
         run: |
           npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Run JavaScript Tests with Mocha
         run: |
           npx fkill-cli OpenFin OpenFinRVM --force --silent
