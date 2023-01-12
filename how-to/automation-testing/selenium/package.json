@@ -10,7 +10,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-helpers": "^0.3.10",
+		"@openfin/automation-helpers": "^1.0.0",
+		"@openfin/automation-native": "^1.0.0",
 		"chai": "4.3.6",
 		"chromedriver": "102.0.0",
 		"fkill": "7.2.1",
