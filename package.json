@@ -22,10 +22,17 @@
 		"how-to/register-with-store-basic",
 		"how-to/migrate-from-a-previous-version",
 		"how-to/integrate-with-sso",
+		"how-to/integrate-with-ms365",
+		"how-to/integrate-with-ms365-basic",
 		"how-to/integrate-server-authentication",
 		"how-to/integrate-with-salesforce-basic",
 		"how-to/hints-and-tips",
-		"how-to/automation-testing"
+		"how-to/automation-testing",
+		"how-to/automation-testing/register-with-home-js",
+		"how-to/automation-testing/register-with-home-ts",
+		"how-to/automation-testing/register-with-store-js",
+		"how-to/automation-testing/selenium",
+		"how-to/automation-testing/wdio"
 	],
 	"howToCustomFolder": "",
 	"contributors": [
