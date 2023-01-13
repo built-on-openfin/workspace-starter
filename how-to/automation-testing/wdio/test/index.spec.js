@@ -222,6 +222,7 @@ describe('Register with Home', () => {
 	it('Can close the home window filters', async () => {
 		await WebDriver.sleep(3000);
 		await OpenFinHome.filtersClose(true);
+		await WebDriver.sleep(2000);
 	});
 
 	it('Can check selected entry content', async () => {
@@ -290,6 +291,7 @@ describe('Register with Home', () => {
 
 				// Do down arrow * 5 to select the close, you should see the confirmation popup
 				await NativeDriver.actions([
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },
