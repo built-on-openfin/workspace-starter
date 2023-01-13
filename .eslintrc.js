@@ -24,7 +24,8 @@ module.exports = {
 		'**/wc-fin/*.js',
 		'**/3rd-party/*',
 		'**/*.d.ts',
-		'**/settings.schema.json'
+		'**/settings.schema.json',
+		'**/reports/*'
 	],
 	parserOptions: {
 		ecmaVersion: 2020,

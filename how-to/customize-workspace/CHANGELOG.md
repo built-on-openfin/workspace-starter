@@ -22,6 +22,7 @@
 - Moved the pages home logic into the Pages integration provider
 - Removed `enableWorkspaceIntegration` from `homeProvider`, enable/disable the Workspaces integration instead
 - Removed `enablePageIntegration` from `homeProvider`, enable/disable the Pages integration instead
+- Added Automation Testing examples
 
 ## v9.2
 

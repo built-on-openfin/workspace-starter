@@ -53,6 +53,18 @@ Want to learn about specific workspace components? If you are starting out and w
 | [How To Register With Browser](./how-to/register-with-browser)           | This example provides details on how to use OpenFin's Browser component to implement a Workspace Platform.                                                                                                                                         | [Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv10.0.0%2Fregister-with-browser%2Fmanifest.fin.json)    |
 | [How To Use Notifications](./how-to/use-notifications)                   | This example demonstrates how to create, interact and audit notifications.                                                                                                                                                                         | [Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv10.0.0%2Fuse-notifications%2Fmanifest.fin.json)        |
 
+## Automation Testing
+
+OpenFin provides some packages to assist in automation testing of yours apps.
+
+- [@openfin/automation-cli](https://www.npmjs.com/package/@openfin/automation-cli) - A command line tool for running tests in an OpenFin environment.
+- [@openfin/automation-helpers](https://www.npmjs.com/package/@openfin/automation-helpers) - A package of helper methods for interacting with OpenFin components.
+- [@openfin/automation-native](https://www.npmjs.com/package/@openfin/automation-native) - Helper methods to help interacting with native mouse and keyboard elements, such as context menus.
+
+| Example                                           | Description                                                                                    | Live Launch |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- |
+| [Automation Testing](./how-to/automation-testing) | This howto contains multiple examples of using the OpenFin automation testing CLI and helpers. |             |
+
 ## Integrations
 
 This section includes samples that utilize the official integrations listed on the OpenFin Website (see [Integration Docs](https://developers.openfin.co/of-docs/#section-third-party-applications))
