@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--common",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "Used to provide a common directory to host assets that apply across examples",
 	"main": "index.js",
 	"scripts": {

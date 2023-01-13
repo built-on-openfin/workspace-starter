@@ -16,13 +16,13 @@ let versionOptions: VersionProviderOptions;
 let minVersion: MinimumVersion;
 let maxVersion: MaximumVersion;
 let versionWindowConfiguration: OpenFin.WindowOptions;
-let endpoints: EndpointProvider; 
+let endpoints: EndpointProvider;
 let endpointId: string;
 let minFail: VersionType[] = [];
 let maxFail: VersionType[] = [];
 let settingsBasedWindowConfiguration = false;
 let isMonitoringEnabled = false;
-let monitoringId;
+let monitoringId: number;
 
 const logger = createLogger("VersionProvider");
 
@@ -31,8 +31,10 @@ const logger = createLogger("VersionProvider");
  * @param versionProviderOptions The options that guide how this version provider behaves
  * @param endpointProvider The provider that allows the setting and retrieval of data without needing to know about the implementation
  */
-export async function init(versionProviderOptions?: VersionProviderOptions, 
-	endpointProvider?: EndpointProvider): Promise<void> {
+export async function init(
+	versionProviderOptions?: VersionProviderOptions,
+	endpointProvider?: EndpointProvider
+): Promise<void> {
 	if (versionProviderOptions === undefined) {
 		logger.info("Version provider options not passed");
 	} else {
@@ -43,14 +45,17 @@ export async function init(versionProviderOptions?: VersionProviderOptions,
 		versionWindowConfiguration = versionProviderOptions.versionWindow as OpenFin.WindowOptions;
 		endpointId = versionProviderOptions.endpointId;
 		settingsBasedWindowConfiguration = versionWindowConfiguration !== undefined;
-		isMonitoringEnabled = versionProviderOptions.versionCheckInterval !== undefined && versionProviderOptions.endpointId !== undefined && endpointProvider.hasEndpoint(versionProviderOptions.endpointId); 
+		isMonitoringEnabled =
+			versionProviderOptions.versionCheckInterval !== undefined &&
+			versionProviderOptions.endpointId !== undefined &&
+			endpointProvider.hasEndpoint(versionProviderOptions.endpointId);
 		logger.info("Initialized with the following settings", versionProviderOptions);
 	}
 	this.endpoints = endpointProvider;
 }
 
 /**
- * The version provider does not look up all the versioning information as this can 
+ * The version provider does not look up all the versioning information as this can
  * come from multiple sources. It does know what sources it supports and allows the platform
  * to feed this information to the provider.
  * @param versionType The type of version number you want to set (e.g. workspace)
@@ -61,6 +66,12 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 	let setVersionNumber = false;
 
 	switch (versionType) {
+		case "app": {
+			logger.warn(
+				"You cannot set the version for app as this can only be specified via the settings provided on application launch inside of the version provider settings."
+			);
+			break;
+		}
 		case "notificationCenter": {
 			versionLabel = "Notification Center Version";
 			setVersionNumber = versionInfo.notificationCenter === undefined;
@@ -153,7 +164,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 }
 
 /**
- * Version information can be set against the version provider and easily retrieved using this function 
+ * Version information can be set against the version provider and easily retrieved using this function
  * @returns VersionInfo - an object containing information related to this platform and it's dependencies
  */
 export async function getVersionInfo(): Promise<VersionInfo> {
@@ -192,54 +203,57 @@ export async function getVersionStatus(): Promise<VersionStatus> {
 		}
 	}
 
-	if(endpointId !== undefined && endpoints !== undefined 
-		&& endpoints.hasEndpoint(endpointId)) {
-			let response = await endpoints.requestResponse<VersionStatusData, VersionResponse>(endpointId, getVersionStatusData())
-			minFail = response.status.minFail;
-			minVersion = response.status.minVersion;
-			maxFail = response.status.maxFail;
-			maxVersion = response.status.maxVersion;
-			if(response.windowOptions !== undefined) {
-				settingsBasedWindowConfiguration = false;
-				versionWindowConfiguration = validateVersionWindow(response.windowOptions);
-				logger.info("Fetched version window configuration from endpoint:", endpointId);
-			}
-		} else {
-			settingsBasedWindowConfiguration = true;
-			versionWindowConfiguration = validateVersionWindow(versionOptions.versionWindow as OpenFin.WindowOptions);
+	if (endpointId !== undefined && endpoints !== undefined && endpoints.hasEndpoint(endpointId)) {
+		const response = await endpoints.requestResponse<VersionStatusData, VersionResponse>(
+			endpointId,
+			getVersionStatusData()
+		);
+		minFail = response.status.minFail;
+		minVersion = response.status.minVersion;
+		maxFail = response.status.maxFail;
+		maxVersion = response.status.maxVersion;
+		if (response.windowOptions !== undefined) {
+			settingsBasedWindowConfiguration = false;
+			versionWindowConfiguration = validateVersionWindow(response.windowOptions);
+			logger.info("Fetched version window configuration from endpoint:", endpointId);
 		}
+	} else {
+		settingsBasedWindowConfiguration = true;
+		versionWindowConfiguration = validateVersionWindow(versionOptions.versionWindow as OpenFin.WindowOptions);
+	}
 
-		let status;
-		if(minFail.includes("app")) {
-			status = "UPGRADABLE";
-		} else {
-			status = minFail.length === 0 && maxFail.length === 0 ? "COMPATIBLE" : "INCOMPATIBLE";
-		}
+	let status: VersionStatus;
+	if (minFail.includes("app")) {
+		status = "UPGRADABLE";
+	} else {
+		status = minFail.length === 0 && maxFail.length === 0 ? "COMPATIBLE" : "INCOMPATIBLE";
+	}
 
-		logger.info("Current version status: ", status);
-		return status;
+	logger.info("Current version status: ", status);
+	return status;
 }
 
 /**
  * This method checks a passed status and reacts according to the rules of the version provider
- * If the status is not valid then it will need to be managed and true will be returned. 
- * Otherwise the platform is in a valid state version wise and false will be returned as nothing 
+ * If the status is not valid then it will need to be managed and true will be returned.
+ * Otherwise the platform is in a valid state version wise and false will be returned as nothing
  * needed to be managed.
  * @param status The status that came from the getVersionStatus function
  * @returns true if the status indicates that it is not compatible and that an action was needed.
  */
-export async function manageVersionStatus(status: VersionStatus) : Promise<boolean> {
-
-	if(status !== "COMPATIBLE") {
+export async function manageVersionStatus(status: VersionStatus): Promise<boolean> {
+	if (status !== "COMPATIBLE") {
 		const windowOptions = validateVersionWindow(versionWindowConfiguration);
-		if(windowOptions === undefined) {
-			logger.warn("The status of the platform version is in a non compatible state but we do not have a window to launch to react to this state.");
+		if (windowOptions === undefined) {
+			logger.warn(
+				"The status of the platform version is in a non compatible state but we do not have a window to launch to react to this state."
+			);
 			// we still return that the state had to be managed even though we were unable to do so as we do not want the platform to continue running
 			// or polling of the endpoint to continue if an action to execute is not being returned.
 			return true;
 		}
 		const openWarningWindow = await fin.Window.create(windowOptions);
-		if(windowOptions.autoShow !== false) {
+		if (windowOptions.autoShow) {
 			await openWarningWindow.setAsForeground();
 		}
 		return true;
@@ -249,8 +263,8 @@ export async function manageVersionStatus(status: VersionStatus) : Promise<boole
 
 /** If configured via Version Provider Settings, this method will start monitoring to see if an upgrade is available */
 export async function MonitorVersionStatus() {
-	if(isMonitoringEnabled) {
-		if(monitoringId === undefined) {
+	if (isMonitoringEnabled) {
+		if (monitoringId === undefined) {
 			logger.info("Monitoring is enabled and not running. Starting the monitoring process.");
 			await startMonitoring();
 		} else {
@@ -262,18 +276,18 @@ export async function MonitorVersionStatus() {
 }
 
 async function startMonitoring() {
-	if(monitoringId !== undefined) {
+	if (monitoringId !== undefined) {
 		clearTimeout(monitoringId);
 		monitoringId = undefined;
 	}
-	monitoringId = setTimeout(async ()=>{
-		let status = await getVersionStatus();
-		let neededManagement = await manageVersionStatus(status);
-		if(!neededManagement) {
+	monitoringId = window.setTimeout(async () => {
+		const status = await getVersionStatus();
+		const neededManagement = await manageVersionStatus(status);
+		if (!neededManagement) {
 			logger.info(`Version status is good: ${status}. Continuing monitoring.`);
 			await startMonitoring();
 		} else {
-			logger.info(`Version status needed management: ${status}. Stopping monitoring.`)
+			logger.info(`Version status needed management: ${status}. Stopping monitoring.`);
 		}
 	}, versionOptions.versionCheckInterval * 1000);
 }
@@ -294,7 +308,7 @@ function validateVersionWindow(windowOptionsToValidate: OpenFin.WindowOptions): 
 		versionWindowConfiguration.name = `${fin.me.identity.uuid}-versioning`;
 	}
 
-	if(settingsBasedWindowConfiguration) {
+	if (settingsBasedWindowConfiguration) {
 		if (versionWindowConfiguration.customData !== undefined) {
 			logger.info("Enriching customData provided by version window configuration.");
 			versionWindowConfiguration.customData = {

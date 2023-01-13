@@ -124,14 +124,17 @@ export async function init(): Promise<boolean> {
 	}
 
 	const versionStatus = await versionProvider.getVersionStatus();
-	if(await versionProvider.manageVersionStatus(versionStatus)) {
+	const versionInfo = await versionProvider.getVersionInfo();
+	logger.info("Loaded with the following versions.", versionInfo);
+
+	if (await versionProvider.manageVersionStatus(versionStatus)) {
 		// version status had to be managed so it couldn't just continue. Stop initialization.
 		await deregister();
+		logger.warn("Platform bootstrapping stopped as the current versioning required stopping.");
 		return false;
-	} else {
-		const versionInfo = await versionProvider.getVersionInfo();
-		logger.info("Bootstrapped with following versions.", versionInfo);
 	}
+
+	await versionProvider.MonitorVersionStatus();
 
 	// Remove any entries from autoShow that have not been registered
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter(

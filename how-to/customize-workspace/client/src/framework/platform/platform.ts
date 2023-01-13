@@ -43,9 +43,9 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	const runtimeVersion = await fin.System.getVersion();
 	const rvmInfo = await fin.System.getRvmInfo();
-	versionProvider.setVersion("Runtime", runtimeVersion);
-	versionProvider.setVersion("RVM", rvmInfo.version);
-	versionProvider.setVersion("PlatformClient", VERSION);
+	versionProvider.setVersion("runtime", runtimeVersion);
+	versionProvider.setVersion("rvm", rvmInfo.version);
+	versionProvider.setVersion("platformClient", VERSION);
 
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);

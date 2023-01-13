@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-selenium",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace Starter Selenium Example",
 	"scripts": {
 		"test": "node ./selenium.js",

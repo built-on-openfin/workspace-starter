@@ -1,3 +1,4 @@
+/* Information about the version of the platform and it's dependencies */
 export interface VersionInfo {
 	/** The version of the the instance of this platform if provided */
 	app?: string;
@@ -16,7 +17,7 @@ export interface VersionInfo {
 	/** The version of the rvm that was used to launch this platform */
 	rvm?: string;
 }
-
+/* Settings related to the configuration of the version provider. */
 export interface VersionProviderOptions {
 	/** The version of the the instance of this platform */
 	appVersion?: string;
@@ -29,7 +30,7 @@ export interface VersionProviderOptions {
 
 	/**
 	 * If you specify an endpointId then this info event if present will not be used.
-	 * If you want have specified min and max version criteria and you specify a version window then this will 
+	 * If you want have specified min and max version criteria and you specify a version window then this will
 	 * be run during the bootstrapping process and if it fails:
 	 * - any workspace component registrations will be un-registered
 	 * - the configured window will be shown and passed the current version and minimum version as customData
@@ -38,18 +39,18 @@ export interface VersionProviderOptions {
 	 */
 	versionWindow?: unknown;
 
-	/** 
+	/**
 	 * If you specify an endpoint then you are telling the platform to send information to this endpoint.
 	 * The information sent will be the VersionWindowCustomData object (It might just include versioning
-	 * information) and whether or not the platform is initialized (has it finished bootstrapping). 
-	 * If you provide minimumVersion and maximumVersion information in the settings then the 
-	 * platform will use those to calculate what has failed validation (minimum and/or maximum) and pass 
+	 * information) and whether or not the platform is initialized (has it finished bootstrapping).
+	 * If you provide minimumVersion and maximumVersion information in the settings then the
+	 * platform will use those to calculate what has failed validation (minimum and/or maximum) and pass
 	 * those onto the endpoint. The endpoint can then return an optional boolean stop which means to stop
-	 * the initialization. If a versionWindow is included then that window is launched. This endpoint can 
+	 * the initialization. If a versionWindow is included then that window is launched. This endpoint can
 	 * also be polled after bootstrapping if a versionCheckInterval is specified. At this stage stop equalling
 	 * true means you want to stop the polling. If a versionWindow is returned then that window is launched
 	 * this might be a window that prompts to user to restart as there is a new version available. The platform
-	 * has no knowledge of the behavior of the versionWindow. 
+	 * has no knowledge of the behavior of the versionWindow.
 	 */
 	endpointId?: string;
 
@@ -58,7 +59,7 @@ export interface VersionProviderOptions {
 	 */
 	versionCheckInterval?: number;
 }
-
+/** What is the current version information of a platform, it's valid versioning criteria and what if anything has failed that validation */
 export interface VersionStatusData {
 	/** The collection version information */
 	versionInfo: VersionInfo;
@@ -72,12 +73,15 @@ export interface VersionStatusData {
 	maxFail?: VersionType[];
 }
 
+/** If an endpoint has been used to get dynamic criteria what if anything has been the response. */
 export interface VersionResponse {
-	windowOptions: OpenFin.WindowOptions, 
-	status: VersionStatusData };
+	windowOptions?: OpenFin.WindowOptions;
+	status: VersionStatusData;
+}
 
+/** The different types of versioning information this platform captures */
 export type VersionType =
-	"app"
+	| "app"
 	| "platformClient"
 	| "workspacePlatformClient"
 	| "workspaceClient"
@@ -86,11 +90,11 @@ export type VersionType =
 	| "runtime"
 	| "rvm";
 
-export type VersionStatus =
-	"COMPATIBLE" | 
-	"INCOMPATIBLE"  | 
-	"UPGRADABLE";
+/** What different states can the version of a platform be in? */
+export type VersionStatus = "COMPATIBLE" | "INCOMPATIBLE" | "UPGRADABLE";
 
+/** What is the minimum version criteria */
 export type MinimumVersion = VersionInfo;
 
+/** What is the maximum version criteria */
 export type MaximumVersion = VersionInfo;

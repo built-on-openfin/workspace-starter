@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-register-with-store-js",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace 10.3.8",
