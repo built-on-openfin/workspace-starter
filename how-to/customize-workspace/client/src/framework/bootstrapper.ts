@@ -114,26 +114,20 @@ export async function init(): Promise<boolean> {
 
 	if (workspaceMetaInfo !== undefined) {
 		// we match the versions of workspace related packages
-		versionProvider.setVersion("WorkspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
-		versionProvider.setVersion("WorkspaceClient", workspaceMetaInfo.clientAPIVersion);
-		versionProvider.setVersion("Workspace", workspaceMetaInfo.workspaceVersion);
+		versionProvider.setVersion("workspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("workspaceClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("workspace", workspaceMetaInfo.workspaceVersion);
 	}
 
 	if (notificationMetaInfo !== undefined) {
-		versionProvider.setVersion("NotificationCenter", notificationMetaInfo.workspaceVersion);
+		versionProvider.setVersion("notificationCenter", notificationMetaInfo.workspaceVersion);
 	}
 
-	if (!versionProvider.isSupported()) {
-		const warningWindow = versionProvider.getVersionWindowConfiguration();
-		if (warningWindow !== undefined) {
-			logger.info(
-				"Unable to meet minimum version requirements and a warning window has been provided. Bootstrapping process has been stopped."
-			);
-			await deregister();
-			const openWarningWindow = await fin.Window.create(warningWindow);
-			await openWarningWindow.setAsForeground();
-			return false;
-		}
+	const versionStatus = await versionProvider.getVersionStatus();
+	if(await versionProvider.manageVersionStatus(versionStatus)) {
+		// version status had to be managed so it couldn't just continue. Stop initialization.
+		await deregister();
+		return false;
 	} else {
 		const versionInfo = await versionProvider.getVersionInfo();
 		logger.info("Bootstrapped with following versions.", versionInfo);

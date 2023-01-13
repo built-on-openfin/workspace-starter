@@ -28,37 +28,69 @@ export interface VersionProviderOptions {
 	maximumVersion?: MaximumVersion;
 
 	/**
-	 * If the minimum version is not met and a window is configured then:
+	 * If you specify an endpointId then this info event if present will not be used.
+	 * If you want have specified min and max version criteria and you specify a version window then this will 
+	 * be run during the bootstrapping process and if it fails:
 	 * - any workspace component registrations will be un-registered
 	 * - the configured window will be shown and passed the current version and minimum version as customData
 	 * Otherwise the platform will continue to load and the version information will be passed onto loaded modules
 	 * through the getVersionInfo function exposed through the passed helper.
 	 */
 	versionWindow?: unknown;
+
+	/** 
+	 * If you specify an endpoint then you are telling the platform to send information to this endpoint.
+	 * The information sent will be the VersionWindowCustomData object (It might just include versioning
+	 * information) and whether or not the platform is initialized (has it finished bootstrapping). 
+	 * If you provide minimumVersion and maximumVersion information in the settings then the 
+	 * platform will use those to calculate what has failed validation (minimum and/or maximum) and pass 
+	 * those onto the endpoint. The endpoint can then return an optional boolean stop which means to stop
+	 * the initialization. If a versionWindow is included then that window is launched. This endpoint can 
+	 * also be polled after bootstrapping if a versionCheckInterval is specified. At this stage stop equalling
+	 * true means you want to stop the polling. If a versionWindow is returned then that window is launched
+	 * this might be a window that prompts to user to restart as there is a new version available. The platform
+	 * has no knowledge of the behavior of the versionWindow. 
+	 */
+	endpointId?: string;
+
+	/** If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an
+	 * interval to see if an update of your application is available.
+	 */
+	versionCheckInterval?: number;
 }
 
-export interface VersionWindowCustomData {
+export interface VersionStatusData {
 	/** The collection version information */
 	versionInfo: VersionInfo;
 	/** The configured minimum limits */
-	minVersion: MinimumVersion;
+	minVersion?: MinimumVersion;
 	/** The configured maximum limits */
-	maxVersion: MaximumVersion;
+	maxVersion?: MaximumVersion;
 	/** The version type that failed the minimum requirements */
-	minFail: string[];
+	minFail?: VersionType[];
 	/** The version type that failed the maximum requirements */
-	maxFail: string[];
+	maxFail?: VersionType[];
 }
 
+export interface VersionResponse {
+	windowOptions: OpenFin.WindowOptions, 
+	status: VersionStatusData };
+
 export type VersionType =
-	| "PlatformClient"
-	| "WorkspacePlatformClient"
-	| "WorkspaceClient"
-	| "Workspace"
-	| "NotificationCenter"
-	| "Runtime"
-	| "RVM";
+	"app"
+	| "platformClient"
+	| "workspacePlatformClient"
+	| "workspaceClient"
+	| "workspace"
+	| "notificationCenter"
+	| "runtime"
+	| "rvm";
 
-export type MinimumVersion = Omit<VersionInfo, "app">;
+export type VersionStatus =
+	"COMPATIBLE" | 
+	"INCOMPATIBLE"  | 
+	"UPGRADABLE";
 
-export type MaximumVersion = Omit<VersionInfo, "app">;
+export type MinimumVersion = VersionInfo;
+
+export type MaximumVersion = VersionInfo;
