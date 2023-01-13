@@ -1,0 +1,101 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies",
+		"version": "28.106.72.17"
+	},
+	"platform": {
+		"uuid": "launch-browser-from-window",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws10-automation/register-with-browser/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws10-automation/register-with-browser/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"defaultWindowOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://www.openfin.co/favicon.ico",
+		"name": "Launch Browser Windows",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Register With Browser - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"bootstrap": {
+			"launchBarWindowSettings": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws10-automation/register-with-browser/html/launch-bar.html",
+				"name": "launch-bar",
+				"frame": false,
+				"icon": "https://www.openfin.co/favicon.ico",
+				"defaultHeight": 400,
+				"defaultWidth": 300,
+				"defaultCentered": true,
+				"saveWindowState": false,
+				"resizable": false,
+				"alwaysOnTop": true,
+				"cornerRounding": {
+					"height": 10,
+					"width": 10
+				}
+			}
+		},
+		"browserProvider": {
+			"windowOptions": {
+				"title": "Browser Starter",
+				"icon": "https://www.openfin.co/favicon.ico",
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws10-automation/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws10-automation/common/views/platform/new-tab/new-tab.html"
+			}
+		},
+		"themeProvider": {
+			"themes": [
+				{
+					"label": "Starter Theme",
+					"logoUrl": "https://www.openfin.co/favicon.ico",
+					"palette": {
+						"brandPrimary": "#1C355E",
+						"brandSecondary": "#0075BE",
+						"backgroundPrimary": "#FFFFFF",
+						"functional1": null,
+						"functional2": null,
+						"functional3": null,
+						"functional4": null,
+						"functional5": null,
+						"functional6": null,
+						"functional7": null,
+						"functional8": null,
+						"functional9": null,
+						"functional10": null,
+						"statusSuccess": null,
+						"statusWarning": null,
+						"statusCritical": null,
+						"statusActive": null,
+						"inputBackground": null,
+						"inputColor": null,
+						"inputPlaceholder": null,
+						"inputDisabled": null,
+						"inputFocused": null,
+						"textDefault": null,
+						"textHelp": null,
+						"textInactive": null,
+						"background1": "#1C355E",
+						"background2": "#0075BE",
+						"background3": "#1C355E",
+						"background4": "#1C355E",
+						"background5": "#0075BE",
+						"background6": "#0075BE"
+					}
+				}
+			]
+		}
+	}
+}
