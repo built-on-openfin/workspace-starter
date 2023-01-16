@@ -2,7 +2,7 @@ name: Automation Test Headless
 on: workflow_dispatch
 
 concurrency:
-  group: automation-tests-full
+  group: automation-full-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

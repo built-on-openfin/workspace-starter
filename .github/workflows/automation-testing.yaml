@@ -2,7 +2,7 @@ name: Automation Test Headless
 on: [push, workflow_dispatch]
 
 concurrency:
-  group: ${{ github.ref }}
+  group: automation-single-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
