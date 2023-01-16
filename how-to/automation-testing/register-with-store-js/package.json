@@ -3,6 +3,7 @@
 	"version": "9.2.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
+		"build": "echo Nothing to build",
 		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace 9.2.5",
 		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace 9.2.5",
 		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v9.2.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 9.2.5",
