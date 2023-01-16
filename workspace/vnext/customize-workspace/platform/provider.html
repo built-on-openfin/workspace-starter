@@ -6,9 +6,13 @@
 		<title>Platform Provider</title>
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<script src="../js/provider.bundle.js"></script>
 	</head>
 	<body>
 		<div>Custom Provider...</div>
+		<script type="module">
+			import('../js/provider.bundle.js').then(async (module) => {
+				await module.init();
+			});
+		</script>
 	</body>
 </html>
