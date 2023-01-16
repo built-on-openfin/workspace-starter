@@ -1,5 +1,9 @@
 name: Automation Test Headless
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - workspace/vnext
 
 concurrency:
   group: automation-tests
