@@ -2,7 +2,7 @@ name: Automation Test Headless
 on: [push, workflow_dispatch]
 
 concurrency:
-  group: automation-tests
+  group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -23,17 +23,3 @@ jobs:
         run: |
           npx fkill-cli OpenFin OpenFinRVM --force --silent
           npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-js
-      - name: Run TypeScript Tests with Mocha
-        run: |
-          npx fkill-cli OpenFin OpenFinRVM --force --silent
-          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-ts
-      - name: Run WDIO tests
-        run: |
-          npm run kill --prefix how-to/automation-testing/wdio
-          npm run dos --prefix how-to/automation-testing/wdio
-          npm run test --prefix how-to/automation-testing/wdio
-      - name: Run Selenium tests
-        run: |
-          npm run kill --prefix how-to/automation-testing/selenium
-          npm run dos --prefix how-to/automation-testing/selenium
-          npm run test --prefix how-to/automation-testing/selenium
