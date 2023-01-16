@@ -1,0 +1,59 @@
+name: Automation Test Headless
+on: workflow_dispatch
+
+concurrency:
+  group: automation-full-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Packages
+        run: |
+          npm install
+      - name: Run JavaScript Tests with Mocha
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-js
+      - name: Run WDIO tests
+        run: |
+          npm run kill --prefix how-to/automation-testing/wdio
+          npm run dos --prefix how-to/automation-testing/wdio
+          npm run test --prefix how-to/automation-testing/wdio
+      - name: Run Selenium tests
+        run: |
+          npm run kill --prefix how-to/automation-testing/selenium
+          npm run dos --prefix how-to/automation-testing/selenium
+          npm run test --prefix how-to/automation-testing/selenium
+      - name: Run JavaScript Tests with Jasmine
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-jasmine --prefix how-to/automation-testing/register-with-home-js
+      - name: Run JavaScript Tests with Jest
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-jest --prefix how-to/automation-testing/register-with-home-js
+      - name: Run TypeScript Tests with Mocha
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-ts
+      - name: Run TypeScript Tests with Jasmine
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-jasmine --prefix how-to/automation-testing/register-with-home-ts
+      - name: Run TypeScript Tests with Jest
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-jest --prefix how-to/automation-testing/register-with-home-ts
+      - name: Run JavaScript Tests with Mocha for Store
+        run: |
+          npx fkill-cli OpenFin OpenFinRVM --force --silent
+          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-store-js
