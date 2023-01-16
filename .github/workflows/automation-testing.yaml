@@ -1,5 +1,5 @@
 name: Automation Test Headless
-on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 concurrency:
   group: automation-single-${{ github.ref }}
