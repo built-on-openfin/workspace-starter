@@ -4,11 +4,13 @@ import type {
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult
+	HomeSearchResult,
+	TemplateFragment
 } from "@openfin/workspace";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { AboutProviderSettings } from "./shapes";
 
 /**
  * Implement the integration provider for about info.
@@ -42,7 +44,19 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<unknown> | undefined;
+	private _definition: ModuleDefinition<AboutProviderSettings> | undefined;
+
+	/**
+	 * Provided alternate labels for the version types
+	 * @internal
+	 */
+	private _versionTypeMap: { [key: string]: string };
+
+	/**
+	 * Provided alternate labels for the version types
+	 * @internal
+	 */
+	private _excludeVersionType: string[];
 
 	/**
 	 * Initialize the module.
@@ -52,12 +66,14 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<unknown>,
+		definition: ModuleDefinition<AboutProviderSettings>,
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
 		this._integrationHelpers = helpers;
 		this._definition = definition;
+		this._versionTypeMap = definition?.data?.versionTypeMap ?? {};
+		this._excludeVersionType = definition?.data?.excludeVersionType ?? [];
 		this._logger = loggerCreator("AboutProvider");
 	}
 
@@ -124,10 +140,48 @@ export class AboutProvider implements IntegrationModule<unknown> {
 		const keys = Object.keys(versionInfo);
 
 		for (let i = 0; i < keys.length; i++) {
-			tableData.push([keys[i], (versionInfo[keys[i]] ?? "unknown") as string]);
+			const key = keys[i];
+			if (!this._excludeVersionType.includes(key)) {
+				const label = this._versionTypeMap[key] ?? keys[i];
+				tableData.push([label, (versionInfo[keys[i]] ?? "unknown") as string]);
+			}
 		}
 
-		data.title = "Versions";
+		data.title = this._definition?.data?.title ?? "Versions";
+
+		const children: TemplateFragment[] = [];
+		const titleFragment = (await this._integrationHelpers.templateHelpers.createTitle(
+			"title",
+			undefined,
+			undefined,
+			{
+				marginBottom: "10px",
+				borderBottom: `1px solid ${palette.background6}`
+			}
+		)) as TemplateFragment;
+
+		children.push(titleFragment);
+
+		if (this._definition?.data?.description !== undefined) {
+			data.description = this._definition.data.description;
+			const descriptionFragment = (await this._integrationHelpers.templateHelpers.createText(
+				"description",
+				undefined,
+				{
+					marginBottom: "10px"
+				}
+			)) as TemplateFragment;
+			children.push(descriptionFragment);
+		}
+
+		const tableFragment = (await this._integrationHelpers.templateHelpers.createTable(
+			tableData,
+			[],
+			0,
+			data
+		)) as TemplateFragment;
+
+		children.push(tableFragment);
 
 		const result = {
 			key: "about-info",
@@ -140,19 +194,9 @@ export class AboutProvider implements IntegrationModule<unknown> {
 			},
 			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
-				layout: await this._integrationHelpers.templateHelpers.createContainer(
-					"column",
-					[
-						await this._integrationHelpers.templateHelpers.createTitle("title", undefined, undefined, {
-							marginBottom: "10px",
-							borderBottom: `1px solid ${palette.background6}`
-						}),
-						await this._integrationHelpers.templateHelpers.createTable(tableData, [], 0, data)
-					],
-					{
-						padding: "10px"
-					}
-				),
+				layout: await this._integrationHelpers.templateHelpers.createContainer("column", children, {
+					padding: "10px"
+				}),
 				data
 			}
 		};
