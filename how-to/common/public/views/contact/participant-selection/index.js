@@ -28,7 +28,7 @@ function init() {
 				type: 'fdc3.contact',
 				name: 'Ashley James',
 				id: {
-					email: 'ashley.james@3rnfnf.onmicrosoft.com '
+					email: 'ashley.james@3rnfnf.onmicrosoft.com'
 				}
 			}
 		};
