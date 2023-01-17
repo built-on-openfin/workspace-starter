@@ -11,20 +11,20 @@ import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-sh
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
 
 /**
- * Implement the integration provider for version info.
+ * Implement the integration provider for about info.
  */
-export class VersionProvider implements IntegrationModule<unknown> {
+export class AboutProvider implements IntegrationModule<unknown> {
 	/**
 	 * Provider id.
 	 * @internal
 	 */
-	private static readonly _PROVIDER_ID = "version";
+	private static readonly _PROVIDER_ID = "about";
 
 	/**
-	 * The command to display the version.
+	 * The command to display the about information.
 	 * @internal
 	 */
-	private static readonly _VERSION_COMMAND = "/version";
+	private static readonly _ABOUT_COMMAND = "/about";
 
 	/**
 	 * The settings for the integration.
@@ -58,7 +58,7 @@ export class VersionProvider implements IntegrationModule<unknown> {
 	): Promise<void> {
 		this._integrationHelpers = helpers;
 		this._definition = definition;
-		this._logger = loggerCreator("VersionProvider");
+		this._logger = loggerCreator("AboutProvider");
 	}
 
 	/**
@@ -68,20 +68,20 @@ export class VersionProvider implements IntegrationModule<unknown> {
 	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		return [
 			{
-				key: `${VersionProvider._PROVIDER_ID}-help`,
-				title: VersionProvider._VERSION_COMMAND,
+				key: `${AboutProvider._PROVIDER_ID}-help`,
+				title: AboutProvider._ABOUT_COMMAND,
 				label: "Help",
 				icon: this._definition?.icon,
 				actions: [],
 				data: {
-					providerId: VersionProvider._PROVIDER_ID,
-					populateQuery: VersionProvider._VERSION_COMMAND
+					providerId: AboutProvider._PROVIDER_ID,
+					populateQuery: AboutProvider._ABOUT_COMMAND
 				},
 				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					VersionProvider._VERSION_COMMAND,
-					["The version commands lists the version information related to this platform."],
-					[VersionProvider._VERSION_COMMAND]
+					AboutProvider._ABOUT_COMMAND,
+					["The about command lists the version information related to this platform."],
+					[AboutProvider._ABOUT_COMMAND]
 				)
 			}
 		];
@@ -104,7 +104,7 @@ export class VersionProvider implements IntegrationModule<unknown> {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		if (query.length < 2 || !VersionProvider._VERSION_COMMAND.startsWith(query)) {
+		if (query.length < 2 || !AboutProvider._ABOUT_COMMAND.startsWith(query)) {
 			return {
 				results: []
 			};
@@ -130,13 +130,13 @@ export class VersionProvider implements IntegrationModule<unknown> {
 		data.title = "Versions";
 
 		const result = {
-			key: "version-info",
-			title: VersionProvider._VERSION_COMMAND,
+			key: "about-info",
+			title: AboutProvider._ABOUT_COMMAND,
 			label: "Version",
 			icon: this._definition?.icon,
 			actions,
 			data: {
-				providerId: VersionProvider._PROVIDER_ID
+				providerId: AboutProvider._PROVIDER_ID
 			},
 			template: "Custom" as CLITemplate.Custom,
 			templateContent: {

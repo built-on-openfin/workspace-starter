@@ -250,9 +250,9 @@ export async function getVersionStatus(): Promise<VersionStatus> {
 
 	let status: VersionStatus;
 	if (minFail.includes("app")) {
-		status = "UPGRADABLE";
+		status = "upgradeable";
 	} else {
-		status = minFail.length === 0 && maxFail.length === 0 ? "COMPATIBLE" : "INCOMPATIBLE";
+		status = minFail.length === 0 && maxFail.length === 0 ? "compatible" : "incompatible";
 	}
 
 	logger.info("Current version status: ", status);
@@ -268,7 +268,7 @@ export async function getVersionStatus(): Promise<VersionStatus> {
  * @returns true if the status indicates that it is not compatible and that an action was needed.
  */
 export async function manageVersionStatus(status: VersionStatus): Promise<boolean> {
-	if (status !== "COMPATIBLE") {
+	if (status !== "compatible") {
 		const windowOptions = validateVersionWindow(versionWindowConfiguration);
 		if (windowOptions === undefined) {
 			logger.warn(
@@ -285,42 +285,6 @@ export async function manageVersionStatus(status: VersionStatus): Promise<boolea
 		return true;
 	}
 	return false;
-}
-
-/** Gets about window options enriched with VersionInfo */
-export async function getAboutWindow(): Promise<OpenFin.WindowOptions> {
-	if (versionOptions?.aboutWindow === undefined) {
-		logger.info("No about window configuration provided.");
-		return undefined;
-	}
-
-	const validatedWindowOptions: OpenFin.WindowOptions = {
-		...(versionOptions.aboutWindow as OpenFin.WindowOptions)
-	};
-
-	if (validatedWindowOptions.url === undefined) {
-		logger.error(
-			"An about version window configuration was set but a url was not provided. A window cannot be launched."
-		);
-		return undefined;
-	}
-	if (validatedWindowOptions.name === undefined) {
-		validatedWindowOptions.name = `${fin.me.identity.uuid}-versioning-about`;
-	}
-
-	if (validatedWindowOptions.customData !== undefined) {
-		logger.info("Enriching customData provided by about version window configuration.");
-		validatedWindowOptions.customData = {
-			...validatedWindowOptions.customData,
-			...getVersionStatusData()
-		};
-	} else {
-		logger.info("Setting customData for about version window configuration.");
-		validatedWindowOptions.customData = getVersionStatusData();
-	}
-
-	logger.info("Returning about version window configuration.");
-	return validatedWindowOptions;
 }
 
 /** If configured via Version Provider Settings, this method will start monitoring to see if an upgrade is available */

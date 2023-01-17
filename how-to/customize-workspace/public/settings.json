@@ -893,13 +893,13 @@
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 			},
 			{
-				"id": "version",
+				"id": "about",
 				"icon": "http://localhost:8080/favicon.ico",
-				"title": "Version",
-				"description": "Version information for this platform.",
+				"title": "About",
+				"description": "Provides information about this platform.",
 				"enabled": true,
 				"excludeFromSourceFilter": true,
-				"url": "http://localhost:8080/js/modules/integrations/version.bundle.js",
+				"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
 				"data": {}
 			}
 		]
@@ -936,6 +936,34 @@
 				"enabled": true,
 				"id": "developer-actions",
 				"url": "http://localhost:8080/js/modules/actions/developer.bundle.js"
+			},
+			{
+				"enabled": true,
+				"id": "about-actions",
+				"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+				"data": {
+					"windowOptions": {
+						"name": "about",
+						"url": "http://localhost:8080/common/windows/version/about.html",
+						"defaultCentered": true,
+						"showTaskbarIcon": false,
+						"autoShow": true,
+						"minimizable": false,
+						"maximizable": false,
+						"defaultHeight": 396,
+						"defaultWidth": 760,
+						"customData": {}
+					}
+				}
+			}
+		]
+	},
+	"conditionsProvider": {
+		"modules": [
+			{
+				"enabled": true,
+				"id": "about-conditions",
+				"url": "http://localhost:8080/js/modules/composite/about.bundle.js"
 			}
 		]
 	},
@@ -1002,18 +1030,6 @@
 		"appVersion": "1.0.0",
 		"minVersion": {
 			"workspace": "10.0.0"
-		},
-		"aboutWindow": {
-			"name": "about",
-			"url": "http://localhost:8080/common/windows/version/about.html",
-			"defaultCentered": true,
-			"showTaskbarIcon": false,
-			"autoShow": true,
-			"minimizable": false,
-			"maximizable": false,
-			"defaultHeight": 396,
-			"defaultWidth": 760,
-			"customData": {}
 		},
 		"versionWindow": {
 			"name": "versioning",

@@ -1,11 +1,11 @@
 {
-	"mode": "COMPATIBLE",
+	"mode": "compatible",
 	"modes": {
-		"COMPATIBLE": {
+		"compatible": {
 			"_description": "This is just a comment. It will not be used. If status is an empty object the service will return what it is passed. It will replace the sent object with any settings you specify.",
 			"status": {}
 		},
-		"INCOMPATIBLE.MESSAGE": {
+		"incompatibleMessage": {
 			"_description": "Similar to above. Specify what you want to override. This will also be passed as customData on the window options.",
 			"status": {
 				"minFail": ["workspace"],
@@ -26,7 +26,7 @@
 				"customData": {}
 			}
 		},
-		"INCOMPATIBLE.MANIFEST": {
+		"incompatibleManifest": {
 			"_description": "Similar to above. Specify what you want to override. This will also be passed as customData on the window options.",
 			"status": {
 				"minFail": ["workspace"],
@@ -42,7 +42,7 @@
 				}
 			}
 		},
-		"UPGRADE": {
+		"upgrade": {
 			"_description": "Similar to above. For upgrades you wish to specify that app is invalid.",
 			"status": {
 				"minFail": ["app"],

@@ -29,14 +29,6 @@ export interface VersionProviderOptions {
 	maxVersion?: MaximumVersion;
 
 	/**
-	 * If you specify the settings for an about window then it will be available as a menu option with a condition to show/hide
-	 * depending on whether the window options have been specified. condition = "version" will be available and the
-	 * action: "show-about" can be used.
-	 * The VersionInfo object settings will be added to the customData of the specified window options.
-	 */
-	aboutWindow?: unknown;
-
-	/**
 	 * This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met.
 	 * This window will be shown to the user and the bootstrapping process will be stopped.
 	 */
@@ -100,7 +92,7 @@ export type VersionType =
 	| "rvm";
 
 /** What different states can the version of a platform be in? */
-export type VersionStatus = "COMPATIBLE" | "INCOMPATIBLE" | "UPGRADABLE";
+export type VersionStatus = "compatible" | "incompatible" | "upgradeable";
 
 /** What is the minimum version criteria */
 export type MinimumVersion = VersionInfo;

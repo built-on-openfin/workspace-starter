@@ -1,5 +1,5 @@
 import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { getActions, registerAction } from "../actions";
+import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
 import { isAuthenticationEnabled, isAuthenticationRequired } from "../auth";
@@ -59,19 +59,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	);
 	conditionsProvider.registerCondition("sharing", async () => isShareEnabled(), false);
 	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
-
-	const aboutVersionWindow = await versionProvider.getAboutWindow();
-
-	if (aboutVersionWindow !== undefined) {
-		registerAction("show-about", async () => {
-			try {
-				await fin.Window.create(aboutVersionWindow);
-			} catch (error) {
-				logger.error("An error was encountered while trying to launch the about window.", error);
-			}
-		});
-		conditionsProvider.registerCondition("has-about", async () => aboutVersionWindow !== undefined);
-	}
 
 	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
 
