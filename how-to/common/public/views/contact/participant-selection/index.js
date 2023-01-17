@@ -21,14 +21,14 @@ function init() {
 				type: 'fdc3.contact',
 				name: 'Avi Green',
 				id: {
-					email: 'agreen@uog.com'
+					email: 'avi.green@3rnfnf.onmicrosoft.com'
 				}
 			},
 			ashley: {
 				type: 'fdc3.contact',
 				name: 'Ashley James',
 				id: {
-					email: 'ajames@uog.com'
+					email: 'ashley.james@3rnfnf.onmicrosoft.com'
 				}
 			}
 		};
