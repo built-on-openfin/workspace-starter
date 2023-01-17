@@ -51,7 +51,7 @@
 	"appAssets": [
 		{
 			"alias": "winform-interop-example",
-			"version": "2.0.0",
+			"version": "3.0.1",
 			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
