@@ -2,7 +2,7 @@ function addVersion(versionType, currentVersion, minVersion, minVersionMet, maxV
 	const lstVersions = document.querySelector('#lstVersions');
 	const colHeaders = Array.from(lstVersions.children[0].children).map((header) => header.textContent);
 	const versionTypeLabel = document.createElement('span');
-	versionTypeLabel.textContent = versionType;
+	versionTypeLabel.textContent = versionType ?? 'unknown';
 
 	const versionLabel = document.createElement('span');
 	versionLabel.textContent = currentVersion;
@@ -83,8 +83,8 @@ async function init() {
 			btnRestart.addEventListener('click', async () => {
 				await restartPlatform();
 			});
-			currentVersion.textContent = versionInfo['app'];
-			newVersion.textContent = minVersion['app'];
+			currentVersion.textContent = versionInfo['app'] ?? 'unknown';
+			newVersion.textContent = minVersion['app'] ?? 'unknown';
 		} else {
 			const keys = Object.keys(versionInfo);
 

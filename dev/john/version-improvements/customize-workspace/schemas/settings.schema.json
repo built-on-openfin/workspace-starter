@@ -2059,9 +2059,6 @@
     "VersionProviderOptions": {
       "additionalProperties": false,
       "properties": {
-        "aboutWindow": {
-          "description": "If you specify the settings for an about window then it will be available as a menu option with a condition to show/hide depending on whether the window options have been specified. condition = \"version\" will be available and the action: \"show-about\" can be used. The VersionInfo object settings will be added to the customData of the specified window options."
-        },
         "appVersion": {
           "description": "The version of the the instance of this platform",
           "type": "string"

@@ -13,7 +13,7 @@ function addVersion(versionType, currentVersion) {
 
 	const cellVersionLabel = document.createElement('div');
 	cellVersionLabel.dataset.name = colHeaders[1];
-	cellVersionLabel.append(versionLabel);
+	cellVersionLabel.append(versionLabel ?? 'unknown');
 
 	const row = document.createElement('div');
 	row.classList.add('table-row');
