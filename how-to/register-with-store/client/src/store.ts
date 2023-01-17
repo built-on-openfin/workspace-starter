@@ -9,6 +9,7 @@ import {
 	StorefrontDetailedNavigationItem,
 	App
 } from "@openfin/workspace";
+import type { StoreCustomButtonActionPayload } from "@openfin/workspace-platform";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
@@ -208,12 +209,12 @@ async function getNavigation(): Promise<
 				settings.storefrontProvider.navigation[i].items,
 				navigationSectionItemLimit
 			)) as [
-				StorefrontNavigationItem,
-				StorefrontNavigationItem?,
-				StorefrontNavigationItem?,
-				StorefrontNavigationItem?,
-				StorefrontNavigationItem?
-			]
+					StorefrontNavigationItem,
+					StorefrontNavigationItem?,
+					StorefrontNavigationItem?,
+					StorefrontNavigationItem?,
+					StorefrontNavigationItem?
+				]
 		};
 		navigationSections.push(navigationSection);
 	}
@@ -268,8 +269,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		const middleRowApps = await getAppsByTag(middleRow.tags);
 		if (middleRowApps.length > middleRowAppLimit) {
 			console.warn(
-				`Too many apps (${
-					middleRowApps.length
+				`Too many apps (${middleRowApps.length
 				}) have been returned by the middle row tag definition ${middleRow.tags.join(
 					" "
 				)}. Only ${middleRowAppLimit} will be shown.`
@@ -407,16 +407,16 @@ function addButtons(apps: App[]): App[] {
 	return apps.map((app) => ({
 		...app,
 		primaryButton: {
-			title: "Launch App",
+			title: "Launch",
 			action: {
 				id: "launchApp"
 			}
 		},
 		secondaryButtons: [
 			{
-				title: "Add to favorites", // "⭐Add",
+				title: favoriteApps[app.appId] ? "Remove from favorites" : "Add to favorites",
 				action: {
-					id: "favorite-add",
+					id: "favorite-toggle",
 					customData: app
 				}
 			}
@@ -424,10 +424,12 @@ function addButtons(apps: App[]): App[] {
 	}));
 }
 
-export function addToFavorites(app: App): void {
-	favoriteApps[app.appId] = app;
-}
-
-export function removeFromFavorites(appId: string): void {
-	delete favoriteApps[appId];
+export function toggleFavorite(payload: StoreCustomButtonActionPayload): void {
+	if (favoriteApps[payload.customData.appId]) {
+		payload.updateButtonState({ title: "Remove from favorites" });
+		favoriteApps[payload.customData.appId] = payload.customData;
+	} else {
+		payload.updateButtonState({ title: "Add to favorites" });
+		delete favoriteApps[payload.customData.appId];
+	}
 }

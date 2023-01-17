@@ -1,11 +1,10 @@
-import type { App } from "@openfin/workspace";
 import {
 	BrowserInitConfig,
 	CustomActionCallerType,
 	init as workspacePlatformInit
 } from "@openfin/workspace-platform";
 import { getSettings, validateThemes } from "./settings";
-import { addToFavorites, removeFromFavorites } from "./store";
+import { toggleFavorite } from "./store";
 
 export async function init() {
 	console.log("Initialising platform");
@@ -30,14 +29,9 @@ export async function init() {
 		browser,
 		theme: validateThemes(settings?.themeProvider?.themes),
 		customActions: {
-			"favorite-add": (e) => {
+			"favorite-toggle": (e) => {
 				if (e.callerType === CustomActionCallerType.StoreCustomButton) {
-					addToFavorites(e.customData as App);
-				}
-			},
-			"favorite-remove": (e) => {
-				if (e.callerType === CustomActionCallerType.StoreCustomButton) {
-					removeFromFavorites((e.customData as App).appId);
+					toggleFavorite(e);
 				}
 			}
 		}
