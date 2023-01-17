@@ -118,7 +118,7 @@ export class VersionProvider implements IntegrationModule<unknown> {
 		const data: { [id: string]: string } = {};
 
 		const tableData: string[][] = [];
-		tableData.push(["Version Type", "Current Version"]);
+		tableData.push(["Version Type", "Version"]);
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const keys = Object.keys(versionInfo);
