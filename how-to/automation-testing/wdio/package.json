@@ -1,7 +1,12 @@
 {
 	"name": "automation-testing-wdio",
-	"version": "0.1.0",
-	"private": true,
+	"version": "9.2.0",
+	"scripts": {
+		"build": "echo Nothing to build",
+		"test": "wdio run wdio.conf.js",
+		"dos": "node ./scripts/dos.mjs",
+		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver"
+	},
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.0.0",
 		"@openfin/automation-native": "^1.0.0",
@@ -15,10 +20,5 @@
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"wdio-chromedriver-service": "8.0.0"
-	},
-	"scripts": {
-		"test": "wdio run wdio.conf.js",
-		"dos": "node ./scripts/dos.mjs",
-		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver"
 	}
 }
