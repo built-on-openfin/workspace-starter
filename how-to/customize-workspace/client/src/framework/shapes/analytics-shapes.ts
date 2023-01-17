@@ -1,5 +1,6 @@
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+export type { AnalyticsSource } from "@openfin/workspace/common/src/utils/usage-register";
 
 export interface PlatformAnalyticsEvent extends AnalyticsEvent {
 	timestamp: Date;

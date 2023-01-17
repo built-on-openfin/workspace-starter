@@ -1,5 +1,6 @@
 import type { HomeRegistration, RegistrationMetaInfo } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
+import * as analyticsProvider from "./analytics";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { registerAction } from "./connections";
@@ -11,8 +12,10 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
+import type { AnalyticsSource, PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
 import * as versionProvider from "./version";
+
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,
@@ -125,7 +128,18 @@ export async function init(): Promise<boolean> {
 
 	const versionStatus = await versionProvider.getVersionStatus();
 	const versionInfo = await versionProvider.getVersionInfo();
+
 	logger.info("Loaded with the following versions.", versionInfo);
+	if (analyticsProvider.isEnabled()) {
+		const analyticsEvent: PlatformAnalyticsEvent = {
+			source: "Platform" as AnalyticsSource,
+			type: "version",
+			timestamp: new Date(),
+			data: versionInfo,
+			action: "load"
+		};
+		await analyticsProvider.handleAnalytics([analyticsEvent]);
+	}
 
 	if (await versionProvider.manageVersionStatus(versionStatus)) {
 		// version status had to be managed so it couldn't just continue. Stop initialization.

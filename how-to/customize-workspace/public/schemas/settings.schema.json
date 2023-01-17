@@ -1138,38 +1138,8 @@
       "type": "string"
     },
     "MaximumVersion": {
-      "additionalProperties": false,
-      "properties": {
-        "notificationCenter": {
-          "description": "The version of the notification center that this platform instance has connected to",
-          "type": "string"
-        },
-        "platformClient": {
-          "description": "The version of the code of this platform",
-          "type": "string"
-        },
-        "runtime": {
-          "description": "The version of the runtime this platform instance is running against",
-          "type": "string"
-        },
-        "rvm": {
-          "description": "The version of the rvm that was used to launch this platform",
-          "type": "string"
-        },
-        "workspace": {
-          "description": "The version of the workspace components this platform is currently connected to",
-          "type": "string"
-        },
-        "workspaceClient": {
-          "description": "The version of the workspace client code",
-          "type": "string"
-        },
-        "workspacePlatformClient": {
-          "description": "The version of the workspace platform client code",
-          "type": "string"
-        }
-      },
-      "type": "object"
+      "$ref": "#/definitions/VersionInfo",
+      "description": "What is the maximum version criteria"
     },
     "MenuEntry<GlobalContextMenuOptionType>": {
       "additionalProperties": false,
@@ -1391,38 +1361,8 @@
       "type": "string"
     },
     "MinimumVersion": {
-      "additionalProperties": false,
-      "properties": {
-        "notificationCenter": {
-          "description": "The version of the notification center that this platform instance has connected to",
-          "type": "string"
-        },
-        "platformClient": {
-          "description": "The version of the code of this platform",
-          "type": "string"
-        },
-        "runtime": {
-          "description": "The version of the runtime this platform instance is running against",
-          "type": "string"
-        },
-        "rvm": {
-          "description": "The version of the rvm that was used to launch this platform",
-          "type": "string"
-        },
-        "workspace": {
-          "description": "The version of the workspace components this platform is currently connected to",
-          "type": "string"
-        },
-        "workspaceClient": {
-          "description": "The version of the workspace client code",
-          "type": "string"
-        },
-        "workspacePlatformClient": {
-          "description": "The version of the workspace platform client code",
-          "type": "string"
-        }
-      },
-      "type": "object"
+      "$ref": "#/definitions/VersionInfo",
+      "description": "What is the minimum version criteria"
     },
     "ModuleDefinition": {
       "additionalProperties": false,
@@ -2078,23 +2018,72 @@
       ],
       "type": "object"
     },
+    "VersionInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "app": {
+          "description": "The version of the the instance of this platform if provided",
+          "type": "string"
+        },
+        "notificationCenter": {
+          "description": "The version of the notification center that this platform instance has connected to",
+          "type": "string"
+        },
+        "platformClient": {
+          "description": "The version of the code of this platform",
+          "type": "string"
+        },
+        "runtime": {
+          "description": "The version of the runtime this platform instance is running against",
+          "type": "string"
+        },
+        "rvm": {
+          "description": "The version of the rvm that was used to launch this platform",
+          "type": "string"
+        },
+        "workspace": {
+          "description": "The version of the workspace components this platform is currently connected to",
+          "type": "string"
+        },
+        "workspaceClient": {
+          "description": "The version of the workspace client code",
+          "type": "string"
+        },
+        "workspacePlatformClient": {
+          "description": "The version of the workspace platform client code",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "VersionProviderOptions": {
       "additionalProperties": false,
       "properties": {
+        "aboutWindow": {
+          "description": "If you specify the settings for an about window then it will be available as a menu option with a condition to show/hide depending on whether the window options have been specified. condition = \"version\" will be available and the action: \"show-about\" can be used. The VersionInfo object settings will be added to the customData of the specified window options."
+        },
         "appVersion": {
           "description": "The version of the the instance of this platform",
           "type": "string"
         },
-        "maximumVersion": {
+        "endpointId": {
+          "description": "If you specify an endpoint then you are telling the platform to send information to this endpoint. The information sent will be the VersionRequest object. If you provide minimumVersion and maximumVersion information in the settings then the platform will use those to calculate what has failed validation (minimum and/or maximum) and pass those onto the endpoint.\n\nThe endpoint then returns an object with status (this returns the version info you sent, the min/max rules and what has failed. The failures indicate the state of the platform.). If the status indicates that things need to be managed and should not proceed they will have a windowOptions property. This should be launched and that window will be built to support what should happen next.\n- Should the window tell the user that the setup isn't compatible and offer to shut down the platform?\n- Should it try to close the platform and launch a compatible manifest?\n- Should it notify the user that a newer version of the app is available and that they should restart? On the initial request while the platform is running an invalid status will result in the bootstrapping stopping.",
+          "type": "string"
+        },
+        "maxVersion": {
           "$ref": "#/definitions/MaximumVersion",
           "description": "You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions"
         },
-        "minimumVersion": {
+        "minVersion": {
           "$ref": "#/definitions/MinimumVersion",
           "description": "You can specify if the platform should stop initializing if the version is less than any of the specified minimum versions"
         },
+        "versionCheckIntervalInSeconds": {
+          "description": "If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an interval to see if an update of your application is available.",
+          "type": "number"
+        },
         "versionWindow": {
-          "description": "If the minimum version is not met and a window is configured then:\n- any workspace component registrations will be un-registered\n- the configured window will be shown and passed the current version and minimum version as customData Otherwise the platform will continue to load and the version information will be passed onto loaded modules through the getVersionInfo function exposed through the passed helper."
+          "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met. This window will be shown to the user and the bootstrapping process will be stopped."
         }
       },
       "type": "object"

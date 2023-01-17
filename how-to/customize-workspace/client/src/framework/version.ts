@@ -5,6 +5,7 @@ import type {
 	MinimumVersion,
 	VersionInfo,
 	VersionProviderOptions,
+	VersionRequest,
 	VersionResponse,
 	VersionStatus,
 	VersionStatusData,
@@ -23,6 +24,7 @@ let maxFail: VersionType[] = [];
 let settingsBasedWindowConfiguration = false;
 let isMonitoringEnabled = false;
 let monitoringId: number;
+let versionCheckIntervalInSeconds: number;
 
 const logger = createLogger("VersionProvider");
 
@@ -40,18 +42,27 @@ export async function init(
 	} else {
 		versionOptions = versionProviderOptions;
 		versionInfo.app = versionProviderOptions.appVersion;
-		minVersion = versionProviderOptions.minimumVersion;
-		maxVersion = versionProviderOptions.maximumVersion;
+		minVersion = versionProviderOptions.minVersion;
+		maxVersion = versionProviderOptions.maxVersion;
 		versionWindowConfiguration = versionProviderOptions.versionWindow as OpenFin.WindowOptions;
 		endpointId = versionProviderOptions.endpointId;
 		settingsBasedWindowConfiguration = versionWindowConfiguration !== undefined;
+
+		if (
+			versionProviderOptions.versionCheckIntervalInSeconds !== undefined &&
+			versionProviderOptions.versionCheckIntervalInSeconds !== null &&
+			Number.isInteger(versionProviderOptions.versionCheckIntervalInSeconds)
+		) {
+			versionCheckIntervalInSeconds = versionProviderOptions.versionCheckIntervalInSeconds;
+		}
+
 		isMonitoringEnabled =
-			versionProviderOptions.versionCheckInterval !== undefined &&
+			versionCheckIntervalInSeconds !== undefined &&
 			versionProviderOptions.endpointId !== undefined &&
 			endpointProvider.hasEndpoint(versionProviderOptions.endpointId);
 		logger.info("Initialized with the following settings", versionProviderOptions);
 	}
-	this.endpoints = endpointProvider;
+	endpoints = endpointProvider;
 }
 
 /**
@@ -204,18 +215,33 @@ export async function getVersionStatus(): Promise<VersionStatus> {
 	}
 
 	if (endpointId !== undefined && endpoints !== undefined && endpoints.hasEndpoint(endpointId)) {
-		const response = await endpoints.requestResponse<VersionStatusData, VersionResponse>(
-			endpointId,
-			getVersionStatusData()
-		);
-		minFail = response.status.minFail;
-		minVersion = response.status.minVersion;
-		maxFail = response.status.maxFail;
-		maxVersion = response.status.maxVersion;
-		if (response.windowOptions !== undefined) {
-			settingsBasedWindowConfiguration = false;
-			versionWindowConfiguration = validateVersionWindow(response.windowOptions);
-			logger.info("Fetched version window configuration from endpoint:", endpointId);
+		try {
+			const response = await endpoints.requestResponse<VersionRequest, VersionResponse>(
+				endpointId,
+				getVersionStatusData()
+			);
+			logger.info("Response received from version endpoint: ", response);
+			if (response?.status !== undefined) {
+				if (Array.isArray(response.status.minFail)) {
+					minFail = response?.status?.minFail;
+				}
+				if (Array.isArray(response.status.maxFail)) {
+					maxFail = response.status.maxFail;
+				}
+			}
+			if (response?.status?.minVersion) {
+				minVersion = response.status.minVersion;
+			}
+			if (response?.status?.maxVersion) {
+				maxVersion = response.status.maxVersion;
+			}
+			if (response.windowOptions !== undefined) {
+				settingsBasedWindowConfiguration = false;
+				versionWindowConfiguration = validateVersionWindow(response.windowOptions);
+				logger.info("Fetched version window configuration from endpoint:", endpointId);
+			}
+		} catch (error) {
+			logger.error("Error while checking for version status.", error);
 		}
 	} else {
 		settingsBasedWindowConfiguration = true;
@@ -261,6 +287,42 @@ export async function manageVersionStatus(status: VersionStatus): Promise<boolea
 	return false;
 }
 
+/** Gets about window options enriched with VersionInfo */
+export async function getAboutWindow(): Promise<OpenFin.WindowOptions> {
+	if (versionOptions?.aboutWindow === undefined) {
+		logger.info("No about window configuration provided.");
+		return undefined;
+	}
+
+	const validatedWindowOptions: OpenFin.WindowOptions = {
+		...(versionOptions.aboutWindow as OpenFin.WindowOptions)
+	};
+
+	if (validatedWindowOptions.url === undefined) {
+		logger.error(
+			"An about version window configuration was set but a url was not provided. A window cannot be launched."
+		);
+		return undefined;
+	}
+	if (validatedWindowOptions.name === undefined) {
+		validatedWindowOptions.name = `${fin.me.identity.uuid}-versioning-about`;
+	}
+
+	if (validatedWindowOptions.customData !== undefined) {
+		logger.info("Enriching customData provided by about version window configuration.");
+		validatedWindowOptions.customData = {
+			...validatedWindowOptions.customData,
+			...getVersionStatusData()
+		};
+	} else {
+		logger.info("Setting customData for about version window configuration.");
+		validatedWindowOptions.customData = getVersionStatusData();
+	}
+
+	logger.info("Returning about version window configuration.");
+	return validatedWindowOptions;
+}
+
 /** If configured via Version Provider Settings, this method will start monitoring to see if an upgrade is available */
 export async function MonitorVersionStatus() {
 	if (isMonitoringEnabled) {
@@ -289,7 +351,7 @@ async function startMonitoring() {
 		} else {
 			logger.info(`Version status needed management: ${status}. Stopping monitoring.`);
 		}
-	}, versionOptions.versionCheckInterval * 1000);
+	}, versionCheckIntervalInSeconds * 1000);
 }
 
 function validateVersionWindow(windowOptionsToValidate: OpenFin.WindowOptions): OpenFin.WindowOptions {
@@ -298,31 +360,33 @@ function validateVersionWindow(windowOptionsToValidate: OpenFin.WindowOptions): 
 		return undefined;
 	}
 
-	if (versionWindowConfiguration.url === undefined) {
+	const validatedWindowOptions = { ...windowOptionsToValidate };
+
+	if (validatedWindowOptions.url === undefined) {
 		logger.error(
 			"A version window configuration was set but a url was not provided. A window cannot be launched."
 		);
 		return undefined;
 	}
-	if (versionWindowConfiguration.name === undefined) {
-		versionWindowConfiguration.name = `${fin.me.identity.uuid}-versioning`;
+	if (validatedWindowOptions.name === undefined) {
+		validatedWindowOptions.name = `${fin.me.identity.uuid}-versioning`;
 	}
 
 	if (settingsBasedWindowConfiguration) {
-		if (versionWindowConfiguration.customData !== undefined) {
+		if (validatedWindowOptions.customData !== undefined) {
 			logger.info("Enriching customData provided by version window configuration.");
-			versionWindowConfiguration.customData = {
-				...versionWindowConfiguration.customData,
+			validatedWindowOptions.customData = {
+				...validatedWindowOptions.customData,
 				...getVersionStatusData()
 			};
 		} else {
 			logger.info("Setting customData for version window configuration.");
-			versionWindowConfiguration.customData = getVersionStatusData();
+			validatedWindowOptions.customData = getVersionStatusData();
 		}
 	}
 
 	logger.info("Returning version window configuration.");
-	return versionWindowConfiguration;
+	return validatedWindowOptions;
 }
 
 function getVersionStatusData(): VersionStatusData {

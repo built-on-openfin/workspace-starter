@@ -1,5 +1,5 @@
 import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { getActions } from "../actions";
+import { getActions, registerAction } from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
 import { isAuthenticationEnabled, isAuthenticationRequired } from "../auth";
@@ -39,15 +39,15 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	logger.info("Initializing Core Services");
 
-	await versionProvider.init(settings?.versionProvider);
+	await endpointProvider.init(settings?.endpointProvider, helpers);
 
 	const runtimeVersion = await fin.System.getVersion();
 	const rvmInfo = await fin.System.getRvmInfo();
+	await versionProvider.init(settings?.versionProvider, endpointProvider);
 	versionProvider.setVersion("runtime", runtimeVersion);
 	versionProvider.setVersion("rvm", rvmInfo.version);
 	versionProvider.setVersion("platformClient", VERSION);
 
-	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
@@ -59,6 +59,19 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	);
 	conditionsProvider.registerCondition("sharing", async () => isShareEnabled(), false);
 	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
+
+	const aboutVersionWindow = await versionProvider.getAboutWindow();
+
+	if (aboutVersionWindow !== undefined) {
+		registerAction("show-about", async () => {
+			try {
+				await fin.Window.create(aboutVersionWindow);
+			} catch (error) {
+				logger.error("An error was encountered while trying to launch the about window.", error);
+			}
+		});
+		conditionsProvider.registerCondition("has-about", async () => aboutVersionWindow !== undefined);
+	}
 
 	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
 

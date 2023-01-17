@@ -23,41 +23,47 @@ export interface VersionProviderOptions {
 	appVersion?: string;
 
 	/** You can specify if the platform should stop initializing if the version is less than any of the specified minimum versions */
-	minimumVersion?: MinimumVersion;
+	minVersion?: MinimumVersion;
 
 	/** You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions */
-	maximumVersion?: MaximumVersion;
+	maxVersion?: MaximumVersion;
 
 	/**
-	 * If you specify an endpointId then this info event if present will not be used.
-	 * If you want have specified min and max version criteria and you specify a version window then this will
-	 * be run during the bootstrapping process and if it fails:
-	 * - any workspace component registrations will be un-registered
-	 * - the configured window will be shown and passed the current version and minimum version as customData
-	 * Otherwise the platform will continue to load and the version information will be passed onto loaded modules
-	 * through the getVersionInfo function exposed through the passed helper.
+	 * If you specify the settings for an about window then it will be available as a menu option with a condition to show/hide
+	 * depending on whether the window options have been specified. condition = "version" will be available and the
+	 * action: "show-about" can be used.
+	 * The VersionInfo object settings will be added to the customData of the specified window options.
+	 */
+	aboutWindow?: unknown;
+
+	/**
+	 * This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met.
+	 * This window will be shown to the user and the bootstrapping process will be stopped.
 	 */
 	versionWindow?: unknown;
 
 	/**
 	 * If you specify an endpoint then you are telling the platform to send information to this endpoint.
-	 * The information sent will be the VersionWindowCustomData object (It might just include versioning
-	 * information) and whether or not the platform is initialized (has it finished bootstrapping).
+	 * The information sent will be the VersionRequest object.
 	 * If you provide minimumVersion and maximumVersion information in the settings then the
 	 * platform will use those to calculate what has failed validation (minimum and/or maximum) and pass
-	 * those onto the endpoint. The endpoint can then return an optional boolean stop which means to stop
-	 * the initialization. If a versionWindow is included then that window is launched. This endpoint can
-	 * also be polled after bootstrapping if a versionCheckInterval is specified. At this stage stop equalling
-	 * true means you want to stop the polling. If a versionWindow is returned then that window is launched
-	 * this might be a window that prompts to user to restart as there is a new version available. The platform
-	 * has no knowledge of the behavior of the versionWindow.
+	 * those onto the endpoint.
+	 *
+	 * The endpoint then returns an object with status (this returns the version info you sent, the min/max rules and what has failed. The failures indicate the state of the platform.).
+	 * If the status indicates that things need to be managed and should not proceed they will have a windowOptions property. This should be launched and that window will be built to
+	 * support what should happen next.
+	 * - Should the window tell the user that the setup isn't compatible and offer to shut down the platform?
+	 * - Should it try to close the platform and launch a compatible manifest?
+	 * - Should it notify the user that a newer version of the app is available and that they should restart?
+	 * On the initial request while the platform is running an invalid status will result in the bootstrapping stopping.
 	 */
 	endpointId?: string;
 
-	/** If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an
+	/**
+	 * If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an
 	 * interval to see if an update of your application is available.
 	 */
-	versionCheckInterval?: number;
+	versionCheckIntervalInSeconds?: number;
 }
 /** What is the current version information of a platform, it's valid versioning criteria and what if anything has failed that validation */
 export interface VersionStatusData {
@@ -72,6 +78,9 @@ export interface VersionStatusData {
 	/** The version type that failed the maximum requirements */
 	maxFail?: VersionType[];
 }
+
+/** If an endpoint is configured for the VersionProvider then this is the shape of the request that will be sent. */
+export type VersionRequest = VersionStatusData;
 
 /** If an endpoint has been used to get dynamic criteria what if anything has been the response. */
 export interface VersionResponse {
