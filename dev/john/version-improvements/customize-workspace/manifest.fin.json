@@ -232,6 +232,21 @@
 				},
 				{
 					"include": true,
+					"label": "About",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "show-about"
+						}
+					},
+					"position": {
+						"type": "Quit",
+						"operation": "before"
+					},
+					"conditions": ["has-about"]
+				},
+				{
+					"include": true,
 					"label": "Quit App",
 					"position": {
 						"type": "Quit",
@@ -820,8 +835,19 @@
 					"title": "Emoji Provider",
 					"description": "Search for emojis by name",
 					"enabled": false,
+					"excludeFromSourceFilter": true,
 					"autoStart": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+				},
+				{
+					"id": "version",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/version-improvements/customize-workspace/favicon.ico",
+					"title": "Version",
+					"description": "Version information for this platform.",
+					"enabled": true,
+					"excludeFromSourceFilter": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version-improvements/customize-workspace/js/modules/integrations/version.bundle.js",
+					"data": {}
 				}
 			]
 		},
@@ -903,13 +929,37 @@
 			]
 		},
 		"versionProvider": {
-			"minimumVersion": {
+			"appVersion": "1.0.0",
+			"minVersion": {
 				"workspace": "10.0.0"
+			},
+			"aboutWindow": {
+				"name": "about",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version-improvements/common/windows/version/about.html",
+				"defaultCentered": true,
+				"showTaskbarIcon": false,
+				"autoShow": true,
+				"minimizable": false,
+				"maximizable": false,
+				"defaultHeight": 396,
+				"defaultWidth": 760,
+				"customData": {}
 			},
 			"versionWindow": {
 				"name": "versioning",
-				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version-improvements/customize-workspace/windows/version/version.html"
-			}
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/version-improvements/customize-workspace/windows/version/version.html",
+				"defaultCentered": true,
+				"showTaskbarIcon": false,
+				"autoShow": true,
+				"minimizable": false,
+				"maximizable": false,
+				"defaultHeight": 481,
+				"defaultWidth": 760,
+				"saveWindowState": false,
+				"includeInSnapshots": false
+			},
+			"endpointId": "version",
+			"versionCheckIntervalInSeconds": 30
 		}
 	}
 }
