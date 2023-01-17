@@ -4,14 +4,11 @@ import type {
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	TemplateFragment
+	HomeSearchResult
 } from "@openfin/workspace";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
-import type { TemplateHelpers } from "customize-workspace/shapes/template-shapes";
-import type { VersionInfo } from "customize-workspace/shapes/version-shapes";
 
 /**
  * Implement the integration provider for version info.
@@ -22,6 +19,12 @@ export class VersionProvider implements IntegrationModule<unknown> {
 	 * @internal
 	 */
 	private static readonly _PROVIDER_ID = "version";
+
+	/**
+	 * The command to display the version.
+	 * @internal
+	 */
+	private static readonly _VERSION_COMMAND = "/version";
 
 	/**
 	 * The settings for the integration.
@@ -66,18 +69,19 @@ export class VersionProvider implements IntegrationModule<unknown> {
 		return [
 			{
 				key: `${VersionProvider._PROVIDER_ID}-help`,
-				title: "/version",
+				title: VersionProvider._VERSION_COMMAND,
 				label: "Help",
 				icon: this._definition?.icon,
 				actions: [],
 				data: {
-					providerId: VersionProvider._PROVIDER_ID
+					providerId: VersionProvider._PROVIDER_ID,
+					populateQuery: VersionProvider._VERSION_COMMAND
 				},
 				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/version",
+					VersionProvider._VERSION_COMMAND,
 					["The version commands lists the version information related to this platform."],
-					["/version"]
+					[VersionProvider._VERSION_COMMAND]
 				)
 			}
 		];
@@ -100,29 +104,34 @@ export class VersionProvider implements IntegrationModule<unknown> {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const possibleMatches = ["/v", "/ve", "/ver", "/vers", "/versi", "/versio", "/version"];
-
-		if(!possibleMatches.includes(query.toLowerCase())) {
+		if (query.length < 2 || !VersionProvider._VERSION_COMMAND.startsWith(query)) {
 			return {
 				results: []
 			};
 		}
+		const palette = await this._integrationHelpers.getCurrentPalette();
+
 		const versionInfo = await this._integrationHelpers.getVersionInfo();
 
 		const actions = [];
 
-		const data = {};
+		const data: { [id: string]: string } = {};
+
+		const tableData: string[][] = [];
+		tableData.push(["Version Type", "Version"]);
+
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const keys = Object.keys(versionInfo);
 
 		for (let i = 0; i < keys.length; i++) {
-			data[`${keys[i]}Label`] = keys[i];
-			data[`${keys[i]}`] = versionInfo[keys[i]];
+			tableData.push([keys[i], (versionInfo[keys[i]] ?? "unknown") as string]);
 		}
+
+		data.title = "Versions";
 
 		const result = {
 			key: "version-info",
-			title: "/Version",
+			title: VersionProvider._VERSION_COMMAND,
 			label: "Version",
 			icon: this._definition?.icon,
 			actions,
@@ -131,14 +140,25 @@ export class VersionProvider implements IntegrationModule<unknown> {
 			},
 			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
-				layout: await this.getVersionTemplate(this._integrationHelpers.templateHelpers, versionInfo),
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
+					"column",
+					[
+						await this._integrationHelpers.templateHelpers.createTitle("title", undefined, undefined, {
+							marginBottom: "10px",
+							borderBottom: `1px solid ${palette.background6}`
+						}),
+						await this._integrationHelpers.templateHelpers.createTable(tableData, [], 0, data)
+					],
+					{
+						padding: "10px"
+					}
+				),
 				data
 			}
 		};
-		const versionResult: HomeSearchResult[] = [result];
 
 		return {
-			results: versionResult
+			results: [result]
 		};
 	}
 
@@ -153,33 +173,5 @@ export class VersionProvider implements IntegrationModule<unknown> {
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		return true;
-	}
-
-	private async getVersionTemplate(
-		templateHelpers: TemplateHelpers,
-		versionInfo: VersionInfo
-	): Promise<TemplateFragment> {
-		const versions: TemplateFragment[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-		const keys = Object.keys(versionInfo);
-
-		for (let i = 0; i < keys.length; i++) {
-			const row: TemplateFragment = await templateHelpers.createContainer(
-				"row",
-				[
-					await templateHelpers.createText(`${keys[i]}Label`, 12, { fontWeight: "bold" }),
-					await templateHelpers.createText(`${keys[i]}`, 12)
-				],
-				{
-					justifyContent: "space-between"
-				}
-			);
-			versions.push(row);
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-		return templateHelpers.createContainer("column", versions, {
-			padding: "10px"
-		});
 	}
 }
