@@ -100,6 +100,13 @@ export class VersionProvider implements IntegrationModule<unknown> {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
+		const possibleMatches = ["/v", "/ve", "/ver", "/vers", "/versi", "/versio", "/version"];
+
+		if(!possibleMatches.includes(query.toLowerCase())) {
+			return {
+				results: []
+			};
+		}
 		const versionInfo = await this._integrationHelpers.getVersionInfo();
 
 		const actions = [];
