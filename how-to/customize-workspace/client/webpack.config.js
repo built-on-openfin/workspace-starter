@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = [
+const configs = [
 	{
 		entry: './client/src/provider.ts',
 		devtool: 'inline-source-map',
@@ -407,3 +407,6 @@ module.exports = [
 		}
 	}
 ];
+
+module.exports =
+	process.env.WEBPACK_CONFIG_INDEX !== undefined ? configs[process.env.WEBPACK_CONFIG_INDEX] : configs;
