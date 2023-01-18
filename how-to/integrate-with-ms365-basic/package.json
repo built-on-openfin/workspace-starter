@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-basic",
-	"version": "10.0.0",
+	"version": "11.0.0",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 - Basic",
 	"main": "index.js",
 	"scripts": {
