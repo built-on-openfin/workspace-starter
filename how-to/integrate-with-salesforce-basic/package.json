@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce-basic",
-	"version": "10.0.0",
+	"version": "11.0.0",
 	"description": "OpenFin Workspace -- Integrate with Salesforce - Basic",
 	"main": "index.js",
 	"scripts": {
