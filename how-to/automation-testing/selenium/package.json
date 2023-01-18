@@ -3,6 +3,7 @@
 	"version": "9.2.0",
 	"description": "OpenFin Workspace Starter Selenium Example",
 	"scripts": {
+		"build": "echo Nothing to build",
 		"test": "node ./selenium.js",
 		"dos": "node ./scripts/dos.mjs",
 		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver"
