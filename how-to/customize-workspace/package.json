@@ -9,7 +9,9 @@
 		"build": "npm run build-server & npm run build-client",
 		"build-server": "tsc --project ./server/express",
 		"build-server-live": "tsc --project ./server/live",
-		"build-client": "node scripts/webpack-parallel.mjs ./client/webpack.config.js",
+		"prebuild-client": "node -p \"'// Generated from package.json version at build time. Do not modify directly.\\nexport const PLATFORM_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > client/src/framework/platform/platform-version.ts",
+		"build-client": "npm run prebuild-client && npm run build-client-parallel",
+		"build-client-parallel": "node scripts/webpack-parallel.mjs ./client/webpack.config.js",
 		"build-client-serial": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
 		"dev": "concurrently -n server,client,manifest -c cyan,magenta,green \"node ./server/live/build/index.js\" \"webpack --config ./client/webpack.config.js --mode=development --watch\" \"npm --prefix ../common/ run client-watch\"",
@@ -37,8 +39,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^28.72.17",
-		"@openfin/workspace": "10.3.8",
-		"@openfin/workspace-platform": "10.3.8",
+		"@openfin/workspace": "10.3.10",
+		"@openfin/workspace-platform": "10.3.10",
 		"csstype": "^3.1.1"
 	},
 	"devDependencies": {
