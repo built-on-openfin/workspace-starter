@@ -2,7 +2,7 @@ function addVersion(versionType, currentVersion, minVersion, minVersionMet, maxV
 	const lstVersions = document.querySelector('#lstVersions');
 	const colHeaders = Array.from(lstVersions.children[0].children).map((header) => header.textContent);
 	const versionTypeLabel = document.createElement('span');
-	versionTypeLabel.textContent = versionType;
+	versionTypeLabel.textContent = versionType ?? 'unknown';
 
 	const versionLabel = document.createElement('span');
 	versionLabel.textContent = currentVersion;
@@ -57,6 +57,12 @@ async function quitPlatform() {
 	await plat.quit();
 }
 
+async function restartPlatform() {
+	const app = await fin.Application.getCurrent();
+	await app.scheduleRestart();
+	await quitPlatform();
+}
+
 async function init() {
 	if (window.fin !== undefined) {
 		const currentWindow = fin.Window.getCurrentSync();
@@ -70,35 +76,47 @@ async function init() {
 		const minFail = customData.minFail ?? [];
 		const maxFail = customData.maxFail ?? [];
 
-		const keys = Object.keys(versionInfo);
+		if (minFail.includes('app')) {
+			const btnRestart = document.querySelector('#restart');
+			const currentVersion = document.querySelector('#current-version');
+			const newVersion = document.querySelector('#new-version');
+			btnRestart.addEventListener('click', async () => {
+				await restartPlatform();
+			});
+			currentVersion.textContent = versionInfo['app'] ?? 'unknown';
+			newVersion.textContent = minVersion['app'] ?? 'unknown';
+		} else {
+			const keys = Object.keys(versionInfo);
 
-		for (let i = 0; i < keys.length; i++) {
-			const currentKey = keys[i];
-			const minVersionMet = minVersion[currentKey] === undefined || !minFail.includes(currentKey);
-			const maxVersionMet = maxVersion[currentKey] === undefined || !maxFail.includes(currentKey);
-			addVersion(
-				currentKey,
-				versionInfo[currentKey],
-				minVersion[currentKey],
-				minVersionMet,
-				maxVersion[currentKey],
-				maxVersionMet
-			);
+			for (let i = 0; i < keys.length; i++) {
+				const currentKey = keys[i];
+				const minVersionMet = minVersion[currentKey] === undefined || !minFail.includes(currentKey);
+				const maxVersionMet = maxVersion[currentKey] === undefined || !maxFail.includes(currentKey);
+				addVersion(
+					currentKey,
+					versionInfo[currentKey],
+					minVersion[currentKey],
+					minVersionMet,
+					maxVersion[currentKey],
+					maxVersionMet
+				);
+			}
+
+			const btnClose = document.querySelector('#close');
+			const btnLaunch = document.querySelector('#launch');
+
+			btnLaunch.addEventListener('click', async () => {
+				await fin.System.openUrlWithBrowser('https://github.com/built-on-openfin/workspace-starter');
+			});
+
+			btnClose.addEventListener('click', async () => {
+				await quitPlatform();
+			});
+			currentWindow.on('close-requested', async () => {
+				await quitPlatform();
+			});
 		}
 
-		const btnClose = document.querySelector('#close');
-		const btnLaunch = document.querySelector('#launch');
-
-		btnLaunch.addEventListener('click', async () => {
-			await fin.System.openUrlWithBrowser('https://github.com/built-on-openfin/workspace-starter');
-		});
-
-		btnClose.addEventListener('click', async () => {
-			await quitPlatform();
-		});
-		currentWindow.on('close-requested', async () => {
-			await quitPlatform();
-		});
 		return true;
 	}
 	return false;

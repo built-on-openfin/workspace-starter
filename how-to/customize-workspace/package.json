@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--customize-workspace",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",

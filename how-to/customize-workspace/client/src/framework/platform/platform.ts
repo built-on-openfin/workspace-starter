@@ -39,15 +39,15 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	logger.info("Initializing Core Services");
 
-	await versionProvider.init(settings?.versionProvider);
+	await endpointProvider.init(settings?.endpointProvider, helpers);
 
 	const runtimeVersion = await fin.System.getVersion();
 	const rvmInfo = await fin.System.getRvmInfo();
-	versionProvider.setVersion("Runtime", runtimeVersion);
-	versionProvider.setVersion("RVM", rvmInfo.version);
-	versionProvider.setVersion("PlatformClient", VERSION);
+	await versionProvider.init(settings?.versionProvider, endpointProvider);
+	versionProvider.setVersion("runtime", runtimeVersion);
+	versionProvider.setVersion("rvm", rvmInfo.version);
+	versionProvider.setVersion("platformClient", VERSION);
 
-	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);

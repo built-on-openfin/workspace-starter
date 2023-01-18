@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-sso",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace -- Integrate with SSO",
 	"main": "index.js",
 	"scripts": {

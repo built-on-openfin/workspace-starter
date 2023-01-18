@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-register-with-home",
-	"version": "10.0.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"build": "echo Nothing to build",
