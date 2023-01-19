@@ -23,7 +23,7 @@ export async function register(bootstrapOptions?: BootstrapOptions): Promise<Reg
 
 		await finalizeRegistration(settings, buttons);
 	}
-
+	logger.info("Dock register about to be called.");
 	return registrationInfo;
 }
 
@@ -204,10 +204,12 @@ async function calculateButtons(
 }
 
 export async function show() {
+	logger.info("Dock show called.");
 	return Dock.show();
 }
 
 export async function minimize() {
+	logger.info("Dock minimize called.");
 	return Dock.minimize();
 }
 
@@ -216,6 +218,7 @@ export async function deregister() {
 		unsubscribeLifecycleEvent(lifeCycleSubscriptionId, "theme-changed");
 		lifeCycleSubscriptionId = undefined;
 		registrationInfo = undefined;
+		logger.info("Dock deregister about to be called.");
 		return Dock.deregister();
 	}
 	logger.warn("Unable to deregister home as there is an indication it was never registered");
