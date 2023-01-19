@@ -1,9 +1,10 @@
 {
+	"$schema": "./schemas/manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=customize-workspace-for-fdc3",
-		"version": "26.102.71.8"
+		"version": "28.106.72.17"
 	},
 	"startup_app": {
 		"name": "customize-workspace-for-fdc3"
@@ -50,7 +51,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon-32x32.png",
-		"name": "Customize Workspace - v9.2.0 - FDC3 Workspace",
+		"name": "Customize Workspace - v10.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -139,7 +140,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/icons/search-dark.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/icons/{theme}/{scheme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -158,13 +159,16 @@
 		"themeProvider": {
 			"themes": [
 				{
+					"id": "fdc3-light",
 					"label": "Light",
 					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon-32x32.png",
+					"default": "light",
+					"iconFolder": "default",
 					"palette": {
 						"brandPrimary": "#399BB8",
 						"brandSecondary": null,
 						"backgroundPrimary": "#111214",
-						"contentBackground1": "#504CFF",
+						"contentBackground1": "#0A76D3",
 						"functional1": null,
 						"functional2": null,
 						"functional3": null,
@@ -215,6 +219,49 @@
 					"enabled": true,
 					"id": "console",
 					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/log/console.bundle.js"
+				}
+			]
+		},
+		"versionProvider": {
+			"minimumVersion": {
+				"workspace": "10.0.0"
+			},
+			"versionWindow": {
+				"name": "versioning",
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/windows/version/version.html"
+			}
+		},
+		"integrationProvider": {
+			"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
+			"isManagementEnabled": false,
+			"command": "integrations",
+			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
+			"modules": [
+				{
+					"id": "workspaces",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
+					"title": "Workspaces",
+					"description": "Manage workspaces",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/workspaces.bundle.js",
+					"data": {
+						"images": {
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/icons/{scheme}/workspace.svg"
+						}
+					}
+				},
+				{
+					"id": "pages",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
+					"title": "Pages",
+					"description": "Manage Pages",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/pages.bundle.js",
+					"data": {
+						"images": {
+							"page": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/icons/{scheme}/page.svg"
+						}
+					}
 				}
 			]
 		}

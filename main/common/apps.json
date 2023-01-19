@@ -18,7 +18,13 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			},
+			{
+				"name": "OpenApp",
+				"displayName": "Open App",
+				"contexts": ["fdc3.contact"],
 				"customConfig": {}
 			}
 		],
@@ -172,7 +178,7 @@
 			}
 		],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3"]
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "fdc3-workbench",
@@ -208,14 +214,14 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/fdc3-workbench.png"
 			}
 		],
-		"tags": ["view", "interop", "fdc3", "contact", "instrument"]
+		"tags": ["view", "interop", "fdc3", "contact", "instrument", "tools"]
 	},
 	{
 		"appId": "fdc3-broadcast-view",
 		"name": "fdc3-broadcast-view",
 		"title": "Context using FDC3",
 		"description": "This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/fdc3/context/fdc3-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -228,7 +234,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-context-fdc3.png"
+				"src": "hhttps://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "tools"]
@@ -238,7 +244,7 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -251,7 +257,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -262,7 +268,7 @@
 		"title": "Context using FDC3 & Interop API (Multi)",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can share context. This page can be launched multiple times. This entry has a manifest type of 'snapshot' and includes an example of fdc3 and interop api usage.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/snapshots/snapshot-context-multi-instance.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-context-multi-instance.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -274,17 +280,17 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/page-context-fdc3-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/page-context-fdc3-interop-api.png"
 			}
 		],
-		"tags": ["page", "openfin"]
+		"tags": ["page", "openfin", "tools"]
 	},
 	{
 		"appId": "fdc3-intent-view",
 		"name": "fdc3-intent-view",
 		"title": "Intents using FDC3",
 		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 api.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/fdc3/intent/fdc3-intent-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/fdc3/intent/fdc3-intent-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -352,7 +358,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-intents-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "intent", "tools"]
@@ -362,7 +368,7 @@
 		"name": "fdc3-intent-view-multi",
 		"title": "Intents using FDC3 (Multi)",
 		"description": "An example of raising and listening to fdc3 intents and the code needed to implement it. This view can be launched multiple times.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/fdc3/intent/fdc3-intent-multi-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/fdc3/intent/fdc3-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -430,7 +436,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-intents-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "intent", "tools"]
@@ -440,7 +446,7 @@
 		"name": "interop-intent-view",
 		"title": "Intents using Interop API",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/interop-api/intent/interop-intent-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/interop-api/intent/interop-intent-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -508,7 +514,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -518,7 +524,7 @@
 		"name": "interop-intent-view-multi",
 		"title": "Intents using Interop API (Multi)",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -586,7 +592,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -597,7 +603,7 @@
 		"title": "Intents using FDC & Interop",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/snapshots/snapshot-intent-single-instance.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-intent-single-instance.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -664,10 +670,10 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/page-intents-fdc3-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/page-intents-fdc3-interop-api.png"
 			}
 		],
-		"tags": ["page", "openfin"]
+		"tags": ["page", "openfin", "tools"]
 	},
 	{
 		"appId": "openfin-intent-page-multi",
@@ -675,7 +681,7 @@
 		"title": "Intents using FDC & Interop API (Multi)",
 		"manifestType": "snapshot",
 		"description": "Shows an example of a snapshot that is a page that has two views that can act as an intent target. This page can be launched multiple times. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/snapshots/snapshot-intent-multi-instance.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/snapshots/snapshot-intent-multi-instance.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -742,7 +748,7 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/interop/images/previews/page-intents-fdc3-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/page-intents-fdc3-interop-api.png"
 			}
 		],
 		"tags": ["page", "openfin", "tools"]
@@ -752,7 +758,7 @@
 		"name": "app-definition-builder",
 		"title": "App Definition Builder",
 		"description": "A developer tool to help build an app definition",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/app/app-definition-builder/app-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/app/app-definition-builder/app-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -768,17 +774,17 @@
 		],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/app/images/previews/app-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/app/images/previews/app-definition-builder.png"
 			}
 		],
-		"tags": ["view", "app", "tool"]
+		"tags": ["view", "app", "tools"]
 	},
 	{
 		"appId": "theme-definition-builder",
 		"name": "theme-definition-builder",
 		"title": "Theme Definition Builder",
 		"description": "A tool to help in the building of a theme.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -787,10 +793,10 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/branding/images/previews/theme-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/branding/images/previews/theme-definition-builder.png"
 			}
 		],
-		"tags": ["view", "theme", "tool"]
+		"tags": ["view", "theme", "tools"]
 	},
 	{
 		"appId": "starter-style-guide",
@@ -809,7 +815,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/starter-style-guide.png"
 			}
 		],
-		"tags": ["view", "style", "tool"]
+		"tags": ["view", "style", "tools"]
 	},
 	{
 		"appId": "openfin-versions-workspace",
@@ -1044,7 +1050,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/openfin-page-docs.png"
 			}
 		],
-		"tags": ["page"]
+		"tags": ["page", "developer"]
 	},
 	{
 		"appId": "winform-interop-example",
@@ -1067,7 +1073,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi", "dock"],
+		"tags": ["native", "appasset", "nwi", "dock", "developer"],
 		"data": {
 			"nwi": {
 				"name": "OpenFin.Interop.Win.Sample",
@@ -1116,7 +1122,7 @@
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [],
-		"tags": ["window", "headless"]
+		"tags": ["window", "headless", "developer"]
 	},
 	{
 		"appId": "manager-portal",
@@ -1283,7 +1289,7 @@
 		"name": "getting-started",
 		"title": "Getting Started Guide",
 		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
-		"manifest": "https://samples.openfin.co/dev-extensions/extensions/v1.1.0/common/snapshots/snapshot-getting-started.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -1291,7 +1297,7 @@
 		"publisher": "OpenFin",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "snapshot", "tool"]
+		"tags": ["page", "snapshot", "tools"]
 	},
 	{
 		"appId": "irs-rfq",

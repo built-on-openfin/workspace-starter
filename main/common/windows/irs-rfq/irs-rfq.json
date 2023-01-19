@@ -2,5 +2,10 @@
 	"url": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/irs-rfq/irs-rfq.html",
 	"defaultWidth": 800,
 	"defaultHeight": 540,
-	"frame": false
+	"frame": false,
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/main/common/style/style-changed-preload.js"
+		}
+	]
 }

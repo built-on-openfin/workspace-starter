@@ -1,37 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
 :root {
-	--brand-background: #1e1f23;
-	--brand-border: #2f3136;
-	--brand-primary: #4f4dff;
-	--brand-text: #ffffff;
-	--brand-text-secondary: #c9cbd2;
-	--brand-input-background: #383a40;
-	--brand-input-border: #53565f;
-	--brand-input-border-highlight: #c9cbd2;
-	--brand-table-header: #111111;
-	--brand-table-header-text: #ffffff;
-	--brand-table-row-even: #383a40;
-	--brand-table-row-odd: #53565f;
-	--brand-error: #cc0000;
-	--brand-success: #00aa00;
+	--brand-background: var(--theme-background-primary, #1e1f23);
+	--brand-border: var(--theme-background4, #2f3136);
+	--brand-primary: var(--theme-brand-primary, #0a76d3);
+	--brand-text: var(--theme-text-default, #ffffff);
+	--brand-text-secondary: var(--theme-text-help, #c9cbd2);
+	--brand-input-background: var(--theme-background5, #383a40);
+	--brand-input-border: var(--theme-background6, #53565f);
+	--brand-input-border-highlight: var(--theme-input-focused, #c9cbd2);
+	--brand-table-header: var(--theme-background1, #111214);
+	--brand-table-header-text: var(--theme-text-default, #ffffff);
+	--brand-table-row-even: var(--theme-background3, #24262b);
+	--brand-table-row-odd: var(--theme-background4, #2f3136);
+	--brand-error: var(--theme-status-critical, #be1d1f);
+	--brand-success: var(--theme-status-success, #35c759);
 
 	accent-color: var(--brand-primary);
 }
 
 .theme-light {
-	--brand-background: #ffffff;
-	--brand-border: #eeeeee;
-	--brand-primary: #4f4dff;
-	--brand-text: #111214;
-	--brand-text-secondary: #333333;
-	--brand-input-background: #f7f7f7;
-	--brand-input-border: #c9cbd2;
-	--brand-input-border-highlight: #53565f;
-	--brand-table-header: #53565f;
-	--brand-table-header-text: #ffffff;
-	--brand-table-row-even: #eeeeee;
-	--brand-table-row-odd: #f7f7f7;
+	--brand-background: var(--theme-background-primary, #ffffff);
+	--brand-border: var(--theme-background4, #eceef1);
+	--brand-primary: var(--theme-brand-primary, #0a76d3);
+	--brand-text: var(--theme-text-default, #111214);
+	--brand-text-secondary: var(--theme-text-help, #2f3136);
+	--brand-input-background: var(--theme-background5, #dddfe4);
+	--brand-input-border: var(--theme-background6, #c9cbd2);
+	--brand-input-border-highlight: var(--theme-input-focused, #c9cbd2);
+	--brand-table-header: var(--theme-background1, #ffffff);
+	--brand-table-header-text: var(--theme-text-default, #111214);
+	--brand-table-row-even: var(--theme-background3, #eceef1);
+	--brand-table-row-odd: var(--theme-background4, #c9cbd2);
+	--brand-error: var(--theme-status-critical, #be1d1f);
+	--brand-success: var(--theme-status-success, #35c759);
 }
 
 .primary {
@@ -215,7 +217,7 @@ footer a:focus,
 footer a:not(:disabled):hover,
 button:not(:disabled):focus,
 button:not(:disabled):hover {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0 0);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.1) 0 0);
 }
 
 button.image {
@@ -424,10 +426,6 @@ input[type='week'] {
 	color: #ffffff;
 }
 
-.theme-light ::-webkit-calendar-picker-indicator {
-	filter: invert(0);
-}
-
 ::-webkit-outer-spin-button,
 ::-webkit-inner-spin-button {
 	-webkit-appearance: none;
@@ -449,10 +447,6 @@ select:not([multiple]):not(:disabled) {
 	background-size: 12px;
 	background-position: calc(100% - 12px) 12px;
 	background-color: var(--brand-input-background);
-}
-
-.theme-light select:not([multiple]):not(:disabled) {
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23333333'><polygon points='0,0 100,0 50,50'/></svg>");
 }
 
 option {
@@ -784,6 +778,11 @@ table {
 	border-collapse: collapse;
 }
 
+table,
+.table {
+	border: var(--brand-input-border) 1px solid;
+}
+
 .table-row {
 	display: flex;
 	flex: 1;
@@ -880,7 +879,8 @@ td,
 }
 
 .form {
-	background-color: #f3f3f3;
+	background-color: var(--brand-table-header);
+	border: var(--brand-input-border) 1px solid;
 	border-radius: 5px;
 	padding: 10px;
 	font-size: 12px;
@@ -890,7 +890,8 @@ td,
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	background-color: #e3e3e3;
+	background-color: var(--brand-table-header);
+	border: var(--brand-input-border) 1px solid;
 	border-radius: 5px;
 	padding: 10px;
 }
