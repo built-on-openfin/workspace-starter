@@ -2,9 +2,14 @@
 	"description": "This is a cut down list of the dependencies that we want to package. This is used by the package-content script which looks at paths specified in package and tries to resolve them (in the same way it reads a manifest). The /package entry is a virtual url used by package-config to fetch specific assets.",
 	"package": [
 		"http://localhost:8080/platform/provider.html",
+		"http://localhost:8080/shell/shell.html",
+		"http://localhost:8080/js/provider.bundle.js",
+		"http://localhost:8080/js/shell.bundle.js",
 		"http://localhost:8080/js/modules/endpoints/local-storage.bundle.js",
 		"http://localhost:8080/js/modules/endpoints/fdc3-app.bundle.js",
+		"http://localhost:8080/js/modules/endpoints/inline-apps.bundle.js",
 		"http://localhost:8080/js/modules/log/console.bundle.js",
+		"http://localhost:8080/js/modules/analytics/console.bundle.js",
 		"http://localhost:8080/package"
 	]
 }

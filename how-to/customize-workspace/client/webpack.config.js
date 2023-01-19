@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = [
+const configs = [
 	{
 		entry: './client/src/provider.ts',
 		devtool: 'inline-source-map',
@@ -16,9 +16,43 @@ module.exports = [
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js']
 		},
+		externals: { fin: 'fin' },
 		output: {
 			filename: 'provider.bundle.js',
+			library: {
+				type: 'module'
+			},
 			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/shell.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'shell.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
 		}
 	},
 	{
@@ -238,7 +272,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/modules/actions/app-definition/index.ts',
+		entry: './client/src/modules/endpoints/example-connection-validation/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -254,7 +288,61 @@ module.exports = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'app-definition.bundle.js',
+			filename: 'example.connection.validation.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/analytics/console/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'console.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'analytics')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/actions/developer/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'developer.bundle.js',
 			library: {
 				type: 'module'
 			},
@@ -263,5 +351,89 @@ module.exports = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/integrations/workspaces/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'workspaces.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'integrations')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/integrations/pages/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'pages.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'integrations')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/composite/about/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'about.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'composite')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
+
+module.exports =
+	process.env.WEBPACK_CONFIG_INDEX !== undefined ? configs[process.env.WEBPACK_CONFIG_INDEX] : configs;

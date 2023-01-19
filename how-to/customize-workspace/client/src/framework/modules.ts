@@ -1,18 +1,27 @@
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
 import type {
 	Module,
+	ModuleDefinition,
 	ModuleEntry,
 	ModuleEntryTypes,
-	ModuleDefinition,
+	ModuleHelpers,
 	ModuleImplementation,
 	ModuleList,
-	ModuleTypes,
-	ModuleHelpers
+	ModuleTypes
 } from "./shapes/module-shapes";
-import { getCurrentTheme, getDefaultPalettes } from "./themes";
+import {
+	getCurrentColorSchemeMode,
+	getCurrentPalette,
+	getCurrentIconFolder,
+	getCurrentThemeId
+} from "./themes";
+import { randomUUID } from "./uuid";
+import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
+const sessionId = randomUUID();
 
 /**
  * All the loaded modules.
@@ -199,7 +208,13 @@ export async function closedownModule<
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
-		getDefaultPalettes,
-		getCurrentTheme
+		sessionId,
+		getCurrentThemeId,
+		getCurrentIconFolder,
+		getCurrentPalette,
+		getCurrentColorSchemeMode,
+		getVersionInfo,
+		subscribeLifecycleEvent,
+		unsubscribeLifecycleEvent
 	};
 }

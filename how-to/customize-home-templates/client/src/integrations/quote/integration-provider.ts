@@ -17,7 +17,7 @@ import {
 	TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
-import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
+import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
 import { createHelp } from "../../templates";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 import { getQuoteTemplate } from "./templates";
@@ -58,7 +58,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: Integration<QuoteSettings>,
+		definition: ModuleDefinition<QuoteSettings>,
 		loggerCreator: () => void,
 		helpers: IntegrationHelpers
 	): Promise<void> {
@@ -86,7 +86,8 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: QuoteIntegrationProvider._PROVIDER_ID
+					providerId: QuoteIntegrationProvider._PROVIDER_ID,
+					populateQuery: "/quote "
 				},
 				template: CLITemplate.Custom,
 				templateContent: await createHelp(
@@ -252,7 +253,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 				animation: false,
 				responsive: false,
 				scales: {
-					xAxis: {
+					x: {
 						display: false
 					}
 				},

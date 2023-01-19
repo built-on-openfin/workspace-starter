@@ -14,16 +14,16 @@ export async function getConfiguredSettings(): Promise<CustomSettings> {
 	return manifest.customSettings ?? {};
 }
 
-async function getValidHosts(): Promise<string[]> {
+async function getValidHosts(validationUrl: string): Promise<string[]> {
 	if (validManifestHosts === undefined) {
-		const manifestHostsPath = window.location.href.replace("platform/provider.html", "manifest-hosts.json");
+		const manifestHostsPath = validationUrl;
 		try {
 			logger.info(`Getting valid hosts for initial settings from ${manifestHostsPath}`);
 			const resp = await fetch(manifestHostsPath);
 			const jsonResults: string[] = await resp.json();
 			validManifestHosts = jsonResults;
-		} catch (error) {
-			logger.error(`Error fetching valid hosts for initial settings from ${manifestHostsPath}.`, error);
+		} catch {
+			logger.info(`Valid hosts endpoint (${manifestHostsPath}) not provided.`);
 			validManifestHosts = [];
 		}
 	}
@@ -52,20 +52,31 @@ export async function getSettings(): Promise<CustomSettings> {
 
 export async function isValid() {
 	logger.info("Validating source of initial settings");
+	const host = window.location.href.toLowerCase();
+	const possibleHosts = ["platform/provider.html", "provider.html", "shell/shell.html", "shell.html"];
+	const hostPage = possibleHosts.find((h) => host.endsWith(h));
+
+	let validationUrl: string;
+	let validHosts: string[] = [];
+
+	if (hostPage !== undefined) {
+		validationUrl = host.replace(hostPage, "manifest-hosts.json");
+		logger.info("Using hosts validation url:", validationUrl);
+		validHosts = await getValidHosts(validationUrl);
+	}
+
 	const app = await fin.Application.getCurrent();
 	const info = await app.getInfo();
 	const manifestUrl = info.manifestUrl;
 	logger.info(`Source of initial settings: ${manifestUrl}`);
-	// this check could be removed or it could be dynamically generated as part of the code or passed made available from the server
-	// that hosts the code. It couldn't be from the manifest itself as it is validating where the manifest is coming from.
 
 	const url = new URL(manifestUrl);
 	const sourceUrl = new URL(location.href);
-	const validHosts = await getValidHosts();
 	if (!validHosts.includes(sourceUrl.hostname)) {
+		logger.info("Adding current host to the list of valid hosts:", sourceUrl.hostname);
 		validHosts.push(sourceUrl.hostname);
 	}
-	logger.info(`Checking host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
+	logger.info(`Checking manifest host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
 	const isValidHost = validHosts.includes(url.hostname);
 	if (isValidHost) {
 		logger.info("The source of the initial settings is valid");

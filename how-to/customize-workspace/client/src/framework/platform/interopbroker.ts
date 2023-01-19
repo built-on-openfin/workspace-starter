@@ -1,13 +1,15 @@
-import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
+import * as connectionProvider from "../connections";
 import { launchSnapshot, launchView } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
+import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("InteropBroker");
 
+const OPEN_APP_NOT_FOUND = "AppNotFound";
 const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
 
@@ -18,7 +20,7 @@ export function interopOverride(
 	...args: unknown[]
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
-		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {
+		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent) {
 			logger.info("Launching app with intent");
 
 			if (
@@ -86,9 +88,9 @@ export function interopOverride(
 		}
 
 		public async launchAppPicker(launchOptions: {
-			apps?: App[];
+			apps?: PlatformApp[];
 			intent?: Partial<AppIntent>;
-			intents?: { intent: Partial<AppIntent>; apps: App[] }[];
+			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
 		}): Promise<{
 			appId: string;
 			intent: Partial<AppIntent>;
@@ -141,9 +143,14 @@ export function interopOverride(
 		}
 
 		public async isConnectionAuthorized(id: OpenFin.Identity, payload?: unknown): Promise<boolean> {
-			logger.info("Interop connection being made by the following identity with payload", id, payload);
-			// perform connection validation checks here if required and return false if it shouldn't be permissioned.
-			return true;
+			logger.info("Interop connection being made by the following identity. About to verify connection", id);
+			const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
+			if (!response.isValid) {
+				logger.warn(`Connection request from ${JSON.stringify(id)} was validated and rejected.`);
+			} else {
+				logger.info("Connection validation request was validated and is valid.");
+			}
+			return response.isValid;
 		}
 
 		public async isActionAuthorized(
@@ -211,7 +218,7 @@ export function interopOverride(
 				name: undefined,
 				displayName: undefined
 			};
-			let targetApp: App;
+			let targetApp: PlatformApp;
 			let targetAppIntent;
 			let targetAppIntentCount = 0;
 
@@ -321,12 +328,16 @@ export function interopOverride(
 		public async handleFiredIntent(intent: OpenFin.Intent) {
 			logger.info("Received request for a raised intent", intent);
 			let intentApps = await getAppsByIntent(intent.name);
-			let targetApp: App;
+			let targetApp: PlatformApp;
+			let targetAppSpecified: boolean = false;
+			let targetAppId: string;
 
 			if (intent.metadata?.target !== undefined) {
-				targetApp = await getApp(intent.metadata?.target as string);
+				targetAppSpecified = true;
+				targetAppId = intent.metadata?.target as string;
+				targetApp = await getApp(targetAppId);
 				if (targetApp === undefined) {
-					// check to see if you have been passed a specific identity for a view that should be targetted instead of an app
+					// check to see if you have been passed a specific identity for a view that should be targeted instead of an app
 					const targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
 					if (targetIdentity !== undefined) {
 						logger.info(
@@ -347,7 +358,19 @@ export function interopOverride(
 				throw new Error(NO_APPS_FOUND);
 			}
 
-			if (targetApp !== undefined && intentApps.includes(targetApp)) {
+			if (targetAppSpecified && targetApp === undefined) {
+				logger.info(`Selected appId was specified: ${targetAppId} but does not exist. Returning error.`);
+				throw new Error(NO_APPS_FOUND);
+			}
+
+			if (targetApp !== undefined) {
+				if (!intentApps.includes(targetApp)) {
+					logger.info(
+						`Selected appId was specified: ${targetAppId} but does it does not support the intent`,
+						intent
+					);
+					throw new Error(NO_APPS_FOUND);
+				}
 				logger.info("Assigning selected application with intent", intent);
 				intentApps = [targetApp];
 			}
@@ -387,6 +410,42 @@ export function interopOverride(
 			} catch {
 				logger.error("App for intent not selected/launched", intent);
 				throw new Error(RESOLVER_TIMEOUT);
+			}
+		}
+
+		public async fdc3HandleOpen(
+			fdc3OpenOptions: { app: (PlatformApp & { name?: string }) | string; context: OpenFin.Context },
+			clientIdentity: OpenFin.ClientIdentity
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		): Promise<any> {
+			if (fdc3OpenOptions?.app === undefined || fdc3OpenOptions?.app === null) {
+				logger.error("A request to fdc3.open did not pass an fdc3OpenOptions object");
+				throw new Error(OPEN_APP_NOT_FOUND);
+			}
+
+			const requestedId =
+				typeof fdc3OpenOptions.app === "string"
+					? fdc3OpenOptions.app
+					: fdc3OpenOptions.app.appId ?? fdc3OpenOptions.app.name;
+			const openAppIntent: OpenFin.Intent = {
+				context: fdc3OpenOptions.context,
+				name: "OpenApp",
+				metadata: {
+					target: requestedId
+				}
+			};
+			logger.info(
+				`A request to Open has been sent to the platform by uuid: ${clientIdentity?.uuid}, name: ${clientIdentity?.name}, endpointId: ${clientIdentity.endpointId} with passed context:`,
+				fdc3OpenOptions.context
+			);
+			try {
+				const result = await this.handleFiredIntent(openAppIntent);
+				return { appId: result.source };
+			} catch (intentError) {
+				if (intentError?.message === NO_APPS_FOUND) {
+					throw new Error(OPEN_APP_NOT_FOUND);
+				}
+				throw intentError;
 			}
 		}
 	}

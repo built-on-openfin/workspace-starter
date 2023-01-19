@@ -1,0 +1,96 @@
+{
+	"$schema": "./schemas/manifest.schema.json",
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=fourth-workspace-starter-how-to-customize-workspace",
+		"version": "28.106.72.17"
+	},
+	"startup_app": {
+		"name": "fourth-workspace-starter-how-to-customize-workspace"
+	},
+	"platform": {
+		"uuid": "fourth-workspace-starter-how-to-customize-workspace",
+		"name": "fourth-workspace-starter-how-to-customize-workspace",
+		"icon": "http://localhost:8080/favicon-32x32.png",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/shell/shell.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			}
+		},
+		"defaultViewOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"appAssets": [
+		{
+			"alias": "winform-interop-example",
+			"version": "3.0.0",
+			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"target": "OpenFin.Interop.Win.Sample.exe",
+			"forceDownload": false
+		}
+	],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Customize Workspace - Fourth Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
+			"sharing": true,
+			"initUrl": "http://localhost:8080/js/provider.bundle.js"
+		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "example",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1
+					}
+				}
+			]
+		},
+		"endpointProvider": {
+			"modules": [],
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:8080/settings.json"
+					}
+				}
+			]
+		}
+	}
+}

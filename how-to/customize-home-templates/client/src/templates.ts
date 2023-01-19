@@ -8,7 +8,7 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
-import { getCurrentTheme } from "./themes";
+import { getCurrentPalette } from "./themes";
 
 export async function createHelp(
 	title: string,
@@ -16,7 +16,7 @@ export async function createHelp(
 	examples: string[]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	const additionalData = {};
 	const fragments: TemplateFragment[] = [];
 	for (let i = 0; i < description.length; i++) {
@@ -44,8 +44,8 @@ export async function createHelp(
 			await createContainer("column", exampleFragments, {
 				padding: "10px",
 				marginTop: "6px",
-				backgroundColor: theme.palette.background5,
-				color: theme.palette.inputColor,
+				backgroundColor: palette.background5,
+				color: palette.inputColor,
 				borderRadius: "5px",
 				overflow: "auto"
 			})
@@ -57,7 +57,7 @@ export async function createHelp(
 			[
 				await createTitle("title", undefined, undefined, {
 					marginBottom: "10px",
-					borderBottom: `1px solid ${theme.palette.background6}`
+					borderBottom: `1px solid ${palette.background6}`
 				}),
 				...fragments
 			],
@@ -94,12 +94,12 @@ export async function createTitle(
 	fontWeight: string = "bold",
 	style?: CSS.Properties
 ): Promise<TextTemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	return {
 		type: TemplateFragmentTypes.Text,
 		dataKey,
 		style: {
-			color: theme.palette.textDefault,
+			color: palette.textDefault,
 			fontSize: `${fontSize ?? 16}px`,
 			fontWeight,
 			...style
@@ -143,11 +143,11 @@ export async function createButton(
 	action: string,
 	style?: CSS.Properties
 ): Promise<ButtonTemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	const buttonOptions =
 		buttonStyle === ButtonStyle.Secondary
 			? {
-					border: `1px solid ${theme.palette.inputColor}`
+					border: `1px solid ${palette.inputColor}`
 			  }
 			: {};
 	return {

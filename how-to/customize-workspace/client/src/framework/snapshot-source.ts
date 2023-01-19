@@ -1,7 +1,7 @@
-import type { App } from "@openfin/workspace";
 import { getConnectedSnapshotSourceClients } from "./connections";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
+import type { PlatformApp } from "./shapes/app-shapes";
 
 const logger = createLogger("SnapshotSource");
 
@@ -62,7 +62,7 @@ export async function applyClientSnapshot(snapshot) {
 					}
 				} else if (clientSnapshot?.snapshot !== undefined) {
 					// eslint-disable-next-line @typescript-eslint/dot-notation
-					const app: App = clientSnapshot.snapshot["App"] ?? clientSnapshot.snapshot["app"];
+					const app: PlatformApp = clientSnapshot.snapshot["App"] ?? clientSnapshot.snapshot["app"];
 					if (app !== undefined) {
 						logger.info(
 							`Client not connected but snapshot contains an app definition. Launching app definition for ${clientSnapshot.identity.uuid}`

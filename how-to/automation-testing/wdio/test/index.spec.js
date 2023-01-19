@@ -32,7 +32,7 @@ describe('Register with Home', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('26.102.71.8');
+		expect(version).to.equal('28.106.72.17');
 	});
 
 	it('The identity should be set', async () => {
@@ -222,6 +222,7 @@ describe('Register with Home', () => {
 	it('Can close the home window filters', async () => {
 		await WebDriver.sleep(3000);
 		await OpenFinHome.filtersClose(true);
+		await WebDriver.sleep(2000);
 	});
 
 	it('Can check selected entry content', async () => {
@@ -290,6 +291,7 @@ describe('Register with Home', () => {
 
 				// Do down arrow * 5 to select the close, you should see the confirmation popup
 				await NativeDriver.actions([
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },
 					{ type: 'keyPress', key: NativeDriverKeys.Down },

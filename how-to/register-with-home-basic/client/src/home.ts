@@ -6,8 +6,8 @@ import {
 	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	HomeRegistration,
+	HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
@@ -90,7 +90,7 @@ async function getResults(queryLower: string): Promise<CLISearchResponse> {
 	};
 }
 
-export async function register(): Promise<RegistrationMetaInfo> {
+export async function register(): Promise<HomeRegistration> {
 	console.log("Initialising home.");
 
 	const queryMinLength = 3;

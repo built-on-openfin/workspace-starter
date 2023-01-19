@@ -139,14 +139,14 @@ To launch a custom action you instead specify its `id`, and the `customData` spe
 }
 ```
 
-If you want to configure a drop down menu instead of a single button you can use the following pattern. Where each of the options is configured with either `appId` or `action` in the same way as the single button elements above. The `tooltip` and `iconUrl` must be specified for a drop down.
+If you want to configure a drop down menu instead of a single button you can use the following pattern. Where each of the options is configured with either `appId` or `action` in the same way as the single button elements above. The `tooltip` and `iconUrl` must be specified for a drop down. The `{theme}` will be replaced with the current theme id (defaults to theme label if not specified) and will also replace `{scheme}` with light/dark dependent on the current settings.
 
 ```json
 "dockProvider": {
     "buttons": [
         {
             "tooltip": "Social",
-            "iconUrl": "http://localhost:8080/common/icons/share.svg",
+            "iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
             "options": [
                 {
                     "tooltip": "Twitter",

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-basic",
-	"version": "9.1.0",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -20,18 +20,18 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.25.0",
-		"@openfin/core": "^27.70.8",
+		"@openfin/core": "^28.72.17",
 		"@openfin/microsoft365": "1.0.0",
-		"@openfin/workspace": "9.2.5",
-		"@openfin/workspace-platform": "9.2.5"
+		"@openfin/workspace": "10.3.10",
+		"@openfin/workspace-platform": "10.3.10"
 	},
 	"devDependencies": {
-		"@types/express": "^4.17.13",
-		"@types/node": "^17.0.41",
-		"express": "^4.18.1",
-		"ts-loader": "^9.3.0",
-		"typescript": "^4.7.3",
-		"webpack": "^5.73.0",
-		"webpack-cli": "^4.9.2"
+		"@types/express": "^4.17.14",
+		"@types/node": "^18.11.10",
+		"express": "^4.18.2",
+		"ts-loader": "^9.4.2",
+		"typescript": "^4.9.3",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^5.0.0"
 	}
 }

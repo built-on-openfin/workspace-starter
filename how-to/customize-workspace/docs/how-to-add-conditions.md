@@ -65,6 +65,7 @@ As part of the platform there are already some built-in conditions.
 
 - `authenticated` - Which determines that the current session is authenticated.
 - `sharing` - Is the sharing flag in the platform enabled.
+- `themed` - Is the platform configured with a light and dark theme.
 
 ## Source Reference
 

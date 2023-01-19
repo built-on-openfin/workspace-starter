@@ -1,10 +1,11 @@
-import type { App } from "@openfin/workspace";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
+import type { PlatformApp } from "./shapes/app-shapes";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("Launch");
 
@@ -59,7 +60,7 @@ function findViewNames(layout) {
 
 	return collectedNames;
 }
-export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
+export async function launchWindow(windowApp: PlatformApp): Promise<OpenFin.Identity> {
 	if (windowApp === undefined || windowApp === null) {
 		logger.warn("No app was passed to launchWindow");
 		return null;
@@ -93,7 +94,7 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 	if (wasNameSpecified) {
 		windowExists = await doesWindowExist(identity.name, identity.uuid);
 	} else {
-		manifest.name = `classic-window-${crypto.randomUUID()}`;
+		manifest.name = `classic-window-${randomUUID()}`;
 		identity.name = manifest.name;
 	}
 
@@ -109,7 +110,7 @@ export async function launchWindow(windowApp: App): Promise<OpenFin.Identity> {
 	return identity;
 }
 
-export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
+export async function launchView(viewApp: PlatformApp): Promise<OpenFin.Identity> {
 	if (viewApp === undefined || viewApp === null) {
 		logger.warn("No app was passed to launchView");
 		return null;
@@ -157,7 +158,7 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity> {
 	return identity;
 }
 
-export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity[]> {
+export async function launchSnapshot(snapshotApp: PlatformApp): Promise<OpenFin.Identity[]> {
 	if (snapshotApp === undefined || snapshotApp === null) {
 		logger.warn("No app was passed to launchSnapshot");
 		return null;
@@ -181,7 +182,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 		for (let i = 0; i < windows.length; i++) {
 			const getViewIdsForLayout = findViewNames(windows[i].layout);
 			if (getViewIdsForLayout.length === 0) {
-				const uuid = window.crypto.randomUUID();
+				const uuid = randomUUID();
 				const name = `internal-generated-window-${uuid}`;
 				windows[i].name = name;
 				windowsToCreate.push(windows[i]);
@@ -223,7 +224,7 @@ export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity
 	return null;
 }
 
-export async function launch(appEntry: App) {
+export async function launch(appEntry: PlatformApp) {
 	try {
 		logger.info("Application launch requested", appEntry);
 		if (appEntry.manifestType === manifestTypes.external.id) {

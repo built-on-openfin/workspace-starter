@@ -1,4 +1,5 @@
 import {
+	ColorSchemeOptionType,
 	CreateSavedPageRequest,
 	CreateSavedWorkspaceRequest,
 	getCurrentSync,
@@ -11,11 +12,16 @@ import {
 	Workspace,
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
+import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
+import * as analyticsProvider from "../analytics";
+import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
+import { setCurrentColorSchemeMode } from "../themes";
 import { deletePageBounds, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -290,6 +296,59 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				await closedownPlatform();
 
 				return super.quit(payload, callerIdentity);
+			}
+		}
+
+		public async createWindow(
+			options: OpenFin.PlatformWindowCreationOptions,
+			identity?: OpenFin.Identity
+		): Promise<OpenFin.Window> {
+			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
+
+			if (!overrideDefaultButtons) {
+				// The window options don't override the toolbar buttons
+				// so we assume we are using the workspace defaults
+				// Since the defaults were created using the theme at startup
+				// we need to replace them with the current set of default
+				// buttons which are theme aware
+				options.workspacePlatform = options.workspacePlatform ?? {};
+				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
+				options.workspacePlatform.toolbarOptions.buttons = await getDefaultToolbarButtons();
+			}
+
+			const window = await super.createWindow(options, identity);
+
+			// If the default buttons were overwritten then hopefully the creator
+			// used correctly themed versions, but in case they didn't we send
+			// an update for the colors.
+			if (overrideDefaultButtons) {
+				try {
+					const platform = getCurrentSync();
+					const browserWindow = platform.Browser.wrapSync(window.identity);
+					await updateBrowserWindowButtonsColorScheme(browserWindow);
+				} catch {
+					// Probably not a browser window
+				}
+			}
+
+			return window;
+		}
+
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+			// The color scheme has been updated, so update the theme
+			await setCurrentColorSchemeMode(schemeType);
+
+			return super.setSelectedScheme(schemeType);
+		}
+
+		public async handleAnalytics(events: AnalyticsEvent[]) {
+			if (analyticsProvider.isEnabled()) {
+				const platformEvents: PlatformAnalyticsEvent[] = [];
+				const timestamp = new Date();
+				for (const analyticEvent of events) {
+					platformEvents.push({ timestamp, ...analyticEvent });
+				}
+				await analyticsProvider.handleAnalytics(platformEvents);
 			}
 		}
 	}

@@ -3,7 +3,6 @@ import {
 	StorefrontLandingPage,
 	StorefrontNavigationSection,
 	StorefrontFooter,
-	App,
 	StorefrontProvider,
 	StorefrontTemplate,
 	StorefrontNavigationItem,
@@ -19,6 +18,7 @@ import type {
 	StorefrontSettingsLandingPageRow,
 	StorefrontSettingsNavigationItem
 } from "../shapes";
+import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("Store");
 
@@ -177,7 +177,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getNavigation: getNavigation.bind(this),
 			getLandingPage: getLandingPage.bind(this),
 			getFooter: getFooter.bind(this),
-			getApps,
+			getApps: async () => getApps({ private: false }),
 			launchApp: launch
 		};
 	}
@@ -268,7 +268,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 
 	if (settings?.storefrontProvider?.landingPage?.middleRow !== undefined) {
 		const middleRow = settings.storefrontProvider.landingPage.middleRow;
-		const middleRowApps = await getAppsByTag(middleRow.tags);
+		const middleRowApps = await getAppsByTag(middleRow.tags, false, { private: false });
 		if (middleRowApps.length > middleRowAppLimit) {
 			logger.warn(
 				`Too many apps (${
@@ -279,12 +279,12 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 			);
 		}
 		const validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
-			App?,
-			App?,
-			App?,
-			App?,
-			App?,
-			App?
+			PlatformApp?,
+			PlatformApp?,
+			PlatformApp?,
+			PlatformApp?,
+			PlatformApp?,
+			PlatformApp?
 		];
 		landingPage.middleRow = {
 			title: middleRow.title,
@@ -320,7 +320,7 @@ async function getFooter(): Promise<StorefrontFooter> {
 	if (settings?.storefrontProvider?.footer !== undefined) {
 		return settings.storefrontProvider.footer;
 	}
-	logger.error("Storefront is being initialised without a footer configured");
+	logger.error("Storefront is being initialized without a footer configured");
 	return null;
 }
 
@@ -350,7 +350,7 @@ async function getNavigationItem(
 		}
 	};
 
-	const apps = await getAppsByTag(tags);
+	const apps = await getAppsByTag(tags, false, { private: false });
 
 	if (apps !== undefined && apps.length > 0) {
 		navigationItem.templateData.apps = apps;

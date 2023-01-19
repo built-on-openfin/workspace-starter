@@ -1,15 +1,12 @@
 import type { CustomThemes } from "@openfin/workspace-platform";
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions
-} from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { getSettings } from "./settings";
 
 const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	light: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#FAFBFE",
+		backgroundPrimary: "#1E1F23",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -30,7 +27,7 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 		textInactive: "#7D808A"
 	},
 	dark: {
-		brandPrimary: "#504CFF",
+		brandPrimary: "#0A76D3",
 		brandSecondary: "#383A40",
 		backgroundPrimary: "#1E1F23",
 		background1: "#111214",
@@ -54,7 +51,7 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 	}
 };
 
-let validatedThemes: CustomThemes;
+let validatedThemes: CustomThemeOptions[];
 
 function getSystemPreferredColorScheme(): "light" | "dark" {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
@@ -63,19 +60,15 @@ function getSystemPreferredColorScheme(): "light" | "dark" {
 	return "light";
 }
 
-export async function getCurrentTheme(): Promise<CustomThemeOptions> {
+export async function getCurrentPalette(): Promise<CustomPaletteSet> {
 	const themes = await getThemes();
 	if (themes.length === 0) {
-		return {
-			label: "default",
-			palette: DEFAULT_PALETTES.dark
-		};
+		return DEFAULT_PALETTES.dark;
 	}
-	return themes[0];
-}
-
-export async function getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }> {
-	return DEFAULT_PALETTES;
+	if ("palette" in themes[0]) {
+		return themes[0].palette;
+	}
+	return themes[0].palettes.dark;
 }
 
 export async function getThemes(): Promise<CustomThemes> {
@@ -86,8 +79,8 @@ export async function getThemes(): Promise<CustomThemes> {
 	return validatedThemes.slice();
 }
 
-export function validateThemes(themes: CustomThemes): CustomThemes {
-	const customThemes: CustomThemes = [];
+export function validateThemes(themes: CustomThemeOptions[]): CustomThemeOptions[] {
+	const customThemes: CustomThemeOptions[] = [];
 
 	if (Array.isArray(themes)) {
 		const preferredColorScheme = getSystemPreferredColorScheme();

@@ -18,6 +18,7 @@ import { getApps } from "./apps";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
 import { WORKSPACE_TEMPLATE } from "./template";
+import { randomUUID } from "./uuid";
 import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "./workspace";
 
 const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
@@ -318,7 +319,7 @@ export async function register() {
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
 							tags: ["workspace"],
-							workspaceId: crypto.randomUUID(),
+							workspaceId: randomUUID(),
 							workspaceTitle: title,
 							workspaceDescription: description
 						}

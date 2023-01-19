@@ -3,10 +3,13 @@ import {
 	CLIFilter,
 	CLITemplate,
 	HomeDispatchedSearchResult,
+	HomeRegistration,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
+import { getCurrentSync } from "@openfin/workspace-platform";
+import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
 import { launchSnapshot } from "./launch";
 import { createLogger } from "./logger-provider";
@@ -26,6 +29,7 @@ import type {
 	IntegrationProviderOptions
 } from "./shapes/integrations-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 
@@ -40,11 +44,17 @@ let integrationModules: ModuleEntry<
 >[] = [];
 let integrationHelpers: IntegrationHelpers;
 
+const POPULATE_QUERY = "Populate Query";
+
 /**
  * Initialise all the integrations.
  * @param integrationOptions The integration provider settings.
  */
-export async function init(options: IntegrationProviderOptions, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: IntegrationProviderOptions,
+	helpers: ModuleHelpers,
+	homeRegistration: HomeRegistration
+): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
 
@@ -63,7 +73,16 @@ export async function init(options: IntegrationProviderOptions, helpers: ModuleH
 					icons: null,
 					publisher: null
 				}),
-			openUrl: async (url) => fin.System.openUrlWithBrowser(url)
+			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+			setSearchQuery: homeRegistration.setSearchQuery
+				? async (query) => homeRegistration.setSearchQuery(query)
+				: undefined,
+			condition: async (conditionId) => {
+				const platform = getCurrentSync();
+				return checkCondition(platform, conditionId);
+			},
+			share,
+			getPlatform: getCurrentSync
 		};
 
 		// Map the old moduleUrl properties to url
@@ -108,18 +127,26 @@ export async function closedown(): Promise<void> {
  * @param query The query to get the search results for.
  * @param filters The filters to apply to the search results.
  * @param lastResponse The last search response used for updating existing results.
+ * @param selectedSources Selected sources filters list.
+ * @param options Options for the search query.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
-	lastResponse: HomeSearchListenerResponse
-): Promise<HomeSearchResponse> {
-	const homeResponse: HomeSearchResponse = {
+	lastResponse: HomeSearchListenerResponse,
+	selectedSources: string[],
+	options: {
+		queryMinLength: number;
+		queryAgainst: string[];
+	}
+): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
+	const homeResponse: HomeSearchResponse & { sourceFilters?: string[] } = {
 		results: [],
 		context: {
 			filters: []
-		}
+		},
+		sourceFilters: []
 	};
 
 	if (!integrationProviderOptions) {
@@ -134,9 +161,19 @@ export async function getSearchResults(
 	}
 
 	const promises: Promise<HomeSearchResponse>[] = [];
+	const sourceFilters: string[] = [];
 	for (const integrationModule of integrationModules) {
-		if (integrationModule.isInitialised && integrationModule.implementation.getSearchResults) {
-			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse));
+		if (
+			integrationModule.isInitialised &&
+			integrationModule.implementation.getSearchResults &&
+			(integrationModule.definition.excludeFromSourceFilter ||
+				selectedSources.length === 0 ||
+				selectedSources.includes(integrationModule.definition.title))
+		) {
+			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse, options));
+		}
+		if (!integrationModule.definition.excludeFromSourceFilter) {
+			sourceFilters.push(integrationModule.definition.title);
 		}
 	}
 
@@ -155,7 +192,10 @@ export async function getSearchResults(
 		}
 	}
 
-	return homeResponse;
+	return {
+		...homeResponse,
+		sourceFilters
+	};
 }
 
 /**
@@ -198,8 +238,18 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 
 	for (const integrationModule of integrationModules) {
 		if (integrationModule.isInitialised && integrationModule.implementation.getHelpSearchEntries) {
-			const integrationResults = await integrationModule.implementation.getHelpSearchEntries();
-			results = results.concat(integrationResults);
+			const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
+
+			if (integrationHelpers?.setSearchQuery) {
+				for (const helpEntry of helpSearchEntries) {
+					if (helpEntry.data?.populateQuery) {
+						helpEntry.actions = helpEntry.actions ?? [];
+						helpEntry.actions.push({ name: POPULATE_QUERY, hotkey: "enter" });
+					}
+				}
+			}
+
+			results = results.concat(helpSearchEntries);
 		}
 	}
 
@@ -217,6 +267,16 @@ export async function itemSelection(
 	lastResponse?: HomeSearchListenerResponse
 ): Promise<boolean> {
 	if (result.data) {
+		if (
+			integrationHelpers?.setSearchQuery &&
+			result.action.trigger === "user-action" &&
+			result.action.name === POPULATE_QUERY &&
+			typeof result.data?.populateQuery === "string"
+		) {
+			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);
+			return true;
+		}
+
 		if (result.data?.providerId === "integration-provider") {
 			if (result.action.trigger === "user-action") {
 				const integrationId: string = result.data.integrationId;

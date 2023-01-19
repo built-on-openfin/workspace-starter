@@ -19,6 +19,7 @@ Using customize workspace an app definition can easily be added to an [apps.json
         "description": "Launch the official FDC3 Workbench",
         "manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-view.json",
         "manifestType": "view",
+        "private": false,
         "icons": [
             {
                 "src": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico"
@@ -57,6 +58,10 @@ The following fields are mandatory:
 - title - used to identify the app when searching or browsing
 - manifestType - what type of application is this (this can be extended by a platform and customize-workspace supports a number of manifestTypes)
 - manifest - this can be a url to a json endpoint or it can be a JSON object. Customize uses the manifest type inline-\* to indicate when the intention is to pass the payload directly.
+
+The following field is custom to this platform and is optional:
+
+- private - default value is false. Should this app entry be available for api usage (e.g. intents) but not be visible in e.g. Home, Store, Dock? Similar to how a private npm package can be used by some people but not everyone.
 
 The rest of the fields are self explanatory but the intents array deserves more detail.
 
@@ -281,14 +286,39 @@ The fdc3 endpoint module can be seen [here](../client/src/modules/endpoints/fdc3
 
 We have a manifest (see [third.manifest.fin.json](../public/third.manifest.fin.json) that has been configured to use this module and provide you with a workspace that imports an FDC3 App Directory (see [apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json)).
 
+### Custom FDC3 settings that can get mapped to our Platform App definition
+
+#### FDC3 1.2 Definition
+
+```json
+    "customConfig": {
+            "private": true,
+            ...
+        },
+```
+
+#### FDC3 2.0 Definition
+
+```json
+    "hostManifests": {
+        "OpenFin": {
+            "config": {
+                "private": true
+            }
+        },
+        ...
+```
+
+If the mapper finds these settings it will assign it to the private property of the Platform App Definition. "True", "true", "False", "false" would also be mapped.
+
 ## Where Are Apps Used?
 
 Apps can come from many sources but the feed can be used by:
 
-- Workspace Home - To present the user with a list of apps that they can filter and launch.
-- Workspace Store - Apps can be used to populate sections of the store so people can browse in order to see what they are entitled to.
-- Workspace Dock - Apps can be pinned to or listed from the Dock in order to give an easy way of launching common applications.
-- The platform's Interop Broker for supporting the launching of Intents.
+- Workspace Home - To present the user with a list of apps that they can filter and launch (if the private setting is unset or false).
+- Workspace Store - Apps can be used to populate sections of the store so people can browse in order to see what they are entitled to (if the private setting is unset or false).
+- Workspace Dock - Apps can be pinned to or listed from the Dock in order to give an easy way of launching common applications (if the private setting is unset or false).
+- The platform's Interop Broker for supporting the launching of Intents (the broker can look up any app regardless of whether it is marked private or not).
 
 Our guides show how to:
 

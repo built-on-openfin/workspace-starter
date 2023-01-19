@@ -47,7 +47,7 @@ export interface AppDefinition {
 	type: string;
 	details: unknown;
 	customConfig?: { [key: string]: unknown };
-	hostManifests?: { OpenFin: { type: string; details: unknown } };
+	hostManifests?: { OpenFin: { type: string; details: unknown; config: { private?: boolean } } };
 	interop?: {
 		intents?: {
 			listensFor?: {

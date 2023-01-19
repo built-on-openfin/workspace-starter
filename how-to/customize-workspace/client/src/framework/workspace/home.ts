@@ -1,5 +1,4 @@
 import {
-	App,
 	CLIFilter,
 	CLIFilterOptionType,
 	CLIProvider,
@@ -9,288 +8,216 @@ import {
 	CLITemplate,
 	Home,
 	HomeDispatchedSearchResult,
+	HomeRegistration,
 	HomeSearchResponse,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	HomeSearchResult
 } from "@openfin/workspace";
-import { getCurrentSync, Page, Workspace } from "@openfin/workspace-platform";
 import { getAppIcon, getApps } from "../apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
-import { getPageBounds, launchPage } from "../platform/browser";
 import { getSettings } from "../settings";
-import { isShareEnabled, share } from "../share";
-import {
-	getCurrentWorkspaceTemplate,
-	getPageTemplate,
-	getWorkspaceTemplate,
-	PAGE_ACTION_IDS,
-	WORKSPACE_ACTION_IDS
-} from "../template";
-import { deleteWorkspace, getWorkspaces, launchWorkspace, saveWorkspace } from "../workspace";
+import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("Home");
 
-const HOME_ACTION_DELETE_PAGE = "Delete Page";
-const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
-const HOME_ACTION_SHARE_PAGE = "Share Page";
-const HOME_ACTION_DELETE_WORKSPACE = "Delete Workspace";
-const HOME_ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
-const HOME_ACTION_SHARE_WORKSPACE = "Share Workspace";
-
 const HOME_TAG_FILTERS = "tags";
+const HOME_SOURCE_FILTERS = "sources";
 
-let isHomeRegistered = false;
-let registrationInfo: RegistrationMetaInfo;
-let enablePageIntegration: boolean = true;
-let enableWorkspaceIntegration: boolean = true;
+const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 
-function getSearchFilters(tags: string[]): CLIFilter[] {
-	if (Array.isArray(tags)) {
-		const filters: CLIFilter[] = [];
-		const uniqueTags = [...new Set(tags.sort())];
-		const tagFilter: CLIFilter = {
-			id: HOME_TAG_FILTERS,
-			title: "Tags",
-			type: CLIFilterOptionType.MultiSelect,
-			options: []
+const HOME_APPS_FILTER = "Apps";
+
+let registrationInfo: HomeRegistration | undefined;
+let queryMinLength = 3;
+let queryAgainst = ["title"];
+let enableSourceFilter;
+let lastResponse: CLISearchListenerResponse;
+let sourceFilterLabel = HOME_SOURCE_DEFAULT_FILTER_LABEL;
+
+export async function register(): Promise<HomeRegistration> {
+	if (!registrationInfo) {
+		logger.info("Initializing home");
+		const settings = await getSettings();
+		if (
+			settings.homeProvider === undefined ||
+			settings.homeProvider.id === undefined ||
+			settings.homeProvider.title === undefined
+		) {
+			logger.warn(
+				"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
+			);
+			return null;
+		}
+
+		queryMinLength = settings?.homeProvider?.queryMinLength ?? queryMinLength;
+		queryAgainst = settings?.homeProvider?.queryAgainst ?? queryAgainst;
+		enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
+		sourceFilterLabel = settings?.homeProvider?.sourceFilter?.label ?? sourceFilterLabel;
+
+		const cliProvider: CLIProvider = {
+			title: settings.homeProvider.title,
+			id: settings.homeProvider.id,
+			icon: settings.homeProvider.icon,
+			onUserInput,
+			onResultDispatch: onSelection,
+			dispatchFocusEvents: true
 		};
 
-		for (const tag of uniqueTags) {
-			if (Array.isArray(tagFilter.options)) {
-				tagFilter.options.push({
-					value: tag,
-					isSelected: false
-				});
+		registrationInfo = await Home.register(cliProvider);
+		logger.info("Version:", registrationInfo);
+		logger.info("Home provider initialized");
+	}
+
+	return registrationInfo;
+}
+
+export async function show() {
+	return Home.show();
+}
+
+export async function hide() {
+	return Home.hide();
+}
+
+export async function deregister() {
+	if (registrationInfo) {
+		registrationInfo = undefined;
+		const settings = await getSettings();
+		return Home.deregister(settings.homeProvider.id);
+	}
+	logger.warn("Unable to deregister home as there is an indication it was never registered");
+}
+
+async function onUserInput(
+	request: CLISearchListenerRequest,
+	response: CLISearchListenerResponse
+): Promise<CLISearchResponse> {
+	try {
+		const filters: CLIFilter[] = request?.context?.selectedFilters;
+
+		if (lastResponse !== undefined) {
+			lastResponse.close();
+		}
+		lastResponse = response;
+		lastResponse.open();
+
+		const queryLower = request.query.toLowerCase();
+
+		if (queryLower === "?") {
+			const integrationHelpSearchEntries = await getHelpSearchEntries();
+			const searchResults = {
+				results: integrationHelpSearchEntries,
+				context: {
+					filters: []
+				}
+			};
+			return searchResults;
+		}
+
+		let selectedSourceFilterOptions: string[] = [];
+		if (enableSourceFilter && filters) {
+			const sourceFilter = filters.find((f) => f.id === HOME_SOURCE_FILTERS);
+			if (sourceFilter) {
+				if (Array.isArray(sourceFilter.options)) {
+					selectedSourceFilterOptions = sourceFilter.options.filter((o) => o.isSelected).map((o) => o.value);
+				} else if (sourceFilter.options.isSelected) {
+					selectedSourceFilterOptions.push(sourceFilter.options.value);
+				}
 			}
 		}
 
-		filters.push(tagFilter);
-		return filters;
-	}
-	return [];
-}
+		const searchResults = await getResults(queryLower, filters, selectedSourceFilterOptions);
 
-function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
-	const appResults: HomeSearchResult[] = [];
-	if (Array.isArray(apps)) {
-		for (let i = 0; i < apps.length; i++) {
-			const action = { name: "Launch View", hotkey: "enter" };
-			const entry: Partial<HomeSearchResult> = {
-				key: apps[i].appId,
-				title: apps[i].title,
-				data: apps[i]
-			};
+		let sourceFilterOptions: string[] = [];
+		if (enableSourceFilter) {
+			sourceFilterOptions.push(HOME_APPS_FILTER);
+		}
 
-			switch (apps[i].manifestType) {
-				case manifestTypes.view.id:
-				case manifestTypes.inlineView.id: {
-					entry.label = manifestTypes.view.label;
-					break;
-				}
-				case manifestTypes.window.id:
-				case manifestTypes.inlineWindow.id: {
-					entry.label = manifestTypes.window.label;
-					break;
-				}
-				case manifestTypes.desktopBrowser.id: {
-					entry.label = manifestTypes.desktopBrowser.label;
-					break;
-				}
-				case manifestTypes.snapshot.id: {
-					entry.label = manifestTypes.snapshot.label;
-					action.name = "Launch Snapshot";
-					break;
-				}
-				case manifestTypes.manifest.id: {
-					entry.label = manifestTypes.manifest.label;
-					action.name = "Launch App";
-					break;
-				}
-				case manifestTypes.external.id:
-				case manifestTypes.inlineExternal.id: {
-					action.name = "Launch Native App";
-					entry.label = manifestTypes.external.label;
-					break;
-				}
-				case manifestTypes.endpoint.id: {
-					action.name = "Launch";
-					entry.label = manifestTypes.endpoint.label;
-					break;
-				}
-				case manifestTypes.connection.id: {
-					action.name = "Launch Connected App";
-					entry.label = manifestTypes.connection.label;
-					break;
+		const integrationResults = await getSearchResults(
+			request.query,
+			filters,
+			lastResponse,
+			selectedSourceFilterOptions,
+			{
+				queryMinLength,
+				queryAgainst
+			}
+		);
+		if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
+			searchResults.results = searchResults.results.concat(integrationResults.results);
+		}
+		if (Array.isArray(integrationResults.context.filters) && integrationResults.context.filters.length > 0) {
+			searchResults.context.filters = searchResults.context.filters.concat(
+				integrationResults.context.filters
+			);
+		}
+
+		if (Array.isArray(integrationResults.sourceFilters) && integrationResults.sourceFilters.length > 0) {
+			sourceFilterOptions = sourceFilterOptions.concat(integrationResults.sourceFilters);
+		}
+
+		if (enableSourceFilter && sourceFilterOptions.length > 0) {
+			searchResults.context = searchResults.context ?? {};
+			searchResults.context.filters = searchResults.context.filters ?? [];
+			searchResults.context.filters.push({
+				id: HOME_SOURCE_FILTERS,
+				title: sourceFilterLabel,
+				options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
+			});
+		}
+
+		// Remove any empty filter lists as these can cause the UI to continually
+		// expand and collapse as you type
+		const finalFilters = [];
+		if (Array.isArray(searchResults.context?.filters)) {
+			for (const filter of searchResults.context.filters) {
+				if (Array.isArray(filter.options) && filter.options.length > 0) {
+					finalFilters.push(filter);
 				}
 			}
-
-			entry.actions = [action];
-			entry.icon = getAppIcon(apps[i]);
-
-			if (apps[i].description !== undefined) {
-				entry.description = apps[i].description;
-				entry.shortDescription = apps[i].description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
-			} else {
-				entry.template = CLITemplate.Plain;
-			}
-
-			appResults.push(entry as HomeSearchResult);
 		}
+		if (finalFilters.length > 0) {
+			searchResults.context.filters = finalFilters;
+		}
+
+		return searchResults;
+	} catch (err) {
+		logger.error("Exception while getting search list results", err);
 	}
-	return appResults;
+
+	return { results: [] };
 }
 
-async function mapPageEntriesToSearchEntries(pages: Page[]): Promise<HomeSearchResult[]> {
-	const pageResults: HomeSearchResult[] = [];
-	const settings = await getSettings();
-	let pageIcon;
-	if (settings?.platformProvider?.rootUrl !== undefined) {
-		pageIcon = `${settings.platformProvider.rootUrl}/icons/page.svg`;
-	}
-	const shareEnabled = isShareEnabled();
-	const pageTemplate = getPageTemplate(shareEnabled);
+async function onSelection(result: HomeDispatchedSearchResult) {
+	if (result.data !== undefined) {
+		const handled = await itemSelection(result, lastResponse);
 
-	if (Array.isArray(pages)) {
-		for (let i = 0; i < pages.length; i++) {
-			const entry: HomeSearchResult = {
-				key: pages[i].pageId,
-				title: pages[i].title,
-				label: "Page",
-				icon: pageIcon,
-				actions: (shareEnabled ? [{ name: HOME_ACTION_SHARE_PAGE, hotkey: "CmdOrCtrl+Shift+S" }] : []).concat(
-					[
-						{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
-						{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
-					]
-				),
-				data: { tags: ["page"], pageId: pages[i].pageId },
-				template: CLITemplate.Custom,
-				templateContent: {
-					layout: pageTemplate,
-					data: {
-						title: pages[i].title,
-						description: pages[i].description,
-						instructions: "Use the buttons below to interact with your saved page:",
-						openText: "Launch",
-						deleteText: "Delete",
-						shareText: "Share"
-					}
-				}
-			};
-
-			pageResults.push(entry);
+		if (!handled && result.action.trigger === "user-action") {
+			await launch(result.data as PlatformApp);
 		}
+	} else {
+		logger.warn("Unable to execute result without data being passed");
 	}
-	return pageResults;
-}
-
-async function mapWorkspaceEntriesToSearchEntries(workspaces: Workspace[]): Promise<HomeSearchResult[]> {
-	const settings = await getSettings();
-
-	let workspaceIcon;
-	if (settings?.platformProvider?.rootUrl !== undefined) {
-		workspaceIcon = `${settings.platformProvider.rootUrl}/icons/workspaces.svg`;
-	}
-	const shareEnabled = isShareEnabled();
-	const workspaceTemplate = getWorkspaceTemplate(shareEnabled);
-
-	const currentWorkspaceTemplate = getCurrentWorkspaceTemplate();
-
-	const workspaceResults: HomeSearchResult[] = [];
-	if (Array.isArray(workspaces)) {
-		const platform = getCurrentSync();
-		const currentWorkspace = await platform.getCurrentWorkspace();
-		const currentWorkspaceId = currentWorkspace?.workspaceId;
-
-		for (let i = 0; i < workspaces.length; i++) {
-			const entryWorkspaceId = workspaces[i].workspaceId;
-			const actions =
-				entryWorkspaceId === currentWorkspaceId
-					? []
-					: (shareEnabled
-							? [
-									{
-										name: HOME_ACTION_SHARE_WORKSPACE,
-										hotkey: "CmdOrCtrl+Shift+S"
-									}
-							  ]
-							: []
-					  ).concat([
-							{
-								name: HOME_ACTION_DELETE_WORKSPACE,
-								hotkey: "CmdOrCtrl+Shift+D"
-							},
-							{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
-					  ]);
-			const layout =
-				currentWorkspaceId === workspaces[i].workspaceId ? currentWorkspaceTemplate : workspaceTemplate;
-			const instructions =
-				currentWorkspaceId === workspaces[i].workspaceId
-					? "This is the currently active workspace. You can use the Browser menu to update/rename this workspace"
-					: "Use the buttons below to interact with your saved Workspace:";
-			const entry: HomeSearchResult = {
-				key: entryWorkspaceId,
-				title: workspaces[i].title,
-				label: "Workspace",
-				icon: workspaceIcon,
-				actions,
-				data: { tags: ["workspace"], workspaceId: entryWorkspaceId },
-				template: CLITemplate.Custom,
-				templateContent: {
-					layout,
-					data: {
-						title: workspaces[i].title,
-						instructions,
-						openText: "Launch",
-						deleteText: "Delete",
-						shareText: "Share"
-					}
-				}
-			};
-
-			workspaceResults.push(entry);
-		}
-	}
-	return workspaceResults;
 }
 
 async function getResults(
 	queryLower: string,
-	queryMinLength,
-	queryAgainst: string[],
-	filters: CLIFilter[]
+	filters: CLIFilter[],
+	selectedSources: string[]
 ): Promise<HomeSearchResponse> {
-	const platform = getCurrentSync();
-	const apps = await getApps();
-	let pageSearchEntries = [];
-	let workspaceSearchEntries = [];
-
-	if (enablePageIntegration) {
-		const pages = await platform.Storage.getPages();
-		pageSearchEntries = await mapPageEntriesToSearchEntries(pages);
-	}
-
-	if (enableWorkspaceIntegration) {
-		const workspaces = await getWorkspaces();
-		workspaceSearchEntries = await mapWorkspaceEntriesToSearchEntries(workspaces);
-	}
+	const apps = await getApps({ private: false });
+	let appSearchEntries = [];
 
 	const tags: string[] = [];
-	const appSearchEntries = mapAppEntriesToSearchEntries(apps);
 
-	const initialResults: HomeSearchResult[] = [
-		...appSearchEntries,
-		...pageSearchEntries,
-		...workspaceSearchEntries
-	];
+	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
+		appSearchEntries = mapAppEntriesToSearchEntries(apps);
+	}
 
-	if (initialResults.length > 0) {
-		const finalResults = initialResults.filter((entry) => {
+	if (appSearchEntries.length > 0) {
+		const finalResults = appSearchEntries.filter((entry) => {
 			let textMatchFound = true;
 			let filterMatchFound = true;
 
@@ -382,246 +309,100 @@ async function getResults(
 	};
 }
 
-export async function register(): Promise<RegistrationMetaInfo> {
-	logger.info("Initializing home");
-	const settings = await getSettings();
-	if (
-		settings.homeProvider === undefined ||
-		settings.homeProvider.id === undefined ||
-		settings.homeProvider.title === undefined
-	) {
-		logger.warn(
-			"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
-		);
-		return null;
-	}
+function getSearchFilters(tags: string[]): CLIFilter[] {
+	if (Array.isArray(tags)) {
+		const filters: CLIFilter[] = [];
+		const uniqueTags = [...new Set(tags.sort())];
+		const tagFilter: CLIFilter = {
+			id: HOME_TAG_FILTERS,
+			title: "Tags",
+			type: CLIFilterOptionType.MultiSelect,
+			options: []
+		};
 
-	const queryMinLength = settings?.homeProvider?.queryMinLength ?? 3;
-	const queryAgainst = settings?.homeProvider?.queryAgainst ?? ["title"];
-	enablePageIntegration = settings?.homeProvider?.enablePageIntegration ?? true;
-	enableWorkspaceIntegration = settings?.homeProvider?.enableWorkspaceIntegration ?? true;
-	let lastResponse: CLISearchListenerResponse;
-	let filters: CLIFilter[];
-
-	const onUserInput = async (
-		request: CLISearchListenerRequest,
-		response: CLISearchListenerResponse
-	): Promise<CLISearchResponse> => {
-		try {
-			const queryLower = request.query.toLowerCase();
-
-			if (enableWorkspaceIntegration && queryLower.startsWith("/w ")) {
-				const workspaces = await getWorkspaces();
-				const title = queryLower.replace("/w ", "");
-
-				const foundMatch = workspaces.find((entry) => entry.title.toLowerCase() === title.toLowerCase());
-				if (foundMatch !== undefined && foundMatch !== null) {
-					// we have a match
-					return {
-						results: [
-							{
-								key: "WORKSPACE-EXISTS",
-								title: `Workspace ${foundMatch.title} already exists.`,
-								actions: [],
-								data: {
-									tags: ["workspace"],
-									workspaceId: foundMatch.workspaceId
-								}
-							}
-						]
-					};
-				}
-				if (lastResponse !== undefined) {
-					lastResponse.close();
-				}
-				lastResponse = response;
-				lastResponse.open();
-				return {
-					results: [
-						{
-							key: "WORKSPACE-SAVE",
-							title: `Save Current Workspace as ${title}`,
-							label: "Suggestion",
-							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
-							data: {
-								tags: ["workspace"],
-								workspaceId: crypto.randomUUID(),
-								workspaceTitle: title
-							}
-						}
-					]
-				};
+		for (const tag of uniqueTags) {
+			if (Array.isArray(tagFilter.options)) {
+				tagFilter.options.push({
+					value: tag,
+					isSelected: false
+				});
 			}
-
-			filters = request?.context?.selectedFilters;
-			if (lastResponse !== undefined) {
-				lastResponse.close();
-			}
-			lastResponse = response;
-			lastResponse.open();
-
-			if (queryLower === "?") {
-				const integrationHelpSearchEntries = await getHelpSearchEntries();
-				const searchResults = {
-					results: integrationHelpSearchEntries,
-					context: {
-						filters: []
-					}
-				};
-				return searchResults;
-			}
-
-			const searchResults = await getResults(queryLower, queryMinLength, queryAgainst, filters);
-			const integrationResults = await getSearchResults(request.query, filters, lastResponse);
-			if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
-				searchResults.results = searchResults.results.concat(integrationResults.results);
-			}
-			if (
-				Array.isArray(integrationResults.context.filters) &&
-				integrationResults.context.filters.length > 0
-			) {
-				searchResults.context.filters = searchResults.context.filters.concat(
-					integrationResults.context.filters
-				);
-			}
-
-			// Remove any empty filter lists as these can cause the UI to continually
-			// expand and collapse as you type
-			const finalFilters = [];
-			if (Array.isArray(searchResults.context?.filters)) {
-				for (const filter of searchResults.context.filters) {
-					if (Array.isArray(filter.options) && filter.options.length > 0) {
-						finalFilters.push(filter);
-					}
-				}
-			}
-			if (finalFilters.length > 0) {
-				searchResults.context.filters = finalFilters;
-			}
-
-			return searchResults;
-		} catch (err) {
-			logger.error("Exception while getting search list results", err);
 		}
 
-		return { results: [] };
-	};
+		filters.push(tagFilter);
+		return filters;
+	}
+	return [];
+}
 
-	const onSelection = async (result: HomeDispatchedSearchResult) => {
-		if (result.data !== undefined) {
-			const handled = await itemSelection(result, lastResponse);
+function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
+	const appResults: HomeSearchResult[] = [];
+	if (Array.isArray(apps)) {
+		for (let i = 0; i < apps.length; i++) {
+			const action = { name: "Launch View", hotkey: "enter" };
+			const entry: Partial<HomeSearchResult> = {
+				key: apps[i].appId,
+				title: apps[i].title,
+				data: apps[i]
+			};
 
-			if (!handled && result.action.trigger === "user-action") {
-				const data: {
-					workspaceId?: string;
-					workspaceTitle?: string;
-					workspaceDescription?: string;
-					pageId?: string;
-				} & App = result.data;
-				if (enableWorkspaceIntegration && data.workspaceId !== undefined) {
-					if (data.workspaceId !== undefined && result.key === "WORKSPACE-SAVE") {
-						await saveWorkspace(data.workspaceId, data.workspaceTitle);
-						if (lastResponse !== undefined && lastResponse !== null) {
-							lastResponse.revoke(result.key);
-							lastResponse.respond([
-								{
-									key: "WORKSPACE-SAVED",
-									title: `Workspace ${data.workspaceTitle} saved.`,
-									actions: [],
-									data: {
-										tags: ["workspace"],
-										workspaceId: data.workspaceId,
-										workspaceTitle: data.workspaceTitle,
-										workspaceDescription: data.workspaceDescription
-									}
-								}
-							]);
-						}
-					} else if (data.workspaceId !== undefined && result.key === "WORKSPACE-EXISTS") {
-						if (lastResponse !== undefined && lastResponse !== null) {
-							lastResponse.revoke(result.key);
-						}
-					} else if (data.workspaceId !== undefined) {
-						const workspaceAction = result.action.name;
-						if (
-							workspaceAction === HOME_ACTION_LAUNCH_WORKSPACE ||
-							workspaceAction === WORKSPACE_ACTION_IDS.launch
-						) {
-							await launchWorkspace(data.workspaceId);
-						} else if (
-							workspaceAction === HOME_ACTION_DELETE_WORKSPACE ||
-							workspaceAction === WORKSPACE_ACTION_IDS.delete
-						) {
-							await deleteWorkspace(data.workspaceId);
-							if (lastResponse !== undefined && lastResponse !== null) {
-								lastResponse.revoke(result.key);
-							}
-						} else if (
-							workspaceAction === HOME_ACTION_SHARE_WORKSPACE ||
-							workspaceAction === WORKSPACE_ACTION_IDS.share
-						) {
-							await share({ workspaceId: data.workspaceId });
-						} else {
-							logger.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
-						}
-					}
-				} else if (enablePageIntegration && data.pageId !== undefined) {
-					const pageAction = result.action.name;
-					if (pageAction === HOME_ACTION_LAUNCH_PAGE || pageAction === PAGE_ACTION_IDS.launch) {
-						const platform = getCurrentSync();
-						const pageToLaunch = await platform.Storage.getPage(data.pageId);
-						await launchPage(pageToLaunch);
-					} else if (pageAction === HOME_ACTION_DELETE_PAGE || pageAction === PAGE_ACTION_IDS.delete) {
-						const platform = getCurrentSync();
-						await platform.Storage.deletePage(data.pageId);
-						if (lastResponse !== undefined && lastResponse !== null) {
-							lastResponse.revoke(result.key);
-						}
-					} else if (pageAction === HOME_ACTION_SHARE_PAGE || pageAction === PAGE_ACTION_IDS.share) {
-						const platform = getCurrentSync();
-						const page = await platform.Storage.getPage(data.pageId);
-						const bounds = await getPageBounds(data.pageId, true);
-						await share({ page, bounds });
-					} else {
-						logger.warn(`Unknown action triggered on search result for page Id: ${data.pageId}`);
-					}
-				} else {
-					await launch(data);
+			switch (apps[i].manifestType) {
+				case manifestTypes.view.id:
+				case manifestTypes.inlineView.id: {
+					entry.label = manifestTypes.view.label;
+					break;
+				}
+				case manifestTypes.window.id:
+				case manifestTypes.inlineWindow.id: {
+					entry.label = manifestTypes.window.label;
+					break;
+				}
+				case manifestTypes.desktopBrowser.id: {
+					entry.label = manifestTypes.desktopBrowser.label;
+					break;
+				}
+				case manifestTypes.snapshot.id: {
+					entry.label = manifestTypes.snapshot.label;
+					action.name = "Launch Snapshot";
+					break;
+				}
+				case manifestTypes.manifest.id: {
+					entry.label = manifestTypes.manifest.label;
+					action.name = "Launch App";
+					break;
+				}
+				case manifestTypes.external.id:
+				case manifestTypes.inlineExternal.id: {
+					action.name = "Launch Native App";
+					entry.label = manifestTypes.external.label;
+					break;
+				}
+				case manifestTypes.endpoint.id: {
+					action.name = "Launch";
+					entry.label = manifestTypes.endpoint.label;
+					break;
+				}
+				case manifestTypes.connection.id: {
+					action.name = "Launch Connected App";
+					entry.label = manifestTypes.connection.label;
+					break;
 				}
 			}
-		} else {
-			logger.warn("Unable to execute result without data being passed");
+
+			entry.actions = [action];
+			entry.icon = getAppIcon(apps[i]);
+
+			if (apps[i].description !== undefined) {
+				entry.description = apps[i].description;
+				entry.shortDescription = apps[i].description;
+				entry.template = CLITemplate.SimpleText;
+				entry.templateContent = apps[i].description;
+			} else {
+				entry.template = CLITemplate.Plain;
+			}
+
+			appResults.push(entry as HomeSearchResult);
 		}
-	};
-
-	const cliProvider: CLIProvider = {
-		title: settings.homeProvider.title,
-		id: settings.homeProvider.id,
-		icon: settings.homeProvider.icon,
-		onUserInput,
-		onResultDispatch: onSelection,
-		dispatchFocusEvents: true
-	};
-
-	registrationInfo = await Home.register(cliProvider);
-	logger.info("Version:", registrationInfo);
-	isHomeRegistered = true;
-	logger.info("Home provider initialized");
-	return registrationInfo;
-}
-
-export async function show() {
-	return Home.show();
-}
-
-export async function hide() {
-	return Home.hide();
-}
-
-export async function deregister() {
-	if (isHomeRegistered) {
-		const settings = await getSettings();
-		return Home.deregister(settings.homeProvider.id);
 	}
-	logger.warn("Unable to deregister home as there is an indication it was never registered");
+	return appResults;
 }

@@ -1,3 +1,4 @@
+import type { InteropClient } from "@openfin/core/src/api/interop";
 import { Cell, enableLogging, ExcelApplication, getExcelApplication } from "@openfin/excel";
 import {
 	CLITemplate,
@@ -54,7 +55,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	 * The interop clients for the different contexts.
 	 * @internal
 	 */
-	private _interopClients: { [id: string]: OpenFin.InteropClient };
+	private _interopClients: { [id: string]: InteropClient };
 
 	/**
 	 * Initialize the module.
@@ -110,6 +111,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	): Promise<boolean> {
 		if (
 			result.action.name === ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
+			result.action.trigger === "user-action" &&
 			result.data.workbook &&
 			this._integrationHelpers.launchAsset
 		) {
@@ -119,22 +121,38 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 				alias: excelAsset.workbook
 			});
 
-			const excel = await this.getExcel();
-			if (excel) {
-				const workbooks = await excel.getWorkbooks();
-				for (const workbook of workbooks) {
-					const name = await workbook.getName();
-					if (name === excelAsset.workbook) {
-						for (const worksheetSettings of excelAsset.worksheets) {
-							const worksheet = await workbook.getWorksheetByName(worksheetSettings.name);
-							await worksheet.addEventListener("change", async (cells) => {
-								await this.handleCellChanges(excelAsset, worksheetSettings, cells);
-							});
+			// The workbook is not always available immediately, so start a background process
+			// to wait for the workbook being ready
+
+			let tryCount = 0;
+			const intervalId = window.setInterval(async () => {
+				const excel = await this.getExcel();
+				if (excel) {
+					const workbooks = await excel.getWorkbooks();
+
+					if (workbooks.length === 0) {
+						if (tryCount === 10) {
+							window.clearInterval(intervalId);
+						} else {
+							tryCount++;
+						}
+					} else {
+						window.clearInterval(intervalId);
+						for (const workbook of workbooks) {
+							const name = await workbook.getName();
+							if (name === excelAsset.workbook) {
+								for (const worksheetSettings of excelAsset.worksheets) {
+									const worksheet = await workbook.getWorksheetByName(worksheetSettings.name);
+									await worksheet.addEventListener("change", async (cells) => {
+										await this.handleCellChanges(excelAsset, worksheetSettings, cells);
+									});
+								}
+							}
 						}
 					}
 				}
-				return true;
-			}
+			}, 1000);
+			return true;
 		}
 
 		return false;

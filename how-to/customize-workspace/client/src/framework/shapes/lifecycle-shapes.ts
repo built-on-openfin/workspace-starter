@@ -6,7 +6,8 @@ export type LifecycleEvents =
 	| "auth-session-expired"
 	| "auth-before-logged-out"
 	| "after-bootstrap"
-	| "before-quit";
+	| "before-quit"
+	| "theme-changed";
 
 export type LifecycleHandler = (platform: WorkspacePlatformModule) => Promise<void>;
 
@@ -20,5 +21,10 @@ export interface Lifecycle<O = unknown, H = ModuleHelpers> extends ModuleImpleme
 	 */
 	get(): Promise<LifecycleEventMap>;
 }
-
+/**
+ * This is a list of modules that allow you to hook
+ * into the lifecycle events exposed by the platform.
+ * A good example might be you wish to register a module
+ * that is called when an authenticated session is expired
+ * */
 export type LifecycleProviderOptions = ModuleList;

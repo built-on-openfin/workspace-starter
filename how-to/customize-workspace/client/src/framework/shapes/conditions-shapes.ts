@@ -12,4 +12,9 @@ export interface Conditions<O = unknown, H = ModuleHelpers> extends ModuleImplem
 	get(): Promise<ConditionMap>;
 }
 
+/**
+ * A list of modules that provide a set of conditions. The function for this
+ * condition will return true or false to indicate if the condition is met.
+ * Conditions are used in a number of places (for example menu options)
+ * */
 export type ConditionsProviderOptions = ModuleList;

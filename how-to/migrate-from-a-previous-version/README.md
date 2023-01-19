@@ -3,36 +3,46 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v9.2 to v10
+
+### Workspace Enhancements
+
+- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
+- New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
+- API Control Over Home Search String - You can now trigger an update to the text shown in the Home Search Box. We provide examples of this in the customize-home-templates example (where the help search entry can update the search box when selected).
+- Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
+- Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
+
+### Notification Enhancements
+
+- We now expose a show/hide API similar to the other workspace components (the toggle api still works)
+
+These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
+
+## What dependencies will I need for v10
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^10.0.0",
+                    "@openfin/workspace-platform": "^10.0.0"
+                }
+```
+
 ## Migrate from a previous version - From v9.1 to v9.2
 
-### Enhancements
+### Store Enhancement
 
-- Added Custom Background Color for Hero Section in Store
-- Workspace Platform Providers can now customize the background color of the Hero section in Workspace Store (by setting contentBackground1).
+Added Custom Background Color for Hero Section in Store.
 
-### UI Improvements
+The background color of the hero section of the store by specifying **contentBackground1** in your palette.
+
+### UI Enhancements
 
 - Updated Workspace Store icon throughout OpenFin Workspace to be consistent and intuitive to end-users.
 - Updated Layout splitters in the Workspace Browser to inherit colors from the theme object. Previously, splitters were always black, regardless of the theme.
 - Updated the appearance of the minimize, maximize, close buttons in Workspace Store and the close button in Notifications to match the rest of Workspace components.
-
-### Resolved Issues
-
-- Resolved issue in Home where selecting a filter and then scrolling to select another filter caused the selection to revert back to the original filter
-- Resolved an issue where success indicators were located on the primary monitor when browser was maximized in the secondary monitor
-
-### Notifications Upgrade 1.18.0
-
-#### Notifications UI Improvements
-
-- Updated the appearance of the close button to match the rest of Workspace components.
-
-#### Notifications Resolved Issues
-
-- Resolved issue where switching position of notifications center is slower when Auto-Hide Center is on.
-- Resolved issue where notification-form-submitted event is not dispatched back to client if notification-action event listener is not registered.
-- Resolved issue where notifications center with auto-hide enabled would not properly launch through home.
-- Resolved issue when generating a sticky notification, then generating another sticky notification with same id but a different body, the first notification toast showed the updated body before it disappeared
 
 ## Migrate from a previous version - From v9.0 to v9.1
 
@@ -42,7 +52,7 @@ The main focus of this release is:
 
 You have the ability to hide favicons from the view tabs if you don't wish them to show.
 
-### Notification Enhancements
+### 9.1 Notification Enhancements
 
 #### Improved formatting of timestamps in Notifications
 
@@ -89,8 +99,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^9.2.0",
-                    "@openfin/workspace-platform": "^9.2.0"
+                    "@openfin/workspace": "^9.0.0",
+                    "@openfin/workspace-platform": "^9.0.0"
                 }
 ```
 
@@ -544,16 +554,16 @@ export async function init() {
 This is done when you initialize your platform:
 
 ```javascript
-import { init as workspacePlatformInit, CustomThemes } from '@openfin/workspace-platform';
+import { init as workspacePlatformInit, CustomThemeOptions } from '@openfin/workspace-platform';
 
 export async function init() {
   console.log('Initialising platform');
-  const theme: CustomThemes = [
+  const theme: CustomThemeOptions[] = [
     {
       label: 'Starter Theme',
       logoUrl: 'http://localhost:8080/favicon.ico',
       palette: {
-        brandPrimary: '#504CFF',
+        brandPrimary: '#0A76D3',
         brandSecondary: '#383A40',
         backgroundPrimary: '#111214'
       }

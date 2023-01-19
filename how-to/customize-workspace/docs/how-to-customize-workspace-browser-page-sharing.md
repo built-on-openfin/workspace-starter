@@ -34,13 +34,13 @@ It is used when you define a browser button (see [How To Customize Browser Butto
     "include": true,
     "id": "share",
     "themes": {
-     "Light": "http://localhost:8080/common/icons/share-dark.svg"
+     "light": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg"
     },
     "button": {
      "type": "Custom",
      "tooltip": "Share",
      "disabled": false,
-     "iconUrl": "http://localhost:8080/common/icons/share.svg",
+     "iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
      "action": {
       "id": "share",
       "customData": {}
@@ -146,7 +146,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "26.102.71.8",
+                "runtimeVersion": "28.106.72.17",
                 "monitorInfo": { ... },
             "windows": [
                 { ... }
@@ -246,7 +246,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "26.102.71.8",
+                "runtimeVersion": "28.106.72.17",
                 "monitorInfo": { ... },
             },
             "windows": [

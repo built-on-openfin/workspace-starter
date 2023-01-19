@@ -1,26 +1,32 @@
 {
 	"name": "openfin-workspace--customize-workspace",
-	"version": "9.2.1",
+	"version": "10.3.0",
 	"description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
-	"main": "index.js",
+	"main": "dist/js/provider.bundle.js",
+	"types": "client/types/provider.d.ts",
 	"scripts": {
 		"dos": "npm --prefix ../common/ run dos",
 		"build": "npm run build-server & npm run build-client",
 		"build-server": "tsc --project ./server/express",
 		"build-server-live": "tsc --project ./server/live",
-		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"prebuild-client": "node -p \"'// Generated from package.json version at build time. Do not modify directly.\\nexport const PLATFORM_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > client/src/framework/platform/platform-version.ts",
+		"build-client": "npm run prebuild-client && npm run build-client-parallel",
+		"build-client-parallel": "node scripts/webpack-parallel.mjs ./client/webpack.config.js",
+		"build-client-serial": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
 		"dev": "concurrently -n server,client,manifest -c cyan,magenta,green \"node ./server/live/build/index.js\" \"webpack --config ./client/webpack.config.js --mode=development --watch\" \"npm --prefix ../common/ run client-watch\"",
 		"start": "npm run server",
 		"client": "npm --prefix ../common/ run client",
 		"secondclient": "npm --prefix ../common/ run secondclient",
 		"thirdclient": "npm --prefix ../common/ run thirdclient",
+		"fourthclient": "npm --prefix ../common/ run fourthclient",
 		"server": "node ./server/express/build/index.js",
 		"kill": "npm --prefix ../common/ run kill",
 		"setup": "cd ../../ && npm install && cd how-to/customize-workspace && npm run build && npm --prefix ../common/ run build",
 		"setup-dev": "npm install concurrently live-server --save-dev && npm run build-server-live",
 		"validate": "npm --prefix ../../ run validate",
-		"generate-types": "tsc --project ./client/tsconfig.types.json",
+		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
+		"generate-schema": "npx ts-json-schema-generator@1.1.2 --path client/src/framework/shapes/setting-shapes.ts --tsconfig client/tsconfig.json --no-type-check --out public/schemas/settings.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
 	},
@@ -32,19 +38,19 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^27.70.8",
-		"@openfin/workspace": "9.2.5",
-		"@openfin/workspace-platform": "9.2.5",
-		"csstype": "^3.0.11"
+		"@openfin/core": "^28.72.17",
+		"@openfin/workspace": "10.3.10",
+		"@openfin/workspace-platform": "10.3.10",
+		"csstype": "^3.1.1"
 	},
 	"devDependencies": {
-		"@types/express": "^4.17.13",
-		"@types/node": "^17.0.41",
-		"express": "^4.18.1",
+		"@types/express": "^4.17.14",
+		"@types/node": "^18.11.10",
+		"express": "^4.18.2",
 		"fast-glob": "^3.2.11",
-		"ts-loader": "^9.3.0",
-		"typescript": "^4.7.3",
-		"webpack": "^5.73.0",
-		"webpack-cli": "^4.9.2"
+		"ts-loader": "^9.4.2",
+		"typescript": "^4.9.3",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^5.0.0"
 	}
 }

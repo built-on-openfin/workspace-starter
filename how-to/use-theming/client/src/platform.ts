@@ -1,45 +1,64 @@
-import { init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { init as workspacePlatformInit, CustomActionCallerType } from "@openfin/workspace-platform";
+import type {
+	CustomActionPayload,
+	CustomThemeOptions,
+	CustomThemeOptionsWithScheme
+} from "@openfin/workspace/client-api-platform/src/shapes";
+import { DEFAULT_PALETTES } from "./default-palettes";
+import { overrideCallback } from "./platform-override";
 import type { ThemingPayload } from "./shapes";
+import { getThemeButton, initColorScheme, themeToggle } from "./themes";
 
 export async function init(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing platform");
 
-	// This is the default dark theme
-	const darkPalette = {
-		brandPrimary: "#504CFF",
-		brandSecondary: "#383A40",
-		backgroundPrimary: "#1E1F23",
-		contentBackground1: "#504CFF",
-		background1: "#111214",
-		background2: "#1E1F23",
-		background3: "#24262B",
-		background4: "#2F3136",
-		background5: "#383A40",
-		background6: "#53565F",
-		statusSuccess: "#35C759",
-		statusWarning: "#F48F00",
-		statusCritical: "#BE1D1F",
-		statusActive: "#0498FB",
-		inputBackground: "#53565F",
-		inputColor: "#FFFFFF",
-		inputPlaceholder: "#C9CBD2",
-		inputDisabled: "#7D808A",
-		inputFocused: "#C9CBD2",
-		textDefault: "#FFFFFF",
-		textHelp: "#C9CBD2",
-		textInactive: "#7D808A"
-	};
-
-	await workspacePlatformInit({
-		browser: {},
-		theme: [
-			{
-				label: "theme",
-				palette: {
-					...darkPalette,
-					...themingPayload?.palette
+	let customTheme: CustomThemeOptions | CustomThemeOptionsWithScheme;
+	if (themingPayload && "palette" in themingPayload) {
+		customTheme = {
+			label: "theme",
+			palette: {
+				...DEFAULT_PALETTES.dark,
+				...themingPayload?.palette
+			}
+		};
+	} else {
+		customTheme = {
+			label: "theme",
+			palettes: {
+				dark: {
+					...DEFAULT_PALETTES.dark,
+					...themingPayload?.palettes?.dark
+				},
+				light: {
+					...DEFAULT_PALETTES.light,
+					...themingPayload?.palettes?.light
 				}
 			}
-		]
+		};
+	}
+
+	await workspacePlatformInit({
+		browser: {
+			defaultWindowOptions: {
+				workspacePlatform: {
+					pages: null,
+					toolbarOptions: {
+						buttons: [getThemeButton()]
+					}
+				}
+			}
+		},
+		overrideCallback,
+		theme: [customTheme],
+		customActions: {
+			"change-theme": async (payload: CustomActionPayload) => {
+				if (payload.callerType === CustomActionCallerType.CustomButton) {
+					await themeToggle();
+				}
+			}
+		}
 	});
+
+	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
+	await initColorScheme();
 }

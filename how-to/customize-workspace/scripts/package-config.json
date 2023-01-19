@@ -23,7 +23,16 @@
 		{
 			"id": "package",
 			"sourceRoot": "./",
-			"sources": ["package.json", "docs/**/*", "README.md", "LICENSE.md", "CHANGELOG.md", "client/types/**"],
+			"sources": [
+				"package.json",
+				"docs/**/*",
+				"README.md",
+				"LICENSE.md",
+				"CHANGELOG.md",
+				"client/types/*.*",
+				"client/types/module/**",
+				"public/schemas/**"
+			],
 			"dest": "../",
 			"dependsOn": "package"
 		}

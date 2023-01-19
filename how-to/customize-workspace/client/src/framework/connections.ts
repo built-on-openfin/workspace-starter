@@ -1,16 +1,22 @@
-import type { App } from "@openfin/workspace";
+import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
+import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+import type { PlatformApp } from "./shapes/app-shapes";
 import type {
 	AppSourceConnection,
 	Connection,
+	ConnectionPayloadVerificationRequest,
+	ConnectionPayloadVerificationResponse,
 	ConnectionProviderOptions,
+	ConnectionValidationOptions,
+	ConnectionValidationResponse,
 	SnapshotSourceConnection
 } from "./shapes/connection-shapes";
 
 const logger = createLogger("Connections");
 
-let connectionService: OpenFin.ChannelProvider;
+let connectionService: ChannelProvider;
 const connectedClients: { [key: string]: Connection } = {};
 const registeredActions: { [key: string]: () => Promise<void> } = {};
 const appSourceTypeId = "appSource";
@@ -76,7 +82,9 @@ async function getConnectionListing(identity: OpenFin.Identity): Promise<Connect
 		logger.info(
 			`A specific listing for connection ${identity.uuid} isn't listed but there is a default * entry and it will be used for this connection.`
 		);
-		defaultConnection.identity = identity;
+		const identityWithDefaults: Connection = JSON.parse(JSON.stringify(defaultConnection));
+		identityWithDefaults.identity = identity;
+		return identityWithDefaults;
 	}
 	return defaultConnection;
 }
@@ -96,7 +104,7 @@ export async function init(options: ConnectionProviderOptions) {
 			connectionService.onConnection(async (identity, payload) => {
 				// can reject a connection here by throwing an error
 				logger.info("Client connection request identity", JSON.stringify(identity));
-				logger.info("Client connection request payload", JSON.stringify(payload));
+				logger.info("Client connection has request payload", payload !== undefined);
 
 				const validatedConnection = await getConnectionListing(identity);
 				let isValid = false;
@@ -105,10 +113,8 @@ export async function init(options: ConnectionProviderOptions) {
 				if (validatedConnection !== undefined) {
 					isValid = true;
 					if (validatedConnection.validatePayload) {
-						logger.warn(
-							`This connection has specified payload validation but that check needs to be implemented. UUID: ${validatedConnection.identity.uuid}`
-						);
-						isValid = true;
+						const response = await isConnectionValid(identity, payload);
+						isValid = response.isValid;
 					}
 					if (isValid) {
 						if (connectedClients[identity.uuid] !== undefined) {
@@ -184,7 +190,7 @@ export function clearAction(actionName: string): boolean {
 }
 
 export async function getConnectedAppSourceClients() {
-	const connections: {
+	const connectionsToReturn: {
 		identity: OpenFin.Identity;
 		connectionData: AppSourceConnection;
 	}[] = [];
@@ -196,23 +202,23 @@ export async function getConnectedAppSourceClients() {
 		);
 
 		if (matchedConnection?.type === appSourceTypeId) {
-			connections.push({ identity: connection.identity, connectionData: matchedConnection });
+			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
 
-	return connections;
+	return connectionsToReturn;
 }
 
-export async function getConnectedApps(): Promise<App[]> {
+export async function getConnectedApps(): Promise<PlatformApp[]> {
 	const connectedSources = await getConnectedAppSourceClients();
-	const apps: App[] = [];
+	const apps: PlatformApp[] = [];
 	for (let i = 0; i < connectedSources.length; i++) {
-		const returnedApplications: App[] = await connectionService.dispatch(
+		const returnedApplications: PlatformApp[] = await connectionService.dispatch(
 			connectedSources[i].identity,
 			"getApps"
 		);
-		const supportedManifestTypes = connectedSources[i]?.connectionData?.manifestTypes;
-		let validatedApps: App[] = [];
+		const supportedManifestTypes: string[] = connectedSources[i]?.connectionData?.manifestTypes;
+		let validatedApps: PlatformApp[] = [];
 		if (Array.isArray(supportedManifestTypes) && supportedManifestTypes.length > 0) {
 			validatedApps = returnedApplications.filter((entry) =>
 				supportedManifestTypes.includes(entry.manifestType)
@@ -232,7 +238,7 @@ export async function getConnectedApps(): Promise<App[]> {
 	return apps;
 }
 
-export async function launchConnectedApp(app: App) {
+export async function launchConnectedApp(app: PlatformApp) {
 	const connectedSources = await getConnectedAppSourceClients();
 	const connectedSource = connectedSources.find((entry) => entry.identity.uuid === app.manifest);
 	if (app.manifestType === manifestTypes.connection.id && connectedSource !== undefined) {
@@ -246,7 +252,7 @@ export async function launchConnectedApp(app: App) {
 }
 
 export async function getConnectedSnapshotSourceClients() {
-	const connections: { identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[] = [];
+	const connectionsToReturn: { identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[] = [];
 
 	const availableConnections = Object.values(connectedClients);
 	for (const connection of availableConnections) {
@@ -255,9 +261,95 @@ export async function getConnectedSnapshotSourceClients() {
 		);
 
 		if (matchedConnection?.type === snapshotSourceTypeId) {
-			connections.push({ identity: connection.identity, connectionData: matchedConnection });
+			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
 		}
 	}
 
-	return connections;
+	return connectionsToReturn;
+}
+export async function isConnectionValid<T>(
+	identity: OpenFin.Identity,
+	payload?: unknown,
+	options?: ConnectionValidationOptions<T>
+): Promise<ConnectionValidationResponse> {
+	const responseToReturn: ConnectionValidationResponse = { isValid: false };
+	try {
+		if (identity?.uuid === undefined) {
+			logger.warn(
+				"An identity without a UUID was passed to the validate connection function. Validation cannot happen.",
+				identity,
+				options
+			);
+			return responseToReturn;
+		}
+
+		if (connectionOptions === undefined || connectionOptions?.connections === undefined) {
+			if (options?.type === "broker") {
+				logger.info(
+					"No connection provider options specified and broker connection requested. Implementing default broker behavior which is to allow a connection."
+				);
+				responseToReturn.isValid = true;
+				return responseToReturn;
+			}
+			logger.warn(
+				"A connection verification request was made but connection provider options have not been defined so we cannot validate the connection request."
+			);
+			return responseToReturn;
+		}
+
+		const listedConnection = await getConnectionListing(identity);
+
+		if (listedConnection === undefined) {
+			logger.warn("Connection is not allowed so unable to validate request", identity);
+			return responseToReturn;
+		}
+		if (listedConnection.validatePayload) {
+			if (
+				connectionOptions.connectionValidationEndpoint === undefined ||
+				connectionOptions.connectionValidationEndpoint === null ||
+				connectionOptions.connectionValidationEndpoint.trim() === ""
+			) {
+				logger.warn(
+					"This connection has been defined as requiring payload verification but the platform has not provided a connection validation endpoint to use for the verification process. For backwards compatibility this connection is valid unless the broker specifies it wishes to validate."
+				);
+				responseToReturn.isValid = true;
+				return responseToReturn;
+			}
+			if (endpointProvider.hasEndpoint(connectionOptions.connectionValidationEndpoint)) {
+				const request = { identity, payload, options };
+				logger.info(
+					`Connection validation being handled by endpoint: ${connectionOptions.connectionValidationEndpoint}`
+				);
+				const response = await endpointProvider.requestResponse<
+					ConnectionPayloadVerificationRequest<unknown>,
+					ConnectionPayloadVerificationResponse
+				>(connectionOptions.connectionValidationEndpoint, request);
+				if (!response.isValid) {
+					logger.warn(`Connection validation request for ${JSON.stringify(identity)} failed validation`);
+					return responseToReturn;
+				}
+				logger.info("Connection has passed validation.");
+			} else {
+				logger.warn(
+					"This connection has been defined as requiring payload verification but the specified connectionValidationEndpoint is not a valid endpoint."
+				);
+				return responseToReturn;
+			}
+		}
+		if (options?.type !== undefined) {
+			const supportedType = listedConnection.connectionTypes.find((entry) => entry.type === options.type);
+			if (supportedType === undefined) {
+				logger.warn(
+					`The connection that is being validated does not support the required connection type: ${options.type}`
+				);
+				return responseToReturn;
+			}
+			logger.info("Connection type requested is supported.");
+		}
+		responseToReturn.isValid = true;
+	} catch (err) {
+		logger.error("An error occurred while trying to valid a connection request.", err);
+	}
+	logger.info("Returning: ", responseToReturn);
+	return responseToReturn;
 }

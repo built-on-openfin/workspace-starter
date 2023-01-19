@@ -5,7 +5,8 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { IShareCustomData } from "customize-workspace/share";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 
@@ -48,6 +49,30 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @param url The url to open.
 	 */
 	openUrl?(url: string): Promise<void>;
+
+	/**
+	 * Set the home search query.
+	 * @param query The query to set.
+	 */
+	setSearchQuery?(query: string): Promise<void>;
+
+	/**
+	 * Get the value of a condition.
+	 * @param conditionId The id of the condition.
+	 * @returns True if the condition is set.
+	 */
+	condition?(conditionId: string): Promise<boolean>;
+
+	/**
+	 * Share data.
+	 * @param options The sharing options.
+	 */
+	share?(options?: IShareCustomData): Promise<void>;
+
+	/**
+	 * Get the current platform.
+	 */
+	getPlatform?(): WorkspacePlatformModule;
 }
 
 /**
@@ -90,6 +115,12 @@ export interface IntegrationModuleDefinition extends ModuleDefinition {
 	autoStart?: boolean;
 
 	/**
+	 * If this property is set then the module will not show in the source filter
+	 * and its results will always be included.
+	 */
+	excludeFromSourceFilter?: boolean;
+
+	/**
 	 * This is the old property, it will be remapped to url.
 	 */
 	moduleUrl?: string;
@@ -104,12 +135,17 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength: number;
+			queryAgainst: string[];
+		}
 	): Promise<HomeSearchResponse>;
 
 	/**

@@ -1,8 +1,8 @@
-import type {
-	CustomPaletteSet,
-	CustomThemeOptions
-} from "@openfin/workspace-platform/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
+import type { ColorSchemeMode } from "./theme-shapes";
+import type { VersionInfo } from "./version-shapes";
 
 /**
  * List of modules.
@@ -69,14 +69,48 @@ export interface ModuleHelpers {
 	rootUrl?: string;
 
 	/**
-	 * Get the default themes.
+	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace platform or a restarted instance of the platform.
 	 */
-	getDefaultPalettes(): Promise<{ [id: string]: CustomPaletteSet }>;
+	sessionId: string;
 
 	/**
-	 * Get the current theme.
+	 * Get the current theme id.
 	 */
-	getCurrentTheme(): Promise<CustomThemeOptions>;
+	getCurrentThemeId(): Promise<string>;
+
+	/**
+	 * Get the current icon folder.
+	 */
+	getCurrentIconFolder(): Promise<string>;
+
+	/**
+	 * Get the current palette.
+	 */
+	getCurrentPalette(): Promise<CustomPaletteSet>;
+
+	/**
+	 * Get the current color scheme.
+	 */
+	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
+
+	/**
+	 * Get the version information related to the platform you are running in.
+	 */
+	getVersionInfo(): Promise<VersionInfo>;
+
+	/**
+	 * Subscribe to lifecycle events.
+	 * @param lifecycleEvent The event to subscribe to.
+	 * @param lifecycleHandler The handle for the event.
+	 */
+	subscribeLifecycleEvent(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+
+	/**
+	 * Unsubscribe from lifecycle events.
+	 * @param subscriptionId The id of the subscription.
+	 * @param lifecycleEvent The event to subscribe to.
+	 */
+	unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
 }
 
 /**
@@ -110,7 +144,8 @@ export type ModuleTypes =
 	| "initOptions"
 	| "integrations"
 	| "conditions"
-	| "lifecycle";
+	| "lifecycle"
+	| "analytics";
 
 /**
  * The definition of a module with typed entry points.

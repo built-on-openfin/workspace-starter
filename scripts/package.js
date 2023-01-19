@@ -44,7 +44,7 @@ function packageHOWTOs(args) {
 	}
 
 	const baseURL = URLBaseMap.get(args.location);
-	let hostFolder = args.path ? args.path : `workspace/v${packageJson.version}`;
+	let hostFolder = args.path ?? `workspace/v${packageJson.version}`;
 
 	if (packageJson.howToCustomFolder !== undefined && packageJson.howToCustomFolder !== '') {
 		hostFolder = packageJson.howToCustomFolder;

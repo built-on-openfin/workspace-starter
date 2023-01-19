@@ -8,7 +8,8 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
-import { getCurrentTheme } from "./themes";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
+import { getCurrentColorSchemeMode, getCurrentPalette } from "./themes";
 
 export async function createHelp(
 	title: string,
@@ -16,7 +17,7 @@ export async function createHelp(
 	examples: string[]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	const additionalData = {};
 	const fragments: TemplateFragment[] = [];
 	for (let i = 0; i < description.length; i++) {
@@ -44,8 +45,8 @@ export async function createHelp(
 			await createContainer("column", exampleFragments, {
 				padding: "10px",
 				marginTop: "6px",
-				backgroundColor: theme.palette.inputBackground,
-				color: theme.palette.inputColor,
+				backgroundColor: palette.inputBackground,
+				color: palette.inputColor,
 				borderRadius: "5px",
 				overflow: "auto"
 			})
@@ -57,7 +58,7 @@ export async function createHelp(
 			[
 				await createTitle("title", undefined, undefined, {
 					marginBottom: "10px",
-					borderBottom: `1px solid ${theme.palette.background6}`
+					borderBottom: `1px solid ${palette.background6}`
 				}),
 				...fragments
 			],
@@ -94,12 +95,12 @@ export async function createTitle(
 	fontWeight: string = "bold",
 	style?: CSS.Properties
 ): Promise<TextTemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	return {
 		type: TemplateFragmentTypes.Text,
 		dataKey,
 		style: {
-			color: theme.palette.textDefault,
+			color: palette.textDefault,
 			fontSize: `${fontSize ?? 16}px`,
 			fontWeight,
 			...style
@@ -144,11 +145,11 @@ export async function createButton(
 	style?: CSS.Properties,
 	children?: TemplateFragment[]
 ): Promise<ButtonTemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	const buttonOptions =
 		buttonStyle === ButtonStyle.Secondary
 			? {
-					border: `1px solid ${theme.palette.inputColor}`
+					border: `1px solid ${palette.inputColor}`
 			  }
 			: {};
 	return {
@@ -168,7 +169,7 @@ export async function createLabelledValue(
 	valueKey: string,
 	style?: CSS.Properties
 ): Promise<PlainContainerTemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
 	return {
 		type: TemplateFragmentTypes.Container,
 		style: {
@@ -178,7 +179,7 @@ export async function createLabelledValue(
 			...style
 		},
 		children: [
-			await createText(labelKey, 11, { fontWeight: "bold", color: theme.palette.brandPrimary }),
+			await createText(labelKey, 11, { fontWeight: "bold", color: palette.brandPrimary }),
 			await createText(valueKey, 14)
 		]
 	};
@@ -190,20 +191,23 @@ export async function createTable(
 	tableIndex: number,
 	data: { [id: string]: string }
 ): Promise<TemplateFragment> {
-	const theme = await getCurrentTheme();
+	const palette = await getCurrentPalette();
+	const scheme = await getCurrentColorSchemeMode();
+
+	const headerColor = scheme === ColorSchemeMode.Dark ? palette.background2 : palette.background5;
+	const cellColor = scheme === ColorSchemeMode.Dark ? palette.background5 : palette.background2;
 
 	const cells: TemplateFragment[] = [];
 	const finalColSpans = colSpans.slice();
 	for (let col = 0; col < tableData[0].length; col++) {
 		const headerKey = `table${tableIndex}_header${col}`;
-		data[headerKey] = tableData[0][col];
+		data[headerKey] = tableData[0][col] ?? "";
 		cells.push(
 			await createText(headerKey, 10, {
-				marginBottom: "10px",
 				padding: "3px",
 				whiteSpace: "nowrap",
 				fontWeight: "bold",
-				backgroundColor: theme.palette.brandPrimary
+				backgroundColor: headerColor
 			})
 		);
 
@@ -215,7 +219,7 @@ export async function createTable(
 	for (let row = 1; row < tableData.length; row++) {
 		for (let col = 0; col < tableData[0].length; col++) {
 			const rowColKey = `table${tableIndex}_col${col}_row${row}`;
-			data[rowColKey] = tableData[row][col];
+			data[rowColKey] = tableData[row][col] ?? "";
 			cells.push(await createText(rowColKey, 10, { padding: "3px", whiteSpace: "nowrap" }));
 		}
 	}
@@ -224,7 +228,9 @@ export async function createTable(
 		display: "grid",
 		gridTemplateColumns: finalColSpans.map((s) => `${s}fr`).join(" "),
 		marginBottom: "10px",
-		overflow: "auto"
+		overflow: "auto",
+		background: cellColor,
+		border: `1px solid ${headerColor}`
 	});
 }
 
