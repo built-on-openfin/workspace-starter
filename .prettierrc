@@ -6,8 +6,7 @@
 		{
 			"files": ["*.html"],
 			"options": {
-				"htmlWhitespaceSensitivity": "ignore",
-				"jsxBracketSameLine": true
+				"htmlWhitespaceSensitivity": "ignore"
 			}
 		},
 		{
