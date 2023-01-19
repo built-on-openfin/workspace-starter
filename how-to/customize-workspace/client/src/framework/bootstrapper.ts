@@ -1,5 +1,6 @@
 import type { HomeRegistration, RegistrationMetaInfo } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
+import * as analyticsProvider from "./analytics";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { registerAction } from "./connections";
@@ -11,6 +12,7 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
+import type { AnalyticsSource, PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
 import * as versionProvider from "./version";
 import {
@@ -114,30 +116,38 @@ export async function init(): Promise<boolean> {
 
 	if (workspaceMetaInfo !== undefined) {
 		// we match the versions of workspace related packages
-		versionProvider.setVersion("WorkspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
-		versionProvider.setVersion("WorkspaceClient", workspaceMetaInfo.clientAPIVersion);
-		versionProvider.setVersion("Workspace", workspaceMetaInfo.workspaceVersion);
+		versionProvider.setVersion("workspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("workspaceClient", workspaceMetaInfo.clientAPIVersion);
+		versionProvider.setVersion("workspace", workspaceMetaInfo.workspaceVersion);
 	}
 
 	if (notificationMetaInfo !== undefined) {
-		versionProvider.setVersion("NotificationCenter", notificationMetaInfo.workspaceVersion);
+		versionProvider.setVersion("notificationCenter", notificationMetaInfo.workspaceVersion);
 	}
 
-	if (!versionProvider.isSupported()) {
-		const warningWindow = versionProvider.getVersionWindowConfiguration();
-		if (warningWindow !== undefined) {
-			logger.info(
-				"Unable to meet minimum version requirements and a warning window has been provided. Bootstrapping process has been stopped."
-			);
-			await deregister();
-			const openWarningWindow = await fin.Window.create(warningWindow);
-			await openWarningWindow.setAsForeground();
-			return false;
-		}
-	} else {
-		const versionInfo = await versionProvider.getVersionInfo();
-		logger.info("Bootstrapped with following versions.", versionInfo);
+	const versionStatus = await versionProvider.getVersionStatus();
+	const versionInfo = await versionProvider.getVersionInfo();
+
+	logger.info("Loaded with the following versions.", versionInfo);
+	if (analyticsProvider.isEnabled()) {
+		const analyticsEvent: PlatformAnalyticsEvent = {
+			source: "Platform" as AnalyticsSource,
+			type: "version",
+			timestamp: new Date(),
+			data: versionInfo,
+			action: "load"
+		};
+		await analyticsProvider.handleAnalytics([analyticsEvent]);
 	}
+
+	if (await versionProvider.manageVersionStatus(versionStatus)) {
+		// version status had to be managed so it couldn't just continue. Stop initialization.
+		await deregister();
+		logger.warn("Platform bootstrapping stopped as the current versioning required stopping.");
+		return false;
+	}
+
+	await versionProvider.MonitorVersionStatus();
 
 	// Remove any entries from autoShow that have not been registered
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter(

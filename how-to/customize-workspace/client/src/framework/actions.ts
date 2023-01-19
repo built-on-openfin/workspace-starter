@@ -23,6 +23,7 @@ import { toggleScheme } from "./themes";
 import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
+const customActionMap: CustomActionsMap = {};
 
 async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
 	const currentWindow = await view.getCurrentWindow();
@@ -58,7 +59,7 @@ export async function getActions(
 	actionsProviderOptions: ActionsProviderOptions,
 	helpers: ModuleHelpers
 ): Promise<CustomActionsMap> {
-	let actionMap: CustomActionsMap = await getDefaultActions();
+	let platformActionMap: CustomActionsMap = await getPlatformActions();
 
 	const actionModules = await loadModules<Actions, ActionHelpers>(actionsProviderOptions, "actions");
 
@@ -72,18 +73,17 @@ export async function getActions(
 	const platform = getCurrentSync();
 	for (const actionModule of actionModules) {
 		const modActions = await actionModule.implementation.get(platform);
-		actionMap = {
-			...actionMap,
+		platformActionMap = {
+			...platformActionMap,
 			...modActions
 		};
 	}
 
-	return actionMap;
+	return platformActionMap;
 }
 
-export async function getDefaultActions(): Promise<CustomActionsMap> {
+async function getPlatformActions(): Promise<CustomActionsMap> {
 	const actionMap: CustomActionsMap = {};
-
 	actionMap[ACTION_IDS.moveViewToNewWindow] = async (payload: CustomActionPayload) => {
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 			const platform = getCurrentSync();
@@ -222,5 +222,27 @@ export async function getDefaultActions(): Promise<CustomActionsMap> {
 		await toggleScheme();
 	};
 
-	return actionMap;
+	return { ...actionMap, ...customActionMap };
+}
+
+export function registerAction(actionName: string, action: () => Promise<void>) {
+	if (actionName === undefined || actionName === null || actionName.trim().length === 0) {
+		logger.warn("Unable to register action. The action name was not specified.");
+		return;
+	}
+
+	if (action === undefined) {
+		logger.warn("Unable to register action as no action was passed.");
+		return;
+	}
+
+	if (customActionMap[actionName] !== undefined) {
+		logger.warn(
+			`Unable to add action to custom actions as an action with the name ${actionName} has already been registered`
+		);
+		return;
+	}
+
+	customActionMap[actionName] = action;
+	logger.info(`Registered action: ${actionName}`);
 }

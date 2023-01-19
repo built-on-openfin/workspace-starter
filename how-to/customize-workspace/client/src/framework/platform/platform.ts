@@ -20,6 +20,7 @@ import * as versionProvider from "../version";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
+import { PLATFORM_VERSION } from "./platform-version";
 
 const logger = createLogger("Platform");
 
@@ -41,13 +42,15 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	await versionProvider.init(settings?.versionProvider);
 
+	await endpointProvider.init(settings?.endpointProvider, helpers);
+
 	const runtimeVersion = await fin.System.getVersion();
 	const rvmInfo = await fin.System.getRvmInfo();
-	versionProvider.setVersion("Runtime", runtimeVersion);
-	versionProvider.setVersion("RVM", rvmInfo.version);
-	versionProvider.setVersion("PlatformClient", VERSION);
+	await versionProvider.init(settings?.versionProvider, endpointProvider);
+	versionProvider.setVersion("runtime", runtimeVersion);
+	versionProvider.setVersion("rvm", rvmInfo.version);
+	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
-	await endpointProvider.init(settings?.endpointProvider, helpers);
 	await connectionProvider.init(settings?.connectionProvider);
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
