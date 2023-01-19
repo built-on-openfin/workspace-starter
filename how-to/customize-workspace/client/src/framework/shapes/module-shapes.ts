@@ -1,3 +1,4 @@
+import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
@@ -96,21 +97,26 @@ export interface ModuleHelpers {
 	/**
 	 * Get the version information related to the platform you are running in.
 	 */
-	getVersionInfo(): Promise<VersionInfo>;
+	getVersionInfo?(): Promise<VersionInfo>;
+
+	/**
+	 * Returns an interop client that can be used to broadcast context and raise intents.
+	 */
+	getInteropClient?(): Promise<InteropClient>;
 
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
 	 */
-	subscribeLifecycleEvent(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
 
 	/**
 	 * Unsubscribe from lifecycle events.
 	 * @param subscriptionId The id of the subscription.
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
-	unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
+	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
 }
 
 /**
