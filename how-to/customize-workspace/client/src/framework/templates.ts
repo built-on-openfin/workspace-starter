@@ -8,7 +8,8 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
-import { getCurrentPalette } from "./themes";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
+import { getCurrentColorSchemeMode, getCurrentPalette } from "./themes";
 
 export async function createHelp(
 	title: string,
@@ -191,19 +192,22 @@ export async function createTable(
 	data: { [id: string]: string }
 ): Promise<TemplateFragment> {
 	const palette = await getCurrentPalette();
+	const scheme = await getCurrentColorSchemeMode();
+
+	const headerColor = scheme === ColorSchemeMode.Dark ? palette.background2 : palette.background5;
+	const cellColor = scheme === ColorSchemeMode.Dark ? palette.background5 : palette.background2;
 
 	const cells: TemplateFragment[] = [];
 	const finalColSpans = colSpans.slice();
 	for (let col = 0; col < tableData[0].length; col++) {
 		const headerKey = `table${tableIndex}_header${col}`;
-		data[headerKey] = tableData[0][col];
+		data[headerKey] = tableData[0][col] ?? "";
 		cells.push(
 			await createText(headerKey, 10, {
-				marginBottom: "10px",
 				padding: "3px",
 				whiteSpace: "nowrap",
 				fontWeight: "bold",
-				backgroundColor: palette.brandPrimary
+				backgroundColor: headerColor
 			})
 		);
 
@@ -215,7 +219,7 @@ export async function createTable(
 	for (let row = 1; row < tableData.length; row++) {
 		for (let col = 0; col < tableData[0].length; col++) {
 			const rowColKey = `table${tableIndex}_col${col}_row${row}`;
-			data[rowColKey] = tableData[row][col];
+			data[rowColKey] = tableData[row][col] ?? "";
 			cells.push(await createText(rowColKey, 10, { padding: "3px", whiteSpace: "nowrap" }));
 		}
 	}
@@ -224,7 +228,9 @@ export async function createTable(
 		display: "grid",
 		gridTemplateColumns: finalColSpans.map((s) => `${s}fr`).join(" "),
 		marginBottom: "10px",
-		overflow: "auto"
+		overflow: "auto",
+		background: cellColor,
+		border: `1px solid ${headerColor}`
 	});
 }
 
