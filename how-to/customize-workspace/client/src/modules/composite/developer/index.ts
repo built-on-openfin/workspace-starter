@@ -1,6 +1,6 @@
 import type { ModuleImplementation, ModuleTypes } from "customize-workspace/shapes/module-shapes";
-import * as initOptionsImplementation from "./init-options";
+import { DeveloperActions } from "./actions";
 
 export const entryPoints: { [type in ModuleTypes]?: ModuleImplementation } = {
-	initOptions: initOptionsImplementation
+	actions: new DeveloperActions()
 };

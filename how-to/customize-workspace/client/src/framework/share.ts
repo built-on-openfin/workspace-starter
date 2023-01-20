@@ -5,36 +5,13 @@ import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
 import { getPageBounds, launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
+import type { IShareCustomData, IShareEntry } from "./shapes/share-shapes";
 
 const logger = createLogger("Share");
 
 export let shareEnabled = false;
 let shareRegistered = false;
 let initOptionsListenerId: string;
-
-export interface IShareCustomData {
-	workspaceId?: string;
-	windowIdentity?: OpenFin.Identity;
-	pageId?: string;
-	page?: Page;
-	bounds?: OpenFin.Bounds;
-}
-
-type IShareEntry = IShareEntryPage | IShareEntryWorkspace | IShareEntryUnknown;
-
-interface IShareEntryPage {
-	type: "page";
-	data: { page: Page; bounds: OpenFin.Bounds };
-}
-
-interface IShareEntryWorkspace {
-	type: "workspace";
-	data: { snapshot: string };
-}
-
-interface IShareEntryUnknown {
-	type: "other";
-}
 
 async function notifyOfSuccessfulLoad() {
 	const settings = await getSettings();

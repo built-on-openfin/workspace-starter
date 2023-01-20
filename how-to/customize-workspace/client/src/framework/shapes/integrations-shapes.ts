@@ -6,8 +6,8 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { IShareCustomData } from "customize-workspace/share";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { IShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 
 /**

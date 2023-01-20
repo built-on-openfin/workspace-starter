@@ -33,11 +33,13 @@ export async function register(): Promise<RegistrationMetaInfo> {
 				"Unable to register notifications platform as we do not have it defined as part of settings"
 			);
 		}
+		logger.info("Gathering notification center status and version.");
 		const providerStatus = await provider.getStatus();
 		metaInfo = {
 			workspaceVersion: providerStatus.version,
 			clientAPIVersion: VERSION
 		};
+		logger.info("Versioning information collected.", metaInfo);
 	}
 	return metaInfo;
 }
@@ -60,9 +62,11 @@ export async function deregister() {
 }
 
 export async function show(options?: ShowOptions): Promise<void> {
+	logger.info("Show Notifications called.");
 	return showNotifications(options);
 }
 
 export async function hide(): Promise<void> {
+	logger.info("Hide Notifications called.");
 	return hideNotifications();
 }
