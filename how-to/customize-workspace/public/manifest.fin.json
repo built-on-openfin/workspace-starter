@@ -953,6 +953,12 @@
 					"data": {
 						"eventLogLevel": "info"
 					}
+				},
+				{
+					"enabled": true,
+					"id": "analytics.dev.channel",
+					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
+					"data": {}
 				}
 			]
 		},

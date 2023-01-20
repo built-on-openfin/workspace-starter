@@ -1,4 +1,5 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type {
 	Lifecycle,
@@ -10,6 +11,7 @@ import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/modu
 import { randomUUID } from "./uuid";
 
 let lifecycleModules: ModuleEntry<Lifecycle, unknown, unknown, ModuleDefinition>[] = [];
+const logger = createLogger("LifeCycle Provider");
 
 const allLifecycleEvents: {
 	[key in LifecycleEvents]?: {
@@ -22,6 +24,7 @@ export async function init(
 	lifecycleProviderOptions: LifecycleProviderOptions,
 	helpers: ModuleHelpers
 ): Promise<void> {
+	logger.info("Initializing lifecycle provider");
 	lifecycleModules = await loadModules<Lifecycle>(lifecycleProviderOptions, "lifecycle");
 	await initializeModules<Lifecycle>(lifecycleModules, helpers);
 
@@ -38,8 +41,12 @@ export async function fireLifecycleEvent(
 	platform: WorkspacePlatformModule,
 	lifecycleEvent: LifecycleEvents
 ): Promise<void> {
-	if (allLifecycleEvents[lifecycleEvent]) {
-		for (const idHandler of allLifecycleEvents[lifecycleEvent]) {
+	logger.info(`Request to fire lifecycle event ${lifecycleEvent} received`);
+	if (Array.isArray(allLifecycleEvents[lifecycleEvent])) {
+		const subscribers = [...allLifecycleEvents[lifecycleEvent]];
+		logger.info(`Notifying ${subscribers.length} subscribers of lifecycle event ${lifecycleEvent}`);
+		for (const idHandler of subscribers) {
+			logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
 			await idHandler.handler(platform);
 		}
 	}
@@ -55,10 +62,12 @@ export function subscribeLifecycleEvent(
 		id,
 		handler: lifecycleHandler
 	});
+	logger.info(`Subscription for lifecycle event ${lifecycleEvent} received. Subscription id: ${id} returned`);
 	return id;
 }
 
 export function unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void {
+	logger.info(`Request to unsubscribe from lifecycle event ${lifecycleEvent} with id: ${subscriptionId}`);
 	if (allLifecycleEvents[lifecycleEvent]) {
 		const idx = allLifecycleEvents[lifecycleEvent].findIndex((l) => l.id === subscriptionId);
 		if (idx >= 0) {

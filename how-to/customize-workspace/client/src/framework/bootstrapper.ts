@@ -65,19 +65,6 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo;
 	let notificationMetaInfo: RegistrationMetaInfo;
 
-	// Notification Center is a separate application.
-	// We want to ensure successful registration if required
-	// before registering the other workspace components.
-	if (bootstrapOptions.notifications) {
-		notificationMetaInfo = await registerNotifications();
-		registerAction("show-notifications", async () => {
-			await showNotifications();
-		});
-		registerAction("hide-notifications", async () => {
-			await hideNotifications();
-		});
-	}
-
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running
 		homeRegistration = await registerHome();
@@ -124,6 +111,16 @@ export async function init(): Promise<boolean> {
 		versionProvider.setVersion("workspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
 		versionProvider.setVersion("workspaceClient", workspaceMetaInfo.clientAPIVersion);
 		versionProvider.setVersion("workspace", workspaceMetaInfo.workspaceVersion);
+	}
+
+	if (bootstrapOptions.notifications) {
+		notificationMetaInfo = await registerNotifications();
+		registerAction("show-notifications", async () => {
+			await showNotifications();
+		});
+		registerAction("hide-notifications", async () => {
+			await hideNotifications();
+		});
 	}
 
 	if (notificationMetaInfo !== undefined) {
