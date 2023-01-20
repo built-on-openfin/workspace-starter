@@ -28,7 +28,9 @@ import path from 'path';
 			console.log();
 			console.log('Execute the following command to serve locally');
 			const url = new URL(host);
-			console.log(`   npx http-server ${path.relative('.', packagedDir)} -p ${url.port.length === 0 ? "80" : url.port}`);
+			console.log(
+				`   npx http-server ${path.relative('.', packagedDir)} -p ${url.port.length === 0 ? '80' : url.port}`
+			);
 			console.log(`and start the app with`);
 			console.log(`   start fin://${url.host}/${manifest}`);
 		}
