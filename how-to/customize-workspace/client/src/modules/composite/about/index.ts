@@ -1,7 +1,7 @@
 import type { ModuleImplementation, ModuleTypes } from "customize-workspace/shapes/module-shapes";
 import { AboutActions } from "./actions";
 import { AboutConditions } from "./conditions";
-import { AboutProvider } from "./integration-provider";
+import { AboutProvider } from "./integration";
 import type { SharedState } from "./shapes";
 
 const sharedState: SharedState = {};

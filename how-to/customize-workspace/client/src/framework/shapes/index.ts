@@ -14,3 +14,4 @@ export * from "./store-shapes";
 export * from "./bootstrap-shapes";
 export * from "./browser-shapes";
 export * from "./app-shapes";
+export * from "./share-shapes";

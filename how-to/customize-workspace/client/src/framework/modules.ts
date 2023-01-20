@@ -1,3 +1,4 @@
+import type { InteropClient } from "@openfin/core/src/api/interop/InteropClient";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
@@ -22,6 +23,10 @@ import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
 const sessionId = randomUUID();
+
+async function getInteropClient(): Promise<InteropClient> {
+	return fin.Interop.connectSync(fin.me.uuid, {});
+}
 
 /**
  * All the loaded modules.
@@ -214,6 +219,7 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
 		getVersionInfo,
+		getInteropClient,
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent
 	};

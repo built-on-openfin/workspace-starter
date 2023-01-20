@@ -65,6 +65,19 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo;
 	let notificationMetaInfo: RegistrationMetaInfo;
 
+	// Notification Center is a separate application.
+	// We want to ensure successful registration if required
+	// before registering the other workspace components.
+	if (bootstrapOptions.notifications) {
+		notificationMetaInfo = await registerNotifications();
+		registerAction("show-notifications", async () => {
+			await showNotifications();
+		});
+		registerAction("hide-notifications", async () => {
+			await hideNotifications();
+		});
+	}
+
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running
 		homeRegistration = await registerHome();
@@ -81,6 +94,7 @@ export async function init(): Promise<boolean> {
 		});
 	}
 
+	logger.info("Registering integrations");
 	await registerIntegration(settings.integrationProvider, helpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
@@ -105,16 +119,6 @@ export async function init(): Promise<boolean> {
 		});
 	}
 
-	if (bootstrapOptions.notifications) {
-		notificationMetaInfo = await registerNotifications();
-		registerAction("show-notifications", async () => {
-			await showNotifications();
-		});
-		registerAction("hide-notifications", async () => {
-			await hideNotifications();
-		});
-	}
-
 	if (workspaceMetaInfo !== undefined) {
 		// we match the versions of workspace related packages
 		versionProvider.setVersion("workspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
@@ -131,6 +135,7 @@ export async function init(): Promise<boolean> {
 
 	logger.info("Loaded with the following versions.", versionInfo);
 	if (analyticsProvider.isEnabled()) {
+		logger.info("Analytics Provider enabled. Capturing versioning information.");
 		const analyticsEvent: PlatformAnalyticsEvent = {
 			source: "Platform" as AnalyticsSource,
 			type: "version",
@@ -141,6 +146,7 @@ export async function init(): Promise<boolean> {
 		await analyticsProvider.handleAnalytics([analyticsEvent]);
 	}
 
+	logger.info("Checking to see if version management is required.");
 	if (await versionProvider.manageVersionStatus(versionStatus)) {
 		// version status had to be managed so it couldn't just continue. Stop initialization.
 		await deregister();
@@ -148,15 +154,21 @@ export async function init(): Promise<boolean> {
 		return false;
 	}
 
+	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
 
+	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
 	// Remove any entries from autoShow that have not been registered
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow.filter(
 		(component) => registeredComponents.includes(component) || component === "none"
 	);
+	logger.info("Validated auto show list:", bootstrapOptions.autoShow);
 
 	// If the autoShow options is not empty, default to the first registered component.
 	if (bootstrapOptions.autoShow.length === 0 && registeredComponents.length > 0) {
+		logger.info(
+			`No auto show options specified but at least one Workspace Component is registered. Showing the first registered component: ${registeredComponents[0]}`
+		);
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
@@ -192,6 +204,7 @@ export async function init(): Promise<boolean> {
 		});
 	}
 
+	logger.info("Setting up dispose handler.");
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
 		await deregister();
@@ -208,11 +221,13 @@ export async function init(): Promise<boolean> {
 	// Let any other modules participate in the lifecycle
 	await fireLifecycleEvent(platform, "after-bootstrap");
 
+	logger.info("Finished the bootstrapping process.");
 	return true;
 }
 
 async function deregister() {
 	if (!deregistered) {
+		logger.info("Deregister has been called.");
 		await deregisterIntegration();
 		if (bootstrapOptions.dock) {
 			await deregisterDock();
@@ -226,6 +241,7 @@ async function deregister() {
 		if (bootstrapOptions.notifications) {
 			await deregisterNotifications();
 		}
+		logger.info("Finished deregister.");
 		deregistered = true;
 	}
 }
