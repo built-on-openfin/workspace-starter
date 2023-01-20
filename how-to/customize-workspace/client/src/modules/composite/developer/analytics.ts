@@ -31,15 +31,14 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 		this._logger = loggerCreator("DeveloperAnalyticsModule");
 		this._logger.info("Initialized");
 		this._logger.info("Session Id: ", helpers.sessionId);
-		if (
-			definition.data?.sessionContextGroupName !== undefined &&
-			definition.data?.contextType !== undefined &&
-			helpers.getInteropClient !== undefined
-		) {
+		this._contextType = definition.data?.contextType ?? "fin.dev.platform.analytics";
+		const channelName: string = definition.data?.sessionContextGroupName ?? "dev/platform/analytics";
+		this._logger.info(
+			`Using channel name: ${channelName} and contextType: ${this._contextType}. These can be customized by passing data settings: sessionContextGroupName and contextType in the module settings.`
+		);
+		if (helpers.getInteropClient !== undefined) {
 			this._interopClient = await helpers.getInteropClient();
-			const sessionContextGroupName: string = definition.data?.sessionContextGroupName;
-			this._channel = await this._interopClient.joinSessionContextGroup(sessionContextGroupName);
-			this._contextType = definition.data.contextType;
+			this._channel = await this._interopClient.joinSessionContextGroup(channelName);
 		} else {
 			this._logger.warn(
 				"This analytics module requires a session context group name, a context type and the ability to create an interop client. Unfortunately this criteria has not been met."

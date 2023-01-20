@@ -18,21 +18,6 @@ let metaInfo: RegistrationMetaInfo;
 
 export async function register(): Promise<RegistrationMetaInfo> {
 	if (!notificationsRegistered) {
-		const settings = await getSettings();
-		const notificationPlatform = settings.notificationProvider;
-		if (notificationPlatform !== undefined) {
-			try {
-				await registerPlatform(settings.notificationProvider);
-				notificationsRegistered = true;
-				logger.info("Registered notifications");
-			} catch (error) {
-				logger.error("We were unable to register with Notification Center", error);
-			}
-		} else {
-			logger.warn(
-				"Unable to register notifications platform as we do not have it defined as part of settings"
-			);
-		}
 		logger.info("Gathering notification center status and version.");
 		const providerStatus = await provider.getStatus();
 		metaInfo = {
@@ -40,6 +25,26 @@ export async function register(): Promise<RegistrationMetaInfo> {
 			clientAPIVersion: VERSION
 		};
 		logger.info("Versioning information collected.", metaInfo);
+		if (providerStatus.connected) {
+			logger.info("Connected to the Notification Center. Registering platform with Notification Center.");
+			const settings = await getSettings();
+			const notificationPlatformSettings = settings?.notificationProvider;
+			if (notificationPlatformSettings !== undefined) {
+				try {
+					await registerPlatform(notificationPlatformSettings);
+					notificationsRegistered = true;
+					logger.info("Registered notifications");
+				} catch (error) {
+					logger.error("We were unable to register with Notification Center", error);
+				}
+			} else {
+				logger.warn(
+					"Unable to register notifications platform as we do not have it defined as part of settings"
+				);
+			}
+		} else {
+			logger.info("Unable to register against notification center as the center wasn't connected.");
+		}
 	}
 	return metaInfo;
 }
