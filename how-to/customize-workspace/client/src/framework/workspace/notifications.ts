@@ -30,13 +30,15 @@ export async function register(): Promise<RegistrationMetaInfo> {
 			const settings = await getSettings();
 			const notificationPlatformSettings = settings?.notificationProvider;
 			if (notificationPlatformSettings !== undefined) {
-				try {
-					await registerPlatform(notificationPlatformSettings);
-					notificationsRegistered = true;
-					logger.info("Registered notifications");
-				} catch (error) {
-					logger.error("We were unable to register with Notification Center", error);
-				}
+				registerPlatform(notificationPlatformSettings)
+					.then(() => {
+						notificationsRegistered = true;
+						logger.info("Registered notifications");
+						return true;
+					})
+					.catch((reason) => {
+						logger.error("We were unable to register with Notification Center", reason);
+					});
 			} else {
 				logger.warn(
 					"Unable to register notifications platform as we do not have it defined as part of settings"
@@ -56,11 +58,18 @@ export async function deregister() {
 		const settings = await getSettings();
 		const notificationPlatform = settings.notificationProvider;
 		if (notificationPlatform !== undefined) {
-			await deregisterPlatform(notificationPlatform.id);
-			logger.info("Unregistered platform notifications");
+			logger.info("Deregister platform from notifications");
+			deregisterPlatform(notificationPlatform.id)
+				.then(() => {
+					logger.info("Deregistered platform notifications");
+					return true;
+				})
+				.catch((reason) => {
+					logger.error("Unable to deregister platform from notifications.", reason);
+				});
 		} else {
 			logger.warn(
-				"Unable to register platform notifications as we do not have notifications defined as part of settings"
+				"Unable to deregister platform notifications as we do not have notifications defined as part of settings"
 			);
 		}
 	}

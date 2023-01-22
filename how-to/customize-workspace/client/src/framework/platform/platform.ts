@@ -20,6 +20,7 @@ import type { CustomSettings, ModuleHelpers } from "../shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
 import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
+import { randomUUID } from "../uuid";
 import * as versionProvider from "../version";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
@@ -32,8 +33,9 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const configuredSettings = await getConfiguredSettings();
+	const sessionId: string = randomUUID();
 
-	await modulesInit();
+	await modulesInit(sessionId);
 
 	let helpers: ModuleHelpers = getDefaultHelpers(configuredSettings);
 

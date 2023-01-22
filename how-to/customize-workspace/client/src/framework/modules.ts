@@ -13,18 +13,19 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
+import type { PlatformLocale } from "./shapes/platform-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentPalette,
 	getCurrentIconFolder,
 	getCurrentThemeId
 } from "./themes";
-import { randomUUID } from "./uuid";
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
-const sessionId = randomUUID();
+let passedSessionId: string;
 let bootstrapped = false;
+let platformLocale: PlatformLocale;
 
 async function getInteropClient(): Promise<InteropClient | undefined> {
 	if (bootstrapped) {
@@ -38,6 +39,11 @@ async function getInteropClient(): Promise<InteropClient | undefined> {
 	);
 }
 
+/** Returns a configured prefer locale or the default */
+async function getLocale(): Promise<PlatformLocale | undefined> {
+	return platformLocale;
+}
+
 /**
  * All the loaded modules.
  */
@@ -46,10 +52,13 @@ const loadedModules: {
 } = {};
 
 /**
- * Setup any required listeners needed by this module
+ * Setup any required listeners needed by this module and specify the session id for this instance of the platform
  */
-export async function init() {
-	logger.info("Initializing and listening for the after bootstrap lifecycle event.");
+export async function init(sessionId: string) {
+	logger.info(
+		`Initializing and listening for the after bootstrap lifecycle event and setting the passed sessionId: ${sessionId}`
+	);
+	passedSessionId = sessionId;
 	const bootstrappedLifeCycleId: string = subscribeLifecycleEvent(
 		"after-bootstrap",
 		async (_platform: WorkspacePlatformModule) => {
@@ -235,13 +244,15 @@ export async function closedownModule<
 }
 
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
+	platformLocale = settings?.platformProvider?.intl?.locale;
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
-		sessionId,
+		sessionId: passedSessionId,
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
+		getLocale,
 		getVersionInfo,
 		getInteropClient,
 		subscribeLifecycleEvent,

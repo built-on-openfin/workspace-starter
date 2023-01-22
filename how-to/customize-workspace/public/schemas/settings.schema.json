@@ -1113,6 +1113,59 @@
       },
       "type": "object"
     },
+    "Intl.LocaleCollationCaseFirst": {
+      "enum": [
+        "upper",
+        "lower",
+        "false"
+      ],
+      "type": "string"
+    },
+    "Intl.LocaleHourCycleKey": {
+      "enum": [
+        "h12",
+        "h23",
+        "h11",
+        "h24"
+      ],
+      "type": "string"
+    },
+    "Intl.LocaleOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "baseName": {
+          "type": "string"
+        },
+        "calendar": {
+          "type": "string"
+        },
+        "caseFirst": {
+          "$ref": "#/definitions/Intl.LocaleCollationCaseFirst"
+        },
+        "collation": {
+          "type": "string"
+        },
+        "hourCycle": {
+          "$ref": "#/definitions/Intl.LocaleHourCycleKey"
+        },
+        "language": {
+          "type": "string"
+        },
+        "numberingSystem": {
+          "type": "string"
+        },
+        "numeric": {
+          "type": "boolean"
+        },
+        "region": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "LifecycleProviderOptions": {
       "$ref": "#/definitions/ModuleList",
       "description": "This is a list of modules that allow you to hook into the lifecycle events exposed by the platform. A good example might be you wish to register a module that is called when an authenticated session is expired"
@@ -1614,6 +1667,23 @@
       },
       "type": "array"
     },
+    "PlatformLocale": {
+      "additionalProperties": false,
+      "properties": {
+        "options": {
+          "$ref": "#/definitions/Intl.LocaleOptions",
+          "description": "An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/Locale#Parameters) with some or all of options of the locale."
+        },
+        "tag": {
+          "description": "A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646).  For the general form and interpretation of the locales argument,  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag"
+      ],
+      "type": "object"
+    },
     "PlatformProviderOptions": {
       "additionalProperties": false,
       "properties": {
@@ -1641,6 +1711,17 @@
           "required": [
             "url"
           ],
+          "type": "object"
+        },
+        "intl": {
+          "additionalProperties": false,
+          "description": "internationalization related settings",
+          "properties": {
+            "locale": {
+              "$ref": "#/definitions/PlatformLocale",
+              "description": "If desired specify the preferred locale for this platform"
+            }
+          },
           "type": "object"
         },
         "rootUrl": {
