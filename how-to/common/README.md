@@ -11,6 +11,10 @@ This lets each sample reference the examples they wish to make available without
 
 This folder supports building content written in TypeScript but the majority of the examples are vanilla html, js and css to keep things simple and easy to tweak and refresh.
 
+## Purpose Of The Common Folder
+
+The purpose of this folder is to provide common content and scripts to the other how-to folders. You can build it (although running npm run setup from a how-to will also build this directory) but it doesn't support npm start or npm run client directly (this should be run from one of the other how-to folders).
+
 ## Getting Started
 
 1. Run setup. Note that these examples assume you are in the common sub-directory.
