@@ -23,6 +23,7 @@
 - Removed `enableWorkspaceIntegration` from `homeProvider`, enable/disable the Workspaces integration instead
 - Removed `enablePageIntegration` from `homeProvider`, enable/disable the Pages integration instead
 - Added Automation Testing examples
+- Added option of modules receiving a getInteropClient function if they are allowed. Added pattern that a module should listen for the after bootstrap lifecycle event before trying to get an interop client. Added an example to the dev module in modules/composite/developer. There is an analytics implementation that publishes events to an interop/fdc3 channel. This is for dev purposes so you can easily listen to a stream of the events and build a UI (it complements the console analytics module we have). It is only enabled in manifest.fin.json.
 
 ## v9.2
 
