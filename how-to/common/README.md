@@ -13,7 +13,7 @@ This folder supports building content written in TypeScript but the majority of 
 
 ## Purpose Of The Common Folder
 
-The purpose of this folder is to provide common content and scripts to the other how-to folders. You can build it (although running npm run setup from a how-to will also build this directory) but it doesn't support npm start or npm run client directly (this should be run from one of the other how-to folders).
+The purpose of this folder is to provide common content and scripts to the other how-to folders. You can build it (although running npm run setup from a how-to will also build this directory) but it doesn't support npm start or npm run client directly (this should be run from one of the other how-to folders). The folders that cannot be launched locally are this folder (common), hints-and-tips and migrate-from-a-previous-version.
 
 ## Getting Started
 
