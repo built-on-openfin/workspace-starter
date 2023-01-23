@@ -3,6 +3,10 @@ on:
   - push
   - workflow_dispatch
 
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     name: Build and package HOWTOs
@@ -58,9 +62,6 @@ jobs:
     name: Publish HOWTOs (GitHub Pages)
     needs: build
     runs-on: ubuntu-latest
-    concurrency:
-      group: publish-gh-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -72,7 +73,7 @@ jobs:
           path: public-github/
 
       - name: Publish
-        uses: JamesIves/github-pages-deploy-action@4.1.7
+        uses: JamesIves/github-pages-deploy-action@4.4.1
         with:
           branch: gh-pages # Target branch to deploy to
           folder: public-github # Source folder to deploy
@@ -83,9 +84,6 @@ jobs:
     name: Publish HOWTOs (AWS s3 CDN)
     needs: build
     runs-on: ubuntu-latest
-    concurrency:
-      group: publish-aws-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
