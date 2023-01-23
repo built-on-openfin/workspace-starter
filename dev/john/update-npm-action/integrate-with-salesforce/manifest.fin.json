@@ -1,0 +1,85 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
+		"version": "28.106.72.17"
+	},
+	"platform": {
+		"uuid": "integrate-with-salesforce",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/favicon.ico",
+		"name": "Integrate With Salesforce - v10.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With SalesForce - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"homeProvider": {
+			"id": "integrate-with-salesforce",
+			"title": "Integrate with Salesforce",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/favicon.ico"
+		},
+		"browserProvider": {
+			"windowOptions": {
+				"title": "Salesforce",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/favicon.ico"
+			}
+		},
+		"themeProvider": {
+			"themes": [
+				{
+					"label": "Salesforce Theme",
+					"palette": {
+						"brandPrimary": "#0070D2",
+						"brandSecondary": "#0070D2",
+						"backgroundPrimary": "#265A78",
+						"background1": "#0C4362",
+						"background2": "#105998",
+						"background3": "#265A78",
+						"background4": "#0070D2",
+						"background5": "#0070D2",
+						"background6": "#0070D2"
+					}
+				}
+			]
+		},
+		"integrationProvider": {
+			"modules": [
+				{
+					"id": "salesforce",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/favicon.ico",
+					"title": "Salesforce",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"data": {
+						"consumerKey": "",
+						"orgUrl": "",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/js/preload.js",
+						"iconMap": {
+							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-npm-action/integrate-with-salesforce/images/task.svg"
+						}
+					}
+				}
+			]
+		}
+	}
+}
