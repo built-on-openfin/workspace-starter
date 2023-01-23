@@ -1,4 +1,5 @@
 import type { InteropClient } from "@openfin/core/src/api/interop/InteropClient";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
@@ -18,14 +19,22 @@ import {
 	getCurrentIconFolder,
 	getCurrentThemeId
 } from "./themes";
-import { randomUUID } from "./uuid";
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
-const sessionId = randomUUID();
+let passedSessionId: string;
+let bootstrapped = false;
 
-async function getInteropClient(): Promise<InteropClient> {
-	return fin.Interop.connectSync(fin.me.uuid, {});
+async function getInteropClient(): Promise<InteropClient | undefined> {
+	if (bootstrapped) {
+		// if an interop broker has been assigned for the platform
+		// provide a proxy to the requesting integration
+		return fin.Interop.connectSync(fin.me.uuid, {});
+	}
+	// otherwise returned undefined as they should be calling after the bootstrapped lifecycle event
+	logger.warn(
+		"A request was made for the interop client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
+	);
 }
 
 /**
@@ -34,6 +43,23 @@ async function getInteropClient(): Promise<InteropClient> {
 const loadedModules: {
 	[url: string]: ModuleEntryTypes;
 } = {};
+
+/**
+ * Setup any required listeners needed by this module and specify the session id for this instance of the platform
+ */
+export async function init(sessionId: string) {
+	logger.info(
+		`Initializing and listening for the after bootstrap lifecycle event and setting the passed sessionId: ${sessionId}`
+	);
+	passedSessionId = sessionId;
+	const bootstrappedLifeCycleId: string = subscribeLifecycleEvent(
+		"after-bootstrap",
+		async (_platform: WorkspacePlatformModule) => {
+			bootstrapped = true;
+			unsubscribeLifecycleEvent(bootstrappedLifeCycleId, "after-bootstrap");
+		}
+	);
+}
 
 /**
  * Load the modules from the list.
@@ -213,7 +239,7 @@ export async function closedownModule<
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
-		sessionId,
+		sessionId: passedSessionId,
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,
