@@ -30,6 +30,7 @@ export async function register(): Promise<RegistrationMetaInfo> {
 			const settings = await getSettings();
 			const notificationPlatformSettings = settings?.notificationProvider;
 			if (notificationPlatformSettings !== undefined) {
+				// use a promise.then instead of await as we do not want to delay the start up of the platform
 				registerPlatform(notificationPlatformSettings)
 					.then(() => {
 						notificationsRegistered = true;
@@ -59,14 +60,11 @@ export async function deregister() {
 		const notificationPlatform = settings.notificationProvider;
 		if (notificationPlatform !== undefined) {
 			logger.info("Deregister platform from notifications");
-			deregisterPlatform(notificationPlatform.id)
-				.then(() => {
-					logger.info("Deregistered platform notifications");
-					return true;
-				})
-				.catch((reason) => {
-					logger.error("Unable to deregister platform from notifications.", reason);
-				});
+			try {
+				await deregisterPlatform(notificationPlatform.id);
+			} catch (error) {
+				logger.error("Unable to deregister platform from notifications.", error);
+			}
 		} else {
 			logger.warn(
 				"Unable to deregister platform notifications as we do not have notifications defined as part of settings"

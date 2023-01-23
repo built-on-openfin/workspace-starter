@@ -13,7 +13,6 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
-import type { PlatformLocale } from "./shapes/platform-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentPalette,
@@ -25,7 +24,6 @@ import { getVersionInfo } from "./version";
 const logger = createLogger("Modules");
 let passedSessionId: string;
 let bootstrapped = false;
-let platformLocale: PlatformLocale;
 
 async function getInteropClient(): Promise<InteropClient | undefined> {
 	if (bootstrapped) {
@@ -37,11 +35,6 @@ async function getInteropClient(): Promise<InteropClient | undefined> {
 	logger.warn(
 		"A request was made for the interop client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
 	);
-}
-
-/** Returns a configured prefer locale or the default */
-async function getLocale(): Promise<PlatformLocale | undefined> {
-	return platformLocale;
 }
 
 /**
@@ -244,7 +237,6 @@ export async function closedownModule<
 }
 
 export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
-	platformLocale = settings?.platformProvider?.intl?.locale;
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		sessionId: passedSessionId,
@@ -252,7 +244,6 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
-		getLocale,
 		getVersionInfo,
 		getInteropClient,
 		subscribeLifecycleEvent,

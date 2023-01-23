@@ -2,7 +2,6 @@ import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
-import type { PlatformLocale } from "./platform-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 
@@ -94,9 +93,6 @@ export interface ModuleHelpers {
 	 * Get the current color scheme.
 	 */
 	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
-
-	/** Returns a preferred Locale settings object that can be used if provided by the platform */
-	getLocale(): Promise<PlatformLocale | undefined>;
 
 	/**
 	 * Get the version information related to the platform you are running in. If you request
