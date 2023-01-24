@@ -882,7 +882,7 @@
 				{
 					"enabled": true,
 					"id": "developer-actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws11-fixedviews/customize-workspace/js/modules/actions/developer.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws11-fixedviews/customize-workspace/js/modules/composite/developer.bundle.js"
 				},
 				{
 					"enabled": true,
@@ -953,6 +953,12 @@
 					"data": {
 						"eventLogLevel": "info"
 					}
+				},
+				{
+					"enabled": true,
+					"id": "analytics.dev.channel",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws11-fixedviews/customize-workspace/js/modules/composite/developer.bundle.js",
+					"data": {}
 				}
 			]
 		},
