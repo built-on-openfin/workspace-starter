@@ -65,10 +65,26 @@ export class AboutActions implements Actions {
 				payload.callerType === this._helpers.callerTypes.GlobalContextMenu &&
 				this._sharedState?.aboutWindow !== undefined
 			) {
+				const aboutWindow = fin.Window.wrapSync({
+					uuid: fin.me.identity.uuid,
+					name: this._sharedState.aboutWindow.name
+				});
+				let windowExists = false;
 				try {
-					await fin.Window.create(this._sharedState.aboutWindow);
-				} catch (error) {
-					this._logger.error("Error launching show about action window.", error);
+					await aboutWindow.getInfo();
+					windowExists = true;
+				} catch {
+					this._logger.info("Cannot see existing about window. Will create an about window.");
+				}
+
+				if (windowExists) {
+					await aboutWindow.setAsForeground();
+				} else {
+					try {
+						await fin.Window.create(this._sharedState.aboutWindow);
+					} catch (error) {
+						this._logger.error("Error launching show about action window.", error);
+					}
 				}
 			}
 		};
