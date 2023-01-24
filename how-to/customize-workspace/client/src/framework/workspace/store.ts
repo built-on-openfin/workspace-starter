@@ -45,21 +45,22 @@ export async function register(): Promise<RegistrationMetaInfo> {
 export async function deregister() {
 	if (isStoreRegistered) {
 		const settings = await getSettings();
+		logger.info("About to deregister Store.");
 		await Storefront.deregister(settings.storefrontProvider.id);
 	} else {
 		logger.warn(
-			"Unable to call store deregister as there is an indication it was never registered successfully"
+			"Unable to call store deregister as there is an indication it was never registered successfully."
 		);
 	}
 }
 
 export async function show() {
-	logger.info("Showing the store");
+	logger.info("Showing the store.");
 	return Storefront.show();
 }
 
 export async function hide() {
-	logger.info("Hiding the store");
+	logger.info("Hiding the store.");
 	return Storefront.hide();
 }
 

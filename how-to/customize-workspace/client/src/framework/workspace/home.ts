@@ -74,10 +74,12 @@ export async function register(): Promise<HomeRegistration> {
 }
 
 export async function show() {
+	logger.info("Show Home called.");
 	return Home.show();
 }
 
 export async function hide() {
+	logger.info("Hide Home called.");
 	return Home.hide();
 }
 
@@ -85,6 +87,7 @@ export async function deregister() {
 	if (registrationInfo) {
 		registrationInfo = undefined;
 		const settings = await getSettings();
+		logger.info("About to call Home deregister.");
 		return Home.deregister(settings.homeProvider.id);
 	}
 	logger.warn("Unable to deregister home as there is an indication it was never registered");

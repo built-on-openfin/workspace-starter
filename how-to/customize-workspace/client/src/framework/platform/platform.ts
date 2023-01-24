@@ -1,4 +1,8 @@
-import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
+import {
+	BrowserInitConfig,
+	getCurrentSync,
+	init as workspacePlatformInit
+} from "@openfin/workspace-platform";
 import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
@@ -10,12 +14,13 @@ import * as endpointProvider from "../endpoint";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
-import { getDefaultHelpers } from "../modules";
+import { init as modulesInit, getDefaultHelpers } from "../modules";
 import { getConfiguredSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
 import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
+import { randomUUID } from "../uuid";
 import * as versionProvider from "../version";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
@@ -28,6 +33,9 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const configuredSettings = await getConfiguredSettings();
+	const sessionId: string = randomUUID();
+
+	await modulesInit(sessionId);
 
 	let helpers: ModuleHelpers = getDefaultHelpers(configuredSettings);
 
@@ -39,8 +47,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	await loggerProvider.init(settings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
-
-	await versionProvider.init(settings?.versionProvider);
 
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 
@@ -80,6 +86,13 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	const customActions = await getActions(settings?.actionsProvider, helpers);
 	const theme = await getThemes();
 
+	const platform = getCurrentSync();
+	await platform.once("platform-api-ready", async () => {
+		logger.info("Platform API Ready");
+		fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
+		await notifyColorScheme();
+	});
+
 	await workspacePlatformInit({
 		browser,
 		theme,
@@ -87,10 +100,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 		interopOverride,
 		overrideCallback
 	});
-
-	fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
-
-	await notifyColorScheme();
 	return true;
 }
 
