@@ -3,6 +3,10 @@ on:
   - push
   - workflow_dispatch
 
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     name: Build and package HOWTOs
@@ -57,9 +61,6 @@ jobs:
   publish-gh:
     name: Publish HOWTOs (GitHub Pages)
     needs: build
-    concurrency:
-      group: publish-gh-${{ github.ref }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -82,9 +83,6 @@ jobs:
     if: ${{ startsWith(github.ref_name, 'workspace/') }}
     name: Publish HOWTOs (AWS s3 CDN)
     needs: build
-    concurrency:
-      group: publish-aws-${{ github.ref }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
