@@ -935,7 +935,7 @@
 			{
 				"enabled": true,
 				"id": "developer-actions",
-				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws11-store/customize-workspace/js/modules/actions/developer.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/ws11-store/customize-workspace/js/modules/composite/developer.bundle.js"
 			},
 			{
 				"enabled": true,
