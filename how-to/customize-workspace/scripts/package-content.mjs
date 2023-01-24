@@ -43,7 +43,7 @@ async function packageContent(manifest, env, host) {
 	const packageConfig = await readJsonFile('./scripts/package-config.json');
 
 	const packagedDirectory = path.join(
-		import.meta.url.replace('file:///', '').replace('file:/', ''),
+		import.meta.url.replace(process.platform === 'win32' ? 'file:///' : 'file://', ''),
 		'..',
 		'..',
 		'packaged',
