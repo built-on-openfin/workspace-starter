@@ -48,8 +48,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	logger.info("Initializing Core Services");
 
-	await versionProvider.init(settings?.versionProvider);
-
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 
 	const runtimeVersion = await fin.System.getVersion();
