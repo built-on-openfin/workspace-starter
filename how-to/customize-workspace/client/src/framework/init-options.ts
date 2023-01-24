@@ -124,6 +124,7 @@ export async function init(
 	actionListeners = new Map();
 	actionListenerMap = {};
 
+	logger.info("Initializing init options provider.");
 	const initOptionsModules = await loadModules<InitOptionsHandler, unknown, InitOptionsHandlerOptions>(
 		options,
 		"initOptions"
@@ -172,6 +173,7 @@ export async function init(
 	if (lifecycle === "after-bootstrap") {
 		await platform.Application.addListener("run-requested", queryWhileRunning);
 	}
+	logger.info("Init options provider initialized.");
 }
 
 export function registerActionListener(

@@ -1,3 +1,4 @@
+import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
@@ -94,23 +95,36 @@ export interface ModuleHelpers {
 	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 
 	/**
-	 * Get the version information related to the platform you are running in.
+	 * Get the version information related to the platform you are running in. If you request
+	 * the version info on initialization or you execute early you might not receive all of the
+	 * version related information as you may be early. Subscribe to the life cycle event
+	 * 'after-bootstrap' to ensure you have all the related versioning information.
 	 */
-	getVersionInfo(): Promise<VersionInfo>;
+	getVersionInfo?(): Promise<VersionInfo>;
+
+	/**
+	 * Returns an interop client that can be used to broadcast context and raise intents. The
+	 * function could be undefined if you are not allowed to use the function or the returned
+	 * InteropClient could be undefined if you try to fetch it before the broker is fully initialized.
+	 * Please listen for the life cycle event 'after-bootstrap' before trying to call this function.
+	 * If you need to handle data before bootstrapping is complete then you can cache it and use it
+	 * once the application is bootstrapped and ready.
+	 */
+	getInteropClient?(): Promise<InteropClient | undefined>;
 
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
 	 */
-	subscribeLifecycleEvent(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
 
 	/**
 	 * Unsubscribe from lifecycle events.
 	 * @param subscriptionId The id of the subscription.
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
-	unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
+	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
 }
 
 /**

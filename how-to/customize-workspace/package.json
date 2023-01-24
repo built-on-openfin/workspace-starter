@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--customize-workspace",
 	"version": "11.0.0",
-	"description": "OpenFin Workspace Example Application -- A super set of the context and intents example this one shows you how to customize workspace.",
+	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
 	"scripts": {

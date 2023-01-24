@@ -935,7 +935,7 @@
 			{
 				"enabled": true,
 				"id": "developer-actions",
-				"url": "http://localhost:8080/js/modules/actions/developer.bundle.js"
+				"url": "http://localhost:8080/js/modules/composite/developer.bundle.js"
 			},
 			{
 				"enabled": true,

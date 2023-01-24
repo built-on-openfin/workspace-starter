@@ -326,7 +326,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/actions/developer/index.ts',
+		entry: './client/src/modules/composite/developer/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -346,7 +346,7 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'composite')
 		},
 		experiments: {
 			outputModule: true
