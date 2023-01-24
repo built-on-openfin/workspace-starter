@@ -167,13 +167,14 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 
 export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
 
 	page.panels = [
 		{
 			position: PanelPosition.Top,
 			height: "50px",
 			viewOptions: {
-				name: "my-panel",
+				name: "top-panel",
 				url: "http://localhost:8080/html/top-panel.html"
 			}
 		},
@@ -181,7 +182,7 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 			position: PanelPosition.Left,
 			width: "50px",
 			viewOptions: {
-				name: "left-panelx",
+				name: "left-panel",
 				url: "http://localhost:8080/html/left-panel.html"
 			}
 		},
@@ -189,7 +190,7 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 			position: PanelPosition.Right,
 			width: "50px",
 			viewOptions: {
-				name: "right-panelx",
+				name: "right-panel",
 				url: "http://localhost:8080/html/right-panel.html"
 			}
 		},
@@ -197,13 +198,24 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 			position: PanelPosition.Bottom,
 			height: "50px",
 			viewOptions: {
-				name: "bottom-panelx",
+				name: "bottom-panel",
 				url: "http://localhost:8080/html/bottom-panel.html"
 			}
 		}
 	];
 
-	const pages: Page[] = [page];
+	page2.panels = [
+		{
+			position: PanelPosition.Top,
+			height: "50px",
+			viewOptions: {
+				name: "top-panel",
+				url: "http://localhost:8080/html/top-panel.html"
+			}
+		}
+	];
+
+	const pages: Page[] = [page, page2];
 
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
