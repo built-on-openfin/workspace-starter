@@ -167,7 +167,7 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 
 export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page2: Page = await createPageWithLayout("Untitled Page (2)", defaultPageLayout);
 
 	page.panels = [
 		{
