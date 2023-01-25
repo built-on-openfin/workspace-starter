@@ -96,11 +96,15 @@ npm run client
 
 ![Launch locked page](./assets/Launch-Locked-Page.gif)
 
-8. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
+8. In `client/src/launchbar.ts` the `createWindowWithFixedViews` click listener function is invoked on click of the "Launch Browser With Fixed Views" button. The function uses fixed panels, the first page has panels top, left, right and bottom, the second page has only the top panel which it shares with the first page by re-using the `viewOptions.name`.
+
+![Fixed views](./assets/Fixed-Views.gif)
+
+9. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
 
 ![Browser window page info](./assets/Page-Info.gif)
 
-9. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
+10. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
 
 ### Note About This Example
 
