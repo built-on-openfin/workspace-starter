@@ -761,7 +761,15 @@
 					"url": "https://www.youtube.com/user/OpenFinTech"
 				}
 			]
-		}
+		},
+		"secondaryButtons": [
+			{
+				"title": "Toggle Scheme",
+				"action": {
+					"id": "toggle-scheme"
+				}
+			}
+		]
 	},
 	"dockProvider": {
 		"id": "customize-workspace",
