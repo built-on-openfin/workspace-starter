@@ -409,16 +409,17 @@ function addButtons(options: StorefrontProviderOptions, apps: PlatformApp[]): Pl
 	if (options.primaryButton || Array.isArray(options.secondaryButtons)) {
 		return apps.map((app) => ({
 			...app,
-			primaryButton: options.primaryButton,
-			secondaryButtons: Array.isArray(options.secondaryButtons)
-				? options.secondaryButtons.map((secondary) => ({
-						title: secondary.title,
-						action: {
-							id: secondary.action.id,
-							customData: secondary.action.customData ?? app
-						}
-				  }))
-				: undefined
+			primaryButton: app.primaryButton ?? options.primaryButton,
+			secondaryButtons:
+				app.secondaryButtons ?? Array.isArray(options.secondaryButtons)
+					? options.secondaryButtons.map((secondary) => ({
+							title: secondary.title,
+							action: {
+								id: secondary.action.id,
+								customData: secondary.action.customData ?? app
+							}
+					  }))
+					: undefined
 		}));
 	}
 
