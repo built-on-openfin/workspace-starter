@@ -1834,6 +1834,60 @@
           },
           "type": "array"
         },
+        "primaryButtonAction": {
+          "additionalProperties": false,
+          "description": "The action triggered when the primary button is clicked, defaults to launching the app.",
+          "properties": {
+            "customData": {
+              "description": "Any data necessary for the functioning of specified custom action"
+            },
+            "id": {
+              "description": "Identifier of a custom action defined at platform initialization",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "type": "object"
+        },
+        "primaryButtonTitle": {
+          "description": "The title to show on the primary button, defaults to \"Launch\".",
+          "type": "string"
+        },
+        "secondaryButtons": {
+          "description": "Secondary buttons added to all store entries.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "additionalProperties": false,
+                "properties": {
+                  "customData": {
+                    "description": "Any data necessary for the functioning of specified custom action"
+                  },
+                  "id": {
+                    "description": "Identifier of a custom action defined at platform initialization",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "action"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
         "title": {
           "description": "The title for the store which will show up in the store dropdown",
           "type": "string"

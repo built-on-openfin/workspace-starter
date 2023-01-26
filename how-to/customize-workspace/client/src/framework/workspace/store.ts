@@ -15,6 +15,7 @@ import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type {
 	CustomSettings,
+	StorefrontProviderOptions,
 	StorefrontSettingsLandingPageRow,
 	StorefrontSettingsNavigationItem
 } from "../shapes";
@@ -178,7 +179,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getNavigation: getNavigation.bind(this),
 			getLandingPage: getLandingPage.bind(this),
 			getFooter: getFooter.bind(this),
-			getApps: async () => getApps({ private: false }),
+			getApps: async () => addButtons(settings.storefrontProvider, await getApps({ private: false })),
 			launchApp: launch
 		};
 	}
@@ -279,14 +280,10 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				)}. Only ${middleRowAppLimit} will be shown.`
 			);
 		}
-		const validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?
-		];
+		const validatedMiddleRowApps = addButtons(
+			settings.storefrontProvider,
+			middleRowApps.slice(0, middleRowAppLimit)
+		) as [PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?];
 		landingPage.middleRow = {
 			title: middleRow.title,
 			apps: validatedMiddleRowApps
@@ -406,4 +403,24 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 		title: definition.title,
 		items: detailedNavigationItems
 	};
+}
+
+function addButtons(options: StorefrontProviderOptions, apps: PlatformApp[]): PlatformApp[] {
+	if (options.primaryButton || Array.isArray(options.secondaryButtons)) {
+		return apps.map((app) => ({
+			...app,
+			primaryButton: options.primaryButton,
+			secondaryButtons: Array.isArray(options.secondaryButtons)
+				? options.secondaryButtons.map((secondary) => ({
+						title: secondary.title,
+						action: {
+							id: secondary.action.id,
+							customData: secondary.action.customData ?? app
+						}
+				  }))
+				: undefined
+		}));
+	}
+
+	return apps;
 }

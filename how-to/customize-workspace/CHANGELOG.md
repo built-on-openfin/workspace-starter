@@ -1,5 +1,9 @@
 # Changelog
 
+## v11
+
+- Added default secondary buttons config for store
+
 ## v10
 
 - Added support for new themes format with light and dark schemes
