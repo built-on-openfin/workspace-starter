@@ -181,6 +181,32 @@
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "fixed-panels",
+		"name": "fixed-panels",
+		"title": "Fixed panels",
+		"manifestType": "snapshot",
+		"description": "Provides an example of using fixed panels",
+		"manifest": "http://localhost:8080/common/snapshots/fixed-panels.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact", "fixed"]
+	},
+	{
 		"appId": "fdc3-workbench",
 		"name": "fdc3-workbench",
 		"title": "FDC3 Workbench",
