@@ -12,7 +12,7 @@ import {
 import { createPageWithLayout, createViewIdentity } from "./browser";
 
 const platform: WorkspacePlatformModule = getCurrentSync();
-const defaultPageLayout: PageLayout = {
+const defaultPageLayout: () => PageLayout = () => ({
 	content: [
 		{
 			type: "stack",
@@ -36,10 +36,10 @@ const defaultPageLayout: PageLayout = {
 			]
 		}
 	]
-};
+});
 
 export async function createBrowserWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -50,7 +50,7 @@ export async function createBrowserWindow(): Promise<BrowserWindowModule> {
 }
 
 export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -62,7 +62,7 @@ export async function createBrowserWindowMaximized(): Promise<BrowserWindowModul
 }
 
 export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -73,7 +73,7 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
 }
 
 export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 	const toolbarOptions: ToolbarOptions = {
 		buttons: [
@@ -111,9 +111,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 }
 
 export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page1: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page1: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page, page1, page2];
 
 	const options: BrowserCreateWindowRequest = {
@@ -124,8 +124,8 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 }
 
 export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page1: Page = await createPageWithLayout("Locked Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page1: Page = await createPageWithLayout("Locked Page", defaultPageLayout());
 	const lockPage1: Page = { isLocked: true, ...page1 };
 	const pages: Page[] = [page, lockPage1];
 	const toolbarOptions: ToolbarOptions = {
@@ -166,8 +166,8 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 }
 
 export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page2: Page = await createPageWithLayout("Untitled Page (2)", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page (2)", defaultPageLayout());
 
 	page.panels = [
 		{
