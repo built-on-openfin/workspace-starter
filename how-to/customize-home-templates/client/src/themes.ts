@@ -6,7 +6,7 @@ const DEFAULT_PALETTES = {
 	light: {
 		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#1E1F23",
+		backgroundPrimary: "#FAFBFE",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -143,19 +143,19 @@ function validatePalette(
 
 	if (!themePalette[brandPrimaryKey]) {
 		console.warn(
-			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
+			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark[brandPrimaryKey]}`
 		);
 	}
 
 	if (!themePalette[brandSecondaryKey]) {
 		console.warn(
-			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandSecondary}`
+			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark[brandSecondaryKey]}`
 		);
 	}
 
 	if (!themePalette[backgroundPrimaryKey]) {
 		console.warn(
-			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark.brandPrimary}`
+			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${DEFAULT_PALETTES.dark[backgroundPrimaryKey]}`
 		);
 	}
 

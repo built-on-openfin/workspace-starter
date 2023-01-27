@@ -250,19 +250,19 @@ function validatePalette(
 
 	if (!themePalette[brandPrimaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandPrimary}`
+			`Theme: ${themeLabel} : ${brandPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette[brandPrimaryKey]}`
 		);
 	}
 
 	if (!themePalette[brandSecondaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandSecondary}`
+			`Theme: ${themeLabel} : ${brandSecondaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette[brandSecondaryKey]}`
 		);
 	}
 
 	if (!themePalette[backgroundPrimaryKey]) {
 		logger.warn(
-			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette.brandPrimary}`
+			`Theme: ${themeLabel} : ${backgroundPrimaryKey} not specified (it is required if specifying other theme palette settings). Providing default of: ${defaultPalette[backgroundPrimaryKey]}`
 		);
 	}
 

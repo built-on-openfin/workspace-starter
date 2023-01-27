@@ -20,7 +20,7 @@
 }
 
 .theme-light {
-	--brand-background: var(--theme-background-primary, #ffffff);
+	--brand-background: var(--theme-background-primary, #fafbfe);
 	--brand-border: var(--theme-background4, #eceef1);
 	--brand-primary: var(--theme-brand-primary, #0a76d3);
 	--brand-text: var(--theme-text-default, #111214);
