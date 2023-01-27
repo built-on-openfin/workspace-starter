@@ -412,7 +412,7 @@ input[type='week'] {
 	min-width: auto;
 }
 
-::-webkit-calendar-picker-indicator {
+.theme-dark ::-webkit-calendar-picker-indicator {
 	filter: invert(1);
 }
 
@@ -442,12 +442,17 @@ select {
 
 select:not([multiple]):not(:disabled) {
 	appearance: none;
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23C9CBD2'><polygon points='0,0 100,0 50,50'/></svg>");
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='WindowText'><polygon points='0,0 100,0 50,50'/></svg>");
 	background-repeat: no-repeat;
 	background-size: 12px;
 	background-position: calc(100% - 12px) 12px;
 	background-color: var(--brand-input-background);
 }
+
+.theme-dark select:not([multiple]):not(:disabled) {
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23ffffff'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
 
 option {
 	color: var(--brand-text);
