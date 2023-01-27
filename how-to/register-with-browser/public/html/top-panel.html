@@ -19,15 +19,49 @@
 	</body>
 
 	<script>
+		let PANEL_ID = 'top-panel';
+
+		let appSessionContextGroup;
+		fin.me.interop.joinSessionContextGroup('browser/panel').then((group) => {
+			appSessionContextGroup = group;
+
+			appSessionContextGroup.addContextHandler((context) => {
+				if (context.type === 'panel.sync' && context.panelId === PANEL_ID) {
+					populateFromPayload(context);
+				}
+			});
+		});
+
+		function syncPanel() {
+			if (appSessionContextGroup) {
+				const payload = createPayload();
+				appSessionContextGroup.setContext({
+					type: 'panel.sync',
+					panelId: PANEL_ID,
+					...payload
+				});
+			}
+		}
+
+		function createPayload() {
+			return { counter: counter.textContent };
+		}
+
+		function populateFromPayload(payload) {
+			counter.textContent = payload.counter;
+		}
+
 		const counter = document.querySelector('#counter');
 		const btnIncCounter = document.querySelector('#btnIncCounter');
 		const btnResetCounter = document.querySelector('#btnResetCounter');
 
 		btnIncCounter.addEventListener('click', () => {
 			counter.textContent = (Number.parseInt(counter.textContent, 10) + 1).toString();
+			syncPanel();
 		});
 		btnResetCounter.addEventListener('click', () => {
 			counter.textContent = '0';
+			syncPanel();
 		});
 	</script>
 </html>
