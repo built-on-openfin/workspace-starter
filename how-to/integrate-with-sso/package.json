@@ -19,7 +19,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^28.72.17",
+		"@openfin/core": "^29.73.14",
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next",
 		"auth0-js": "^9.19.0"
