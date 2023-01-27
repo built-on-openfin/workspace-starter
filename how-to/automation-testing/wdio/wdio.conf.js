@@ -7,7 +7,7 @@ const fsPromises = require('fs/promises');
 const path = require('path');
 
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
-// e.g. if the manifest runtime version is 29.108.73.12 then the chromedriver version should be '108.0.0'
+// e.g. if the manifest runtime version is 29.108.73.14 then the chromedriver version should be '108.0.0'
 const manifestUrl =
 	'https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5843;
