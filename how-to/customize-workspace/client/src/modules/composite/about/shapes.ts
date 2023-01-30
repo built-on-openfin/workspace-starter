@@ -1,3 +1,5 @@
+import type { MenuPosition } from "customize-workspace/shapes";
+
 export interface SharedState {
 	aboutWindow?: OpenFin.WindowOptions;
 }
@@ -11,4 +13,11 @@ export interface AboutProviderSettings {
 	description?: string;
 	excludeVersionType?: string[];
 	versionTypeMap?: { [key: string]: string };
+}
+
+export interface AboutMenusSettings {
+	about?: {
+		label: string;
+		position?: MenuPosition;
+	};
 }

@@ -3,15 +3,21 @@ import type { Menus } from "customize-workspace/shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { MenuEntry, MenuType } from "customize-workspace/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
+import type { AboutMenusSettings } from "./shapes";
 
 /**
  * Implement the menus.
  */
-export class AboutMenus implements Menus {
+export class AboutMenus implements Menus<AboutMenusSettings> {
 	/**
 	 * The helper methods to use.
 	 */
 	private _logger: Logger;
+
+	/**
+	 * The helper methods to use.
+	 */
+	private _settings: AboutMenusSettings;
 
 	/**
 	 * Initialize the module.
@@ -21,11 +27,12 @@ export class AboutMenus implements Menus {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition,
+		definition: ModuleDefinition<AboutMenusSettings>,
 		createLogger: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._logger = createLogger("DeveloperMenus");
+		this._settings = definition.data;
 	}
 
 	/**
@@ -37,15 +44,14 @@ export class AboutMenus implements Menus {
 		if (menuType === "global") {
 			return [
 				{
-					include: true,
-					label: "About",
+					label: this._settings?.about?.label ?? "About",
 					data: {
 						type: "Custom",
 						action: {
 							id: "show-about"
 						}
 					},
-					position: {
+					position: this._settings?.about?.position ?? {
 						type: "Quit",
 						operation: "before"
 					},

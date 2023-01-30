@@ -120,7 +120,7 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 		const platform = getCurrentSync();
 
 		for (const menuItem of configEntries) {
-			if (menuItem.include) {
+			if (menuItem.include || menuItem.include === undefined) {
 				const canShow = await checkConditions(platform, menuItem.conditions);
 
 				if (canShow) {
