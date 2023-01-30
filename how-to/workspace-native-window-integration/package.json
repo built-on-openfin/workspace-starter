@@ -21,8 +21,8 @@
 	"dependencies": {
 		"@openfin/core": "^29.73.14",
 		"@openfin/native-window-integration-client": "0.0.13",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next",
+		"@openfin/workspace": "11.0.5",
+		"@openfin/workspace-platform": "11.0.5",
 		"file-loader": "^6.2.0"
 	},
 	"devDependencies": {
