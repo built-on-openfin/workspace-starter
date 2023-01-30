@@ -159,7 +159,8 @@ export type ModuleTypes =
 	| "integrations"
 	| "conditions"
 	| "lifecycle"
-	| "analytics";
+	| "analytics"
+	| "menus";
 
 /**
  * The definition of a module with typed entry points.

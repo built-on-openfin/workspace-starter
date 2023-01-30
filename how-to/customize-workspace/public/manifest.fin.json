@@ -176,34 +176,6 @@
 			"globalMenu": [
 				{
 					"include": true,
-					"label": "Inspect Platform",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect",
-							"customData": { "target": "platform" }
-						}
-					},
-					"position": {
-						"operation": "start"
-					},
-					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Inspect Window",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
-				{
-					"include": true,
 					"label": "Toggle Notification Center",
 					"data": {
 						"type": "Custom",
@@ -229,21 +201,6 @@
 						"type": "OpenStorefront",
 						"operation": "after"
 					}
-				},
-				{
-					"include": true,
-					"label": "About",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "show-about"
-						}
-					},
-					"position": {
-						"type": "Quit",
-						"operation": "before"
-					},
-					"conditions": ["has-about"]
 				},
 				{
 					"include": true,
@@ -299,32 +256,6 @@
 						"operation": "start"
 					},
 					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Create App Definition",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "raise-create-app-definition-intent"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
-				{
-					"include": true,
-					"label": "Inspect View",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
 				}
 			],
 			"toolbarButtons": [
@@ -982,6 +913,25 @@
 			},
 			"endpointId": "version",
 			"versionCheckIntervalInSeconds": 30
+		},
+		"menusProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "developer-menus",
+					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "about",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "About",
+					"description": "Provides information about this platform.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }
