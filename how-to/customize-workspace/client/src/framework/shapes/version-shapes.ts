@@ -32,7 +32,7 @@ export interface VersionProviderOptions {
 	 * This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met.
 	 * This window will be shown to the user and the bootstrapping process will be stopped.
 	 */
-	versionWindow?: unknown;
+	versionWindow?: Partial<OpenFin.WindowOptions>;
 
 	/**
 	 * If you specify an endpoint then you are telling the platform to send information to this endpoint.
