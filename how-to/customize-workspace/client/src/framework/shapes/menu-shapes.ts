@@ -24,21 +24,23 @@ export interface MenuPosition<T = unknown> {
 	customId?: string;
 }
 
-export interface MenuEntry<T = unknown> {
-	/** Should this menu entry definition be included in the list of menu entries */
-	include?: boolean;
-
+export interface MenuEntryDynamic<T = unknown> {
 	/** What label should the user see when they look at this menu option */
 	label: string;
+
+	/** Where should this menu item be positioned in relation to existing entries */
+	position?: MenuPosition<T>;
+}
+
+export interface MenuEntry<T = unknown> extends MenuEntryDynamic<T> {
+	/** Should this menu entry definition be included in the list of menu entries */
+	include?: boolean;
 
 	/** Data related to the menu option */
 	data?: {
 		type: T;
 		action?: CustomActionSpecifier;
 	};
-
-	/** Where should this menu item be positioned in relation to existing entries */
-	position?: MenuPosition<T>;
 
 	/** If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true) */
 	conditions?: string[];

@@ -1,4 +1,4 @@
-import type { MenuPosition } from "customize-workspace/shapes";
+import type { MenuEntryDynamic } from "customize-workspace/shapes";
 
 export interface SharedState {
 	aboutWindow?: OpenFin.WindowOptions;
@@ -16,8 +16,7 @@ export interface AboutProviderSettings {
 }
 
 export interface AboutMenusSettings {
-	about?: {
-		label: string;
-		position?: MenuPosition;
+	entries?: {
+		[id: string]: MenuEntryDynamic;
 	};
 }

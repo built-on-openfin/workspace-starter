@@ -44,14 +44,14 @@ export class AboutMenus implements Menus<AboutMenusSettings> {
 		if (menuType === "global") {
 			return [
 				{
-					label: this._settings?.about?.label ?? "About",
+					label: this._settings?.entries?.about?.label ?? "About",
 					data: {
 						type: "Custom",
 						action: {
 							id: "show-about"
 						}
 					},
-					position: this._settings?.about?.position ?? {
+					position: this._settings?.entries?.about?.position ?? {
 						type: "Quit",
 						operation: "before"
 					},
