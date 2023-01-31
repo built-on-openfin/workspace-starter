@@ -134,12 +134,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private static readonly _TEAMS_PROTOCOL = "msteams:";
 
 	/**
-	 * The url for office.
-	 * @internal
-	 */
-	private static readonly _OFFICE_URL = "https://outlook.office365.com/";
-
-	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
@@ -662,16 +656,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			}))
 		});
 
-		const uri = new URL(response.data?.webLink);
+		await this._integrationHelpers.launchView(response.data.webLink);
 
-		if (uri.searchParams.has("ItemID")) {
-			const itemId = encodeURIComponent(uri.searchParams.get("ItemID"));
-			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}mail/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
-			);
-		} else {
-			await this._integrationHelpers.launchView(response.data.webLink);
-		}
 		return true;
 	}
 
@@ -686,16 +672,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			}))
 		});
 
-		const uri = new URL(response.data?.webLink);
+		await this._integrationHelpers.launchView(response.data.webLink);
 
-		if (uri.searchParams.has("itemid")) {
-			const itemId = encodeURIComponent(uri.searchParams.get("itemid"));
-			await this._integrationHelpers.launchView(
-				`${Microsoft365Provider._OFFICE_URL}calendar/deeplink/compose/${itemId}?ItemID=${itemId}&exvsurl=1`
-			);
-		} else {
-			await this._integrationHelpers.launchView(response.data.webLink);
-		}
 		return true;
 	}
 
