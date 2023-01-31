@@ -1,4 +1,6 @@
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { LoggerCreator } from "./logger-shapes";
+import type { ColorSchemeMode } from "./theme-shapes";
 
 /**
  * List of modules.
@@ -63,6 +65,16 @@ export interface ModuleHelpers {
 	 * The root url for the provider.
 	 */
 	rootUrl?: string;
+
+	/**
+	 * Get the current palette.
+	 */
+	getCurrentPalette(): Promise<CustomPaletteSet>;
+
+	/**
+	 * Get the current color scheme.
+	 */
+	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 }
 
 /**

@@ -2,6 +2,7 @@ import {
 	connect,
 	ConnectionError,
 	enableLogging,
+	SalesforceRestApiSObject,
 	type SalesforceConnection,
 	type SalesforceRestApiSearchResponse
 } from "@openfin/salesforce";
@@ -11,28 +12,26 @@ import {
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
-	type CLISearchResultContact,
-	type CLISearchResultList,
 	type CLISearchResultPlain,
 	type CLISearchResultSimpleText,
 	type HomeSearchResponse,
-	type HomeSearchResult
+	type HomeSearchResult,
+	type TemplateFragment
 } from "@openfin/workspace";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
 import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
-	SalesforceAccount,
 	SalesforceBatchRequest,
 	SalesforceBatchRequestItem,
 	SalesforceBatchResponse,
-	SalesforceContact,
-	SalesforceContentNote,
 	SalesforceFeedElementPage,
-	SalesforceFeedItem,
+	SalesforceMapping,
 	SalesforceResultData,
+	SalesforceSearchResult,
 	SalesforceSettings,
-	SalesforceTask
+	SalesforceTextArea
 } from "./shapes";
 
 /**
@@ -64,6 +63,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private static readonly _NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
 	/**
+	 * The action for opening.
+	 * @internal
+	 */
+	private static readonly _ACTION_OPEN = "Open";
+
+	/**
 	 * The integration helpers.
 	 * @internal
 	 */
@@ -80,6 +85,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @internal
 	 */
 	private _settings: SalesforceSettings | undefined;
+
+	/**
+	 * The mappings.
+	 * @internal
+	 */
+	private _mappings: SalesforceMapping[] | undefined;
 
 	/**
 	 * The connection to SalesForce.
@@ -108,6 +119,32 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		this._moduleDefinition = definition;
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
+
+		this._mappings = definition.data?.mappings;
+
+		// No mappings defined so use the default ones
+		if (!Array.isArray(this._mappings)) {
+			this._mappings = [
+				{
+					type: "Account"
+				},
+				{
+					type: "Contact"
+				},
+				{
+					type: "Task"
+				},
+				{
+					type: "ContentNote"
+				},
+				{
+					type: "Chatter"
+				}
+			];
+		}
+
+		this.populateFields();
+
 		this._logger = loggerCreator("Salesforce");
 		this._logger.info("Registering SalesForce");
 		try {
@@ -185,18 +222,31 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			// otherwise open the result page url in browser
 			const data = result.data as SalesforceResultData;
 			if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
-				const preload = this._settings?.preload;
-				const viewOptions = {
-					url: data.pageUrl,
-					fdc3InteropApi: "1.2",
-					interop: {
-						currentContextGroup: "green"
-					},
-					customData: { buttonLabel: "Process Participant" },
-					preloadScripts: [{ url: preload }],
-					target: { name: "", url: "", uuid: "" }
-				};
-				await this._integrationHelpers.launchView(viewOptions);
+				const linkIndex = result.action.name.indexOf("_link_");
+				if (linkIndex > 0) {
+					let u = data.urls[result.action.name.replace(`${SalesForceIntegrationProvider._ACTION_OPEN}_`, "")];
+					if (u.includes("@")) {
+						await fin.System.openUrlWithBrowser(`mailto:${u}`);
+					} else {
+						if (!u.startsWith("http")) {
+							u = `https://${u}`;
+						}
+						await fin.System.openUrlWithBrowser(u);
+					}
+				} else {
+					const preload = this._settings?.preload;
+					const viewOptions = {
+						url: data.url,
+						fdc3InteropApi: "1.2",
+						interop: {
+							currentContextGroup: "green"
+						},
+						customData: { buttonLabel: "Process Participant" },
+						preloadScripts: [{ url: preload }],
+						target: { name: "", url: "", uuid: "" }
+					};
+					await this._integrationHelpers.launchView(viewOptions);
+				}
 				return true;
 			}
 		}
@@ -208,175 +258,75 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: CLISearchListenerResponse
+		lastResponse: CLISearchListenerResponse,
+		options?: {
+			queryMinLength: number;
+			queryAgainst: string[];
+		}
 	): Promise<HomeSearchResponse> {
 		const response: HomeSearchResponse = {
 			results: await this.getDefaultEntries(query)
 		};
 
 		if (this._salesForceConnection) {
-			let searchResults: (
-				| SalesforceAccount
-				| SalesforceContact
-				| SalesforceTask
-				| SalesforceContentNote
-				| SalesforceFeedItem
-			)[];
+			const minLength = options?.queryMinLength ?? 3;
 
-			let selectedObjects: string[] = [];
-			if (Array.isArray(filters) && filters.length > 0) {
-				const objectsFilter = filters.find((x) => x.id === SalesForceIntegrationProvider._OBJECTS_FILTER_ID);
-				if (objectsFilter) {
-					selectedObjects = (
-						Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options]
-					)
-						.filter((x) => Boolean(x.isSelected))
-						.map((x) => (x.value === "Note" ? "ContentNote" : x.value));
-				}
-			}
-
-			try {
-				searchResults = await this.getApiSearchResults(query, selectedObjects);
-
-				const results = searchResults.map((searchResult) => {
-					if ("Website" in searchResult) {
-						return {
-							actions: [{ name: "View", hotkey: "enter" }],
-							label: searchResult.attributes.type,
-							key: searchResult.Id,
-							title: searchResult.Name,
-							icon: this._settings?.iconMap.account,
-							data: {
-								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-							},
-							template: CLITemplate.Contact,
-							templateContent: {
-								name: searchResult.Name,
-								title: searchResult.Industry,
-								details: [
-									[
-										["Phone", searchResult.Phone],
-										["Type", searchResult.Type],
-										["Website", searchResult.Website]
-									]
-								]
-							}
-						} as CLISearchResultContact;
-					} else if ("Email" in searchResult) {
-						return {
-							actions: [{ name: "View", hotkey: "enter" }],
-							label: searchResult.attributes.type,
-							key: searchResult.Id,
-							title: searchResult.Name,
-							icon: this._settings?.iconMap.contact,
-							data: {
-								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-							},
-							template: CLITemplate.Contact,
-							templateContent: {
-								name: searchResult.Name,
-								title: searchResult.Title,
-								useInitials: true,
-								details: [
-									[
-										["Department", searchResult.Department],
-										["Email", searchResult.Email],
-										["Work #", searchResult.Phone]
-									]
-								]
-							}
-						} as CLISearchResultContact;
-					} else if ("Description" in searchResult) {
-						return {
-							actions: [{ name: "View", hotkey: "enter" }],
-							label: searchResult.attributes.type,
-							key: searchResult.Id,
-							title: searchResult.Subject,
-							icon: this._settings?.iconMap.task,
-							data: {
-								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-							},
-							template: "List",
-							templateContent: [
-								["Subject", searchResult.Subject],
-								["Comments", searchResult.Description]
-							]
-						} as CLISearchResultList;
-					} else if ("TextPreview" in searchResult) {
-						return {
-							actions: [{ name: "View", hotkey: "enter" }],
-							label: "Note",
-							key: searchResult.Id,
-							title: searchResult.Title,
-							icon: this._settings?.iconMap.note,
-							data: {
-								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-							},
-							template: "List",
-							templateContent: [
-								["Title", searchResult.Title],
-								["Content", searchResult?.TextPreview]
-							]
-						} as CLISearchResultList;
-					} else if (
-						"actor" in searchResult &&
-						(searchResult.type === "TextPost" || searchResult.type === "ContentPost")
-					) {
-						return {
-							actions: [{ name: "View", hotkey: "enter" }],
-							label: "Chatter",
-							key: searchResult.id,
-							title: searchResult.actor?.displayName,
-							icon: this._settings?.iconMap.chatter,
-							data: {
-								providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-								pageUrl: this.getObjectUrl(searchResult.id, this._settings?.orgUrl),
-								tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-							} as SalesforceResultData,
-							template: CLITemplate.Contact,
-							templateContent: {
-								name: searchResult.actor?.displayName,
-								useInitials: true,
-								details: [
-									[
-										["Header", searchResult?.header?.text],
-										["Note", searchResult?.body?.text]
-									]
-								]
-							}
-						} as CLISearchResultContact;
+			if (query.length >= minLength) {
+				let selectedObjects: string[] = [];
+				if (Array.isArray(filters) && filters.length > 0) {
+					const objectsFilter = filters.find(
+						(x) => x.id === SalesForceIntegrationProvider._OBJECTS_FILTER_ID
+					);
+					if (objectsFilter) {
+						selectedObjects = (
+							Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options]
+						)
+							.filter((x) => Boolean(x.isSelected))
+							.map((x) => x.value);
 					}
-					// in this case we are only searching for accounts, contacts, tasks, content notes and chatter
-				});
-
-				const filteredResults = results.filter(Boolean) as CLISearchResultContact[];
-				// eslint-disable-next-line no-confusing-arrow
-				const objects = searchResults.map((result) =>
-					"attributes" in result ? result.attributes.type : "Chatter"
-				);
-				response.results.push(...filteredResults);
-				response.context = {
-					filters: this.getSearchFilters(objects.map((c) => (c === "ContentNote" ? "Note" : c)))
-				};
-			} catch (err) {
-				await this.closeConnection();
-				if (err instanceof ConnectionError) {
-					response.results.push(this.getReconnectSearchResult(query, filters));
+				} else {
+					selectedObjects = this._mappings.map((m) => m.label);
 				}
-				this._logger.error("Error retrieving SalesForce search results", err);
+
+				try {
+					const apiSearchResults = await this.getApiSearchResults(query, selectedObjects);
+
+					const maps: { [type: string]: SalesforceMapping } = {};
+					for (const mapping of this._mappings) {
+						maps[mapping.type] = mapping;
+					}
+
+					const searchResults = await Promise.all(
+						apiSearchResults.results.map(async (r) => this.buildSearchResult(r, maps[r.attributes.type]))
+					);
+
+					response.results.push(...searchResults);
+					response.context = {
+						filters: [
+							{
+								id: SalesForceIntegrationProvider._OBJECTS_FILTER_ID,
+								title: "Salesforce",
+								type: CLIFilterOptionType.MultiSelect,
+								options: apiSearchResults.filters.map((label) => ({
+									value: label,
+									isSelected: true
+								}))
+							}
+						]
+					};
+				} catch (err) {
+					await this.closeConnection();
+					if (err instanceof ConnectionError) {
+						response.results.push(this.getReconnectSearchResult(query, filters));
+					}
+					this._logger.error("Error retrieving SalesForce search results", err);
+				}
 			}
 		}
 
@@ -402,7 +352,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					actions: [{ name: "Browse", hotkey: "enter" }],
 					data: {
 						providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-						pageUrl: this._settings?.orgUrl,
+						url: this._settings?.orgUrl,
 						tags: [SalesForceIntegrationProvider._PROVIDER_ID]
 					} as SalesforceResultData,
 					icon: this._moduleDefinition.icon,
@@ -470,83 +420,82 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 */
 	private async getApiSearchResults(
 		query: string,
-		selectedObjects?: string[]
-	): Promise<
-		(SalesforceContact | SalesforceAccount | SalesforceTask | SalesforceContentNote | SalesforceFeedItem)[]
-	> {
-		const accountFieldSpec = "Account(Id, Industry, Name, Phone, Type, Website)";
-		const contactFieldSpec = "Contact(Department, Email, Id, Name, Phone, Title)";
-		const taskFieldSpec = "Task(Id, Subject, Description)";
-		const contentNoteFieldSpec = "ContentNote(Id, Title, Content, TextPreview)";
-		const fieldSpecMap = new Map<string, string>([
-			["Account", accountFieldSpec],
-			["Contact", contactFieldSpec],
-			["Task", taskFieldSpec],
-			["ContentNote", contentNoteFieldSpec]
-		]);
-		const fieldSpecs = [...fieldSpecMap]
-			.filter((x) => {
-				if (Array.isArray(selectedObjects) && selectedObjects.length > 0) {
-					return selectedObjects.includes(x[0]);
+		selectedObjects: string[]
+	): Promise<{
+		results: SalesforceSearchResult[];
+		filters: string[];
+	}> {
+		const filteredMappings: SalesforceMapping[] = this._mappings.filter((m) =>
+			selectedObjects.includes(m.label)
+		);
+		const batch: SalesforceBatchRequestItem[] = [];
+		const filters: string[] = [];
+
+		for (const mapping of filteredMappings) {
+			const fields = [];
+			if (mapping.lookupType === "search") {
+				for (const fieldMapping of mapping.fieldMappings) {
+					if (!fields.includes(fieldMapping.field)) {
+						fields.push(fieldMapping.field);
+					}
 				}
-				return true;
-			})
-			.map((x) => x[1]);
+				if (fields.length > 0) {
+					const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${
+						mapping.type
+					}(${fields.join(",")}) LIMIT ${mapping.maxItems}`;
 
-		const batch: SalesforceBatchRequestItem[] = fieldSpecs.map((fieldSpec) => {
-			const salesforceSearchQuery = `FIND {${this.escapeQuery(
-				query
-			)}} IN ALL FIELDS RETURNING ${fieldSpec} LIMIT 10`;
-
-			return {
-				method: "GET",
-				url: `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
-			};
-		});
-
-		const includeChatter = !selectedObjects?.length || selectedObjects.includes("Chatter");
-		if (includeChatter) {
-			batch.push({
-				method: "GET",
-				url: `/services/data/vXX.X/chatter/feed-elements?q=${query}&pageSize=25&sort=LastModifiedDateDesc`
-			});
+					batch.push({
+						method: "GET",
+						url: `/services/data/vXX.X/search?q=${encodeURIComponent(salesforceSearchQuery)}`
+					});
+				}
+			} else if (mapping.lookupType === "feed") {
+				batch.push({
+					method: "GET",
+					url: `/services/data/vXX.X/${mapping.feedType}/feed-elements?q=${encodeURIComponent(
+						query
+					)}&pageSize=${mapping.maxItems}&sort=LastModifiedDateDesc`
+				});
+			}
 		}
 
 		const batchedResults = await this.getBatchedResults<
-			| SalesforceRestApiSearchResponse<
-					SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
-			  >
+			| SalesforceRestApiSearchResponse<SalesforceRestApiSObject<SalesforceSearchResult>>
 			| SalesforceFeedElementPage
 		>(batch);
 
-		let results: (
-			| SalesforceAccount
-			| SalesforceContact
-			| SalesforceTask
-			| SalesforceContentNote
-			| SalesforceFeedItem
-		)[] = [];
+		let results: SalesforceSearchResult[] = [];
 
 		if (batchedResults.length > 0) {
-			let idx = 0;
-			for (; idx < fieldSpecs.length; idx++) {
-				const searchResponse = batchedResults[idx] as SalesforceRestApiSearchResponse<
-					SalesforceAccount | SalesforceContact | SalesforceTask | SalesforceContentNote
-				>;
-				if (searchResponse?.searchRecords?.length) {
+			for (let i = 0; i < filteredMappings.length; i++) {
+				const searchResponse = batchedResults[i];
+				if ("searchRecords" in searchResponse && searchResponse.searchRecords.length > 0) {
 					results = results.concat(searchResponse.searchRecords);
-				}
-			}
-
-			if (includeChatter) {
-				const chatterResponse = batchedResults[idx++] as SalesforceFeedElementPage;
-				if (chatterResponse?.elements?.length) {
-					results = results.concat(chatterResponse.elements);
+					filters.push(filteredMappings[i].label);
+				} else if ("elements" in searchResponse && searchResponse.elements.length > 0) {
+					results = results.concat(
+						searchResponse.elements.map((e) => {
+							const id = e.id;
+							const url = e.url;
+							delete e.id;
+							delete e.url;
+							delete e.type;
+							return {
+								Id: id,
+								attributes: { type: filteredMappings[i].type, url },
+								...e
+							};
+						})
+					);
+					filters.push(filteredMappings[i].label);
 				}
 			}
 		}
 
-		return results;
+		return {
+			results,
+			filters
+		};
 	}
 
 	/**
@@ -604,35 +553,531 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		} as CLISearchResultSimpleText;
 	}
 
-	/**
-	 * Get the search filters based on the results.
-	 * @param objects The object types to create the filters from.
-	 * @returns The filters.
-	 * @internal
-	 */
-	private getSearchFilters(objects: string[]): CLIFilter[] {
-		if (Array.isArray(objects) && objects.length > 0) {
-			const filters: CLIFilter[] = [];
-			const uniqueObjects = [...new Set(objects.sort())];
-			const objectFilter: CLIFilter = {
-				id: SalesForceIntegrationProvider._OBJECTS_FILTER_ID,
-				title: "Salesforce",
-				type: CLIFilterOptionType.MultiSelect,
-				options: []
-			};
+	private getFieldContent(field: unknown): string {
+		if (field === undefined || field === null) {
+			return "";
+		}
+		if (typeof field === "string") {
+			return field;
+		} else if ("isRichText" in (field as object)) {
+			return (field as SalesforceTextArea).text;
+		}
+		return JSON.stringify(field);
+	}
 
-			for (const object of uniqueObjects) {
-				if (Array.isArray(objectFilter.options)) {
-					objectFilter.options.push({
-						value: object,
-						isSelected: false
+	private async buildSearchResult(
+		searchResult: SalesforceSearchResult,
+		mapping: SalesforceMapping
+	): Promise<HomeSearchResult> {
+		let resultTitle = searchResult.Id;
+
+		const palette = await this._integrationHelpers.getCurrentPalette();
+
+		const headerParts: {
+			image?: TemplateFragment;
+			header?: TemplateFragment;
+			subHeader?: TemplateFragment;
+		} = {};
+
+		const pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[] = [];
+
+		const data: { [id: string]: string } = {};
+		const urls: { [id: string]: string } = {};
+
+		for (const fieldMapping of mapping.fieldMappings) {
+			if (fieldMapping.isResultTitle) {
+				resultTitle = this.getFieldContent(searchResult[fieldMapping.field]);
+			}
+			if (fieldMapping.displayMode === "icon") {
+				headerParts.image = await this._integrationHelpers.templateHelpers.createImage("image", "Profile", {
+					width: "44px",
+					height: "44px",
+					objectFit: "cover",
+					borderRadius: "50%"
+				});
+				data.image = `${this._settings?.orgUrl.replace(/\/?$/, "")}${this.getFieldContent(
+					searchResult[fieldMapping.field]
+				)}`;
+			} else if (fieldMapping.displayMode === "initials") {
+			} else if (fieldMapping.displayMode === "header") {
+				headerParts.header = await this._integrationHelpers.templateHelpers.createTitle("header", 14);
+				data.header = this.getFieldContent(searchResult[fieldMapping.field]);
+			} else if (fieldMapping.displayMode === "sub-header") {
+				headerParts.subHeader = await this._integrationHelpers.templateHelpers.createText("subHeader", 12);
+				data.subHeader = this.getFieldContent(searchResult[fieldMapping.field]);
+			} else if (fieldMapping.displayMode === "field") {
+				if (fieldMapping.fieldContent === "link") {
+					const link = this.getFieldContent(searchResult[fieldMapping.field]);
+					pairs.push({
+						label: fieldMapping.label,
+						links: [link]
+					});
+					urls[`${fieldMapping.label}_link_0`] = link;
+				} else {
+					pairs.push({
+						label: fieldMapping.label,
+						value: this.getFieldContent(searchResult[fieldMapping.field])
 					});
 				}
 			}
-
-			filters.push(objectFilter);
-			return filters;
 		}
-		return [];
+
+		const headerChildren: TemplateFragment[] = [];
+
+		if (headerParts.image) {
+			headerChildren.push(headerParts.image);
+		}
+		if (headerParts.header || headerParts.subHeader) {
+			const headerTitleParts: TemplateFragment[] = [];
+			if (headerParts.header) {
+				headerTitleParts.push(headerParts.header);
+			}
+			if (headerParts.subHeader) {
+				headerTitleParts.push(headerParts.subHeader);
+			}
+			headerChildren.push(
+				await this._integrationHelpers.templateHelpers.createContainer("column", headerTitleParts)
+			);
+		}
+
+		const headerRow = await this._integrationHelpers.templateHelpers.createContainer("row", headerChildren, {
+			paddingBottom: "10px",
+			borderBottom: `1px solid ${palette.brandPrimary}`,
+			gap: "10px"
+		});
+
+		return {
+			actions: [{ name: "View", hotkey: "enter" }],
+			label: searchResult.attributes.type,
+			key: searchResult.Id,
+			title: resultTitle,
+			icon: this._settings?.iconMap[mapping.iconKey],
+			data: {
+				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+				url: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
+				urls,
+				tags: [SalesForceIntegrationProvider._PROVIDER_ID],
+				obj: searchResult
+			} as SalesforceResultData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
+					"column",
+					[headerRow, await this.createPairsLayout(palette, pairs)],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					...data,
+					...this.mapPairsToData(pairs)
+				}
+			}
+		};
+	}
+
+	private async createPairsLayout(
+		palette: CustomPaletteSet,
+		pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[]
+	): Promise<TemplateFragment> {
+		return this._integrationHelpers.templateHelpers.createContainer(
+			"column",
+			await Promise.all(pairs.map(async (p) => this.createPairLayout(palette, p))),
+			{ gap: "5px", flex: "1" }
+		);
+	}
+
+	private async createPairLayout(
+		palette: CustomPaletteSet,
+		pair: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }
+	): Promise<TemplateFragment> {
+		const elements: TemplateFragment[] = [
+			await this._integrationHelpers.templateHelpers.createText(`${pair.label}Title`, 10, {
+				color: palette.inputPlaceholder,
+				flex: 1
+			})
+		];
+
+		if (pair.value) {
+			elements.push(
+				await this._integrationHelpers.templateHelpers.createText(`${pair.label}`, 10, {
+					flex: pair.wide ? 1 : 3,
+					display: "flex",
+					flexWrap: "wrap",
+					justifyContent: pair.wide ? "flex-start" : "flex-end",
+					wordBreak: "break-all"
+				})
+			);
+		}
+
+		if (pair.links?.length) {
+			elements.push(
+				await this._integrationHelpers.templateHelpers.createContainer(
+					"row",
+					await Promise.all(
+						pair.links.map(async (l, idx) =>
+							this._integrationHelpers.templateHelpers.createLink(
+								`${pair.label}_link_${idx}`,
+								`${SalesForceIntegrationProvider._ACTION_OPEN}_${pair.label}_link_${idx}`,
+								10
+							)
+						)
+					),
+					{ gap: "5px", flex: 3, justifyContent: "flex-end", flexWrap: "wrap" }
+				)
+			);
+		}
+
+		if (pair.srcs?.length) {
+			elements.push(
+				await this._integrationHelpers.templateHelpers.createContainer(
+					"row",
+					await Promise.all(
+						pair.srcs.map(async (s, idx) =>
+							this._integrationHelpers.templateHelpers.createImage(`${pair.label}_src_${idx}`, "Member", {
+								width: "16px",
+								height: "16px",
+								objectFit: "cover",
+								borderRadius: "50%"
+							})
+						)
+					),
+					{ gap: "5px", flex: 3, justifyContent: "flex-end", flexWrap: "wrap" }
+				)
+			);
+		}
+
+		return this._integrationHelpers.templateHelpers.createContainer(pair.wide ? "column" : "row", elements, {
+			justifyContent: "space-between",
+			gap: pair.wide ? "5px" : "10px"
+		});
+	}
+
+	private mapPairsToData(
+		pairs: {
+			label: string;
+			value?: string;
+			links?: string[];
+			srcs?: string[];
+			wide?: boolean;
+		}[]
+	): { [id: string]: string } {
+		const pairData: { [id: string]: string } = {};
+		for (const pair of pairs) {
+			pairData[`${pair.label}Title`] = pair.label;
+			if (pair.value) {
+				pairData[pair.label] = pair.value;
+			}
+			if (pair.links) {
+				for (let i = 0; i < pair.links.length; i++) {
+					pairData[`${pair.label}_link_${i}`] = pair.links[i];
+				}
+			}
+			if (pair.srcs) {
+				for (let i = 0; i < pair.srcs.length; i++) {
+					pairData[`${pair.label}_src_${i}`] = pair.srcs[i];
+				}
+			}
+		}
+		return pairData;
+	}
+
+	/**
+	 * Populate the default fields for all the mappings if they have not been configured.
+	 */
+	private populateFields(): void {
+		this.populateAccountMapping();
+		this.populateContactMapping();
+		this.populateTaskMapping();
+		this.populateNoteMapping();
+		this.populateChatterMapping();
+	}
+
+	private populateAccountMapping() {
+		const mapping = this._mappings.find((m) => m.type === "Account");
+		if (mapping) {
+			mapping.label = mapping.label ?? "Account";
+			mapping.iconKey = mapping.iconKey ?? "account";
+			mapping.lookupType = mapping.lookupType ?? "search";
+			mapping.maxItems = mapping.maxItems ?? 10;
+			mapping.fieldMappings = mapping.fieldMappings ?? [
+				{
+					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "Name",
+					displayMode: "header",
+					isResultTitle: true
+				},
+				{
+					field: "Industry",
+					displayMode: "sub-header"
+				},
+				{
+					field: "Phone",
+					displayMode: "field",
+					label: "Phone"
+				},
+				{
+					field: "Type",
+					displayMode: "field",
+					label: "Type"
+				},
+				{
+					field: "Website",
+					displayMode: "field",
+					fieldContent: "link",
+					label: "Website"
+				}
+			];
+		}
+	}
+
+	private populateContactMapping() {
+		const mapping = this._mappings.find((m) => m.type === "Contact");
+		if (mapping) {
+			mapping.label = mapping.label ?? "Contact";
+			mapping.iconKey = mapping.iconKey ?? "contact";
+			mapping.lookupType = mapping.lookupType ?? "search";
+			mapping.maxItems = mapping.maxItems ?? 10;
+			mapping.fieldMappings = mapping.fieldMappings ?? [
+				{
+					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "PhotoUrl",
+					displayMode: "icon"
+				},
+				{
+					field: "Name",
+					displayMode: "header",
+					isResultTitle: true
+				},
+				{
+					field: "Title",
+					displayMode: "sub-header"
+				},
+				{
+					field: "Department",
+					displayMode: "field",
+					fieldContent: "text",
+					label: "Department"
+				},
+				{
+					field: "Email",
+					displayMode: "field",
+					fieldContent: "link",
+					label: "Email"
+				},
+				{
+					field: "Phone",
+					displayMode: "field",
+					fieldContent: "text",
+					label: "Phone"
+				}
+			];
+		}
+	}
+
+	private populateTaskMapping() {
+		const mapping = this._mappings.find((m) => m.type === "Task");
+		if (mapping) {
+			mapping.label = mapping.label ?? "Contact";
+			mapping.iconKey = mapping.iconKey ?? "task";
+			mapping.lookupType = mapping.lookupType ?? "search";
+			mapping.maxItems = mapping.maxItems ?? 10;
+			mapping.fieldMappings = mapping.fieldMappings ?? [
+				{
+					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "Subject",
+					displayMode: "header",
+					isResultTitle: true
+				},
+				{
+					field: "Description",
+					displayMode: "field",
+					label: "Comments"
+				}
+			];
+		}
+	}
+
+	private populateNoteMapping() {
+		const mapping = this._mappings.find((m) => m.type === "ContentNote");
+		if (mapping) {
+			mapping.label = mapping.label ?? "Note";
+			mapping.iconKey = mapping.iconKey ?? "note";
+			mapping.lookupType = mapping.lookupType ?? "search";
+			mapping.maxItems = mapping.maxItems ?? 10;
+			mapping.fieldMappings = mapping.fieldMappings ?? [
+				{
+					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "Title",
+					displayMode: "header",
+					isResultTitle: true
+				},
+				{
+					field: "TextPreview",
+					displayMode: "field",
+					label: "Content"
+				}
+			];
+		}
+	}
+
+	private populateChatterMapping() {
+		const mapping = this._mappings.find((m) => m.type === "Chatter");
+		if (mapping) {
+			mapping.label = mapping.label ?? "Chatter";
+			mapping.iconKey = mapping.iconKey ?? "chatter";
+			mapping.lookupType = mapping.lookupType ?? "feed";
+			mapping.feedType = mapping.feedType ?? "chatter";
+			mapping.maxItems = mapping.maxItems ?? 10;
+			mapping.fieldMappings = mapping.fieldMappings ?? [
+				{
+					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "Title",
+					displayMode: "header",
+					isResultTitle: true
+				},
+				{
+					field: "TextPreview",
+					displayMode: "field",
+					label: "Content"
+				}
+			];
+		}
 	}
 }
+
+// const results = searchResults.map((searchResult) => {
+// 	if ("Website" in searchResult) {
+// 		return {
+// 			actions: [{ name: "View", hotkey: "enter" }],
+// 			label: searchResult.attributes.type,
+// 			key: searchResult.Id,
+// 			title: searchResult.Name,
+// 			icon: this._settings?.iconMap.account,
+// 			data: {
+// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
+// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+// 			},
+// 			template: CLITemplate.Contact,
+// 			templateContent: {
+// 				name: searchResult.Name,
+// 				title: searchResult.Industry,
+// 				details: [
+// 					[
+// 						["Phone", searchResult.Phone],
+// 						["Type", searchResult.Type],
+// 						["Website", searchResult.Website]
+// 					]
+// 				]
+// 			}
+// 		} as CLISearchResultContact;
+// 	} else if ("Email" in searchResult) {
+// 		return {
+// 			actions: [{ name: "View", hotkey: "enter" }],
+// 			label: searchResult.attributes.type,
+// 			key: searchResult.Id,
+// 			title: searchResult.Name,
+// 			icon: this._settings?.iconMap.contact,
+// 			data: {
+// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
+// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+// 			},
+// 			template: CLITemplate.Contact,
+// 			templateContent: {
+// 				name: searchResult.Name,
+// 				title: searchResult.Title,
+// 				useInitials: true,
+// 				details: [
+// 					[
+// 						["Department", searchResult.Department],
+// 						["Email", searchResult.Email],
+// 						["Work #", searchResult.Phone]
+// 					]
+// 				]
+// 			}
+// 		} as CLISearchResultContact;
+// 	} else if ("Description" in searchResult) {
+// 		return {
+// 			actions: [{ name: "View", hotkey: "enter" }],
+// 			label: searchResult.attributes.type,
+// 			key: searchResult.Id,
+// 			title: searchResult.Subject,
+// 			icon: this._settings?.iconMap.task,
+// 			data: {
+// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
+// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+// 			},
+// 			template: "List",
+// 			templateContent: [
+// 				["Subject", searchResult.Subject],
+// 				["Comments", searchResult.Description]
+// 			]
+// 		} as CLISearchResultList;
+// 	} else if ("TextPreview" in searchResult) {
+// 		return {
+// 			actions: [{ name: "View", hotkey: "enter" }],
+// 			label: "Note",
+// 			key: searchResult.Id,
+// 			title: searchResult.Title,
+// 			icon: this._settings?.iconMap.note,
+// 			data: {
+// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
+// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+// 			},
+// 			template: "List",
+// 			templateContent: [
+// 				["Title", searchResult.Title],
+// 				["Content", searchResult?.TextPreview]
+// 			]
+// 		} as CLISearchResultList;
+// 	} else if (
+// 		"actor" in searchResult &&
+// 		(searchResult.type === "TextPost" || searchResult.type === "ContentPost")
+// 	) {
+// 		return {
+// 			actions: [{ name: "View", hotkey: "enter" }],
+// 			label: "Chatter",
+// 			key: searchResult.id,
+// 			title: searchResult.actor?.displayName,
+// 			icon: this._settings?.iconMap.chatter,
+// 			data: {
+// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+// 				pageUrl: this.getObjectUrl(searchResult.id, this._settings?.orgUrl),
+// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+// 			} as SalesforceResultData,
+// 			template: CLITemplate.Contact,
+// 			templateContent: {
+// 				name: searchResult.actor?.displayName,
+// 				useInitials: true,
+// 				details: [
+// 					[
+// 						["Header", searchResult?.header?.text],
+// 						["Note", searchResult?.body?.text]
+// 					]
+// 				]
+// 			}
+// 		} as CLISearchResultContact;
+// 	}
+// 	// in this case we are only searching for accounts, contacts, tasks, content notes and chatter
+// });
