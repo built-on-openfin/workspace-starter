@@ -134,12 +134,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private static readonly _TEAMS_PROTOCOL = "msteams:";
 
 	/**
-	 * The url for office.
-	 * @internal
-	 */
-	private static readonly _OFFICE_URL = "https://outlook.office365.com/";
-
-	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
