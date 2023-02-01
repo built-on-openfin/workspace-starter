@@ -88,53 +88,9 @@ export interface SalesforceActor {
 	name: string;
 }
 
-/**
- * Model for text area.
- */
-export interface SalesforceTextArea {
-	/**
-	 * Is the text content rich text.
-	 */
-	isRichText: boolean;
-	/**
-	 * The text content.
-	 */
-	text: string;
-}
-
 export interface SalesforceSearchResult extends Record<string, unknown> {
 	Id: string;
 	attributes: { type: string; url: string };
-}
-
-/**
- * Model for a feed item.
- */
-export interface SalesforceFeedItem {
-	/**
-	 * The id of the feed item.
-	 */
-	id?: string;
-	/**
-	 * The url of the feed item.
-	 */
-	url?: string;
-	/**
-	 * The type of the feed item.
-	 */
-	type?: string;
-	/**
-	 * The actor for the feed item.
-	 */
-	actor?: SalesforceActor;
-	/**
-	 * The body for the feed item.
-	 */
-	body?: SalesforceTextArea;
-	/**
-	 * The header for the feed item.
-	 */
-	header?: SalesforceTextArea;
 }
 
 /**
@@ -152,7 +108,7 @@ export interface SalesforceFeedElementPage {
 	/**
 	 * The elements for the current page.
 	 */
-	elements: SalesforceFeedItem[];
+	elements: SalesforceSearchResult[];
 	/**
 	 * The token for checking modifications.
 	 */
@@ -195,19 +151,31 @@ export interface SalesforceResultData {
 	 * The object.
 	 */
 	obj?: SalesforceSearchResult;
+	/**
+	 * The mapping for the object.
+	 */
+	mapping?: SalesforceMapping;
 }
 
 export interface SalesforceMappingFieldMapping {
 	// The name of the field to retrieve.
 	field: string;
+	// A sub field of the main one.
+	fieldSub?: string;
 	// How should this field be displayed.
 	displayMode: "none" | "icon" | "initials" | "header" | "sub-header" | "field";
 	// The content type if its a field.
-	fieldContent?: "text" | "link";
+	fieldContent?: "text" | "link" | "memo" | "date";
 	// The label to display for the field.
 	label?: string;
 	// Use this field for the result title.
 	isResultTitle?: boolean;
+	// This is an id reference field that needs secondary name lookup from the specified table.
+	reference?: {
+		type: string;
+		field: string;
+		fieldSub?: string;
+	};
 }
 
 export interface SalesforceMapping {
@@ -239,6 +207,10 @@ export interface SalesforceSettings {
 	 * The org access url.
 	 */
 	orgUrl: string;
+	/**
+	 * Enable the logging from the library.
+	 */
+	enableLibLogging: boolean;
 	/**
 	 * Map of the icon urls.
 	 */

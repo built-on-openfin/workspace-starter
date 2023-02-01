@@ -2,6 +2,7 @@ import {
 	connect,
 	ConnectionError,
 	enableLogging,
+	SalesforceRestApiQueryResponse,
 	SalesforceRestApiSObject,
 	type SalesforceConnection,
 	type SalesforceRestApiSearchResponse
@@ -9,6 +10,7 @@ import {
 import {
 	CLIFilterOptionType,
 	CLITemplate,
+	CustomTemplate,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
@@ -28,10 +30,10 @@ import type {
 	SalesforceBatchResponse,
 	SalesforceFeedElementPage,
 	SalesforceMapping,
+	SalesforceMappingFieldMapping,
 	SalesforceResultData,
 	SalesforceSearchResult,
-	SalesforceSettings,
-	SalesforceTextArea
+	SalesforceSettings
 } from "./shapes";
 
 /**
@@ -105,6 +107,28 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private _logger: Logger;
 
 	/**
+	 * The last search result response.
+	 */
+	private _lastResponse?: CLISearchListenerResponse;
+
+	/**
+	 * Cache for referenced names.
+	 */
+	private readonly _referenceCache: {
+		[id: string]: {
+			lastReferenced: number;
+			value: string;
+		};
+	};
+
+	/**
+	 * Create a new instance of SalesForceIntegrationProvider
+	 */
+	constructor() {
+		this._referenceCache = {};
+	}
+
+	/**
 	 * Initialise the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -119,6 +143,19 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		this._moduleDefinition = definition;
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
+
+		this._logger = loggerCreator("Salesforce");
+		this._logger.info("Registering SalesForce");
+
+		if (!this._settings.orgUrl) {
+			this._logger.error("Configuration is missing orgUrl");
+			return;
+		}
+
+		if (!this._settings.consumerKey) {
+			this._logger.error("Configuration is missing consumerKey");
+			return;
+		}
 
 		this._mappings = definition.data?.mappings;
 
@@ -145,13 +182,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		this.populateFields();
 
-		this._logger = loggerCreator("Salesforce");
-		this._logger.info("Registering SalesForce");
-		try {
-			await this.openConnection();
-		} catch (err) {
-			this._logger.error("Error connecting to SalesForce", err);
+		if (this._settings.enableLibLogging) {
+			enableLogging();
 		}
+
+		await this.openConnection();
+		setTimeout(() => this.cleanupCache(), 30000);
 	}
 
 	/**
@@ -200,7 +236,14 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		result: CLIDispatchedSearchResult,
 		lastResponse: CLISearchListenerResponse
 	): Promise<boolean> {
-		if (result.action.trigger === "user-action") {
+		if (result.action.trigger === "focus-change") {
+			const data = result.data as SalesforceResultData;
+			if (data.obj) {
+				const resultWithReferences = await this.buildSearchResult(data.obj, data.mapping);
+				lastResponse.respond([resultWithReferences]);
+				return true;
+			}
+		} else if (result.action.trigger === "user-action") {
 			// if the user clicked the reconnect result, reconnect to salesforce and re-run query
 			if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
 				await this.openConnection();
@@ -274,6 +317,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			results: await this.getDefaultEntries(query)
 		};
 
+		this._lastResponse = lastResponse;
+
 		if (this._salesForceConnection) {
 			const minLength = options?.queryMinLength ?? 3;
 
@@ -303,7 +348,14 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					}
 
 					const searchResults = await Promise.all(
-						apiSearchResults.results.map(async (r) => this.buildSearchResult(r, maps[r.attributes.type]))
+						apiSearchResults.results.map(async (r) =>
+							this.buildTemplate(
+								r,
+								// we clone this so reference deletions don't affect the original
+								JSON.parse(JSON.stringify(maps[r.attributes.type])) as SalesforceMapping,
+								CLITemplate.Loading
+							)
+						)
 					);
 
 					response.results.push(...searchResults);
@@ -375,9 +427,16 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @internal
 	 */
 	private async openConnection(): Promise<void> {
-		if (this._settings?.orgUrl && !this._salesForceConnection) {
-			enableLogging();
-			this._salesForceConnection = await connect(this._settings?.orgUrl, this._settings?.consumerKey);
+		if (this._settings?.orgUrl && this._settings?.consumerKey && !this._salesForceConnection) {
+			try {
+				this._salesForceConnection = await connect(this._settings?.orgUrl, this._settings?.consumerKey);
+
+				if (this._lastResponse) {
+					this._lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
+				}
+			} catch (err) {
+				this._logger.error("Error connecting to API", err);
+			}
 		}
 	}
 
@@ -390,25 +449,11 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			try {
 				await this._salesForceConnection.disconnect();
 			} catch (err) {
-				this._logger.error("Error disconnecting SalesForce", err);
+				this._logger.error("Error disconnecting API", err);
 			} finally {
 				this._salesForceConnection = undefined;
 			}
 		}
-	}
-
-	/**
-	 * Create the object url from the if and origin.
-	 * @param objectId The object id.
-	 * @param salesforceOrgOrigin The origin url.
-	 * @returns Then object url.
-	 * @internal
-	 */
-	private getObjectUrl(objectId: string, salesforceOrgOrigin?: string): string {
-		if (!salesforceOrgOrigin) {
-			return "";
-		}
-		return `${salesforceOrgOrigin}/${objectId}`;
 	}
 
 	/**
@@ -553,24 +598,24 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		} as CLISearchResultSimpleText;
 	}
 
-	private getFieldContent(field: unknown): string {
-		if (field === undefined || field === null) {
+	private getFieldContent(searchResult: SalesforceSearchResult, field: string, subField?: string): string {
+		let value = searchResult[field];
+
+		if (subField && value !== null && value !== undefined) {
+			value = value[subField];
+		}
+
+		if (value === null || value === undefined) {
 			return "";
 		}
-		if (typeof field === "string") {
-			return field;
-		} else if ("isRichText" in (field as object)) {
-			return (field as SalesforceTextArea).text;
-		}
-		return JSON.stringify(field);
+
+		return value as string;
 	}
 
 	private async buildSearchResult(
 		searchResult: SalesforceSearchResult,
 		mapping: SalesforceMapping
 	): Promise<HomeSearchResult> {
-		let resultTitle = searchResult.Id;
-
 		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const headerParts: {
@@ -584,40 +629,68 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		const data: { [id: string]: string } = {};
 		const urls: { [id: string]: string } = {};
 
+		await this.populateReferences(searchResult, mapping);
+
 		for (const fieldMapping of mapping.fieldMappings) {
-			if (fieldMapping.isResultTitle) {
-				resultTitle = this.getFieldContent(searchResult[fieldMapping.field]);
-			}
-			if (fieldMapping.displayMode === "icon") {
-				headerParts.image = await this._integrationHelpers.templateHelpers.createImage("image", "Profile", {
-					width: "44px",
-					height: "44px",
-					objectFit: "cover",
-					borderRadius: "50%"
-				});
-				data.image = `${this._settings?.orgUrl.replace(/\/?$/, "")}${this.getFieldContent(
-					searchResult[fieldMapping.field]
-				)}`;
-			} else if (fieldMapping.displayMode === "initials") {
-			} else if (fieldMapping.displayMode === "header") {
-				headerParts.header = await this._integrationHelpers.templateHelpers.createTitle("header", 14);
-				data.header = this.getFieldContent(searchResult[fieldMapping.field]);
-			} else if (fieldMapping.displayMode === "sub-header") {
-				headerParts.subHeader = await this._integrationHelpers.templateHelpers.createText("subHeader", 12);
-				data.subHeader = this.getFieldContent(searchResult[fieldMapping.field]);
-			} else if (fieldMapping.displayMode === "field") {
-				if (fieldMapping.fieldContent === "link") {
-					const link = this.getFieldContent(searchResult[fieldMapping.field]);
-					pairs.push({
-						label: fieldMapping.label,
-						links: [link]
+			const fieldValue = this.getFieldContent(searchResult, fieldMapping.field, fieldMapping.fieldSub);
+
+			if (fieldValue !== null && fieldValue !== undefined && fieldValue.length > 0) {
+				if (fieldMapping.displayMode === "icon") {
+					headerParts.image = await this._integrationHelpers.templateHelpers.createImage("image", "Profile", {
+						width: "44px",
+						height: "44px",
+						objectFit: "cover",
+						borderRadius: "50%"
 					});
-					urls[`${fieldMapping.label}_link_0`] = link;
-				} else {
-					pairs.push({
-						label: fieldMapping.label,
-						value: this.getFieldContent(searchResult[fieldMapping.field])
+					data.image = `${this._settings?.orgUrl.replace(/\/?$/, "")}${fieldValue}`;
+				} else if (fieldMapping.displayMode === "initials") {
+					const values = fieldValue.split(" ");
+					let initials: string = "";
+					if (values.length > 0) {
+						initials += values[0][0];
+					}
+					if (values.length > 1) {
+						initials += values[values.length - 1][0];
+					}
+
+					headerParts.image = await this._integrationHelpers.templateHelpers.createText("initials", 18, {
+						width: "44px",
+						height: "44px",
+						objectFit: "cover",
+						borderRadius: "50%",
+						backgroundColor: palette.background2,
+						color: "white",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center"
 					});
+					data.initials = initials;
+				} else if (fieldMapping.displayMode === "header") {
+					headerParts.header = await this._integrationHelpers.templateHelpers.createTitle("header", 14);
+					data.header = fieldValue;
+				} else if (fieldMapping.displayMode === "sub-header") {
+					headerParts.subHeader = await this._integrationHelpers.templateHelpers.createText("subHeader", 12);
+					data.subHeader = fieldValue;
+				} else if (fieldMapping.displayMode === "field") {
+					if (fieldMapping.fieldContent === "link") {
+						pairs.push({
+							label: fieldMapping.label,
+							links: [fieldValue]
+						});
+						urls[`${fieldMapping.label}_link_0`] = fieldValue;
+					} else if (fieldMapping.fieldContent === "date") {
+						pairs.push({
+							label: fieldMapping.label,
+							value: new Date(fieldValue).toLocaleString()
+						});
+						urls[`${fieldMapping.label}_link_0`] = fieldValue;
+					} else {
+						pairs.push({
+							label: fieldMapping.label,
+							value: fieldValue,
+							wide: fieldMapping.fieldContent === "memo"
+						});
+					}
 				}
 			}
 		}
@@ -642,40 +715,117 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		const headerRow = await this._integrationHelpers.templateHelpers.createContainer("row", headerChildren, {
 			paddingBottom: "10px",
-			borderBottom: `1px solid ${palette.brandPrimary}`,
+			borderBottom: `1px solid ${palette.background2}`,
 			gap: "10px"
 		});
 
+		return this.buildTemplate(searchResult, mapping, CLITemplate.Custom, {
+			layout: await this._integrationHelpers.templateHelpers.createContainer(
+				"column",
+				[headerRow, await this.createPairsLayout(palette, pairs)],
+				{
+					padding: "10px",
+					gap: "15px",
+					flex: "1"
+				}
+			),
+			data: {
+				...data,
+				...this.mapPairsToData(pairs)
+			}
+		});
+	}
+
+	private buildTemplate(
+		searchResult: SalesforceSearchResult,
+		mapping: SalesforceMapping,
+		template: CLITemplate,
+		templateContent?: CustomTemplate
+	): HomeSearchResult {
+		const titleField = mapping.fieldMappings.find((m) => m.isResultTitle);
+		let title = searchResult.Id;
+		if (titleField && searchResult[titleField.field]) {
+			title = this.getFieldContent(searchResult, titleField.field, titleField.fieldSub);
+		}
 		return {
 			actions: [{ name: "View", hotkey: "enter" }],
-			label: searchResult.attributes.type,
+			label: mapping.label,
 			key: searchResult.Id,
-			title: resultTitle,
+			title,
 			icon: this._settings?.iconMap[mapping.iconKey],
 			data: {
 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-				url: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-				urls,
+				url: `${this._settings?.orgUrl}/${searchResult.Id}`,
 				tags: [SalesForceIntegrationProvider._PROVIDER_ID],
-				obj: searchResult
+				obj: searchResult,
+				mapping
 			} as SalesforceResultData,
-			template: CLITemplate.Custom,
-			templateContent: {
-				layout: await this._integrationHelpers.templateHelpers.createContainer(
-					"column",
-					[headerRow, await this.createPairsLayout(palette, pairs)],
-					{
-						padding: "10px",
-						gap: "15px",
-						flex: "1"
+			template,
+			templateContent
+		} as HomeSearchResult;
+	}
+
+	private async populateReferences(
+		searchResult: SalesforceSearchResult,
+		mapping: SalesforceMapping
+	): Promise<void> {
+		const batch: SalesforceBatchRequestItem[] = [];
+		const referenceMappings: SalesforceMappingFieldMapping[] = [];
+
+		for (const fieldMapping of mapping.fieldMappings) {
+			if (fieldMapping.reference) {
+				const id = this.getFieldContent(searchResult, fieldMapping.field, fieldMapping.fieldSub);
+				if (id) {
+					if (this._referenceCache[id]) {
+						searchResult[fieldMapping.field] = this._referenceCache[id].value;
+						delete fieldMapping.reference;
+					} else {
+						referenceMappings.push(fieldMapping);
+						batch.push({
+							method: "GET",
+							url: `/services/data/vXX.X/query?q=${encodeURIComponent(
+								`SELECT ${fieldMapping.reference.field} FROM ${fieldMapping.reference.type} WHERE Id='${id}'`
+							)}`
+						});
 					}
-				),
-				data: {
-					...data,
-					...this.mapPairsToData(pairs)
 				}
 			}
-		};
+		}
+
+		if (batch.length > 0) {
+			const batchedResults = await this.getBatchedResults<SalesforceRestApiQueryResponse<
+				SalesforceRestApiSObject<SalesforceSearchResult>
+			>>(batch);
+			for (let i = 0; i < referenceMappings.length; i++) {
+				if (batchedResults[i].records?.length > 0) {
+					const result = batchedResults[i].records[0];
+					const id = this.getFieldContent(
+						searchResult,
+						referenceMappings[i].field,
+						referenceMappings[i].fieldSub
+					);
+					this._referenceCache[id] = {
+						value: this.getFieldContent(
+							result,
+							referenceMappings[i].reference.field,
+							referenceMappings[i].reference.fieldSub
+						),
+						lastReferenced: Date.now()
+					};
+					searchResult[referenceMappings[i].field] = this._referenceCache[id].value;
+					delete referenceMappings[i].reference;
+				}
+			}
+		}
+	}
+
+	private cleanupCache(): void {
+		const now = Date.now();
+		for (const cacheId of Object.keys(this._referenceCache)) {
+			if (now - this._referenceCache[cacheId].lastReferenced > 120000) {
+				delete this._referenceCache[cacheId];
+			}
+		}
 	}
 
 	private async createPairsLayout(
@@ -831,6 +981,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					fieldContent: "link",
 					label: "Website"
+				},
+				{
+					field: "Description",
+					displayMode: "field",
+					fieldContent: "memo",
+					label: "Description"
 				}
 			];
 		}
@@ -849,8 +1005,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "none"
 				},
 				{
-					field: "PhotoUrl",
-					displayMode: "icon"
+					field: "Name",
+					displayMode: "initials"
 				},
 				{
 					field: "Name",
@@ -886,7 +1042,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private populateTaskMapping() {
 		const mapping = this._mappings.find((m) => m.type === "Task");
 		if (mapping) {
-			mapping.label = mapping.label ?? "Contact";
+			mapping.label = mapping.label ?? "Task";
 			mapping.iconKey = mapping.iconKey ?? "task";
 			mapping.lookupType = mapping.lookupType ?? "search";
 			mapping.maxItems = mapping.maxItems ?? 10;
@@ -901,8 +1057,29 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					isResultTitle: true
 				},
 				{
+					field: "Status",
+					displayMode: "field",
+					label: "Status"
+				},
+				{
+					field: "CreatedById",
+					displayMode: "field",
+					label: "Created By",
+					reference: {
+						type: "User",
+						field: "Name"
+					}
+				},
+				{
+					field: "CreatedDate",
+					displayMode: "field",
+					fieldContent: "date",
+					label: "Created On"
+				},
+				{
 					field: "Description",
 					displayMode: "field",
+					fieldContent: "memo",
 					label: "Comments"
 				}
 			];
@@ -927,8 +1104,24 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					isResultTitle: true
 				},
 				{
+					field: "CreatedById",
+					displayMode: "field",
+					label: "Created By",
+					reference: {
+						type: "User",
+						field: "Name"
+					}
+				},
+				{
+					field: "CreatedDate",
+					displayMode: "field",
+					fieldContent: "date",
+					label: "Created On"
+				},
+				{
 					field: "TextPreview",
 					displayMode: "field",
+					fieldContent: "memo",
 					label: "Content"
 				}
 			];
@@ -949,135 +1142,32 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "none"
 				},
 				{
-					field: "Title",
+					field: "actor",
+					fieldSub: "displayName",
 					displayMode: "header",
 					isResultTitle: true
 				},
 				{
-					field: "TextPreview",
+					field: "header",
+					fieldSub: "text",
 					displayMode: "field",
+					fieldContent: "memo",
+					label: "Header"
+				},
+				{
+					field: "createdDate",
+					displayMode: "field",
+					fieldContent: "date",
+					label: "Created On"
+				},
+				{
+					field: "body",
+					fieldSub: "text",
+					displayMode: "field",
+					fieldContent: "memo",
 					label: "Content"
 				}
 			];
 		}
 	}
 }
-
-// const results = searchResults.map((searchResult) => {
-// 	if ("Website" in searchResult) {
-// 		return {
-// 			actions: [{ name: "View", hotkey: "enter" }],
-// 			label: searchResult.attributes.type,
-// 			key: searchResult.Id,
-// 			title: searchResult.Name,
-// 			icon: this._settings?.iconMap.account,
-// 			data: {
-// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-// 			},
-// 			template: CLITemplate.Contact,
-// 			templateContent: {
-// 				name: searchResult.Name,
-// 				title: searchResult.Industry,
-// 				details: [
-// 					[
-// 						["Phone", searchResult.Phone],
-// 						["Type", searchResult.Type],
-// 						["Website", searchResult.Website]
-// 					]
-// 				]
-// 			}
-// 		} as CLISearchResultContact;
-// 	} else if ("Email" in searchResult) {
-// 		return {
-// 			actions: [{ name: "View", hotkey: "enter" }],
-// 			label: searchResult.attributes.type,
-// 			key: searchResult.Id,
-// 			title: searchResult.Name,
-// 			icon: this._settings?.iconMap.contact,
-// 			data: {
-// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-// 			},
-// 			template: CLITemplate.Contact,
-// 			templateContent: {
-// 				name: searchResult.Name,
-// 				title: searchResult.Title,
-// 				useInitials: true,
-// 				details: [
-// 					[
-// 						["Department", searchResult.Department],
-// 						["Email", searchResult.Email],
-// 						["Work #", searchResult.Phone]
-// 					]
-// 				]
-// 			}
-// 		} as CLISearchResultContact;
-// 	} else if ("Description" in searchResult) {
-// 		return {
-// 			actions: [{ name: "View", hotkey: "enter" }],
-// 			label: searchResult.attributes.type,
-// 			key: searchResult.Id,
-// 			title: searchResult.Subject,
-// 			icon: this._settings?.iconMap.task,
-// 			data: {
-// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-// 			},
-// 			template: "List",
-// 			templateContent: [
-// 				["Subject", searchResult.Subject],
-// 				["Comments", searchResult.Description]
-// 			]
-// 		} as CLISearchResultList;
-// 	} else if ("TextPreview" in searchResult) {
-// 		return {
-// 			actions: [{ name: "View", hotkey: "enter" }],
-// 			label: "Note",
-// 			key: searchResult.Id,
-// 			title: searchResult.Title,
-// 			icon: this._settings?.iconMap.note,
-// 			data: {
-// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-// 				pageUrl: this.getObjectUrl(searchResult.Id, this._settings?.orgUrl),
-// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-// 			},
-// 			template: "List",
-// 			templateContent: [
-// 				["Title", searchResult.Title],
-// 				["Content", searchResult?.TextPreview]
-// 			]
-// 		} as CLISearchResultList;
-// 	} else if (
-// 		"actor" in searchResult &&
-// 		(searchResult.type === "TextPost" || searchResult.type === "ContentPost")
-// 	) {
-// 		return {
-// 			actions: [{ name: "View", hotkey: "enter" }],
-// 			label: "Chatter",
-// 			key: searchResult.id,
-// 			title: searchResult.actor?.displayName,
-// 			icon: this._settings?.iconMap.chatter,
-// 			data: {
-// 				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-// 				pageUrl: this.getObjectUrl(searchResult.id, this._settings?.orgUrl),
-// 				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-// 			} as SalesforceResultData,
-// 			template: CLITemplate.Contact,
-// 			templateContent: {
-// 				name: searchResult.actor?.displayName,
-// 				useInitials: true,
-// 				details: [
-// 					[
-// 						["Header", searchResult?.header?.text],
-// 						["Note", searchResult?.body?.text]
-// 					]
-// 				]
-// 			}
-// 		} as CLISearchResultContact;
-// 	}
-// 	// in this case we are only searching for accounts, contacts, tasks, content notes and chatter
-// });

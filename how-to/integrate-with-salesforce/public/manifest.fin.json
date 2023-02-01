@@ -77,6 +77,7 @@
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
+						"enableLibLogging": true,
 						"preload": "http://localhost:8080/js/preload.js",
 						"iconMap": {
 							"contact": "http://localhost:8080/images/contact.svg",
