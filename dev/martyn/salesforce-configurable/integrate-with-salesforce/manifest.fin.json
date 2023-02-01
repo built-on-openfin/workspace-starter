@@ -77,6 +77,7 @@
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
+						"enableLibLogging": true,
 						"preload": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/salesforce-configurable/integrate-with-salesforce/js/preload.js",
 						"iconMap": {
 							"contact": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/salesforce-configurable/integrate-with-salesforce/images/contact.svg",
