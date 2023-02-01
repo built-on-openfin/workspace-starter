@@ -193,6 +193,8 @@ export interface SalesforceMapping {
 	lookupType?: "search" | "feed";
 	// If the lookup type is a feed what is the feed type
 	feedType?: string;
+	// Condition used when performing lookup
+	condition?: string;
 }
 
 /**

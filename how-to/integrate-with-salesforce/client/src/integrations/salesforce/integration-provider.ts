@@ -502,10 +502,15 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 						fields.push(fieldMapping.field);
 					}
 				}
+				let where = "";
+				if (mapping.condition) {
+					where = ` WHERE ${mapping.condition}`;
+				}
+
 				if (fields.length > 0) {
 					const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${
 						mapping.sourceType
-					}(${fields.join(",")}) LIMIT ${mapping.maxItems}`;
+					}(${fields.join(",")}${where}) LIMIT ${mapping.maxItems}`;
 
 					batch.push({
 						method: "GET",
@@ -1046,6 +1051,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			mapping.fieldMappings = mapping.fieldMappings ?? [
 				{
 					field: "Id",
+					displayMode: "none"
+				},
+				{
+					field: "VisibleInOpenFinHome__c",
 					displayMode: "none"
 				},
 				{
