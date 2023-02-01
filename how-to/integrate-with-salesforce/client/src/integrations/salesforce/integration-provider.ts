@@ -9,6 +9,7 @@ import {
 } from "@openfin/salesforce";
 import {
 	CLIFilterOptionType,
+	CLISearchResultLoading,
 	CLITemplate,
 	CustomTemplate,
 	type CLIDispatchedSearchResult,
@@ -47,6 +48,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private static readonly _PROVIDER_ID = "salesforce";
 
 	/**
+	 * The title to use for the browse result.
+	 * @internal
+	 */
+	private static readonly _BROWSE_TITLE = "Browse SalesForce";
+
+	/**
 	 * The key to use for a SalesForce result.
 	 * @internal
 	 */
@@ -59,10 +66,16 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private static readonly _OBJECTS_FILTER_ID = "salesforce-objects";
 
 	/**
+	 * The id of the connecting result.
+	 * @internal
+	 */
+	private static readonly _CONNECTING_SEARCH_RESULT_KEY = "salesforce-connecting-result";
+
+	/**
 	 * The id of the not connected result.
 	 * @internal
 	 */
-	private static readonly _NOT_CONNECTED_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
+	private static readonly _RECONNECT_SEARCH_RESULT_KEY = "salesforce-not-connected-result";
 
 	/**
 	 * The action for opening.
@@ -110,6 +123,11 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * The last search result response.
 	 */
 	private _lastResponse?: CLISearchListenerResponse;
+
+	/**
+	 * Are we in a connecting state.
+	 */
+	private _isConnecting: boolean;
 
 	/**
 	 * Cache for referenced names.
@@ -163,19 +181,19 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		if (!Array.isArray(this._mappings)) {
 			this._mappings = [
 				{
-					type: "Account"
+					sourceType: "Account"
 				},
 				{
-					type: "Contact"
+					sourceType: "Contact"
 				},
 				{
-					type: "Task"
+					sourceType: "Task"
 				},
 				{
-					type: "ContentNote"
+					sourceType: "ContentNote"
 				},
 				{
-					type: "Chatter"
+					sourceType: "Chatter"
 				}
 			];
 		}
@@ -245,20 +263,19 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			}
 		} else if (result.action.trigger === "user-action") {
 			// if the user clicked the reconnect result, reconnect to salesforce and re-run query
-			if (result.key === SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY) {
+			if (result.key === SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY) {
 				await this.openConnection();
 
-				if (result.data?.query) {
+				if (result.data?.query && lastResponse) {
 					const results = await this.getSearchResults(
 						result.data?.query as string,
 						result.data?.filters as CLIFilter[],
 						lastResponse
 					);
-					if (lastResponse) {
-						lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
-						lastResponse.respond(results.results);
-					}
+					lastResponse.respond(results.results);
 				}
+				return true;
+			} else if (result.key === SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY) {
 				return true;
 			}
 
@@ -342,9 +359,9 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				try {
 					const apiSearchResults = await this.getApiSearchResults(query, selectedObjects);
 
-					const maps: { [type: string]: SalesforceMapping } = {};
+					const maps: { [source: string]: SalesforceMapping } = {};
 					for (const mapping of this._mappings) {
-						maps[mapping.type] = mapping;
+						maps[mapping.sourceType] = mapping;
 					}
 
 					const searchResults = await Promise.all(
@@ -393,28 +410,18 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private async getDefaultEntries(query: string): Promise<HomeSearchResult[]> {
 		const results: HomeSearchResult[] = [];
 		if (this._settings?.orgUrl) {
-			const title = "Browse Salesforce";
-			if (
-				query === undefined ||
-				query === null ||
-				query === "" ||
-				title.toLowerCase().includes(query.toLowerCase())
-			) {
-				results.push({
-					actions: [{ name: "Browse", hotkey: "enter" }],
-					data: {
-						providerId: SalesForceIntegrationProvider._PROVIDER_ID,
-						url: this._settings?.orgUrl,
-						tags: [SalesForceIntegrationProvider._PROVIDER_ID]
-					} as SalesforceResultData,
-					icon: this._moduleDefinition.icon,
-					key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-					template: CLITemplate.Plain,
-					templateContent: undefined,
-					title
-				} as CLISearchResultPlain);
-			}
-			if (!this._salesForceConnection && (query === undefined || query === null || query === "")) {
+			if (this._salesForceConnection) {
+				if (
+					query === undefined ||
+					query === null ||
+					query === "" ||
+					SalesForceIntegrationProvider._BROWSE_TITLE.toLowerCase().includes(query.toLowerCase())
+				) {
+					results.push(this.getBrowseSearchResult());
+				}
+			} else if (this._isConnecting) {
+				results.push(this.getConnectingSearchResult());
+			} else if (!this._salesForceConnection) {
 				results.push(this.getReconnectSearchResult());
 			}
 		}
@@ -429,13 +436,24 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private async openConnection(): Promise<void> {
 		if (this._settings?.orgUrl && this._settings?.consumerKey && !this._salesForceConnection) {
 			try {
+				if (this._lastResponse) {
+					this._lastResponse.revoke(SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY);
+					this._lastResponse.respond([this.getConnectingSearchResult()]);
+				}
+
+				this._isConnecting = true;
 				this._salesForceConnection = await connect(this._settings?.orgUrl, this._settings?.consumerKey);
 
 				if (this._lastResponse) {
-					this._lastResponse.revoke(SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY);
+					this._lastResponse.revoke(SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+					this._lastResponse.respond([this.getBrowseSearchResult()]);
 				}
 			} catch (err) {
 				this._logger.error("Error connecting to API", err);
+				this._lastResponse.revoke(SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+				this._lastResponse.respond([this.getReconnectSearchResult()]);
+			} finally {
+				this._isConnecting = false;
 			}
 		}
 	}
@@ -486,7 +504,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 				if (fields.length > 0) {
 					const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${
-						mapping.type
+						mapping.sourceType
 					}(${fields.join(",")}) LIMIT ${mapping.maxItems}`;
 
 					batch.push({
@@ -527,7 +545,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 							delete e.type;
 							return {
 								Id: id,
-								attributes: { type: filteredMappings[i].type, url },
+								attributes: { type: filteredMappings[i].sourceType, url },
 								...e
 							};
 						})
@@ -584,10 +602,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @returns The search result entry.
 	 * @internal
 	 */
-	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]) {
+	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Reconnect", hotkey: "enter" }],
-			key: SalesForceIntegrationProvider._NOT_CONNECTED_SEARCH_RESULT_KEY,
+			key: SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY,
 			icon: this._moduleDefinition?.icon,
 			title: "Reconnect to Salesforce",
 			data: {
@@ -596,6 +614,32 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				filters
 			}
 		} as CLISearchResultSimpleText;
+	}
+
+	private getBrowseSearchResult(): CLISearchResultPlain {
+		return {
+			actions: [{ name: "Browse", hotkey: "enter" }],
+			data: {
+				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+				url: this._settings?.orgUrl,
+				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+			} as SalesforceResultData,
+			icon: this._moduleDefinition.icon,
+			key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+			template: CLITemplate.Plain,
+			templateContent: undefined,
+			title: SalesForceIntegrationProvider._BROWSE_TITLE
+		} as CLISearchResultPlain;
+	}
+
+	private getConnectingSearchResult(): CLISearchResultLoading {
+		return {
+			icon: this._moduleDefinition.icon,
+			key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+			template: CLITemplate.Loading,
+			templateContent: undefined,
+			title: "Connecting to SalesForce"
+		} as CLISearchResultLoading;
 	}
 
 	private getFieldContent(searchResult: SalesforceSearchResult, field: string, subField?: string): string {
@@ -659,12 +703,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 						objectFit: "cover",
 						borderRadius: "50%",
 						backgroundColor: palette.background2,
-						color: "white",
+						color: palette.textDefault,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center"
 					});
-					data.initials = initials;
+					data.initials = initials.toUpperCase();
 				} else if (fieldMapping.displayMode === "header") {
 					headerParts.header = await this._integrationHelpers.templateHelpers.createTitle("header", 14);
 					data.header = fieldValue;
@@ -715,7 +759,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 
 		const headerRow = await this._integrationHelpers.templateHelpers.createContainer("row", headerChildren, {
 			paddingBottom: "10px",
-			borderBottom: `1px solid ${palette.background2}`,
+			borderBottom: `1px solid ${palette.textDefault}`,
 			gap: "10px"
 		});
 
@@ -793,9 +837,9 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		if (batch.length > 0) {
-			const batchedResults = await this.getBatchedResults<SalesforceRestApiQueryResponse<
-				SalesforceRestApiSObject<SalesforceSearchResult>
-			>>(batch);
+			const batchedResults = await this.getBatchedResults<
+				SalesforceRestApiQueryResponse<SalesforceRestApiSObject<SalesforceSearchResult>>
+			>(batch);
 			for (let i = 0; i < referenceMappings.length; i++) {
 				if (batchedResults[i].records?.length > 0) {
 					const result = batchedResults[i].records[0];
@@ -946,7 +990,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	private populateAccountMapping() {
-		const mapping = this._mappings.find((m) => m.type === "Account");
+		const mapping = this._mappings.find((m) => m.sourceType === "Account");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Account";
 			mapping.iconKey = mapping.iconKey ?? "account";
@@ -993,7 +1037,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	private populateContactMapping() {
-		const mapping = this._mappings.find((m) => m.type === "Contact");
+		const mapping = this._mappings.find((m) => m.sourceType === "Contact");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Contact";
 			mapping.iconKey = mapping.iconKey ?? "contact";
@@ -1040,7 +1084,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	private populateTaskMapping() {
-		const mapping = this._mappings.find((m) => m.type === "Task");
+		const mapping = this._mappings.find((m) => m.sourceType === "Task");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Task";
 			mapping.iconKey = mapping.iconKey ?? "task";
@@ -1087,7 +1131,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	private populateNoteMapping() {
-		const mapping = this._mappings.find((m) => m.type === "ContentNote");
+		const mapping = this._mappings.find((m) => m.sourceType === "ContentNote");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Note";
 			mapping.iconKey = mapping.iconKey ?? "note";
@@ -1129,7 +1173,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	private populateChatterMapping() {
-		const mapping = this._mappings.find((m) => m.type === "Chatter");
+		const mapping = this._mappings.find((m) => m.sourceType === "Chatter");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Chatter";
 			mapping.iconKey = mapping.iconKey ?? "chatter";

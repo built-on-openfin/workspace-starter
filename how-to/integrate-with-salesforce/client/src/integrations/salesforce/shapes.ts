@@ -180,7 +180,7 @@ export interface SalesforceMappingFieldMapping {
 
 export interface SalesforceMapping {
 	// The salesforce type to lookup
-	type: string;
+	sourceType: string;
 	// The icon to display in the search result list, lookup up in the icon map
 	iconKey?: string;
 	// The label to display in the interface for this type
