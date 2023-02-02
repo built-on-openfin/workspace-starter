@@ -243,7 +243,7 @@ export async function getVersionStatus(): Promise<VersionStatus> {
 		} catch (error) {
 			logger.error("Error while checking for version status.", error);
 		}
-	} else {
+	} else if (versionOptions) {
 		settingsBasedWindowConfiguration = true;
 		versionWindowConfiguration = validateVersionWindow(versionOptions.versionWindow as OpenFin.WindowOptions);
 	}
