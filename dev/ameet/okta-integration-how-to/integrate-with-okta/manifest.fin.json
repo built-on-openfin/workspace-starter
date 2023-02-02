@@ -20,30 +20,21 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/favicon.ico",
-		"name": "Integrate with SSO - v10.0.0",
+		"name": "Integrate with Okta - v10.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "OpenFin",
-		"product": "Workspace Starter - Integrate With SSO - Client",
+		"product": "Workspace Starter - Integrate With Okta - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
 		"okta": {
-			"domain": "https://dev-17687012.okta.com//oauth2/",
-			"clientId": "0oa83im6irktIOxmm5d7",
-			"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/login-complete.html",
-			"logoutUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/logout-complete.html", "https://accounts.google.com"],
-			"appUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
-			"redirectUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
-			"verifyPollMs": 10000
-		},
-		"auth": {
-			"domain": "https://dev-17687012.okta.com//oauth2/v1/authorize",
-			"clientId": "0oa83im6irktIOxmm5d7",
-			"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/login-complete.html",
-			"logoutUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/logout-complete.html", "https://accounts.google.com"],
+			"domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
+			"clientId": "{YOUR_CLIENT_ID}",
+			"loginUrl": "{YOUR_CONFIGURED_LOGIN_URL}",
+			"logoutUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/logout-complete.html"],
 			"appUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
 			"redirectUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
 			"verifyPollMs": 10000
