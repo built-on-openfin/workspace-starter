@@ -1,0 +1,47 @@
+{
+	"name": "openfin-workspace--integrate-with-okta",
+	"version": "10.3.0",
+	"description": "OpenFin Workspace -- Integrate with Okta",
+	"main": "index.js",
+	"scripts": {
+		"dos": "npm --prefix ../common/ run dos",
+		"build": "npm run build-server & npm run build-client",
+		"build-server": "tsc --project ./server",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
+		"start": "npm run server",
+		"client": "npm --prefix ../common/ run client",
+		"server": "node ./server/build/index.js",
+		"kill": "npm --prefix ../common/ run kill",
+		"setup": "cd ../../ && npm install && cd how-to/integrate-with-okta && npm run build && npm --prefix ../common/ run build",
+		"validate": "npm --prefix ../../ run validate"
+	},
+	"author": "martyn.janes@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@okta/jwt-verifier": "^3.0.0",
+		"@openfin/core": "^28.72.17",
+		"@openfin/workspace": "10.3.10",
+		"@openfin/workspace-platform": "10.3.10",
+		"auth0-js": "^9.19.0",
+		"crypto-random-string": "^5.0.0",
+		"http": "^0.0.1-security",
+		"web-monitoring": "^3.2.2"
+	},
+	"devDependencies": {
+		"@okta/okta-auth-js": "^7.2.0",
+		"cookie-parser": "~1.4.4",
+		"debug": "~2.6.9",
+		"ejs": "^3.1.8",
+		"express": "^4.18.2",
+		"express-session": "^1.17.3",
+		"http-errors": "~1.6.3",
+		"morgan": "~1.9.1",
+		"passport": "^0.6.0",
+		"passport-openidconnect": "^0.1.1",
+		"ts-loader": "^9.4.2",
+		"typescript": "^4.9.3",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^5.0.0"
+	}
+}
