@@ -28,35 +28,31 @@ npm run setup
 This example uses [Okta](https://developer.okta.com/) as a provider for the SSO features, you can sign-up for a free account to test this demonstration.
 
 Okta Integration Pre-Requisites:
-In order to integrate an SPA with Okta please refer to this link: https://developer.okta.com/docs/guides/sign-into-spa-redirect/vue/main/
+In order to integrate an SPA with Okta please refer to this link: <https://developer.okta.com/docs/guides/sign-into-spa-redirect/vue/main/>
 
-In order to integrate a Web App with Okta please refer to this link: https://developer.okta.com/docs/guides/sign-into-web-app-redirect/node-express/main/
+In order to integrate a Web App with Okta please refer to this link: <https://developer.okta.com/docs/guides/sign-into-web-app-redirect/node-express/main/>
 
 After creating the Okta integration using one of the examples above, populate the `customSettings` in the `public/manifest.fin.json` file in the repo. The `domain` and `clientId` values can be viewed in the settings for the application on the Okta Admin management console.
 
 ```json
 "customSettings": {
-   "auth": {
-      "domain": "<DOMAIN>",
-      "clientId": "<CLIENTID>",
-      "loginUrl": "http://localhost:8080/platform/login-complete.html",
-      "logoutUrls": [
-        "http://localhost:8080/platform/logout-complete.html",
-        "https://accounts.google.com"
-      ],
-      "appUrl": "http://localhost:8080/platform/app.html",
-      "verifyPollMs": 10000
-   }
-}
+  "okta": {
+   "domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
+   "clientId": "{YOUR_CLIENT_ID}",
+   "loginUrl": "{YOUR_CONFIGURED_LOGIN_URL}",
+   "logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
+   "appUrl": "http://localhost:8080/platform/app.html",
+   "redirectUrl": "http://localhost:8080/platform/app.html",
+   "verifyPollMs": 10000
+  }
+ }
 ```
 
-The login url `http://localhost:8080/platform/login-complete.html` needs to be added in Auth0 app config as an **Allowed Callback Url**.
+The login url `http://localhost:8080/platform/login-complete.html` needs to be added in the Okta dashboard for the app as an **Allowed Callback Url**.
 
-The logout urls contain `http://localhost:8080/platform/logout-complete.html` which needs to be added in auth0 app config as a **Allowed Logout Url**, this is the default completion url for the logout flow.
+The logout urls contain `http://localhost:8080/platform/logout-complete.html` which needs to be added in the Okta dashboard for the app app config as a **Allowed Logout Url**, this is the default completion url for the logout flow.
 
-There is also a second entry for `https://accounts.google.com` in the `logoutUrls`, as the default for Auth0 is to include Google as a federated provider. This means that the logout flow can also complete at that secondary url.
-
-If you enable additional federated providers in Auth0 you might need additional logout urls.
+If you enable additional federated providers in Okta you might need additional logout urls.
 
 3. Optional (if you wish to pin the version of OpenFin Workspace to version 10.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
@@ -86,7 +82,7 @@ npm run client
 npm run build
 ```
 
-![Integrate with SSO](openfin-integrate-with-sso.gif)
+![Integrate with Okta](openfin-integrate-with-sso.gif)
 
 ---
 

@@ -20,30 +20,21 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with SSO - v10.0.0",
+		"name": "Integrate with Okta - v10.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "OpenFin",
-		"product": "Workspace Starter - Integrate With SSO - Client",
+		"product": "Workspace Starter - Integrate With Okta - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
 		"okta": {
-			"domain": "https://dev-17687012.okta.com//oauth2/",
-			"clientId": "0oa83im6irktIOxmm5d7",
-			"loginUrl": "http://localhost:8080/platform/login-complete.html",
-			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
-			"appUrl": "http://localhost:8080/platform/app.html",
-			"redirectUrl": "http://localhost:8080/platform/app.html",
-			"verifyPollMs": 10000
-		},
-		"auth": {
-			"domain": "https://dev-17687012.okta.com//oauth2/v1/authorize",
-			"clientId": "0oa83im6irktIOxmm5d7",
-			"loginUrl": "http://localhost:8080/platform/login-complete.html",
-			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
+			"domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
+			"clientId": "{YOUR_CLIENT_ID}",
+			"loginUrl": "{YOUR_CONFIGURED_LOGIN_URL}",
+			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
 			"appUrl": "http://localhost:8080/platform/app.html",
 			"redirectUrl": "http://localhost:8080/platform/app.html",
 			"verifyPollMs": 10000
