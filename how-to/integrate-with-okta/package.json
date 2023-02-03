@@ -19,14 +19,9 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@okta/jwt-verifier": "^3.0.0",
 		"@openfin/core": "^28.72.17",
 		"@openfin/workspace": "10.3.10",
-		"@openfin/workspace-platform": "10.3.10",
-		"auth0-js": "^9.19.0",
-		"crypto-random-string": "^5.0.0",
-		"http": "^0.0.1-security",
-		"web-monitoring": "^3.2.2"
+		"@openfin/workspace-platform": "10.3.10"
 	},
 	"devDependencies": {
 		"@okta/okta-auth-js": "^7.2.0",
