@@ -1,8 +1,7 @@
 /* eslint-disable linebreak-style */
 import { init as authenticationInit } from "./auth";
 import {
-	isAuthenticated as providerIsAuthenticated,
-	isBusy as providerIsBusy,
+
 	logInformation
 } from "./provider";
 import { getSettings } from "./settings";
@@ -18,5 +17,5 @@ export async function init() {
 
 	const settings = await getSettings();
 
-	await authenticationInit(settings?.okta, providerIsAuthenticated, providerIsBusy, logInformation);
+	await authenticationInit(settings?.okta, logInformation);
 }

@@ -1,17 +1,13 @@
 import { getSettings } from "./settings";
-import type { OktaSettings, OktaIdentitySettings } from "./shapes";
+import type { OktaSettings } from "./shapes";
 
 let authSettings: OktaSettings;
-let busyCallback: (isBusy: boolean) => Promise<void>;
 let informationCallback: (info: string) => void;
 
 export async function init(
 	settings: OktaSettings,
-	authenticatedCb: (isAuthenticated: boolean, userInfo?: OktaIdentitySettings) => Promise<void>,
-	busyCb: (isBusy: boolean) => Promise<void>,
 	informationCb: (info: string) => void
 ) {
-	busyCallback = busyCb;
 	informationCallback = informationCb;
 
 	informationCallback("Initialising the authentication");
@@ -50,7 +46,12 @@ export async function login() {
 		&state=${state}
 		&sessionToken=session_not_needed`;
 
-	await busyCallback(true);
+	await showWindow(authUrl);
+}
+
+export async function loginWithWidget() {
+	const authUrl = "http://localhost:8080/widgetLogin.html";
+
 
 	await showWindow(authUrl);
 }
