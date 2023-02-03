@@ -1,0 +1,43 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "28.106.72.17"
+	},
+	"platform": {
+		"uuid": "integrate-with-okta",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"defaultWindowOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/favicon.ico",
+		"name": "Integrate with Okta - v10.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With Okta - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"okta": {
+			"domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
+			"clientId": "{YOUR_CLIENT_ID}",
+			"loginUrl": "{YOUR_CONFIGURED_LOGIN_URL}",
+			"logoutUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/logout-complete.html"],
+			"appUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
+			"redirectUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/integrate-with-okta/platform/app.html",
+			"verifyPollMs": 10000
+		}
+	}
+}
