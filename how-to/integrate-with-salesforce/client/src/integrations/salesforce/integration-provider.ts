@@ -38,23 +38,11 @@ import type {
 } from "./shapes";
 
 /**
- * Implement the integration provider for SalesForce.
+ * Implement the integration provider for Salesforce.
  */
-export class SalesForceIntegrationProvider implements IntegrationModule<SalesforceSettings> {
+export class SalesforceIntegrationProvider implements IntegrationModule<SalesforceSettings> {
 	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "salesforce";
-
-	/**
-	 * The title to use for the browse result.
-	 * @internal
-	 */
-	private static readonly _BROWSE_TITLE = "Browse SalesForce";
-
-	/**
-	 * The key to use for a SalesForce result.
+	 * The key to use for a Salesforce result.
 	 * @internal
 	 */
 	private static readonly _BROWSE_SEARCH_RESULT_KEY = "browse-salesforce";
@@ -108,7 +96,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private _mappings: SalesforceMapping[] | undefined;
 
 	/**
-	 * The connection to SalesForce.
+	 * The connection to Salesforce.
 	 * @internal
 	 */
 	private _salesForceConnection: SalesforceConnection | undefined;
@@ -140,7 +128,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	};
 
 	/**
-	 * Create a new instance of SalesForceIntegrationProvider
+	 * Create a new instance of SalesforceIntegrationProvider
 	 */
 	constructor() {
 		this._referenceCache = {};
@@ -163,7 +151,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		this._settings = definition.data;
 
 		this._logger = loggerCreator("Salesforce");
-		this._logger.info("Registering SalesForce");
+		this._logger.info("Registering Salesforce");
 
 		if (!this._settings.orgUrl) {
 			this._logger.error("Configuration is missing orgUrl");
@@ -174,6 +162,8 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			this._logger.error("Configuration is missing consumerKey");
 			return;
 		}
+
+		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
 
 		this._mappings = definition.data?.mappings;
 
@@ -223,20 +213,22 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
-				key: `${SalesForceIntegrationProvider._PROVIDER_ID}-help1`,
-				title: "Salesforce",
+				key: `${this._moduleDefinition.id}-help1`,
+				title: this._moduleDefinition.title,
 				label: "Help",
 				icon: this._moduleDefinition.icon,
 				actions: [],
 				data: {
-					providerId: SalesForceIntegrationProvider._PROVIDER_ID
+					providerId: this._moduleDefinition.id
 				},
 				template: CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"Salesforce",
 					[
 						"The Salesforce integration provides no individual commands",
-						"Using the home query it will search the content of your Salesforce platform for Accounts, Contacts, Tasks, Notes and Chatter"
+						`Using the home query it will search the content of your Salesforce platform for ${this._mappings
+							.map((m) => m.label)
+							.join(", ")}`
 					],
 					[]
 				)
@@ -263,7 +255,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			}
 		} else if (result.action.trigger === "user-action") {
 			// if the user clicked the reconnect result, reconnect to salesforce and re-run query
-			if (result.key === SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY) {
+			if (result.key === SalesforceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY) {
 				await this.openConnection();
 
 				if (result.data?.query && lastResponse) {
@@ -275,7 +267,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					lastResponse.respond(results.results);
 				}
 				return true;
-			} else if (result.key === SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY) {
+			} else if (result.key === SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY) {
 				return true;
 			}
 
@@ -284,7 +276,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
 				const linkIndex = result.action.name.indexOf("_link_");
 				if (linkIndex > 0) {
-					let u = data.urls[result.action.name.replace(`${SalesForceIntegrationProvider._ACTION_OPEN}_`, "")];
+					let u = data.urls[result.action.name.replace(`${SalesforceIntegrationProvider._ACTION_OPEN}_`, "")];
 					if (u.includes("@")) {
 						await fin.System.openUrlWithBrowser(`mailto:${u}`);
 					} else {
@@ -343,7 +335,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				let selectedObjects: string[] = [];
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
-						(x) => x.id === SalesForceIntegrationProvider._OBJECTS_FILTER_ID
+						(x) => x.id === SalesforceIntegrationProvider._OBJECTS_FILTER_ID
 					);
 					if (objectsFilter) {
 						selectedObjects = (
@@ -379,7 +371,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					response.context = {
 						filters: [
 							{
-								id: SalesForceIntegrationProvider._OBJECTS_FILTER_ID,
+								id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID,
 								title: "Salesforce",
 								type: CLIFilterOptionType.MultiSelect,
 								options: apiSearchResults.filters.map((label) => ({
@@ -394,7 +386,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					if (err instanceof ConnectionError) {
 						response.results.push(this.getReconnectSearchResult(query, filters));
 					}
-					this._logger.error("Error retrieving SalesForce search results", err);
+					this._logger.error("Error retrieving Salesforce search results", err);
 				}
 			}
 		}
@@ -415,7 +407,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					query === undefined ||
 					query === null ||
 					query === "" ||
-					SalesForceIntegrationProvider._BROWSE_TITLE.toLowerCase().includes(query.toLowerCase())
+					`Browse ${this._moduleDefinition.title}`.toLowerCase().includes(query.toLowerCase())
 				) {
 					results.push(this.getBrowseSearchResult());
 				}
@@ -437,7 +429,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		if (this._settings?.orgUrl && this._settings?.consumerKey && !this._salesForceConnection) {
 			try {
 				if (this._lastResponse) {
-					this._lastResponse.revoke(SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY);
+					this._lastResponse.revoke(SalesforceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY);
 					this._lastResponse.respond([this.getConnectingSearchResult()]);
 				}
 
@@ -445,12 +437,12 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 				this._salesForceConnection = await connect(this._settings?.orgUrl, this._settings?.consumerKey);
 
 				if (this._lastResponse) {
-					this._lastResponse.revoke(SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+					this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
 					this._lastResponse.respond([this.getBrowseSearchResult()]);
 				}
 			} catch (err) {
 				this._logger.error("Error connecting to API", err);
-				this._lastResponse.revoke(SalesForceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+				this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
 				this._lastResponse.respond([this.getReconnectSearchResult()]);
 			} finally {
 				this._isConnecting = false;
@@ -459,7 +451,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Close the connection to SalesForce.
+	 * Close the connection to Salesforce.
 	 * @internal
 	 */
 	private async closeConnection(): Promise<void> {
@@ -567,7 +559,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Get batched results from SalesForce api.
+	 * Get batched results from Salesforce api.
 	 * @param batchRequests The batch requests to send.
 	 * @returns The results from the batch request.
 	 * @internal
@@ -589,7 +581,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Escape any characters needed in SalesForce API calls.
+	 * Escape any characters needed in Salesforce API calls.
 	 * @param query The query to escape.
 	 * @returns The escaped query.
 	 * @internal
@@ -601,7 +593,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
-	 * Get the search result to display when SalesForce needs to reconnect.
+	 * Get the search result to display when Salesforce needs to reconnect.
 	 * @param query The query that needs to reconnect.
 	 * @param filters The filter for the reconnect.
 	 * @returns The search result entry.
@@ -610,11 +602,11 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Reconnect", hotkey: "enter" }],
-			key: SalesForceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY,
+			key: SalesforceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY,
 			icon: this._moduleDefinition?.icon,
-			title: "Reconnect to Salesforce",
+			title: `Reconnect to ${this._moduleDefinition.title}`,
 			data: {
-				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				query,
 				filters
 			}
@@ -625,25 +617,25 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 		return {
 			actions: [{ name: "Browse", hotkey: "enter" }],
 			data: {
-				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				url: this._settings?.orgUrl,
-				tags: [SalesForceIntegrationProvider._PROVIDER_ID]
+				tags: ["salesforce"]
 			} as SalesforceResultData,
 			icon: this._moduleDefinition.icon,
-			key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
 			template: CLITemplate.Plain,
 			templateContent: undefined,
-			title: SalesForceIntegrationProvider._BROWSE_TITLE
+			title: `Browse ${this._moduleDefinition.title}`
 		} as CLISearchResultPlain;
 	}
 
 	private getConnectingSearchResult(): CLISearchResultLoading {
 		return {
 			icon: this._moduleDefinition.icon,
-			key: SalesForceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
+			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
 			template: CLITemplate.Loading,
 			templateContent: undefined,
-			title: "Connecting to SalesForce"
+			title: `Connecting to ${this._moduleDefinition.title}`
 		} as CLISearchResultLoading;
 	}
 
@@ -803,9 +795,9 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 			title,
 			icon: this._settings?.iconMap[mapping.iconKey],
 			data: {
-				providerId: SalesForceIntegrationProvider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				url: `${this._settings?.orgUrl}/${searchResult.Id}`,
-				tags: [SalesForceIntegrationProvider._PROVIDER_ID],
+				tags: ["salesforce"],
 				obj: searchResult,
 				mapping
 			} as SalesforceResultData,
@@ -919,7 +911,7 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 						pair.links.map(async (l, idx) =>
 							this._integrationHelpers.templateHelpers.createLink(
 								`${pair.label}_link_${idx}`,
-								`${SalesForceIntegrationProvider._ACTION_OPEN}_${pair.label}_link_${idx}`,
+								`${SalesforceIntegrationProvider._ACTION_OPEN}_${pair.label}_link_${idx}`,
 								10
 							)
 						)
@@ -1195,17 +1187,10 @@ export class SalesForceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "none"
 				},
 				{
-					field: "actor",
-					fieldSub: "displayName",
-					displayMode: "header",
-					isResultTitle: true
-				},
-				{
 					field: "header",
 					fieldSub: "text",
-					displayMode: "field",
-					fieldContent: "memo",
-					label: "Header"
+					displayMode: "header",
+					isResultTitle: true
 				},
 				{
 					field: "createdDate",
