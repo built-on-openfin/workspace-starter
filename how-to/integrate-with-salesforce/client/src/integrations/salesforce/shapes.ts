@@ -157,7 +157,16 @@ export interface SalesforceResultData {
 	mapping?: SalesforceMapping;
 }
 
-export interface SalesforceMappingFieldMapping {
+export interface SalesforceFieldMappingReference {
+	// The source type of the reference field
+	sourceType: string;
+	// The field to get from the data
+	field: string;
+	// Sub property of the field
+	fieldSub?: string;
+}
+
+export interface SalesforceFieldMapping {
 	// The name of the field to retrieve.
 	field: string;
 	// A sub field of the main one.
@@ -171,11 +180,7 @@ export interface SalesforceMappingFieldMapping {
 	// Use this field for the result title.
 	isResultTitle?: boolean;
 	// This is an id reference field that needs secondary name lookup from the specified table.
-	reference?: {
-		type: string;
-		field: string;
-		fieldSub?: string;
-	};
+	reference?: SalesforceFieldMappingReference;
 }
 
 export interface SalesforceMapping {
@@ -186,7 +191,7 @@ export interface SalesforceMapping {
 	// The label to display in the interface for this type
 	label?: string;
 	// The fields to retrieve.
-	fieldMappings?: SalesforceMappingFieldMapping[];
+	fieldMappings?: SalesforceFieldMapping[];
 	// The maximum number of items to retrieve.
 	maxItems?: number;
 	// What type of lookup is this
@@ -195,6 +200,26 @@ export interface SalesforceMapping {
 	feedType?: string;
 	// Condition used when performing lookup
 	condition?: string;
+	// Actions
+	actions?: SalesforceAction[];
+}
+
+export interface SalesforceAction {
+	// The label for the action
+	label: string;
+	// The icon for the action
+	iconKey: string;
+	// The url to open, optional if intent provided instead, if no url intent defaults to open in Salesforce
+	url?: string;
+	// The intent to raise if no url supplied
+	intent?: {
+		// The name of the intent
+		name: string;
+		// The context for the intent
+		context: OpenFin.Context;
+		// Optional target app
+		target?: string;
+	};
 }
 
 /**

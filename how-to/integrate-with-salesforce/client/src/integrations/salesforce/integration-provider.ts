@@ -8,6 +8,7 @@ import {
 	type SalesforceRestApiSearchResponse
 } from "@openfin/salesforce";
 import {
+	ButtonStyle,
 	CLIFilterOptionType,
 	CLISearchResultLoading,
 	CLITemplate,
@@ -31,7 +32,7 @@ import type {
 	SalesforceBatchResponse,
 	SalesforceFeedElementPage,
 	SalesforceMapping,
-	SalesforceMappingFieldMapping,
+	SalesforceFieldMapping,
 	SalesforceResultData,
 	SalesforceSearchResult,
 	SalesforceSettings
@@ -216,7 +217,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				key: `${this._moduleDefinition.id}-help1`,
 				title: this._moduleDefinition.title,
 				label: "Help",
-				icon: this._moduleDefinition.icon,
+				icon: this._settings.iconMap.salesforce,
 				actions: [],
 				data: {
 					providerId: this._moduleDefinition.id
@@ -273,33 +274,54 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 			// otherwise open the result page url in browser
 			const data = result.data as SalesforceResultData;
-			if (data !== undefined && this._integrationHelpers && this._integrationHelpers.launchView) {
-				const linkIndex = result.action.name.indexOf("_link_");
-				if (linkIndex > 0) {
-					let u = data.urls[result.action.name.replace(`${SalesforceIntegrationProvider._ACTION_OPEN}_`, "")];
-					if (u.includes("@")) {
-						await fin.System.openUrlWithBrowser(`mailto:${u}`);
-					} else {
-						if (!u.startsWith("http")) {
-							u = `https://${u}`;
-						}
-						await fin.System.openUrlWithBrowser(u);
+			if (data !== undefined && this._integrationHelpers) {
+				if (result.action.name.startsWith("button-action-")) {
+					const actionIdx = Number.parseInt(result.action.name.replace("button-action-", ""), 10);
+
+					const action = data.mapping.actions[actionIdx];
+
+					if (!action.url && !action.intent) {
+						await this.openSalesforceView(data);
+					} else if (action.url) {
+						await fin.System.openUrlWithBrowser(
+							this.substituteProperties(data.mapping, data.obj, action.url, true)
+						);
+					} else if (action.intent && this._integrationHelpers.getInteropClient) {
+						const client = await this._integrationHelpers.getInteropClient();
+
+						const contextJson = JSON.stringify(action.intent.context);
+						const substitutedJson = this.substituteProperties(data.mapping, data.obj, contextJson, false);
+						const finalContext = JSON.parse(substitutedJson);
+						await client.fireIntent({
+							name: action.intent.name,
+							context: finalContext,
+							metadata: {
+								target: action.intent.target
+							}
+						});
 					}
-				} else {
-					const preload = this._settings?.preload;
-					const viewOptions = {
-						url: data.url,
-						fdc3InteropApi: "1.2",
-						interop: {
-							currentContextGroup: "green"
-						},
-						customData: { buttonLabel: "Process Participant" },
-						preloadScripts: [{ url: preload }],
-						target: { name: "", url: "", uuid: "" }
-					};
-					await this._integrationHelpers.launchView(viewOptions);
+
+					return true;
 				}
-				return true;
+
+				if (this._integrationHelpers.launchView) {
+					const linkIndex = result.action.name.indexOf("_link_");
+					if (linkIndex > 0) {
+						let u =
+							data.urls[result.action.name.replace(`${SalesforceIntegrationProvider._ACTION_OPEN}_`, "")];
+						if (u.includes("@")) {
+							await fin.System.openUrlWithBrowser(`mailto:${u}`);
+						} else {
+							if (!u.startsWith("http")) {
+								u = `https://${u}`;
+							}
+							await fin.System.openUrlWithBrowser(u);
+						}
+					} else {
+						await this.openSalesforceView(data);
+					}
+					return true;
+				}
 			}
 		}
 		return false;
@@ -621,7 +643,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				url: this._settings?.orgUrl,
 				tags: ["salesforce"]
 			} as SalesforceResultData,
-			icon: this._moduleDefinition.icon,
+			icon: this._settings.iconMap.salesforce,
 			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
 			template: CLITemplate.Plain,
 			templateContent: undefined,
@@ -631,12 +653,42 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 	private getConnectingSearchResult(): CLISearchResultLoading {
 		return {
-			icon: this._moduleDefinition.icon,
+			icon: this._settings.iconMap.salesforce,
 			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
 			template: CLITemplate.Loading,
 			templateContent: undefined,
 			title: `Connecting to ${this._moduleDefinition.title}`
 		} as CLISearchResultLoading;
+	}
+
+	private async openSalesforceView(data: SalesforceResultData) {
+		const preload = this._settings?.preload;
+		const viewOptions = {
+			url: data.url,
+			fdc3InteropApi: "1.2",
+			interop: {
+				currentContextGroup: "green"
+			},
+			customData: { buttonLabel: "Process Participant" },
+			preloadScripts: [{ url: preload }],
+			target: { name: "", url: "", uuid: "" }
+		};
+		await this._integrationHelpers.launchView(viewOptions);
+	}
+
+	private substituteProperties(
+		mapping: SalesforceMapping,
+		searchResult: SalesforceSearchResult,
+		content: string,
+		encode: boolean
+	): string {
+		let ret = content;
+		for (const fieldMapping of mapping.fieldMappings) {
+			const fieldValue = this.getFieldContent(searchResult, fieldMapping.field, fieldMapping.fieldSub) ?? "";
+			const re = new RegExp(`{${fieldMapping.field}}`, "g");
+			ret = ret.replace(re, encode ? encodeURIComponent(fieldValue) : fieldValue);
+		}
+		return ret;
 	}
 
 	private getFieldContent(searchResult: SalesforceSearchResult, field: string, subField?: string): string {
@@ -760,10 +812,38 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			gap: "10px"
 		});
 
+		const buttons: {
+			titleKey: string;
+			action: string;
+			imageKey: string;
+			imageAltText: string;
+		}[] = [];
+
+		const buttonData: { [id: string]: string } = {};
+
+		if (Array.isArray(mapping.actions)) {
+			for (let i = 0; i < mapping.actions.length; i++) {
+				const titleKey = `button-title-${i}`;
+				const imageKey = `button-image-${i}`;
+				buttons.push({
+					titleKey,
+					action: `button-action-${i}`,
+					imageKey,
+					imageAltText: mapping.actions[i].label
+				});
+				buttonData[titleKey] = mapping.actions[i].label;
+				buttonData[imageKey] = this._settings.iconMap[mapping.actions[i].iconKey];
+			}
+		}
+
 		return this.buildTemplate(searchResult, mapping, CLITemplate.Custom, {
 			layout: await this._integrationHelpers.templateHelpers.createContainer(
 				"column",
-				[headerRow, await this.createPairsLayout(palette, pairs)],
+				[
+					headerRow,
+					await this.createPairsLayout(palette, pairs),
+					await this.createButtonsLayout(palette, buttons)
+				],
 				{
 					padding: "10px",
 					gap: "15px",
@@ -772,7 +852,8 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			),
 			data: {
 				...data,
-				...this.mapPairsToData(pairs)
+				...this.mapPairsToData(pairs),
+				...buttonData
 			}
 		});
 	}
@@ -811,7 +892,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		mapping: SalesforceMapping
 	): Promise<void> {
 		const batch: SalesforceBatchRequestItem[] = [];
-		const referenceMappings: SalesforceMappingFieldMapping[] = [];
+		const referenceMappings: SalesforceFieldMapping[] = [];
 
 		for (const fieldMapping of mapping.fieldMappings) {
 			if (fieldMapping.reference) {
@@ -825,7 +906,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 						batch.push({
 							method: "GET",
 							url: `/services/data/vXX.X/query?q=${encodeURIComponent(
-								`SELECT ${fieldMapping.reference.field} FROM ${fieldMapping.reference.type} WHERE Id='${id}'`
+								`SELECT ${fieldMapping.reference.field} FROM ${fieldMapping.reference.sourceType} WHERE Id='${id}'`
 							)}`
 						});
 					}
@@ -946,6 +1027,48 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		});
 	}
 
+	private async createButtonsLayout(
+		palette: CustomPaletteSet,
+		buttons: {
+			titleKey: string;
+			action: string;
+			imageKey: string;
+			imageAltText: string;
+		}[]
+	): Promise<TemplateFragment> {
+		return this._integrationHelpers.templateHelpers.createContainer(
+			"row",
+			await Promise.all(
+				buttons.map(async (b) =>
+					this._integrationHelpers.templateHelpers.createButton(
+						ButtonStyle.Secondary,
+						b.titleKey,
+						b.action,
+						{
+							border: "none",
+							borderRadius: "50%",
+							width: "40px",
+							height: "40px",
+							padding: "0px",
+							justifyContent: "center",
+							backgroundColor: palette.background2
+						},
+						[
+							await this._integrationHelpers.templateHelpers.createImage(b.imageKey, b.imageAltText, {
+								width: "16px",
+								height: "16px"
+							})
+						]
+					)
+				)
+			),
+			{
+				justifyContent: "space-around",
+				gap: "20px"
+			}
+		);
+	}
+
 	private mapPairsToData(
 		pairs: {
 			label: string;
@@ -1030,6 +1153,12 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Description"
 				}
 			];
+			mapping.actions = mapping.actions ?? [
+				{
+					label: "Salesforce",
+					iconKey: "salesforce"
+				}
+			];
 		}
 	}
 
@@ -1081,6 +1210,12 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Phone"
 				}
 			];
+			mapping.actions = mapping.actions ?? [
+				{
+					label: "Salesforce",
+					iconKey: "salesforce"
+				}
+			];
 		}
 	}
 
@@ -1111,7 +1246,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					label: "Created By",
 					reference: {
-						type: "User",
+						sourceType: "User",
 						field: "Name"
 					}
 				},
@@ -1126,6 +1261,12 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					fieldContent: "memo",
 					label: "Comments"
+				}
+			];
+			mapping.actions = mapping.actions ?? [
+				{
+					label: "Salesforce",
+					iconKey: "salesforce"
 				}
 			];
 		}
@@ -1153,7 +1294,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					label: "Created By",
 					reference: {
-						type: "User",
+						sourceType: "User",
 						field: "Name"
 					}
 				},
@@ -1168,6 +1309,12 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					fieldContent: "memo",
 					label: "Content"
+				}
+			];
+			mapping.actions = mapping.actions ?? [
+				{
+					label: "Salesforce",
+					iconKey: "salesforce"
 				}
 			];
 		}
@@ -1204,6 +1351,12 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					displayMode: "field",
 					fieldContent: "memo",
 					label: "Content"
+				}
+			];
+			mapping.actions = mapping.actions ?? [
+				{
+					label: "Salesforce",
+					iconKey: "salesforce"
 				}
 			];
 		}

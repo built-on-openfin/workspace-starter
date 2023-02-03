@@ -1,3 +1,4 @@
+import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
@@ -65,6 +66,16 @@ export interface ModuleHelpers {
 	 * The root url for the provider.
 	 */
 	rootUrl?: string;
+
+	/**
+	 * Returns an interop client that can be used to broadcast context and raise intents. The
+	 * function could be undefined if you are not allowed to use the function or the returned
+	 * InteropClient could be undefined if you try to fetch it before the broker is fully initialized.
+	 * Please listen for the life cycle event 'after-bootstrap' before trying to call this function.
+	 * If you need to handle data before bootstrapping is complete then you can cache it and use it
+	 * once the application is bootstrapped and ready.
+	 */
+	getInteropClient?(): Promise<InteropClient | undefined>;
 
 	/**
 	 * Get the current palette.

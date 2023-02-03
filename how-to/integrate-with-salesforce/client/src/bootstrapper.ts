@@ -17,6 +17,7 @@ export async function init() {
 	await registerIntegration(settings.integrationProvider, {
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
+		getInteropClient: async () => fin.Interop.connectSync(fin.me.uuid, {}),
 		templateHelpers,
 		openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 		launchView,
