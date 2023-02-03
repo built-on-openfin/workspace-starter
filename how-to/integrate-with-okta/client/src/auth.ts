@@ -4,10 +4,7 @@ import type { OktaSettings } from "./shapes";
 let authSettings: OktaSettings;
 let informationCallback: (info: string) => void;
 
-export async function init(
-	settings: OktaSettings,
-	informationCb: (info: string) => void
-) {
+export async function init(settings: OktaSettings, informationCb: (info: string) => void) {
 	informationCallback = informationCb;
 
 	informationCallback("Initialising the authentication");
@@ -51,7 +48,6 @@ export async function login() {
 
 export async function loginWithWidget() {
 	const authUrl = "http://localhost:8080/widgetLogin.html";
-
 
 	await showWindow(authUrl);
 }

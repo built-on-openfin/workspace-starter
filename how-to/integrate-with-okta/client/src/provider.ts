@@ -3,7 +3,6 @@ import { login as authenticationLogin, loginWithWidget as authenticationLoginWit
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 
-
 window.addEventListener("DOMContentLoaded", async () => {
 	const platform = fin.Platform.getCurrentSync();
 
@@ -13,7 +12,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	await initialisePlatform();
 });
-
 
 export function logInformation(info: string) {
 	const logElem = document.querySelector("#logOutput");

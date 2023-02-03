@@ -1,9 +1,6 @@
 /* eslint-disable linebreak-style */
 import { init as authenticationInit } from "./auth";
-import {
-
-	logInformation
-} from "./provider";
+import { logInformation } from "./provider";
 import { getSettings } from "./settings";
 
 export async function init() {
