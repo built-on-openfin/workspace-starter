@@ -1,10 +1,10 @@
 {
-	"name": "openfin-workspace--integrate-with-sso",
+	"name": "openfin-workspace--integrate-with-auth0",
 	"version": "10.3.0",
-	"description": "OpenFin Workspace -- Integrate with SSO",
+	"description": "OpenFin Workspace -- Integrate with SSO - Auth0",
 	"main": "index.js",
 	"scripts": {
-		"dos": "npm --prefix ../common/ run dos",
+		"dos": "npm --prefix ../../common/ run dos",
 		"build": "npm run build-server & npm run build-client",
 		"build-server": "tsc --project ./server",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
@@ -12,8 +12,8 @@
 		"start": "npm run server",
 		"client": "npm --prefix ../../common/ run client",
 		"server": "node ./server/build/index.js",
-		"kill": "npm --prefix ../common/ run kill",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-sso && npm run build && npm --prefix ../common/ run build",
+		"kill": "npm --prefix ../../common/ run kill",
+		"setup": "cd ../../../ && npm install && cd how-to/integrate-with-sso/integrate-with-auth0 && npm run build && npm --prefix ../../common/ run build",
 		"validate": "npm --prefix ../../../ run validate"
 	},
 	"author": "martyn.janes@openfin.co",

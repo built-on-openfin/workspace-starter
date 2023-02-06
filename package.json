@@ -15,13 +15,16 @@
 	},
 	"workspaces": [
 		"how-to/*",
-		"how-to/automation-testing/*"
+		"how-to/automation-testing/*",
+		"how-to/integrate-with-sso/*"
 	],
 	"packageExclude": [
 		"how-to/register-with-home-basic",
 		"how-to/register-with-store-basic",
 		"how-to/migrate-from-a-previous-version",
 		"how-to/integrate-with-sso",
+		"how-to/integrate-with-sso/integrate-with-auth0",
+		"how-to/integrate-with-sso/integrate-with-okta",
 		"how-to/integrate-with-ms365-basic",
 		"how-to/integrate-server-authentication",
 		"how-to/integrate-with-salesforce-basic",
@@ -35,6 +38,7 @@
 	],
 	"howToCustomFolder": "",
 	"contributors": [
+		"ameet.jayawant@openfin.co",
 		"adam.saland@openfin.co",
 		"john.mandia@openfin.co",
 		"martyn.janes@openfin.co",

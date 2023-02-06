@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import type { CustomSettings } from "./shapes";
 
 let settings: CustomSettings;
