@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
 		"start": "npm run server",
-		"client": "npm --prefix ../common/ run client",
+		"client": "npm --prefix ../../common/ run client",
 		"server": "node ./server/build/index.js",
 		"kill": "npm --prefix ../common/ run kill",
 		"setup": "cd ../../ && npm install && cd how-to/integrate-with-okta && npm run build && npm --prefix ../common/ run build",
