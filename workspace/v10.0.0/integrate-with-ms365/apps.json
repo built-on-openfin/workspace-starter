@@ -152,6 +152,25 @@
 		"tags": ["view", "microsoft", "365", "sharepoint"]
 	},
 	{
+		"appId": "ms-365-onedrive",
+		"name": "ms-365-onedrive",
+		"title": "Microsoft OneDrive",
+		"description": "Launch Microsoft 365 OneDrive in a view.",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-ms365/views/ms-365-onedrive-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-ms365/images/apps/onedrive.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "microsoft", "365", "onedrive"]
+	},
+	{
 		"appId": "ms-365-onenote",
 		"name": "ms-365-onenote",
 		"title": "Microsoft OneNote",
