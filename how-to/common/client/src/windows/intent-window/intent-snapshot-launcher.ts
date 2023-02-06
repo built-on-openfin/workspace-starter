@@ -68,33 +68,40 @@ async function launcherInit() {
 		const intentName: string = settings.intentName;
 
 		await fin.me.interop.registerIntentHandler(async (intent) => {
-			const response = await fetch(snapshotUrl, {
-				headers: {
-					Accept: "application/json"
-				}
-			});
-			if (response.status === 200) {
-				console.log("Received snapshot response");
-				let text = await response.text();
-				if (
-					idName !== undefined &&
-					intent?.context?.id !== undefined &&
-					intent.context.id[idName] !== undefined
-				) {
-					text = text.replaceAll(idToken, intent.context.id[idName]);
-				}
+			try {
+				const response = await fetch(snapshotUrl, {
+					headers: {
+						Accept: "application/json"
+					}
+				});
+				if (response.status === 200) {
+					console.log("Received snapshot response");
+					let text = await response.text();
+					if (
+						idName !== undefined &&
+						intent?.context?.id !== undefined &&
+						intent.context.id[idName] !== undefined
+					) {
+						text = text.replaceAll(idToken, intent.context.id[idName]);
+					}
 
-				const targetContextGroupName: string = await getContextGroupName(contextGroupName, contextGroupToken);
-				if (targetContextGroupName !== undefined && contextGroupToken !== undefined) {
-					text = text.replaceAll(contextGroupToken, targetContextGroupName);
+					const targetContextGroupName: string = await getContextGroupName(
+						contextGroupName,
+						contextGroupToken
+					);
+					if (targetContextGroupName !== undefined && contextGroupToken !== undefined) {
+						text = text.replaceAll(contextGroupToken, targetContextGroupName);
+					}
+					const snapshot: OpenFin.Snapshot = JSON.parse(text);
+					const platform = fin.Platform.getCurrentSync();
+					if (targetContextGroupName !== undefined) {
+						await fin.me.interop.joinContextGroup(targetContextGroupName);
+						await fin.me.interop.setContext(intent.context);
+					}
+					await platform.applySnapshot(snapshot);
 				}
-				const snapshot: OpenFin.Snapshot = JSON.parse(text);
-				const platform = fin.Platform.getCurrentSync();
-				if (targetContextGroupName !== undefined) {
-					await fin.me.interop.joinContextGroup(targetContextGroupName);
-					await fin.me.interop.setContext(intent.context);
-				}
-				await platform.applySnapshot(snapshot);
+			} catch (error) {
+				console.error("Error while trying to handle intent request for:", intent.name, error);
 			}
 		}, intentName);
 	}
