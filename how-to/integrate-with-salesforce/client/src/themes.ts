@@ -2,6 +2,7 @@ import type { CustomThemes } from "@openfin/workspace-platform";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { DEFAULT_PALETTES } from "./default-palletes";
 import { getSettings } from "./settings";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
 
 let validatedThemes: CustomThemeOptions[];
 
@@ -10,6 +11,10 @@ function getSystemPreferredColorScheme(): "light" | "dark" {
 		return "dark";
 	}
 	return "light";
+}
+
+export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
+	return ColorSchemeMode.Dark;
 }
 
 export async function getCurrentPalette(): Promise<CustomPaletteSet> {

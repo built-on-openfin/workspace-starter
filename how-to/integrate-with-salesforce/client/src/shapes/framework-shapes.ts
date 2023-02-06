@@ -6,6 +6,7 @@ interface HomeProviderOptions {
 	title: string;
 	icon: string;
 	hidden?: boolean;
+	queryMinLength?: number;
 }
 
 interface AppProviderOptions {
