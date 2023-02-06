@@ -165,6 +165,8 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
+		this._settings.iconMap = this._settings.iconMap ?? {};
+		this._settings.iconMap.salesforce = this._settings.iconMap.salesforce ?? this._moduleDefinition.icon;
 
 		this._mappings = definition.data?.mappings;
 
