@@ -14,6 +14,7 @@ import { launch } from "./launch";
 import { getSettings } from "./settings";
 
 let isHomeRegistered = false;
+let queryMinLength = 3;
 
 export async function register(): Promise<HomeRegistration> {
 	console.log("Initialising home.");
@@ -28,6 +29,8 @@ export async function register(): Promise<HomeRegistration> {
 		);
 		return;
 	}
+
+	queryMinLength = settings?.homeProvider?.queryMinLength ?? queryMinLength;
 
 	let lastResponse: HomeSearchListenerResponse;
 
@@ -56,7 +59,9 @@ export async function register(): Promise<HomeRegistration> {
 			if (queryLower === "?") {
 				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
 			} else {
-				const integrationResults = await getSearchResults(request.query, filters, lastResponse);
+				const integrationResults = await getSearchResults(request.query, filters, lastResponse, {
+					queryMinLength
+				});
 				if (Array.isArray(integrationResults.results)) {
 					searchResults.results = searchResults.results.concat(integrationResults.results);
 				}

@@ -93,12 +93,16 @@ export async function deregister(integrationProvider?: IntegrationProviderOption
  * @param query The query to get the search results for.
  * @param filters The filters to apply to the search results.
  * @param lastResponse The last search response used for updating existing results.
+ * @param options Options for the search query.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
-	lastResponse: HomeSearchListenerResponse
+	lastResponse: HomeSearchListenerResponse,
+	options: {
+		queryMinLength: number;
+	}
 ): Promise<HomeSearchResponse> {
 	const homeResponse: HomeSearchResponse = {
 		results: [],
@@ -110,7 +114,7 @@ export async function getSearchResults(
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.implementation.getSearchResults) {
-			promises.push(homeIntegration.implementation.getSearchResults(query, filters, lastResponse));
+			promises.push(homeIntegration.implementation.getSearchResults(query, filters, lastResponse, options));
 		}
 	}
 
