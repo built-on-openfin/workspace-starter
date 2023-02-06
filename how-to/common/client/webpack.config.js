@@ -81,5 +81,32 @@ module.exports = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/windows/intent-window/intent-snapshot-launcher.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'common.windows.intent-snapshot-launcher.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];

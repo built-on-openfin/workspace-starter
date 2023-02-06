@@ -10,7 +10,15 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		}
 	},
 	"snapshot": {
 		"windows": []
@@ -69,8 +77,10 @@
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
+						"enableLibLogging": true,
 						"preload": "http://localhost:8080/js/preload.js",
 						"iconMap": {
+							"salesforce": "http://localhost:8080/images/salesforce.svg",
 							"contact": "http://localhost:8080/images/contact.svg",
 							"account": "http://localhost:8080/images/account.svg",
 							"chatter": "http://localhost:8080/images/chatter.svg",

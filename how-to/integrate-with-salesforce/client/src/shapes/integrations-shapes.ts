@@ -110,12 +110,16 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength: number;
+		}
 	): Promise<HomeSearchResponse>;
 
 	/**

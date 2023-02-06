@@ -1,7 +1,7 @@
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
-import { launchSnapshot, launchView } from "../launch";
+import { launchSnapshot, launchView, launchWindow } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
@@ -26,10 +26,14 @@ export function interopOverride(
 			if (
 				app.manifestType !== manifestTypes.view.id &&
 				app.manifestType !== manifestTypes.inlineView.id &&
+				app.manifestType !== manifestTypes.window.id &&
+				app.manifestType !== manifestTypes.inlineWindow.id &&
 				app.manifestType !== manifestTypes.snapshot.id
 			) {
 				// optional logic show a prompt to the user to let them know
-				logger.warn("Unable to raise intent against app as only view/snapshot based apps are supported");
+				logger.warn(
+					"Unable to raise intent against app as only view/snapshot and window based apps are supported"
+				);
 				return null;
 			}
 
@@ -40,6 +44,21 @@ export function interopOverride(
 				if (identity === null) {
 					// optional logic show a prompt to the user to let them know
 					logger.warn("Unable to raise intent against view as no identity was returned");
+					return null;
+				}
+				await super.setIntentTarget(intent, identity);
+			}
+
+			if (
+				app.manifestType === manifestTypes.window.id ||
+				app.manifestType === manifestTypes.inlineWindow.id
+			) {
+				logger.info(`The supporting app is a classic window (${app.manifestType})`);
+
+				const identity = await launchWindow(app);
+				if (identity === null) {
+					// optional logic show a prompt to the user to let them know
+					logger.warn("Unable to raise intent against classic window as no identity was returned");
 					return null;
 				}
 				await super.setIntentTarget(intent, identity);
