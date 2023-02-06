@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import { init as authenticationInit } from "./auth";
 import { logInformation } from "./provider";
 import { getSettings } from "./settings";

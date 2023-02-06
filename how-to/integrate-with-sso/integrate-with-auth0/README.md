@@ -1,9 +1,9 @@
-![OpenFin Workspace Example Application -- Integrate with SSO](../../assets/OpenFin-Workspace-Starter.png)
+![OpenFin Workspace Example Application -- Integrate with SSO - Auth0](../../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
-# Integrate with SSO
+# Integrate with SSO - Auth0
 
 Your OpenFin application will often need to authenticate with a SSO provider before use, this examples demonstrates such an integration.
 
@@ -54,7 +54,7 @@ There is also a second entry for `https://accounts.google.com` in the `logoutUrl
 If you enable additional federated providers in Auth0 you might need additional logout urls.
 
 3. Optional (if you wish to pin the version of OpenFin Workspace to version 10.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
+   This example runs a utility [desktop-owner-settings.bat](../../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).

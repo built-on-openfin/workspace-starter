@@ -10,7 +10,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"importsNotUsedAsValues": "error",
 		"moduleResolution": "node",
-		"types": ["../../common/types/fin"]
+		"types": ["../../../common/types/fin"]
 	},
 	"include": ["./src/**/*.ts"]
 }

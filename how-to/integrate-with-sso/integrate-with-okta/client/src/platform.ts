@@ -1,8 +1,7 @@
-/* eslint-disable linebreak-style */
 import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
 
 export async function init() {
-	console.log("Initialising platform");
+	console.log("Initializing platform");
 
 	const browser: BrowserInitConfig = {};
 
