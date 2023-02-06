@@ -29,6 +29,12 @@ async function init() {
 		}
 	});
 	action.addEventListener('click', actionQuery);
+	if (location.search !== undefined) {
+		const queryParams = new URLSearchParams(location.search);
+		if (queryParams.has('q')) {
+			query.value = queryParams.get('q');
+		}
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
