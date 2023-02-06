@@ -356,7 +356,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			const minLength = options?.queryMinLength ?? 3;
 
 			if (query.length >= minLength) {
-				let selectedObjects: string[] = [];
+				let selectedObjects: string[] = this._mappings.map((m) => m.label);
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
 						(x) => x.id === SalesforceIntegrationProvider._OBJECTS_FILTER_ID
@@ -368,8 +368,6 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 							.filter((x) => Boolean(x.isSelected))
 							.map((x) => x.value);
 					}
-				} else {
-					selectedObjects = this._mappings.map((m) => m.label);
 				}
 
 				try {
