@@ -14,7 +14,7 @@
 		"server": "node ./server/build/index.js",
 		"kill": "npm --prefix ../common/ run kill",
 		"setup": "cd ../../ && npm install && cd how-to/integrate-with-sso && npm run build && npm --prefix ../common/ run build",
-		"validate": "npm --prefix ../../ run validate"
+		"validate": "npm --prefix ../../../ run validate"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",

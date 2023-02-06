@@ -57,7 +57,7 @@
 					//callRecovery: true,                         // Enable voice call-based account recovery
 					router: true // Leave this set to true for this demo
 				},
-                logo: 'http://localhost:8080/favicon.ico',
+				logo: 'http://localhost:8080/favicon.ico',
 				issuer: '{YOUR_OKTA_DOMAIN}/oauth2/default',
 				redirectUri: 'http://localhost:8080/platform/app.html',
 				clientId: '{YOUR_CLIENT_ID}'
@@ -106,7 +106,7 @@
 			function logout() {
 				oktaSignIn.authClient.signOut();
 				location.reload();
-                // window.location.href = 'http://localhost:8080/platform/app.html';
+				// window.location.href = 'http://localhost:8080/platform/app.html';
 			}
 		</script>
 	</body>
