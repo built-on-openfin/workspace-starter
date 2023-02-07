@@ -85,7 +85,11 @@
 							"account": "http://localhost:8080/images/account.svg",
 							"chatter": "http://localhost:8080/images/chatter.svg",
 							"note": "http://localhost:8080/images/note.svg",
-							"task": "http://localhost:8080/images/task.svg"
+							"task": "http://localhost:8080/images/task.svg",
+							"dashboard": "http://localhost:8080/images/dashboard.svg",
+							"phone": "http://localhost:8080/images/phone.svg",
+							"chat": "http://localhost:8080/images/chat.svg",
+							"email": "http://localhost:8080/images/email.svg"
 						}
 					}
 				}
