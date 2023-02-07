@@ -291,18 +291,22 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
 						);
 					} else if (action.intent && this._integrationHelpers.getInteropClient) {
-						const client = await this._integrationHelpers.getInteropClient();
+						try {
+							const client = await this._integrationHelpers.getInteropClient();
 
-						const contextJson = JSON.stringify(action.intent.context);
-						const substitutedJson = this.substituteProperties(data.mapping, data.obj, contextJson, false);
-						const finalContext = JSON.parse(substitutedJson);
-						await client.fireIntent({
-							name: action.intent.name,
-							context: finalContext,
-							metadata: {
-								target: action.intent.target
-							}
-						});
+							const contextJson = JSON.stringify(action.intent.context);
+							const subJson = this.substituteProperties(data.mapping, data.obj, contextJson, false);
+							const finalContext = JSON.parse(subJson);
+							await client.fireIntent({
+								name: action.intent.name,
+								context: finalContext,
+								metadata: {
+									target: action.intent.target
+								}
+							});
+						} catch (err) {
+							this._logger.error(`Failed raising intent ${action.intent.name}`, err);
+						}
 					}
 
 					return true;
