@@ -27,12 +27,13 @@ import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integra
 import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
 import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
+	SalesforceAction,
 	SalesforceBatchRequest,
 	SalesforceBatchRequestItem,
 	SalesforceBatchResponse,
 	SalesforceFeedElementPage,
-	SalesforceMapping,
 	SalesforceFieldMapping,
+	SalesforceMapping,
 	SalesforceResultData,
 	SalesforceSearchResult,
 	SalesforceSettings
@@ -192,7 +193,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			];
 		}
 
-		this.populateFields();
+		await this.populateFields();
 
 		if (this._settings.enableLibLogging) {
 			enableLogging();
@@ -1102,15 +1103,15 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	/**
 	 * Populate the default fields for all the mappings if they have not been configured.
 	 */
-	private populateFields(): void {
-		this.populateAccountMapping();
-		this.populateContactMapping();
-		this.populateTaskMapping();
-		this.populateNoteMapping();
-		this.populateChatterMapping();
+	private async populateFields(): Promise<void> {
+		await this.populateAccountMapping();
+		await this.populateContactMapping();
+		await this.populateTaskMapping();
+		await this.populateNoteMapping();
+		await this.populateChatterMapping();
 	}
 
-	private populateAccountMapping() {
+	private async populateAccountMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Account");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Account";
@@ -1154,16 +1155,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Description"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateContactMapping() {
+	private async populateContactMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Contact");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Contact";
@@ -1173,10 +1176,6 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			mapping.fieldMappings = mapping.fieldMappings ?? [
 				{
 					field: "Id",
-					displayMode: "none"
-				},
-				{
-					field: "VisibleInOpenFinHome__c",
 					displayMode: "none"
 				},
 				{
@@ -1211,16 +1210,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Phone"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateTaskMapping() {
+	private async populateTaskMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Task");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Task";
@@ -1264,16 +1265,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Comments"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateNoteMapping() {
+	private async populateNoteMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "ContentNote");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Note";
@@ -1312,16 +1315,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Content"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateChatterMapping() {
+	private async populateChatterMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Chatter");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Chatter";
@@ -1354,12 +1359,42 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Content"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
+	}
+
+	private async validateIntents(actions: SalesforceAction[]): Promise<SalesforceAction[]> {
+		const finalActions: SalesforceAction[] = [];
+
+		for (const action of actions) {
+			if (action.intent) {
+				let hasHandler = false;
+				try {
+					const info = await fin.me.interop.getInfoForIntent({
+						name: action.intent?.name
+					});
+					if (info) {
+						hasHandler = true;
+					}
+				} catch {}
+
+				if (hasHandler) {
+					finalActions.push(action);
+				} else {
+					this._logger.error(`No handler for intent ${action.intent.name}`);
+				}
+			} else {
+				finalActions.push(action);
+			}
+		}
+
+		return finalActions;
 	}
 }
