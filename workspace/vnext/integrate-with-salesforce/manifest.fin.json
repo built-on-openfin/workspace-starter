@@ -85,7 +85,11 @@
 							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
 							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
 							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg"
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				}
