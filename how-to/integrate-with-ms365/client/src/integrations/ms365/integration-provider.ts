@@ -2404,7 +2404,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			),
 			{
 				justifyContent: "space-around",
-				gap: "20px"
+				gap: "10px"
 			}
 		);
 	}

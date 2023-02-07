@@ -1066,7 +1066,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			),
 			{
 				justifyContent: "space-around",
-				gap: "20px"
+				gap: "10px"
 			}
 		);
 	}
