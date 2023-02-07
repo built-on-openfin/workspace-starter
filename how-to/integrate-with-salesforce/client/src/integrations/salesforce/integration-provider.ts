@@ -151,8 +151,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
 
-		this._logger = loggerCreator("Salesforce");
-		this._logger.info("Registering Salesforce");
+		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
+
+		this._logger = loggerCreator(this._moduleDefinition.title);
+		this._logger.info(`Initializing ${this._moduleDefinition.title}`);
 
 		if (!this._settings.orgUrl) {
 			this._logger.error("Configuration is missing orgUrl");
@@ -164,7 +166,6 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			return;
 		}
 
-		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
 		this._settings.iconMap = this._settings.iconMap ?? {};
 		this._settings.iconMap.salesforce = this._settings.iconMap.salesforce ?? this._moduleDefinition.icon;
 

@@ -181,6 +181,48 @@
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "view-contact-dashboard-launcher",
+		"name": "view-contact-dashboard-launcher",
+		"title": "View Contact Dashboard",
+		"description": "A hidden window that acts as an intent target and launches and snapshot and optionally publishes a context object to a specific context group",
+		"manifest": {
+			"name": "view-contact-dashboard-launcher",
+			"url": "http://localhost:8080/common/windows/intent-window/intent-snapshot-launcher.html",
+			"autoShow": false,
+			"includeInSnapshots": false,
+			"customData": {
+				"settings": {
+					"snapshotUrl": "http://localhost:8080/common/snapshots/template-snapshot-contact-dashboard.json",
+					"contextGroupName": "*",
+					"contextGroupToken": "{CONTEXT_GROUP}",
+					"intentName": "ViewContact",
+					"idToken": "{ID}",
+					"idName": "email"
+				}
+			}
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			}
+		],
+		"private": true,
+		"images": [],
+		"tags": ["window", "fdc3", "interop", "contact"]
+	},
+	{
 		"appId": "fdc3-workbench",
 		"name": "fdc3-workbench",
 		"title": "FDC3 Workbench",

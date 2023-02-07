@@ -1,0 +1,184 @@
+{
+	"windows": [
+		{
+			"title": "Contact Dashboard",
+			"defaultHeight": 930,
+			"defaultLeft": 346,
+			"defaultTop": 238,
+			"defaultWidth": 1501,
+			"height": 931,
+			"width": 1503,
+			"workspacePlatform": {
+				"pages": [
+					{
+						"title": "Contact Dashboard",
+						"layout": {
+							"settings": {
+								"hasHeaders": true,
+								"constrainDragToContainer": true,
+								"reorderEnabled": true,
+								"selectionEnabled": false,
+								"popoutWholeStack": false,
+								"blockedPopoutsThrowError": true,
+								"closePopoutsOnUnload": true,
+								"showPopoutIcon": false,
+								"showMaximiseIcon": true,
+								"showCloseIcon": false,
+								"responsiveMode": "onload",
+								"tabOverlapAllowance": 0,
+								"reorderOnTabMenuClick": true,
+								"tabControlOffset": 10,
+								"constrainDragToHeaders": false,
+								"preventDragOut": true,
+								"preventDragIn": true
+							},
+							"content": [
+								{
+									"type": "row",
+									"reorderEnabled": true,
+									"title": "",
+									"content": [
+										{
+											"type": "row",
+											"reorderEnabled": true,
+											"title": "",
+											"height": 100,
+											"width": 100,
+											"content": [
+												{
+													"type": "column",
+													"reorderEnabled": true,
+													"title": "",
+													"width": 50,
+													"content": [
+														{
+															"type": "stack",
+															"width": 50,
+															"height": 54.035874439461885,
+															"reorderEnabled": true,
+															"title": "",
+															"activeItemIndex": 0,
+															"content": [
+																{
+																	"type": "component",
+																	"isClosable": false,
+																	"componentName": "view",
+																	"componentState": {
+																		"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
+																		"componentName": "view",
+																		"fdc3InteropApi": "1.2",
+																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
+																		"preloadScripts": [
+																			{
+																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																			}
+																		]
+																	}
+																},
+																{
+																	"type": "component",
+																	"isClosable": false,
+																	"componentName": "view",
+																	"componentState": {
+																		"url": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
+																		"componentName": "view",
+																		"fdc3InteropApi": "1.2",
+																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
+																		"preloadScripts": [
+																			{
+																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																			}
+																		]
+																	}
+																}
+															]
+														},
+														{
+															"type": "stack",
+															"header": {},
+															"reorderEnabled": true,
+															"title": "",
+															"activeItemIndex": 0,
+															"height": 45.964125560538115,
+															"content": [
+																{
+																	"type": "component",
+																	"isClosable": false,
+																	"componentName": "view",
+																	"componentState": {
+																		"url": "http://localhost:8080/common/views/contact/participant-history/index.html",
+																		"componentName": "view",
+																		"fdc3InteropApi": "1.2",
+																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
+																		"preloadScripts": [
+																			{
+																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																			}
+																		]
+																	}
+																},
+																{
+																	"type": "component",
+																	"isClosable": false,
+																	"componentName": "view",
+																	"componentState": {
+																		"url": "http://localhost:8080/common/views/contact/participant-selection/index.html",
+																		"componentName": "view",
+																		"fdc3InteropApi": "1.2",
+																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
+																		"preloadScripts": [
+																			{
+																				"url": "http://localhost:8080/common/style/style-changed-preload.js",
+																				"state": "succeeded"
+																			}
+																		]
+																	}
+																}
+															]
+														}
+													]
+												},
+												{
+													"type": "stack",
+													"header": {},
+													"reorderEnabled": true,
+													"title": "",
+													"activeItemIndex": 0,
+													"width": 50,
+													"content": [
+														{
+															"type": "component",
+															"isClosable": false,
+															"componentName": "view",
+															"componentState": {
+																"url": "http://localhost:8080/common/views/platform/new-tab/new-tab.html?q={ID}",
+																"componentName": "view"
+															}
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							],
+							"reorderEnabled": true,
+							"title": "",
+							"openPopouts": [],
+							"maximisedItemId": null
+						},
+						"isReadOnly": false,
+						"hasUnsavedChanges": false,
+						"isActive": true
+					}
+				],
+				"title": "Contact Dashboard",
+				"newTabUrl": null,
+				"newPageUrl": null,
+				"toolbarOptions": {}
+			},
+			"ignoreSavedWindowState": true,
+			"preloadScripts": []
+		}
+	]
+}
