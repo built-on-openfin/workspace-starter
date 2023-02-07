@@ -1,4 +1,4 @@
-import type { CustomThemes } from "@openfin/workspace-platform";
+import { ColorSchemeOptionType, CustomThemes, getCurrentSync } from "@openfin/workspace-platform";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { getSettings } from "./settings";
 import { ColorSchemeMode } from "./shapes/theme-shapes";
@@ -54,14 +54,33 @@ const DEFAULT_PALETTES: { [id: string]: CustomPaletteSet } = {
 
 let validatedThemes: CustomThemeOptions[];
 
-function getSystemPreferredColorScheme(): "light" | "dark" {
+function getSystemPreferredColorScheme(): ColorSchemeMode {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
-		return "dark";
+		return ColorSchemeMode.Dark;
 	}
-	return "light";
+	return ColorSchemeMode.Light;
 }
 
 export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
+	// No theme currently set so try and work it out
+	try {
+		const platform = getCurrentSync();
+		// Get the selected theme from the platform
+		const selectedTheme = await platform.Theme.getSelectedScheme();
+
+		if (selectedTheme === ColorSchemeOptionType.System) {
+			// If set to system then find out what that really means
+			return getSystemPreferredColorScheme();
+		} else if (selectedTheme === ColorSchemeOptionType.Dark) {
+			return ColorSchemeMode.Dark;
+		} else if (selectedTheme === ColorSchemeOptionType.Light) {
+			return ColorSchemeMode.Light;
+		}
+	} catch {
+		// Platform probably not running yet, don't set a default as we want
+		// subsequent successful calls to populate it when the platform is running
+	}
+
 	return ColorSchemeMode.Dark;
 }
 
