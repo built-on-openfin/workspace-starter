@@ -78,13 +78,19 @@
 							"Chat.Read",
 							"ChannelMessage.Read.All",
 							"TeamMember.Read.All",
-							"ChannelMember.Read.All"
+							"ChannelMember.Read.All",
+							"Files.Read.All",
+							"Sites.Read.All"
 						],
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
 							"microsoft365": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/microsoft365.svg",
 							"teams": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/teams.svg",
+							"word": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/word.svg",
+							"excel": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/excel.svg",
+							"onenote": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/onenote.svg",
+							"powerpoint": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/powerpoint.svg",
 							"outlook": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/apps/outlook-mail.svg",
 							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/email.svg",
 							"calendar": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/calendar.svg",
@@ -93,6 +99,7 @@
 							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/call.svg",
 							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/contact.svg",
 							"team": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/team.svg",
+							"file": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/file.svg",
 							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/channel.svg",
 							"clock": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/clock.svg",
 							"check": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-ms365/images/icons/check.svg",
