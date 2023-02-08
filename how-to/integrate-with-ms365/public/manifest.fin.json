@@ -78,13 +78,19 @@
 							"Chat.Read",
 							"ChannelMessage.Read.All",
 							"TeamMember.Read.All",
-							"ChannelMember.Read.All"
+							"ChannelMember.Read.All",
+							"Files.Read.All",
+							"Sites.Read.All"
 						],
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
 							"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
 							"teams": "http://localhost:8080/images/apps/teams.svg",
+							"word": "http://localhost:8080/images/apps/word.svg",
+							"excel": "http://localhost:8080/images/apps/excel.svg",
+							"onenote": "http://localhost:8080/images/apps/onenote.svg",
+							"powerpoint": "http://localhost:8080/images/apps/powerpoint.svg",
 							"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
 							"email": "http://localhost:8080/images/icons/email.svg",
 							"calendar": "http://localhost:8080/images/icons/calendar.svg",
@@ -93,6 +99,7 @@
 							"call": "http://localhost:8080/images/icons/call.svg",
 							"contact": "http://localhost:8080/images/icons/contact.svg",
 							"team": "http://localhost:8080/images/icons/team.svg",
+							"file": "http://localhost:8080/images/icons/file.svg",
 							"channel": "http://localhost:8080/images/icons/channel.svg",
 							"clock": "http://localhost:8080/images/icons/clock.svg",
 							"check": "http://localhost:8080/images/icons/check.svg",
