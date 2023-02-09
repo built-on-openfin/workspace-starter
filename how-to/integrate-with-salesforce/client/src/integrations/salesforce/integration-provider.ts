@@ -419,18 +419,19 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		return {
 			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []),
 			context: {
-				filters: this._mappings
-					? [
-							{
-								id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID as string,
-								title: "Salesforce",
-								options: this._mappings.map((o) => ({
-									value: o.label,
-									isSelected: true
-								}))
-							}
-					  ]
-					: undefined
+				filters:
+					query.length >= minLength && this._mappings
+						? [
+								{
+									id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID as string,
+									title: "Salesforce",
+									options: this._mappings.map((o) => ({
+										value: o.label,
+										isSelected: true
+									}))
+								}
+						  ]
+						: undefined
 			}
 		};
 	}
@@ -672,7 +673,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		} as CLISearchResultSimpleText;
 	}
 
-	private getBrowseSearchResult(): CLISearchResultPlain {
+	private getBrowseSearchResult(): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Browse", hotkey: "enter" }],
 			data: {
@@ -682,10 +683,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			} as SalesforceResultData,
 			icon: this._settings.iconMap.salesforce,
 			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-			template: CLITemplate.Plain,
-			templateContent: undefined,
+			template: CLITemplate.SimpleText,
+			templateContent: "Open a browser window at the Salesforce home page",
 			title: `Browse ${this._moduleDefinition.title}`
-		} as CLISearchResultPlain;
+		} as CLISearchResultSimpleText;
 	}
 
 	private getConnectingSearchResult(): CLISearchResultLoading {
