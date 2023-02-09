@@ -15,7 +15,6 @@ import {
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
-	type CLISearchResultPlain,
 	type CLISearchResultSimpleText,
 	type HomeSearchResponse,
 	type HomeSearchResult,
