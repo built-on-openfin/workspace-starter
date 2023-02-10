@@ -12,7 +12,7 @@
 		"eslint": "eslint . --ext .js,.mjs,.ts",
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
-		"list-update-packages": "npx npm-check-updates --deep -x chromedriver,fkill*,node-fetch > updatable-packages.txt",
+		"list-update-packages": "npx npm-check-updates --deep > updatable-packages.txt",
 		"update-packages": "npx npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch"
 	},
 	"workspaces": [
