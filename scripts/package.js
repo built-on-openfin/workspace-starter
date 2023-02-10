@@ -29,7 +29,10 @@ args = yargs(process.argv.slice(2))
 		alias: 'path',
 		default: '',
 		type: 'string',
-		description: `Path under which the ${ENV_NAME.replace('PKG_', '').toLowerCase()} should be placed in the publish location.`
+		description: `Path under which the ${ENV_NAME.replace(
+			'PKG_',
+			''
+		).toLowerCase()} should be placed in the publish location.`
 	})
 	.options('legacy', {
 		default: false,
