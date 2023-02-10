@@ -9,14 +9,12 @@ import {
 } from "@openfin/salesforce";
 import {
 	ButtonStyle,
-	CLIFilterOptionType,
 	CLISearchResultLoading,
 	CLITemplate,
 	CustomTemplate,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
-	type CLISearchResultPlain,
 	type CLISearchResultSimpleText,
 	type HomeSearchResponse,
 	type HomeSearchResult,
@@ -102,6 +100,11 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @internal
 	 */
 	private _salesForceConnection: SalesforceConnection | undefined;
+
+	/**
+	 * The debounce timer id.
+	 */
+	private _debounceTimerId?: number;
 
 	/**
 	 * Logger for logging info.
@@ -352,16 +355,19 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const response: HomeSearchResponse = {
-			results: await this.getDefaultEntries(query)
-		};
+		const homeResults = await this.getDefaultEntries(query);
 
 		this._lastResponse = lastResponse;
 
-		if (this._salesForceConnection) {
-			const minLength = options?.queryMinLength ?? 3;
+		const minLength = options?.queryMinLength ?? 3;
 
-			if (query.length >= minLength) {
+		if (this._debounceTimerId) {
+			window.clearTimeout(this._debounceTimerId);
+			this._debounceTimerId = undefined;
+		}
+
+		this._debounceTimerId = window.setTimeout(async () => {
+			if (this._salesForceConnection && query.length >= minLength) {
 				let selectedObjects: string[] = this._mappings.map((m) => m.label);
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
@@ -395,31 +401,38 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 						)
 					);
 
-					response.results.push(...searchResults);
-					response.context = {
-						filters: [
-							{
-								id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID,
-								title: "Salesforce",
-								type: CLIFilterOptionType.MultiSelect,
-								options: apiSearchResults.filters.map((label) => ({
-									value: label,
-									isSelected: true
-								}))
-							}
-						]
-					};
+					homeResults.push(...searchResults);
+
+					lastResponse.respond(homeResults);
 				} catch (err) {
 					await this.closeConnection();
 					if (err instanceof ConnectionError) {
-						response.results.push(this.getReconnectSearchResult(query, filters));
+						this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
 					}
 					this._logger.error("Error retrieving Salesforce search results", err);
 				}
 			}
-		}
+			lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
+		}, 500);
 
-		return response;
+		return {
+			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []),
+			context: {
+				filters:
+					query.length >= minLength && this._mappings
+						? [
+								{
+									id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID as string,
+									title: "Salesforce",
+									options: this._mappings.map((o) => ({
+										value: o.label,
+										isSelected: true
+									}))
+								}
+						  ]
+						: undefined
+			}
+		};
 	}
 
 	/**
@@ -528,7 +541,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 
 				if (fields.length > 0) {
-					const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${
+					const salesforceSearchQuery = `FIND {"${this.escapeQuery(query)}"} IN ALL FIELDS RETURNING ${
 						mapping.sourceType
 					}(${fields.join(",")}${where}) LIMIT ${mapping.maxItems}`;
 
@@ -621,6 +634,24 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
+	 * Get result to show while searching.
+	 * @returns The result entry.
+	 */
+	private createSearchingResult(): HomeSearchResult {
+		return {
+			key: `${this._moduleDefinition.id}-searching`,
+			title: "Searching ...",
+			icon: this._moduleDefinition?.icon,
+			actions: [],
+			data: {
+				providerId: this._moduleDefinition.id
+			},
+			template: CLITemplate.Loading,
+			templateContent: undefined
+		};
+	}
+
+	/**
 	 * Get the search result to display when Salesforce needs to reconnect.
 	 * @param query The query that needs to reconnect.
 	 * @param filters The filter for the reconnect.
@@ -641,7 +672,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		} as CLISearchResultSimpleText;
 	}
 
-	private getBrowseSearchResult(): CLISearchResultPlain {
+	private getBrowseSearchResult(): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Browse", hotkey: "enter" }],
 			data: {
@@ -651,10 +682,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			} as SalesforceResultData,
 			icon: this._settings.iconMap.salesforce,
 			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-			template: CLITemplate.Plain,
-			templateContent: undefined,
+			template: CLITemplate.SimpleText,
+			templateContent: "Open a browser window at the Salesforce home page",
 			title: `Browse ${this._moduleDefinition.title}`
-		} as CLISearchResultPlain;
+		} as CLISearchResultSimpleText;
 	}
 
 	private getConnectingSearchResult(): CLISearchResultLoading {

@@ -241,7 +241,11 @@ export function interopOverride(
 			let targetAppIntent;
 			let targetAppIntentCount = 0;
 
-			if (contextForIntent.metadata?.target !== undefined) {
+			if (
+				contextForIntent.metadata?.target !== undefined &&
+				contextForIntent.metadata?.target !== null &&
+				contextForIntent.metadata?.target.trim().length > 0
+			) {
 				targetApp = await getApp(contextForIntent.metadata?.target);
 			}
 
@@ -351,7 +355,11 @@ export function interopOverride(
 			let targetAppSpecified: boolean = false;
 			let targetAppId: string;
 
-			if (intent.metadata?.target !== undefined) {
+			if (
+				intent.metadata?.target !== undefined &&
+				intent.metadata?.target !== null &&
+				intent.metadata?.target.trim().length > 0
+			) {
 				targetAppSpecified = true;
 				targetAppId = intent.metadata?.target as string;
 				targetApp = await getApp(targetAppId);
