@@ -35,7 +35,7 @@
 		"how-to/automation-testing/selenium",
 		"how-to/automation-testing/wdio"
 	],
-	"howToCustomFolder": "",
+	"packageCustomFolder": "",
 	"contributors": [
 		"adam.saland@openfin.co",
 		"john.mandia@openfin.co",
