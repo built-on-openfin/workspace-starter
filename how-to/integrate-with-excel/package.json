@@ -19,7 +19,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^29.73.14",
+		"@openfin/core": "^28.72.17",
 		"@openfin/excel": "^1.4.1",
 		"@openfin/workspace": "10.3.10",
 		"@openfin/workspace-platform": "10.3.10"
