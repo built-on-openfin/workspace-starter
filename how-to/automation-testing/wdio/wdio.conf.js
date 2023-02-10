@@ -29,6 +29,16 @@ if (!isFile) {
 	process.exit(1);
 }
 
+console.log('Launching OpenFinRVM');
+const openFinRVMProcess = childProcess.spawn(
+	openFinRVM,
+	[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
+	{
+		shell: true
+	}
+);
+console.log('OpenFinRVM PID', openFinRVMProcess.pid);
+
 exports.config = {
 	specs: ['./test/**/*.js'],
 	capabilities: [
@@ -50,15 +60,6 @@ exports.config = {
 		timeout: 60000
 	},
 	beforeSession: async () => {
-		console.log('Launching OpenFinRVM');
-		const openFinRVMProcess = childProcess.spawn(
-			openFinRVM,
-			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
-			{
-				shell: true
-			}
-		);
-		console.log('OpenFinRVM PID', openFinRVMProcess.pid);
 		await setValue('openFinRVMProcessPID', openFinRVMProcess.pid);
 
 		try {

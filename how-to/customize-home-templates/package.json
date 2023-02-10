@@ -23,22 +23,22 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/core": "^29.73.14",
-		"@openfin/workspace": "11.0.6",
-		"@openfin/workspace-platform": "11.0.6",
-		"chart.js": "^4.0.1",
+		"@openfin/workspace": "10.3.10",
+		"@openfin/workspace-platform": "10.3.10",
+		"chart.js": "^4.2.1",
 		"csstype": "^3.1.1",
-		"luxon": "^3.1.1",
+		"luxon": "^3.2.1",
 		"node-emoji": "^1.11.0"
 	},
 	"devDependencies": {
-		"@types/express": "^4.17.14",
-		"@types/luxon": "^3.1.0",
-		"@types/node": "^18.11.10",
-		"@types/node-emoji": "^1.8.1",
+		"@types/express": "^4.17.17",
+		"@types/luxon": "^3.2.0",
+		"@types/node": "^18.13.0",
+		"@types/node-emoji": "^1.8.2",
 		"express": "^4.18.2",
 		"ts-loader": "^9.4.2",
-		"typescript": "^4.9.3",
+		"typescript": "^4.9.5",
 		"webpack": "^5.75.0",
-		"webpack-cli": "^5.0.0"
+		"webpack-cli": "^5.0.1"
 	}
 }
