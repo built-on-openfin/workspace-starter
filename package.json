@@ -11,7 +11,9 @@
 		"prettier": "prettier --config .prettierrc --write .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
-		"validate": "npm run prettier & npm run eslint & npm run markdownlint"
+		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
+		"list-update-packages": "npx npm-check-updates --deep > updatable-packages.txt",
+		"update-packages": "npx npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,openfin/core"
 	},
 	"workspaces": [
 		"how-to/*",
@@ -33,7 +35,7 @@
 		"how-to/automation-testing/selenium",
 		"how-to/automation-testing/wdio"
 	],
-	"howToCustomFolder": "",
+	"packageCustomFolder": "",
 	"contributors": [
 		"adam.saland@openfin.co",
 		"john.mandia@openfin.co",
@@ -43,20 +45,20 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.30.0",
+		"eslint": "8.33.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.0.0",
-		"eslint-config-prettier": "8.5.0",
+		"eslint-config-prettier": "8.6.0",
 		"eslint-plugin-import": "2.26.0",
 		"eslint-plugin-prettier": "4.2.1",
 		"eslint-plugin-promise": "6.1.1",
-		"eslint-plugin-simple-import-sort": "8.0.0",
-		"eslint-plugin-unicorn": "45.0.1",
+		"eslint-plugin-simple-import-sort": "10.0.0",
+		"eslint-plugin-unicorn": "45.0.2",
 		"eslint-plugin-unused-imports": "2.0.0",
 		"fast-glob": "3.2.12",
 		"fs-extra": "11.1.0",
-		"markdownlint-cli": "0.32.2",
-		"prettier": "2.8.0",
+		"markdownlint-cli": "0.33.0",
+		"prettier": "2.8.4",
 		"replace-in-file": "6.3.5",
 		"yargs": "17.6.2"
 	}
