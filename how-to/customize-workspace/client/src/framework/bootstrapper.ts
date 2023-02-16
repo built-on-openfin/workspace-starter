@@ -12,7 +12,7 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
-import type { AnalyticsSource, PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
+import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
 import * as versionProvider from "./version";
 import {
@@ -133,7 +133,7 @@ export async function init(): Promise<boolean> {
 	if (analyticsProvider.isEnabled()) {
 		logger.info("Analytics Provider enabled. Capturing versioning information.");
 		const analyticsEvent: PlatformAnalyticsEvent = {
-			source: "Platform" as AnalyticsSource,
+			source: "WorkspacePlatform",
 			type: "version",
 			timestamp: new Date(),
 			data: versionInfo,
