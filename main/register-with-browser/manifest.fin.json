@@ -8,7 +8,7 @@
 	"platform": {
 		"uuid": "launch-browser-from-window",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-browser/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/register-with-browser/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
