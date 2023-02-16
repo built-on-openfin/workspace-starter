@@ -242,7 +242,18 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		// For themed icons we fetch the svg content so that we can replace colors
 		// when they are used, instead of linking directly to the source
-		const themedIcons = ["calendar", "call", "channel", "chat", "contact", "email", "share", "team", "file", "folder"];
+		const themedIcons = [
+			"calendar",
+			"call",
+			"channel",
+			"chat",
+			"contact",
+			"email",
+			"share",
+			"team",
+			"file",
+			"folder"
+		];
 		for (const themedIcon of themedIcons) {
 			const response = await fetch(this._settings.images[themedIcon]);
 			const svg = await response.text();
@@ -358,16 +369,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const isRecent = query === "/recent";
-		const defaultFilters: Microsoft365ObjectTypes[] = isRecent ? ["File"] : [
-			"User",
-			"Contact",
-			"Event",
-			"Message",
-			"Channel",
-			"Team",
-			"ChatMessage",
-			"File"
-		];
+		const defaultFilters: Microsoft365ObjectTypes[] = isRecent
+			? ["File"]
+			: ["User", "Contact", "Event", "Message", "Channel", "Team", "ChatMessage", "File"];
 
 		this._debounceTimerId = window.setTimeout(async () => {
 			try {
@@ -487,9 +491,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const fileSearchQuery = `'${query}'`;
 						batchRequests.push({
 							id: "File",
-							url: isRecent ? "/me/drive/recent" : `/me/drive/root/search(q=${encodeURIComponent(
-								fileSearchQuery
-							)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
+							url: isRecent
+								? "/me/drive/recent"
+								: `/me/drive/root/search(q=${encodeURIComponent(
+										fileSearchQuery
+								  )})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
 							method: "GET"
 						});
 					}
@@ -548,12 +554,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					{
 						id: Microsoft365Provider._MS365_FILTERS as string,
 						title: "Microsoft 365",
-						options: defaultFilters.map(
-							(o) => ({
-								value: o,
-								isSelected: true
-							})
-						)
+						options: defaultFilters.map((o) => ({
+							value: o,
+							isSelected: true
+						}))
 					}
 				]
 			}
@@ -675,7 +679,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private async handleTeamsMeeting(actionData: ActionData) {
 		this._logger.info("Teams Meeting", this._ms365Connection.currentUser.mail, actionData.emails);
 		await fin.System.openUrlWithBrowser(
-			`${Microsoft365Provider._TEAMS_PROTOCOL}/l/meeting/new?attendees=${this._ms365Connection.currentUser.mail
+			`${Microsoft365Provider._TEAMS_PROTOCOL}/l/meeting/new?attendees=${
+				this._ms365Connection.currentUser.mail
 			},${actionData.emails.join(",")}`
 		);
 		return true;
@@ -1193,31 +1198,31 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "callTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CALL,
-					imageKey: "callImage",
-					imageAltText: "Teams Call"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "E-mail"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "callTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CALL,
+				imageKey: "callImage",
+				imageAltText: "Teams Call"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "E-mail"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${user.id}`,
@@ -1523,13 +1528,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${message.id}`,
@@ -1647,13 +1652,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${event.id}`,
@@ -1780,13 +1785,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${chatMessage.id}`,
@@ -1886,31 +1891,31 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CALL,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "Email"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CALL,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "Email"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${team.id}`,
@@ -2010,31 +2015,31 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CALL,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "Email"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CALL,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "Email"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._moduleDefinition.id}-${channel.id}`,
@@ -2142,13 +2147,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Provider._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		const isFolder = this.driveItemIsFolder(driveItem);
 		const typeName = isFolder ? "Folder" : "File";
@@ -2602,11 +2607,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	}
 
 	private driveItemIsImage(driveItem: DriveItem): boolean {
-		return driveItem.file?.mimeType.startsWith("image/") ||
+		return (
+			driveItem.file?.mimeType.startsWith("image/") ||
 			driveItem.name?.endsWith(".jpeg") ||
 			driveItem.name?.endsWith(".jpg") ||
 			driveItem.name?.endsWith(".gif") ||
 			driveItem.name?.endsWith(".webp") ||
-			driveItem.name?.endsWith(".png");
+			driveItem.name?.endsWith(".png")
+		);
 	}
 }
