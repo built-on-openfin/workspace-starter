@@ -8,27 +8,7 @@ export interface Microsoft365Settings {
 	enableLibLogging: boolean;
 	disableGraphExplorer: boolean;
 	graphExplorerPrefix?: string;
-	images: {
-		microsoft365: string;
-		teams: string;
-		word: string;
-		powerpoint: string;
-		onenote: string;
-		outlook: string;
-		email: string;
-		calendar: string;
-		share: string;
-		chat: string;
-		call: string;
-		contact: string;
-		team: string;
-		channel: string;
-		cross: string;
-		check: string;
-		clock: string;
-		file: string;
-		excel: string;
-	};
+	images: { [id: string]: string };
 }
 
 export type Microsoft365ObjectTypes =
