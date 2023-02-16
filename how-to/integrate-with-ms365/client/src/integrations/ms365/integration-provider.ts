@@ -242,9 +242,20 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		// For themed icons we fetch the svg content so that we can replace colors
 		// when they are used, instead of linking directly to the source
-		const themedIcons = ["calendar", "call", "channel", "chat", "contact", "email", "share", "team", "file"];
+		const themedIcons = [
+			"calendar",
+			"call",
+			"channel",
+			"chat",
+			"contact",
+			"email",
+			"share",
+			"team",
+			"file",
+			"folder"
+		];
 		for (const themedIcon of themedIcons) {
-			const response = await fetch(this._settings.images[themedIcon] as string);
+			const response = await fetch(this._settings.images[themedIcon]);
 			const svg = await response.text();
 			this._settings.images[themedIcon] = this.svgToInline(svg);
 		}
@@ -308,6 +319,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					].concat(additionalDescription),
 					additionalHelp
 				)
+			},
+			{
+				key: `${this._moduleDefinition.id}-help2`,
+				title: `${this._moduleDefinition.title} Recent`,
+				label: "Help",
+				icon: this._settings.images.microsoft365,
+				actions: [],
+				data: {
+					providerId: this._moduleDefinition.id,
+					populateQuery: "/recent"
+				},
+				template: CLITemplate.Custom,
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+					"Microsoft 365 Recent",
+					["Running this command will retrieve the most recent files from MS365"],
+					["/recent"]
+				)
 			}
 		];
 	}
@@ -340,6 +368,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._debounceTimerId = undefined;
 		}
 
+		const isRecent = query === "/recent";
+		const defaultFilters: Microsoft365ObjectTypes[] = isRecent
+			? ["File"]
+			: ["User", "Contact", "Event", "Message", "Channel", "Team", "ChatMessage", "File"];
+
 		this._debounceTimerId = window.setTimeout(async () => {
 			try {
 				// If query starts with ms just do a passthrough to the graph API
@@ -359,16 +392,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				} else if (query.length >= 3) {
 					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
 
-					let includeOptions: Microsoft365ObjectTypes[] = [
-						"User",
-						"Contact",
-						"Event",
-						"Message",
-						"Channel",
-						"Team",
-						"ChatMessage",
-						"File"
-					];
+					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
 
 					if (Array.isArray(ms365Filter?.options)) {
 						includeOptions = ms365Filter.options
@@ -467,9 +491,11 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const fileSearchQuery = `'${query}'`;
 						batchRequests.push({
 							id: "File",
-							url: `/me/drive/root/search(q=${encodeURIComponent(
-								fileSearchQuery
-							)})?$top=10&$orderby=lastModifiedDateTime desc`,
+							url: isRecent
+								? "/me/drive/recent"
+								: `/me/drive/root/search(q=${encodeURIComponent(
+										fileSearchQuery
+								  )})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
 							method: "GET"
 						});
 					}
@@ -528,12 +554,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					{
 						id: Microsoft365Provider._MS365_FILTERS as string,
 						title: "Microsoft 365",
-						options: ["User", "Contact", "Message", "Event", "Team", "Channel", "ChatMessage", "File"].map(
-							(o) => ({
-								value: o,
-								isSelected: true
-							})
-						)
+						options: defaultFilters.map((o) => ({
+							value: o,
+							isSelected: true
+						}))
 					}
 				]
 			}
@@ -1019,17 +1043,22 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			File: "file"
 		};
 
+		let label = objType.split(/(?=[A-Z])/).join(" ");
 		let mimeIcon;
 		if (objType === "File") {
-			const driveItem = obj as DriveItem;
-			mimeIcon = this.getMimeIcon(driveItem.file?.mimeType, driveItem.name, driveItem.package?.type);
+			mimeIcon = this.getMimeIcon(obj as DriveItem, palette);
+			if (this.driveItemIsFolder(obj)) {
+				label = "Folder";
+			} else if (this.driveItemIsImage(obj)) {
+				label = "Image";
+			}
 		}
 
 		return {
 			key: `${this._moduleDefinition.id}-${obj.id}`,
 			score: this.objectTypeToOrder(objType),
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
-			label: objType.split(/(?=[A-Z])/).join(" "),
+			label,
 			icon: mimeIcon ?? this.getThemedIcon(icons[objType], palette),
 			actions: [],
 			data: {
@@ -2082,7 +2111,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		const pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[] = [];
 		const urls = {};
 
-		const mimeIcon = this.getMimeIcon(driveItem.file?.mimeType, driveItem.name, driveItem.package?.type);
+		const mimeIcon = this.getMimeIcon(driveItem, palette);
 
 		if (driveItem.createdBy?.user?.displayName) {
 			pairs.push({
@@ -2126,12 +2155,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			}
 		];
 
+		const isFolder = this.driveItemIsFolder(driveItem);
+		const typeName = isFolder ? "Folder" : "File";
+
 		return {
 			key: `${this._moduleDefinition.id}-${driveItem.id}`,
 			score: this.objectTypeToOrder("File"),
-			title: driveItem.name ?? "Untitled File",
-			label: "File",
-			icon: mimeIcon ?? this.getThemedIcon("file", palette),
+			title: driveItem.name ?? `Untitled ${typeName}`,
+			label: typeName,
+			icon: mimeIcon ?? this.getThemedIcon(typeName.toLowerCase(), palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_OPEN,
@@ -2523,11 +2555,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		this._cacheCounter++;
 	}
 
-	private getMimeIcon(
-		mimeType: string | undefined,
-		filename: string | undefined,
-		packageType: string | undefined
-	): string | undefined {
+	private getMimeIcon(driveItem: DriveItem, palette: CustomPaletteSet): string | undefined {
+		const mimeType = driveItem.file?.mimeType ?? "";
+		const filename = driveItem.name ?? "";
+		const packageType = driveItem.package?.type ?? "";
 		if (
 			mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
 			mimeType === "application/msword" ||
@@ -2549,8 +2580,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			filename.endsWith(".ppt")
 		) {
 			return this._settings.images.powerpoint;
+		} else if (this.driveItemIsImage(driveItem)) {
+			if (Array.isArray(driveItem.thumbnails) && driveItem.thumbnails.length > 0) {
+				return driveItem.thumbnails[0].small?.url ?? driveItem.thumbnails[0].medium?.url;
+			}
 		} else if (packageType === "oneNote" || filename.endsWith("onetoc2") || filename.endsWith("one")) {
 			return this._settings.images.onenote;
+		} else if (this.driveItemIsFolder(driveItem)) {
+			return this.getThemedIcon("folder", palette);
 		}
 	}
 
@@ -2558,10 +2595,25 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		if (!this._settings.images[themedIcon]) {
 			return "";
 		}
-		const icon = this._settings.images[themedIcon] as string;
+		const icon = this._settings.images[themedIcon];
 		if (icon.startsWith("data:image/svg+xml")) {
 			return icon.replace(/rgb\(0,0,0\)/g, palette.textDefault.replace(/#/g, "%23"));
 		}
 		return icon;
+	}
+
+	private driveItemIsFolder(driveItem: DriveItem): boolean {
+		return driveItem.file === undefined && driveItem.folder !== undefined;
+	}
+
+	private driveItemIsImage(driveItem: DriveItem): boolean {
+		return (
+			driveItem.file?.mimeType.startsWith("image/") ||
+			driveItem.name?.endsWith(".jpeg") ||
+			driveItem.name?.endsWith(".jpg") ||
+			driveItem.name?.endsWith(".gif") ||
+			driveItem.name?.endsWith(".webp") ||
+			driveItem.name?.endsWith(".png")
+		);
 	}
 }

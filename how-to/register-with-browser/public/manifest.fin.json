@@ -8,7 +8,7 @@
 	"platform": {
 		"uuid": "launch-browser-from-window",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}

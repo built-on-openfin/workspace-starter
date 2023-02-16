@@ -220,8 +220,6 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	await (fin.me as OpenFin.Window).showDeveloperTools();
-
 	// create browser window with view
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	createBrowserWinBtn.addEventListener("click", createBrowserWindow);
@@ -249,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// get all browser pages
 	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
 	getBrowserPagesBtn.addEventListener("click", async () => {
+		await (fin.me as OpenFin.Window).showDeveloperTools();
 		const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
 		if (lastFocusedWindow) {
 			const pages = await platform.Browser.getAllAttachedPages();
