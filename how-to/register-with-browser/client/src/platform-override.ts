@@ -114,7 +114,14 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					});
 				}
 				menuEntry.submenu.push(...pagesMenu);
-				template.push(menuEntry);
+
+				const savePageAsIndex = template.findIndex(
+					(existingMenuEntry) =>
+						existingMenuEntry?.data?.type !== undefined &&
+						existingMenuEntry.data.type === GlobalContextMenuOptionType.SavePageAs
+				);
+
+				template.splice(savePageAsIndex + 1, 0, menuEntry);
 			}
 
 			return super.openGlobalContextMenu(
