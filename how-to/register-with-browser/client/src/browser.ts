@@ -51,3 +51,12 @@ export function createViewIdentity(uuid: string, name: string): OpenFin.Identity
 	};
 	return viewIdentity;
 }
+
+export async function addPageToWindow(pageId: string, windowIdentity: OpenFin.Identity) {
+	const page = await platform.Storage.getPage(pageId);
+	if (page !== undefined && page !== null) {
+		const targetWindow = platform.Browser.wrapSync(windowIdentity);
+		await targetWindow.addPage(page);
+		await targetWindow.setActivePage(pageId);
+	}
+}
