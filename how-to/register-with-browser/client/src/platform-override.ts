@@ -1,5 +1,4 @@
 import {
-	AnalyticsEvent,
 	CreateSavedPageRequest,
 	CreateSavedWorkspaceRequest,
 	getCurrentSync,
@@ -17,14 +16,6 @@ import {
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {
-		public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
-			return super.getSnapshot(...args);
-		}
-
-		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
-			return super.applySnapshot(...args);
-		}
-
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -157,10 +148,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				},
 				callerIdentity
 			);
-		}
-
-		public async handleAnalytics(events: AnalyticsEvent[]) {
-			// you can pass generated workspace analytic events to your own server from here
 		}
 	}
 	return new Override();
