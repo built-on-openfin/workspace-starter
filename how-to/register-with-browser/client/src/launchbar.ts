@@ -165,8 +165,6 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	await (fin.me as OpenFin.Window).showDeveloperTools();
-
 	// CREATE BROWSER WINDOW WITH VIEW
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	createBrowserWinBtn.addEventListener("click", createBrowserWindow);
@@ -194,6 +192,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// GET ALL BROWSER PAGES
 	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
 	getBrowserPagesBtn.addEventListener("click", async () => {
+		await (fin.me as OpenFin.Window).showDeveloperTools();
 		const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
 		if (lastFocusedWindow) {
 			const pages = await platform.Browser.getAllAttachedPages();
