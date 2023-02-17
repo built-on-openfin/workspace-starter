@@ -8,7 +8,8 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
-import { getCurrentPalette } from "./themes";
+import { ColorSchemeMode } from "./shapes/theme-shapes";
+import { getCurrentColorSchemeMode, getCurrentPalette } from "./themes";
 
 export async function createHelp(
 	title: string,
@@ -44,7 +45,7 @@ export async function createHelp(
 			await createContainer("column", exampleFragments, {
 				padding: "10px",
 				marginTop: "6px",
-				backgroundColor: palette.background5,
+				backgroundColor: palette.inputBackground,
 				color: palette.inputColor,
 				borderRadius: "5px",
 				overflow: "auto"
@@ -141,7 +142,8 @@ export async function createButton(
 	buttonStyle: ButtonStyle,
 	titleKey: string,
 	action: string,
-	style?: CSS.Properties
+	style?: CSS.Properties,
+	children?: TemplateFragment[]
 ): Promise<ButtonTemplateFragment> {
 	const palette = await getCurrentPalette();
 	const buttonOptions =
@@ -153,10 +155,101 @@ export async function createButton(
 	return {
 		type: TemplateFragmentTypes.Button,
 		buttonStyle,
-		children: [await createText(titleKey, 12)],
+		children: children ?? [await createText(titleKey, 12)],
 		action,
 		style: {
 			...buttonOptions,
+			...style
+		}
+	};
+}
+
+export async function createLabelledValue(
+	labelKey: string,
+	valueKey: string,
+	style?: CSS.Properties
+): Promise<PlainContainerTemplateFragment> {
+	const palette = await getCurrentPalette();
+	return {
+		type: TemplateFragmentTypes.Container,
+		style: {
+			display: "flex",
+			flexDirection: "column",
+			marginBottom: "9px",
+			...style
+		},
+		children: [
+			await createText(labelKey, 11, { fontWeight: "bold", color: palette.brandPrimary }),
+			await createText(valueKey, 14)
+		]
+	};
+}
+
+export async function createTable(
+	tableData: string[][],
+	colSpans: number[],
+	tableIndex: number,
+	data: { [id: string]: string }
+): Promise<TemplateFragment> {
+	const palette = await getCurrentPalette();
+	const scheme = await getCurrentColorSchemeMode();
+
+	const headerColor = scheme === ColorSchemeMode.Dark ? palette.background2 : palette.background5;
+	const cellColor = scheme === ColorSchemeMode.Dark ? palette.background5 : palette.background2;
+
+	const cells: TemplateFragment[] = [];
+	const finalColSpans = colSpans.slice();
+	for (let col = 0; col < tableData[0].length; col++) {
+		const headerKey = `table${tableIndex}_header${col}`;
+		data[headerKey] = tableData[0][col] ?? "";
+		cells.push(
+			await createText(headerKey, 10, {
+				padding: "3px",
+				whiteSpace: "nowrap",
+				fontWeight: "bold",
+				backgroundColor: headerColor
+			})
+		);
+
+		if (colSpans.length === 0) {
+			finalColSpans.push(1);
+		}
+	}
+
+	for (let row = 1; row < tableData.length; row++) {
+		for (let col = 0; col < tableData[0].length; col++) {
+			const rowColKey = `table${tableIndex}_col${col}_row${row}`;
+			data[rowColKey] = tableData[row][col] ?? "";
+			cells.push(await createText(rowColKey, 10, { padding: "3px", whiteSpace: "nowrap" }));
+		}
+	}
+
+	return createContainer("row", cells, {
+		display: "grid",
+		gridTemplateColumns: finalColSpans.map((s) => `${s}fr`).join(" "),
+		marginBottom: "10px",
+		overflow: "auto",
+		background: cellColor,
+		border: `1px solid ${headerColor}`
+	});
+}
+
+export async function createLink(
+	labelKey: string,
+	action: string,
+	fontSize: number = 10,
+	style?: CSS.Properties
+): Promise<TemplateFragment> {
+	return {
+		type: TemplateFragmentTypes.Button,
+		buttonStyle: ButtonStyle.TextOnly,
+		children: [await createText(labelKey, fontSize)],
+		action,
+		style: {
+			padding: 0,
+			border: 0,
+			fontWeight: "normal",
+			textDecoration: "underline",
 			...style
 		}
 	};

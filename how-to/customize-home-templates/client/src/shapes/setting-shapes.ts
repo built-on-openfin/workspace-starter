@@ -1,4 +1,3 @@
-import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
 
 interface HomeProviderOptions {
@@ -8,12 +7,7 @@ interface HomeProviderOptions {
 	hidden?: boolean;
 }
 
-interface ThemeProviderOptions {
-	themes: CustomThemeOptions[];
-}
-
 export interface CustomSettings {
 	homeProvider?: HomeProviderOptions;
-	themeProvider?: ThemeProviderOptions;
 	integrationProvider?: IntegrationProviderOptions;
 }
