@@ -238,18 +238,22 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 
 	for (const integrationModule of integrationModules) {
 		if (integrationModule.isInitialised && integrationModule.implementation.getHelpSearchEntries) {
-			const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
+			try {
+				const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
 
-			if (integrationHelpers?.setSearchQuery) {
-				for (const helpEntry of helpSearchEntries) {
-					if (helpEntry.data?.populateQuery) {
-						helpEntry.actions = helpEntry.actions ?? [];
-						helpEntry.actions.push({ name: POPULATE_QUERY, hotkey: "enter" });
+				if (integrationHelpers?.setSearchQuery) {
+					for (const helpEntry of helpSearchEntries) {
+						if (helpEntry.data?.populateQuery) {
+							helpEntry.actions = helpEntry.actions ?? [];
+							helpEntry.actions.push({ name: POPULATE_QUERY, hotkey: "enter" });
+						}
 					}
 				}
-			}
 
-			results = results.concat(helpSearchEntries);
+				results = results.concat(helpSearchEntries);
+			} catch (err) {
+				logger.error(`Failed creating search entries for module ${integrationModule.definition.id}`, err);
+			}
 		}
 	}
 
