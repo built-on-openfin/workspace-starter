@@ -6,8 +6,8 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
-import { createHelp } from "../../templates";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
 /**
@@ -76,7 +76,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					populateQuery: "/contacts-sync "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await createHelp(
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/contacts-sync",
 					[
 						"The contacts-sync command can be used to search for a contact.",
@@ -96,7 +96,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					populateQuery: "/contacts-partial "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await createHelp(
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/contacts-partial",
 					[
 						"The contacts-partial command can be used to search for a contact.",
@@ -116,7 +116,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 					populateQuery: "/contacts "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await createHelp(
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/contacts",
 					[
 						"The contacts command can be used to search for a contact.",
