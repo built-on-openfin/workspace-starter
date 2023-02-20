@@ -32,6 +32,8 @@ Optionally, if the enhanced notes feature is [enabled](https://help.salesforce.c
 
 With Salesforce configured and the sample custom settings updated, you can continue to run the sample.
 
+For more advanced configuration of the data that is searched and displayed see [Advanced Configuration](#advanced-configuration)
+
 ### Run The Sample
 
 1. Install dependencies. Note that these samples assume you are in the sub-directory for the sample.
@@ -79,6 +81,161 @@ npm run build
 ### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
+
+## Advanced Configuration
+
+### Data sources and layout
+
+The default configuration for the module uses the following sources and fields.
+
+- Account - Id, Name, Industry, Phone, Type, Website, Description
+- Contact - Id, Name, Title, Department, Email, Phone
+- Task - Id, Subject, Status, CreatedById, CreatedDate, Description
+- ContentNote - Id, Title, CreatedById, CreatedDate, TextPreview
+- Chatter - Id, header, createdDate, body
+
+You can override either part or all of the objects by using the `mapping` entry of the config in the manifest.
+
+To keep everything else intact but not include a specific type e.g. Task, you can specify the following.
+
+```json
+mappings: [
+    { "sourceType": "Account" },
+    { "sourceType": "Contact" },
+    { "sourceType": "ContentNote" },
+    { "sourceType": "Chatter" }
+];
+```
+
+You can change the fields that are retrieved for an object, and the way it is displayed using the following syntax.
+
+```json
+mappings: [
+    ...
+    {
+        "sourceType": "Contact",
+        "label": "Address book", // The label you see in Home for the type and filters
+        "iconKey": "address", // The key of the icon in the iconMap property of the config
+        "lookupType": "search", // This determines the type of REST request made e.g. Chatter uses feed
+        "maxItems": 5, // The maximum number of items to retrieve, defaults to 10
+        "fieldMappings": [
+            {
+                "field": "Id", // The data field to use
+                "displayMode": "None" // Don't display on the result card
+            },
+            {
+                "field": "Name", // The data field to use
+                "displayMode": "initials" // Display as profile initials e.g. Avi Green shows AG styled as an icon
+            },
+            {
+                "field": "Name", // The data field to use
+                "displayMode": "header", // Display in the header of the card
+                "isResultTitle": true // Use as the title for the result
+            },
+            {
+                "field": "Title", // The data field to use
+                "displayMode": "sub-header" // Display in the header as a subtitle
+            },
+            {
+                "field": "Department", // The data field to use
+                "displayMode": "field", // Display on the card as a row of data
+                "fieldContent": "text", // Display the value as text
+                "label": "Department" // The label to show on the card
+            },
+            {
+                "field": "Email", // The data field to use
+                "displayMode": "field", // Display on the card as a row of data
+                "fieldContent": "link", // Display as a hyperlink
+                "label": "Email" // The label to show on the card
+            },
+            {
+                "field": "CreatedDate", // The data field to use
+                "displayMode": "field", // Display on the card as a row of data
+                "fieldContent": "date", // Display as a locally formatted data
+                "label": "Created On" // The label to show on the card
+            },
+            {
+                "field": "Description", // The data field to use
+                "displayMode": "field", // Display on the card as a row of data
+                "fieldContent": "memo",// Display as text the full width of the card
+                "label": "Comments" // The label to show on the card
+            }
+        ]
+    }
+    ...
+];
+```
+
+Sometimes the data returned contains only an Id which needs a secondary lookup, e.g. in the case of the `Task` `CreatedById`. The lookup can be automatic using the following configuration for a `fieldMapping`.
+
+```json
+{
+  "field": "CreatedById", // The data field to use
+  "displayMode": "field", // Display on the card as a row of data
+  "label": "Created By", // The label to show on the card
+  "reference": {
+    "sourceType": "User", // The secondary data source to lookup from
+    "field": "Name" // The secondary field to use for the data
+  }
+}
+```
+
+In summary the `displayMode` can be:
+
+- `none` - Don't display the data
+- `icon` - The data is treated as a url to an image
+- `initials` - Display as the initials as a profile image
+- `header` - Display as the main header on the card
+- `sub-header` - Display as a sub header on the card
+- `field` - Display as a data field in the body of the card
+
+In summary the `fieldContent` for `fields` can be:
+
+- `text` - Display a plain text with a label
+- `link` - Display as a hyperlink
+- `memo` - Display as text the full width of the card
+- `date` - Display as a locally formatted date
+
+### Card actions
+
+The cards have a default action button which opens Salesforce at the relevant entry, but this can be overridden. You can specify urls and intents to perform other operations.
+
+You could override the actions for a contact as follows:
+
+```json
+mappings: [
+    {
+        "sourceType": "Contact",
+        "actions": [
+            {
+                "label": "Salesforce", // The label for the action
+                "iconKey": "salesforce" // The icon to use from the iconMap
+                // By not populating url or intent the default open operation is performed
+            },
+            {
+                "label": "Contact", // The label for the action
+                "iconKey": "contact", // The icon to use from the iconMap
+                "url": "https://mydomain.com/?id={Id}&Name={Name}" // Open the url in a browser window, substituting the Id and Name in to the url
+            },
+            {
+                "label": "Dashboard", // The label for the action
+                "iconKey": "dashboard", // The icon to use from the iconMap
+                "intent": { // Raise an intent
+                    "name": "ViewContactDashboard", // Name of the intent
+                    "context": {
+                        "name": "{Name}", // Name of the data in the context
+                        "type": "fdc3.contact", // The type of the context data
+                        "id": {
+                            "email": "{Email}", // Substitute data for the type
+                            "salesforce": "{Id}" // Substitute custom data for the type
+                        }
+                    }
+                }
+            }
+        ]
+    }
+];
+```
 
 ---
 
