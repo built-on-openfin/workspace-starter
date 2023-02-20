@@ -84,7 +84,7 @@ npm run client
 
 ![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
 
-5. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button.
+5. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button. This example in addition to hiding the page tabs uses the `showFavicons` property to hide the view icons.
 
 ![Initial browser with no tab](./assets/Launch-Browser-No-Tab.gif)
 

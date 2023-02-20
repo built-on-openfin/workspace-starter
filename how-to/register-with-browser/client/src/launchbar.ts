@@ -65,7 +65,10 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
-		workspacePlatform: { pages, disableMultiplePages: true }
+		workspacePlatform: { pages, disableMultiplePages: true },
+		experimental: {
+			showFavicons: false
+		}
 	};
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
