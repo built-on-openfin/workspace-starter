@@ -142,6 +142,14 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 				}
 			},
 			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Manual Lock Page",
+				iconUrl: "http://localhost:8080/icons/lock.svg",
+				action: {
+					id: "lock-page-toggle"
+				}
+			},
+			{
 				type: BrowserButtonType.ShowHideTabs
 			},
 			{
