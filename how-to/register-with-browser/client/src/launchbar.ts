@@ -92,6 +92,14 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 				}
 			},
 			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Print",
+				iconUrl: `${window.location.origin}/icons/print.svg`,
+				action: {
+					id: "custom-print"
+				}
+			},
+			{
 				type: BrowserButtonType.ShowHideTabs
 			},
 			{
@@ -147,7 +155,7 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 			{
 				type: BrowserButtonType.Custom,
 				tooltip: "Manual Lock Page",
-				iconUrl: "http://localhost:8080/icons/lock.svg",
+				iconUrl: `${window.location.origin}/icons/lock.svg`,
 				action: {
 					id: "lock-page-toggle"
 				}

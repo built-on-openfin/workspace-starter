@@ -58,7 +58,48 @@ export async function init() {
 					pageId: activePage.pageId,
 					page: activePage
 				});
+			},
+			"custom-print": async (payload: CustomButtonActionPayload) => {
+				console.info("Print called with payload:", payload);
+				await showPrintMenu({ x: payload.x, y: payload.y });
 			}
 		}
 	});
+}
+
+async function showPrintMenu(position: { x: number; y: number }) {
+	const platform = getCurrentSync();
+	const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+	const browserWindow = platform.Browser.wrapSync({ uuid, name });
+
+	const template: OpenFin.MenuItemTemplate[] = [
+		{
+			label: "Print view",
+			data: { type: "view" }
+		},
+		{
+			label: "Print page",
+			data: { type: "page" }
+		},
+		{
+			label: "Print screenshot",
+			data: { type: "screen" }
+		}
+	];
+
+	const r = await browserWindow.openfinWindow.showPopupMenu({
+		template,
+		x: position.x,
+		y: position.y
+	});
+
+	if (r.result === "closed") {
+		console.log("Menu dismissed");
+	} else if (r.data.type === "view") {
+		console.log("Print view");
+	} else if (r.data.type === "page") {
+		console.log("Print page");
+	} else if (r.data.type === "screen") {
+		console.log("Print screen");
+	}
 }
