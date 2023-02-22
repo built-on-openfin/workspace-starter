@@ -276,7 +276,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "hhttps://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "tools"]
@@ -1181,14 +1181,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/page-manager-portal.png"
@@ -1211,14 +1204,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1237,14 +1223,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1263,14 +1242,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1289,14 +1261,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1315,14 +1280,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1365,7 +1323,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/common/images/previews/irs-rfq-notification1.png"
 			}
 		],
-		"tags": ["view", "irs"]
+		"tags": ["view", "irs", "finance"]
 	},
 	{
 		"appId": "analytics-viewer",
