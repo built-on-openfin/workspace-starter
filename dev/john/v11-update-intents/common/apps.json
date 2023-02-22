@@ -1204,14 +1204,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/v11-update-intents/common/images/previews/page-manager-portal.png"
