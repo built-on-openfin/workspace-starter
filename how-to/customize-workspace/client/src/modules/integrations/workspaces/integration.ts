@@ -2,13 +2,15 @@ import type {
 	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
+	CustomTemplate,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	TemplateFragment,
-	Workspace
+	TemplateFragment
 } from "@openfin/workspace";
+import type { CustomPaletteSet, Workspace, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { WorkspaceChangedLifecyclePayload } from "customize-workspace/shapes";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
@@ -27,10 +29,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	private static readonly _PROVIDER_ID = "workspaces";
 
 	/**
-	 * The key to use for launching a workspace.
+	 * The key to use for opening a workspace.
 	 * @internal
 	 */
-	private static readonly _ACTION_LAUNCH_WORKSPACE = "Launch Workspace";
+	private static readonly _ACTION_OPEN_WORKSPACE = "Open Workspace";
 
 	/**
 	 * The key to use for deleting a workspace.
@@ -74,6 +76,26 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
+	 * The last search response.
+	 */
+	private _lastResponse?: HomeSearchListenerResponse;
+
+	/**
+	 * The last query.
+	 */
+	private _lastQuery?: string;
+
+	/**
+	 * The last query min length.
+	 */
+	private _lastQueryMinLength?: number;
+
+	/**
+	 * The last results.
+	 */
+	private _lastResults?: HomeSearchResult[];
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -88,6 +110,27 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("WorkspacesProvider");
+
+		this._integrationHelpers.subscribeLifecycleEvent(
+			"workspace-changed",
+			async (platform: WorkspacePlatformModule, payload: WorkspaceChangedLifecyclePayload) => {
+				if (payload.action === "create") {
+					if (!this._lastQuery.startsWith("/w ")) {
+						await this.rebuildResults(platform);
+					}
+				} else if (payload.action === "update") {
+					const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+					if (lastResult) {
+						lastResult.title = payload.workspace.title;
+						lastResult.data.workspaceTitle = payload.workspace.title;
+						(lastResult.templateContent as CustomTemplate).data.title = payload.workspace.title;
+						this.resultAddUpdate([lastResult]);
+					}
+				} else if (payload.action === "delete") {
+					this.resultRemove(payload.id as string);
+				}
+			}
+		);
 	}
 
 	/**
@@ -134,12 +177,15 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const platform = this._integrationHelpers.getPlatform();
-		const workspaces = await platform.Storage.getWorkspaces();
+		const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+		const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-		const iconFolder: string = await this._integrationHelpers.getCurrentIconFolder();
 
 		const queryLower = query.toLowerCase();
+
+		this._lastResponse = lastResponse;
+		this._lastQuery = queryLower;
+		this._lastQueryMinLength = options.queryMinLength;
 
 		if (queryLower.startsWith("/w ")) {
 			const title = queryLower.replace("/w ", "");
@@ -185,30 +231,15 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			};
 		}
 
-		let workspaceResults: HomeSearchResult[] = [];
+		const workspaceResults: HomeSearchResult[] = await this.buildResults(
+			platform,
+			workspaces,
+			queryLower,
+			options.queryMinLength,
+			colorScheme
+		);
 
-		if (Array.isArray(workspaces)) {
-			const currentWorkspace = await platform.getCurrentWorkspace();
-			const currentWorkspaceId = currentWorkspace?.workspaceId;
-			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
-
-			workspaceResults = workspaces
-				.filter(
-					(pg) =>
-						query.length === 0 ||
-						(query.length >= options.queryMinLength && pg.title.toLowerCase().includes(queryLower))
-				)
-				.map((ws: Workspace) =>
-					this.getWorkspaceTemplate(
-						ws.workspaceId,
-						ws.title,
-						shareEnabled,
-						currentWorkspaceId === ws.workspaceId,
-						iconFolder,
-						colorScheme
-					)
-				);
-		}
+		this._lastResults = workspaceResults;
 
 		return {
 			results: workspaceResults
@@ -232,17 +263,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				workspaceTitle?: string;
 			} = result.data;
 
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-			const iconFolder: string = await this._integrationHelpers.getCurrentIconFolder();
-			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
-
 			if (data?.workspaceId) {
 				handled = true;
 
 				if (result.key === WorkspacesProvider._ACTION_SAVE_WORKSPACE) {
-					lastResponse.revoke(result.key);
+					// Remove the save workspace entry
+					this.resultRemove(result.key);
 
-					const platform = this._integrationHelpers.getPlatform();
+					const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
 					const snapshot = await platform.getSnapshot();
 					const currentWorkspace = await platform.getCurrentWorkspace();
 					const currentMetaData = currentWorkspace?.metadata;
@@ -253,40 +281,39 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						metadata: currentMetaData,
 						snapshot
 					};
+
 					await platform.Storage.saveWorkspace(workspace);
 
-					const savedTemplate = this.getWorkspaceTemplate(
-						data.workspaceId,
-						data.workspaceTitle,
+					const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
+					const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
+					const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
+
+					const savedWorkspace = this.getWorkspaceTemplate(
+						workspace.workspaceId,
+						workspace.title,
 						shareEnabled,
 						true,
-						iconFolder,
-						colorScheme
+						colorScheme,
+						palette
 					);
 
-					lastResponse.respond([savedTemplate]);
+					// And add the new one
+					this.resultAddUpdate([savedWorkspace]);
 				} else if (result.key === WorkspacesProvider._ACTION_EXISTS_WORKSPACE) {
-					lastResponse.revoke(result.key);
-				} else if (result.action.name === WorkspacesProvider._ACTION_LAUNCH_WORKSPACE) {
-					lastResponse.revoke(result.key);
-					const platform = this._integrationHelpers.getPlatform();
+					// Do nothing, the user must update the query to give it a different
+					// name which will automatically refresh the results
+				} else if (result.action.name === WorkspacesProvider._ACTION_OPEN_WORKSPACE) {
+					const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
 					const workspace = await platform.Storage.getWorkspace(data.workspaceId);
 					await platform.applyWorkspace(workspace);
-
-					const savedTemplate = this.getWorkspaceTemplate(
-						data.workspaceId,
-						data.workspaceTitle,
-						shareEnabled,
-						true,
-						iconFolder,
-						colorScheme
-					);
-
-					lastResponse.respond([savedTemplate]);
+					// We rebuild the results here as we will now have a new current workspace
+					// and we need to change the existing one back to a standard template
+					await this.rebuildResults(platform);
 				} else if (result.action.name === WorkspacesProvider._ACTION_DELETE_WORKSPACE) {
 					const platform = this._integrationHelpers.getPlatform();
 					await platform.Storage.deleteWorkspace(data.workspaceId);
-					lastResponse.revoke(result.key);
+					// Deleting the working will eventually trigger the "delete" lifecycle
+					// event which will remove it from the result list
 				} else if (result.action.name === WorkspacesProvider._ACTION_SHARE_WORKSPACE) {
 					await this._integrationHelpers.share({ workspaceId: data.workspaceId });
 				} else {
@@ -304,20 +331,34 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		title: string,
 		shareEnabled: boolean,
 		isCurrent: boolean,
-		iconFolder: string,
-		colorScheme: ColorSchemeMode
+		colorScheme: ColorSchemeMode,
+		palette: CustomPaletteSet
 	): HomeSearchResult {
 		let actions = [];
 		let layout;
 		let data;
 
 		if (isCurrent) {
-			layout = this.getCurrentWorkspaceTemplate();
+			layout = this.getOtherWorkspaceTemplate(shareEnabled, false, palette);
 			data = {
 				title,
 				instructions:
-					"This is the currently active workspace. You can use the Browser menu to update/rename this workspace"
+					"This is the currently active workspace. You can use the Browser menu to update/rename this workspace",
+				openText: "Open",
+				shareText: "Share"
 			};
+			if (shareEnabled) {
+				actions.push({
+					name: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
+					hotkey: "CmdOrCtrl+Shift+S"
+				});
+			}
+			actions = actions.concat([
+				{
+					name: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
+					hotkey: "Enter"
+				}
+			]);
 		} else {
 			if (shareEnabled) {
 				actions.push({
@@ -331,15 +372,15 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					hotkey: "CmdOrCtrl+Shift+D"
 				},
 				{
-					name: WorkspacesProvider._ACTION_LAUNCH_WORKSPACE,
+					name: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
 					hotkey: "Enter"
 				}
 			]);
-			layout = this.getOtherWorkspaceTemplate(shareEnabled);
+			layout = this.getOtherWorkspaceTemplate(shareEnabled, true, palette);
 			data = {
 				title,
-				instructions: "Use the buttons below to interact with your saved Workspace:",
-				openText: "Launch",
+				instructions: "Use the buttons below to interact with your saved workspace",
+				openText: "Open",
 				deleteText: "Delete",
 				shareText: "Share"
 			};
@@ -365,60 +406,47 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		};
 	}
 
-	private getOtherWorkspaceTemplate(enableShare: boolean): TemplateFragment {
+	private getOtherWorkspaceTemplate(
+		enableShare: boolean,
+		enableDelete: boolean,
+		palette: CustomPaletteSet
+	): TemplateFragment {
 		const actionButtons: TemplateFragment[] = [
 			{
 				type: "Button",
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px"
-				},
-				action: WorkspacesProvider._ACTION_LAUNCH_WORKSPACE,
+				action: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
 				children: [
 					{
 						type: "Text",
-						dataKey: "openText",
-						optional: false
-					}
-				]
-			},
-			{
-				type: "Button",
-				buttonStyle: "primary" as ButtonStyle.Primary,
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px",
-					marginLeft: "10px",
-					marginRight: "10px"
-				},
-				action: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "deleteText",
-						optional: false
+						dataKey: "openText"
 					}
 				]
 			}
 		];
 
+		if (enableDelete) {
+			actionButtons.push({
+				type: "Button",
+				buttonStyle: "primary" as ButtonStyle.Primary,
+				action: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
+				children: [
+					{
+						type: "Text",
+						dataKey: "deleteText"
+					}
+				]
+			});
+		}
+
 		if (enableShare) {
 			actionButtons.push({
 				type: "Button",
 				buttonStyle: "primary" as ButtonStyle.Primary,
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px"
-				},
 				action: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
 				children: [
 					{
 						type: "Text",
-						dataKey: "shareText",
-						optional: false
+						dataKey: "shareText"
 					}
 				]
 			});
@@ -427,9 +455,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		return {
 			type: "Container",
 			style: {
-				paddingTop: "10px",
+				padding: "10px",
 				display: "flex",
-				flexDirection: "column"
+				flexDirection: "column",
+				flex: 1
 			},
 			children: [
 				{
@@ -438,29 +467,24 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					style: {
 						fontWeight: "bold",
 						fontSize: "16px",
-						textAlign: "center"
+						paddingBottom: "5px",
+						marginBottom: "10px",
+						borderBottom: `1px solid ${palette.background6}`
 					}
 				},
 				{
 					type: "Text",
 					dataKey: "instructions",
-					optional: true,
 					style: {
-						fontWeight: "bold",
-						paddingTop: "10px",
-						paddingBottom: "10px",
-						paddingLeft: "10px",
-						paddingRight: "10px"
+						flex: 1
 					}
 				},
 				{
 					type: "Container",
 					style: {
 						display: "flex",
-						flexFlow: "row wrap",
 						justifyContent: "center",
-						paddingTop: "10px",
-						paddingBottom: "10px"
+						gap: "10px"
 					},
 					children: actionButtons
 				}
@@ -468,37 +492,80 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		};
 	}
 
-	private getCurrentWorkspaceTemplate(): TemplateFragment {
-		return {
-			type: "Container",
-			style: {
-				paddingTop: "10px",
-				display: "flex",
-				flexDirection: "column"
-			},
-			children: [
-				{
-					type: "Text",
-					dataKey: "title",
-					style: {
-						fontWeight: "bold",
-						fontSize: "16px",
-						textAlign: "center"
-					}
-				},
-				{
-					type: "Text",
-					dataKey: "instructions",
-					optional: true,
-					style: {
-						fontWeight: "bold",
-						paddingTop: "10px",
-						paddingBottom: "10px",
-						paddingLeft: "10px",
-						paddingRight: "10px"
-					}
+	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
+		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
+
+		const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
+		const results = await this.buildResults(
+			platform,
+			workspaces,
+			this._lastQuery,
+			this._lastQueryMinLength,
+			colorScheme
+		);
+		this.resultAddUpdate(results);
+	}
+
+	private async buildResults(
+		platform: WorkspacePlatformModule,
+		workspaces: Workspace[],
+		query: string,
+		queryMinLength: number,
+		colorScheme: ColorSchemeMode
+	): Promise<HomeSearchResult[]> {
+		let results: HomeSearchResult[] = [];
+
+		if (Array.isArray(workspaces)) {
+			const currentWorkspace = await platform.getCurrentWorkspace();
+			const currentWorkspaceId = currentWorkspace?.workspaceId;
+			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
+			const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
+
+			results = workspaces
+				.filter(
+					(pg) =>
+						query.length === 0 || (query.length >= queryMinLength && pg.title.toLowerCase().includes(query))
+				)
+				.map((ws: Workspace, index: number) =>
+					this.getWorkspaceTemplate(
+						ws.workspaceId,
+						ws.title,
+						shareEnabled,
+						currentWorkspaceId === ws.workspaceId,
+						colorScheme,
+						palette
+					)
+				)
+				.sort((a, b) => a.title.localeCompare(b.title));
+		}
+		return results;
+	}
+
+	private resultAddUpdate(results: HomeSearchResult[]): void {
+		if (this._lastResults) {
+			for (const result of results) {
+				const resultIndex = this._lastResults.findIndex((res) => res.key === result.key);
+				if (resultIndex >= 0) {
+					this._lastResults.splice(resultIndex, 1, result);
+				} else {
+					this._lastResults.push(result);
 				}
-			]
-		};
+			}
+		}
+		if (this._lastResponse) {
+			this._lastResponse.respond(results);
+		}
+	}
+
+	private resultRemove(id: string): void {
+		if (this._lastResults) {
+			const resultIndex = this._lastResults.findIndex((res) => res.key === id);
+			if (resultIndex >= 0) {
+				this._lastResults.splice(resultIndex, 1);
+			}
+		}
+		if (this._lastResponse) {
+			this._lastResponse.revoke(id);
+		}
 	}
 }

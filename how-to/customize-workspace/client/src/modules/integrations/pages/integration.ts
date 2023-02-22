@@ -2,6 +2,7 @@ import type {
 	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
+	CustomTemplate,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
@@ -9,6 +10,9 @@ import type {
 	Page,
 	TemplateFragment
 } from "@openfin/workspace";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { CustomPaletteSet } from "@openfin/workspace/client-api-platform/src/shapes";
+import type { PageChangedLifecyclePayload } from "customize-workspace/shapes";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
@@ -61,6 +65,26 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
+	 * The last search response.
+	 */
+	private _lastResponse?: HomeSearchListenerResponse;
+
+	/**
+	 * The last query.
+	 */
+	private _lastQuery?: string;
+
+	/**
+	 * The last query min length.
+	 */
+	private _lastQueryMinLength?: number;
+
+	/**
+	 * The last results.
+	 */
+	private _lastResults?: HomeSearchResult[];
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -75,6 +99,25 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
+
+		this._integrationHelpers.subscribeLifecycleEvent(
+			"page-changed",
+			async (platform: WorkspacePlatformModule, payload: PageChangedLifecyclePayload) => {
+				if (payload.action === "create") {
+					await this.rebuildResults(platform);
+				} else if (payload.action === "update") {
+					const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+					if (lastResult) {
+						lastResult.title = payload.page.title;
+						lastResult.data.workspaceTitle = payload.page.title;
+						(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
+						this.resultAddUpdate([lastResult]);
+					}
+				} else if (payload.action === "delete") {
+					this.resultRemove(payload.id as string);
+				}
+			}
+		);
 	}
 
 	/**
@@ -102,25 +145,24 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const platform = this._integrationHelpers.getPlatform();
-		const pages = await platform.Storage.getPages();
+		const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+		const pages: Page[] = await platform.Storage.getPages();
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-		const iconFolder: string = await this._integrationHelpers.getCurrentIconFolder();
 		const queryLower = query.toLowerCase();
 
-		let pageResults: HomeSearchResult[] = [];
+		this._lastResponse = lastResponse;
+		this._lastQuery = queryLower;
+		this._lastQueryMinLength = options.queryMinLength;
 
-		if (Array.isArray(pages)) {
-			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
+		const pageResults: HomeSearchResult[] = await this.buildResults(
+			platform,
+			pages,
+			queryLower,
+			options.queryMinLength,
+			colorScheme
+		);
 
-			pageResults = pages
-				.filter(
-					(pg) =>
-						query.length === 0 ||
-						(query.length >= options.queryMinLength && pg.title.toLowerCase().includes(queryLower))
-				)
-				.map((pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, iconFolder, colorScheme));
-		}
+		this._lastResults = pageResults;
 
 		return {
 			results: pageResults
@@ -153,7 +195,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
 					const platform = this._integrationHelpers.getPlatform();
 					await platform.Storage.deletePage(data.pageId);
-					lastResponse.revoke(result.key);
+					// Deleting the page will eventually trigger the "delete" lifecycle
+					// event which will remove it from the result list
 				} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
 					await this._integrationHelpers.share({ pageId: data.pageId });
 				} else {
@@ -170,8 +213,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		id: string,
 		title: string,
 		shareEnabled: boolean,
-		iconFolder: string,
-		colorScheme: ColorSchemeMode
+		colorScheme: ColorSchemeMode,
+		palette: CustomPaletteSet
 	): HomeSearchResult {
 		let actions = [];
 
@@ -191,7 +234,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				hotkey: "Enter"
 			}
 		]);
-		const layout = this.getOtherPageTemplate(shareEnabled);
+		const layout = this.getOtherPageTemplate(shareEnabled, palette);
 
 		return {
 			key: id,
@@ -210,7 +253,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				layout,
 				data: {
 					title,
-					instructions: "Use the buttons below to interact with your saved Page:",
+					instructions: "Use the buttons below to interact with your saved page",
 					openText: "Launch",
 					deleteText: "Delete",
 					shareText: "Share"
@@ -219,40 +262,26 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		};
 	}
 
-	private getOtherPageTemplate(enableShare: boolean): TemplateFragment {
+	private getOtherPageTemplate(enableShare: boolean, palette: CustomPaletteSet): TemplateFragment {
 		const actionButtons: TemplateFragment[] = [
 			{
 				type: "Button",
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px"
-				},
 				action: PagesProvider._ACTION_LAUNCH_PAGE,
 				children: [
 					{
 						type: "Text",
-						dataKey: "openText",
-						optional: false
+						dataKey: "openText"
 					}
 				]
 			},
 			{
 				type: "Button",
 				buttonStyle: "primary" as ButtonStyle.Primary,
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px",
-					marginLeft: "10px",
-					marginRight: "10px"
-				},
 				action: PagesProvider._ACTION_DELETE_PAGE,
 				children: [
 					{
 						type: "Text",
-						dataKey: "deleteText",
-						optional: false
+						dataKey: "deleteText"
 					}
 				]
 			}
@@ -262,27 +291,23 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 			actionButtons.push({
 				type: "Button",
 				buttonStyle: "primary" as ButtonStyle.Primary,
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					width: "80px"
-				},
 				action: PagesProvider._ACTION_SHARE_PAGE,
 				children: [
 					{
 						type: "Text",
-						dataKey: "shareText",
-						optional: false
+						dataKey: "shareText"
 					}
 				]
 			});
 		}
+
 		return {
 			type: "Container",
 			style: {
-				paddingTop: "10px",
+				padding: "10px",
 				display: "flex",
-				flexDirection: "column"
+				flexDirection: "column",
+				flex: 1
 			},
 			children: [
 				{
@@ -291,41 +316,95 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 					style: {
 						fontWeight: "bold",
 						fontSize: "16px",
-						textAlign: "center"
-					}
-				},
-				{
-					type: "Text",
-					dataKey: "description",
-					optional: true,
-					style: {
-						paddingLeft: "10px",
-						paddingRight: "10px"
+						paddingBottom: "5px",
+						marginBottom: "10px",
+						borderBottom: `1px solid ${palette.background6}`
 					}
 				},
 				{
 					type: "Text",
 					dataKey: "instructions",
 					style: {
-						fontWeight: "bold",
-						paddingTop: "10px",
-						paddingBottom: "10px",
-						paddingLeft: "10px",
-						paddingRight: "10px"
+						flex: 1
 					}
 				},
 				{
 					type: "Container",
 					style: {
 						display: "flex",
-						flexFlow: "row wrap",
 						justifyContent: "center",
-						paddingTop: "10px",
-						paddingBottom: "10px"
+						gap: "10px"
 					},
 					children: actionButtons
 				}
 			]
 		};
+	}
+
+	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
+		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
+
+		const pages: Page[] = await platform.Storage.getPages();
+		const results = await this.buildResults(
+			platform,
+			pages,
+			this._lastQuery,
+			this._lastQueryMinLength,
+			colorScheme
+		);
+		this.resultAddUpdate(results);
+	}
+
+	private async buildResults(
+		platform: WorkspacePlatformModule,
+		pages: Page[],
+		query: string,
+		queryMinLength: number,
+		colorScheme: ColorSchemeMode
+	): Promise<HomeSearchResult[]> {
+		let results: HomeSearchResult[] = [];
+
+		if (Array.isArray(pages)) {
+			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
+			const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
+
+			results = pages
+				.filter(
+					(pg) =>
+						query.length === 0 || (query.length >= queryMinLength && pg.title.toLowerCase().includes(query))
+				)
+				.map((pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, colorScheme, palette))
+				.sort((a, b) => a.title.localeCompare(b.title));
+		}
+
+		return results;
+	}
+
+	private resultAddUpdate(results: HomeSearchResult[]): void {
+		if (this._lastResults) {
+			for (const result of results) {
+				const resultIndex = this._lastResults.findIndex((res) => res.key === result.key);
+				if (resultIndex >= 0) {
+					this._lastResults.splice(resultIndex, 1, result);
+				} else {
+					this._lastResults.push(result);
+				}
+			}
+		}
+		if (this._lastResponse) {
+			this._lastResponse.respond(results);
+		}
+	}
+
+	private resultRemove(id: string): void {
+		if (this._lastResults) {
+			const resultIndex = this._lastResults.findIndex((res) => res.key === id);
+			if (resultIndex >= 0) {
+				this._lastResults.splice(resultIndex, 1);
+			}
+		}
+		if (this._lastResponse) {
+			this._lastResponse.revoke(id);
+		}
 	}
 }
