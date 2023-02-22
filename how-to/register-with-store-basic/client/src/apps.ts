@@ -23,7 +23,24 @@ export const experoApp: App = {
 			src: "http://localhost:8080/common/images/previews/expero-news-view.png"
 		}
 	],
-	tags: ["expero", "view", "interop"]
+	tags: ["expero", "view", "interop"],
+	primaryButton: {
+		title: "Open App",
+		action: {
+			id: "launch-app"
+		}
+	},
+	secondaryButtons: [
+		{
+			title: "Open Web Site",
+			action: {
+				id: "open-web-site",
+				customData: {
+					url: "https://www.experoinc.com/"
+				}
+			}
+		}
+	]
 };
 
 export const notificationStudio: App = {

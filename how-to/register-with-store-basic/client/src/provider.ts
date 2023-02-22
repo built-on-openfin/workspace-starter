@@ -1,10 +1,33 @@
-import { init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { register, deregister, show, hide } from "./store";
+import {
+	CustomActionCallerType,
+	getCurrentSync,
+	init as workspacePlatformInit
+} from "@openfin/workspace-platform";
+import { getApps } from "./apps";
+import { deregister, hide, register, show } from "./store";
 
 async function init() {
 	await workspacePlatformInit({
-		browser: {}
+		browser: {},
+		customActions: {
+			"open-web-site": async (payload) => {
+				if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
+					window.open(payload.customData?.url as string);
+				}
+			},
+			"launch-app": async (payload) => {
+				if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
+					const apps = await getApps();
+					const app = apps.find((a) => a.appId === payload.appId);
+					if (app) {
+						const platform = getCurrentSync();
+						await platform.launchApp({ app });
+					}
+				}
+			}
+		}
 	});
+
 	const registerStore = document.querySelector<HTMLButtonElement>("#register");
 	const showStore = document.querySelector<HTMLButtonElement>("#show");
 	const hideStore = document.querySelector<HTMLButtonElement>("#hide");
