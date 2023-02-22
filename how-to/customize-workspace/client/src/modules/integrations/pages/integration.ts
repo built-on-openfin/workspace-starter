@@ -118,6 +118,10 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				}
 			}
 		);
+		this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
+			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+			await this.rebuildResults(platform);
+		});
 	}
 
 	/**

@@ -131,6 +131,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				}
 			}
 		);
+		this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
+			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+			await this.rebuildResults(platform);
+		});
 	}
 
 	/**
