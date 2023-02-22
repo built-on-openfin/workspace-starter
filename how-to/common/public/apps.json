@@ -1204,14 +1204,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [
 			{
 				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
