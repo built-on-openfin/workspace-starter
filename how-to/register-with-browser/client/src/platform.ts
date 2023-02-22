@@ -1,7 +1,9 @@
 import {
 	BrowserInitConfig,
 	CustomButtonActionPayload,
-	init as workspacePlatformInit
+	getCurrentSync,
+	init as workspacePlatformInit,
+	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { addPageToWindow } from "./browser";
 import { overrideCallback } from "./platform-override";
@@ -41,6 +43,21 @@ export async function init() {
 				if (pageId !== undefined && targetWindowIdentity !== undefined) {
 					await addPageToWindow(pageId, targetWindowIdentity);
 				}
+			},
+			"lock-page-toggle": async (payload: CustomButtonActionPayload) => {
+				const platform: WorkspacePlatformModule = getCurrentSync();
+
+				const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+				const browserWindow = platform.Browser.wrapSync({ uuid, name });
+
+				// Get the active page and toggle its locked state
+				const allPages = await browserWindow.getPages();
+				const activePage = allPages.find((pg) => pg.isActive);
+				activePage.isLocked = !activePage.isLocked;
+				await browserWindow.updatePage({
+					pageId: activePage.pageId,
+					page: activePage
+				});
 			}
 		}
 	});
