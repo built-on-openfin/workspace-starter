@@ -1,3 +1,4 @@
+import type { Page, Workspace } from "@openfin/workspace";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
@@ -7,9 +8,11 @@ export type LifecycleEvents =
 	| "auth-before-logged-out"
 	| "after-bootstrap"
 	| "before-quit"
-	| "theme-changed";
+	| "theme-changed"
+	| "workspace-changed"
+	| "page-changed";
 
-export type LifecycleHandler = (platform: WorkspacePlatformModule) => Promise<void>;
+export type LifecycleHandler = (platform: WorkspacePlatformModule, customData?: unknown) => Promise<void>;
 
 export type LifecycleEventMap = {
 	[key in LifecycleEvents]?: LifecycleHandler;
@@ -28,3 +31,15 @@ export interface Lifecycle<O = unknown, H = ModuleHelpers> extends ModuleImpleme
  * that is called when an authenticated session is expired
  * */
 export type LifecycleProviderOptions = ModuleList;
+
+export interface WorkspaceChangedLifecyclePayload {
+	action: "create" | "update" | "delete";
+	id: string;
+	workspace?: Workspace;
+}
+
+export interface PageChangedLifecyclePayload {
+	action: "create" | "update" | "delete";
+	id: string;
+	page?: Page;
+}
