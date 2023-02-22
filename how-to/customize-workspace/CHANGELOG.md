@@ -26,6 +26,7 @@
 - Added option of modules receiving a getInteropClient function if they are allowed. Added pattern that a module should listen for the after bootstrap lifecycle event before trying to get an interop client. Added an example to the dev module in modules/composite/developer. There is an analytics implementation that publishes events to an interop/fdc3 channel. This is for dev purposes so you can easily listen to a stream of the events and build a UI (it complements the console analytics module we have). It is only enabled in manifest.fin.json.
 - Added intent support for manifest type: inline-window and window. These can now be intent targets. Specifying the name of the window means only a single window will be launched as the intent target.
 - Only lookup and use intent target if it isn't undefined, null or an empty string
+- Added lifecycle events for `workspace-changed` and `page-changed` so the integrations such as workspace and pages can keep in sync with actual data
 
 ## v9.2
 
