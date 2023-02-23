@@ -24,6 +24,8 @@ You can add this to the permissions section of your manifest (either at the plat
 }
 ```
 
+IdleDetector is a Web API: <https://developer.mozilla.org/en-US/docs/web/api/idledetector>.
+
 You should check to see if the permission is enabled in your code:
 
 ```js
@@ -36,27 +38,40 @@ if (state !== 'granted') {
 With the permission granted you can then add logic to be notified when the idle state changes:
 
 ```js
-try {
-  const controller = new AbortController();
-  const signal = controller.signal;
+function startListening(idleDetectorController) {
+    try {
+        const signal = idleDetectorController.signal;
 
-  const idleDetector = new IdleDetector();
-  idleDetector.addEventListener('change', () => {
-    const userState = idleDetector.userState;
-    const screenState = idleDetector.screenState;
-    console.log(`Idle change: ${userState}, ${screenState}.`);
-  });
+        const idleDetector = new IdleDetector();
+        idleDetector.addEventListener('change', () => {
+            const userState = idleDetector.userState;
+            const screenState = idleDetector.screenState;
+            console.log(`Idle change: ${userState}, ${screenState}.`);
+        });
 
-  await idleDetector.start({
-    threshold: 60000,
-    signal
-  });
-  console.log('IdleDetector is active.');
-} catch (err) {
-  // Deal with initialization errors like permission denied,
-  // running outside of top-level frame, etc.
-  console.error(err.name, err.message);
+        await idleDetector.start({
+            threshold: 60000,
+            signal
+        });
+        console.log('IdleDetector is active.');
+    } catch (err) {
+        // Deal with initialization errors like permission denied,
+        // running outside of top-level frame, etc.
+        console.error(err.name, err.message);
+    }
 }
+
+function stopListening(idleDetectorController) {
+    // to deactivate the idle detector you can do the following:
+    idleDetectorController.abort();
+    console.log("IdleDetector is stopped.");
+}
+
+const controller = new AbortController();
+startListening(controller);
+
+// to stop listening
+// stopListening(controller);
 ```
 
 To simulate this behavior you can open up the dev tools for the window/view you are working against and do the following:
@@ -83,6 +98,8 @@ If you have a view it might be covered for the following reasons:
 - They have focused on another window and that window is now covering the window that contains your view
 
 ### How can you detect when your view is hidden and made visible again?
+
+**visibilitychange** is a Web API Document Event: <https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event>
 
 ```js
 document.addEventListener('visibilitychange', () => {
