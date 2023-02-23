@@ -8,6 +8,7 @@ import {
 import { addPageToWindow } from "./browser";
 import { overrideCallback } from "./platform-override";
 import { getSettings, validateThemes } from "./settings";
+import { randomUUID } from "./uuid";
 
 export async function init() {
 	console.log("Initializing platform");
@@ -58,7 +59,101 @@ export async function init() {
 					pageId: activePage.pageId,
 					page: activePage
 				});
+			},
+			announce: async (payload: CustomButtonActionPayload) => {
+				console.info("Announce called with payload:", payload);
+				await showPopup(
+					{ width: 400, height: 300 },
+					payload.windowIdentity,
+					"Announce",
+					"Announce the application to anyone listening ?",
+					[
+						{
+							id: "yes",
+							label: "Yes",
+							default: true
+						},
+						{
+							id: "no",
+							label: "No"
+						}
+					]
+				);
 			}
 		}
 	});
+}
+
+async function showPopup(
+	dimensions: { width: number; height: number },
+	parentIdentity: OpenFin.Identity,
+	title: string,
+	instructions: string,
+	buttons: {
+		id: string;
+		label: string;
+		default?: boolean;
+	}[]
+): Promise<string | undefined> {
+	console.log("Parent Identity", parentIdentity);
+
+	const platform = getCurrentSync();
+	const browserWindow = platform.Browser.wrapSync(parentIdentity);
+	const parentBounds = await browserWindow.openfinWindow.getBounds();
+
+	console.log("Parent Bounds", parentBounds);
+
+	const halfParentWidth = parentBounds.width / 2;
+	const halfParentHeight = parentBounds.height / 2;
+	const halfWidth = dimensions.width / 2;
+	const halfHeight = dimensions.height / 2;
+
+	const parentCenter = {
+		x: parentBounds.left + halfParentWidth,
+		y: parentBounds.top + halfParentHeight
+	};
+
+	await browserWindow.openfinWindow.showPopupWindow({
+		name: randomUUID(),
+		initialOptions: {
+			modalParentIdentity: parentIdentity
+		},
+		additionalOptions: {
+			customData: {
+				title,
+				instructions,
+				buttons
+			}
+		},
+		url: `${window.location.origin}/html/popup.html`,
+		x: parentCenter.x - halfWidth,
+		y: parentCenter.y - halfHeight,
+		width: dimensions.width,
+		height: dimensions.height
+	});
+
+	// await fin.Window.create({
+	// 	name: randomUUID(),
+	// 	modalParentIdentity: parentIdentity,
+	// 	customData: {
+	// 		title,
+	// 		instructions,
+	// 		buttons
+	// 	},
+	// 	url: `${window.location.origin}/html/popup.html`,
+	// 	defaultLeft: parentCenter.x - halfWidth,
+	// 	defaultTop: parentCenter.y - halfHeight,
+	// 	defaultWidth: dimensions.width,
+	// 	defaultHeight: dimensions.height,
+	// 	frame: false,
+	// 	autoShow: true
+	// });
+
+	// if (result.result === "dismissed") {
+	// 	console.log("Popup dismissed");
+	// } else if (result.result === "clicked") {
+	// 	console.log("Popup clicked", result.data);
+	// 	return result.data as string;
+	// }
+	return "";
 }
