@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 
 interface BrowserProvider {

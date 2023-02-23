@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
