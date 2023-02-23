@@ -1,4 +1,4 @@
-import type { CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes/setting-shapes";
 
 let settings: CustomSettings;
 

@@ -66,7 +66,10 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
-		workspacePlatform: { pages, disableMultiplePages: true }
+		workspacePlatform: { pages, disableMultiplePages: true },
+		experimental: {
+			showFavicons: false
+		}
 	};
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
@@ -140,6 +143,14 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 						pageId: page.pageId,
 						layout: page.layout
 					}
+				}
+			},
+			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Manual Lock Page",
+				iconUrl: "http://localhost:8080/icons/lock.svg",
+				action: {
+					id: "lock-page-toggle"
 				}
 			},
 			{
@@ -220,8 +231,6 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	await (fin.me as OpenFin.Window).showDeveloperTools();
-
 	// create browser window with view
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	createBrowserWinBtn.addEventListener("click", createBrowserWindow);

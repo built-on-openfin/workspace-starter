@@ -17,8 +17,8 @@ import {
 	TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
-import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
-import { createHelp } from "../../templates";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 import { getQuoteTemplate } from "./templates";
 
@@ -90,7 +90,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					populateQuery: "/quote "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await createHelp(
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/quote",
 					[
 						"The quote command can be used to search for details of an instrument.",

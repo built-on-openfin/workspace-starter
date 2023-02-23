@@ -7,8 +7,8 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import * as emoji from "node-emoji";
-import type { IntegrationHelpers, IntegrationModule, ModuleDefinition } from "../../integrations-shapes";
-import { createHelp } from "../../templates";
+import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
+import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type { EmojiSettings } from "./shapes";
 import { getEmojiTemplate } from "./templates";
 
@@ -91,7 +91,7 @@ export class EmojiIntegrationProvider implements IntegrationModule<EmojiSettings
 					populateQuery: "/emoji "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await createHelp(
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/emoji",
 					[
 						"The emoji command can be used to search for emojis by name.",

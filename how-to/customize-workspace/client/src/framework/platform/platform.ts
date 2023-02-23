@@ -105,8 +105,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	return true;
 }
 
-export const VERSION = "11.0.0";
-
 export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);
 	if (!isValid) {

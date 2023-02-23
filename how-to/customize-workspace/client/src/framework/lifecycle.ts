@@ -39,7 +39,8 @@ export async function init(
 
 export async function fireLifecycleEvent(
 	platform: WorkspacePlatformModule,
-	lifecycleEvent: LifecycleEvents
+	lifecycleEvent: LifecycleEvents,
+	customData?: unknown
 ): Promise<void> {
 	logger.info(`Request to fire lifecycle event ${lifecycleEvent} received`);
 	if (Array.isArray(allLifecycleEvents[lifecycleEvent])) {
@@ -47,7 +48,7 @@ export async function fireLifecycleEvent(
 		logger.info(`Notifying ${subscribers.length} subscribers of lifecycle event ${lifecycleEvent}`);
 		for (const idHandler of subscribers) {
 			logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
-			await idHandler.handler(platform);
+			await idHandler.handler(platform, customData);
 		}
 	}
 }
