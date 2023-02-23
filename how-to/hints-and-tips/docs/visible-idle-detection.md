@@ -49,7 +49,7 @@ try {
 
   await idleDetector.start({
     threshold: 60000,
-    signal,
+    signal
   });
   console.log('IdleDetector is active.');
 } catch (err) {
@@ -85,11 +85,11 @@ If you have a view it might be covered for the following reasons:
 ### How can you detect when your view is hidden and made visible again?
 
 ```js
-document.addEventListener("visibilitychange", () => {
+document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-   console.log("hidden")
+    console.log('hidden');
   } else {
-    console.log("shown")
+    console.log('shown');
   }
 });
 ```

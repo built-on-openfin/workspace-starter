@@ -7,7 +7,7 @@
 
 This section is where we will add small hints and tips that isn't specific to any one sample but may prove useful.
 
-| Topic                            | Description                                                         |
-| -------------------------------- | ------------------------------------------------------------------- |
-| [Channel API](./doc/channel-api) | This section covers things related to the Channel API and it's use. |
-| [User Engagement - Idleness and Visibility](./doc/visible-idle-detection) | This document covers how you can detect if the user is currently active and when they show or hide your content. |
+| Topic                                                                      | Description                                                                                                      |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [Channel API](./docs/channel-api)                                          | This section covers things related to the Channel API and it's use.                                              |
+| [User Engagement - Idleness and Visibility](./docs/visible-idle-detection) | This document covers how you can detect if the user is currently active and when they show or hide your content. |
