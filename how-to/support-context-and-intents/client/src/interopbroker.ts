@@ -388,5 +388,5 @@ export function interopOverride(
 		}
 	}
 
-	return new InteropOverride(provider, options, ...args);
+	return new InteropOverride();
 }

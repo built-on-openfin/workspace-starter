@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	ColorSchemeOptionType,
 	getCurrentSync,
