@@ -9,10 +9,7 @@ const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
 
 export function interopOverride(
-	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
-	provider?: OpenFin.ChannelProvider,
-	options?: OpenFin.InteropBrokerOptions,
-	...args: unknown[]
+	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
 		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {

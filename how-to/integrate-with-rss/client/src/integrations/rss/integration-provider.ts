@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import {
 	CLITemplate,

@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";

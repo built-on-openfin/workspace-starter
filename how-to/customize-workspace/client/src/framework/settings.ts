@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";

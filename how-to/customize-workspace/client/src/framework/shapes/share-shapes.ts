@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { Page } from "@openfin/workspace-platform";
 
 export interface IShareCustomData {
