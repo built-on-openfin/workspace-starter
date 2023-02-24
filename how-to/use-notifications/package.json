@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-notifications",
-	"version": "11.0.0",
+	"version": "12.0.0",
 	"description": "OpenFin Workspace -- Use Notifications",
 	"main": "index.js",
 	"scripts": {
@@ -19,8 +19,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^29.73.14",
-		"@openfin/workspace": "11.0.6",
+		"@openfin/core": "^30.74.7",
+		"@openfin/workspace": "next",
 		"csstype": "^3.1.1"
 	},
 	"devDependencies": {

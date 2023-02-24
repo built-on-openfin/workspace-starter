@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { CustomSettings } from "./shapes/setting-shapes";
 
 let settings: CustomSettings;

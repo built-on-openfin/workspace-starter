@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	login as authenticationLogin,
 	logout as authenticationLogout,

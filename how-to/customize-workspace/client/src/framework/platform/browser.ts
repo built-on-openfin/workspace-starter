@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { BrowserCreateWindowRequest, getCurrentSync, Page } from "@openfin/workspace-platform";
 import { getDefaultToolbarButtons } from "../buttons";
 import * as endpointProvider from "../endpoint";

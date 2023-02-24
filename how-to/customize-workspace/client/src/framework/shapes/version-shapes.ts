@@ -1,3 +1,5 @@
+import type OpenFin from "@openfin/core";
+
 /* Information about the version of the platform and it's dependencies */
 export interface VersionInfo {
 	/** The version of the the instance of this platform if provided */

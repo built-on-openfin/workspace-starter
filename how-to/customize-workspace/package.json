@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--customize-workspace",
-	"version": "11.0.0",
+	"version": "12.0.0",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
@@ -38,9 +38,9 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^29.73.14",
-		"@openfin/workspace": "11.0.6",
-		"@openfin/workspace-platform": "11.0.6",
+		"@openfin/core": "^30.74.7",
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next",
 		"csstype": "^3.1.1"
 	},
 	"devDependencies": {

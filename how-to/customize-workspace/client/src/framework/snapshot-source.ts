@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { getConnectedSnapshotSourceClients } from "./connections";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";

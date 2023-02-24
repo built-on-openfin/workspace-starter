@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { InteropClient } from "@openfin/core/src/api/interop";
 import { Cell, enableLogging, ExcelApplication, getExcelApplication } from "@openfin/excel";
 import {

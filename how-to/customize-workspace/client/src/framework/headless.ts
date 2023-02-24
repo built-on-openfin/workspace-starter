@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { createLogger } from "./logger-provider";
 import type { HeadlessProviderOptions } from "./shapes/headless-shapes";
 import type { ModuleDefinition } from "./shapes/module-shapes";

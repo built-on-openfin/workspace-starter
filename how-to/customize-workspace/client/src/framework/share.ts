@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { getCurrentSync, Page } from "@openfin/workspace-platform";
 import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
 import { requestResponse } from "./endpoint";
