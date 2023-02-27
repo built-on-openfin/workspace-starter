@@ -100,6 +100,14 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 				}
 			},
 			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Announce2",
+				iconUrl: `${window.location.origin}/icons/announce.svg`,
+				action: {
+					id: "announce2"
+				}
+			},
+			{
 				type: BrowserButtonType.ShowHideTabs
 			},
 			{

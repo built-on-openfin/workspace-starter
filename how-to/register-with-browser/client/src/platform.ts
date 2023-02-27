@@ -79,6 +79,26 @@ export async function init() {
 						}
 					]
 				);
+			},
+			announce2: async (payload: CustomButtonActionPayload) => {
+				console.info("Announce2 called with payload:", payload);
+				await showWindow(
+					{ width: 400, height: 300 },
+					payload.windowIdentity,
+					"Announce",
+					"Announce the application to anyone listening ?",
+					[
+						{
+							id: "yes",
+							label: "Yes",
+							default: true
+						},
+						{
+							id: "no",
+							label: "No"
+						}
+					]
+				);
 			}
 		}
 	});
@@ -97,9 +117,8 @@ async function showPopup(
 ): Promise<string | undefined> {
 	console.log("Parent Identity", parentIdentity);
 
-	const platform = getCurrentSync();
-	const browserWindow = platform.Browser.wrapSync(parentIdentity);
-	const parentBounds = await browserWindow.openfinWindow.getBounds();
+	const browserWindow = fin.Window.wrapSync(parentIdentity);
+	const parentBounds = await browserWindow.getBounds();
 
 	console.log("Parent Bounds", parentBounds);
 
@@ -113,7 +132,7 @@ async function showPopup(
 		y: parentBounds.top + halfParentHeight
 	};
 
-	await browserWindow.openfinWindow.showPopupWindow({
+	const result = await browserWindow.showPopupWindow({
 		name: randomUUID(),
 		initialOptions: {
 			modalParentIdentity: parentIdentity
@@ -132,28 +151,58 @@ async function showPopup(
 		height: dimensions.height
 	});
 
-	// await fin.Window.create({
-	// 	name: randomUUID(),
-	// 	modalParentIdentity: parentIdentity,
-	// 	customData: {
-	// 		title,
-	// 		instructions,
-	// 		buttons
-	// 	},
-	// 	url: `${window.location.origin}/html/popup.html`,
-	// 	defaultLeft: parentCenter.x - halfWidth,
-	// 	defaultTop: parentCenter.y - halfHeight,
-	// 	defaultWidth: dimensions.width,
-	// 	defaultHeight: dimensions.height,
-	// 	frame: false,
-	// 	autoShow: true
-	// });
+	if (result.result === "dismissed") {
+		console.log("Popup dismissed");
+	} else if (result.result === "clicked") {
+		console.log("Popup clicked", result.data);
+		return result.data as string;
+	}
+}
 
-	// if (result.result === "dismissed") {
-	// 	console.log("Popup dismissed");
-	// } else if (result.result === "clicked") {
-	// 	console.log("Popup clicked", result.data);
-	// 	return result.data as string;
-	// }
+async function showWindow(
+	dimensions: { width: number; height: number },
+	parentIdentity: OpenFin.Identity,
+	title: string,
+	instructions: string,
+	buttons: {
+		id: string;
+		label: string;
+		default?: boolean;
+	}[]
+): Promise<string | undefined> {
+	console.log("Parent Identity", parentIdentity);
+
+	const browserWindow = fin.Window.wrapSync(parentIdentity);
+	const parentBounds = await browserWindow.getBounds();
+
+	console.log("Parent Bounds", parentBounds);
+
+	const halfParentWidth = parentBounds.width / 2;
+	const halfParentHeight = parentBounds.height / 2;
+	const halfWidth = dimensions.width / 2;
+	const halfHeight = dimensions.height / 2;
+
+	const parentCenter = {
+		x: parentBounds.left + halfParentWidth,
+		y: parentBounds.top + halfParentHeight
+	};
+
+	await fin.Window.create({
+		name: randomUUID(),
+		modalParentIdentity: parentIdentity,
+		customData: {
+			title,
+			instructions,
+			buttons
+		},
+		url: `${window.location.origin}/html/popup.html`,
+		defaultLeft: parentCenter.x - halfWidth,
+		defaultTop: parentCenter.y - halfHeight,
+		defaultWidth: dimensions.width,
+		defaultHeight: dimensions.height,
+		frame: false,
+		autoShow: true
+	});
+
 	return "";
 }
