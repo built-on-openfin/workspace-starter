@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes";
 import type { AnalyticsModule, PlatformAnalyticsEvent } from "customize-workspace/shapes/analytics-shapes";

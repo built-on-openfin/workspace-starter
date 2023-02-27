@@ -16,8 +16,8 @@ export async function register() {
 	console.log("Initialising the storefront provider.");
 	const provider = await getStoreProvider();
 	try {
-		await Storefront.register(provider);
-		console.log("Storefront provider initialised.");
+		const metaInfo = await Storefront.register(provider);
+		console.log("Storefront provider initialised.", metaInfo);
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content store provider", err);
 	}

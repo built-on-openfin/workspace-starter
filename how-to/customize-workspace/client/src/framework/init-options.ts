@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";

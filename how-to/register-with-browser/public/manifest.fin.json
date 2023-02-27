@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies",
-		"version": "28.106.72.17"
+		"version": "30.110.74.7"
 	},
 	"platform": {
 		"uuid": "launch-browser-from-window",
@@ -20,7 +20,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Launch Browser Windows - v10.0.0",
+		"name": "Launch Browser Windows - v12.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -36,7 +36,7 @@
 				"name": "launch-bar",
 				"frame": false,
 				"icon": "https://www.openfin.co/favicon.ico",
-				"defaultHeight": 400,
+				"defaultHeight": 440,
 				"defaultWidth": 300,
 				"defaultCentered": true,
 				"saveWindowState": false,

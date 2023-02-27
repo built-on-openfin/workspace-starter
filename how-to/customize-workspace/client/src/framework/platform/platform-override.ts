@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	ColorSchemeOptionType,
 	CreateSavedPageRequest,
@@ -13,6 +14,10 @@ import {
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
+import type {
+	PageChangedLifecyclePayload,
+	WorkspaceChangedLifecyclePayload
+} from "customize-workspace/shapes";
 import * as analyticsProvider from "../analytics";
 import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -101,7 +106,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return;
 			}
 			logger.info(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
-			return super.createSavedWorkspace(req);
+
+			const res = await super.createSavedWorkspace(req);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "workspace-changed", {
+				action: "create",
+				id: req.workspace.workspaceId,
+				workspace: req.workspace
+			} as WorkspaceChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
@@ -126,7 +141,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			logger.info(
 				`Saving updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
 			);
-			return super.updateSavedWorkspace(req);
+
+			const res = await super.updateSavedWorkspace(req);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "workspace-changed", {
+				action: "update",
+				id: req.workspace.workspaceId,
+				workspace: req.workspace
+			} as WorkspaceChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async deleteSavedWorkspace(id: string): Promise<void> {
@@ -144,7 +169,16 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return;
 			}
 			logger.info(`Deleting workspace from default storage for workspace id: ${id}`);
-			return super.deleteSavedWorkspace(id);
+
+			const res = await super.deleteSavedWorkspace(id);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "workspace-changed", {
+				action: "delete",
+				id
+			} as WorkspaceChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async getSavedPages(query?: string): Promise<Page[]> {
@@ -201,7 +235,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return;
 			}
 			logger.info(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
-			return super.createSavedPage(req);
+
+			const res = await super.createSavedPage(req);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "page-changed", {
+				action: "create",
+				id: req.page.pageId,
+				page: req.page
+			} as PageChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
@@ -225,7 +269,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return;
 			}
 			logger.info(`updating saved page and saving to default storage with page id: ${req.page.pageId}`);
-			return super.updateSavedPage(req);
+
+			const res = await super.updateSavedPage(req);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "page-changed", {
+				action: "update",
+				id: req.page.pageId,
+				page: req.page
+			} as PageChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async deleteSavedPage(id: string): Promise<void> {
@@ -245,7 +299,16 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return;
 			}
 			logger.info(`deleting saved page from default storage. PageId: ${id}`);
-			await super.deleteSavedPage(id);
+
+			const res = await super.deleteSavedPage(id);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "page-changed", {
+				action: "delete",
+				id
+			} as PageChangedLifecyclePayload);
+
+			return res;
 		}
 
 		public async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {

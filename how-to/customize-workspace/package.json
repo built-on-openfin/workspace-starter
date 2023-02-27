@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--customize-workspace",
-	"version": "10.3.2",
+	"version": "12.0.0",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
@@ -26,7 +26,7 @@
 		"setup-dev": "npm install concurrently live-server --save-dev && npm run build-server-live",
 		"validate": "npm --prefix ../../ run validate",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
-		"generate-schema": "npx ts-json-schema-generator@1.1.2 --path client/src/framework/shapes/setting-shapes.ts --tsconfig client/tsconfig.json --no-type-check --out public/schemas/settings.schema.json",
+		"generate-schema": "npx typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
 	},
@@ -38,9 +38,9 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^28.72.17",
-		"@openfin/workspace": "10.3.11",
-		"@openfin/workspace-platform": "10.3.11",
+		"@openfin/core": "^30.74.7",
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next",
 		"csstype": "^3.1.1"
 	},
 	"devDependencies": {

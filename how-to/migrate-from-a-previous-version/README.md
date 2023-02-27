@@ -3,9 +3,33 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v10 to v11
+
+### Workspace 11 Enhancements
+
+- Fixed Panels for Pages - Workspace Platform and content providers can configure fixed panels on any side of a Browser Page. Developers can programmatically control the size, contents, and options of these panels. The panels are configured at the Page level and saved/restored with snapshots. End-user cannot rearrange, move, or remove these panels.
+- Custom Buttons and Landing Page in Store - An Application’s buttons and text in OpenFin Store are now fully customizable. Each application can have both a primary button and a set of secondary buttons. The Landing Page can display either an application or navigation item in any row.
+
+### Notification 1.20.0 Enhancements
+
+- Custom Toast Location - End-users can now set a specific location within a monitor for where their Notifications will display.
+
+These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
+
+## What dependencies will I need for v11
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^12.0.0",
+                    "@openfin/workspace-platform": "^12.0.0"
+                }
+```
+
 ## Migrate from a previous version - From v9.2 to v10
 
-### Workspace Enhancements
+### Workspace 10 Enhancements
 
 - Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
 - New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
@@ -13,7 +37,7 @@
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
 - Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
 
-### Notification Enhancements
+### Notification 1.19.2 Enhancements
 
 - We now expose a show/hide API similar to the other workspace components (the toggle api still works)
 

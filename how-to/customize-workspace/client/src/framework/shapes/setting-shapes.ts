@@ -14,6 +14,7 @@ import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
 import type { LifecycleProviderOptions } from "./lifecycle-shapes";
 import type { LoggerProviderOptions } from "./logger-shapes";
+import type { MenusProviderOptions } from "./menu-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
@@ -43,4 +44,5 @@ export interface CustomSettings {
 	lifecycleProvider?: LifecycleProviderOptions;
 	analyticsProvider?: AnalyticsProviderOptions;
 	versionProvider?: VersionProviderOptions;
+	menusProvider?: MenusProviderOptions;
 }

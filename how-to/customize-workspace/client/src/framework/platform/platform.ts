@@ -14,11 +14,12 @@ import * as endpointProvider from "../endpoint";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
-import { init as modulesInit, getDefaultHelpers } from "../modules";
+import * as menusProvider from "../menu";
+import { getDefaultHelpers, init as modulesInit } from "../modules";
 import { getConfiguredSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
-import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
+import { deregister as deregisterShare, isShareEnabled, register as registerShare } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { randomUUID } from "../uuid";
 import * as versionProvider from "../version";
@@ -58,6 +59,7 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
 	await connectionProvider.init(settings?.connectionProvider);
+	await menusProvider.init(settings?.menusProvider, helpers);
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider, helpers);
@@ -102,8 +104,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	});
 	return true;
 }
-
-export const VERSION = "10.3.0";
 
 export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);

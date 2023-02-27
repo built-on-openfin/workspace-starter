@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	BrowserButtonType,
 	BrowserCreateWindowRequest,
@@ -5,13 +6,14 @@ import {
 	getCurrentSync,
 	Page,
 	PageLayout,
+	PanelPosition,
 	ToolbarOptions,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { createPageWithLayout, createViewIdentity } from "./browser";
 
 const platform: WorkspacePlatformModule = getCurrentSync();
-const defaultPageLayout: PageLayout = {
+const defaultPageLayout: () => PageLayout = () => ({
 	content: [
 		{
 			type: "stack",
@@ -35,10 +37,10 @@ const defaultPageLayout: PageLayout = {
 			]
 		}
 	]
-};
+});
 
 export async function createBrowserWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -49,7 +51,7 @@ export async function createBrowserWindow(): Promise<BrowserWindowModule> {
 }
 
 export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -61,7 +63,7 @@ export async function createBrowserWindowMaximized(): Promise<BrowserWindowModul
 }
 
 export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -75,7 +77,7 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
 }
 
 export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page];
 	const toolbarOptions: ToolbarOptions = {
 		buttons: [
@@ -121,9 +123,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 }
 
 export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page1: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page1: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
 	const pages: Page[] = [page, page1, page2];
 
 	const options: BrowserCreateWindowRequest = {
@@ -134,8 +136,8 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 }
 
 export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout);
-	const page1: Page = await createPageWithLayout("Locked Page", defaultPageLayout);
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page1: Page = await createPageWithLayout("Locked Page", defaultPageLayout());
 	const lockPage1: Page = { isLocked: true, ...page1 };
 	const pages: Page[] = [page, lockPage1];
 	const toolbarOptions: ToolbarOptions = {
@@ -183,32 +185,86 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 	return createdBrowserWin;
 }
 
+export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page (2)", defaultPageLayout());
+
+	page.panels = [
+		{
+			position: PanelPosition.Top,
+			height: "50px",
+			viewOptions: {
+				url: "http://localhost:8080/html/top-panel.html"
+			}
+		},
+		{
+			position: PanelPosition.Left,
+			width: "50px",
+			viewOptions: {
+				url: "http://localhost:8080/html/left-panel.html"
+			}
+		},
+		{
+			position: PanelPosition.Right,
+			width: "50px",
+			viewOptions: {
+				url: "http://localhost:8080/html/right-panel.html"
+			}
+		},
+		{
+			position: PanelPosition.Bottom,
+			height: "50px",
+			viewOptions: {
+				url: "http://localhost:8080/html/bottom-panel.html"
+			}
+		}
+	];
+
+	page2.panels = [
+		{
+			position: PanelPosition.Top,
+			height: "50px",
+			viewOptions: {
+				url: "http://localhost:8080/html/top-panel.html"
+			}
+		}
+	];
+
+	const pages: Page[] = [page, page2];
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: { pages }
+	};
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	return createdBrowserWin;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
-	// CREATE BROWSER WINDOW WITH VIEW
+	// create browser window with view
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	createBrowserWinBtn.addEventListener("click", createBrowserWindow);
 
-	// CREATE BROWSER WINDOW MAXIMIZED
+	// create browser window maximized
 	const createBrowserMaximized = document.querySelector("#launch-browser-window-maximized");
 	createBrowserMaximized.addEventListener("click", createBrowserWindowMaximized);
 
-	// CREATE BROWSER WINDOW WITH CUSTOM SAVE PAGE BUTTON
+	// create browser window with custom save page button
 	const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
 	customToolbarBtn.addEventListener("click", createCustomToolbarWindow);
 
-	// CREATE BROWSER WINDOW WITH SINGLE PAGE AND NO TAB
+	// create browser window with single page and no tab
 	const singlePageBrowserWinNoTabBtn = document.querySelector("#launch-nopagetab-browser-window");
 	singlePageBrowserWinNoTabBtn.addEventListener("click", createSinglePageNoTabWindow);
 
-	// CREATE BROWSER WINDOW WITH MULTIPLE PAGES
+	// create browser window with multiple pages
 	const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");
 	multiPageBrowserWinBtn.addEventListener("click", createMultiPageWindow);
 
-	// CREATE BROWSER WINDOW WITH A SINGLE LOCKED PAGE
-	const singleLockedPage = document.querySelector("#launch-single-locked-page");
-	singleLockedPage.addEventListener("click", createWindowWithLockedPage);
+	// create browser window with fixed views
+	const fixedViews = document.querySelector("#launch-fixed-views");
+	fixedViews.addEventListener("click", createWindowWithFixedViews);
 
-	// GET ALL BROWSER PAGES
+	// get all browser pages
 	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
 	getBrowserPagesBtn.addEventListener("click", async () => {
 		await (fin.me as OpenFin.Window).showDeveloperTools();
@@ -225,7 +281,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 	});
 
-	// QUIT LAUNCHER / BROWSER
+	// Create browser window with fixed views
+	const singleLockedPage = document.querySelector("#launch-single-locked-page");
+	singleLockedPage.addEventListener("click", createWindowWithLockedPage);
+
+	// quit launcher / browser
 	const quitBtn = document.querySelector("#quit");
 	quitBtn.addEventListener("click", async () => {
 		await platform.quit();

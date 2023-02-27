@@ -1,18 +1,18 @@
 {
 	"name": "automation-testing-register-with-home-js",
-	"version": "10.3.0",
+	"version": "12.0.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"build": "echo Nothing to build",
-		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --reporter ./mocha.reporter.json --testFailCount 2 --workspace 10.3.11",
-		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace 10.3.11",
-		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --reporter ./jasmine.reporter.json --testFailCount 2 --workspace 10.3.11",
-		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 10.3.11",
-		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jest --reporter ./jest.reporter.json --testFailCount 2 --workspace 10.3.11",
-		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace 10.3.11",
-		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage --workspace 10.3.11",
-		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --driver=selenium --workspace 10.3.11",
-		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --driver=selenium --workspace 10.3.11"
+		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --reporter ./mocha.reporter.json --testFailCount 2 --workspace next",
+		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace next",
+		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --reporter ./jasmine.reporter.json --testFailCount 2 --workspace next",
+		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace next",
+		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --framework jest --reporter ./jest.reporter.json --testFailCount 2 --workspace next",
+		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace next",
+		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage --workspace next",
+		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.js --driver=selenium --workspace next",
+		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --driver=selenium --workspace next"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
@@ -22,7 +22,7 @@
 		"@openfin/automation-native": "^1.0.1",
 		"chai": "4.3.7",
 		"jasmine-pretty-html-reporter": "0.2.5",
-		"jest-html-reporters": "3.1.2",
+		"jest-html-reporters": "3.1.3",
 		"mochawesome": "7.1.3"
 	}
 }

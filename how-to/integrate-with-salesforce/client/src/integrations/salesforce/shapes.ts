@@ -1,3 +1,5 @@
+import type OpenFin from "@openfin/core";
+
 /**
  * Model for batch request.
  */

@@ -1,4 +1,4 @@
-name: Automation Test Headless
+name: Automation Test Full Headless
 on: workflow_dispatch
 
 concurrency:

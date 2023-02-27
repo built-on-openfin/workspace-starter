@@ -1,4 +1,9 @@
-import type { StorefrontFooter, Image, StorefrontNavigationItemDetails } from "@openfin/workspace";
+import type {
+	StorefrontFooter,
+	Image,
+	StorefrontNavigationItemDetails,
+	StoreButtonConfig
+} from "@openfin/workspace";
 
 export interface StorefrontSettingsNavigationItem {
 	/**
@@ -77,4 +82,14 @@ export interface StorefrontProviderOptions {
 	}[];
 	/** The configuration of the footer for the store */
 	footer: StorefrontFooter;
+
+	/**
+	 * The action triggered when the primary button is clicked, defaults to launching the app.
+	 */
+	primaryButton?: StoreButtonConfig;
+
+	/**
+	 * Secondary buttons added to all store entries.
+	 */
+	secondaryButtons?: StoreButtonConfig[];
 }

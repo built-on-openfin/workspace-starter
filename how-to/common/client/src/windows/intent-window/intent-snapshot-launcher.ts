@@ -1,3 +1,5 @@
+import type OpenFin from "@openfin/core";
+
 interface LauncherSettings {
 	intentName?: string;
 	snapshotUrl?: string;

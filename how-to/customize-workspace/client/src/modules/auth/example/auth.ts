@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import { randomUUID } from "../../../framework/uuid";

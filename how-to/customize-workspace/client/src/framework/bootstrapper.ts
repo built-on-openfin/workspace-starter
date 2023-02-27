@@ -15,7 +15,6 @@ import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
 import * as versionProvider from "./version";
-
 import {
 	deregister as deregisterDock,
 	minimize as minimizeDock,

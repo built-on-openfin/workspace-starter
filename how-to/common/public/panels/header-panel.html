@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Header</title>
+		<link rel="stylesheet" href="/common/style/app.css" />
+		<style>
+			nav > button {
+				color: var(--brand-text);
+				border: none;
+				background: none;
+				padding: 9px;
+			}
+		</style>
+	</head>
+
+	<body class="pad0 fill">
+		<nav class="row fill gap10">
+			<button id="btnFile">File</button>
+			<button id="btnHelp">Help</button>
+		</nav>
+		<script>
+			const btnFile = document.querySelector('#btnFile');
+			btnFile.addEventListener('click', async (e) => {
+				const view = fin.View.getCurrentSync();
+				const window = await view.getCurrentWindow();
+				await window.showPopupMenu({
+					template: [
+						{
+							label: 'Open'
+						},
+						{
+							label: 'Save'
+						},
+						{ type: 'separator', data: {} },
+						{
+							label: 'Exit'
+						}
+					],
+					x: btnFile.offsetLeft + 40,
+					y: btnFile.offsetTop + 65
+				});
+			});
+
+			const btnHelp = document.querySelector('#btnHelp');
+			btnHelp.addEventListener('click', async (e) => {
+				const view = fin.View.getCurrentSync();
+				const window = await view.getCurrentWindow();
+				await window.showPopupMenu({
+					template: [
+						{
+							label: 'Feedback'
+						},
+						{
+							label: 'About'
+						}
+					],
+					x: btnHelp.offsetLeft + 40,
+					y: btnHelp.offsetTop + 65
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -276,7 +276,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "hhttps://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "fdc3", "tools"]
@@ -1181,14 +1181,30 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
+		"intents": [],
+		"images": [
 			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
+		"tags": ["page", "openfin", "manager", "fcd3"]
+	},
+	{
+		"appId": "manager-portal-fixed-panels",
+		"name": "manager-portal-fixed-panels",
+		"title": "Manager Portal (Fixed Views)",
+		"manifestType": "snapshot",
+		"description": "Provides a portal for a manager with fixed panels",
+		"manifest": "http://localhost:8080/common/views/manager-portal/snapshot-manager-portal-fixed.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
 		"images": [
 			{
 				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
@@ -1211,14 +1227,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1237,14 +1246,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1263,14 +1265,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1289,14 +1284,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1315,14 +1303,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
-			}
-		],
+		"intents": [],
 		"images": [],
 		"tags": ["view", "manager", "fcd3"]
 	},
@@ -1365,7 +1346,7 @@
 				"src": "http://localhost:8080/common/images/previews/irs-rfq-notification1.png"
 			}
 		],
-		"tags": ["view", "irs"]
+		"tags": ["view", "irs", "finance"]
 	},
 	{
 		"appId": "analytics-viewer",
