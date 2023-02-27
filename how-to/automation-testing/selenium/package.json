@@ -18,6 +18,6 @@
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"mocha": "10.2.0",
-		"selenium-webdriver": "4.8.0"
+		"selenium-webdriver": "4.8.1"
 	}
 }
