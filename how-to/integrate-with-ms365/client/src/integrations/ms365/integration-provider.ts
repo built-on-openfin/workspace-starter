@@ -389,7 +389,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const response = await this._ms365Connection.executeApiRequest(fullPath);
 						lastResponse.respond([this.createGraphJsonResult(response)]);
 					}
-				} else if (query.length >= 3) {
+				} else if (query.length >= 3 && !query.startsWith("/")) {
 					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
 
 					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];

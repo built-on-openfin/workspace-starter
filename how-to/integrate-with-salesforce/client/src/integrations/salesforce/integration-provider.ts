@@ -367,7 +367,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._salesForceConnection && query.length >= minLength) {
+			if (this._salesForceConnection && query.length >= minLength && !query.startsWith("/")) {
 				let selectedObjects: string[] = this._mappings.map((m) => m.label);
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
