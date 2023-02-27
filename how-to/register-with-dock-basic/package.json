@@ -19,13 +19,13 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^30.74.7",
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next"
 	},
 	"devDependencies": {
+		"@openfin/core": "^30.74.7",
 		"@types/express": "^4.17.17",
-		"@types/node": "^18.13.0",
+		"@types/node": "^18.14.2",
 		"express": "^4.18.2",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.5",
