@@ -3,6 +3,137 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v11 to v12
+
+### @openfin/core Updates
+
+The Openfin runtime core types have been updated. When you move to the matching types for the runtime you may get a number of TypeScript errors:
+
+#### OpenFin Error
+
+```shell
+TS2503: Cannot find namespace 'OpenFin'.
+```
+
+#### OpenFin Error Resolution
+
+OpenFin is no longer made globally available by default. import the OpenFin type to resolve the issue.
+
+```javascript
+import type OpenFin from '@openfin/core';
+```
+
+#### Interop Broker Constructor Error
+
+```shell
+ TS2322: Type '(InteropBroker: Constructor<InteropBroker>, provider?: ChannelProvider, options?: InteropBrokerOptions, ...args: unknown[]) => InteropBroker' is not assignable to type 'OverrideCallback<InteropBroker, InteropBroker>'.
+```
+
+#### Interop Broker Constructor Error Resolution
+
+The constructor has changed and you no longer pass down options. Previously we had:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
+ provider?: OpenFin.ChannelProvider,
+ options?: OpenFin.InteropBrokerOptions,
+ ...args: unknown[]
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride(provider, options, ...args);
+}
+```
+
+And this has now become:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride();
+}
+```
+
+### Use of BrowserOverrideCallback Error
+
+```shell
+ TS2322: Type '(WorkspacePlatformProvider: Constructor<WorkspacePlatformProvider>) => Promise<Override>' is not assignable to type 'WorkspacePlatformOverrideCallback'.
+```
+
+You may get an error similar to the one above. Your Platform Override should use the updated Workspace type:
+
+#### Old WorkspacePlatformProvider approach
+
+```javascript
+import type { BrowserOverrideCallback } from "@openfin/workspace-platform";
+
+export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
+ class Override extends WorkspacePlatformProvider {
+    ...
+  }
+  return new Override();
+};
+```
+
+#### New WorkspacePlatformProvider approach
+
+```javascript
+import type { WorkspacePlatformOverrideCallback } from "@openfin/workspace-platform";
+
+export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+ class Override extends WorkspacePlatformProvider {
+    ...
+  }
+  return new Override();
+};
+```
+
+### Mixed Core Types Error
+
+If you have dependencies that bring in an earlier version of @openfin/core and you have TypeScript errors as shown above then you may see some additional errors relating to a type conflict. Resolve the other TypeScript errors first and this error should go away (TypeScript is trying to resolve issues and finds the additional copies of the @openfin/core types).
+
+Here is an example of what the error might say:
+
+```shell
+ TS2345: Argument of type 'import("/YOUR_PATH/node_modules/@openfin/core/src/api/view/Instance").View' is not assignable to parameter of type 'import("/YOUR_PATH/node_modules/OTHER_DEPENDENCY/node_modules/@openfin/core/src/api/view/Instance").View'.
+  Property '#private' in type 'View' refers to a different member that cannot be accessed from within type 'View'.
+```
+
+This should not be an issue if the other TypeScript errors have been resolved.
+
+### Workspace 12 Enhancements
+
+- To be updated upon release.
+
+### Notification 1.21.0 Enhancements
+
+- To be updated upon release.
+
+## What dependencies will I need for v12
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^12.0.0",
+                    "@openfin/workspace-platform": "^12.0.0"
+                }
+```
+
+You should update your dev dependencies
+
+```javascript
+"devDependencies": {
+                    "@openfin/core": "^30.74.7"
+                   }
+```
+
 ## Migrate from a previous version - From v10 to v11
 
 ### Workspace 11 Enhancements
@@ -22,8 +153,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^12.0.0",
-                    "@openfin/workspace-platform": "^12.0.0"
+                    "@openfin/workspace": "^11.0.0",
+                    "@openfin/workspace-platform": "^11.0.0"
                 }
 ```
 
