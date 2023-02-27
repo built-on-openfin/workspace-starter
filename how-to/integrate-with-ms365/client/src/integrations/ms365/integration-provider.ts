@@ -345,12 +345,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options?: {
+			queryMinLength: number;
+			queryAgainst: string[];
+		}
 	): Promise<HomeSearchResponse> {
 		if (!this._ms365Connection) {
 			this._connectLastResponse = lastResponse;
@@ -373,6 +378,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			? ["File"]
 			: ["User", "Contact", "Event", "Message", "Channel", "Team", "ChatMessage", "File"];
 
+		const minLength = options?.queryMinLength ?? 3;
+
 		this._debounceTimerId = window.setTimeout(async () => {
 			try {
 				// If query starts with ms just do a passthrough to the graph API
@@ -389,7 +396,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const response = await this._ms365Connection.executeApiRequest(fullPath);
 						lastResponse.respond([this.createGraphJsonResult(response)]);
 					}
-				} else if (query.length >= 3 && !query.startsWith("/")) {
+				} else if (query.length >= minLength && !query.startsWith("/")) {
 					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
 
 					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
@@ -548,7 +555,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}, 500);
 
 		return {
-			results: query.length >= 3 ? [this.createSearchingResult()] : [],
+			results: query.length >= minLength ? [this.createSearchingResult()] : [],
 			context: {
 				filters: [
 					{
