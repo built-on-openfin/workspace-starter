@@ -77,12 +77,13 @@ export async function init() {
 							id: "no",
 							label: "No"
 						}
-					]
+					],
+					false
 				);
 			},
 			announce2: async (payload: CustomButtonActionPayload) => {
 				console.info("Announce2 called with payload:", payload);
-				await showWindow(
+				await showPopup(
 					{ width: 400, height: 300 },
 					payload.windowIdentity,
 					"Announce",
@@ -97,7 +98,8 @@ export async function init() {
 							id: "no",
 							label: "No"
 						}
-					]
+					],
+					true
 				);
 			}
 		}
@@ -113,7 +115,8 @@ async function showPopup(
 		id: string;
 		label: string;
 		default?: boolean;
-	}[]
+	}[],
+	useCreateWindow: boolean
 ): Promise<string | undefined> {
 	console.log("Parent Identity", parentIdentity);
 
@@ -132,77 +135,48 @@ async function showPopup(
 		y: parentBounds.top + halfParentHeight
 	};
 
-	const result = await browserWindow.showPopupWindow({
-		name: randomUUID(),
-		initialOptions: {
-			modalParentIdentity: parentIdentity
-		},
-		additionalOptions: {
+	if (useCreateWindow) {
+		await fin.Window.create({
+			name: randomUUID(),
+			modalParentIdentity: parentIdentity,
 			customData: {
 				title,
 				instructions,
 				buttons
-			}
-		},
-		url: `${window.location.origin}/html/popup.html`,
-		x: parentCenter.x - halfWidth,
-		y: parentCenter.y - halfHeight,
-		width: dimensions.width,
-		height: dimensions.height
-	});
+			},
+			url: `${window.location.origin}/html/popup.html`,
+			defaultLeft: parentCenter.x - halfWidth,
+			defaultTop: parentCenter.y - halfHeight,
+			defaultWidth: dimensions.width,
+			defaultHeight: dimensions.height,
+			frame: false,
+			autoShow: true
+		});
+	} else {
+		const result = await browserWindow.showPopupWindow({
+			name: randomUUID(),
+			initialOptions: {
+				modalParentIdentity: parentIdentity
+			},
+			additionalOptions: {
+				customData: {
+					title,
+					instructions,
+					buttons
+				}
+			},
+			url: `${window.location.origin}/html/popup.html`,
+			x: parentCenter.x - halfWidth,
+			y: parentCenter.y - halfHeight,
+			width: dimensions.width,
+			height: dimensions.height
+		});
 
-	if (result.result === "dismissed") {
-		console.log("Popup dismissed");
-	} else if (result.result === "clicked") {
-		console.log("Popup clicked", result.data);
-		return result.data as string;
+		if (result.result === "dismissed") {
+			console.log("Popup dismissed");
+		} else if (result.result === "clicked") {
+			console.log("Popup clicked", result.data);
+			return result.data as string;
+		}
 	}
-}
-
-async function showWindow(
-	dimensions: { width: number; height: number },
-	parentIdentity: OpenFin.Identity,
-	title: string,
-	instructions: string,
-	buttons: {
-		id: string;
-		label: string;
-		default?: boolean;
-	}[]
-): Promise<string | undefined> {
-	console.log("Parent Identity", parentIdentity);
-
-	const browserWindow = fin.Window.wrapSync(parentIdentity);
-	const parentBounds = await browserWindow.getBounds();
-
-	console.log("Parent Bounds", parentBounds);
-
-	const halfParentWidth = parentBounds.width / 2;
-	const halfParentHeight = parentBounds.height / 2;
-	const halfWidth = dimensions.width / 2;
-	const halfHeight = dimensions.height / 2;
-
-	const parentCenter = {
-		x: parentBounds.left + halfParentWidth,
-		y: parentBounds.top + halfParentHeight
-	};
-
-	await fin.Window.create({
-		name: randomUUID(),
-		modalParentIdentity: parentIdentity,
-		customData: {
-			title,
-			instructions,
-			buttons
-		},
-		url: `${window.location.origin}/html/popup.html`,
-		defaultLeft: parentCenter.x - halfWidth,
-		defaultTop: parentCenter.y - halfHeight,
-		defaultWidth: dimensions.width,
-		defaultHeight: dimensions.height,
-		frame: false,
-		autoShow: true
-	});
-
-	return "";
 }
