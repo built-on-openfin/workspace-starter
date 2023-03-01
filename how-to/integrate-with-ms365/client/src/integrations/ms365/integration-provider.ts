@@ -259,11 +259,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			const svg = await response.text();
 			this._settings.images[themedIcon] = this.svgToInline(svg);
 		}
-
-		this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
-		window.setTimeout(async () => {
-			await this.updateCache();
-		}, 0);
 	}
 
 	/**
@@ -628,6 +623,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				this._settings.redirectUri,
 				this._settings.permissions
 			);
+
+			this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
+			window.setTimeout(async () => {
+				await this.updateCache();
+			}, 0);
+
 			if (this._connectLastResponse) {
 				this._connectLastResponse.revoke(`${this._moduleDefinition.id}-connect`);
 				this._connectLastResponse = undefined;
