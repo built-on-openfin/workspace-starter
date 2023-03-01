@@ -28,7 +28,7 @@ export class InlineAppModuleEndpoint implements Endpoint {
 		endpointDefinition: EndpointDefinition<{
 			apps: PlatformApp[];
 		}>,
-		request?: never
+		request?: unknown
 	): Promise<PlatformApp[]> {
 		if (endpointDefinition.type !== "module") {
 			this._logger.warn(

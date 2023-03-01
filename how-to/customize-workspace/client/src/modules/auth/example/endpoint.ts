@@ -1,7 +1,7 @@
 import type { CustomSettings, PlatformApp } from "customize-workspace/shapes";
 import type { Endpoint, EndpointDefinition, FetchOptions } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import type { ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
@@ -22,7 +22,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 	public async initialize(
 		definition: ModuleDefinition<ExampleEndpointOptions>,
 		createLogger: LoggerCreator,
-		helpers?: never
+		helpers?: ModuleHelpers
 	) {
 		this._logger = createLogger("ExampleAuthEndpoint");
 		this._logger.info("Was passed the following options", definition.data);

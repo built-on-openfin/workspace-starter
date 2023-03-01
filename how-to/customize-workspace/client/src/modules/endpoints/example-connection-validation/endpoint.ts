@@ -4,7 +4,7 @@ import type {
 } from "customize-workspace/shapes/connection-shapes";
 import type { Endpoint, EndpointDefinition } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
-import type { ModuleDefinition } from "customize-workspace/shapes/module-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 
 export class ConnectionValidationEndpoint implements Endpoint {
 	private _logger: Logger;
@@ -16,7 +16,11 @@ export class ConnectionValidationEndpoint implements Endpoint {
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers?: never) {
+	public async initialize(
+		definition: ModuleDefinition,
+		createLogger: LoggerCreator,
+		helpers?: ModuleHelpers
+	) {
 		this._logger = createLogger("ConnectionValidationEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
