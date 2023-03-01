@@ -403,7 +403,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 					homeResults.push(...searchResults);
 
-					lastResponse.respond(homeResults);
+					this._lastResponse.respond(homeResults);
 				} catch (err) {
 					await this.closeConnection();
 					if (err instanceof ConnectionError) {
@@ -412,7 +412,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					this._logger.error("Error retrieving Salesforce search results", err);
 				}
 			}
-			lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
+			this._lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
 		}, 500);
 
 		return {
@@ -483,8 +483,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 			} catch (err) {
 				this._logger.error("Error connecting to API", err);
-				this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
-				this._lastResponse.respond([this.getReconnectSearchResult()]);
+				if (this._lastResponse) {
+					this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+					this._lastResponse.respond([this.getReconnectSearchResult()]);
+				}
 			} finally {
 				this._isConnecting = false;
 			}
