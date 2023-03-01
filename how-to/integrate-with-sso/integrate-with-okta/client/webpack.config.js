@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+	// target: 'node',
 	entry: './client/src/provider.ts',
 	devtool: 'inline-source-map',
 	module: {
@@ -13,7 +14,11 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js']
+		extensions: ['.tsx', '.ts', '.js'],
+		fallback: {
+			"crypto": false,
+			"sha256": false
+		}
 	},
 	output: {
 		filename: 'provider.bundle.js',

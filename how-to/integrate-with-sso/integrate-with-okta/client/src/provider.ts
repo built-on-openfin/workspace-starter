@@ -1,4 +1,8 @@
-import { login as authenticationLogin, loginWithWidget as authenticationLoginWithWidget } from "./auth";
+import {
+	login as authenticationLogin,
+	loginWithWidget as authenticationLoginWithWidget,
+	logout as authenticationLogOut
+} from "./auth";
 import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 
@@ -15,21 +19,29 @@ window.addEventListener("DOMContentLoaded", async () => {
 export function logInformation(info: string) {
 	const logElem = document.querySelector("#logOutput");
 
-	logElem.textContent = `${logElem.textContent + info}\n\n`;
-	logElem.scrollTop = logElem.scrollHeight;
+	if(logElem) {
+		logElem.textContent = `${logElem.textContent + info}\n\n`;
+		logElem.scrollTop = logElem.scrollHeight;
+	} else {
+		console.log("logElem is null");
+	}
 }
 
 function logClear() {
 	const logElem = document.querySelector("#logOutput");
+	console.log(logElem);
 	logElem.textContent = "";
 	logElem.scrollTop = 0;
 }
 
 function initDom() {
+	logClear();
+
 	const btnClear = document.querySelector("#btnClear");
 	btnClear.addEventListener("click", async () => {
 		logClear();
 	});
+
 
 	const btnLogin = document.querySelector("#btnLogin");
 	btnLogin.addEventListener("click", async () => {
@@ -41,5 +53,11 @@ function initDom() {
 	btnLoginWidget.addEventListener("click", async () => {
 		logInformation("Login using Widget was manually opened");
 		await authenticationLoginWithWidget();
+	});
+
+	const btnLogOut = document.querySelector("#btnLogout");
+	btnLogOut.addEventListener("click", async () => {
+		logInformation("Logout was manually triggered");
+		await authenticationLogOut();
 	});
 }

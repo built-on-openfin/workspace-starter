@@ -57,10 +57,10 @@
 					//callRecovery: true,                         // Enable voice call-based account recovery
 					router: true // Leave this set to true for this demo
 				},
-				logo: 'http://localhost:8080/favicon.ico',
-				issuer: '{YOUR_OKTA_DOMAIN}/oauth2/default',
+                logo: 'http://localhost:8080/favicon.ico',
+				issuer: 'https://dev-17687012.okta.com/oauth2/default',
 				redirectUri: 'http://localhost:8080/platform/app.html',
-				clientId: '{YOUR_CLIENT_ID}'
+				clientId: '0oa877u3l4OQazuxt5d7'
 			};
 			// Search for URL Parameters to see if a user is being routed to the application to recover password
 			var searchParams = new URL(window.location.href).searchParams;
@@ -89,6 +89,7 @@
 							oktaSignIn.remove();
 
 							const idToken = tokens.idToken;
+							document.cookie = 'accessToken=' + tokens.accessToken.accessToken + ';path=/';
 							document.getElementById('messageBox').style.color = 'blue';
 							document.getElementById('messageBox').innerHTML =
 								'Hello, ' + idToken.claims.email + '! You just logged in! :)';
@@ -104,8 +105,8 @@
 			);
 
 			function logout() {
-				oktaSignIn.authClient.signOut();
-				location.reload();
+				oktaSignIn.authClient.signOut().then(() => location.reload());
+				// location.reload();
 				// window.location.href = 'http://localhost:8080/platform/app.html';
 			}
 		</script>

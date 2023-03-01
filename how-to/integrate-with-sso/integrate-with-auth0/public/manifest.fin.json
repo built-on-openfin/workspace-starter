@@ -31,12 +31,15 @@
 	},
 	"customSettings": {
 		"auth": {
-			"domain": "<DOMAIN>",
-			"clientId": "<CLIENTID>",
-			"loginUrl": "http://localhost:8080/platform/login-complete.html",
-			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
-			"appUrl": "http://localhost:8080/platform/app.html",
-			"verifyPollMs": 10000
+			"domain": "openfin-starter.us.auth0.com",
+        "clientId": "cGwCi1YjCKUAqGmmu4jjXffLMtzwUiHj",
+        "loginUrl": "http://localhost:8080/platform/login-complete.html",
+        "logoutUrls": [
+            "http://localhost:8080/platform/logout-complete.html",
+            "https://accounts.google.com"
+        ],
+        "appUrl": "http://localhost:8080/platform/app.html",
+        "verifyPollMs": 10000
 		}
 	}
 }
