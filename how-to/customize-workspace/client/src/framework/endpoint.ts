@@ -136,7 +136,7 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 		if (resolvedEndpoint === undefined) {
 			return null;
 		}
-		return resolvedEndpoint.requestResponse<T, R>(endpoint, request);
+		return resolvedEndpoint.requestResponse(endpoint, request) as R;
 	}
 	logger.warn(`${endpointId} specifies a type: ${endpointType} that is not supported`);
 	return null;
