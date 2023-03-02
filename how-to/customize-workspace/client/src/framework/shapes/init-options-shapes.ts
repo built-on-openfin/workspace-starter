@@ -10,6 +10,11 @@ export interface InitOptionsHandlerOptions {
 
 export interface InitOptionsHandler<O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions>
 	extends ModuleImplementation<O> {
+	/**
+	 * Handle the init options action.
+	 * @param requestedAction The requested action.
+	 * @param payload The payload for the action.
+	 */
 	action(requestedAction: string, payload?: unknown): Promise<void>;
 }
 
