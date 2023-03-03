@@ -32,12 +32,21 @@
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": ["mailto"]
+						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
 			}
 		},
-		"defaultViewOptions": {}
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto", "msteams", "tel"]
+					}
+				}
+			}
+		}
 	},
 	"snapshot": {
 		"windows": []
