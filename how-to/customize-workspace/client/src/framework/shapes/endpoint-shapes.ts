@@ -8,9 +8,26 @@ export interface EndpointProvider {
 }
 
 export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
-	action?<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
-	requestResponse?<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
+	/**
+	 * Handle an action sent to the endpoint.
+	 * @param endpointDefinition The definition of the endpoint.
+	 * @param request The request to process.
+	 * @returns True if processed.
+	 */
+	action?(endpointDefinition: EndpointDefinition<unknown>, request?: unknown): Promise<boolean>;
+
+	/**
+	 * Handle a request response on an endpoint.
+	 * @param endpointDefinition The definition of the endpoint.
+	 * @param request The request to process.
+	 * @returns The response to the request, or null of not handled.
+	 */
+	requestResponse?(
+		endpointDefinition: EndpointDefinition<unknown>,
+		request?: unknown
+	): Promise<unknown | null>;
 }
+
 /** Endpoint provider options */
 export interface EndpointProviderOptions extends ModuleList {
 	/** An array of endpoint definitions that can either use the built in fetch support or load modules that provide different implementations for executing actions or performing request/response actions */
