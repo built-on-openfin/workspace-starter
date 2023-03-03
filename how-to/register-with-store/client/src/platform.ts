@@ -1,10 +1,11 @@
+import type { App } from "@openfin/workspace";
 import {
 	BrowserInitConfig,
 	CustomActionCallerType,
-	getCurrentSync,
 	init as workspacePlatformInit
 } from "@openfin/workspace-platform";
 import { getSettings, validateThemes } from "./settings";
+import { toggleFavorite } from "./store";
 
 export async function init() {
 	console.log("Initialising platform");
@@ -29,15 +30,9 @@ export async function init() {
 		browser,
 		theme: validateThemes(settings?.themeProvider?.themes),
 		customActions: {
-			search: async (e) => {
+			"favorite-toggle": async (e) => {
 				if (e.callerType === CustomActionCallerType.StoreCustomButton) {
-					const url = `https://www.google.com/search?q=${encodeURIComponent(e.customData.query as string)}`;
-
-					const platform = getCurrentSync();
-					await platform.createView({
-						url,
-						target: null
-					});
+					await toggleFavorite(e.customData as App);
 				}
 			}
 		}
