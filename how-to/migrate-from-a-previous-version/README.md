@@ -110,13 +110,13 @@ This should not be an issue if the other TypeScript errors have been resolved.
 ### Workspace 12 Enhancements
 
 - Version Fallback Mechanism.
-OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
+  OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
 
 ### Notification 1.21.0 Enhancements
 
 #### New UI to view Notifications
 
-Notification Center now provides end-users the ability to choose how notifications are viewed. 
+Notification Center now provides end-users the ability to choose how notifications are viewed.
 
 Available options are:
 
