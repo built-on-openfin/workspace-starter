@@ -5,9 +5,11 @@ import {
 	StorefrontFooter,
 	StorefrontProvider,
 	StorefrontTemplate,
+	StoreButtonConfig,
 	StorefrontNavigationItem,
 	StorefrontDetailedNavigationItem,
-	App
+	App,
+	StoreRegistration
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
@@ -20,12 +22,15 @@ import type {
 
 let isStoreRegistered = false;
 
+const favoriteAppIds: string[] = [];
+let registration: StoreRegistration;
+
 export async function register() {
 	console.log("Initialising the storefront provider.");
 	const provider = await getStoreProvider();
 	if (provider !== null) {
 		try {
-			await Storefront.register(provider);
+			registration = await Storefront.register(provider);
 			isStoreRegistered = true;
 			console.log("Storefront provider initialised.");
 		} catch (err) {
@@ -405,6 +410,16 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 function addButtons(apps: App[]): App[] {
 	return apps.map((app) => ({
 		...app,
+		...calculateButtons(app)
+	}));
+}
+
+function calculateButtons(app: App): {
+	primaryButton: StoreButtonConfig;
+	secondaryButtons: StoreButtonConfig[];
+} {
+	return {
+		...app,
 		primaryButton: {
 			title: "Launch",
 			action: {
@@ -413,14 +428,30 @@ function addButtons(apps: App[]): App[] {
 		},
 		secondaryButtons: [
 			{
-				title: "Search Google",
+				title: favoriteAppIds.includes(app.appId) ? "Remove Favorite" : "Add Favorite",
 				action: {
-					id: "search",
-					customData: {
-						query: app.title
-					}
+					id: "favorite-toggle",
+					customData: app
 				}
 			}
 		]
-	}));
+	};
+}
+
+export async function toggleFavorite(app: App): Promise<void> {
+	const appIndex = favoriteAppIds.indexOf(app.appId);
+	if (appIndex >= 0) {
+		favoriteAppIds.splice(appIndex, 1);
+	} else {
+		favoriteAppIds.push(app.appId);
+	}
+	await registration.updateAppCardButtons({
+		appId: app.appId,
+		...calculateButtons(app)
+	});
+}
+
+export async function getFavoriteApps(): Promise<App[]> {
+	const apps = await getApps();
+	return apps.filter((a) => favoriteAppIds.includes(a.appId));
 }

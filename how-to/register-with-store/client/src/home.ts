@@ -16,6 +16,7 @@ import { getApps } from "./apps";
 import { deletePage, getPage, getPages, launchPage } from "./browser";
 import { launch } from "./launch";
 import { getSettings } from "./settings";
+import { getFavoriteApps } from "./store";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
@@ -246,7 +247,13 @@ export async function register() {
 		response: CLISearchListenerResponse
 	): Promise<CLISearchResponse> => {
 		const queryLower = request.query.toLowerCase();
-		if (queryLower.startsWith("/")) {
+
+		if (queryLower === "/f") {
+			const favoriteApps = await getFavoriteApps();
+			return {
+				results: mapAppEntriesToSearchEntries(favoriteApps)
+			};
+		} else if (queryLower.startsWith("/")) {
 			return { results: [] };
 		}
 
@@ -256,6 +263,7 @@ export async function register() {
 		}
 		lastResponse = response;
 		lastResponse.open();
+
 		const results = await getResults(queryLower, queryMinLength, queryAgainst, filters);
 		return results;
 	};
