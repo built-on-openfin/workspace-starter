@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "28.106.72.17"
+		"version": "29.108.73.14"
 	},
 	"platform": {
 		"uuid": "register-with-platform-windows",
@@ -40,7 +40,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-platform-windows/favicon.ico",
-		"name": "Register With Platform Windows - v10.0.0",
+		"name": "Register With Platform Windows - v11.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [

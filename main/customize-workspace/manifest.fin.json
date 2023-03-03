@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "28.106.72.17"
+		"version": "29.108.73.14"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"
@@ -38,12 +38,21 @@
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": ["mailto"]
+						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
 			}
 		},
-		"defaultViewOptions": {}
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto", "msteams", "tel"]
+					}
+				}
+			}
+		}
 	},
 	"snapshot": {
 		"windows": []
@@ -52,7 +61,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
-		"name": "Customize Workspace - v10.0.0",
+		"name": "Customize Workspace - v11.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
@@ -176,34 +185,6 @@
 			"globalMenu": [
 				{
 					"include": true,
-					"label": "Inspect Platform",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect",
-							"customData": { "target": "platform" }
-						}
-					},
-					"position": {
-						"operation": "start"
-					},
-					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Inspect Window",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
-				{
-					"include": true,
 					"label": "Toggle Notification Center",
 					"data": {
 						"type": "Custom",
@@ -229,21 +210,6 @@
 						"type": "OpenStorefront",
 						"operation": "after"
 					}
-				},
-				{
-					"include": true,
-					"label": "About",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "show-about"
-						}
-					},
-					"position": {
-						"type": "Quit",
-						"operation": "before"
-					},
-					"conditions": ["has-about"]
 				},
 				{
 					"include": true,
@@ -299,32 +265,6 @@
 						"operation": "start"
 					},
 					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Create App Definition",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "raise-create-app-definition-intent"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
-				{
-					"include": true,
-					"label": "Inspect View",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
 				}
 			],
 			"toolbarButtons": [
@@ -518,7 +458,7 @@
 							"inputPlaceholder": "#383A40",
 							"inputDisabled": "#7D808A",
 							"inputFocused": "#C9CBD2",
-							"textDefault": "#111214",
+							"textDefault": "#1E1F23",
 							"textHelp": "#2F3136",
 							"textInactive": "#7D808A",
 							"contentBackground1": "#0A76D3",
@@ -812,20 +752,20 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/js/preload.js",
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/task.svg"
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/task.svg"
 						}
 					}
 				},
@@ -837,7 +777,7 @@
 					"enabled": false,
 					"excludeFromSourceFilter": true,
 					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				},
 				{
 					"id": "about",
@@ -965,7 +905,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "10.0.0"
+				"workspace": "11.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -982,6 +922,25 @@
 			},
 			"endpointId": "version",
 			"versionCheckIntervalInSeconds": 30
+		},
+		"menusProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "developer-menus",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/composite/developer.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "about",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
+					"title": "About",
+					"description": "Provides information about this platform.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/composite/about.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }
