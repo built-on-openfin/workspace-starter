@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 export function logInformation(info: string) {
-	const logElem = document.querySelector("#logOutput");
+	const logElem = document.querySelector("pre");
 
 	if(logElem) {
 		logElem.textContent = `${logElem.textContent + info}\n\n`;
@@ -28,10 +28,12 @@ export function logInformation(info: string) {
 }
 
 function logClear() {
-	const logElem = document.querySelector("#logOutput");
-	console.log(logElem);
-	logElem.textContent = "";
-	logElem.scrollTop = 0;
+	const logElem = document.querySelector("pre");
+	if(logElem) {
+		console.log(logElem);
+		logElem.textContent = "";
+		logElem.scrollTop = 0;
+	}
 }
 
 function initDom() {

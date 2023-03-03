@@ -66,9 +66,8 @@ export async function getOktaToken(oktaCode) {
 
 	const url = `${sessionSettings.okta.domain}v1/token`;
 
-	let oktaAccessToken;
-
 	if (oktaCode) {
+		const response =
 		await fetch(url, {
 			method: "POST",
 			headers: {
@@ -76,29 +75,21 @@ export async function getOktaToken(oktaCode) {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
 			body: fetchBody
-			})
-			.then(async (response) => {
-				if (!response.ok) {
-					throw new Error("Unable to retrieve access token");
-				}
+		});
+		if (!response.ok) {
+			throw new Error("Unable to retrieve access token");
+		}
 
-				return response.json();
-				})
-			// eslint-disable-next-line promise/always-return
-			.then((data) => {
-				const accessToken = data.access_token;
-				oktaAccessToken = accessToken;
-				console.log(`Access Token: ${accessToken}`);
-				// informationCallback(`Access Token: ${accessToken}`); --> Error: TypeError informationCallback is not a function ???
-				localStorage.setItem("oktaToken", String(accessToken));
-				return String(accessToken);
-				})
-			.catch((error) => {
-				console.log(`Error thrown: ${error}`);
-				throw error;
-				});
+		const tokenResponse = await response.json();
+		const accessToken: string = tokenResponse.access_token;
+
+		console.log(`Access Token: ${accessToken}`);
+
+		localStorage.setItem("oktaToken", accessToken);
+		return accessToken;
 	}
 }
+
 
 export async function loginWithWidget() {
 	const authUrl = "http://localhost:8080/widgetLogin.html";
@@ -131,14 +122,10 @@ export async function logout() {
 			informationCallback("Logout was successful.");
 			localStorage.removeItem("oktaToken");
 			location.reload();
-			// returnToPlatform())
 		})
 		.catch((err) => console.log(`error on sign out: ${err}`));
 }
 
-function returnToPlatform() {
-	window.location.href = "http://localhost:8080/platform/provider.html";
-}
 
 async function transformAuthState(_authClient, authState) {
 	const promise = Promise.resolve(authState);

@@ -31,10 +31,10 @@
 	},
 	"customSettings": {
 		"okta": {
-			"domain": "https://dev-17687012.okta.com/oauth2/",
-			"clientId": "0oa83im6irktIOxmm5d7",
-			"loginUrl": "http://localhost:8080/platform/login-complete.html",
-			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
+			"domain": "{YOUR_DOMAIN}}",
+			"clientId": "{YOUR_CLIENTID}",
+			"loginUrl": "{YOUR_LOGIN_URL}",
+			"logoutUrls": ["{YOUR_LOGOUT_URL}"],
 			"appUrl": "http://localhost:8080/platform/app.html",
 			"redirectUrl": "http://localhost:8080/platform/app.html",
 			"verifyPollMs": 10000
