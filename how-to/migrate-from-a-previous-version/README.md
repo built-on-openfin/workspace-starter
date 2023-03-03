@@ -109,11 +109,34 @@ This should not be an issue if the other TypeScript errors have been resolved.
 
 ### Workspace 12 Enhancements
 
-- To be updated upon release.
+- Version Fallback Mechanism.
+OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
 
 ### Notification 1.21.0 Enhancements
 
-- To be updated upon release.
+#### New UI to view Notifications
+
+Notification Center now provides end-users the ability to choose how notifications are viewed. 
+
+Available options are:
+
+- All
+- Needs Attention (“persistent notifications”)
+- Grouped by Sender
+- Sort by Priority or Date continue to be available.
+
+#### View All Persistent Notifications
+
+End-users can now view or dismiss all persistent Notifications on their desktop with a single mouse click.
+
+### Workspace Subdomain
+
+OpenFin Workspace and Notifications assets are now delivered from the Workspace subdomain (workspace.openfin.co) by default.
+
+### Resolved Issues
+
+- Updated Store APIs can now make updates to Store buttons in real-time.
+- Resolved issue where queries with a lot of leading spaces calculated suggestion text positions incorrectly
 
 ## What dependencies will I need for v12
 
