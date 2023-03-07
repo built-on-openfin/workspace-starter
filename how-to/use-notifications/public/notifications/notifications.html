@@ -36,11 +36,25 @@
 				<button id="btnNotificationCustom" class="secondary">Custom Notification</button>
 				<button id="btnNotificationWithSound" class="secondary">Notification with Sound</button>
 			</div>
-			<div class="col fill gap20" id="logging-container">
-				<h2>Logging</h2>
-				<pre id="logging" class="scroll fill"></pre>
-				<div class="row right">
-					<button id="btnLoggingClear">Clear Logging</button>
+			<div class="col fill gap20">
+				<div class="row gap10">
+					<button id="btnViewLogging">Logging</button>
+					<button id="btnViewCode">Code</button>
+				</div>
+				<div class="col fill gap20 overflow-hidden" id="logging-container">
+					<h2>Logging</h2>
+					<pre id="logging" class="scroll fill"></pre>
+					<div class="row right">
+						<button id="btnLoggingClear">Clear Logging</button>
+					</div>
+				</div>
+				<div class="col fill gap20 overflow-hidden" id="code-container">
+					<h2>Code</h2>
+					<textarea id="code" class="scroll fill width-full"></textarea>
+					<div class="row right gap10">
+						<button id="btnCodeNotification">Show Notification</button>
+						<button id="btnCodeCopy">Copy Code</button>
+					</div>
 				</div>
 			</div>
 		</main>
