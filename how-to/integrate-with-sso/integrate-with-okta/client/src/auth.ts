@@ -1,6 +1,7 @@
 import { OktaAuth } from "@okta/okta-auth-js";
 import { getSettings } from "./settings";
 import type { OktaSettings } from "./shapes";
+import { randomUUID } from "./uuid";
 
 const STORAGE_REALM = "integrate-with-okta";
 const STORE_ACCESS_TOKEN = "token";
@@ -34,22 +35,11 @@ export async function init(settings: OktaSettings, informationCb: (info: string)
 	await login();
 }
 
-function makeid(length): string {
-	let result = "";
-	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
-	const charactersLength = characters.length;
-	let counter = 0;
-	while (counter < length) {
-		result += characters.charAt(Math.floor(Math.random() * charactersLength));
-		counter += 1;
-	}
-	return result;
-}
 
 // PKCE workflow - https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce
 export async function login() {
 	const sessionSettings = await getSettings();
-	const state = makeid(32);
+	const state = randomUUID();
 
 	removeProperty(STORE_ACCESS_TOKEN);
 
@@ -245,8 +235,7 @@ async function checkForUrls(win: OpenFin.Window, urls: string[]): Promise<URL | 
 	const isCompleteUrl = urls.some((u) => winInfo.url.includes(u));
 
 	if (isCompleteUrl) {
-		const returnedUrlString = new URL(winInfo.url);
-		const returnedUrl = new URL(returnedUrlString);
+		const returnedUrl = new URL(winInfo.url);
 		const searchParams = returnedUrl.searchParams;
 		if(searchParams.get("code") !== null) {
 			return new URL(winInfo.url);
