@@ -39,8 +39,8 @@ const defaultPageLayout: () => PageLayout = () => ({
 	]
 });
 
-export async function createBrowserWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout());
+export async function createBrowserWindow(hasUnsavedChanges = true): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout("Untitled Page", defaultPageLayout(), hasUnsavedChanges);
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -48,6 +48,10 @@ export async function createBrowserWindow(): Promise<BrowserWindowModule> {
 	};
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
+}
+
+export async function createBrowserWindowWithoutRequiringSave(): Promise<BrowserWindowModule> {
+	return createBrowserWindow(false);
 }
 
 export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
@@ -234,7 +238,11 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 document.addEventListener("DOMContentLoaded", async () => {
 	// create browser window with view
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
-	createBrowserWinBtn.addEventListener("click", createBrowserWindow);
+	createBrowserWinBtn.addEventListener("click", async () => createBrowserWindow());
+
+	// create browser window with no save requirement
+	const createBrowserWinNoSaveBtn = document.querySelector("#launch-browser-window-no-save");
+	createBrowserWinNoSaveBtn.addEventListener("click", createBrowserWindowWithoutRequiringSave);
 
 	// create browser window maximized
 	const createBrowserMaximized = document.querySelector("#launch-browser-window-maximized");
