@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-okta",
-	"version": "10.3.0",
+	"version": "11.0.0",
 	"description": "OpenFin Workspace -- Integrate with SSO - Okta",
 	"main": "index.js",
 	"scripts": {
@@ -19,9 +19,9 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "^28.72.17",
-		"@openfin/workspace": "10.3.10",
-		"@openfin/workspace-platform": "10.3.10"
+		"@openfin/core": "^29.73.14",
+		"@openfin/workspace": "11.0.6",
+		"@openfin/workspace-platform": "11.0.6"
 	},
 	"devDependencies": {
 		"@okta/okta-auth-js": "^7.2.0"

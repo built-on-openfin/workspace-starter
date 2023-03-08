@@ -1,7 +1,7 @@
 {
-	"name": "openfin-workspace--integrate-with-sso",
+	"name": "openfin-workspace--integrate-with-auth0",
 	"version": "11.0.0",
-	"description": "OpenFin Workspace -- Integrate with SSO",
+	"description": "OpenFin Workspace -- Integrate with Auth0",
 	"main": "index.js",
 	"scripts": {
 		"dos": "npm --prefix ../../common/ run dos",

@@ -6,7 +6,6 @@ import { randomUUID } from "./uuid";
 const STORAGE_REALM = "integrate-with-okta";
 const STORE_ACCESS_TOKEN = "token";
 
-
 let authSettings: OktaSettings;
 let informationCallback: (info: string) => void;
 let authWin: OpenFin.Window;
@@ -34,7 +33,6 @@ export async function init(settings: OktaSettings, informationCb: (info: string)
 
 	await login();
 }
-
 
 // PKCE workflow - https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce
 export async function login() {
@@ -68,14 +66,14 @@ export async function login() {
 			completePoll = undefined;
 		}
 		if (authWin) {
-				const win = authWin;
-				authWin = undefined;
+			const win = authWin;
+			authWin = undefined;
 
-				await win.removeAllListeners();
+			await win.removeAllListeners();
 
-				if (!isManualClose) {
-					await win.close(true);
-				}
+			if (!isManualClose) {
+				await win.close(true);
+			}
 		}
 	};
 
@@ -93,12 +91,12 @@ export async function login() {
 			const oktaCode = await getOktaCode(winUrl);
 			console.log(`Okta code: ${oktaCode}`);
 
-			if(oktaCode === undefined) {
+			if (oktaCode === undefined) {
 				informationCallback("Get userInfo failed");
 			} else {
 				const token: string = await getOktaToken(oktaCode);
 
-				if(token === undefined) {
+				if (token === undefined) {
 					informationCallback("Could not retrieve access token.");
 				} else {
 					informationCallback(`Okta Token: ${token}`);
@@ -122,20 +120,20 @@ async function getOktaCode(urlAsString) {
 export async function getOktaToken(oktaCode) {
 	const sessionSettings = await getSettings();
 
-	const fetchBody = "grant_type=authorization_code" +
-	`&code=${oktaCode}` +
-	`&client_id=${sessionSettings.okta.clientId}` +
-	`&code_verifier=${codeVerifier}` +
-	`&redirect_uri=${sessionSettings.okta.loginUrl}`;
+	const fetchBody =
+		"grant_type=authorization_code" +
+		`&code=${oktaCode}` +
+		`&client_id=${sessionSettings.okta.clientId}` +
+		`&code_verifier=${codeVerifier}` +
+		`&redirect_uri=${sessionSettings.okta.loginUrl}`;
 
 	const url = `${sessionSettings.okta.domain}v1/token`;
 
 	if (oktaCode) {
-		const response =
-		await fetch(url, {
+		const response = await fetch(url, {
 			method: "POST",
 			headers: {
-				"Accept": "application/json",
+				Accept: "application/json",
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
 			body: fetchBody
@@ -153,7 +151,6 @@ export async function getOktaToken(oktaCode) {
 		return accessToken;
 	}
 }
-
 
 export async function loginWithWidget() {
 	const authUrl = "http://localhost:8080/widgetLogin.html";
@@ -237,7 +234,7 @@ async function checkForUrls(win: OpenFin.Window, urls: string[]): Promise<URL | 
 	if (isCompleteUrl) {
 		const returnedUrl = new URL(winInfo.url);
 		const searchParams = returnedUrl.searchParams;
-		if(searchParams.get("code") !== null) {
+		if (searchParams.get("code") !== null) {
 			return new URL(winInfo.url);
 		}
 	}

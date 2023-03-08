@@ -16,8 +16,8 @@ module.exports = {
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 		fallback: {
-			"crypto": false,
-			"sha256": false
+			crypto: false,
+			sha256: false
 		}
 	},
 	output: {

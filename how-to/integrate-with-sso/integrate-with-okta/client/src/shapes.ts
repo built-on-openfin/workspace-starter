@@ -4,7 +4,6 @@ export interface OktaSettings {
 	loginUrl: string;
 	logoutUrls: string;
 	appUrl: string;
-	redirectUrl: string;
 	verifyPollMs?: number;
 }
 

@@ -19,7 +19,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 export function logInformation(info: string) {
 	const logElem = document.querySelector("pre");
 
-	if(logElem) {
+	if (logElem) {
 		logElem.textContent = `${logElem.textContent + info}\n\n`;
 		logElem.scrollTop = logElem.scrollHeight;
 	} else {
@@ -29,7 +29,7 @@ export function logInformation(info: string) {
 
 function logClear() {
 	const logElem = document.querySelector("pre");
-	if(logElem) {
+	if (logElem) {
 		console.log(logElem);
 		logElem.textContent = "";
 		logElem.scrollTop = 0;
@@ -43,7 +43,6 @@ function initDom() {
 	btnClear.addEventListener("click", async () => {
 		logClear();
 	});
-
 
 	const btnLogin = document.querySelector("#btnLogin");
 	btnLogin.addEventListener("click", async () => {

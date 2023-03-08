@@ -39,10 +39,9 @@ After creating the Okta integration using one of the examples above, populate th
   "okta": {
    "domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
    "clientId": "{YOUR_CLIENT_ID}",
-   "loginUrl": "{YOUR_CONFIGURED_LOGIN_URL}",
+   "loginUrl": "http://localhost:8080/platform/login-complete.html",
    "logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
    "appUrl": "http://localhost:8080/platform/app.html",
-   "redirectUrl": "http://localhost:8080/platform/app.html",
    "verifyPollMs": 10000
   }
  }
@@ -54,7 +53,7 @@ The logout urls contain `http://localhost:8080/platform/logout-complete.html` wh
 
 If you enable additional federated providers in Okta you might need additional logout urls.
 
-3. Optional (if you wish to pin the version of OpenFin Workspace to version 10.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+3. Optional (if you wish to pin the version of OpenFin Workspace to version 11.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -82,7 +81,7 @@ npm run client
 npm run build
 ```
 
-![Integrate with Okta](openfin-integrate-with-sso.gif)
+![Integrate with Okta](openfin-integrate-with-sso-okta.gif)
 
 ---
 

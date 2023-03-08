@@ -6,7 +6,7 @@
 		"version": "29.108.73.14"
 	},
 	"platform": {
-		"uuid": "integrate-with-sso",
+		"uuid": "integrate-with-auth0",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -20,26 +20,23 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with SSO - v11.0.0",
+		"name": "Integrate with Auth0 - v11.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "OpenFin",
-		"product": "Workspace Starter - Integrate With SSO - Client",
+		"product": "Workspace Starter - Integrate With Auth0 - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
 		"auth": {
-			"domain": "openfin-starter.us.auth0.com",
-        "clientId": "cGwCi1YjCKUAqGmmu4jjXffLMtzwUiHj",
-        "loginUrl": "http://localhost:8080/platform/login-complete.html",
-        "logoutUrls": [
-            "http://localhost:8080/platform/logout-complete.html",
-            "https://accounts.google.com"
-        ],
-        "appUrl": "http://localhost:8080/platform/app.html",
-        "verifyPollMs": 10000
+			"domain": "<DOMAIN>",
+			"clientId": "<CLIENTID>",
+			"loginUrl": "http://localhost:8080/platform/login-complete.html",
+			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
+			"appUrl": "http://localhost:8080/platform/app.html",
+			"verifyPollMs": 10000
 		}
 	}
 }

@@ -13,7 +13,7 @@
 		"name": "workspace-starter-how-to-customize-workspace",
 		"uuid": "customize-workspace",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
