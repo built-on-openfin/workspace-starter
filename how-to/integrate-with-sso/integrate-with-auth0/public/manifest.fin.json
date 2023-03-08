@@ -1,0 +1,42 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "30.110.74.7"
+	},
+	"platform": {
+		"uuid": "integrate-with-sso",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"defaultWindowOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Integrate with SSO - v12.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With SSO - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"auth": {
+			"domain": "<DOMAIN>",
+			"clientId": "<CLIENTID>",
+			"loginUrl": "http://localhost:8080/platform/login-complete.html",
+			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html", "https://accounts.google.com"],
+			"appUrl": "http://localhost:8080/platform/app.html",
+			"verifyPollMs": 10000
+		}
+	}
+}

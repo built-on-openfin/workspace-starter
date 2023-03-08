@@ -33,7 +33,8 @@ export async function createPageLayout(layout): Promise<PageLayout> {
 
 export async function createPageWithLayout(
 	title: string,
-	layout: LayoutExtended
+	layout: LayoutExtended,
+	hasUnsavedChanges = true
 ): Promise<PageWithUpdatableRuntimeAttribs> {
 	const layoutWithDetails = await createPageLayout(layout);
 	return {
@@ -41,7 +42,7 @@ export async function createPageWithLayout(
 		title,
 		layout: layoutWithDetails,
 		isReadOnly: false,
-		hasUnsavedChanges: true
+		hasUnsavedChanges
 	};
 }
 
