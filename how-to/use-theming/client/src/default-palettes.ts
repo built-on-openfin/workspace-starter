@@ -7,7 +7,7 @@ export const DEFAULT_PALETTES: {
 	light: {
 		brandPrimary: "#0A76D3",
 		brandSecondary: "#1E1F23",
-		backgroundPrimary: "#1E1F23",
+		backgroundPrimary: "#FAFBFE",
 		background1: "#FFFFFF",
 		background2: "#FAFBFE",
 		background3: "#F3F5F8",
@@ -23,7 +23,7 @@ export const DEFAULT_PALETTES: {
 		inputPlaceholder: "#383A40",
 		inputDisabled: "#7D808A",
 		inputFocused: "#C9CBD2",
-		textDefault: "#111214",
+		textDefault: "#1E1F23",
 		textHelp: "#2F3136",
 		textInactive: "#7D808A",
 		contentBackground1: "#0A76D3",

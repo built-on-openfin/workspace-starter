@@ -6,6 +6,7 @@ import type {
 	Contact,
 	Entity,
 	Event,
+	DriveItem,
 	Message,
 	Presence,
 	SearchResponse,
@@ -49,12 +50,6 @@ import type {
  * Implement the integration provider for microsoft 365 results.
  */
 export class Microsoft365Provider implements IntegrationModule<Microsoft365Settings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "ms365";
-
 	/**
 	 * The key to use for a call key action.
 	 * @internal
@@ -137,12 +132,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _settings: Microsoft365Settings | undefined;
-
-	/**
-	 * The settings for the integration.
-	 * @internal
-	 */
 	private _logger: Logger;
 
 	/**
@@ -150,6 +139,18 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @internal
 	 */
 	private _integrationHelpers: IntegrationHelpers | undefined;
+
+	/**
+	 * The module definition.
+	 * @internal
+	 */
+	private _moduleDefinition: ModuleDefinition<Microsoft365Settings>;
+
+	/**
+	 * The settings for the integration.
+	 * @internal
+	 */
+	private _settings: Microsoft365Settings | undefined;
 
 	/**
 	 * The Microsoft 365 connection.
@@ -217,27 +218,47 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
+		this._moduleDefinition = definition;
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
-		this._logger = loggerCreator("Microsoft365Provider");
+
+		this._moduleDefinition.title = this._moduleDefinition.title ?? "Microsoft 365";
+		this._settings.graphExplorerPrefix = this._settings.graphExplorerPrefix ?? "ms";
+
+		this._logger = loggerCreator(this._moduleDefinition.title);
+		this._logger.info(`Initializing ${this._moduleDefinition.title}`);
+
+		if (!this._settings.clientId) {
+			this._logger.error("Configuration is missing clientId");
+			return;
+		}
+
+		if (!this._settings.tenantId) {
+			this._logger.error("Configuration is missing tenantId");
+			return;
+		}
 
 		await this.connectProvider();
 
-		const palette = await this._integrationHelpers.getCurrentPalette();
-
-		const themedIcons = ["calendar", "call", "channel", "chat", "contact", "email", "share", "team"];
-
+		// For themed icons we fetch the svg content so that we can replace colors
+		// when they are used, instead of linking directly to the source
+		const themedIcons = [
+			"calendar",
+			"call",
+			"channel",
+			"chat",
+			"contact",
+			"email",
+			"share",
+			"team",
+			"file",
+			"folder"
+		];
 		for (const themedIcon of themedIcons) {
-			const response = await fetch(this._settings.images[themedIcon] as string);
-			let svg = await response.text();
-			svg = svg.replace(/rgb\(0,0,0\)/g, palette.textDefault);
+			const response = await fetch(this._settings.images[themedIcon]);
+			const svg = await response.text();
 			this._settings.images[themedIcon] = this.svgToInline(svg);
 		}
-
-		this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
-		window.setTimeout(async () => {
-			await this.updateCache();
-		}, 0);
 	}
 
 	/**
@@ -266,20 +287,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 		if (!this._settings.disableGraphExplorer) {
 			additionalDescription.push(
-				"You can also specify a query as a graph explorer path and parameters, by using the /ms prefix"
+				`You can also specify a query as a graph explorer path and parameters, by using the /${this._settings.graphExplorerPrefix} prefix`
 			);
-			additionalHelp.push("/ms/me", "/ms/users?$filter=startsWith(displayName,'john')");
+			additionalHelp.push(
+				`/${this._settings.graphExplorerPrefix}/me`,
+				`/${this._settings.graphExplorerPrefix}/users?$filter=startsWith(displayName,'john')`
+			);
 		}
 
 		return [
 			{
-				key: `${Microsoft365Provider._PROVIDER_ID}-help1`,
-				title: "Microsoft 365",
+				key: `${this._moduleDefinition.id}-help1`,
+				title: this._moduleDefinition.title,
 				label: "Help",
 				icon: this._settings.images.microsoft365,
 				actions: [],
 				data: {
-					providerId: Microsoft365Provider._PROVIDER_ID
+					providerId: this._moduleDefinition.id
 				},
 				template: CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
@@ -290,6 +314,23 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					].concat(additionalDescription),
 					additionalHelp
 				)
+			},
+			{
+				key: `${this._moduleDefinition.id}-help2`,
+				title: `${this._moduleDefinition.title} Recent`,
+				label: "Help",
+				icon: this._settings.images.microsoft365,
+				actions: [],
+				data: {
+					providerId: this._moduleDefinition.id,
+					populateQuery: "/recent"
+				},
+				template: CLITemplate.Custom,
+				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+					"Microsoft 365 Recent",
+					["Running this command will retrieve the most recent files from MS365"],
+					["/recent"]
+				)
 			}
 		];
 	}
@@ -299,12 +340,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options?: {
+			queryMinLength: number;
+			queryAgainst: string[];
+		}
 	): Promise<HomeSearchResponse> {
 		if (!this._ms365Connection) {
 			this._connectLastResponse = lastResponse;
@@ -322,11 +368,21 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			this._debounceTimerId = undefined;
 		}
 
+		const isRecent = query === "/recent";
+		const defaultFilters: Microsoft365ObjectTypes[] = isRecent
+			? ["File"]
+			: ["User", "Contact", "Event", "Message", "Channel", "Team", "ChatMessage", "File"];
+
+		const minLength = options?.queryMinLength ?? 3;
+
 		this._debounceTimerId = window.setTimeout(async () => {
 			try {
 				// If query starts with ms just do a passthrough to the graph API
-				if (!this._settings.disableGraphExplorer && query.startsWith("/ms/")) {
-					const path = query.replace("/ms/", "");
+				if (
+					!this._settings.disableGraphExplorer &&
+					query.startsWith(`/${this._settings.graphExplorerPrefix}/`)
+				) {
+					const path = query.replace(`/${this._settings.graphExplorerPrefix}/`, "");
 					if (path.length > 0) {
 						const fullPath = `/v1.0/${path}`;
 
@@ -335,24 +391,18 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const response = await this._ms365Connection.executeApiRequest(fullPath);
 						lastResponse.respond([this.createGraphJsonResult(response)]);
 					}
-				} else if (query.length >= 3) {
+				} else if (isRecent || (query.length >= minLength && !query.startsWith("/"))) {
 					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
 
-					let includeOptions: Microsoft365ObjectTypes[] = [
-						"User",
-						"Contact",
-						"Event",
-						"Message",
-						"Channel",
-						"Team",
-						"ChatMessage"
-					];
+					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
 
 					if (Array.isArray(ms365Filter?.options)) {
 						includeOptions = ms365Filter.options
 							.filter((o) => o.isSelected)
 							.map((o) => o.value as Microsoft365ObjectTypes);
 					}
+
+					const palette = await this._integrationHelpers.getCurrentPalette();
 
 					const batchRequests: GraphBatchRequest[] = [];
 
@@ -439,6 +489,19 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						});
 					}
 
+					if (includeOptions.includes("File")) {
+						const fileSearchQuery = `'${query}'`;
+						batchRequests.push({
+							id: "File",
+							url: isRecent
+								? "/me/drive/recent"
+								: `/me/drive/root/search(q=${encodeURIComponent(
+										fileSearchQuery
+								  )})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
+							method: "GET"
+						});
+					}
+
 					const homeResults = await this.sendBatchQuery(query, includeOptions, batchRequests);
 
 					if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
@@ -450,7 +513,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 								(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ||
 									teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
 							) {
-								homeResults.push(this.createLoadingResult(teamAndChannels.team, "displayName", "Team"));
+								homeResults.push(
+									this.createLoadingResult(teamAndChannels.team, "displayName", "Team", palette)
+								);
 							}
 							if (includeOptions.includes("Channel")) {
 								for (const channel of teamAndChannels.channels) {
@@ -465,7 +530,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 													team: teamAndChannels.team
 												},
 												"displayName",
-												"Channel"
+												"Channel",
+												palette
 											)
 										);
 									}
@@ -480,17 +546,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				const message = err instanceof Error ? err.message : err;
 				lastResponse.respond([this.createGraphJsonResult({ status: 400, data: message })]);
 			}
-			lastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-searching`);
+			lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
 		}, 500);
 
 		return {
-			results: query.length >= 3 ? [this.createSearchingResult()] : [],
+			results: query.length >= minLength ? [this.createSearchingResult()] : [],
 			context: {
 				filters: [
 					{
 						id: Microsoft365Provider._MS365_FILTERS as string,
 						title: "Microsoft 365",
-						options: ["User", "Contact", "Message", "Event", "Team", "Channel", "ChatMessage"].map((o) => ({
+						options: defaultFilters.map((o) => ({
 							value: o,
 							isSelected: true
 						}))
@@ -522,7 +588,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					Event: async () => this.createEventResult(actionData.obj as Event),
 					ChatMessage: async () => this.createChatMessageResult(actionData.obj as ChatMessage),
 					Channel: async () => this.createChannelResult(actionData.obj as Channel & { team: Team }),
-					Team: async () => this.createTeamResult(actionData.obj as Team)
+					Team: async () => this.createTeamResult(actionData.obj as Team),
+					File: async () => this.createFileResult(actionData.obj as DriveItem)
 				};
 
 				if (resultHandlers[objType]) {
@@ -556,8 +623,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				this._settings.redirectUri,
 				this._settings.permissions
 			);
+
+			this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
+			window.setTimeout(async () => {
+				await this.updateCache();
+			}, 0);
+
 			if (this._connectLastResponse) {
-				this._connectLastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-connect`);
+				this._connectLastResponse.revoke(`${this._moduleDefinition.id}-connect`);
 				this._connectLastResponse = undefined;
 			}
 		} catch (err) {
@@ -577,7 +650,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	): Promise<boolean> {
 		switch (actionName) {
 			case Microsoft365Provider._ACTION_CONNECT:
-				lastResponse.revoke(`${Microsoft365Provider._PROVIDER_ID}-connect`);
+				lastResponse.revoke(`${this._moduleDefinition.id}-connect`);
 				await this.connectProvider();
 				return true;
 			case Microsoft365Provider._ACTION_TEAMS_CALL:
@@ -767,19 +840,21 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		const type = batchResponse.id.split("-")[0] as Microsoft365ObjectTypes;
 
 		if (includeOptions.includes(type)) {
+			const palette = await this._integrationHelpers.getCurrentPalette();
+
 			if (type === "User") {
 				const users = (batchResponse.body as GraphListResponse<User>).value;
 
 				if (users.length > 0) {
 					homeResults = homeResults.concat(
-						users.map((u) => this.createLoadingResult(u, "displayName", "User"))
+						users.map((u) => this.createLoadingResult(u, "displayName", "User", palette))
 					);
 				}
 			} else if (type === "Contact") {
 				const contacts = (batchResponse.body as GraphListResponse<Contact>).value;
 				if (contacts.length > 0) {
 					homeResults = homeResults.concat(
-						contacts.map((c) => this.createLoadingResult(c, "displayName", "Contact"))
+						contacts.map((c) => this.createLoadingResult(c, "displayName", "Contact", palette))
 					);
 				}
 			} else if (type === "Message") {
@@ -791,7 +866,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 								(m) =>
 									m.subject && !m.subject.startsWith("Canceled") && !m.subject.startsWith("Undeliverable")
 							)
-							.map((m) => this.createLoadingResult(m, "subject", "Message"))
+							.map((m) => this.createLoadingResult(m, "subject", "Message", palette))
 					);
 				}
 			} else if (type === "Event") {
@@ -809,7 +884,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 										...e.resource
 									} as Event,
 									"subject",
-									"Event"
+									"Event",
+									palette
 								)
 							)
 					);
@@ -828,9 +904,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 									summary: e.summary
 								} as ChatMessage,
 								"summary",
-								"ChatMessage"
+								"ChatMessage",
+								palette
 							)
 						)
+					);
+				}
+			} else if (type === "File") {
+				const files = (batchResponse.body as GraphListResponse<DriveItem>).value;
+				if (files.length > 0) {
+					homeResults = homeResults.concat(
+						files.map((c) => this.createLoadingResult(c, "name", "File", palette))
 					);
 				}
 			}
@@ -873,8 +957,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		);
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-connect`,
-			title: "Microsoft 365",
+			key: `${this._moduleDefinition.id}-connect`,
+			title: this._moduleDefinition.title,
 			label: "Connect",
 			icon: this._settings.images.microsoft365,
 			actions: [
@@ -884,14 +968,14 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID
+				providerId: this._moduleDefinition.id
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout,
 				data: {
-					title: "Microsoft 365 Connection",
-					description: "Microsoft 365 failed to connect due to the following error",
+					title: `${this._moduleDefinition.title} Connection`,
+					description: `${this._moduleDefinition.title} failed to connect due to the following error`,
 					error: this._connectionError,
 					connect: "Connect"
 				}
@@ -901,12 +985,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 	private createSearchingResult(): HomeSearchResult {
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-searching`,
+			key: `${this._moduleDefinition.id}-searching`,
 			title: "Searching ...",
 			icon: this._settings.images.microsoft365,
 			actions: [],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID
+				providerId: this._moduleDefinition.id
 			} as ActionData,
 			template: CLITemplate.Loading,
 			templateContent: undefined
@@ -915,7 +999,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 
 	private createGraphJsonResult(response: GraphResponse): HomeSearchResult {
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-rest`,
+			key: `${this._moduleDefinition.id}-rest`,
 			title: "Graph Result",
 			label: response.status === 200 ? "JSON" : "Error",
 			icon: this._settings.images.microsoft365,
@@ -926,7 +1010,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				json: response.data
 			} as ActionData,
 			template: CLITemplate.Custom,
@@ -953,27 +1037,40 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private createLoadingResult<T extends Entity>(
 		obj: T,
 		title: keyof T,
-		objType: Microsoft365ObjectTypes
+		objType: Microsoft365ObjectTypes,
+		palette: CustomPaletteSet
 	): HomeSearchResult {
 		const icons = {
-			User: this._settings.images.teams,
-			Contact: this._settings.images.contact,
-			Message: this._settings.images.email,
-			Event: this._settings.images.calendar,
-			Channel: this._settings.images.channel,
-			Team: this._settings.images.team,
-			ChatMessage: this._settings.images.chat
+			User: "teams",
+			Contact: "contact",
+			Message: "email",
+			Event: "calendar",
+			Channel: "channel",
+			Team: "team",
+			ChatMessage: "chat",
+			File: "file"
 		};
 
+		let label = objType.split(/(?=[A-Z])/).join(" ");
+		let mimeIcon;
+		if (objType === "File") {
+			mimeIcon = this.getMimeIcon(obj as DriveItem, palette);
+			if (this.driveItemIsFolder(obj)) {
+				label = "Folder";
+			} else if (this.driveItemIsImage(obj)) {
+				label = "Image";
+			}
+		}
+
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${obj.id}`,
+			key: `${this._moduleDefinition.id}-${obj.id}`,
 			score: this.objectTypeToOrder(objType),
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
-			label: objType.split(/(?=[A-Z])/).join(" "),
-			icon: icons[objType],
+			label,
+			icon: mimeIcon ?? this.getThemedIcon(icons[objType], palette),
 			actions: [],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType,
 				obj,
 				state: "loading"
@@ -1104,43 +1201,43 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "callTitle",
+				titleKey: "callTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CALL,
-				image: "callImage",
+				imageKey: "callImage",
 				imageAltText: "Teams Call"
 			},
 			{
-				title: "emailTitle",
+				titleKey: "emailTitle",
 				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-				image: "emailImage",
+				imageKey: "emailImage",
 				imageAltText: "E-mail"
 			},
 			{
-				title: "meetingTitle",
+				titleKey: "meetingTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-				image: "meetingImage",
+				imageKey: "meetingImage",
 				imageAltText: "Meeting"
 			},
 			{
-				title: "chatTitle",
+				titleKey: "chatTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-				image: "chatImage",
+				imageKey: "chatImage",
 				imageAltText: "Chat"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${user.id}`,
+			key: `${this._moduleDefinition.id}-${user.id}`,
 			score: this.objectTypeToOrder("User"),
 			title: user.displayName,
 			label: "User",
-			icon: this._settings.images.teams,
+			icon: this.getThemedIcon("teams", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_TEAMS_CALL,
@@ -1148,7 +1245,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "User",
 				obj: user,
 				emails: [user.mail],
@@ -1202,19 +1299,19 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				),
 				data: {
-					picData: picData ?? this._settings.images.contact,
+					picData: picData ?? this.getThemedIcon("contact", palette),
 					status: availableIcon,
 					displayName: user.displayName,
 					availability,
 					...this.mapPairsToData(pairs),
 					callTitle: "Teams Call",
-					callImage: this._settings.images.teams,
+					callImage: this.getThemedIcon("teams", palette),
 					emailTitle: "Outlook E-mail",
-					emailImage: this._settings.images.email,
+					emailImage: this.getThemedIcon("email", palette),
 					meetingTitle: "Teams Meeting",
-					meetingImage: this._settings.images.calendar,
+					meetingImage: this.getThemedIcon("calendar", palette),
 					chatTitle: "Teams Chat",
-					chatImage: this._settings.images.chat
+					chatImage: this.getThemedIcon("chat", palette)
 				}
 			}
 		};
@@ -1305,42 +1402,42 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [];
 
 		if (phone) {
 			buttons.push({
-				title: "callTitle",
+				titleKey: "callTitle",
 				action: Microsoft365Provider._ACTION_PHONE_CALL,
-				image: "callImage",
+				imageKey: "callImage",
 				imageAltText: "Call"
 			});
 		}
 
 		if (email) {
 			buttons.push({
-				title: "emailTitle",
+				titleKey: "emailTitle",
 				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-				image: "emailImage",
+				imageKey: "emailImage",
 				imageAltText: "E-mail"
 			});
 			buttons.push({
-				title: "calendarTitle",
+				titleKey: "calendarTitle",
 				action: Microsoft365Provider._ACTION_OUTLOOK_EVENT,
-				image: "calendarImage",
+				imageKey: "calendarImage",
 				imageAltText: "Calendar"
 			});
 		}
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${contact.id}`,
+			key: `${this._moduleDefinition.id}-${contact.id}`,
 			score: this.objectTypeToOrder("Contact"),
 			title: contact.displayName,
 			label: "Contact",
-			icon: this._settings.images.contact,
+			icon: this.getThemedIcon("contact", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_PHONE_CALL,
@@ -1348,7 +1445,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Contact",
 				obj: contact,
 				emails: [email],
@@ -1392,15 +1489,15 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					}
 				),
 				data: {
-					picData: picData ?? this._settings.images.contact,
+					picData: picData ?? this.getThemedIcon("contact", palette),
 					displayName: contact.displayName,
 					...this.mapPairsToData(pairs),
 					callTitle: "Call",
-					callImage: this._settings.images.call,
+					callImage: this.getThemedIcon("call", palette),
 					emailTitle: "Outlook E-mail",
-					emailImage: this._settings.images.email,
+					emailImage: this.getThemedIcon("email", palette),
 					calendarTitle: "Outlook Calendar",
-					calendarImage: this._settings.images.calendar
+					calendarImage: this.getThemedIcon("calendar", palette)
 				}
 			}
 		};
@@ -1434,25 +1531,25 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "openTitle",
+				titleKey: "openTitle",
 				action: Microsoft365Provider._ACTION_OPEN,
-				image: "openImage",
+				imageKey: "openImage",
 				imageAltText: "Open"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${message.id}`,
+			key: `${this._moduleDefinition.id}-${message.id}`,
 			score: this.objectTypeToOrder("Message"),
 			title: message.subject ?? "Untitled Message",
 			label: "Message",
-			icon: this._settings.images.email,
+			icon: this.getThemedIcon("email", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_OPEN,
@@ -1460,7 +1557,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Message",
 				obj: message,
 				url: message.webLink
@@ -1496,7 +1593,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					subject: message.subject,
 					...this.mapPairsToData(pairs),
 					openTitle: "Open Outlook",
-					openImage: this._settings.images.outlook
+					openImage: this.getThemedIcon("outlook", palette)
 				}
 			}
 		};
@@ -1558,25 +1655,25 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "openTitle",
+				titleKey: "openTitle",
 				action: Microsoft365Provider._ACTION_OPEN,
-				image: "openImage",
+				imageKey: "openImage",
 				imageAltText: "Open"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${event.id}`,
+			key: `${this._moduleDefinition.id}-${event.id}`,
 			score: this.objectTypeToOrder("Event"),
 			title: event.subject ?? "Untitled Event",
 			label: "Event",
-			icon: this._settings.images.calendar,
+			icon: this.getThemedIcon("calendar", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_OPEN,
@@ -1584,7 +1681,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Event",
 				obj: event,
 				url: event.webLink
@@ -1620,7 +1717,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					subject: event.subject ?? "Untitled Event",
 					...this.mapPairsToData(pairs),
 					openTitle: "Open Outlook",
-					openImage: this._settings.images.outlook
+					openImage: this.getThemedIcon("outlook", palette)
 				}
 			}
 		};
@@ -1691,25 +1788,25 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "openTitle",
+				titleKey: "openTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-				image: "openImage",
+				imageKey: "openImage",
 				imageAltText: "Open"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${chatMessage.id}`,
+			key: `${this._moduleDefinition.id}-${chatMessage.id}`,
 			score: this.objectTypeToOrder("ChatMessage"),
 			title: chatMessage.summary ?? "Untitled Chat Message",
 			label: "Chat Message",
-			icon: this._settings.images.chat,
+			icon: this.getThemedIcon("chat", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_TEAMS_CHAT,
@@ -1717,7 +1814,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Event",
 				obj: chatMessage,
 				url: chatMessage.webUrl,
@@ -1755,7 +1852,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					summary: chatMessage.summary ?? "Untitled Chat Message",
 					...this.mapPairsToData(pairs),
 					openTitle: "Open Chat Message",
-					openImage: this._settings.images.teams
+					openImage: this.getThemedIcon("teams", palette)
 				}
 			}
 		};
@@ -1797,43 +1894,43 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "openTitle",
+				titleKey: "openTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CALL,
-				image: "openImage",
+				imageKey: "openImage",
 				imageAltText: "Open"
 			},
 			{
-				title: "emailTitle",
+				titleKey: "emailTitle",
 				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-				image: "emailImage",
+				imageKey: "emailImage",
 				imageAltText: "Email"
 			},
 			{
-				title: "meetingTitle",
+				titleKey: "meetingTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-				image: "meetingImage",
+				imageKey: "meetingImage",
 				imageAltText: "Meeting"
 			},
 			{
-				title: "chatTitle",
+				titleKey: "chatTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-				image: "chatImage",
+				imageKey: "chatImage",
 				imageAltText: "Chat"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${team.id}`,
+			key: `${this._moduleDefinition.id}-${team.id}`,
 			score: this.objectTypeToOrder("Team"),
 			title: team.displayName ?? "Untitled Team",
 			label: "Team",
-			icon: this._settings.images.team,
+			icon: this.getThemedIcon("team", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_TEAMS_CALL,
@@ -1841,7 +1938,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Team",
 				obj: team,
 				url: team.webUrl,
@@ -1880,13 +1977,13 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					displayName: team.displayName ?? "Untitled Team",
 					...this.mapPairsToData(pairs),
 					openTitle: "Open Teams",
-					openImage: this._settings.images.teams,
+					openImage: this.getThemedIcon("teams", palette),
 					emailTitle: "Outlook E-mail",
-					emailImage: this._settings.images.email,
+					emailImage: this.getThemedIcon("email", palette),
 					meetingTitle: "Teams Meeting",
-					meetingImage: this._settings.images.calendar,
+					meetingImage: this.getThemedIcon("calendar", palette),
 					chatTitle: "Teams Chat",
-					chatImage: this._settings.images.chat
+					chatImage: this.getThemedIcon("chat", palette)
 				}
 			}
 		};
@@ -1921,43 +2018,43 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}
 
 		const buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[] = [
 			{
-				title: "openTitle",
+				titleKey: "openTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CALL,
-				image: "openImage",
+				imageKey: "openImage",
 				imageAltText: "Open"
 			},
 			{
-				title: "emailTitle",
+				titleKey: "emailTitle",
 				action: Microsoft365Provider._ACTION_OUTLOOK_EMAIL,
-				image: "emailImage",
+				imageKey: "emailImage",
 				imageAltText: "Email"
 			},
 			{
-				title: "meetingTitle",
+				titleKey: "meetingTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_MEETING,
-				image: "meetingImage",
+				imageKey: "meetingImage",
 				imageAltText: "Meeting"
 			},
 			{
-				title: "chatTitle",
+				titleKey: "chatTitle",
 				action: Microsoft365Provider._ACTION_TEAMS_CHAT,
-				image: "chatImage",
+				imageKey: "chatImage",
 				imageAltText: "Chat"
 			}
 		];
 
 		return {
-			key: `${Microsoft365Provider._PROVIDER_ID}-${channel.id}`,
+			key: `${this._moduleDefinition.id}-${channel.id}`,
 			score: this.objectTypeToOrder("Channel"),
 			title: channel.displayName ?? "Untitled Channel",
 			label: "Channel",
-			icon: this._settings.images.channel,
+			icon: this.getThemedIcon("channel", palette),
 			actions: [
 				{
 					name: Microsoft365Provider._ACTION_TEAMS_CALL,
@@ -1965,7 +2062,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				}
 			],
 			data: {
-				providerId: Microsoft365Provider._PROVIDER_ID,
+				providerId: this._moduleDefinition.id,
 				objType: "Channel",
 				obj: channel,
 				url: channel.webUrl,
@@ -2004,13 +2101,122 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 					displayName: channel.displayName ?? "Untitled Channel",
 					...this.mapPairsToData(pairs),
 					openTitle: "Open Teams",
-					openImage: this._settings.images.teams,
+					openImage: this.getThemedIcon("teams", palette),
 					emailTitle: "Outlook E-mail",
-					emailImage: this._settings.images.email,
+					emailImage: this.getThemedIcon("email", palette),
 					meetingTitle: "Teams Meeting",
-					meetingImage: this._settings.images.calendar,
+					meetingImage: this.getThemedIcon("calendar", palette),
 					chatTitle: "Teams Chat",
-					chatImage: this._settings.images.chat
+					chatImage: this.getThemedIcon("chat", palette)
+				}
+			}
+		};
+	}
+
+	private async createFileResult(driveItem: DriveItem): Promise<HomeSearchResult> {
+		const palette = await this._integrationHelpers.getCurrentPalette();
+
+		const pairs: { label: string; value?: string; links?: string[]; srcs?: string[]; wide?: boolean }[] = [];
+		const urls = {};
+
+		const mimeIcon = this.getMimeIcon(driveItem, palette);
+
+		if (driveItem.createdBy?.user?.displayName) {
+			pairs.push({
+				label: "Created By",
+				value: driveItem.createdBy?.user?.displayName
+			});
+		}
+
+		if (driveItem.createdDateTime) {
+			pairs.push({
+				label: "Created On",
+				value: new Date(driveItem.createdDateTime).toLocaleString()
+			});
+		}
+
+		if (driveItem.lastModifiedBy?.user?.displayName) {
+			pairs.push({
+				label: "Updated By",
+				value: driveItem.lastModifiedBy?.user?.displayName
+			});
+		}
+
+		if (driveItem.lastModifiedDateTime) {
+			pairs.push({
+				label: "Updated On",
+				value: new Date(driveItem.lastModifiedDateTime).toLocaleString()
+			});
+		}
+
+		const buttons: {
+			titleKey: string;
+			action: string;
+			imageKey: string;
+			imageAltText: string;
+		}[] = [
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Provider._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
+
+		const isFolder = this.driveItemIsFolder(driveItem);
+		const typeName = isFolder ? "Folder" : "File";
+
+		return {
+			key: `${this._moduleDefinition.id}-${driveItem.id}`,
+			score: this.objectTypeToOrder("File"),
+			title: driveItem.name ?? `Untitled ${typeName}`,
+			label: typeName,
+			icon: mimeIcon ?? this.getThemedIcon(typeName.toLowerCase(), palette),
+			actions: [
+				{
+					name: Microsoft365Provider._ACTION_OPEN,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: this._moduleDefinition.id,
+				objType: "File",
+				obj: driveItem,
+				url: driveItem.webUrl,
+				urls
+			} as ActionData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: await this._integrationHelpers.templateHelpers.createContainer(
+					"column",
+					[
+						await this._integrationHelpers.templateHelpers.createContainer(
+							"row",
+							[
+								await this._integrationHelpers.templateHelpers.createText("displayName", 14, {
+									fontWeight: "bold"
+								})
+							],
+							{
+								paddingBottom: "10px",
+								borderBottom: `1px solid ${palette.background6}`,
+								gap: "10px"
+							}
+						),
+						await this.createPairsLayout(palette, pairs),
+						await this.createButtonsLayout(palette, buttons)
+					],
+					{
+						padding: "10px",
+						gap: "15px",
+						flex: "1"
+					}
+				),
+				data: {
+					displayName: driveItem.name ?? "Untitled File",
+					...this.mapPairsToData(pairs),
+					openTitle: "Open File",
+					openImage: mimeIcon ?? this.getThemedIcon("file", palette)
 				}
 			}
 		};
@@ -2108,7 +2314,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		for (const pair of pairs) {
 			pairData[`${pair.label}Title`] = pair.label;
 			if (pair.value) {
-				pairData[pair.label] = pair.value;
+				pairData[pair.label] = this.stripHtml(pair.value);
 			}
 			if (pair.links) {
 				for (let i = 0; i < pair.links.length; i++) {
@@ -2204,9 +2410,9 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	private async createButtonsLayout(
 		palette: CustomPaletteSet,
 		buttons: {
-			title: string;
+			titleKey: string;
 			action: string;
-			image: string;
+			imageKey: string;
 			imageAltText: string;
 		}[]
 	): Promise<TemplateFragment> {
@@ -2216,7 +2422,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				buttons.map(async (b) =>
 					this._integrationHelpers.templateHelpers.createButton(
 						ButtonStyle.Secondary,
-						b.title,
+						b.titleKey,
 						b.action,
 						{
 							border: "none",
@@ -2225,10 +2431,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 							height: "40px",
 							padding: "0px",
 							justifyContent: "center",
-							backgroundColor: palette.background6
+							backgroundColor: palette.background2
 						},
 						[
-							await this._integrationHelpers.templateHelpers.createImage(b.image, b.imageAltText, {
+							await this._integrationHelpers.templateHelpers.createImage(b.imageKey, b.imageAltText, {
 								width: "16px",
 								height: "16px"
 							})
@@ -2238,7 +2444,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			),
 			{
 				justifyContent: "space-around",
-				gap: "20px"
+				gap: "10px"
 			}
 		);
 	}
@@ -2259,6 +2465,10 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		return b64Id.replace(/\+/g, "_").replace(/\//g, "-");
 	}
 
+	private stripHtml(input: string): string {
+		return input.replace(/<[^>]+>/g, "");
+	}
+
 	private objectTypeToOrder(objType: Microsoft365ObjectTypes): number {
 		const objTypeOrder: { [key in Microsoft365ObjectTypes]: number } = {
 			User: 1,
@@ -2267,7 +2477,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			ChatMessage: 4,
 			Event: 5,
 			Team: 6,
-			Channel: 7
+			Channel: 7,
+			File: 8
 		};
 		return objTypeOrder[objType] * 1000;
 	}
@@ -2350,5 +2561,67 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			}
 		}
 		this._cacheCounter++;
+	}
+
+	private getMimeIcon(driveItem: DriveItem, palette: CustomPaletteSet): string | undefined {
+		const mimeType = driveItem.file?.mimeType ?? "";
+		const filename = driveItem.name ?? "";
+		const packageType = driveItem.package?.type ?? "";
+		if (
+			mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+			mimeType === "application/msword" ||
+			filename.endsWith(".docx") ||
+			filename.endsWith(".doc")
+		) {
+			return this._settings.images.word;
+		} else if (
+			mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+			mimeType === "application/vnd.ms-excel" ||
+			filename.endsWith(".xlsx") ||
+			filename.endsWith(".xls")
+		) {
+			return this._settings.images.excel;
+		} else if (
+			mimeType === "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+			mimeType === "application/vnd.ms-powerpoint" ||
+			filename.endsWith(".pptx") ||
+			filename.endsWith(".ppt")
+		) {
+			return this._settings.images.powerpoint;
+		} else if (this.driveItemIsImage(driveItem)) {
+			if (Array.isArray(driveItem.thumbnails) && driveItem.thumbnails.length > 0) {
+				return driveItem.thumbnails[0].small?.url ?? driveItem.thumbnails[0].medium?.url;
+			}
+		} else if (packageType === "oneNote" || filename.endsWith("onetoc2") || filename.endsWith("one")) {
+			return this._settings.images.onenote;
+		} else if (this.driveItemIsFolder(driveItem)) {
+			return this.getThemedIcon("folder", palette);
+		}
+	}
+
+	private getThemedIcon(themedIcon: string, palette: CustomPaletteSet): string {
+		if (!this._settings.images[themedIcon]) {
+			return "";
+		}
+		const icon = this._settings.images[themedIcon];
+		if (icon.startsWith("data:image/svg+xml")) {
+			return icon.replace(/rgb\(0,0,0\)/g, palette.textDefault.replace(/#/g, "%23"));
+		}
+		return icon;
+	}
+
+	private driveItemIsFolder(driveItem: DriveItem): boolean {
+		return driveItem.file === undefined && driveItem.folder !== undefined;
+	}
+
+	private driveItemIsImage(driveItem: DriveItem): boolean {
+		return (
+			driveItem.file?.mimeType.startsWith("image/") ||
+			driveItem.name?.endsWith(".jpeg") ||
+			driveItem.name?.endsWith(".jpg") ||
+			driveItem.name?.endsWith(".gif") ||
+			driveItem.name?.endsWith(".webp") ||
+			driveItem.name?.endsWith(".png")
+		);
 	}
 }

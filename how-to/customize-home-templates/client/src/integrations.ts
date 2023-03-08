@@ -6,11 +6,11 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type {
-	ModuleDefinition,
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationProviderOptions
-} from "./integrations-shapes";
+} from "./shapes/integrations-shapes";
+import type { ModuleDefinition } from "./shapes/module-shapes";
 
 const integrationModules: { [id: string]: IntegrationModule } = {};
 
@@ -85,7 +85,11 @@ export async function deregister(integrationProvider?: IntegrationProviderOption
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
-	lastResponse: HomeSearchListenerResponse
+	lastResponse: HomeSearchListenerResponse,
+	options: {
+		queryMinLength: number;
+		queryAgainst: string[];
+	}
 ): Promise<HomeSearchResponse> {
 	const homeResponse: HomeSearchResponse = {
 		results: [],
@@ -97,7 +101,7 @@ export async function getSearchResults(
 	const promises: Promise<HomeSearchResponse>[] = [];
 	for (const homeIntegration of homeIntegrations) {
 		if (homeIntegration.implementation.getSearchResults) {
-			promises.push(homeIntegration.implementation.getSearchResults(query, filters, lastResponse));
+			promises.push(homeIntegration.implementation.getSearchResults(query, filters, lastResponse, options));
 		}
 	}
 

@@ -9,14 +9,12 @@ import {
 } from "@openfin/salesforce";
 import {
 	ButtonStyle,
-	CLIFilterOptionType,
 	CLISearchResultLoading,
 	CLITemplate,
 	CustomTemplate,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
-	type CLISearchResultPlain,
 	type CLISearchResultSimpleText,
 	type HomeSearchResponse,
 	type HomeSearchResult,
@@ -27,12 +25,13 @@ import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integra
 import type { Logger, LoggerCreator } from "../../shapes/logger-shapes";
 import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
+	SalesforceAction,
 	SalesforceBatchRequest,
 	SalesforceBatchRequestItem,
 	SalesforceBatchResponse,
 	SalesforceFeedElementPage,
-	SalesforceMapping,
 	SalesforceFieldMapping,
+	SalesforceMapping,
 	SalesforceResultData,
 	SalesforceSearchResult,
 	SalesforceSettings
@@ -103,6 +102,11 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	private _salesForceConnection: SalesforceConnection | undefined;
 
 	/**
+	 * The debounce timer id.
+	 */
+	private _debounceTimerId?: number;
+
+	/**
 	 * Logger for logging info.
 	 * @internal
 	 */
@@ -151,8 +155,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
 
-		this._logger = loggerCreator("Salesforce");
-		this._logger.info("Registering Salesforce");
+		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
+
+		this._logger = loggerCreator(this._moduleDefinition.title);
+		this._logger.info(`Initializing ${this._moduleDefinition.title}`);
 
 		if (!this._settings.orgUrl) {
 			this._logger.error("Configuration is missing orgUrl");
@@ -164,7 +170,6 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			return;
 		}
 
-		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
 		this._settings.iconMap = this._settings.iconMap ?? {};
 		this._settings.iconMap.salesforce = this._settings.iconMap.salesforce ?? this._moduleDefinition.icon;
 
@@ -191,7 +196,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			];
 		}
 
-		this.populateFields();
+		await this.populateFields();
 
 		if (this._settings.enableLibLogging) {
 			enableLogging();
@@ -289,18 +294,22 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
 						);
 					} else if (action.intent && this._integrationHelpers.getInteropClient) {
-						const client = await this._integrationHelpers.getInteropClient();
+						try {
+							const client = await this._integrationHelpers.getInteropClient();
 
-						const contextJson = JSON.stringify(action.intent.context);
-						const substitutedJson = this.substituteProperties(data.mapping, data.obj, contextJson, false);
-						const finalContext = JSON.parse(substitutedJson);
-						await client.fireIntent({
-							name: action.intent.name,
-							context: finalContext,
-							metadata: {
-								target: action.intent.target
-							}
-						});
+							const contextJson = JSON.stringify(action.intent.context);
+							const subJson = this.substituteProperties(data.mapping, data.obj, contextJson, false);
+							const finalContext = JSON.parse(subJson);
+							await client.fireIntent({
+								name: action.intent.name,
+								context: finalContext,
+								metadata: {
+									target: action.intent.target
+								}
+							});
+						} catch (err) {
+							this._logger.error(`Failed raising intent ${action.intent.name}`, err);
+						}
 					}
 
 					return true;
@@ -346,16 +355,19 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const response: HomeSearchResponse = {
-			results: await this.getDefaultEntries(query)
-		};
+		const homeResults = await this.getDefaultEntries(query);
 
 		this._lastResponse = lastResponse;
 
-		if (this._salesForceConnection) {
-			const minLength = options?.queryMinLength ?? 3;
+		const minLength = options?.queryMinLength ?? 3;
 
-			if (query.length >= minLength) {
+		if (this._debounceTimerId) {
+			window.clearTimeout(this._debounceTimerId);
+			this._debounceTimerId = undefined;
+		}
+
+		this._debounceTimerId = window.setTimeout(async () => {
+			if (this._salesForceConnection && query.length >= minLength && !query.startsWith("/")) {
 				let selectedObjects: string[] = this._mappings.map((m) => m.label);
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
@@ -389,31 +401,38 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 						)
 					);
 
-					response.results.push(...searchResults);
-					response.context = {
-						filters: [
-							{
-								id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID,
-								title: "Salesforce",
-								type: CLIFilterOptionType.MultiSelect,
-								options: apiSearchResults.filters.map((label) => ({
-									value: label,
-									isSelected: true
-								}))
-							}
-						]
-					};
+					homeResults.push(...searchResults);
+
+					this._lastResponse.respond(homeResults);
 				} catch (err) {
 					await this.closeConnection();
 					if (err instanceof ConnectionError) {
-						response.results.push(this.getReconnectSearchResult(query, filters));
+						this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
 					}
 					this._logger.error("Error retrieving Salesforce search results", err);
 				}
 			}
-		}
+			this._lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
+		}, 500);
 
-		return response;
+		return {
+			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []),
+			context: {
+				filters:
+					query.length >= minLength && this._mappings
+						? [
+								{
+									id: SalesforceIntegrationProvider._OBJECTS_FILTER_ID as string,
+									title: "Salesforce",
+									options: this._mappings.map((o) => ({
+										value: o.label,
+										isSelected: true
+									}))
+								}
+						  ]
+						: undefined
+			}
+		};
 	}
 
 	/**
@@ -464,8 +483,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 			} catch (err) {
 				this._logger.error("Error connecting to API", err);
-				this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
-				this._lastResponse.respond([this.getReconnectSearchResult()]);
+				if (this._lastResponse) {
+					this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+					this._lastResponse.respond([this.getReconnectSearchResult()]);
+				}
 			} finally {
 				this._isConnecting = false;
 			}
@@ -522,7 +543,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 
 				if (fields.length > 0) {
-					const salesforceSearchQuery = `FIND {${this.escapeQuery(query)}} IN ALL FIELDS RETURNING ${
+					const salesforceSearchQuery = `FIND {"${this.escapeQuery(query)}"} IN ALL FIELDS RETURNING ${
 						mapping.sourceType
 					}(${fields.join(",")}${where}) LIMIT ${mapping.maxItems}`;
 
@@ -615,6 +636,24 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	}
 
 	/**
+	 * Get result to show while searching.
+	 * @returns The result entry.
+	 */
+	private createSearchingResult(): HomeSearchResult {
+		return {
+			key: `${this._moduleDefinition.id}-searching`,
+			title: "Searching ...",
+			icon: this._moduleDefinition?.icon,
+			actions: [],
+			data: {
+				providerId: this._moduleDefinition.id
+			},
+			template: CLITemplate.Loading,
+			templateContent: undefined
+		};
+	}
+
+	/**
 	 * Get the search result to display when Salesforce needs to reconnect.
 	 * @param query The query that needs to reconnect.
 	 * @param filters The filter for the reconnect.
@@ -635,7 +674,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		} as CLISearchResultSimpleText;
 	}
 
-	private getBrowseSearchResult(): CLISearchResultPlain {
+	private getBrowseSearchResult(): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Browse", hotkey: "enter" }],
 			data: {
@@ -645,10 +684,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			} as SalesforceResultData,
 			icon: this._settings.iconMap.salesforce,
 			key: SalesforceIntegrationProvider._BROWSE_SEARCH_RESULT_KEY,
-			template: CLITemplate.Plain,
-			templateContent: undefined,
+			template: CLITemplate.SimpleText,
+			templateContent: "Open a browser window at the Salesforce home page",
 			title: `Browse ${this._moduleDefinition.title}`
-		} as CLISearchResultPlain;
+		} as CLISearchResultSimpleText;
 	}
 
 	private getConnectingSearchResult(): CLISearchResultLoading {
@@ -1064,7 +1103,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			),
 			{
 				justifyContent: "space-around",
-				gap: "20px"
+				gap: "10px"
 			}
 		);
 	}
@@ -1101,15 +1140,15 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	/**
 	 * Populate the default fields for all the mappings if they have not been configured.
 	 */
-	private populateFields(): void {
-		this.populateAccountMapping();
-		this.populateContactMapping();
-		this.populateTaskMapping();
-		this.populateNoteMapping();
-		this.populateChatterMapping();
+	private async populateFields(): Promise<void> {
+		await this.populateAccountMapping();
+		await this.populateContactMapping();
+		await this.populateTaskMapping();
+		await this.populateNoteMapping();
+		await this.populateChatterMapping();
 	}
 
-	private populateAccountMapping() {
+	private async populateAccountMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Account");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Account";
@@ -1153,16 +1192,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Description"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateContactMapping() {
+	private async populateContactMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Contact");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Contact";
@@ -1172,10 +1213,6 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 			mapping.fieldMappings = mapping.fieldMappings ?? [
 				{
 					field: "Id",
-					displayMode: "none"
-				},
-				{
-					field: "VisibleInOpenFinHome__c",
 					displayMode: "none"
 				},
 				{
@@ -1210,16 +1247,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Phone"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateTaskMapping() {
+	private async populateTaskMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Task");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Task";
@@ -1263,16 +1302,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Comments"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateNoteMapping() {
+	private async populateNoteMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "ContentNote");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Note";
@@ -1311,16 +1352,18 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Content"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
 	}
 
-	private populateChatterMapping() {
+	private async populateChatterMapping() {
 		const mapping = this._mappings.find((m) => m.sourceType === "Chatter");
 		if (mapping) {
 			mapping.label = mapping.label ?? "Chatter";
@@ -1353,12 +1396,42 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 					label: "Content"
 				}
 			];
-			mapping.actions = mapping.actions ?? [
-				{
-					label: "Salesforce",
-					iconKey: "salesforce"
-				}
-			];
+			mapping.actions = await this.validateIntents(
+				mapping.actions ?? [
+					{
+						label: "Salesforce",
+						iconKey: "salesforce"
+					}
+				]
+			);
 		}
+	}
+
+	private async validateIntents(actions: SalesforceAction[]): Promise<SalesforceAction[]> {
+		const finalActions: SalesforceAction[] = [];
+
+		for (const action of actions) {
+			if (action.intent) {
+				let hasHandler = false;
+				try {
+					const info = await fin.me.interop.getInfoForIntent({
+						name: action.intent?.name
+					});
+					if (info) {
+						hasHandler = true;
+					}
+				} catch {}
+
+				if (hasHandler) {
+					finalActions.push(action);
+				} else {
+					this._logger.error(`No handler for intent ${action.intent.name}`);
+				}
+			} else {
+				finalActions.push(action);
+			}
+		}
+
+		return finalActions;
 	}
 }

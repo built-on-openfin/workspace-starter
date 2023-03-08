@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "28.106.72.17"
+		"version": "29.108.73.14"
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365",
@@ -27,7 +27,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Microsoft 365 - v10.0.0",
+		"name": "Integrate With Microsoft 365 - v11.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -78,13 +78,19 @@
 							"Chat.Read",
 							"ChannelMessage.Read.All",
 							"TeamMember.Read.All",
-							"ChannelMember.Read.All"
+							"ChannelMember.Read.All",
+							"Files.Read.All",
+							"Sites.Read.All"
 						],
 						"disableGraphExplorer": false,
 						"enableLibLogging": false,
 						"images": {
 							"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
 							"teams": "http://localhost:8080/images/apps/teams.svg",
+							"word": "http://localhost:8080/images/apps/word.svg",
+							"excel": "http://localhost:8080/images/apps/excel.svg",
+							"onenote": "http://localhost:8080/images/apps/onenote.svg",
+							"powerpoint": "http://localhost:8080/images/apps/powerpoint.svg",
 							"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
 							"email": "http://localhost:8080/images/icons/email.svg",
 							"calendar": "http://localhost:8080/images/icons/calendar.svg",
@@ -93,6 +99,8 @@
 							"call": "http://localhost:8080/images/icons/call.svg",
 							"contact": "http://localhost:8080/images/icons/contact.svg",
 							"team": "http://localhost:8080/images/icons/team.svg",
+							"file": "http://localhost:8080/images/icons/file.svg",
+							"folder": "http://localhost:8080/images/icons/folder.svg",
 							"channel": "http://localhost:8080/images/icons/channel.svg",
 							"clock": "http://localhost:8080/images/icons/clock.svg",
 							"check": "http://localhost:8080/images/icons/check.svg",

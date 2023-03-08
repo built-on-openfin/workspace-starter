@@ -1,10 +1,12 @@
-import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
+import type { AnalyticsEvent, AnalyticsSource } from "@openfin/workspace/common/src/utils/usage-register";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
-export type { AnalyticsSource } from "@openfin/workspace/common/src/utils/usage-register";
 
-export interface PlatformAnalyticsEvent extends AnalyticsEvent {
+export interface PlatformAnalyticsEvent extends Omit<AnalyticsEvent, "source"> {
+	source: typeof PLATFORM_ANALYTICS_SOURCE | AnalyticsSource;
 	timestamp: Date;
 }
+
+const PLATFORM_ANALYTICS_SOURCE = "WorkspacePlatform";
 
 /** A list of modules that will be loaded and then called when analytical events come in from the platform or workspace components. */
 export type AnalyticsProviderOptions = ModuleList;

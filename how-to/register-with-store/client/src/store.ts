@@ -3,11 +3,11 @@ import {
 	StorefrontLandingPage,
 	StorefrontNavigationSection,
 	StorefrontFooter,
-	App,
 	StorefrontProvider,
 	StorefrontTemplate,
 	StorefrontNavigationItem,
-	StorefrontDetailedNavigationItem
+	StorefrontDetailedNavigationItem,
+	App
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "./apps";
 import { launch } from "./launch";
@@ -169,19 +169,25 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getNavigation: getNavigation.bind(this),
 			getLandingPage: getLandingPage.bind(this),
 			getFooter: getFooter.bind(this),
-			getApps,
+			getApps: async () => addButtons(await getApps()),
 			launchApp: launch
 		};
 	}
 	return null;
 }
 
-async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
+async function getNavigation(): Promise<
+	[StorefrontNavigationSection?, StorefrontNavigationSection?, StorefrontNavigationSection?]
+> {
 	console.log("Showing the store navigation.");
 	const navigationSectionItemLimit = 5;
 	const navigationSectionLimit = 2;
 	const settings = await getSettings();
-	const navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [];
+	const navigationSections: [
+		StorefrontNavigationSection?,
+		StorefrontNavigationSection?,
+		StorefrontNavigationSection?
+	] = [];
 
 	if (settings?.storefrontProvider?.navigation === undefined) {
 		return [];
@@ -189,9 +195,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 
 	for (let i = 0; i < settings.storefrontProvider.navigation.length; i++) {
 		if (navigationSections.length === navigationSectionLimit) {
-			console.log(
-				"More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken."
-			);
+			console.log("More than 3 navigation sections defined in StorefrontProvider settings. Only 3 are used.");
 			break;
 		}
 		const navigationSection: StorefrontNavigationSection = {
@@ -270,7 +274,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				)}. Only ${middleRowAppLimit} will be shown.`
 			);
 		}
-		const validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
+		const validatedMiddleRowApps = addButtons(middleRowApps.slice(0, middleRowAppLimit)) as [
 			App?,
 			App?,
 			App?,
@@ -361,7 +365,7 @@ async function getNavigationItems(items: StorefrontSettingsNavigationItem[], lim
 
 	if (navigationItems.length > limit) {
 		console.warn(
-			`You have defined too many navigations items (${navigationItems.length}). Please limit it to ${limit} as we will only take the first ${limit}`
+			`You have defined too many navigation items (${navigationItems.length}). Please limit it to ${limit} as we will only take the first ${limit}`
 		);
 	}
 	return navigationItems.slice(0, limit);
@@ -396,4 +400,27 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 		title: definition.title,
 		items: detailedNavigationItems
 	};
+}
+
+function addButtons(apps: App[]): App[] {
+	return apps.map((app) => ({
+		...app,
+		primaryButton: {
+			title: "Launch",
+			action: {
+				id: "launchApp"
+			}
+		},
+		secondaryButtons: [
+			{
+				title: "Search Google",
+				action: {
+					id: "search",
+					customData: {
+						query: app.title
+					}
+				}
+			}
+		]
+	}));
 }

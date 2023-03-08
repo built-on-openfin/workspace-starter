@@ -20,6 +20,7 @@ import { addEventListener as providerEventListener } from "./provider-event-list
 import { randomUUID } from "./uuid";
 
 let loggingElement: HTMLElement;
+let codeElement: HTMLTextAreaElement;
 const updatableNotifications = {};
 let updatableNotificationTimer: NodeJS.Timer;
 let activePlatform;
@@ -35,6 +36,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 async function initDom() {
 	loggingElement = document.querySelector("#logging");
+	codeElement = document.querySelector("#code");
+
+	const loggingContainer: HTMLDivElement = document.querySelector("#logging-container");
+	const codeContainer: HTMLDivElement = document.querySelector("#code-container");
 
 	loggingAddEntry(`Library Version: ${VERSION}`);
 
@@ -43,7 +48,43 @@ async function initDom() {
 		loggingElement.textContent = "";
 	});
 
-	loggingShowHide();
+	const btnCodeCopy = document.querySelector("#btnCodeCopy");
+	btnCodeCopy.addEventListener("click", async () => {
+		await fin.Clipboard.writeText({ data: codeElement.value });
+	});
+
+	const btnCodeNotification = document.querySelector("#btnCodeNotification");
+	btnCodeNotification.addEventListener("click", async () => {
+		try {
+			const notificationOptions: NotificationOptions = JSON.parse(codeElement.value);
+			notificationOptions.id = randomUUID();
+			codeShowExample(notificationOptions);
+			await create(notificationOptions);
+		} catch {}
+	});
+
+	codeElement.addEventListener("input", () => {
+		try {
+			JSON.parse(codeElement.value);
+			codeElement.classList.remove("error");
+		} catch {
+			codeElement.classList.add("error");
+		}
+	});
+
+	codeContainer.style.display = "none";
+
+	const btnViewLogging = document.querySelector("#btnViewLogging");
+	btnViewLogging.addEventListener("click", () => {
+		loggingContainer.style.display = "flex";
+		codeContainer.style.display = "none";
+	});
+
+	const btnViewCode = document.querySelector("#btnViewCode");
+	btnViewCode.addEventListener("click", () => {
+		loggingContainer.style.display = "none";
+		codeContainer.style.display = "flex";
+	});
 
 	const customSettings = await getCustomSettings();
 
@@ -195,14 +236,12 @@ async function initListener() {
 	});
 }
 
-function loggingShowHide(): void {
-	const loggingContainer: HTMLElement = document.querySelector("#logging-container");
-	loggingContainer.style.display = loggingElement.textContent.length === 0 ? "none" : "flex";
-}
-
 function loggingAddEntry(entry: string): void {
 	loggingElement.textContent = `${entry}\n\n${loggingElement.textContent}`;
-	loggingShowHide();
+}
+
+function codeShowExample(notificationOptions: NotificationOptions): void {
+	codeElement.value = JSON.stringify(notificationOptions, undefined, "  ");
 }
 
 function updateConnectedState(): void {
@@ -233,6 +272,7 @@ async function showSimpleNotification() {
 		platform: activePlatform
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -248,6 +288,7 @@ async function showSimpleNotificationBodyDismiss() {
 		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT }
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -269,6 +310,7 @@ async function showSimpleNotificationBodyDismissAction() {
 		}
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -300,6 +342,7 @@ async function showActionableNotification() {
 		]
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -351,6 +394,7 @@ async function showFormNotification() {
 		]
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -383,6 +427,7 @@ async function showUpdatableNotification() {
 		}, 1000);
 	}
 
+	codeShowExample(notification);
 	await create(notification);
 
 	updatableNotifications[notification.id] = notification;
@@ -441,6 +486,7 @@ async function showCustomNotification() {
 		templateData
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 }
 
@@ -455,6 +501,7 @@ async function showSoundNotification(notificationSoundUrl: string) {
 		platform: activePlatform
 	};
 
+	codeShowExample(notification);
 	await create(notification);
 	await playNotification(notificationSoundUrl);
 }

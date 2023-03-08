@@ -7,22 +7,8 @@ export interface Microsoft365Settings {
 	permissions: string[];
 	enableLibLogging: boolean;
 	disableGraphExplorer: boolean;
-	images: {
-		microsoft365: string;
-		teams: string;
-		outlook: string;
-		email: string;
-		calendar: string;
-		share: string;
-		chat: string;
-		call: string;
-		contact: string;
-		team: string;
-		channel: string;
-		cross: string;
-		check: string;
-		clock: string;
-	};
+	graphExplorerPrefix?: string;
+	images: { [id: string]: string };
 }
 
 export type Microsoft365ObjectTypes =
@@ -32,7 +18,8 @@ export type Microsoft365ObjectTypes =
 	| "Event"
 	| "Team"
 	| "Channel"
-	| "ChatMessage";
+	| "ChatMessage"
+	| "File";
 
 export interface ActionData {
 	providerId: string;

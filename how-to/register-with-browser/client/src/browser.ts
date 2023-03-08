@@ -32,7 +32,8 @@ export async function createPageLayout(layout): Promise<PageLayout> {
 
 export async function createPageWithLayout(
 	title: string,
-	layout: LayoutExtended
+	layout: LayoutExtended,
+	hasUnsavedChanges = true
 ): Promise<PageWithUpdatableRuntimeAttribs> {
 	const layoutWithDetails = await createPageLayout(layout);
 	return {
@@ -40,7 +41,7 @@ export async function createPageWithLayout(
 		title,
 		layout: layoutWithDetails,
 		isReadOnly: false,
-		hasUnsavedChanges: true
+		hasUnsavedChanges
 	};
 }
 
@@ -50,4 +51,13 @@ export function createViewIdentity(uuid: string, name: string): OpenFin.Identity
 		name: `${randomUUID()}-${name}`
 	};
 	return viewIdentity;
+}
+
+export async function addPageToWindow(pageId: string, windowIdentity: OpenFin.Identity) {
+	const page = await platform.Storage.getPage(pageId);
+	if (page !== undefined && page !== null) {
+		const targetWindow = platform.Browser.wrapSync(windowIdentity);
+		await targetWindow.addPage(page);
+		await targetWindow.setActivePage(pageId);
+	}
 }

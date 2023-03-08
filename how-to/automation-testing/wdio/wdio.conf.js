@@ -7,9 +7,9 @@ const fsPromises = require('fs/promises');
 const path = require('path');
 
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
-// e.g. if the manifest runtime version is 28.106.72.17 then the chromedriver version should be '106.0.0'
+// e.g. if the manifest runtime version is 29.108.73.14 then the chromedriver version should be '108.0.0'
 const manifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5843;
 const devToolsPort = 9123;
 
@@ -28,6 +28,16 @@ if (!isFile) {
 	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(1);
 }
+
+console.log('Launching OpenFinRVM');
+const openFinRVMProcess = childProcess.spawn(
+	openFinRVM,
+	[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
+	{
+		shell: true
+	}
+);
+console.log('OpenFinRVM PID', openFinRVMProcess.pid);
 
 exports.config = {
 	specs: ['./test/**/*.js'],
@@ -50,15 +60,6 @@ exports.config = {
 		timeout: 60000
 	},
 	beforeSession: async () => {
-		console.log('Launching OpenFinRVM');
-		const openFinRVMProcess = childProcess.spawn(
-			openFinRVM,
-			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
-			{
-				shell: true
-			}
-		);
-		console.log('OpenFinRVM PID', openFinRVMProcess.pid);
 		await setValue('openFinRVMProcessPID', openFinRVMProcess.pid);
 
 		try {

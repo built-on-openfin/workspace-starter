@@ -1,4 +1,9 @@
-import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
+import {
+	BrowserInitConfig,
+	CustomActionCallerType,
+	getCurrentSync,
+	init as workspacePlatformInit
+} from "@openfin/workspace-platform";
 import { getSettings, validateThemes } from "./settings";
 
 export async function init() {
@@ -22,6 +27,19 @@ export async function init() {
 	console.log("Specifying following browser options:", browser);
 	await workspacePlatformInit({
 		browser,
-		theme: validateThemes(settings?.themeProvider?.themes)
+		theme: validateThemes(settings?.themeProvider?.themes),
+		customActions: {
+			search: async (e) => {
+				if (e.callerType === CustomActionCallerType.StoreCustomButton) {
+					const url = `https://www.google.com/search?q=${encodeURIComponent(e.customData.query as string)}`;
+
+					const platform = getCurrentSync();
+					await platform.createView({
+						url,
+						target: null
+					});
+				}
+			}
+		}
 	});
 }
