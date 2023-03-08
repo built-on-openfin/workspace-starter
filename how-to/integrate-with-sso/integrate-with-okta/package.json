@@ -1,0 +1,29 @@
+{
+	"name": "openfin-workspace--integrate-with-okta",
+	"version": "11.0.0",
+	"description": "OpenFin Workspace -- Integrate with SSO - Okta",
+	"main": "index.js",
+	"scripts": {
+		"dos": "npm --prefix ../../common/ run dos",
+		"build": "npm run build-server & npm run build-client",
+		"build-server": "tsc --project ./server",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
+		"start": "npm run server",
+		"client": "npm --prefix ../../common/ run client",
+		"server": "node ./server/build/index.js",
+		"kill": "npm --prefix ../../common/ run kill",
+		"setup": "cd ../../../ && npm install && cd how-to/integrate-with-sso/integrate-with-okta && npm run build && npm --prefix ../../common/ run build",
+		"validate": "npm --prefix ../../../ run validate"
+	},
+	"author": "ameet.jayawant@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/core": "^29.73.14",
+		"@openfin/workspace": "11.0.6",
+		"@openfin/workspace-platform": "11.0.6"
+	},
+	"devDependencies": {
+		"@okta/okta-auth-js": "^7.2.0"
+	}
+}
