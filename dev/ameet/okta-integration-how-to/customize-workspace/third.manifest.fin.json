@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=customize-workspace-for-fdc3",
-		"version": "28.106.72.17"
+		"version": "29.108.73.14"
 	},
 	"startup_app": {
 		"name": "customize-workspace-for-fdc3"
@@ -51,7 +51,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/okta-integration-how-to/customize-workspace/favicon-32x32.png",
-		"name": "Customize Workspace - v10.0.0 - FDC3 Workspace",
+		"name": "Customize Workspace - v11.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -224,7 +224,7 @@
 		},
 		"versionProvider": {
 			"minimumVersion": {
-				"workspace": "10.0.0"
+				"workspace": "11.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
