@@ -8,7 +8,7 @@
 	"platform": {
 		"uuid": "integrate-with-okta",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
@@ -20,7 +20,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with Okta - v10.0.0",
+		"name": "Integrate with Okta - v11.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
