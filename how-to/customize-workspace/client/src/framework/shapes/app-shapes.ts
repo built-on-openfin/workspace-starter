@@ -1,3 +1,4 @@
+import type { AppIdentifier } from "@finos/fdc3";
 import type { App } from "@openfin/workspace";
 
 export type PlatformApp = App & {
@@ -12,6 +13,11 @@ export interface AppFilterOptions {
 	/** Should the list be public apps, private apps or all apps if undefined */
 	private?: boolean;
 }
+
+export type PlatformAppIdentifier = AppIdentifier & {
+	/** Is this application e.g. a view being loaded into a host with a different identity (for targeting purposes) */
+	uuid?: string;
+};
 
 export type ManifestTypeId =
 	| "view"

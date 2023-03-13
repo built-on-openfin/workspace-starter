@@ -5,7 +5,7 @@ import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import { getSettings } from "./settings";
-import type { PlatformApp } from "./shapes/app-shapes";
+import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
 import { randomUUID } from "./uuid";
 
 const logger = createLogger("Launch");
@@ -95,7 +95,7 @@ export async function launchWindow(windowApp: PlatformApp): Promise<OpenFin.Iden
 	if (wasNameSpecified) {
 		windowExists = await doesWindowExist(identity.name, identity.uuid);
 	} else {
-		manifest.name = `classic-window-${randomUUID()}`;
+		manifest.name = `${windowApp.appId}/${randomUUID()}`;
 		identity.name = manifest.name;
 	}
 
@@ -144,13 +144,19 @@ export async function launchView(viewApp: PlatformApp): Promise<OpenFin.Identity
 
 	if (wasNameSpecified) {
 		viewExists = await doesViewExist(identity.name, identity.uuid);
+	} else {
+		manifest.name = `${viewApp.appId}/${randomUUID()}`;
 	}
 
 	if (!viewExists) {
 		try {
 			const platform = getCurrentSync();
 			const createdView = await platform.createView(manifest);
+			const info = await createdView.getInfo();
+			console.log(info);
 			identity = createdView.identity;
+			const infos = await fin.System.getEntityInfo(identity.uuid, identity.name);
+			console.log("Infos:", infos);
 		} catch (err) {
 			logger.error("Error launching view", err);
 			return null;
@@ -225,53 +231,52 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<OpenFin.
 	return null;
 }
 
-export async function launch(appEntry: PlatformApp) {
+export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifier> {
 	try {
 		logger.info("Application launch requested", appEntry);
+		let openfinIdentity: OpenFin.Identity;
 		if (appEntry.manifestType === manifestTypes.external.id) {
 			const settings = await getSettings();
 			const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
+			const options: OpenFin.ExternalProcessRequestType = {};
 
 			if (appEntry.tags?.includes(appAssetTag)) {
 				logger.info(
-					"Application requested is a native app with a tag of appasset so it is provided by this workspace platform. Managing request via platform and not Workspace"
+					`Application requested is a native app with a tag of ${appAssetTag} so it is provided by this workspace platform. Managing request via platform and not Workspace`
 				);
-				const options: OpenFin.ExternalProcessRequestType = {};
 				options.alias = appEntry.manifest;
 				options.uuid = appEntry.appId;
-
-				await fin.System.launchExternalProcess(options);
 			} else {
 				logger.info("Application requested is a native app. Managing request via platform and not Workspace");
-				const options: OpenFin.ExternalProcessRequestType = {};
 				options.path = appEntry.manifest;
 				options.uuid = appEntry.appId;
-
-				await fin.System.launchExternalProcess(options);
 			}
-		} else if (appEntry.manifestType === manifestTypes.inlineView.id) {
-			await launchView(appEntry);
-		} else if (
-			appEntry.manifestType === manifestTypes.window.id ||
-			appEntry.manifestType === manifestTypes.inlineWindow.id
-		) {
-			await launchWindow(appEntry);
+			openfinIdentity = await fin.System.launchExternalProcess(options);
 		} else if (appEntry.manifestType === manifestTypes.inlineExternal.id) {
 			logger.info(
 				"Application requested is a native app defined as inline-external. Managing request via platform and not Workspace."
 			);
 			try {
 				const options = appEntry.manifest as OpenFin.ExternalProcessRequestType;
-				await fin.System.launchExternalProcess(options);
+				openfinIdentity = await fin.System.launchExternalProcess(options);
 			} catch (err) {
 				logger.error(`Error trying to launch inline-external with appId: ${appEntry.appId}`, err);
 			}
+		} else if (appEntry.manifestType === manifestTypes.inlineView.id ||
+			appEntry.manifestType === manifestTypes.view.id) {
+			openfinIdentity = await launchView(appEntry);
+		} else if (
+			appEntry.manifestType === manifestTypes.window.id ||
+			appEntry.manifestType === manifestTypes.inlineWindow.id
+		) {
+			openfinIdentity = await launchWindow(appEntry);
 		} else if (appEntry.manifestType === manifestTypes.desktopBrowser.id) {
 			await fin.System.openUrlWithBrowser(appEntry.manifest);
 		} else if (appEntry.manifestType === manifestTypes.endpoint.id) {
 			if (endpointProvider.hasEndpoint(appEntry.manifest)) {
-				const launched = await endpointProvider.action(appEntry.manifest, { payload: appEntry });
-				if (!launched) {
+				openfinIdentity = await endpointProvider.requestResponse<{ payload: PlatformApp},
+				OpenFin.Identity>(appEntry.manifest, { payload: appEntry });
+				if (openfinIdentity === undefined) {
 					logger.warn(
 						`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`
 					);
@@ -285,12 +290,20 @@ export async function launch(appEntry: PlatformApp) {
 			logger.info(
 				"An app defined by a connection (connected app) has been selected. Passing selection to connection"
 			);
-			await launchConnectedApp(appEntry);
+			openfinIdentity = await launchConnectedApp(appEntry);
 		} else {
 			const platform = getCurrentSync();
 			await platform.launchApp({ app: appEntry });
 		}
 		logger.info("Finished application launch request");
+		if(openfinIdentity !== undefined) {
+			const platformAppIdentity: PlatformAppIdentifier = {
+				appId: appEntry.appId,
+				instanceId: openfinIdentity.name,
+				uuid: openfinIdentity.uuid
+			};
+			return platformAppIdentity;
+		}
 	} catch (err) {
 		logger.error("Failed during application launch request", err);
 	}

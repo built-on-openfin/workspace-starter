@@ -887,7 +887,7 @@
 		"analyticsProvider": {
 			"modules": [
 				{
-					"enabled": true,
+					"enabled": false,
 					"id": "analytics.console",
 					"url": "http://localhost:8080/js/modules/analytics/console.bundle.js",
 					"data": {
@@ -895,7 +895,7 @@
 					}
 				},
 				{
-					"enabled": true,
+					"enabled": false,
 					"id": "analytics.dev.channel",
 					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
 					"data": {}

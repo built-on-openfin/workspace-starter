@@ -180,7 +180,9 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getLandingPage: getLandingPage.bind(this),
 			getFooter: getFooter.bind(this),
 			getApps: async () => addButtons(settings.storefrontProvider, await getApps({ private: false })),
-			launchApp: launch
+			launchApp: async (app) => {
+ 							await launch(app);
+						}
 		};
 	}
 	return null;

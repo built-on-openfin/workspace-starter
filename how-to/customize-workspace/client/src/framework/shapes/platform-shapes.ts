@@ -13,5 +13,9 @@ export interface PlatformProviderOptions {
 		height?: number;
 		/** the width you wish the window to be */
 		width?: number;
+		/** the fdc3 api version this picker will support (default is v2) */
+		fdc3InteropApi?: string;
+		/** should we show all registered intent handler instances or only instances linked to registered apps */
+		showAllInstances?: boolean;
 	};
 }
