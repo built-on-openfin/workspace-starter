@@ -7,7 +7,8 @@
 
 This section is where we will add small hints and tips that isn't specific to any one sample but may prove useful.
 
-| Topic                                                                         | Description                                                                                                      |
-| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [Channel API](./docs/channel-api.md)                                          | This section covers things related to the Channel API and it's use.                                              |
-| [User Engagement - Idleness and Visibility](./docs/visible-idle-detection.md) | This document covers how you can detect if the user is currently active and when they show or hide your content. |
+| Topic                                                                         | Description                                                                                                                         |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [Channel API](./docs/channel-api.md)                                          | This section covers things related to the Channel API and it's use.                                                                 |
+| [User Engagement - Idleness and Visibility](./docs/visible-idle-detection.md) | This document covers how you can detect if the user is currently active and when they show or hide your content.                    |
+| [Version Info](./docs/version-info.md)                                        | This document covers how you can look up information related to your application, the rvm, the runtime or the workspace components. |
