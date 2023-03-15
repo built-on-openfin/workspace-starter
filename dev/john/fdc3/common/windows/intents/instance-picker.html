@@ -1,0 +1,61 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Intent Picker</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script type="module" src="./instance-picker.js"></script>
+		<script src="../../style/style-changed-preload.js"></script>
+		<link rel="stylesheet" href="../../style/app.css" />
+	</head>
+
+	<body class="border">
+		<main class="fill">
+			<header class="row spread middle">
+				<div class="col">
+					<h1>Intent Picker</h1>
+					<h1 class="tag">
+						<span id="target-type"></span>
+					</h1>
+				</div>
+			</header>
+			<div class="fill col scroll-vertical gap5">
+				<div id="intent-container" class="pad10">
+					<fieldset>
+						<label for="intents" title="Intent">Intent</label>
+						<div class="row gap10 wrap">
+							<select id="intents"></select>
+						</div>
+					</fieldset>
+				</div>
+				<div id="app-container" class="pad10">
+					<fieldset>
+						<label for="applications" title="Application">Application</label>
+						<div class="row gap10 wrap">
+							<select id="applications"></select>
+						</div>
+					</fieldset>
+				</div>
+				<div id="app-instance-container" class="pad10">
+					<fieldset>
+						<label for="instances" title="Application Instances">Application Instances</label>
+						<div class="row gap10 wrap">
+							<select id="instances"></select>
+						</div>
+					</fieldset>
+				</div>
+				<div id="summary" class="pad10 row gap10">
+					<img src="" style="height: 32px; width: 32px" alt="logo" id="logo" />
+					<p id="description"></p>
+				</div>
+			</div>
+			<footer>
+				<div class="row spread">
+					<button id="cancel">Cancel</button>
+					<button id="launch">Launch</button>
+				</div>
+			</footer>
+		</main>
+	</body>
+</html>
