@@ -262,8 +262,10 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			} catch (err) {
 				logger.error(`Error trying to launch inline-external with appId: ${appEntry.appId}`, err);
 			}
-		} else if (appEntry.manifestType === manifestTypes.inlineView.id ||
-			appEntry.manifestType === manifestTypes.view.id) {
+		} else if (
+			appEntry.manifestType === manifestTypes.inlineView.id ||
+			appEntry.manifestType === manifestTypes.view.id
+		) {
 			openfinIdentity = await launchView(appEntry);
 		} else if (
 			appEntry.manifestType === manifestTypes.window.id ||
@@ -274,8 +276,10 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			await fin.System.openUrlWithBrowser(appEntry.manifest);
 		} else if (appEntry.manifestType === manifestTypes.endpoint.id) {
 			if (endpointProvider.hasEndpoint(appEntry.manifest)) {
-				openfinIdentity = await endpointProvider.requestResponse<{ payload: PlatformApp},
-				OpenFin.Identity>(appEntry.manifest, { payload: appEntry });
+				openfinIdentity = await endpointProvider.requestResponse<{ payload: PlatformApp }, OpenFin.Identity>(
+					appEntry.manifest,
+					{ payload: appEntry }
+				);
 				if (openfinIdentity === undefined) {
 					logger.warn(
 						`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`
@@ -296,7 +300,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			await platform.launchApp({ app: appEntry });
 		}
 		logger.info("Finished application launch request");
-		if(openfinIdentity !== undefined) {
+		if (openfinIdentity !== undefined) {
 			const platformAppIdentity: PlatformAppIdentifier = {
 				appId: appEntry.appId,
 				instanceId: openfinIdentity.name,

@@ -1,3 +1,5 @@
+import { createRadioEntry, getSelection, setElementVisibility } from './helper.js';
+
 let rejectAppSelection;
 let resolveAppSelection;
 let backBtn;
@@ -16,46 +18,6 @@ let intent;
 let intents;
 let apps;
 
-function createEntry(name, label, value, checked = false) {
-	const fieldset = document.createElement('fieldset');
-	const radioButton = document.createElement('input');
-
-	radioButton.type = 'radio';
-	radioButton.id = value;
-	radioButton.value = value;
-	radioButton.name = name;
-	radioButton.checked = checked;
-
-	const labelForRadioButton = document.createElement('label');
-	labelForRadioButton.setAttribute('for', value);
-	labelForRadioButton.textContent = label;
-
-	fieldset.classList.add('row');
-	fieldset.classList.add('middle');
-
-	fieldset.append(radioButton);
-	fieldset.append(labelForRadioButton);
-	return fieldset;
-}
-
-function getSelection(name) {
-	const entries = document.getElementsByName(name);
-
-	for (let i = 0; i < entries.length; i++) {
-		if (entries[i].checked) {
-			return entries[i].value;
-		}
-	}
-}
-
-function setIntentVisibility(isVisible) {
-	intentSelectionContainer.style.display = isVisible ? 'flex' : 'none';
-}
-
-function setAppVisibility(isVisible) {
-	appSelectionContainer.style.display = isVisible ? 'flex' : 'none';
-}
-
 function setupIntentView(setupIntents) {
 	if (Array.isArray(setupIntents)) {
 		const listName = 'intent';
@@ -64,7 +26,7 @@ function setupIntentView(setupIntents) {
 		}
 
 		for (let i = 0; i < setupIntents.length; i++) {
-			const intentEntry = createEntry(
+			const intentEntry = createRadioEntry(
 				listName,
 				setupIntents[i].intent.displayName,
 				setupIntents[i].intent.name,
@@ -92,14 +54,14 @@ function setupIntentView(setupIntents) {
 			});
 
 			if (selectedIntent !== undefined) {
-				setIntentVisibility(false);
+				setElementVisibility(intentSelectionContainer, false);
 				setupAppView(selectedIntent.apps);
-				setAppVisibility(true);
+				setElementVisibility(appSelectionContainer, true);
 			}
 		});
 
-		setAppVisibility(false);
-		setIntentVisibility(true);
+		setElementVisibility(appSelectionContainer, false);
+		setElementVisibility(intentSelectionContainer, true);
 	}
 }
 
@@ -112,13 +74,13 @@ function setupAppView(applications) {
 		appsContainer.replaceChildren();
 
 		for (let i = 0; i < applications.length; i++) {
-			const appEntry = createEntry(listName, applications[i].title, applications[i].appId, i === 0);
+			const appEntry = createRadioEntry(listName, applications[i].title, applications[i].appId, i === 0);
 			appsContainer.append(appEntry);
 		}
 
 		backBtn.addEventListener('click', () => {
-			setAppVisibility(false);
-			setIntentVisibility(true);
+			setElementVisibility(appSelectionContainer, false);
+			setElementVisibility(intentSelectionContainer, true);
 		});
 
 		cancelAppSelectionBtn.addEventListener('click', async () => {
@@ -133,8 +95,8 @@ function setupAppView(applications) {
 			fin.me.close(true);
 		});
 
-		setIntentVisibility(false);
-		setAppVisibility(true);
+		setElementVisibility(intentSelectionContainer, false);
+		setElementVisibility(appSelectionContainer, true);
 	}
 }
 

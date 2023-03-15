@@ -91,7 +91,7 @@
 			"rootUrl": "http://localhost:8080",
 			"sharing": true,
 			"intentPicker": {
-				"url": "http://localhost:8080/common/windows/intents/picker.html",
+				"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
 				"height": 400,
 				"width": 400
 			}

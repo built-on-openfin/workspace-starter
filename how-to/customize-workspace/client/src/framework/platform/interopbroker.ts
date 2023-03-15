@@ -1,8 +1,10 @@
 import type { AppIdentifier, AppMetadata } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
-import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
-import type { IntentRegistrationEntry, IntentRegistrationPayload } from "customize-workspace/shapes/interopbroker-shapes";
+import type {
+	IntentRegistrationEntry,
+	IntentRegistrationPayload
+} from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
 import { launchSnapshot, launchView, launchWindow } from "../launch";
@@ -21,8 +23,7 @@ export function interopOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
-		private readonly _registeredIntentHandlers = new Map<string,
-		IntentRegistrationEntry[]>();
+		private readonly _registeredIntentHandlers = new Map<string, IntentRegistrationEntry[]>();
 
 		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent) {
 			logger.info("Launching app with intent");
@@ -133,7 +134,7 @@ export function interopOverride(
 			const winOption = {
 				name: "intent-picker",
 				includeInSnapshot: false,
-				fdc3InteropApi: "1.2",
+				fdc3InteropApi: "2.0",
 				defaultWidth: width,
 				defaultHeight: height,
 				showTaskbarIcon: false,
@@ -352,9 +353,10 @@ export function interopOverride(
 			}
 		}
 
-		public async handleFiredIntent(intent: OpenFin.Intent,
-			clientIdentity: OpenFin.ClientIdentity): Promise<{ source: string; version: string }
-			| { source: unknown }> {
+		public async handleFiredIntent(
+			intent: OpenFin.Intent,
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<{ source: string; version: string } | { source: unknown }> {
 			logger.info("Received request for a raised intent", intent);
 			let intentApps = await getAppsByIntent(intent.name);
 			let targetApp: PlatformApp;
@@ -488,16 +490,19 @@ export function interopOverride(
 			const cleanupIndex: { [key: string]: number } = {};
 
 			for (const intentClients of availableIntentHandlers) {
-				const intentEndpointIndex = intentClients[1].findIndex((entry) =>
-				entry.clientIdentity.endpointId === clientIdentity.endpointId);
-				if(intentEndpointIndex !== -1) {
+				const intentEndpointIndex = intentClients[1].findIndex(
+					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
+				);
+				if (intentEndpointIndex !== -1) {
 					cleanupIndex[intentClients[0]] = intentEndpointIndex;
 				}
 			}
 			const relatedIntents = Object.keys(cleanupIndex);
 
-			for(const intent of relatedIntents) {
-				logger.info(`Removing client with endpoint Id: ${clientIdentity.endpointId} and name: ${clientIdentity.name} from instance list for intent: ${intent}`);
+			for (const intent of relatedIntents) {
+				logger.info(
+					`Removing client with endpoint Id: ${clientIdentity.endpointId} and name: ${clientIdentity.name} from instance list for intent: ${intent}`
+				);
 				const intentToUpdate = this._registeredIntentHandlers.get(intent);
 				intentToUpdate.splice(cleanupIndex[intent], 1);
 				this._registeredIntentHandlers.set(intent, intentToUpdate);
@@ -505,81 +510,108 @@ export function interopOverride(
 			await super.clientDisconnected(clientIdentity);
 		}
 
-		 public async fdc3HandleFindInstances(app: AppIdentifier,
-			clientIdentity: OpenFin.ClientIdentity): Promise<AppIdentifier[]> {
-				const endpointApps: { [key: string]: AppIdentifier} = {};
-				for (const entry of this._registeredIntentHandlers) {
-					for(const instance of entry[1]) {
-						if(instance.appId !== undefined && instance.appId === app.appId) {
-							endpointApps[instance.clientIdentity.endpointId] = { appId: instance.appId,
-								instanceId: instance.clientIdentity.endpointId };
-						}
+		public async fdc3HandleFindInstances(
+			app: AppIdentifier,
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<AppIdentifier[]> {
+			const endpointApps: { [key: string]: AppIdentifier } = {};
+			for (const entry of this._registeredIntentHandlers) {
+				for (const instance of entry[1]) {
+					if (instance.appId !== undefined && instance.appId === app.appId) {
+						endpointApps[instance.clientIdentity.endpointId] = {
+							appId: instance.appId,
+							instanceId: instance.clientIdentity.endpointId
+						};
 					}
 				}
+			}
 
-				return Object.values(endpointApps);
-		 }
+			return Object.values(endpointApps);
+		}
 
-		 public async fdc3HandleGetAppMetadata(app: AppIdentifier,
-			clientIdentity: OpenFin.ClientIdentity): Promise<AppMetadata> {
-				logger.info("fdc3handlegetappmeta", app, clientIdentity);
-				throw new Error("fdc3HandleGetAppMetadata");
-		 }
+		public async fdc3HandleGetAppMetadata(
+			app: AppIdentifier,
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<AppMetadata> {
+			logger.info("fdc3handlegetappmeta call received.", app, clientIdentity);
+			const appMetadata = await getApp(app.appId);
+			if (appMetadata !== undefined && appMetadata !== null) {
+				return appMetadata;
+			}
+			throw new Error("TargetAppUnavailable");
+		}
 
-		 public async invokeContextHandler(clientIdentity: OpenFin.ClientIdentity,
-			handlerId: string, context: OpenFin.Context): Promise<void> {
-				logger.info("invokeContextHandler:", clientIdentity, handlerId, context);
+		public async invokeContextHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			context: OpenFin.Context
+		): Promise<void> {
+			logger.info("invokeContextHandler:", clientIdentity, handlerId, context);
 			await super.invokeContextHandler(clientIdentity, handlerId, context);
-		 }
+		}
 
-		 public async invokeIntentHandler(clientIdentity: OpenFin.ClientIdentity,
-			handlerId: string, intent: OpenFin.Intent): Promise<void> {
-				logger.info("invokeIntentHandler", clientIdentity, handlerId, intent);
+		public async invokeIntentHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			intent: OpenFin.Intent
+		): Promise<void> {
+			logger.info("invokeIntentHandler", clientIdentity, handlerId, intent);
 			await super.invokeIntentHandler(clientIdentity, handlerId, intent);
-		 }
+		}
 
-		 public async fdc3HandleGetInfo(payload: {
-			 fdc3Version: string;
-		 }, clientIdentity: OpenFin.ClientIdentity): Promise<unknown> {
+		public async fdc3HandleGetInfo(
+			payload: {
+				fdc3Version: string;
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<unknown> {
 			logger.info("fdc3HandleGetInfo", payload, clientIdentity);
 			return super.fdc3HandleGetInfo(payload, clientIdentity);
-		 }
+		}
 
-		 public contextHandlerRegistered({ contextType, handlerId }: {
-			contextType: string | undefined;
-			handlerId: string;
-		}, clientIdentity: OpenFin.ClientIdentity): void {
+		public contextHandlerRegistered(
+			{
+				contextType,
+				handlerId
+			}: {
+				contextType: string | undefined;
+				handlerId: string;
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		): void {
 			logger.info("contextHandlerRegistered:", contextType, handlerId);
 			super.contextHandlerRegistered({ contextType, handlerId }, clientIdentity);
 		}
 
-		public async intentHandlerRegistered(payload: IntentRegistrationPayload,
-			clientIdentity: OpenFin.ClientIdentity): Promise<void> {
+		public async intentHandlerRegistered(
+			payload: IntentRegistrationPayload,
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<void> {
 			logger.info("intentHandlerRegistered:", payload, clientIdentity);
-			if(payload !== undefined) {
+			if (payload !== undefined) {
 				const intentName: string = payload.handlerId.replace("intent-handler-", "");
 
-				let intentHandlers: IntentRegistrationEntry[] =
-				this._registeredIntentHandlers.get(intentName);
+				let intentHandlers: IntentRegistrationEntry[] = this._registeredIntentHandlers.get(intentName);
 
-				if(intentHandlers === undefined) {
+				if (intentHandlers === undefined) {
 					intentHandlers = [];
 				}
 
-				const handler = intentHandlers.find((entry) =>
-				entry.clientIdentity.endpointId === clientIdentity.endpointId);
+				const handler = intentHandlers.find(
+					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
+				);
 
-				if(handler === undefined) {
+				if (handler === undefined) {
 					const nameParts = clientIdentity.name.split("/");
 					let app: PlatformApp;
 
-					if(nameParts.length === 1) {
+					if (nameParts.length === 1) {
 						app = await getApp(nameParts[0]);
 					}
-					if(nameParts.length === 2) {
+					if (nameParts.length === 2) {
 						app = await getApp(nameParts[0]);
 					}
-					if(nameParts.length > 2) {
+					if (nameParts.length > 2) {
 						app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
 					}
 
@@ -592,9 +624,14 @@ export function interopOverride(
 			await super.intentHandlerRegistered(payload, clientIdentity);
 		}
 
-		public removeContextHandler({ handlerId }: {
-			handlerId: string;
-		}, clientIdentity: OpenFin.ClientIdentity): void {
+		public removeContextHandler(
+			{
+				handlerId
+			}: {
+				handlerId: string;
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		): void {
 			logger.info("removeContextHandler:", handlerId, clientIdentity);
 			super.removeContextHandler({ handlerId }, clientIdentity);
 		}
