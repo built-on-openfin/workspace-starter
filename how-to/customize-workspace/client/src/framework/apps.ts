@@ -5,6 +5,7 @@ import type {
 	AppEndpointOptions,
 	AppFilterOptions,
 	AppProviderOptions,
+	AppsForIntent,
 	PlatformApp
 } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
@@ -366,7 +367,7 @@ export async function getIntent(
 
 export async function getIntentsByContext(
 	contextType: string
-): Promise<{ intent: { name: string; displayName: string }; apps: PlatformApp[] }[]> {
+): Promise<AppsForIntent[]> {
 	const apps = await getApps();
 	let intents: {
 		[key: string]: {
