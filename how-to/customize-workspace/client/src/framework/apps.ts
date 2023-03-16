@@ -365,9 +365,7 @@ export async function getIntent(
 	return null;
 }
 
-export async function getIntentsByContext(
-	contextType: string
-): Promise<AppsForIntent[]> {
+export async function getIntentsByContext(contextType: string): Promise<AppsForIntent[]> {
 	const apps = await getApps();
 	let intents: {
 		[key: string]: {

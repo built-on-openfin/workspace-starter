@@ -92,4 +92,3 @@ export interface AppsForIntent {
 	intent: { name: string; displayName: string };
 	apps: PlatformApp[];
 }
-

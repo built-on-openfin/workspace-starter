@@ -76,15 +76,15 @@ async function setupAppInstancesView(foundAppInstances) {
 			if (foundAppInstances[i].instanceId !== undefined) {
 				const appMetaData = await fdc3.getAppMetadata(foundAppInstances[i]);
 				let label = `${foundAppInstances[i].appId} (${i + 1})`;
-				if(appMetaData?.instanceMetaData !== undefined && appMetaData?.instanceMetaData?.title !== undefined) {
+				if (
+					appMetaData?.instanceMetaData !== undefined &&
+					appMetaData?.instanceMetaData?.title !== undefined
+				) {
 					label = appMetaData.instanceMetaData.title;
-				} else if(appMetaData?.title !== undefined) {
+				} else if (appMetaData?.title !== undefined) {
 					label = `${appMetaData.title} (${i + 1})`;
 				}
-				const appInstanceEntry = createOptionEntry(
-					label,
-					foundAppInstances[i].instanceId
-				);
+				const appInstanceEntry = createOptionEntry(label, foundAppInstances[i].instanceId);
 				appInstanceContainer.append(appInstanceEntry);
 			}
 		}
