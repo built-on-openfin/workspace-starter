@@ -12,6 +12,7 @@ let appInstanceSelectionContainer;
 let appInstanceContainer;
 let appSummaryContainer;
 let targetLabel;
+let targetLabelSet = false;
 
 let intent;
 let intents;
@@ -20,7 +21,8 @@ let apps;
 async function setupIntentView(setupIntents) {
 	if (Array.isArray(setupIntents) && setupIntents.length > 0) {
 		if (intent.context?.type !== undefined) {
-			targetLabel.textContent = intent.context.type;
+			targetLabel.textContent = `Select an Intent & Application to handle the ${intent.context.type} context: ${intent.context.name}`;
+			targetLabelSet = true;
 		}
 
 		for (let i = 0; i < setupIntents.length; i++) {
@@ -45,8 +47,8 @@ async function setupAppView(applications, intentName) {
 	setElementVisibility(appInstanceSelectionContainer, false);
 	setElementVisibility(appSummaryContainer, false);
 	if (Array.isArray(applications) && applications.length > 0) {
-		if (intentName !== undefined) {
-			targetLabel.textContent = intentName;
+		if (intentName !== undefined && !targetLabelSet) {
+			targetLabel.textContent = `Select an application to handle the Intent ${intentName}`;
 		}
 
 		appsContainer.options.length = 0;
@@ -72,8 +74,15 @@ async function setupAppInstancesView(foundAppInstances) {
 		appInstanceContainer.append(newInstanceEntry);
 		for (let i = 0; i < foundAppInstances.length; i++) {
 			if (foundAppInstances[i].instanceId !== undefined) {
+				const appMetaData = await fdc3.getAppMetadata(foundAppInstances[i]);
+				let label = `${foundAppInstances[i].appId} (${i + 1})`;
+				if(appMetaData?.instanceMetaData !== undefined && appMetaData?.instanceMetaData?.title !== undefined) {
+					label = appMetaData.instanceMetaData.title;
+				} else if(appMetaData?.title !== undefined) {
+					label = `${appMetaData.title} (${i + 1})`;
+				}
 				const appInstanceEntry = createOptionEntry(
-					`${foundAppInstances[i].appId} ${i + 1}`,
+					label,
 					foundAppInstances[i].instanceId
 				);
 				appInstanceContainer.append(appInstanceEntry);

@@ -11,7 +11,7 @@
 	</head>
 
 	<body class="border">
-		<main class="fill">
+		<main class="fill col">
 			<header class="row spread middle">
 				<div class="col">
 					<h1>Intent Picker</h1>
@@ -22,27 +22,21 @@
 			</header>
 			<div class="fill col scroll-vertical gap5">
 				<div id="intent-container" class="pad10">
-					<fieldset>
+					<fieldset class="fill">
 						<label for="intents" title="Intent">Intent</label>
-						<div class="row gap10 wrap">
-							<select id="intents"></select>
-						</div>
+						<select id="intents" class="width-full"></select>
 					</fieldset>
 				</div>
 				<div id="app-container" class="pad10">
-					<fieldset>
+					<fieldset class="fill">
 						<label for="applications" title="Application">Application</label>
-						<div class="row gap10 wrap">
-							<select id="applications"></select>
-						</div>
+						<select id="applications" class="width-full"></select>
 					</fieldset>
 				</div>
 				<div id="app-instance-container" class="pad10">
-					<fieldset>
+					<fieldset class="fill">
 						<label for="instances" title="Application Instances">Application Instances</label>
-						<div class="row gap10 wrap">
-							<select id="instances"></select>
-						</div>
+						<select id="instances" class="width-full"></select>
 					</fieldset>
 				</div>
 				<div id="summary" class="pad10 row gap10">
@@ -50,11 +44,9 @@
 					<p id="description"></p>
 				</div>
 			</div>
-			<footer>
-				<div class="row spread">
-					<button id="cancel">Cancel</button>
-					<button id="launch">Launch</button>
-				</div>
+			<footer class="row right gap10">
+				<button id="cancel" class="secondary">Cancel</button>
+				<button id="launch">Launch</button>
 			</footer>
 		</main>
 	</body>

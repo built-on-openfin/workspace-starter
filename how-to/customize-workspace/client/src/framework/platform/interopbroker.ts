@@ -117,6 +117,7 @@ export function interopOverride(
 			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
 		}): Promise<{
 			appId: string;
+			instanceId?: string;
 			intent: Partial<AppIntent>;
 		}> {
 			// show menu
@@ -124,8 +125,8 @@ export function interopOverride(
 			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
 			const settings = await getSettings();
 
-			const height = settings?.platformProvider?.intentPicker?.height || 400;
-			const width = settings?.platformProvider?.intentPicker?.width || 400;
+			const height = settings?.platformProvider?.intentPicker?.height || 650;
+			const width = settings?.platformProvider?.intentPicker?.width || 550;
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
 			const url =
 				settings?.platformProvider?.intentPicker.url ||
@@ -158,6 +159,7 @@ export function interopOverride(
 				const selectedAppId = await webWindow["getIntentSelection"]();
 				return selectedAppId as {
 					appId: string;
+					instanceId?: string;
 					intent: AppIntent;
 				};
 			} catch {
