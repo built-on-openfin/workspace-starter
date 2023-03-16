@@ -1,9 +1,12 @@
-import type { AppIdentifier, AppMetadata } from "@finos/fdc3";
+import { AppIdentifier, AppMetadata, ResolveError } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type {
+	IntentPickerResponse,
 	IntentRegistrationEntry,
-	IntentRegistrationPayload
+	IntentRegistrationPayload,
+	IntentTargetMetaData
 } from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
@@ -11,13 +14,43 @@ import { launchSnapshot, launchView, launchWindow } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
-import type { PlatformApp } from "../shapes/app-shapes";
+import type { AppsForIntent, PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("InteropBroker");
 
 const OPEN_APP_NOT_FOUND = "AppNotFound";
 const NO_APPS_FOUND = "NoAppsFound";
-const RESOLVER_TIMEOUT = "ResolverTimeout";
+
+function getApplicationIdentity(metadata:
+	OpenFin.IntentMetadata<IntentTargetMetaData>): AppIdentifier {
+	if(metadata?.target === undefined || metadata.target === null) {
+		return undefined;
+	}
+	if(typeof metadata.target === "string") {
+		if(metadata.target.trim().length === 0) {
+			return undefined;
+		}
+		return { appId: metadata.target };
+	}
+
+	if(metadata.target?.appId === undefined) {
+		return undefined;
+	}
+
+	return { appId: metadata.target.appId, instanceId: metadata.target.instanceId };
+}
+
+function usesApplicationIdentity(metadata:
+	OpenFin.IntentMetadata<IntentTargetMetaData>): boolean {
+	return !(metadata?.target === undefined || metadata.target === null || typeof metadata.target === "string");
+}
+
+function getSource(appIdentifier: AppIdentifier, usesAppIdentifier: boolean): string | AppIdentifier {
+	if(usesAppIdentifier) {
+		return appIdentifier;
+	}
+	return appIdentifier.appId;
+}
 
 export function interopOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
@@ -25,7 +58,7 @@ export function interopOverride(
 	class InteropOverride extends InteropBroker {
 		private readonly _registeredIntentHandlers = new Map<string, IntentRegistrationEntry[]>();
 
-		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent) {
+		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent, instanceId?: string) {
 			logger.info("Launching app with intent");
 
 			if (
@@ -115,11 +148,7 @@ export function interopOverride(
 			apps?: PlatformApp[];
 			intent?: Partial<AppIntent>;
 			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
-		}): Promise<{
-			appId: string;
-			instanceId?: string;
-			intent: Partial<AppIntent>;
-		}> {
+		}): Promise<IntentPickerResponse> {
 			// show menu
 			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
 			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
@@ -232,222 +261,107 @@ export function interopOverride(
 		}
 
 		public async handleFiredIntentForContext(
-			contextForIntent: { type: string; metadata?: { target?: string } },
-			clientIdentity
+			contextForIntent: { type: string; metadata?: OpenFin.IntentMetadata<IntentTargetMetaData>},
+			clientIdentity: ClientIdentity
 		) {
-			const availableIntents = await getIntentsByContext(contextForIntent.type);
-			if (availableIntents.length === 0) {
-				throw new Error(NO_APPS_FOUND);
-			}
+			const targetAppIdentifier = getApplicationIdentity(contextForIntent.metadata);
 			const intent = {
 				context: contextForIntent,
 				name: undefined,
 				displayName: undefined
 			};
-			let targetApp: PlatformApp;
-			let targetAppIntent;
-			let targetAppIntentCount = 0;
 
-			if (
-				contextForIntent.metadata?.target !== undefined &&
-				contextForIntent.metadata?.target !== null &&
-				contextForIntent.metadata?.target.trim().length > 0
-			) {
-				targetApp = await getApp(contextForIntent.metadata?.target);
+			// app specified flow
+			if(targetAppIdentifier !== undefined) {
+				return this.handleTargetedIntent(targetAppIdentifier, intent, true,
+					usesApplicationIdentity(contextForIntent.metadata), clientIdentity);
 			}
 
-			if (targetApp !== undefined && Array.isArray(targetApp.intents)) {
-				for (let i = 0; i < targetApp.intents.length; i++) {
-					targetAppIntent = targetApp.intents[i];
-					if (
-						Array.isArray(targetAppIntent.contexts) &&
-						targetAppIntent.contexts.includes(contextForIntent.type)
-					) {
-						targetAppIntentCount++;
-					}
-				}
+			const intentsForSelection: AppsForIntent[] = await getIntentsByContext(contextForIntent.type);
+
+			if (intentsForSelection.length === 0) {
+				// no available intents for the context
+				throw new Error(ResolveError.NoAppsFound);
 			}
 
-			if (targetApp !== undefined && targetAppIntent !== undefined && targetAppIntentCount === 1) {
-				// a preferred name for an app was given with the context object
-				// the app existed and it supported the context type and there was only one intent that supported
-				// that context type. Launch the app with that intent otherwise present the user with a list of
-				// everything that supports that context type
-				intent.name = targetAppIntent.name;
-				intent.displayName = targetAppIntent.name;
-				const intentResolver = await this.launchAppWithIntent(targetApp, intent);
-				if (intentResolver === null) {
-					throw new Error(NO_APPS_FOUND);
-				}
-				return intentResolver;
-			}
+			let userSelection: IntentPickerResponse;
 
-			if (availableIntents.length === 1) {
-				intent.name = availableIntents[0].intent.name;
-				intent.displayName = availableIntents[0].intent.name;
-				if (availableIntents[0].apps.length === 1) {
-					const intentResolver = await this.launchAppWithIntent(availableIntents[0].apps[0], intent);
-					if (intentResolver === null) {
-						throw new Error(NO_APPS_FOUND);
-					}
-					return intentResolver;
-				}
-				if (availableIntents[0].apps.length > 1) {
-					try {
-						const userSelection = await this.launchAppPicker({
-							apps: availableIntents[0].apps,
-							intent
-						});
+			if (intentsForSelection.length === 1) {
+				const intentForSelection = intentsForSelection[0];
+				// only one intent matches the passed context
+				intent.name = intentForSelection.intent.name;
+				intent.displayName = intentForSelection.intent.displayName;
 
-						const selectedApp = availableIntents[0].apps.find(
-							(entry) => entry.appId === userSelection.appId && entry.appId !== undefined
-						);
-						if (selectedApp !== null && selectedApp !== undefined) {
-							const intentResolver = await this.launchAppWithIntent(selectedApp, intent);
-							if (intentResolver === null) {
-								throw new Error(NO_APPS_FOUND);
-							}
-							return intentResolver;
-						}
-						logger.error("We were returned a non existent appId to launch with the intent");
-						throw new Error(NO_APPS_FOUND);
-					} catch {
-						logger.error("App for intent by context not selected/launched", intent);
-						throw new Error(RESOLVER_TIMEOUT);
-					}
-				}
-			} else {
-				try {
-					const userSelection = await this.launchAppPicker({
-						intent,
-						intents: availableIntents
-					});
-
-					const selectedIntent = availableIntents.find(
-						(entry) => entry.intent.name === userSelection.intent.name
-					);
-
-					if (selectedIntent === undefined) {
-						logger.error(
-							"The user selected an intent but it's name doesn't match the available intents",
-							userSelection
-						);
-						throw new Error(NO_APPS_FOUND);
-					}
-					const selectedApp = selectedIntent.apps.find(
-						(entry) => entry.appId === userSelection.appId && entry.appId !== undefined
-					);
-					if (selectedApp !== null && selectedApp !== undefined) {
-						intent.displayName = userSelection.intent.displayName;
-						intent.name = userSelection.intent.name;
-						const intentResolver = await this.launchAppWithIntent(selectedApp, intent);
+				if (intentForSelection.apps.length === 1) {
+					const appInstances = await this.fdc3HandleFindInstances(intentForSelection.apps[0],
+						clientIdentity);
+					// if there are no instances launch a new one otherwise present the choice to the user
+					// by falling through to the next code block
+					if(appInstances.length === 0) {
+						const intentResolver = await this.launchAppWithIntent(intentForSelection.apps[0], intent);
 						if (intentResolver === null) {
-							throw new Error(NO_APPS_FOUND);
+							throw new Error(ResolveError.NoAppsFound);
 						}
 						return intentResolver;
 					}
-					logger.error("We were returned a non existent appId to launch with the intent");
-					throw new Error(NO_APPS_FOUND);
-				} catch {
-					logger.error("App for intent by context not selected/launched", intent);
-					throw new Error(RESOLVER_TIMEOUT);
 				}
+				userSelection = await this.launchAppPicker({
+						apps: intentsForSelection[0].apps,
+						intent
+				});
+			} else {
+				userSelection = await this.launchAppPicker({
+						intent,
+						intents: intentsForSelection
+				});
 			}
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent,
+				usesApplicationIdentity(contextForIntent.metadata));
+			return intentResolver;
 		}
 
 		public async handleFiredIntent(
-			intent: OpenFin.Intent,
+			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<{ source: string; version: string } | { source: unknown }> {
 			logger.info("Received request for a raised intent", intent);
-			let intentApps = await getAppsByIntent(intent.name);
-			let targetApp: PlatformApp;
-			let targetAppSpecified: boolean = false;
-			let targetAppId: string;
+			const targetAppIdentifier = getApplicationIdentity(intent.metadata);
 
-			if (
-				intent.metadata?.target !== undefined &&
-				intent.metadata?.target !== null &&
-				intent.metadata?.target.trim().length > 0
-			) {
-				targetAppSpecified = true;
-				targetAppId = intent.metadata?.target as string;
-				targetApp = await getApp(targetAppId);
-				if (targetApp === undefined) {
-					// check to see if you have been passed a specific identity for a view that should be targeted instead of an app
-					const targetIdentity = await this.getTargetIdentity(intent.metadata?.target);
-					if (targetIdentity !== undefined) {
-						logger.info(
-							"We were passed a view identity instead of an app entry when raising/firing an intent. We will fire the intent at that as it exists and no app entry exists with that name.:",
-							targetIdentity,
-							intent
-						);
-						await super.setIntentTarget(intent, targetIdentity);
-						return {
-							source: targetIdentity.name
-						};
-					}
-				}
+			if(targetAppIdentifier !== undefined) {
+				return this.handleTargetedIntent(targetAppIdentifier, intent, false,
+					usesApplicationIdentity(intent.metadata), clientIdentity);
 			}
+
+			const intentApps = await getAppsByIntent(intent.name);
 
 			if (intentApps.length === 0) {
 				logger.info("No apps support this intent");
-				throw new Error(NO_APPS_FOUND);
-			}
-
-			if (targetAppSpecified && targetApp === undefined) {
-				logger.info(`Selected appId was specified: ${targetAppId} but does not exist. Returning error.`);
-				throw new Error(NO_APPS_FOUND);
-			}
-
-			if (targetApp !== undefined) {
-				if (!intentApps.includes(targetApp)) {
-					logger.info(
-						`Selected appId was specified: ${targetAppId} but does it does not support the intent`,
-						intent
-					);
-					throw new Error(NO_APPS_FOUND);
-				}
-				logger.info("Assigning selected application with intent", intent);
-				intentApps = [targetApp];
+				throw new Error(ResolveError.NoAppsFound);
 			}
 
 			if (intentApps.length === 1) {
 				// handle single entry
-				const intentResolver = await this.launchAppWithIntent(intentApps[0], intent);
-				if (intentResolver === null) {
-					throw new Error(NO_APPS_FOUND);
-				}
-				return intentResolver;
-			}
-			// show menu
-			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
-			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
-			try {
-				const userSelection = await this.launchAppPicker({
-					apps: intentApps,
-					intent
-				});
-				if (intentApps === undefined) {
-					logger.warn("We should have a list of apps to search from");
-					intentApps = [];
-				}
-				const selectedApp = intentApps.find(
-					(entry) => entry.appId === userSelection.appId && entry.appId !== undefined
-				);
-				if (selectedApp !== null && selectedApp !== undefined) {
-					const intentResolver = await this.launchAppWithIntent(selectedApp, intent);
+				const appInstances = await this.fdc3HandleFindInstances(intentApps[0],
+					clientIdentity);
+				// if there are no instances launch a new one otherwise present the choice to the user
+				// by falling through to the next code block
+				if(appInstances.length === 0) {
+					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent);
 					if (intentResolver === null) {
-						throw new Error(NO_APPS_FOUND);
+						throw new Error(ResolveError.NoAppsFound);
 					}
 					return intentResolver;
 				}
-				logger.error("We were returned a non existent appId to launch with the intent");
-				throw new Error(NO_APPS_FOUND);
-			} catch {
-				logger.error("App for intent not selected/launched", intent);
-				throw new Error(RESOLVER_TIMEOUT);
 			}
+
+			const userSelection = await this.launchAppPicker({
+				apps: intentApps,
+				intent
+			});
+
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent,
+				usesApplicationIdentity(intent.metadata));
+			return intentResolver;
 		}
 
 		public async fdc3HandleOpen(
@@ -636,6 +550,129 @@ export function interopOverride(
 		): void {
 			logger.info("removeContextHandler:", handlerId, clientIdentity);
 			super.removeContextHandler({ handlerId }, clientIdentity);
+		}
+
+		private async handleIntentPickerSelection(userSelection: IntentPickerResponse,
+			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
+			usesAppIdentity: boolean) {
+			try {
+				const selectedApp = await getApp({ appId: userSelection.appId });
+				const response = {
+					version: selectedApp.version,
+					source: getSource({ appId: userSelection.appId, instanceId: userSelection.instanceId },
+						usesAppIdentity),
+					intent
+				};
+				if(userSelection.instanceId !== undefined) {
+					// an instance of an application was selected
+					const allConnectedClients = await this.getAllClientInfo();
+					let identity: OpenFin.Identity;
+					const clientInfo = allConnectedClients.find((connectedClient) => connectedClient.endpointId ===
+					userSelection.instanceId);
+					if(clientInfo !== undefined) {
+						// the connected instance is available
+						identity = { uuid: clientInfo.uuid, name: clientInfo.name };
+						await super.setIntentTarget(intent, identity);
+						return response;
+					}
+				}
+				const intentResolver = await this.launchAppWithIntent(selectedApp, intent);
+				if (intentResolver === null) {
+					throw new Error(ResolveError.NoAppsFound);
+				}
+				return response;
+			} catch {
+				logger.error("App for intent by context not selected/launched", intent);
+				throw new Error(ResolveError.ResolverTimeout);
+			}
+		}
+
+		private async handleTargetedIntent(targetAppIdentifier: AppIdentifier,
+			intent: OpenFin.Intent, targetByContext: boolean, useAppIdentifier: boolean,
+			clientIdentity: ClientIdentity) {
+			// app specified flow
+			const intentsForSelection: AppsForIntent[] = [];
+			const targetApp = await getApp(targetAppIdentifier.appId);
+
+			// if the specified app isn't available then let the caller know
+			if(targetApp === undefined || targetApp === null) {
+				throw new Error(ResolveError.TargetAppUnavailable);
+			}
+			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
+			if(targetAppIdentifier.instanceId !== undefined) {
+				const availableAppInstances = await this.fdc3HandleFindInstances(targetAppIdentifier,
+					clientIdentity);
+				if(availableAppInstances.length === 0 || !availableAppInstances.includes(targetAppIdentifier)) {
+					throw new Error(ResolveError.TargetInstanceUnavailable);
+				}
+			}
+
+			if(!Array.isArray(targetApp.intents) || targetApp.intents.length === 0) {
+				// an app was specified but it doesn't have any intents. Indicate that something is wrong
+				throw new Error(ResolveError.TargetAppUnavailable);
+			}
+
+			const supportedIntents = targetApp.intents
+			.filter((intentEntry) => {
+				if(targetByContext) {
+					return intentEntry.contexts?.includes(intent.context.type);
+				}
+				return intentEntry.name === intent.name;
+			});
+
+			if(supportedIntents.length === 0) {
+				// the specified app does have intent support but just none that support this context type
+				throw new Error(ResolveError.TargetAppUnavailable);
+			}
+
+			if(supportedIntents.length === 1) {
+				// a preferred name for an app was given with the context object
+				// the app existed and it supported the context type and there was only one intent that supported
+				// that context type. Launch the app with that intent otherwise present the user with a list of
+				// everything that supports that context type
+				intent.name = supportedIntents[0].name;
+				// check for instances
+				if(targetAppIdentifier.instanceId !== undefined) {
+					const allConnectedClients = await this.getAllClientInfo();
+					let identity: OpenFin.Identity;
+					const clientInfo = allConnectedClients.find((connectedClient) => connectedClient.endpointId ===
+					targetAppIdentifier.instanceId);
+					if(clientInfo !== undefined) {
+						// the connected instance is available
+						identity = { uuid: clientInfo.uuid, name: clientInfo.name };
+						await super.setIntentTarget(intent, identity);
+						return {
+							version: targetApp.version,
+							source: getSource(targetAppIdentifier,
+								useAppIdentifier),
+							intent
+						};
+					}
+				}
+				const specifiedAppInstances = await this.fdc3HandleFindInstances(targetApp, clientIdentity);
+				if(specifiedAppInstances.length === 0) {
+					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
+					if (intentResolver === null) {
+						throw new Error(ResolveError.IntentDeliveryFailed);
+					}
+					return intentResolver;
+				}
+			}
+
+			for(const supportedIntent of supportedIntents) {
+				const appForIntent: AppsForIntent = {
+					apps: [targetApp],
+					intent: { name: supportedIntent.name, displayName: supportedIntent.displayName }
+				};
+				intentsForSelection.push(appForIntent);
+			}
+
+			const userSelection = await this.launchAppPicker({
+				intent,
+				intents: intentsForSelection
+			});
+
+			return this.handleIntentPickerSelection(userSelection, intent, useAppIdentifier);
 		}
 	}
 
