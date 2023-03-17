@@ -5,6 +5,8 @@ import type { App } from "@openfin/workspace";
 export type PlatformApp = App & {
 	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
 	private?: boolean;
+	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
+	customConfig?: CustomConfig;
 };
 
 /**
@@ -16,6 +18,10 @@ export interface AppFilterOptions {
 }
 
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
+
+export interface CustomConfig {
+	instanceMode: "single" | "multi";
+}
 
 export type ManifestTypeId =
 	| "view"

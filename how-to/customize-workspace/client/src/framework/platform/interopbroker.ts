@@ -8,12 +8,10 @@ import type {
 	IntentRegistrationPayload,
 	IntentTargetMetaData
 } from "customize-workspace/shapes/interopbroker-shapes";
-import { clearTimeout } from "timers";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
-import { launchSnapshot, launchView, launchWindow, launch } from "../launch";
+import { launch } from "../launch";
 import { createLogger } from "../logger-provider";
-import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
 
@@ -39,13 +37,6 @@ function getApplicationIdentity(metadata: OpenFin.IntentMetadata<IntentTargetMet
 
 function usesApplicationIdentity(metadata: OpenFin.IntentMetadata<IntentTargetMetaData>): boolean {
 	return !(metadata?.target === undefined || metadata.target === null || typeof metadata.target === "string");
-}
-
-function getSource(appIdentifier: AppIdentifier, usesAppIdentifier: boolean): string | AppIdentifier {
-	if (usesAppIdentifier) {
-		return appIdentifier;
-	}
-	return appIdentifier.appId;
 }
 
 export function interopOverride(
@@ -122,8 +113,9 @@ export function interopOverride(
 		public async handleFiredIntentForContext(
 			contextForIntent: { type: string; metadata?: OpenFin.IntentMetadata<IntentTargetMetaData> },
 			clientIdentity: ClientIdentity
-		) {
+		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version: string }> {
 			const targetAppIdentifier = getApplicationIdentity(contextForIntent.metadata);
+			const usesAppIdentity = usesApplicationIdentity(contextForIntent.metadata);
 			const intent = {
 				context: contextForIntent,
 				name: undefined,
@@ -132,13 +124,13 @@ export function interopOverride(
 
 			// app specified flow
 			if (targetAppIdentifier !== undefined) {
-				return this.handleTargetedIntent(
+				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent,
 					true,
-					usesApplicationIdentity(contextForIntent.metadata),
 					clientIdentity
 				);
+				return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 			}
 
 			const intentsForSelection: AppsForIntent[] = await getIntentsByContext(contextForIntent.type);
@@ -165,7 +157,7 @@ export function interopOverride(
 						if (intentResolver === null) {
 							throw new Error(ResolveError.NoAppsFound);
 						}
-						return intentResolver;
+						return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 					}
 				}
 				userSelection = await this.launchIntentPicker({
@@ -178,29 +170,26 @@ export function interopOverride(
 					intents: intentsForSelection
 				});
 			}
-			const intentResolver = await this.handleIntentPickerSelection(
-				userSelection,
-				intent,
-				usesApplicationIdentity(contextForIntent.metadata)
-			);
-			return intentResolver;
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
+			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 		}
 
 		public async handleFiredIntent(
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
 			clientIdentity: OpenFin.ClientIdentity
-		): Promise<{ source: string; version: string } | { source: unknown }> {
+		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version: string }> {
 			logger.info("Received request for a raised intent", intent);
 			const targetAppIdentifier = getApplicationIdentity(intent.metadata);
+			const usesAppIdentifier = usesApplicationIdentity(intent.metadata);
 
 			if (targetAppIdentifier !== undefined) {
-				return this.handleTargetedIntent(
+				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent,
 					false,
-					usesApplicationIdentity(intent.metadata),
 					clientIdentity
 				);
+				return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 			}
 
 			const intentApps = await getAppsByIntent(intent.name);
@@ -215,12 +204,16 @@ export function interopOverride(
 				const appInstances = await this.fdc3HandleFindInstances(intentApps[0], clientIdentity);
 				// if there are no instances launch a new one otherwise present the choice to the user
 				// by falling through to the next code block
-				if (appInstances.length === 0) {
-					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent);
+				let appInstanceId: string;
+				if(appInstances.length === 1) {
+					appInstanceId = appInstances[0].instanceId;
+				}
+				if (appInstances.length === 0 || this.useSingleInstance(intentApps[0])) {
+					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent, appInstanceId);
 					if (intentResolver === null) {
 						throw new Error(ResolveError.NoAppsFound);
 					}
-					return intentResolver;
+					return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 				}
 			}
 
@@ -229,19 +222,15 @@ export function interopOverride(
 				intent
 			});
 
-			const intentResolver = await this.handleIntentPickerSelection(
-				userSelection,
-				intent,
-				usesApplicationIdentity(intent.metadata)
-			);
-			return intentResolver;
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
+			return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 		}
 
 		public async fdc3HandleOpen(
 			fdc3OpenOptions: { app: (PlatformApp & { name?: string }) | string; context: OpenFin.Context },
 			clientIdentity: OpenFin.ClientIdentity
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		): Promise<any> {
+		): Promise<AppIdentifier> {
 			if (fdc3OpenOptions?.app === undefined || fdc3OpenOptions?.app === null) {
 				logger.error("A request to fdc3.open did not pass an fdc3OpenOptions object");
 				throw new Error(ResolveError.NoAppsFound);
@@ -255,7 +244,7 @@ export function interopOverride(
 				context: fdc3OpenOptions.context,
 				name: "OpenApp",
 				metadata: {
-					target: requestedId
+					target: { appId: requestedId }
 				}
 			};
 			logger.info(
@@ -264,7 +253,14 @@ export function interopOverride(
 			);
 			try {
 				const result = await this.handleFiredIntent(openAppIntent, clientIdentity);
-				return { appId: result.source };
+				const identity: { appId: string; instanceId: string } = { appId: undefined, instanceId: undefined };
+				if (typeof result.source === "string") {
+					identity.appId = result.source;
+				} else {
+					identity.appId = result.source.appId;
+					identity.instanceId = result.source.instanceId;
+				}
+				return identity;
 			} catch (intentError) {
 				if (intentError?.message === ResolveError.NoAppsFound) {
 					throw new Error(ResolveError.NoAppsFound);
@@ -378,7 +374,7 @@ export function interopOverride(
 
 				this._registeredIntentHandlers.set(intentName, intentHandlers);
 				const clientReadyKey = this.getClientReadyKey(clientIdentity, intentName);
-				if(this._clientReadyRequests[clientReadyKey] !== undefined) {
+				if (this._clientReadyRequests[clientReadyKey] !== undefined) {
 					logger.info("Resolving client ready request.");
 					this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
 				}
@@ -386,8 +382,12 @@ export function interopOverride(
 			await super.intentHandlerRegistered(payload, clientIdentity);
 		}
 
-		public async launchAppWithIntent(app: PlatformApp, intent: OpenFin.Intent,
-			instanceId?: string): Promise<Omit<IntentResolution, "getResult">> {
+
+		private async launchAppWithIntent(
+			app: PlatformApp,
+			intent: OpenFin.Intent,
+			instanceId?: string
+		): Promise<Omit<IntentResolution, "getResult">> {
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] = [];
 
@@ -398,30 +398,32 @@ export function interopOverride(
 					(connectedClient) => connectedClient.endpointId === instanceId
 				);
 				if (clientInfo !== undefined) {
-					logger.info(
-						`App Id: ${app.appId} and instance Id: ${instanceId} was provided and found.`
-					);
+					logger.info(`App Id: ${app.appId} and instance Id: ${instanceId} was provided and found.`);
 					// the connected instance is available
-					 platformIdentities.push({ uuid: clientInfo.uuid, name: clientInfo.name, appId: app.appId,
-						instanceId: clientInfo.endpointId });
+					platformIdentities.push({
+						uuid: clientInfo.uuid,
+						name: clientInfo.name,
+						appId: app.appId,
+						instanceId: clientInfo.endpointId
+					});
 				} else {
 					throw new Error(ResolveError.TargetInstanceUnavailable);
 				}
 			}
 
-			if(platformIdentities.length === 0) {
+			if (platformIdentities.length === 0) {
 				platformIdentities = await launch(app);
-				if(platformIdentities.length === 0) {
+				if (platformIdentities.length === 0) {
 					throw new Error(ResolveError.IntentDeliveryFailed);
 				}
 
-				if(platformIdentities.length === 1) {
+				if (platformIdentities.length === 1) {
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 					instanceId = await this.onClientReady(platformIdentities[0], intent.name);
 				}
 			}
 
-			for(let i = 0; i < platformIdentities.length; i++) {
+			for (let i = 0; i < platformIdentities.length; i++) {
 				await super.setIntentTarget(intent, platformIdentities[i]);
 			}
 
@@ -432,7 +434,7 @@ export function interopOverride(
 			};
 		}
 
-		public async launchIntentPicker(launchOptions: {
+		private async launchIntentPicker(launchOptions: {
 			apps?: PlatformApp[];
 			intent?: Partial<AppIntent>;
 			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
@@ -488,38 +490,16 @@ export function interopOverride(
 
 		private async handleIntentPickerSelection(
 			userSelection: IntentPickerResponse,
-			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
-			usesAppIdentity: boolean
-		) {
+			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
+		): Promise<Omit<IntentResolution, "getResult">> {
 			try {
 				const selectedApp = await getApp({ appId: userSelection.appId });
-				const response = {
-					version: selectedApp.version,
-					source: getSource(
-						{ appId: userSelection.appId, instanceId: userSelection.instanceId },
-						usesAppIdentity
-					),
-					intent
-				};
-				if (userSelection.instanceId !== undefined) {
-					// an instance of an application was selected
-					const allConnectedClients = await this.getAllClientInfo();
-					let identity: OpenFin.Identity;
-					const clientInfo = allConnectedClients.find(
-						(connectedClient) => connectedClient.endpointId === userSelection.instanceId
-					);
-					if (clientInfo !== undefined) {
-						// the connected instance is available
-						identity = { uuid: clientInfo.uuid, name: clientInfo.name };
-						await super.setIntentTarget(intent, identity);
-						return response;
-					}
-				}
-				const intentResolver = await this.launchAppWithIntent(selectedApp, intent);
+				const instanceId: string = userSelection.instanceId;
+				const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
 				if (intentResolver === null) {
 					throw new Error(ResolveError.NoAppsFound);
 				}
-				return response;
+				return intentResolver;
 			} catch {
 				logger.error("App for intent by context not selected/launched", intent);
 				throw new Error(ResolveError.ResolverTimeout);
@@ -530,9 +510,8 @@ export function interopOverride(
 			targetAppIdentifier: AppIdentifier,
 			intent: OpenFin.Intent,
 			targetByContext: boolean,
-			useAppIdentifier: boolean,
 			clientIdentity: ClientIdentity
-		) {
+		): Promise<Omit<IntentResolution, "getResult">> {
 			// app specified flow
 			const intentsForSelection: AppsForIntent[] = [];
 			const targetApp = await getApp(targetAppIdentifier.appId);
@@ -574,21 +553,12 @@ export function interopOverride(
 				intent.name = supportedIntents[0].name;
 				// check for instances
 				if (targetAppIdentifier.instanceId !== undefined) {
-					const allConnectedClients = await this.getAllClientInfo();
-					let identity: OpenFin.Identity;
-					const clientInfo = allConnectedClients.find(
-						(connectedClient) => connectedClient.endpointId === targetAppIdentifier.instanceId
+					const intentResolver = await this.launchAppWithIntent(
+						targetApp,
+						intent,
+						targetAppIdentifier.instanceId
 					);
-					if (clientInfo !== undefined) {
-						// the connected instance is available
-						identity = { uuid: clientInfo.uuid, name: clientInfo.name };
-						await super.setIntentTarget(intent, identity);
-						return {
-							version: targetApp.version,
-							source: getSource(targetAppIdentifier, useAppIdentifier),
-							intent
-						};
-					}
+					return intentResolver;
 				}
 				const specifiedAppInstances = await this.fdc3HandleFindInstances(targetApp, clientIdentity);
 				if (specifiedAppInstances.length === 0) {
@@ -613,7 +583,21 @@ export function interopOverride(
 				intents: intentsForSelection
 			});
 
-			return this.handleIntentPickerSelection(userSelection, intent, useAppIdentifier);
+			return this.handleIntentPickerSelection(userSelection, intent);
+		}
+
+		private shapeIntentResolver(
+			intentResolver: Omit<IntentResolution, "getResult">,
+			usesAppIdentifier: boolean
+		): Omit<IntentResolution, "getResult"> | { source: string; version: string } {
+			if (usesAppIdentifier) {
+				return intentResolver;
+			}
+			return { source: intentResolver.source.appId, version: intentResolver.version };
+		}
+
+		private useSingleInstance(app: PlatformApp): boolean {
+			return (app?.customConfig?.instanceMode === "single");
 		}
 
 		private getClientReadyKey(identity: OpenFin.Identity, intentName: string): string {
@@ -624,21 +608,23 @@ export function interopOverride(
 			return new Promise((resolve: (instanceId: string) => void, reject: (message: string) => void) => {
 				const registeredHandlers = this._registeredIntentHandlers.get(intentName);
 				let existingInstanceId: string;
-				if(registeredHandlers !== undefined) {
-					for(const handler of registeredHandlers) {
-						if(handler.clientIdentity.uuid === identity.uuid &&
-							handler.clientIdentity.name === identity.name) {
-								existingInstanceId = handler.clientIdentity.endpointId;
-								break;
+				if (registeredHandlers !== undefined) {
+					for (const handler of registeredHandlers) {
+						if (
+							handler.clientIdentity.uuid === identity.uuid &&
+							handler.clientIdentity.name === identity.name
+						) {
+							existingInstanceId = handler.clientIdentity.endpointId;
+							break;
 						}
 					}
 				}
-				if(existingInstanceId !== undefined) {
+				if (existingInstanceId !== undefined) {
 					resolve(existingInstanceId);
 				}
 				const key = this.getClientReadyKey(identity, intentName);
 				const timerId = setTimeout(() => {
-					if(this._clientReadyRequests[key] !== undefined) {
+					if (this._clientReadyRequests[key] !== undefined) {
 						delete this._clientReadyRequests[key];
 						reject(ResolveError.ResolverUnavailable);
 					}
@@ -651,7 +637,7 @@ export function interopOverride(
 					}, 0);
 					resolve(instanceId);
 				};
-			 });
+			});
 		}
 	}
 

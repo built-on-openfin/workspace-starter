@@ -10,7 +10,11 @@ import { randomUUID } from "./uuid";
 
 const logger = createLogger("Launch");
 
-async function getViewIdentities(name: string, uuid: string, appId: string): Promise<PlatformAppIdentifier[]> {
+async function getViewIdentities(
+	name: string,
+	uuid: string,
+	appId: string
+): Promise<PlatformAppIdentifier[]> {
 	const identity = { uuid, name };
 	const win = fin.Window.wrapSync(identity);
 	const views = await win.getCurrentViews();
@@ -221,7 +225,11 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 		}
 
 		for (let w = 0; w < windowsToGather.length; w++) {
-			const windowViewIds = await getViewIdentities(windowsToGather[w], fin.me.identity.uuid, snapshotApp.appId);
+			const windowViewIds = await getViewIdentities(
+				windowsToGather[w],
+				fin.me.identity.uuid,
+				snapshotApp.appId
+			);
 			viewIds.push(...windowViewIds);
 		}
 
@@ -236,7 +244,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 		logger.info("Application launch requested", appEntry);
 
 		const platformAppIdentities: PlatformAppIdentifier[] = [];
-		switch(appEntry.appId) {
+		switch (appEntry.manifestType) {
 			case manifestTypes.external.id: {
 				const settings = await getSettings();
 				const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
@@ -249,7 +257,9 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 					options.alias = appEntry.manifest;
 					options.uuid = appEntry.appId;
 				} else {
-					logger.info("Application requested is a native app. Managing request via platform and not Workspace");
+					logger.info(
+						"Application requested is a native app. Managing request via platform and not Workspace"
+					);
 					options.path = appEntry.manifest;
 					options.uuid = appEntry.appId;
 				}
@@ -273,7 +283,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			case manifestTypes.inlineView.id:
 			case manifestTypes.view.id: {
 				const platformIdentity = await launchView(appEntry);
-				if(platformIdentity !== null) {
+				if (platformIdentity !== null) {
 					platformAppIdentities.push(platformIdentity);
 				}
 				break;
@@ -288,7 +298,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			}
 			case manifestTypes.snapshot.id: {
 				const identities = await launchSnapshot(appEntry);
-				if(identities !== null && identities !== undefined) {
+				if (identities !== null && identities !== undefined) {
 					platformAppIdentities.push(...identities);
 				}
 				break;
@@ -296,11 +306,17 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			case manifestTypes.manifest.id: {
 				const manifest = await fin.System.launchManifest(appEntry.manifest);
 				if (manifest?.platform?.uuid !== undefined) {
-					platformAppIdentities.push({ uuid: manifest.platform.uuid,
-						name: manifest.platform.uuid, appId: appEntry.appId });
-				} else if(manifest?.startup_app?.uuid !== undefined) {
-					platformAppIdentities.push({ uuid: manifest.startup_app.uuid,
-						name: manifest.startup_app.uuid, appId: appEntry.appId });
+					platformAppIdentities.push({
+						uuid: manifest.platform.uuid,
+						name: manifest.platform.uuid,
+						appId: appEntry.appId
+					});
+				} else if (manifest?.startup_app?.uuid !== undefined) {
+					platformAppIdentities.push({
+						uuid: manifest.startup_app.uuid,
+						name: manifest.startup_app.uuid,
+						appId: appEntry.appId
+					});
 				}
 				break;
 			}
@@ -310,8 +326,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			}
 			case manifestTypes.endpoint.id: {
 				if (endpointProvider.hasEndpoint(appEntry.manifest)) {
-					const identity = await endpointProvider.requestResponse<{ payload: PlatformApp },
-					OpenFin.Identity>(
+					const identity = await endpointProvider.requestResponse<{ payload: PlatformApp }, OpenFin.Identity>(
 						appEntry.manifest,
 						{ payload: appEntry }
 					);
@@ -334,7 +349,7 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 					"An app defined by a connection (connected app) has been selected. Passing selection to connection"
 				);
 				const identity = await launchConnectedApp(appEntry);
-				if(identity !== undefined && identity !== null) {
+				if (identity !== undefined && identity !== null) {
 					platformAppIdentities.push({ ...identity, appId: appEntry.appId });
 				}
 				break;
