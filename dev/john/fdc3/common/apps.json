@@ -513,6 +513,7 @@
 		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 2.0 api.",
 		"manifest": "http://localhost:7070/fdc3/intent/2-0/fdc3-intent-view.json",
 		"manifestType": "view",
+		"customConfig": { "instanceMode": "single" },
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/common/images/icon-blue.png"

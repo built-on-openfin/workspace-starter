@@ -17,6 +17,7 @@ let targetLabelSet = false;
 let intent;
 let intents;
 let apps;
+const appLookup = {};
 
 async function setupIntentView(setupIntents) {
 	if (Array.isArray(setupIntents) && setupIntents.length > 0) {
@@ -46,12 +47,11 @@ async function setupIntentView(setupIntents) {
 async function setupAppView(applications, intentName) {
 	setElementVisibility(appInstanceSelectionContainer, false);
 	setElementVisibility(appSummaryContainer, false);
+	appsContainer.options.length = 0;
 	if (Array.isArray(applications) && applications.length > 0) {
 		if (intentName !== undefined && !targetLabelSet) {
 			targetLabel.textContent = `Select an application to handle the Intent ${intentName}`;
 		}
-
-		appsContainer.options.length = 0;
 		for (let i = 0; i < applications.length; i++) {
 			if (applications[i].instanceId === undefined) {
 				const appEntry = createOptionEntry(applications[i].title, applications[i].appId, i === 0);
@@ -67,22 +67,22 @@ async function setupAppView(applications, intentName) {
 
 async function setupAppInstancesView(foundAppInstances) {
 	setElementVisibility(appInstanceSelectionContainer, false);
+	appInstanceContainer.options.length = 0;
 	launchBtn.disabled = false;
 	if (Array.isArray(foundAppInstances) && foundAppInstances.length > 0) {
-		appInstanceContainer.options.length = 0;
 		const newInstanceEntry = createOptionEntry('New Instance', '', true);
 		appInstanceContainer.append(newInstanceEntry);
 		for (let i = 0; i < foundAppInstances.length; i++) {
 			if (foundAppInstances[i].instanceId !== undefined) {
-				const appMetaData = await fdc3.getAppMetadata(foundAppInstances[i]);
+				const appMetadata = await fdc3.getAppMetadata(foundAppInstances[i]);
 				let label = `${foundAppInstances[i].appId} (${i + 1})`;
 				if (
-					appMetaData?.instanceMetaData !== undefined &&
-					appMetaData?.instanceMetaData?.title !== undefined
+					appMetadata?.instanceMetadata !== undefined &&
+					appMetadata?.instanceMetadata?.title !== undefined
 				) {
-					label = appMetaData.instanceMetaData.title;
-				} else if (appMetaData?.title !== undefined) {
-					label = `${appMetaData.title} (${i + 1})`;
+					label = appMetadata.instanceMetadata.title;
+				} else if (appMetadata?.title !== undefined) {
+					label = `${appMetadata.title} (${i + 1})`;
 				}
 				const appInstanceEntry = createOptionEntry(label, foundAppInstances[i].instanceId);
 				appInstanceContainer.append(appInstanceEntry);
@@ -92,43 +92,81 @@ async function setupAppInstancesView(foundAppInstances) {
 	}
 }
 
-async function setupAppMetadata(appId, instanceId) {
-	const identifier = { appId, instanceId };
-	const appMetaData = await fdc3.getAppMetadata(identifier);
-	if (appMetaData !== undefined && appMetaData !== null) {
+async function onIntentSelection(targetIntent) {
+	launchBtn.disabled = true;
+	for (const availableIntent of intents) {
+		if (availableIntent.intent.name === targetIntent) {
+			intent.displayName = availableIntent.intent.displayName;
+			intent.name = targetIntent;
+			await setupAppView(availableIntent.apps, targetIntent);
+		}
+	}
+}
+
+async function onAppSelection(appId) {
+	const selectedApp = appLookup[appId];
+	if (
+		selectedApp?.customConfig === undefined ||
+		selectedApp?.customConfig?.instanceMode === undefined ||
+		selectedApp.customConfig.instanceMode !== 'single'
+	) {
+		const foundAppInstances = await fdc3.findInstances({ appId });
+		await setupAppInstancesView(foundAppInstances);
+	} else {
+		// clear previous selections
+		await setupAppInstancesView([]);
+	}
+
+	await setupAppMetadata(appId);
+}
+
+async function onAppInstanceSelection(appId, instanceId) {
+	const appPreviewImage = document.querySelector('#preview');
+	setElementVisibility(appPreviewImage, false);
+	const appMetadata = await fdc3.getAppMetadata({ appId, instanceId });
+	let preview;
+	if (appMetadata?.instanceMetadata !== undefined && appMetadata?.instanceMetadata?.preview !== undefined) {
+		preview = appMetadata.instanceMetadata.preview;
+		appPreviewImage.src = `data:image/jpg;base64,${preview}`;
+		setElementVisibility(appPreviewImage, true);
+	} else {
+		loadAppPreview(appId);
+	}
+}
+
+async function loadAppPreview(appId) {
+	const appPreviewImage = document.querySelector('#preview');
+	setElementVisibility(appPreviewImage, false);
+	const appMetadata = appLookup[appId];
+	if (Array.isArray(appMetadata?.images) && appMetadata.images.length > 0) {
+		appPreviewImage.src = appMetadata.images[0].src;
+		setElementVisibility(appPreviewImage, true);
+	}
+}
+
+async function setupAppMetadata(appId) {
+	const appMetadata = appLookup[appId];
+	if (appMetadata !== undefined) {
 		const appImage = document.querySelector('#logo');
-		if (Array.isArray(appMetaData.icons) && appMetaData.icons.length > 0) {
-			appImage.src = appMetaData.icons[0].src;
+		if (Array.isArray(appMetadata.icons) && appMetadata.icons.length > 0) {
+			appImage.src = appMetadata.icons[0].src;
 			setElementVisibility(appImage, true);
 		} else {
 			setElementVisibility(appImage, false);
 		}
 
 		const appDescription = document.querySelector('#description');
-		if (appMetaData.description !== undefined && appMetaData.description.length > 0) {
-			appDescription.textContent = appMetaData.description;
+		if (appMetadata.description !== undefined && appMetadata.description.length > 0) {
+			appDescription.textContent = appMetadata.description;
 			setElementVisibility(appDescription, true);
 		} else {
 			setElementVisibility(appDescription, false);
 		}
+		loadAppPreview(appId);
 		setElementVisibility(appSummaryContainer, true);
 	} else {
 		setElementVisibility(appSummaryContainer, false);
 	}
-}
-
-async function onIntentSelection(targetIntent) {
-	launchBtn.disabled = true;
-	const appsForIntent = await fdc3.findIntent(targetIntent);
-	intent = appsForIntent.intent;
-	await setupAppView(appsForIntent.apps, targetIntent);
-}
-
-async function onAppSelection(appId) {
-	const foundAppInstances = await fdc3.findInstances({ appId });
-
-	await setupAppMetadata(appId);
-	await setupAppInstancesView(foundAppInstances);
 }
 
 async function init() {
@@ -150,6 +188,10 @@ async function init() {
 
 	appInstanceSelectionContainer = document.querySelector('#app-instance-container');
 	appInstanceContainer = document.querySelector('#instances');
+	appInstanceContainer.addEventListener('change', async (instanceList) => {
+		const instanceId = instanceList.target.value;
+		await onAppInstanceSelection(appsContainer.value, instanceId);
+	});
 	appSummaryContainer = document.querySelector('#summary');
 	setElementVisibility(appSummaryContainer, false);
 	launchBtn = document.querySelector('#launch');
@@ -161,8 +203,22 @@ async function init() {
 		intent = data.customData.intent;
 		intents = data.customData.intents;
 	}
+
+	if (Array.isArray(intents)) {
+		for (const passedIntent of intents) {
+			for (const intentApp of passedIntent.apps) {
+				appLookup[intentApp.appId] = intentApp;
+			}
+		}
+	}
 	setupIntentView(intents);
-	await setupAppView(apps, intent.name);
+
+	if (Array.isArray(apps)) {
+		for (const app of apps) {
+			appLookup[app.appId] = app;
+		}
+		await setupAppView(apps, intent.name);
+	}
 
 	cancelSelectionBtn.addEventListener('click', async () => {
 		if (rejectAppSelection !== undefined) {
@@ -183,7 +239,7 @@ async function init() {
 	});
 }
 
-// this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
+// this function is called by the interop broker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
 window['getIntentSelection'] = async () => {
 	launchBtn.disabled = false;
 	return new Promise((resolve, reject) => {
