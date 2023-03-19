@@ -1,6 +1,8 @@
 function init() {
 	const action = document.querySelector('#action');
 	const timeLabel = document.querySelector('#time');
+	const originalTitle = document.title;
+
 	let contactNameLabel = '';
 	let intervalId = null;
 	let seconds = 0;
@@ -23,6 +25,7 @@ function init() {
 			contactNameLabel = '';
 			action.textContent = 'Start Call';
 			timeLabel.textContent = '00:00';
+			document.title = originalTitle;
 		} else {
 			action.textContent = `End Call${contactNameLabel}`;
 			seconds = 0;
@@ -40,6 +43,7 @@ function init() {
 			if (ctx.type === 'fdc3.contact') {
 				contactNameLabel = ` To ${ctx.name}`;
 				action.textContent = `Start Call${contactNameLabel}`;
+				document.title = `${originalTitle} - ${ctx.name}`;
 			} else {
 				console.warn('Passed context was not of type fdc3.contact.', ctx);
 			}

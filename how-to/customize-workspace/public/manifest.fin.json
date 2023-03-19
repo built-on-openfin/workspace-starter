@@ -92,8 +92,8 @@
 			"sharing": true,
 			"intentPicker": {
 				"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
-				"height": 400,
-				"width": 400,
+				"height": 715,
+				"width": 665,
 				"fdc3InteropApi": "2.0"
 			}
 		},

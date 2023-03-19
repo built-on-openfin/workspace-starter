@@ -170,6 +170,9 @@ export function interopOverride(
 					intents: intentsForSelection
 				});
 			}
+			// update intent with user selection
+			intent.displayName = userSelection.intent.displayName;
+			intent.name = userSelection.intent.name;
 			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 		}
@@ -205,7 +208,7 @@ export function interopOverride(
 				// if there are no instances launch a new one otherwise present the choice to the user
 				// by falling through to the next code block
 				let appInstanceId: string;
-				if(appInstances.length === 1) {
+				if (appInstances.length === 1) {
 					appInstanceId = appInstances[0].instanceId;
 				}
 				if (appInstances.length === 0 || this.useSingleInstance(intentApps[0])) {
@@ -321,6 +324,35 @@ export function interopOverride(
 			logger.info("fdc3handlegetappmeta call received.", app, clientIdentity);
 			const appMetadata = await getApp(app.appId);
 			if (appMetadata !== undefined && appMetadata !== null) {
+				if (app.instanceId !== undefined) {
+					const allConnectedClients = await this.getAllClientInfo();
+					const connectedClient = allConnectedClients.find((client) => client.endpointId === app.instanceId);
+					if (connectedClient !== undefined && connectedClient.uuid === fin.me.identity.uuid) {
+						const identity = { uuid: connectedClient.uuid, name: connectedClient.name };
+						let title: string;
+						let preview: string;
+						if (connectedClient.entityType === "window") {
+							const instanceWindow = fin.Window.wrapSync(identity);
+							const isUserWindow = await instanceWindow.isShowing();
+							if (isUserWindow) {
+								const windowInfo = await instanceWindow.getInfo();
+								title = windowInfo.title;
+								preview = await instanceWindow.capturePage({ format: "jpg", quality: 85 });
+							}
+						} else {
+							const instanceView = fin.View.wrapSync(identity);
+							const viewInfo = await instanceView.getInfo();
+							title = viewInfo.title;
+							preview = await instanceView.capturePage({ format: "jpg", quality: 85 });
+						}
+						const instanceAppMeta = {
+							...appMetadata,
+							instanceId: app.instanceId,
+							instanceMetadata: { title, preview }
+						};
+						return instanceAppMeta;
+					}
+				}
 				return appMetadata;
 			}
 			throw new Error("TargetAppUnavailable");
@@ -381,7 +413,6 @@ export function interopOverride(
 			}
 			await super.intentHandlerRegistered(payload, clientIdentity);
 		}
-
 
 		private async launchAppWithIntent(
 			app: PlatformApp,
@@ -444,13 +475,13 @@ export function interopOverride(
 			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
 			const settings = await getSettings();
 
-			const height = settings?.platformProvider?.intentPicker?.height || 650;
-			const width = settings?.platformProvider?.intentPicker?.width || 550;
-			const interopApiVersion = settings?.platformProvider?.intentPicker?.fdc3InteropApi || "1.2";
+			const height = settings?.platformProvider?.intentPicker?.height || 715;
+			const width = settings?.platformProvider?.intentPicker?.width || 665;
+			const interopApiVersion = settings?.platformProvider?.intentPicker?.fdc3InteropApi || "2.0";
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
 			const url =
 				settings?.platformProvider?.intentPicker.url ||
-				window.location.href.replace("platform/provider.html", "common/windows/intents/picker.html");
+				window.location.href.replace("platform/provider.html", "common/windows/intents/instance-picker.html");
 
 			const winOption = {
 				name: "intent-picker",
@@ -597,7 +628,7 @@ export function interopOverride(
 		}
 
 		private useSingleInstance(app: PlatformApp): boolean {
-			return (app?.customConfig?.instanceMode === "single");
+			return app?.customConfig?.instanceMode === "single";
 		}
 
 		private getClientReadyKey(identity: OpenFin.Identity, intentName: string): string {
