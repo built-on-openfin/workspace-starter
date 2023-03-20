@@ -4,6 +4,13 @@ import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+import {
+	bringViewToFront,
+	bringWindowToFront,
+	doesViewExist,
+	doesWindowExist,
+	findViewNames
+} from "./platform/browser";
 import { getSettings } from "./settings";
 import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
 import { randomUUID } from "./uuid";
@@ -23,49 +30,7 @@ async function getViewIdentities(
 	return viewIdentities;
 }
 
-async function doesViewExist(name: string, uuid: string) {
-	const view = fin.View.wrapSync({ name, uuid });
-	let exists = false;
-	try {
-		await view.getInfo();
-		const viewHost = await view.getCurrentWindow();
-		await viewHost.bringToFront();
-		exists = true;
-	} catch {
-		exists = false;
-	}
-	return exists;
-}
-
-async function doesWindowExist(name: string, uuid: string) {
-	const win = fin.Window.wrapSync({ name, uuid });
-	let exists = false;
-	try {
-		await win.getInfo();
-		exists = true;
-		if (await win.isShowing()) {
-			await win.bringToFront();
-		}
-	} catch {
-		exists = false;
-	}
-	return exists;
-}
-
-function findViewNames(layout) {
-	const collectedNames: string[] = [];
-
-	JSON.stringify(layout, (_, nestedValue) => {
-		// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
-		if (nestedValue?.name?.length && nestedValue.url !== undefined) {
-			collectedNames.push(nestedValue.name as string);
-		}
-		return nestedValue as unknown;
-	});
-
-	return collectedNames;
-}
-export async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier> {
+async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier> {
 	if (windowApp === undefined || windowApp === null) {
 		logger.warn("No app was passed to launchWindow");
 		return null;
@@ -97,7 +62,7 @@ export async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppI
 	let windowExists = false;
 
 	if (wasNameSpecified) {
-		windowExists = await doesWindowExist(identity.name, identity.uuid);
+		windowExists = await doesWindowExist(identity.name, identity.uuid, true);
 	} else {
 		manifest.name = `${windowApp.appId}/${randomUUID()}`;
 		identity.name = manifest.name;
@@ -107,6 +72,7 @@ export async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppI
 		try {
 			const createdWindow = await fin.Window.create(manifest);
 			identity = createdWindow.identity;
+			await bringWindowToFront({ window: createdWindow });
 		} catch (err) {
 			logger.error("Error launching window", err);
 			return null;
@@ -115,7 +81,7 @@ export async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppI
 	return { ...identity, appId: windowApp.appId };
 }
 
-export async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> {
+async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> {
 	if (viewApp === undefined || viewApp === null) {
 		logger.warn("No app was passed to launchView");
 		return null;
@@ -147,7 +113,7 @@ export async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdent
 	let viewExists = false;
 
 	if (wasNameSpecified) {
-		viewExists = await doesViewExist(identity.name, identity.uuid);
+		viewExists = await doesViewExist(identity.name, identity.uuid, true);
 	} else {
 		manifest.name = `${viewApp.appId}/${randomUUID()}`;
 	}
@@ -190,13 +156,13 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 		const windowsToGather: string[] = [];
 		const viewIds: PlatformAppIdentifier[] = [];
 
-		for (let i = 0; i < windows.length; i++) {
-			const getViewIdsForLayout = findViewNames(windows[i].layout);
+		for (const currentWindow of windows) {
+			const getViewIdsForLayout = findViewNames(currentWindow.layout);
 			if (getViewIdsForLayout.length === 0) {
 				const uuid = randomUUID();
 				const name = `${snapshotApp.appId}/${uuid}`;
-				windows[i].name = name;
-				windowsToCreate.push(windows[i]);
+				currentWindow.name = name;
+				windowsToCreate.push(currentWindow);
 				windowsToGather.push(name);
 			} else {
 				// we have views. Grab the first one to validate existence.
@@ -207,8 +173,8 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 				}
 
 				// these views should be readonly and cannot be pulled out of the page or closed
-				if (!(await doesViewExist(viewId, fin.me.identity.uuid))) {
-					windowsToCreate.push(windows[i]);
+				if (!(await doesViewExist(viewId, fin.me.identity.uuid, true))) {
+					windowsToCreate.push(currentWindow);
 				}
 			}
 		}
@@ -224,12 +190,8 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 			}
 		}
 
-		for (let w = 0; w < windowsToGather.length; w++) {
-			const windowViewIds = await getViewIdentities(
-				windowsToGather[w],
-				fin.me.identity.uuid,
-				snapshotApp.appId
-			);
+		for (const targetWindow of windowsToGather) {
+			const windowViewIds = await getViewIdentities(targetWindow, fin.me.identity.uuid, snapshotApp.appId);
 			viewIds.push(...windowViewIds);
 		}
 
@@ -363,5 +325,56 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 		return platformAppIdentities;
 	} catch (err) {
 		logger.error("Failed during application launch request", err);
+	}
+}
+
+export async function bringToFront(appEntry: PlatformApp, platformAppIdentifiers: PlatformAppIdentifier[]) {
+	switch (appEntry.manifestType) {
+		case manifestTypes.external.id:
+		case manifestTypes.inlineExternal.id:
+		case manifestTypes.manifest.id:
+		case manifestTypes.desktopBrowser.id:
+		case manifestTypes.endpoint.id:
+		case manifestTypes.connection.id: {
+			logger.info(`Bringing apps of type: ${appEntry.manifestType} to front is not supported.`);
+			break;
+		}
+		case manifestTypes.inlineView.id:
+		case manifestTypes.view.id: {
+			if (Array.isArray(platformAppIdentifiers) && platformAppIdentifiers.length === 1) {
+				await bringViewToFront({ identity: platformAppIdentifiers[0] });
+			} else {
+				logger.warn(
+					`A request to bring a view app to front was received but we didn't receive exactly one identity for app: ${appEntry.appId}.`
+				);
+			}
+			break;
+		}
+		case manifestTypes.window.id:
+		case manifestTypes.inlineWindow.id: {
+			if (Array.isArray(platformAppIdentifiers) && platformAppIdentifiers.length === 1) {
+				await bringWindowToFront({ identity: platformAppIdentifiers[0] });
+			} else {
+				logger.warn(
+					`A request to bring a window app to front was received but we didn't receive exactly one identity for app: ${appEntry.appId}.`
+				);
+			}
+			break;
+		}
+		case manifestTypes.snapshot.id: {
+			if (Array.isArray(platformAppIdentifiers) && platformAppIdentifiers.length > 0) {
+				for (const identity of platformAppIdentifiers) {
+					await bringViewToFront({ identity });
+				}
+			} else {
+				logger.warn(
+					`A request to bring a snapshot app to front was received but we didn't receive at least one view for app: ${appEntry.appId}.`
+				);
+			}
+			break;
+		}
+		default: {
+			logger.error("We do not support the manifest type so this app cannot be brought to front.", appEntry);
+		}
 	}
 }

@@ -10,7 +10,7 @@ import type {
 } from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
-import { launch } from "../launch";
+import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
@@ -337,13 +337,13 @@ export function interopOverride(
 							if (isUserWindow) {
 								const windowInfo = await instanceWindow.getInfo();
 								title = windowInfo.title;
-								preview = await instanceWindow.capturePage({ format: "jpg", quality: 85 });
+								preview = await this.getPreviewImage(instanceWindow);
 							}
 						} else {
 							const instanceView = fin.View.wrapSync(identity);
 							const viewInfo = await instanceView.getInfo();
 							title = viewInfo.title;
-							preview = await instanceView.capturePage({ format: "jpg", quality: 85 });
+							preview = await this.getPreviewImage(instanceView);
 						}
 						const instanceAppMeta = {
 							...appMetadata,
@@ -454,8 +454,9 @@ export function interopOverride(
 				}
 			}
 
-			for (let i = 0; i < platformIdentities.length; i++) {
-				await super.setIntentTarget(intent, platformIdentities[i]);
+			for (const target of platformIdentities) {
+				await super.setIntentTarget(intent, target);
+				await bringToFront(app, [target]);
 			}
 
 			return {
@@ -636,7 +637,7 @@ export function interopOverride(
 		}
 
 		private async onClientReady(identity: OpenFin.Identity, intentName: string): Promise<string> {
-			return new Promise((resolve: (instanceId: string) => void, reject: (message: string) => void) => {
+			return new Promise<string>((resolve, reject) => {
 				const registeredHandlers = this._registeredIntentHandlers.get(intentName);
 				let existingInstanceId: string;
 				if (registeredHandlers !== undefined) {
@@ -663,12 +664,20 @@ export function interopOverride(
 				this._clientReadyRequests[key] = (instanceId: string) => {
 					clearTimeout(timerId);
 					// clear the callback asynchronously
-					setTimeout(() => {
-						delete this._clientReadyRequests[key];
-					}, 0);
+					delete this._clientReadyRequests[key];
 					resolve(instanceId);
 				};
 			});
+		}
+
+		private async getPreviewImage(target: {
+			capturePage: (options: { format?: string; quality?: number }) => Promise<string>;
+		}): Promise<string> {
+			const preview = await target.capturePage({ format: "jpg", quality: 85 });
+			if (preview !== undefined && preview !== null && preview !== "") {
+				return preview;
+			}
+			return undefined;
 		}
 	}
 
