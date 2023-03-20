@@ -173,7 +173,7 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 				}
 
 				// these views should be readonly and cannot be pulled out of the page or closed
-				if (!(await doesViewExist(viewId, fin.me.identity.uuid, true))) {
+				if (!(await doesViewExist(viewId, fin.me.identity.uuid, false))) {
 					windowsToCreate.push(currentWindow);
 				}
 			}

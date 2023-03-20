@@ -28,7 +28,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/call-app.png"
+			}
+		],
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
@@ -47,7 +51,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/participant-selection.png"
+			}
+		],
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
@@ -73,7 +81,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/participant-history.png"
+			}
+		],
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
@@ -99,7 +111,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/investments-and-models.png"
+			}
+		],
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
@@ -125,7 +141,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/participant-summary-view.png"
+			}
+		],
 		"tags": ["view", "interop", "fdc3", "contact"]
 	},
 	{
@@ -151,7 +171,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/participant-summary-window.png"
+			}
+		],
 		"tags": ["window", "interop", "fdc3", "contact"]
 	},
 	{
@@ -168,6 +192,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
+		"customConfig": { "instanceMode": "single" },
 		"publisher": "OpenFin",
 		"intents": [
 			{
@@ -177,7 +202,11 @@
 				"customConfig": {}
 			}
 		],
-		"images": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/client-overview.png"
+			}
+		],
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
@@ -219,7 +248,12 @@
 			}
 		],
 		"private": true,
-		"images": [],
+		"customConfig": { "instanceMode": "single" },
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/view-contact-dashboard-launcher.png"
+			}
+		],
 		"tags": ["window", "fdc3", "interop", "contact"]
 	},
 	{
@@ -364,6 +398,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
+		"customConfig": { "instanceMode": "single" },
 		"publisher": "OpenFin",
 		"intents": [
 			{
@@ -510,7 +545,7 @@
 		"appId": "fdc3-intent-view-2-0",
 		"name": "fdc3-intent-view-2-0",
 		"title": "Intents using FDC3 (2.0)",
-		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 2.0 api.",
+		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 2.0 api. Only a single instance of this view can be launched.",
 		"manifest": "http://localhost:7070/fdc3/intent/2-0/fdc3-intent-view.json",
 		"manifestType": "view",
 		"customConfig": { "instanceMode": "single" },
@@ -580,7 +615,85 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/view-intents-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/fdc3-intent-view-2-0.png"
+			}
+		],
+		"tags": ["view", "fdc3", "intent", "tools"]
+	},
+	{
+		"appId": "fdc3-intent-view-2-0-multi",
+		"name": "fdc3-intent-view-2-0-multi",
+		"title": "Intents using FDC3 (2.0) (Multi)",
+		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 2.0 api. Multiple instances of this view can be launched.",
+		"manifest": "http://localhost:7070/fdc3/intent/2-0/fdc3-intent-multi-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "StartCall",
+				"displayName": "Start a Call",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "StartChat",
+				"displayName": "Start a Chat",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewChart",
+				"displayName": "View Chart",
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact Details",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewQuote",
+				"displayName": "View Quote",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewNews",
+				"displayName": "View News",
+				"contexts": [
+					"fdc3.country",
+					"fdc3.instrument",
+					"fdc3.instrumentList",
+					"fdc3.organization",
+					"fdc3.portfolio"
+				],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewAnalysis",
+				"displayName": "View Analysis",
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument Details",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v2.0.0/interop/images/previews/fdc3-intent-view-2-0.png"
 			}
 		],
 		"tags": ["view", "fdc3", "intent", "tools"]
@@ -753,6 +866,7 @@
 				"src": "http://localhost:8080/common/images/icon-blue.png"
 			}
 		],
+		"customConfig": { "instanceMode": "single" },
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",

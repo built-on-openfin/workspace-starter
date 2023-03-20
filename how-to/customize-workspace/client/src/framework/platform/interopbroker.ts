@@ -387,6 +387,7 @@ export function interopOverride(
 				);
 
 				if (handler === undefined) {
+					logger.info("intentHandler endpoint not registered. Registering.", payload, clientIdentity);
 					const nameParts = clientIdentity.name.split("/");
 					let app: PlatformApp;
 
@@ -400,11 +401,12 @@ export function interopOverride(
 						app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
 					}
 
-					logger.info("intentHandler endpoint not registered. Registering.", payload, clientIdentity);
 					intentHandlers.push({ fdc3Version: payload.fdc3Version, clientIdentity, appId: app?.appId });
+					logger.info("intentHandler endpoint registered.", clientIdentity.endpointId);
 				}
 
 				this._registeredIntentHandlers.set(intentName, intentHandlers);
+				logger.info(`Setting ${intentHandlers.length} handlers for intent: ${intentName}.`);
 				const clientReadyKey = this.getClientReadyKey(clientIdentity, intentName);
 				if (this._clientReadyRequests[clientReadyKey] !== undefined) {
 					logger.info("Resolving client ready request.");
@@ -566,10 +568,14 @@ export function interopOverride(
 			}
 
 			const supportedIntents = targetApp.intents.filter((intentEntry) => {
-				if (targetByContext) {
-					return intentEntry.contexts?.includes(intent.context.type);
+				let contextMatch: boolean = true;
+				if (intent?.context?.type !== undefined) {
+					contextMatch = intentEntry.contexts?.includes(intent.context.type);
+					if (targetByContext) {
+						return contextMatch;
+					}
 				}
-				return intentEntry.name === intent.name;
+				return intentEntry.name === intent.name && contextMatch;
 			});
 
 			if (supportedIntents.length === 0) {
@@ -609,11 +615,18 @@ export function interopOverride(
 				};
 				intentsForSelection.push(appForIntent);
 			}
-
-			const userSelection = await this.launchIntentPicker({
-				intent,
-				intents: intentsForSelection
-			});
+			let userSelection: IntentPickerResponse;
+			if (intentsForSelection.length === 1) {
+				userSelection = await this.launchIntentPicker({
+					apps: intentsForSelection[0].apps,
+					intent
+				});
+			} else {
+				userSelection = await this.launchIntentPicker({
+					intent,
+					intents: intentsForSelection
+				});
+			}
 
 			return this.handleIntentPickerSelection(userSelection, intent);
 		}
