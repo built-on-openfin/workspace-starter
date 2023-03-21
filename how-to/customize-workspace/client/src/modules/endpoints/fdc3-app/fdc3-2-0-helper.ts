@@ -39,11 +39,21 @@ export function getManifest(app: AppDefinition): unknown {
 	switch (app.type) {
 		case "web": {
 			if (app?.details !== undefined) {
-				// return fdc3InteropApi 1.2 as the platform currently supports that.
-				manifest = {
-					url: (app?.details as WebAppDetails).url,
-					fdc3InteropApi: "1.2"
-				};
+				if (
+					app.hostManifests?.OpenFin?.details !== undefined &&
+					typeof app.hostManifests.OpenFin.details === "object"
+				) {
+					manifest = {
+						url: (app?.details as WebAppDetails).url,
+						fdc3InteropApi: "2.0",
+						...app.hostManifests.OpenFin.details
+					};
+				} else {
+					manifest = {
+						url: (app?.details as WebAppDetails).url,
+						fdc3InteropApi: "2.0"
+					};
+				}
 			}
 			break;
 		}
