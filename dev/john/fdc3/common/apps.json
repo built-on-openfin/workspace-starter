@@ -1138,6 +1138,25 @@
 		"tags": ["versions", "desktop-browser"]
 	},
 	{
+		"appId": "page-layout",
+		"name": "page-layout",
+		"title": "Page Layout Tool",
+		"description": "A tool to help in the building of a page.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/layout/views/page-layout-snapshot.json",
+		"manifestType": "snapshot",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/layout/images/previews/page-layout.png"
+			}
+		],
+		"tags": ["view", "page", "tools"]
+	},
+	{
 		"appId": "preload-tradingview-view",
 		"name": "preload-tradingview-view",
 		"title": "Trading View",
