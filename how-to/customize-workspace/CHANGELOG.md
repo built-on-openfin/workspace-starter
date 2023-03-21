@@ -1,5 +1,14 @@
 # Changelog
 
+## v12
+
+- Initial update to interop broker to support fdc3 2.0
+- Additional intent picker that is the new default that supports instances
+- Support for customConfig in an app definition to say whether the instance picker should present a single app option or show multiple instances via instanceMode: "single" or "multi"
+- Updated images for contact related samples and updated them to set page title as context comes in
+- Updated call app to support fdc3 2.0 and initially return the passed context as a getResult return object.
+- Updated references to tools for fdc3 2.0 help (intent and context).
+
 ## v11
 
 - Added default secondary buttons config for store

@@ -20,7 +20,7 @@ export interface AppFilterOptions {
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
 
 export interface CustomConfig {
-	instanceMode: "single" | "multi";
+	instanceMode?: "single" | "multi";
 }
 
 export type ManifestTypeId =
