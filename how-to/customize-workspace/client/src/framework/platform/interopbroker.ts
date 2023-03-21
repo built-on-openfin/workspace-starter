@@ -416,6 +416,7 @@ export function interopOverride(
 		): Promise<Omit<IntentResolution, "getResult">> {
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] = [];
+			let existingInstance = true;
 
 			if (instanceId !== undefined) {
 				// an instance of an application was selected
@@ -442,7 +443,7 @@ export function interopOverride(
 				if (platformIdentities.length === 0) {
 					throw new Error(ResolveError.IntentDeliveryFailed);
 				}
-
+				existingInstance = false;
 				if (platformIdentities.length === 1) {
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 					instanceId = await this.onClientReady(platformIdentities[0], intent.name);
@@ -451,7 +452,16 @@ export function interopOverride(
 
 			for (const target of platformIdentities) {
 				await super.setIntentTarget(intent, target);
-				await bringToFront(app, [target]);
+				if (existingInstance) {
+					try {
+						await bringToFront(app, [target]);
+					} catch (bringToFrontError) {
+						logger.warn(
+							`There was an error bringing app: ${target.appId}, and instance ${target.instanceId} with name: ${target.name} to front.`,
+							bringToFrontError
+						);
+					}
+				}
 			}
 
 			return {
