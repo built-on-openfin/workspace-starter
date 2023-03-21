@@ -60,6 +60,10 @@ function init() {
 		const openAppIntent = 'OpenApp';
 		fdc3.addIntentListener(startCallIntent, (ctx) => {
 			updateCallInformation(ctx, startCallIntent);
+			return new Promise((resolve) => {
+				// To demonstrate getResult in fdc3 2.0 we simply return the context that was sent.
+				resolve(ctx);
+			});
 		});
 		fdc3.addIntentListener(openAppIntent, (ctx) => {
 			updateCallInformation(ctx, openAppIntent);
