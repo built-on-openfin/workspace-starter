@@ -1,6 +1,7 @@
 function init() {
 	const action = document.querySelector('#action');
 	const timeLabel = document.querySelector('#time');
+	const contactHeaderLabel = document.querySelector('#contact');
 	const originalTitle = document.title;
 
 	let contactNameLabel = '';
@@ -26,6 +27,7 @@ function init() {
 			action.textContent = 'Start Call';
 			timeLabel.textContent = '00:00';
 			document.title = originalTitle;
+			contactHeaderLabel.textContent = '';
 		} else {
 			action.textContent = `End Call${contactNameLabel}`;
 			seconds = 0;
@@ -42,6 +44,7 @@ function init() {
 		if (ctx !== undefined) {
 			if (ctx.type === 'fdc3.contact') {
 				contactNameLabel = ` To ${ctx.name}`;
+				contactHeaderLabel.textContent = ctx.name;
 				action.textContent = `Start Call${contactNameLabel}`;
 				document.title = `${originalTitle} - ${ctx.name}`;
 			} else {
