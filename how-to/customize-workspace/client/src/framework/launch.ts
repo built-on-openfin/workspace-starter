@@ -56,9 +56,19 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 		manifest = windowApp.manifest as unknown as OpenFin.WindowOptions;
 	}
 
-	const name = manifest.name;
+	let name = manifest.name;
+	let wasNameSpecified = name !== undefined;
+
+	if (!wasNameSpecified && windowApp?.customConfig?.instanceMode === "single") {
+		logger.info(
+			`A unique name was not provided in the manifest of this window but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${windowApp.appId} as the unique name.`
+		);
+		name = windowApp.appId;
+		wasNameSpecified = true;
+	}
+
 	let identity = { uuid: fin.me.identity.uuid, name };
-	const wasNameSpecified = name !== undefined;
+
 	let windowExists = false;
 
 	if (wasNameSpecified) {
@@ -107,9 +117,19 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 		manifest = viewApp.manifest as unknown as OpenFin.ViewOptions;
 	}
 
-	const name = manifest.name;
+	let name = manifest.name;
+	let wasNameSpecified = name !== undefined;
+
+	if (!wasNameSpecified && viewApp?.customConfig?.instanceMode === "single") {
+		logger.info(
+			`A unique name was not provided in the manifest of this view but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${viewApp.appId} as the unique name.`
+		);
+		name = viewApp.appId;
+		wasNameSpecified = true;
+	}
+
 	let identity = { uuid: fin.me.identity.uuid, name };
-	const wasNameSpecified = name !== undefined;
+
 	let viewExists = false;
 
 	if (wasNameSpecified) {
