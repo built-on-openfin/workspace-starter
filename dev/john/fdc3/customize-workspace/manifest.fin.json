@@ -888,7 +888,7 @@
 		"analyticsProvider": {
 			"modules": [
 				{
-					"enabled": false,
+					"enabled": true,
 					"id": "analytics.console",
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/customize-workspace/js/modules/analytics/console.bundle.js",
 					"data": {
@@ -896,7 +896,7 @@
 					}
 				},
 				{
-					"enabled": false,
+					"enabled": true,
 					"id": "analytics.dev.channel",
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/customize-workspace/js/modules/composite/developer.bundle.js",
 					"data": {}
