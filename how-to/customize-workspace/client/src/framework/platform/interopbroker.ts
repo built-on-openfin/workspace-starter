@@ -43,7 +43,7 @@ export function interopOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
-		private readonly _registeredIntentHandlers = new Map<string, IntentRegistrationEntry[]>();
+		private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] } = {};
 
 		private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
 
@@ -274,27 +274,13 @@ export function interopOverride(
 
 		public async clientDisconnected(clientIdentity: OpenFin.ClientIdentity): Promise<void> {
 			logger.info("Client Disconnected.", clientIdentity);
-			const availableIntentHandlers = this._registeredIntentHandlers.entries();
-			const cleanupIndex: { [key: string]: number } = {};
 
-			for (const intentClients of availableIntentHandlers) {
-				const intentEndpointIndex = intentClients[1].findIndex(
-					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
+			for (const [key, value] of Object.entries(this._trackedIntentHandlers)) {
+				this._trackedIntentHandlers[key] = value.filter(
+					(entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId
 				);
-				if (intentEndpointIndex !== -1) {
-					cleanupIndex[intentClients[0]] = intentEndpointIndex;
-				}
 			}
-			const relatedIntents = Object.keys(cleanupIndex);
 
-			for (const intent of relatedIntents) {
-				logger.info(
-					`Removing client with endpoint Id: ${clientIdentity.endpointId} and name: ${clientIdentity.name} from instance list for intent: ${intent}`
-				);
-				const intentToUpdate = this._registeredIntentHandlers.get(intent);
-				intentToUpdate.splice(cleanupIndex[intent], 1);
-				this._registeredIntentHandlers.set(intent, intentToUpdate);
-			}
 			await super.clientDisconnected(clientIdentity);
 		}
 
@@ -303,14 +289,14 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<AppIdentifier[]> {
 			const endpointApps: { [key: string]: AppIdentifier } = {};
-			for (const entry of this._registeredIntentHandlers) {
-				for (const instance of entry[1]) {
-					if (instance.appId !== undefined && instance.appId === app.appId) {
-						endpointApps[instance.clientIdentity.endpointId] = {
-							appId: instance.appId,
-							instanceId: instance.clientIdentity.endpointId
-						};
-					}
+
+			for (const [, value] of Object.entries(this._trackedIntentHandlers)) {
+				const entries = value.filter((entry) => entry.appId === app.appId);
+				for (const entry of entries) {
+					endpointApps[entry.clientIdentity.endpointId] = {
+						appId: entry.appId,
+						instanceId: entry.clientIdentity.endpointId
+					};
 				}
 			}
 
@@ -376,18 +362,21 @@ export function interopOverride(
 			if (payload !== undefined) {
 				const intentName: string = payload.handlerId.replace("intent-handler-", "");
 
-				let intentHandlers: IntentRegistrationEntry[] = this._registeredIntentHandlers.get(intentName);
+				let trackedIntentHandler = this._trackedIntentHandlers[intentName];
 
-				if (intentHandlers === undefined) {
-					intentHandlers = [];
+				if (trackedIntentHandler === undefined) {
+					trackedIntentHandler = [];
+					this._trackedIntentHandlers[intentName] = trackedIntentHandler;
 				}
 
-				const handler = intentHandlers.find(
+				const trackedHandler = this._trackedIntentHandlers[intentName].find(
 					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
 				);
 
-				if (handler === undefined) {
-					logger.info("intentHandler endpoint not registered. Registering.", payload, clientIdentity);
+				if (trackedHandler === undefined) {
+					logger.info(
+						`intentHandler endpoint not registered. Registering ${clientIdentity.endpointId} against intent ${intentName}.`
+					);
 					const nameParts = clientIdentity.name.split("/");
 					let app: PlatformApp;
 
@@ -401,12 +390,16 @@ export function interopOverride(
 						app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
 					}
 
-					intentHandlers.push({ fdc3Version: payload.fdc3Version, clientIdentity, appId: app?.appId });
-					logger.info("intentHandler endpoint registered.", clientIdentity.endpointId);
+					this._trackedIntentHandlers[intentName].push({
+						fdc3Version: payload.fdc3Version,
+						clientIdentity,
+						appId: app?.appId
+					});
+					logger.info(
+						`intentHandler endpoint: ${clientIdentity.endpointId} registered against intent: ${intentName} and app Id: ${app.appId}.`
+					);
 				}
 
-				this._registeredIntentHandlers.set(intentName, intentHandlers);
-				logger.info(`Setting ${intentHandlers.length} handlers for intent: ${intentName}.`);
 				const clientReadyKey = this.getClientReadyKey(clientIdentity, intentName);
 				if (this._clientReadyRequests[clientReadyKey] !== undefined) {
 					logger.info("Resolving client ready request.");
@@ -651,7 +644,7 @@ export function interopOverride(
 
 		private async onClientReady(identity: OpenFin.Identity, intentName: string): Promise<string> {
 			return new Promise<string>((resolve, reject) => {
-				const registeredHandlers = this._registeredIntentHandlers.get(intentName);
+				const registeredHandlers = this._trackedIntentHandlers[intentName];
 				let existingInstanceId: string;
 				if (registeredHandlers !== undefined) {
 					for (const handler of registeredHandlers) {
