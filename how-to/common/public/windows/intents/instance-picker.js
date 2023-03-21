@@ -76,10 +76,7 @@ async function setupAppInstancesView(foundAppInstances) {
 			if (foundAppInstances[i].instanceId !== undefined) {
 				const appMetadata = await fdc3.getAppMetadata(foundAppInstances[i]);
 				let label = `${foundAppInstances[i].appId} (${i + 1})`;
-				if (
-					appMetadata?.instanceMetadata !== undefined &&
-					appMetadata?.instanceMetadata?.title !== undefined
-				) {
+				if (appMetadata?.instanceMetadata?.title !== undefined) {
 					label = appMetadata.instanceMetadata.title;
 				} else if (appMetadata?.title !== undefined) {
 					label = `${appMetadata.title} (${i + 1})`;
@@ -99,6 +96,7 @@ async function onIntentSelection(targetIntent) {
 			intent.displayName = availableIntent.intent.displayName;
 			intent.name = targetIntent;
 			await setupAppView(availableIntent.apps, targetIntent);
+			break;
 		}
 	}
 }

@@ -380,10 +380,7 @@ export function interopOverride(
 					const nameParts = clientIdentity.name.split("/");
 					let app: PlatformApp;
 
-					if (nameParts.length === 1) {
-						app = await getApp(nameParts[0]);
-					}
-					if (nameParts.length === 2) {
+					if (nameParts.length === 1 || nameParts.length === 2) {
 						app = await getApp(nameParts[0]);
 					}
 					if (nameParts.length > 2) {
