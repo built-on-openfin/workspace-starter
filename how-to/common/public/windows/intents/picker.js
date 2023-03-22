@@ -121,6 +121,11 @@ async function init() {
 		apps = data.customData.apps;
 		intent = data.customData.intent;
 		intents = data.customData.intents;
+		if (data.customData.unregisteredAppId !== undefined) {
+			// this intent picker does not support instances and an unregistered app entry is a placeholder
+			// for any views/windows that register as intent handlers but are not linked to an app
+			apps = apps.filter((app) => app.appId !== data.customData.unregisteredAppId);
+		}
 	}
 
 	if (intents !== undefined) {

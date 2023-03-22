@@ -3,6 +3,8 @@ import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type {
+	IntentOptions,
+	IntentPickerOptions,
 	IntentPickerResponse,
 	IntentRegistrationEntry,
 	IntentRegistrationPayload,
@@ -46,6 +48,37 @@ export function interopOverride(
 		private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] } = {};
 
 		private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
+
+		private _intentPickerOptions: IntentPickerOptions;
+
+		private _intentOptions: IntentOptions;
+
+		constructor() {
+			super();
+			logger.info("Interop Broker Constructor fetching settings.");
+			getSettings()
+				.then((customSettings) => {
+					if (customSettings?.platformProvider !== undefined) {
+						this._intentPickerOptions = {
+							height: 715,
+							width: 665,
+							fdc3InteropApi: "2.0",
+							url: window.location.href.replace(
+								"platform/provider.html",
+								"common/windows/intents/instance-picker.html"
+							),
+							...customSettings?.platformProvider?.intentPicker
+						};
+						// eslint-disable-next-line max-len
+						this._intentOptions = { intentTimeout: 5000, ...customSettings?.platformProvider?.intentOptions };
+						return true;
+					}
+					return false;
+				})
+				.catch((error) => {
+					logger.error("Settings unavailable at broker construction.", error);
+				});
+		}
 
 		public async isConnectionAuthorized(id: OpenFin.Identity, payload?: unknown): Promise<boolean> {
 			logger.info("Interop connection being made by the following identity. About to verify connection", id);
@@ -135,6 +168,34 @@ export function interopOverride(
 
 			const intentsForSelection: AppsForIntent[] = await getIntentsByContext(contextForIntent.type);
 
+			// check for unregistered app intent handlers (if enabled)
+			const unregisteredAppIntents = await this.getUnregisteredAppIntentByContext(
+				contextForIntent.type,
+				clientIdentity
+			);
+
+			if (unregisteredAppIntents.length > 0) {
+				const unregisteredApp: PlatformApp = this._intentOptions.unregisteredApp;
+				const matchedIntents: string[] = [];
+				for (const intentForSelection of intentsForSelection) {
+					if (unregisteredAppIntents.includes(intentForSelection.intent.name)) {
+						intentForSelection.apps.push(unregisteredApp);
+						matchedIntents.push(intentForSelection.intent.name);
+					}
+				}
+				const missingIntentMatches = unregisteredAppIntents.filter(
+					(intentName) => !matchedIntents.includes(intentName)
+				);
+
+				for (const missingIntentMatch of missingIntentMatches) {
+					const missingIntent = unregisteredApp.intents.find((entry) => entry.name === missingIntentMatch);
+					intentsForSelection.push({
+						intent: { name: missingIntent.name, displayName: missingIntent.displayName },
+						apps: [unregisteredApp]
+					});
+				}
+			}
+
 			if (intentsForSelection.length === 0) {
 				// no available intents for the context
 				throw new Error(ResolveError.NoAppsFound);
@@ -196,6 +257,11 @@ export function interopOverride(
 			}
 
 			const intentApps = await getAppsByIntent(intent.name);
+
+			if (await this.canAddUnregisteredApp(clientIdentity, intent.name)) {
+				// We have unregistered app instances that support this intent and support for unregistered instances is enabled
+				intentApps.push(this._intentOptions.unregisteredApp as PlatformApp);
+			}
 
 			if (intentApps.length === 0) {
 				logger.info("No apps support this intent");
@@ -308,7 +374,13 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<AppMetadata> {
 			logger.info("fdc3handlegetappmeta call received.", app, clientIdentity);
-			const appMetadata = await getApp(app.appId);
+			let appMetadata = await getApp(app.appId);
+			if (
+				(appMetadata === undefined || appMetadata === null) &&
+				app.appId === this._intentOptions?.unregisteredApp?.appId
+			) {
+				appMetadata = this._intentOptions?.unregisteredApp as PlatformApp;
+			}
 			if (appMetadata !== undefined && appMetadata !== null) {
 				if (app.instanceId !== undefined) {
 					const allConnectedClients = await this.getAllClientInfo();
@@ -375,7 +447,7 @@ export function interopOverride(
 
 				if (trackedHandler === undefined) {
 					logger.info(
-						`intentHandler endpoint not registered. Registering ${clientIdentity.endpointId} against intent ${intentName}.`
+						`intentHandler endpoint not registered. Registering ${clientIdentity.endpointId} against intent ${intentName} and looking up app name.`
 					);
 					const nameParts = clientIdentity.name.split("/");
 					let app: PlatformApp;
@@ -387,13 +459,39 @@ export function interopOverride(
 						app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
 					}
 
+					const appNotFound = app === undefined || app === null;
+
+					if (appNotFound && clientIdentity.uuid !== fin.me.identity.uuid) {
+						logger.warn(
+							"Connection made by a non-registered app that is outside of this platform. It is not going to be added as a tracked intent handler.",
+							clientIdentity
+						);
+						return;
+					}
+
+					if (appNotFound && this._intentOptions?.unregisteredApp === undefined) {
+						logger.warn(
+							"Connection made by a non-registered app that falls under this platform. No unregistered placeholder app is specified in intent options so it is not got to be added as a tracked intent handler.",
+							clientIdentity
+						);
+						return;
+					}
+
+					if (appNotFound) {
+						app = this._intentOptions.unregisteredApp;
+						logger.info(
+							"Assigned the following unregistered app to represent views/windows that are registering intent handlers but are not directly linked to an app.",
+							app
+						);
+					}
+
 					this._trackedIntentHandlers[intentName].push({
 						fdc3Version: payload.fdc3Version,
 						clientIdentity,
 						appId: app?.appId
 					});
 					logger.info(
-						`intentHandler endpoint: ${clientIdentity.endpointId} registered against intent: ${intentName} and app Id: ${app.appId}.`
+						`intentHandler endpoint: ${clientIdentity.endpointId} registered against intent: ${intentName} and app Id: ${app?.appId}.`
 					);
 				}
 
@@ -442,8 +540,7 @@ export function interopOverride(
 				}
 				existingInstance = false;
 				if (platformIdentities.length === 1) {
-					const settings = await getSettings();
-					const intentTimeout = settings?.platformProvider?.intentTimeout;
+					const intentTimeout: number = this._intentOptions.intentTimeout;
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 					instanceId = await this.onClientReady(platformIdentities[0], intent.name, intentTimeout);
 				}
@@ -477,17 +574,12 @@ export function interopOverride(
 		}): Promise<IntentPickerResponse> {
 			// show menu
 			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
-			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
-			const settings = await getSettings();
-
-			const height = settings?.platformProvider?.intentPicker?.height || 715;
-			const width = settings?.platformProvider?.intentPicker?.width || 665;
-			const interopApiVersion = settings?.platformProvider?.intentPicker?.fdc3InteropApi || "2.0";
+			// the window can then use raiseIntent against a specific app (the selected one).
+			const height = this._intentPickerOptions.height;
+			const width = this._intentPickerOptions.width;
+			const interopApiVersion = this._intentPickerOptions.fdc3InteropApi;
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
-			const url =
-				settings?.platformProvider?.intentPicker.url ||
-				window.location.href.replace("platform/provider.html", "common/windows/intents/instance-picker.html");
-
+			const url = this._intentPickerOptions.url;
 			const winOption = {
 				name: "intent-picker",
 				includeInSnapshot: false,
@@ -500,7 +592,8 @@ export function interopOverride(
 				customData: {
 					apps: launchOptions.apps,
 					intent: launchOptions.intent,
-					intents: launchOptions.intents
+					intents: launchOptions.intents,
+					unregisteredAppId: this._intentOptions?.unregisteredApp?.appId
 				},
 				url,
 				frame: false,
@@ -529,7 +622,13 @@ export function interopOverride(
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
 		): Promise<Omit<IntentResolution, "getResult">> {
 			try {
-				const selectedApp = await getApp({ appId: userSelection.appId });
+				let selectedApp = await getApp({ appId: userSelection.appId });
+				if (
+					(selectedApp === undefined || selectedApp === null) &&
+					this._intentOptions.unregisteredApp !== undefined
+				) {
+					selectedApp = this._intentOptions.unregisteredApp as PlatformApp;
+				}
 				const instanceId: string = userSelection.instanceId;
 				const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
 				if (intentResolver === null) {
@@ -550,10 +649,16 @@ export function interopOverride(
 		): Promise<Omit<IntentResolution, "getResult">> {
 			// app specified flow
 			const intentsForSelection: AppsForIntent[] = [];
-			const targetApp = await getApp(targetAppIdentifier.appId);
+			let targetApp = await getApp(targetAppIdentifier.appId);
 
 			// if the specified app isn't available then let the caller know
 			if (targetApp === undefined || targetApp === null) {
+				if (
+					targetAppIdentifier.instanceId !== undefined &&
+					targetAppIdentifier.appId === this._intentOptions?.unregisteredApp?.appId
+				) {
+					targetApp = this._intentOptions.unregisteredApp;
+				}
 				throw new Error(ResolveError.TargetAppUnavailable);
 			}
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
@@ -697,6 +802,49 @@ export function interopOverride(
 				return preview;
 			}
 			return undefined;
+		}
+
+		private async getUnregisteredAppIntentByContext(type: string, clientIdentity: ClientIdentity) {
+			const intentNames: string[] = [];
+			const supportedIntentNames: string[] = [];
+			if (this?._intentOptions?.unregisteredApp === undefined) {
+				return intentNames;
+			}
+			if (Array.isArray(this?._intentOptions?.unregisteredApp?.intents)) {
+				for (const intent of this._intentOptions.unregisteredApp.intents) {
+					if (intent.contexts.includes(type)) {
+						const intentName: string = intent.name;
+						intentNames.push(intentName);
+					}
+				}
+			}
+
+			if (intentNames.length > 0) {
+				// now we need to check if there are any instances as this app can not be launched as it is a placeholder for unregistered instances
+				for (const intentName of intentNames) {
+					if (await this.canAddUnregisteredApp(clientIdentity, intentName)) {
+						supportedIntentNames.push(intentName);
+					}
+				}
+			}
+			return intentNames;
+		}
+
+		private async canAddUnregisteredApp(clientIdentity: ClientIdentity, intentName?: string) {
+			if (this?._intentOptions?.unregisteredApp === undefined) {
+				return false;
+			}
+			if (
+				intentName !== undefined &&
+				this._intentOptions.unregisteredApp.intents.findIndex((intent) => intent.name === intentName) === -1
+			) {
+				return false;
+			}
+			const instances = await this.fdc3HandleFindInstances(
+				{ appId: this._intentOptions.unregisteredApp.appId },
+				clientIdentity
+			);
+			return instances.length > 0;
 		}
 	}
 
