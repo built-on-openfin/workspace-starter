@@ -28,9 +28,10 @@
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/customize-workspace",
 		"sharing": true,
 		"intentPicker": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/common/windows/intents/picker.html",
-			"height": 400,
-			"width": 400
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3/common/windows/intents/instance-picker.html",
+			"height": 715,
+			"width": 665,
+			"fdc3InteropApi": "2.0"
 		}
 	},
 	"appProvider": {
