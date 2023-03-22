@@ -9,6 +9,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"importsNotUsedAsValues": "error",
+		"ignoreDeprecations": "5.0",
 		"moduleResolution": "node",
 		"types": ["../../common/types/fin"]
 	},
