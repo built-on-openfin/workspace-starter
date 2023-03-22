@@ -72,7 +72,12 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 			`A unique name was not provided in the manifest of this window but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${windowApp.appId} as the unique name.`
 		);
 		name = windowApp.appId;
+		// assign the new name to the manifest in case the view doesn't exist yet (as it is dynamically allocated and not part of the app's manifest)
+		manifest.name = name;
 		wasNameSpecified = true;
+	} else if (!wasNameSpecified) {
+		name = `${windowApp.appId}/${randomUUID()}`;
+		manifest.name = name;
 	}
 
 	let identity = { uuid: fin.me.identity.uuid, name };
@@ -81,9 +86,6 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 
 	if (wasNameSpecified) {
 		windowExists = await doesWindowExist(identity.name, identity.uuid, true);
-	} else {
-		manifest.name = `${windowApp.appId}/${randomUUID()}`;
-		identity.name = manifest.name;
 	}
 
 	if (!windowExists) {
@@ -126,6 +128,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 	}
 
 	let name = manifest.name;
+
 	let wasNameSpecified = name !== undefined;
 
 	if (!wasNameSpecified && viewApp?.customConfig?.instanceMode === "single") {
@@ -133,7 +136,12 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 			`A unique name was not provided in the manifest of this view but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${viewApp.appId} as the unique name.`
 		);
 		name = viewApp.appId;
+		// assign the new name to the manifest in case the view doesn't exist yet (as it is dynamically allocated and not part of the app's manifest)
+		manifest.name = name;
 		wasNameSpecified = true;
+	} else if (!wasNameSpecified) {
+		name = `${viewApp.appId}/${randomUUID()}`;
+		manifest.name = name;
 	}
 
 	let identity = { uuid: fin.me.identity.uuid, name };
@@ -142,19 +150,13 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 
 	if (wasNameSpecified) {
 		viewExists = await doesViewExist(identity.name, identity.uuid, true);
-	} else {
-		manifest.name = `${viewApp.appId}/${randomUUID()}`;
 	}
 
 	if (!viewExists) {
 		try {
 			const platform = getCurrentSync();
 			const createdView = await platform.createView(manifest);
-			const info = await createdView.getInfo();
-			console.log(info);
 			identity = createdView.identity;
-			const infos = await fin.System.getEntityInfo(identity.uuid, identity.name);
-			console.log("Infos:", infos);
 		} catch (err) {
 			logger.error("Error launching view", err);
 			return null;
