@@ -17,6 +17,7 @@ let targetLabelSet = false;
 let intent;
 let intents;
 let apps;
+let unregisteredAppId;
 const appLookup = {};
 
 async function setupIntentView(setupIntents) {
@@ -65,13 +66,17 @@ async function setupAppView(applications, intentName) {
 	}
 }
 
-async function setupAppInstancesView(foundAppInstances) {
+async function setupAppInstancesView(foundAppInstances, addNewInstanceOption = true) {
 	setElementVisibility(appInstanceSelectionContainer, false);
 	appInstanceContainer.options.length = 0;
 	launchBtn.disabled = false;
 	if (Array.isArray(foundAppInstances) && foundAppInstances.length > 0) {
-		const newInstanceEntry = createOptionEntry('New Instance', '', true);
-		appInstanceContainer.append(newInstanceEntry);
+		if (addNewInstanceOption) {
+			const newInstanceEntry = createOptionEntry('New Instance', '', true);
+			appInstanceContainer.append(newInstanceEntry);
+		} else {
+			await onAppInstanceSelection(foundAppInstances[0].appId, foundAppInstances[0].instanceId);
+		}
 		for (let i = 0; i < foundAppInstances.length; i++) {
 			if (foundAppInstances[i].instanceId !== undefined) {
 				const appMetadata = await fdc3.getAppMetadata(foundAppInstances[i]);
@@ -103,19 +108,19 @@ async function onIntentSelection(targetIntent) {
 
 async function onAppSelection(appId) {
 	const selectedApp = appLookup[appId];
+	await setupAppMetadata(appId);
 	if (
 		selectedApp?.customConfig === undefined ||
 		selectedApp?.customConfig?.instanceMode === undefined ||
 		selectedApp.customConfig.instanceMode !== 'single'
 	) {
 		const foundAppInstances = await fdc3.findInstances({ appId });
-		await setupAppInstancesView(foundAppInstances);
+		const addNewInstanceOption = appId !== unregisteredAppId;
+		await setupAppInstancesView(foundAppInstances, addNewInstanceOption);
 	} else {
 		// clear previous selections
 		await setupAppInstancesView([]);
 	}
-
-	await setupAppMetadata(appId);
 }
 
 async function onAppInstanceSelection(appId, instanceId) {
@@ -200,6 +205,7 @@ async function init() {
 		apps = data.customData.apps;
 		intent = data.customData.intent;
 		intents = data.customData.intents;
+		unregisteredAppId = data.customData.unregisteredAppId;
 	}
 
 	if (Array.isArray(intents)) {

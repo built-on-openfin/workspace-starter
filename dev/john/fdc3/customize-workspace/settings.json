@@ -32,7 +32,8 @@
 			"height": 715,
 			"width": 665,
 			"fdc3InteropApi": "2.0"
-		}
+		},
+		"intentOptions": {}
 	},
 	"appProvider": {
 		"endpointIds": ["apps-get", "common-apps-get"],

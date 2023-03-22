@@ -58,6 +58,29 @@
                 }
             ]
         },
+        "AppIntent": {
+            "additionalProperties": false,
+            "properties": {
+                "contexts": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contexts",
+                "displayName",
+                "name"
+            ],
+            "type": "object"
+        },
         "AppProviderOptions": {
             "additionalProperties": false,
             "description": "App Provider settings to configure where apps are fetched from.",
@@ -515,6 +538,19 @@
                 "tooltip",
                 "type"
             ],
+            "type": "object"
+        },
+        "CustomConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "instanceMode": {
+                    "enum": [
+                        "multi",
+                        "single"
+                    ],
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "CustomPaletteSet": {
@@ -1191,6 +1227,45 @@
             },
             "type": "object"
         },
+        "IntentOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "intentTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
+                    "type": "number"
+                },
+                "unregisteredApp": {
+                    "$ref": "#/definitions/PlatformApp",
+                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances."
+                }
+            },
+            "type": "object"
+        },
+        "IntentPickerOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "fdc3InteropApi": {
+                    "description": "the fdc3 api version this picker will support (default is v2)",
+                    "type": "string"
+                },
+                "height": {
+                    "description": "the height you wish the window to be",
+                    "type": "number"
+                },
+                "url": {
+                    "description": "The url of the html page that has the intent picker",
+                    "type": "string"
+                },
+                "width": {
+                    "description": "the width you wish the window to be",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "url"
+            ],
+            "type": "object"
+        },
         "InteropConfig": {
             "$ref": "#/definitions/__type_8"
         },
@@ -1799,6 +1874,95 @@
         "Partial_7": {
             "$ref": "#/definitions/__type_20"
         },
+        "PlatformApp": {
+            "additionalProperties": false,
+            "properties": {
+                "appId": {
+                    "description": "Unique identifier for an application.",
+                    "type": "string"
+                },
+                "contactEmail": {
+                    "type": "string"
+                },
+                "customConfig": {
+                    "$ref": "#/definitions/CustomConfig",
+                    "description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher"
+                },
+                "description": {
+                    "description": "UI friendly description for an application.",
+                    "type": "string"
+                },
+                "icons": {
+                    "description": "A list of icons that can be rendered in UI for this application.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "images": {
+                    "description": "A list of optional images that highlight application functionality.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "intents": {
+                    "items": {
+                        "$ref": "#/definitions/AppIntent"
+                    },
+                    "type": "array"
+                },
+                "manifest": {
+                    "description": "URL to application manifest.",
+                    "type": "string"
+                },
+                "manifestType": {
+                    "description": "Describes the type of manifest resolved by the `manifest` field.\nLaunch mechanics are determined by the manifest type.",
+                    "type": "string"
+                },
+                "primaryButton": {
+                    "$ref": "#/definitions/StoreButtonConfig",
+                    "description": "Primary button configuration."
+                },
+                "private": {
+                    "description": "This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API))",
+                    "type": "boolean"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "secondaryButtons": {
+                    "description": "Array of secondary button configurations.",
+                    "items": {
+                        "$ref": "#/definitions/StoreButtonConfig"
+                    },
+                    "type": "array"
+                },
+                "supportEmail": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "A UI friendly title for the application.",
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appId",
+                "icons",
+                "publisher",
+                "title"
+            ],
+            "type": "object"
+        },
         "PlatformCustomTheme": {
             "anyOf": [
                 {
@@ -1904,39 +2068,12 @@
                     "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth logic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate the provider bundle and provide an example in our docs.",
                     "type": "string"
                 },
-                "intentPicker": {
-                    "additionalProperties": false,
-                    "description": "Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform",
-                    "properties": {
-                        "fdc3InteropApi": {
-                            "description": "the fdc3 api version this picker will support (default is v2)",
-                            "type": "string"
-                        },
-                        "height": {
-                            "description": "the height you wish the window to be",
-                            "type": "number"
-                        },
-                        "showAllInstances": {
-                            "description": "should we show all registered intent handler instances or only instances linked to registered apps",
-                            "type": "boolean"
-                        },
-                        "url": {
-                            "description": "The url of the html page that has the intent picker",
-                            "type": "string"
-                        },
-                        "width": {
-                            "description": "the width you wish the window to be",
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "url"
-                    ],
-                    "type": "object"
+                "intentOptions": {
+                    "$ref": "#/definitions/IntentOptions"
                 },
-                "intentTimeout": {
-                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
-                    "type": "number"
+                "intentPicker": {
+                    "$ref": "#/definitions/IntentPickerOptions",
+                    "description": "Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform"
                 },
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
@@ -1948,6 +2085,7 @@
                 }
             },
             "required": [
+                "intentOptions",
                 "rootUrl",
                 "sharing"
             ],
