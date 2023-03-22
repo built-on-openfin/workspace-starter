@@ -442,8 +442,10 @@ export function interopOverride(
 				}
 				existingInstance = false;
 				if (platformIdentities.length === 1) {
+					const settings = await getSettings();
+					const intentTimeout = settings?.platformProvider?.intentTimeout;
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-					instanceId = await this.onClientReady(platformIdentities[0], intent.name);
+					instanceId = await this.onClientReady(platformIdentities[0], intent.name, intentTimeout);
 				}
 			}
 
@@ -649,7 +651,11 @@ export function interopOverride(
 			return `${identity.uuid}/${identity.name}/${intentName}`;
 		}
 
-		private async onClientReady(identity: OpenFin.Identity, intentName: string): Promise<string> {
+		private async onClientReady(
+			identity: OpenFin.Identity,
+			intentName: string,
+			timeout: number = 5000
+		): Promise<string> {
 			return new Promise<string>((resolve, reject) => {
 				const registeredHandlers = this._trackedIntentHandlers[intentName];
 				let existingInstanceId: string;
@@ -673,7 +679,7 @@ export function interopOverride(
 						delete this._clientReadyRequests[key];
 						reject(ResolveError.ResolverUnavailable);
 					}
-				}, 5000);
+				}, timeout);
 				this._clientReadyRequests[key] = (instanceId: string) => {
 					clearTimeout(timerId);
 					// clear the callback asynchronously

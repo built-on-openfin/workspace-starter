@@ -30,6 +30,14 @@ async function getViewIdentities(
 	return viewIdentities;
 }
 
+function decoupleApp(app: PlatformApp) {
+	if (app === undefined || app === null) {
+		logger.warn("No app was passed to decoupleApp");
+		return app;
+	}
+	return JSON.parse(JSON.stringify(app)) as PlatformApp;
+}
+
 async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier> {
 	if (windowApp === undefined || windowApp === null) {
 		logger.warn("No app was passed to launchWindow");
@@ -155,7 +163,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 	return { ...identity, appId: viewApp.appId };
 }
 
-export async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIdentifier[]> {
+async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIdentifier[]> {
 	if (snapshotApp === undefined || snapshotApp === null) {
 		logger.warn("No app was passed to launchSnapshot");
 		return null;
@@ -221,32 +229,38 @@ export async function launchSnapshot(snapshotApp: PlatformApp): Promise<Platform
 	return null;
 }
 
-export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifier[]> {
+export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdentifier[]> {
 	try {
-		logger.info("Application launch requested", appEntry);
+		logger.info("Application launch requested", platformApp);
+
+		if (platformApp === undefined || platformApp === null) {
+			logger.warn("An empty app definition was passed to launch");
+			return [];
+		}
+		const app = decoupleApp(platformApp);
 
 		const platformAppIdentities: PlatformAppIdentifier[] = [];
-		switch (appEntry.manifestType) {
+		switch (app.manifestType) {
 			case manifestTypes.external.id: {
 				const settings = await getSettings();
 				const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
 				const options: OpenFin.ExternalProcessRequestType = {};
 
-				if (appEntry.tags?.includes(appAssetTag)) {
+				if (app.tags?.includes(appAssetTag)) {
 					logger.info(
 						`Application requested is a native app with a tag of ${appAssetTag} so it is provided by this workspace platform. Managing request via platform and not Workspace`
 					);
-					options.alias = appEntry.manifest;
-					options.uuid = appEntry.appId;
+					options.alias = app.manifest;
+					options.uuid = app.appId;
 				} else {
 					logger.info(
 						"Application requested is a native app. Managing request via platform and not Workspace"
 					);
-					options.path = appEntry.manifest;
-					options.uuid = appEntry.appId;
+					options.path = app.manifest;
+					options.uuid = app.appId;
 				}
 				const identity = await fin.System.launchExternalProcess(options);
-				platformAppIdentities.push({ ...identity, appId: appEntry.appId });
+				platformAppIdentities.push({ ...identity, appId: app.appId });
 				break;
 			}
 			case manifestTypes.inlineExternal.id: {
@@ -254,17 +268,17 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 					"Application requested is a native app defined as inline-external. Managing request via platform and not Workspace."
 				);
 				try {
-					const options = appEntry.manifest as OpenFin.ExternalProcessRequestType;
+					const options = app.manifest as OpenFin.ExternalProcessRequestType;
 					const identity = await fin.System.launchExternalProcess(options);
-					platformAppIdentities.push({ ...identity, appId: appEntry.appId });
+					platformAppIdentities.push({ ...identity, appId: app.appId });
 				} catch (err) {
-					logger.error(`Error trying to launch inline-external with appId: ${appEntry.appId}`, err);
+					logger.error(`Error trying to launch inline-external with appId: ${app.appId}`, err);
 				}
 				break;
 			}
 			case manifestTypes.inlineView.id:
 			case manifestTypes.view.id: {
-				const platformIdentity = await launchView(appEntry);
+				const platformIdentity = await launchView(app);
 				if (platformIdentity !== null) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -272,56 +286,56 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 			}
 			case manifestTypes.window.id:
 			case manifestTypes.inlineWindow.id: {
-				const platformIdentity = await launchWindow(appEntry);
+				const platformIdentity = await launchWindow(app);
 				if (platformIdentity !== null) {
 					platformAppIdentities.push(platformIdentity);
 				}
 				break;
 			}
 			case manifestTypes.snapshot.id: {
-				const identities = await launchSnapshot(appEntry);
+				const identities = await launchSnapshot(app);
 				if (identities !== null && identities !== undefined) {
 					platformAppIdentities.push(...identities);
 				}
 				break;
 			}
 			case manifestTypes.manifest.id: {
-				const manifest = await fin.System.launchManifest(appEntry.manifest);
+				const manifest = await fin.System.launchManifest(app.manifest);
 				if (manifest?.platform?.uuid !== undefined) {
 					platformAppIdentities.push({
 						uuid: manifest.platform.uuid,
 						name: manifest.platform.uuid,
-						appId: appEntry.appId
+						appId: app.appId
 					});
 				} else if (manifest?.startup_app?.uuid !== undefined) {
 					platformAppIdentities.push({
 						uuid: manifest.startup_app.uuid,
 						name: manifest.startup_app.uuid,
-						appId: appEntry.appId
+						appId: app.appId
 					});
 				}
 				break;
 			}
 			case manifestTypes.desktopBrowser.id: {
-				await fin.System.openUrlWithBrowser(appEntry.manifest);
+				await fin.System.openUrlWithBrowser(app.manifest);
 				break;
 			}
 			case manifestTypes.endpoint.id: {
-				if (endpointProvider.hasEndpoint(appEntry.manifest)) {
+				if (endpointProvider.hasEndpoint(app.manifest)) {
 					const identity = await endpointProvider.requestResponse<{ payload: PlatformApp }, OpenFin.Identity>(
-						appEntry.manifest,
-						{ payload: appEntry }
+						app.manifest,
+						{ payload: app }
 					);
 					if (identity === undefined || identity === null) {
 						logger.warn(
-							`App with id: ${appEntry.appId} encountered when launched using endpoint: ${appEntry.manifest}.`
+							`App with id: ${app.appId} encountered when launched using endpoint: ${app.manifest}.`
 						);
 					} else {
-						platformAppIdentities.push({ ...identity, appId: appEntry.appId });
+						platformAppIdentities.push({ ...identity, appId: app.appId });
 					}
 				} else {
 					logger.warn(
-						`App with id: ${appEntry.appId} could not be launched as it is of manifestType: ${appEntry.manifestType} and the endpoint: ${appEntry.manifest} is not available.`
+						`App with id: ${app.appId} could not be launched as it is of manifestType: ${app.manifestType} and the endpoint: ${app.manifest} is not available.`
 					);
 				}
 				break;
@@ -330,14 +344,14 @@ export async function launch(appEntry: PlatformApp): Promise<PlatformAppIdentifi
 				logger.info(
 					"An app defined by a connection (connected app) has been selected. Passing selection to connection"
 				);
-				const identity = await launchConnectedApp(appEntry);
+				const identity = await launchConnectedApp(app);
 				if (identity !== undefined && identity !== null) {
-					platformAppIdentities.push({ ...identity, appId: appEntry.appId });
+					platformAppIdentities.push({ ...identity, appId: app.appId });
 				}
 				break;
 			}
 			default: {
-				logger.error("We do not support the manifest type so this app cannot be launched.", appEntry);
+				logger.error("We do not support the manifest type so this app cannot be launched.", app);
 			}
 		}
 

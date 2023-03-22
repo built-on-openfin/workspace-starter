@@ -1934,6 +1934,10 @@
                     ],
                     "type": "object"
                 },
+                "intentTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
+                    "type": "number"
+                },
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
                     "type": "string"

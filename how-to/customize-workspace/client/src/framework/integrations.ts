@@ -11,7 +11,7 @@ import {
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
-import { launchSnapshot } from "./launch";
+import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import {
@@ -65,7 +65,7 @@ export async function init(
 			launchView,
 			launchPage,
 			launchSnapshot: async (manifestUrl) =>
-				launchSnapshot({
+				launch({
 					manifestType: manifestTypes.snapshot.id,
 					manifest: manifestUrl,
 					appId: "",

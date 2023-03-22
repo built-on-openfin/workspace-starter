@@ -18,4 +18,6 @@ export interface PlatformProviderOptions {
 		/** should we show all registered intent handler instances or only instances linked to registered apps */
 		showAllInstances?: boolean;
 	};
+	/** How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds) */
+	intentTimeout?: number;
 }
