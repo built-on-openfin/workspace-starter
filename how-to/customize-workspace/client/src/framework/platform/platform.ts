@@ -51,11 +51,19 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 
-	const runtimeVersion = await fin.System.getVersion();
-	const rvmInfo = await fin.System.getRvmInfo();
 	await versionProvider.init(settings?.versionProvider, endpointProvider);
+
+	const runtimeVersion = await fin.System.getVersion();
 	versionProvider.setVersion("runtime", runtimeVersion);
-	versionProvider.setVersion("rvm", rvmInfo.version);
+
+	try {
+		// getRvmInfo not currently support on Mac
+		const rvmInfo = await fin.System.getRvmInfo();
+		versionProvider.setVersion("rvm", rvmInfo.version);
+	} catch {
+		versionProvider.setVersion("rvm", "9.0.0.301");
+	}
+
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
 	await connectionProvider.init(settings?.connectionProvider);
