@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.7"
+		"version": "30.110.74.8"
 	},
 	"platform": {
 		"uuid": "register-with-home-basic",

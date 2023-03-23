@@ -1,8 +1,12 @@
+import type { AppIdentifier } from "@finos/fdc3";
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
 
 export type PlatformApp = App & {
 	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
 	private?: boolean;
+	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
+	customConfig?: CustomConfig;
 };
 
 /**
@@ -11,6 +15,12 @@ export type PlatformApp = App & {
 export interface AppFilterOptions {
 	/** Should the list be public apps, private apps or all apps if undefined */
 	private?: boolean;
+}
+
+export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
+
+export interface CustomConfig {
+	instanceMode?: "single" | "multi";
 }
 
 export type ManifestTypeId =
@@ -24,7 +34,8 @@ export type ManifestTypeId =
 	| "external"
 	| "desktop-browser"
 	| "endpoint"
-	| "connection";
+	| "connection"
+	| "unregistered-app";
 
 export interface ManifestType {
 	id: ManifestTypeId;
@@ -80,4 +91,9 @@ export interface AppProviderOptions {
 	 * your platform to support (only the ones listed will be included in the end result).
 	 * */
 	manifestTypes?: ManifestTypeId[];
+}
+
+export interface AppsForIntent {
+	intent: { name: string; displayName: string };
+	apps: PlatformApp[];
 }

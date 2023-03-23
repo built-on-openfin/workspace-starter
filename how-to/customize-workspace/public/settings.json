@@ -28,10 +28,12 @@
 		"rootUrl": "http://localhost:8080",
 		"sharing": true,
 		"intentPicker": {
-			"url": "http://localhost:8080/common/windows/intents/picker.html",
-			"height": 400,
-			"width": 400
-		}
+			"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
+			"height": 715,
+			"width": 665,
+			"fdc3InteropApi": "2.0"
+		},
+		"intentOptions": {}
 	},
 	"appProvider": {
 		"endpointIds": ["apps-get", "common-apps-get"],

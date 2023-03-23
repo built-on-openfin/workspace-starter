@@ -11,7 +11,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What version does this branch cover?
 
-This branch covers version **12.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=12.1.3)
+This branch covers version **12.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=12.1.4)
 
 ## What you can do with this repository
 
@@ -90,7 +90,7 @@ OpenFin is a very easy platform to integrate with. If you need to integrate with
 | Documentation                                                                      | Description                                                                                                                                                                    | Live Launch |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is the difference between version 1-4 and version 5-6 and points to examples on how to manage those differences.   |             |
-| [Tips And Tricks](./how-to/tips-and-tricks)                                        | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
+| [Hints And Tips](./how-to/hints-and-tips)                                          | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
 
 ## Before you get started
 
@@ -121,7 +121,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "12.1.3",
+        "version": "12.1.4",
         "customConfig": {}
       }
     }
@@ -136,7 +136,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "12.1.3",
+        "version": "12.1.4",
         "customConfig": {}
       }
     }

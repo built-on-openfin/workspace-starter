@@ -65,5 +65,11 @@ export const manifestTypes: { [id: string]: ManifestType } = {
 		label: "Connected App",
 		description:
 			"This manifest type expects the manifest setting to have a uuid. This must match to a connection registered in the connectionProvider with app support."
+	},
+	unregisteredApp: {
+		id: "unregistered-app",
+		label: "Unregistered App",
+		description:
+			"This manifest type represents web page instances that have been launched that are not linked to an app. This manifest type should not be in the permitted manifest type list for app feeds as it is for dynamic urls."
 	}
 };

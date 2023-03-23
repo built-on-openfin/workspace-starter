@@ -1,8 +1,150 @@
 import type OpenFin from "@openfin/core";
-import { BrowserCreateWindowRequest, getCurrentSync, Page } from "@openfin/workspace-platform";
+import {
+	AttachedPage,
+	BrowserCreateWindowRequest,
+	BrowserWindowModule,
+	getCurrentSync,
+	Page
+} from "@openfin/workspace-platform";
 import { getDefaultToolbarButtons } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { getSettings } from "../settings";
+
+export function findViewNames(layout) {
+	const collectedNames: string[] = [];
+
+	JSON.stringify(layout, (_, nestedValue) => {
+		// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
+		if (nestedValue?.name?.length && nestedValue.url !== undefined) {
+			collectedNames.push(nestedValue.name as string);
+		}
+		return nestedValue as unknown;
+	});
+
+	return collectedNames;
+}
+
+export async function doesViewExist(name: string, uuid: string, bringToFrontIfExists: boolean = false) {
+	const view = fin.View.wrapSync({ name, uuid });
+	let exists = false;
+	try {
+		await view.getInfo();
+		if (bringToFrontIfExists) {
+			await bringViewToFront({ view });
+		}
+		exists = true;
+	} catch {
+		exists = false;
+	}
+	return exists;
+}
+
+export async function bringViewToFront(target: { identity?: OpenFin.Identity; view?: OpenFin.View }) {
+	let targetView: OpenFin.View;
+
+	if (target.identity !== undefined) {
+		targetView = fin.View.wrapSync(target.identity);
+	} else if (target.view !== undefined) {
+		targetView = target.view;
+	}
+
+	if (targetView !== undefined) {
+		const hostPage = await getPageForView(targetView);
+		if (hostPage !== undefined) {
+			await bringPageToFront({ page: hostPage });
+		} else {
+			const windowHost = await targetView.getCurrentWindow();
+			await bringWindowToFront({ window: windowHost });
+		}
+		await targetView.focus();
+	}
+}
+
+export async function doesWindowExist(name: string, uuid: string, bringToFrontIfExists: boolean = false) {
+	const win = fin.Window.wrapSync({ name, uuid });
+	let exists = false;
+	try {
+		await win.getInfo();
+		exists = true;
+		if (bringToFrontIfExists) {
+			await bringWindowToFront({ window: win });
+		}
+	} catch {
+		exists = false;
+	}
+	return exists;
+}
+
+export async function bringWindowToFront(target: { identity?: OpenFin.Identity; window?: OpenFin.Window }) {
+	let targetWindow: OpenFin.Window;
+
+	if (target.identity !== undefined) {
+		targetWindow = fin.Window.wrapSync(target.identity);
+	} else if (target.window !== undefined) {
+		targetWindow = target.window;
+	}
+	const windowState = await targetWindow.getState();
+	if (windowState === "minimized") {
+		await targetWindow.restore();
+	}
+	if (await targetWindow.isShowing()) {
+		await targetWindow.setAsForeground();
+	}
+}
+
+export async function bringPageToFront(target: {
+	identity?: { window: OpenFin.Identity; pageId: string };
+	page?: AttachedPage;
+}) {
+	let targetPage: AttachedPage;
+	let parentWindow: BrowserWindowModule;
+	const platform = getCurrentSync();
+
+	if (target.identity?.pageId !== undefined && target?.identity?.window !== undefined) {
+		parentWindow = platform.Browser.wrapSync(target.identity.window);
+		targetPage = await parentWindow.getPage(target.identity.pageId);
+	} else if (target.page !== undefined) {
+		targetPage = target.page;
+		parentWindow = platform.Browser.wrapSync(targetPage.parentIdentity);
+	}
+
+	if (targetPage !== undefined && parentWindow !== undefined) {
+		try {
+			const pages = await parentWindow.getPages();
+			if (pages.length > 1) {
+				await parentWindow.setActivePage(targetPage.pageId);
+			}
+		} catch {
+			// this window may only support a single page.
+		}
+	}
+	await bringWindowToFront({ identity: parentWindow.identity });
+}
+
+export async function getPageForView(view: OpenFin.View): Promise<AttachedPage | undefined> {
+	const parentWindow: OpenFin.Window = await view.getCurrentWindow();
+	let pagesToInspect: AttachedPage[] = [];
+	const platform = getCurrentSync();
+
+	if (parentWindow.identity.name === fin.me.identity.uuid) {
+		// this view is not currently hooked into the window as the page doesn't have focus
+		pagesToInspect = await platform.Browser.getAllAttachedPages();
+	} else {
+		const browserWindow = platform.Browser.wrapSync(parentWindow.identity);
+		pagesToInspect = await browserWindow.getPages();
+	}
+
+	let matchingPage: AttachedPage;
+
+	for (const page of pagesToInspect) {
+		const viewIds = findViewNames(page.layout);
+		if (viewIds.includes(view.identity.name)) {
+			matchingPage = page;
+			break;
+		}
+	}
+	return matchingPage;
+}
 
 export async function savePageBounds(pageId: string) {
 	const bounds = await getPageBounds(pageId);
