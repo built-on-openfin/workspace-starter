@@ -28,10 +28,12 @@
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-workspace",
 		"sharing": true,
 		"intentPicker": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/common/windows/intents/picker.html",
-			"height": 400,
-			"width": 400
-		}
+			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/common/windows/intents/instance-picker.html",
+			"height": 715,
+			"width": 665,
+			"fdc3InteropApi": "2.0"
+		},
+		"intentOptions": {}
 	},
 	"appProvider": {
 		"endpointIds": ["apps-get", "common-apps-get"],

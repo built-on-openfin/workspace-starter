@@ -17,6 +17,7 @@ function init() {
 }
 
 function setContact(ctx) {
+	document.title = `Participant Summary - ${ctx.name}`;
 	const username = ctx.name;
 	const email = ctx.id?.email;
 
