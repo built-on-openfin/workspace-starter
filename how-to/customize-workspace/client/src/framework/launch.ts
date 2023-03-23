@@ -397,6 +397,29 @@ export async function bringToFront(appEntry: PlatformApp, platformAppIdentifiers
 			}
 			break;
 		}
+		case manifestTypes.unregisteredApp.id: {
+			if (Array.isArray(platformAppIdentifiers) && platformAppIdentifiers.length === 1) {
+				// isView - this should be the majority of cases for an unregistered app
+				let isView = true;
+				try {
+					const view = fin.View.wrapSync(platformAppIdentifiers[0]);
+					const viewInfo = await view.getInfo();
+					logger.info("View Info", viewInfo);
+				} catch {
+					isView = false;
+				}
+				if (isView) {
+					await bringViewToFront({ identity: platformAppIdentifiers[0] });
+				} else {
+					await bringWindowToFront({ identity: platformAppIdentifiers[0] });
+				}
+			} else {
+				logger.warn(
+					`A request to bring a window app to front was received but we didn't receive exactly one identity for app: ${appEntry.appId}.`
+				);
+			}
+			break;
+		}
 		case manifestTypes.snapshot.id: {
 			if (Array.isArray(platformAppIdentifiers) && platformAppIdentifiers.length > 0) {
 				for (const identity of platformAppIdentifiers) {

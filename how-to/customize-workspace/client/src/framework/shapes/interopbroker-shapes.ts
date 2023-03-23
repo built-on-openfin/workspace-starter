@@ -26,6 +26,8 @@ export interface IntentOptions {
 	intentTimeout?: number;
 	/** If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from
 	 * an intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.
+	 * Do not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it
+	 * is existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus).
 	 * */
 	unregisteredApp?: PlatformApp;
 }

@@ -34,7 +34,8 @@ export type ManifestTypeId =
 	| "external"
 	| "desktop-browser"
 	| "endpoint"
-	| "connection";
+	| "connection"
+	| "unregistered-app";
 
 export interface ManifestType {
 	id: ManifestTypeId;

@@ -14,6 +14,7 @@ import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps
 import * as connectionProvider from "../connections";
 import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
+import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
 
@@ -71,6 +72,9 @@ export function interopOverride(
 						};
 						// eslint-disable-next-line max-len
 						this._intentOptions = { intentTimeout: 5000, ...customSettings?.platformProvider?.intentOptions };
+						if (this._intentOptions?.unregisteredApp !== undefined) {
+							this._intentOptions.unregisteredApp.manifestType = manifestTypes.unregisteredApp.id;
+						}
 						return true;
 					}
 					return false;
@@ -389,19 +393,26 @@ export function interopOverride(
 						const identity = { uuid: connectedClient.uuid, name: connectedClient.name };
 						let title: string;
 						let preview: string;
-						if (connectedClient.entityType === "window") {
-							const instanceWindow = fin.Window.wrapSync(identity);
-							const isUserWindow = await instanceWindow.isShowing();
-							if (isUserWindow) {
-								const windowInfo = await instanceWindow.getInfo();
-								title = windowInfo.title;
-								preview = await this.getPreviewImage(instanceWindow);
+						try {
+							if (connectedClient.entityType === "window") {
+								const instanceWindow = fin.Window.wrapSync(identity);
+								const isUserWindow = await instanceWindow.isShowing();
+								if (isUserWindow) {
+									const windowInfo = await instanceWindow.getInfo();
+									title = windowInfo.title;
+									preview = await this.getPreviewImage(instanceWindow);
+								}
+							} else {
+								const instanceView = fin.View.wrapSync(identity);
+								const viewInfo = await instanceView.getInfo();
+								title = viewInfo.title;
+								preview = await this.getPreviewImage(instanceView);
 							}
-						} else {
-							const instanceView = fin.View.wrapSync(identity);
-							const viewInfo = await instanceView.getInfo();
-							title = viewInfo.title;
-							preview = await this.getPreviewImage(instanceView);
+						} catch (error) {
+							logger.warn(
+								`A connected client could not be queried for data. It could be it hasn't unregistered itself from the broker. AppId: ${app.appId}, instanceId: ${app.instanceId}, name: ${identity.name}`,
+								error
+							);
 						}
 						const instanceAppMeta = {
 							...appMetadata,
