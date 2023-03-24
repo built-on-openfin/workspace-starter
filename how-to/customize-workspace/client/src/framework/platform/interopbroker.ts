@@ -68,6 +68,7 @@ export function interopOverride(
 								"platform/provider.html",
 								"common/windows/intents/instance-picker.html"
 							),
+							title: "Intent Resolver",
 							...customSettings?.platformProvider?.intentPicker
 						};
 						// eslint-disable-next-line max-len
@@ -601,6 +602,7 @@ export function interopOverride(
 				saveWindowState: false,
 				defaultCentered: true,
 				customData: {
+					title: this._intentPickerOptions?.title,
 					apps: launchOptions.apps,
 					intent: launchOptions.intent,
 					intents: launchOptions.intents,
@@ -622,9 +624,20 @@ export function interopOverride(
 					instanceId?: string;
 					intent: AppIntent;
 				};
-			} catch {
-				logger.error("App for intent not selected/launched", launchOptions.intent);
-				return null;
+			} catch (error) {
+				let message: string;
+				if (typeof error === "string") {
+					message = error;
+				} else {
+					message = error?.message;
+				}
+
+				if (message?.includes(ResolveError.UserCancelled)) {
+					logger.info("App for intent not selected/launched by user", launchOptions.intent);
+					throw new Error(message);
+				}
+				logger.error("Unexpected error from intent picker/resolver for intent", launchOptions.intent);
+				throw new Error(ResolveError.ResolverUnavailable);
 			}
 		}
 
@@ -675,7 +688,14 @@ export function interopOverride(
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
 			if (targetAppIdentifier.instanceId !== undefined) {
 				const availableAppInstances = await this.fdc3HandleFindInstances(targetAppIdentifier, clientIdentity);
-				if (availableAppInstances.length === 0 || !availableAppInstances.includes(targetAppIdentifier)) {
+				if (
+					availableAppInstances.length === 0 ||
+					!availableAppInstances.some(
+						(entry) =>
+							// eslint-disable-next-line max-len
+							entry.appId === targetAppIdentifier.appId && entry.instanceId === targetAppIdentifier.instanceId
+					)
+				) {
 					throw new Error(ResolveError.TargetInstanceUnavailable);
 				}
 			}
