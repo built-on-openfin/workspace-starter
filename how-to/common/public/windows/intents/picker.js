@@ -85,7 +85,7 @@ function setupAppView(applications) {
 
 		cancelAppSelectionBtn.addEventListener('click', async () => {
 			if (rejectAppSelection !== undefined) {
-				rejectAppSelection('Application selection cancelled.');
+				rejectAppSelection('UserCancelledResolution');
 			}
 			fin.me.close(true);
 		});
@@ -125,6 +125,10 @@ async function init() {
 			// this intent picker does not support instances and an unregistered app entry is a placeholder
 			// for any views/windows that register as intent handlers but are not linked to an app
 			apps = apps.filter((app) => app.appId !== data.customData.unregisteredAppId);
+		}
+		if (data.customData.title !== undefined) {
+			const title = document.querySelector('#title');
+			title.textContent = data.customData.title;
 		}
 	}
 

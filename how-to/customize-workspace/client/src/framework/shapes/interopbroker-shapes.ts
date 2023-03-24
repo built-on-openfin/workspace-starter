@@ -41,6 +41,8 @@ export interface IntentPickerOptions {
 	width?: number;
 	/** the fdc3 api version this picker will support (default is v2) */
 	fdc3InteropApi?: string;
+	/** A suggested title for the intent picker/resolver ui */
+	title?: string;
 }
 export interface PlatformInteropBrokerOptions {
 	/** Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform */

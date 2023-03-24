@@ -206,6 +206,10 @@ async function init() {
 		intent = data.customData.intent;
 		intents = data.customData.intents;
 		unregisteredAppId = data.customData.unregisteredAppId;
+		if (data.customData.title !== undefined) {
+			const title = document.querySelector('#title');
+			title.textContent = data.customData.title;
+		}
 	}
 
 	if (Array.isArray(intents)) {
@@ -226,7 +230,7 @@ async function init() {
 
 	cancelSelectionBtn.addEventListener('click', async () => {
 		if (rejectAppSelection !== undefined) {
-			rejectAppSelection('Application selection cancelled.');
+			rejectAppSelection('UserCancelledResolution');
 		}
 		fin.me.close(true);
 	});
