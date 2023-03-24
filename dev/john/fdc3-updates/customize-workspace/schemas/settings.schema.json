@@ -1252,6 +1252,10 @@
                     "description": "the height you wish the window to be",
                     "type": "number"
                 },
+                "title": {
+                    "description": "A suggested title for the intent picker/resolver ui",
+                    "type": "string"
+                },
                 "url": {
                     "description": "The url of the html page that has the intent picker",
                     "type": "string"
