@@ -645,24 +645,19 @@ export function interopOverride(
 			userSelection: IntentPickerResponse,
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
 		): Promise<Omit<IntentResolution, "getResult">> {
-			try {
-				let selectedApp = await getApp({ appId: userSelection.appId });
-				if (
-					(selectedApp === undefined || selectedApp === null) &&
-					this._intentOptions.unregisteredApp !== undefined
-				) {
-					selectedApp = this._intentOptions.unregisteredApp as PlatformApp;
-				}
-				const instanceId: string = userSelection.instanceId;
-				const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
-				if (intentResolver === null) {
-					throw new Error(ResolveError.NoAppsFound);
-				}
-				return intentResolver;
-			} catch {
-				logger.error("App for intent by context not selected/launched", intent);
-				throw new Error(ResolveError.ResolverTimeout);
+			let selectedApp = await getApp({ appId: userSelection.appId });
+			if (
+				(selectedApp === undefined || selectedApp === null) &&
+				this._intentOptions.unregisteredApp !== undefined
+			) {
+				selectedApp = this._intentOptions.unregisteredApp as PlatformApp;
 			}
+			const instanceId: string = userSelection.instanceId;
+			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
+			if (intentResolver === null) {
+				throw new Error(ResolveError.NoAppsFound);
+			}
+			return intentResolver;
 		}
 
 		private async handleTargetedIntent(
@@ -813,7 +808,7 @@ export function interopOverride(
 				const timerId = setTimeout(() => {
 					if (this._clientReadyRequests[key] !== undefined) {
 						delete this._clientReadyRequests[key];
-						reject(ResolveError.ResolverUnavailable);
+						reject(ResolveError.IntentDeliveryFailed);
 					}
 				}, timeout);
 				this._clientReadyRequests[key] = (instanceId: string) => {
