@@ -1,0 +1,3674 @@
+{
+    "$ref": "#/definitions/CustomSettings",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "ActionConnection": {
+            "additionalProperties": false,
+            "properties": {
+                "supportedActions": {
+                    "description": "If you want to provide a different set of available actions to a specific connection then you can do so here",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "The actions connection type allows connections to execute a list of actions that the platform will carry out e.g. show-home",
+                    "enum": [
+                        "actions"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "ActionsProviderOptions": {
+            "$ref": "#/definitions/ModuleList_4",
+            "description": "List of modules."
+        },
+        "AnalyticsProviderOptions": {
+            "$ref": "#/definitions/ModuleList_7",
+            "description": "List of modules."
+        },
+        "Api": {
+            "$ref": "#/definitions/__type_11"
+        },
+        "AppEndpointOptions": {
+            "anyOf": [
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "inputId": {
+                            "type": "string"
+                        },
+                        "outputId": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "inputId"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "AppIntent": {
+            "additionalProperties": false,
+            "properties": {
+                "contexts": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contexts",
+                "displayName",
+                "name"
+            ],
+            "type": "object"
+        },
+        "AppProviderOptions": {
+            "additionalProperties": false,
+            "description": "App Provider settings to configure where apps are fetched from.",
+            "properties": {
+                "appAssetTag": {
+                    "description": "If app assets are included as part of the available apps what tag should the platform look for to identify it\nas such e.g. \"appasset\".",
+                    "type": "string"
+                },
+                "appsSourceUrl": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "Legacy - Where should we fetch the apps from. It is a url or an array of urls\nfrom which to get apps data from. If present it will be used instead of\nendpointIds."
+                },
+                "cacheDurationInMinutes": {
+                    "description": "Once all apps are fetched and processed from the one or more sources specified, how long should the\nresult be cached for in minutes (can be used with the seconds setting).",
+                    "type": "number"
+                },
+                "cacheDurationInSeconds": {
+                    "description": "Once all apps are fetched and processed from the one or more sources specified, how long should the\nresult be cached for in seconds (can be used on it's own or in addition to the minutes setting).",
+                    "type": "number"
+                },
+                "endpointIds": {
+                    "description": "An array of endpoints that should be used to request a list of apps. The array\nentry can be a string (representing the array id) or an object with an inputId\nthat maps to an endpoint id and gets passed to the endpoint specified using the\noutputId (this is useful for mapping apps from one format to another)",
+                    "items": {
+                        "$ref": "#/definitions/AppEndpointOptions"
+                    },
+                    "type": "array"
+                },
+                "includeCredentialOnSourceRequest": {
+                    "description": "Legacy - Used when appsSourceUrl is used. This is specified as part of the options of\nthe fetch request.",
+                    "enum": [
+                        "include",
+                        "omit",
+                        "same-origin"
+                    ],
+                    "type": "string"
+                },
+                "manifestTypes": {
+                    "description": "The specified app sources may include apps of many different manifest types. Which manifest types do you want\nyour platform to support (only the ones listed will be included in the end result).",
+                    "items": {
+                        "$ref": "#/definitions/ManifestTypeId"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "AppSourceConnection": {
+            "additionalProperties": false,
+            "properties": {
+                "manifestTypes": {
+                    "description": "If a connection is allowed to provide apps do you wish to limit the manifest types they can provide you with. The connection type must be supported if it is an app entry where the selection should go back to the connection.",
+                    "items": {
+                        "$ref": "#/definitions/ManifestTypeId"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "The appSource connection type allows connections to provide a list of apps that can show up in home and the store. Apps with manifest type id connection will be send back to the connection on selection (e.g. a child view)",
+                    "enum": [
+                        "appSource"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "ApplicationIdentity": {
+            "$ref": "#/definitions/__type_1"
+        },
+        "Array": {
+            "items": {
+                "$ref": "#/definitions/PlatformCustomTheme"
+            },
+            "type": "array"
+        },
+        "Array_1": {
+            "items": {
+                "$ref": "#/definitions/PrebuiltContextMenuItem"
+            },
+            "type": "array"
+        },
+        "AuthProviderOptions": {
+            "$ref": "#/definitions/ModuleList",
+            "description": "List of modules."
+        },
+        "AutoResizeOptions": {
+            "$ref": "#/definitions/__type_18"
+        },
+        "AutoplayPolicyOptions": {
+            "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
+            "enum": [
+                "document-user-activation-required",
+                "no-user-gesture-required",
+                "user-gesture-required"
+            ],
+            "type": "string"
+        },
+        "BaseEndpointDefinition.O": {
+            "$ref": "#/definitions/FetchOptions"
+        },
+        "BaseEndpointDefinition.O_1": {},
+        "BootstrapComponents": {
+            "enum": [
+                "dock",
+                "home",
+                "none",
+                "store"
+            ],
+            "type": "string"
+        },
+        "BootstrapOptions": {
+            "additionalProperties": false,
+            "description": "Bootstrap provider options.",
+            "properties": {
+                "autoShow": {
+                    "description": "Which components should auto show after the bootstrapping process. As home vanishes\non blur we suggest adding home last if you wish it to show.",
+                    "items": {
+                        "$ref": "#/definitions/BootstrapComponents"
+                    },
+                    "type": "array"
+                },
+                "dock": {
+                    "description": "Should the platform register against the dock component?",
+                    "type": "boolean"
+                },
+                "home": {
+                    "description": "Should the platform register against the home component?",
+                    "type": "boolean"
+                },
+                "notifications": {
+                    "description": "Should the platform register itself against the notification center\nand have a platform specific tab show up?",
+                    "type": "boolean"
+                },
+                "store": {
+                    "description": "Should the platform register against the store component?",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "autoShow",
+                "dock",
+                "home",
+                "notifications",
+                "store"
+            ],
+            "type": "object"
+        },
+        "Bounds": {
+            "$ref": "#/definitions/__type_14"
+        },
+        "BrokerConnection": {
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "description": "The broker connection type allows connections to connect to our broker in order to react to context sharing",
+                    "enum": [
+                        "broker"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "BrowserButtonType": {
+            "description": "Types of buttons on browser windows",
+            "enum": [
+                "Close",
+                "ColorLinking",
+                "Custom",
+                "LockUnlockPage",
+                "Maximise",
+                "Minimise",
+                "PresetLayouts",
+                "SaveMenu",
+                "SavePage",
+                "ShowHideTabs"
+            ],
+            "type": "string"
+        },
+        "BrowserButtonType.Custom": {
+            "enum": [
+                "Custom"
+            ],
+            "type": "string"
+        },
+        "BrowserProviderOptions": {
+            "additionalProperties": false,
+            "description": "Browser Provider Options",
+            "properties": {
+                "globalMenu": {
+                    "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
+                    },
+                    "type": "array"
+                },
+                "pageMenu": {
+                    "description": "This setting lets you customize the page right click context menu and add your own entries.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
+                    },
+                    "type": "array"
+                },
+                "toolbarButtons": {
+                    "description": "This setting lets you override the default workspace browser buttons and specify your own.",
+                    "items": {
+                        "$ref": "#/definitions/ToolbarButtonDefinition"
+                    },
+                    "type": "array"
+                },
+                "viewMenu": {
+                    "description": "This setting lets you customize the view right click context menu and add your own entries.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
+                    },
+                    "type": "array"
+                },
+                "windowOptions": {
+                    "additionalProperties": false,
+                    "description": "Window Options that will apply to all workspace browser windows",
+                    "properties": {
+                        "icon": {
+                            "description": "The icon to show for every browser window (specify something that will be supported on the taskbar as well)",
+                            "type": "string"
+                        },
+                        "newPageUrl": {
+                            "description": "Not specifying this setting means a + sign will not appear alongside page tabs inside a window.\nIf you specify a url then the + sign will show and when selected it will add a new page to the window\nand the page will load a single view with this url.",
+                            "type": "string"
+                        },
+                        "newTabUrl": {
+                            "description": "Not specifying this setting means a + sign will not appear alongside view tabs inside a page.\nIf you specify a url then the + sign will show and when selected it will load a view with that\nurl into the layout.",
+                            "type": "string"
+                        },
+                        "title": {
+                            "description": "The title that will show for every browser window",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "required": [
+                "windowOptions"
+            ],
+            "type": "object"
+        },
+        "ColorSchemeOption": {
+            "enum": [
+                "dark",
+                "light",
+                "system"
+            ],
+            "type": "string"
+        },
+        "ConditionsProviderOptions": {
+            "$ref": "#/definitions/ModuleList_5",
+            "description": "List of modules."
+        },
+        "Connection": {
+            "additionalProperties": false,
+            "properties": {
+                "connectionTypes": {
+                    "description": "An array of the connection types this connection will be permitted to use",
+                    "items": {
+                        "$ref": "#/definitions/ConnectionTypes"
+                    },
+                    "type": "array"
+                },
+                "identity": {
+                    "$ref": "#/definitions/Identity",
+                    "description": "The identity uuid of the incoming connection or * as a wildcard. We currently do not restrict down to the name level so it can be blank or omitted."
+                },
+                "validatePayload": {
+                    "description": "Should we check the payload be validated for this connection when it connects",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "connectionTypes",
+                "identity"
+            ],
+            "type": "object"
+        },
+        "ConnectionProviderOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "connectionId": {
+                    "description": "The channel id that external apps will use to connect to this platform (it will be prefixed with your platform's uuid e.g. your-uuid-connection-id)",
+                    "type": "string"
+                },
+                "connectionValidationEndpoint": {
+                    "description": "If you want to validate the payload passed by connecting apps you can\nspecify the endpoint id that should receive the payload and return whether\nor not it is valid.",
+                    "type": "string"
+                },
+                "connections": {
+                    "description": "An array of connections that this platform allows being connected from.\nBy specifying * as the uuid you can allow any connection and give it certain\ncapabilities. You can then specify specific uuids with more capabilities.",
+                    "items": {
+                        "$ref": "#/definitions/Connection"
+                    },
+                    "type": "array"
+                },
+                "supportedActions": {
+                    "description": "The connection provider can have actions registered against it from the platform.\nThis provides a default list of actions that connections should be able to use if\nactions are enabled for that connection.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "connectionId",
+                "connections",
+                "supportedActions"
+            ],
+            "type": "object"
+        },
+        "ConnectionTypes": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/AppSourceConnection"
+                },
+                {
+                    "$ref": "#/definitions/SnapshotSourceConnection"
+                },
+                {
+                    "$ref": "#/definitions/ActionConnection"
+                },
+                {
+                    "$ref": "#/definitions/BrokerConnection"
+                }
+            ]
+        },
+        "ContentCreationOptions": {
+            "$ref": "#/definitions/__type_12"
+        },
+        "ContentCreationRule<ContentCreationBehaviorNames>": {
+            "additionalProperties": false,
+            "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled.",
+            "properties": {
+                "behavior": {
+                    "$ref": "#/definitions/T",
+                    "description": "Behavior to use when opening matched content."
+                },
+                "match": {
+                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "options": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Partial"
+                        },
+                        {
+                            "$ref": "#/definitions/Partial_3"
+                        }
+                    ],
+                    "description": "Options for newly-created view or window (if applicable)."
+                }
+            },
+            "required": [
+                "behavior",
+                "match"
+            ],
+            "type": "object"
+        },
+        "ContentNavigation": {
+            "$ref": "#/definitions/__type_19"
+        },
+        "ContextMenuOptions": {
+            "$ref": "#/definitions/__type_5"
+        },
+        "ContextMenuSettings": {
+            "$ref": "#/definitions/__type_4"
+        },
+        "CustomActionSpecifier": {
+            "additionalProperties": false,
+            "description": "Configures a custom action when the control is invoked",
+            "properties": {
+                "customData": {
+                    "description": "Any data necessary for the functioning of specified custom action"
+                },
+                "id": {
+                    "description": "Identifier of a custom action defined at platform initialization",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "CustomActionSpecifier_1": {
+            "additionalProperties": false,
+            "description": "Configures a custom action when the control is invoked",
+            "properties": {
+                "customData": {
+                    "description": "Any data necessary for the functioning of specified custom action"
+                },
+                "id": {
+                    "description": "Identifier of a custom action defined at platform initialization",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "CustomBrowserButtonConfig": {
+            "additionalProperties": false,
+            "description": "Custom browser buttons",
+            "properties": {
+                "action": {
+                    "$ref": "#/definitions/CustomActionSpecifier",
+                    "description": "Custom action once the button is clicked"
+                },
+                "disabled": {
+                    "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "iconUrl": {
+                    "description": "icon URL for icon image",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "Button name text when hovered over",
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/BrowserButtonType.Custom",
+                    "description": "Type of cutom browser button"
+                }
+            },
+            "required": [
+                "action",
+                "tooltip",
+                "type"
+            ],
+            "type": "object"
+        },
+        "CustomConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "instanceMode": {
+                    "enum": [
+                        "multi",
+                        "single"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "CustomPaletteSet": {
+            "additionalProperties": false,
+            "properties": {
+                "background1": {
+                    "type": "string"
+                },
+                "background2": {
+                    "type": "string"
+                },
+                "background3": {
+                    "type": "string"
+                },
+                "background4": {
+                    "type": "string"
+                },
+                "background5": {
+                    "type": "string"
+                },
+                "background6": {
+                    "type": "string"
+                },
+                "backgroundPrimary": {
+                    "type": "string"
+                },
+                "brandPrimary": {
+                    "type": "string"
+                },
+                "brandSecondary": {
+                    "type": "string"
+                },
+                "contentBackground1": {
+                    "type": "string"
+                },
+                "contentBackground2": {
+                    "type": "string"
+                },
+                "contentBackground3": {
+                    "type": "string"
+                },
+                "contentBackground4": {
+                    "type": "string"
+                },
+                "contentBackground5": {
+                    "type": "string"
+                },
+                "functional1": {
+                    "type": "string"
+                },
+                "functional10": {
+                    "type": "string"
+                },
+                "functional2": {
+                    "type": "string"
+                },
+                "functional3": {
+                    "type": "string"
+                },
+                "functional4": {
+                    "type": "string"
+                },
+                "functional5": {
+                    "type": "string"
+                },
+                "functional6": {
+                    "type": "string"
+                },
+                "functional7": {
+                    "type": "string"
+                },
+                "functional8": {
+                    "type": "string"
+                },
+                "functional9": {
+                    "type": "string"
+                },
+                "inputBackground": {
+                    "type": "string"
+                },
+                "inputColor": {
+                    "type": "string"
+                },
+                "inputDisabled": {
+                    "type": "string"
+                },
+                "inputFocused": {
+                    "type": "string"
+                },
+                "inputPlaceholder": {
+                    "type": "string"
+                },
+                "statusActive": {
+                    "type": "string"
+                },
+                "statusCritical": {
+                    "type": "string"
+                },
+                "statusSuccess": {
+                    "type": "string"
+                },
+                "statusWarning": {
+                    "type": "string"
+                },
+                "textDefault": {
+                    "type": "string"
+                },
+                "textHelp": {
+                    "type": "string"
+                },
+                "textInactive": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "backgroundPrimary",
+                "brandPrimary",
+                "brandSecondary"
+            ],
+            "type": "object"
+        },
+        "CustomSettings": {
+            "additionalProperties": false,
+            "properties": {
+                "$schema": {
+                    "type": "string"
+                },
+                "actionsProvider": {
+                    "$ref": "#/definitions/ActionsProviderOptions"
+                },
+                "analyticsProvider": {
+                    "$ref": "#/definitions/AnalyticsProviderOptions"
+                },
+                "appProvider": {
+                    "$ref": "#/definitions/AppProviderOptions"
+                },
+                "authProvider": {
+                    "$ref": "#/definitions/AuthProviderOptions"
+                },
+                "bootstrap": {
+                    "$ref": "#/definitions/BootstrapOptions"
+                },
+                "browserProvider": {
+                    "$ref": "#/definitions/BrowserProviderOptions"
+                },
+                "conditionsProvider": {
+                    "$ref": "#/definitions/ConditionsProviderOptions"
+                },
+                "connectionProvider": {
+                    "$ref": "#/definitions/ConnectionProviderOptions"
+                },
+                "dockProvider": {
+                    "$ref": "#/definitions/DockProviderOptions"
+                },
+                "endpointProvider": {
+                    "$ref": "#/definitions/EndpointProviderOptions"
+                },
+                "headlessProvider": {
+                    "$ref": "#/definitions/HeadlessProviderOptions"
+                },
+                "homeProvider": {
+                    "$ref": "#/definitions/HomeProviderOptions"
+                },
+                "initOptionsProvider": {
+                    "$ref": "#/definitions/InitOptionsProviderOptions"
+                },
+                "integrationProvider": {
+                    "$ref": "#/definitions/IntegrationProviderOptions"
+                },
+                "lifecycleProvider": {
+                    "$ref": "#/definitions/LifecycleProviderOptions"
+                },
+                "loggerProvider": {
+                    "$ref": "#/definitions/LoggerProviderOptions"
+                },
+                "menusProvider": {
+                    "$ref": "#/definitions/MenusProviderOptions"
+                },
+                "notificationProvider": {
+                    "$ref": "#/definitions/NotificationProviderOptions"
+                },
+                "platformProvider": {
+                    "$ref": "#/definitions/PlatformProviderOptions"
+                },
+                "storefrontProvider": {
+                    "$ref": "#/definitions/StorefrontProviderOptions"
+                },
+                "themeProvider": {
+                    "$ref": "#/definitions/ThemeProviderOptions"
+                },
+                "versionProvider": {
+                    "$ref": "#/definitions/VersionProviderOptions"
+                }
+            },
+            "type": "object"
+        },
+        "DockButtonAction": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "additionalProperties": false,
+                    "description": "If an appId isn't provided then provide details related to the action",
+                    "properties": {
+                        "customData": {
+                            "description": "data that should be passed to the action"
+                        },
+                        "id": {
+                            "description": "The id of the action to fire",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "customData",
+                        "id"
+                    ],
+                    "type": "object"
+                },
+                "appId": {
+                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
+                    "type": "string"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "DockButtonApp": {
+            "additionalProperties": false,
+            "description": "A single app or a list of apps",
+            "properties": {
+                "display": {
+                    "description": "Should this entry show a single app or a group of apps",
+                    "enum": [
+                        "group",
+                        "individual"
+                    ],
+                    "type": "string"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "The tags to use to find the single app or a collection of apps\nthat need to be listed. This will be compared against the tags\nassociated with apps returned from the app data sources.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "display"
+            ],
+            "type": "object"
+        },
+        "DockButtonDropdown": {
+            "additionalProperties": false,
+            "properties": {
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "options": {
+                    "items": {
+                        "$ref": "#/definitions/Omit<DockButtonAction,\"iconUrl\">"
+                    },
+                    "type": "array"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "options"
+            ],
+            "type": "object"
+        },
+        "DockProviderOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "apps": {
+                    "description": "What apps should be made available via the dock",
+                    "items": {
+                        "$ref": "#/definitions/DockButtonApp"
+                    },
+                    "type": "array"
+                },
+                "buttons": {
+                    "description": "What custom actions should be made available via the dock",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/DockButtonAction"
+                            },
+                            {
+                                "$ref": "#/definitions/DockButtonDropdown"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "icon": {
+                    "description": "The icon to show in the dock component",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id to use when registering against the dock component",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "The title for your dock registration",
+                    "type": "string"
+                },
+                "workspaceComponents": {
+                    "additionalProperties": false,
+                    "description": "Which workspace related icons should be hidden from the dock",
+                    "properties": {
+                        "hideHomeButton": {
+                            "type": "boolean"
+                        },
+                        "hideNotificationsButton": {
+                            "type": "boolean"
+                        },
+                        "hideStorefrontButton": {
+                            "type": "boolean"
+                        },
+                        "hideWorkspacesButton": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "required": [
+                "icon",
+                "id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "EndpointDefinition<unknown>": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/FetchEndpointDefinition"
+                },
+                {
+                    "$ref": "#/definitions/ModuleEndpointDefinition"
+                }
+            ],
+            "description": "An endpoint entry definition"
+        },
+        "EndpointProviderOptions": {
+            "additionalProperties": false,
+            "description": "Endpoint provider options",
+            "properties": {
+                "endpoints": {
+                    "description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide different implementations for executing actions or performing request/response actions",
+                    "items": {
+                        "$ref": "#/definitions/EndpointDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "FetchEndpointDefinition": {
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "description": "A unique id for this endpoint. This ID will be called by the platform.\nIn the future you may change what the implementation for this endpoint\nis but you can keep the same endpoint id and request/response objects\nin order to not require changes from the platform.",
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/BaseEndpointDefinition.O",
+                    "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
+                },
+                "type": {
+                    "description": "This uses the built in support for fetch and the options will be the fetch options",
+                    "enum": [
+                        "fetch"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ],
+            "type": "object"
+        },
+        "FetchOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "cache": {
+                    "enum": [
+                        "default",
+                        "force-cache",
+                        "no-cache",
+                        "only-if-cached",
+                        "reload"
+                    ],
+                    "type": "string"
+                },
+                "credentials": {
+                    "enum": [
+                        "include",
+                        "omit",
+                        "same-origin"
+                    ],
+                    "type": "string"
+                },
+                "headers": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "type": "object"
+                },
+                "method": {
+                    "enum": [
+                        "GET",
+                        "POST"
+                    ],
+                    "type": "string"
+                },
+                "mode": {
+                    "enum": [
+                        "cors",
+                        "no-cors",
+                        "same-origin"
+                    ],
+                    "type": "string"
+                },
+                "redirect": {
+                    "enum": [
+                        "error",
+                        "follow",
+                        "manual"
+                    ],
+                    "type": "string"
+                },
+                "referrerPolicy": {
+                    "enum": [
+                        "no-referrer",
+                        "no-referrer-when-downgrade",
+                        "origin",
+                        "origin-when-cross-origin",
+                        "same-origin",
+                        "strict-origin",
+                        "strict-origin-when-cross-origin",
+                        "unsafe-url"
+                    ],
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GlobalContextMenuOptionType": {
+            "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
+            "enum": [
+                "Appearance",
+                "CloseWindow",
+                "Custom",
+                "DeleteWorkspace",
+                "NewPage",
+                "NewWindow",
+                "OpenStorefront",
+                "Quit",
+                "RenameWorkspace",
+                "RestoreChanges",
+                "SavePage",
+                "SavePageAs",
+                "SaveWorkspace",
+                "SaveWorkspaceAs",
+                "SwitchWorkspace"
+            ],
+            "type": "string"
+        },
+        "HeadlessProviderOptions": {
+            "$ref": "#/definitions/ModuleList_1",
+            "description": "List of modules."
+        },
+        "HomeProviderOptions": {
+            "additionalProperties": false,
+            "description": "HomeProvider Options",
+            "properties": {
+                "icon": {
+                    "description": "The icon to show in the Home component UI",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id to use when registering against the Workspace Home component",
+                    "type": "string"
+                },
+                "queryAgainst": {
+                    "description": "What do you wish to run the query against when filtering apps.\nAn array of entries. If not specified it will default to [\"title\"].\nSince we store the app definition inside of a cli search result's\ndata field you can add data.tags to the array so that it will see if\nthe query matches the start of a tag e.g. [\"title\",\"data.tags\"]",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "queryMinLength": {
+                    "description": "How many characters need to be entered before filtering the available apps",
+                    "type": "number"
+                },
+                "sourceFilter": {
+                    "additionalProperties": false,
+                    "description": "Options for the source filters displayed in home.",
+                    "properties": {
+                        "disabled": {
+                            "description": "Should we disable the source filters, defaults to false.",
+                            "type": "boolean"
+                        },
+                        "label": {
+                            "description": "The label to display in home, defaults to Source.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "title": {
+                    "description": "The title to show in the Home component UI",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "icon",
+                "id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "Identity": {
+            "$ref": "#/definitions/__type"
+        },
+        "Image": {
+            "additionalProperties": false,
+            "description": "Detailed metadata describing an image.",
+            "properties": {
+                "purpose": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "src": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "src"
+            ],
+            "type": "object"
+        },
+        "InitOptionsProviderOptions": {
+            "$ref": "#/definitions/ModuleList_2",
+            "description": "List of modules."
+        },
+        "IntegrationModuleDefinition": {
+            "additionalProperties": false,
+            "description": "Integration definition.",
+            "properties": {
+                "autoStart": {
+                    "description": "Does the integration start automatically if enabled (default is true).",
+                    "type": "boolean"
+                },
+                "data": {
+                    "$ref": "#/definitions/ModuleDefinition.O",
+                    "description": "Custom data for the module."
+                },
+                "description": {
+                    "description": "The description of the module.",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Is the module enabled.",
+                    "type": "boolean"
+                },
+                "excludeFromSourceFilter": {
+                    "description": "If this property is set then the module will not show in the source filter\nand its results will always be included.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon for the module.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id of the module.",
+                    "type": "string"
+                },
+                "info": {
+                    "description": "Url to more information.",
+                    "type": "string"
+                },
+                "moduleUrl": {
+                    "description": "This is the old property, it will be remapped to url.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "The title of the module.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "The url to load the module from.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "url"
+            ],
+            "type": "object"
+        },
+        "IntegrationProviderOptions": {
+            "additionalProperties": false,
+            "description": "Integration provider settings.",
+            "properties": {
+                "command": {
+                    "description": "What command should we look for in order to return the list of integrations",
+                    "type": "string"
+                },
+                "commandDescription": {
+                    "description": "What description should accompany the command",
+                    "type": "string"
+                },
+                "icon": {
+                    "description": "An icon representing the top level integration provider",
+                    "type": "string"
+                },
+                "integrations": {
+                    "description": "This is the old module list name, remove in future.",
+                    "items": {
+                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                    },
+                    "type": "array"
+                },
+                "isManagementEnabled": {
+                    "description": "Do you wish to expose an option of turning on/off integrations.",
+                    "type": "boolean"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IntentOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "intentTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
+                    "type": "number"
+                },
+                "unregisteredApp": {
+                    "$ref": "#/definitions/PlatformApp",
+                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
+                }
+            },
+            "type": "object"
+        },
+        "IntentPickerOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "fdc3InteropApi": {
+                    "description": "the fdc3 api version this picker will support (default is v2)",
+                    "type": "string"
+                },
+                "height": {
+                    "description": "the height you wish the window to be",
+                    "type": "number"
+                },
+                "url": {
+                    "description": "The url of the html page that has the intent picker",
+                    "type": "string"
+                },
+                "width": {
+                    "description": "the width you wish the window to be",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "url"
+            ],
+            "type": "object"
+        },
+        "InteropConfig": {
+            "$ref": "#/definitions/__type_8"
+        },
+        "LifecycleProviderOptions": {
+            "$ref": "#/definitions/ModuleList_6",
+            "description": "List of modules."
+        },
+        "LoggerProviderOptions": {
+            "$ref": "#/definitions/ModuleList_3",
+            "description": "List of modules."
+        },
+        "ManifestTypeId": {
+            "enum": [
+                "connection",
+                "desktop-browser",
+                "endpoint",
+                "external",
+                "inline-external",
+                "inline-view",
+                "inline-window",
+                "manifest",
+                "snapshot",
+                "unregistered-app",
+                "view",
+                "window"
+            ],
+            "type": "string"
+        },
+        "MaximumVersion": {
+            "$ref": "#/definitions/VersionInfo"
+        },
+        "MenuEntry.T": {
+            "$ref": "#/definitions/GlobalContextMenuOptionType",
+            "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuEntry.T_1": {
+            "$ref": "#/definitions/PageTabContextMenuOptionType",
+            "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuEntry.T_2": {
+            "$ref": "#/definitions/ViewTabMenuOptionType",
+            "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
+        },
+        "MenuEntry<GlobalContextMenuOptionType>": {
+            "additionalProperties": false,
+            "properties": {
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "description": "What label should the user see when they look at this menu option",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                }
+            },
+            "required": [
+                "label"
+            ],
+            "type": "object"
+        },
+        "MenuEntry<PageTabContextMenuOptionType>": {
+            "additionalProperties": false,
+            "properties": {
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T_1"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "description": "What label should the user see when they look at this menu option",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition_1",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                }
+            },
+            "required": [
+                "label"
+            ],
+            "type": "object"
+        },
+        "MenuEntry<ViewTabMenuOptionType>": {
+            "additionalProperties": false,
+            "properties": {
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T_2"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "description": "What label should the user see when they look at this menu option",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition_2",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                }
+            },
+            "required": [
+                "label"
+            ],
+            "type": "object"
+        },
+        "MenuPosition": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuPosition.T": {
+            "$ref": "#/definitions/GlobalContextMenuOptionType",
+            "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuPosition.T_1": {
+            "$ref": "#/definitions/PageTabContextMenuOptionType",
+            "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuPosition.T_2": {
+            "$ref": "#/definitions/ViewTabMenuOptionType",
+            "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
+        },
+        "MenuPositionOperation": {
+            "enum": [
+                "after",
+                "before",
+                "delete",
+                "end",
+                "replaceLabel",
+                "start"
+            ],
+            "type": "string"
+        },
+        "MenuPosition_1": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_1",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuPosition_2": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_2",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuSeparatorPosition": {
+            "enum": [
+                "after",
+                "before"
+            ],
+            "type": "string"
+        },
+        "MenusProviderOptions": {
+            "$ref": "#/definitions/ModuleList_8",
+            "description": "List of modules."
+        },
+        "MinimumVersion": {
+            "$ref": "#/definitions/VersionInfo"
+        },
+        "ModuleDefinition.O": {},
+        "ModuleDefinition<unknown>": {
+            "additionalProperties": false,
+            "description": "The definition of a module with generic data for options.",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/ModuleDefinition.O",
+                    "description": "Custom data for the module."
+                },
+                "description": {
+                    "description": "The description of the module.",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Is the module enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon for the module.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id of the module.",
+                    "type": "string"
+                },
+                "info": {
+                    "description": "Url to more information.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "The title of the module.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "The url to load the module from.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "url"
+            ],
+            "type": "object"
+        },
+        "ModuleEndpointDefinition": {
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "description": "A unique id for this endpoint. This ID will be called by the platform.\nIn the future you may change what the implementation for this endpoint\nis but you can keep the same endpoint id and request/response objects\nin order to not require changes from the platform.",
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/BaseEndpointDefinition.O_1",
+                    "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
+                },
+                "type": {
+                    "description": "This indicates that this endpoint depends on a module that needs to be loaded in order for it to work",
+                    "enum": [
+                        "module"
+                    ],
+                    "type": "string"
+                },
+                "typeId": {
+                    "description": "The id of the module that should be loaded",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "typeId"
+            ],
+            "type": "object"
+        },
+        "ModuleList": {
+            "additionalProperties": false,
+            "description": "Auth Provider Options. Specify a single auth module if your application requires authentication\nbefore allowing the user to use the platform.",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_1": {
+            "additionalProperties": false,
+            "description": "The headless provider supports a list of modules. Right now the url must be to a\nhtml page as we will be launching a window after the bootstrapping process has run. A js extension will log an error.\nThe data setting of the module can be a WindowsOptions object with settings (our defaults should be enough if you want\na hidden window to run logic in the background)",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_2": {
+            "additionalProperties": false,
+            "description": "InitOptions Provider Options.\nThis is a list of modules that will be loaded and used to handle init params\n(similar to query strings). The module data setting needs to specify\n\"supportedActions\" and this should be an array of strings of the actions this module\nsupports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed\na payload (this should be a base64 encoded object when passed via init params).",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_3": {
+            "additionalProperties": false,
+            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_4": {
+            "additionalProperties": false,
+            "description": "A list of modules that provide actions that can be used by the platform",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_5": {
+            "additionalProperties": false,
+            "description": "A list of modules that provide a set of conditions. The function for this\ncondition will return true or false to indicate if the condition is met.\nConditions are used in a number of places (for example menu options)",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_6": {
+            "additionalProperties": false,
+            "description": "This is a list of modules that allow you to hook\ninto the lifecycle events exposed by the platform.\nA good example might be you wish to register a module\nthat is called when an authenticated session is expired",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_7": {
+            "additionalProperties": false,
+            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace components.",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_8": {
+            "additionalProperties": false,
+            "description": "A list of modules that provide menu for different locations.",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "NotificationProviderOptions": {
+            "additionalProperties": false,
+            "description": "Notification Provider Options. Providing settings in order to register your platform against the notification center.",
+            "properties": {
+                "icon": {
+                    "description": "URL of the icon to be displayed for this platform.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the platform.",
+                    "type": "string"
+                },
+                "scheme": {
+                    "$ref": "#/definitions/ColorSchemeOption",
+                    "description": "This is the scheme associated with this platform."
+                },
+                "title": {
+                    "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",
+                    "type": "string"
+                },
+                "workspacePlatform": {
+                    "additionalProperties": false,
+                    "description": "Workspace platform that registers this platform",
+                    "properties": {
+                        "analytics": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "isSupported": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "isSupported"
+                            ],
+                            "type": "object"
+                        },
+                        "identity": {
+                            "$ref": "#/definitions/ApplicationIdentity"
+                        }
+                    },
+                    "required": [
+                        "analytics",
+                        "identity"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "icon",
+                "id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "Omit<DockButtonAction,\"iconUrl\">": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "additionalProperties": false,
+                    "description": "If an appId isn't provided then provide details related to the action",
+                    "properties": {
+                        "customData": {
+                            "description": "data that should be passed to the action"
+                        },
+                        "id": {
+                            "description": "The id of the action to fire",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "customData",
+                        "id"
+                    ],
+                    "type": "object"
+                },
+                "appId": {
+                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "PageTabContextMenuOptionType": {
+            "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
+            "enum": [
+                "Close",
+                "Custom",
+                "Duplicate",
+                "Rename",
+                "Save",
+                "Save As"
+            ],
+            "type": "string"
+        },
+        "Partial": {
+            "$ref": "#/definitions/__type_2"
+        },
+        "Partial_1": {
+            "$ref": "#/definitions/__type_6"
+        },
+        "Partial_2": {
+            "$ref": "#/definitions/__type_10"
+        },
+        "Partial_3": {
+            "$ref": "#/definitions/__type_13"
+        },
+        "Partial_4": {
+            "$ref": "#/definitions/__type_15"
+        },
+        "Partial_5": {
+            "$ref": "#/definitions/__type_16"
+        },
+        "Partial_6": {
+            "$ref": "#/definitions/__type_17"
+        },
+        "Partial_7": {
+            "$ref": "#/definitions/__type_20"
+        },
+        "PlatformApp": {
+            "additionalProperties": false,
+            "properties": {
+                "appId": {
+                    "description": "Unique identifier for an application.",
+                    "type": "string"
+                },
+                "contactEmail": {
+                    "type": "string"
+                },
+                "customConfig": {
+                    "$ref": "#/definitions/CustomConfig",
+                    "description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher"
+                },
+                "description": {
+                    "description": "UI friendly description for an application.",
+                    "type": "string"
+                },
+                "icons": {
+                    "description": "A list of icons that can be rendered in UI for this application.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "images": {
+                    "description": "A list of optional images that highlight application functionality.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "intents": {
+                    "items": {
+                        "$ref": "#/definitions/AppIntent"
+                    },
+                    "type": "array"
+                },
+                "manifest": {
+                    "description": "URL to application manifest.",
+                    "type": "string"
+                },
+                "manifestType": {
+                    "description": "Describes the type of manifest resolved by the `manifest` field.\nLaunch mechanics are determined by the manifest type.",
+                    "type": "string"
+                },
+                "primaryButton": {
+                    "$ref": "#/definitions/StoreButtonConfig",
+                    "description": "Primary button configuration."
+                },
+                "private": {
+                    "description": "This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API))",
+                    "type": "boolean"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "secondaryButtons": {
+                    "description": "Array of secondary button configurations.",
+                    "items": {
+                        "$ref": "#/definitions/StoreButtonConfig"
+                    },
+                    "type": "array"
+                },
+                "supportEmail": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "A UI friendly title for the application.",
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appId",
+                "icons",
+                "publisher",
+                "title"
+            ],
+            "type": "object"
+        },
+        "PlatformCustomTheme": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/PlatformCustomThemeOptions"
+                },
+                {
+                    "$ref": "#/definitions/PlatformCustomThemeOptionsWithScheme"
+                }
+            ]
+        },
+        "PlatformCustomThemeOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "default": {
+                    "description": "If you are specifying a single palette in your theme and it is a light palette then you can indicate that by specifying the default of light (otherwise we will assume it is dark)\nIf you specify palettes and have a light and a dark palette then this setting specifies a default preference (it defaults to picking the dark palette if a default is not specified)",
+                    "enum": [
+                        "dark",
+                        "light"
+                    ],
+                    "type": "string"
+                },
+                "iconFolder": {
+                    "description": "If there is a shared folder across themes that have light and dark icons you can specify a folder name to use instead of the theme id (or label if there is no id)",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "An id to help identify this theme as labels can change over time and are used for display",
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "logoUrl": {
+                    "type": "string"
+                },
+                "palette": {
+                    "$ref": "#/definitions/CustomPaletteSet"
+                }
+            },
+            "required": [
+                "id",
+                "label",
+                "palette"
+            ],
+            "type": "object"
+        },
+        "PlatformCustomThemeOptionsWithScheme": {
+            "additionalProperties": false,
+            "properties": {
+                "default": {
+                    "description": "If you are specifying a single palette in your theme and it is a light palette then you can indicate that by specifying the default of light (otherwise we will assume it is dark)\nIf you specify palettes and have a light and a dark palette then this setting specifies a default preference (it defaults to picking the dark palette if a default is not specified)",
+                    "enum": [
+                        "dark",
+                        "light"
+                    ],
+                    "type": "string"
+                },
+                "iconFolder": {
+                    "description": "If there is a shared folder across themes that have light and dark icons you can specify a folder name to use instead of the theme id (or label if there is no id)",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "An id to help identify this theme as labels can change over time and are used for display",
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "logoUrl": {
+                    "type": "string"
+                },
+                "palettes": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "dark": {
+                            "$ref": "#/definitions/CustomPaletteSet"
+                        },
+                        "light": {
+                            "$ref": "#/definitions/CustomPaletteSet"
+                        }
+                    },
+                    "required": [
+                        "dark",
+                        "light"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "id",
+                "label",
+                "palettes"
+            ],
+            "type": "object"
+        },
+        "PlatformCustomThemes": {
+            "$ref": "#/definitions/Array"
+        },
+        "PlatformProviderOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "initUrl": {
+                    "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth logic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate the provider bundle and provide an example in our docs.",
+                    "type": "string"
+                },
+                "intentOptions": {
+                    "$ref": "#/definitions/IntentOptions"
+                },
+                "intentPicker": {
+                    "$ref": "#/definitions/IntentPickerOptions",
+                    "description": "Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform"
+                },
+                "rootUrl": {
+                    "description": "What is the root url of you platform e.g. https://mydomain.com",
+                    "type": "string"
+                },
+                "sharing": {
+                    "description": "Do you want to enable this platforms sharing capability (you will still need to have 2 endpoints called share-save and share-get for the storing and retrieval of the share target)",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "intentOptions",
+                "rootUrl",
+                "sharing"
+            ],
+            "type": "object"
+        },
+        "PreDefinedButtonConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "disabled": {
+                    "description": "should this button be disabled so that it is visible but can't be selected",
+                    "type": "boolean"
+                },
+                "iconUrl": {
+                    "description": "icon URL for icon image",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "Button name text when hovered over",
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/BrowserButtonType",
+                    "description": "Type of default browser button"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "PrebuiltContextMenuItem": {
+            "description": "Context menu item with an implementation provided by OpenFin.",
+            "enum": [
+                "copy",
+                "cut",
+                "inspect",
+                "navigateBack",
+                "navigateForward",
+                "paste",
+                "print",
+                "redo",
+                "reload",
+                "selectAll",
+                "separator",
+                "spellCheck",
+                "undo"
+            ],
+            "type": "string"
+        },
+        "RGB": {
+            "$ref": "#/definitions/__type_3"
+        },
+        "ResizeRegion": {
+            "$ref": "#/definitions/__type_7"
+        },
+        "ShowViewOnWindowResizeOptions": {
+            "additionalProperties": false,
+            "description": "_Platform Windows Only_. Enables views to be shown when a Platform Window is being resized by the user.",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paintIntervalMs": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "SnapshotSourceConnection": {
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "description": "The snapshotSource connection type allows connections to be accepted as a snapshot source",
+                    "enum": [
+                        "snapshotSource"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "StoreButtonConfig": {
+            "additionalProperties": false,
+            "description": "Store custom button configuration",
+            "properties": {
+                "action": {
+                    "$ref": "#/definitions/CustomActionSpecifier_1",
+                    "description": "Custom action once the button is clicked"
+                },
+                "disabled": {
+                    "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "action",
+                "title"
+            ],
+            "type": "object"
+        },
+        "StorefrontFooter": {
+            "additionalProperties": false,
+            "properties": {
+                "links": {
+                    "description": "A set of links to display on Storefront's footer.",
+                    "items": [
+                        {
+                            "$ref": "#/definitions/StorefrontLink"
+                        },
+                        {
+                            "$ref": "#/definitions/StorefrontLink"
+                        },
+                        {
+                            "$ref": "#/definitions/StorefrontLink"
+                        }
+                    ],
+                    "maxItems": 3,
+                    "minItems": 0,
+                    "type": "array"
+                },
+                "logo": {
+                    "$ref": "#/definitions/Image",
+                    "description": "A logo to be displayed on the Storefront's footer."
+                },
+                "text": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "links",
+                "logo",
+                "text"
+            ],
+            "type": "object"
+        },
+        "StorefrontLink": {
+            "additionalProperties": false,
+            "description": "Represents a link to be rendered inside Storefront.",
+            "properties": {
+                "title": {
+                    "description": "A UI friendly title to render the link as.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "When the rendered `title` text is clicked, the user will be navigated to this URL.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "title",
+                "url"
+            ],
+            "type": "object"
+        },
+        "StorefrontProviderOptions": {
+            "additionalProperties": false,
+            "description": "Store Provider Options",
+            "properties": {
+                "footer": {
+                    "$ref": "#/definitions/StorefrontFooter",
+                    "description": "The configuration of the footer for the store"
+                },
+                "icon": {
+                    "description": "The icon to be displayed in the store drop down",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id you wish to use when you register the store component",
+                    "type": "string"
+                },
+                "landingPage": {
+                    "additionalProperties": false,
+                    "description": "Configuration for the landing page",
+                    "properties": {
+                        "bottomRow": {
+                            "$ref": "#/definitions/StorefrontSettingsLandingPageRow",
+                            "description": "The bottom row of the landing page"
+                        },
+                        "hero": {
+                            "additionalProperties": false,
+                            "description": "Configuration for the hero section of the store if you wish one.",
+                            "properties": {
+                                "cta": {
+                                    "$ref": "#/definitions/StorefrontSettingsNavigationItem",
+                                    "description": "Configuration for the Call To Action button of the hero section"
+                                },
+                                "description": {
+                                    "description": "The body description of the hero section",
+                                    "type": "string"
+                                },
+                                "image": {
+                                    "$ref": "#/definitions/Image",
+                                    "description": "The image to display"
+                                },
+                                "title": {
+                                    "description": "The title of the Hero section",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "cta",
+                                "description",
+                                "image",
+                                "title"
+                            ],
+                            "type": "object"
+                        },
+                        "middleRow": {
+                            "additionalProperties": false,
+                            "description": "The middle row of the landing page",
+                            "properties": {
+                                "tags": {
+                                    "description": "The tags to use as a source of apps. The store will take the first x number of apps until the row is full.",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "title": {
+                                    "description": "The title for the middle row",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "tags",
+                                "title"
+                            ],
+                            "type": "object"
+                        },
+                        "topRow": {
+                            "$ref": "#/definitions/StorefrontSettingsLandingPageRow",
+                            "description": "Configuration for the top row of the landing page (just below the hero section if it is configured)"
+                        }
+                    },
+                    "required": [
+                        "bottomRow",
+                        "middleRow",
+                        "topRow"
+                    ],
+                    "type": "object"
+                },
+                "navigation": {
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "id": {
+                                "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation section regardless of how\nmany times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same).\nAs you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation section has\na different ID then the store will not be able to find a match and it won't be able to render the navigation items.",
+                                "type": "string"
+                            },
+                            "items": {
+                                "description": "The items to list when the user navigates to that section of the store",
+                                "items": {
+                                    "$ref": "#/definitions/StorefrontSettingsNavigationItem"
+                                },
+                                "type": "array"
+                            },
+                            "title": {
+                                "description": "The title to show in the navigation",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "items",
+                            "title"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "primaryButton": {
+                    "$ref": "#/definitions/StoreButtonConfig",
+                    "description": "The action triggered when the primary button is clicked, defaults to launching the app."
+                },
+                "secondaryButtons": {
+                    "description": "Secondary buttons added to all store entries.",
+                    "items": {
+                        "$ref": "#/definitions/StoreButtonConfig"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "The title for the store which will show up in the store dropdown",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "footer",
+                "icon",
+                "id",
+                "landingPage",
+                "navigation",
+                "title"
+            ],
+            "type": "object"
+        },
+        "StorefrontSettingsDetailedNavigationItem": {
+            "additionalProperties": false,
+            "properties": {
+                "buttonTitle": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how\nmany times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same).\nAs you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has\na different ID then the store will not be able to find a match and it won't be able to render the navigation item.",
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/Image"
+                },
+                "tags": {
+                    "description": "The Storefront API has a collection of apps for a navigation item. Tags is an approach for how you can determine what apps should be included in a navigation item.\ni.e we filter the apps list by one or more tags and assign those apps to the navigation item.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "The title for the navigation item",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description",
+                "id",
+                "image",
+                "tags",
+                "title"
+            ],
+            "type": "object"
+        },
+        "StorefrontSettingsLandingPageRow": {
+            "additionalProperties": false,
+            "properties": {
+                "items": {
+                    "items": {
+                        "$ref": "#/definitions/StorefrontSettingsDetailedNavigationItem"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "items",
+                "title"
+            ],
+            "type": "object"
+        },
+        "StorefrontSettingsNavigationItem": {
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless of how\nmany times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the same).\nAs you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has\na different ID then the store will not be able to find a match and it won't be able to render the navigation item.",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "The Storefront API has a collection of apps for a navigation item. Tags is an approach for how you can determine what apps should be included in a navigation item.\ni.e we filter the apps list by one or more tags and assign those apps to the navigation item.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "The title for the navigation item",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "tags",
+                "title"
+            ],
+            "type": "object"
+        },
+        "T": {
+            "enum": [
+                "block",
+                "browser",
+                "view",
+                "window"
+            ],
+            "type": "string"
+        },
+        "ThemeProviderOptions": {
+            "additionalProperties": false,
+            "description": "Platform theme configuration",
+            "properties": {
+                "cssVarPrefix": {
+                    "description": "If providing the palette through css variables would you\nlike a specific custom prefix?",
+                    "type": "string"
+                },
+                "schemaNames": {
+                    "additionalProperties": false,
+                    "description": "If providing a class at the root document for content providers to indicate light/dark\nwould you like to provide something other than the default.",
+                    "properties": {
+                        "dark": {
+                            "type": "string"
+                        },
+                        "light": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "themes": {
+                    "$ref": "#/definitions/PlatformCustomThemes",
+                    "description": "The Themes you wish your platform to support"
+                }
+            },
+            "required": [
+                "themes"
+            ],
+            "type": "object"
+        },
+        "ToolbarButton": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/CustomBrowserButtonConfig"
+                },
+                {
+                    "$ref": "#/definitions/PreDefinedButtonConfig"
+                }
+            ]
+        },
+        "ToolbarButtonDefinition": {
+            "additionalProperties": false,
+            "properties": {
+                "button": {
+                    "$ref": "#/definitions/ToolbarButton",
+                    "description": "Details about the button itself"
+                },
+                "conditions": {
+                    "description": "If the button is included should there be conditions related to whether or not it is shown (e.g. authenticated)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "description": "A unique id for your button",
+                    "type": "string"
+                },
+                "include": {
+                    "description": "Should this definition be included in the list of buttons",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "button",
+                "id",
+                "include"
+            ],
+            "type": "object"
+        },
+        "VersionInfo": {
+            "additionalProperties": false,
+            "properties": {
+                "app": {
+                    "description": "The version of the the instance of this platform if provided",
+                    "type": "string"
+                },
+                "notificationCenter": {
+                    "description": "The version of the notification center that this platform instance has connected to",
+                    "type": "string"
+                },
+                "platformClient": {
+                    "description": "The version of the code of this platform",
+                    "type": "string"
+                },
+                "runtime": {
+                    "description": "The version of the runtime this platform instance is running against",
+                    "type": "string"
+                },
+                "rvm": {
+                    "description": "The version of the rvm that was used to launch this platform",
+                    "type": "string"
+                },
+                "workspace": {
+                    "description": "The version of the workspace components this platform is currently connected to",
+                    "type": "string"
+                },
+                "workspaceClient": {
+                    "description": "The version of the workspace client code",
+                    "type": "string"
+                },
+                "workspacePlatformClient": {
+                    "description": "The version of the workspace platform client code",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "VersionProviderOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "appVersion": {
+                    "description": "The version of the the instance of this platform",
+                    "type": "string"
+                },
+                "endpointId": {
+                    "description": "If you specify an endpoint then you are telling the platform to send information to this endpoint.\nThe information sent will be the VersionRequest object.\nIf you provide minimumVersion and maximumVersion information in the settings then the\nplatform will use those to calculate what has failed validation (minimum and/or maximum) and pass\nthose onto the endpoint.\n\nThe endpoint then returns an object with status (this returns the version info you sent, the min/max rules and what has failed. The failures indicate the state of the platform.).\nIf the status indicates that things need to be managed and should not proceed they will have a windowOptions property. This should be launched and that window will be built to\nsupport what should happen next.\n- Should the window tell the user that the setup isn't compatible and offer to shut down the platform?\n- Should it try to close the platform and launch a compatible manifest?\n- Should it notify the user that a newer version of the app is available and that they should restart?\nOn the initial request while the platform is running an invalid status will result in the bootstrapping stopping.",
+                    "type": "string"
+                },
+                "maxVersion": {
+                    "$ref": "#/definitions/MaximumVersion",
+                    "description": "You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions"
+                },
+                "minVersion": {
+                    "$ref": "#/definitions/MinimumVersion",
+                    "description": "You can specify if the platform should stop initializing if the version is less than any of the specified minimum versions"
+                },
+                "versionCheckIntervalInSeconds": {
+                    "description": "If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an\ninterval to see if an update of your application is available.",
+                    "type": "number"
+                },
+                "versionWindow": {
+                    "$ref": "#/definitions/Partial",
+                    "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met.\nThis window will be shown to the user and the bootstrapping process will be stopped."
+                }
+            },
+            "type": "object"
+        },
+        "ViewTabMenuOptionType": {
+            "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
+            "enum": [
+                "AddToChannel",
+                "Back",
+                "CloseTab",
+                "Custom",
+                "DuplicateView",
+                "Forward",
+                "NewView",
+                "OpenWithDefaultBrowser",
+                "Print",
+                "ReloadTab",
+                "RemoveFromChannel"
+            ],
+            "type": "string"
+        },
+        "ViewVisibilityOption": {
+            "$ref": "#/definitions/__type_22"
+        },
+        "ViewVisibilityOptions": {
+            "$ref": "#/definitions/__type_21"
+        },
+        "WebPermission": {
+            "enum": [
+                "audio",
+                "clipboard-read",
+                "clipboard-sanitized-write",
+                "fullscreen",
+                "geolocation",
+                "midiSysex",
+                "notifications",
+                "openExternal",
+                "pointerLock",
+                "video"
+            ],
+            "type": "string"
+        },
+        "WindowState": {
+            "description": "Visibility state of a window.",
+            "enum": [
+                "maximized",
+                "minimized",
+                "normal"
+            ],
+            "type": "string"
+        },
+        "WorkspacePlatformOptions": {
+            "$ref": "#/definitions/__type_9"
+        },
+        "__type": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_1": {
+            "additionalProperties": false,
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_10": {
+            "additionalProperties": false,
+            "properties": {
+                "devtools": {
+                    "description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
+                    "type": "boolean"
+                },
+                "reload": {
+                    "description": "If `true`, enables the reload keyboard shortcuts:<br>\n`Ctrl` + `R` _(Windows)_<br>\n`F5` _(Windows)_<br>\n`Command` + `R` _(Mac)_",
+                    "type": "boolean"
+                },
+                "reloadIgnoringCache": {
+                    "description": "If `true`, enables the reload-from-source keyboard shortcuts:<br>\n`Ctrl` + `Shift` + `R` _(Windows)_<br>\n`Shift` + `F5` _(Windows)_<br>\n`Command` + `Shift` + `R` _(Mac)_",
+                    "type": "boolean"
+                },
+                "zoom": {
+                    "description": "NOTE: It is not recommended to set this value to true for Windows in Platforms as that may lead to unexpected visual shifts in layout.\nIf `true`, enables the zoom keyboard shortcuts:<br>\n`Ctrl` + `+` _(Zoom In)_<br>\n`Ctrl` + `Shift` + `+` _(Zoom In)_<br>\n`Ctrl` + `NumPad+` _(Zoom In)_<br>\n`Ctrl` + `-` _(Zoom Out)_<br>\n`Ctrl` + `Shift` + `-` _(Zoom Out)_<br>\n`Ctrl` + `NumPad-` _(Zoom Out)_<br>\n`Ctrl` + `Scroll` _(Zoom In & Out)_<br>\n`Ctrl` + `0` _(Restore to 100%)_",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_11": {
+            "additionalProperties": false,
+            "description": "Configurations for API injection.",
+            "properties": {
+                "iframe": {
+                    "additionalProperties": false,
+                    "description": "Configure injection of OpenFin API into iframes based on domain",
+                    "properties": {
+                        "crossOriginInjection": {
+                            "description": "Inject OpenFin API into cross-origin iframes",
+                            "type": "boolean"
+                        },
+                        "enableDeprecatedSharedName": {
+                            "type": "boolean"
+                        },
+                        "sameOriginInjection": {
+                            "description": "Inject OpenFin API into same-origin iframes",
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "__type_12": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_13": {
+            "additionalProperties": false,
+            "properties": {
+                "accelerator": {
+                    "$ref": "#/definitions/Partial_2",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+                },
+                "api": {
+                    "$ref": "#/definitions/Api",
+                    "description": "Configurations for API injection."
+                },
+                "autoResize": {
+                    "$ref": "#/definitions/AutoResizeOptions"
+                },
+                "autoplayPolicy": {
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+                },
+                "backgroundColor": {
+                    "description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+                    "type": "string"
+                },
+                "bounds": {
+                    "$ref": "#/definitions/Bounds",
+                    "description": "Initial bounds given relative to the window."
+                },
+                "contentCreation": {
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+                },
+                "contentNavigation": {
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                },
+                "contextMenu": {
+                    "type": "boolean"
+                },
+                "contextMenuOptions": {
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
+                },
+                "contextMenuSettings": {
+                    "$ref": "#/definitions/ContextMenuSettings"
+                },
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the view.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
+                        "properties": {
+                            "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+                                "items": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "headers",
+                            "urlPatterns"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "detachOnClose": {
+                    "type": "boolean"
+                },
+                "enableBeforeUnload": {
+                    "type": "boolean"
+                },
+                "experimental": {},
+                "fdc3InteropApi": {
+                    "type": "string"
+                },
+                "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A hotkey binding.",
+                        "properties": {
+                            "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+                                "type": "string"
+                            },
+                            "preventDefault": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "keys"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "isClosable": {
+                    "type": "boolean"
+                },
+                "manifestUrl": {
+                    "description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the view.",
+                    "type": "string"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/Partial_4"
+                },
+                "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A script that is run before page load.",
+                        "properties": {
+                            "mandatory": {
+                                "type": "boolean"
+                            },
+                            "state": {
+                                "description": "Preload script execution state.",
+                                "enum": [
+                                    "failed",
+                                    "load-failed",
+                                    "load-started",
+                                    "load-succeeded",
+                                    "succeeded"
+                                ],
+                                "type": "string"
+                            },
+                            "url": {
+                                "description": "The URL from which the script was loaded.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "url"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "preventDragOut": {
+                    "type": "boolean"
+                },
+                "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+                    "type": "string"
+                },
+                "target": {
+                    "$ref": "#/definitions/Identity",
+                    "description": "The identity of the window this view should be attached to."
+                },
+                "url": {
+                    "type": "string"
+                },
+                "zoomLevel": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_14": {
+            "additionalProperties": false,
+            "properties": {
+                "height": {
+                    "type": "number"
+                },
+                "left": {
+                    "type": "number"
+                },
+                "top": {
+                    "type": "number"
+                },
+                "width": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "height",
+                "left",
+                "top",
+                "width"
+            ],
+            "type": "object"
+        },
+        "__type_15": {
+            "additionalProperties": false,
+            "properties": {
+                "Application": {
+                    "$ref": "#/definitions/Partial_5"
+                },
+                "System": {
+                    "$ref": "#/definitions/Partial_6"
+                },
+                "webAPIs": {
+                    "items": {
+                        "$ref": "#/definitions/WebPermission"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "__type_16": {
+            "additionalProperties": false,
+            "properties": {
+                "setFileDownloadLocation": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_17": {
+            "additionalProperties": false,
+            "properties": {
+                "getAllExternalWindows": {
+                    "type": "boolean"
+                },
+                "launchExternalProcess": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "assets": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "srcRules": {
+                                            "items": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "behavior": {
+                                                        "enum": [
+                                                            "allow",
+                                                            "block"
+                                                        ],
+                                                        "type": "string"
+                                                    },
+                                                    "match": {
+                                                        "items": {
+                                                            "type": "string"
+                                                        },
+                                                        "type": "array"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "behavior",
+                                                    "match"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                },
+                                "downloads": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                },
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "executables": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "pathRules": {
+                                            "items": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "behavior": {
+                                                        "enum": [
+                                                            "allow",
+                                                            "block"
+                                                        ],
+                                                        "type": "string"
+                                                    },
+                                                    "match": {
+                                                        "items": {
+                                                            "type": "string"
+                                                        },
+                                                        "type": "array"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "behavior",
+                                                    "match"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "enabled"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "openUrlWithBrowser": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "protocols": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "enabled",
+                        "protocols"
+                    ],
+                    "type": "object"
+                },
+                "readRegistryValue": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "registryKeys": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "enabled",
+                                "registryKeys"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "terminateExternalProcess": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_18": {
+            "additionalProperties": false,
+            "properties": {
+                "height": {
+                    "description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
+                    "type": "boolean"
+                },
+                "horizontal": {
+                    "description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
+                    "type": "boolean"
+                },
+                "vertical": {
+                    "description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
+                    "type": "boolean"
+                },
+                "width": {
+                    "description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_19": {
+            "additionalProperties": false,
+            "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details.",
+            "properties": {
+                "blacklist": {
+                    "description": "Forbidden URLs for navigation.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "whitelist": {
+                    "description": "Allowed URLs for navigation.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "__type_2": {
+            "additionalProperties": false,
+            "properties": {
+                "accelerator": {
+                    "$ref": "#/definitions/Partial_2",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+                },
+                "alphaMask": {
+                    "$ref": "#/definitions/RGB",
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                },
+                "alwaysOnTop": {
+                    "type": "boolean"
+                },
+                "api": {
+                    "$ref": "#/definitions/Api",
+                    "description": "Configurations for API injection."
+                },
+                "applicationIcon": {
+                    "type": "string"
+                },
+                "aspectRatio": {
+                    "type": "number"
+                },
+                "autoShow": {
+                    "description": "Automatically show the window when it is created.",
+                    "type": "boolean"
+                },
+                "autoplayPolicy": {
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+                },
+                "backgroundColor": {
+                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+                    "type": "string"
+                },
+                "closeOnLastViewRemoved": {
+                    "type": "boolean"
+                },
+                "contentCreation": {
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+                },
+                "contentNavigation": {
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                },
+                "contentRedirect": {
+                    "$ref": "#/definitions/Partial_7",
+                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                },
+                "contextMenu": {
+                    "type": "boolean"
+                },
+                "contextMenuOptions": {
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
+                },
+                "contextMenuSettings": {
+                    "$ref": "#/definitions/ContextMenuSettings"
+                },
+                "cornerRounding": {
+                    "$ref": "#/definitions/Partial_1",
+                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
+                },
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the window.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
+                        "properties": {
+                            "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+                                "items": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "headers",
+                            "urlPatterns"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "defaultCentered": {
+                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+                    "type": "boolean"
+                },
+                "defaultHeight": {
+                    "type": "number"
+                },
+                "defaultLeft": {
+                    "type": "number"
+                },
+                "defaultTop": {
+                    "type": "number"
+                },
+                "defaultWidth": {
+                    "type": "number"
+                },
+                "experimental": {},
+                "fdc3InteropApi": {
+                    "type": "string"
+                },
+                "frame": {
+                    "type": "boolean"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "hideOnClose": {
+                    "type": "boolean"
+                },
+                "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A hotkey binding.",
+                        "properties": {
+                            "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+                                "type": "string"
+                            },
+                            "preventDefault": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "keys"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "icon": {
+                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+                    "type": "string"
+                },
+                "ignoreSavedWindowState": {
+                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
+                    "type": "boolean"
+                },
+                "includeInSnapshots": {
+                    "type": "boolean"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "layout": {},
+                "maxHeight": {
+                    "type": "number"
+                },
+                "maxWidth": {
+                    "type": "number"
+                },
+                "maximizable": {
+                    "type": "boolean"
+                },
+                "minHeight": {
+                    "type": "number"
+                },
+                "minWidth": {
+                    "type": "number"
+                },
+                "minimizable": {
+                    "type": "boolean"
+                },
+                "modalParentIdentity": {
+                    "$ref": "#/definitions/Identity",
+                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
+                },
+                "name": {
+                    "description": "The name of the window.",
+                    "type": "string"
+                },
+                "opacity": {
+                    "type": "number"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/Partial_4"
+                },
+                "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A script that is run before page load.",
+                        "properties": {
+                            "mandatory": {
+                                "type": "boolean"
+                            },
+                            "state": {
+                                "description": "Preload script execution state.",
+                                "enum": [
+                                    "failed",
+                                    "load-failed",
+                                    "load-started",
+                                    "load-succeeded",
+                                    "succeeded"
+                                ],
+                                "type": "string"
+                            },
+                            "url": {
+                                "description": "The URL from which the script was loaded.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "url"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+                    "type": "string"
+                },
+                "resizable": {
+                    "type": "boolean"
+                },
+                "resizeRegion": {
+                    "$ref": "#/definitions/ResizeRegion",
+                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
+                },
+                "saveWindowState": {
+                    "type": "boolean"
+                },
+                "shadow": {
+                    "type": "boolean"
+                },
+                "showBackgroundImages": {
+                    "type": "boolean"
+                },
+                "showTaskbarIcon": {
+                    "type": "boolean"
+                },
+                "smallWindow": {
+                    "type": "boolean"
+                },
+                "state": {
+                    "$ref": "#/definitions/WindowState"
+                },
+                "taskbarIcon": {
+                    "type": "string"
+                },
+                "taskbarIconGroup": {
+                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "viewVisibility": {
+                    "$ref": "#/definitions/ViewVisibilityOptions",
+                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
+                },
+                "waitForPageLoad": {
+                    "type": "boolean"
+                },
+                "width": {
+                    "type": "number"
+                },
+                "workspacePlatform": {
+                    "$ref": "#/definitions/WorkspacePlatformOptions"
+                },
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_20": {
+            "additionalProperties": false,
+            "properties": {
+                "blacklist": {
+                    "description": "Forbidden URLs for redirects.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "whitelist": {
+                    "description": "Allowed URLs for redirects.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "__type_21": {
+            "additionalProperties": false,
+            "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
+            "properties": {
+                "showViewsOnSplitterDrag": {
+                    "$ref": "#/definitions/ViewVisibilityOption",
+                    "description": "Allows views to be shown when they are resized by the user dragging the splitter between layout stacks."
+                },
+                "showViewsOnTabDrag": {
+                    "$ref": "#/definitions/ViewVisibilityOption",
+                    "description": "_Supported on Windows Operating Systems only_. Allows views to be shown when the user is dragging a tab around a layout."
+                },
+                "showViewsOnWindowResize": {
+                    "$ref": "#/definitions/ShowViewOnWindowResizeOptions",
+                    "description": "Enables views to be shown when a Platform Window is being resized by the user."
+                }
+            },
+            "type": "object"
+        },
+        "__type_22": {
+            "additionalProperties": false,
+            "description": "Configuration for view visibility settings",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_3": {
+            "additionalProperties": false,
+            "properties": {
+                "blue": {
+                    "type": "number"
+                },
+                "green": {
+                    "type": "number"
+                },
+                "red": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "blue",
+                "green",
+                "red"
+            ],
+            "type": "object"
+        },
+        "__type_4": {
+            "additionalProperties": false,
+            "properties": {
+                "devtools": {
+                    "description": "Should the context menu contain a button for opening devtools.",
+                    "type": "boolean"
+                },
+                "enable": {
+                    "description": "Should the context menu display on right click.",
+                    "type": "boolean"
+                },
+                "reload": {
+                    "description": "Should the context menu contain a button for reloading the page.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "enable"
+            ],
+            "type": "object"
+        },
+        "__type_5": {
+            "additionalProperties": false,
+            "description": "Configure the context menu when right-clicking on a window.",
+            "properties": {
+                "enabled": {
+                    "description": "Displays the context menu on right click.",
+                    "type": "boolean"
+                },
+                "template": {
+                    "$ref": "#/definitions/Array_1",
+                    "description": "Context menu items to display on right-click."
+                }
+            },
+            "type": "object"
+        },
+        "__type_6": {
+            "additionalProperties": false,
+            "properties": {
+                "height": {
+                    "type": "number"
+                },
+                "width": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_7": {
+            "additionalProperties": false,
+            "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
+            "properties": {
+                "bottomRightCorner": {
+                    "type": "number"
+                },
+                "sides": {
+                    "additionalProperties": false,
+                    "description": "Enables resizing interaction for each side of the window.",
+                    "properties": {
+                        "bottom": {
+                            "type": "boolean"
+                        },
+                        "left": {
+                            "type": "boolean"
+                        },
+                        "right": {
+                            "type": "boolean"
+                        },
+                        "top": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "size": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_8": {
+            "additionalProperties": false,
+            "properties": {
+                "currentContextGroup": {
+                    "description": "Context Group for the client. (green, yellow, red, etc.).",
+                    "type": "string"
+                },
+                "providerId": {
+                    "description": "When provided, automatically connects the client to the specified provider uuid.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_9": {
+            "additionalProperties": {},
+            "type": "object"
+        }
+    }
+}
+
