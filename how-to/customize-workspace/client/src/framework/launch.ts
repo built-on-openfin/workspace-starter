@@ -67,7 +67,7 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	let name = manifest.name;
 	let wasNameSpecified = name !== undefined;
 
-	if (!wasNameSpecified && windowApp?.customConfig?.instanceMode === "single") {
+	if (!wasNameSpecified && windowApp?.instanceMode === "single") {
 		logger.info(
 			`A unique name was not provided in the manifest of this window but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${windowApp.appId} as the unique name.`
 		);
@@ -131,7 +131,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 
 	let wasNameSpecified = name !== undefined;
 
-	if (!wasNameSpecified && viewApp?.customConfig?.instanceMode === "single") {
+	if (!wasNameSpecified && viewApp?.instanceMode === "single") {
 		logger.info(
 			`A unique name was not provided in the manifest of this view but the custom config indicates that this app is supposed to have a single instance so we are using the appId: ${viewApp.appId} as the unique name.`
 		);

@@ -32,7 +32,7 @@ export interface IntentOptions {
 	unregisteredApp?: PlatformApp;
 }
 
-export interface IntentPickerOptions {
+export interface IntentResolverOptions {
 	/** The url of the html page that has the intent picker */
 	url: string;
 	/** the height you wish the window to be */
@@ -45,7 +45,8 @@ export interface IntentPickerOptions {
 	title?: string;
 }
 export interface PlatformInteropBrokerOptions {
-	/** Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform */
-	intentPicker?: IntentPickerOptions;
-	intentOptions: IntentOptions;
+	/** Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the platform */
+	intentResolver?: IntentResolverOptions;
+	/** Options related to the way this platform supports intents */
+	intentOptions?: IntentOptions;
 }

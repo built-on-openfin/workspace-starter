@@ -1,13 +1,29 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
+import type { AppInterop } from "./fdc3-2-0-shapes";
 
 export type PlatformApp = App & {
 	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
 	private?: boolean;
+	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */
+	instanceMode?: "multi" | "single";
 	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
-	customConfig?: CustomConfig;
+	customConfig?: { [key: string]: unknown };
+	/**
+	 * Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:
+	 * - It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens for.
+	 * - It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.
+	 * - It provides a standard location to document how the app interacts with user channels, app channels, and intents, for use by other app developers and desktop assemblers.
+	 */
+	interop?: PlatformAppInterop;
+	/** Optional tooltip description e.g. for a launcher or dock component */
+	tooltip?: string;
+	/** Optional URL that provides more information about the application */
+	moreInfo?: string;
 };
+
+export type PlatformAppInterop = AppInterop;
 
 /**
  * When fetching apps you can optionally provide a filter
@@ -18,10 +34,6 @@ export interface AppFilterOptions {
 }
 
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
-
-export interface CustomConfig {
-	instanceMode?: "single" | "multi";
-}
 
 export type ManifestTypeId =
 	| "view"

@@ -1,23 +1,22 @@
 import { getConnectedApps } from "./connections";
+import { addDirectory, getPlatformApps, init as directoryInit } from "./directory";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
+
 import type {
-	AppEndpointOptions,
 	AppFilterOptions,
 	AppProviderOptions,
 	AppsForIntent,
 	PlatformApp
 } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
+import { randomUUID } from "./uuid";
 
 const logger = createLogger("Apps");
 
 let cachedApps: PlatformApp[];
-let endpoints: EndpointProvider;
 let cacheDuration = 0;
-let endpointIds: AppEndpointOptions[] = [];
 let isInitialized = false;
-let defaultCredentials: "omit" | "same-origin" | "include";
 let appAssetTag: string = "appasset";
 let supportedManifestTypes: string[] = [];
 let canLaunchExternalProcess: boolean;
@@ -95,75 +94,21 @@ async function validateEntries(apps: PlatformApp[]) {
 }
 
 async function getEntries(
-	source: string[] | AppEndpointOptions[],
-	credentials?: "omit" | "same-origin" | "include",
 	cache?: number
 ): Promise<PlatformApp[]> {
-	const options = credentials !== undefined ? { credentials } : undefined;
-	if (!Array.isArray(source)) {
-		return [];
-	}
 	const apps: PlatformApp[] = [];
-
-	for (let i = 0; i < source.length; i++) {
-		const endpoint = source[i];
-		try {
-			if (typeof endpoint === "string") {
-				if (endpoints.hasEndpoint(endpoint)) {
-					logger.info(`Fetching apps from source: ${endpoint}`);
-					const results = await endpoints.requestResponse<never, PlatformApp[]>(endpoint);
-					logger.info(`${results.length} app(s) received.`);
-					apps.push(...results);
-				} else if (endpoint.startsWith("http")) {
-					logger.info(`Fetching apps from url: ${endpoint}`);
-					const resp = await fetch(endpoint, options);
-					const jsonResults: PlatformApp[] = await resp.json();
-					logger.info(`${jsonResults.length} app(s) received.`);
-					apps.push(...jsonResults);
-				} else {
-					logger.warn(
-						`Endpoint provided ${endpoint} that is not an available endpoint or a url. Unable to fetch apps.`
-					);
-				}
-			} else if (endpoint?.inputId !== undefined && endpoint?.outputId !== undefined) {
-				if (endpoints.hasEndpoint(endpoint.inputId) && endpoints.hasEndpoint(endpoint.outputId)) {
-					logger.info(
-						`Mapping from App Source: ${endpoint.inputId} to Platform App using: ${endpoint.outputId}`
-					);
-					const inputResults = await endpoints.requestResponse<never, unknown[]>(endpoint.inputId);
-					logger.info(`Received ${inputResults.length} result(s) from ${endpoint.inputId}.`);
-					const outputResults = await endpoints.requestResponse<unknown, PlatformApp[]>(
-						endpoint.outputId,
-						inputResults
-					);
-					logger.info(`Mapped ${outputResults.length} app(s) using ${endpoint.outputId}`);
-					apps.push(...outputResults);
-				} else {
-					logger.warn(
-						`Unable to mapping from App Source: ${endpoint.inputId} to Platform App using: ${endpoint.outputId} as one or both of the endpoints are not defined.`
-					);
-				}
-			} else if (endpoint?.inputId !== undefined && endpoints.hasEndpoint(endpoint?.inputId)) {
-				logger.info(`Fetching apps from source: ${endpoint.inputId}`);
-				const results = await endpoints.requestResponse<never, PlatformApp[]>(endpoint.inputId);
-				logger.info(`${results.length} app(s) received.`);
-				apps.push(...results);
-			} else {
-				logger.warn(
-					`Endpoint provided ${JSON.stringify(
-						endpoint
-					)} cannot be resolved. Please ensure that ids are provided and available.`
-				);
-			}
-		} catch (error) {
-			logger.error(`Error fetching apps from endpoint ${JSON.stringify(endpoint)}`, error);
+	try {
+		logger.info("Getting directory apps.");
+		const directoryApps = await getPlatformApps();
+		apps.push(...directoryApps);
+		logger.info("Getting connected apps.");
+		const connectedApps = await getConnectedApps();
+		if (connectedApps.length > 0) {
+			logger.info(`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`);
+			apps.push(...connectedApps);
 		}
-	}
-
-	const connectedApps = await getConnectedApps();
-	if (connectedApps.length > 0) {
-		logger.info(`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`);
-		apps.push(...connectedApps);
+	} catch (error) {
+		logger.error("Error fetching apps.", error);
 	}
 
 	cachedApps = await validateEntries(apps);
@@ -209,7 +154,8 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 		return;
 	}
 	isInitialized = true;
-	endpoints = endpointProvider;
+	await directoryInit(endpointProvider);
+
 	if (options?.appsSourceUrl !== undefined) {
 		// backward compatibility support
 		logger.info(
@@ -218,14 +164,42 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 		if (Array.isArray(options?.appsSourceUrl)) {
 			logger.info("appsSourceUrl specified as an array of urls");
 			const appUrls: string[] = options?.appsSourceUrl || [];
-			endpointIds.push(...appUrls);
+			for(const url of appUrls) {
+				addDirectory({
+					id: randomUUID(),
+					url: { path: url, credentials: options?.includeCredentialOnSourceRequest }
+				});
+			}
 		} else {
 			logger.info("appsSourceUrl specified as a single url");
-			endpointIds.push(options?.appsSourceUrl);
+			addDirectory({
+				id: randomUUID(),
+				url: { path: options?.appsSourceUrl, credentials: options?.includeCredentialOnSourceRequest }
+			});
 		}
 	} else if (Array.isArray(options?.endpointIds)) {
 		logger.info("Using the following passed endpoints", options?.endpointIds);
-		endpointIds = options?.endpointIds || [];
+		const endpointIds = options?.endpointIds || [];
+		for(const endpointId of endpointIds) {
+			if(typeof endpointId === "string") {
+				if(endpointId.startsWith("http")) {
+					addDirectory({
+						id: randomUUID(),
+						url: { path: endpointId, credentials: options?.includeCredentialOnSourceRequest }
+					});
+				} else {
+					addDirectory({
+						id: randomUUID(),
+						endpointId
+					});
+				}
+			} else {
+				addDirectory({
+					id: randomUUID(),
+					map: endpointId
+				});
+			}
+		}
 	}
 
 	if (options?.cacheDurationInSeconds !== undefined) {
@@ -235,8 +209,6 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 	if (options?.cacheDurationInMinutes !== undefined) {
 		cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 	}
-
-	defaultCredentials = options?.includeCredentialOnSourceRequest;
 	appAssetTag = options?.appAssetTag ?? "appasset";
 	supportedManifestTypes = options?.manifestTypes ?? [];
 }
@@ -244,7 +216,7 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 export async function getApps(appFilter: AppFilterOptions = {}): Promise<PlatformApp[]> {
 	logger.info("Requesting apps");
 	try {
-		const apps = cachedApps ?? (await getEntries(endpointIds, defaultCredentials, cacheDuration));
+		const apps = cachedApps ?? (await getEntries(cacheDuration));
 		if (appFilter.private !== undefined) {
 			return apps.filter((appToFilter) => {
 				const isPrivate = appToFilter.private ?? false;

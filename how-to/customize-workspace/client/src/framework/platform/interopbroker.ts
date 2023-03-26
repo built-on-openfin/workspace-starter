@@ -4,7 +4,7 @@ import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type {
 	IntentOptions,
-	IntentPickerOptions,
+	IntentResolverOptions,
 	IntentPickerResponse,
 	IntentRegistrationEntry,
 	IntentRegistrationPayload,
@@ -50,7 +50,7 @@ export function interopOverride(
 
 		private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
 
-		private _intentPickerOptions: IntentPickerOptions;
+		private _intentResolverOptions: IntentResolverOptions;
 
 		private _intentOptions: IntentOptions;
 
@@ -60,7 +60,15 @@ export function interopOverride(
 			getSettings()
 				.then((customSettings) => {
 					if (customSettings?.platformProvider !== undefined) {
-						this._intentPickerOptions = {
+						let intentResolverOptions: IntentResolverOptions;
+						if(customSettings?.platformProvider?.interop?.intentResolver === undefined &&
+							customSettings?.platformProvider?.intentPicker !== undefined) {
+								logger.warn("Please use platformProvider.interop.intentResolver instead of platformProvider.intentPicker for your settings.");
+								intentResolverOptions = customSettings.platformProvider.intentPicker;
+							} else {
+								intentResolverOptions = customSettings?.platformProvider?.interop?.intentResolver;
+							}
+						this._intentResolverOptions = {
 							height: 715,
 							width: 665,
 							fdc3InteropApi: "2.0",
@@ -69,10 +77,10 @@ export function interopOverride(
 								"common/windows/intents/instance-picker.html"
 							),
 							title: "Intent Resolver",
-							...customSettings?.platformProvider?.intentPicker
+							...intentResolverOptions
 						};
 						// eslint-disable-next-line max-len
-						this._intentOptions = { intentTimeout: 5000, ...customSettings?.platformProvider?.intentOptions };
+						this._intentOptions = { intentTimeout: 5000, ...customSettings?.platformProvider?.interop?.intentOptions };
 						if (this._intentOptions?.unregisteredApp !== undefined) {
 							this._intentOptions.unregisteredApp.manifestType = manifestTypes.unregisteredApp.id;
 						}
@@ -587,11 +595,11 @@ export function interopOverride(
 			// show menu
 			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
 			// the window can then use raiseIntent against a specific app (the selected one).
-			const height = this._intentPickerOptions.height;
-			const width = this._intentPickerOptions.width;
-			const interopApiVersion = this._intentPickerOptions.fdc3InteropApi;
+			const height = this._intentResolverOptions.height;
+			const width = this._intentResolverOptions.width;
+			const interopApiVersion = this._intentResolverOptions.fdc3InteropApi;
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
-			const url = this._intentPickerOptions.url;
+			const url = this._intentResolverOptions.url;
 			const winOption = {
 				name: "intent-picker",
 				includeInSnapshot: false,
@@ -602,7 +610,7 @@ export function interopOverride(
 				saveWindowState: false,
 				defaultCentered: true,
 				customData: {
-					title: this._intentPickerOptions?.title,
+					title: this._intentResolverOptions?.title,
 					apps: launchOptions.apps,
 					intent: launchOptions.intent,
 					intents: launchOptions.intents,
@@ -775,7 +783,7 @@ export function interopOverride(
 		}
 
 		private useSingleInstance(app: PlatformApp): boolean {
-			return app?.customConfig?.instanceMode === "single";
+			return app?.instanceMode === "single";
 		}
 
 		private getClientReadyKey(identity: OpenFin.Identity, intentName: string): string {
