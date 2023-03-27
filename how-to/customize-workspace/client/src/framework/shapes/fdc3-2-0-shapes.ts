@@ -39,9 +39,7 @@ export interface CitrixAppDetails {
 
 /** Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface OtherAppDetails {
-
-}
+export interface OtherAppDetails {}
 
 export interface AppIntents {
 	/** An optional display name for the intent that may be used in UI instead of the name. */

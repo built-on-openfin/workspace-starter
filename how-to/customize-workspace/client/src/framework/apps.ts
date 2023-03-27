@@ -3,12 +3,7 @@ import { addDirectory, getPlatformApps, init as directoryInit } from "./director
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 
-import type {
-	AppFilterOptions,
-	AppProviderOptions,
-	AppsForIntent,
-	PlatformApp
-} from "./shapes/app-shapes";
+import type { AppFilterOptions, AppProviderOptions, AppsForIntent, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import { randomUUID } from "./uuid";
 
@@ -93,9 +88,7 @@ async function validateEntries(apps: PlatformApp[]) {
 	return validatedApps;
 }
 
-async function getEntries(
-	cache?: number
-): Promise<PlatformApp[]> {
+async function getEntries(cache?: number): Promise<PlatformApp[]> {
 	const apps: PlatformApp[] = [];
 	try {
 		logger.info("Getting directory apps.");
@@ -130,21 +123,22 @@ function updateEntry(
 			apps: PlatformApp[];
 		};
 	},
-	intent,
+	name: string,
+	displayName: string,
 	app: PlatformApp
 ) {
-	if (source[intent.name] === undefined) {
+	if (source[name] === undefined) {
 		// in a production app you would either need to ensure that every app was populated with the same name & displayName for an intent from a golden source (e.g. intents table) so picking the first entry wouldn't make a difference.
 		// or you could pull in a golden source of intents from a service and then do a lookup using the intent name to get an object with intent name and official display name.
-		source[intent.name] = {
+		source[name] = {
 			intent: {
-				name: intent.name,
-				displayName: intent.displayName
+				name,
+				displayName
 			},
 			apps: []
 		};
 	}
-	source[intent.name].apps.push(app);
+	source[name].apps.push(app);
 	return source;
 }
 
@@ -164,7 +158,7 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 		if (Array.isArray(options?.appsSourceUrl)) {
 			logger.info("appsSourceUrl specified as an array of urls");
 			const appUrls: string[] = options?.appsSourceUrl || [];
-			for(const url of appUrls) {
+			for (const url of appUrls) {
 				addDirectory({
 					id: randomUUID(),
 					url: { path: url, credentials: options?.includeCredentialOnSourceRequest }
@@ -180,9 +174,9 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 	} else if (Array.isArray(options?.endpointIds)) {
 		logger.info("Using the following passed endpoints", options?.endpointIds);
 		const endpointIds = options?.endpointIds || [];
-		for(const endpointId of endpointIds) {
-			if(typeof endpointId === "string") {
-				if(endpointId.startsWith("http")) {
+		for (const endpointId of endpointIds) {
+			if (typeof endpointId === "string") {
+				if (endpointId.startsWith("http")) {
 					addDirectory({
 						id: randomUUID(),
 						url: { path: endpointId, credentials: options?.includeCredentialOnSourceRequest }
@@ -277,12 +271,13 @@ export async function getApp(requestedApp: string | { appId: string }): Promise<
 
 export async function getAppsByIntent(intent: string): Promise<PlatformApp[]> {
 	const apps = await getApps();
-	const filteredApps = apps.filter((value) => {
-		if (value.intents === undefined) {
+	const filteredApps = apps.filter((app) => {
+		if (app.interop?.intents?.listensFor === undefined) {
 			return false;
 		}
-		for (let i = 0; i < value.intents.length; i++) {
-			if (value.intents[i].name.toLowerCase() === intent.toLowerCase()) {
+		const intentNames = Object.keys(app.interop.intents.listensFor);
+		for (let i = 0; i < intentNames.length; i++) {
+			if (intentNames[i].toLowerCase() === intent.toLowerCase()) {
 				return true;
 			}
 		}
@@ -293,7 +288,8 @@ export async function getAppsByIntent(intent: string): Promise<PlatformApp[]> {
 
 export async function getIntent(
 	intent: string,
-	contextType?: string
+	contextType?: string,
+	resultType?: string
 ): Promise<{ intent: { name: string; displayName: string }; apps: PlatformApp[] }> {
 	const apps = await getApps();
 	let intents: {
@@ -304,17 +300,28 @@ export async function getIntent(
 	} = {};
 
 	if (Array.isArray(apps)) {
-		for (const value of apps) {
-			if (value.intents !== undefined) {
-				for (let i = 0; i < value.intents.length; i++) {
-					if (value.intents[i].name === intent) {
-						if (contextType === undefined) {
-							intents = updateEntry(intents, value.intents[i], value);
-						} else if (
-							Array.isArray(value.intents[i].contexts) &&
-							value.intents[i].contexts.includes(contextType)
-						) {
-							intents = updateEntry(intents, value.intents[i], value);
+		for (const app of apps) {
+			if (app.interop?.intents?.listensFor !== undefined) {
+				const supportedIntents = Object.keys(app.interop.intents.listensFor);
+				for (let i = 0; i < supportedIntents.length; i++) {
+					const intentName = supportedIntents[i];
+					if (intentName === intent) {
+						let include = true;
+						const appIntent = app.interop.intents.listensFor[intentName];
+						if (contextType !== undefined && resultType !== undefined) {
+							if (
+								!appIntent?.contexts?.includes(contextType) ||
+								!appIntent.resultType?.includes(resultType, 0)
+							) {
+								include = false;
+							}
+						} else if (contextType !== undefined && !appIntent?.contexts?.includes(contextType)) {
+							include = false;
+						} else if (resultType !== undefined && !appIntent?.resultType?.includes(resultType, 0)) {
+							include = false;
+						}
+						if (include) {
+							intents = updateEntry(intents, intentName, appIntent.displayName, app);
 						}
 					}
 				}
@@ -323,13 +330,15 @@ export async function getIntent(
 
 		const results = Object.values(intents);
 		if (results.length === 0) {
-			logger.info(`No results found for findIntent for intent ${intent} and context ${contextType}`);
+			logger.info(
+				`No results found for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}`
+			);
 			return null;
 		} else if (results.length === 1) {
 			return results[0];
 		}
 		logger.warn(
-			`Received more than one result for findIntent for intent ${intent} and context ${contextType}. Returning the first entry.`
+			`Received more than one result for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}. Returning the first entry.`
 		);
 		return results[0];
 	}
@@ -337,7 +346,10 @@ export async function getIntent(
 	return null;
 }
 
-export async function getIntentsByContext(contextType: string): Promise<AppsForIntent[]> {
+export async function getIntentsByContext(
+	contextType: string,
+	resultType?: string
+): Promise<AppsForIntent[]> {
 	const apps = await getApps();
 	let intents: {
 		[key: string]: {
@@ -347,11 +359,25 @@ export async function getIntentsByContext(contextType: string): Promise<AppsForI
 	} = {};
 
 	if (Array.isArray(apps)) {
-		for (const value of apps) {
-			if (value.intents !== undefined) {
-				for (let i = 0; i < value.intents.length; i++) {
-					if (Array.isArray(value.intents[i].contexts) && value.intents[i].contexts.includes(contextType)) {
-						intents = updateEntry(intents, value.intents[i], value);
+		for (const app of apps) {
+			if (app.interop?.intents?.listensFor !== undefined) {
+				const supportedIntents = Object.keys(app.interop.intents.listensFor);
+				for (let i = 0; i < supportedIntents.length; i++) {
+					let include = true;
+					const intentName = supportedIntents[i];
+					const appIntent = app.interop.intents.listensFor[intentName];
+					if (contextType !== undefined && resultType !== undefined) {
+						if (
+							!appIntent?.contexts?.includes(contextType) ||
+							!appIntent.resultType?.includes(resultType, 0)
+						) {
+							include = false;
+						}
+					} else if (contextType !== undefined && !appIntent?.contexts?.includes(contextType)) {
+						include = false;
+					}
+					if (include) {
+						intents = updateEntry(intents, intentName, appIntent.displayName, app);
 					}
 				}
 			}

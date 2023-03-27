@@ -105,39 +105,39 @@ export function getIntents(interop: AppInterop): AppIntent[] {
 }
 
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
-    const platformApp: PlatformApp = {
-        appId: app.appId,
-        title: app.title || app.name,
-        manifestType: getManifestType(app),
-        manifest: getManifest(app) as string,
-        description: app.description,
+	const platformApp: PlatformApp = {
+		appId: app.appId,
+		title: app.title || app.name,
+		manifestType: getManifestType(app),
+		manifest: getManifest(app) as string,
+		description: app.description,
 		instanceMode: app?.hostManifests?.OpenFin?.config?.instanceMode,
-        intents: getIntents(app.interop),
-        interop: app.interop,
-        customConfig: app.customConfig,
-        tags: app.categories,
-        version: app.version,
-        publisher: app.publisher,
-        contactEmail: app.contactEmail,
-        supportEmail: app.supportEmail,
-        icons: app.icons,
-        images: app.screenshots,
-        private: app?.hostManifests?.OpenFin?.config?.private
-    };
-    return platformApp;
+		intents: getIntents(app.interop),
+		interop: app.interop,
+		customConfig: app.customConfig,
+		tags: app.categories,
+		version: app.version,
+		publisher: app.publisher,
+		contactEmail: app.contactEmail,
+		supportEmail: app.supportEmail,
+		icons: app.icons,
+		images: app.screenshots,
+		private: app?.hostManifests?.OpenFin?.config?.private
+	};
+	return platformApp;
 }
 
 export function mapToPlatformApps(apps: AppDefinition[]): PlatformApp[] {
 	const platformApps: PlatformApp[] = [];
 
-	for(const app of apps) {
+	for (const app of apps) {
 		platformApps.push(mapToPlatformApp(app));
 	}
 
 	return platformApps;
 }
 
-export function MapToAppMetaData(app: PlatformApp): AppMetadata {
+export function mapToAppMetaData(app: PlatformApp, resultType?: string): AppMetadata {
 	const appMetaData: AppMetadata = {
 		appId: app.appId,
 		description: app.description,
@@ -146,7 +146,8 @@ export function MapToAppMetaData(app: PlatformApp): AppMetadata {
 		screenshots: app.images,
 		title: app.title,
 		tooltip: app.tooltip,
-		version: app.version
+		version: app.version,
+		resultType
 	};
 	return appMetaData;
 }

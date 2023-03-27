@@ -12,6 +12,7 @@ import type {
 } from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
+import { mapToAppMetaData } from "../fdc3/2.0/mapper";
 import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
@@ -61,13 +62,17 @@ export function interopOverride(
 				.then((customSettings) => {
 					if (customSettings?.platformProvider !== undefined) {
 						let intentResolverOptions: IntentResolverOptions;
-						if(customSettings?.platformProvider?.interop?.intentResolver === undefined &&
-							customSettings?.platformProvider?.intentPicker !== undefined) {
-								logger.warn("Please use platformProvider.interop.intentResolver instead of platformProvider.intentPicker for your settings.");
-								intentResolverOptions = customSettings.platformProvider.intentPicker;
-							} else {
-								intentResolverOptions = customSettings?.platformProvider?.interop?.intentResolver;
-							}
+						if (
+							customSettings?.platformProvider?.interop?.intentResolver === undefined &&
+							customSettings?.platformProvider?.intentPicker !== undefined
+						) {
+							logger.warn(
+								"Please use platformProvider.interop.intentResolver instead of platformProvider.intentPicker for your settings."
+							);
+							intentResolverOptions = customSettings.platformProvider.intentPicker;
+						} else {
+							intentResolverOptions = customSettings?.platformProvider?.interop?.intentResolver;
+						}
 						this._intentResolverOptions = {
 							height: 715,
 							width: 665,
@@ -80,7 +85,10 @@ export function interopOverride(
 							...intentResolverOptions
 						};
 						// eslint-disable-next-line max-len
-						this._intentOptions = { intentTimeout: 5000, ...customSettings?.platformProvider?.interop?.intentOptions };
+						this._intentOptions = {
+							intentTimeout: 5000,
+							...customSettings?.platformProvider?.interop?.intentOptions
+						};
 						if (this._intentOptions?.unregisteredApp !== undefined) {
 							this._intentOptions.unregisteredApp.manifestType = manifestTypes.unregisteredApp.id;
 						}
@@ -114,8 +122,23 @@ export function interopOverride(
 			return true;
 		}
 
-		public async handleInfoForIntentsByContext(context: { type: string }, clientIdentity) {
-			const intents = await getIntentsByContext(context.type);
+		public async handleInfoForIntentsByContext(
+			contextOptions: { type: string } | { context: { type: string }; metadata: { resultType: string } },
+			clientIdentity
+		) {
+			let requestedContextType: string;
+			let requestedResultType: string;
+			let request: { context: { type: string }; metadata: { resultType: string } };
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			if (contextOptions["type"] !== undefined) {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				requestedContextType = contextOptions["type"];
+			} else {
+				request = contextOptions as { context: { type: string }; metadata: { resultType: string } };
+				requestedContextType = request?.context?.type;
+				requestedResultType = request?.metadata?.resultType;
+			}
+			const intents = await getIntentsByContext(requestedContextType, requestedResultType);
 
 			if (intents.length === 0) {
 				throw new Error(ResolveError.NoAppsFound);
@@ -123,32 +146,48 @@ export function interopOverride(
 
 			const mappedIntents = intents.map((entry) => ({
 				intent: entry.intent,
-				apps: entry.apps.map((app) => ({
-					name: app.appId,
-					appId: app.appId,
-					title: app.title
-				}))
+				apps: entry.apps.map((app) => {
+					let resultType: string;
+					if (
+						app?.interop?.intents?.listensFor !== undefined &&
+						app.interop.intents.listensFor[entry.intent.name] !== undefined
+					) {
+						resultType = app.interop.intents.listensFor[entry.intent.name].resultType;
+					}
+					const appEntry: AppMetadata = mapToAppMetaData(app, resultType);
+
+					return appEntry;
+				})
 			}));
 
 			return mappedIntents;
 		}
 
 		public async handleInfoForIntent(
-			intentOptions: { name: string; context?: { type: string } },
+			intentOptions: { name: string; context?: { type: string }; metadata: { resultType?: string } },
 			clientIdentity
 		) {
-			const result = await getIntent(intentOptions.name, intentOptions.context?.type);
+			let contextType: string;
+			if (intentOptions?.context?.type !== undefined && intentOptions?.context.type !== "fdc3.nothing") {
+				contextType = intentOptions?.context.type;
+			}
+
+			const result = await getIntent(intentOptions.name, contextType, intentOptions?.metadata?.resultType);
 			if (result === null) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
 			const response = {
 				intent: result.intent,
 				apps: result.apps.map((app) => {
-					const appEntry = {
-						name: app.appId,
-						appId: app.appId,
-						title: app.title
-					};
+					let resultType: string;
+					if (
+						app?.interop?.intents?.listensFor !== undefined &&
+						app.interop.intents.listensFor[result.intent.name] !== undefined
+					) {
+						resultType = app.interop.intents.listensFor[result.intent.name].resultType;
+					}
+					const appEntry: AppMetadata = mapToAppMetaData(app, resultType);
+
 					return appEntry;
 				})
 			};
@@ -386,15 +425,16 @@ export function interopOverride(
 			app: AppIdentifier,
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<AppMetadata> {
-			logger.info("fdc3handlegetappmeta call received.", app, clientIdentity);
-			let appMetadata = await getApp(app.appId);
+			logger.info("fdc3HandleGetAppMetadata call received.", app, clientIdentity);
+			let platformApp = await getApp(app.appId);
 			if (
-				(appMetadata === undefined || appMetadata === null) &&
+				(platformApp === undefined || platformApp === null) &&
 				app.appId === this._intentOptions?.unregisteredApp?.appId
 			) {
-				appMetadata = this._intentOptions?.unregisteredApp as PlatformApp;
+				platformApp = this._intentOptions?.unregisteredApp as PlatformApp;
 			}
-			if (appMetadata !== undefined && appMetadata !== null) {
+			if (platformApp !== undefined && platformApp !== null) {
+				const appMetaData: AppMetadata = mapToAppMetaData(platformApp);
 				if (app.instanceId !== undefined) {
 					const allConnectedClients = await this.getAllClientInfo();
 					const connectedClient = allConnectedClients.find((client) => client.endpointId === app.instanceId);
@@ -423,15 +463,15 @@ export function interopOverride(
 								error
 							);
 						}
-						const instanceAppMeta = {
-							...appMetadata,
+						const instanceAppMeta: AppMetadata = {
+							...appMetaData,
 							instanceId: app.instanceId,
 							instanceMetadata: { title, preview }
 						};
 						return instanceAppMeta;
 					}
 				}
-				return appMetadata;
+				return appMetaData;
 			}
 			throw new Error("TargetAppUnavailable");
 		}

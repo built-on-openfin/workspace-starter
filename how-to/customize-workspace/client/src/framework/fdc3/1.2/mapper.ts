@@ -1,6 +1,9 @@
 import type { Image } from "@openfin/workspace";
 import type { PlatformApp } from "customize-workspace/shapes";
-import type { AppInterop, AppIntents as FDC3TwoPointZeroAppIntents } from "customize-workspace/shapes/fdc3-2-0-shapes";
+import type {
+	AppInterop,
+	AppIntents as FDC3TwoPointZeroAppIntents
+} from "customize-workspace/shapes/fdc3-2-0-shapes";
 import type { AppDefinition, AppIcon, AppImage, AppIntents } from "../../shapes/fdc3-1-2-shapes";
 
 function getIcons(icons: AppIcon[]): Image[] {
@@ -58,51 +61,51 @@ function getPrivate(app: AppDefinition): boolean {
 }
 
 export function getInterop(intents: AppIntents[]): AppInterop {
-    const listensFor: { [key: string]: FDC3TwoPointZeroAppIntents } = {};
+	const listensFor: { [key: string]: FDC3TwoPointZeroAppIntents } = {};
 
-    for(const intent of intents) {
-        listensFor[intent.name] = {
-            contexts: intent.contexts,
-            customConfig: intent.customConfig,
-            displayName: intent.displayName
-        };
-    }
+	for (const intent of intents) {
+		listensFor[intent.name] = {
+			contexts: intent.contexts,
+			customConfig: intent.customConfig,
+			displayName: intent.displayName
+		};
+	}
 
-    const interop: AppInterop = {
-        intents: { listensFor }
-    };
+	const interop: AppInterop = {
+		intents: { listensFor }
+	};
 
-    return interop;
+	return interop;
 }
 
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
-    const platformApp: PlatformApp = {
-        appId: app.appId,
-        title: app.title || app.name,
-        manifestType: app.manifestType,
-        manifest: getManifest(app) as string,
-        description: app.description,
-        customConfig: app.customConfig,
-        intents: app.intents,
-        interop: getInterop(app.intents),
-        tags: getTags(app),
-        version: app.version,
-        publisher: app.publisher,
-        contactEmail: app.contactEmail,
-        supportEmail: app.supportEmail,
-        icons: getIcons(app.icons),
-        images: getImages(app.images),
-        private: getPrivate(app),
-        instanceMode: app.customConfig?.instanceMode,
-        tooltip: app.tooltip
-    };
-    return platformApp;
+	const platformApp: PlatformApp = {
+		appId: app.appId,
+		title: app.title || app.name,
+		manifestType: app.manifestType,
+		manifest: getManifest(app) as string,
+		description: app.description,
+		customConfig: app.customConfig,
+		intents: app.intents,
+		interop: getInterop(app.intents),
+		tags: getTags(app),
+		version: app.version,
+		publisher: app.publisher,
+		contactEmail: app.contactEmail,
+		supportEmail: app.supportEmail,
+		icons: getIcons(app.icons),
+		images: getImages(app.images),
+		private: getPrivate(app),
+		instanceMode: app.customConfig?.instanceMode,
+		tooltip: app.tooltip
+	};
+	return platformApp;
 }
 
 export function mapToPlatformApps(apps: AppDefinition[]): PlatformApp[] {
 	const platformApps: PlatformApp[] = [];
 
-	for(const app of apps) {
+	for (const app of apps) {
 		platformApps.push(mapToPlatformApp(app));
 	}
 
