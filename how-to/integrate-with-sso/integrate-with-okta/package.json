@@ -23,7 +23,7 @@
 		"@openfin/workspace-platform": "12.1.4"
 	},
 	"devDependencies": {
-		"@openfin/core": "30.74.8",
+		"@openfin/core": "30.74.7",
 		"@okta/okta-auth-js": "^7.2.0"
 	}
 }
