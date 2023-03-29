@@ -65,5 +65,22 @@
 		"prettier": "2.8.4",
 		"replace-in-file": "6.3.5",
 		"yargs": "17.7.1"
+	},
+	"overrides": {
+		"tsutils": {
+			"typescript": "4.9.5"
+		},
+		"ts-loader": {
+			"typescript": "4.9.5"
+		},
+		"ts-jest": {
+			"typescript": "4.9.5"
+		},
+		"ts-node": {
+			"typescript": "4.9.5"
+		},
+		"puppeteer-core": {
+			"typescript": "4.9.5"
+		}
 	}
 }
