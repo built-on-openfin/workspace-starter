@@ -39,8 +39,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.0-beta.5",
-		"@openfin/workspace": "12.1.4",
-		"@openfin/workspace-platform": "12.1.4",
+		"@openfin/workspace": "12.6.1",
+		"@openfin/workspace-platform": "12.6.1",
 		"csstype": "^3.1.1"
 	},
 	"devDependencies": {
