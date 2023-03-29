@@ -142,10 +142,10 @@ export interface AppDefinition {
 	 */
 	hostManifests?: {
 		OpenFin: {
-			/** this is the manifest type id used by OpenFin */
-			type: string;
-			/** this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type */
-			details: string | unknown;
+			/** this is the manifest type id used by OpenFin and specified if root type is defined as other.*/
+			type?: string;
+			/** this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type or extending the details from the root. */
+			details?: string | unknown;
 			/** An area for config related to this app for the platform hosting it. This isn't specific to the app manifest but how the platform can manage the app. */
 			config?: {
 				/** Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it is intended to be a background window that acts as an intent handler) */
