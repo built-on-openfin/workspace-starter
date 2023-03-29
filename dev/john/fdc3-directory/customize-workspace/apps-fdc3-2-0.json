@@ -1,4 +1,5 @@
 {
+	"$schema": "./schemas/fdc3v2.0-appd.schema.json",
 	"applications": [
 		{
 			"appId": "fdc3-intent-view-2-0",
@@ -66,10 +67,10 @@
 							"displayName": "View Instrument",
 							"contexts": ["fdc3.instrument", "fdc3.instrumentList"]
 						}
-					},
-					"userChannels": {},
-					"appChannels": []
-				}
+					}
+				},
+				"userChannels": {},
+				"appChannels": []
 			},
 			"hostManifests": {
 				"OpenFin": {
@@ -115,6 +116,7 @@
 		},
 		{
 			"appId": "fdc3-workbench-2-0",
+			"name": "fdc3-workbench-2-0",
 			"title": "FDC3 Workbench (2.0)",
 			"description": "Development and test tool for FDC3 desktop agents and apps",
 			"categories": ["developer tools", "tools", "training"],
@@ -160,20 +162,20 @@
 							"displayName": "View Instrument",
 							"contexts": ["fdc3.instrument", "fdc3.instrumentList"]
 						}
-					},
-					"userChannels": {
-						"broadcasts": ["fdc3.instrument"],
-						"listensFor": [
-							"fdc3.instrument",
-							"fdc3.instrumentList",
-							"fdc3.position",
-							"fdc3.portfolio",
-							"fdc3.chart",
-							"fdc3.timeRange"
-						]
-					},
-					"appChannels": []
-				}
+					}
+				},
+				"userChannels": {
+					"broadcasts": ["fdc3.instrument"],
+					"listensFor": [
+						"fdc3.instrument",
+						"fdc3.instrumentList",
+						"fdc3.position",
+						"fdc3.portfolio",
+						"fdc3.chart",
+						"fdc3.timeRange"
+					]
+				},
+				"appChannels": []
 			}
 		}
 	],
