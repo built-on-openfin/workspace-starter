@@ -5,6 +5,7 @@ import { manifestTypes } from "./manifest-types";
 
 import type { AppFilterOptions, AppProviderOptions, AppsForIntent, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
+import type { AppIntents } from "./shapes/fdc3-2-0-shapes";
 import { randomUUID } from "./uuid";
 
 const logger = createLogger("Apps");
@@ -312,26 +313,11 @@ export async function getIntent(
 		for (const app of apps) {
 			if (app.interop?.intents?.listensFor !== undefined) {
 				const supportedIntents = Object.keys(app.interop.intents.listensFor);
-				for (let i = 0; i < supportedIntents.length; i++) {
-					const intentName = supportedIntents[i];
-					if (intentName === intent) {
-						let include = true;
-						const appIntent = app.interop.intents.listensFor[intentName];
-						if (contextType !== undefined && resultType !== undefined) {
-							if (
-								!appIntent?.contexts?.includes(contextType) ||
-								!appIntent.resultType?.includes(resultType, 0)
-							) {
-								include = false;
-							}
-						} else if (contextType !== undefined && !appIntent?.contexts?.includes(contextType)) {
-							include = false;
-						} else if (resultType !== undefined && !appIntent?.resultType?.includes(resultType, 0)) {
-							include = false;
-						}
-						if (include) {
-							intents = updateEntry(intents, intentName, appIntent.displayName, app);
-						}
+				for (const supportedIntent of supportedIntents) {
+					const appIntent = app.interop.intents.listensFor[supportedIntent];
+					const include = appIntentContains(contextType, resultType, appIntent);
+					if (include) {
+						intents = updateEntry(intents, supportedIntent, appIntent.displayName, app);
 					}
 				}
 			}
@@ -371,22 +357,11 @@ export async function getIntentsByContext(
 		for (const app of apps) {
 			if (app.interop?.intents?.listensFor !== undefined) {
 				const supportedIntents = Object.keys(app.interop.intents.listensFor);
-				for (let i = 0; i < supportedIntents.length; i++) {
-					let include = true;
-					const intentName = supportedIntents[i];
-					const appIntent = app.interop.intents.listensFor[intentName];
-					if (contextType !== undefined && resultType !== undefined) {
-						if (
-							!appIntent?.contexts?.includes(contextType) ||
-							!appIntent.resultType?.includes(resultType, 0)
-						) {
-							include = false;
-						}
-					} else if (contextType !== undefined && !appIntent?.contexts?.includes(contextType)) {
-						include = false;
-					}
+				for (const supportedIntent of supportedIntents) {
+					const appIntent = app.interop.intents.listensFor[supportedIntent];
+					const include = appIntentContains(contextType, resultType, appIntent);
 					if (include) {
-						intents = updateEntry(intents, intentName, appIntent.displayName, app);
+						intents = updateEntry(intents, supportedIntent, appIntent.displayName, app);
 					}
 				}
 			}
@@ -403,4 +378,17 @@ export function getAppIcon(app: PlatformApp): string | undefined {
 	if (Array.isArray(app.icons) && app.icons.length > 0) {
 		return app.icons[0].src;
 	}
+}
+
+function appIntentContains(contextType: string, resultType: string, appIntent: AppIntents) {
+	if (contextType !== undefined && resultType !== undefined) {
+		if (!appIntent?.contexts?.includes(contextType) || !appIntent.resultType?.includes(resultType, 0)) {
+			return false;
+		}
+	} else if (contextType !== undefined && !appIntent?.contexts?.includes(contextType)) {
+		return false;
+	} else if (resultType !== undefined && !appIntent?.resultType?.includes(resultType, 0)) {
+		return false;
+	}
+	return true;
 }

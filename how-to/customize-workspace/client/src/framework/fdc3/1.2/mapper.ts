@@ -36,9 +36,8 @@ function getManifest(app: AppDefinition): unknown {
 	return app.manifest;
 }
 
-function getTags(app: AppDefinition): string[] {
-	// eslint-disable-next-line @typescript-eslint/dot-notation
-	const tags: string[] = app["tags"] ?? [];
+function getTags(app: AppDefinition & { tags?: string[] }): string[] {
+	const tags: string[] = app.tags ?? [];
 	if (tags.length === 0) {
 		tags.push(app.manifestType);
 	}
