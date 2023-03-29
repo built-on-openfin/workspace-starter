@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "12.0.0",
+	"version": "13.0.0",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "npm run build --workspaces",
@@ -13,7 +13,8 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
 		"list-update-packages": "npx --yes npm-check-updates --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform"
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform",
+		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json"
 	},
 	"workspaces": [
 		"how-to/*",
@@ -49,20 +50,20 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.35.0",
+		"eslint": "8.37.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.0.0",
-		"eslint-config-prettier": "8.6.0",
+		"eslint-config-prettier": "8.8.0",
 		"eslint-plugin-import": "2.26.0",
 		"eslint-plugin-prettier": "4.2.1",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
-		"eslint-plugin-unicorn": "45.0.2",
+		"eslint-plugin-unicorn": "46.0.0",
 		"eslint-plugin-unused-imports": "2.0.0",
 		"fast-glob": "3.2.12",
-		"fs-extra": "11.1.0",
+		"fs-extra": "11.1.1",
 		"markdownlint-cli": "0.33.0",
-		"prettier": "2.8.4",
+		"prettier": "2.8.7",
 		"replace-in-file": "6.3.5",
 		"yargs": "17.7.1"
 	},

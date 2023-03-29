@@ -51,7 +51,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon-32x32.png",
-		"name": "Customize Workspace - v12.0.0 - FDC3 Workspace",
+		"name": "Customize Workspace - v13.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -224,7 +224,7 @@
 		},
 		"versionProvider": {
 			"minimumVersion": {
-				"workspace": "12.0.0"
+				"workspace": "13.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",

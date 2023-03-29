@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-okta",
-	"version": "12.0.0",
+	"version": "13.0.0",
 	"description": "OpenFin Workspace -- Integrate with SSO - Okta",
 	"main": "index.js",
 	"scripts": {

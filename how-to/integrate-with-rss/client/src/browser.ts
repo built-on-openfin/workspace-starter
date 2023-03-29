@@ -1,12 +1,12 @@
 import type OpenFin from "@openfin/core";
-import type {
-	LayoutComponentExtended,
-	LayoutComponentStateExtended,
-	LayoutContentExtended,
-	Page
-} from "@openfin/workspace";
+import type { Page } from "@openfin/workspace";
 import { BrowserCreateWindowRequest, BrowserWindowModule, getCurrentSync } from "@openfin/workspace-platform";
-import type { LayoutContentItemExtended } from "@openfin/workspace-platform/client-api/src";
+
+export type LayoutItemExtended =
+	| OpenFin.LayoutItemConfig
+	| OpenFin.LayoutRow
+	| OpenFin.LayoutColumn
+	| OpenFin.LayoutComponent;
 
 export async function launchView(
 	view: OpenFin.PlatformViewCreationOptions | string,
@@ -92,11 +92,11 @@ export async function findAndActivateView(
 				page = allPage;
 
 				const activeComponents: {
-					currentParent?: LayoutContentItemExtended;
-					current?: LayoutContentItemExtended;
-					foundParent?: LayoutContentItemExtended;
+					currentParent?: LayoutItemExtended;
+					current?: LayoutItemExtended;
+					foundParent?: LayoutItemExtended;
 					foundIndex?: number;
-					found?: LayoutContentItemExtended;
+					found?: LayoutItemExtended;
 				} = {};
 				activateComponent(viewIdentity, undefined, allPage.layout.content, activeComponents);
 
@@ -142,41 +142,33 @@ export async function findAndActivateView(
 
 function activateComponent(
 	viewIdentity: OpenFin.Identity,
-	parentComponent: LayoutContentItemExtended | undefined,
-	content: LayoutContentExtended,
+	parentComponent: LayoutItemExtended | undefined,
+	content: OpenFin.LayoutContent,
 	activeComponents: {
-		currentParent?: LayoutContentItemExtended;
-		current?: LayoutContentItemExtended;
-		foundParent?: LayoutContentItemExtended;
+		currentParent?: LayoutItemExtended;
+		current?: LayoutItemExtended;
+		foundParent?: LayoutItemExtended;
 		foundIndex?: number;
-		found?: LayoutContentItemExtended;
+		found?: LayoutItemExtended;
 	}
 ): void {
 	for (let i = 0; i < content.length; i++) {
 		const component = content[i];
 		if (component.type === "column" || component.type === "row" || component.type === "stack") {
-			activateComponent(
-				viewIdentity,
-				component,
-				component.content as LayoutContentExtended,
-				activeComponents
-			);
+			activateComponent(viewIdentity, component, component.content, activeComponents);
 		} else {
 			// If its not column, row or stack it must be extended
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-			const extended: LayoutComponentExtended = component as LayoutComponentExtended;
+			const extended = component as OpenFin.LayoutComponent & {
+				componentState: { uuid: string; target?: OpenFin.Identity };
+			};
 
 			const mainIdentityMatch =
 				extended.componentState.name === viewIdentity.name &&
 				extended.componentState.uuid === viewIdentity.uuid;
 
-			const componentStateWithTarget = extended.componentState as LayoutComponentStateExtended & {
-				target?: OpenFin.Identity;
-			};
-
 			const targetIdentityMatch =
-				componentStateWithTarget.target?.name === viewIdentity.name &&
-				componentStateWithTarget?.target.uuid === viewIdentity.uuid;
+				extended.componentState.target?.name === viewIdentity.name &&
+				extended.componentState?.target.uuid === viewIdentity.uuid;
 
 			if (mainIdentityMatch || targetIdentityMatch) {
 				activeComponents.found = component;

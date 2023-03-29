@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import type { LayoutExtended } from "@openfin/workspace";
 import {
 	getCurrentSync,
 	PageLayout,
@@ -33,7 +32,7 @@ export async function createPageLayout(layout): Promise<PageLayout> {
 
 export async function createPageWithLayout(
 	title: string,
-	layout: LayoutExtended,
+	layout: OpenFin.LayoutItemConfig,
 	hasUnsavedChanges = true
 ): Promise<PageWithUpdatableRuntimeAttribs> {
 	const layoutWithDetails = await createPageLayout(layout);

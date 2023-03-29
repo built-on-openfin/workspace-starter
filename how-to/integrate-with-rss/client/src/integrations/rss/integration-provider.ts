@@ -9,7 +9,6 @@ import {
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse
 } from "@openfin/workspace";
-import type { LayoutComponentExtended } from "@openfin/workspace-platform/client-api/src";
 import {
 	addEventListener as addNotificationEventListener,
 	create as createNotification,
@@ -599,7 +598,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 									uuid: viewId,
 									url: viewUrl
 								}
-							} as LayoutComponentExtended
+							} as OpenFin.LayoutItemConfig
 						]
 					}
 				]
