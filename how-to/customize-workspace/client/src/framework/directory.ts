@@ -3,8 +3,8 @@ import { getIntents, mapToPlatformApps as mapFDC3TwoPointZeroToPlatformApp } fro
 import { createLogger } from "./logger-provider";
 import type { EndpointProvider, PlatformApp } from "./shapes";
 import type { DirectoryEndpoint } from "./shapes/directory-shapes";
-import type { AppDirectoryResponse as FDC3ResponseOnePointTwo } from "./shapes/fdc3-1-2-shapes";
-import type { AppDirectoryResponse as FDC3ResponseTwoPointZero } from "./shapes/fdc3-2-0-shapes";
+import type { FDC3VOnePointTwoAppDirectoryResponse } from "./shapes/fdc3-1-2-shapes";
+import type { FDC3VTwoPointZeroAppDirectoryResponse } from "./shapes/fdc3-2-0-shapes";
 
 const logger = createLogger("Directory");
 let endpoints: EndpointProvider;
@@ -26,7 +26,7 @@ function mapOpenFinResults(applications: PlatformApp[]) {
 }
 
 async function getApps(
-	results: PlatformApp[] | FDC3ResponseTwoPointZero | FDC3ResponseOnePointTwo
+	results: PlatformApp[] | FDC3VTwoPointZeroAppDirectoryResponse | FDC3VOnePointTwoAppDirectoryResponse
 ): Promise<PlatformApp[]> {
 	if (Array.isArray(results)) {
 		const openfinApps = mapOpenFinResults(results);
@@ -36,13 +36,13 @@ async function getApps(
 		switch (version) {
 			case "1.2": {
 				const mappedApps: PlatformApp[] = mapFDC3OnePointTwoToPlatformApp(
-					(results as FDC3ResponseOnePointTwo).applications
+					(results as FDC3VOnePointTwoAppDirectoryResponse).applications
 				);
 				return mappedApps;
 			}
 			case "2.0": {
 				const mappedApps: PlatformApp[] = mapFDC3TwoPointZeroToPlatformApp(
-					(results as FDC3ResponseTwoPointZero).applications
+					(results as FDC3VTwoPointZeroAppDirectoryResponse).applications
 				);
 				return mappedApps;
 			}
@@ -54,12 +54,12 @@ async function getApps(
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (results.applications[0]["type"] !== undefined) {
 			const mappedApps: PlatformApp[] = mapFDC3TwoPointZeroToPlatformApp(
-				(results as FDC3ResponseTwoPointZero).applications
+				(results as FDC3VTwoPointZeroAppDirectoryResponse).applications
 			);
 			return mappedApps;
 		}
 		const mappedApps: PlatformApp[] = mapFDC3OnePointTwoToPlatformApp(
-			(results as FDC3ResponseOnePointTwo).applications
+			(results as FDC3VOnePointTwoAppDirectoryResponse).applications
 		);
 		return mappedApps;
 	}
@@ -71,14 +71,17 @@ async function getResults(directory: DirectoryEndpoint): Promise<PlatformApp[]> 
 		logger.info(`Fetching apps from endpoint id: ${directory.endpointId}.`);
 		const results = await endpoints.requestResponse<
 			never,
-			PlatformApp[] | FDC3ResponseTwoPointZero | FDC3ResponseOnePointTwo
+			PlatformApp[] | FDC3VTwoPointZeroAppDirectoryResponse | FDC3VOnePointTwoAppDirectoryResponse
 		>(directory.endpointId);
 		const platformApps = await getApps(results);
 		return platformApps;
 	} else if (directory.url !== undefined) {
 		logger.info(`Fetching apps from url: ${directory.url.path}`);
 		const resp = await fetch(directory.url.path, { credentials: directory.url.credentials });
-		const results: PlatformApp[] | FDC3ResponseTwoPointZero | FDC3ResponseOnePointTwo = await resp.json();
+		const results:
+			| PlatformApp[]
+			| FDC3VTwoPointZeroAppDirectoryResponse
+			| FDC3VOnePointTwoAppDirectoryResponse = await resp.json();
 		const platformApps = await getApps(results);
 		return platformApps;
 	} else if (directory.map !== undefined) {
@@ -89,7 +92,7 @@ async function getResults(directory: DirectoryEndpoint): Promise<PlatformApp[]> 
 		logger.info(`Received response from ${directory.map.inputId}`);
 		const outputResults = await endpoints.requestResponse<
 			unknown,
-			PlatformApp[] | FDC3ResponseTwoPointZero | FDC3ResponseOnePointTwo
+			PlatformApp[] | FDC3VTwoPointZeroAppDirectoryResponse | FDC3VOnePointTwoAppDirectoryResponse
 		>(directory.map.outputId, inputResults);
 		const platformApps = await getApps(outputResults);
 		return platformApps;

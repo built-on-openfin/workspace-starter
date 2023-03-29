@@ -1,4 +1,5 @@
 {
+	"$schema": "./schemas/fdc3v1.2-appd.schema.json",
 	"applications": [
 		{
 			"appId": "fdc3-broadcast-view",

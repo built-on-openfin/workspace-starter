@@ -113,7 +113,7 @@ export interface AppDefinition {
 	/** A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC 5646. */
 	lang?: string;
 	/** Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or STORE Components */
-	icons: Icon[];
+	icons?: Icon[];
 	/** Array of images to show the user when they are looking at app description. Each image can have an optional description/tooltip. These images could be used in the
 	 * OpenFin Workspace STORE and HOME components or it could be used by an Intent Resolver to provide a visual queue as to the application that will handle the intent.
 	 */
@@ -147,7 +147,7 @@ export interface AppDefinition {
 			/** this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type */
 			details: string | unknown;
 			/** An area for config related to this app for the platform hosting it. This isn't specific to the app manifest but how the platform can manage the app. */
-			config: {
+			config?: {
 				/** Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it is intended to be a background window that acts as an intent handler) */
 				private?: boolean;
 				/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */
@@ -170,7 +170,9 @@ export interface AppDefinition {
 }
 
 /** The successful response expected from a FDC3 2.0 request when all applications are requested. */
-export interface AppDirectoryResponse {
+export interface FDC3VTwoPointZeroAppDirectoryResponse {
+	/** The schema that helps guide the structure of the response */
+	$schema: string;
 	/** List of applications */
 	applications: AppDefinition[];
 

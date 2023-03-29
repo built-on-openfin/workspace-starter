@@ -61,7 +61,9 @@ export interface AppDefinition {
 }
 
 /** The successful response expected from a FDC3 1.2 request when all applications are requested. */
-export interface AppDirectoryResponse {
+export interface FDC3VOnePointTwoAppDirectoryResponse {
+	/** The schema that helps guide the structure of the response */
+	$schema: string;
 	/** List of applications */
 	applications: AppDefinition[];
 	/** Response message providing status of query */
