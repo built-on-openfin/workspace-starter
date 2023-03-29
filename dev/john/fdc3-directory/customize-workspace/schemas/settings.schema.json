@@ -1335,10 +1335,6 @@
                 "intentTimeout": {
                     "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
                     "type": "number"
-                },
-                "unregisteredApp": {
-                    "$ref": "#/definitions/PlatformApp",
-                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
                 }
             },
             "type": "object"
@@ -2044,6 +2040,10 @@
                     "description": "Optional URL that provides more information about the application",
                     "type": "string"
                 },
+                "name": {
+                    "description": "name is provided for support for fdc3 mappings if not provided then appId is used as name. Internally we use appId.",
+                    "type": "string"
+                },
                 "primaryButton": {
                     "$ref": "#/definitions/StoreButtonConfig",
                     "description": "Primary button configuration."
@@ -2202,6 +2202,10 @@
                 "intentResolver": {
                     "$ref": "#/definitions/IntentResolverOptions",
                     "description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the platform"
+                },
+                "unregisteredApp": {
+                    "$ref": "#/definitions/PlatformApp",
+                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
                 }
             },
             "type": "object"
