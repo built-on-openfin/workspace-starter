@@ -73,14 +73,13 @@
 									"type": "object"
 								},
 								"details": {
-									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type"
+									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type or extending the details from the root."
 								},
 								"type": {
-									"description": "this is the manifest type id used by OpenFin",
+									"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
 									"type": "string"
 								}
 							},
-							"required": ["details", "type"],
 							"type": "object"
 						}
 					},
