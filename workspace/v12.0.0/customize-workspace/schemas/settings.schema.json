@@ -81,6 +81,121 @@
             ],
             "type": "object"
         },
+        "AppIntents": {
+            "additionalProperties": false,
+            "properties": {
+                "contexts": {
+                    "description": "Required. A comma separated list of the types of contexts the intent offered by the application can process, where the first part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "customConfig": {
+                    "additionalProperties": {},
+                    "description": "Custom configuration for the intent that may be required for a particular desktop agent. *",
+                    "type": "object"
+                },
+                "displayName": {
+                    "description": "An optional display name for the intent that may be used in UI instead of the name.",
+                    "type": "string"
+                },
+                "resultType": {
+                    "description": "An optional type for output returned by the application, if any, when resolving this intent. May indicate a context type by type name (e.g. \"fdc3.instrument\"), a channel (e.g. \"channel\") or a combination\nthat indicates a channel that returns a particular context type (e.g. \"channel<fdc3.instrument>\").",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contexts"
+            ],
+            "type": "object"
+        },
+        "AppInterop": {
+            "additionalProperties": false,
+            "properties": {
+                "appChannels": {
+                    "description": "Describes the application's use of App Channels.",
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "broadcasts": {
+                                "description": "Context type names that are broadcast by the application on the channel.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "description": {
+                                "description": "A description of how the channel is used.",
+                                "type": "string"
+                            },
+                            "listensFor": {
+                                "description": "Context type names that the application listens for on the channel.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "name": {
+                                "description": "The name of the App Channel.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "intents": {
+                    "additionalProperties": false,
+                    "description": "Describes the app's interactions with intents.",
+                    "properties": {
+                        "listensFor": {
+                            "additionalProperties": {
+                                "$ref": "#/definitions/AppIntents"
+                            },
+                            "description": "A mapping of Intents names that an app listens for via fdc3.addIntentListener() or fin.me.interop.registerIntentHandler.\nUsed to support intent resolution by the interop broker. Replaces the intents array used previously.",
+                            "type": "object"
+                        },
+                        "raises": {
+                            "additionalProperties": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "description": "A mapping of Intent names that an app raises (via fdc3.raiseIntent) to an array of context type names that it may be raised with. Use the intent name \"any\" to represent use of the fdc3.raiseIntentForContext\nand fdc3.findIntentForContext functions, which allow the user to select from intents available for a specified context type.",
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "userChannels": {
+                    "additionalProperties": false,
+                    "description": "Describes the application's use of context types on User Channels.",
+                    "properties": {
+                        "broadcasts": {
+                            "description": "Context type names that are broadcast by the application.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "listensFor": {
+                            "description": "Context type names that the application listens for.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
         "AppProviderOptions": {
             "additionalProperties": false,
             "description": "App Provider settings to configure where apps are fetched from.",
@@ -538,19 +653,6 @@
                 "tooltip",
                 "type"
             ],
-            "type": "object"
-        },
-        "CustomConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "instanceMode": {
-                    "enum": [
-                        "multi",
-                        "single"
-                    ],
-                    "type": "string"
-                }
-            },
             "type": "object"
         },
         "CustomPaletteSet": {
@@ -1233,15 +1335,11 @@
                 "intentTimeout": {
                     "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
                     "type": "number"
-                },
-                "unregisteredApp": {
-                    "$ref": "#/definitions/PlatformApp",
-                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
                 }
             },
             "type": "object"
         },
-        "IntentPickerOptions": {
+        "IntentResolverOptions": {
             "additionalProperties": false,
             "properties": {
                 "fdc3InteropApi": {
@@ -1890,8 +1988,9 @@
                     "type": "string"
                 },
                 "customConfig": {
-                    "$ref": "#/definitions/CustomConfig",
-                    "description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher"
+                    "additionalProperties": {},
+                    "description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher",
+                    "type": "object"
                 },
                 "description": {
                     "description": "UI friendly description for an application.",
@@ -1911,11 +2010,23 @@
                     },
                     "type": "array"
                 },
+                "instanceMode": {
+                    "description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.",
+                    "enum": [
+                        "multi",
+                        "single"
+                    ],
+                    "type": "string"
+                },
                 "intents": {
                     "items": {
                         "$ref": "#/definitions/AppIntent"
                     },
                     "type": "array"
+                },
+                "interop": {
+                    "$ref": "#/definitions/PlatformAppInterop",
+                    "description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and intents, for use by other app developers and desktop assemblers."
                 },
                 "manifest": {
                     "description": "URL to application manifest.",
@@ -1923,6 +2034,14 @@
                 },
                 "manifestType": {
                     "description": "Describes the type of manifest resolved by the `manifest` field.\nLaunch mechanics are determined by the manifest type.",
+                    "type": "string"
+                },
+                "moreInfo": {
+                    "description": "Optional URL that provides more information about the application",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name is provided for support for fdc3 mappings if not provided then appId is used as name. Internally we use appId.",
                     "type": "string"
                 },
                 "primaryButton": {
@@ -1956,6 +2075,10 @@
                     "description": "A UI friendly title for the application.",
                     "type": "string"
                 },
+                "tooltip": {
+                    "description": "Optional tooltip description e.g. for a launcher or dock component",
+                    "type": "string"
+                },
                 "version": {
                     "type": "string"
                 }
@@ -1967,6 +2090,9 @@
                 "title"
             ],
             "type": "object"
+        },
+        "PlatformAppInterop": {
+            "$ref": "#/definitions/AppInterop"
         },
         "PlatformCustomTheme": {
             "anyOf": [
@@ -2066,6 +2192,24 @@
         "PlatformCustomThemes": {
             "$ref": "#/definitions/Array"
         },
+        "PlatformInteropBrokerOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "intentOptions": {
+                    "$ref": "#/definitions/IntentOptions",
+                    "description": "Options related to the way this platform supports intents"
+                },
+                "intentResolver": {
+                    "$ref": "#/definitions/IntentResolverOptions",
+                    "description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the platform"
+                },
+                "unregisteredApp": {
+                    "$ref": "#/definitions/PlatformApp",
+                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
+                }
+            },
+            "type": "object"
+        },
         "PlatformProviderOptions": {
             "additionalProperties": false,
             "properties": {
@@ -2073,12 +2217,13 @@
                     "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth logic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate the provider bundle and provide an example in our docs.",
                     "type": "string"
                 },
-                "intentOptions": {
-                    "$ref": "#/definitions/IntentOptions"
-                },
                 "intentPicker": {
-                    "$ref": "#/definitions/IntentPickerOptions",
-                    "description": "Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform"
+                    "$ref": "#/definitions/IntentResolverOptions",
+                    "description": "Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker settings"
+                },
+                "interop": {
+                    "$ref": "#/definitions/PlatformInteropBrokerOptions",
+                    "description": "interop settings related to this platform"
                 },
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
@@ -2090,7 +2235,6 @@
                 }
             },
             "required": [
-                "intentOptions",
                 "rootUrl",
                 "sharing"
             ],
