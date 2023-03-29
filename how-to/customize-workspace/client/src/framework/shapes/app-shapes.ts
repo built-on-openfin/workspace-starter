@@ -21,6 +21,8 @@ export type PlatformApp = App & {
 	tooltip?: string;
 	/** Optional URL that provides more information about the application */
 	moreInfo?: string;
+	/** name is provided for support for fdc3 mappings if not provided then appId is used as name. Internally we use appId.*/
+	name?: string;
 };
 
 export type PlatformAppInterop = AppInterop;

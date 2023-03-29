@@ -107,6 +107,7 @@ export function getIntents(interop: AppInterop): AppIntent[] {
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 	const platformApp: PlatformApp = {
 		appId: app.appId,
+		name: app.name ?? app.appId,
 		title: app.title || app.name,
 		manifestType: getManifestType(app),
 		manifest: getManifest(app) as string,
@@ -142,7 +143,7 @@ export function mapToAppMetaData(app: PlatformApp, resultType?: string): AppMeta
 		appId: app.appId,
 		description: app.description,
 		icons: app.icons,
-		name: app.appId,
+		name: app.name,
 		screenshots: app.images,
 		title: app.title,
 		tooltip: app.tooltip,

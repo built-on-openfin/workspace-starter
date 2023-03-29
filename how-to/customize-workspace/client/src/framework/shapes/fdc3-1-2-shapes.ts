@@ -72,3 +72,14 @@ export interface AppDirectoryResponse {
 		version: "1.2";
 	};
 }
+
+export interface AppMetadata {
+	name: string;
+	appId?: string;
+	version?: string;
+	title?: string;
+	tooltip?: string;
+	description?: string;
+	icons?: string[];
+	images?: string[];
+}

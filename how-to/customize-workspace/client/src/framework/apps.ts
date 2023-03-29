@@ -253,18 +253,27 @@ export async function getAppsByTag(
 
 export async function getApp(requestedApp: string | { appId: string }): Promise<PlatformApp> {
 	const apps = await getApps();
-	let appId;
+	let lookupId;
 	if (requestedApp !== undefined) {
 		if (typeof requestedApp === "string") {
-			appId = requestedApp;
+			lookupId = requestedApp;
 		} else {
-			appId = requestedApp.appId;
+			lookupId = requestedApp.appId;
 		}
 	}
-	if (appId === undefined) {
+	if (lookupId === undefined) {
 		return undefined;
 	}
-	const app = apps.find((entry) => entry.appId === appId);
+	let app = apps.find((entry) => entry.appId === lookupId);
+
+	if (app === undefined) {
+		app = apps.find((entry) => entry.name === lookupId);
+		logger.info(
+			`App not found when using lookup id: ${lookupId} against appId. Fell back to name to see if it is a reference against name. App found: ${
+				app !== undefined
+			}`
+		);
+	}
 
 	return app;
 }

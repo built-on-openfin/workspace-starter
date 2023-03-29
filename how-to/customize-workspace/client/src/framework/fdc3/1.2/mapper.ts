@@ -4,7 +4,7 @@ import type {
 	AppInterop,
 	AppIntents as FDC3TwoPointZeroAppIntents
 } from "customize-workspace/shapes/fdc3-2-0-shapes";
-import type { AppDefinition, AppIcon, AppImage, AppIntents } from "../../shapes/fdc3-1-2-shapes";
+import type { AppDefinition, AppIcon, AppImage, AppIntents, AppMetadata } from "../../shapes/fdc3-1-2-shapes";
 
 function getIcons(icons: AppIcon[]): Image[] {
 	const appIcons: Image[] = [];
@@ -81,6 +81,7 @@ export function getInterop(intents: AppIntents[]): AppInterop {
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 	const platformApp: PlatformApp = {
 		appId: app.appId,
+		name: app.name ?? app.appId,
 		title: app.title || app.name,
 		manifestType: app.manifestType,
 		manifest: getManifest(app) as string,
@@ -110,4 +111,34 @@ export function mapToPlatformApps(apps: AppDefinition[]): PlatformApp[] {
 	}
 
 	return platformApps;
+}
+
+export function mapToAppMetaData(app: PlatformApp): AppMetadata {
+	const icons: string[] = [];
+	const images: string[] = [];
+	if (Array.isArray(app.icons)) {
+		for (const icon of app.icons) {
+			if (icon.src !== undefined) {
+				icons.push(icon.src as string);
+			}
+		}
+	}
+	if (Array.isArray(app.images)) {
+		for (const image of app.images) {
+			if (image.src !== undefined) {
+				images.push(image.src as string);
+			}
+		}
+	}
+	const appMetaData: AppMetadata = {
+		appId: app.appId,
+		description: app.description,
+		icons,
+		images,
+		name: app.appId,
+		title: app.title,
+		tooltip: app.tooltip,
+		version: app.version
+	};
+	return appMetaData;
 }
