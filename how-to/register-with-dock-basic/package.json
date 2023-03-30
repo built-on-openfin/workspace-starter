@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-dock-basic",
-	"version": "13.0.0",
+	"version": "12.6.0",
 	"description": "OpenFin Workspace -- Register with dock basic",
 	"main": "index.js",
 	"scripts": {

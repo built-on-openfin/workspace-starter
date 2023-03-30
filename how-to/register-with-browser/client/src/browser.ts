@@ -32,7 +32,7 @@ export async function createPageLayout(layout): Promise<PageLayout> {
 
 export async function createPageWithLayout(
 	title: string,
-	layout: OpenFin.LayoutItemConfig,
+	layout: PageLayout,
 	hasUnsavedChanges = true
 ): Promise<PageWithUpdatableRuntimeAttribs> {
 	const layoutWithDetails = await createPageLayout(layout);

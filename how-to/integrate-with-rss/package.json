@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-rss",
-	"version": "13.0.0",
+	"version": "12.6.0",
 	"description": "OpenFin Workspace -- Integrate with RSS",
 	"main": "index.js",
 	"scripts": {
