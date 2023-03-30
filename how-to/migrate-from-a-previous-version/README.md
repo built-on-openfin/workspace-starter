@@ -27,6 +27,39 @@ You will need the following dependencies
                 }
 ```
 
+### Interop Broker Constructor Changes
+
+The constructor has changed and you no longer pass down options. Previously we had:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
+ provider?: OpenFin.ChannelProvider,
+ options?: OpenFin.InteropBrokerOptions,
+ ...args: unknown[]
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride(provider, options, ...args);
+}
+```
+
+And this has now become:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride();
+}
+```
+
+Your broker can still override functions related to context groups and manifest configured context groups will still be used by the base implementation of the broker.
+
 ## Migrate from a previous version - From v9.2 to v10
 
 ### Workspace 10 Enhancements
