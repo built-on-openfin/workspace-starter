@@ -90,13 +90,14 @@
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace",
 			"sharing": true,
-			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/windows/intents/instance-picker.html",
-				"height": 715,
-				"width": 665,
-				"fdc3InteropApi": "2.0"
-			},
-			"intentOptions": {
+			"interop": {
+				"intentResolver": {
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/windows/intents/instance-picker.html",
+					"height": 715,
+					"width": 665,
+					"fdc3InteropApi": "2.0"
+				},
+				"intentOptions": {},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
@@ -159,10 +160,14 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["apps-get", "common-apps-get"],
+			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
-			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
 				"snapshot",
@@ -185,22 +190,6 @@
 				}
 			],
 			"endpoints": [
-				{
-					"id": "apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/apps.json"
-					}
-				},
-				{
-					"id": "common-apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/apps.json"
-					}
-				},
 				{
 					"id": "share-get",
 					"type": "fetch",
