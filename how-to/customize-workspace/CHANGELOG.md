@@ -9,8 +9,14 @@
 - Updated call app to support fdc3 2.0 and initially return the passed context as a getResult return object.
 - Updated references to tools for fdc3 2.0 help (intent and context).
 - Added a bring to front function when intents are fired at a specific view/window
-- Add support for indicating an app has a preference for a single instance (for views/window right now) by setting customConfig.instanceMode: "single" against an app.
+- Add support for indicating an app has a preference for a single instance (for views/window right now) by setting instanceMode: "single" against an app.
 - A new layout helper is added to the getting started window and there is a layout entry in the common apps.json as well
+- Added default support for fdc3 1.2 and 2.0 app directory structures and added examples into the public folder.
+- Added intellisense to the json files for fdc3 1.2 and 2.0 apps
+- dropped the fdc3 app module used for mapping as it is now built into customize-workspace
+- broke out the fdc3 tools into different json files.
+- Updated the broker to return results in expected format based on whether the view is set to fdc3 1.2 or 2.0
+- Customize workspace supports interop api, fdc3 1.2 and fdc3 2.0 apps and directory structures.
 
 ## v11
 

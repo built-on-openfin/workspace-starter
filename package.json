@@ -13,7 +13,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
 		"list-update-packages": "npx --yes npm-check-updates --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import,typescript",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json"
 	},
 	"workspaces": [

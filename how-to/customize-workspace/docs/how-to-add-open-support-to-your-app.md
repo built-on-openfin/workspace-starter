@@ -7,7 +7,7 @@
 
 If you have added a view (url based app) to an app directory/source (see [How To Define Apps](./how-to-define-apps.md)) you may want it to be opened easily with the option of receiving some contextual data.
 
-The first thing your app should do is to highlight that it supports the FDC3 standard by opting into the api through it's settings (this can either be inline e.g. manifestType inline-view or a json file manifestType: view). E.g.:
+The first thing your app should do is to highlight that it supports the FDC3 standard by opting into the api through it's settings (this can either be inline e.g. manifestType inline-view or a json file manifestType: view) and what version you support e.g. 1.2 or 2.0. E.g.:
 
 ```json
 {
@@ -18,7 +18,7 @@ The first thing your app should do is to highlight that it supports the FDC3 sta
 
 ## Do I Need To Reference An Npm Module
 
-You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [FDC3 Types NPM Package](https://www.npmjs.com/package/@finos/fdc3/v/1.2.0)
+You don't need to reference an npm module for the API as we inject the API into your document. If you want to access the TypeScript types then you can reference the official FinOS types package: [FDC3 Types NPM Package](https://www.npmjs.com/package/@finos/fdc3/)
 
 ## How Do I Open An App?
 

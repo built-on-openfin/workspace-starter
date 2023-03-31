@@ -27,19 +27,84 @@
 	"platformProvider": {
 		"rootUrl": "http://localhost:8080",
 		"sharing": true,
-		"intentPicker": {
-			"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
-			"height": 715,
-			"width": 665,
-			"fdc3InteropApi": "2.0"
-		},
-		"intentOptions": {}
+		"interop": {
+			"intentResolver": {
+				"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
+				"height": 715,
+				"width": 665,
+				"fdc3InteropApi": "2.0"
+			},
+			"intentOptions": {},
+			"unregisteredApp": {
+				"appId": "unregistered",
+				"title": "Other",
+				"description": "If you can not find an application to support your action please check the instances associated with this entry to see if it satisfies your need.",
+				"icons": [
+					{
+						"src": "http://localhost:8080/favicon.ico"
+					}
+				],
+				"publisher": "Multiple",
+				"intents": [
+					{
+						"name": "StartCall",
+						"displayName": "Start a Call",
+						"contexts": ["fdc3.contact", "fdc3.contactList"]
+					},
+					{
+						"name": "StartChat",
+						"displayName": "Start a Chat",
+						"contexts": ["fdc3.contact", "fdc3.contactList"]
+					},
+					{
+						"name": "ViewChart",
+						"displayName": "View Chart",
+						"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+					},
+					{
+						"name": "ViewContact",
+						"displayName": "View Contact Details",
+						"contexts": ["fdc3.contact"]
+					},
+					{
+						"name": "ViewQuote",
+						"displayName": "View Quote",
+						"contexts": ["fdc3.instrument"]
+					},
+					{
+						"name": "ViewNews",
+						"displayName": "View News",
+						"contexts": [
+							"fdc3.country",
+							"fdc3.instrument",
+							"fdc3.instrumentList",
+							"fdc3.organization",
+							"fdc3.portfolio"
+						]
+					},
+					{
+						"name": "ViewAnalysis",
+						"displayName": "View Analysis",
+						"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+					},
+					{
+						"name": "ViewInstrument",
+						"displayName": "View Instrument Details",
+						"contexts": ["fdc3.instrument"]
+					}
+				]
+			}
+		}
 	},
 	"appProvider": {
-		"endpointIds": ["apps-get", "common-apps-get"],
+		"endpointIds": [
+			"http://localhost:8080/apps.json",
+			"http://localhost:8080/common/apps.json",
+			"http://localhost:8080/apps-fdc3-1-2.json",
+			"http://localhost:8080/apps-fdc3-2-0.json"
+		],
 		"cacheDurationInSeconds": 10,
 		"cacheDurationInMinutes": 0,
-		"appAssetTag": "appasset",
 		"manifestTypes": [
 			"view",
 			"snapshot",
@@ -67,22 +132,6 @@
 			}
 		],
 		"endpoints": [
-			{
-				"id": "apps-get",
-				"type": "fetch",
-				"options": {
-					"method": "GET",
-					"url": "http://localhost:8080/apps.json"
-				}
-			},
-			{
-				"id": "common-apps-get",
-				"type": "fetch",
-				"options": {
-					"method": "GET",
-					"url": "http://localhost:8080/common/apps.json"
-				}
-			},
 			{
 				"id": "share-get",
 				"type": "fetch",
