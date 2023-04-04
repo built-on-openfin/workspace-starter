@@ -90,7 +90,7 @@ OpenFin is a very easy platform to integrate with. If you need to integrate with
 | Documentation                                                                      | Description                                                                                                                                                                    | Live Launch |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is the difference between version 1-4 and version 5-6 and points to examples on how to manage those differences.   |             |
-| [Hints And Tips](./how-to/hints-and-tips)                                        | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
+| [Hints And Tips](./how-to/hints-and-tips)                                          | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
 
 ## Before you get started
 
