@@ -287,12 +287,17 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 					const action = data.mapping.actions[actionIdx];
 
-					if (!action.url && !action.intent) {
+					if (!action.url && !action.intent && !action.view) {
 						await this.openSalesforceView(data);
 					} else if (action.url) {
 						await fin.System.openUrlWithBrowser(
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
 						);
+					} else if (action.view) {
+						await this._integrationHelpers.launchView({
+							...action.view,
+							url: this.substituteProperties(data.mapping, data.obj, action.view.url, true)
+						});
 					} else if (action.intent && this._integrationHelpers.getInteropClient) {
 						try {
 							const client = await this._integrationHelpers.getInteropClient();
