@@ -3,7 +3,7 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
-## Migrate from a previous version - From v12.0.0 to v12.6.0
+## Migrate from a previous version - From v12.0.0 to vnext
 
 ### @openfin/workspace-platform Updates
 
@@ -163,7 +163,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "30.74.7"
+                    "@openfin/core": "30.74.13"
                    }
 ```
 
