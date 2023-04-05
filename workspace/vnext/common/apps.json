@@ -261,7 +261,7 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -274,7 +274,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -284,7 +284,7 @@
 		"name": "interop-intent-view",
 		"title": "Intents using Interop API",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/intent/interop-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -352,7 +352,7 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -362,7 +362,7 @@
 		"name": "app-definition-builder",
 		"title": "App Definition Builder",
 		"description": "A developer tool to help build an app definition",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/app/app-definition-builder/app-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/app/app-definition-builder/app-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -378,7 +378,7 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/app/images/previews/app-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/app/images/previews/app-definition-builder.png"
 			}
 		],
 		"tags": ["view", "app", "tools"]
@@ -388,7 +388,7 @@
 		"name": "theme-definition-builder",
 		"title": "Theme Definition Builder",
 		"description": "A tool to help in the building of a theme.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/theme-definition-builder/theme-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -397,7 +397,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/images/previews/theme-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/images/previews/theme-definition-builder.png"
 			}
 		],
 		"tags": ["view", "theme", "tools"]
@@ -488,7 +488,7 @@
 		"name": "page-layout",
 		"title": "Page Layout Tool",
 		"description": "A tool to help in the building of a page.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/layout/views/page-layout-snapshot.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/layout/views/page-layout-snapshot.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -497,7 +497,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/layout/images/previews/page-layout.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/layout/images/previews/page-layout.png"
 			}
 		],
 		"tags": ["view", "page", "tools"]
@@ -893,7 +893,7 @@
 		"name": "getting-started",
 		"title": "Getting Started Guide",
 		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/common/snapshots/snapshot-getting-started.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -934,7 +934,7 @@
 		"name": "analytics-viewer",
 		"title": "Analytics Viewer",
 		"description": "This analytics viewer acts as a basic view to see the analytics events generated by the platform and workspace components if the events are published to the watched app channel.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/analytics/views/analytics-viewer/analytics-viewer-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/analytics/views/analytics-viewer/analytics-viewer-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -947,7 +947,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/analytics/views/analytics-viewer/analytics-viewer.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/analytics/views/analytics-viewer/analytics-viewer.png"
 			}
 		],
 		"tags": ["view", "analytics", "tools"]
