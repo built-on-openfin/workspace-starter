@@ -15,7 +15,7 @@ function init() {
 
 function setContact(ctx) {
 	const userNameContainers = document.querySelectorAll('#username');
-
+	document.title = `Investments &amp; Models - ${ctx.name}`;
 	for (let i = 0; i < userNameContainers.length; i++) {
 		userNameContainers[i].textContent = ctx.name;
 	}
