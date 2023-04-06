@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-	entry: './client/src/provider.ts',
+	entry: {
+		provider: path.join(__dirname, 'src', 'provider.ts'),// './client/src/provider.ts',
+		bbgtest: path.join(__dirname, 'src', 'bbgtest.ts')// './client/src/bbgtest.js'
+	},
 	devtool: 'inline-source-map',
 	module: {
 		rules: [
@@ -16,7 +19,7 @@ module.exports = {
 		extensions: ['.tsx', '.ts', '.js']
 	},
 	output: {
-		filename: 'provider.bundle.js',
+		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, '..', 'public', 'js')
 	}
 };

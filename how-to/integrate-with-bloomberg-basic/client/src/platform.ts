@@ -1,4 +1,5 @@
 import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
+import { interopOverride } from "./interopbroker";
 
 export async function init() {
 	console.log("Initialising platform");
@@ -6,6 +7,7 @@ export async function init() {
 	const browser: BrowserInitConfig = {};
 
 	await workspacePlatformInit({
-		browser
+		browser,
+		interopOverride
 	});
 }

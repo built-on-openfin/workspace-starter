@@ -8,14 +8,37 @@
 	"platform": {
 		"uuid": "integrate-with-bloomberg-basic",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
 	"snapshot": {
-		"windows": []
-	},
+		"windows": [
+		  {
+			"defaultHeight": 500,
+			"defaultWidth": 900,
+			"center": true,
+			"saveWindowState": true,
+			"layout": {				
+				"content": [
+					{
+						"type": "component",
+						"componentName": "view",
+						"componentState": {
+							"name": "bbgTest",
+							"processAffinity": "ps_1",
+							"url": "http://localhost:8080/platform/bbgtest.html",
+							"interop":{
+							"currentContextGroup": "green"
+							}
+						}
+					}
+				]					
+			}
+		  }
+		]
+	  },
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",

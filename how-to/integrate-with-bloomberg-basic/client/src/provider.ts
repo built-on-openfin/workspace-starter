@@ -1,158 +1,44 @@
-import { BloombergConnection,
-    BloombergConnectionConfig,
-    connect,
-    ContextActionMap,
-    IntentActionMap,
-    isBloombergTerminalReady } from "@openfin/bloomberg";
-import { fin } from "@openfin/core";
-// import { getCurrentSync, init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { init as bootstrap } from "./bootstrapper";
 import { init as initialisePlatform } from "./platform";
 
-
-const interopConfig = {
-    currentContextGroup: "green"
-};
-
-let bbgConnection;
-let client;
-let isConnected = false;
-
-// global vars
-let selectedIntent = "";
-let fdc3Denomination = "";
-let bbgMnemonic = "";
-let intentValue = "";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	const platform = fin.Platform.getCurrentSync();
 
-	// await platform.once("platform-api-ready", async () => bootstrap());
-
-	initDom();
+	await platform.once("platform-api-ready", async () => bootstrap());
 
 	await initialisePlatform();
+
+	// initDom();
+    // await showBBGTestWindow();
 });
 
 const initDom = () => {
     const btnConnect = document.querySelector("#btnConnect");
-    const btnClearLogs = document.querySelector("#btnClear");
-    const btnQuery = document.querySelector("#btnQuery");
-    const inputText = document.querySelector("#intentValue");
-    const selectChoice = document.querySelector("#intentName");
 
-    let selectOptions: HTMLSelectElement;
-    selectOptions = document.querySelector<HTMLSelectElement>("#intentName");
+    btnConnect.addEventListener("click", showBBGTestWindow);
+};
 
-    selectOptions.selectedIndex = -1;
+const showBBGTestWindow = async () => {
+    let appWin = await fin.Window.create({
+        name: "integrate-with-bloomberg-app",
+        alwaysOnTop: true,
+        maximizable: false,
+        minimizable: false,
+        autoShow: true,
+        defaultCentered: true,
+        defaultHeight: 500,
+        defaultWidth: 800,
+        includeInSnapshots: false,
+        resizable: true,
+        showTaskbarIcon: false,
+        url: "http://localhost:8080/platform/bbgtest.html"
+    });
 
-    btnConnect.addEventListener("click", connectToBBGTerminal);
-    btnClearLogs.addEventListener("click", clearLogs);
-    btnQuery.addEventListener("click", createAndFireIntent);
-    inputText.addEventListener("input", getInputValue);
-
-    selectChoice.addEventListener("change", function handleChange(event) {
-        switch(this.value) {
-            case "ViewChart":
-                // document.querySelector("#selectChoice").innerHTML = "Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP";
-                logInformation("Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP");
-                selectedIntent = "ViewChart";
-                fdc3Denomination = "fdc3.instrument";
-                bbgMnemonic = "GP";
-                break;
-            case "ViewContact":
-                logInformation("Intent to be fired is ViewContact. Content Type is fdc3.contact. Bloomberg Terminal Mnemonic: BIO");
-                selectedIntent = "ViewContact";
-                fdc3Denomination = "fdc3.contact";
-                bbgMnemonic = "BIO";
-                break;
-            case "ViewInstrument":
-                logInformation("Intent to be fired is ViewInstrument. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: DES");
-                selectedIntent = "ViewInstrument";
-                fdc3Denomination = "fdc3.instrument";
-                bbgMnemonic = "DES";
-                break;
-            case "ViewQuote":
-                logInformation("Intent to be fired is ViewQuote. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: Q");
-                selectedIntent = "ViewQuote";
-                fdc3Denomination = "fdc3.instrument";
-                bbgMnemonic = "Q";
-                break;
-        }
+    await appWin.on("closed", async () => {
+        await appWin.removeAllListeners();
+        appWin = undefined;
     });
 };
 
-const getInputValue = (e) => {
-    const inputVal = e.target.value;
-    intentValue = inputVal;
-    console.log(inputVal);
-}
-
-// Connect to Bloomberg Terminal
-const connectToBBGTerminal = async (): Promise<void> => {
-    try {
-        logInformation("Checking Bloomberg Terminal Status");
-        if (!(await isBloombergTerminalReady())) {
-            const error = new Error("Failed to connect to Bloomberg terminal.");
-            console.log(error);
-            logInformation("Failed to connect to Bloomberg terminal.");
-            throw error;
-          }
-
-        bbgConnection = await connect();
-        logInformation("Connection successful"); 
-        isConnected = true;
-    } catch (error) {
-        console.log(error);
-        logInformation(String(error.message));
-        isConnected = false;
-    }
-};
-
-// Connect to InterOp broker
-const connectToBroker = async () => {
-    const interopBroker = await fin.Interop.init("openfin");
-
-    client = fin.Interop.connectSync("openfin", interopConfig);
-};
-
-const createAndFireIntent = (e) => {
-    logInformation(`action: ${selectedIntent}, type: ${fdc3Denomination}, bbg mnemonic: ${bbgMnemonic}, search value: ${intentValue}`);
-    // Define the intent to fire
-    /*
-    const intent = {
-        action: "ViewChart",
-        dataType: "Stock",
-        data: {
-          symbol: "AAPL"
-        }
-      };
-
-      fireIntentforBBG(intent);
-      */
-};
-
-// Fire an intent
-const fireIntentforBBG = (intent) => {
-    if(client) {
-        client.fireIntent(intent);
-    }
-};
-
-const logInformation = (info: string) => {
-    const logElem = document.querySelector("#logOutput");
-
-    if(logElem) {
-        logElem.textContent = `${logElem.textContent + info}\n\n`;
-	logElem.scrollTop = logElem.scrollHeight;
-    }
-}
-
-const clearLogs = () => {
-    const logElem = document.querySelector("#logOutput");
-
-    if(logElem) {
-        logElem.textContent = "";
-	    logElem.scrollTop = 0;
-    }
-};
 
