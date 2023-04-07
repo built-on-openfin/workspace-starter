@@ -19,11 +19,11 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "12.1.4",
-		"@openfin/workspace-platform": "12.1.4"
+		"@openfin/workspace": "12.1.5",
+		"@openfin/workspace-platform": "12.1.5"
 	},
 	"devDependencies": {
-		"@openfin/core": "30.74.7",
+		"@openfin/core": "30.74.13",
 		"@okta/okta-auth-js": "^7.2.0"
 	}
 }
