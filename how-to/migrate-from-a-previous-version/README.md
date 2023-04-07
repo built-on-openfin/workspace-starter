@@ -153,7 +153,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "30.74.7"
+                    "@openfin/core": "30.74.13"
                    }
 ```
 

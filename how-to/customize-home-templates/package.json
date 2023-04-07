@@ -22,15 +22,15 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "12.1.4",
-		"@openfin/workspace-platform": "12.1.4",
+		"@openfin/workspace": "12.1.5",
+		"@openfin/workspace-platform": "12.1.5",
 		"chart.js": "^4.2.1",
 		"csstype": "^3.1.1",
 		"luxon": "^3.2.1",
 		"node-emoji": "^1.11.0"
 	},
 	"devDependencies": {
-		"@openfin/core": "30.74.7",
+		"@openfin/core": "30.74.13",
 		"@types/express": "^4.17.17",
 		"@types/luxon": "^3.2.0",
 		"@types/node": "^18.14.2",
