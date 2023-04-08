@@ -4,6 +4,8 @@ import type { App } from "@openfin/workspace";
 import type { AppInterop } from "./fdc3-2-0-shapes";
 
 export type PlatformApp = App & {
+	/** does the application wish to be automatically started when the platform is initialized. Default behavior is false. */
+	autostart?: boolean;
 	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
 	private?: boolean;
 	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */
@@ -33,6 +35,8 @@ export type PlatformAppInterop = AppInterop;
 export interface AppFilterOptions {
 	/** Should the list be public apps, private apps or all apps if undefined */
 	private?: boolean;
+	/** Is this app marked as one that should be automatically started? */
+	autostart?: boolean;
 }
 
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
@@ -42,10 +46,11 @@ export type ManifestTypeId =
 	| "inline-view"
 	| "window"
 	| "inline-window"
-	| "inline-external"
 	| "snapshot"
+	| "inline-snapshot"
 	| "manifest"
 	| "external"
+	| "inline-external"
 	| "desktop-browser"
 	| "endpoint"
 	| "connection"
