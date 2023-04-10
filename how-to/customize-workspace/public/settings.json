@@ -107,14 +107,15 @@
 		"cacheDurationInMinutes": 0,
 		"manifestTypes": [
 			"view",
-			"snapshot",
-			"manifest",
-			"external",
 			"inline-view",
 			"window",
 			"inline-window",
-			"desktop-browser",
+			"snapshot",
+			"inline-snapshot",
+			"external",
 			"inline-external",
+			"manifest",
+			"desktop-browser",
 			"connection"
 		]
 	},

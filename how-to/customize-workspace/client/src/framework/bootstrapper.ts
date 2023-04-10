@@ -1,12 +1,13 @@
 import type { HomeRegistration, RegistrationMetaInfo } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import * as analyticsProvider from "./analytics";
+import { getApps } from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import { registerAction } from "./connections";
-import * as headlessProvider from "./headless";
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
+import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
@@ -56,6 +57,7 @@ export async function init(): Promise<boolean> {
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
 	bootstrapOptions.notifications = bootstrapOptions.notifications ?? false;
 	bootstrapOptions.autoShow = bootstrapOptions.autoShow ?? [];
+	bootstrapOptions.autostartApps = bootstrapOptions.autostartApps ?? true;
 
 	const helpers: ModuleHelpers = getDefaultHelpers(settings);
 
@@ -211,14 +213,38 @@ export async function init(): Promise<boolean> {
 	// listener so that it is ready to handle initial params or subsequent requests.
 	await registerInitOptionsListener(settings?.initOptionsProvider, "after-bootstrap", helpers);
 
-	// fire up any windows that have been configured
-	await headlessProvider.init(settings?.headlessProvider);
-
 	// Let any other modules participate in the lifecycle
 	await fireLifecycleEvent(platform, "after-bootstrap");
 
+	// start up any apps that have requested to be started up at the end of the bootstrapping process
+	if (bootstrapOptions.autostartApps) {
+		await autoStartApps();
+	}
+
 	logger.info("Finished the bootstrapping process.");
 	return true;
+}
+
+async function autoStartApps() {
+	const apps = await getApps({ autostart: true });
+	if (Array.isArray(apps) && apps.length > 0) {
+		logger.info(
+			`Apps have been marked that they should autostart after the bootstrapping process and the platform has not set autostartApps to false in the bootstrapping options. ${apps.length} app(s) will be launched.`
+		);
+		for (const app of apps) {
+			setTimeout(async () => {
+				try {
+					// we should not wait for every single app to launch in case there are slow launching apps or delays
+					// the goal is to launch all of the apps that have requested it
+					logger.info(`Launching app: ${app.appId}`);
+					const appIdentifier = await launch(app);
+					logger.info(`App: ${app.appId} launched with the following identifier`, appIdentifier);
+				} catch (error) {
+					logger.error(`Error launching app: ${app.appId}.`, error);
+				}
+			}, 1000);
+		}
+	}
 }
 
 async function deregister() {

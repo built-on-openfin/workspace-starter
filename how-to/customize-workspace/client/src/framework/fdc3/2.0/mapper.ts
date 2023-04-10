@@ -123,7 +123,8 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		supportEmail: app.supportEmail,
 		icons: app.icons,
 		images: app.screenshots,
-		private: app?.hostManifests?.OpenFin?.config?.private
+		private: app?.hostManifests?.OpenFin?.config?.private,
+		autostart: app?.hostManifests?.OpenFin?.config?.autostart
 	};
 	return platformApp;
 }

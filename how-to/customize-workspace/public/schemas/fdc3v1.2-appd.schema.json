@@ -130,6 +130,10 @@
 		"CustomConfig": {
 			"additionalProperties": {},
 			"properties": {
+				"autostart": {
+					"description": "does the application wish to be automatically started when the platform is initialized. Default behavior is false.",
+					"type": ["string", "boolean"]
+				},
 				"instanceMode": {
 					"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.",
 					"enum": ["multi", "single"],
