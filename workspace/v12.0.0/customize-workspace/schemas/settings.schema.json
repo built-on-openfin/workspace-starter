@@ -26,11 +26,11 @@
             "type": "object"
         },
         "ActionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_4",
+            "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
         "AnalyticsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_7",
+            "$ref": "#/definitions/ModuleList_6",
             "description": "List of modules."
         },
         "Api": {
@@ -330,6 +330,10 @@
                     },
                     "type": "array"
                 },
+                "autostartApps": {
+                    "description": "Should the platform launch one or more apps at the end of the bootstrapping process\nif they have declared autostart as true in their metadata? Default behavior is true.",
+                    "type": "boolean"
+                },
                 "dock": {
                     "description": "Should the platform register against the dock component?",
                     "type": "boolean"
@@ -467,7 +471,7 @@
             "type": "string"
         },
         "ConditionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_5",
+            "$ref": "#/definitions/ModuleList_4",
             "description": "List of modules."
         },
         "Connection": {
@@ -810,9 +814,6 @@
                 "endpointProvider": {
                     "$ref": "#/definitions/EndpointProviderOptions"
                 },
-                "headlessProvider": {
-                    "$ref": "#/definitions/HeadlessProviderOptions"
-                },
                 "homeProvider": {
                     "$ref": "#/definitions/HomeProviderOptions"
                 },
@@ -1154,10 +1155,6 @@
             ],
             "type": "string"
         },
-        "HeadlessProviderOptions": {
-            "$ref": "#/definitions/ModuleList_1",
-            "description": "List of modules."
-        },
         "HomeProviderOptions": {
             "additionalProperties": false,
             "description": "HomeProvider Options",
@@ -1234,7 +1231,7 @@
             "type": "object"
         },
         "InitOptionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_2",
+            "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
         "IntegrationModuleDefinition": {
@@ -1372,11 +1369,11 @@
             "$ref": "#/definitions/__type_8"
         },
         "LifecycleProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
+            "$ref": "#/definitions/ModuleList_5",
             "description": "List of modules."
         },
         "LoggerProviderOptions": {
-            "$ref": "#/definitions/ModuleList_3",
+            "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
         "ManifestTypeId": {
@@ -1386,6 +1383,7 @@
                 "endpoint",
                 "external",
                 "inline-external",
+                "inline-snapshot",
                 "inline-view",
                 "inline-window",
                 "manifest",
@@ -1649,7 +1647,7 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_8",
+            "$ref": "#/definitions/ModuleList_7",
             "description": "List of modules."
         },
         "MinimumVersion": {
@@ -1745,7 +1743,7 @@
         },
         "ModuleList_1": {
             "additionalProperties": false,
-            "description": "The headless provider supports a list of modules. Right now the url must be to a\nhtml page as we will be launching a window after the bootstrapping process has run. A js extension will log an error.\nThe data setting of the module can be a WindowsOptions object with settings (our defaults should be enough if you want\na hidden window to run logic in the background)",
+            "description": "InitOptions Provider Options.\nThis is a list of modules that will be loaded and used to handle init params\n(similar to query strings). The module data setting needs to specify\n\"supportedActions\" and this should be an array of strings of the actions this module\nsupports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed\na payload (this should be a base64 encoded object when passed via init params).",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1759,7 +1757,7 @@
         },
         "ModuleList_2": {
             "additionalProperties": false,
-            "description": "InitOptions Provider Options.\nThis is a list of modules that will be loaded and used to handle init params\n(similar to query strings). The module data setting needs to specify\n\"supportedActions\" and this should be an array of strings of the actions this module\nsupports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed\na payload (this should be a base64 encoded object when passed via init params).",
+            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1773,7 +1771,7 @@
         },
         "ModuleList_3": {
             "additionalProperties": false,
-            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform",
+            "description": "A list of modules that provide actions that can be used by the platform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1787,7 +1785,7 @@
         },
         "ModuleList_4": {
             "additionalProperties": false,
-            "description": "A list of modules that provide actions that can be used by the platform",
+            "description": "A list of modules that provide a set of conditions. The function for this\ncondition will return true or false to indicate if the condition is met.\nConditions are used in a number of places (for example menu options)",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1801,7 +1799,7 @@
         },
         "ModuleList_5": {
             "additionalProperties": false,
-            "description": "A list of modules that provide a set of conditions. The function for this\ncondition will return true or false to indicate if the condition is met.\nConditions are used in a number of places (for example menu options)",
+            "description": "This is a list of modules that allow you to hook\ninto the lifecycle events exposed by the platform.\nA good example might be you wish to register a module\nthat is called when an authenticated session is expired",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1815,20 +1813,6 @@
         },
         "ModuleList_6": {
             "additionalProperties": false,
-            "description": "This is a list of modules that allow you to hook\ninto the lifecycle events exposed by the platform.\nA good example might be you wish to register a module\nthat is called when an authenticated session is expired",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_7": {
-            "additionalProperties": false,
             "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace components.",
             "properties": {
                 "modules": {
@@ -1841,7 +1825,7 @@
             },
             "type": "object"
         },
-        "ModuleList_8": {
+        "ModuleList_7": {
             "additionalProperties": false,
             "description": "A list of modules that provide menu for different locations.",
             "properties": {
@@ -1983,6 +1967,10 @@
                 "appId": {
                     "description": "Unique identifier for an application.",
                     "type": "string"
+                },
+                "autostart": {
+                    "description": "does the application wish to be automatically started when the platform is initialized. Default behavior is false.",
+                    "type": "boolean"
                 },
                 "contactEmail": {
                     "type": "string"
