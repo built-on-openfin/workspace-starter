@@ -27,6 +27,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const initDom = () => {
     const btnConnect = document.querySelector("#btnConnect");
+    const btnDisconnect = document.querySelector("#btnDisconnect");
     const btnClearLogs = document.querySelector("#btnClear");
     const btnQuery = document.querySelector("#btnQuery");
     const inputText = document.querySelector("#intentValue");
@@ -38,8 +39,9 @@ const initDom = () => {
     selectOptions.selectedIndex = -1;
 
     btnConnect.addEventListener("click", connectToBBGTerminal);
+    btnDisconnect.addEventListener("click", disconnectFromBBGTerminal);
     btnClearLogs.addEventListener("click", clearLogs);
-    btnQuery.addEventListener("click", createAndFireIntent);
+    btnQuery.addEventListener("click", fireIntentforBBG);
     inputText.addEventListener("input", getInputValue);
 
     selectChoice.addEventListener("change", function handleChange(event) {
@@ -78,7 +80,7 @@ const initDom = () => {
 const getInputValue = (e) => {
     const inputVal = e.target.value;
     intentValue = inputVal;
-    console.log(inputVal);
+    // console.log(inputVal);
 };
 
 // Connect to Bloomberg Terminal
@@ -103,33 +105,36 @@ const connectToBBGTerminal = async (): Promise<void> => {
     }
 };
 
-// Connect to InterOp broker
-const connectToBroker = async () => {
-    const interopBroker = await fin.Interop.init("openfin");
-
-    client = fin.Interop.connectSync("openfin", interopConfig);
-};
-
-const createAndFireIntent = (e: any) => {
-    logInformation(`action: ${selectedIntent}, type: ${fdc3Denomination}, bbg mnemonic: ${bbgMnemonic}, search value: ${intentValue}`);
-    // Define the intent to fire
-    /*
-    const intent = {
-        action: "ViewChart",
-        dataType: "Stock",
-        data: {
-          symbol: "AAPL"
-        }
-      };
-
-      fireIntentforBBG(intent);
-      */
+// Disconnect from Bloomberg Terminal
+const disconnectFromBBGTerminal = async () => {
+    if(bbgConnection) {
+        await bbgConnection.disconnect();
+        bbgConnection = undefined;
+        isConnected = false;
+        logInformation("Disconnected from Bloomberg Terminal");
+    }
 };
 
 // Fire an intent
-const fireIntentforBBG = (intent: any) => {
-    if(client) {
-        client.fireIntent(intent);
+const fireIntentforBBG = async () => {
+    if(isConnected && bbgConnection) {
+        try {
+            logInformation(`action: ${selectedIntent}, type: ${fdc3Denomination}, bbg mnemonic: ${bbgMnemonic}, search value: ${intentValue}`);
+
+            const intent: OpenFin.Intent = {
+                name: selectedIntent,
+                context: {
+                    type: fdc3Denomination,
+                    id: {
+                        intentValue
+                    }
+                }
+            };
+
+            await fin.me.interop.fireIntent(intent);
+        } catch (error) {
+            logInformation(`Error while trying to raise intent: ${String(error.message)}`);
+        }
     }
 };
 

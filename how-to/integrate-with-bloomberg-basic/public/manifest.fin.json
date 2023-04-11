@@ -10,16 +10,18 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true,
+		"preventQuitOnLastWindowClosed": false,
 		"defaultWindowOptions": {}
 	},
 	"snapshot": {
 		"windows": [
 		  {
+			"icon": "http://localhost:8080/favicon-32x32.png",
 			"defaultHeight": 500,
 			"defaultWidth": 900,
 			"center": true,
 			"saveWindowState": true,
+			"alwaysOnTop":false,
 			"layout": {				
 				"content": [
 					{
@@ -28,7 +30,7 @@
 						"componentState": {
 							"name": "bbgTest",
 							"processAffinity": "ps_1",
-							"url": "http://localhost:8080/platform/bbgtest.html",
+							"url": "https://openfin-bbg-int.loca.lt/platform/bbgtest.html",
 							"interop":{
 							"currentContextGroup": "green"
 							}

@@ -7,7 +7,7 @@ export function interopOverride(
     class InteropOverride extends InteropBroker {
         public async handleFiredIntent(intent: OpenFin.Intent) {
             console.log("Received request for a raised intent:", intent);
-            const targetIdentity = fin.me.identity;
+            const targetIdentity = { uuid: fin.me.identity.uuid, name: "bbgTest" };
             await super.setIntentTarget(intent, targetIdentity);
         }
     }
