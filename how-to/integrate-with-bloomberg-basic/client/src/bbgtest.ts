@@ -2,6 +2,7 @@ import { BloombergConnection,
     BloombergConnectionConfig,
     connect,
     ContextActionMap,
+    enableLogging,
     IntentActionMap,
     isBloombergTerminalReady } from "@openfin/bloomberg";
 import { fin } from "@openfin/core";
@@ -22,6 +23,7 @@ let bbgMnemonic = "";
 let intentValue = "";
 
 window.addEventListener("DOMContentLoaded", async () => {
+    enableLogging();
 	initDom();
 });
 
@@ -121,15 +123,42 @@ const fireIntentforBBG = async () => {
         try {
             logInformation(`action: ${selectedIntent}, type: ${fdc3Denomination}, bbg mnemonic: ${bbgMnemonic}, search value: ${intentValue}`);
 
-            const intent: OpenFin.Intent = {
-                name: selectedIntent,
-                context: {
-                    type: fdc3Denomination,
-                    id: {
-                        intentValue
-                    }
-                }
-            };
+            let intent: OpenFin.Intent;
+
+            switch (selectedIntent) {
+                case "ViewChart": 
+                    intent = {
+                        name: selectedIntent,
+                        context: {
+                            type: fdc3Denomination,
+                            id: {
+                                ticker: intentValue
+                            }
+                        }
+                    };
+                    break;
+                case "ViewContact":
+                    intent = {
+                        name: selectedIntent,
+                        context: {
+                            type: fdc3Denomination,
+                            name: intentValue,
+                            id: {}
+                        }
+                    };
+                    break;
+                default:
+                    intent = {
+                        name: selectedIntent,
+                        context: {
+                            type: fdc3Denomination,
+                            id: {
+                                ticker: intentValue
+                            }
+                        }
+                    };
+                    break;
+            }
 
             await fin.me.interop.fireIntent(intent);
         } catch (error) {
