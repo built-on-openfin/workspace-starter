@@ -123,17 +123,9 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 			result.action.trigger === "user-action" &&
 			result.action.name === TreeIntegrationProvider._BACK_ACTION
 		) {
-			const type: string = result.data.entity.type;
-			const path: string[] = result.data.path;
+			const query: string = result.data.query;
 
-			let newPath = [];
-			if (type === "member") {
-				newPath = [path[0], path[1]];
-			} else if (type === "department") {
-				newPath = [path[0], ""];
-			}
-
-			await this._integrationHelpers.setSearchQuery(newPath.join("/"));
+			await this._integrationHelpers.setSearchQuery(query);
 
 			return true;
 		}
@@ -154,43 +146,43 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	): Promise<HomeSearchResponse> {
 		let results: HomeSearchResult[] = [];
 
-		const parts = query.split("/");
+		if (query.length > 0) {
+			const parts = query.split("/");
 
-		const queryOrg = new RegExp(parts[0], "i");
-		const matchingOrgs: EntityOrganization[] = this._orgData.filter(
-			(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
-		);
+			const queryOrg = new RegExp(parts[0], "i");
+			const matchingOrgs: EntityOrganization[] = this._orgData.filter(
+				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
+			);
 
-		if (parts.length === 1) {
-			results = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [o.name, ""])));
-		} else if (parts.length >= 2) {
-			const queryDep = new RegExp(parts[1], "i");
-			for (const org of matchingOrgs) {
-				let deps: EntityDepartment[] = [];
-				if (parts[1].length === 0) {
-					deps = deps.concat(org.departments);
-				} else {
-					deps = deps.concat(org.departments.filter((d) => queryDep.test(d.id) || queryDep.test(d.name)));
-				}
+			if (parts.length === 1) {
+				results = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [o.name, ""], "")));
+			} else if (parts.length >= 2) {
+				const queryDep = new RegExp(parts[1], "i");
+				for (const org of matchingOrgs) {
+					let deps: EntityDepartment[] = org.departments;
+					if (parts[1].length > 0) {
+						deps = deps.filter((d) => queryDep.test(d.id) || queryDep.test(d.name));
+					}
 
-				if (parts.length === 2) {
-					results = results.concat(
-						await Promise.all(deps.map(async (d) => this.createResult(d, [org.name, d.name, ""])))
-					);
-				} else if (parts.length === 3) {
-					const queryMem = new RegExp(parts[2], "i");
-
-					for (const dep of deps) {
-						let mems: EntityMember[] = [];
-						if (parts[2].length === 0) {
-							mems = mems.concat(dep.members);
-						} else {
-							mems = mems.concat(dep.members.filter((m) => queryMem.test(m.id) || queryMem.test(m.name)));
-						}
-
+					if (parts.length === 2) {
 						results = results.concat(
-							await Promise.all(mems.map(async (m) => this.createResult(m, [org.name, dep.name, m.name])))
+							await Promise.all(deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name)))
 						);
+					} else if (parts.length === 3) {
+						const queryMem = new RegExp(parts[2], "i");
+
+						for (const dep of deps) {
+							let mems: EntityMember[] = dep.members;
+							if (parts[2].length > 0) {
+								mems = mems.filter((m) => queryMem.test(m.id) || queryMem.test(m.name));
+							}
+
+							results = results.concat(
+								await Promise.all(
+									mems.map(async (m) => this.createResult(m, [org.name, dep.name, m.name], `${org.name}/`))
+								)
+							);
+						}
 					}
 				}
 			}
@@ -205,9 +197,10 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	 * Create a search result.
 	 * @param entity The entity for the item.
 	 * @param path The full path to the item.
+	 * @param query The original query.
 	 * @returns The search result.
 	 */
-	private async createResult(entity: EntityItem, path: string[]): Promise<HomeSearchResult> {
+	private async createResult(entity: EntityItem, path: string[], query: string): Promise<HomeSearchResult> {
 		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const data: { [id: string]: string } = {
@@ -290,7 +283,8 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 			data: {
 				providerId: TreeIntegrationProvider._PROVIDER_ID,
 				entity,
-				path
+				path,
+				query
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
