@@ -19,8 +19,8 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "12.6.4",
-		"@openfin/workspace-platform": "12.6.4"
+		"@openfin/workspace": "12.6.5",
+		"@openfin/workspace-platform": "12.6.5"
 	},
 	"devDependencies": {
 		"@openfin/core": "30.74.13",

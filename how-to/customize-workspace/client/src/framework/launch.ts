@@ -171,13 +171,26 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		return null;
 	}
 
-	if (snapshotApp.manifestType !== manifestTypes.snapshot.id) {
-		logger.warn(`The app passed was not of manifestType ${manifestTypes.snapshot.id}`);
+	if (
+		snapshotApp.manifestType !== manifestTypes.snapshot.id &&
+		snapshotApp.manifestType !== manifestTypes.inlineSnapshot.id
+	) {
+		logger.warn(
+			`The app passed was not of manifestType ${manifestTypes.snapshot.id} or ${manifestTypes.inlineSnapshot.id}`
+		);
 		return null;
 	}
 
-	const manifestResponse = await fetch(snapshotApp.manifest);
-	const manifest: BrowserSnapshot = await manifestResponse.json();
+	let manifest: BrowserSnapshot;
+
+	if (snapshotApp.manifestType === manifestTypes.snapshot.id) {
+		logger.info(`Fetching snapshot for app ${snapshotApp.appId} from url: ${snapshotApp.manifest}`);
+		const manifestResponse = await fetch(snapshotApp.manifest);
+		manifest = await manifestResponse.json();
+	} else {
+		logger.info(`Using snapshot defined in manifest setting of app ${snapshotApp.appId}`);
+		manifest = snapshotApp.manifest as unknown as BrowserSnapshot;
+	}
 
 	const windows = manifest.windows;
 	const windowsToCreate = [];
@@ -253,13 +266,19 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 						`Application requested is a native app with a tag of ${appAssetTag} so it is provided by this workspace platform. Managing request via platform and not Workspace`
 					);
 					options.alias = app.manifest;
-					options.uuid = app.appId;
+					if (app.instanceMode === "single") {
+						// use the appId as the UUID and OpenFin will only be able to launch a single instance
+						options.uuid = app.appId;
+					}
 				} else {
 					logger.info(
 						"Application requested is a native app. Managing request via platform and not Workspace"
 					);
 					options.path = app.manifest;
-					options.uuid = app.appId;
+					if (app.instanceMode === "single") {
+						// use the appId as the UUID and OpenFin will only be able to launch a single instance
+						options.uuid = app.appId;
+					}
 				}
 				const identity = await fin.System.launchExternalProcess(options);
 				platformAppIdentities.push({ ...identity, appId: app.appId });
@@ -294,7 +313,8 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 				}
 				break;
 			}
-			case manifestTypes.snapshot.id: {
+			case manifestTypes.snapshot.id:
+			case manifestTypes.inlineSnapshot.id: {
 				const identities = await launchSnapshot(app);
 				if (identities !== null && identities !== undefined) {
 					platformAppIdentities.push(...identities);

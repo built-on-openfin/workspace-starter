@@ -26,4 +26,10 @@ export interface BootstrapOptions {
 	 * on blur we suggest adding home last if you wish it to show.
 	 * */
 	autoShow: BootstrapComponents[];
+
+	/**
+	 * Should the platform launch one or more apps at the end of the bootstrapping process
+	 * if they have declared autostart as true in their metadata? Default behavior is true.
+	 */
+	autostartApps?: boolean;
 }

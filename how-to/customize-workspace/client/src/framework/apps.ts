@@ -212,10 +212,23 @@ export async function getApps(appFilter: AppFilterOptions = {}): Promise<Platfor
 	logger.info("Requesting apps");
 	try {
 		const apps = cachedApps ?? (await getEntries(cacheDuration));
+		if (appFilter.private !== undefined && appFilter.autostart !== undefined) {
+			return apps.filter((appToFilter) => {
+				const isPrivate = appToFilter.private ?? false;
+				const autostart = appToFilter.autostart ?? false;
+				return appFilter.private === isPrivate && appFilter.autostart === autostart;
+			});
+		}
 		if (appFilter.private !== undefined) {
 			return apps.filter((appToFilter) => {
 				const isPrivate = appToFilter.private ?? false;
 				return appFilter.private === isPrivate;
+			});
+		}
+		if (appFilter.autostart !== undefined) {
+			return apps.filter((appToFilter) => {
+				const autostart = appToFilter.autostart ?? false;
+				return appFilter.autostart === autostart;
 			});
 		}
 		return apps;

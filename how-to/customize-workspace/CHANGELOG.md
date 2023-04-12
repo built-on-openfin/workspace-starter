@@ -4,7 +4,7 @@
 
 - Initial update to interop broker to support fdc3 2.0
 - Additional intent picker that is the new default that supports instances
-- Support for customConfig in an app definition to say whether the instance picker should present a single app option or show multiple instances via instanceMode: "single" or "multi"
+- Support for instanceMode in an app definition to say whether the instance picker should present a single app option or show multiple instances via instanceMode: "single" or "multi"
 - Updated images for contact related samples and updated them to set page title as context comes in
 - Updated call app to support fdc3 2.0 and initially return the passed context as a getResult return object.
 - Updated references to tools for fdc3 2.0 help (intent and context).
@@ -17,6 +17,11 @@
 - broke out the fdc3 tools into different json files.
 - Updated the broker to return results in expected format based on whether the view is set to fdc3 1.2 or 2.0
 - Customize workspace supports interop api, fdc3 1.2 and fdc3 2.0 apps and directory structures.
+- autostart is available as an app setting. This can be used if you need an application to start straight after the bootstrapping process. This may be a headless window (that might be needed to provide services to views), a native app that works with the platform and should be auto launched or it could be the launching of another OpenFin app that is required. If this applications need to be launched but shouldn't be visible in home, store or dock then set the app private property to true.
+- autostart of apps can be disabled at the platform level by setting the autostartApps bootstrap provider setting to false.
+- headlessProvider has been removed from customized. This provider allowed the setting of windows that should be launched after the bootstrapping process. It could be used by content providers to have a headless window launched but meant there were two ways of defining
+  content provider related apps. This has been removed because now it can be achieved by defining an app entry (e.g. a manifest type of inline-window or window) with private and autostart set to true.
+- Support for a new manifest type has been added (after feedback). We now support inline-snapshot as well as snapshot. We already have inline-view, inline-window and inline-external alongside view, window and external so inline-snapshot was the only one missing and people have found it useful and added it themselves. It is now available in customize to remove the need to add it yourself.
 
 ## v11
 

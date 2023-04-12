@@ -148,6 +148,8 @@ export interface AppDefinition {
 			details?: string | unknown;
 			/** An area for config related to this app for the platform hosting it. This isn't specific to the app manifest but how the platform can manage the app. */
 			config?: {
+				/** does the application wish to be automatically started when the platform is initialized. Default behavior is false. */
+				autostart?: boolean;
 				/** Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it is intended to be a background window that acts as an intent handler) */
 				private?: boolean;
 				/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */

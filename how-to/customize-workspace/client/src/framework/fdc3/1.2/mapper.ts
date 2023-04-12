@@ -46,17 +46,30 @@ function getTags(app: AppDefinition & { tags?: string[] }): string[] {
 }
 
 function getPrivate(app: AppDefinition): boolean {
-	if (app?.customConfig?.private !== undefined) {
-		switch (app?.customConfig?.private) {
+	return getValue(app?.customConfig?.private, false);
+}
+
+function getAutostart(app: AppDefinition): boolean {
+	return getValue(app?.customConfig?.autostart, false);
+}
+
+function getValue(flag: string | boolean, defaultFlag: boolean) {
+	if (flag !== undefined && flag !== null && flag !== "") {
+		switch (flag) {
 			case "False":
 			case "false":
 			case false:
 				return false;
-			default:
-				// if someone has defined private then the likely hood was to override the default of false.
+			case "True":
+			case "true":
+			case true:
 				return true;
+			default:
+				// if someone has defined a flag then the likely hood was to override the default value
+				return !defaultFlag;
 		}
 	}
+	return defaultFlag;
 }
 
 export function getInterop(intents: AppIntents[]): AppInterop {
@@ -96,6 +109,7 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		icons: getIcons(app.icons),
 		images: getImages(app.images),
 		private: getPrivate(app),
+		autostart: getAutostart(app),
 		instanceMode: app.customConfig?.instanceMode,
 		tooltip: app.tooltip
 	};
