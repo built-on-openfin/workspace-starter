@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "29.108.73.14"
+		"version": "30.110.74.13"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"
@@ -61,7 +61,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
-		"name": "Customize Workspace - v11.0.0",
+		"name": "Customize Workspace - v12.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
@@ -90,27 +90,95 @@
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace",
 			"sharing": true,
-			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/intents/picker.html",
-				"height": 400,
-				"width": 400
+			"interop": {
+				"intentResolver": {
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/intents/instance-picker.html",
+					"height": 715,
+					"width": 665,
+					"fdc3InteropApi": "2.0"
+				},
+				"intentOptions": {},
+				"unregisteredApp": {
+					"appId": "unregistered",
+					"title": "Other",
+					"description": "If you can not find an application to support your action please check the instances associated with this entry to see if it satisfies your need.",
+					"icons": [
+						{
+							"src": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico"
+						}
+					],
+					"publisher": "Multiple",
+					"intents": [
+						{
+							"name": "StartCall",
+							"displayName": "Start a Call",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						{
+							"name": "StartChat",
+							"displayName": "Start a Chat",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						{
+							"name": "ViewChart",
+							"displayName": "View Chart",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+						},
+						{
+							"name": "ViewContact",
+							"displayName": "View Contact Details",
+							"contexts": ["fdc3.contact"]
+						},
+						{
+							"name": "ViewQuote",
+							"displayName": "View Quote",
+							"contexts": ["fdc3.instrument"]
+						},
+						{
+							"name": "ViewNews",
+							"displayName": "View News",
+							"contexts": [
+								"fdc3.country",
+								"fdc3.instrument",
+								"fdc3.instrumentList",
+								"fdc3.organization",
+								"fdc3.portfolio"
+							]
+						},
+						{
+							"name": "ViewAnalysis",
+							"displayName": "View Analysis",
+							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+						},
+						{
+							"name": "ViewInstrument",
+							"displayName": "View Instrument Details",
+							"contexts": ["fdc3.instrument"]
+						}
+					]
+				}
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["apps-get", "common-apps-get"],
+			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/common/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
-			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
-				"snapshot",
-				"manifest",
-				"external",
 				"inline-view",
 				"window",
 				"inline-window",
-				"desktop-browser",
+				"snapshot",
+				"inline-snapshot",
+				"external",
 				"inline-external",
+				"manifest",
+				"desktop-browser",
 				"connection"
 			]
 		},
@@ -123,22 +191,6 @@
 				}
 			],
 			"endpoints": [
-				{
-					"id": "apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/apps.json"
-					}
-				},
-				{
-					"id": "common-apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/main/common/apps.json"
-					}
-				},
 				{
 					"id": "share-get",
 					"type": "fetch",
@@ -752,20 +804,20 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/js/preload.js",
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/integrate-with-salesforce/images/task.svg"
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/integrate-with-salesforce/images/task.svg"
 						}
 					}
 				},
@@ -777,7 +829,7 @@
 					"enabled": false,
 					"excludeFromSourceFilter": true,
 					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v11.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				},
 				{
 					"id": "about",
@@ -905,7 +957,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "11.0.0"
+				"workspace": "12.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",

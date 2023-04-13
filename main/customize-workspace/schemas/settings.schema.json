@@ -26,12 +26,15 @@
             "type": "object"
         },
         "ActionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_4",
+            "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
         "AnalyticsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_7",
+            "$ref": "#/definitions/ModuleList_6",
             "description": "List of modules."
+        },
+        "Api": {
+            "$ref": "#/definitions/__type_11"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -54,6 +57,144 @@
                     "type": "string"
                 }
             ]
+        },
+        "AppIntent": {
+            "additionalProperties": false,
+            "properties": {
+                "contexts": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contexts",
+                "displayName",
+                "name"
+            ],
+            "type": "object"
+        },
+        "AppIntents": {
+            "additionalProperties": false,
+            "properties": {
+                "contexts": {
+                    "description": "Required. A comma separated list of the types of contexts the intent offered by the application can process, where the first part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "customConfig": {
+                    "additionalProperties": {},
+                    "description": "Custom configuration for the intent that may be required for a particular desktop agent. *",
+                    "type": "object"
+                },
+                "displayName": {
+                    "description": "An optional display name for the intent that may be used in UI instead of the name.",
+                    "type": "string"
+                },
+                "resultType": {
+                    "description": "An optional type for output returned by the application, if any, when resolving this intent. May indicate a context type by type name (e.g. \"fdc3.instrument\"), a channel (e.g. \"channel\") or a combination\nthat indicates a channel that returns a particular context type (e.g. \"channel<fdc3.instrument>\").",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contexts"
+            ],
+            "type": "object"
+        },
+        "AppInterop": {
+            "additionalProperties": false,
+            "properties": {
+                "appChannels": {
+                    "description": "Describes the application's use of App Channels.",
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "broadcasts": {
+                                "description": "Context type names that are broadcast by the application on the channel.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "description": {
+                                "description": "A description of how the channel is used.",
+                                "type": "string"
+                            },
+                            "listensFor": {
+                                "description": "Context type names that the application listens for on the channel.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "name": {
+                                "description": "The name of the App Channel.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "intents": {
+                    "additionalProperties": false,
+                    "description": "Describes the app's interactions with intents.",
+                    "properties": {
+                        "listensFor": {
+                            "additionalProperties": {
+                                "$ref": "#/definitions/AppIntents"
+                            },
+                            "description": "A mapping of Intents names that an app listens for via fdc3.addIntentListener() or fin.me.interop.registerIntentHandler.\nUsed to support intent resolution by the interop broker. Replaces the intents array used previously.",
+                            "type": "object"
+                        },
+                        "raises": {
+                            "additionalProperties": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "description": "A mapping of Intent names that an app raises (via fdc3.raiseIntent) to an array of context type names that it may be raised with. Use the intent name \"any\" to represent use of the fdc3.raiseIntentForContext\nand fdc3.findIntentForContext functions, which allow the user to select from intents available for a specified context type.",
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "userChannels": {
+                    "additionalProperties": false,
+                    "description": "Describes the application's use of context types on User Channels.",
+                    "properties": {
+                        "broadcasts": {
+                            "description": "Context type names that are broadcast by the application.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "listensFor": {
+                            "description": "Context type names that the application listens for.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
         },
         "AppProviderOptions": {
             "additionalProperties": false,
@@ -134,6 +275,9 @@
             ],
             "type": "object"
         },
+        "ApplicationIdentity": {
+            "$ref": "#/definitions/__type_1"
+        },
         "Array": {
             "items": {
                 "$ref": "#/definitions/PlatformCustomTheme"
@@ -142,32 +286,25 @@
         },
         "Array_1": {
             "items": {
-                "$ref": "#/definitions/OpenFin.PrebuiltContextMenuItem"
-            },
-            "type": "array"
-        },
-        "Array_2": {
-            "items": {
-                "anyOf": [
-                    {
-                        "$ref": "#/definitions/OpenFin.LayoutRow"
-                    },
-                    {
-                        "$ref": "#/definitions/OpenFin.LayoutColumn"
-                    },
-                    {
-                        "$ref": "#/definitions/OpenFin.LayoutComponent"
-                    },
-                    {
-                        "$ref": "#/definitions/OpenFin.LayoutItemConfig"
-                    }
-                ]
+                "$ref": "#/definitions/PrebuiltContextMenuItem"
             },
             "type": "array"
         },
         "AuthProviderOptions": {
             "$ref": "#/definitions/ModuleList",
             "description": "List of modules."
+        },
+        "AutoResizeOptions": {
+            "$ref": "#/definitions/__type_18"
+        },
+        "AutoplayPolicyOptions": {
+            "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
+            "enum": [
+                "document-user-activation-required",
+                "no-user-gesture-required",
+                "user-gesture-required"
+            ],
+            "type": "string"
         },
         "BaseEndpointDefinition.O": {
             "$ref": "#/definitions/FetchOptions"
@@ -192,6 +329,10 @@
                         "$ref": "#/definitions/BootstrapComponents"
                     },
                     "type": "array"
+                },
+                "autostartApps": {
+                    "description": "Should the platform launch one or more apps at the end of the bootstrapping process\nif they have declared autostart as true in their metadata? Default behavior is true.",
+                    "type": "boolean"
                 },
                 "dock": {
                     "description": "Should the platform register against the dock component?",
@@ -218,6 +359,9 @@
                 "store"
             ],
             "type": "object"
+        },
+        "Bounds": {
+            "$ref": "#/definitions/__type_14"
         },
         "BrokerConnection": {
             "additionalProperties": false,
@@ -327,7 +471,7 @@
             "type": "string"
         },
         "ConditionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_5",
+            "$ref": "#/definitions/ModuleList_4",
             "description": "List of modules."
         },
         "Connection": {
@@ -341,7 +485,7 @@
                     "type": "array"
                 },
                 "identity": {
-                    "$ref": "#/definitions/OpenFin.Identity",
+                    "$ref": "#/definitions/Identity",
                     "description": "The identity uuid of the incoming connection or * as a wildcard. We currently do not restrict down to the name level so it can be blank or omitted."
                 },
                 "validatePayload": {
@@ -403,6 +547,51 @@
                     "$ref": "#/definitions/BrokerConnection"
                 }
             ]
+        },
+        "ContentCreationOptions": {
+            "$ref": "#/definitions/__type_12"
+        },
+        "ContentCreationRule<ContentCreationBehaviorNames>": {
+            "additionalProperties": false,
+            "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled.",
+            "properties": {
+                "behavior": {
+                    "$ref": "#/definitions/T",
+                    "description": "Behavior to use when opening matched content."
+                },
+                "match": {
+                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "options": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Partial"
+                        },
+                        {
+                            "$ref": "#/definitions/Partial_3"
+                        }
+                    ],
+                    "description": "Options for newly-created view or window (if applicable)."
+                }
+            },
+            "required": [
+                "behavior",
+                "match"
+            ],
+            "type": "object"
+        },
+        "ContentNavigation": {
+            "$ref": "#/definitions/__type_19"
+        },
+        "ContextMenuOptions": {
+            "$ref": "#/definitions/__type_5"
+        },
+        "ContextMenuSettings": {
+            "$ref": "#/definitions/__type_4"
         },
         "CustomActionSpecifier": {
             "additionalProperties": false,
@@ -624,9 +813,6 @@
                 },
                 "endpointProvider": {
                     "$ref": "#/definitions/EndpointProviderOptions"
-                },
-                "headlessProvider": {
-                    "$ref": "#/definitions/HeadlessProviderOptions"
                 },
                 "homeProvider": {
                     "$ref": "#/definitions/HomeProviderOptions"
@@ -969,10 +1155,6 @@
             ],
             "type": "string"
         },
-        "HeadlessProviderOptions": {
-            "$ref": "#/definitions/ModuleList_1",
-            "description": "List of modules."
-        },
         "HomeProviderOptions": {
             "additionalProperties": false,
             "description": "HomeProvider Options",
@@ -1023,6 +1205,9 @@
             ],
             "type": "object"
         },
+        "Identity": {
+            "$ref": "#/definitions/__type"
+        },
         "Image": {
             "additionalProperties": false,
             "description": "Detailed metadata describing an image.",
@@ -1046,7 +1231,7 @@
             "type": "object"
         },
         "InitOptionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_2",
+            "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
         "IntegrationModuleDefinition": {
@@ -1141,12 +1326,54 @@
             },
             "type": "object"
         },
+        "IntentOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "intentTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default is 5000 (5 seconds)",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "IntentResolverOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "fdc3InteropApi": {
+                    "description": "the fdc3 api version this picker will support (default is v2)",
+                    "type": "string"
+                },
+                "height": {
+                    "description": "the height you wish the window to be",
+                    "type": "number"
+                },
+                "title": {
+                    "description": "A suggested title for the intent picker/resolver ui",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "The url of the html page that has the intent picker",
+                    "type": "string"
+                },
+                "width": {
+                    "description": "the width you wish the window to be",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "url"
+            ],
+            "type": "object"
+        },
+        "InteropConfig": {
+            "$ref": "#/definitions/__type_8"
+        },
         "LifecycleProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
+            "$ref": "#/definitions/ModuleList_5",
             "description": "List of modules."
         },
         "LoggerProviderOptions": {
-            "$ref": "#/definitions/ModuleList_3",
+            "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
         "ManifestTypeId": {
@@ -1156,10 +1383,12 @@
                 "endpoint",
                 "external",
                 "inline-external",
+                "inline-snapshot",
                 "inline-view",
                 "inline-window",
                 "manifest",
                 "snapshot",
+                "unregistered-app",
                 "view",
                 "window"
             ],
@@ -1215,26 +1444,8 @@
                     "type": "string"
                 },
                 "position": {
-                    "additionalProperties": false,
-                    "description": "Where should this menu item be positioned in relation to existing entries",
-                    "properties": {
-                        "customId": {
-                            "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
-                            "type": "string"
-                        },
-                        "operation": {
-                            "$ref": "#/definitions/MenuPositionOperation",
-                            "description": "What should we do with this menu option"
-                        },
-                        "type": {
-                            "$ref": "#/definitions/MenuEntry.T",
-                            "description": "The type of Menu entry this is"
-                        }
-                    },
-                    "required": [
-                        "operation"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/MenuPosition",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
@@ -1242,7 +1453,6 @@
                 }
             },
             "required": [
-                "include",
                 "label"
             ],
             "type": "object"
@@ -1282,26 +1492,8 @@
                     "type": "string"
                 },
                 "position": {
-                    "additionalProperties": false,
-                    "description": "Where should this menu item be positioned in relation to existing entries",
-                    "properties": {
-                        "customId": {
-                            "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
-                            "type": "string"
-                        },
-                        "operation": {
-                            "$ref": "#/definitions/MenuPositionOperation",
-                            "description": "What should we do with this menu option"
-                        },
-                        "type": {
-                            "$ref": "#/definitions/MenuEntry.T_1",
-                            "description": "The type of Menu entry this is"
-                        }
-                    },
-                    "required": [
-                        "operation"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/MenuPosition_1",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
@@ -1309,7 +1501,6 @@
                 }
             },
             "required": [
-                "include",
                 "label"
             ],
             "type": "object"
@@ -1349,26 +1540,8 @@
                     "type": "string"
                 },
                 "position": {
-                    "additionalProperties": false,
-                    "description": "Where should this menu item be positioned in relation to existing entries",
-                    "properties": {
-                        "customId": {
-                            "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
-                            "type": "string"
-                        },
-                        "operation": {
-                            "$ref": "#/definitions/MenuPositionOperation",
-                            "description": "What should we do with this menu option"
-                        },
-                        "type": {
-                            "$ref": "#/definitions/MenuEntry.T_2",
-                            "description": "The type of Menu entry this is"
-                        }
-                    },
-                    "required": [
-                        "operation"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/MenuPosition_2",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
@@ -1376,10 +1549,42 @@
                 }
             },
             "required": [
-                "include",
                 "label"
             ],
             "type": "object"
+        },
+        "MenuPosition": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuPosition.T": {
+            "$ref": "#/definitions/GlobalContextMenuOptionType",
+            "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuPosition.T_1": {
+            "$ref": "#/definitions/PageTabContextMenuOptionType",
+            "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`"
+        },
+        "MenuPosition.T_2": {
+            "$ref": "#/definitions/ViewTabMenuOptionType",
+            "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
         },
         "MenuPositionOperation": {
             "enum": [
@@ -1392,6 +1597,48 @@
             ],
             "type": "string"
         },
+        "MenuPosition_1": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_1",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuPosition_2": {
+            "additionalProperties": false,
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_2",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
         "MenuSeparatorPosition": {
             "enum": [
                 "after",
@@ -1400,7 +1647,7 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_8",
+            "$ref": "#/definitions/ModuleList_7",
             "description": "List of modules."
         },
         "MinimumVersion": {
@@ -1496,7 +1743,7 @@
         },
         "ModuleList_1": {
             "additionalProperties": false,
-            "description": "The headless provider supports a list of modules. Right now the url must be to a\nhtml page as we will be launching a window after the bootstrapping process has run. A js extension will log an error.\nThe data setting of the module can be a WindowsOptions object with settings (our defaults should be enough if you want\na hidden window to run logic in the background)",
+            "description": "InitOptions Provider Options.\nThis is a list of modules that will be loaded and used to handle init params\n(similar to query strings). The module data setting needs to specify\n\"supportedActions\" and this should be an array of strings of the actions this module\nsupports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed\na payload (this should be a base64 encoded object when passed via init params).",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1510,7 +1757,7 @@
         },
         "ModuleList_2": {
             "additionalProperties": false,
-            "description": "InitOptions Provider Options.\nThis is a list of modules that will be loaded and used to handle init params\n(similar to query strings). The module data setting needs to specify\n\"supportedActions\" and this should be an array of strings of the actions this module\nsupports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed\na payload (this should be a base64 encoded object when passed via init params).",
+            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1524,7 +1771,7 @@
         },
         "ModuleList_3": {
             "additionalProperties": false,
-            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform",
+            "description": "A list of modules that provide actions that can be used by the platform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1538,7 +1785,7 @@
         },
         "ModuleList_4": {
             "additionalProperties": false,
-            "description": "A list of modules that provide actions that can be used by the platform",
+            "description": "A list of modules that provide a set of conditions. The function for this\ncondition will return true or false to indicate if the condition is met.\nConditions are used in a number of places (for example menu options)",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1552,7 +1799,7 @@
         },
         "ModuleList_5": {
             "additionalProperties": false,
-            "description": "A list of modules that provide a set of conditions. The function for this\ncondition will return true or false to indicate if the condition is met.\nConditions are used in a number of places (for example menu options)",
+            "description": "This is a list of modules that allow you to hook\ninto the lifecycle events exposed by the platform.\nA good example might be you wish to register a module\nthat is called when an authenticated session is expired",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -1566,20 +1813,6 @@
         },
         "ModuleList_6": {
             "additionalProperties": false,
-            "description": "This is a list of modules that allow you to hook\ninto the lifecycle events exposed by the platform.\nA good example might be you wish to register a module\nthat is called when an authenticated session is expired",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_7": {
-            "additionalProperties": false,
             "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace components.",
             "properties": {
                 "modules": {
@@ -1592,7 +1825,7 @@
             },
             "type": "object"
         },
-        "ModuleList_8": {
+        "ModuleList_7": {
             "additionalProperties": false,
             "description": "A list of modules that provide menu for different locations.",
             "properties": {
@@ -1643,7 +1876,7 @@
                             "type": "object"
                         },
                         "identity": {
-                            "$ref": "#/definitions/OpenFin.ApplicationIdentity"
+                            "$ref": "#/definitions/ApplicationIdentity"
                         }
                     },
                     "required": [
@@ -1692,286 +1925,6 @@
             },
             "type": "object"
         },
-        "OpenFin.Api": {
-            "$ref": "#/definitions/__type_11"
-        },
-        "OpenFin.ApplicationIdentity": {
-            "$ref": "#/definitions/__type_1"
-        },
-        "OpenFin.AutoResizeOptions": {
-            "$ref": "#/definitions/__type_18"
-        },
-        "OpenFin.AutoplayPolicyOptions": {
-            "enum": [
-                "document-user-activation-required",
-                "no-user-gesture-required",
-                "user-gesture-required"
-            ],
-            "type": "string"
-        },
-        "OpenFin.Bounds": {
-            "$ref": "#/definitions/__type_14"
-        },
-        "OpenFin.ContentCreationOptions": {
-            "$ref": "#/definitions/__type_12"
-        },
-        "OpenFin.ContentCreationRule<OpenFin.ContentCreationBehaviorNames>": {
-            "additionalProperties": false,
-            "properties": {
-                "behavior": {
-                    "$ref": "#/definitions/T"
-                },
-                "match": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "options": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/Partial"
-                        },
-                        {
-                            "$ref": "#/definitions/Partial_3"
-                        }
-                    ]
-                }
-            },
-            "required": [
-                "behavior",
-                "match"
-            ],
-            "type": "object"
-        },
-        "OpenFin.ContentNavigation": {
-            "$ref": "#/definitions/__type_19"
-        },
-        "OpenFin.ContextMenuOptions": {
-            "$ref": "#/definitions/__type_5"
-        },
-        "OpenFin.ContextMenuSettings": {
-            "$ref": "#/definitions/__type_4"
-        },
-        "OpenFin.Identity": {
-            "$ref": "#/definitions/__type"
-        },
-        "OpenFin.InteropConfig": {
-            "$ref": "#/definitions/__type_8"
-        },
-        "OpenFin.LayoutColumn": {
-            "additionalProperties": false,
-            "properties": {
-                "content": {
-                    "$ref": "#/definitions/OpenFin.LayoutContent"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "id": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "column"
-                    ],
-                    "type": "string"
-                },
-                "width": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "OpenFin.LayoutComponent": {
-            "additionalProperties": false,
-            "properties": {
-                "componentName": {
-                    "enum": [
-                        "view"
-                    ],
-                    "type": "string"
-                },
-                "componentState": {
-                    "$ref": "#/definitions/Partial_8"
-                },
-                "content": {
-                    "$ref": "#/definitions/OpenFin.LayoutContent"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "id": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "width": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "componentName",
-                "type"
-            ],
-            "type": "object"
-        },
-        "OpenFin.LayoutContent": {
-            "$ref": "#/definitions/Array_2"
-        },
-        "OpenFin.LayoutItemConfig": {
-            "$ref": "#/definitions/__type_23"
-        },
-        "OpenFin.LayoutOptions": {
-            "$ref": "#/definitions/__type_21"
-        },
-        "OpenFin.LayoutRow": {
-            "additionalProperties": false,
-            "properties": {
-                "content": {
-                    "$ref": "#/definitions/OpenFin.LayoutContent"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "id": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "row"
-                    ],
-                    "type": "string"
-                },
-                "width": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "OpenFin.PrebuiltContextMenuItem": {
-            "enum": [
-                "copy",
-                "cut",
-                "inspect",
-                "navigateBack",
-                "navigateForward",
-                "paste",
-                "print",
-                "redo",
-                "reload",
-                "selectAll",
-                "separator",
-                "spellCheck",
-                "undo"
-            ],
-            "type": "string"
-        },
-        "OpenFin.RGB": {
-            "$ref": "#/definitions/__type_3"
-        },
-        "OpenFin.ResizeRegion": {
-            "$ref": "#/definitions/__type_7"
-        },
-        "OpenFin.ShowViewOnWindowResizeOptions": {
-            "additionalProperties": false,
-            "properties": {
-                "enabled": {
-                    "type": "boolean"
-                },
-                "paintIntervalMs": {
-                    "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "OpenFin.ViewVisibilityOption": {
-            "$ref": "#/definitions/__type_25"
-        },
-        "OpenFin.ViewVisibilityOptions": {
-            "$ref": "#/definitions/__type_24"
-        },
-        "OpenFin.WebPermission": {
-            "enum": [
-                "audio",
-                "clipboard-read",
-                "clipboard-sanitized-write",
-                "fullscreen",
-                "geolocation",
-                "midiSysex",
-                "notifications",
-                "openExternal",
-                "pointerLock",
-                "video"
-            ],
-            "type": "string"
-        },
-        "OpenFin.WindowState": {
-            "enum": [
-                "maximized",
-                "minimized",
-                "normal"
-            ],
-            "type": "string"
-        },
-        "OpenFin.WorkspacePlatformOptions": {
-            "$ref": "#/definitions/__type_9"
-        },
         "PageTabContextMenuOptionType": {
             "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
             "enum": [
@@ -2008,8 +1961,126 @@
         "Partial_7": {
             "$ref": "#/definitions/__type_20"
         },
-        "Partial_8": {
-            "$ref": "#/definitions/__type_22"
+        "PlatformApp": {
+            "additionalProperties": false,
+            "properties": {
+                "appId": {
+                    "description": "Unique identifier for an application.",
+                    "type": "string"
+                },
+                "autostart": {
+                    "description": "does the application wish to be automatically started when the platform is initialized. Default behavior is false.",
+                    "type": "boolean"
+                },
+                "contactEmail": {
+                    "type": "string"
+                },
+                "customConfig": {
+                    "additionalProperties": {},
+                    "description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher",
+                    "type": "object"
+                },
+                "description": {
+                    "description": "UI friendly description for an application.",
+                    "type": "string"
+                },
+                "icons": {
+                    "description": "A list of icons that can be rendered in UI for this application.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "images": {
+                    "description": "A list of optional images that highlight application functionality.",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "type": "array"
+                },
+                "instanceMode": {
+                    "description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.",
+                    "enum": [
+                        "multi",
+                        "single"
+                    ],
+                    "type": "string"
+                },
+                "intents": {
+                    "items": {
+                        "$ref": "#/definitions/AppIntent"
+                    },
+                    "type": "array"
+                },
+                "interop": {
+                    "$ref": "#/definitions/PlatformAppInterop",
+                    "description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and intents, for use by other app developers and desktop assemblers."
+                },
+                "manifest": {
+                    "description": "URL to application manifest.",
+                    "type": "string"
+                },
+                "manifestType": {
+                    "description": "Describes the type of manifest resolved by the `manifest` field.\nLaunch mechanics are determined by the manifest type.",
+                    "type": "string"
+                },
+                "moreInfo": {
+                    "description": "Optional URL that provides more information about the application",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name is provided for support for fdc3 mappings if not provided then appId is used as name. Internally we use appId.",
+                    "type": "string"
+                },
+                "primaryButton": {
+                    "$ref": "#/definitions/StoreButtonConfig",
+                    "description": "Primary button configuration."
+                },
+                "private": {
+                    "description": "This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API))",
+                    "type": "boolean"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "secondaryButtons": {
+                    "description": "Array of secondary button configurations.",
+                    "items": {
+                        "$ref": "#/definitions/StoreButtonConfig"
+                    },
+                    "type": "array"
+                },
+                "supportEmail": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "A UI friendly title for the application.",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "Optional tooltip description e.g. for a launcher or dock component",
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appId",
+                "icons",
+                "publisher",
+                "title"
+            ],
+            "type": "object"
+        },
+        "PlatformAppInterop": {
+            "$ref": "#/definitions/AppInterop"
         },
         "PlatformCustomTheme": {
             "anyOf": [
@@ -2109,6 +2180,24 @@
         "PlatformCustomThemes": {
             "$ref": "#/definitions/Array"
         },
+        "PlatformInteropBrokerOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "intentOptions": {
+                    "$ref": "#/definitions/IntentOptions",
+                    "description": "Options related to the way this platform supports intents"
+                },
+                "intentResolver": {
+                    "$ref": "#/definitions/IntentResolverOptions",
+                    "description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the platform"
+                },
+                "unregisteredApp": {
+                    "$ref": "#/definitions/PlatformApp",
+                    "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are not linked to an app from\nan intent picker that supports instances. The intents and contexts in this app specify which you support for unregistered instances.\nDo not specify a manifest or manifestType for this entry (we don't launch unregistered apps so there is no need for a manifest as it\nis existing instances and we specify a custom manifestType for consideration when we are bringing an unregistered web app instance into focus)."
+                }
+            },
+            "type": "object"
+        },
         "PlatformProviderOptions": {
             "additionalProperties": false,
             "properties": {
@@ -2117,26 +2206,12 @@
                     "type": "string"
                 },
                 "intentPicker": {
-                    "additionalProperties": false,
-                    "description": "Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform",
-                    "properties": {
-                        "height": {
-                            "description": "the height you wish the window to be",
-                            "type": "number"
-                        },
-                        "url": {
-                            "description": "The url of the html page that has the intent picker",
-                            "type": "string"
-                        },
-                        "width": {
-                            "description": "the width you wish the window to be",
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "url"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/IntentResolverOptions",
+                    "description": "Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker settings"
+                },
+                "interop": {
+                    "$ref": "#/definitions/PlatformInteropBrokerOptions",
+                    "description": "interop settings related to this platform"
                 },
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
@@ -2176,6 +2251,44 @@
             "required": [
                 "type"
             ],
+            "type": "object"
+        },
+        "PrebuiltContextMenuItem": {
+            "description": "Context menu item with an implementation provided by OpenFin.",
+            "enum": [
+                "copy",
+                "cut",
+                "inspect",
+                "navigateBack",
+                "navigateForward",
+                "paste",
+                "print",
+                "redo",
+                "reload",
+                "selectAll",
+                "separator",
+                "spellCheck",
+                "undo"
+            ],
+            "type": "string"
+        },
+        "RGB": {
+            "$ref": "#/definitions/__type_3"
+        },
+        "ResizeRegion": {
+            "$ref": "#/definitions/__type_7"
+        },
+        "ShowViewOnWindowResizeOptions": {
+            "additionalProperties": false,
+            "description": "_Platform Windows Only_. Enables views to be shown when a Platform Window is being resized by the user.",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paintIntervalMs": {
+                    "type": "number"
+                }
+            },
             "type": "object"
         },
         "SnapshotSourceConnection": {
@@ -2659,13 +2772,48 @@
             ],
             "type": "string"
         },
+        "ViewVisibilityOption": {
+            "$ref": "#/definitions/__type_22"
+        },
+        "ViewVisibilityOptions": {
+            "$ref": "#/definitions/__type_21"
+        },
+        "WebPermission": {
+            "enum": [
+                "audio",
+                "clipboard-read",
+                "clipboard-sanitized-write",
+                "fullscreen",
+                "geolocation",
+                "midiSysex",
+                "notifications",
+                "openExternal",
+                "pointerLock",
+                "video"
+            ],
+            "type": "string"
+        },
+        "WindowState": {
+            "description": "Visibility state of a window.",
+            "enum": [
+                "maximized",
+                "minimized",
+                "normal"
+            ],
+            "type": "string"
+        },
+        "WorkspacePlatformOptions": {
+            "$ref": "#/definitions/__type_9"
+        },
         "__type": {
             "additionalProperties": false,
             "properties": {
                 "name": {
+                    "description": "The name of the component",
                     "type": "string"
                 },
                 "uuid": {
+                    "description": "Universally unique identifier of the compenent",
                     "type": "string"
                 }
             },
@@ -2691,15 +2839,19 @@
             "additionalProperties": false,
             "properties": {
                 "devtools": {
+                    "description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
                     "type": "boolean"
                 },
                 "reload": {
+                    "description": "If `true`, enables the reload keyboard shortcuts:<br>\n`Ctrl` + `R` _(Windows)_<br>\n`F5` _(Windows)_<br>\n`Command` + `R` _(Mac)_",
                     "type": "boolean"
                 },
                 "reloadIgnoringCache": {
+                    "description": "If `true`, enables the reload-from-source keyboard shortcuts:<br>\n`Ctrl` + `Shift` + `R` _(Windows)_<br>\n`Shift` + `F5` _(Windows)_<br>\n`Command` + `Shift` + `R` _(Mac)_",
                     "type": "boolean"
                 },
                 "zoom": {
+                    "description": "NOTE: It is not recommended to set this value to true for Windows in Platforms as that may lead to unexpected visual shifts in layout.\nIf `true`, enables the zoom keyboard shortcuts:<br>\n`Ctrl` + `+` _(Zoom In)_<br>\n`Ctrl` + `Shift` + `+` _(Zoom In)_<br>\n`Ctrl` + `NumPad+` _(Zoom In)_<br>\n`Ctrl` + `-` _(Zoom Out)_<br>\n`Ctrl` + `Shift` + `-` _(Zoom Out)_<br>\n`Ctrl` + `NumPad-` _(Zoom Out)_<br>\n`Ctrl` + `Scroll` _(Zoom In & Out)_<br>\n`Ctrl` + `0` _(Restore to 100%)_",
                     "type": "boolean"
                 }
             },
@@ -2707,17 +2859,21 @@
         },
         "__type_11": {
             "additionalProperties": false,
+            "description": "Configurations for API injection.",
             "properties": {
                 "iframe": {
                     "additionalProperties": false,
+                    "description": "Configure injection of OpenFin API into iframes based on domain",
                     "properties": {
                         "crossOriginInjection": {
+                            "description": "Inject OpenFin API into cross-origin iframes",
                             "type": "boolean"
                         },
                         "enableDeprecatedSharedName": {
                             "type": "boolean"
                         },
                         "sameOriginInjection": {
+                            "description": "Inject OpenFin API into same-origin iframes",
                             "type": "boolean"
                         }
                     },
@@ -2728,10 +2884,13 @@
         },
         "__type_12": {
             "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
             "properties": {
                 "rules": {
+                    "description": "List of rules for creation of new content.",
                     "items": {
-                        "$ref": "#/definitions/OpenFin.ContentCreationRule<OpenFin.ContentCreationBehaviorNames>"
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
                     },
                     "type": "array"
                 }
@@ -2745,54 +2904,71 @@
             "additionalProperties": false,
             "properties": {
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_2"
+                    "$ref": "#/definitions/Partial_2",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
-                    "$ref": "#/definitions/OpenFin.Api"
+                    "$ref": "#/definitions/Api",
+                    "description": "Configurations for API injection."
                 },
                 "autoResize": {
-                    "$ref": "#/definitions/OpenFin.AutoResizeOptions"
+                    "$ref": "#/definitions/AutoResizeOptions"
                 },
                 "autoplayPolicy": {
-                    "$ref": "#/definitions/OpenFin.AutoplayPolicyOptions"
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
                 },
                 "backgroundColor": {
+                    "description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
                     "type": "string"
                 },
                 "bounds": {
-                    "$ref": "#/definitions/OpenFin.Bounds"
+                    "$ref": "#/definitions/Bounds",
+                    "description": "Initial bounds given relative to the window."
                 },
                 "contentCreation": {
-                    "$ref": "#/definitions/OpenFin.ContentCreationOptions"
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
                 },
                 "contentNavigation": {
-                    "$ref": "#/definitions/OpenFin.ContentNavigation"
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contextMenu": {
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuOptions"
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
                 },
                 "contextMenuSettings": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuSettings"
+                    "$ref": "#/definitions/ContextMenuSettings"
                 },
-                "customContext": {},
-                "customData": {},
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
                 "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the view.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
                         "properties": {
                             "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
                                 "items": {
                                     "additionalProperties": {
                                         "type": "string"
                                     },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
                                     "type": "object"
                                 },
                                 "type": "array"
                             },
                             "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
                                 "items": {
                                     "type": "string"
                                 },
@@ -2818,10 +2994,13 @@
                     "type": "string"
                 },
                 "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "A hotkey binding.",
                         "properties": {
                             "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
                             "preventDefault": {
@@ -2836,28 +3015,33 @@
                     "type": "array"
                 },
                 "interop": {
-                    "$ref": "#/definitions/OpenFin.InteropConfig"
+                    "$ref": "#/definitions/InteropConfig"
                 },
                 "isClosable": {
                     "type": "boolean"
                 },
                 "manifestUrl": {
+                    "description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
                     "type": "string"
                 },
                 "name": {
+                    "description": "The name of the view.",
                     "type": "string"
                 },
                 "permissions": {
                     "$ref": "#/definitions/Partial_4"
                 },
                 "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
                                 "type": "boolean"
                             },
                             "state": {
+                                "description": "Preload script execution state.",
                                 "enum": [
                                     "failed",
                                     "load-failed",
@@ -2868,6 +3052,7 @@
                                 "type": "string"
                             },
                             "url": {
+                                "description": "The URL from which the script was loaded.",
                                 "type": "string"
                             }
                         },
@@ -2882,10 +3067,12 @@
                     "type": "boolean"
                 },
                 "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
                     "type": "string"
                 },
                 "target": {
-                    "$ref": "#/definitions/OpenFin.Identity"
+                    "$ref": "#/definitions/Identity",
+                    "description": "The identity of the window this view should be attached to."
                 },
                 "url": {
                     "type": "string"
@@ -2931,7 +3118,7 @@
                 },
                 "webAPIs": {
                     "items": {
-                        "$ref": "#/definitions/OpenFin.WebPermission"
+                        "$ref": "#/definitions/WebPermission"
                     },
                     "type": "array"
                 }
@@ -3135,14 +3322,17 @@
         },
         "__type_19": {
             "additionalProperties": false,
+            "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details.",
             "properties": {
                 "blacklist": {
+                    "description": "Forbidden URLs for navigation.",
                     "items": {
                         "type": "string"
                     },
                     "type": "array"
                 },
                 "whitelist": {
+                    "description": "Allowed URLs for navigation.",
                     "items": {
                         "type": "string"
                     },
@@ -3155,16 +3345,19 @@
             "additionalProperties": false,
             "properties": {
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_2"
+                    "$ref": "#/definitions/Partial_2",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "alphaMask": {
-                    "$ref": "#/definitions/OpenFin.RGB"
+                    "$ref": "#/definitions/RGB",
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
                 },
                 "api": {
-                    "$ref": "#/definitions/OpenFin.Api"
+                    "$ref": "#/definitions/Api",
+                    "description": "Configurations for API injection."
                 },
                 "applicationIcon": {
                     "type": "string"
@@ -3173,54 +3366,71 @@
                     "type": "number"
                 },
                 "autoShow": {
+                    "description": "Automatically show the window when it is created.",
                     "type": "boolean"
                 },
                 "autoplayPolicy": {
-                    "$ref": "#/definitions/OpenFin.AutoplayPolicyOptions"
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
                 },
                 "backgroundColor": {
+                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
                     "type": "string"
                 },
                 "closeOnLastViewRemoved": {
                     "type": "boolean"
                 },
                 "contentCreation": {
-                    "$ref": "#/definitions/OpenFin.ContentCreationOptions"
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
                 },
                 "contentNavigation": {
-                    "$ref": "#/definitions/OpenFin.ContentNavigation"
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contentRedirect": {
-                    "$ref": "#/definitions/Partial_7"
+                    "$ref": "#/definitions/Partial_7",
+                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contextMenu": {
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuOptions"
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
                 },
                 "contextMenuSettings": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuSettings"
+                    "$ref": "#/definitions/ContextMenuSettings"
                 },
                 "cornerRounding": {
-                    "$ref": "#/definitions/Partial_1"
+                    "$ref": "#/definitions/Partial_1",
+                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
                 },
-                "customContext": {},
-                "customData": {},
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
                 "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the window.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
                         "properties": {
                             "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
                                 "items": {
                                     "additionalProperties": {
                                         "type": "string"
                                     },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
                                     "type": "object"
                                 },
                                 "type": "array"
                             },
                             "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
                                 "items": {
                                     "type": "string"
                                 },
@@ -3236,6 +3446,7 @@
                     "type": "array"
                 },
                 "defaultCentered": {
+                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
                     "type": "boolean"
                 },
                 "defaultHeight": {
@@ -3264,10 +3475,13 @@
                     "type": "boolean"
                 },
                 "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "A hotkey binding.",
                         "properties": {
                             "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
                             "preventDefault": {
@@ -3282,20 +3496,20 @@
                     "type": "array"
                 },
                 "icon": {
+                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
                     "type": "string"
                 },
                 "ignoreSavedWindowState": {
+                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
                     "type": "boolean"
                 },
                 "includeInSnapshots": {
                     "type": "boolean"
                 },
                 "interop": {
-                    "$ref": "#/definitions/OpenFin.InteropConfig"
+                    "$ref": "#/definitions/InteropConfig"
                 },
-                "layout": {
-                    "$ref": "#/definitions/OpenFin.LayoutOptions"
-                },
+                "layout": {},
                 "maxHeight": {
                     "type": "number"
                 },
@@ -3315,9 +3529,11 @@
                     "type": "boolean"
                 },
                 "modalParentIdentity": {
-                    "$ref": "#/definitions/OpenFin.Identity"
+                    "$ref": "#/definitions/Identity",
+                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
                 },
                 "name": {
+                    "description": "The name of the window.",
                     "type": "string"
                 },
                 "opacity": {
@@ -3327,13 +3543,16 @@
                     "$ref": "#/definitions/Partial_4"
                 },
                 "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
                     "items": {
                         "additionalProperties": false,
+                        "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
                                 "type": "boolean"
                             },
                             "state": {
+                                "description": "Preload script execution state.",
                                 "enum": [
                                     "failed",
                                     "load-failed",
@@ -3344,6 +3563,7 @@
                                 "type": "string"
                             },
                             "url": {
+                                "description": "The URL from which the script was loaded.",
                                 "type": "string"
                             }
                         },
@@ -3355,13 +3575,15 @@
                     "type": "array"
                 },
                 "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
                     "type": "string"
                 },
                 "resizable": {
                     "type": "boolean"
                 },
                 "resizeRegion": {
-                    "$ref": "#/definitions/OpenFin.ResizeRegion"
+                    "$ref": "#/definitions/ResizeRegion",
+                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
                 },
                 "saveWindowState": {
                     "type": "boolean"
@@ -3379,12 +3601,13 @@
                     "type": "boolean"
                 },
                 "state": {
-                    "$ref": "#/definitions/OpenFin.WindowState"
+                    "$ref": "#/definitions/WindowState"
                 },
                 "taskbarIcon": {
                     "type": "string"
                 },
                 "taskbarIconGroup": {
+                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
                     "type": "string"
                 },
                 "url": {
@@ -3394,7 +3617,8 @@
                     "type": "string"
                 },
                 "viewVisibility": {
-                    "$ref": "#/definitions/OpenFin.ViewVisibilityOptions"
+                    "$ref": "#/definitions/ViewVisibilityOptions",
+                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
                 },
                 "waitForPageLoad": {
                     "type": "boolean"
@@ -3403,7 +3627,7 @@
                     "type": "number"
                 },
                 "workspacePlatform": {
-                    "$ref": "#/definitions/OpenFin.WorkspacePlatformOptions"
+                    "$ref": "#/definitions/WorkspacePlatformOptions"
                 },
                 "x": {
                     "type": "number"
@@ -3418,12 +3642,14 @@
             "additionalProperties": false,
             "properties": {
                 "blacklist": {
+                    "description": "Forbidden URLs for redirects.",
                     "items": {
                         "type": "string"
                     },
                     "type": "array"
                 },
                 "whitelist": {
+                    "description": "Allowed URLs for redirects.",
                     "items": {
                         "type": "string"
                     },
@@ -3434,279 +3660,26 @@
         },
         "__type_21": {
             "additionalProperties": false,
+            "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
             "properties": {
-                "content": {
-                    "$ref": "#/definitions/OpenFin.LayoutContent"
+                "showViewsOnSplitterDrag": {
+                    "$ref": "#/definitions/ViewVisibilityOption",
+                    "description": "Allows views to be shown when they are resized by the user dragging the splitter between layout stacks."
                 },
-                "dimensions": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "borderWidth": {
-                            "type": "number"
-                        },
-                        "headerHeight": {
-                            "type": "number"
-                        },
-                        "minItemHeight": {
-                            "type": "number"
-                        },
-                        "minItemWidth": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
+                "showViewsOnTabDrag": {
+                    "$ref": "#/definitions/ViewVisibilityOption",
+                    "description": "_Supported on Windows Operating Systems only_. Allows views to be shown when the user is dragging a tab around a layout."
                 },
-                "settings": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "constrainDragToContainer": {
-                            "type": "boolean"
-                        },
-                        "constrainDragToHeaders": {
-                            "type": "boolean"
-                        },
-                        "hasHeaders": {
-                            "type": "boolean"
-                        },
-                        "popoutWholeStack": {
-                            "type": "boolean"
-                        },
-                        "preventDragIn": {
-                            "type": "boolean"
-                        },
-                        "preventDragOut": {
-                            "type": "boolean"
-                        },
-                        "reorderEnabled": {
-                            "type": "boolean"
-                        },
-                        "showCloseIcon": {
-                            "type": "boolean"
-                        },
-                        "showMaximiseIcon": {
-                            "type": "boolean"
-                        },
-                        "showPopoutIcon": {
-                            "type": "boolean"
-                        }
-                    },
-                    "type": "object"
+                "showViewsOnWindowResize": {
+                    "$ref": "#/definitions/ShowViewOnWindowResizeOptions",
+                    "description": "Enables views to be shown when a Platform Window is being resized by the user."
                 }
             },
             "type": "object"
         },
         "__type_22": {
             "additionalProperties": false,
-            "properties": {
-                "accelerator": {
-                    "$ref": "#/definitions/Partial_2"
-                },
-                "api": {
-                    "$ref": "#/definitions/OpenFin.Api"
-                },
-                "autoResize": {
-                    "$ref": "#/definitions/OpenFin.AutoResizeOptions"
-                },
-                "autoplayPolicy": {
-                    "$ref": "#/definitions/OpenFin.AutoplayPolicyOptions"
-                },
-                "backgroundColor": {
-                    "type": "string"
-                },
-                "bounds": {
-                    "$ref": "#/definitions/OpenFin.Bounds"
-                },
-                "contentCreation": {
-                    "$ref": "#/definitions/OpenFin.ContentCreationOptions"
-                },
-                "contentNavigation": {
-                    "$ref": "#/definitions/OpenFin.ContentNavigation"
-                },
-                "contextMenu": {
-                    "type": "boolean"
-                },
-                "contextMenuOptions": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuOptions"
-                },
-                "contextMenuSettings": {
-                    "$ref": "#/definitions/OpenFin.ContextMenuSettings"
-                },
-                "customContext": {},
-                "customData": {},
-                "customRequestHeaders": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "headers": {
-                                "items": {
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    },
-                                    "type": "object"
-                                },
-                                "type": "array"
-                            },
-                            "urlPatterns": {
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
-                            }
-                        },
-                        "required": [
-                            "headers",
-                            "urlPatterns"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "detachOnClose": {
-                    "type": "boolean"
-                },
-                "enableBeforeUnload": {
-                    "type": "boolean"
-                },
-                "experimental": {},
-                "fdc3InteropApi": {
-                    "type": "string"
-                },
-                "hotkeys": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "keys": {
-                                "type": "string"
-                            },
-                            "preventDefault": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "keys"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "interop": {
-                    "$ref": "#/definitions/OpenFin.InteropConfig"
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "manifestUrl": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/Partial_4"
-                },
-                "preloadScripts": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "mandatory": {
-                                "type": "boolean"
-                            },
-                            "state": {
-                                "enum": [
-                                    "failed",
-                                    "load-failed",
-                                    "load-started",
-                                    "load-succeeded",
-                                    "succeeded"
-                                ],
-                                "type": "string"
-                            },
-                            "url": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "url"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "preventDragOut": {
-                    "type": "boolean"
-                },
-                "processAffinity": {
-                    "type": "string"
-                },
-                "target": {
-                    "$ref": "#/definitions/OpenFin.Identity"
-                },
-                "url": {
-                    "type": "string"
-                },
-                "zoomLevel": {
-                    "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_23": {
-            "additionalProperties": false,
-            "properties": {
-                "content": {
-                    "$ref": "#/definitions/OpenFin.LayoutContent"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "id": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "width": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "__type_24": {
-            "additionalProperties": false,
-            "properties": {
-                "showViewsOnSplitterDrag": {
-                    "$ref": "#/definitions/OpenFin.ViewVisibilityOption"
-                },
-                "showViewsOnTabDrag": {
-                    "$ref": "#/definitions/OpenFin.ViewVisibilityOption"
-                },
-                "showViewsOnWindowResize": {
-                    "$ref": "#/definitions/OpenFin.ShowViewOnWindowResizeOptions"
-                }
-            },
-            "type": "object"
-        },
-        "__type_25": {
-            "additionalProperties": false,
+            "description": "Configuration for view visibility settings",
             "properties": {
                 "enabled": {
                     "type": "boolean"
@@ -3738,12 +3711,15 @@
             "additionalProperties": false,
             "properties": {
                 "devtools": {
+                    "description": "Should the context menu contain a button for opening devtools.",
                     "type": "boolean"
                 },
                 "enable": {
+                    "description": "Should the context menu display on right click.",
                     "type": "boolean"
                 },
                 "reload": {
+                    "description": "Should the context menu contain a button for reloading the page.",
                     "type": "boolean"
                 }
             },
@@ -3754,12 +3730,15 @@
         },
         "__type_5": {
             "additionalProperties": false,
+            "description": "Configure the context menu when right-clicking on a window.",
             "properties": {
                 "enabled": {
+                    "description": "Displays the context menu on right click.",
                     "type": "boolean"
                 },
                 "template": {
-                    "$ref": "#/definitions/Array_1"
+                    "$ref": "#/definitions/Array_1",
+                    "description": "Context menu items to display on right-click."
                 }
             },
             "type": "object"
@@ -3778,12 +3757,14 @@
         },
         "__type_7": {
             "additionalProperties": false,
+            "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
             "properties": {
                 "bottomRightCorner": {
                     "type": "number"
                 },
                 "sides": {
                     "additionalProperties": false,
+                    "description": "Enables resizing interaction for each side of the window.",
                     "properties": {
                         "bottom": {
                             "type": "boolean"
@@ -3810,9 +3791,11 @@
             "additionalProperties": false,
             "properties": {
                 "currentContextGroup": {
+                    "description": "Context Group for the client. (green, yellow, red, etc.).",
                     "type": "string"
                 },
                 "providerId": {
+                    "description": "When provided, automatically connects the client to the specified provider uuid.",
                     "type": "string"
                 }
             },

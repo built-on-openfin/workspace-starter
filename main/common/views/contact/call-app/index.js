@@ -1,6 +1,9 @@
 function init() {
 	const action = document.querySelector('#action');
 	const timeLabel = document.querySelector('#time');
+	const contactHeaderLabel = document.querySelector('#contact');
+	const originalTitle = document.title;
+
 	let contactNameLabel = '';
 	let intervalId = null;
 	let seconds = 0;
@@ -23,6 +26,8 @@ function init() {
 			contactNameLabel = '';
 			action.textContent = 'Start Call';
 			timeLabel.textContent = '00:00';
+			document.title = originalTitle;
+			contactHeaderLabel.textContent = '';
 		} else {
 			action.textContent = `End Call${contactNameLabel}`;
 			seconds = 0;
@@ -39,7 +44,9 @@ function init() {
 		if (ctx !== undefined) {
 			if (ctx.type === 'fdc3.contact') {
 				contactNameLabel = ` To ${ctx.name}`;
+				contactHeaderLabel.textContent = ctx.name;
 				action.textContent = `Start Call${contactNameLabel}`;
+				document.title = `${originalTitle} - ${ctx.name}`;
 			} else {
 				console.warn('Passed context was not of type fdc3.contact.', ctx);
 			}
@@ -53,6 +60,10 @@ function init() {
 		const openAppIntent = 'OpenApp';
 		fdc3.addIntentListener(startCallIntent, (ctx) => {
 			updateCallInformation(ctx, startCallIntent);
+			return new Promise((resolve) => {
+				// To demonstrate getResult in fdc3 2.0 we simply return the context that was sent.
+				resolve(ctx);
+			});
 		});
 		fdc3.addIntentListener(openAppIntent, (ctx) => {
 			updateCallInformation(ctx, openAppIntent);
