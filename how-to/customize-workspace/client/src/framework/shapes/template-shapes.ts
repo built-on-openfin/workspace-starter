@@ -7,6 +7,7 @@ import type {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
+import type { PlatformApp } from "./app-shapes";
 
 export interface TemplateHelpers {
 	createHelp(
@@ -65,4 +66,19 @@ export interface TemplateHelpers {
 		fontSize?: number,
 		style?: CSS.Properties
 	): Promise<TemplateFragment>;
+
+	createApp(
+		app: PlatformApp,
+		appIcon: string,
+		action: string
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	): Promise<{ layout: PlainContainerTemplateFragment; data: any }>;
+
+	createLayout(
+		title: string,
+		icon: string | undefined,
+		bodyFragments: TemplateFragment[],
+		buttons?: { title: string; action: string }[]
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	): Promise<{ layout: PlainContainerTemplateFragment; data: any }>;
 }

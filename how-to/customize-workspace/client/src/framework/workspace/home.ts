@@ -19,6 +19,7 @@ import { createLogger } from "../logger-provider";
 import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { PlatformApp } from "../shapes/app-shapes";
+import { createApp } from "../templates";
 
 const logger = createLogger("Home");
 
@@ -216,7 +217,7 @@ async function getResults(
 	const tags: string[] = [];
 
 	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
-		appSearchEntries = mapAppEntriesToSearchEntries(apps);
+		appSearchEntries = await mapAppEntriesToSearchEntries(apps);
 	}
 
 	if (appSearchEntries.length > 0) {
@@ -338,7 +339,7 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 	return [];
 }
 
-function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
+async function mapAppEntriesToSearchEntries(apps: PlatformApp[]): Promise<HomeSearchResult[]> {
 	const appResults: HomeSearchResult[] = [];
 	if (Array.isArray(apps)) {
 		for (let i = 0; i < apps.length; i++) {
@@ -398,11 +399,10 @@ function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
 			if (apps[i].description !== undefined) {
 				entry.description = apps[i].description;
 				entry.shortDescription = apps[i].description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
-			} else {
-				entry.template = CLITemplate.Plain;
 			}
+
+			entry.template = CLITemplate.Custom;
+			entry.templateContent = await createApp(apps[i], entry.icon, action.name);
 
 			appResults.push(entry as HomeSearchResult);
 		}
