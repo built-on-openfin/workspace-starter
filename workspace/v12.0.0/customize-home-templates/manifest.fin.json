@@ -81,6 +81,16 @@
 					"data": {
 						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-home-templates/contacts/"
 					}
+				},
+				{
+					"id": "tree",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-home-templates/favicon.ico",
+					"title": "Tree Provider",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-home-templates/js/integrations/tree.bundle.js",
+					"data": {
+						"orgUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/customize-home-templates/organizations/organizations.json"
+					}
 				}
 			]
 		}
