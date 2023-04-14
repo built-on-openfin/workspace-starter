@@ -83,13 +83,23 @@
 					}
 				},
 				{
-					"id": "tree",
+					"id": "tree-query",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Tree Provider",
+					"title": "Tree Query Provider",
 					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/tree.bundle.js",
+					"url": "http://localhost:8080/js/integrations/tree-query.bundle.js",
 					"data": {
-						"orgUrl": "http://localhost:8080/organizations/organizations.json"
+						"orgUrl": "http://localhost:8080/organizations/organizations-query.json"
+					}
+				},
+				{
+					"id": "tree-inline",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Tree Inline Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/integrations/tree-inline.bundle.js",
+					"data": {
+						"orgUrl": "http://localhost:8080/organizations/organizations-inline.json"
 					}
 				}
 			]
