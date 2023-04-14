@@ -8,6 +8,7 @@ import {
 	TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
+import type { PlatformApp } from "./shapes/app-shapes";
 import { ColorSchemeMode } from "./shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentPalette } from "./themes";
 
@@ -52,22 +53,13 @@ export async function createHelp(
 			})
 		);
 	}
+
+	const layoutData = await createLayout(title, undefined, fragments);
+
 	return {
-		layout: await createContainer(
-			"column",
-			[
-				await createTitle("title", undefined, undefined, {
-					marginBottom: "10px",
-					borderBottom: `1px solid ${palette.background6}`
-				}),
-				...fragments
-			],
-			{
-				padding: "10px"
-			}
-		),
+		layout: layoutData.layout,
 		data: {
-			title,
+			...layoutData.data,
 			...additionalData
 		}
 	};
@@ -91,7 +83,7 @@ export async function createContainer(
 
 export async function createTitle(
 	dataKey: string,
-	fontSize: number = 16,
+	fontSize: number = 12,
 	fontWeight: string = "bold",
 	style?: CSS.Properties
 ): Promise<TextTemplateFragment> {
@@ -101,7 +93,7 @@ export async function createTitle(
 		dataKey,
 		style: {
 			color: palette.textDefault,
-			fontSize: `${fontSize ?? 16}px`,
+			fontSize: `${fontSize ?? 12}px`,
 			fontWeight,
 			...style
 		}
@@ -110,14 +102,14 @@ export async function createTitle(
 
 export async function createText(
 	dataKey: string,
-	fontSize: number = 14,
+	fontSize: number = 12,
 	style?: CSS.Properties
 ): Promise<TextTemplateFragment> {
 	return {
 		type: TemplateFragmentTypes.Text,
 		dataKey,
 		style: {
-			fontSize: `${fontSize ?? 14}px`,
+			fontSize: `${fontSize ?? 12}px`,
 			...style
 		}
 	};
@@ -251,6 +243,102 @@ export async function createLink(
 			fontWeight: "normal",
 			textDecoration: "underline",
 			...style
+		}
+	};
+}
+
+export async function createLayout(
+	title: string,
+	icon: string | undefined,
+	bodyFragments: TemplateFragment[],
+	buttons?: { title: string; action: string }[]
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
+	const palette = await getCurrentPalette();
+	const additionalData: { [id: string]: string } = {
+		title
+	};
+
+	const header: TemplateFragment[] = [];
+	if (icon) {
+		header.push(
+			await createImage("icon", "", {
+				width: "16px",
+				height: "16px"
+			})
+		);
+		additionalData.icon = icon;
+	}
+	header.push(await createTitle("title"));
+
+	const buttonsFragments: TemplateFragment[] = [];
+	if (Array.isArray(buttons)) {
+		for (let i = 0; i < buttons.length; i++) {
+			buttonsFragments.push(await createButton(ButtonStyle.Primary, `buttonTitle${i}`, buttons[i].action));
+			additionalData[`buttonTitle${i}`] = buttons[i].title;
+		}
+	}
+
+	return {
+		layout: await createContainer(
+			"column",
+			[
+				await createContainer("row", header, {
+					borderBottom: `1px solid ${palette.background6}`,
+					paddingBottom: "5px",
+					gap: "5px",
+					alignItems: "center"
+				}),
+				await createContainer("column", bodyFragments, {
+					flex: "1",
+					gap: "10px"
+				}),
+				await createContainer("row", buttonsFragments, {
+					justifyContent: "center",
+					gap: "10px"
+				})
+			],
+			{
+				padding: "10px",
+				gap: "10px",
+				flex: "1"
+			}
+		),
+		data: additionalData
+	};
+}
+
+export async function createApp(
+	app: PlatformApp,
+	appIcon: string,
+	action: string
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
+	const palette = await getCurrentPalette();
+	const additionalData: { [id: string]: string } = {};
+
+	const body: TemplateFragment[] = [];
+	if (app.description) {
+		body.push(await createText("description", 12));
+		additionalData.description = app.description;
+	}
+
+	if (Array.isArray(app.images) && app.images.length > 0 && app.images[0].src) {
+		body.push(
+			await createImage("screenshot", "Screenshot", {
+				border: `1px solid ${palette.background6}`
+			})
+		);
+		additionalData.screenshot = app.images[0].src;
+	}
+
+	const layoutData = await createLayout(app.title, appIcon, body, [{ title: action, action }]);
+
+	return {
+		layout: layoutData.layout,
+		data: {
+			...layoutData.data,
+			...additionalData
 		}
 	};
 }

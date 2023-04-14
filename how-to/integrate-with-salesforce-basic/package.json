@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce-basic",
-	"version": "12.6.0",
+	"version": "next",
 	"description": "OpenFin Workspace -- Integrate with Salesforce - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -20,8 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/salesforce": "^2.1.5",
-		"@openfin/workspace": "12.6.5",
-		"@openfin/workspace-platform": "12.6.5"
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next"
 	},
 	"devDependencies": {
 		"@openfin/core": "30.74.13",
@@ -30,7 +30,7 @@
 		"express": "^4.18.2",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.5",
-		"webpack": "^5.78.0",
+		"webpack": "^5.79.0",
 		"webpack-cli": "^5.0.1"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-notifications",
-	"version": "12.6.0",
+	"version": "next",
 	"description": "OpenFin Workspace -- Use Notifications",
 	"main": "index.js",
 	"scripts": {
@@ -19,7 +19,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "12.6.5",
+		"@openfin/workspace": "next",
 		"csstype": "^3.1.2"
 	},
 	"devDependencies": {
@@ -29,7 +29,7 @@
 		"express": "^4.18.2",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.5",
-		"webpack": "^5.78.0",
+		"webpack": "^5.79.0",
 		"webpack-cli": "^5.0.1"
 	}
 }

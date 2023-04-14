@@ -18,6 +18,10 @@ Through configuration you can add the version of your application e.g. 1.0.0. Ad
 - runtime
 - rvm
 
+## Tip
+
+If you are looking for just the code related to getting versioning information then we have taken examples from our versioning implementation and added it as a hints and tips entry: [Version Info](../../hints-and-tips/docs/version-info.md)
+
 ## Configuration
 
 By default the Version Provider will initialize even without configuration but you can specify some settings to control what your supported versions are and whether you should stop the platform and show a version message.
@@ -26,7 +30,7 @@ By default the Version Provider will initialize even without configuration but y
 "versionProvider": {
    "appVersion": "1.0.0",
    "minimumVersion": {
-    "workspace": "12.6.0"
+    "workspace": "next"
    },
    "maximumVersion": {
    },

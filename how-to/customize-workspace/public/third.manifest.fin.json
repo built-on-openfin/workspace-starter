@@ -283,7 +283,7 @@
 		},
 		"versionProvider": {
 			"minimumVersion": {
-				"workspace": "12.6.0"
+				"workspace": "next"
 			},
 			"versionWindow": {
 				"name": "versioning",

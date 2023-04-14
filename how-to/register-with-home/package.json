@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-home",
-	"version": "12.6.0",
+	"version": "next",
 	"description": "OpenFin Workspace -- Register with Home",
 	"main": "index.js",
 	"scripts": {
@@ -19,8 +19,8 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "12.6.5",
-		"@openfin/workspace-platform": "12.6.5"
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next"
 	},
 	"devDependencies": {
 		"@openfin/core": "30.74.13",
@@ -29,7 +29,7 @@
 		"@types/node": "^18.15.11",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.5",
-		"webpack": "^5.78.0",
+		"webpack": "^5.79.0",
 		"webpack-cli": "^5.0.1"
 	}
 }
