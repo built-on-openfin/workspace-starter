@@ -83,13 +83,23 @@
 					}
 				},
 				{
-					"id": "tree",
+					"id": "tree-query",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/favicon.ico",
-					"title": "Tree Provider",
+					"title": "Tree Query Provider",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/js/integrations/tree.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/js/integrations/tree-query.bundle.js",
 					"data": {
-						"orgUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/organizations/organizations.json"
+						"orgUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/organizations/organizations-query.json"
+					}
+				},
+				{
+					"id": "tree-inline",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/favicon.ico",
+					"title": "Tree Inline Provider",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/js/integrations/tree-inline.bundle.js",
+					"data": {
+						"orgUrl": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/organizations/organizations-inline.json"
 					}
 				}
 			]
