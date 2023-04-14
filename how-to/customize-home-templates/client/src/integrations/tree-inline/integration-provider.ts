@@ -10,17 +10,23 @@ import {
 } from "@openfin/workspace";
 import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
 import type { ModuleDefinition } from "../../shapes/module-shapes";
-import type { EntityDepartment, EntityItem, EntityMember, EntityOrganization, TreeSettings } from "./shapes";
+import type {
+	EntityDepartment,
+	EntityItem,
+	EntityMember,
+	EntityOrganization,
+	TreeInlineSettings
+} from "./shapes";
 
 /**
  * Implement the integration provider for Tree structured data.
  */
-export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> {
+export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInlineSettings> {
 	/**
 	 * Provider id.
 	 * @internal
 	 */
-	private static readonly _PROVIDER_ID = "tree";
+	private static readonly _PROVIDER_ID = "tree-inline";
 
 	/**
 	 * The key to use for a details result.
@@ -44,12 +50,17 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<TreeSettings> | undefined;
+	private _definition: ModuleDefinition<TreeInlineSettings> | undefined;
 
 	/**
 	 * The organization data.
 	 */
 	private _orgData: EntityOrganization[];
+
+	/**
+	 * The last results;
+	 */
+	private _lastResults: HomeSearchResult[];
 
 	/**
 	 * Initialize the module.
@@ -59,7 +70,7 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<TreeSettings>,
+		definition: ModuleDefinition<TreeInlineSettings>,
 		loggerCreator: () => void,
 		helpers: IntegrationHelpers
 	): Promise<void> {
@@ -68,6 +79,7 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 
 		const orgResponse = await fetch(definition.data.orgUrl);
 		this._orgData = await orgResponse.json();
+		this._lastResults = [];
 	}
 
 	/**
@@ -83,16 +95,16 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
-				key: `${TreeIntegrationProvider._PROVIDER_ID}-help`,
-				title: "/tree",
+				key: `${TreeInlineIntegrationProvider._PROVIDER_ID}-help`,
+				title: "/tree-inline",
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: TreeIntegrationProvider._PROVIDER_ID
+					providerId: TreeInlineIntegrationProvider._PROVIDER_ID
 				},
 				template: CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/tree",
+					"/tree-inline",
 					["Start typing the name of an organization to find the data."],
 					["acme"]
 				)
@@ -112,20 +124,39 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 	): Promise<boolean> {
 		if (
 			result.action.trigger === "user-action" &&
-			result.action.name === TreeIntegrationProvider._DETAILS_ACTION
+			result.action.name === TreeInlineIntegrationProvider._DETAILS_ACTION
 		) {
-			const path: string[] = result.data.path;
+			const entity: EntityItem = result.data.entity;
 
-			await this._integrationHelpers.setSearchQuery(path.join("/"));
+			let results: HomeSearchResult[];
+			if (entity?.type === "organization") {
+				const org = entity as EntityOrganization;
+				results = await Promise.all(
+					org.departments.map(async (d) => this.createResult(d, this._lastResults))
+				);
+			} else if (entity?.type === "department") {
+				const dep = entity as EntityDepartment;
+				results = await Promise.all(dep.members.map(async (m) => this.createResult(m, this._lastResults)));
+			}
+
+			if (results) {
+				lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				lastResponse.respond(results);
+				this._lastResults = results;
+			}
 
 			return true;
 		} else if (
 			result.action.trigger === "user-action" &&
-			result.action.name === TreeIntegrationProvider._BACK_ACTION
+			result.action.name === TreeInlineIntegrationProvider._BACK_ACTION
 		) {
-			const query: string = result.data.query;
+			const parentResults: HomeSearchResult[] = result.data.parentResults;
 
-			await this._integrationHelpers.setSearchQuery(query);
+			if (parentResults) {
+				lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				lastResponse.respond(parentResults);
+				this._lastResults = parentResults;
+			}
 
 			return true;
 		}
@@ -144,63 +175,33 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> {
-		let results: HomeSearchResult[] = [];
+		this._lastResults = [];
 
 		if (query.length > 0) {
-			const parts = query.split("/");
-
-			const queryOrg = new RegExp(parts[0], "i");
+			const queryOrg = new RegExp(query, "i");
 			const matchingOrgs: EntityOrganization[] = this._orgData.filter(
 				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
 			);
 
-			if (parts.length === 1) {
-				results = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [o.name, ""], "")));
-			} else if (parts.length >= 2) {
-				const queryDep = new RegExp(parts[1], "i");
-				for (const org of matchingOrgs) {
-					let deps: EntityDepartment[] = org.departments;
-					if (parts[1].length > 0) {
-						deps = deps.filter((d) => queryDep.test(d.id) || queryDep.test(d.name));
-					}
-
-					if (parts.length === 2) {
-						results = results.concat(
-							await Promise.all(deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name)))
-						);
-					} else if (parts.length === 3) {
-						const queryMem = new RegExp(parts[2], "i");
-
-						for (const dep of deps) {
-							let mems: EntityMember[] = dep.members;
-							if (parts[2].length > 0) {
-								mems = mems.filter((m) => queryMem.test(m.id) || queryMem.test(m.name));
-							}
-
-							results = results.concat(
-								await Promise.all(
-									mems.map(async (m) => this.createResult(m, [org.name, dep.name, m.name], `${org.name}/`))
-								)
-							);
-						}
-					}
-				}
-			}
+			this._lastResults = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [])));
 		}
 
 		return {
-			results
+			results: this._lastResults
 		};
 	}
 
 	/**
 	 * Create a search result.
 	 * @param entity The entity for the item.
-	 * @param path The full path to the item.
+	 * @param parentResults The parent results.
 	 * @param query The original query.
 	 * @returns The search result.
 	 */
-	private async createResult(entity: EntityItem, path: string[], query: string): Promise<HomeSearchResult> {
+	private async createResult(
+		entity: EntityItem,
+		parentResults: HomeSearchResult[]
+	): Promise<HomeSearchResult> {
 		const palette = await this._integrationHelpers.getCurrentPalette();
 
 		const data: { [id: string]: string } = {
@@ -242,7 +243,7 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 				await this._integrationHelpers.templateHelpers.createButton(
 					ButtonStyle.Primary,
 					"navigateBackAction",
-					TreeIntegrationProvider._BACK_ACTION,
+					TreeInlineIntegrationProvider._BACK_ACTION,
 					{
 						fontSize: "12px"
 					}
@@ -255,7 +256,7 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 				await this._integrationHelpers.templateHelpers.createButton(
 					ButtonStyle.Primary,
 					"navigateAction",
-					TreeIntegrationProvider._DETAILS_ACTION,
+					TreeInlineIntegrationProvider._DETAILS_ACTION,
 					{
 						fontSize: "12px"
 					}
@@ -276,15 +277,14 @@ export class TreeIntegrationProvider implements IntegrationModule<TreeSettings> 
 			label: entity.type,
 			actions: [
 				{
-					name: TreeIntegrationProvider._DETAILS_ACTION,
+					name: TreeInlineIntegrationProvider._DETAILS_ACTION,
 					hotkey: "Enter"
 				}
 			],
 			data: {
-				providerId: TreeIntegrationProvider._PROVIDER_ID,
+				providerId: TreeInlineIntegrationProvider._PROVIDER_ID,
 				entity,
-				path,
-				query
+				parentResults
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
