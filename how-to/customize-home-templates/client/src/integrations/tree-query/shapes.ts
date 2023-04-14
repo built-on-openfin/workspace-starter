@@ -1,4 +1,4 @@
-export interface TreeSettings {
+export interface TreeQuerySettings {
 	orgUrl: string;
 }
 

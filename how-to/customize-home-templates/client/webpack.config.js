@@ -100,7 +100,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/integrations/tree/index.ts',
+		entry: './client/src/integrations/tree-query/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -115,7 +115,33 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'tree.bundle.js',
+			filename: 'tree-query.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/integrations/tree-inline/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'tree-inline.bundle.js',
 			library: {
 				type: 'module'
 			},
