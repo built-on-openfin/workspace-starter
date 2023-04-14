@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.11"
+		"version": "30.110.74.13"
 	},
 	"platform": {
 		"uuid": "customize-home-templates",
@@ -80,6 +80,16 @@
 					"url": "http://localhost:8080/js/integrations/async.bundle.js",
 					"data": {
 						"rootUrl": "http://localhost:8080/contacts/"
+					}
+				},
+				{
+					"id": "tree",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Tree Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/integrations/tree.bundle.js",
+					"data": {
+						"orgUrl": "http://localhost:8080/organizations/organizations.json"
 					}
 				}
 			]
