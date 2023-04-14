@@ -130,8 +130,7 @@
 			],
 			"screenshots": [
 				{
-					"src": "https://fdc3.finos.org/docs/assets/fdc3-logo.png",
-					"label": "FDC3 logo"
+					"src": "http://localhost:8080/common/images/previews/fdc3-workbench-2-0.png"
 				}
 			],
 			"contactEmail": "fdc3@finos.org,",
