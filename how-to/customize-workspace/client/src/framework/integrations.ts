@@ -74,7 +74,7 @@ export async function init(
 					publisher: null
 				}),
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery: homeRegistration.setSearchQuery
+			setSearchQuery: homeRegistration?.setSearchQuery
 				? async (query) => homeRegistration.setSearchQuery(query)
 				: undefined,
 			condition: async (conditionId) => {
