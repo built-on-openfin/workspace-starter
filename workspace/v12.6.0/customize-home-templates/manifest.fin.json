@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.11"
+		"version": "30.110.74.13"
 	},
 	"platform": {
 		"uuid": "customize-home-templates",
@@ -80,6 +80,16 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/js/integrations/async.bundle.js",
 					"data": {
 						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/contacts/"
+					}
+				},
+				{
+					"id": "tree",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/favicon.ico",
+					"title": "Tree Provider",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/js/integrations/tree.bundle.js",
+					"data": {
+						"orgUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/organizations/organizations.json"
 					}
 				}
 			]
