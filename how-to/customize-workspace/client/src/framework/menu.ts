@@ -166,6 +166,12 @@ export async function getGlobalMenu(
 	const menuEntries = (settings?.browserProvider?.globalMenu ?? []).concat(
 		await getModuleMenuEntries<GlobalContextMenuOptionType>("global")
 	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.globalMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.globalMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
 	return buildMenu(defaultGlobalContextMenu, menuEntries);
 }
 
@@ -176,6 +182,12 @@ export async function getPageMenu(
 	const menuEntries = (settings?.browserProvider?.pageMenu ?? []).concat(
 		await getModuleMenuEntries<PageTabContextMenuOptionType>("page")
 	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.pageMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.pageMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
 	return buildMenu(defaultPageContextMenu, menuEntries);
 }
 
@@ -186,6 +198,12 @@ export async function getViewMenu(
 	const menuEntries = (settings?.browserProvider?.viewMenu ?? []).concat(
 		await getModuleMenuEntries<ViewTabMenuOptionType>("view")
 	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.viewMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.viewMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
 	return buildMenu(defaultViewContextMenu, menuEntries);
 }
 

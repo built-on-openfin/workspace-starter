@@ -115,6 +115,24 @@ The following example create a menu entry to display the Notification Center wit
 }
 ```
 
+## Including or Excluding Default Menu Entries
+
+By default when you specify menus through the browser provider we include the defaults provided by the Workspace Platform version you are using.
+
+If you want to have no menu (i.e. you specify an empty array for globalMenu and say you don't want the defaults) then the menu will not appear in your browser. If you just want the defaults you can not specify globalMenu etc settings and the defaults will apply.
+
+```json
+"browserProvider": {
+    "menuOptions": {
+    "includeDefaults": {
+     "globalMenu": false,
+     "pageMenu": false,
+     "viewMenu": false
+    }
+   }
+}
+```
+
 ## Source Reference
 
 - [menu.ts](../client/src/framework/menu.ts)

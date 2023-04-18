@@ -1,5 +1,10 @@
 # Changelog
 
+## v12.6
+
+- Added ability to specify defaultWindowOptions (this replaces windowOptions and offers the full workspace options. We have maintained backwards compatibility if you have windowOptions specified.), defaultPageOptions and defaultViewOptions in the browserProvider
+- Added option of specifying whether you want the default Global, Page, or View Menu options included when you specify menu options in the browser provider (this is through browserProvider.menuOptions.includeDefaults)
+
 ## v12
 
 - Initial update to interop broker to support fdc3 2.0
