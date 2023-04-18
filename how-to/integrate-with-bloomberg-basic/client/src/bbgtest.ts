@@ -1,19 +1,11 @@
 import { BloombergConnection,
-    BloombergConnectionConfig,
     connect,
-    ContextActionMap,
     enableLogging,
-    IntentActionMap,
     isBloombergTerminalReady } from "@openfin/bloomberg";
 import { fin } from "@openfin/core";
-import type { InteropClient } from "@openfin/core/src/api/interop";
 
-const interopConfig = {
-    currentContextGroup: "green"
-};
 
 let bbgConnection: BloombergConnection;
-let client: InteropClient;
 let isConnected = false;
 
 // global vars
@@ -32,58 +24,61 @@ const initDom = () => {
     const btnDisconnect = document.querySelector("#btnDisconnect");
     const btnClearLogs = document.querySelector("#btnClear");
     const btnQuery = document.querySelector("#btnQuery");
-    const inputText = document.querySelector("#intentValue");
     const selectChoice = document.querySelector("#intentName");
+    const selectValue = document.querySelector("#intentValueChoice");
 
-    let selectOptions: HTMLSelectElement;
-    selectOptions = document.querySelector<HTMLSelectElement>("#intentName");
-
-    selectOptions.selectedIndex = -1;
+    document.querySelector<HTMLSelectElement>("#intentName").selectedIndex = -1;
+    document.querySelector<HTMLSelectElement>("#intentValueChoice").selectedIndex = -1;
 
     btnConnect.addEventListener("click", connectToBBGTerminal);
     btnDisconnect.addEventListener("click", disconnectFromBBGTerminal);
     btnClearLogs.addEventListener("click", clearLogs);
     btnQuery.addEventListener("click", fireIntentforBBG);
-    inputText.addEventListener("input", getInputValue);
+
+    selectValue.addEventListener("change", function handleInputChange(event) {
+        intentValue = this.value;
+        logInformation(`action: ${selectedIntent}, type: ${fdc3Denomination}, bbg mnemonic: ${bbgMnemonic}, search value: ${intentValue}`);
+    });
 
     selectChoice.addEventListener("change", function handleChange(event) {
         console.log(event);
         switch(this.value) {
             case "ViewChart":
-                // document.querySelector("#selectChoice").innerHTML = "Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP";
                 logInformation("Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP");
                 selectedIntent = "ViewChart";
                 fdc3Denomination = "fdc3.instrument";
                 bbgMnemonic = "GP";
+                selectValue.innerHTML = "<option value='ORCL'>Oracle Corp</option><option value='MSFT'>Microsoft</option><option value='IBM'>IBM</option>";
+                document.querySelector<HTMLSelectElement>("#intentValueChoice").selectedIndex = -1;
                 break;
             case "ViewContact":
                 logInformation("Intent to be fired is ViewContact. Content Type is fdc3.contact. Bloomberg Terminal Mnemonic: BIO");
                 selectedIntent = "ViewContact";
                 fdc3Denomination = "fdc3.contact";
                 bbgMnemonic = "BIO";
+                selectValue.innerHTML = "<option value='William Henry Gates'>William Henry Gates</option><option value='Larry Ellison'>Larry Ellison</option><option value='Robert Iger'>Robert Iger</option>";
+                document.querySelector<HTMLSelectElement>("#intentValueChoice").selectedIndex = -1;
                 break;
             case "ViewInstrument":
                 logInformation("Intent to be fired is ViewInstrument. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: DES");
                 selectedIntent = "ViewInstrument";
                 fdc3Denomination = "fdc3.instrument";
                 bbgMnemonic = "DES";
+                selectValue.innerHTML = "<option value='ORCL'>Oracle Corp</option><option value='MSFT'>Microsoft</option><option value='IBM'>IBM</option>";
+                document.querySelector<HTMLSelectElement>("#intentValueChoice").selectedIndex = -1;
                 break;
             case "ViewQuote":
                 logInformation("Intent to be fired is ViewQuote. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: Q");
                 selectedIntent = "ViewQuote";
                 fdc3Denomination = "fdc3.instrument";
                 bbgMnemonic = "Q";
+                selectValue.innerHTML = "<option value='ORCL'>Oracle Corp</option><option value='MSFT'>Microsoft</option><option value='IBM'>IBM</option>";
+                document.querySelector<HTMLSelectElement>("#intentValueChoice").selectedIndex = -1;
                 break;
         }
     });
 };
 
-// inputText element's addEventListener handler
-const getInputValue = (e) => {
-    const inputVal = e.target.value;
-    intentValue = inputVal;
-    // console.log(inputVal);
-};
 
 // Connect to Bloomberg Terminal
 const connectToBBGTerminal = async (): Promise<void> => {
@@ -126,7 +121,7 @@ const fireIntentforBBG = async () => {
             let intent: OpenFin.Intent;
 
             switch (selectedIntent) {
-                case "ViewChart": 
+                case "ViewChart":
                     intent = {
                         name: selectedIntent,
                         context: {

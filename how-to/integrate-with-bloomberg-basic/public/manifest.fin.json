@@ -30,7 +30,7 @@
 						"componentState": {
 							"name": "bbgTest",
 							"processAffinity": "ps_1",
-							"url": "https://openfin-bbg-int.loca.lt/platform/bbgtest.html",
+							"url": "http://localhost:8080/platform/bbgtest.html",
 							"interop":{
 							"currentContextGroup": "green"
 							}
