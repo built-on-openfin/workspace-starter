@@ -12,6 +12,12 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
 	let openFinRVMProcess;
 	try {
+		console.log('Removing any existing OpenFin processes');
+		await fkill(
+			['OpenFin.exe', 'OpenFinRVM.exe', 'chromedriver.exe', 'OpenFin', 'OpenFinRVM', 'chromedriver'],
+			{ silent: true, force: true }
+		);
+
 		// Spawn the OpenFin runtime with a specific debugging port and also
 		// configure the selenium web driver to use the same port for debugger address
 		console.log('Start OpenFin Runtime');
