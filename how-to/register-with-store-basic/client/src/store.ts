@@ -1,20 +1,10 @@
-import {
-	Storefront,
-	StorefrontTemplate,
-	type StoreRegistration
-} from "@openfin/workspace";
+import { Storefront, StorefrontTemplate, type StoreRegistration } from "@openfin/workspace";
 import {
 	CustomActionCallerType,
 	type CustomActionPayload,
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
-import {
-	DEVELOPER_CONTENT,
-	EXPERO_APP,
-	NOTIFICATION_STUDIO,
-	PROCESS_MANAGER,
-	launchApp
-} from "./apps";
+import { DEVELOPER_CONTENT, EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER, launchApp } from "./apps";
 
 /**
  * Register with the store component.
@@ -34,7 +24,7 @@ export async function register(
 			id,
 			title,
 			icon,
-			getNavigation: async () => ([
+			getNavigation: async () => [
 				{
 					id: "apps",
 					title: "Apps",
@@ -65,7 +55,7 @@ export async function register(
 						}
 					]
 				}
-			]),
+			],
 			getLandingPage: async () => ({
 				hero: {
 					title: "Custom Hero Title",
@@ -165,7 +155,7 @@ export async function register(
 					}
 				]
 			}),
-			getApps: async () => ([EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER]),
+			getApps: async () => [EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER],
 			launchApp: async (app) => {
 				await launchApp(app);
 			}
