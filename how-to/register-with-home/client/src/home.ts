@@ -9,7 +9,8 @@ import {
 	type CLISearchListenerRequest,
 	type CLISearchListenerResponse,
 	type CLISearchResponse,
-	type HomeSearchResult
+	type HomeSearchResult,
+	HomeRegistration
 } from "@openfin/workspace";
 import { getCurrentSync, type Page } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
@@ -23,9 +24,9 @@ let isHomeRegistered = false;
 /**
  * Register with the home component.
  * @param customSettings The custom settings from the manifest.
- * @returns Nothing.
+ * @returns The registration details for home.
  */
-export async function register(customSettings: CustomSettings): Promise<void> {
+export async function register(customSettings: CustomSettings): Promise<HomeRegistration | undefined> {
 	console.log("Initialising home.");
 
 	if (
@@ -106,10 +107,10 @@ export async function register(customSettings: CustomSettings): Promise<void> {
 		onResultDispatch: onSelection
 	};
 
-	const metaInfo = await Home.register(cliProvider);
+	const homeRegistration = await Home.register(cliProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
-	console.log(metaInfo);
+	console.log(homeRegistration);
 }
 
 /**
