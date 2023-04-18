@@ -245,7 +245,7 @@ async function getResults(
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
 		const filters: CLIFilter[] = [];
-		const uniqueTags = [...new Set(tags.sort())];
+		const uniqueTags = [...new Set(tags)].sort();
 		const tagFilter: CLIFilter = {
 			id: "tags",
 			title: "Tags",
@@ -276,40 +276,40 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 	const appResults: HomeSearchResult[] = [];
 	if (Array.isArray(apps)) {
-		for (let i = 0; i < apps.length; i++) {
+		for (const element of apps) {
 			const action = { name: "Launch View", hotkey: "enter" };
 			const entry: Partial<HomeSearchResult> = {
-				key: apps[i].appId,
-				title: apps[i].title,
-				data: apps[i]
+				key: element.appId,
+				title: element.title,
+				data: element
 			};
 
-			if (apps[i].manifestType === "view") {
+			if (element.manifestType === "view") {
 				entry.label = "View";
 				entry.actions = [action];
-			} else if (apps[i].manifestType === "snapshot") {
+			} else if (element.manifestType === "snapshot") {
 				entry.label = "Snapshot";
 				action.name = "Launch Snapshot";
 				entry.actions = [action];
-			} else if (apps[i].manifestType === "manifest") {
+			} else if (element.manifestType === "manifest") {
 				entry.label = "App";
 				action.name = "Launch App";
 				entry.actions = [action];
-			} else if (apps[i].manifestType === "external") {
+			} else if (element.manifestType === "external") {
 				action.name = "Launch Native App";
 				entry.actions = [action];
 				entry.label = "Native App";
 			}
 
-			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-				entry.icon = apps[i].icons[0].src;
+			if (Array.isArray(element.icons) && element.icons.length > 0) {
+				entry.icon = element.icons[0].src;
 			}
 
-			if (apps[i].description !== undefined) {
-				entry.description = apps[i].description;
-				entry.shortDescription = apps[i].description;
+			if (element.description !== undefined) {
+				entry.description = element.description;
+				entry.shortDescription = element.description;
 				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
+				entry.templateContent = element.description;
 			} else {
 				entry.template = CLITemplate.Plain;
 			}
@@ -329,23 +329,23 @@ function mapPageEntriesToSearchEntries(pages: Page[]): HomeSearchResult[] {
 	const pageResults: HomeSearchResult[] = [];
 
 	if (Array.isArray(pages)) {
-		for (let i = 0; i < pages.length; i++) {
+		for (const element of pages) {
 			const entry: Partial<HomeSearchResult> = {
-				key: pages[i].pageId,
-				title: pages[i].title,
+				key: element.pageId,
+				title: element.title,
 				label: "Page",
 				actions: [
 					{ name: HOME_ACTION_DELETE_PAGE, hotkey: "CmdOrCtrl+Shift+D" },
 					{ name: HOME_ACTION_LAUNCH_PAGE, hotkey: "Enter" }
 				],
-				data: { tags: ["page"], pageId: pages[i].pageId }
+				data: { tags: ["page"], pageId: element.pageId }
 			};
 
-			if (pages[i].description !== undefined) {
-				entry.description = pages[i].description;
-				entry.shortDescription = pages[i].description;
+			if (element.description !== undefined) {
+				entry.description = element.description;
+				entry.shortDescription = element.description;
 				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = pages[i].description;
+				entry.templateContent = element.description;
 			} else {
 				entry.template = CLITemplate.Plain;
 			}
