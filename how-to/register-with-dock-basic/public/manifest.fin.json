@@ -13,9 +13,6 @@
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
