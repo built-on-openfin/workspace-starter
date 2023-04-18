@@ -31,9 +31,6 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
@@ -49,8 +46,7 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/apps.json",
-			"includeCredentialOnSourceRequest": "include",
+			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/apps.json"],
 			"manifestTypes": ["view", "snapshot", "manifest", "external"]
 		},
 		"homeProvider": {
