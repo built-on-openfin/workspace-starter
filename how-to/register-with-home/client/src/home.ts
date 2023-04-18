@@ -274,50 +274,52 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
  * @returns The search result templates.
  */
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
-	const appResults: HomeSearchResult[] = [];
+	const results: HomeSearchResult[] = [];
+
 	if (Array.isArray(apps)) {
-		for (const element of apps) {
+		for (const app of apps) {
 			const action = { name: "Launch View", hotkey: "enter" };
 			const entry: Partial<HomeSearchResult> = {
-				key: element.appId,
-				title: element.title,
-				data: element
+				key: app.appId,
+				title: app.title,
+				data: app
 			};
 
-			if (element.manifestType === "view") {
+			if (app.manifestType === "view") {
 				entry.label = "View";
 				entry.actions = [action];
-			} else if (element.manifestType === "snapshot") {
+			} else if (app.manifestType === "snapshot") {
 				entry.label = "Snapshot";
 				action.name = "Launch Snapshot";
 				entry.actions = [action];
-			} else if (element.manifestType === "manifest") {
+			} else if (app.manifestType === "manifest") {
 				entry.label = "App";
 				action.name = "Launch App";
 				entry.actions = [action];
-			} else if (element.manifestType === "external") {
+			} else if (app.manifestType === "external") {
 				action.name = "Launch Native App";
 				entry.actions = [action];
 				entry.label = "Native App";
 			}
 
-			if (Array.isArray(element.icons) && element.icons.length > 0) {
-				entry.icon = element.icons[0].src;
+			if (Array.isArray(app.icons) && app.icons.length > 0) {
+				entry.icon = app.icons[0].src;
 			}
 
-			if (element.description !== undefined) {
-				entry.description = element.description;
-				entry.shortDescription = element.description;
+			if (app.description !== undefined) {
+				entry.description = app.description;
+				entry.shortDescription = app.description;
 				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = element.description;
+				entry.templateContent = app.description;
 			} else {
 				entry.template = CLITemplate.Plain;
 			}
 
-			appResults.push(entry as HomeSearchResult);
+			results.push(entry as HomeSearchResult);
 		}
 	}
-	return appResults;
+
+	return results;
 }
 
 /**
