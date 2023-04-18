@@ -22,6 +22,14 @@ describe("Register with Home", () => {
 		expect(isReady).to.equal(true);
 	});
 
+	it("Can switch to platform window", async () => {
+		const switched = await WebDriver.switchToWindow("identityString", [
+			"register-with-home",
+			"register-with-home"
+		]);
+		expect(switched).to.equal(true);
+	});
+
 	it("The title should be set", async () => {
 		const title = await WebDriver.getTitle();
 		expect(title).to.equal("Platform Provider");
