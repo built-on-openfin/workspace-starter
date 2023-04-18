@@ -891,6 +891,14 @@
 				"data": {
 					"supportedActions": ["raise-intent", "share-context"]
 				}
+			},
+			{
+				"enabled": true,
+				"id": "launch-app",
+				"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
+				"data": {
+					"supportedActions": ["launch-app"]
+				}
 			}
 		]
 	},
