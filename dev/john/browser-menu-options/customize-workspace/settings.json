@@ -257,11 +257,14 @@
 		]
 	},
 	"browserProvider": {
-		"windowOptions": {
-			"title": "Second Browser Starter",
+		"defaultWindowOptions": {
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/browser-menu-options/customize-workspace/favicon-32x32.png",
-			"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/browser-menu-options/common/views/platform/new-tab/new-tab.html",
-			"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/browser-menu-options/common/views/platform/new-tab/new-tab.html"
+			"workspacePlatform": {
+				"pages": [],
+				"title": "Second Browser Starter",
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/browser-menu-options/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/browser-menu-options/common/views/platform/new-tab/new-tab.html"
+			}
 		},
 		"globalMenu": [
 			{
