@@ -106,14 +106,6 @@ export const DEVELOPER_CONTENT: App = {
 };
 
 /**
- * Get the list of apps to display.
- * @returns List of app definitions
- */
-export async function getApps(): Promise<App[]> {
-	return [EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER];
-}
-
-/**
  * Launch the passed app using its manifest type to determine how to launch it.
  * @param app The app to launch.
  */
