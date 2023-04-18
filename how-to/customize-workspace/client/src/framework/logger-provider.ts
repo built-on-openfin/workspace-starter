@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import type { Logger, LoggerProviderOptions, LogLevel, LogProvider } from "./shapes/logger-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";

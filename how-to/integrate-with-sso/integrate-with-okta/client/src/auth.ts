@@ -1,4 +1,5 @@
 import { OktaAuth } from "@okta/okta-auth-js";
+import type OpenFin from "@openfin/core";
 import { getSettings } from "./settings";
 import type { OktaSettings } from "./shapes";
 import { randomUUID } from "./uuid";

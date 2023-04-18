@@ -25,17 +25,17 @@ export const manifestTypes: { [id: string]: ManifestType } = {
 		description:
 			"This manifest type expects the manifest setting to have the classic window options inline rather than a url to a json file."
 	},
-	inlineExternal: {
-		id: "inline-external",
-		label: "Native App",
-		description:
-			"This manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request."
-	},
 	snapshot: {
 		id: "snapshot",
 		label: "Snapshot",
 		description:
 			"This manifest type expects the manifest setting to point to a json file that contains a snapshot (one or more windows)"
+	},
+	inlineSnapshot: {
+		id: "inline-snapshot",
+		label: "Snapshot",
+		description:
+			"This manifest type expects the manifest setting to have a snapshot inline rather than a url to a json file that contains a snapshot (one or more windows)"
 	},
 	manifest: {
 		id: "manifest",
@@ -47,6 +47,12 @@ export const manifestTypes: { [id: string]: ManifestType } = {
 		id: "external",
 		label: "Native App",
 		description: "This manifest type expects the manifest setting to point to an exe or an app asset name."
+	},
+	inlineExternal: {
+		id: "inline-external",
+		label: "Native App",
+		description:
+			"This manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request."
 	},
 	desktopBrowser: {
 		id: "desktop-browser",
@@ -65,5 +71,11 @@ export const manifestTypes: { [id: string]: ManifestType } = {
 		label: "Connected App",
 		description:
 			"This manifest type expects the manifest setting to have a uuid. This must match to a connection registered in the connectionProvider with app support."
+	},
+	unregisteredApp: {
+		id: "unregistered-app",
+		label: "Unregistered App",
+		description:
+			"This manifest type represents web page instances that have been launched that are not linked to an app. This manifest type should not be in the permitted manifest type list for app feeds as it is for dynamic urls."
 	}
 };

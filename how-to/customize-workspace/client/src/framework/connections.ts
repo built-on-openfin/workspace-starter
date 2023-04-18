@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
@@ -238,17 +239,17 @@ export async function getConnectedApps(): Promise<PlatformApp[]> {
 	return apps;
 }
 
-export async function launchConnectedApp(app: PlatformApp) {
+export async function launchConnectedApp(app: PlatformApp): Promise<OpenFin.Identity> {
 	const connectedSources = await getConnectedAppSourceClients();
 	const connectedSource = connectedSources.find((entry) => entry.identity.uuid === app.manifest);
 	if (app.manifestType === manifestTypes.connection.id && connectedSource !== undefined) {
 		logger.info(`Launching app: ${app.appId} against connection: ${connectedSource.identity.uuid}`);
 		await connectionService.dispatch(connectedSource.identity, "launchApp", app);
-	} else {
-		logger.warn(
-			`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestTypes.connection.id}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with ${appSourceTypeId} support or hasn't connected to this platform.`
-		);
+		return connectedSource.identity;
 	}
+	logger.warn(
+		`A request to launch app ${app.appId} was not successful. Either the manifestType is not ${manifestTypes.connection.id}:${app.manifestType} or the connection ${app.manifest} is either not registered in the connectionProvider with ${appSourceTypeId} support or hasn't connected to this platform.`
+	);
 }
 
 export async function getConnectedSnapshotSourceClients() {

@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import * as auth0 from "auth0-js";
 import type { AuthSettings } from "./shapes";
 import { randomUUID } from "./uuid";

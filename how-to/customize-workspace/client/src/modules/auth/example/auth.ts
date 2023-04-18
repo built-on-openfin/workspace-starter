@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { AuthProvider } from "customize-workspace/shapes/auth-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";

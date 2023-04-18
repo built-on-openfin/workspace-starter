@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { themeBuilderApp } from "./apps";
 import { launchView } from "./browser";
 import { deregister as deregisterDock, register as registerDock, show as showDock } from "./dock";

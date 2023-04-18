@@ -5,9 +5,15 @@
 
 # How To See Intents In Action
 
-If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [How To Setup Customize Workspace](./how-to-setup-customize-workspace.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Picker UI:
+If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [How To Setup Customize Workspace](./how-to-setup-customize-workspace.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Resolver UI:
 
-![Default Intent Picker](./assets/intent-picker.png)
+## Default Instance Intent Resolver
+
+![Default Intent Resolver](./assets/intent-resolver-instance.png)
+
+## Default Basic Intent Resolver
+
+![Basic Intent Resolver](./assets/intent-resolver.png)
 
 # How To Configure Intents For Your Workspace Platform
 
@@ -22,10 +28,13 @@ We have a platform provider defined in the settings and it contains some informa
 ```json
 "platformProvider": {
    ...,
-   "intentPicker": {
-    "url": "http://localhost:8080/common/windows/intents/picker.html",
-    "height": 400,
-    "width": 400
+   "interop": {
+    "intentResolver": {
+     "url": "http://localhost:8080/common/windows/intents/instance-picker.html",
+     "height": 715,
+     "width": 665,
+     "fdc3InteropApi": "2.0"
+    }
    }
   },
 
@@ -44,6 +53,13 @@ if (data.customData !== undefined) {
   apps = data.customData.apps;
   intent = data.customData.intent;
   intents = data.customData.intents;
+  // used if the picker supports instances not linked to a specific app but a fallback app has been
+  // provided. Do not provide an option of launching a new instance as there is no app to launch
+  // simply show existing instances
+  unregisteredAppId = data.customData.unregisteredAppId;
+  if (data.customData.title !== undefined) {
+    // use the passed title
+  }
 }
 ```
 
@@ -67,7 +83,14 @@ window['getIntentSelection'] = async () => {
 
 ## Source Reference
 
+### Simple Intent Resolver
+
 - [picker.html](../../common/public/windows/intents/picker.html)
 - [picker.js](../../common/public/windows/intents/picker.js)
+
+### Advanced Intent Resolver
+
+- [instance-picker.html](../../common/public/windows/intents/instance-picker.html)
+- [instance-picker.js](../../common/public/windows/intents/instance-picker.js)
 
 [<- Back to Table Of Contents](../README.md)

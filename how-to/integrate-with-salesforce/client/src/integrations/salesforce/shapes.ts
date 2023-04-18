@@ -1,3 +1,5 @@
+import type OpenFin from "@openfin/core";
+
 /**
  * Model for batch request.
  */
@@ -211,6 +213,8 @@ export interface SalesforceAction {
 	iconKey: string;
 	// The url to open, optional if intent provided instead, if no url intent defaults to open in Salesforce
 	url?: string;
+	// Open as a view
+	view?: OpenFin.PlatformViewCreationOptions;
 	// The intent to raise if no url supplied
 	intent?: {
 		// The name of the intent

@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import type { CustomSettings } from "./shapes";
 

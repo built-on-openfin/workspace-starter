@@ -1,3 +1,5 @@
+import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
+
 export interface PlatformProviderOptions {
 	/** What is the root url of you platform e.g. https://mydomain.com */
 	rootUrl: string;
@@ -5,13 +7,8 @@ export interface PlatformProviderOptions {
 	sharing: boolean;
 	/** This is optional and only needed if you are using shell mode where you wish to load a small module with just auth logic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate the provider bundle and provide an example in our docs. */
 	initUrl?: string;
-	/** Intent Picker configuration if you wish to support intents. It needs to support the functions required by the platform */
-	intentPicker?: {
-		/** The url of the html page that has the intent picker */
-		url: string;
-		/** the height you wish the window to be */
-		height?: number;
-		/** the width you wish the window to be */
-		width?: number;
-	};
+	/** interop settings related to this platform */
+	interop?: PlatformInteropBrokerOptions;
+	/** Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker settings*/
+	intentPicker?: IntentResolverOptions;
 }
