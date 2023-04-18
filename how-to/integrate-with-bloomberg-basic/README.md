@@ -74,7 +74,7 @@ npm run client
 npm run build
 ```
 
-![Server Authentication](openfin-integrate-server-authentication.gif)
+![Integrate With Bloomberg Basic](integrate-wth-bloomberg-basic.gif)
 
 ---
 

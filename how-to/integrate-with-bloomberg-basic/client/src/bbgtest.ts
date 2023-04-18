@@ -159,6 +159,8 @@ const fireIntentforBBG = async () => {
         } catch (error) {
             logInformation(`Error while trying to raise intent: ${String(error.message)}`);
         }
+    } else {
+        logInformation("Not connected to the Bloomberg Terminal. Please check your status or log in again.");
     }
 };
 
