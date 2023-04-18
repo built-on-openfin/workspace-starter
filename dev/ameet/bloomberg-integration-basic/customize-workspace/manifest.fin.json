@@ -82,10 +82,10 @@
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
-			"store": true,
+			"store": false,
 			"dock": true,
 			"notifications": true,
-			"autoShow": ["dock", "home"]
+			"autoShow": ["dock"]
 		},
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/bloomberg-integration-basic/customize-workspace",

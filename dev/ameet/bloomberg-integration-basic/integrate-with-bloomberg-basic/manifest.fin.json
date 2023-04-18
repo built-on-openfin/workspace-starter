@@ -30,7 +30,7 @@
 						"componentState": {
 							"name": "bbgTest",
 							"processAffinity": "ps_1",
-							"url": "https://openfin-bbg-int.loca.lt/platform/bbgtest.html",
+							"url": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/bloomberg-integration-basic/integrate-with-bloomberg-basic/platform/bbgtest.html",
 							"interop":{
 							"currentContextGroup": "green"
 							}
