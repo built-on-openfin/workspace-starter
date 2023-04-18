@@ -852,6 +852,14 @@
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-app",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/init-launch-app/customize-workspace/js/modules/init-options/launch-app.bundle.js",
+					"data": {
+						"supportedActions": ["launch-app"]
+					}
 				}
 			]
 		},
