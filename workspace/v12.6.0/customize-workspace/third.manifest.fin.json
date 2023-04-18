@@ -162,11 +162,14 @@
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
-			"windowOptions": {
-				"title": "FDC3 Workspace",
+			"defaultWindowOptions": {
 				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/favicon-32x32.png",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html"
+				"workspacePlatform": {
+					"pages": [],
+					"title": "FDC3 Workspace",
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html"
+				}
 			},
 			"toolbarButtons": [
 				{
