@@ -311,43 +311,52 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return res;
 		}
 
-		public async openGlobalContextMenu(req: OpenGlobalContextMenuPayload, callerIdentity: OpenFin.Identity) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-			return super.openGlobalContextMenu(
-				{
-					...req,
-					template: await getGlobalMenu(req.template)
-				},
-				callerIdentity
-			);
+		public async openGlobalContextMenu(
+			req: OpenGlobalContextMenuPayload,
+			callerIdentity: OpenFin.Identity
+		): Promise<void> {
+			const template = await getGlobalMenu(req.template);
+			if (template?.length > 0) {
+				await super.openGlobalContextMenu(
+					{
+						...req,
+						template
+					},
+					callerIdentity
+				);
+			}
 		}
 
 		public async openViewTabContextMenu(
 			req: OpenViewTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
-		) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-			return super.openViewTabContextMenu(
-				{
-					...req,
-					template: await getViewMenu(req.template)
-				},
-				callerIdentity
-			);
+		): Promise<void> {
+			const template = await getViewMenu(req.template);
+			if (template?.length > 0) {
+				await super.openViewTabContextMenu(
+					{
+						...req,
+						template
+					},
+					callerIdentity
+				);
+			}
 		}
 
 		public async openPageTabContextMenu(
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
-		) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-			return super.openPageTabContextMenu(
-				{
-					...req,
-					template: await getPageMenu(req.template)
-				},
-				callerIdentity
-			);
+		): Promise<void> {
+			const template = await getPageMenu(req.template);
+			if (template?.length > 0) {
+				await super.openPageTabContextMenu(
+					{
+						...req,
+						template
+					},
+					callerIdentity
+				);
+			}
 		}
 
 		public async quit(payload: undefined, callerIdentity: OpenFin.Identity) {

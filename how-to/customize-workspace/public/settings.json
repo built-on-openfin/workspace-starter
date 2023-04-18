@@ -257,11 +257,14 @@
 		]
 	},
 	"browserProvider": {
-		"windowOptions": {
-			"title": "Second Browser Starter",
+		"defaultWindowOptions": {
 			"icon": "http://localhost:8080/favicon-32x32.png",
-			"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
-			"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+			"workspacePlatform": {
+				"pages": [],
+				"title": "Second Browser Starter",
+				"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+			}
 		},
 		"globalMenu": [
 			{

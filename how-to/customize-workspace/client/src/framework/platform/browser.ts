@@ -248,20 +248,56 @@ export async function launchView(
 	return platform.createView(viewOptions, targetIdentity);
 }
 
-export async function getDefaultWindowOptions() {
+export async function getDefaultWindowOptions(): Promise<Partial<BrowserCreateWindowRequest>> {
 	const settings = await getSettings();
 
-	return {
-		icon: settings.browserProvider.windowOptions?.icon,
-		workspacePlatform: {
-			pages: null,
-			title: settings.browserProvider.windowOptions?.title,
-			favicon: settings.browserProvider.windowOptions?.icon,
-			newTabUrl: settings.browserProvider.windowOptions?.newTabUrl,
-			newPageUrl: settings.browserProvider.windowOptions?.newPageUrl,
-			toolbarOptions: {
-				buttons: await getDefaultToolbarButtons()
-			}
-		}
-	};
+	const windowOptions = settings?.browserProvider?.windowOptions ?? {};
+	const defaultWindowOptions = settings?.browserProvider.defaultWindowOptions ?? {};
+
+	if (defaultWindowOptions.workspacePlatform === undefined) {
+		defaultWindowOptions.workspacePlatform = {
+			pages: null
+		};
+	}
+
+	// start backwards compatibility
+	if (windowOptions.title !== undefined && defaultWindowOptions?.workspacePlatform?.title === undefined) {
+		defaultWindowOptions.workspacePlatform.title = windowOptions.title;
+	}
+
+	if (
+		windowOptions.newPageUrl !== undefined &&
+		defaultWindowOptions?.workspacePlatform?.newPageUrl === undefined
+	) {
+		defaultWindowOptions.workspacePlatform.newPageUrl = windowOptions.newPageUrl;
+	}
+
+	if (
+		windowOptions.newTabUrl !== undefined &&
+		defaultWindowOptions?.workspacePlatform?.newTabUrl === undefined
+	) {
+		defaultWindowOptions.workspacePlatform.newTabUrl = windowOptions.newTabUrl;
+	}
+
+	if (windowOptions?.icon !== undefined && defaultWindowOptions?.icon === undefined) {
+		defaultWindowOptions.icon = windowOptions.icon;
+	}
+
+	if (
+		defaultWindowOptions?.icon !== undefined &&
+		defaultWindowOptions?.workspacePlatform?.favicon === undefined
+	) {
+		defaultWindowOptions.workspacePlatform.favicon = defaultWindowOptions.icon;
+	}
+	// end backwards compatibility
+
+	if (Array.isArray(settings.browserProvider.toolbarButtons)) {
+		// we are going to override the ones specified at the workspace platform level
+		// as this is our more flexible extension with conditions
+		defaultWindowOptions.workspacePlatform.toolbarOptions = {
+			buttons: await getDefaultToolbarButtons()
+		};
+	}
+
+	return defaultWindowOptions;
 }
