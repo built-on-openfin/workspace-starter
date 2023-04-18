@@ -1,19 +1,18 @@
-import type OpenFin from "@openfin/core";
 import {
+	CLIFilterOptionType,
+	CLITemplate,
+	Home,
 	type App,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
-	CLIFilterOptionType,
 	type CLIProvider,
 	type CLISearchListenerRequest,
 	type CLISearchListenerResponse,
 	type CLISearchResponse,
-	CLITemplate,
-	Home,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import { type Page, getCurrentSync, AppManifestType } from "@openfin/workspace-platform";
-import { getApps } from "./apps";
+import { getCurrentSync, type Page } from "@openfin/workspace-platform";
+import { getApps, launchApp } from "./apps";
 import type { CustomSettings } from "./shapes";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
@@ -355,49 +354,4 @@ function mapPageEntriesToSearchEntries(pages: Page[]): HomeSearchResult[] {
 	}
 
 	return pageResults;
-}
-
-/**
- * Launch the passed app using its manifest type to determine how to launch it.
- * @param app The app to launch.
- */
-export async function launchApp(
-	app: App
-): Promise<OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined> {
-	if (!app.manifest) {
-		console.error(`No manifest was provided for type ${app.manifestType}`);
-		return;
-	}
-
-	let ret: OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined;
-
-	console.log("Application launch requested:", app);
-
-	switch (app.manifestType) {
-		case AppManifestType.Snapshot: {
-			const platform = getCurrentSync();
-			ret = await platform.applySnapshot(app.manifest);
-			break;
-		}
-
-		case AppManifestType.View: {
-			const platform = getCurrentSync();
-			ret = await platform.createView({ manifestUrl: app.manifest });
-			break;
-		}
-
-		case AppManifestType.External: {
-			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
-			break;
-		}
-
-		default: {
-			ret = await fin.Application.startFromManifest(app.manifest);
-			break;
-		}
-	}
-
-	console.log("Finished application launch request");
-
-	return ret;
 }

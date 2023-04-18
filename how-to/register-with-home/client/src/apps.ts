@@ -1,4 +1,6 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
+import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 import type { CustomSettings } from "./shapes";
 
 /**
@@ -58,25 +60,25 @@ async function validateEntries(customSettings: CustomSettings, apps: App[]): Pro
 	const appAssetTag = "appasset";
 	const supportedManifestTypes = customSettings?.appProvider?.manifestTypes;
 
-	for (let i = 0; i < apps.length; i++) {
-		const manifestType = apps[i].manifestType;
+	for (const element of apps) {
+		const manifestType = element.manifestType;
 		if (manifestType) {
 			let validApp = true;
-			const tags = apps[i].tags;
+			const tags = element.tags;
 
 			if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
 				validApp = supportedManifestTypes.includes(manifestType);
 			}
 
 			if (validApp) {
-				if (apps[i].manifestType !== "external") {
-					validatedApps.push(apps[i]);
+				if (element.manifestType !== "external") {
+					validatedApps.push(element);
 				} else if (canLaunchExternalProcess === false) {
-					rejectedAppIds.push(apps[i].appId);
+					rejectedAppIds.push(element.appId);
 				} else if (Array.isArray(tags) && tags.includes(appAssetTag) && canDownloadAppAssets === false) {
-					rejectedAppIds.push(apps[i].appId);
+					rejectedAppIds.push(element.appId);
 				} else {
-					validatedApps.push(apps[i]);
+					validatedApps.push(element);
 				}
 			}
 		}
@@ -90,4 +92,49 @@ async function validateEntries(customSettings: CustomSettings, apps: App[]): Pro
 	}
 
 	return validatedApps;
+}
+
+/**
+ * Launch the passed app using its manifest type to determine how to launch it.
+ * @param app The app to launch.
+ */
+export async function launchApp(
+	app: App
+): Promise<OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined> {
+	if (!app.manifest) {
+		console.error(`No manifest was provided for type ${app.manifestType}`);
+		return;
+	}
+
+	let ret: OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined;
+
+	console.log("Application launch requested:", app);
+
+	switch (app.manifestType) {
+		case AppManifestType.Snapshot: {
+			const platform = getCurrentSync();
+			ret = await platform.applySnapshot(app.manifest);
+			break;
+		}
+
+		case AppManifestType.View: {
+			const platform = getCurrentSync();
+			ret = await platform.createView({ manifestUrl: app.manifest });
+			break;
+		}
+
+		case AppManifestType.External: {
+			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
+			break;
+		}
+
+		default: {
+			ret = await fin.Application.startFromManifest(app.manifest);
+			break;
+		}
+	}
+
+	console.log("Finished application launch request");
+
+	return ret;
 }
