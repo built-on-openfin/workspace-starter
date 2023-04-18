@@ -1,18 +1,26 @@
+/**
+ * The custom settings stored in the manifest.fin.json
+ */
+export interface CustomSettings {
+	appProvider?: AppProvider;
+	homeProvider?: HomeProvider;
+}
+
+/**
+ * Settings for home.
+ */
 interface HomeProvider {
 	id: string;
 	title: string;
 	icon: string;
-	hidden?: boolean;
 	queryMinLength?: number;
 	queryAgainst?: string[];
 }
 
+/**
+ * Settings for app provider.
+ */
 interface AppProvider {
-	appsSourceUrl: string;
-	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
+	appSourceUrls: string[];
 	manifestTypes?: string[];
-}
-export interface CustomSettings {
-	appProvider?: AppProvider;
-	homeProvider?: HomeProvider;
 }

@@ -88,21 +88,18 @@ You have your own [Workspace Platform](public/manifest.fin.json) that is defined
 npm run client
 ```
 
-The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform (using the [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform) module). Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts).
+The app entry point [provider.ts](client/src/provider.ts) initializes the platform and then once initialized bootstraps the app.
 
 The bootstrapper has two main responsibilities:
 
 1. Import [home.ts](client/src/home.ts) to register this workspace platform against Home.
 2. Listen for when the workspace platform is closing so that it can deregister from Home.
 
-The **home provider**([home.ts](client/src/home.ts)) imports the following:
+The **home provider** ([home.ts](client/src/home.ts)) imports the following:
 
 - [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to have access to the relevant functions
 - [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform) to have access to the right types
-- [settings.ts](client/src/settings.ts) to read settings (such as the id, title of the provider and where it should get the list of apps from)
 - [apps.ts](client/src/apps.ts) to fetch a list of applications (the home provider maps these into CLI Search Results)
-- [browser.ts](client/src/browser.ts) to fetch saved pages and display them in the Home UI and launch/delete them when the action is executed.
-- [launch.ts](client/src/launch.ts) to launch the entry the user selects from OpenFin Home
 
 The registration of a provider against home will look like the following:
 
@@ -118,13 +115,12 @@ const cliProvider: CLIProvider = {
 await Home.register(cliProvider);
 ```
 
-The [settings.ts](client/src/settings.ts) file reads the customSettings section of your [manifest file](public/manifest.fin.json):
+The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method reads the `customSettings` section of your [manifest file](public/manifest.fin.json):
 
 ```javascript
  "customSettings": {
         "appProvider": {
-            "appsSourceUrl": "http://localhost:8080/apps.json",
-            "includeCredentialOnSourceRequest": "include",
+            "appSourceUrls": ["http://localhost:8080/apps.json"],
             "manifestTypes": ["view", "snapshot", "manifest", "external"]
         },
         "homeProvider": {
@@ -137,18 +133,17 @@ The [settings.ts](client/src/settings.ts) file reads the customSettings section 
     }
 ```
 
-| Property                         | Description                                                                                                                                                                                                                                                                                                                                                          |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **appProvider**                  | Config related to where the apps should be fetched from                                                                                                                                                                                                                                                                                                              |
-| appsSourceUrl                    | Where should we fetch the apps from                                                                                                                                                                                                                                                                                                                                  |
-| includeCredentialOnSourceRequest | Should we include credentials when doing the search request. Options: "omit", "same-origin", "include"                                                                                                                                                                                                                                                               |
-| manifestTypes                    | ["view", "snapshot", "manifest", "external"]                                                                                                                                                                                                                                                                                                                         |
-| **homeProvider**                 | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                        |
-| id                               | What your provider should be called                                                                                                                                                                                                                                                                                                                                  |
-| title                            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                             |
-| icon                             | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)                                                                                                                                                                                                                            |
-| queryMinLength                   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                       |
-| queryAgainst                     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
+| Property         | Description                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **appProvider**  | Config related to where the apps should be fetched from                                                                                                                                                                                                                                                                                                              |
+| appSourceUrls    | Where should we fetch the apps from                                                                                                                                                                                                                                                                                                                                  |
+| manifestTypes    | ["view", "snapshot", "manifest", "external"] Which type of applications to include from the app sources                                                                                                                                                                                                                                                              |
+| **homeProvider** | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                        |
+| id               | What your provider should be called                                                                                                                                                                                                                                                                                                                                  |
+| title            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                             |
+| icon             | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)                                                                                                                                                                                                                            |
+| queryMinLength   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                       |
+| queryAgainst     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
 
 ### Note About The Config
 
