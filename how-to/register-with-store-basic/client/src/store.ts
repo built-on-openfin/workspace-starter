@@ -1,61 +1,63 @@
 import {
 	Storefront,
-	App,
-	StorefrontLandingPage,
-	StorefrontNavigationSection,
-	StorefrontFooter,
-	StorefrontProvider,
-	StorefrontTemplate
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type StorefrontNavigationSection,
+	StorefrontTemplate,
+	type StoreRegistration
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
-import { getApps, experoApp, notificationStudio, processManager, developerContent } from "./apps";
+import {
+	CustomActionCallerType,
+	type CustomActionPayload,
+	type CustomActionsMap
+} from "@openfin/workspace-platform";
+import {
+	DEVELOPER_CONTENT,
+	EXPERO_APP,
+	NOTIFICATION_STUDIO,
+	PROCESS_MANAGER,
+	getApps,
+	launchApp
+} from "./apps";
 
-const providerId = "register-with-store-basic";
-
-export async function register() {
+/**
+ * Register with the store component.
+ * @param id The id to register the provider with.
+ * @param title The title to use for the store registration.
+ * @param icon The icon to use for the store registration.
+ * @returns The registration details for home.
+ */
+export async function register(
+	id: string,
+	title: string,
+	icon: string
+): Promise<StoreRegistration | undefined> {
 	console.log("Initialising the storefront provider.");
-	const provider = await getStoreProvider();
 	try {
-		const metaInfo = await Storefront.register(provider);
+		const metaInfo = await Storefront.register({
+			id,
+			title,
+			icon,
+			getNavigation: buildNavigation,
+			getLandingPage: buildLandingPage,
+			getFooter: buildFooter,
+			getApps,
+			launchApp: async (app) => {
+				await launchApp(app);
+			}
+		});
 		console.log("Storefront provider initialised.", metaInfo);
+		return metaInfo;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content store provider", err);
 	}
 }
 
-export async function deregister() {
-	return Storefront.deregister(providerId);
-}
-
-export async function show() {
-	console.log("Showing the store.");
-	return Storefront.show();
-}
-
-export async function hide() {
-	console.log("Hiding the store.");
-	return Storefront.hide();
-}
-
-async function getStoreProvider(): Promise<StorefrontProvider> {
-	console.log("Getting the store provider.");
-
-	return {
-		id: providerId,
-		title: "Basic Store",
-		icon: "http://localhost:8080/favicon.ico",
-		getNavigation,
-		getLandingPage,
-		getFooter,
-		getApps,
-		launchApp: async (app: App) => {
-			const platform = getCurrentSync();
-			await platform.launchApp({ app });
-		}
-	};
-}
-
-async function getNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
+/**
+ * Build the navigation sections for the store.
+ * @returns The navigation sections.
+ */
+async function buildNavigation(): Promise<[StorefrontNavigationSection?, StorefrontNavigationSection?]> {
 	console.log("Showing the store navigation.");
 
 	const navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [
@@ -68,7 +70,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 					title: "Views",
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [EXPERO_APP]
 					}
 				},
 				{
@@ -76,7 +78,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 					title: "Pages",
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [developerContent]
+						apps: [DEVELOPER_CONTENT]
 					}
 				},
 				{
@@ -84,7 +86,7 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 					title: "Web Apps",
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [notificationStudio, processManager]
+						apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
 					}
 				}
 			]
@@ -94,7 +96,11 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 	return navigationSections;
 }
 
-async function getLandingPage(): Promise<StorefrontLandingPage> {
+/**
+ * Build the content for the landing page.
+ * @returns The store landing page content.
+ */
+async function buildLandingPage(): Promise<StorefrontLandingPage> {
 	console.log("Getting the store landing page.");
 
 	const landingPage: StorefrontLandingPage = {
@@ -106,7 +112,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				title: "Hero Apps!",
 				templateId: StorefrontTemplate.AppGrid,
 				templateData: {
-					apps: [notificationStudio, processManager]
+					apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
 				}
 			},
 			image: {
@@ -126,7 +132,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [EXPERO_APP]
 					},
 					buttonTitle: "Expero Apps"
 				},
@@ -140,7 +146,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [notificationStudio, processManager]
+						apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
 					},
 					buttonTitle: "View Tools"
 				}
@@ -148,7 +154,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		},
 		middleRow: {
 			title: "A collection of simple views that show how to share context using the Interop API.",
-			apps: [experoApp]
+			apps: [EXPERO_APP]
 		},
 		bottomRow: {
 			title: "Quick Access",
@@ -162,7 +168,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [experoApp]
+						apps: [EXPERO_APP]
 					},
 					buttonTitle: "See Views"
 				},
@@ -175,7 +181,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
-						apps: [notificationStudio, processManager]
+						apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
 					},
 					buttonTitle: "See Web Apps"
 				}
@@ -186,7 +192,11 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 	return landingPage;
 }
 
-async function getFooter(): Promise<StorefrontFooter> {
+/**
+ * Build the footer content.
+ * @returns The store footer content.
+ */
+async function buildFooter(): Promise<StorefrontFooter> {
 	console.log("Getting the store footer.");
 	return {
 		logo: { src: "http://localhost:8080/favicon.ico", size: "32" },
@@ -201,5 +211,29 @@ async function getFooter(): Promise<StorefrontFooter> {
 				url: "https://www.youtube.com/user/OpenFinTech"
 			}
 		]
+	};
+}
+
+/**
+ * Get the actions that will be triggered by the button clicks.
+ * The action are added to the workspace platform when it is created.
+ * @returns The maps of the custom actions.
+ */
+export function storeGetCustomActions(): CustomActionsMap {
+	return {
+		"open-web-site": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
+				window.open(payload.customData?.url as string);
+			}
+		},
+		"launch-app": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
+				const apps = await getApps();
+				const app = apps.find((a) => a.appId === payload.appId);
+				if (app) {
+					await launchApp(app);
+				}
+			}
+		}
 	};
 }
