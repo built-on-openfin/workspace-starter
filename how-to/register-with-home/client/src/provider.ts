@@ -6,14 +6,22 @@ import type { CustomSettings } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// Load the settings from the manifest
-	const settings = await getManifestCustomSettings();
+	const customSettings = await getManifestCustomSettings();
 
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => platformBootstrap(settings));
+	await platform.once("platform-api-ready", async () => platformBootstrap(customSettings));
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
+	await initializeWorkspacePlatform(customSettings);
+});
+
+/**
+ * Initialize the workspace platform.
+ * @param customSettings The custom settings from the manifest.
+ */
+async function initializeWorkspacePlatform(settings: CustomSettings): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
@@ -37,7 +45,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 			}
 		]
 	});
-});
+}
 
 /**
  * Bring the platform to life.
