@@ -3,7 +3,7 @@ import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-sh
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import type { LaunchAppPayload } from "./shapes";
 
-export class InitOptionsInteropHandler implements InitOptionsHandler {
+export class InitOptionsLaunchAppHandler implements InitOptionsHandler {
 	private _logger: Logger;
 
 	private _helpers: ModuleHelpers;
