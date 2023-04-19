@@ -1,6 +1,6 @@
-import type { ManifestType } from "./shapes";
+import type { ManifestTypes } from "./shapes";
 
-export const manifestTypes: { [id: string]: ManifestType } = {
+export const manifestTypes: ManifestTypes = {
 	view: {
 		id: "view",
 		label: "View",

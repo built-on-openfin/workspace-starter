@@ -184,10 +184,84 @@ public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 
 For further information on customizing the home template see [Home To Customize Home Templates](./how-to-customize-home-templates.md).
 
+## Available Home Integrations
+
+We have a number of integrations we have built to allow you to configure customize workspace to your needs.
+
+- [Apps integration](../client/src/modules/integrations/apps/integration.ts) - an apps module that fetches the available public applications (apps marked as private should not be displayed) that you can configured in your appsProvider, displays them via a dynamic templates and allows text filtering (home input) and tag filtering.
+
+```json
+{
+  "id": "apps",
+  "icon": "http://localhost:8080/favicon.ico",
+  "title": "Apps",
+  "description": "Search Applications",
+  "enabled": true,
+  "url": "http://localhost:8080/js/modules/integrations/apps.bundle.js",
+  "data": {
+    "manifestTypeMapping": {
+      "view": { "entryLabel": "View", "actionName": "" },
+      "inline-view": { "entryLabel": "View", "actionName": "" },
+      "window": { "entryLabel": "Window", "actionName": "" },
+      "inline-window": { "entryLabel": "Window", "actionName": "" },
+      "snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+      "inline-snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+      "manifest": { "entryLabel": "App", "actionName": "Launch App" },
+      "external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+      "inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+      "desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
+      "endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
+      "connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
+    }
+  }
+}
+```
+
+- [Workspaces integration](../client/src/modules/integrations/workspaces/integration.ts) - a module that lets your manage your saved workspaces from within Home
+
+```json
+{
+  "id": "workspaces",
+  "icon": "http://localhost:8080/favicon.ico",
+  "title": "Workspaces",
+  "description": "Manage workspaces",
+  "enabled": true,
+  "url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
+  "data": {
+    "images": {
+      "workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+    }
+  }
+}
+```
+
+- [Pages integration](../client/src/modules/integrations/pages/integration.ts) - a module that lets you manage your saved pages from within Home
+
+```json
+{
+  "id": "pages",
+  "icon": "http://localhost:8080/favicon.ico",
+  "title": "Pages",
+  "description": "Manage Pages",
+  "enabled": true,
+  "url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
+  "data": {
+    "images": {
+      "page": "http://localhost:8080/icons/{scheme}/page.svg"
+    }
+  }
+}
+```
+
+In our manifests we also give examples of plugging in our other how-tos (e.g. how-to/integrate-with-salesforce).
+
 ## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)
 - [integrations.ts](../client/src/framework/integrations.ts)
 - [integrations-shapes.ts](../client/src/framework/shapes/integrations-shapes.ts)
+- [apps/integration.ts](../client/src/modules/integrations/apps/integration.ts)
+- [workspaces/integration.ts](../client/src/modules/integrations/workspaces/integration.ts)
+- [pages/integration.ts](../client/src/modules/integrations/pages/integration.ts)
 
 [<- Back to Table Of Contents](../README.md)

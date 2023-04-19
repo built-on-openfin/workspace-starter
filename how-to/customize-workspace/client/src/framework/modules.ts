@@ -1,6 +1,6 @@
 import type { InteropClient } from "@openfin/core/src/api/interop/InteropClient";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import { getApp } from "./apps";
+import { getApp, getApps } from "./apps";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
@@ -243,6 +243,10 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		sessionId: passedSessionId,
+		getApps: async () => {
+			logger.info("getApps: getting public apps for module.");
+			return getApps({ private: false });
+		},
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,

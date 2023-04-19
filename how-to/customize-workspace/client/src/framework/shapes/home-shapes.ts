@@ -1,11 +1,10 @@
+import type { SearchProviderInfo } from "@openfin/workspace";
+
 /** HomeProvider Options */
-export interface HomeProviderOptions {
-	/** The id to use when registering against the Workspace Home component */
-	id: string;
-	/** The title to show in the Home component UI */
-	title: string;
-	/** The icon to show in the Home component UI */
-	icon: string;
+export type HomeProviderOptions = Omit<
+	SearchProviderInfo,
+	"identity" | "dispatchFocusEvents" | "clientAPIVersion"
+> & {
 	/**
 	 * How many characters need to be entered before filtering the available apps
 	 */
@@ -31,4 +30,4 @@ export interface HomeProviderOptions {
 		 */
 		label?: string;
 	};
-}
+};

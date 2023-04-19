@@ -56,11 +56,30 @@ export type ManifestTypeId =
 	| "connection"
 	| "unregistered-app";
 
+export type ManifestTypesId =
+	| "view"
+	| "inlineView"
+	| "window"
+	| "inlineWindow"
+	| "snapshot"
+	| "inlineSnapshot"
+	| "manifest"
+	| "external"
+	| "inlineExternal"
+	| "desktopBrowser"
+	| "endpoint"
+	| "connection"
+	| "unregisteredApp";
+
 export interface ManifestType {
 	id: ManifestTypeId;
 	label: string;
 	description: string;
 }
+
+export type ManifestTypes = {
+	[key in ManifestTypesId]: ManifestType;
+};
 
 export type AppEndpointOptions =
 	| string
