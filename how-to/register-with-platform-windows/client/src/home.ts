@@ -1,268 +1,136 @@
 import {
-	App,
-	CLIDispatchedSearchResult,
-	CLIFilter,
-	CLIFilterOptionType,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
+	type CLIDispatchedSearchResult,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult
+	type HomeRegistration,
+	type HomeSearchResult,
+	type App
 } from "@openfin/workspace";
-import { getApps } from "./apps";
-import { launch } from "./launch";
-import { getSettings } from "./settings";
+import { getApps, launchApp } from "./apps";
 
-let isHomeRegistered = false;
-
-function getSearchFilters(tags: string[]): CLIFilter[] {
-	if (Array.isArray(tags)) {
-		const filters: CLIFilter[] = [];
-		const uniqueTags = [...new Set(tags.sort())];
-		const tagFilter: CLIFilter = {
-			id: "tags",
-			title: "Tags",
-			type: CLIFilterOptionType.MultiSelect,
-			options: []
-		};
-
-		for (const tag of uniqueTags) {
-			if (Array.isArray(tagFilter.options)) {
-				tagFilter.options.push({
-					value: tag,
-					isSelected: false
-				});
-			}
-		}
-
-		filters.push(tagFilter);
-		return filters;
-	}
-	return [];
-}
-
-function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
-	const appResults: HomeSearchResult[] = [];
-	if (Array.isArray(apps)) {
-		for (let i = 0; i < apps.length; i++) {
-			const action = { name: "Launch View", hotkey: "enter" };
-			const entry: Partial<HomeSearchResult> = {
-				key: apps[i].appId,
-				title: apps[i].title,
-				data: apps[i]
-			};
-
-			if (apps[i].manifestType === "view") {
-				entry.label = "View";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "snapshot") {
-				entry.label = "Snapshot";
-				action.name = "Launch Snapshot";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "manifest") {
-				entry.label = "App";
-				action.name = "Launch App";
-				entry.actions = [action];
-			}
-			if (apps[i].manifestType === "external") {
-				action.name = "Launch Native App";
-				entry.actions = [action];
-				entry.label = "Native App";
-			}
-
-			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-				entry.icon = apps[i].icons[0].src;
-			}
-
-			if (apps[i].description !== undefined) {
-				entry.description = apps[i].description;
-				entry.shortDescription = apps[i].description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
-			} else {
-				entry.template = CLITemplate.Plain;
-			}
-
-			appResults.push(entry as HomeSearchResult);
-		}
-	}
-	return appResults;
-}
-
-async function getResults(
-	queryLower: string,
-	queryMinLength = 3,
-	queryAgainst: string[] = ["title"],
-	filters?: CLIFilter[]
-): Promise<CLISearchResponse> {
-	const apps = await getApps();
-
-	const tags: string[] = [];
-	const appSearchEntries = mapAppEntriesToSearchEntries(apps);
-
-	const initialResults: HomeSearchResult[] = [...appSearchEntries];
-
-	if (initialResults.length > 0) {
-		const finalResults = initialResults.filter((entry) => {
-			let textMatchFound = true;
-			let filterMatchFound = true;
-
-			if (queryLower !== undefined && queryLower !== null && queryLower.length >= queryMinLength) {
-				textMatchFound = queryAgainst.some((target) => {
-					const path = target.split(".");
-					if (path.length === 1) {
-						const targetValue = entry[path[0]];
-
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(queryLower);
-						}
-					} else if (path.length === 2) {
-						const specifiedTarget = entry[path[0]];
-						let targetValue: string | string[];
-						if (specifiedTarget !== undefined && specifiedTarget !== null) {
-							targetValue = specifiedTarget[path[1]];
-						}
-
-						if (targetValue !== undefined && targetValue !== null && typeof targetValue === "string") {
-							return targetValue.toLowerCase().includes(queryLower);
-						}
-
-						if (targetValue !== undefined && targetValue !== null && Array.isArray(targetValue)) {
-							if (
-								targetValue.length > 0 &&
-								typeof targetValue[0] === "string" &&
-								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
-							) {
-								return true;
-							}
-							console.warn(
-								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
-							);
-						}
-					} else {
-						console.warn(
-							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings."
-						);
-					}
-					return false;
-				});
-			}
-
-			if (Array.isArray(filters) && filters.length > 0) {
-				filterMatchFound = filters.some((filter) => {
-					if (Array.isArray(filter.options)) {
-						if (entry.data?.tags !== undefined) {
-							return filter.options.every(
-								(option) => !option.isSelected || entry.data.tags.includes(option.value)
-							);
-						}
-					} else if (filter.options.isSelected && entry.data?.tags !== undefined) {
-						return entry.data?.tags.indexOf(filter.options.value) > -1;
-					}
-					return true;
-				});
-			}
-
-			if (textMatchFound && Array.isArray(entry.data?.tags)) {
-				tags.push(...(entry.data.tags as string[]));
-			}
-			return textMatchFound && filterMatchFound;
-		});
-
-		const response: CLISearchResponse = {
-			results: finalResults,
-			context: {
-				filters: getSearchFilters(tags)
-			}
-		};
-
-		return response;
-	}
-	return {
-		results: []
-	};
-}
-
-export async function register() {
+/**
+ * Register with the home component.
+ * @param id The id to register the provider with.
+ * @param title The title to use for the home registration.
+ * @param icon The icon to use for the home registration.
+ * @returns The registration details for home.
+ */
+export async function register(id: string, title: string, icon: string): Promise<HomeRegistration> {
 	console.log("Initialising home.");
-	const settings = await getSettings();
-	if (
-		settings.homeProvider === undefined ||
-		settings.homeProvider.id === undefined ||
-		settings.homeProvider.title === undefined
-	) {
-		console.warn(
-			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
-		);
-		return;
-	}
 
-	const queryMinLength = settings?.homeProvider?.queryMinLength || 3;
-	const queryAgainst = settings?.homeProvider?.queryAgainst;
-	let lastResponse: CLISearchListenerResponse;
-
-	const onUserInput = async (
-		request: CLISearchListenerRequest,
-		response: CLISearchListenerResponse
-	): Promise<CLISearchResponse> => {
+	// The callback fired when the user types in the home query
+	const onUserInput = async (request: CLISearchListenerRequest): Promise<CLISearchResponse> => {
 		const queryLower = request.query.toLowerCase();
+
+		// If the query starts with a / treat this as a help request
+		// so we don't have any additional entries to show
 		if (queryLower.startsWith("/")) {
 			return { results: [] };
 		}
 
-		const filters: CLIFilter[] = request?.context?.selectedFilters;
-		if (lastResponse !== undefined) {
-			lastResponse.close();
-		}
-		lastResponse = response;
-		lastResponse.open();
-		const results = await getResults(queryLower, queryMinLength, queryAgainst, filters);
-		return results;
+		return getResults(queryLower);
 	};
 
-	const onSelection = async (result: CLIDispatchedSearchResult) => {
+	// The callback fired when a selection is made in home
+	const onSelection = async (result: CLIDispatchedSearchResult): Promise<void> => {
 		if (result.data !== undefined) {
-			const data: {
-				workspaceId?: string;
-				workspaceTitle?: string;
-				workspaceDescription?: string;
-				pageId?: string;
-			} & App = result.data;
-			await launch(data);
+			await launchApp(result.data as App);
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
 	};
 
 	const cliProvider: CLIProvider = {
-		title: settings.homeProvider.title,
-		id: settings.homeProvider.id,
-		icon: settings.homeProvider.icon,
+		id,
+		title,
+		icon,
 		onUserInput,
 		onResultDispatch: onSelection
 	};
 
-	await Home.register(cliProvider);
-	isHomeRegistered = true;
+	const homeRegistration = await Home.register(cliProvider);
 	console.log("Home configured.");
+	console.log(homeRegistration);
+
+	return homeRegistration;
 }
 
-export async function show() {
-	return Home.show();
-}
+/**
+ * Get the list of results to show in home.
+ * @param queryLower Lower case version of query.
+ * @returns The search response containing results.
+ */
+async function getResults(queryLower: string): Promise<CLISearchResponse> {
+	const apps = await getApps();
 
-export async function hide() {
-	return Home.hide();
-}
+	let filteredApps: App[];
 
-export async function deregister() {
-	if (isHomeRegistered) {
-		const settings = await getSettings();
-		return Home.deregister(settings.homeProvider.id);
+	// If the query length is less than 3 don't do any filtering
+	if (queryLower.length < 3) {
+		filteredApps = apps;
+	} else {
+		// Otherwise try and match the app title with the query
+		filteredApps = apps.filter((entry) => entry.title.toLowerCase().includes(queryLower));
 	}
-	console.warn("Unable to deregister home as there is an indication it was never registered");
+
+	return {
+		results: mapAppEntriesToSearchEntries(filteredApps)
+	};
+}
+
+/**
+ * Convert the app definitions into search results.
+ * @param apps The list of apps to convert.
+ * @returns The search result templates.
+ */
+function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
+	const results: HomeSearchResult[] = [];
+
+	if (Array.isArray(apps)) {
+		for (const app of apps) {
+			const action = { name: "Launch View", hotkey: "enter" };
+			const entry: Partial<HomeSearchResult> = {
+				key: app.appId,
+				title: app.title,
+				data: app
+			};
+
+			if (app.manifestType === "view") {
+				entry.label = "View";
+				entry.actions = [action];
+			} else if (app.manifestType === "snapshot") {
+				entry.label = "Snapshot";
+				action.name = "Launch Snapshot";
+				entry.actions = [action];
+			} else if (app.manifestType === "manifest") {
+				entry.label = "App";
+				action.name = "Launch App";
+				entry.actions = [action];
+			} else if (app.manifestType === "external") {
+				action.name = "Launch Native App";
+				entry.actions = [action];
+				entry.label = "Native App";
+			}
+
+			if (Array.isArray(app.icons) && app.icons.length > 0) {
+				entry.icon = app.icons[0].src;
+			}
+
+			if (app.description !== undefined) {
+				entry.description = app.description;
+				entry.shortDescription = app.description;
+				entry.template = CLITemplate.SimpleText;
+				entry.templateContent = app.description;
+			} else {
+				entry.template = CLITemplate.Plain;
+			}
+
+			results.push(entry as HomeSearchResult);
+		}
+	}
+
+	return results;
 }
