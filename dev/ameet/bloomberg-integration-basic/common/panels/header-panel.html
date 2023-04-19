@@ -19,7 +19,7 @@
 	<body class="pad0 fill">
 		<nav class="row fill gap10">
 			<button id="btnFile">File</button>
-			<button id="btnAbout">About</button>
+			<button id="btnHelp">Help</button>
 		</nav>
 		<script>
 			const btnFile = document.querySelector('#btnFile');
@@ -29,11 +29,14 @@
 				await window.showPopupMenu({
 					template: [
 						{
-							label: 'Entry 1'
+							label: 'Open'
+						},
+						{
+							label: 'Save'
 						},
 						{ type: 'separator', data: {} },
 						{
-							label: 'Entry 2'
+							label: 'Exit'
 						}
 					],
 					x: btnFile.offsetLeft + 40,
@@ -41,22 +44,21 @@
 				});
 			});
 
-			const btnAbout = document.querySelector('#btnAbout');
-			btnAbout.addEventListener('click', async (e) => {
+			const btnHelp = document.querySelector('#btnHelp');
+			btnHelp.addEventListener('click', async (e) => {
 				const view = fin.View.getCurrentSync();
 				const window = await view.getCurrentWindow();
 				await window.showPopupMenu({
 					template: [
 						{
-							label: 'Entry 1'
+							label: 'Feedback'
 						},
-						{ type: 'separator', data: {} },
 						{
-							label: 'Entry 2'
+							label: 'About'
 						}
 					],
-					x: btnAbout.offsetLeft + 40,
-					y: btnAbout.offsetTop + 65
+					x: btnHelp.offsetLeft + 40,
+					y: btnHelp.offsetTop + 65
 				});
 			});
 		</script>

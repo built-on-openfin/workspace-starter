@@ -15,7 +15,7 @@ function init() {
 
 function setContact(ctx) {
 	const randomId = (Math.random() * 1000000).toFixed(0);
-
+	document.title = `Participant History - ${ctx.name}`;
 	const userNameContainers = document.querySelectorAll('.username');
 
 	const username = `${ctx.name} (${randomId})`;
