@@ -113,6 +113,13 @@ export interface ModuleHelpers {
 	getInteropClient?(): Promise<InteropClient | undefined>;
 
 	/**
+	 * If available, this function lets you request the launch of an application that is available to this
+	 * platform and the current user.
+	 * @param appId The id of the application that is registered against the currently running platform
+	 */
+	launchApp?(appId: string): Promise<void>;
+
+	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.

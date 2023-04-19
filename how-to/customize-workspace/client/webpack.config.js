@@ -191,6 +191,33 @@ const configs = [
 		}
 	},
 	{
+		entry: './client/src/modules/init-options/launch-app/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'launch-app.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'init-options')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
 		entry: './client/src/modules/log/console/index.ts',
 		devtool: 'inline-source-map',
 		module: {
