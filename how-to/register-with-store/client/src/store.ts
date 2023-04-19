@@ -445,7 +445,8 @@ function calculateButtons(app: App): {
 		primaryButton: {
 			title: "Launch",
 			action: {
-				id: "launchApp"
+				id: "launch-app",
+				customData: app
 			}
 		},
 		secondaryButtons: [
@@ -497,6 +498,11 @@ async function getFavoriteApps(appSettings: AppProviderSettings): Promise<App[]>
  */
 export function storeGetCustomActions(): CustomActionsMap {
 	return {
+		"launch-app": async (e): Promise<void> => {
+			if (e.callerType === CustomActionCallerType.StoreCustomButton) {
+				await launchApp(e.customData as App);
+			}
+		},
 		"favorite-toggle": async (e): Promise<void> => {
 			if (e.callerType === CustomActionCallerType.StoreCustomButton) {
 				await toggleFavorite(e.customData as App);
