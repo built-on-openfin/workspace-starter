@@ -73,7 +73,7 @@ This is a headless application. If you wish to debug it then you can update the 
 npm run client
 ```
 
-1. The client command will launch a window with the options object `customSettings.bootstrap.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/bootstrapper.ts`.
+1. The client command will launch a window with the options object `customSettings.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/provider.ts`.
 
 ![Initial window launch](./assets/Launch-App.gif)
 
@@ -89,7 +89,7 @@ npm run client
 
 ![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
 
-5. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page-clicked` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
+5. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
 
 ![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
 
