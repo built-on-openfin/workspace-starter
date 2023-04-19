@@ -9,8 +9,7 @@ import {
 	type BrowserWindowModule,
 	type Page,
 	type PageLayout,
-	type ToolbarOptions,
-	type WorkspacePlatformModule
+	type ToolbarOptions
 } from "@openfin/workspace-platform";
 
 const DEFAULT_PAGE_LAYOUT: () => PageLayout = () => ({
@@ -40,8 +39,6 @@ const DEFAULT_PAGE_LAYOUT: () => PageLayout = () => ({
 		}
 	]
 });
-
-const platform: WorkspacePlatformModule = getCurrentSync();
 
 document.addEventListener("DOMContentLoaded", async () => {
 	// create browser window with view
@@ -91,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (getBrowserPagesBtn) {
 		getBrowserPagesBtn.addEventListener("click", async () => {
 			await (fin.me as OpenFin.Window).showDeveloperTools();
+			const platform = getCurrentSync();
 			const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
 			if (lastFocusedWindow) {
 				const pages = await platform.Browser.getAllAttachedPages();
@@ -115,6 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const quitBtn = document.querySelector("#quit");
 	if (quitBtn) {
 		quitBtn.addEventListener("click", async () => {
+			const platform = getCurrentSync();
 			await platform.quit();
 		});
 	}
@@ -132,6 +131,8 @@ export async function createBrowserWindow(hasUnsavedChanges = true): Promise<Bro
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -156,6 +157,8 @@ export async function createBrowserWindowMaximized(): Promise<BrowserWindowModul
 		workspacePlatform: { pages },
 		state: "maximized"
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -174,6 +177,8 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
 			showFavicons: false
 		}
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -216,6 +221,8 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages, toolbarOptions }
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -233,6 +240,8 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -287,6 +296,7 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
 		workspacePlatform: { pages, toolbarOptions }
 	};
 
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
@@ -345,6 +355,8 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
 	};
+
+	const platform = getCurrentSync();
 	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
 	return createdBrowserWin;
 }
