@@ -1,10 +1,8 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
+import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
-export async function getApps(): Promise<App[]> {
-	return [experoApp, notificationStudio, processManager, developerContent];
-}
-
-export const experoApp: App = {
+export const EXPERO_APP: App = {
 	appId: "expero-company-news",
 	title: "Gateway - Company News",
 	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
@@ -43,7 +41,7 @@ export const experoApp: App = {
 	]
 };
 
-export const notificationStudio: App = {
+export const NOTIFICATION_STUDIO: App = {
 	appId: "notifications-generator",
 	title: "OpenFin Notifications Studio",
 	manifestType: "manifest",
@@ -67,7 +65,7 @@ export const notificationStudio: App = {
 	tags: ["hero", "manifest", "tools"]
 };
 
-export const processManager: App = {
+export const PROCESS_MANAGER: App = {
 	appId: "openfin-process-manager",
 	title: "OpenFin Process Manager",
 	manifestType: "manifest",
@@ -87,7 +85,7 @@ export const processManager: App = {
 	tags: ["hero", "manifest", "tools"]
 };
 
-export const developerContent: App = {
+export const DEVELOPER_CONTENT: App = {
 	appId: "openfin-developer-page",
 	title: "OpenFin Developer Docs",
 	manifestType: "snapshot",
@@ -106,3 +104,48 @@ export const developerContent: App = {
 	],
 	tags: ["page"]
 };
+
+/**
+ * Launch the passed app using its manifest type to determine how to launch it.
+ * @param app The app to launch.
+ */
+export async function launchApp(
+	app: App
+): Promise<OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined> {
+	if (!app.manifest) {
+		console.error(`No manifest was provided for type ${app.manifestType}`);
+		return;
+	}
+
+	let ret: OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined;
+
+	console.log("Application launch requested:", app);
+
+	switch (app.manifestType) {
+		case AppManifestType.Snapshot: {
+			const platform = getCurrentSync();
+			ret = await platform.applySnapshot(app.manifest);
+			break;
+		}
+
+		case AppManifestType.View: {
+			const platform = getCurrentSync();
+			ret = await platform.createView({ manifestUrl: app.manifest });
+			break;
+		}
+
+		case AppManifestType.External: {
+			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
+			break;
+		}
+
+		default: {
+			ret = await fin.Application.startFromManifest(app.manifest);
+			break;
+		}
+	}
+
+	console.log("Finished application launch request");
+
+	return ret;
+}
