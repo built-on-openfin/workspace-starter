@@ -5,24 +5,25 @@
 
 # Integrate With Bloomberg (Basic)
 
-## Pre-requisites  
-- Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: https://www.bloomberg.com/professional/support/software-updates/  
-- A domain that is set uo with Bloomberg IT so that the BBG terminal will accept requests originating from that domain  
-  
+## Pre-requisites
+
+- Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: <https://www.bloomberg.com/professional/support/software-updates/>
+- A domain that is set uo with Bloomberg IT so that the BBG terminal will accept requests originating from that domain
+
 ## Notes about this sample
+
 This application you are about to install is a simple example of connecting to a Bloomberg Terminal.  
-  When a connection is established between your OpenFin app and the Bloomberg Terminal, the Terminal reacts to Interop events and shares the appropriate context. The reaction depends on the type of context. You can configure contexts and intents, but we provide a default configuration for the most common contexts and intents.  
-  The default configuration always directs interop actions to Terminal panel 1 and maps context types and intents to Terminal functions as follows:  
- 
-  |Intent Name   |  ContentType    | Terminal Function |
-  |------------  |---------------  |-------------------|
-  |ViewChart	  | fdc3.instrument |	GP              |
-  |ViewContact	  |  fdc3.contact   |   BIO             |
-  |ViewInstrument|  fdc3.instrument|	DES             |
-  |ViewQuote	  | fdc3.instrument |  Q                |
- 
-  
-  This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+ When a connection is established between your OpenFin app and the Bloomberg Terminal, the Terminal reacts to Interop events and shares the appropriate context. The reaction depends on the type of context. You can configure contexts and intents, but we provide a default configuration for the most common contexts and intents.  
+ The default configuration always directs interop actions to Terminal panel 1 and maps context types and intents to Terminal functions as follows:
+
+| Intent Name    | ContentType     | Terminal Function |
+| -------------- | --------------- | ----------------- |
+| ViewChart      | fdc3.instrument | GP                |
+| ViewContact    | fdc3.contact    | BIO               |
+| ViewInstrument | fdc3.instrument | DES               |
+| ViewQuote      | fdc3.instrument | Q                 |
+
+This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
 ## Running the Sample
 
@@ -59,14 +60,13 @@ npm run start
 ```shell
 npm run client
 
-```  
+```
 
-##### Please note: In the manifest.json file, please change "http://localhost:8080" under snapshot/windows/layout/content to point to your domain:
+### Please note: In the manifest.json file, please change "http://localhost:8080" under snapshot/windows/layout/content to point to your domain
 
-   "url": "http://localhost:8080/platform/bbgtest.html",  
+"url": "http://localhost:8080/platform/bbgtest.html",
 
-##### Please also note that you must establish a connection to the Bloomberg Terminal and verify that you receive the "connected" message prior to raising any intents. You may connect to the Bloomberg Terminal via the "Connect to Bloomberg Terminal" button.  
-
+### Please also note that you must establish a connection to the Bloomberg Terminal and verify that you receive the "connected" message prior to raising any intents. You may connect to the Bloomberg Terminal via the "Connect to Bloomberg Terminal" button
 
 5. If you modify and want to build the code you can run the build command.
 

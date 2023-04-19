@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		provider: path.join(__dirname, 'src', 'provider.ts'),// './client/src/provider.ts',
-		bbgtest: path.join(__dirname, 'src', 'bbgtest.ts')// './client/src/bbgtest.js'
+		provider: path.join(__dirname, 'src', 'provider.ts'), // './client/src/provider.ts',
+		bbgtest: path.join(__dirname, 'src', 'bbgtest.ts') // './client/src/bbgtest.js'
 	},
 	devtool: 'inline-source-map',
 	module: {

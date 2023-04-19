@@ -15,32 +15,32 @@
 	},
 	"snapshot": {
 		"windows": [
-		  {
-			"icon": "http://localhost:8080/favicon-32x32.png",
-			"defaultHeight": 500,
-			"defaultWidth": 900,
-			"center": true,
-			"saveWindowState": true,
-			"alwaysOnTop":false,
-			"layout": {				
-				"content": [
-					{
-						"type": "component",
-						"componentName": "view",
-						"componentState": {
-							"name": "bbgTest",
-							"processAffinity": "ps_1",
-							"url": "http://localhost:8080/platform/bbgtest.html",
-							"interop":{
-							"currentContextGroup": "green"
+			{
+				"icon": "http://localhost:8080/favicon-32x32.png",
+				"defaultHeight": 500,
+				"defaultWidth": 900,
+				"center": true,
+				"saveWindowState": true,
+				"alwaysOnTop": false,
+				"layout": {
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "bbgTest",
+								"processAffinity": "ps_1",
+								"url": "http://localhost:8080/platform/bbgtest.html",
+								"interop": {
+									"currentContextGroup": "green"
+								}
 							}
 						}
-					}
-				]					
+					]
+				}
 			}
-		  }
 		]
-	  },
+	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
