@@ -1,4 +1,4 @@
-import {
+import type {
 	CLIFilter,
 	CLIFilterOptionType,
 	CLITemplate,
@@ -236,7 +236,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			const tagFilter: CLIFilter = {
 				id: AppProvider._HOME_TAG_FILTERS,
 				title: "Tags",
-				type: CLIFilterOptionType.MultiSelect,
+				type: "MultiSelect" as CLIFilterOptionType.MultiSelect,
 				options: []
 			};
 
@@ -294,7 +294,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					entry.shortDescription = app.description;
 				}
 
-				entry.template = CLITemplate.Custom;
+				entry.template = "Custom" as CLITemplate.Custom;
 				entry.templateContent = await this._integrationHelpers.templateHelpers.createApp(
 					app,
 					entry.icon,

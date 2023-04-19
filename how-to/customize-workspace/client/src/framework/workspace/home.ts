@@ -97,6 +97,7 @@ async function onUserInput(
 		const queryLower = request.query.toLowerCase();
 
 		if (queryLower === "?") {
+			logger.info("Integration Help requested.");
 			const integrationHelpSearchEntries = await getHelpSearchEntries();
 			const searchResults = {
 				results: integrationHelpSearchEntries,
@@ -121,6 +122,7 @@ async function onUserInput(
 
 		let sourceFilterOptions: string[] = [];
 
+		logger.info("Search results requested.");
 		const searchResults = await getSearchResults(
 			request.query,
 			filters,
@@ -159,7 +161,11 @@ async function onUserInput(
 		if (finalFilters.length > 0) {
 			searchResults.context.filters = finalFilters;
 		}
-
+		if (!Array.isArray(searchResults?.results)) {
+			logger.info("No results array returned.");
+		} else {
+			logger.info(`${searchResults.results.length} results returned.`);
+		}
 		return searchResults;
 	} catch (err) {
 		logger.error("Exception while getting search list results", err);

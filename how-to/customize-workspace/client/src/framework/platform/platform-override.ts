@@ -57,26 +57,34 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
+			if (query !== undefined) {
+				logger.info(`Saved workspaces requested with query: ${query}`);
+			}
 			const getWorkspacesEndpointId = "workspace-get";
 
+			logger.info(`Checking for custom workspace storage with endpoint id: ${getWorkspacesEndpointId}`);
 			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
+				logger.info("Requesting saved workspaces from custom storage");
 				const workspacesResponse = await endpointProvider.requestResponse<
 					{ query?: string },
 					{ [key: string]: Workspace }
 				>(getWorkspacesEndpointId, { query });
-				logger.info(`Returning saved workspaces from custom storage for query: ${query ?? "none"}`);
+				logger.info("Returning saved workspaces from custom storage");
 				return Object.values(workspacesResponse);
 			}
-			logger.info(`Returning saved workspaces from default storage for query: ${query ?? "none"}`);
-			return super.getSavedWorkspaces(query);
+			logger.info("Requesting saved workspaces from default storage");
+			const savedWorkspaces = await super.getSavedWorkspaces(query);
+			logger.info("Returning saved workspaces from default storage");
+			return savedWorkspaces;
 		}
 
 		public async getSavedWorkspace(id: string): Promise<Workspace> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			const getWorkspaceEndpointId = "workspace-get";
-
+			logger.info(`Checking for custom workspace storage with endpoint id: ${getWorkspaceEndpointId}`);
 			if (endpointProvider.hasEndpoint(getWorkspaceEndpointId)) {
+				logger.info(`Requesting saved workspace from custom storage for workspace id: ${id}`);
 				const workspaceResponse = await endpointProvider.requestResponse<{ id: string }, Workspace>(
 					getWorkspaceEndpointId,
 					{ id }
@@ -84,15 +92,17 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
 				return workspaceResponse;
 			}
+			logger.info(`Requesting saved workspace from default storage for workspace id: ${id}`);
+			const savedWorkspace = await super.getSavedWorkspace(id);
 			logger.info(`Returning saved workspace from default storage for workspace id: ${id}`);
-			return super.getSavedWorkspace(id);
+			return savedWorkspace;
 		}
 
 		public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			const setWorkspaceEndpointId = "workspace-set";
-
+			logger.info(`Checking for custom workspace storage with endpoint id: ${setWorkspaceEndpointId}`);
 			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
 					setWorkspaceEndpointId,
@@ -103,11 +113,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				} else {
 					logger.info(`Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				}
-				return;
+			} else {
+				logger.info(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
+				await super.createSavedWorkspace(req);
+				logger.info(`Saved workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
 			}
-			logger.info(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
-
-			const res = await super.createSavedWorkspace(req);
 
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "workspace-changed", {
@@ -115,15 +125,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
 			} as WorkspaceChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			const setWorkspaceEndpointId = "workspace-set";
-
+			logger.info(`Checking for custom workspace storage with endpoint id: ${setWorkspaceEndpointId}`);
 			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
 					setWorkspaceEndpointId,
@@ -136,13 +144,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 						`Unable to update workspace with id: ${req.workspace.workspaceId} against custom storage`
 					);
 				}
-				return;
+			} else {
+				logger.info(
+					`Saving updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
+				);
+				await super.updateSavedWorkspace(req);
+				logger.info(
+					`Saved updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
+				);
 			}
-			logger.info(
-				`Saving updated workspace to default storage for workspace id: ${req.workspace.workspaceId}.`
-			);
-
-			const res = await super.updateSavedWorkspace(req);
 
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "workspace-changed", {
@@ -150,15 +160,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
 			} as WorkspaceChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async deleteSavedWorkspace(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			const removeWorkspaceEndpointId = "workspace-remove";
-
+			logger.info(`Checking for custom workspace storage with endpoint id: ${removeWorkspaceEndpointId}`);
 			if (endpointProvider.hasEndpoint(removeWorkspaceEndpointId)) {
 				const success = await endpointProvider.action<{ id: string }>(removeWorkspaceEndpointId, { id });
 				if (success) {
@@ -166,52 +174,59 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				} else {
 					logger.info(`Unable to remove workspace with id: ${id} from custom storage`);
 				}
-				return;
+			} else {
+				logger.info(`Deleting workspace from default storage for workspace id: ${id}`);
+				await super.deleteSavedWorkspace(id);
+				logger.info(`Deleted workspace from default storage for workspace id: ${id}`);
 			}
-			logger.info(`Deleting workspace from default storage for workspace id: ${id}`);
-
-			const res = await super.deleteSavedWorkspace(id);
 
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "workspace-changed", {
 				action: "delete",
 				id
 			} as WorkspaceChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
+			if (query !== undefined) {
+				logger.info(`Saved pages requested with query: ${query}`);
+			}
 			const getPagesEndpointId = "page-get";
-
+			logger.info(`Checking for custom page storage with endpoint id: ${getPagesEndpointId}`);
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
+				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
 					{ query: string },
 					{ [key: string]: Page }
 				>(getPagesEndpointId, { query });
-				logger.info(`Returning saved pages from custom storage for query: ${query ?? "none"}`);
+				logger.info("Returning saved pages from custom storage");
 				return Object.values(pagesResponse);
 			}
-			logger.info(`Returning saved pages from default storage for query: ${query ?? "none"}`);
-			return super.getSavedPages(query);
+			logger.info("Getting saved pages from default storage");
+			const pagesResponse = await super.getSavedPages(query);
+			logger.info("Returning saved pages from default storage");
+			return pagesResponse;
 		}
 
 		public async getSavedPage(id: string): Promise<Page> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const getPageEndpointId = "page-get";
-
+			logger.info(`Checking for custom page storage with endpoint id: ${getPageEndpointId}`);
 			if (endpointProvider.hasEndpoint(getPageEndpointId)) {
+				logger.info(`Getting saved page from custom storage for page id: ${id}`);
 				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
 					id
 				});
 				logger.info(`Returning saved page from custom storage for page id: ${id}`);
 				return pageResponse;
 			}
+			logger.info(`Getting saved page with id ${id} from default storage`);
+			const pageResponse = await super.getSavedPage(id);
 			logger.info(`Returning saved page with id ${id} from default storage`);
-			return super.getSavedPage(id);
+			return pageResponse;
 		}
 
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
@@ -221,8 +236,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const setPageEndpointId = "page-set";
-
+			logger.info(`Checking for custom page storage with endpoint id: ${setPageEndpointId}`);
 			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
+				logger.info(`Saving page with id: ${req.page.pageId} to custom storage`);
 				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
 					id: req.page.pageId,
 					payload: req.page
@@ -232,11 +248,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				} else {
 					logger.info(`Unable to save page with id: ${req.page.pageId} to custom storage`);
 				}
-				return;
+			} else {
+				logger.info(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
+				await super.createSavedPage(req);
+				logger.info(`Saved page with id: ${req.page.pageId} to default storage`);
 			}
-			logger.info(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
-
-			const res = await super.createSavedPage(req);
 
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "page-changed", {
@@ -244,8 +260,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				id: req.page.pageId,
 				page: req.page
 			} as PageChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
@@ -255,8 +269,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const setPageEndpointId = "page-set";
-
+			logger.info(`Checking for custom page storage with endpoint id: ${setPageEndpointId}`);
 			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
+				logger.info(`Updating saved page and saving to custom storage with page id: ${req.page.pageId}`);
 				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
 					id: req.page.pageId,
 					payload: req.page
@@ -266,11 +281,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				} else {
 					logger.info(`Unable to save page with id: ${req.page.pageId} against custom storage`);
 				}
-				return;
+			} else {
+				logger.info(`updating saved page and saving to default storage with page id: ${req.page.pageId}`);
+				await super.updateSavedPage(req);
+				logger.info(`Updated page with id: ${req.page.pageId} against default storage`);
 			}
-			logger.info(`updating saved page and saving to default storage with page id: ${req.page.pageId}`);
-
-			const res = await super.updateSavedPage(req);
 
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "page-changed", {
@@ -278,8 +293,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				id: req.page.pageId,
 				page: req.page
 			} as PageChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async deleteSavedPage(id: string): Promise<void> {
@@ -289,26 +302,25 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const removePageEndpointId = "page-remove";
+			logger.info(`Checking for custom page storage with endpoint id: ${removePageEndpointId}`);
 			if (endpointProvider.hasEndpoint(removePageEndpointId)) {
+				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
 				const success = await endpointProvider.action<{ id: string }>(removePageEndpointId, { id });
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {
 					logger.info(`Unable to remove page with id: ${id} from custom storage`);
 				}
-				return;
+			} else {
+				logger.info(`deleting saved page from default storage. PageId: ${id}`);
+				await super.deleteSavedPage(id);
+				logger.info(`Removed page with id: ${id} from custom storage`);
 			}
-			logger.info(`deleting saved page from default storage. PageId: ${id}`);
-
-			const res = await super.deleteSavedPage(id);
-
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "page-changed", {
 				action: "delete",
 				id
 			} as PageChangedLifecyclePayload);
-
-			return res;
 		}
 
 		public async openGlobalContextMenu(
