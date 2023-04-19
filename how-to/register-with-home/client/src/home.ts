@@ -14,34 +14,41 @@ import {
 } from "@openfin/workspace";
 import { getCurrentSync, type Page } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
-import type { CustomSettings } from "./shapes";
+import type { AppProviderSettings, HomeProviderSettings } from "./shapes";
 
 const HOME_ACTION_DELETE_PAGE = "Delete Page";
 const HOME_ACTION_LAUNCH_PAGE = "Launch Page";
 
-let isHomeRegistered = false;
+let homeRegistration: HomeRegistration | undefined;
 
 /**
  * Register with the home component.
- * @param customSettings The custom settings from the manifest.
+ * @param appSettings The app settings from the manifest.
+ * @param homeSettings The home settings from the manifest.
  * @returns The registration details for home.
  */
-export async function register(customSettings: CustomSettings): Promise<HomeRegistration | undefined> {
+export async function register(
+	appSettings: AppProviderSettings | undefined,
+	homeSettings: HomeProviderSettings | undefined
+): Promise<HomeRegistration | undefined> {
 	console.log("Initialising home.");
 
-	if (
-		customSettings.homeProvider === undefined ||
-		customSettings.homeProvider.id === undefined ||
-		customSettings.homeProvider.title === undefined
-	) {
+	if (appSettings === undefined) {
+		console.warn(
+			"appProvider: not configured in the customSettings of your manifest correctly. Ensure you have the appProvider object defined in customSettings"
+		);
+		return;
+	}
+
+	if (homeSettings === undefined || homeSettings.id === undefined || homeSettings.title === undefined) {
 		console.warn(
 			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);
 		return;
 	}
 
-	const queryMinLength = customSettings?.homeProvider?.queryMinLength ?? 3;
-	const queryAgainst = customSettings?.homeProvider?.queryAgainst;
+	const queryMinLength = homeSettings.queryMinLength ?? 3;
+	const queryAgainst = homeSettings.queryAgainst;
 	let lastResponse: CLISearchListenerResponse;
 
 	// The callback fired when the user types in the home query
@@ -64,7 +71,7 @@ export async function register(customSettings: CustomSettings): Promise<HomeRegi
 		lastResponse = response;
 		lastResponse.open();
 
-		return getResults(customSettings, queryLower, queryMinLength, queryAgainst, filters);
+		return getResults(appSettings, queryLower, queryMinLength, queryAgainst, filters);
 	};
 
 	// The callback fired when a selection is made in home
@@ -100,37 +107,33 @@ export async function register(customSettings: CustomSettings): Promise<HomeRegi
 	};
 
 	const cliProvider: CLIProvider = {
-		title: customSettings.homeProvider.title,
-		id: customSettings.homeProvider.id,
-		icon: customSettings.homeProvider.icon,
+		title: homeSettings.title,
+		id: homeSettings.id,
+		icon: homeSettings.icon,
 		onUserInput,
 		onResultDispatch: onSelection
 	};
 
-	const homeRegistration = await Home.register(cliProvider);
-	isHomeRegistered = true;
+	homeRegistration = await Home.register(cliProvider);
 	console.log("Home configured.");
 	console.log(homeRegistration);
 }
 
 /**
  * Deregister from home.
- * @param customSettings The custom settings from the manifest.
- * @returns Nothing
+ * @param homeSettings The home settings from the manifest.
+ * @returns Nothing.
  */
-export async function deregister(customSettings: CustomSettings): Promise<void> {
-	if (isHomeRegistered) {
-		isHomeRegistered = false;
-		if (customSettings.homeProvider) {
-			return Home.deregister(customSettings.homeProvider.id);
-		}
+export async function deregister(homeSettings: HomeProviderSettings | undefined): Promise<void> {
+	if (homeRegistration && homeSettings?.id) {
+		return Home.deregister(homeSettings.id);
 	}
 	console.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
 /**
  * Get the list of results to show in home.
- * @param customSettings The custom settings from the manifest.
+ * @param appSettings The app settings from the manifest.
  * @param queryLower Lower case version of query.
  * @param queryMinLength The min length that we can handle.
  * @param queryAgainst The fields to query against in the apps.
@@ -138,13 +141,13 @@ export async function deregister(customSettings: CustomSettings): Promise<void> 
  * @returns The search response containing results and filters.
  */
 async function getResults(
-	customSettings: CustomSettings,
+	appSettings: AppProviderSettings,
 	queryLower: string,
 	queryMinLength = 3,
 	queryAgainst: string[] = ["title"],
 	filters?: CLIFilter[]
 ): Promise<CLISearchResponse> {
-	const apps = await getApps(customSettings);
+	const apps = await getApps(appSettings);
 
 	const platform = getCurrentSync();
 	const pages = await platform.Storage.getPages();

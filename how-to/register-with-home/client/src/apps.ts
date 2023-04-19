@@ -1,40 +1,55 @@
 import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
 import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
-import type { CustomSettings } from "./shapes";
+import type { AppProviderSettings } from "./shapes";
+
+let lastCacheUpdate: number = 0;
+let cachedApps: App[] = [];
 
 /**
  * Load the apps from the json feeds configured in the custom settings.
- * @param customSettings The custom settings from the manifest.
+ * @param appSettings The app settings from the manifest.
  * @returns The list of apps.
  */
-export async function getApps(customSettings: CustomSettings): Promise<App[]> {
-	console.log("Requesting apps.");
-	try {
-		let apps: App[] = [];
+export async function getApps(appSettings: AppProviderSettings | undefined): Promise<App[]> {
+	if (appSettings) {
+		const cacheDurationInMinutes = appSettings?.cacheDurationInMinutes ?? 1;
+		const now = Date.now();
+		if (now - lastCacheUpdate > cacheDurationInMinutes * 60 * 1000) {
+			lastCacheUpdate = now;
 
-		if (customSettings?.appProvider?.appSourceUrls) {
-			for (const url of customSettings.appProvider.appSourceUrls) {
-				const response = await fetch(url, { credentials: "include" });
-				const json = await response.json();
-				apps = apps.concat(json as App[]);
+			console.log("Requesting apps.");
+			try {
+				let apps: App[] = [];
+
+				if (appSettings?.appSourceUrls) {
+					for (const url of appSettings.appSourceUrls) {
+						const response = await fetch(url, { credentials: "include" });
+						const json = await response.json();
+						apps = apps.concat(json as App[]);
+					}
+				}
+
+				cachedApps = await validateEntries(appSettings, apps);
+			} catch (err) {
+				console.error("Error retrieving apps. Returning empty list.", err);
+				cachedApps = [];
 			}
 		}
-
-		return await validateEntries(customSettings, apps);
-	} catch (err) {
-		console.error("Error retrieving apps. Returning empty list.", err);
-		return [];
+	} else {
+		console.warn("No appProvider settings in the manifest");
 	}
+
+	return cachedApps;
 }
 
 /**
  * Validate that the apps have the correct permissions enabled.
- * @param customSettings The custom settings from the manifest.
+ * @param appSettings The app settings from the manifest.
  * @param apps The apps the validate.
  * @returns The list of validated apps.
  */
-async function validateEntries(customSettings: CustomSettings, apps: App[]): Promise<App[]> {
+async function validateEntries(appSettings: AppProviderSettings, apps: App[]): Promise<App[]> {
 	let canLaunchExternalProcessResponse;
 
 	try {
@@ -57,8 +72,8 @@ async function validateEntries(customSettings: CustomSettings, apps: App[]): Pro
 
 	const validatedApps: App[] = [];
 	const rejectedAppIds = [];
-	const appAssetTag = "appasset";
-	const supportedManifestTypes = customSettings?.appProvider?.manifestTypes;
+	const appAssetTag = appSettings?.appAssetTag ?? "appasset";
+	const supportedManifestTypes = appSettings?.manifestTypes;
 
 	for (const element of apps) {
 		const manifestType = element.manifestType;

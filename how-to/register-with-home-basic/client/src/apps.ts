@@ -90,7 +90,7 @@ export const DEVELOPER_CONTENT: App = {
 
 /**
  * Get the list of apps to display.
- * @returns List of app definitions
+ * @returns List of app definitions.
  */
 export async function getApps(): Promise<App[]> {
 	return [EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER, DEVELOPER_CONTENT];
