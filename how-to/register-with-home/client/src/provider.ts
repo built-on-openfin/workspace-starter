@@ -21,15 +21,15 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  * @param customSettings The custom settings from the manifest.
  */
-async function initializeWorkspacePlatform(settings: CustomSettings): Promise<void> {
+async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon: settings.homeProvider?.icon,
+				icon: customSettings.homeProvider?.icon,
 				workspacePlatform: {
 					pages: [],
-					favicon: settings.homeProvider?.icon
+					favicon: customSettings.homeProvider?.icon
 				}
 			}
 		},
@@ -55,19 +55,19 @@ export async function platformBootstrap(customSettings: CustomSettings): Promise
 	console.log("Initialising the bootstrapper");
 
 	// Register with home and show it
-	await register(customSettings);
+	await register(customSettings.appProvider, customSettings.homeProvider);
 	await Home.show();
 
 	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async () => {
-		await deregister(customSettings);
+		await deregister(customSettings.homeProvider);
 		await fin.Platform.getCurrentSync().quit();
 	});
 }
 
 /**
- * Read the custom settings from the manifest.fin.json
+ * Read the custom settings from the manifest.fin.json.
  * @returns The custom settings from the manifest.
  */
 export async function getManifestCustomSettings(): Promise<CustomSettings> {

@@ -17,6 +17,9 @@ import {
  * @param title The title to use for the dock registration.
  * @param icon The icon to use for the dock registration.
  * @param options The options to pass to the dock provider.
+ * @param options.workspaceComponents The workspace components options.
+ * @param options.customIconUrl Use a custom icon url.
+ * @param options.customOpenUrl Use a custom open url.
  * @param webRoot The web root for locating assets.
  * @returns The registration details for dock.
  */
