@@ -180,9 +180,17 @@ async function onSelection(result: HomeDispatchedSearchResult) {
 
 		if (result.action.trigger === "user-action") {
 			if (handled) {
-				logger.info(`The action for result with title: '${result.title}' for provider: '${result.data?.providerId ?? "unknown"}' was handled`);
+				logger.info(
+					`The action for result with title: '${result.title}' for provider: '${
+						result.data?.providerId ?? "unknown"
+					}' was handled`
+				);
 			} else {
-				logger.error(`The action for result with title: '${result.title}' for provider: '${result.data?.providerId ?? "unknown"}' was not handled`);
+				logger.error(
+					`The action for result with title: '${result.title}' for provider: '${
+						result.data?.providerId ?? "unknown"
+					}' was not handled`
+				);
 			}
 		}
 	} else {
