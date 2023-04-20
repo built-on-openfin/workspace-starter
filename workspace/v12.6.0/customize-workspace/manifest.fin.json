@@ -777,6 +777,30 @@
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
+					"id": "apps",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/favicon.ico",
+					"title": "Apps",
+					"description": "Search Applications",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/integrations/apps.bundle.js",
+					"data": {
+						"manifestTypeMapping": {
+							"view": { "entryLabel": "View", "actionName": "" },
+							"inline-view": { "entryLabel": "View", "actionName": "" },
+							"window": { "entryLabel": "Window", "actionName": "" },
+							"inline-window": { "entryLabel": "Window", "actionName": "" },
+							"snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"inline-snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"manifest": { "entryLabel": "App", "actionName": "Launch App" },
+							"external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
+							"endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
+							"connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
+						}
+					}
+				},
+				{
 					"id": "workspaces",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/favicon.ico",
 					"title": "Workspaces",

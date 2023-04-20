@@ -1226,12 +1226,36 @@
             "additionalProperties": false,
             "description": "HomeProvider Options",
             "properties": {
+                "commandCode": {
+                    "description": "A keycode that can be used to interact with this Search Provider.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "A short description of the Search Provider.",
+                    "type": "string"
+                },
+                "hidden": {
+                    "description": "A flag to indicate this provider will not be displayed as a command.",
+                    "type": "boolean"
+                },
                 "icon": {
-                    "description": "The icon to show in the Home component UI",
+                    "description": "An icon that a UI can display for the Search Provider.",
                     "type": "string"
                 },
                 "id": {
-                    "description": "The id to use when registering against the Workspace Home component",
+                    "description": "A unique ID used to identify the search provider.",
+                    "type": "string"
+                },
+                "inputPlaceholder": {
+                    "description": "The placeholder string to be displayed in a UI when targeting this specific Search Provider.",
+                    "type": "string"
+                },
+                "listTitle": {
+                    "description": "A title to display above the result list in a UI when targeting this specific Search Provider.",
+                    "type": "string"
+                },
+                "logoUrl": {
+                    "description": "Logo to show render when targeting this specific Search Provider.",
                     "type": "string"
                 },
                 "queryAgainst": {
@@ -1244,6 +1268,10 @@
                 "queryMinLength": {
                     "description": "How many characters need to be entered before filtering the available apps",
                     "type": "number"
+                },
+                "scoreOrder": {
+                    "$ref": "#/definitions/ScoreOrder",
+                    "description": "The order to sort the score in. The default is `ascending`."
                 },
                 "sourceFilter": {
                     "additionalProperties": false,
@@ -1261,7 +1289,7 @@
                     "type": "object"
                 },
                 "title": {
-                    "description": "The title to show in the Home component UI",
+                    "description": "A UI friendly title for the search provider.",
                     "type": "string"
                 }
             },
@@ -2754,6 +2782,14 @@
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_10"
+        },
+        "ScoreOrder": {
+            "description": "The order to sort scored search results in.",
+            "enum": [
+                "ascending",
+                "descending"
+            ],
+            "type": "string"
         },
         "ShowHideTabsConfig": {
             "$ref": "#/definitions/__type_26"
