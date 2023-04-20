@@ -36,6 +36,7 @@ import { createButton, createContainer, createHelp, createImage, createText, cre
 const logger = createLogger("Integrations");
 
 let isQueriedBeforeInit = false;
+let isInitialized = false;
 let queryBeforeInit: string;
 
 let integrationProviderOptions: IntegrationProviderOptions;
@@ -50,7 +51,7 @@ let integrationHelpers: IntegrationHelpers;
 const POPULATE_QUERY = "Populate Query";
 
 /**
- * Initialise all the integrations.
+ * Initialize all the integrations.
  * @param integrationOptions The integration provider settings.
  */
 export async function init(
@@ -60,7 +61,7 @@ export async function init(
 ): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
-
+		logger.info("Initializing integrations.");
 		integrationProviderOptions = options;
 		integrationHelpers = {
 			...helpers,
@@ -115,10 +116,12 @@ export async function init(
 
 		// Initialize just the auto start modules
 		await initializeModules(initModules, integrationHelpers);
-
+		isInitialized = true;
 		if (isQueriedBeforeInit) {
 			try {
+				logger.info("A query was passed before integrations was initialized. Resending the last query.");
 				await homeRegistration.setSearchQuery(queryBeforeInit);
+				logger.info("Last query has been resent.");
 			} catch (error) {
 				logger.error(
 					"There was an error while trying to set the last query that was set before initialization.",
@@ -126,6 +129,7 @@ export async function init(
 				);
 			}
 		}
+		logger.info("Integrations has been initialized.");
 	}
 }
 
@@ -163,7 +167,7 @@ export async function getSearchResults(
 		sourceFilters: []
 	};
 
-	if (!integrationProviderOptions) {
+	if (!isInitialized) {
 		isQueriedBeforeInit = true;
 		queryBeforeInit = query;
 		logger.warn(`We received a query: ${query} before being initialized.`);
