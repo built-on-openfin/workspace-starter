@@ -120,6 +120,10 @@ export async function init(
 		if (isQueriedBeforeInit) {
 			try {
 				logger.info("A query was passed before integrations was initialized. Resending the last query.");
+				const refreshQuery: string = `${queryBeforeInit} `;
+				// send a query different from initial query as resending the initial query does clear the cache
+				await homeRegistration.setSearchQuery(refreshQuery);
+				// resend the initial query
 				await homeRegistration.setSearchQuery(queryBeforeInit);
 				logger.info("Last query has been resent.");
 			} catch (error) {
