@@ -53,19 +53,23 @@ For example, to only show results after a minimum of 3 characters have been ente
 }
 ```
 
+We also support all the other settings available when registering home through code. We do however keep **dispatchFocusEvents** set to true to ensure that integrations have the most flexibility (i.e. fetch data on focus).
+
 ## Sources And Results
 
 The sources that provide the results for the home components fall into 3 categories, `apps`, `commands` and `search` results.
 
-- `Apps` are retrieved from the app sources configured for the platform, see [How To Define Apps](./how-to-define-apps.md)
+- `Apps` are retrieved from the app sources configured for the platform, see [How To Define Apps](./how-to-define-apps.md). App support in home is provided via an integration so please also see [How to Add Integrations to Home](./how-to-add-integrations-to-home.md)
 - `Commands` are fixed entries, there are some built-in like `/dock`, `/store`, `/notifications`, but these can be extended using custom commands, see [How to Add Integrations to Home](./how-to-add-integrations-to-home.md)
 - `Search` entries can be used to provide results from search and other endpoints, see [How to Add Integrations to Home](./how-to-add-integrations-to-home.md)
 
-Apps use a fixed template for display as a search result:
+Apps use an integration module called apps that provides a template using the app data available:
 
 ![Apps Template](./assets/home-apps.png)
 
-Whereas commands and search entries can have custom templates with richer layouts:
+But you can create your own apps integration that returns a dynamic or customized template instead.
+
+Commands and search entries can have custom templates with richer layouts:
 
 ![Commands Template](./assets/home-commands.png)
 

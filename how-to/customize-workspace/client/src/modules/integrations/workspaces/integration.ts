@@ -21,12 +21,6 @@ import type { WorkspacesSettings } from "./shapes";
  */
 export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings> {
 	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "workspaces";
-
-	/**
 	 * The key to use for opening a workspace.
 	 * @internal
 	 */
@@ -55,6 +49,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 * @internal
 	 */
 	private static readonly _ACTION_EXISTS_WORKSPACE = "Workspace Exists";
+
+	/**
+	 * Provider id.
+	 * @internal
+	 */
+	private _providerId: string;
 
 	/**
 	 * The settings from config.
@@ -108,7 +108,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("WorkspacesProvider");
-
+		this._providerId = definition.id;
 		this._integrationHelpers.subscribeLifecycleEvent(
 			"workspace-changed",
 			async (platform: WorkspacePlatformModule, payload: WorkspaceChangedLifecyclePayload) => {
@@ -144,13 +144,13 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 		return [
 			{
-				key: `${WorkspacesProvider._PROVIDER_ID}-help1`,
+				key: `${this._providerId}-help1`,
 				title: "Workspaces",
 				label: "Help",
 				icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 				actions: [],
 				data: {
-					providerId: WorkspacesProvider._PROVIDER_ID
+					providerId: this._providerId
 				},
 				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
@@ -202,7 +202,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 							icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 							actions: [],
 							data: {
-								providerId: WorkspacesProvider._PROVIDER_ID,
+								providerId: this._providerId,
 								tags: ["workspace"],
 								workspaceId: foundMatch.workspaceId
 							},
@@ -221,7 +221,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						label: "Suggestion",
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
-							providerId: WorkspacesProvider._PROVIDER_ID,
+							providerId: this._providerId,
 							tags: ["workspace"],
 							workspaceId: randomUUID(),
 							workspaceTitle: title
@@ -389,7 +389,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			icon,
 			actions,
 			data: {
-				providerId: WorkspacesProvider._PROVIDER_ID,
+				providerId: this._providerId,
 				workspaceTitle: title,
 				workspaceId: id,
 				tags: ["workspace"]

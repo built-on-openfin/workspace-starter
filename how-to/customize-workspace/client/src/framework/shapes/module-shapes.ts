@@ -1,5 +1,6 @@
 import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
@@ -73,6 +74,11 @@ export interface ModuleHelpers {
 	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace platform or a restarted instance of the platform.
 	 */
 	sessionId: string;
+
+	/**
+	 * Get the list of apps supported by this platform and/or user.
+	 */
+	getApps?(): Promise<PlatformApp[]>;
 
 	/**
 	 * Get the current theme id.
