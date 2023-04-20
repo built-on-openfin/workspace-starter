@@ -35,6 +35,9 @@ import { createButton, createContainer, createHelp, createImage, createText, cre
 
 const logger = createLogger("Integrations");
 
+let isQueriedBeforeInit = false;
+let queryBeforeInit: string;
+
 let integrationProviderOptions: IntegrationProviderOptions;
 let integrationModules: ModuleEntry<
 	IntegrationModule,
@@ -112,6 +115,17 @@ export async function init(
 
 		// Initialize just the auto start modules
 		await initializeModules(initModules, integrationHelpers);
+
+		if (isQueriedBeforeInit) {
+			try {
+				await homeRegistration.setSearchQuery(queryBeforeInit);
+			} catch (error) {
+				logger.error(
+					"There was an error while trying to set the last query that was set before initialization.",
+					error
+				);
+			}
+		}
 	}
 }
 
@@ -150,6 +164,9 @@ export async function getSearchResults(
 	};
 
 	if (!integrationProviderOptions) {
+		isQueriedBeforeInit = true;
+		queryBeforeInit = query;
+		logger.warn(`We received a query: ${query} before being initialized.`);
 		return homeResponse;
 	}
 
