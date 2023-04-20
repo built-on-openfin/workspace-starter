@@ -177,7 +177,14 @@ async function onUserInput(
 async function onSelection(result: HomeDispatchedSearchResult) {
 	if (result.data !== undefined) {
 		const handled = await itemSelection(result, lastResponse);
-		logger.info(`The selection for result with title: ${result.title} was handled: ${handled}`);
+
+		if (result.action.trigger === "user-action") {
+			if (handled) {
+				logger.info(`The action for result with title: '${result.title}' for provider: '${result.data?.providerId ?? "unknown"}' was handled`);
+			} else {
+				logger.error(`The action for result with title: '${result.title}' for provider: '${result.data?.providerId ?? "unknown"}' was not handled`);
+			}
+		}
 	} else {
 		logger.warn("Unable to execute result without data being passed");
 	}

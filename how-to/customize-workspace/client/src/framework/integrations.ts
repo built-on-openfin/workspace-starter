@@ -292,13 +292,7 @@ export async function itemSelection(
 
 		const foundIntegration = integrationModules.find((hi) => hi.definition.id === result.data?.providerId);
 		if (foundIntegration?.implementation?.itemSelection) {
-			const handled = await foundIntegration.implementation.itemSelection(result, lastResponse);
-
-			if (!handled) {
-				logger.warn(`Error while trying to handle ${foundIntegration.definition.id} entry`, result.data);
-			}
-
-			return handled;
+			return foundIntegration.implementation.itemSelection(result, lastResponse);
 		}
 	}
 
