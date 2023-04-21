@@ -8,7 +8,8 @@
 ## Pre-requisites
 
 - Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: <https://www.bloomberg.com/professional/support/software-updates/>
-- A domain that is set uo with Bloomberg IT so that the BBG terminal will accept requests originating from that domain
+- A domain that is set up with Bloomberg IT so that the BBG terminal will accept requests originating from that domain  
+- Please see the documentation online for more information - https://developers.openfin.co/of-docs/docs/integration-with-terminal-connect
 
 ## Notes about this sample
 
