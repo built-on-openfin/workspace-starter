@@ -82,10 +82,10 @@
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
-			"store": false,
+			"store": true,
 			"dock": true,
 			"notifications": true,
-			"autoShow": ["dock"]
+			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
