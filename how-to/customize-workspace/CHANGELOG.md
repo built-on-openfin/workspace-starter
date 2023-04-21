@@ -10,6 +10,7 @@
 - Added option of specifying whether you want the default Global, Page, or View Menu options included when you specify menu options in the browser provider (this is through browserProvider.menuOptions.includeDefaults)
 - Added optional function launchApp to the default module helpers so that modules that need to can launch an app that is listed in the directory (this feature allows the launching of apps without enabling the passing of an app Object)
 - Added new example init module that supports the launching of an app by id and enabled it in manifest.fin.json and settings.json e.g. launching call-app = fin://localhost:8080/manifest.fin.json?$$action=launch-app&$$payload=eyAiYXBwSWQiOiAiY2FsbC1hcHAiIH0= the payload is a base64 encoded string of an object that specifies appId.
+- Removed appAssetTag from appProvider and added support for two more manifest types. appasset - you have defined an app asset in your manifest and the manifest part of the app definition represents the alias. inline-appasset - you put the app asset definition as the manifest instead of putting it into appAssets in your manifest (so that it can be service and user driven). Also added additional error handling and logging to external and inline-external manifest support.
 
 ## v12
 

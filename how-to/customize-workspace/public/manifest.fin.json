@@ -64,15 +64,6 @@
 		"name": "Customize Workspace - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Customize Workspace - Client",
@@ -177,6 +168,8 @@
 				"inline-snapshot",
 				"external",
 				"inline-external",
+				"appasset",
+				"inline-appasset",
 				"manifest",
 				"desktop-browser",
 				"connection"
@@ -794,6 +787,8 @@
 							"manifest": { "entryLabel": "App", "actionName": "Launch App" },
 							"external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
 							"inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"inline-appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
 							"desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
 							"endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
 							"connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
