@@ -567,8 +567,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		const batchedResults = await this.getBatchedResults<
-			| SalesforceRestApiSearchResult<SalesforceSearchResult>
-			| SalesforceFeedElementPage
+			SalesforceRestApiSearchResult<SalesforceSearchResult> | SalesforceFeedElementPage
 		>(batch);
 
 		let results: SalesforceSearchResult[] = [];
