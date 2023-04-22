@@ -1658,6 +1658,10 @@
         "MenuEntry<GlobalContextMenuOptionType>": {
             "additionalProperties": false,
             "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
                 "conditions": {
                     "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
                     "items": {
@@ -1681,12 +1685,19 @@
                     ],
                     "type": "object"
                 },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
                 "include": {
                     "description": "Should this menu entry definition be included in the list of menu entries",
                     "type": "boolean"
                 },
                 "label": {
-                    "description": "What label should the user see when they look at this menu option",
                     "type": "string"
                 },
                 "position": {
@@ -1696,16 +1707,38 @@
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
                     "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
                 }
             },
-            "required": [
-                "label"
-            ],
             "type": "object"
         },
         "MenuEntry<PageTabContextMenuOptionType>": {
             "additionalProperties": false,
             "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
                 "conditions": {
                     "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
                     "items": {
@@ -1729,12 +1762,19 @@
                     ],
                     "type": "object"
                 },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
                 "include": {
                     "description": "Should this menu entry definition be included in the list of menu entries",
                     "type": "boolean"
                 },
                 "label": {
-                    "description": "What label should the user see when they look at this menu option",
                     "type": "string"
                 },
                 "position": {
@@ -1744,16 +1784,38 @@
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
                     "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
                 }
             },
-            "required": [
-                "label"
-            ],
             "type": "object"
         },
         "MenuEntry<ViewTabMenuOptionType>": {
             "additionalProperties": false,
             "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
                 "conditions": {
                     "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
                     "items": {
@@ -1777,12 +1839,19 @@
                     ],
                     "type": "object"
                 },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
                 "include": {
                     "description": "Should this menu entry definition be included in the list of menu entries",
                     "type": "boolean"
                 },
                 "label": {
-                    "description": "What label should the user see when they look at this menu option",
                     "type": "string"
                 },
                 "position": {
@@ -1792,11 +1861,84 @@
                 "separator": {
                     "$ref": "#/definitions/MenuSeparatorPosition",
                     "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
                 }
             },
-            "required": [
-                "label"
-            ],
+            "type": "object"
+        },
+        "MenuItemTemplate": {
+            "additionalProperties": false,
+            "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
+                "data": {
+                    "description": "Data to be returned if the user selects the element. Must be serializable"
+                },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "role": {
+                    "enum": [
+                        "copy",
+                        "cut",
+                        "paste",
+                        "reload",
+                        "toggleDevTools"
+                    ],
+                    "type": "string"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
+                }
+            },
             "type": "object"
         },
         "MenuPosition": {

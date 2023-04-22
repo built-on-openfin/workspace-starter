@@ -327,7 +327,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			req: OpenGlobalContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getGlobalMenu(req.template);
+			const template = await getGlobalMenu(req.template, { windowIdentity: req.identity });
 			if (template?.length > 0) {
 				await super.openGlobalContextMenu(
 					{
@@ -343,7 +343,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			req: OpenViewTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getViewMenu(req.template);
+			const template = await getViewMenu(req.template, {
+				windowIdentity: req.identity,
+				views: req.selectedViews
+			});
 			if (template?.length > 0) {
 				await super.openViewTabContextMenu(
 					{
@@ -359,7 +362,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getPageMenu(req.template);
+			const template = await getPageMenu(req.template, { windowIdentity: req.identity, pageId: req.pageId });
 			if (template?.length > 0) {
 				await super.openPageTabContextMenu(
 					{
