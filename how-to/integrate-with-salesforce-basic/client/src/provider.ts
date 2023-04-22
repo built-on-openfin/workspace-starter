@@ -1,22 +1,14 @@
 import {
 	connect,
+	SalesforceRestApiSObjectContact,
 	type SalesforceConnection,
-	type SalesforceRestApiSearchResponse,
-	type SalesforceRestApiSObject
+	type SalesforceRestApiSearchResult
 } from "@openfin/salesforce";
 import { getCurrentSync, init as workspacePlatformInit } from "@openfin/workspace-platform";
 import { CONSUMER_KEY, ORG_URL } from "./settings";
 
-type SalesforceContact = SalesforceRestApiSObject & {
-	Department?: string;
-	Email: string;
-	Name: string;
-	Phone?: string;
-	Title?: string;
-};
-
 let salesforceConnection: SalesforceConnection;
-let contacts: SalesforceContact[] = [];
+let contacts: SalesforceRestApiSObjectContact[] = [];
 
 let errorStatus: HTMLDivElement;
 let btnConnect: HTMLButtonElement;
@@ -26,6 +18,7 @@ let btnQuery: HTMLButtonElement;
 let txtQuery: HTMLInputElement;
 let tableResults: HTMLTableElement;
 let bodyResults: HTMLTableSectionElement;
+let username: HTMLDivElement;
 
 async function init() {
 	await workspacePlatformInit({
@@ -39,6 +32,7 @@ async function init() {
 	txtQuery = document.querySelector<HTMLInputElement>("#txtQuery");
 	tableResults = document.querySelector<HTMLTableElement>("#tableResults");
 	bodyResults = document.querySelector<HTMLTableSectionElement>("#bodyResults");
+	username = document.querySelector<HTMLDivElement>("#username");
 
 	updateConnectionStatus();
 	if (CONSUMER_KEY === "" || ORG_URL === "") {
@@ -57,6 +51,8 @@ async function init() {
 			btnConnect.disabled = true;
 			connectionStatus.textContent = "Salesforce is connecting";
 			salesforceConnection = await connect(ORG_URL, CONSUMER_KEY);
+
+			username.textContent = salesforceConnection.currentUser.Username;
 		} catch (err) {
 			errorStatus.textContent = `Error connecting to Salesforce\n${
 				err instanceof Error ? err.message : JSON.stringify(err)
@@ -71,7 +67,10 @@ async function init() {
 			if (salesforceConnection) {
 				await salesforceConnection.disconnect();
 			}
-		} catch {}
+		} catch {
+		} finally {
+			username.textContent = "Not connected";
+		}
 		salesforceConnection = undefined;
 		updateConnectionStatus();
 	});
@@ -89,7 +88,7 @@ async function init() {
 			const sfQuery = `FIND {${query}} IN ALL FIELDS RETURNING Contact(Department, Email, Id, Name, Phone, Title) LIMIT 10`;
 
 			const response = await salesforceConnection.executeApiRequest<
-				SalesforceRestApiSearchResponse<SalesforceRestApiSObject<SalesforceContact>>
+				SalesforceRestApiSearchResult<SalesforceRestApiSObjectContact>
 			>(`/services/data/vXX.X/search?q=${encodeURIComponent(sfQuery)}`);
 
 			if (response.data?.searchRecords?.length) {
@@ -157,7 +156,7 @@ function updateTable() {
 	}
 }
 
-async function openContact(contact: SalesforceContact) {
+async function openContact(contact: SalesforceRestApiSObjectContact) {
 	const viewOptions = {
 		url: `${ORG_URL}/${contact.Id}`,
 		fdc3InteropApi: "1.2",
