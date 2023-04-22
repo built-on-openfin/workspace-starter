@@ -1,8 +1,7 @@
+import type OpenFin from "@openfin/core";
+
 export function interopOverride(
-	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
-	provider?: OpenFin.ChannelProvider,
-	options?: OpenFin.InteropBrokerOptions,
-	...args: unknown[]
+	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
 		public async handleFiredIntent(intent: OpenFin.Intent) {
