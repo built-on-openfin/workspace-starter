@@ -209,6 +209,8 @@ We have a number of integrations we have built to allow you to configure customi
       "manifest": { "entryLabel": "App", "actionName": "Launch App" },
       "external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
       "inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+      "appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+      "inline-appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
       "desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
       "endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
       "connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }

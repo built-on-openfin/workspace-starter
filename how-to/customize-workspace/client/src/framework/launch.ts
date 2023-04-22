@@ -11,7 +11,6 @@ import {
 	doesWindowExist,
 	findViewNames
 } from "./platform/browser";
-import { getSettings } from "./settings";
 import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
 import { randomUUID } from "./uuid";
 
