@@ -926,6 +926,11 @@
 							"customData": {}
 						}
 					}
+				},
+				{
+					"enabled": true,
+					"id": "page-actions",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/page-menu/customize-workspace/js/modules/composite/pages.bundle.js"
 				}
 			]
 		},
@@ -1022,6 +1027,15 @@
 					"description": "Provides information about this platform.",
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/page-menu/customize-workspace/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "pages",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/page-menu/customize-workspace/favicon.ico",
+					"title": "Pages",
+					"description": "Provides additional menu options for pages.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/page-menu/customize-workspace/js/modules/composite/pages.bundle.js",
 					"data": {}
 				}
 			]
