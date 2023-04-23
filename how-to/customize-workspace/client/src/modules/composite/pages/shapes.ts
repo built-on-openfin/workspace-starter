@@ -1,6 +1,6 @@
 import type { MenuPosition } from "customize-workspace/shapes";
 
-export interface PageMenuOptions {
+export interface PageMenuSettings {
 	/** Settings related to the show page menu entry */
 	showPage?: {
 		/**

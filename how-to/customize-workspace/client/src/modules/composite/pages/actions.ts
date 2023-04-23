@@ -46,7 +46,7 @@ export class PageActions implements Actions {
 		const actionMap: CustomActionsMap = {};
 
 		actionMap["page-open"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
+			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const targetWindowIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (pageId !== undefined) {
@@ -77,7 +77,7 @@ export class PageActions implements Actions {
 		};
 
 		actionMap["page-show"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
+			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const parentIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (pageId !== undefined && parentIdentity !== undefined) {
@@ -96,7 +96,7 @@ export class PageActions implements Actions {
 		};
 
 		actionMap["page-delete"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
+			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
 				if (pageId !== undefined) {
 					this._logger.info(`Deleting page with id: ${pageId}`);

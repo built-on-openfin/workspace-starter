@@ -1,16 +1,10 @@
 import type OpenFin from "@openfin/core";
-import type { MenuItemTemplate } from "@openfin/core/src/OpenFin";
-import type {
-	GlobalContextMenuItemTemplate,
-	GlobalContextMenuOptionType,
-	Page,
-	WorkspacePlatformModule
-} from "@openfin/workspace-platform";
+import type { GlobalContextMenuOptionType, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { Menus } from "customize-workspace/shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { MenuEntry, MenuType, RelatedMenuId } from "customize-workspace/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
-import type { PageMenuOptions as PageMenuSettings } from "./shapes";
+import type { PageMenuSettings } from "./shapes";
 
 /**
  * Implement the menus.
@@ -52,7 +46,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 		menuType: MenuType,
 		platform: WorkspacePlatformModule,
 		relatedMenuId?: RelatedMenuId
-	): Promise<MenuEntry<MenuItemTemplate>[] | undefined> {
+	): Promise<MenuEntry[] | undefined> {
 		if (menuType === "global" && relatedMenuId.windowIdentity !== undefined) {
 			// you can customize the browser main menu here
 			const pages: Page[] = await platform.Storage.getPages();
@@ -61,30 +55,31 @@ export class PageMenus implements Menus<PageMenuSettings> {
 			const includeShowPage =
 				this._settings?.showPage?.include === undefined || this._settings?.showPage?.include;
 			const showPagesMenu: OpenFin.MenuItemTemplate[] = [];
-			const showPageMenuEntry: GlobalContextMenuItemTemplate = {
+			const showPageMenuEntry: MenuEntry = {
 				label: this._settings?.showPage?.menuLabel ?? "Show Page",
 				icon: this._settings?.showPage?.menuIcon,
 				enabled: pages.length > 0,
-				submenu: []
+				submenu: [],
+				position: {
+					type: "SavePageAs",
+					operation: "after",
+					customId: "ShowPage",
+					...this._settings?.showPage?.menuPosition
+				}
 			};
-			const showPagePosition = {
-				type: "SavePageAs",
-				operation: "after",
-				customId: "ShowPage",
-				...this._settings?.showPage?.menuPosition
-			};
-			const deletePageMenuEntry: GlobalContextMenuItemTemplate = {
+			const deletePageMenuEntry: MenuEntry = {
 				label: this._settings?.deletePage?.menuLabel ?? "Delete Page",
 				icon: this._settings?.deletePage?.menuIcon,
 				enabled: pages.length > 0,
-				submenu: []
+				submenu: [],
+				position: {
+					type: "SavePageAs",
+					operation: "after",
+					customId: "ShowDelete",
+					...this._settings?.deletePage?.menuPosition
+				}
 			};
-			const deletePagePosition = {
-				type: "SavePageAs",
-				operation: "after",
-				customId: "ShowDelete",
-				...this._settings?.deletePage?.menuPosition
-			};
+
 			const deletePagesMenu: OpenFin.MenuItemTemplate[] = [];
 
 			let browserWindowIdentity: OpenFin.Identity = relatedMenuId.windowIdentity;
@@ -93,10 +88,13 @@ export class PageMenus implements Menus<PageMenuSettings> {
 
 			const options = await browserWindow.openfinWindow.getOptions();
 			const workspaceOptions: OpenFin.WorkspacePlatformOptions = options.workspacePlatform;
+
 			if (workspaceOptions.disableMultiplePages === true) {
 				browserWindowIdentity = undefined;
 			}
+
 			const allOpenPages = await platform.Browser.getAllAttachedPages();
+
 			if (pages.length > 0) {
 				for (const page of pages) {
 					const existingPage = allOpenPages.find((openPage) => page.pageId === openPage.pageId);
@@ -146,11 +144,11 @@ export class PageMenus implements Menus<PageMenuSettings> {
 			const menuItemsToReturn = [];
 
 			if (includeDeletePage) {
-				menuItemsToReturn.push({ ...deletePageMenuEntry, position: deletePagePosition } as MenuEntry);
+				menuItemsToReturn.push(deletePageMenuEntry);
 			}
 
 			if (includeShowPage) {
-				menuItemsToReturn.push({ ...showPageMenuEntry, position: showPagePosition } as MenuEntry);
+				menuItemsToReturn.push(showPageMenuEntry);
 			}
 
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
