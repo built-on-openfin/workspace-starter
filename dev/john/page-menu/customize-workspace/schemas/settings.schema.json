@@ -200,10 +200,6 @@
             "additionalProperties": false,
             "description": "App Provider settings to configure where apps are fetched from.",
             "properties": {
-                "appAssetTag": {
-                    "description": "If app assets are included as part of the available apps what tag should the platform look for to identify it\nas such e.g. \"appasset\".",
-                    "type": "string"
-                },
                 "appsSourceUrl": {
                     "anyOf": [
                         {
@@ -1624,10 +1620,12 @@
         },
         "ManifestTypeId": {
             "enum": [
+                "appasset",
                 "connection",
                 "desktop-browser",
                 "endpoint",
                 "external",
+                "inline-appasset",
                 "inline-external",
                 "inline-snapshot",
                 "inline-view",
