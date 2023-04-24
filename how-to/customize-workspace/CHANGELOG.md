@@ -12,6 +12,7 @@
 - Added new example init module that supports the launching of an app by id and enabled it in manifest.fin.json and settings.json e.g. launching call-app = fin://localhost:8080/manifest.fin.json?$$action=launch-app&$$payload=eyAiYXBwSWQiOiAiY2FsbC1hcHAiIH0= the payload is a base64 encoded string of an object that specifies appId.
 - Removed appAssetTag from appProvider and added support for two more manifest types. appasset - you have defined an app asset in your manifest and the manifest part of the app definition represents the alias. inline-appasset - you put the app asset definition as the manifest instead of putting it into appAssets in your manifest (so that it can be service and user driven). Also added additional error handling and logging to external and inline-external manifest support.
 - Added support for two new composite modules: pages and windows. They contain action and menu implementations. The modules have been added to the manifest and settings.json to show how they can be configured. They show up in the main browser menu and two of the window management options are referenced in the dock. The two modules provide the following actions: page-open, page-show, page-delete, window-show-all, window-hide-all, window-hide-others. The customize workspace MenuEntry type has been updated to extend the MenuItemTemplate so that icon's can be specified and sub menus can be specified for a menu entry.
+- Added default window positioning strategy for browser windows, which cascades them offset from the previous one
 
 ## v12
 
