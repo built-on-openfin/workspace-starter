@@ -227,6 +227,11 @@
 				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/new-tab/new-tab.html"
 			},
+			"windowPositioningStrategy": {
+				"x": 30,
+				"y": 30,
+				"maxIncrements": 8
+			},
 			"globalMenu": [
 				{
 					"include": true,
@@ -798,20 +803,62 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/integrations/apps.bundle.js",
 					"data": {
 						"manifestTypeMapping": {
-							"view": { "entryLabel": "View", "actionName": "" },
-							"inline-view": { "entryLabel": "View", "actionName": "" },
-							"window": { "entryLabel": "Window", "actionName": "" },
-							"inline-window": { "entryLabel": "Window", "actionName": "" },
-							"snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
-							"inline-snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
-							"manifest": { "entryLabel": "App", "actionName": "Launch App" },
-							"external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
-							"inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
-							"appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
-							"inline-appasset": { "entryLabel": "Native App", "actionName": "Launch Native App" },
-							"desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
-							"endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
-							"connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
+							"view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"inline-view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"inline-window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"inline-snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"manifest": {
+								"entryLabel": "App",
+								"actionName": "Launch App"
+							},
+							"external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"desktop-browser": {
+								"entryLabel": "Desktop Browser",
+								"actionName": ""
+							},
+							"endpoint": {
+								"entryLabel": "Endpoint",
+								"actionName": "Launch"
+							},
+							"connection": {
+								"entryLabel": "Connected App",
+								"actionName": "Launch Connected App"
+							}
 						}
 					}
 				},
@@ -977,18 +1024,34 @@
 			],
 			"connections": [
 				{
-					"identity": { "uuid": "customize-workspace" },
-					"validatePayload": false,
-					"connectionTypes": [{ "type": "broker" }]
-				},
-				{
-					"identity": { "uuid": "*" },
+					"identity": {
+						"uuid": "customize-workspace"
+					},
 					"validatePayload": false,
 					"connectionTypes": [
-						{ "type": "appSource" },
-						{ "type": "snapshotSource" },
-						{ "type": "actions" },
-						{ "type": "broker" }
+						{
+							"type": "broker"
+						}
+					]
+				},
+				{
+					"identity": {
+						"uuid": "*"
+					},
+					"validatePayload": false,
+					"connectionTypes": [
+						{
+							"type": "appSource"
+						},
+						{
+							"type": "snapshotSource"
+						},
+						{
+							"type": "actions"
+						},
+						{
+							"type": "broker"
+						}
 					]
 				}
 			]

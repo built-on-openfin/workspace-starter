@@ -521,6 +521,29 @@
                         }
                     },
                     "type": "object"
+                },
+                "windowPositioningStrategy": {
+                    "$ref": "#/definitions/CascadingWindowOffsetStrategy",
+                    "description": "The strategy for window positioning."
+                }
+            },
+            "type": "object"
+        },
+        "CascadingWindowOffsetStrategy": {
+            "additionalProperties": false,
+            "description": "The cascading window strategy for positioning new windows.",
+            "properties": {
+                "maxIncrements": {
+                    "description": "The maximum number increment, before resetting to start, defaults to 8.",
+                    "type": "number"
+                },
+                "x": {
+                    "description": "The x offset to increment by for each new window, defaults to 30.",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "The y offset to increment by for each new window, defaults to 30.",
+                    "type": "number"
                 }
             },
             "type": "object"
