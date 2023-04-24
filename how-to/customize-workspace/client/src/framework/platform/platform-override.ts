@@ -426,10 +426,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			const hasLeft = options?.defaultLeft !== undefined;
 			const hasTop = options?.defaultTop !== undefined;
-			const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
-			const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
 
 			if (!hasLeft || !hasTop) {
+				const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
+				const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
 				const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
 
 				const visibleWindows = await getAllVisibleWindows();
