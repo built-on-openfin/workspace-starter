@@ -166,7 +166,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		},
 		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {
-		const apps: PlatformApp[] = cachedApps ?? await this._integrationHelpers.getApps();
+		const apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
 		this._lastAppResults = apps;
 		this._lastQuery = queryLower;
 		this._lastQueryMinLength = options?.queryMinLength;
@@ -359,12 +359,15 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	}
 
 	private async rebuildResults(): Promise<void> {
-		if(this._lastResponse !== undefined && Array.isArray(this._lastResultIds)) {
+		if (this._lastResponse !== undefined && Array.isArray(this._lastResultIds)) {
 			this._logger.info("Rebuilding results...");
 			this._lastResponse.revoke(...this._lastResultIds);
-			const appResponse = await this.getResults(this._lastQuery, this._lastCLIFilters,
+			const appResponse = await this.getResults(
+				this._lastQuery,
+				this._lastCLIFilters,
 				{ queryMinLength: this._lastQueryMinLength, queryAgainst: this._lastQueryAgainst },
-				this._lastAppResults);
+				this._lastAppResults
+			);
 			this._lastResponse.respond(appResponse.results);
 			this._logger.info("Results rebuilt.");
 		}
