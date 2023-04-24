@@ -261,6 +261,11 @@
 	"browserProvider": {
 		"defaultWindowOptions": {
 			"icon": "http://localhost:8080/favicon-32x32.png",
+			"viewVisibility": {
+				"showViewsOnTabDrag": { "enabled": true },
+				"showViewsOnSplitterDrag": { "enabled": true },
+				"showViewsOnWindowResize": { "enabled": true }
+			},
 			"workspacePlatform": {
 				"pages": [],
 				"title": "Second Browser Starter",
