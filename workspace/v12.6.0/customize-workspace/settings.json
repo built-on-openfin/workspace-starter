@@ -261,6 +261,11 @@
 	"browserProvider": {
 		"defaultWindowOptions": {
 			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/favicon-32x32.png",
+			"viewVisibility": {
+				"showViewsOnTabDrag": { "enabled": true },
+				"showViewsOnSplitterDrag": { "enabled": true },
+				"showViewsOnWindowResize": { "enabled": true }
+			},
 			"workspacePlatform": {
 				"pages": [],
 				"title": "Second Browser Starter",
