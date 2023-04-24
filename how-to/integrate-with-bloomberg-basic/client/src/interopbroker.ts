@@ -1,3 +1,5 @@
+import type OpenFin from "@openfin/core";
+
 export function interopOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
 	provider?: OpenFin.ChannelProvider,
