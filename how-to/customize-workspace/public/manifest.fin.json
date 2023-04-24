@@ -28,12 +28,6 @@
 			}
 		},
 		"defaultWindowOptions": {
-			"experimental": {
-				"showViewsOnResize": {
-					"enabled": true,
-					"delayMs": 0
-				}
-			},
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
@@ -41,6 +35,11 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
+			},
+			"viewVisibility": {
+				"showViewsOnTabDrag": { "enabled": true },
+				"showViewsOnSplitterDrag": { "enabled": true },
+				"showViewsOnWindowResize": { "enabled": true }
 			}
 		},
 		"defaultViewOptions": {
