@@ -45,7 +45,7 @@ export class WindowActions implements Actions {
 	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
 		const actionMap: CustomActionsMap = {};
 
-		actionMap["window-showall"] = async (payload: CustomActionPayload) => {
+		actionMap["window-show-all"] = async (payload: CustomActionPayload) => {
 			if (
 				payload.callerType !== this._helpers.callerTypes.API &&
 				payload.callerType !== this._helpers.callerTypes.SaveButtonContextMenu
@@ -72,14 +72,14 @@ export class WindowActions implements Actions {
 			}
 		};
 
-		actionMap["window-hideall"] = async (payload: CustomActionPayload) => {
+		actionMap["window-hide-all"] = async (payload: CustomActionPayload) => {
 			const visibleWindows = await getAllVisibleWindows();
 			for (const visibleWindow of visibleWindows) {
 				await visibleWindow.minimize();
 			}
 		};
 
-		actionMap["window-hideothers"] = async (payload: CustomActionPayload) => {
+		actionMap["window-hide-others"] = async (payload: CustomActionPayload) => {
 			if (
 				payload.callerType !== this._helpers.callerTypes.API &&
 				payload.callerType !== this._helpers.callerTypes.SaveButtonContextMenu

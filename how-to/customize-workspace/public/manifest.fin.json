@@ -763,14 +763,14 @@
 						{
 							"tooltip": "Show All Windows",
 							"action": {
-								"id": "window-showall",
+								"id": "window-show-all",
 								"customData": {}
 							}
 						},
 						{
 							"tooltip": "Hide All Windows",
 							"action": {
-								"id": "window-hideall",
+								"id": "window-hide-all",
 								"customData": {}
 							}
 						}

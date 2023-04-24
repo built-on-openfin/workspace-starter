@@ -1,48 +1,29 @@
 import type { MenuPosition } from "customize-workspace/shapes";
 
+export interface PageMenuEntry {
+	/**
+	 * This setting lets you override the default label that is used for this menu entry.
+	 */
+	menuLabel?: string;
+
+	/**
+	 * This setting lets you override the default icon that is shown for this menu entry.
+	 * Default is no icon.
+	 */
+	menuIcon?: string;
+
+	/** Show we include this menu option. The default is true */
+	include?: boolean;
+
+	/**
+	 * Where should this menu item be positioned in relation to existing entries. Default is after type CloseWindow.
+	 **/
+	menuPosition?: MenuPosition;
+}
+
 export interface PageMenuSettings {
 	/** Settings related to the show page menu entry */
-	showPage?: {
-		/**
-		 * This setting lets you override the default label that is used for this menu entry.
-		 * Default is Show Page.
-		 */
-		menuLabel?: string;
-
-		/**
-		 * This setting lets you override the default icon that is shown for this menu entry.
-		 * Default is no icon.
-		 */
-		menuIcon?: string;
-
-		/** Show we include this menu option. The default is true */
-		include?: boolean;
-
-		/**
-		 * Where should this menu item be positioned in relation to existing entries. Default is after type SavePageAs.
-		 **/
-		menuPosition?: MenuPosition;
-	};
+	showPage?: PageMenuEntry;
 	/** Settings related to the delete page menu entry */
-	deletePage?: {
-		/**
-		 * This setting lets you override the default label that is used for this menu entry.
-		 * Default is Delete Page.
-		 */
-		menuLabel?: string;
-
-		/**
-		 * This setting lets you override the default icon that is shown for this menu entry.
-		 * Default is no icon.
-		 */
-		menuIcon?: string;
-
-		/** Show we include this menu option. The default is true */
-		include?: boolean;
-
-		/**
-		 * Where should this menu item be positioned in relation to existing entries. Default is after type SavePageAs.
-		 **/
-		menuPosition?: MenuPosition;
-	};
+	deletePage?: PageMenuEntry;
 }

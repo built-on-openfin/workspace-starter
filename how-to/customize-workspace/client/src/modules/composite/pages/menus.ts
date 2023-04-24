@@ -141,7 +141,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 				}
 			}
 
-			const menuItemsToReturn = [];
+			const menuItemsToReturn: MenuEntry[] = [];
 
 			if (includeDeletePage) {
 				menuItemsToReturn.push(deletePageMenuEntry);
@@ -151,6 +151,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 				menuItemsToReturn.push(showPageMenuEntry);
 			}
 
+			// even thought the array is typed eslint will still complain so the rule is disabled here
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 			return menuItemsToReturn;
 		}

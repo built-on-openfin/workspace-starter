@@ -248,10 +248,6 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 	logger.info(`Request to launch app asset app of type ${appAssetApp.manifestType}`);
 	if (appAssetApp.manifestType === manifestTypes.appasset.id) {
 		options.alias = appAssetApp.manifest;
-		if (appAssetApp.instanceMode === "single") {
-			// use the appId as the UUID and OpenFin will only be able to launch a single instance
-			options.uuid = appAssetApp.appId;
-		}
 	} else if (appAssetApp.manifestType === manifestTypes.inlineAppAsset.id) {
 		const appAssetInfo: OpenFin.AppAssetInfo = appAssetApp.manifest as unknown as OpenFin.AppAssetInfo;
 		try {
