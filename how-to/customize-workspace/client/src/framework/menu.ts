@@ -19,7 +19,8 @@ import type {
 	MenusProviderOptions,
 	Menus,
 	MenuTemplateType,
-	MenuType
+	MenuType,
+	RelatedMenuId
 } from "./shapes/menu-shapes";
 
 const logger = createLogger("Menu");
@@ -120,30 +121,29 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 		const platform = getCurrentSync();
 
 		for (const menuItem of configEntries) {
-			if (menuItem.include || menuItem.include === undefined) {
-				const canShow = await checkConditions(platform, menuItem.conditions);
+			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
+
+			if (include || include === undefined) {
+				const canShow = await checkConditions(platform, conditions);
 
 				if (canShow) {
 					const insertedIndex = updateMenuEntries(
 						menuItems,
-						menuItem.position.type,
-						menuItem.position.operation,
-						menuItem.position.customId,
-						{
-							label: menuItem.label,
-							data: menuItem.data
-						} as unknown as T
+						position.type,
+						position.operation,
+						position.customId,
+						menuItemTemplate as unknown as T
 					);
 
 					if (insertedIndex >= 0) {
 						const sep = { type: "separator" } as T;
-						if (menuItem.separator === "before") {
+						if (separator === "before") {
 							if (insertedIndex === 0) {
 								menuItems.unshift(sep);
 							} else {
 								menuItems.splice(insertedIndex, 0, sep);
 							}
-						} else if (menuItem.separator === "after") {
+						} else if (separator === "after") {
 							if (insertedIndex === menuItems.length - 1) {
 								menuItems.push(sep);
 							} else {
@@ -160,11 +160,12 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 }
 
 export async function getGlobalMenu(
-	defaultGlobalContextMenu?: GlobalContextMenuItemTemplate[]
+	defaultGlobalContextMenu?: GlobalContextMenuItemTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<GlobalContextMenuItemTemplate[]> {
 	const settings = await getSettings();
 	const menuEntries = (settings?.browserProvider?.globalMenu ?? []).concat(
-		await getModuleMenuEntries<GlobalContextMenuOptionType>("global")
+		await getModuleMenuEntries<GlobalContextMenuOptionType>("global", relatedMenuId)
 	);
 	if (
 		settings?.browserProvider?.menuOptions?.includeDefaults?.globalMenu !== undefined &&
@@ -176,11 +177,12 @@ export async function getGlobalMenu(
 }
 
 export async function getPageMenu(
-	defaultPageContextMenu: PageTabContextMenuItemTemplate[]
+	defaultPageContextMenu: PageTabContextMenuItemTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<PageTabContextMenuItemTemplate[]> {
 	const settings = await getSettings();
 	const menuEntries = (settings?.browserProvider?.pageMenu ?? []).concat(
-		await getModuleMenuEntries<PageTabContextMenuOptionType>("page")
+		await getModuleMenuEntries<PageTabContextMenuOptionType>("page", relatedMenuId)
 	);
 	if (
 		settings?.browserProvider?.menuOptions?.includeDefaults?.pageMenu !== undefined &&
@@ -192,11 +194,12 @@ export async function getPageMenu(
 }
 
 export async function getViewMenu(
-	defaultViewContextMenu: ViewTabContextMenuTemplate[]
+	defaultViewContextMenu: ViewTabContextMenuTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<ViewTabContextMenuTemplate[]> {
 	const settings = await getSettings();
 	const menuEntries = (settings?.browserProvider?.viewMenu ?? []).concat(
-		await getModuleMenuEntries<ViewTabMenuOptionType>("view")
+		await getModuleMenuEntries<ViewTabMenuOptionType>("view", relatedMenuId)
 	);
 	if (
 		settings?.browserProvider?.menuOptions?.includeDefaults?.viewMenu !== undefined &&
@@ -208,12 +211,13 @@ export async function getViewMenu(
 }
 
 async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
-	menuType: MenuType
+	menuType: MenuType,
+	relatedMenuId?: RelatedMenuId
 ): Promise<MenuEntry<T>[]> {
 	const platform = getCurrentSync();
 	let menuEntries: MenuEntry<T>[] = [];
 	for (const menuModule of menuModules) {
-		const entries = await menuModule.implementation.get(menuType, platform);
+		const entries = await menuModule.implementation.get(menuType, platform, relatedMenuId);
 		if (entries) {
 			menuEntries = menuEntries.concat(entries as MenuEntry<T>[]);
 		}

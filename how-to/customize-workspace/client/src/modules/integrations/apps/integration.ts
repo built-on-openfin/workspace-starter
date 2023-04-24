@@ -47,6 +47,39 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
+	 * The last search response.
+	 */
+	private _lastResponse?: HomeSearchListenerResponse;
+
+	/**
+	 * The last query.
+	 */
+	private _lastQuery?: string;
+
+	/**
+	 * The last query min length.
+	 */
+	private _lastQueryMinLength?: number;
+
+	/**
+	 * The last query against array.
+	 */
+	private _lastQueryAgainst?: string[];
+
+	/**
+	 * The last query against array.
+	 */
+	private _lastCLIFilters?: CLIFilter[];
+
+	/**
+	 * The last app results.
+	 */
+	private _lastAppResults?: PlatformApp[];
+
+	/** The list of the ids of the last set of results */
+	private _lastResultIds?: string[];
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -62,6 +95,9 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("AppProvider");
 		this._providerId = definition.id;
+		this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
+			await this.rebuildResults();
+		});
 	}
 
 	/**
@@ -90,7 +126,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		}
 	): Promise<HomeSearchResponse> {
 		const queryLower = query.toLowerCase();
-
+		this._lastResponse = lastResponse;
 		const appResponse: HomeSearchResponse = await this.getResults(queryLower, filters, options);
 
 		return appResponse;
@@ -127,9 +163,15 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
-		}
+		},
+		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {
-		const apps: PlatformApp[] = await this._integrationHelpers.getApps();
+		const apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
+		this._lastAppResults = apps;
+		this._lastQuery = queryLower;
+		this._lastQueryMinLength = options?.queryMinLength;
+		this._lastQueryAgainst = options?.queryAgainst;
+		this._lastCLIFilters = filters;
 		const appSearchEntries = await this.mapAppEntriesToSearchEntries(apps);
 
 		const tags: string[] = [];
@@ -214,6 +256,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				return textMatchFound && filterMatchFound;
 			});
 
+			this._lastResultIds = finalResults.map((entry) => entry.key);
+
 			return {
 				results: finalResults,
 				context: {
@@ -221,6 +265,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				}
 			};
 		}
+		this._lastResultIds = [];
 		return {
 			results: [],
 			context: {
@@ -310,6 +355,21 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private getAppIcon(app: PlatformApp): string | undefined {
 		if (Array.isArray(app.icons) && app.icons.length > 0) {
 			return app.icons[0].src as string;
+		}
+	}
+
+	private async rebuildResults(): Promise<void> {
+		if (this._lastResponse !== undefined && Array.isArray(this._lastResultIds)) {
+			this._logger.info("Rebuilding results...");
+			this._lastResponse.revoke(...this._lastResultIds);
+			const appResponse = await this.getResults(
+				this._lastQuery,
+				this._lastCLIFilters,
+				{ queryMinLength: this._lastQueryMinLength, queryAgainst: this._lastQueryAgainst },
+				this._lastAppResults
+			);
+			this._lastResponse.respond(appResponse.results);
+			this._logger.info("Results rebuilt.");
 		}
 	}
 }
