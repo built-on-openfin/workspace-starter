@@ -14,25 +14,29 @@ import {
 	WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
-import type {
-	PageChangedLifecyclePayload,
-	WorkspaceChangedLifecyclePayload
-} from "customize-workspace/shapes";
 import * as analyticsProvider from "../analytics";
 import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
+import type { CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
+import type {
+	PageChangedLifecyclePayload,
+	WorkspaceChangedLifecyclePayload
+} from "../shapes/lifecycle-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import { deletePageBounds, savePageBounds } from "./browser";
+import { deletePageBounds, getAllVisibleWindows, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
 const logger = createLogger("PlatformOverride");
 
 let isApplyingSnapshot: boolean = false;
+let platformManifest: OpenFin.Manifest | undefined;
+let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
 	class Override extends WorkspacePlatformProvider {
@@ -390,6 +394,84 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			options: OpenFin.PlatformWindowCreationOptions,
 			identity?: OpenFin.Identity
 		): Promise<OpenFin.Window> {
+			// AutoShow is not defined as optional, but it can be undefined
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
+			if (options.autoShow === false) {
+				// We use this case to match modal windows
+				// so we don't theme or position them
+				return super.createWindow(options, identity);
+			}
+
+			if (!platformManifest || !windowPositioningStrategy) {
+				const app = await fin.Application.getCurrent();
+				platformManifest = await app.getManifest();
+				logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
+
+				const settings = await getSettings();
+				windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
+			}
+
+			logger.info("Create Window", options);
+
+			const hasLeft = options?.defaultLeft !== undefined;
+			const hasTop = options?.defaultTop !== undefined;
+			const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
+			const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
+
+			if (!hasLeft || !hasTop) {
+				const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
+
+				const visibleWindows = await getAllVisibleWindows();
+
+				// Get the top left bounds for all the visible windows
+				const topLeftBounds = await Promise.all(
+					visibleWindows.map(async (win) => {
+						const bounds = await win.getBounds();
+						return {
+							left: bounds.left,
+							top: bounds.top,
+							right: bounds.left + windowOffsetsX,
+							bottom: bounds.top + windowOffsetsY
+						};
+					})
+				);
+
+				const startLeft = platformManifest?.platform?.defaultWindowOptions?.defaultLeft ?? 0;
+				const startTop = platformManifest?.platform?.defaultWindowOptions?.defaultTop ?? 0;
+				let minCountVal: number = 1000;
+				let minCountIndex = windowOffsetsMaxIncrements;
+
+				// Now see how many windows appear in each increment slot
+				for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
+					const xPos = i * windowOffsetsX;
+					const yPos = i * windowOffsetsY;
+					const leftPos = startLeft + xPos;
+					const topPos = startTop + yPos;
+					const foundWins = topLeftBounds.filter(
+						(topLeftWinBounds) =>
+							topLeftWinBounds.left >= leftPos &&
+							topLeftWinBounds.right <= leftPos + windowOffsetsX &&
+							topLeftWinBounds.top >= topPos &&
+							topLeftWinBounds.bottom <= topPos + windowOffsetsY
+					);
+
+					// If this slot has less than the current minimum use this slot
+					if (foundWins.length < minCountVal) {
+						minCountVal = foundWins.length;
+						minCountIndex = i;
+					}
+				}
+
+				if (!hasLeft) {
+					const xOffset = minCountIndex * windowOffsetsX;
+					options.defaultLeft = startLeft + xOffset;
+				}
+				if (!hasTop) {
+					const yOffset = minCountIndex * windowOffsetsY;
+					options.defaultTop = startTop + yOffset;
+				}
+			}
+
 			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
 
 			if (!overrideDefaultButtons) {
@@ -404,6 +486,8 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			}
 
 			const window = await super.createWindow(options, identity);
+
+			logger.info("After Create Window", await window.getOptions());
 
 			// If the default buttons were overwritten then hopefully the creator
 			// used correctly themed versions, but in case they didn't we send
