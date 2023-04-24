@@ -755,6 +755,26 @@
 							}
 						}
 					]
+				},
+				{
+					"tooltip": "Window Visibility",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/icons/{theme}/{scheme}/windows.svg",
+					"options": [
+						{
+							"tooltip": "Show All Windows",
+							"action": {
+								"id": "window-show-all",
+								"customData": {}
+							}
+						},
+						{
+							"tooltip": "Hide All Windows",
+							"action": {
+								"id": "window-hide-all",
+								"customData": {}
+							}
+						}
+					]
 				}
 			]
 		},
@@ -921,6 +941,16 @@
 							"customData": {}
 						}
 					}
+				},
+				{
+					"enabled": true,
+					"id": "page-actions",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/composite/pages.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "window-actions",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/composite/windows.bundle.js"
 				}
 			]
 		},
@@ -1017,6 +1047,24 @@
 					"description": "Provides information about this platform.",
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "pages",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/favicon.ico",
+					"title": "Pages",
+					"description": "Provides additional menu options for pages.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/composite/pages.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "windows",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/favicon.ico",
+					"title": "Windows",
+					"description": "Provides additional menu options for windows.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-workspace/js/modules/composite/windows.bundle.js",
 					"data": {}
 				}
 			]
