@@ -13,7 +13,6 @@ const logger = createLogger("Apps");
 let cachedApps: PlatformApp[];
 let cacheDuration = 0;
 let isInitialized = false;
-let appAssetTag: string = "appasset";
 let supportedManifestTypes: string[] = [];
 let canLaunchExternalProcess: boolean;
 let canDownloadAppAssets: boolean;
@@ -62,16 +61,25 @@ async function validateEntries(apps: PlatformApp[]) {
 
 	for (let i = 0; i < apps.length; i++) {
 		let validApp = true;
+		const manifestType = apps[i].manifestType;
 		if (supportedManifestTypes !== undefined && supportedManifestTypes.length > 0) {
-			validApp = supportedManifestTypes.includes(apps[i].manifestType);
+			validApp = supportedManifestTypes.includes(manifestType);
 		}
 
 		if (validApp) {
-			if (apps[i].manifestType !== manifestTypes.external.id) {
+			if (
+				manifestType !== manifestTypes.external.id &&
+				manifestType !== manifestTypes.inlineExternal.id &&
+				manifestType !== manifestTypes.appasset.id &&
+				manifestType !== manifestTypes.inlineAppAsset.id
+			) {
 				validatedApps.push(apps[i]);
 			} else if (!hasLaunchExternalProcess) {
 				rejectedAppIds.push(apps[i].appId);
-			} else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !hasDownloadAppAssets) {
+			} else if (
+				(manifestType === manifestTypes.appasset.id || manifestType === manifestTypes.inlineAppAsset.id) &&
+				!hasDownloadAppAssets
+			) {
 				rejectedAppIds.push(apps[i].appId);
 			} else {
 				validatedApps.push(apps[i]);
@@ -204,7 +212,6 @@ export async function init(options: AppProviderOptions, endpointProvider: Endpoi
 	if (options?.cacheDurationInMinutes !== undefined) {
 		cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 	}
-	appAssetTag = options?.appAssetTag ?? "appasset";
 	supportedManifestTypes = options?.manifestTypes ?? [];
 }
 

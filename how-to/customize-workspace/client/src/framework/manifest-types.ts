@@ -46,13 +46,24 @@ export const manifestTypes: ManifestTypes = {
 	external: {
 		id: "external",
 		label: "Native App",
-		description: "This manifest type expects the manifest setting to point to an exe or an app asset name."
+		description: "This manifest type expects the manifest setting to point to an exe."
 	},
 	inlineExternal: {
 		id: "inline-external",
 		label: "Native App",
 		description:
-			"This manifest type expects the manifest setting to point to an exe or an app asset name using an inline launch external process request."
+			"This manifest type expects the manifest setting to point to an exe using an inline launch external process request."
+	},
+	appasset: {
+		id: "appasset",
+		label: "Native App",
+		description: "This manifest type expects the manifest setting to point to an app asset name."
+	},
+	inlineAppAsset: {
+		id: "inline-appasset",
+		label: "Native App",
+		description:
+			"This manifest type expects the manifest setting to point to an app asset config using an inline launch external process request."
 	},
 	desktopBrowser: {
 		id: "desktop-browser",
