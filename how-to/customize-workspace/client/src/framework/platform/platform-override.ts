@@ -411,11 +411,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				const settings = await getSettings();
 
 				windowDefaultLeft =
-					settings.browserProvider?.defaultWindowOptions.defaultLeft ??
+					settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
 					platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
 					0;
 				windowDefaultTop =
-					settings.browserProvider?.defaultWindowOptions.defaultTop ??
+					settings.browserProvider?.defaultWindowOptions?.defaultTop ??
 					platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
 					0;
 
