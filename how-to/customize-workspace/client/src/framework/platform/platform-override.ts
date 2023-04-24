@@ -35,7 +35,8 @@ import { closedown as closedownPlatform } from "./platform";
 const logger = createLogger("PlatformOverride");
 
 let isApplyingSnapshot: boolean = false;
-let platformManifest: OpenFin.Manifest | undefined;
+let windowDefaultLeft: number | undefined;
+let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
 
 export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
@@ -402,12 +403,22 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return super.createWindow(options, identity);
 			}
 
-			if (!platformManifest || !windowPositioningStrategy) {
+			if (!windowPositioningStrategy || windowDefaultLeft === undefined || windowDefaultTop === undefined) {
 				const app = await fin.Application.getCurrent();
-				platformManifest = await app.getManifest();
+				const platformManifest: OpenFin.Manifest = await app.getManifest();
 				logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
 
 				const settings = await getSettings();
+
+				windowDefaultLeft =
+					settings.browserProvider?.defaultWindowOptions.defaultLeft ??
+					platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
+					0;
+				windowDefaultTop =
+					settings.browserProvider?.defaultWindowOptions.defaultTop ??
+					platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
+					0;
+
 				windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
 			}
 
@@ -436,8 +447,6 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					})
 				);
 
-				const startLeft = platformManifest?.platform?.defaultWindowOptions?.defaultLeft ?? 0;
-				const startTop = platformManifest?.platform?.defaultWindowOptions?.defaultTop ?? 0;
 				let minCountVal: number = 1000;
 				let minCountIndex = windowOffsetsMaxIncrements;
 
@@ -445,8 +454,8 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
 					const xPos = i * windowOffsetsX;
 					const yPos = i * windowOffsetsY;
-					const leftPos = startLeft + xPos;
-					const topPos = startTop + yPos;
+					const leftPos = windowDefaultLeft + xPos;
+					const topPos = windowDefaultTop + yPos;
 					const foundWins = topLeftBounds.filter(
 						(topLeftWinBounds) =>
 							topLeftWinBounds.left >= leftPos &&
@@ -464,11 +473,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 				if (!hasLeft) {
 					const xOffset = minCountIndex * windowOffsetsX;
-					options.defaultLeft = startLeft + xOffset;
+					options.defaultLeft = windowDefaultLeft + xOffset;
 				}
 				if (!hasTop) {
 					const yOffset = minCountIndex * windowOffsetsY;
-					options.defaultTop = startTop + yOffset;
+					options.defaultTop = windowDefaultTop + yOffset;
 				}
 			}
 
