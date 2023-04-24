@@ -105,4 +105,27 @@ export type BrowserProviderOptions = Pick<
 			viewMenu?: boolean;
 		};
 	};
+
+	/**
+	 * The strategy for window positioning.
+	 */
+	windowPositioningStrategy?: CascadingWindowOffsetStrategy;
 };
+
+/**
+ * The cascading window strategy for positioning new windows.
+ */
+export interface CascadingWindowOffsetStrategy {
+	/**
+	 * The x offset to increment by for each new window, defaults to 30.
+	 */
+	x?: number;
+	/**
+	 * The y offset to increment by for each new window, defaults to 30.
+	 */
+	y?: number;
+	/**
+	 * The maximum number increment, before resetting to start, defaults to 8.
+	 */
+	maxIncrements?: number;
+}
