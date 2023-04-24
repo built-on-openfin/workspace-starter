@@ -361,13 +361,17 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private async rebuildResults(): Promise<void> {
 		if (this._lastResponse !== undefined && Array.isArray(this._lastResultIds)) {
 			this._logger.info("Rebuilding results...");
-			this._lastResponse.revoke(...this._lastResultIds);
+			const lastResultIds = this._lastResultIds.slice();
 			const appResponse = await this.getResults(
 				this._lastQuery,
 				this._lastCLIFilters,
 				{ queryMinLength: this._lastQueryMinLength, queryAgainst: this._lastQueryAgainst },
 				this._lastAppResults
 			);
+			const removeResultIds = lastResultIds.filter((id) => !this._lastResultIds.includes(id));
+			if (removeResultIds.length > 0) {
+				this._lastResponse.revoke(...removeResultIds);
+			}
 			this._lastResponse.respond(appResponse.results);
 			this._logger.info("Results rebuilt.");
 		}
