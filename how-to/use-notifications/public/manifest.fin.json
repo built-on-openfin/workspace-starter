@@ -9,7 +9,7 @@
 		"uuid": "use-notifications",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/notifications/notifications.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
@@ -28,9 +28,5 @@
 		"product": "Workspace Starter - Use Notifications - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"customProviderIcon": "http://localhost:8080/images/icon-dot.png",
-		"notificationSoundUrl": "http://localhost:8080/assets/notification.mp3"
 	}
 }

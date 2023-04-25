@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<title>Use Notifications Example</title>
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="/common/style/app.css" />
-		<script src="../js/notifications.bundle.js"></script>
+		<script src="../js/provider.bundle.js"></script>
 	</head>
 
 	<body class="col fill gap20">
@@ -22,8 +22,10 @@
 		<main class="row fill gap20">
 			<div class="col fill left gap20 scroll-vertical">
 				<h2>Platform</h2>
-				<button id="btnPlatformRegister" class="secondary">Register Platform</button>
-				<button id="btnPlatformDeregister" class="secondary">Deregister Platform</button>
+				<div class="row gap10">
+					<button id="btnPlatformRegister" class="secondary">Register Platform</button>
+					<button id="btnPlatformDeregister" class="secondary">Deregister Platform</button>
+				</div>
 				<h2>Notifications</h2>
 				<button id="btnNotificationSimple" class="secondary">Simple Notification</button>
 				<button id="btnNotificationBodyDismiss" class="secondary">Body Click Dismiss Notification</button>
@@ -35,6 +37,7 @@
 				<button id="btnNotificationUpdatable" class="secondary">Updatable Notification</button>
 				<button id="btnNotificationCustom" class="secondary">Custom Notification</button>
 				<button id="btnNotificationWithSound" class="secondary">Notification with Sound</button>
+				<button id="btnNotificationWithIndicator" class="secondary">Notification with Indicator</button>
 			</div>
 			<div class="col fill gap20">
 				<div class="row gap10">

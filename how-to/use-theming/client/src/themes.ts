@@ -87,10 +87,9 @@ export async function themeToggle(): Promise<void> {
 }
 
 export function getThemeButton(): ToolbarButton {
-	const webRoot = window.location.href.replace("platform/provider.html", "");
 	return {
 		type: BrowserButtonType.Custom,
-		iconUrl: `${webRoot}common/icons/${currentColorScheme}/theme.svg`,
+		iconUrl: `http://localhost:8080/common/icons/${currentColorScheme}/theme.svg`,
 		action: {
 			id: "change-theme"
 		}

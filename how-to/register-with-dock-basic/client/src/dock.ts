@@ -20,7 +20,6 @@ import {
  * @param options.workspaceComponents The workspace components options.
  * @param options.customIconUrl Use a custom icon url.
  * @param options.customOpenUrl Use a custom open url.
- * @param webRoot The web root for locating assets.
  * @returns The registration details for dock.
  */
 export async function register(
@@ -31,8 +30,7 @@ export async function register(
 		workspaceComponents: WorkspaceComponentButtonOptions;
 		customIconUrl: string;
 		customOpenUrl: string;
-	},
-	webRoot: string
+	}
 ): Promise<RegistrationMetaInfo | undefined> {
 	console.log("Initialising the dock provider.");
 
@@ -68,7 +66,7 @@ export async function register(
 				{
 					type: DockButtonNames.DropdownButton,
 					tooltip: "Social",
-					iconUrl: `${webRoot}assets/spanner.svg`,
+					iconUrl: "http://localhost:8080/assets/spanner.svg",
 					options: [
 						{
 							tooltip: "Twitter",

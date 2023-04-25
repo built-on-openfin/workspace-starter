@@ -15,7 +15,7 @@ const URLBaseMap = new Map([
 	['aws', 'https://samples.openfin.co']
 ]);
 
-args = yargs(process.argv.slice(2))
+const args = yargs(process.argv.slice(2))
 	.usage('$0 [args]')
 	.env(ENV_NAME)
 	.option('l', {
@@ -62,14 +62,13 @@ function packageItems(args) {
 	// for different locations.
 	fs.rmSync(publishDir, { recursive: true, force: true });
 
-	workspaces = fg.sync(packageJson.workspaces, { onlyDirectories: true });
+	let workspaces = fg.sync(packageJson.workspaces, { onlyDirectories: true });
 	if (packageJson.packageExclude) {
 		workspaces = workspaces.filter((item) => !packageJson.packageExclude.includes(item));
 	}
 
-	for (let i = 0; i < workspaces.length; i++) {
-		const workspace = workspaces[i];
-		const item = workspace.split('/')[1];
+	for (const workspace of workspaces) {
+		let item = workspace.split('/')[1];
 
 		if (args.legacy) {
 			execSync('npm run build-client', {
@@ -91,12 +90,18 @@ function packageItems(args) {
 		}
 
 		try {
+			const workspaceUrl = [baseURL, DEFAULT_FOLDER, hostFolder, workspace.replace('how-to/', '')].filter(Boolean).join('/');
 			const commonUrl = [baseURL, DEFAULT_FOLDER, hostFolder, 'common'].filter(Boolean).join('/');
 			const commonOptions = [
 				{
 					files: `${targetDir}/**/*.json`,
 					from: new RegExp(`http://localhost:${DEFAULT_PORT}/common`, 'g'),
 					to: commonUrl
+				},
+				{
+					files: `${targetDir}/**/*.js`,
+					from: new RegExp(`http://localhost:${DEFAULT_PORT}`, 'g'),
+					to: workspaceUrl
 				},
 				{
 					files: `${targetDir}/**/*.html`,
@@ -106,8 +111,9 @@ function packageItems(args) {
 			];
 
 			for (const common of commonOptions) {
-				const commonResults = replace.sync(common);
-				console.log('Replacement results for common:', commonResults);
+				const replaceResults = replace.sync(common);
+				console.log('Replacement results for:', replaceResults);
+				console.log(`Workspace URLs replaced with: ${workspaceUrl}`);
 				console.log(`Common URLs replaced with: ${commonUrl}`);
 			}
 
