@@ -90,7 +90,9 @@ function packageItems(args) {
 		}
 
 		try {
-			const workspaceUrl = [baseURL, DEFAULT_FOLDER, hostFolder, workspace.replace('how-to/', '')].filter(Boolean).join('/');
+			const workspaceUrl = [baseURL, DEFAULT_FOLDER, hostFolder, workspace.replace('how-to/', '')]
+				.filter(Boolean)
+				.join('/');
 			const commonUrl = [baseURL, DEFAULT_FOLDER, hostFolder, 'common'].filter(Boolean).join('/');
 			const commonOptions = [
 				{
