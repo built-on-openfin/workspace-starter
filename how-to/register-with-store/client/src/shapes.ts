@@ -33,11 +33,6 @@ export interface AppProviderSettings {
 	 * How long to store the apps before getting a new list.
 	 */
 	cacheDurationInMinutes?: number;
-
-	/**
-	 * The tag to use for app assets.
-	 */
-	appAssetTag?: string;
 }
 
 /**

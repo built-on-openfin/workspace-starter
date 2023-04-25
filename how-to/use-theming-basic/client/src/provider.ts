@@ -1,5 +1,11 @@
+import type { Context } from "@openfin/core/src/OpenFin";
 import { Home } from "@openfin/workspace";
-import { init } from "@openfin/workspace-platform";
+import {
+	ColorSchemeOptionType,
+	CustomThemeOptionsWithScheme,
+	getCurrentSync,
+	init
+} from "@openfin/workspace-platform";
 import { register } from "./home";
 
 const PLATFORM_ID = "use-theming-basic";
@@ -16,6 +22,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	// Show the home component
 	await Home.show();
+
+	// Now that the platform has initialized get the initial state
+	// of the theme and update the style preload channel with it
+	const platform = getCurrentSync();
+	const schemeType = await platform.Theme.getSelectedScheme();
+	await updateViewTheme(schemeType);
 });
 
 /**
@@ -97,6 +109,68 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 					}
 				}
 			}
-		]
+		],
+		overrideCallback: async (WorkspacePlatformProvider) => {
+			/**
+			 * Override the platform methods so that we can intercept the
+			 * color scheme changing.
+			 */
+			class Override extends WorkspacePlatformProvider {
+				/**
+				 * The color scheme was changed.
+				 * @param schemeType The scheme it was changed to.
+				 * @returns Nothing.
+				 */
+				public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+					// Override the platform callback to we can detect the theme has changed
+					// and send this information to all the views with the preload script.
+					await updateViewTheme(schemeType);
+					return super.setSelectedScheme(schemeType);
+				}
+			}
+			return new Override();
+		}
 	});
+}
+
+/**
+ * Sends a channel message to all the views which have the theming
+ * preload script included, so that they can also update their colors.
+ * @param schemeType The new scheme type to display.
+ */
+async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void> {
+	const platform = getCurrentSync();
+	const themes = await platform.Theme.getThemes();
+
+	let scheme: "dark" | "light";
+	if (schemeType === ColorSchemeOptionType.System) {
+		scheme = getSystemPreferredColorScheme();
+	} else {
+		scheme = schemeType;
+	}
+
+	// Get the current palette from the platform based on the selected scheme.
+	const currentPalette = (themes[0] as CustomThemeOptionsWithScheme).palettes[scheme];
+
+	// Broadcast a message using interop so that any views with the style preload
+	// scripts can react and update their UIs accordingly
+	const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
+	const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
+	await appSessionContextGroup.setContext({
+		type: "platform.theme",
+		schemeType: scheme,
+		palette: currentPalette
+	} as Context);
+}
+
+/**
+ * If the OpenFin color scheme is set to System we need to work out
+ * if the OS is currently set to dark or light.
+ * @returns The OS preference for color scheme.
+ */
+function getSystemPreferredColorScheme(): "dark" | "light" {
+	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+		return "dark";
+	}
+	return "light";
 }

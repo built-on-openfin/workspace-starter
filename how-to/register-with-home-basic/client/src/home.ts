@@ -119,14 +119,10 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 				entry.icon = app.icons[0].src;
 			}
 
-			if (app.description !== undefined) {
-				entry.description = app.description;
-				entry.shortDescription = app.description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = app.description;
-			} else {
-				entry.template = CLITemplate.Plain;
-			}
+			entry.description = app.description;
+			entry.shortDescription = app.description;
+			entry.template = CLITemplate.SimpleText;
+			entry.templateContent = app.description;
 
 			results.push(entry as HomeSearchResult);
 		}

@@ -48,7 +48,6 @@
 		"appProvider": {
 			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
 			"manifestTypes": ["view", "snapshot", "manifest", "external"],
-			"appAssetTag": "appasset",
 			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {

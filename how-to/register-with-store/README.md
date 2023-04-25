@@ -130,8 +130,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
   "appProvider": {
     "appSourceUrls": ["http://localhost:8080/common/apps.json"],
     "manifestTypes": ["view", "snapshot", "manifest", "external"],
-    "cacheDurationInMinutes": 1,
-    "appAssetTag": "appasset"
+    "cacheDurationInMinutes": 1
   },
   "storefrontProvider": {
     "id": "register-with-store",
@@ -264,29 +263,28 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
 }
 ```
 
-| Property               | Description                                                                                                                                                                                                           |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **appProvider**        | Config related to where the apps should be fetched from                                                                                                                                                               |
-| appSourceUrls          | Where should we fetch the apps from                                                                                                                                                                                   |
-| manifestTypes          | ["view", "snapshot", "manifest", "external"]                                                                                                                                                                          |
-| cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server?                                                                                                                                           |
-| appAssetTag            | If including app assets in your manifest, what tag in the app definition will highlight this manifestType:"external" is actually an app asset and shouldn't be run from a path? If undefined then appasset is assumed |
-| **storefrontProvider** | Config settings that are used by the sample code to configure the store using the workspace APIs                                                                                                                      |
-| id                     | Unique ID for your store                                                                                                                                                                                              |
-| title                  | The name for your store that will be shown in the store selection dropdown                                                                                                                                            |
-| icon                   | The icon to show in the store selection dropdown                                                                                                                                                                      |
-| landingPage            | The structure of the main page the user will be presented with when they visit your store                                                                                                                             |
-| landingPage.hero       | Optional. Do you want a hero section on the main page.                                                                                                                                                                |
-| landingPage.topRow     | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). Limit of 4 sections.                                                         |
-| landingPage.middleRow  | What do you want this row to be called and what apps do you want to show in the middle (use tags to determine what apps are included in this row). Limit of 6 apps.                                                   |
-| landingPage.bottomRow  | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). There is a limit of 3 sections.                                              |
-| navigation             | How many navigation sections do you want on the left hand menu? Limit of 2.                                                                                                                                           |
-| navigation[i].title    | What do you want as a title for these set of links?                                                                                                                                                                   |
-| navigation[i].items    | How many links do you want to show (limit of 5) and what apps do you want a link to display (use tags to select apps)                                                                                                 |
-| footer                 | What do you want to show in the store footer                                                                                                                                                                          |
-| footer.logo            | The logo to show in the footer                                                                                                                                                                                        |
-| footer.text            | The text to show in the footer                                                                                                                                                                                        |
-| footer.links           | What links do you want to show in the footer (opens up using the default web browser.                                                                                                                                 |
+| Property               | Description                                                                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **appProvider**        | Config related to where the apps should be fetched from                                                                                                                  |
+| appSourceUrls          | Where should we fetch the apps from                                                                                                                                      |
+| manifestTypes          | ["view", "snapshot", "manifest", "external"]                                                                                                                             |
+| cacheDurationInMinutes | How many minutes should we wait before refreshing the list from the server?                                                                                              |
+| **storefrontProvider** | Config settings that are used by the sample code to configure the store using the workspace APIs                                                                         |
+| id                     | Unique ID for your store                                                                                                                                                 |
+| title                  | The name for your store that will be shown in the store selection dropdown                                                                                               |
+| icon                   | The icon to show in the store selection dropdown                                                                                                                         |
+| landingPage            | The structure of the main page the user will be presented with when they visit your store                                                                                |
+| landingPage.hero       | Optional. Do you want a hero section on the main page.                                                                                                                   |
+| landingPage.topRow     | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). Limit of 4 sections.            |
+| landingPage.middleRow  | What do you want this row to be called and what apps do you want to show in the middle (use tags to determine what apps are included in this row). Limit of 6 apps.      |
+| landingPage.bottomRow  | What do you want this row to be called and how many sections do you want (use tags to determine what apps are included in this section). There is a limit of 3 sections. |
+| navigation             | How many navigation sections do you want on the left hand menu? Limit of 2.                                                                                              |
+| navigation[i].title    | What do you want as a title for these set of links?                                                                                                                      |
+| navigation[i].items    | How many links do you want to show (limit of 5) and what apps do you want a link to display (use tags to select apps)                                                    |
+| footer                 | What do you want to show in the store footer                                                                                                                             |
+| footer.logo            | The logo to show in the footer                                                                                                                                           |
+| footer.text            | The text to show in the footer                                                                                                                                           |
+| footer.links           | What links do you want to show in the footer (opens up using the default web browser.                                                                                    |
 
 ### Note About The Manifest
 

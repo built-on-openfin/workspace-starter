@@ -1,15 +1,15 @@
 import {
+	CLITemplate,
+	Home,
+	type App,
 	type CLIDispatchedSearchResult,
 	type CLIProvider,
 	type CLISearchListenerRequest,
 	type CLISearchResponse,
-	CLITemplate,
-	Home,
 	type HomeRegistration,
-	type HomeSearchResult,
-	type App
+	type HomeSearchResult
 } from "@openfin/workspace";
-import { getApps, launchApp } from "./apps";
+import { getCurrentSync } from "@openfin/workspace-platform";
 
 /**
  * Register with the home component.
@@ -22,22 +22,16 @@ export async function register(id: string, title: string, icon: string): Promise
 	console.log("Initialising home.");
 
 	// The callback fired when the user types in the home query
-	const onUserInput = async (request: CLISearchListenerRequest): Promise<CLISearchResponse> => {
-		const queryLower = request.query.toLowerCase();
-
-		// If the query starts with a / treat this as a help request
-		// so we don't have any additional entries to show
-		if (queryLower.startsWith("/")) {
-			return { results: [] };
-		}
-
-		return getResults(queryLower);
-	};
+	const onUserInput = async (request: CLISearchListenerRequest): Promise<CLISearchResponse> => ({
+		results: mapAppEntriesToSearchEntries([OPENFIN_INFORMATION_APP])
+	});
 
 	// The callback fired when a selection is made in home
 	const onSelection = async (result: CLIDispatchedSearchResult): Promise<void> => {
 		if (result.data !== undefined) {
-			await launchApp(result.data as App);
+			const app: App = result.data as App;
+			const platform = getCurrentSync();
+			await platform.createView({ manifestUrl: app.manifest });
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
@@ -59,29 +53,6 @@ export async function register(id: string, title: string, icon: string): Promise
 }
 
 /**
- * Get the list of results to show in home.
- * @param queryLower Lower case version of query.
- * @returns The search response containing results.
- */
-async function getResults(queryLower: string): Promise<CLISearchResponse> {
-	const apps = await getApps();
-
-	let filteredApps: App[];
-
-	// If the query length is less than 3 don't do any filtering
-	if (queryLower.length < 3) {
-		filteredApps = apps;
-	} else {
-		// Otherwise try and match the app title with the query
-		filteredApps = apps.filter((entry) => entry.title.toLowerCase().includes(queryLower));
-	}
-
-	return {
-		results: mapAppEntriesToSearchEntries(filteredApps)
-	};
-}
-
-/**
  * Convert the app definitions into search results.
  * @param apps The list of apps to convert.
  * @returns The search result templates.
@@ -91,41 +62,20 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 
 	if (Array.isArray(apps)) {
 		for (const app of apps) {
-			const action = { name: "Launch View", hotkey: "enter" };
 			const entry: Partial<HomeSearchResult> = {
 				key: app.appId,
 				title: app.title,
-				data: app
+				data: app,
+				label: "View",
+				actions: [{ name: "Launch View", hotkey: "enter" }],
+				description: app.description,
+				shortDescription: app.description,
+				template: CLITemplate.SimpleText,
+				templateContent: app.description
 			};
-
-			if (app.manifestType === "view") {
-				entry.label = "View";
-				entry.actions = [action];
-			} else if (app.manifestType === "snapshot") {
-				entry.label = "Snapshot";
-				action.name = "Launch Snapshot";
-				entry.actions = [action];
-			} else if (app.manifestType === "manifest") {
-				entry.label = "App";
-				action.name = "Launch App";
-				entry.actions = [action];
-			} else if (app.manifestType === "external") {
-				action.name = "Launch Native App";
-				entry.actions = [action];
-				entry.label = "Native App";
-			}
 
 			if (Array.isArray(app.icons) && app.icons.length > 0) {
 				entry.icon = app.icons[0].src;
-			}
-
-			if (app.description !== undefined) {
-				entry.description = app.description;
-				entry.shortDescription = app.description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = app.description;
-			} else {
-				entry.template = CLITemplate.Plain;
 			}
 
 			results.push(entry as HomeSearchResult);
@@ -134,3 +84,29 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 
 	return results;
 }
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP: App = {
+	appId: "openfin-information",
+	title: "OpenFin Information",
+	description: "Display information about the OpenFin environment",
+	manifest: "http://localhost:8080/common/views/platform/of-info.json",
+	manifestType: "view",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["view", "openfin"]
+};

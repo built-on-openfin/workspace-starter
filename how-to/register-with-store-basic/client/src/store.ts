@@ -4,7 +4,7 @@ import {
 	type CustomActionPayload,
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
-import { DEVELOPER_CONTENT, EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER, launchApp } from "./apps";
+import { DEVELOPER_CONTENT, EXPERO_APP, OPENFIN_INFORMATION_APP, PROCESS_MANAGER, launchApp } from "./apps";
 
 /**
  * Register with the store component.
@@ -34,7 +34,7 @@ export async function register(
 							title: "Views",
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [EXPERO_APP]
+								apps: [OPENFIN_INFORMATION_APP, EXPERO_APP]
 							}
 						},
 						{
@@ -47,10 +47,10 @@ export async function register(
 						},
 						{
 							id: "manifest",
-							title: "Web Apps",
+							title: "Tools",
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
+								apps: [PROCESS_MANAGER]
 							}
 						}
 					]
@@ -65,7 +65,7 @@ export async function register(
 						title: "Hero Apps!",
 						templateId: StorefrontTemplate.AppGrid,
 						templateData: {
-							apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
+							apps: [OPENFIN_INFORMATION_APP, PROCESS_MANAGER]
 						}
 					},
 					image: {
@@ -99,7 +99,7 @@ export async function register(
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
+								apps: [PROCESS_MANAGER]
 							},
 							buttonTitle: "View Tools"
 						}
@@ -121,7 +121,7 @@ export async function register(
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [EXPERO_APP]
+								apps: [OPENFIN_INFORMATION_APP, EXPERO_APP]
 							},
 							buttonTitle: "See Views"
 						},
@@ -134,7 +134,7 @@ export async function register(
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [NOTIFICATION_STUDIO, PROCESS_MANAGER]
+								apps: [PROCESS_MANAGER]
 							},
 							buttonTitle: "See Web Apps"
 						}
@@ -155,7 +155,7 @@ export async function register(
 					}
 				]
 			}),
-			getApps: async () => [EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER],
+			getApps: async () => [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER],
 			launchApp: async (app) => {
 				await launchApp(app);
 			}
@@ -181,7 +181,7 @@ export function storeGetCustomActions(): CustomActionsMap {
 		},
 		"launch-app": async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
-				const apps = [EXPERO_APP, NOTIFICATION_STUDIO, PROCESS_MANAGER, DEVELOPER_CONTENT];
+				const apps = [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
 				const app = apps.find((a) => a.appId === payload.appId);
 				if (app) {
 					await launchApp(app);
