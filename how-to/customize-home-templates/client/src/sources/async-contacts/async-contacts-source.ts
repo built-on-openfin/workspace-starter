@@ -4,22 +4,15 @@ import {
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
-	type HomeSearchResult
+	type HomeSearchResult,
+	ListPairs
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
-import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
 /**
- * Implement the integration provider for async results.
+ * Implement the source for async contact results.
  */
-export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "async";
-
+export class AsyncContactsSource {
 	/**
 	 * The key to use for a async result.
 	 * @internal
@@ -27,13 +20,19 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	private static readonly _ASYNC_PROVIDER_DETAILS_ACTION = "Async Details";
 
 	/**
-	 * The integration helpers.
+	 * The helpers for the source.
 	 * @internal
 	 */
-	private _integrationHelpers: IntegrationHelpers | undefined;
+	private _helpers: { openUrl: (url: string) => Promise<void> } | undefined;
 
 	/**
-	 * The settings for the integration.
+	 * The definition for the source.
+	 * @internal
+	 */
+	private _definition: { id: string; icon: string; data?: AsyncSettings } | undefined;
+
+	/**
+	 * The settings for the source.
 	 * @internal
 	 */
 	private _settings: AsyncSettings | undefined;
@@ -41,24 +40,23 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
+	 * @param definition.id The id for the module.
+	 * @param definition.icon The icon for the module.
+	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
-	 * @param helpers Helper methods for the module to interact with the application core.
+	 * @param helpers Helper methods from the platform.
+	 * @param helpers.openUrl Method for opening a url.
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<AsyncSettings>,
+		definition: { id: string; icon: string; data?: AsyncSettings },
 		loggerCreator: () => void,
-		helpers: IntegrationHelpers
+		helpers: { openUrl: (url: string) => Promise<void> }
 	): Promise<void> {
-		this._integrationHelpers = helpers;
+		this._definition = definition;
 		this._settings = definition.data;
+		this._helpers = helpers;
 	}
-
-	/**
-	 * The module is being deregistered.
-	 * @returns Nothing.
-	 */
-	public async closedown(): Promise<void> {}
 
 	/**
 	 * Get a list of the static help entries.
@@ -67,65 +65,195 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
-				key: `${AsyncIntegrationProvider._PROVIDER_ID}-help1`,
+				key: `${this._definition?.id}-help1`,
 				title: "/contacts-sync",
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					providerId: this._definition?.id,
 					populateQuery: "/contacts-sync "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/contacts-sync",
-					[
-						"The contacts-sync command can be used to search for a contact.",
-						"It demonstrates how a long running retrieval would have to wait for the response before anything is display.",
-						"For example to search for a contact containing the letter a."
-					],
-					["/contacts-sync a"]
-				)
+				templateContent: {
+					layout: {
+						type: "Container",
+						style: { display: "flex", flexDirection: "column", padding: "10px" },
+						children: [
+							{
+								type: "Text",
+								dataKey: "title",
+								style: {
+									color: "#FFFFFF",
+									fontSize: "16px",
+									fontWeight: "bold",
+									marginBottom: "10px",
+									borderBottom: "1px solid #53565F"
+								}
+							},
+							{ type: "Text", dataKey: "desc-0", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-1", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-2", style: { fontSize: "12px", padding: "6px 0px" } },
+							{
+								type: "Container",
+								style: {
+									display: "flex",
+									flexDirection: "column",
+									padding: "10px",
+									marginTop: "6px",
+									backgroundColor: "#53565F",
+									color: "#FFFFFF",
+									borderRadius: "5px",
+									overflow: "auto"
+								},
+								children: [
+									{
+										type: "Text",
+										dataKey: "line-0",
+										style: { fontSize: "12px", fontFamily: "monospace", whiteSpace: "nowrap" }
+									}
+								]
+							}
+						]
+					},
+					data: {
+						title: "/contacts-sync",
+						"desc-0": "The contacts-sync command can be used to search for a contact.",
+						"desc-1":
+							"It demonstrates how a long running retrieval would have to wait for the response before anything is display.",
+						"desc-2": "For example to search for a contact containing the letter a.",
+						"line-0": "/contacts-sync a"
+					}
+				}
 			},
 			{
-				key: `${AsyncIntegrationProvider._PROVIDER_ID}-help2`,
+				key: `${this._definition?.id}-help2`,
 				title: "/contacts-partial",
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					providerId: this._definition?.id,
 					populateQuery: "/contacts-partial "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/contacts-partial",
-					[
-						"The contacts-partial command can be used to search for a contact.",
-						"It demonstrates how we would display results instantly while asynchronously retrieving all the results.",
-						"For example to search for a contact containing the letter a."
-					],
-					["/contacts-partial a"]
-				)
+				templateContent: {
+					layout: {
+						type: "Container",
+						style: { display: "flex", flexDirection: "column", padding: "10px" },
+						children: [
+							{
+								type: "Text",
+								dataKey: "title",
+								style: {
+									color: "#FFFFFF",
+									fontSize: "16px",
+									fontWeight: "bold",
+									marginBottom: "10px",
+									borderBottom: "1px solid #53565F"
+								}
+							},
+							{ type: "Text", dataKey: "desc-0", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-1", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-2", style: { fontSize: "12px", padding: "6px 0px" } },
+							{
+								type: "Container",
+								style: {
+									display: "flex",
+									flexDirection: "column",
+									padding: "10px",
+									marginTop: "6px",
+									backgroundColor: "#53565F",
+									color: "#FFFFFF",
+									borderRadius: "5px",
+									overflow: "auto"
+								},
+								children: [
+									{
+										type: "Text",
+										dataKey: "line-0",
+										style: { fontSize: "12px", fontFamily: "monospace", whiteSpace: "nowrap" }
+									}
+								]
+							}
+						]
+					},
+					data: {
+						title: "/contacts-partial",
+						"desc-0": "The contacts-partial command can be used to search for a contact.",
+						"desc-1":
+							"It demonstrates how we would display results instantly while asynchronously retrieving all the results.",
+						"desc-2": "For example to search for a contact containing the letter a.",
+						"line-0": "/contacts-partial a"
+					}
+				}
 			},
 			{
-				key: `${AsyncIntegrationProvider._PROVIDER_ID}-help3`,
+				key: `${this._definition?.id}-help3`,
 				title: "/contacts",
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: AsyncIntegrationProvider._PROVIDER_ID,
+					providerId: this._definition?.id,
 					populateQuery: "/contacts "
 				},
 				template: CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/contacts",
-					[
-						"The contacts command can be used to search for a contact.",
-						"It demonstrates how we would display results instantly and only retrieve full data on entry selection.",
-						"Contacts starting with E will show error on first load.",
-						"For example to search for a contact containing the letter a."
-					],
-					["/contacts a", "/contacts e"]
-				)
+				templateContent: {
+					layout: {
+						type: "Container",
+						style: { display: "flex", flexDirection: "column", padding: "10px" },
+						children: [
+							{
+								type: "Text",
+								dataKey: "title",
+								style: {
+									color: "#FFFFFF",
+									fontSize: "16px",
+									fontWeight: "bold",
+									marginBottom: "10px",
+									borderBottom: "1px solid #53565F"
+								}
+							},
+							{ type: "Text", dataKey: "desc-0", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-1", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-2", style: { fontSize: "12px", padding: "6px 0px" } },
+							{ type: "Text", dataKey: "desc-3", style: { fontSize: "12px", padding: "6px 0px" } },
+							{
+								type: "Container",
+								style: {
+									display: "flex",
+									flexDirection: "column",
+									padding: "10px",
+									marginTop: "6px",
+									backgroundColor: "#53565F",
+									color: "#FFFFFF",
+									borderRadius: "5px",
+									overflow: "auto"
+								},
+								children: [
+									{
+										type: "Text",
+										dataKey: "line-0",
+										style: { fontSize: "12px", fontFamily: "monospace", whiteSpace: "nowrap" }
+									},
+									{
+										type: "Text",
+										dataKey: "line-1",
+										style: { fontSize: "12px", fontFamily: "monospace", whiteSpace: "nowrap" }
+									}
+								]
+							}
+						]
+					},
+					data: {
+						title: "/contacts",
+						"desc-0": "The contacts command can be used to search for a contact.",
+						"desc-1":
+							"It demonstrates how we would display results instantly and only retrieve full data on entry selection.",
+						"desc-2": "Contacts starting with E will show error on first load.",
+						"desc-3": "For example to search for a contact containing the letter a.",
+						"line-0": "/contacts a",
+						"line-1": "/contacts e"
+					}
+				}
 			}
 		];
 	}
@@ -144,11 +272,11 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 
 		if (
 			result.action.trigger === "user-action" &&
-			result.action.name === AsyncIntegrationProvider._ASYNC_PROVIDER_DETAILS_ACTION &&
-			data.url &&
-			this._integrationHelpers.openUrl
+			result.action.name === AsyncContactsSource._ASYNC_PROVIDER_DETAILS_ACTION &&
+			this._helpers?.openUrl &&
+			data.url
 		) {
-			await this._integrationHelpers.openUrl(data.url);
+			await this._helpers?.openUrl(data.url);
 			return true;
 		} else if (
 			(result.action.trigger === "focus-change" && result.data?.state === "loading") ||
@@ -243,7 +371,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				const response = await fetch(`${this._settings?.rootUrl}index.json`);
 
 				const json: ContactsResult = await response.json();
-				const finalContacts = [];
+				const finalContacts: Contact[] = [];
 
 				for (const contact of json.data) {
 					if (
@@ -288,14 +416,12 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 				const response = await fetch(`${this._settings?.rootUrl}index.json`);
 
 				const json: ContactsResult = await response.json();
-				const finalContacts = [];
 
 				for (const contact of json.data) {
 					if (
 						contact.firstName.toLowerCase().includes(wildcard) ||
 						contact.lastName.toLowerCase().includes(wildcard)
 					) {
-						finalContacts.push(contact);
 						// If a contact starts with E show it in errored state
 						if (contact.firstName.startsWith("E")) {
 							results.push(this.createResultErrored(contact));
@@ -317,9 +443,9 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 	 */
 	private createResult(contact: Partial<ContactFull>): HomeSearchResult {
 		const fullName = `${contact.firstName} ${contact.lastName}`;
-		const details = [];
+		const details: ListPairs[] = [];
 		if (contact.email) {
-			details.push(["E-mail", contact.email]);
+			details.push([["E-mail", contact.email]]);
 		}
 		return {
 			key: `contact-${contact.id}`,
@@ -327,13 +453,13 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 			label: "Information",
 			actions: [],
 			data: {
-				providerId: AsyncIntegrationProvider._PROVIDER_ID,
+				providerId: this._definition?.id,
 				contact
 			},
 			template: CLITemplate.Contact,
 			templateContent: {
 				name: fullName,
-				details: [details]
+				details
 			}
 		};
 	}
@@ -351,12 +477,12 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 			label: "Information",
 			actions: [],
 			data: {
-				providerId: AsyncIntegrationProvider._PROVIDER_ID,
+				providerId: this._definition?.id,
 				contact,
 				state: "loading"
 			},
 			template: CLITemplate.Loading,
-			templateContent: undefined
+			templateContent: ""
 		};
 	}
 
@@ -373,7 +499,7 @@ export class AsyncIntegrationProvider implements IntegrationModule<AsyncSettings
 			label: "Information",
 			actions: [],
 			data: {
-				providerId: AsyncIntegrationProvider._PROVIDER_ID,
+				providerId: this._definition?.id,
 				contact,
 				state: "error"
 			},

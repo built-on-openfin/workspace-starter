@@ -5,11 +5,9 @@ import {
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	TemplateFragment,
+	type TemplateFragment,
 	ButtonStyle
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
-import type { ModuleDefinition } from "../../shapes/module-shapes";
 import type {
 	EntityDepartment,
 	EntityItem,
@@ -19,15 +17,9 @@ import type {
 } from "./shapes";
 
 /**
- * Implement the integration provider for Tree structured data.
+ * Implement the source for Tree structured data.
  */
-export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInlineSettings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "tree-inline";
-
+export class TreeInlineSource {
 	/**
 	 * The key to use for a details result.
 	 * @internal
@@ -41,52 +33,40 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 	private static readonly _BACK_ACTION = "Back";
 
 	/**
-	 * The integration helpers.
+	 * The settings for the source.
 	 * @internal
 	 */
-	private _integrationHelpers: IntegrationHelpers | undefined;
-
-	/**
-	 * The settings for the integration.
-	 * @internal
-	 */
-	private _definition: ModuleDefinition<TreeInlineSettings> | undefined;
+	private _definition: { id: string; icon: string; data?: TreeInlineSettings } | undefined;
 
 	/**
 	 * The organization data.
 	 */
-	private _orgData: EntityOrganization[];
+	private _orgData?: EntityOrganization[];
 
 	/**
 	 * The last results;
 	 */
-	private _lastResults: HomeSearchResult[];
+	private _lastResults?: HomeSearchResult[];
 
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
+	 * @param definition.id The id for the module.
+	 * @param definition.icon The icon for the module.
+	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
-	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<TreeInlineSettings>,
-		loggerCreator: () => void,
-		helpers: IntegrationHelpers
+		definition: { id: string; icon: string; data?: TreeInlineSettings },
+		loggerCreator: () => void
 	): Promise<void> {
-		this._integrationHelpers = helpers;
 		this._definition = definition;
 
-		const orgResponse = await fetch(definition.data.orgUrl);
+		const orgResponse = await fetch(`${definition.data?.rootUrl}organizations-inline.json`);
 		this._orgData = await orgResponse.json();
 		this._lastResults = [];
 	}
-
-	/**
-	 * The module is being deregistered.
-	 * @returns Nothing.
-	 */
-	public async closedown(): Promise<void> {}
 
 	/**
 	 * Get a list of the static help entries.
@@ -95,19 +75,59 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
 		return [
 			{
-				key: `${TreeInlineIntegrationProvider._PROVIDER_ID}-help`,
+				key: `${this._definition?.id}-help`,
 				title: "/tree-inline",
 				label: "Help",
 				actions: [],
 				data: {
-					providerId: TreeInlineIntegrationProvider._PROVIDER_ID
+					providerId: this._definition?.id
 				},
 				template: CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/tree-inline",
-					["Start typing the name of an organization to find the data."],
-					["acme"]
-				)
+				templateContent: {
+					layout: {
+						type: "Container",
+						style: { display: "flex", flexDirection: "column", padding: "10px" },
+						children: [
+							{
+								type: "Text",
+								dataKey: "title",
+								style: {
+									color: "#FFFFFF",
+									fontSize: "16px",
+									fontWeight: "bold",
+									marginBottom: "10px",
+									borderBottom: "1px solid #53565F"
+								}
+							},
+							{ type: "Text", dataKey: "desc-0", style: { fontSize: "12px", padding: "6px 0px" } },
+							{
+								type: "Container",
+								style: {
+									display: "flex",
+									flexDirection: "column",
+									padding: "10px",
+									marginTop: "6px",
+									backgroundColor: "#53565F",
+									color: "#FFFFFF",
+									borderRadius: "5px",
+									overflow: "auto"
+								},
+								children: [
+									{
+										type: "Text",
+										dataKey: "line-0",
+										style: { fontSize: "12px", fontFamily: "monospace", whiteSpace: "nowrap" }
+									}
+								]
+							}
+						]
+					},
+					data: {
+						title: "/tree-inline",
+						"desc-0": "Start typing the name of an organization to find the data.",
+						"line-0": "dock"
+					}
+				}
 			}
 		];
 	}
@@ -124,11 +144,11 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 	): Promise<boolean> {
 		if (
 			result.action.trigger === "user-action" &&
-			result.action.name === TreeInlineIntegrationProvider._DETAILS_ACTION
+			result.action.name === TreeInlineSource._DETAILS_ACTION
 		) {
 			const entity: EntityItem = result.data.entity;
 
-			let results: HomeSearchResult[];
+			let results: HomeSearchResult[] | undefined;
 			if (entity?.type === "organization") {
 				const org = entity as EntityOrganization;
 				results = await Promise.all(
@@ -140,7 +160,9 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 			}
 
 			if (results) {
-				lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				if (this._lastResults) {
+					lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				}
 				lastResponse.respond(results);
 				this._lastResults = results;
 			}
@@ -148,12 +170,14 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 			return true;
 		} else if (
 			result.action.trigger === "user-action" &&
-			result.action.name === TreeInlineIntegrationProvider._BACK_ACTION
+			result.action.name === TreeInlineSource._BACK_ACTION
 		) {
 			const parentResults: HomeSearchResult[] = result.data.parentResults;
 
 			if (parentResults) {
-				lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				if (this._lastResults) {
+					lastResponse.revoke(...this._lastResults.map((r) => r.key));
+				}
 				lastResponse.respond(parentResults);
 				this._lastResults = parentResults;
 			}
@@ -179,11 +203,13 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 
 		if (query.length > 0) {
 			const queryOrg = new RegExp(query, "i");
-			const matchingOrgs: EntityOrganization[] = this._orgData.filter(
+			const matchingOrgs: EntityOrganization[] | undefined = this._orgData?.filter(
 				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
 			);
 
-			this._lastResults = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [])));
+			if (matchingOrgs) {
+				this._lastResults = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [])));
+			}
 		}
 
 		return {
@@ -195,81 +221,78 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 	 * Create a search result.
 	 * @param entity The entity for the item.
 	 * @param parentResults The parent results.
-	 * @param query The original query.
 	 * @returns The search result.
 	 */
 	private async createResult(
 		entity: EntityItem,
-		parentResults: HomeSearchResult[]
+		parentResults?: HomeSearchResult[]
 	): Promise<HomeSearchResult> {
-		const palette = await this._integrationHelpers.getCurrentPalette();
-
 		const data: { [id: string]: string } = {
 			title: entity.name,
 			navigateBackAction: "Back"
 		};
 
 		const children: TemplateFragment[] = [
-			await this._integrationHelpers.templateHelpers.createTitle("title", undefined, undefined, {
-				marginBottom: "10px",
-				borderBottom: `1px solid ${palette.background6}`
-			})
+			{
+				type: "Text",
+				dataKey: "title",
+				style: {
+					color: "#FFFFFF",
+					fontSize: "16px",
+					fontWeight: "bold",
+					marginBottom: "10px",
+					borderBottom: "1px solid #53565F"
+				}
+			}
 		];
 
 		const mainContent: TemplateFragment[] = [];
 		if (entity.type === "organization") {
-			mainContent.push(await this._integrationHelpers.templateHelpers.createText("childCount"));
+			mainContent.push({ type: "Text", dataKey: "childCount", style: { fontSize: "14px" } });
 			data.childCount = `Departments: ${(entity as EntityOrganization).departments.length.toString()}`;
 			data.navigateAction = "Departments";
 			delete data.navigateBackAction;
 		} else if (entity.type === "department") {
-			mainContent.push(await this._integrationHelpers.templateHelpers.createText("childCount"));
+			mainContent.push({ type: "Text", dataKey: "childCount", style: { fontSize: "14px" } });
 			data.childCount = `Members: ${(entity as EntityDepartment).members.length.toString()}`;
 			data.navigateAction = "Members";
 		} else {
 			data.role = `Role: ${(entity as EntityMember).role}`;
-			mainContent.push(await this._integrationHelpers.templateHelpers.createText("role"));
+			mainContent.push({ type: "Text", dataKey: "role", style: { fontSize: "14px" } });
 		}
 
-		children.push(
-			await this._integrationHelpers.templateHelpers.createContainer("column", mainContent, {
-				flex: 1
-			})
-		);
+		children.push({
+			type: "Container",
+			style: { display: "flex", flexDirection: "column", flex: 1 },
+			children: mainContent
+		});
 
 		const buttons: TemplateFragment[] = [];
 		if (data.navigateBackAction) {
-			buttons.push(
-				await this._integrationHelpers.templateHelpers.createButton(
-					ButtonStyle.Primary,
-					"navigateBackAction",
-					TreeInlineIntegrationProvider._BACK_ACTION,
-					{
-						fontSize: "12px"
-					}
-				)
-			);
+			buttons.push({
+				type: "Button",
+				buttonStyle: ButtonStyle.Primary,
+				children: [{ type: "Text", dataKey: "navigateBackAction", style: { fontSize: "12px" } }],
+				action: TreeInlineSource._BACK_ACTION,
+				style: { fontSize: "12px" }
+			});
 		}
 
 		if (data.navigateAction) {
-			buttons.push(
-				await this._integrationHelpers.templateHelpers.createButton(
-					ButtonStyle.Primary,
-					"navigateAction",
-					TreeInlineIntegrationProvider._DETAILS_ACTION,
-					{
-						fontSize: "12px"
-					}
-				)
-			);
+			buttons.push({
+				type: "Button",
+				buttonStyle: ButtonStyle.Primary,
+				children: [{ type: "Text", dataKey: "navigateAction", style: { fontSize: "12px" } }],
+				action: TreeInlineSource._DETAILS_ACTION,
+				style: { fontSize: "12px" }
+			});
 		}
 
-		children.push(
-			await this._integrationHelpers.templateHelpers.createContainer("row", buttons, {
-				justifyContent: "flex-end",
-				gap: "10px"
-			})
-		);
+		children.push({
+			type: "Container",
+			style: { display: "flex", flexDirection: "row", justifyContent: "flex-end", gap: "10px" },
+			children: buttons
+		});
 
 		return {
 			key: `tree-${entity.id}`,
@@ -277,21 +300,22 @@ export class TreeInlineIntegrationProvider implements IntegrationModule<TreeInli
 			label: entity.type,
 			actions: [
 				{
-					name: TreeInlineIntegrationProvider._DETAILS_ACTION,
+					name: TreeInlineSource._DETAILS_ACTION,
 					hotkey: "Enter"
 				}
 			],
 			data: {
-				providerId: TreeInlineIntegrationProvider._PROVIDER_ID,
+				providerId: this._definition?.id,
 				entity,
 				parentResults
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
-				layout: await this._integrationHelpers.templateHelpers.createContainer("column", children, {
-					padding: "10px",
-					flex: 1
-				}),
+				layout: {
+					type: "Container",
+					style: { display: "flex", flexDirection: "column", flex: 1, padding: "10px" },
+					children
+				},
 				data
 			}
 		};
