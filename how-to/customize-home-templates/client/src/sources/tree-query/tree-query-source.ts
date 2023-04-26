@@ -207,7 +207,9 @@ export class TreeQuerySource {
 
 						if (parts.length === 2) {
 							results = results.concat(
-								await Promise.all(deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name)))
+								await Promise.all(
+									deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name))
+								)
 							);
 						} else if (parts.length === 3) {
 							const queryMem = new RegExp(parts[2], "i");

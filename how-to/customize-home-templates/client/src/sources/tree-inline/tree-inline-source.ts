@@ -142,10 +142,7 @@ export class TreeInlineSource {
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
-		if (
-			result.action.trigger === "user-action" &&
-			result.action.name === TreeInlineSource._DETAILS_ACTION
-		) {
+		if (result.action.trigger === "user-action" && result.action.name === TreeInlineSource._DETAILS_ACTION) {
 			const entity: EntityItem = result.data.entity;
 
 			let results: HomeSearchResult[] | undefined;

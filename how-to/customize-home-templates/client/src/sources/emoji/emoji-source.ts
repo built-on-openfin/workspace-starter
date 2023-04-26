@@ -153,16 +153,10 @@ export class EmojiSource {
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		if (result.action.trigger === "user-action") {
-			if (
-				result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION &&
-				result.data.emoji
-			) {
+			if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION && result.data.emoji) {
 				await fin.Clipboard.writeText({ data: result.data.emoji });
 				return true;
-			} else if (
-				result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION &&
-				result.data.key
-			) {
+			} else if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION && result.data.key) {
 				await fin.Clipboard.writeText({ data: result.data.key });
 				return true;
 			} else if (
