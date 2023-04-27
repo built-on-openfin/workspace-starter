@@ -907,16 +907,6 @@
 					}
 				},
 				{
-					"id": "emoji",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/favicon.ico",
-					"title": "Emoji Provider",
-					"description": "Search for emojis by name",
-					"enabled": false,
-					"excludeFromSourceFilter": true,
-					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/js/integrations/emoji.bundle.js"
-				},
-				{
 					"id": "about",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/favicon.ico",
 					"title": "About",
@@ -924,6 +914,24 @@
 					"enabled": true,
 					"excludeFromSourceFilter": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "quote",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/favicon.ico",
+					"title": "Quote Provider",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/js/modules/integrations/quote.bundle.js",
+					"data": {
+						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/data/quotes/"
+					}
+				},
+				{
+					"id": "emoji",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/customize-home-templates-simplify/customize-workspace/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
