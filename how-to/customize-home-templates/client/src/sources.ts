@@ -6,12 +6,12 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
+import type { ISource, ISourceDefinition } from "./shapes";
 import { AsyncContactsSource } from "./sources/async-contacts/async-contacts-source";
 import { EmojiSource } from "./sources/emoji/emoji-source";
 import { QuoteSource } from "./sources/quote/quote-source";
 import { TreeInlineSource } from "./sources/tree-inline/tree-inline-source";
 import { TreeQuerySource } from "./sources/tree-query/tree-query-source";
-import { ISource, ISourceDefinition } from "./shapes";
 
 // Configuration for all the data sources.
 const SOURCES: {
