@@ -359,17 +359,12 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 				break;
 			}
 			case manifestTypes.manifest.id: {
-				const manifest = await fin.System.launchManifest(app.manifest);
-				if (manifest?.platform?.uuid !== undefined) {
+				const manifestApp = await fin.Application.startFromManifest(app.manifest);
+				const manifestUUID = manifestApp?.identity?.uuid;
+				if (manifestUUID !== undefined) {
 					platformAppIdentities.push({
-						uuid: manifest.platform.uuid,
-						name: manifest.platform.uuid,
-						appId: app.appId
-					});
-				} else if (manifest?.startup_app?.uuid !== undefined) {
-					platformAppIdentities.push({
-						uuid: manifest.startup_app.uuid,
-						name: manifest.startup_app.uuid,
+						uuid: manifestUUID,
+						name: manifestUUID,
 						appId: app.appId
 					});
 				}
