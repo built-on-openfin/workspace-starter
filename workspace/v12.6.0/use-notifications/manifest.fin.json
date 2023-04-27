@@ -9,7 +9,7 @@
 		"uuid": "use-notifications",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/use-notifications/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/use-notifications/notifications/notifications.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/use-notifications/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
@@ -28,9 +28,5 @@
 		"product": "Workspace Starter - Use Notifications - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"customProviderIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/use-notifications/images/icon-dot.png",
-		"notificationSoundUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/use-notifications/assets/notification.mp3"
 	}
 }

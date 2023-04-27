@@ -1097,7 +1097,7 @@ async function init() {
     const browser = {
         title: "Bloomberg Test Harness",
         defaultWindowOptions: {
-            icon: "http://localhost:8080/favicon-32x32.png"
+            icon: "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-bloomberg-basic/favicon-32x32.png"
         },
         defaultPageOptions: {
             closeButton: {
