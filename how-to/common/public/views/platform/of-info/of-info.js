@@ -17,8 +17,8 @@ async function init() {
 	let rvmInfo;
 
 	try {
-		rvmInfo = await fin.System.getRvmInfo()
-	} catch(err) {
+		rvmInfo = await fin.System.getRvmInfo();
+	} catch (err) {
 		console.error(err);
 	}
 
@@ -34,7 +34,7 @@ async function init() {
 	let runtimeInfo;
 	try {
 		runtimeInfo = await fin.System.getRuntimeInfo();
-	} catch(err) {
+	} catch (err) {
 		console.error(err);
 	}
 
@@ -51,7 +51,7 @@ async function init() {
 
 	try {
 		platform = fin.Platform.getCurrentSync();
-	} catch(err) {
+	} catch (err) {
 		console.error(err);
 	}
 
