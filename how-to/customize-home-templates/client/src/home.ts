@@ -52,7 +52,7 @@ export async function register(id: string, title: string, icon: string): Promise
 		}
 	};
 
-	// Important to not we enable the dispatchFocusEvents flag
+	// Important to note we enable the dispatchFocusEvents flag
 	// which means we receive `focus-change` events in the onSelection
 	// callback allowing us to lazy load a template
 	const cliProvider: CLIProvider = {
