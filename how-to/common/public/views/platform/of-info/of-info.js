@@ -14,29 +14,47 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initialize the DOM elements.
  */
 async function init() {
-	const rvmInfo = await fin.System.getRvmInfo();
+	let rvmInfo;
+
+	try {
+		rvmInfo = await fin.System.getRvmInfo()
+	} catch(err) {
+		console.error(err);
+	}
 
 	const rvmVersionElement = document.querySelector('#rvmVersion');
-	rvmVersionElement.textContent = `v${rvmInfo.version}`;
+	rvmVersionElement.textContent = `v${rvmInfo?.version ?? 'unknown'}`;
 
 	const rvmPathElement = document.querySelector('#rvmPath');
-	rvmPathElement.textContent = rvmInfo.path;
+	rvmPathElement.textContent = rvmInfo?.path ?? 'unknown';
 
 	const appLogDirectoryElement = document.querySelector('#appLogDirectory');
-	appLogDirectoryElement.textContent = rvmInfo.appLogDirectory;
+	appLogDirectoryElement.textContent = rvmInfo?.appLogDirectory ?? 'unknown';
 
-	const runtimeInfo = await fin.System.getRuntimeInfo();
+	let runtimeInfo;
+	try {
+		runtimeInfo = await fin.System.getRuntimeInfo();
+	} catch(err) {
+		console.error(err);
+	}
 
 	const runtimeVersionElement = document.querySelector('#runtimeVersion');
-	runtimeVersionElement.textContent = `v${runtimeInfo.version}`;
+	runtimeVersionElement.textContent = `v${runtimeInfo?.version ?? 'unknown'}`;
 
 	const chromeVersionElement = document.querySelector('#chromeVersion');
-	chromeVersionElement.textContent = `v${runtimeInfo.chromeVersion}`;
+	chromeVersionElement.textContent = `v${runtimeInfo?.chromeVersion ?? 'unknown'}`;
 
 	const electronVersionElement = document.querySelector('#electronVersion');
-	electronVersionElement.textContent = runtimeInfo.electronVersion;
+	electronVersionElement.textContent = runtimeInfo?.electronVersion ?? 'unknown';
 
-	const platform = fin.Platform.getCurrentSync();
+	let platform;
+
+	try {
+		platform = fin.Platform.getCurrentSync();
+	} catch(err) {
+		console.error(err);
+	}
+
 	const platformIdentityElement = document.querySelector('#platformIdentity');
-	platformIdentityElement.textContent = platform.identity.uuid;
+	platformIdentityElement.textContent = platform?.identity?.uuid ?? 'unknown';
 }
