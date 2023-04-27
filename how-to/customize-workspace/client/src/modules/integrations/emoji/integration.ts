@@ -269,9 +269,19 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 			)
 		];
 
-		const layout = await this._integrationHelpers.templateHelpers.createLayout(`Emoji ${key}`, "", body, [
-			{ title: "Details", action: EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION }
-		]);
+		const buttons = [
+			{
+				title: "Details",
+				action: EmojiIntegrationProvider._EMOJI_PROVIDER_DETAILS_ACTION
+			}
+		];
+
+		const layout = await this._integrationHelpers.templateHelpers.createLayout(
+			`Emoji ${key}`,
+			"",
+			body,
+			buttons
+		);
 
 		return {
 			layout: layout.layout,
