@@ -907,16 +907,6 @@
 					}
 				},
 				{
-					"id": "emoji",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Emoji Provider",
-					"description": "Search for emojis by name",
-					"enabled": false,
-					"excludeFromSourceFilter": true,
-					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/customize-home-templates/js/integrations/emoji.bundle.js"
-				},
-				{
 					"id": "about",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "About",
@@ -924,6 +914,24 @@
 					"enabled": true,
 					"excludeFromSourceFilter": true,
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "quote",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Quote Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/quote.bundle.js",
+					"data": {
+						"rootUrl": "http://localhost:8080/data/quotes/"
+					}
+				},
+				{
+					"id": "emoji",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]

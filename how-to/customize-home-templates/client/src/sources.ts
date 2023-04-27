@@ -11,64 +11,58 @@ import { EmojiSource } from "./sources/emoji/emoji-source";
 import { QuoteSource } from "./sources/quote/quote-source";
 import { TreeInlineSource } from "./sources/tree-inline/tree-inline-source";
 import { TreeQuerySource } from "./sources/tree-query/tree-query-source";
+import { ISource, ISourceDefinition } from "./shapes";
 
 // Configuration for all the data sources.
-const SOURCE_SETTINGS: {
-	id: string;
-	icon: string;
-	title: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	data?: any;
+const SOURCES: {
+	definition: ISourceDefinition;
+	instance: ISource;
 }[] = [
 	{
-		id: "quote",
-		icon: "http://localhost:8080/favicon.ico",
-		title: "Quote Provider",
-		data: {
-			rootUrl: "http://localhost:8080/data/quotes/"
-		}
+		definition: {
+			id: "quote",
+			data: {
+				rootUrl: "http://localhost:8080/data/quotes/"
+			}
+		},
+		instance: new QuoteSource()
 	},
 	{
-		id: "emoji",
-		icon: "http://localhost:8080/favicon.ico",
-		title: "Emoji Provider",
-		data: {
-			rootUrl: ""
-		}
+		definition: {
+			id: "emoji",
+			data: {
+				rootUrl: ""
+			}
+		},
+		instance: new EmojiSource()
 	},
 	{
-		id: "async",
-		icon: "http://localhost:8080/favicon.ico",
-		title: "Async Provider",
-		data: {
-			rootUrl: "http://localhost:8080/data/contacts/"
-		}
+		definition: {
+			id: "async",
+			data: {
+				rootUrl: "http://localhost:8080/data/contacts/"
+			}
+		},
+		instance: new AsyncContactsSource()
 	},
 	{
-		id: "tree-query",
-		icon: "http://localhost:8080/favicon.ico",
-		title: "Tree Query Provider",
-		data: {
-			rootUrl: "http://localhost:8080/data/organizations/"
-		}
+		definition: {
+			id: "tree-query",
+			data: {
+				rootUrl: "http://localhost:8080/data/organizations/"
+			}
+		},
+		instance: new TreeQuerySource()
 	},
 	{
-		id: "tree-inline",
-		icon: "http://localhost:8080/favicon.ico",
-		title: "Tree Inline Provider",
-		data: {
-			rootUrl: "http://localhost:8080/data/organizations/"
-		}
+		definition: {
+			id: "tree-inline",
+			data: {
+				rootUrl: "http://localhost:8080/data/organizations/"
+			}
+		},
+		instance: new TreeInlineSource()
 	}
-];
-
-// The instance of the sources
-const SOURCES = [
-	new QuoteSource(),
-	new EmojiSource(),
-	new AsyncContactsSource(),
-	new TreeQuerySource(),
-	new TreeInlineSource()
 ];
 
 /**
@@ -76,8 +70,8 @@ const SOURCES = [
  * @param homeRegistration The home registration to use.
  */
 export async function initializeSources(homeRegistration: HomeRegistration): Promise<void> {
-	for (let i = 0; i < SOURCES.length; i++) {
-		await SOURCES[i].initialize(SOURCE_SETTINGS[i], () => {}, {
+	for (const source of SOURCES) {
+		await source.instance.initialize(source.definition, () => {}, {
 			setSearchQuery: async (query: string) => homeRegistration.setSearchQuery(query),
 			openUrl: async (url: string) => fin.System.openUrlWithBrowser(url)
 		});
@@ -92,9 +86,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	let helpResults: HomeSearchResult[] = [];
 
 	for (const element of SOURCES) {
-		if (element.getHelpSearchEntries) {
-			helpResults = helpResults.concat(await element.getHelpSearchEntries());
-		}
+		helpResults = helpResults.concat(await element.instance.getHelpSearchEntries());
 	}
 
 	return helpResults;
@@ -117,7 +109,7 @@ export async function getSearchResults(
 	};
 
 	for (const element of SOURCES) {
-		const searchResponse = await element.getSearchResults(query, filters, lastResponse);
+		const searchResponse = await element.instance.getSearchResults(query, filters, lastResponse);
 		response.results = response.results.concat(searchResponse.results);
 	}
 
@@ -137,9 +129,9 @@ export async function itemSelection(
 ): Promise<boolean> {
 	let res = false;
 
-	const foundIndex = SOURCE_SETTINGS.findIndex((source) => source.id === result.data?.providerId);
+	const foundIndex = SOURCES.findIndex((source) => source.definition.id === result.data?.providerId);
 	if (foundIndex >= 0) {
-		res = await SOURCES[foundIndex].itemSelection(result, lastResponse);
+		res = await SOURCES[foundIndex].instance.itemSelection(result, lastResponse);
 	}
 
 	return res;

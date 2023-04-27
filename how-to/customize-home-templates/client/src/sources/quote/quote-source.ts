@@ -40,10 +40,10 @@ export class QuoteSource {
 	 * The settings for the source.
 	 * @internal
 	 */
-	private _definition: { id: string; icon: string; data?: QuoteSettings } | undefined;
+	private _definition: { id: string; data?: QuoteSettings } | undefined;
 
 	/**
-	 * The settings for the sourcesource.
+	 * The settings for the source.
 	 * @internal
 	 */
 	private _settings: QuoteSettings | undefined;
@@ -52,7 +52,6 @@ export class QuoteSource {
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param definition.id The id for the module.
-	 * @param definition.icon The icon for the module.
 	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods from the platform.
@@ -60,7 +59,7 @@ export class QuoteSource {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: { id: string; icon: string; data?: QuoteSettings },
+		definition: { id: string; data?: QuoteSettings },
 		loggerCreator: () => void,
 		helpers: { openUrl: (url: string) => Promise<void> }
 	): Promise<void> {
@@ -136,29 +135,6 @@ export class QuoteSource {
 				}
 			}
 		];
-	}
-
-	/**
-	 * An entry has been selected.
-	 * @param result The dispatched result.
-	 * @param lastResponse The last response.
-	 * @returns True if the item was handled.
-	 */
-	public async itemSelection(
-		result: HomeDispatchedSearchResult,
-		lastResponse: HomeSearchListenerResponse
-	): Promise<boolean> {
-		if (
-			result.action.trigger === "user-action" &&
-			result.action.name === QuoteSource._QUOTE_PROVIDER_DETAILS_ACTION &&
-			this._helpers?.openUrl &&
-			result.data.url
-		) {
-			await this._helpers.openUrl(result.data.url as string);
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -284,6 +260,29 @@ export class QuoteSource {
 		return {
 			results
 		};
+	}
+
+	/**
+	 * An entry has been selected.
+	 * @param result The dispatched result.
+	 * @param lastResponse The last response.
+	 * @returns True if the item was handled.
+	 */
+	public async itemSelection(
+		result: HomeDispatchedSearchResult,
+		lastResponse: HomeSearchListenerResponse
+	): Promise<boolean> {
+		if (
+			result.action.trigger === "user-action" &&
+			result.action.name === QuoteSource._QUOTE_PROVIDER_DETAILS_ACTION &&
+			this._helpers?.openUrl &&
+			result.data.url
+		) {
+			await this._helpers.openUrl(result.data.url as string);
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

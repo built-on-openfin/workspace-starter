@@ -42,7 +42,7 @@ export class TreeQuerySource {
 	 * The settings for the source.
 	 * @internal
 	 */
-	private _definition: { id: string; icon: string; data?: TreeQuerySettings } | undefined;
+	private _definition: { id: string; data?: TreeQuerySettings } | undefined;
 
 	/**
 	 * The organization data.
@@ -53,7 +53,6 @@ export class TreeQuerySource {
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param definition.id The id for the module.
-	 * @param definition.icon The icon for the module.
 	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -61,7 +60,7 @@ export class TreeQuerySource {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: { id: string; icon: string; data?: TreeQuerySettings },
+		definition: { id: string; data?: TreeQuerySettings },
 		loggerCreator: () => void,
 		helpers: {
 			setSearchQuery: (query: string) => Promise<void>;
@@ -78,7 +77,7 @@ export class TreeQuerySource {
 	 * Get a list of the static help entries.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${this._definition?.id}-help`,
@@ -136,40 +135,6 @@ export class TreeQuerySource {
 				}
 			}
 		];
-	}
-
-	/**
-	 * An entry has been selected.
-	 * @param result The dispatched result.
-	 * @param lastResponse The last response.
-	 * @returns True if the item was handled.
-	 */
-	public async itemSelection(
-		result: HomeDispatchedSearchResult,
-		lastResponse: HomeSearchListenerResponse
-	): Promise<boolean> {
-		if (
-			result.action.trigger === "user-action" &&
-			result.action.name === TreeQuerySource._DETAILS_ACTION &&
-			this._helpers?.setSearchQuery
-		) {
-			const path: string[] = result.data.path;
-
-			await this._helpers.setSearchQuery(path.join("/"));
-
-			return true;
-		} else if (
-			result.action.trigger === "user-action" &&
-			result.action.name === TreeQuerySource._BACK_ACTION &&
-			this._helpers?.setSearchQuery
-		) {
-			const query: string = result.data.query;
-
-			await this._helpers.setSearchQuery(query);
-
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -235,6 +200,40 @@ export class TreeQuerySource {
 		return {
 			results
 		};
+	}
+
+	/**
+	 * An entry has been selected.
+	 * @param result The dispatched result.
+	 * @param lastResponse The last response.
+	 * @returns True if the item was handled.
+	 */
+	public async itemSelection(
+		result: HomeDispatchedSearchResult,
+		lastResponse: HomeSearchListenerResponse
+	): Promise<boolean> {
+		if (
+			result.action.trigger === "user-action" &&
+			result.action.name === TreeQuerySource._DETAILS_ACTION &&
+			this._helpers?.setSearchQuery
+		) {
+			const path: string[] = result.data.path;
+
+			await this._helpers.setSearchQuery(path.join("/"));
+
+			return true;
+		} else if (
+			result.action.trigger === "user-action" &&
+			result.action.name === TreeQuerySource._BACK_ACTION &&
+			this._helpers?.setSearchQuery
+		) {
+			const query: string = result.data.query;
+
+			await this._helpers.setSearchQuery(query);
+
+			return true;
+		}
+		return false;
 	}
 
 	/**

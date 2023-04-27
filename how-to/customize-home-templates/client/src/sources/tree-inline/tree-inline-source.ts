@@ -36,7 +36,7 @@ export class TreeInlineSource {
 	 * The settings for the source.
 	 * @internal
 	 */
-	private _definition: { id: string; icon: string; data?: TreeInlineSettings } | undefined;
+	private _definition: { id: string; data?: TreeInlineSettings } | undefined;
 
 	/**
 	 * The organization data.
@@ -52,13 +52,12 @@ export class TreeInlineSource {
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param definition.id The id for the module.
-	 * @param definition.icon The icon for the module.
 	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: { id: string; icon: string; data?: TreeInlineSettings },
+		definition: { id: string; data?: TreeInlineSettings },
 		loggerCreator: () => void
 	): Promise<void> {
 		this._definition = definition;
@@ -72,7 +71,7 @@ export class TreeInlineSource {
 	 * Get a list of the static help entries.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${this._definition?.id}-help`,
@@ -133,6 +132,36 @@ export class TreeInlineSource {
 	}
 
 	/**
+	 * Get a list of search results based on the query and filters.
+	 * @param query The query to search for.
+	 * @param filters The filters to apply.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResults(
+		query: string,
+		filters: CLIFilter[],
+		lastResponse: HomeSearchListenerResponse
+	): Promise<HomeSearchResponse> {
+		this._lastResults = [];
+
+		if (query.length > 0) {
+			const queryOrg = new RegExp(query, "i");
+			const matchingOrgs: EntityOrganization[] | undefined = this._orgData?.filter(
+				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
+			);
+
+			if (matchingOrgs) {
+				this._lastResults = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [])));
+			}
+		}
+
+		return {
+			results: this._lastResults
+		};
+	}
+
+	/**
 	 * An entry has been selected.
 	 * @param result The dispatched result.
 	 * @param lastResponse The last response.
@@ -182,36 +211,6 @@ export class TreeInlineSource {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Get a list of search results based on the query and filters.
-	 * @param query The query to search for.
-	 * @param filters The filters to apply.
-	 * @param lastResponse The last search response used for updating existing results.
-	 * @returns The list of results and new filters.
-	 */
-	public async getSearchResults(
-		query: string,
-		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
-	): Promise<HomeSearchResponse> {
-		this._lastResults = [];
-
-		if (query.length > 0) {
-			const queryOrg = new RegExp(query, "i");
-			const matchingOrgs: EntityOrganization[] | undefined = this._orgData?.filter(
-				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
-			);
-
-			if (matchingOrgs) {
-				this._lastResults = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [])));
-			}
-		}
-
-		return {
-			results: this._lastResults
-		};
 	}
 
 	/**

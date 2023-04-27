@@ -42,13 +42,12 @@ export class EmojiSource {
 	 * The settings for the source.
 	 * @internal
 	 */
-	private _definition: { id: string; icon: string; data?: unknown } | undefined;
+	private _definition: { id: string; data?: unknown } | undefined;
 
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param definition.id The id for the module.
-	 * @param definition.icon The icon for the module.
 	 * @param definition.data The custom data for the module.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods from the platform.
@@ -58,7 +57,6 @@ export class EmojiSource {
 	public async initialize(
 		definition: {
 			id: string;
-			icon: string;
 			data?: unknown;
 		},
 		loggerCreator: () => void,
@@ -72,13 +70,12 @@ export class EmojiSource {
 	 * Get a list of the static help entries.
 	 * @returns The list of help entries.
 	 */
-	public async getHelpSearchEntries?(): Promise<HomeSearchResult[]> {
+	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		return [
 			{
 				key: `${this._definition?.id}-help`,
 				title: "/emoji",
 				label: "Help",
-				icon: this._definition?.icon,
 				actions: [],
 				data: {
 					providerId: this._definition?.id,
@@ -143,36 +140,6 @@ export class EmojiSource {
 	}
 
 	/**
-	 * An entry has been selected.
-	 * @param result The dispatched result.
-	 * @param lastResponse The last response.
-	 * @returns True if the item was handled.
-	 */
-	public async itemSelection(
-		result: HomeDispatchedSearchResult,
-		lastResponse: HomeSearchListenerResponse
-	): Promise<boolean> {
-		if (result.action.trigger === "user-action") {
-			if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION && result.data.emoji) {
-				await fin.Clipboard.writeText({ data: result.data.emoji });
-				return true;
-			} else if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION && result.data.key) {
-				await fin.Clipboard.writeText({ data: result.data.key });
-				return true;
-			} else if (
-				result.action.name === EmojiSource._EMOJI_PROVIDER_DETAILS_ACTION &&
-				this._helpers?.openUrl &&
-				result.data.url
-			) {
-				await this._helpers?.openUrl(result.data.url as string);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
@@ -215,6 +182,36 @@ export class EmojiSource {
 	}
 
 	/**
+	 * An entry has been selected.
+	 * @param result The dispatched result.
+	 * @param lastResponse The last response.
+	 * @returns True if the item was handled.
+	 */
+	public async itemSelection(
+		result: HomeDispatchedSearchResult,
+		lastResponse: HomeSearchListenerResponse
+	): Promise<boolean> {
+		if (result.action.trigger === "user-action") {
+			if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION && result.data.emoji) {
+				await fin.Clipboard.writeText({ data: result.data.emoji });
+				return true;
+			} else if (result.action.name === EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION && result.data.key) {
+				await fin.Clipboard.writeText({ data: result.data.key });
+				return true;
+			} else if (
+				result.action.name === EmojiSource._EMOJI_PROVIDER_DETAILS_ACTION &&
+				this._helpers?.openUrl &&
+				result.data.url
+			) {
+				await this._helpers?.openUrl(result.data.url as string);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Create a search result.
 	 * @param key The key for the emoji.
 	 * @param symbol The emoji symbol.
@@ -239,16 +236,15 @@ export class EmojiSource {
 				providerId: this._definition?.id,
 				key,
 				emoji: symbol,
-				url: `https://emojipedia.org/${key}/`
+				url: `https://emojipedia.org/${key.replace(/_/g, "-")}/`
 			},
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout: await this.getEmojiTemplate(),
 				data: {
-					keyTitle: "Key",
+					title: `Emoji ${key}`,
 					copyKeyTitle: "Copy Key",
 					key,
-					emojiTitle: "Emoji",
 					copyEmojiTitle: "Copy Emoji",
 					emoji: symbol,
 					detailsTitle: "Further Details"
@@ -264,61 +260,71 @@ export class EmojiSource {
 	private async getEmojiTemplate(): Promise<TemplateFragment> {
 		return {
 			type: "Container",
-			style: { display: "flex", flexDirection: "column", padding: "10px" },
+			style: { display: "flex", flex: "1", flexDirection: "column", padding: "10px" },
 			children: [
 				{
-					type: "Text",
-					dataKey: "keyTitle",
-					style: { fontSize: "12px", color: "#0A76D3", fontWeight: "bold" }
-				},
-				{
 					type: "Container",
-					style: {
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						gap: "10px",
-						marginBottom: "10px"
-					},
+					style: { display: "flex", flex: "1", flexDirection: "column" },
 					children: [
 						{
 							type: "Text",
-							dataKey: "key",
-							style: { fontSize: "12px", color: "#FFFFFF", wordBreak: "break-all" }
+							dataKey: "title",
+							style: {
+								color: "#FFFFFF",
+								fontSize: "16px",
+								fontWeight: "bold",
+								marginBottom: "10px",
+								borderBottom: "1px solid #53565F",
+								whiteSpace: "nowrap",
+								textOverflow: "ellipsis",
+								overflow: "hidden"
+							}
 						},
 						{
-							type: "Button",
-							buttonStyle: ButtonStyle.Secondary,
-							children: [{ type: "Text", dataKey: "copyKeyTitle", style: { fontSize: "12px" } }],
-							action: EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION,
-							style: { border: "1px solid #FFFFFF", fontSize: "12px" }
-						}
-					]
-				},
-				{
-					type: "Text",
-					dataKey: "emojiTitle",
-					style: { fontSize: "12px", color: "#0A76D3", fontWeight: "bold" }
-				},
-				{
-					type: "Container",
-					style: {
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						gap: "10px",
-						marginBottom: "10px"
-					},
-					children: [
-						{ type: "Text", dataKey: "emoji", style: { fontSize: "32px", color: "#FFFFFF" } },
+							type: "Container",
+							style: {
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "space-between",
+								alignItems: "center",
+								gap: "10px",
+								marginBottom: "10px"
+							},
+							children: [
+								{
+									type: "Text",
+									dataKey: "key",
+									style: { fontSize: "12px", color: "#FFFFFF", wordBreak: "break-all" }
+								},
+								{
+									type: "Button",
+									buttonStyle: ButtonStyle.Secondary,
+									children: [{ type: "Text", dataKey: "copyKeyTitle", style: { fontSize: "12px" } }],
+									action: EmojiSource._EMOJI_PROVIDER_COPY_KEY_ACTION,
+									style: { border: "1px solid #FFFFFF", fontSize: "12px" }
+								}
+							]
+						},
 						{
-							type: "Button",
-							buttonStyle: ButtonStyle.Secondary,
-							children: [{ type: "Text", dataKey: "copyEmojiTitle", style: { fontSize: "12px" } }],
-							action: EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION,
-							style: { border: "1px solid #FFFFFF", fontSize: "12px" }
+							type: "Container",
+							style: {
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "space-between",
+								alignItems: "center",
+								gap: "10px",
+								marginBottom: "10px"
+							},
+							children: [
+								{ type: "Text", dataKey: "emoji", style: { fontSize: "32px", color: "#FFFFFF" } },
+								{
+									type: "Button",
+									buttonStyle: ButtonStyle.Secondary,
+									children: [{ type: "Text", dataKey: "copyEmojiTitle", style: { fontSize: "12px" } }],
+									action: EmojiSource._EMOJI_PROVIDER_COPY_EMOJI_ACTION,
+									style: { border: "1px solid #FFFFFF", fontSize: "12px" }
+								}
+							]
 						}
 					]
 				},
