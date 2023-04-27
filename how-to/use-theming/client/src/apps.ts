@@ -4,8 +4,6 @@ export async function getApps(): Promise<App[]> {
 	return [themeBuilderApp, commonStylesApp, notificationStudio, processManager, developerContent];
 }
 
-const webRoot = window.location.href.replace("platform/provider.html", "");
-
 export const themeBuilderApp: App = {
 	appId: "theme-definition-builder",
 	title: "Theme Definition Builder",
@@ -13,7 +11,7 @@ export const themeBuilderApp: App = {
 	manifest:
 		"https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 	manifestType: "view",
-	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
+	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
@@ -30,16 +28,16 @@ export const commonStylesApp: App = {
 	appId: "common-styles",
 	title: "Common Styles Example",
 	description: "A view demonstrating the common styles.",
-	manifest: `${webRoot}common/style/style-view.json`,
+	manifest: "http://localhost:8080/common/style/style-view.json",
 	manifestType: "view",
-	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
+	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
 	intents: [],
 	images: [
 		{
-			src: `${webRoot}common/images/previews/starter-style-guide.png`
+			src: "http://localhost:8080/common/images/previews/starter-style-guide.png"
 		}
 	],
 	tags: ["view", "theme", "tool"]
@@ -63,7 +61,7 @@ export const notificationStudio: App = {
 	intents: [],
 	images: [
 		{
-			src: `${webRoot}common/images/previews/openfin-notification-studio.png`
+			src: "http://localhost:8080/common/images/previews/openfin-notification-studio.png"
 		}
 	],
 	tags: ["hero", "manifest", "tools"]
@@ -83,7 +81,7 @@ export const processManager: App = {
 	intents: [],
 	images: [
 		{
-			src: `${webRoot}common/images/previews/openfin-process-manager.png`
+			src: "http://localhost:8080/common/images/previews/openfin-process-manager.png"
 		}
 	],
 	tags: ["hero", "manifest", "tools"]
@@ -95,15 +93,15 @@ export const developerContent: App = {
 	manifestType: "snapshot",
 	description:
 		"Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-	manifest: `${webRoot}common/snapshots/snapshot.json`,
-	icons: [{ src: `${webRoot}common/images/icon-blue.png` }],
+	manifest: "http://localhost:8080/common/snapshots/snapshot.json",
+	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
 	intents: [],
 	images: [
 		{
-			src: `${webRoot}common/images/previews/openfin-page-docs.png`
+			src: "http://localhost:8080/common/images/previews/openfin-page-docs.png"
 		}
 	],
 	tags: ["page"]

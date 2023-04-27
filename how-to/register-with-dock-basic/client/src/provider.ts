@@ -13,10 +13,9 @@ let showWorkspacesButton: HTMLInputElement | null;
 let customIconUrlInput: HTMLInputElement | null;
 let customOpenUrlInput: HTMLInputElement | null;
 
-const WEB_ROOT = "http://localhost:8080/";
 const PLATFORM_ID = "register-with-dock-basic";
 const PLATFORM_TITLE = "Register With Dock Basic";
-const PLATFORM_ICON = `${WEB_ROOT}favicon.ico`;
+const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// The DOM is ready so initialize the platform
@@ -83,22 +82,16 @@ async function initializeDOM(): Promise<void> {
 			try {
 				// Perform the dock registration which will configure
 				// it and add the buttons/menus
-				await register(
-					PLATFORM_ID,
-					PLATFORM_TITLE,
-					PLATFORM_ICON,
-					{
-						workspaceComponents: {
-							hideHomeButton: !showHomeButton?.checked ?? false,
-							hideNotificationsButton: !showNotificationButton?.checked ?? false,
-							hideStorefrontButton: !showStorefrontButton?.checked ?? false,
-							hideWorkspacesButton: !showWorkspacesButton?.checked ?? false
-						},
-						customIconUrl: customIconUrlInput?.value ?? "",
-						customOpenUrl: customOpenUrlInput?.value ?? ""
+				await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON, {
+					workspaceComponents: {
+						hideHomeButton: !showHomeButton?.checked ?? false,
+						hideNotificationsButton: !showNotificationButton?.checked ?? false,
+						hideStorefrontButton: !showStorefrontButton?.checked ?? false,
+						hideWorkspacesButton: !showWorkspacesButton?.checked ?? false
 					},
-					WEB_ROOT
-				);
+					customIconUrl: customIconUrlInput?.value ?? "",
+					customOpenUrl: customOpenUrlInput?.value ?? ""
+				});
 				setStates(true);
 			} catch (err) {
 				console.error("Error registering dock provider", err);

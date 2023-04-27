@@ -30,12 +30,10 @@ export async function minimize() {
 async function getDockProvider(): Promise<DockProvider> {
 	console.log("Getting the dock provider.");
 
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	return {
 		id: providerId,
 		title: "Theming Dock",
-		icon: `${webRoot}favicon.ico`,
+		icon: "http://localhost:8080/favicon.ico",
 		workspaceComponents: {
 			hideHomeButton: true,
 			hideNotificationsButton: true,
@@ -60,7 +58,7 @@ async function getDockProvider(): Promise<DockProvider> {
 			{
 				type: DockButtonNames.DropdownButton,
 				tooltip: "Social",
-				iconUrl: `${webRoot}favicon.ico`,
+				iconUrl: "http://localhost:8080/favicon.ico",
 				options: [
 					{
 						tooltip: "Twitter",
