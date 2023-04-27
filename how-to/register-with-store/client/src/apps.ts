@@ -72,7 +72,7 @@ async function validateEntries(appSettings: AppProviderSettings, apps: App[]): P
 
 	const validatedApps: App[] = [];
 	const rejectedAppIds = [];
-	const appAssetTag = appSettings?.appAssetTag ?? "appasset";
+	const appAssetTag = "appasset";
 	const supportedManifestTypes = appSettings?.manifestTypes;
 
 	for (const element of apps) {

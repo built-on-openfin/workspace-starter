@@ -72,7 +72,7 @@ async function validateEntries(appSettings: AppProviderSettings, apps: App[]): P
 
 	const validatedApps: App[] = [];
 	const rejectedAppIds = [];
-	const appAssetTag = appSettings?.appAssetTag ?? "appasset";
+	const appAssetTag = "appasset";
 	const supportedManifestTypes = appSettings?.manifestTypes;
 
 	for (const element of apps) {
@@ -112,6 +112,7 @@ async function validateEntries(appSettings: AppProviderSettings, apps: App[]): P
 /**
  * Launch the passed app using its manifest type to determine how to launch it.
  * @param app The app to launch.
+ * @returns The value returned by the launch.
  */
 export async function launchApp(
 	app: App
