@@ -67,7 +67,7 @@ export function interopOverride(
 							height: 715,
 							width: 665,
 							fdc3InteropApi: "2.0",
-							url: "http://localhost:8080/common/windows/intents/instance-picker.html",
+							url: `${customSettings?.platformProvider?.rootUrl}/common/windows/intents/instance-picker.html`,
 							title: "Intent Resolver",
 							...intentResolverOptions
 						};
