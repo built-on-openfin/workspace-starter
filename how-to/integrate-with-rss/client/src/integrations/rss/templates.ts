@@ -1,4 +1,4 @@
-import { ButtonStyle, TemplateFragment } from "@openfin/workspace";
+import { ButtonStyle, type TemplateFragment } from "@openfin/workspace";
 import { createButton, createContainer, createImage, createText } from "../../templates";
 import { getCurrentPalette } from "../../themes";
 

@@ -1,15 +1,15 @@
 import {
-	App,
-	CLIDispatchedSearchResult,
-	CLIFilter,
 	CLIFilterOptionType,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult
+	type App,
+	type CLIDispatchedSearchResult,
+	type CLIFilter,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import type { Page } from "@openfin/workspace-platform";
 import { getApps } from "./apps";

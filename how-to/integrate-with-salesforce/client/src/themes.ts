@@ -1,4 +1,4 @@
-import { ColorSchemeOptionType, CustomThemes, getCurrentSync } from "@openfin/workspace-platform";
+import { ColorSchemeOptionType, getCurrentSync, type CustomThemes } from "@openfin/workspace-platform";
 import type { CustomPaletteSet, CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import { DEFAULT_PALETTES } from "./default-palletes";
 import { getSettings } from "./settings";

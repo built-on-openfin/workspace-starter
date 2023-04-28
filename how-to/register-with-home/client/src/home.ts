@@ -9,8 +9,8 @@ import {
 	type CLISearchListenerRequest,
 	type CLISearchListenerResponse,
 	type CLISearchResponse,
-	type HomeSearchResult,
-	HomeRegistration
+	type HomeRegistration,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync, type Page } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";

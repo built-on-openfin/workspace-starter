@@ -5,7 +5,7 @@ import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
-import { ColorSchemeMode, PlatformCustomTheme, PlatformCustomThemes } from "./shapes/theme-shapes";
+import { ColorSchemeMode, type PlatformCustomTheme, type PlatformCustomThemes } from "./shapes/theme-shapes";
 
 const logger = createLogger("Themes");
 

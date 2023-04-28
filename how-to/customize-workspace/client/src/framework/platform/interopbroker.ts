@@ -1,21 +1,21 @@
 import {
-	AppIdentifier,
-	AppMetadata,
-	ImplementationMetadata,
-	IntentResolution,
-	ResolveError
+	ResolveError,
+	type AppIdentifier,
+	type AppMetadata,
+	type ImplementationMetadata,
+	type IntentResolution
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type {
+	ApiMetadata,
 	IntentOptions,
-	IntentResolverOptions,
 	IntentPickerResponse,
 	IntentRegistrationEntry,
 	IntentRegistrationPayload,
-	IntentTargetMetaData,
-	ApiMetadata
+	IntentResolverOptions,
+	IntentTargetMetaData
 } from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";

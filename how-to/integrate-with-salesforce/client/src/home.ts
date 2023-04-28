@@ -1,13 +1,13 @@
 import {
-	App,
-	CLIFilter,
 	Home,
-	HomeDispatchedSearchResult,
-	HomeProvider,
-	HomeRegistration,
-	HomeSearchListenerRequest,
-	HomeSearchListenerResponse,
-	HomeSearchResponse
+	type App,
+	type CLIFilter,
+	type HomeDispatchedSearchResult,
+	type HomeProvider,
+	type HomeRegistration,
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { launch } from "./launch";

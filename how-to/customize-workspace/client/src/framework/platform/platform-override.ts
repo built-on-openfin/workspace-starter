@@ -1,17 +1,17 @@
 import type OpenFin from "@openfin/core";
 import {
-	ColorSchemeOptionType,
-	CreateSavedPageRequest,
-	CreateSavedWorkspaceRequest,
 	getCurrentSync,
-	OpenGlobalContextMenuPayload,
-	OpenPageTabContextMenuPayload,
-	OpenViewTabContextMenuPayload,
-	Page,
-	UpdateSavedPageRequest,
-	UpdateSavedWorkspaceRequest,
-	Workspace,
-	WorkspacePlatformOverrideCallback
+	type ColorSchemeOptionType,
+	type CreateSavedPageRequest,
+	type CreateSavedWorkspaceRequest,
+	type OpenGlobalContextMenuPayload,
+	type OpenPageTabContextMenuPayload,
+	type OpenViewTabContextMenuPayload,
+	type Page,
+	type UpdateSavedPageRequest,
+	type UpdateSavedWorkspaceRequest,
+	type Workspace,
+	type WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";

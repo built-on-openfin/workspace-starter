@@ -1,4 +1,4 @@
-import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
+import { init as workspacePlatformInit, type BrowserInitConfig } from "@openfin/workspace-platform";
 import { interopOverride } from "./interopbroker";
 
 export async function init() {

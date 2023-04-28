@@ -1,8 +1,8 @@
 import type OpenFin from "@openfin/core";
 import {
-	ColorSchemeOptionType,
 	getCurrentSync,
-	WorkspacePlatformOverrideCallback
+	type ColorSchemeOptionType,
+	type WorkspacePlatformOverrideCallback
 } from "@openfin/workspace-platform";
 import { setColorScheme, updateBrowserWindowButtonsColorScheme } from "./themes";
 

@@ -1,11 +1,11 @@
 import {
 	CLITemplate,
-	ListPairs,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
-	type HomeSearchResult
+	type HomeSearchResult,
+	type ListPairs
 } from "@openfin/workspace";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 

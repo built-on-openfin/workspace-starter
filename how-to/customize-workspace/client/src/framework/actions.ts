@@ -1,12 +1,12 @@
 import type OpenFin from "@openfin/core";
 import {
-	BrowserCreateWindowRequest,
 	CustomActionCallerType,
-	CustomActionPayload,
-	CustomActionsMap,
-	CustomButtonActionPayload,
-	CustomDropdownItemActionPayload,
-	getCurrentSync
+	getCurrentSync,
+	type BrowserCreateWindowRequest,
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type CustomButtonActionPayload,
+	type CustomDropdownItemActionPayload
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
 import { getApp } from "./apps";

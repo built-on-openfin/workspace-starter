@@ -1,4 +1,4 @@
-import { Dock, DockButtonNames, DockProvider } from "@openfin/workspace";
+import { Dock, DockButtonNames, type DockProvider } from "@openfin/workspace";
 
 const providerId = "use-theming";
 

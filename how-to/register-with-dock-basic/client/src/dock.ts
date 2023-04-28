@@ -6,9 +6,9 @@ import {
 } from "@openfin/workspace";
 import {
 	CustomActionCallerType,
-	CustomActionPayload,
-	CustomActionsMap,
-	getCurrentSync
+	getCurrentSync,
+	type CustomActionPayload,
+	type CustomActionsMap
 } from "@openfin/workspace-platform";
 
 /**
