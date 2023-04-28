@@ -653,6 +653,29 @@
 		"tags": ["hero", "manifest", "tools"]
 	},
 	{
+		"appId": "openfin-information",
+		"name": "openfin-information",
+		"title": "OpenFin Information",
+		"description": "Display information about the OpenFin environment",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/of-info.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/previews/of-info.png"
+			}
+		],
+		"tags": ["view", "openfin"]
+	},
+	{
 		"appId": "openfin-developer-page",
 		"name": "openfin-developer-page",
 		"title": "OpenFin Developer Docs",
@@ -680,8 +703,14 @@
 		"name": "OpenFin Winform Interop Example",
 		"title": "OpenFin Winform Interop Example",
 		"description": "A Winform application built in .NET 5 that shows the power of our interop api.",
-		"manifestType": "external",
-		"manifest": "winform-interop-example",
+		"manifestType": "inline-appasset",
+		"manifest": {
+			"alias": "winform-interop-example",
+			"version": "3.0.2",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
+			"target": "OpenFin.Interop.Win.Sample.exe",
+			"forceDownload": false
+		},
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/images/icon-winform-interop.png"

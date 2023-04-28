@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=customize-workspace-for-fdc3",
-		"version": "30.110.74.13"
+		"version": "31.112.75.4"
 	},
 	"startup_app": {
 		"name": "customize-workspace-for-fdc3"
@@ -51,7 +51,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon-32x32.png",
-		"name": "Customize Workspace - vnext - FDC3 Workspace",
+		"name": "Customize Workspace - v13.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -162,11 +162,14 @@
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
-			"windowOptions": {
-				"title": "FDC3 Workspace",
+			"defaultWindowOptions": {
 				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/favicon-32x32.png",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
+				"workspacePlatform": {
+					"pages": [],
+					"title": "FDC3 Workspace",
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/views/platform/new-tab/new-tab.html"
+				}
 			},
 			"toolbarButtons": [
 				{
@@ -305,6 +308,30 @@
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
+				{
+					"id": "apps",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",
+					"title": "Apps",
+					"description": "Search Applications",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/js/modules/integrations/apps.bundle.js",
+					"data": {
+						"manifestTypeMapping": {
+							"view": { "entryLabel": "View", "actionName": "" },
+							"inline-view": { "entryLabel": "View", "actionName": "" },
+							"window": { "entryLabel": "Window", "actionName": "" },
+							"inline-window": { "entryLabel": "Window", "actionName": "" },
+							"snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"inline-snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"manifest": { "entryLabel": "App", "actionName": "Launch App" },
+							"external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
+							"endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
+							"connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
+						}
+					}
+				},
 				{
 					"id": "workspaces",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-workspace/favicon.ico",

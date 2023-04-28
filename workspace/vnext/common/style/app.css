@@ -53,7 +53,7 @@
 }
 
 * {
-	font-family: Inter, 'Sans Serif';
+	font-family: Inter, 'Sans Serif', sans-serif;
 	box-sizing: border-box;
 }
 
@@ -922,4 +922,8 @@ td,
 
 .pointer {
 	cursor: pointer;
+}
+
+.nowrap {
+	white-space: nowrap;
 }
