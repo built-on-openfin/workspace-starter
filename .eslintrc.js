@@ -426,6 +426,12 @@ module.exports = {
 				'@typescript-eslint/comma-spacing': ['error'],
 				'@typescript-eslint/consistent-type-assertions': ['error'],
 				'@typescript-eslint/consistent-type-definitions': ['error'],
+				'@typescript-eslint/consistent-type-imports': [
+					'error',
+					{
+						fixStyle: 'inline-type-imports'
+					}
+				],
 				'@typescript-eslint/default-param-last': ['error'],
 				'@typescript-eslint/dot-notation': ['error'],
 				'@typescript-eslint/explicit-function-return-type': ['off'],

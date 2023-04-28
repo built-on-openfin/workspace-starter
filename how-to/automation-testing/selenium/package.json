@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-selenium",
-	"version": "next",
+	"version": "13.0.0",
 	"description": "OpenFin Workspace Starter Selenium Example",
 	"scripts": {
 		"build": "echo Nothing to build",
@@ -11,10 +11,10 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-helpers": "^1.0.9",
-		"@openfin/automation-native": "^1.0.9",
+		"@openfin/automation-helpers": "^1.0.11",
+		"@openfin/automation-native": "^1.0.11",
 		"chai": "4.3.7",
-		"chromedriver": "110.0.0",
+		"chromedriver": "112.0.0",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"mocha": "10.2.0",

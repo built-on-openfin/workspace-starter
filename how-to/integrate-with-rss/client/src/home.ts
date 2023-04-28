@@ -1,10 +1,10 @@
 import {
 	Home,
-	HomeDispatchedSearchResult,
-	HomeProvider,
-	HomeSearchListenerRequest,
-	HomeSearchListenerResponse,
-	HomeSearchResponse
+	type HomeDispatchedSearchResult,
+	type HomeProvider,
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
 import { getSettings } from "./settings";

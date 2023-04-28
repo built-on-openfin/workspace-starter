@@ -1,13 +1,13 @@
 import {
+	ButtonStyle,
 	CLITemplate,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	ButtonStyle,
-	TemplateFragment,
-	PlainContainerTemplateFragment
+	type PlainContainerTemplateFragment,
+	type TemplateFragment
 } from "@openfin/workspace";
 import type {
 	IntegrationHelpers,

@@ -1,7 +1,7 @@
 import type { User } from "@microsoft/microsoft-graph-types";
-import { connect, Microsoft365Connection, TeamsConnection } from "@openfin/microsoft365";
+import { TeamsConnection, connect, type Microsoft365Connection } from "@openfin/microsoft365";
 import { init as workspacePlatformInit } from "@openfin/workspace-platform";
-import { TENANT_ID, CLIENT_ID, REDIRECT_URL } from "./settings";
+import { CLIENT_ID, REDIRECT_URL, TENANT_ID } from "./settings";
 
 export interface GraphListResponse<T> {
 	value?: T[];

@@ -1,12 +1,12 @@
 import {
-	CLIFilter,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
 	Home,
-	HomeDispatchedSearchResult,
-	HomeRegistration
+	type CLIFilter,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeDispatchedSearchResult,
+	type HomeRegistration
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { createLogger } from "../logger-provider";

@@ -1,4 +1,4 @@
-import { Dock, DockButton, DockButtonNames, RegistrationMetaInfo } from "@openfin/workspace";
+import { Dock, DockButtonNames, type DockButton, type RegistrationMetaInfo } from "@openfin/workspace";
 import type { ColorSchemeMode } from "customize-workspace/shapes/theme-shapes";
 import { ACTION_IDS } from "../actions";
 import { getApp, getAppIcon, getAppsByTag } from "../apps";

@@ -1,14 +1,14 @@
 import {
 	Storefront,
-	App,
-	StorefrontLandingPage,
-	StorefrontNavigationSection,
-	StorefrontFooter,
-	StorefrontProvider,
-	StorefrontTemplate
+	StorefrontTemplate,
+	type App,
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type StorefrontNavigationSection,
+	type StorefrontProvider
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { getApps, themeBuilderApp, notificationStudio, processManager, developerContent } from "./apps";
+import { developerContent, getApps, notificationStudio, processManager, themeBuilderApp } from "./apps";
 
 const providerId = "use-theming";
 

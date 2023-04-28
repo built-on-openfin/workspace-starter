@@ -1,11 +1,11 @@
 import {
 	ButtonStyle,
-	ButtonTemplateFragment,
-	ImageTemplateFragment,
-	PlainContainerTemplateFragment,
-	TemplateFragment,
 	TemplateFragmentTypes,
-	TextTemplateFragment
+	type ButtonTemplateFragment,
+	type ImageTemplateFragment,
+	type PlainContainerTemplateFragment,
+	type TemplateFragment,
+	type TextTemplateFragment
 } from "@openfin/workspace";
 import type * as CSS from "csstype";
 import type { PlatformApp } from "./shapes/app-shapes";

@@ -1,10 +1,10 @@
 import type OpenFin from "@openfin/core";
 import {
 	BrowserButtonType,
-	BrowserWindowModule,
 	ColorSchemeOptionType,
 	getCurrentSync,
-	ToolbarButton
+	type BrowserWindowModule,
+	type ToolbarButton
 } from "@openfin/workspace-platform";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
 import { DEFAULT_PALETTES } from "./default-palettes";

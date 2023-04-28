@@ -1,11 +1,11 @@
 import {
 	getCurrentSync,
-	GlobalContextMenuItemTemplate,
-	GlobalContextMenuOptionType,
-	PageTabContextMenuItemTemplate,
-	PageTabContextMenuOptionType,
-	ViewTabContextMenuTemplate,
-	ViewTabMenuOptionType
+	type GlobalContextMenuItemTemplate,
+	type GlobalContextMenuOptionType,
+	type PageTabContextMenuItemTemplate,
+	type PageTabContextMenuOptionType,
+	type ViewTabContextMenuTemplate,
+	type ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
@@ -16,10 +16,10 @@ import type {
 	MenuEntry,
 	MenuOptionType,
 	MenuPositionOperation,
-	MenusProviderOptions,
-	Menus,
 	MenuTemplateType,
 	MenuType,
+	Menus,
+	MenusProviderOptions,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
 

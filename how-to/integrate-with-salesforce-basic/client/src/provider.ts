@@ -1,7 +1,7 @@
 import {
 	connect,
-	SalesforceRestApiSObjectContact,
 	type SalesforceConnection,
+	type SalesforceRestApiSObjectContact,
 	type SalesforceRestApiSearchResult
 } from "@openfin/salesforce";
 import { getCurrentSync, init as workspacePlatformInit } from "@openfin/workspace-platform";

@@ -1,10 +1,10 @@
 import {
 	BrowserButtonType,
-	BrowserCreateWindowRequest,
-	BrowserWindowModule,
-	CustomBrowserButtonConfig,
 	getCurrentSync,
-	ToolbarButton
+	type BrowserCreateWindowRequest,
+	type BrowserWindowModule,
+	type CustomBrowserButtonConfig,
+	type ToolbarButton
 } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { subscribeLifecycleEvent } from "./lifecycle";

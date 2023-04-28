@@ -1,6 +1,10 @@
 import type OpenFin from "@openfin/core";
 import type { Page } from "@openfin/workspace";
-import { BrowserCreateWindowRequest, BrowserWindowModule, getCurrentSync } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type BrowserCreateWindowRequest,
+	type BrowserWindowModule
+} from "@openfin/workspace-platform";
 
 export type LayoutItemExtended =
 	| OpenFin.LayoutItemConfig

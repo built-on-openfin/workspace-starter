@@ -1,4 +1,4 @@
-import { init as workspacePlatformInit, BrowserInitConfig } from "@openfin/workspace-platform";
+import { init as workspacePlatformInit, type BrowserInitConfig } from "@openfin/workspace-platform";
 import { overrideCallback } from "./browser";
 
 export async function init() {

@@ -1,12 +1,12 @@
 import {
+	ButtonStyle,
 	CLITemplate,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	TemplateFragment,
-	ButtonStyle
+	type TemplateFragment
 } from "@openfin/workspace";
 import {
 	CategoryScale,
