@@ -1,7 +1,7 @@
 import {
-	ButtonStyle,
-	CLITemplate,
+	type ButtonStyle,
 	type CLIFilter,
+	type CLITemplate,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
@@ -83,7 +83,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 					providerId: this._definition.id,
 					populateQuery: "/emoji "
 				},
-				template: CLITemplate.Custom,
+				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/emoji",
 					[
@@ -203,7 +203,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 				emoji: symbol,
 				url: `https://emojipedia.org/${key.replace(/_/g, "-")}/`
 			},
-			template: CLITemplate.Custom,
+			template: "Custom" as CLITemplate.Custom,
 			templateContent: await this.getEmojiTemplate(key, symbol)
 		};
 	}
@@ -230,7 +230,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 						wordBreak: "break-all"
 					}),
 					await this._integrationHelpers.templateHelpers.createButton(
-						ButtonStyle.Secondary,
+						"secondary" as ButtonStyle.Secondary,
 						"copyKeyTitle",
 						EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_KEY_ACTION,
 						{
@@ -252,7 +252,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 						color: palette.textDefault
 					}),
 					await this._integrationHelpers.templateHelpers.createButton(
-						ButtonStyle.Secondary,
+						"secondary" as ButtonStyle.Secondary,
 						"copyEmojiTitle",
 						EmojiIntegrationProvider._EMOJI_PROVIDER_COPY_EMOJI_ACTION,
 						{
