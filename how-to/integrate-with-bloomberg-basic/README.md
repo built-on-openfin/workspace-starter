@@ -5,6 +5,8 @@
 
 # Integrate With Bloomberg (Basic)
 
+> **_:information_source: Bloomberg:_** The Bloomberg Terminal Connect API is subject to Bloomberg’s licensing terms. Check with your Bloomberg account manager for more information..
+
 ## Pre-requisites
 
 - Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: <https://www.bloomberg.com/professional/support/software-updates/>
