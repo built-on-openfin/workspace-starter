@@ -1,12 +1,12 @@
 import {
+	IndicatorColor,
 	addEventListener as addNotificationEventListener,
-	BodyTemplateOptions,
-	ButtonOptions,
 	clear,
 	create,
-	CustomTemplateData,
-	IndicatorColor,
-	NotificationOptions
+	type BodyTemplateOptions,
+	type ButtonOptions,
+	type CustomTemplateData,
+	type NotificationOptions
 } from "@openfin/workspace/notifications";
 import { randomUUID } from "../../lib/uuid";
 import { createContainer, createLabelledForm, createText } from "./notifications";

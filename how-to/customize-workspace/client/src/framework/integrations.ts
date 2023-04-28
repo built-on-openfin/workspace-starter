@@ -1,12 +1,12 @@
 import {
 	ButtonStyle,
-	CLIFilter,
 	CLITemplate,
-	HomeDispatchedSearchResult,
-	HomeRegistration,
-	HomeSearchListenerResponse,
-	HomeSearchResponse,
-	HomeSearchResult
+	type CLIFilter,
+	type HomeDispatchedSearchResult,
+	type HomeRegistration,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkCondition } from "./conditions";

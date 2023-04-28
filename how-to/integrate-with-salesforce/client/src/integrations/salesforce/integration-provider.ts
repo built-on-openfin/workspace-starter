@@ -1,20 +1,20 @@
 import {
 	AuthorizationError,
-	SalesforceRestApiQueryResult,
 	connect,
 	enableLogging,
 	type SalesforceConnection,
+	type SalesforceRestApiQueryResult,
 	type SalesforceRestApiSearchResult
 } from "@openfin/salesforce";
 import {
 	ButtonStyle,
-	CLISearchResultLoading,
 	CLITemplate,
-	CustomTemplate,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
+	type CLISearchResultLoading,
 	type CLISearchResultSimpleText,
+	type CustomTemplate,
 	type HomeSearchResponse,
 	type HomeSearchResult,
 	type TemplateFragment

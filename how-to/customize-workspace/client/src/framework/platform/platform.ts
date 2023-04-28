@@ -1,7 +1,7 @@
 import {
-	BrowserInitConfig,
 	getCurrentSync,
-	init as workspacePlatformInit
+	init as workspacePlatformInit,
+	type BrowserInitConfig
 } from "@openfin/workspace-platform";
 import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";

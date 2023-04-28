@@ -1,13 +1,13 @@
 import {
 	Storefront,
-	StorefrontLandingPage,
-	StorefrontNavigationSection,
-	StorefrontFooter,
-	StorefrontProvider,
 	StorefrontTemplate,
-	StorefrontNavigationItem,
-	StorefrontDetailedNavigationItem,
-	RegistrationMetaInfo
+	type RegistrationMetaInfo,
+	type StorefrontDetailedNavigationItem,
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type StorefrontNavigationItem,
+	type StorefrontNavigationSection,
+	type StorefrontProvider
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "../apps";
 import { launch } from "../launch";

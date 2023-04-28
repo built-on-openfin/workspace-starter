@@ -1,7 +1,7 @@
 import {
 	init as workspacePlatformInit,
-	BrowserInitConfig,
-	BrowserCreateWindowRequest
+	type BrowserCreateWindowRequest,
+	type BrowserInitConfig
 } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 

@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import { getCurrentSync, type BrowserSnapshot } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";

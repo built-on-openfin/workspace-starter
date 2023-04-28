@@ -1,5 +1,11 @@
-import { BloombergConnection, connect, enableLogging, isBloombergTerminalReady } from "@openfin/bloomberg";
-import OpenFin, { fin } from "@openfin/core";
+import {
+	connect,
+	enableLogging,
+	isBloombergTerminalReady,
+	type BloombergConnection
+} from "@openfin/bloomberg";
+import type OpenFin from "@openfin/core";
+import { fin } from "@openfin/core";
 
 let bbgConnection: BloombergConnection;
 let isConnected = false;

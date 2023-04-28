@@ -2,9 +2,9 @@ import type { Context } from "@openfin/core/src/OpenFin";
 import { Home } from "@openfin/workspace";
 import {
 	ColorSchemeOptionType,
-	CustomThemeOptionsWithScheme,
 	getCurrentSync,
-	init
+	init,
+	type CustomThemeOptionsWithScheme
 } from "@openfin/workspace-platform";
 import { register } from "./home";
 

@@ -1,14 +1,14 @@
 import type OpenFin from "@openfin/core";
 import {
 	BrowserButtonType,
-	PageLayoutDetails,
-	PageWithUpdatableRuntimeAttribs,
 	PanelPosition,
 	getCurrentSync,
 	type BrowserCreateWindowRequest,
 	type BrowserWindowModule,
 	type Page,
 	type PageLayout,
+	type PageLayoutDetails,
+	type PageWithUpdatableRuntimeAttribs,
 	type ToolbarOptions
 } from "@openfin/workspace-platform";
 

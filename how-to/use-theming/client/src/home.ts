@@ -1,13 +1,13 @@
 import {
-	CLIDispatchedSearchResult,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	type CLIDispatchedSearchResult,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeSearchResult,
+	type RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getApps } from "./apps";

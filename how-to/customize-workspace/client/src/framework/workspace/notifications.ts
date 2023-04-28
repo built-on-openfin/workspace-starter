@@ -1,12 +1,12 @@
 import type { RegistrationMetaInfo } from "@openfin/workspace";
 import {
-	register as registerPlatform,
+	VERSION,
 	deregister as deregisterPlatform,
-	show as showNotifications,
 	hide as hideNotifications,
-	ShowOptions,
 	provider,
-	VERSION
+	register as registerPlatform,
+	show as showNotifications,
+	type ShowOptions
 } from "@openfin/workspace/notifications";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";

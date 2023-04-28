@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, Page } from "@openfin/workspace-platform";
+import { getCurrentSync, type Page } from "@openfin/workspace-platform";
 
 export async function getPage(pageId: string) {
 	const platform = getCurrentSync();

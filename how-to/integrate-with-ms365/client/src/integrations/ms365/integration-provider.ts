@@ -4,9 +4,9 @@ import type {
 	Channel,
 	ChatMessage,
 	Contact,
+	DriveItem,
 	Entity,
 	Event,
-	DriveItem,
 	Message,
 	Presence,
 	SearchResponse,
@@ -16,20 +16,20 @@ import type {
 import {
 	connect,
 	enableLogging,
-	GraphResponse,
 	TeamsConnection,
+	type GraphResponse,
 	type Microsoft365Connection
 } from "@openfin/microsoft365";
 import {
 	ButtonStyle,
-	CLIFilter,
 	CLITemplate,
-	HomeDispatchedSearchResult,
-	HomeSearchListenerResponse,
-	HomeSearchResponse,
-	HomeSearchResult,
-	TemplateFragment,
-	TemplateFragmentTypes
+	TemplateFragmentTypes,
+	type CLIFilter,
+	type HomeDispatchedSearchResult,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult,
+	type TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";

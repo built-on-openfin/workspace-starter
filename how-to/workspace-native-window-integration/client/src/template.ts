@@ -1,4 +1,4 @@
-import { ButtonStyle, TemplateFragment, TemplateFragmentTypes } from "@openfin/workspace";
+import { ButtonStyle, TemplateFragmentTypes, type TemplateFragment } from "@openfin/workspace";
 
 const WORKSPACE_ACTIONS = {
 	delete: "workspace-delete",
