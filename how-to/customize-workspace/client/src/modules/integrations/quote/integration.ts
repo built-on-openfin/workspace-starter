@@ -1,7 +1,7 @@
 import {
-	ButtonStyle,
-	CLITemplate,
+	type ButtonStyle,
 	type CLIFilter,
+	type CLITemplate,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
@@ -89,7 +89,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					providerId: this._providerId,
 					populateQuery: "/quote "
 				},
-				template: CLITemplate.Custom,
+				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
 					"/quote",
 					[
@@ -180,7 +180,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 							providerId: this._providerId,
 							url: `https://www.nasdaq.com/market-activity/stocks/${symbol.toLowerCase()}`
 						},
-						template: CLITemplate.Custom,
+						template: "Custom" as CLITemplate.Custom,
 						templateContent: {
 							layout: await this.getQuoteTemplate(),
 							data: {
@@ -303,7 +303,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					"row",
 					[
 						await this._integrationHelpers.templateHelpers.createButton(
-							ButtonStyle.Primary,
+							"primary" as ButtonStyle.Primary,
 							"detailsTitle",
 							QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION,
 							{

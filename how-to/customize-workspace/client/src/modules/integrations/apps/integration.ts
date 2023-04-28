@@ -277,7 +277,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private getSearchFilters(tags: string[]): CLIFilter[] {
 		if (Array.isArray(tags)) {
 			const filters: CLIFilter[] = [];
-			const uniqueTags = [...new Set(tags.sort())];
+			const uniqueTags = [...new Set(tags)].sort();
 			const tagFilter: CLIFilter = {
 				id: AppProvider._HOME_TAG_FILTERS,
 				title: "Tags",
@@ -303,8 +303,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private async mapAppEntriesToSearchEntries(apps: PlatformApp[]): Promise<HomeSearchResult[]> {
 		const appResults: HomeSearchResult[] = [];
 		if (Array.isArray(apps)) {
-			for (let i = 0; i < apps.length; i++) {
-				const app = apps[i];
+			for (const app of apps) {
 				const action = { name: "Launch View", hotkey: "enter" };
 				const entry: Partial<HomeSearchResult> = {
 					key: app.appId,

@@ -16,10 +16,10 @@ import type {
 	MenuEntry,
 	MenuOptionType,
 	MenuPositionOperation,
-	MenuTemplateType,
-	MenuType,
 	Menus,
 	MenusProviderOptions,
+	MenuTemplateType,
+	MenuType,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
 

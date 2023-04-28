@@ -31,7 +31,7 @@ let isHomeRegistered = false;
 function getSearchFilters(tags: string[]): CLIFilter[] {
 	if (Array.isArray(tags)) {
 		const filters: CLIFilter[] = [];
-		const uniqueTags = [...new Set(tags.sort())];
+		const uniqueTags = [...new Set(tags)].sort();
 		const tagFilter: CLIFilter = {
 			id: HOME_TAG_FILTERS,
 			title: "Tags",
@@ -57,43 +57,43 @@ function getSearchFilters(tags: string[]): CLIFilter[] {
 function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 	const appResults: HomeSearchResult[] = [];
 	if (Array.isArray(apps)) {
-		for (let i = 0; i < apps.length; i++) {
+		for (const app of apps) {
 			const action = { name: "Launch View", hotkey: "enter" };
 			const entry: Partial<HomeSearchResult> = {
-				key: apps[i].appId,
-				title: apps[i].title,
-				data: apps[i]
+				key: app.appId,
+				title: app.title,
+				data: app
 			};
 
-			if (apps[i].manifestType === "view") {
+			if (app.manifestType === "view") {
 				entry.label = "View";
 				entry.actions = [action];
 			}
-			if (apps[i].manifestType === "snapshot") {
+			if (app.manifestType === "snapshot") {
 				entry.label = "Snapshot";
 				action.name = "Launch Snapshot";
 				entry.actions = [action];
 			}
-			if (apps[i].manifestType === "manifest") {
+			if (app.manifestType === "manifest") {
 				entry.label = "App";
 				action.name = "Launch App";
 				entry.actions = [action];
 			}
-			if (apps[i].manifestType === "external") {
+			if (app.manifestType === "external") {
 				action.name = "Launch Native App";
 				entry.actions = [action];
 				entry.label = "Native App";
 			}
 
-			if (Array.isArray(apps[i].icons) && apps[i].icons.length > 0) {
-				entry.icon = apps[i].icons[0].src;
+			if (Array.isArray(app.icons) && app.icons.length > 0) {
+				entry.icon = app.icons[0].src;
 			}
 
-			if (apps[i].description !== undefined) {
-				entry.description = apps[i].description;
-				entry.shortDescription = apps[i].description;
+			if (app.description !== undefined) {
+				entry.description = app.description;
+				entry.shortDescription = app.description;
 				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
+				entry.templateContent = app.description;
 			} else {
 				entry.template = CLITemplate.Plain;
 			}
@@ -122,23 +122,23 @@ async function mapWorkspaceEntriesToSearchEntries(
 
 	const workspaceResults: HomeSearchResult[] = [];
 	if (Array.isArray(workspaces)) {
-		for (let i = 0; i < workspaces.length; i++) {
+		for (const workspace of workspaces) {
 			const entry: HomeSearchResult = {
-				key: workspaces[i].id,
-				title: workspaces[i].title,
+				key: workspace.id,
+				title: workspace.title,
 				label: "Workspace",
 				icon: workspaceIcon,
 				actions: [
 					{ name: HOME_ACTION_DELETE_WORKSPACE, hotkey: "CmdOrCtrl+Shift+D" },
 					{ name: HOME_ACTION_LAUNCH_WORKSPACE, hotkey: "Enter" }
 				],
-				data: { tags: ["workspace"], workspaceId: workspaces[i].id },
+				data: { tags: ["workspace"], workspaceId: workspace.id },
 				template: CLITemplate.Custom,
 				templateContent: {
 					layout: workspaceTemplate,
 					data: {
-						title: workspaces[i].title,
-						description: workspaces[i].description,
+						title: workspace.title,
+						description: workspace.description,
 						instructions: "Use the buttons below to interact with your saved Workspace:",
 						openText: "Launch",
 						deleteText: "Delete"

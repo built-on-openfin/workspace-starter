@@ -24,9 +24,19 @@ let actionListeners: Map<
 			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
 		}
 	>
-> = new Map();
+> = new Map<
+	string,
+	Map<
+		string,
+		{
+			lifecycle: InitOptionsLifecycle;
+			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
+		}
+	>
+>();
 let actionListenerMap: { [key: string]: string } = {};
-const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map();
+const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> =
+	new Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>>();
 const listenerMap: { [key: string]: string } = {};
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
@@ -52,8 +62,7 @@ async function notifyActionListeners(initOptions: UserAppConfigArgs, lifecycle: 
 	if (availableListeners !== undefined && availableListeners !== null) {
 		const subscriberIds = Array.from(availableListeners.keys());
 
-		for (let i = 0; i < subscriberIds.length; i++) {
-			const subscriberId = subscriberIds[i];
+		for (const subscriberId of subscriberIds) {
 			logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of action: ${action}`);
 			const listener = availableListeners.get(subscriberId);
 
@@ -74,9 +83,9 @@ async function notifyActionListeners(initOptions: UserAppConfigArgs, lifecycle: 
 async function notifyListeners(initOptions: UserAppConfigArgs) {
 	const customParamIds = Array.from(listeners.keys());
 	let listenerId: string;
-	for (let i = 0; i < customParamIds.length; i++) {
-		if (initOptions[customParamIds[i]] !== undefined) {
-			listenerId = customParamIds[i];
+	for (const id of customParamIds) {
+		if (initOptions[id] !== undefined) {
+			listenerId = id;
 			break;
 		}
 	}
@@ -88,8 +97,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs) {
 		if (availableListeners !== undefined && availableListeners !== null) {
 			const subscriberIds = Array.from(availableListeners.keys());
 
-			for (let l = 0; l < subscriberIds.length; l++) {
-				const subscriberId = subscriberIds[l];
+			for (const subscriberId of subscriberIds) {
 				logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of request: ${listenerId}`);
 
 				try {

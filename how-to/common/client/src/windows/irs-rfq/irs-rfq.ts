@@ -47,12 +47,12 @@ let clearButton: HTMLButtonElement;
 
 const currencies: string[] = ["USD", "GBP", "EUR", "YEN"];
 
-const accounts: Map<string, string> = new Map();
+const accounts: Map<string, string> = new Map<string, string>();
 accounts.set("ACT10", "Acme Ltd");
 accounts.set("CON20", "Contoso Ltd");
 accounts.set("NOR50", "Northwind Inc");
 
-const allocations: Map<string, string> = new Map();
+const allocations: Map<string, string> = new Map<string, string>();
 allocations.set("TRD01", "Trader 1");
 allocations.set("TRD02", "Trader 2");
 allocations.set("TRD03", "Trader 3");
@@ -185,7 +185,7 @@ function gatherData(): IrsRfqData {
 		let notionalSuffix: string = "";
 		let notionalDiv: number;
 
-		const units: Map<string, number> = new Map();
+		const units: Map<string, number> = new Map<string, number>();
 		units.set("T", 1000000000000);
 		units.set("B", 1000000000);
 		units.set("M", 1000000);

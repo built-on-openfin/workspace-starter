@@ -39,7 +39,7 @@ export function createText(
 export function createLabelledValue(
 	labelKey: string,
 	valueKey: string,
-	style?: Record<string, string | number>
+	style?: { [prop: string]: string | number }
 ): ContainerTemplateFragment {
 	return {
 		type: "container",
@@ -61,9 +61,9 @@ export function createLabelledValue(
 export function createTable(tableData: string[][]): TemplateFragment {
 	const cells: TemplateFragment[] = [];
 	const colSpans = [];
-	for (let col = 0; col < tableData[0].length; col++) {
+	for (const cell of tableData[0]) {
 		cells.push(
-			createText(tableData[0][col], 10, {
+			createText(cell, 10, {
 				marginBottom: "10px",
 				padding: "3px",
 				whiteSpace: "nowrap",
@@ -97,7 +97,7 @@ export function createTable(tableData: string[][]): TemplateFragment {
 export function createLabelledForm(
 	labelKey: string,
 	valueKey: string,
-	style?: Record<string, string | number>
+	style?: { [prop: string]: string | number }
 ): ContainerTemplateFragment {
 	return {
 		type: "container",

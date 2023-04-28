@@ -23,8 +23,8 @@ export async function getWorkspaceTitles(): Promise<string[]> {
 	const entries = await workspaceStorage.getAllStoredEntries<ISavedWorkspace>();
 	const keys = Object.keys(entries);
 	const titles: string[] = [];
-	for (let i = 0; i < keys.length; i++) {
-		titles.push(entries[keys[i]].title);
+	for (const key of keys) {
+		titles.push(entries[key].title);
 	}
 	return titles;
 }
