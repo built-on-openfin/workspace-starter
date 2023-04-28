@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type {
 	CustomActionSpecifier,
 	GlobalContextMenuItemTemplate,
@@ -12,6 +13,12 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
 
 export type MenuType = "global" | "page" | "view";
 
+export interface RelatedMenuId {
+	views?: OpenFin.Identity[];
+	pageId?: string;
+	windowIdentity?: OpenFin.Identity;
+}
+
 export type MenuPositionOperation = "replaceLabel" | "before" | "after" | "delete" | "start" | "end";
 export type MenuSeparatorPosition = "before" | "after";
 
@@ -24,10 +31,7 @@ export interface MenuPosition<T = unknown> {
 	customId?: string;
 }
 
-export interface MenuEntryDynamic<T = unknown> {
-	/** What label should the user see when they look at this menu option */
-	label: string;
-
+export interface MenuEntryDynamic<T = unknown> extends Omit<OpenFin.MenuItemTemplate, "data" | "role"> {
 	/** Where should this menu item be positioned in relation to existing entries */
 	position?: MenuPosition<T>;
 }
@@ -65,8 +69,13 @@ export interface Menus<O = unknown, H = ModuleHelpers> extends ModuleImplementat
 	 * Get the menus from the module.
 	 * @param menuType The type of menu to get the entries for.
 	 * @param platform The current platform.
+	 * @param relatedMenuId If available provide the related window identity the menu is showing on and page or view ids depending on the menu type.
 	 */
-	get(menuType: MenuType, platform: WorkspacePlatformModule): Promise<MenuEntry[] | undefined>;
+	get(
+		menuType: MenuType,
+		platform: WorkspacePlatformModule,
+		relatedMenuId?: RelatedMenuId
+	): Promise<MenuEntry[] | undefined>;
 }
 
 /**

@@ -28,12 +28,6 @@
 			}
 		},
 		"defaultWindowOptions": {
-			"experimental": {
-				"showViewsOnResize": {
-					"enabled": true,
-					"delayMs": 0
-				}
-			},
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
@@ -41,6 +35,11 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
+			},
+			"viewVisibility": {
+				"showViewsOnTabDrag": { "enabled": true },
+				"showViewsOnSplitterDrag": { "enabled": true },
+				"showViewsOnWindowResize": { "enabled": true }
 			}
 		},
 		"defaultViewOptions": {
@@ -64,15 +63,6 @@
 		"name": "Customize Workspace - vnext",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Customize Workspace - Client",
@@ -177,6 +167,8 @@
 				"inline-snapshot",
 				"external",
 				"inline-external",
+				"appasset",
+				"inline-appasset",
 				"manifest",
 				"desktop-browser",
 				"connection"
@@ -233,6 +225,11 @@
 				"icon": "http://localhost:8080/favicon.ico",
 				"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+			},
+			"windowPositioningStrategy": {
+				"x": 30,
+				"y": 30,
+				"maxIncrements": 8
 			},
 			"globalMenu": [
 				{
@@ -762,6 +759,26 @@
 							}
 						}
 					]
+				},
+				{
+					"tooltip": "Window Visibility",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/windows.svg",
+					"options": [
+						{
+							"tooltip": "Show All Windows",
+							"action": {
+								"id": "window-show-all",
+								"customData": {}
+							}
+						},
+						{
+							"tooltip": "Hide All Windows",
+							"action": {
+								"id": "window-hide-all",
+								"customData": {}
+							}
+						}
+					]
 				}
 			]
 		},
@@ -776,6 +793,74 @@
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
+				{
+					"id": "apps",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Apps",
+					"description": "Search Applications",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/apps.bundle.js",
+					"data": {
+						"manifestTypeMapping": {
+							"view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"inline-view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"inline-window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"inline-snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"manifest": {
+								"entryLabel": "App",
+								"actionName": "Launch App"
+							},
+							"external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"desktop-browser": {
+								"entryLabel": "Desktop Browser",
+								"actionName": ""
+							},
+							"endpoint": {
+								"entryLabel": "Endpoint",
+								"actionName": "Launch"
+							},
+							"connection": {
+								"entryLabel": "Connected App",
+								"actionName": "Launch Connected App"
+							}
+						}
+					}
+				},
 				{
 					"id": "workspaces",
 					"icon": "http://localhost:8080/favicon.ico",
@@ -822,16 +907,6 @@
 					}
 				},
 				{
-					"id": "emoji",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Emoji Provider",
-					"description": "Search for emojis by name",
-					"enabled": false,
-					"excludeFromSourceFilter": true,
-					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/customize-home-templates/js/integrations/emoji.bundle.js"
-				},
-				{
 					"id": "about",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "About",
@@ -839,6 +914,24 @@
 					"enabled": true,
 					"excludeFromSourceFilter": true,
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "quote",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Quote Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/quote.bundle.js",
+					"data": {
+						"rootUrl": "http://localhost:8080/data/quotes/"
+					}
+				},
+				{
+					"id": "emoji",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
@@ -851,6 +944,14 @@
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
+					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-app",
+					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
+					"data": {
+						"supportedActions": ["launch-app"]
 					}
 				}
 			]
@@ -894,6 +995,16 @@
 							"customData": {}
 						}
 					}
+				},
+				{
+					"enabled": true,
+					"id": "page-actions",
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "window-actions",
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				}
 			]
 		},
@@ -920,18 +1031,34 @@
 			],
 			"connections": [
 				{
-					"identity": { "uuid": "customize-workspace" },
-					"validatePayload": false,
-					"connectionTypes": [{ "type": "broker" }]
-				},
-				{
-					"identity": { "uuid": "*" },
+					"identity": {
+						"uuid": "customize-workspace"
+					},
 					"validatePayload": false,
 					"connectionTypes": [
-						{ "type": "appSource" },
-						{ "type": "snapshotSource" },
-						{ "type": "actions" },
-						{ "type": "broker" }
+						{
+							"type": "broker"
+						}
+					]
+				},
+				{
+					"identity": {
+						"uuid": "*"
+					},
+					"validatePayload": false,
+					"connectionTypes": [
+						{
+							"type": "appSource"
+						},
+						{
+							"type": "snapshotSource"
+						},
+						{
+							"type": "actions"
+						},
+						{
+							"type": "broker"
+						}
 					]
 				}
 			]
@@ -990,6 +1117,24 @@
 					"description": "Provides information about this platform.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "pages",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Pages",
+					"description": "Provides additional menu options for pages.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "windows",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Windows",
+					"description": "Provides additional menu options for windows.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
 					"data": {}
 				}
 			]

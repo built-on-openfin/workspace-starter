@@ -83,7 +83,8 @@ The commands implemented are:
 /contacts <contact name>
 /contacts-sync <contact name>
 /contacts-partial <contact name>
-/tree
+/tree-inline
+/tree-query
 ```
 
 The **/quote** command demonstrates a template that is built dynamically with a graph image.
@@ -96,7 +97,7 @@ The contacts commands demonstrate different approaches to retrieving data.
 - **/contacts-partial** - Retrieves the contact list asynchronously and then retrieves all the contact details in the background, updating the results when it has the detailed data
 - **/contacts** - Retrieves the contact list asynchronously and then only retrieves the details for an item when they are selected, using the additional `Loading` template as a placeholder while the data is loaded. Also by searching for a contact starting with the letter E it will initially show the `Error` template, the contact will work when selecting reload.
 
-- **/tree** The tree command does actually perform any function other than showing the help. To search for tree structured use a query such as `Acme` or `Bee`. This then demonstrates how to navigate through a tree like data structure and back up.
+- **/tree-inline** and **/tree-query** The tree commands do not actually perform any function other than showing the help. To search for tree structured use a query such as `Acme`, `Bee`, `Chad`, `Dock`. This then demonstrates how to navigate through a tree like data structure and back up.
 
 e.g.
 
@@ -109,6 +110,9 @@ e.g.
 /contacts-sync john
 /contacts-partial john
 acme
+bee
+chad
+dock
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -127,6 +131,8 @@ e.g.
 ```shell
 Acme
 Bee
+Chad
+Dock
 ```
 
 ![Customize Home Template Tree](customize-home-templates-tree.gif)

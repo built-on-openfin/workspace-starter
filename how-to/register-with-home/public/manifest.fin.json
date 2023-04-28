@@ -31,9 +31,6 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
@@ -49,9 +46,9 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/common/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"manifestTypes": ["view", "snapshot", "manifest", "external"]
+			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
+			"manifestTypes": ["view", "snapshot", "manifest", "external"],
+			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {
 			"id": "register-with-home",

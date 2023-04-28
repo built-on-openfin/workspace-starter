@@ -1,5 +1,20 @@
 # Changelog
 
+## v12.6
+
+- BREAKING CHANGE (unless you update your manifest): Decoupled home from App logic. Home supported searching for apps plus an array of configurable integrations. If you didn't like the implementation with regards to how apps were filtered or searched and rendered then you didn't have a choice. This update means that our app support is now a module that can be configured in the integration provider (to maintain existing behavior or let you plug in your own). If you don't want app support simply don't add our app module or your own. This gives more flexibility.
+- Added ability to set more settings for the Home Provider (this aligns with the settings you would specify if doing it through code).
+- Added more logging in platform override when it comes to saving, deleting and fetching workspaces and pages and fixed an issue where a lifecycle event wouldn't have fired if you have had custom storage via endpoints.
+- Updated workspace and page integration modules to specify the id of the module definition as the providerId to ensure they do not get out of sync (which was a danger if it was hardcoded).
+- Added ability to specify defaultWindowOptions (this replaces windowOptions and offers the full workspace options. We have maintained backwards compatibility if you have windowOptions specified.), defaultPageOptions and defaultViewOptions in the browserProvider
+- Added option of specifying whether you want the default Global, Page, or View Menu options included when you specify menu options in the browser provider (this is through browserProvider.menuOptions.includeDefaults)
+- Added optional function launchApp to the default module helpers so that modules that need to can launch an app that is listed in the directory (this feature allows the launching of apps without enabling the passing of an app Object)
+- Added new example init module that supports the launching of an app by id and enabled it in manifest.fin.json and settings.json e.g. launching call-app = fin://localhost:8080/manifest.fin.json?$$action=launch-app&$$payload=eyAiYXBwSWQiOiAiY2FsbC1hcHAiIH0= the payload is a base64 encoded string of an object that specifies appId.
+- Removed appAssetTag from appProvider and added support for two more manifest types. appasset - you have defined an app asset in your manifest and the manifest part of the app definition represents the alias. inline-appasset - you put the app asset definition as the manifest instead of putting it into appAssets in your manifest (so that it can be service and user driven). Also added additional error handling and logging to external and inline-external manifest support.
+- Added support for two new composite modules: pages and windows. They contain action and menu implementations. The modules have been added to the manifest and settings.json to show how they can be configured. They show up in the main browser menu and two of the window management options are referenced in the dock. The two modules provide the following actions: page-open, page-show, page-delete, window-show-all, window-hide-all, window-hide-others. The customize workspace MenuEntry type has been updated to extend the MenuItemTemplate so that icon's can be specified and sub menus can be specified for a menu entry.
+- Added default window positioning strategy for browser windows, which cascades them offset from the previous one
+- FDC3 v2 packages no longer in beta, updated to 2.0.1
+
 ## v12
 
 - Initial update to interop broker to support fdc3 2.0

@@ -120,12 +120,10 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		}
 	};
 
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	const cliProvider: CLIProvider = {
 		title: "Theming Platform",
 		id: providerId,
-		icon: `${webRoot}favicon.ico`,
+		icon: "http://localhost:8080/favicon.ico",
 		onUserInput,
 		onResultDispatch: onSelection
 	};

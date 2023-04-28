@@ -1,5 +1,7 @@
 import type { InteropClient } from "@openfin/core/src/api/interop/InteropClient";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { getApp, getApps } from "./apps";
+import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { CustomSettings } from "./shapes";
@@ -19,6 +21,7 @@ import {
 	getCurrentIconFolder,
 	getCurrentThemeId
 } from "./themes";
+
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
@@ -240,12 +243,27 @@ export function getDefaultHelpers(settings: CustomSettings): ModuleHelpers {
 	return {
 		rootUrl: settings?.platformProvider?.rootUrl,
 		sessionId: passedSessionId,
+		getApps: async () => {
+			logger.info("getApps: getting public apps for module.");
+			return getApps({ private: false });
+		},
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
 		getVersionInfo,
 		getInteropClient,
+		launchApp: async (appId: string) => {
+			logger.info(`launchApp: Looking up appId: ${appId}`);
+			const app = await getApp(appId);
+			if (app === undefined || app === null) {
+				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
+			} else {
+				logger.info(`launchApp: Launching app with appId: ${appId}`);
+				await launch(app);
+				logger.info(`launchApp: App with appId: ${appId} launched.`);
+			}
+		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent
 	};

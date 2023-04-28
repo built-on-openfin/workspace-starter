@@ -21,12 +21,6 @@ import type { PagesSettings } from "./shapes";
  */
 export class PagesProvider implements IntegrationModule<PagesSettings> {
 	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "pages";
-
-	/**
 	 * The key to use for launching a page.
 	 * @internal
 	 */
@@ -43,6 +37,12 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @internal
 	 */
 	private static readonly _ACTION_SHARE_PAGE = "Share Page";
+
+	/**
+	 * Provider id.
+	 * @internal
+	 */
+	private _providerId: string;
 
 	/**
 	 * The settings from config.
@@ -96,7 +96,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
-
+		this._providerId = definition.id;
 		this._integrationHelpers.subscribeLifecycleEvent(
 			"page-changed",
 			async (platform: WorkspacePlatformModule, payload: PageChangedLifecyclePayload) => {
@@ -263,7 +263,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 			icon,
 			actions,
 			data: {
-				providerId: PagesProvider._PROVIDER_ID,
+				providerId: this._providerId,
 				pageTitle: title,
 				pageId: id,
 				tags: ["page"]

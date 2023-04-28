@@ -97,7 +97,7 @@ export function interopOverride(
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
 			const url =
 				settings?.platformProvider?.intentPicker.url ||
-				window.location.href.replace("platform/provider.html", "common/windows/intents/picker.html");
+				"http://localhost:8080/common/windows/intents/picker.html";
 
 			const winOption = {
 				name: "intent-picker",

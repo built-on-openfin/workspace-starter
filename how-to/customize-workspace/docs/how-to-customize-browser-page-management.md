@@ -124,6 +124,42 @@ We include support for doing page management from home in customize workspace. I
 
 ![Home Page Management](./assets/home-page-management.png)
 
+## Can I Manage Pages From Browser?
+
+We provide an example of a module that extends the browser main menu with additional menu options for showing saved pages or deleting them:
+
+### Menus Provider lets you include a module that returns menu entries dynamically
+
+```json
+ "menusProvider": {
+   "modules": [
+    {
+     "id": "pages",
+     "icon": "http://localhost:8080/favicon.ico",
+     "title": "Pages",
+     "description": "Provides additional menu options for pages.",
+     "enabled": true,
+     "url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
+     "data": {}
+    }
+   ]
+  }
+```
+
+### Actions Provider lets you include actions that should respond to the menu entries returned by the menusProvider
+
+```json
+"actionsProvider": {
+   "modules": [
+    {
+     "enabled": true,
+     "id": "page-actions",
+     "url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
+    }
+   ]
+  },
+```
+
 ### I See A Sharing Button, How Is That Configured?
 
 Please see [How To Customize Workspace And Browser Page Sharing](./how-to-customize-workspace-browser-page-sharing.md).
@@ -132,5 +168,6 @@ Please see [How To Customize Workspace And Browser Page Sharing](./how-to-custom
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
 - [platform-local-storage.ts](../client/src/modules/endpoints/local-storage/platform-local-storage.ts)
+- [Pages Composite Module](../client/src/modules/composite/pages/)
 
 [<- Back to Table Of Contents](../README.md)

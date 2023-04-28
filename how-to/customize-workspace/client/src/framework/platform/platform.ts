@@ -84,8 +84,14 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
-	if (settings.browserProvider !== undefined) {
+	if (settings?.browserProvider !== undefined) {
 		browser.defaultWindowOptions = await getDefaultWindowOptions();
+	}
+	if (settings?.browserProvider?.defaultPageOptions !== undefined) {
+		browser.defaultPageOptions = settings.browserProvider.defaultPageOptions;
+	}
+	if (settings?.browserProvider?.defaultViewOptions !== undefined) {
+		browser.defaultViewOptions = settings.browserProvider.defaultViewOptions;
 	}
 
 	logger.info("Specifying following browser options", browser);

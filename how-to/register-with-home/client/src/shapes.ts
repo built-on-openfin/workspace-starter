@@ -1,18 +1,64 @@
-interface HomeProvider {
+/**
+ * The custom settings stored in the manifest.fin.json.
+ */
+export interface CustomSettings {
+	/**
+	 * Provider for app configuration.
+	 */
+	appProvider?: AppProviderSettings;
+
+	/**
+	 * Provider for home configuration.
+	 */
+	homeProvider?: HomeProviderSettings;
+}
+
+/**
+ * Settings for home.
+ */
+export interface HomeProviderSettings {
+	/**
+	 * The id to register home with.
+	 */
 	id: string;
+
+	/**
+	 * The title to display on home.
+	 */
 	title: string;
+
+	/**
+	 * The icon to display in home.
+	 */
 	icon: string;
-	hidden?: boolean;
+
+	/**
+	 * The min length of a query before filtering.
+	 */
 	queryMinLength?: number;
+
+	/**
+	 * The properties to query when filtering.
+	 */
 	queryAgainst?: string[];
 }
 
-interface AppProvider {
-	appsSourceUrl: string;
-	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
+/**
+ * Settings for app provider.
+ */
+export interface AppProviderSettings {
+	/**
+	 * A list of endpoints that return apps in JSON format.
+	 */
+	appSourceUrls: string[];
+
+	/**
+	 * The types of apps that we allow.
+	 */
 	manifestTypes?: string[];
-}
-export interface CustomSettings {
-	appProvider?: AppProvider;
-	homeProvider?: HomeProvider;
+
+	/**
+	 * How long to store the apps before getting a new list.
+	 */
+	cacheDurationInMinutes?: number;
 }

@@ -51,16 +51,39 @@ export type ManifestTypeId =
 	| "manifest"
 	| "external"
 	| "inline-external"
+	| "appasset"
+	| "inline-appasset"
 	| "desktop-browser"
 	| "endpoint"
 	| "connection"
 	| "unregistered-app";
+
+export type ManifestTypesId =
+	| "view"
+	| "inlineView"
+	| "window"
+	| "inlineWindow"
+	| "snapshot"
+	| "inlineSnapshot"
+	| "manifest"
+	| "external"
+	| "inlineExternal"
+	| "appasset"
+	| "inlineAppAsset"
+	| "desktopBrowser"
+	| "endpoint"
+	| "connection"
+	| "unregisteredApp";
 
 export interface ManifestType {
 	id: ManifestTypeId;
 	label: string;
 	description: string;
 }
+
+export type ManifestTypes = {
+	[key in ManifestTypesId]: ManifestType;
+};
 
 export type AppEndpointOptions =
 	| string
@@ -100,11 +123,6 @@ export interface AppProviderOptions {
 	 * result be cached for in seconds (can be used on it's own or in addition to the minutes setting).
 	 * */
 	cacheDurationInSeconds?: number;
-	/**
-	 * If app assets are included as part of the available apps what tag should the platform look for to identify it
-	 * as such e.g. "appasset".
-	 * */
-	appAssetTag?: string;
 	/**
 	 * The specified app sources may include apps of many different manifest types. Which manifest types do you want
 	 * your platform to support (only the ones listed will be included in the end result).

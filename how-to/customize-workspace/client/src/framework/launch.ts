@@ -11,7 +11,6 @@ import {
 	doesWindowExist,
 	findViewNames
 } from "./platform/browser";
-import { getSettings } from "./settings";
 import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
 import { randomUUID } from "./uuid";
 
@@ -244,6 +243,69 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 	return null;
 }
 
+async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIdentifier> {
+	const options: OpenFin.ExternalProcessRequestType = {};
+	logger.info(`Request to launch app asset app of type ${appAssetApp.manifestType}`);
+	if (appAssetApp.manifestType === manifestTypes.appasset.id) {
+		options.alias = appAssetApp.manifest;
+	} else if (appAssetApp.manifestType === manifestTypes.inlineAppAsset.id) {
+		const appAssetInfo: OpenFin.AppAssetInfo = appAssetApp.manifest as unknown as OpenFin.AppAssetInfo;
+		try {
+			await fin.System.downloadAsset(appAssetInfo, (progress) => {
+				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
+				logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
+			});
+		} catch (error) {
+			logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
+			return null;
+		}
+		options.alias = appAssetInfo.alias;
+		options.arguments = appAssetInfo.args;
+	} else {
+		logger.warn(
+			"An app asset app was passed to launch app asset but it didn't match the supported manifest types."
+		);
+		return null;
+	}
+	if (appAssetApp.instanceMode === "single") {
+		// use the appId as the UUID and OpenFin will only be able to launch a single instance
+		options.uuid = appAssetApp.appId;
+	}
+	logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
+	try {
+		const identity = await fin.System.launchExternalProcess(options);
+		logger.info(`App asset with appId: ${appAssetApp.appId} launched with the following identity`, identity);
+		return { ...identity, appId: appAssetApp.appId };
+	} catch (error) {
+		logger.error(`Error trying to launch app asset with appId: ${appAssetApp.appId}}`, error);
+		return null;
+	}
+}
+
+async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIdentifier> {
+	let options: OpenFin.ExternalProcessRequestType = {};
+	logger.info(`Request to external app of type ${externalApp.manifestType}`);
+	if (externalApp.manifestType === manifestTypes.external.id) {
+		options.path = externalApp.manifest;
+	} else if (externalApp.manifestType === manifestTypes.inlineExternal.id) {
+		options = externalApp.manifest as OpenFin.ExternalProcessRequestType;
+	} else {
+		logger.warn("An external app was passed to launch but it didn't match the supported manifest types.");
+		return null;
+	}
+	if (externalApp.instanceMode === "single") {
+		// use the appId as the UUID and OpenFin will only be able to launch a single instance
+		options.uuid = externalApp.appId;
+	}
+	try {
+		const identity = await fin.System.launchExternalProcess(options);
+		return { ...identity, appId: externalApp.appId };
+	} catch (err) {
+		logger.error(`Error trying to launch external with appId: ${externalApp.appId}`, err);
+		return null;
+	}
+}
+
 export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdentifier[]> {
 	try {
 		logger.info("Application launch requested", platformApp);
@@ -256,44 +318,19 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 
 		const platformAppIdentities: PlatformAppIdentifier[] = [];
 		switch (app.manifestType) {
-			case manifestTypes.external.id: {
-				const settings = await getSettings();
-				const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
-				const options: OpenFin.ExternalProcessRequestType = {};
-
-				if (app.tags?.includes(appAssetTag)) {
-					logger.info(
-						`Application requested is a native app with a tag of ${appAssetTag} so it is provided by this workspace platform. Managing request via platform and not Workspace`
-					);
-					options.alias = app.manifest;
-					if (app.instanceMode === "single") {
-						// use the appId as the UUID and OpenFin will only be able to launch a single instance
-						options.uuid = app.appId;
-					}
-				} else {
-					logger.info(
-						"Application requested is a native app. Managing request via platform and not Workspace"
-					);
-					options.path = app.manifest;
-					if (app.instanceMode === "single") {
-						// use the appId as the UUID and OpenFin will only be able to launch a single instance
-						options.uuid = app.appId;
-					}
+			case manifestTypes.external.id:
+			case manifestTypes.inlineExternal.id: {
+				const platformIdentity = await launchExternal(app);
+				if (platformIdentity !== null) {
+					platformAppIdentities.push(platformIdentity);
 				}
-				const identity = await fin.System.launchExternalProcess(options);
-				platformAppIdentities.push({ ...identity, appId: app.appId });
 				break;
 			}
-			case manifestTypes.inlineExternal.id: {
-				logger.info(
-					"Application requested is a native app defined as inline-external. Managing request via platform and not Workspace."
-				);
-				try {
-					const options = app.manifest as OpenFin.ExternalProcessRequestType;
-					const identity = await fin.System.launchExternalProcess(options);
-					platformAppIdentities.push({ ...identity, appId: app.appId });
-				} catch (err) {
-					logger.error(`Error trying to launch inline-external with appId: ${app.appId}`, err);
+			case manifestTypes.appasset.id:
+			case manifestTypes.inlineAppAsset.id: {
+				const platformIdentity = await launchAppAsset(app);
+				if (platformIdentity !== null) {
+					platformAppIdentities.push(platformIdentity);
 				}
 				break;
 			}
@@ -322,17 +359,12 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 				break;
 			}
 			case manifestTypes.manifest.id: {
-				const manifest = await fin.System.launchManifest(app.manifest);
-				if (manifest?.platform?.uuid !== undefined) {
+				const manifestApp = await fin.Application.startFromManifest(app.manifest);
+				const manifestUUID = manifestApp?.identity?.uuid;
+				if (manifestUUID !== undefined) {
 					platformAppIdentities.push({
-						uuid: manifest.platform.uuid,
-						name: manifest.platform.uuid,
-						appId: app.appId
-					});
-				} else if (manifest?.startup_app?.uuid !== undefined) {
-					platformAppIdentities.push({
-						uuid: manifest.startup_app.uuid,
-						name: manifest.startup_app.uuid,
+						uuid: manifestUUID,
+						name: manifestUUID,
 						appId: app.appId
 					});
 				}

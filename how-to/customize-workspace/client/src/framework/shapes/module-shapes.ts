@@ -1,5 +1,6 @@
 import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
@@ -75,6 +76,11 @@ export interface ModuleHelpers {
 	sessionId: string;
 
 	/**
+	 * Get the list of apps supported by this platform and/or user.
+	 */
+	getApps?(): Promise<PlatformApp[]>;
+
+	/**
 	 * Get the current theme id.
 	 */
 	getCurrentThemeId(): Promise<string>;
@@ -111,6 +117,13 @@ export interface ModuleHelpers {
 	 * once the application is bootstrapped and ready.
 	 */
 	getInteropClient?(): Promise<InteropClient | undefined>;
+
+	/**
+	 * If available, this function lets you request the launch of an application that is available to this
+	 * platform and the current user.
+	 * @param appId The id of the application that is registered against the currently running platform
+	 */
+	launchApp?(appId: string): Promise<void>;
 
 	/**
 	 * Subscribe to lifecycle events.
