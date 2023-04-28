@@ -95,6 +95,9 @@ export async function createTitle(
 			color: palette.textDefault,
 			fontSize: `${fontSize ?? 12}px`,
 			fontWeight,
+			overflow: "hidden",
+			whiteSpace: "nowrap",
+			textOverflow: "ellipsis",
 			...style
 		}
 	};
