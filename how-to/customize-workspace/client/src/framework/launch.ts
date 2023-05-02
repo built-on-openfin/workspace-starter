@@ -37,6 +37,14 @@ function decoupleApp(app: PlatformApp) {
 	return JSON.parse(JSON.stringify(app)) as PlatformApp;
 }
 
+function getManifest(app: PlatformApp): unknown {
+	if (typeof app.manifest === "string" && app.manifest.startsWith("{")) {
+		return JSON.parse(app.manifest);
+	}
+
+	return app.manifest;
+}
+
 async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier> {
 	if (windowApp === undefined || windowApp === null) {
 		logger.warn("No app was passed to launchWindow");
@@ -60,7 +68,7 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	} else {
 		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For classic windows we are demonstrating how it could be used
 		// for passing the manifest inline
-		manifest = windowApp.manifest as unknown as OpenFin.WindowOptions;
+		manifest = getManifest(windowApp) as OpenFin.WindowOptions;
 	}
 
 	let name = manifest.name;
@@ -123,7 +131,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier> 
 	} else {
 		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
 		// for passing the manifest inline
-		manifest = viewApp.manifest as unknown as OpenFin.ViewOptions;
+		manifest = getManifest(viewApp) as OpenFin.ViewOptions;
 	}
 
 	let name = manifest.name;
@@ -188,7 +196,7 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		manifest = await manifestResponse.json();
 	} else {
 		logger.info(`Using snapshot defined in manifest setting of app ${snapshotApp.appId}`);
-		manifest = snapshotApp.manifest as unknown as BrowserSnapshot;
+		manifest = getManifest(snapshotApp) as BrowserSnapshot;
 	}
 
 	const windows = manifest.windows;
@@ -249,7 +257,7 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 	if (appAssetApp.manifestType === manifestTypes.appasset.id) {
 		options.alias = appAssetApp.manifest;
 	} else if (appAssetApp.manifestType === manifestTypes.inlineAppAsset.id) {
-		const appAssetInfo: OpenFin.AppAssetInfo = appAssetApp.manifest as unknown as OpenFin.AppAssetInfo;
+		const appAssetInfo: OpenFin.AppAssetInfo = getManifest(appAssetApp) as OpenFin.AppAssetInfo;
 		try {
 			await fin.System.downloadAsset(appAssetInfo, (progress) => {
 				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
@@ -288,7 +296,7 @@ async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIden
 	if (externalApp.manifestType === manifestTypes.external.id) {
 		options.path = externalApp.manifest;
 	} else if (externalApp.manifestType === manifestTypes.inlineExternal.id) {
-		options = externalApp.manifest as OpenFin.ExternalProcessRequestType;
+		options = getManifest(externalApp) as OpenFin.ExternalProcessRequestType;
 	} else {
 		logger.warn("An external app was passed to launch but it didn't match the supported manifest types.");
 		return null;
