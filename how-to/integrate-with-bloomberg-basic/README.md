@@ -65,9 +65,11 @@ npm run client
 
 ```
 
-### Please note: In the manifest.json file, please change "http://localhost:8080" under snapshot/windows/layout/content to point to your domain
+### Please note: In the manifest.json file, please change `http://localhost:8080` under snapshot/windows/layout/content to point to your domain
 
+```json
 "url": "http://localhost:8080/platform/bbgtest.html",
+```
 
 ### Please also note that you must establish a connection to the Bloomberg Terminal and verify that you receive the "connected" message prior to raising any intents. You may connect to the Bloomberg Terminal via the "Connect to Bloomberg Terminal" button
 
