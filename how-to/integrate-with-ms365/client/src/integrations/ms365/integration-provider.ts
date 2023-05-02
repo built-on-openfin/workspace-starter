@@ -4,9 +4,9 @@ import type {
 	Channel,
 	ChatMessage,
 	Contact,
+	DriveItem,
 	Entity,
 	Event,
-	DriveItem,
 	Message,
 	Presence,
 	SearchResponse,
@@ -16,20 +16,20 @@ import type {
 import {
 	connect,
 	enableLogging,
-	GraphResponse,
 	TeamsConnection,
+	type GraphResponse,
 	type Microsoft365Connection
 } from "@openfin/microsoft365";
 import {
 	ButtonStyle,
-	CLIFilter,
 	CLITemplate,
-	HomeDispatchedSearchResult,
-	HomeSearchListenerResponse,
-	HomeSearchResponse,
-	HomeSearchResult,
-	TemplateFragment,
-	TemplateFragmentTypes
+	TemplateFragmentTypes,
+	type CLIFilter,
+	type HomeDispatchedSearchResult,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult,
+	type TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { IntegrationHelpers, IntegrationModule } from "../../shapes/integrations-shapes";
@@ -259,11 +259,6 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			const svg = await response.text();
 			this._settings.images[themedIcon] = this.svgToInline(svg);
 		}
-
-		this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
-		window.setTimeout(async () => {
-			await this.updateCache();
-		}, 0);
 	}
 
 	/**
@@ -345,12 +340,17 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options?: {
+			queryMinLength: number;
+			queryAgainst: string[];
+		}
 	): Promise<HomeSearchResponse> {
 		if (!this._ms365Connection) {
 			this._connectLastResponse = lastResponse;
@@ -373,6 +373,8 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 			? ["File"]
 			: ["User", "Contact", "Event", "Message", "Channel", "Team", "ChatMessage", "File"];
 
+		const minLength = options?.queryMinLength ?? 3;
+
 		this._debounceTimerId = window.setTimeout(async () => {
 			try {
 				// If query starts with ms just do a passthrough to the graph API
@@ -389,7 +391,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 						const response = await this._ms365Connection.executeApiRequest(fullPath);
 						lastResponse.respond([this.createGraphJsonResult(response)]);
 					}
-				} else if (query.length >= 3) {
+				} else if (isRecent || (query.length >= minLength && !query.startsWith("/"))) {
 					const ms365Filter = filters?.find((f) => f.id === Microsoft365Provider._MS365_FILTERS);
 
 					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
@@ -548,7 +550,7 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 		}, 500);
 
 		return {
-			results: query.length >= 3 ? [this.createSearchingResult()] : [],
+			results: query.length >= minLength ? [this.createSearchingResult()] : [],
 			context: {
 				filters: [
 					{
@@ -621,6 +623,12 @@ export class Microsoft365Provider implements IntegrationModule<Microsoft365Setti
 				this._settings.redirectUri,
 				this._settings.permissions
 			);
+
+			this._cacheIntervalId = window.setInterval(async () => this.updateCache(), 30000);
+			window.setTimeout(async () => {
+				await this.updateCache();
+			}, 0);
+
 			if (this._connectLastResponse) {
 				this._connectLastResponse.revoke(`${this._moduleDefinition.id}-connect`);
 				this._connectLastResponse = undefined;

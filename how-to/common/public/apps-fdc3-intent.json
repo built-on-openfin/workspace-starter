@@ -1,0 +1,158 @@
+[
+	{
+		"appId": "fdc3-intent-view",
+		"name": "fdc3-intent-view",
+		"title": "Intents using FDC3 (1.2)",
+		"description": "An example of raising and listening to fdc3 intents and the code needed to implement it. This view can be launched multiple times.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/fdc3/intent/fdc3-intent-multi-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "StartCall",
+				"displayName": "Start a Call",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "StartChat",
+				"displayName": "Start a Chat",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewChart",
+				"displayName": "View Chart",
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact Details",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewQuote",
+				"displayName": "View Quote",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewNews",
+				"displayName": "View News",
+				"contexts": [
+					"fdc3.country",
+					"fdc3.instrument",
+					"fdc3.instrumentList",
+					"fdc3.organization",
+					"fdc3.portfolio"
+				],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewAnalysis",
+				"displayName": "View Analysis",
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument Details",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-intents-fdc3.png"
+			}
+		],
+		"tags": ["view", "fdc3", "intent", "tools"]
+	},
+	{
+		"appId": "fdc3-intent-view-2-0",
+		"name": "fdc3-intent-view-2-0",
+		"title": "Intents using FDC3 (2.0)",
+		"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 2.0 api. Multiple instances of this view can be launched.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/fdc3/intent/2-0/fdc3-intent-multi-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "StartCall",
+				"displayName": "Start a Call",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "StartChat",
+				"displayName": "Start a Chat",
+				"contexts": ["fdc3.contact", "fdc3.contactList"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewChart",
+				"displayName": "View Chart",
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact Details",
+				"contexts": ["fdc3.contact"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewQuote",
+				"displayName": "View Quote",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewNews",
+				"displayName": "View News",
+				"contexts": [
+					"fdc3.country",
+					"fdc3.instrument",
+					"fdc3.instrumentList",
+					"fdc3.organization",
+					"fdc3.portfolio"
+				],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewAnalysis",
+				"displayName": "View Analysis",
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+				"customConfig": {}
+			},
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument Details",
+				"contexts": ["fdc3.instrument"],
+				"customConfig": {}
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/fdc3-intent-view-2-0.png"
+			}
+		],
+		"tags": ["view", "fdc3", "intent", "tools"]
+	}
+]

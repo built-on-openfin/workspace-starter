@@ -1,37 +1,26 @@
 import {
-	CLIFilter,
-	CLIFilterOptionType,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
-	CLITemplate,
 	Home,
-	HomeDispatchedSearchResult,
-	HomeRegistration,
-	HomeSearchResponse,
-	HomeSearchResult
+	type CLIFilter,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeDispatchedSearchResult,
+	type HomeRegistration
 } from "@openfin/workspace";
-import { getAppIcon, getApps } from "../apps";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
-import { launch } from "../launch";
 import { createLogger } from "../logger-provider";
-import { manifestTypes } from "../manifest-types";
 import { getSettings } from "../settings";
-import type { PlatformApp } from "../shapes/app-shapes";
 
 const logger = createLogger("Home");
 
-const HOME_TAG_FILTERS = "tags";
 const HOME_SOURCE_FILTERS = "sources";
 
 const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 
-const HOME_APPS_FILTER = "Apps";
-
 let registrationInfo: HomeRegistration | undefined;
-let queryMinLength = 3;
-let queryAgainst = ["title"];
+let queryMinLengthSetting = 3;
+let queryAgainstSetting = ["title"];
 let enableSourceFilter;
 let lastResponse: CLISearchListenerResponse;
 let sourceFilterLabel = HOME_SOURCE_DEFAULT_FILTER_LABEL;
@@ -51,15 +40,14 @@ export async function register(): Promise<HomeRegistration> {
 			return null;
 		}
 
-		queryMinLength = settings?.homeProvider?.queryMinLength ?? queryMinLength;
-		queryAgainst = settings?.homeProvider?.queryAgainst ?? queryAgainst;
-		enableSourceFilter = !(settings?.homeProvider?.sourceFilter?.disabled ?? false);
-		sourceFilterLabel = settings?.homeProvider?.sourceFilter?.label ?? sourceFilterLabel;
+		const { queryMinLength, queryAgainst, sourceFilter, ...cliSettings } = settings.homeProvider;
+		queryMinLengthSetting = queryMinLength ?? queryMinLengthSetting;
+		queryAgainstSetting = queryAgainst ?? queryAgainstSetting;
+		enableSourceFilter = !(sourceFilter?.disabled ?? false);
+		sourceFilterLabel = sourceFilter?.label ?? sourceFilterLabel;
 
 		const cliProvider: CLIProvider = {
-			title: settings.homeProvider.title,
-			id: settings.homeProvider.id,
-			icon: settings.homeProvider.icon,
+			...cliSettings,
 			onUserInput,
 			onResultDispatch: onSelection,
 			dispatchFocusEvents: true
@@ -109,6 +97,7 @@ async function onUserInput(
 		const queryLower = request.query.toLowerCase();
 
 		if (queryLower === "?") {
+			logger.info("Integration Help requested.");
 			const integrationHelpSearchEntries = await getHelpSearchEntries();
 			const searchResults = {
 				results: integrationHelpSearchEntries,
@@ -131,34 +120,22 @@ async function onUserInput(
 			}
 		}
 
-		const searchResults = await getResults(queryLower, filters, selectedSourceFilterOptions);
-
 		let sourceFilterOptions: string[] = [];
-		if (enableSourceFilter) {
-			sourceFilterOptions.push(HOME_APPS_FILTER);
-		}
 
-		const integrationResults = await getSearchResults(
+		logger.info("Search results requested.");
+		const searchResults = await getSearchResults(
 			request.query,
 			filters,
 			lastResponse,
 			selectedSourceFilterOptions,
 			{
-				queryMinLength,
-				queryAgainst
+				queryMinLength: queryMinLengthSetting,
+				queryAgainst: queryAgainstSetting
 			}
 		);
-		if (Array.isArray(integrationResults.results) && integrationResults.results.length > 0) {
-			searchResults.results = searchResults.results.concat(integrationResults.results);
-		}
-		if (Array.isArray(integrationResults.context.filters) && integrationResults.context.filters.length > 0) {
-			searchResults.context.filters = searchResults.context.filters.concat(
-				integrationResults.context.filters
-			);
-		}
 
-		if (Array.isArray(integrationResults.sourceFilters) && integrationResults.sourceFilters.length > 0) {
-			sourceFilterOptions = sourceFilterOptions.concat(integrationResults.sourceFilters);
+		if (Array.isArray(searchResults.sourceFilters) && searchResults.sourceFilters.length > 0) {
+			sourceFilterOptions = sourceFilterOptions.concat(searchResults.sourceFilters);
 		}
 
 		if (enableSourceFilter && sourceFilterOptions.length > 0) {
@@ -184,7 +161,11 @@ async function onUserInput(
 		if (finalFilters.length > 0) {
 			searchResults.context.filters = finalFilters;
 		}
-
+		if (!Array.isArray(searchResults?.results)) {
+			logger.info("No results array returned.");
+		} else {
+			logger.info(`${searchResults.results.length} results returned.`);
+		}
 		return searchResults;
 	} catch (err) {
 		logger.error("Exception while getting search list results", err);
@@ -197,215 +178,22 @@ async function onSelection(result: HomeDispatchedSearchResult) {
 	if (result.data !== undefined) {
 		const handled = await itemSelection(result, lastResponse);
 
-		if (!handled && result.action.trigger === "user-action") {
-			await launch(result.data as PlatformApp);
+		if (result.action.trigger === "user-action") {
+			if (handled) {
+				logger.info(
+					`The action for result with title: '${result.title}' for provider: '${
+						result.data?.providerId ?? "unknown"
+					}' was handled`
+				);
+			} else {
+				logger.error(
+					`The action for result with title: '${result.title}' for provider: '${
+						result.data?.providerId ?? "unknown"
+					}' was not handled`
+				);
+			}
 		}
 	} else {
 		logger.warn("Unable to execute result without data being passed");
 	}
-}
-
-async function getResults(
-	queryLower: string,
-	filters: CLIFilter[],
-	selectedSources: string[]
-): Promise<HomeSearchResponse> {
-	const apps = await getApps({ private: false });
-	let appSearchEntries = [];
-
-	const tags: string[] = [];
-
-	if (selectedSources.length === 0 || selectedSources.includes(HOME_APPS_FILTER)) {
-		appSearchEntries = mapAppEntriesToSearchEntries(apps);
-	}
-
-	if (appSearchEntries.length > 0) {
-		const finalResults = appSearchEntries.filter((entry) => {
-			let textMatchFound = true;
-			let filterMatchFound = true;
-
-			const isCommand = queryLower.startsWith("/");
-
-			if (queryLower.length >= queryMinLength || isCommand) {
-				textMatchFound = queryAgainst.some((target) => {
-					const path = target.split(".");
-					if (path.length === 1) {
-						const targetValue = entry[path[0]];
-
-						if (typeof targetValue === "string") {
-							const lowerTarget = targetValue.toLowerCase();
-							if (isCommand) {
-								return lowerTarget.startsWith(queryLower);
-							}
-							return lowerTarget.includes(queryLower);
-						}
-					} else if (path.length === 2) {
-						const specifiedTarget = entry[path[0]];
-						let targetValue: string | string[];
-						if (specifiedTarget !== undefined && specifiedTarget !== null) {
-							targetValue = specifiedTarget[path[1]];
-						}
-
-						if (typeof targetValue === "string") {
-							const lowerTarget = targetValue.toLowerCase();
-							if (isCommand) {
-								return lowerTarget.startsWith(queryLower);
-							}
-							return lowerTarget.includes(queryLower);
-						}
-
-						if (Array.isArray(targetValue)) {
-							if (
-								targetValue.length > 0 &&
-								typeof targetValue[0] === "string" &&
-								targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
-							) {
-								return true;
-							}
-							logger.warn(
-								`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
-							);
-						}
-					} else {
-						logger.warn(
-							"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
-						);
-					}
-					return false;
-				});
-			}
-
-			const tagFilters = Array.isArray(filters) ? filters.filter((f) => f.id === HOME_TAG_FILTERS) : [];
-			if (tagFilters.length > 0) {
-				filterMatchFound = tagFilters.some((filter) => {
-					if (Array.isArray(filter.options)) {
-						if (entry.data?.tags !== undefined) {
-							return filter.options.every(
-								(option) => !option.isSelected || entry.data.tags.includes(option.value)
-							);
-						}
-					} else if (filter.options.isSelected && entry.data?.tags !== undefined) {
-						return entry.data?.tags.indexOf(filter.options.value) > -1;
-					}
-					return true;
-				});
-			}
-
-			if (textMatchFound && Array.isArray(entry.data?.tags)) {
-				tags.push(...(entry.data.tags as string[]));
-			}
-			return textMatchFound && filterMatchFound;
-		});
-
-		return {
-			results: finalResults,
-			context: {
-				filters: getSearchFilters(tags.filter(Boolean))
-			}
-		};
-	}
-	return {
-		results: [],
-		context: {
-			filters: []
-		}
-	};
-}
-
-function getSearchFilters(tags: string[]): CLIFilter[] {
-	if (Array.isArray(tags)) {
-		const filters: CLIFilter[] = [];
-		const uniqueTags = [...new Set(tags.sort())];
-		const tagFilter: CLIFilter = {
-			id: HOME_TAG_FILTERS,
-			title: "Tags",
-			type: CLIFilterOptionType.MultiSelect,
-			options: []
-		};
-
-		for (const tag of uniqueTags) {
-			if (Array.isArray(tagFilter.options)) {
-				tagFilter.options.push({
-					value: tag,
-					isSelected: false
-				});
-			}
-		}
-
-		filters.push(tagFilter);
-		return filters;
-	}
-	return [];
-}
-
-function mapAppEntriesToSearchEntries(apps: PlatformApp[]): HomeSearchResult[] {
-	const appResults: HomeSearchResult[] = [];
-	if (Array.isArray(apps)) {
-		for (let i = 0; i < apps.length; i++) {
-			const action = { name: "Launch View", hotkey: "enter" };
-			const entry: Partial<HomeSearchResult> = {
-				key: apps[i].appId,
-				title: apps[i].title,
-				data: apps[i]
-			};
-
-			switch (apps[i].manifestType) {
-				case manifestTypes.view.id:
-				case manifestTypes.inlineView.id: {
-					entry.label = manifestTypes.view.label;
-					break;
-				}
-				case manifestTypes.window.id:
-				case manifestTypes.inlineWindow.id: {
-					entry.label = manifestTypes.window.label;
-					break;
-				}
-				case manifestTypes.desktopBrowser.id: {
-					entry.label = manifestTypes.desktopBrowser.label;
-					break;
-				}
-				case manifestTypes.snapshot.id: {
-					entry.label = manifestTypes.snapshot.label;
-					action.name = "Launch Snapshot";
-					break;
-				}
-				case manifestTypes.manifest.id: {
-					entry.label = manifestTypes.manifest.label;
-					action.name = "Launch App";
-					break;
-				}
-				case manifestTypes.external.id:
-				case manifestTypes.inlineExternal.id: {
-					action.name = "Launch Native App";
-					entry.label = manifestTypes.external.label;
-					break;
-				}
-				case manifestTypes.endpoint.id: {
-					action.name = "Launch";
-					entry.label = manifestTypes.endpoint.label;
-					break;
-				}
-				case manifestTypes.connection.id: {
-					action.name = "Launch Connected App";
-					entry.label = manifestTypes.connection.label;
-					break;
-				}
-			}
-
-			entry.actions = [action];
-			entry.icon = getAppIcon(apps[i]);
-
-			if (apps[i].description !== undefined) {
-				entry.description = apps[i].description;
-				entry.shortDescription = apps[i].description;
-				entry.template = CLITemplate.SimpleText;
-				entry.templateContent = apps[i].description;
-			} else {
-				entry.template = CLITemplate.Plain;
-			}
-
-			appResults.push(entry as HomeSearchResult);
-		}
-	}
-	return appResults;
 }

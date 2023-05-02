@@ -1,5 +1,6 @@
-import { getCurrentSync, Page } from "@openfin/workspace-platform";
-import { create, IndicatorColor, NotificationOptions } from "@openfin/workspace/notifications";
+import type OpenFin from "@openfin/core";
+import { getCurrentSync, type Page } from "@openfin/workspace-platform";
+import { create, IndicatorColor, type NotificationOptions } from "@openfin/workspace/notifications";
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";

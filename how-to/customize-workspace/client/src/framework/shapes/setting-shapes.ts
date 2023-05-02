@@ -8,12 +8,12 @@ import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { DockProviderOptions } from "./dock-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
-import type { HeadlessProviderOptions } from "./headless-shapes";
 import type { HomeProviderOptions } from "./home-shapes";
 import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
 import type { LifecycleProviderOptions } from "./lifecycle-shapes";
 import type { LoggerProviderOptions } from "./logger-shapes";
+import type { MenusProviderOptions } from "./menu-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
@@ -29,7 +29,6 @@ export interface CustomSettings {
 	connectionProvider?: ConnectionProviderOptions;
 	dockProvider?: DockProviderOptions;
 	endpointProvider?: EndpointProviderOptions;
-	headlessProvider?: HeadlessProviderOptions;
 	homeProvider?: HomeProviderOptions;
 	initOptionsProvider?: InitOptionsProviderOptions;
 	integrationProvider?: IntegrationProviderOptions;
@@ -43,4 +42,5 @@ export interface CustomSettings {
 	lifecycleProvider?: LifecycleProviderOptions;
 	analyticsProvider?: AnalyticsProviderOptions;
 	versionProvider?: VersionProviderOptions;
+	menusProvider?: MenusProviderOptions;
 }

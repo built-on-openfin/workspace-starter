@@ -1,14 +1,14 @@
 import {
-	App,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeDispatchedSearchResult,
-	HomeSearchResponse,
-	HomeSearchResult
+	type App,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeDispatchedSearchResult,
+	type HomeSearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import { getApps } from "./apps";
 import { getSearchResults, itemSelection } from "./integrations";

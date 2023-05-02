@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "28.106.72.17"
+		"version": "30.110.74.13"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"
@@ -28,22 +28,30 @@
 			}
 		},
 		"defaultWindowOptions": {
-			"experimental": {
-				"showViewsOnResize": {
-					"enabled": true,
-					"delayMs": 0
-				}
-			},
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": ["mailto"]
+						"protocols": ["mailto", "msteams", "tel"]
+					}
+				}
+			},
+			"viewVisibility": {
+				"showViewsOnTabDrag": { "enabled": true },
+				"showViewsOnSplitterDrag": { "enabled": true },
+				"showViewsOnWindowResize": { "enabled": true }
+			}
+		},
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
 			}
-		},
-		"defaultViewOptions": {}
+		}
 	},
 	"snapshot": {
 		"windows": []
@@ -52,18 +60,9 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Customize Workspace - v10.0.0",
+		"name": "Customize Workspace - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Customize Workspace - Client",
@@ -81,27 +80,97 @@
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
 			"sharing": true,
-			"intentPicker": {
-				"url": "http://localhost:8080/common/windows/intents/picker.html",
-				"height": 400,
-				"width": 400
+			"interop": {
+				"intentResolver": {
+					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
+					"height": 715,
+					"width": 665,
+					"fdc3InteropApi": "2.0"
+				},
+				"intentOptions": {},
+				"unregisteredApp": {
+					"appId": "unregistered",
+					"title": "Other",
+					"description": "If you can not find an application to support your action please check the instances associated with this entry to see if it satisfies your need.",
+					"icons": [
+						{
+							"src": "http://localhost:8080/favicon.ico"
+						}
+					],
+					"publisher": "Multiple",
+					"intents": [
+						{
+							"name": "StartCall",
+							"displayName": "Start a Call",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						{
+							"name": "StartChat",
+							"displayName": "Start a Chat",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						{
+							"name": "ViewChart",
+							"displayName": "View Chart",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+						},
+						{
+							"name": "ViewContact",
+							"displayName": "View Contact Details",
+							"contexts": ["fdc3.contact"]
+						},
+						{
+							"name": "ViewQuote",
+							"displayName": "View Quote",
+							"contexts": ["fdc3.instrument"]
+						},
+						{
+							"name": "ViewNews",
+							"displayName": "View News",
+							"contexts": [
+								"fdc3.country",
+								"fdc3.instrument",
+								"fdc3.instrumentList",
+								"fdc3.organization",
+								"fdc3.portfolio"
+							]
+						},
+						{
+							"name": "ViewAnalysis",
+							"displayName": "View Analysis",
+							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+						},
+						{
+							"name": "ViewInstrument",
+							"displayName": "View Instrument Details",
+							"contexts": ["fdc3.instrument"]
+						}
+					]
+				}
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["apps-get", "common-apps-get"],
+			"endpointIds": [
+				"http://localhost:8080/apps.json",
+				"http://localhost:8080/common/apps.json",
+				"http://localhost:8080/apps-fdc3-1-2.json",
+				"http://localhost:8080/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
-			"appAssetTag": "appasset",
 			"manifestTypes": [
 				"view",
-				"snapshot",
-				"manifest",
-				"external",
 				"inline-view",
 				"window",
 				"inline-window",
-				"desktop-browser",
+				"snapshot",
+				"inline-snapshot",
+				"external",
 				"inline-external",
+				"appasset",
+				"inline-appasset",
+				"manifest",
+				"desktop-browser",
 				"connection"
 			]
 		},
@@ -114,22 +183,6 @@
 				}
 			],
 			"endpoints": [
-				{
-					"id": "apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "http://localhost:8080/apps.json"
-					}
-				},
-				{
-					"id": "common-apps-get",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "http://localhost:8080/common/apps.json"
-					}
-				},
 				{
 					"id": "share-get",
 					"type": "fetch",
@@ -173,35 +226,12 @@
 				"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
 			},
+			"windowPositioningStrategy": {
+				"x": 30,
+				"y": 30,
+				"maxIncrements": 8
+			},
 			"globalMenu": [
-				{
-					"include": true,
-					"label": "Inspect Platform",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect",
-							"customData": { "target": "platform" }
-						}
-					},
-					"position": {
-						"operation": "start"
-					},
-					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Inspect Window",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
 				{
 					"include": true,
 					"label": "Toggle Notification Center",
@@ -229,21 +259,6 @@
 						"type": "OpenStorefront",
 						"operation": "after"
 					}
-				},
-				{
-					"include": true,
-					"label": "About",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "show-about"
-						}
-					},
-					"position": {
-						"type": "Quit",
-						"operation": "before"
-					},
-					"conditions": ["has-about"]
 				},
 				{
 					"include": true,
@@ -299,32 +314,6 @@
 						"operation": "start"
 					},
 					"separator": "after"
-				},
-				{
-					"include": true,
-					"label": "Create App Definition",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "raise-create-app-definition-intent"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
-				},
-				{
-					"include": true,
-					"label": "Inspect View",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "developer-inspect"
-						}
-					},
-					"position": {
-						"operation": "start"
-					}
 				}
 			],
 			"toolbarButtons": [
@@ -518,7 +507,7 @@
 							"inputPlaceholder": "#383A40",
 							"inputDisabled": "#7D808A",
 							"inputFocused": "#C9CBD2",
-							"textDefault": "#111214",
+							"textDefault": "#1E1F23",
 							"textHelp": "#2F3136",
 							"textInactive": "#7D808A",
 							"contentBackground1": "#0A76D3",
@@ -770,6 +759,26 @@
 							}
 						}
 					]
+				},
+				{
+					"tooltip": "Window Visibility",
+					"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/windows.svg",
+					"options": [
+						{
+							"tooltip": "Show All Windows",
+							"action": {
+								"id": "window-show-all",
+								"customData": {}
+							}
+						},
+						{
+							"tooltip": "Hide All Windows",
+							"action": {
+								"id": "window-hide-all",
+								"customData": {}
+							}
+						}
+					]
 				}
 			]
 		},
@@ -784,6 +793,74 @@
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
+				{
+					"id": "apps",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Apps",
+					"description": "Search Applications",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/apps.bundle.js",
+					"data": {
+						"manifestTypeMapping": {
+							"view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"inline-view": {
+								"entryLabel": "View",
+								"actionName": ""
+							},
+							"window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"inline-window": {
+								"entryLabel": "Window",
+								"actionName": ""
+							},
+							"snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"inline-snapshot": {
+								"entryLabel": "Snapshot",
+								"actionName": "Launch Snapshot"
+							},
+							"manifest": {
+								"entryLabel": "App",
+								"actionName": "Launch App"
+							},
+							"external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-external": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"inline-appasset": {
+								"entryLabel": "Native App",
+								"actionName": "Launch Native App"
+							},
+							"desktop-browser": {
+								"entryLabel": "Desktop Browser",
+								"actionName": ""
+							},
+							"endpoint": {
+								"entryLabel": "Endpoint",
+								"actionName": "Launch"
+							},
+							"connection": {
+								"entryLabel": "Connected App",
+								"actionName": "Launch Connected App"
+							}
+						}
+					}
+				},
 				{
 					"id": "workspaces",
 					"icon": "http://localhost:8080/favicon.ico",
@@ -812,32 +889,22 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/js/preload.js",
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/integrate-with-salesforce/images/task.svg"
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/integrate-with-salesforce/images/task.svg"
 						}
 					}
-				},
-				{
-					"id": "emoji",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Emoji Provider",
-					"description": "Search for emojis by name",
-					"enabled": false,
-					"excludeFromSourceFilter": true,
-					"autoStart": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v10.0.0/customize-home-templates/js/integrations/emoji.bundle.js"
 				},
 				{
 					"id": "about",
@@ -847,6 +914,24 @@
 					"enabled": true,
 					"excludeFromSourceFilter": true,
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "quote",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Quote Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/quote.bundle.js",
+					"data": {
+						"rootUrl": "http://localhost:8080/data/quotes/"
+					}
+				},
+				{
+					"id": "emoji",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Emoji Provider",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
@@ -859,6 +944,14 @@
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
+					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-app",
+					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
+					"data": {
+						"supportedActions": ["launch-app"]
 					}
 				}
 			]
@@ -902,6 +995,16 @@
 							"customData": {}
 						}
 					}
+				},
+				{
+					"enabled": true,
+					"id": "page-actions",
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "window-actions",
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				}
 			]
 		},
@@ -928,18 +1031,34 @@
 			],
 			"connections": [
 				{
-					"identity": { "uuid": "customize-workspace" },
-					"validatePayload": false,
-					"connectionTypes": [{ "type": "broker" }]
-				},
-				{
-					"identity": { "uuid": "*" },
+					"identity": {
+						"uuid": "customize-workspace"
+					},
 					"validatePayload": false,
 					"connectionTypes": [
-						{ "type": "appSource" },
-						{ "type": "snapshotSource" },
-						{ "type": "actions" },
-						{ "type": "broker" }
+						{
+							"type": "broker"
+						}
+					]
+				},
+				{
+					"identity": {
+						"uuid": "*"
+					},
+					"validatePayload": false,
+					"connectionTypes": [
+						{
+							"type": "appSource"
+						},
+						{
+							"type": "snapshotSource"
+						},
+						{
+							"type": "actions"
+						},
+						{
+							"type": "broker"
+						}
 					]
 				}
 			]
@@ -965,7 +1084,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "10.0.0"
+				"workspace": "12.6.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -982,6 +1101,43 @@
 			},
 			"endpointId": "version",
 			"versionCheckIntervalInSeconds": 30
+		},
+		"menusProvider": {
+			"modules": [
+				{
+					"enabled": true,
+					"id": "developer-menus",
+					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "about",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "About",
+					"description": "Provides information about this platform.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "pages",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Pages",
+					"description": "Provides additional menu options for pages.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "windows",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Windows",
+					"description": "Provides additional menu options for windows.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
+					"data": {}
+				}
+			]
 		}
 	}
 }

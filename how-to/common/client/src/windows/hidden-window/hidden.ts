@@ -1,8 +1,8 @@
 import {
-	create,
 	IndicatorColor,
-	NotificationOptions,
-	addEventListener as addNotificationEventListener
+	addEventListener as addNotificationEventListener,
+	create,
+	type NotificationOptions
 } from "@openfin/workspace/notifications";
 
 async function notifyOfLoad() {

@@ -22,6 +22,14 @@ describe("Register with Home", () => {
 		expect(isReady).to.equal(true);
 	});
 
+	it("Can switch to platform window", async () => {
+		const switched = await WebDriver.switchToWindow("identityString", [
+			"register-with-home",
+			"register-with-home"
+		]);
+		expect(switched).to.equal(true);
+	});
+
 	it("The title should be set", async () => {
 		const title = await WebDriver.getTitle();
 		expect(title).to.equal("Platform Provider");
@@ -35,7 +43,7 @@ describe("Register with Home", () => {
 	it("The runtime version should be set", async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal("28.106.72.17");
+		expect(version).to.equal("30.110.74.13");
 	});
 
 	it("The identity should be set", async () => {
@@ -162,13 +170,9 @@ describe("Register with Home", () => {
 
 		const ids = await OpenFinHome.searchResultIds();
 
-		expect(ids.length).equal(6);
+		expect(ids.length).equal(2);
 		expect(ids[0]).equal("interop-broadcast-view");
-		expect(ids[1]).equal("openfin-context-page-multi");
-		expect(ids[2]).equal("interop-intent-view");
-		expect(ids[3]).equal("interop-intent-view-multi");
-		expect(ids[4]).equal("openfin-intent-page");
-		expect(ids[5]).equal("openfin-intent-page-multi");
+		expect(ids[1]).equal("interop-intent-view");
 
 		await WebDriver.saveScreenshot();
 	});
@@ -183,7 +187,7 @@ describe("Register with Home", () => {
 
 	it("Can select entries in the home window by id", async () => {
 		await WebDriver.sleep(1000);
-		await OpenFinHome.searchResultById("openfin-context-page-multi", "select");
+		await OpenFinHome.searchResultById("interop-intent-view", "select");
 
 		await WebDriver.sleep(1000);
 		await OpenFinHome.searchResultById("interop-broadcast-view", "select");
@@ -195,13 +199,12 @@ describe("Register with Home", () => {
 
 	it("Can get the filter ids", async () => {
 		const filterIds = await OpenFinHome.filtersIds();
-		expect(filterIds.length).equal(6);
+		expect(filterIds.length).equal(5);
 		expect(filterIds[0]).equal("intent");
 		expect(filterIds[1]).equal("interop");
 		expect(filterIds[2]).equal("openfin");
-		expect(filterIds[3]).equal("page");
-		expect(filterIds[4]).equal("tools");
-		expect(filterIds[5]).equal("view");
+		expect(filterIds[3]).equal("tools");
+		expect(filterIds[4]).equal("view");
 	});
 
 	it("Set a filter by index", async () => {

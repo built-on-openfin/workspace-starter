@@ -1,28 +1,36 @@
 import {
 	getCurrentSync,
-	GlobalContextMenuItemTemplate,
-	GlobalContextMenuOptionType,
-	PageTabContextMenuItemTemplate,
-	PageTabContextMenuOptionType,
-	ViewTabContextMenuTemplate,
-	ViewTabMenuOptionType
+	type GlobalContextMenuItemTemplate,
+	type GlobalContextMenuOptionType,
+	type PageTabContextMenuItemTemplate,
+	type PageTabContextMenuOptionType,
+	type ViewTabContextMenuTemplate,
+	type ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
+import { initializeModules, loadModules } from "./modules";
 import { getSettings } from "./settings";
-import type { MenuEntry, MenuPositionOperation } from "./shapes/browser-shapes";
+import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes";
+import type {
+	MenuEntry,
+	MenuOptionType,
+	MenuPositionOperation,
+	Menus,
+	MenusProviderOptions,
+	MenuTemplateType,
+	MenuType,
+	RelatedMenuId
+} from "./shapes/menu-shapes";
 
 const logger = createLogger("Menu");
 
-type MenuTemplateType =
-	| GlobalContextMenuItemTemplate
-	| PageTabContextMenuItemTemplate
-	| ViewTabContextMenuTemplate;
-type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
-	? GlobalContextMenuOptionType
-	: T extends PageTabContextMenuItemTemplate
-	? PageTabContextMenuOptionType
-	: ViewTabMenuOptionType;
+let menuModules: ModuleEntry<Menus, unknown, unknown, ModuleDefinition>[] = [];
+
+export async function init(menuProviderOptions: MenusProviderOptions, helpers: ModuleHelpers): Promise<void> {
+	menuModules = await loadModules<Menus>(menuProviderOptions, "menus");
+	await initializeModules<Menus>(menuModules, helpers);
+}
 
 function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<T>>(
 	menuEntries: T[],
@@ -113,30 +121,29 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 		const platform = getCurrentSync();
 
 		for (const menuItem of configEntries) {
-			if (menuItem.include) {
-				const canShow = await checkConditions(platform, menuItem.conditions);
+			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
+
+			if (include || include === undefined) {
+				const canShow = await checkConditions(platform, conditions);
 
 				if (canShow) {
 					const insertedIndex = updateMenuEntries(
 						menuItems,
-						menuItem.position.type,
-						menuItem.position.operation,
-						menuItem.position.customId,
-						{
-							label: menuItem.label,
-							data: menuItem.data
-						} as unknown as T
+						position.type,
+						position.operation,
+						position.customId,
+						menuItemTemplate as unknown as T
 					);
 
 					if (insertedIndex >= 0) {
 						const sep = { type: "separator" } as T;
-						if (menuItem.separator === "before") {
+						if (separator === "before") {
 							if (insertedIndex === 0) {
 								menuItems.unshift(sep);
 							} else {
 								menuItems.splice(insertedIndex, 0, sep);
 							}
-						} else if (menuItem.separator === "after") {
+						} else if (separator === "after") {
 							if (insertedIndex === menuItems.length - 1) {
 								menuItems.push(sep);
 							} else {
@@ -153,22 +160,67 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 }
 
 export async function getGlobalMenu(
-	defaultGlobalContextMenu?: GlobalContextMenuItemTemplate[]
+	defaultGlobalContextMenu?: GlobalContextMenuItemTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<GlobalContextMenuItemTemplate[]> {
 	const settings = await getSettings();
-	return buildMenu(defaultGlobalContextMenu, settings?.browserProvider?.globalMenu);
+	const menuEntries = (settings?.browserProvider?.globalMenu ?? []).concat(
+		await getModuleMenuEntries<GlobalContextMenuOptionType>("global", relatedMenuId)
+	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.globalMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.globalMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
+	return buildMenu(defaultGlobalContextMenu, menuEntries);
 }
 
 export async function getPageMenu(
-	defaultPageContextMenu: PageTabContextMenuItemTemplate[]
+	defaultPageContextMenu: PageTabContextMenuItemTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<PageTabContextMenuItemTemplate[]> {
 	const settings = await getSettings();
-	return buildMenu(defaultPageContextMenu, settings?.browserProvider?.pageMenu);
+	const menuEntries = (settings?.browserProvider?.pageMenu ?? []).concat(
+		await getModuleMenuEntries<PageTabContextMenuOptionType>("page", relatedMenuId)
+	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.pageMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.pageMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
+	return buildMenu(defaultPageContextMenu, menuEntries);
 }
 
 export async function getViewMenu(
-	defaultViewContextMenu: ViewTabContextMenuTemplate[]
+	defaultViewContextMenu: ViewTabContextMenuTemplate[],
+	relatedMenuId?: RelatedMenuId
 ): Promise<ViewTabContextMenuTemplate[]> {
 	const settings = await getSettings();
-	return buildMenu(defaultViewContextMenu, settings?.browserProvider?.viewMenu);
+	const menuEntries = (settings?.browserProvider?.viewMenu ?? []).concat(
+		await getModuleMenuEntries<ViewTabMenuOptionType>("view", relatedMenuId)
+	);
+	if (
+		settings?.browserProvider?.menuOptions?.includeDefaults?.viewMenu !== undefined &&
+		!settings.browserProvider.menuOptions.includeDefaults.viewMenu
+	) {
+		return buildMenu(undefined, menuEntries);
+	}
+	return buildMenu(defaultViewContextMenu, menuEntries);
+}
+
+async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
+	menuType: MenuType,
+	relatedMenuId?: RelatedMenuId
+): Promise<MenuEntry<T>[]> {
+	const platform = getCurrentSync();
+	let menuEntries: MenuEntry<T>[] = [];
+	for (const menuModule of menuModules) {
+		const entries = await menuModule.implementation.get(menuType, platform, relatedMenuId);
+		if (entries) {
+			menuEntries = menuEntries.concat(entries as MenuEntry<T>[]);
+		}
+	}
+	return menuEntries;
 }

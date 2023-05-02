@@ -8,10 +8,15 @@
 OpenFin Workspace empowers you to take advantage of our browser component by using our Workspace Platform SDK to control the behavior of the OpenFin Browser independent of the Home and Storefront components. This example shows how to do a few basic things such as:
 
 1. Launch a browser window.
-2. Launch a browser window with a custom toolbar.
-3. Launch a browser window with multiple pages.
-4. Get all the pages for all open browser windows.
-5. Quit the running platform.
+2. Launch a browser window that doesn't require saving unless changes have been applied.
+3. Launch a browser in a maximized state
+4. Launch a browser window with a custom toolbar.
+5. Launch a page with no page tab.
+6. Launch a browser window with multiple pages.
+7. Launch a single locked page.
+8. Launch a browser window with fixed views.
+9. Get all the pages for all open browser windows.
+10. Quit the running platform.
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
@@ -20,7 +25,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv10.0.0%2Fregister-with-browser%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fregister-with-browser%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -30,7 +35,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 10.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -68,7 +73,7 @@ This is a headless application. If you wish to debug it then you can update the 
 npm run client
 ```
 
-1. The client command will launch a window with the options object `customSettings.bootstrap.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/bootstrapper.ts`.
+1. The client command will launch a window with the options object `customSettings.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/provider.ts`.
 
 ![Initial window launch](./assets/Launch-App.gif)
 
@@ -76,31 +81,39 @@ npm run client
 
 ![Initial browser window](./assets/Launch-Browser-Window.gif)
 
-3. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
+3. In `client/src/launchbar.ts` the `createBrowserWindowWithoutRequiringSave` function is invoked on click of the "Launch Browser Window (No Save Required)" button.
+
+![Initial browser window no save](./assets/Launch-Browser-Window-No-Save.gif)
+
+4. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
 
 ![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
 
-4. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page-clicked` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
+5. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
 
 ![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
 
-5. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button. This example in addition to hiding the page tabs uses the `showFavicons` property to hide the view icons.
+6. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button. This example in addition to hiding the page tabs uses the `showFavicons` property to hide the view icons.
 
 ![Initial browser with no tab](./assets/Launch-Browser-No-Tab.gif)
 
-6. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
+7. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
 
 ![Launch multiple pages in browser window](./assets/Multiple-Pages.gif)
 
-7. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.
+8. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.
 
 ![Launch locked page](./assets/Launch-Locked-Page.gif)
 
-8. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
+9. In `client/src/launchbar.ts` the `createWindowWithFixedViews` click listener function is invoked on click of the "Launch Browser With Fixed Views" button. The function uses fixed panels, the first page has panels top, left, right and bottom, the second page has only the top panel which it shares with the first page by re-using the `viewOptions.name`.
+
+![Fixed views](./assets/Fixed-Views.gif)
+
+10. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
 
 ![Browser window page info](./assets/Page-Info.gif)
 
-9. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
+11. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
 
 ### Note About This Example
 

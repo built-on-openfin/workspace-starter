@@ -1,5 +1,4 @@
 import type {
-	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
 	CustomTemplate,
@@ -7,11 +6,9 @@ import type {
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
 	HomeSearchResult,
-	Page,
-	TemplateFragment
+	Page
 } from "@openfin/workspace";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { CustomPaletteSet } from "@openfin/workspace/client-api-platform/src/shapes";
 import type { PageChangedLifecyclePayload } from "customize-workspace/shapes";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
@@ -23,12 +20,6 @@ import type { PagesSettings } from "./shapes";
  * Implement the integration provider for pages.
  */
 export class PagesProvider implements IntegrationModule<PagesSettings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "pages";
-
 	/**
 	 * The key to use for launching a page.
 	 * @internal
@@ -46,6 +37,12 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @internal
 	 */
 	private static readonly _ACTION_SHARE_PAGE = "Share Page";
+
+	/**
+	 * Provider id.
+	 * @internal
+	 */
+	private _providerId: string;
 
 	/**
 	 * The settings from config.
@@ -99,7 +96,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
-
+		this._providerId = definition.id;
 		this._integrationHelpers.subscribeLifecycleEvent(
 			"page-changed",
 			async (platform: WorkspacePlatformModule, payload: PageChangedLifecyclePayload) => {
@@ -159,7 +156,6 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._lastQueryMinLength = options.queryMinLength;
 
 		const pageResults: HomeSearchResult[] = await this.buildResults(
-			platform,
 			pages,
 			queryLower,
 			options.queryMinLength,
@@ -213,135 +209,73 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		return handled;
 	}
 
-	private getPageTemplate(
+	private async getPageTemplate(
 		id: string,
 		title: string,
 		shareEnabled: boolean,
-		colorScheme: ColorSchemeMode,
-		palette: CustomPaletteSet
-	): HomeSearchResult {
-		let actions = [];
+		colorScheme: ColorSchemeMode
+	): Promise<HomeSearchResult> {
+		const actions = [
+			{
+				name: PagesProvider._ACTION_LAUNCH_PAGE,
+				hotkey: "Enter"
+			},
+			{
+				name: PagesProvider._ACTION_DELETE_PAGE,
+				hotkey: "CmdOrCtrl+Shift+D"
+			}
+		];
+		const actionButtons: { title: string; action: string }[] = [
+			{
+				title: "Launch",
+				action: PagesProvider._ACTION_LAUNCH_PAGE
+			},
+			{
+				title: "Delete",
+				action: PagesProvider._ACTION_DELETE_PAGE
+			}
+		];
 
 		if (shareEnabled) {
 			actions.push({
 				name: PagesProvider._ACTION_SHARE_PAGE,
 				hotkey: "CmdOrCtrl+Shift+S"
 			});
+			actionButtons.push({
+				title: "Share",
+				action: PagesProvider._ACTION_SHARE_PAGE
+			});
 		}
-		actions = actions.concat([
-			{
-				name: PagesProvider._ACTION_DELETE_PAGE,
-				hotkey: "CmdOrCtrl+Shift+D"
-			},
-			{
-				name: PagesProvider._ACTION_LAUNCH_PAGE,
-				hotkey: "Enter"
-			}
-		]);
-		const layout = this.getOtherPageTemplate(shareEnabled, palette);
+
+		const icon = this._settings.images.page.replace("{scheme}", colorScheme as string);
+
+		const layoutData = await this._integrationHelpers.templateHelpers.createLayout(
+			title,
+			icon,
+			[await this._integrationHelpers.templateHelpers.createText("instructions")],
+			actionButtons
+		);
 
 		return {
 			key: id,
 			title,
 			label: "Page",
-			icon: this._settings.images.page.replace("{scheme}", colorScheme as string),
+			icon,
 			actions,
 			data: {
-				providerId: PagesProvider._PROVIDER_ID,
+				providerId: this._providerId,
 				pageTitle: title,
 				pageId: id,
 				tags: ["page"]
 			},
 			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
-				layout,
+				layout: layoutData.layout,
 				data: {
-					title,
-					instructions: "Use the buttons below to interact with your saved page",
-					openText: "Launch",
-					deleteText: "Delete",
-					shareText: "Share"
+					...layoutData.data,
+					instructions: "Use the buttons below to interact with your saved page"
 				}
 			}
-		};
-	}
-
-	private getOtherPageTemplate(enableShare: boolean, palette: CustomPaletteSet): TemplateFragment {
-		const actionButtons: TemplateFragment[] = [
-			{
-				type: "Button",
-				action: PagesProvider._ACTION_LAUNCH_PAGE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "openText"
-					}
-				]
-			},
-			{
-				type: "Button",
-				buttonStyle: "primary" as ButtonStyle.Primary,
-				action: PagesProvider._ACTION_DELETE_PAGE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "deleteText"
-					}
-				]
-			}
-		];
-
-		if (enableShare) {
-			actionButtons.push({
-				type: "Button",
-				buttonStyle: "primary" as ButtonStyle.Primary,
-				action: PagesProvider._ACTION_SHARE_PAGE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "shareText"
-					}
-				]
-			});
-		}
-
-		return {
-			type: "Container",
-			style: {
-				padding: "10px",
-				display: "flex",
-				flexDirection: "column",
-				flex: 1
-			},
-			children: [
-				{
-					type: "Text",
-					dataKey: "title",
-					style: {
-						fontWeight: "bold",
-						fontSize: "16px",
-						paddingBottom: "5px",
-						marginBottom: "10px",
-						borderBottom: `1px solid ${palette.background6}`
-					}
-				},
-				{
-					type: "Text",
-					dataKey: "instructions",
-					style: {
-						flex: 1
-					}
-				},
-				{
-					type: "Container",
-					style: {
-						display: "flex",
-						justifyContent: "center",
-						gap: "10px"
-					},
-					children: actionButtons
-				}
-			]
 		};
 	}
 
@@ -349,18 +283,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 
 		const pages: Page[] = await platform.Storage.getPages();
-		const results = await this.buildResults(
-			platform,
-			pages,
-			this._lastQuery,
-			this._lastQueryMinLength,
-			colorScheme
-		);
+		const results = await this.buildResults(pages, this._lastQuery, this._lastQueryMinLength, colorScheme);
 		this.resultAddUpdate(results);
 	}
 
 	private async buildResults(
-		platform: WorkspacePlatformModule,
 		pages: Page[],
 		query: string,
 		queryMinLength: number,
@@ -370,15 +297,16 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 		if (Array.isArray(pages)) {
 			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
-			const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
 
-			results = pages
+			const pgsProm = pages
 				.filter(
 					(pg) =>
 						query.length === 0 || (query.length >= queryMinLength && pg.title.toLowerCase().includes(query))
 				)
-				.map((pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, colorScheme, palette))
-				.sort((a, b) => a.title.localeCompare(b.title));
+				.sort((a, b) => a.title.localeCompare(b.title))
+				.map(async (pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, colorScheme));
+
+			results = await Promise.all(pgsProm);
 		}
 
 		return results;

@@ -1,7 +1,7 @@
 import {
-	BrowserInitConfig,
 	getCurrentSync,
-	init as workspacePlatformInit
+	init as workspacePlatformInit,
+	type BrowserInitConfig
 } from "@openfin/workspace-platform";
 import { getActions } from "../actions";
 import * as analyticsProvider from "../analytics";
@@ -14,11 +14,12 @@ import * as endpointProvider from "../endpoint";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import { createLogger, loggerProvider } from "../logger-provider";
-import { init as modulesInit, getDefaultHelpers } from "../modules";
+import * as menusProvider from "../menu";
+import { getDefaultHelpers, init as modulesInit } from "../modules";
 import { getConfiguredSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
-import { deregister as deregisterShare, register as registerShare, isShareEnabled } from "../share";
+import { deregister as deregisterShare, isShareEnabled, register as registerShare } from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { randomUUID } from "../uuid";
 import * as versionProvider from "../version";
@@ -51,13 +52,19 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	await endpointProvider.init(settings?.endpointProvider, helpers);
 
 	const runtimeVersion = await fin.System.getVersion();
-	const rvmInfo = await fin.System.getRvmInfo();
+
 	await versionProvider.init(settings?.versionProvider, endpointProvider);
 	versionProvider.setVersion("runtime", runtimeVersion);
-	versionProvider.setVersion("rvm", rvmInfo.version);
+	try {
+		const rvmInfo = await fin.System.getRvmInfo();
+		versionProvider.setVersion("rvm", rvmInfo.version);
+	} catch {
+		logger.warn("RVM version information unavailable.");
+	}
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
 	await connectionProvider.init(settings?.connectionProvider);
+	await menusProvider.init(settings?.menusProvider, helpers);
 	await analyticsProvider.init(settings?.analyticsProvider, helpers);
 	await appProvider.init(settings?.appProvider, endpointProvider);
 	await conditionsProvider.init(settings?.conditionsProvider, helpers);
@@ -77,8 +84,14 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
-	if (settings.browserProvider !== undefined) {
+	if (settings?.browserProvider !== undefined) {
 		browser.defaultWindowOptions = await getDefaultWindowOptions();
+	}
+	if (settings?.browserProvider?.defaultPageOptions !== undefined) {
+		browser.defaultPageOptions = settings.browserProvider.defaultPageOptions;
+	}
+	if (settings?.browserProvider?.defaultViewOptions !== undefined) {
+		browser.defaultViewOptions = settings.browserProvider.defaultViewOptions;
 	}
 
 	logger.info("Specifying following browser options", browser);
@@ -102,8 +115,6 @@ async function setupPlatform(_?: PlatformProviderOptions): Promise<boolean> {
 	});
 	return true;
 }
-
-export const VERSION = "10.3.0";
 
 export async function init(): Promise<boolean> {
 	const isValid = await initAuthFlow(setupPlatform, logger, true);

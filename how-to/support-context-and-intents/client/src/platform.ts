@@ -1,4 +1,4 @@
-import { BrowserInitConfig, init as workspacePlatformInit } from "@openfin/workspace-platform";
+import { init as workspacePlatformInit, type BrowserInitConfig } from "@openfin/workspace-platform";
 import { interopOverride } from "./interopbroker";
 import { getSettings, validateThemes } from "./settings";
 

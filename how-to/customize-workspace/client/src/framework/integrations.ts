@@ -1,17 +1,17 @@
 import {
 	ButtonStyle,
-	CLIFilter,
 	CLITemplate,
-	HomeDispatchedSearchResult,
-	HomeRegistration,
-	HomeSearchListenerResponse,
-	HomeSearchResponse,
-	HomeSearchResult
+	type CLIFilter,
+	type HomeDispatchedSearchResult,
+	type HomeRegistration,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
-import { launchSnapshot } from "./launch";
+import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { manifestTypes } from "./manifest-types";
 import {
@@ -35,6 +35,10 @@ import { createButton, createContainer, createHelp, createImage, createText, cre
 
 const logger = createLogger("Integrations");
 
+let isQueriedBeforeInit = false;
+let isInitialized = false;
+let queryBeforeInit: string;
+
 let integrationProviderOptions: IntegrationProviderOptions;
 let integrationModules: ModuleEntry<
 	IntegrationModule,
@@ -47,7 +51,7 @@ let integrationHelpers: IntegrationHelpers;
 const POPULATE_QUERY = "Populate Query";
 
 /**
- * Initialise all the integrations.
+ * Initialize all the integrations.
  * @param integrationOptions The integration provider settings.
  */
 export async function init(
@@ -57,7 +61,7 @@ export async function init(
 ): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
-
+		logger.info("Initializing integrations.");
 		integrationProviderOptions = options;
 		integrationHelpers = {
 			...helpers,
@@ -65,7 +69,7 @@ export async function init(
 			launchView,
 			launchPage,
 			launchSnapshot: async (manifestUrl) =>
-				launchSnapshot({
+				launch({
 					manifestType: manifestTypes.snapshot.id,
 					manifest: manifestUrl,
 					appId: "",
@@ -74,7 +78,7 @@ export async function init(
 					publisher: null
 				}),
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery: homeRegistration.setSearchQuery
+			setSearchQuery: homeRegistration?.setSearchQuery
 				? async (query) => homeRegistration.setSearchQuery(query)
 				: undefined,
 			condition: async (conditionId) => {
@@ -112,6 +116,24 @@ export async function init(
 
 		// Initialize just the auto start modules
 		await initializeModules(initModules, integrationHelpers);
+		isInitialized = true;
+		if (isQueriedBeforeInit) {
+			try {
+				logger.info("A query was passed before integrations was initialized. Resending the last query.");
+				const refreshQuery: string = `${queryBeforeInit} `;
+				// send a query different from initial query as resending the initial query does clear the cache
+				await homeRegistration.setSearchQuery(refreshQuery);
+				// resend the initial query
+				await homeRegistration.setSearchQuery(queryBeforeInit);
+				logger.info("Last query has been resent.");
+			} catch (error) {
+				logger.error(
+					"There was an error while trying to set the last query that was set before initialization.",
+					error
+				);
+			}
+		}
+		logger.info("Integrations has been initialized.");
 	}
 }
 
@@ -149,7 +171,10 @@ export async function getSearchResults(
 		sourceFilters: []
 	};
 
-	if (!integrationProviderOptions) {
+	if (!isInitialized) {
+		isQueriedBeforeInit = true;
+		queryBeforeInit = query;
+		logger.warn(`We received a query: ${query} before being initialized.`);
 		return homeResponse;
 	}
 
@@ -292,13 +317,7 @@ export async function itemSelection(
 
 		const foundIntegration = integrationModules.find((hi) => hi.definition.id === result.data?.providerId);
 		if (foundIntegration?.implementation?.itemSelection) {
-			const handled = await foundIntegration.implementation.itemSelection(result, lastResponse);
-
-			if (!handled) {
-				logger.warn(`Error while trying to handle ${foundIntegration.definition.id} entry`, result.data);
-			}
-
-			return handled;
+			return foundIntegration.implementation.itemSelection(result, lastResponse);
 		}
 	}
 

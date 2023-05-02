@@ -15,6 +15,8 @@ In the customize example you can configure some features of the window, as well 
 
 To configure the `title` and `icon` for the window add the following:
 
+### V12 and Below
+
 ```json
 "browserProvider": {
     "windowOptions": {
@@ -24,7 +26,22 @@ To configure the `title` and `icon` for the window add the following:
 }
 ```
 
+### V12.6 and Above
+
+```json
+"browserProvider": {
+    "defaultWindowOptions": {
+        "icon": "http://localhost:8080/favicon.ico",
+        "workspacePlatform": {
+            "title": "My Application"
+        }
+    }
+}
+```
+
 In the title bar of the window the pages are listed, by default the plus button next to the pages is not visible, this can be configured to open a view by setting `newPageUrl`. The same is true of the views, the plus button next to the view tabs is hidden by default, but can be configured by setting `newTabUrl` to open a view.
+
+### V12 and Below For Urls
 
 ```json
 "browserProvider": {
@@ -36,7 +53,51 @@ In the title bar of the window the pages are listed, by default the plus button 
 }
 ```
 
+### V12.6 and Above For Urls
+
+```json
+"browserProvider": {
+    "defaultWindowOptions": {
+        "workspacePlatform": {
+        ...
+        "newPageUrl": "http://localhost:8080/common/views/platform/new-page.html",
+        "newTabUrl": "http://localhost:8080/common/views/platform/new-tab.html"
+        }
+    }
+}
+```
+
 The theming for the browser window is configured in the platform using a pallette, see [How To Theme Your Platform](./how-to-theme-your-platform.md).
+
+## windowOptions vs defaultWindowOptions backwards compatibility
+
+We have extended the browser provider to support the same defaultWindowOptions as the workspace platform instead of restricting you to a subset. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
+
+We have added comments and deprecated information to say that we have moved from windowOptions to defaultWindowOptions but to maintain backwards compatibility we still check for windowOptions and re-use the settings.
+
+## defaultPageOptions
+
+We now support adding defaultPageOptions to the browserProvider like you would if you were putting it in code.
+
+```json
+"browserProvider": {
+    "defaultPageOptions": {
+        ...
+    }
+}
+```
+
+## defaultViewOptions
+
+We now support adding defaultViewOptions to the browserProvider like you would if you were putting it in code.
+
+```json
+"browserProvider": {
+    "defaultViewOptions": {
+        ...
+    }
+}
+```
 
 ## Menu And Buttons
 

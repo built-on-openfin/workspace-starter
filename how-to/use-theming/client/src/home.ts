@@ -1,13 +1,13 @@
 import {
-	CLIDispatchedSearchResult,
-	CLIProvider,
-	CLISearchListenerRequest,
-	CLISearchListenerResponse,
-	CLISearchResponse,
 	CLITemplate,
 	Home,
-	HomeSearchResult,
-	RegistrationMetaInfo
+	type CLIDispatchedSearchResult,
+	type CLIProvider,
+	type CLISearchListenerRequest,
+	type CLISearchListenerResponse,
+	type CLISearchResponse,
+	type HomeSearchResult,
+	type RegistrationMetaInfo
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getApps } from "./apps";
@@ -120,12 +120,10 @@ export async function register(): Promise<RegistrationMetaInfo> {
 		}
 	};
 
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	const cliProvider: CLIProvider = {
 		title: "Theming Platform",
 		id: providerId,
-		icon: `${webRoot}favicon.ico`,
+		icon: "http://localhost:8080/favicon.ico",
 		onUserInput,
 		onResultDispatch: onSelection
 	};

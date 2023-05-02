@@ -1,3 +1,6 @@
+import type OpenFin from "@openfin/core";
+import type { SalesforceRestApiSObject } from "@openfin/salesforce";
+
 /**
  * Model for batch request.
  */
@@ -58,40 +61,7 @@ export interface SalesforceBatchResponseItem {
 	result: unknown;
 }
 
-/**
- * Account response object actor.
- */
-export interface SalesforceActor {
-	/**
-	 * Id for the actor.
-	 */
-	id: string;
-	/**
-	 * Url for the actor.
-	 */
-	url: string;
-	/**
-	 * Type for the actor.
-	 */
-	type: string;
-	/**
-	 * Company name for the actor.
-	 */
-	companyName: string;
-	/**
-	 * Display name for the actor.
-	 */
-	displayName: string;
-	/**
-	 * Name for the actor.
-	 */
-	name: string;
-}
-
-export interface SalesforceSearchResult extends Record<string, unknown> {
-	Id: string;
-	attributes: { type: string; url: string };
-}
+export type SalesforceSearchResult = SalesforceRestApiSObject<Record<string, unknown>>;
 
 /**
  * Model for the feed element page.
@@ -211,6 +181,8 @@ export interface SalesforceAction {
 	iconKey: string;
 	// The url to open, optional if intent provided instead, if no url intent defaults to open in Salesforce
 	url?: string;
+	// Open as a view
+	view?: OpenFin.PlatformViewCreationOptions;
 	// The intent to raise if no url supplied
 	intent?: {
 		// The name of the intent

@@ -7,15 +7,13 @@ let notificationsRegistered = false;
 
 const providerId = "use-theming";
 
-const webRoot = window.location.href.replace("platform/provider.html", "");
-
 export async function register() {
 	if (!notificationsRegistered) {
 		try {
 			await registerPlatform({
 				id: providerId,
 				title: "Theming Platform",
-				icon: `${webRoot}favicon.ico`
+				icon: "http://localhost:8080/favicon.ico"
 			});
 			notificationsRegistered = true;
 			console.log("Registered notifications");

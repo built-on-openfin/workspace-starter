@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import { getCurrentSync } from "@openfin/workspace-platform";
 
 export async function launchView(

@@ -1,29 +1,29 @@
+import type OpenFin from "@openfin/core";
 import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import {
 	CLITemplate,
-	HomeSearchResult,
-	Page,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
-	type HomeSearchResponse
+	type HomeSearchResponse,
+	type HomeSearchResult,
+	type Page
 } from "@openfin/workspace";
-import type { LayoutComponentExtended } from "@openfin/workspace-platform/client-api/src";
 import {
 	addEventListener as addNotificationEventListener,
 	create as createNotification,
-	NotificationActionEvent
+	type NotificationActionEvent
 } from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
 import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
 import {
 	CHANNEL_ACTIONS,
-	RssCache,
-	RssChannelFeedSubscribePayload,
-	RssFeed,
-	RssFeedCache,
-	RssFeedCacheEntry,
-	RssFeedSettings
+	type RssCache,
+	type RssChannelFeedSubscribePayload,
+	type RssFeed,
+	type RssFeedCache,
+	type RssFeedCacheEntry,
+	type RssFeedSettings
 } from "./shapes";
 import { getRssEntryTemplate, getRssFeedTemplate } from "./templates";
 
@@ -598,7 +598,7 @@ export class RssIntegrationProvider implements IntegrationModule<RssFeedSettings
 									uuid: viewId,
 									url: viewUrl
 								}
-							} as LayoutComponentExtended
+							} as OpenFin.LayoutItemConfig
 						]
 					}
 				]

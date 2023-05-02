@@ -1,365 +1,428 @@
+import type OpenFin from "@openfin/core";
+import type { AuthProvider } from "customize-workspace/shapes/auth-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
 import { randomUUID } from "../../../framework/uuid";
 import type { ExampleOptions, ExampleUser } from "./shapes";
 import { clearCurrentUser, EXAMPLE_AUTH_CURRENT_USER_KEY, getCurrentUser } from "./util";
 
-let authenticated: boolean;
-let authOptions: ExampleOptions;
-let currentUser: ExampleUser;
-let sessionExpiryCheckId;
-let logger: Logger;
+export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
+	private _authOptions: ExampleOptions;
 
-const subscribeIdMap: { [key: string]: string } = {};
-const loggedInSubscribers: Map<string, () => Promise<void>> = new Map();
-const beforeLoggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
-const loggedOutSubscribers: Map<string, () => Promise<void>> = new Map();
-const sessionExpiredSubscribers: Map<string, () => Promise<void>> = new Map();
+	private _logger: Logger;
 
-const EXAMPLE_AUTH_AUTHENTICATED_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_IS_AUTHENTICATED`;
+	private readonly _subscribeIdMap: { [key: string]: string };
 
-async function openLoginWindow(url: string): Promise<OpenFin.Window> {
-	const enrichedCustomData = { currentUserKey: EXAMPLE_AUTH_CURRENT_USER_KEY, ...authOptions?.customData };
-	return fin.Window.create({
-		name: "example-auth-log-in",
-		alwaysOnTop: true,
-		maximizable: false,
-		minimizable: false,
-		autoShow: false,
-		defaultCentered: true,
-		defaultHeight: authOptions.loginHeight ?? 325,
-		defaultWidth: authOptions.loginWidth ?? 400,
-		includeInSnapshots: false,
-		resizable: false,
-		showTaskbarIcon: false,
-		saveWindowState: false,
-		url,
-		customData: enrichedCustomData
-	});
-}
+	private readonly _loggedInSubscribers: Map<string, () => Promise<void>>;
 
-async function openLogoutWindow(url: string): Promise<OpenFin.Window> {
-	return fin.Window.create({
-		name: "example-auth-log-out",
-		maximizable: false,
-		minimizable: false,
-		autoShow: false,
-		defaultCentered: true,
-		defaultHeight: authOptions.loginHeight ?? 325,
-		defaultWidth: authOptions.loginWidth ?? 400,
-		includeInSnapshots: false,
-		resizable: false,
-		showTaskbarIcon: false,
-		saveWindowState: false,
-		url
-	});
-}
+	private readonly _beforeLoggedOutSubscribers: Map<string, () => Promise<void>>;
 
-async function checkAuth(url: string): Promise<boolean> {
-	const windowToCheck = await fin.Window.create({
-		name: "example-auth-check-window",
-		alwaysOnTop: true,
-		maximizable: false,
-		minimizable: false,
-		autoShow: false,
-		defaultHeight: authOptions.loginHeight ?? 325,
-		defaultWidth: authOptions.loginWidth ?? 400,
-		includeInSnapshots: false,
-		resizable: false,
-		showTaskbarIcon: false,
-		saveWindowState: false,
-		url
-	});
-	let isAuthenticated = false;
-	try {
-		const info = await windowToCheck.getInfo();
-		if (info.url === authOptions.authenticatedUrl) {
-			isAuthenticated = true;
-		}
-	} catch (error) {
-		logger.error("Error encountered while checking session", error);
-	} finally {
-		if (windowToCheck !== undefined) {
-			await windowToCheck.close(true);
-		}
+	private readonly _loggedOutSubscribers: Map<string, () => Promise<void>>;
+
+	private readonly _sessionExpiredSubscribers: Map<string, () => Promise<void>>;
+
+	private _authenticatedKey: string;
+
+	private _currentUser: ExampleUser;
+
+	private _authenticated: boolean;
+
+	private _sessionExpiryCheckId: number;
+
+	/**
+	 * Create a new instance of ExampleAuthProvider.
+	 */
+	constructor() {
+		this._subscribeIdMap = {};
+		this._loggedInSubscribers = new Map();
+		this._beforeLoggedOutSubscribers = new Map();
+		this._loggedOutSubscribers = new Map();
+		this._sessionExpiredSubscribers = new Map();
 	}
-	return isAuthenticated;
-}
 
-async function getAuthenticationFromUser(): Promise<boolean> {
-	return new Promise<boolean>((resolve, reject) => {
-		openLoginWindow(authOptions.loginUrl)
-			.then(async (win) => {
-				const authMatch = new RegExp(authOptions.authenticatedUrl, "i");
-
-				try {
-					if (win !== undefined) {
-						const info = await win.getInfo();
-						if (authMatch.test(info.url)) {
-							await win.close(true);
-							return resolve(true);
-						}
-						await win.show(true);
-					}
-				} catch (error) {
-					logger.error(
-						`Error while checking if login window automatically redirected. Error ${error.message}`
-					);
-					if (win !== undefined) {
-						await win.show(true);
-					}
-				}
-
-				let statusCheck: number;
-
-				await win.addListener("closed", async () => {
-					if (win) {
-						window.clearInterval(statusCheck);
-						statusCheck = undefined;
-						logger.info("Auth Window cancelled by user");
-						win = undefined;
-						return resolve(false);
-					}
-				});
-				statusCheck = window.setInterval(async () => {
-					if (win !== undefined) {
-						const info = await win.getInfo();
-						if (authMatch.test(info.url)) {
-							window.clearInterval(statusCheck);
-							await win.removeAllListeners();
-							await win.close(true);
-							return resolve(true);
-						}
-					} else {
-						return resolve(false);
-					}
-				}, authOptions.checkLoginStatusInSeconds ?? 1 * 1000);
-				return true;
-			})
-			.catch((error) => {
-				logger.error("Error while trying to authenticate the user", error);
-			});
-	});
-}
-
-function checkForSessionExpiry(force = false) {
-	if (
-		authOptions?.checkSessionValidityInSeconds !== undefined &&
-		authOptions?.checkSessionValidityInSeconds > -1 &&
-		sessionExpiryCheckId === undefined
+	/**
+	 * Initialise the module.
+	 * @param definition The definition of the module from configuration include custom options.
+	 * @param loggerCreator For logging entries.
+	 * @param helpers Helper methods for the module to interact with the application core.
+	 * @returns Nothing.
+	 */
+	public async initialize(
+		definition: ModuleDefinition<ExampleOptions>,
+		createLogger: LoggerCreator,
+		helpers: ModuleHelpers
 	) {
-		sessionExpiryCheckId = setTimeout(async () => {
-			sessionExpiryCheckId = undefined;
-			const stillAuthenticated = await checkAuth(authOptions.loginUrl);
-			if (stillAuthenticated) {
-				logger.info("Session Still Active");
-				checkForSessionExpiry();
-			} else {
-				logger.info(
-					"Session not valid. Killing session and notifying registered callback that authentication is required. This check is configured in the data for this example auth module. Set checkSessionValidityInSeconds to -1 in the authProvider module definition if you wish to disable this check"
-				);
-				authenticated = false;
-				localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
-				clearCurrentUser();
-				await notifySubscribers("session-expired", sessionExpiredSubscribers);
+		this._logger = createLogger("AuthExample");
+		this._authenticatedKey = `${fin.me.identity.uuid}-EXAMPLE_AUTH_IS_AUTHENTICATED`;
+
+		if (this._authOptions === undefined) {
+			this._logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
+			this._authOptions = definition.data;
+			this._authenticated = Boolean(localStorage.getItem(this._authenticatedKey));
+			if (this._authenticated) {
+				this._currentUser = getCurrentUser();
+				this.checkForSessionExpiry();
 			}
-		}, authOptions.checkSessionValidityInSeconds * 1000);
-	}
-}
-
-async function notifySubscribers(eventType: string, subscribers: Map<string, () => Promise<void>>) {
-	const subscriberIds = Array.from(subscribers.keys());
-	subscriberIds.reverse();
-
-	for (let i = 0; i < subscriberIds.length; i++) {
-		const subscriberId = subscriberIds[i];
-		logger.info(`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`);
-		await subscribers.get(subscriberId)();
-	}
-}
-
-async function handleLogout(resolve: (success: boolean) => void): Promise<void> {
-	if (authenticated === undefined || !authenticated) {
-		logger.error("You have requested to log out but are not logged in");
-		resolve(false);
-		return;
-	}
-	logger.info("Log out requested");
-	await notifySubscribers("before-logged-out", beforeLoggedOutSubscribers);
-	authenticated = false;
-	localStorage.removeItem(EXAMPLE_AUTH_AUTHENTICATED_KEY);
-	clearCurrentUser();
-	if (
-		authOptions.logoutUrl !== undefined &&
-		authOptions.logoutUrl !== null &&
-		authOptions.logoutUrl.trim().length > 0
-	) {
-		try {
-			const win = await openLogoutWindow(authOptions.logoutUrl);
-			setTimeout(async () => {
-				await win.close();
-				await notifySubscribers("logged-out", loggedOutSubscribers);
-				resolve(true);
-			}, 2000);
-		} catch (error) {
-			logger.error(`Error while launching logout window. ${error}`);
-			return resolve(false);
-		}
-	} else {
-		await notifySubscribers("logged-out", loggedOutSubscribers);
-		resolve(true);
-	}
-}
-
-export async function initialize(
-	definition: ModuleDefinition<ExampleOptions>,
-	createLogger: LoggerCreator,
-	helpers: ModuleHelpers
-) {
-	logger = createLogger("AuthExample");
-	if (authOptions === undefined) {
-		logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
-		authOptions = definition.data;
-		authenticated = Boolean(localStorage.getItem(EXAMPLE_AUTH_AUTHENTICATED_KEY));
-		if (authenticated) {
-			currentUser = getCurrentUser();
-			checkForSessionExpiry();
-		}
-	} else {
-		logger.warn("Options have already been set as init has already been called");
-	}
-}
-
-export function subscribe(
-	to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
-	callback: () => Promise<void>
-): string {
-	const key = randomUUID();
-	let matchFound = false;
-	switch (to) {
-		case "logged-in": {
-			matchFound = true;
-			loggedInSubscribers.set(key, callback);
-			break;
-		}
-		case "before-logged-out": {
-			matchFound = true;
-			beforeLoggedOutSubscribers.set(key, callback);
-			break;
-		}
-		case "logged-out": {
-			matchFound = true;
-			loggedOutSubscribers.set(key, callback);
-			break;
-		}
-		case "session-expired": {
-			matchFound = true;
-			sessionExpiredSubscribers.set(key, callback);
-			break;
+		} else {
+			this._logger.warn("Options have already been set as init has already been called");
 		}
 	}
 
-	if (matchFound) {
-		subscribeIdMap[key] = to;
-		logger.info(`Subscription to ${to} events registered. Subscription Id: ${key}`);
-		return key;
-	}
-	return null;
-}
+	/**
+	 * Subscribe to one of the auth events.
+	 * @param to The event to subscribe to.
+	 * @param callback The callback to fire when the event occurs.
+	 * @returns Subscription id for unsubscribing or undefined if event type is not available.
+	 */
+	public subscribe(
+		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
+		callback: () => Promise<void>
+	): string {
+		const key = randomUUID();
+		let matchFound = false;
+		switch (to) {
+			case "logged-in": {
+				matchFound = true;
+				this._loggedInSubscribers.set(key, callback);
+				break;
+			}
+			case "before-logged-out": {
+				matchFound = true;
+				this._beforeLoggedOutSubscribers.set(key, callback);
+				break;
+			}
+			case "logged-out": {
+				matchFound = true;
+				this._loggedOutSubscribers.set(key, callback);
+				break;
+			}
+			case "session-expired": {
+				matchFound = true;
+				this._sessionExpiredSubscribers.set(key, callback);
+				break;
+			}
+		}
 
-export function unsubscribe(from: string): boolean {
-	let matchFound = false;
-	const eventType = subscribeIdMap[from];
-	if (eventType === undefined) {
-		logger.warn(`You have tried to unsubscribe with a key ${from} that is invalid`);
+		if (matchFound) {
+			this._subscribeIdMap[key] = to;
+			this._logger.info(`Subscription to ${to} events registered. Subscription Id: ${key}`);
+			return key;
+		}
+		return null;
+	}
+
+	/**
+	 * Unsubscribe from an already subscribed event.
+	 * @param subscriptionId The id of the subscription returned from subscribe.
+	 * @returns True if the unsubscribe was successful.
+	 */
+	public unsubscribe(from: string): boolean {
+		let matchFound = false;
+		const eventType = this._subscribeIdMap[from];
+		if (eventType === undefined) {
+			this._logger.warn(`You have tried to unsubscribe with a key ${from} that is invalid`);
+			return false;
+		}
+
+		switch (eventType) {
+			case "logged-in": {
+				matchFound = true;
+				this._loggedInSubscribers.delete(from);
+				break;
+			}
+			case "before-logged-out": {
+				matchFound = true;
+				this._beforeLoggedOutSubscribers.delete(from);
+				break;
+			}
+			case "logged-out": {
+				matchFound = true;
+				this._loggedOutSubscribers.delete(from);
+				break;
+			}
+			case "session-expired": {
+				matchFound = true;
+				this._sessionExpiredSubscribers.delete(from);
+				break;
+			}
+		}
+
+		delete this._subscribeIdMap[from];
+		if (matchFound) {
+			this._logger.info(`Subscription to ${eventType} events with subscription Id: ${from} has been cleared`);
+			return true;
+		}
+
+		this._logger.warn(
+			`Subscription to ${eventType} events with subscription Id: ${from} could not be cleared as we do not have a register of that event type.`
+		);
 		return false;
 	}
 
-	switch (eventType) {
-		case "logged-in": {
-			matchFound = true;
-			loggedInSubscribers.delete(from);
-			break;
+	/**
+	 * Does the auth provider require authentication.
+	 * @returns True if authentication is required.
+	 */
+	public async isAuthenticationRequired(): Promise<boolean> {
+		if (this._authenticated === undefined) {
+			this._authenticated = false;
 		}
-		case "before-logged-out": {
-			matchFound = true;
-			beforeLoggedOutSubscribers.delete(from);
-			break;
+		return !this._authenticated;
+	}
+
+	/**
+	 * Perform the login operation on the auth provider.
+	 * @returns True if the login was successful.
+	 */
+	public async login(): Promise<boolean> {
+		this._logger.info("login requested");
+		if (this._authenticated) {
+			this._logger.info("User already authenticated");
+			return this._authenticated;
 		}
-		case "logged-out": {
-			matchFound = true;
-			loggedOutSubscribers.delete(from);
-			break;
+		if (this._authOptions.autoLogin) {
+			this._logger.info("autoLogin enabled in auth provide module settings. Fake logged in");
+			this._authenticated = true;
+		} else {
+			this._authenticated = await this.getAuthenticationFromUser();
 		}
-		case "session-expired": {
-			matchFound = true;
-			sessionExpiredSubscribers.delete(from);
-			break;
+
+		if (this._authenticated) {
+			localStorage.setItem(this._authenticatedKey, this._authenticated.toString());
+			this.checkForSessionExpiry();
+			await this.notifySubscribers("logged-in", this._loggedInSubscribers);
+		} else {
+			clearCurrentUser();
+		}
+
+		return this._authenticated;
+	}
+
+	/**
+	 * Perform the logout operation on the auth provider.
+	 * @returns True if the logout was successful.
+	 */
+	public async logout(): Promise<boolean> {
+		return new Promise<boolean>((resolve, reject) => {
+			this.handleLogout(resolve)
+				.then(async () => {
+					this._logger.info("Log out called");
+					return true;
+				})
+				.catch(async (error) => {
+					this._logger.error(`Error while trying to log out ${error}`);
+				});
+		});
+	}
+
+	/**
+	 * Get user information from the auth provider.
+	 */
+	public async getUserInfo(): Promise<unknown> {
+		if (this._authenticated === undefined || !this._authenticated) {
+			this._logger.warn("Unable to retrieve user info unless the user is authenticated");
+			return null;
+		}
+		this._logger.info("This example returns a user if it was provided to the example login");
+
+		return this._currentUser;
+	}
+
+	public async getAuthenticationFromUser(): Promise<boolean> {
+		return new Promise<boolean>((resolve, reject) => {
+			this.openLoginWindow(this._authOptions.loginUrl)
+				.then(async (win) => {
+					const authMatch = new RegExp(this._authOptions.authenticatedUrl, "i");
+
+					try {
+						if (win !== undefined) {
+							const info = await win.getInfo();
+							if (authMatch.test(info.url)) {
+								await win.close(true);
+								return resolve(true);
+							}
+							await win.show(true);
+						}
+					} catch (error) {
+						this._logger.error(
+							`Error while checking if login window automatically redirected. Error ${error.message}`
+						);
+						if (win !== undefined) {
+							await win.show(true);
+						}
+					}
+
+					let statusCheck: number;
+
+					await win.addListener("closed", async () => {
+						if (win) {
+							window.clearInterval(statusCheck);
+							statusCheck = undefined;
+							this._logger.info("Auth Window cancelled by user");
+							win = undefined;
+							return resolve(false);
+						}
+					});
+					statusCheck = window.setInterval(async () => {
+						if (win !== undefined) {
+							const info = await win.getInfo();
+							if (authMatch.test(info.url)) {
+								window.clearInterval(statusCheck);
+								await win.removeAllListeners();
+								await win.close(true);
+								return resolve(true);
+							}
+						} else {
+							return resolve(false);
+						}
+					}, this._authOptions.checkLoginStatusInSeconds ?? 1 * 1000);
+					return true;
+				})
+				.catch((error) => {
+					this._logger.error("Error while trying to authenticate the user", error);
+				});
+		});
+	}
+
+	private checkForSessionExpiry(force = false) {
+		if (
+			this._authOptions?.checkSessionValidityInSeconds !== undefined &&
+			this._authOptions?.checkSessionValidityInSeconds > -1 &&
+			this._sessionExpiryCheckId === undefined
+		) {
+			this._sessionExpiryCheckId = window.setTimeout(async () => {
+				this._sessionExpiryCheckId = undefined;
+				const stillAuthenticated = await this.checkAuth(this._authOptions.loginUrl);
+				if (stillAuthenticated) {
+					this._logger.info("Session Still Active");
+					this.checkForSessionExpiry();
+				} else {
+					this._logger.info(
+						"Session not valid. Killing session and notifying registered callback that authentication is required. This check is configured in the data for this example auth module. Set checkSessionValidityInSeconds to -1 in the authProvider module definition if you wish to disable this check"
+					);
+					this._authenticated = false;
+					localStorage.removeItem(this._authenticatedKey);
+					clearCurrentUser();
+					await this.notifySubscribers("session-expired", this._sessionExpiredSubscribers);
+				}
+			}, this._authOptions.checkSessionValidityInSeconds * 1000);
 		}
 	}
 
-	delete subscribeIdMap[from];
-	if (matchFound) {
-		logger.info(`Subscription to ${eventType} events with subscription Id: ${from} has been cleared`);
-		return true;
+	private async notifySubscribers(eventType: string, subscribers: Map<string, () => Promise<void>>) {
+		const subscriberIds = Array.from(subscribers.keys());
+		subscriberIds.reverse();
+
+		for (let i = 0; i < subscriberIds.length; i++) {
+			const subscriberId = subscriberIds[i];
+			this._logger.info(
+				`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
+			);
+			await subscribers.get(subscriberId)();
+		}
 	}
 
-	logger.warn(
-		`Subscription to ${eventType} events with subscription Id: ${from} could not be cleared as we do not have a register of that event type.`
-	);
-	return false;
-}
-
-export async function login(): Promise<boolean> {
-	logger.info("login requested");
-	if (authenticated) {
-		logger.info("User already authenticated");
-		return authenticated;
-	}
-	if (authOptions.autoLogin) {
-		logger.info("autoLogin enabled in auth provide module settings. Fake logged in");
-		authenticated = true;
-	} else {
-		authenticated = await getAuthenticationFromUser();
-	}
-
-	if (authenticated) {
-		localStorage.setItem(EXAMPLE_AUTH_AUTHENTICATED_KEY, authenticated.toString());
-		checkForSessionExpiry();
-		await notifySubscribers("logged-in", loggedInSubscribers);
-	} else {
+	private async handleLogout(resolve: (success: boolean) => void): Promise<void> {
+		if (this._authenticated === undefined || !this._authenticated) {
+			this._logger.error("You have requested to log out but are not logged in");
+			resolve(false);
+			return;
+		}
+		this._logger.info("Log out requested");
+		await this.notifySubscribers("before-logged-out", this._beforeLoggedOutSubscribers);
+		this._authenticated = false;
+		localStorage.removeItem(this._authenticatedKey);
 		clearCurrentUser();
+		if (
+			this._authOptions.logoutUrl !== undefined &&
+			this._authOptions.logoutUrl !== null &&
+			this._authOptions.logoutUrl.trim().length > 0
+		) {
+			try {
+				const win = await this.openLogoutWindow(this._authOptions.logoutUrl);
+				setTimeout(async () => {
+					await win.close();
+					await this.notifySubscribers("logged-out", this._loggedOutSubscribers);
+					resolve(true);
+				}, 2000);
+			} catch (error) {
+				this._logger.error(`Error while launching logout window. ${error}`);
+				return resolve(false);
+			}
+		} else {
+			await this.notifySubscribers("logged-out", this._loggedOutSubscribers);
+			resolve(true);
+		}
 	}
 
-	return authenticated;
-}
-
-export async function logout(): Promise<boolean> {
-	return new Promise<boolean>((resolve, reject) => {
-		handleLogout(resolve)
-			.then(async () => {
-				logger.info("Log out called");
-				return true;
-			})
-			.catch(async (error) => {
-				logger.error(`Error while trying to log out ${error}`);
-			});
-	});
-}
-
-export async function isAuthenticationRequired(): Promise<boolean> {
-	if (authenticated === undefined) {
-		authenticated = false;
+	private async openLoginWindow(url: string): Promise<OpenFin.Window> {
+		const enrichedCustomData = {
+			currentUserKey: EXAMPLE_AUTH_CURRENT_USER_KEY,
+			...this._authOptions?.customData
+		};
+		return fin.Window.create({
+			name: "example-auth-log-in",
+			alwaysOnTop: true,
+			maximizable: false,
+			minimizable: false,
+			autoShow: false,
+			defaultCentered: true,
+			defaultHeight: this._authOptions.loginHeight ?? 325,
+			defaultWidth: this._authOptions.loginWidth ?? 400,
+			includeInSnapshots: false,
+			resizable: false,
+			showTaskbarIcon: false,
+			saveWindowState: false,
+			url,
+			customData: enrichedCustomData
+		});
 	}
-	return !authenticated;
-}
 
-export async function getUserInfo(): Promise<unknown> {
-	if (authenticated === undefined || !authenticated) {
-		logger.warn("Unable to retrieve user info unless the user is authenticated");
-		return null;
+	private async openLogoutWindow(url: string): Promise<OpenFin.Window> {
+		return fin.Window.create({
+			name: "example-auth-log-out",
+			maximizable: false,
+			minimizable: false,
+			autoShow: false,
+			defaultCentered: true,
+			defaultHeight: this._authOptions.loginHeight ?? 325,
+			defaultWidth: this._authOptions.loginWidth ?? 400,
+			includeInSnapshots: false,
+			resizable: false,
+			showTaskbarIcon: false,
+			saveWindowState: false,
+			url
+		});
 	}
-	logger.info("This example returns a user if it was provided to the example login");
 
-	return currentUser;
+	private async checkAuth(url: string): Promise<boolean> {
+		const windowToCheck = await fin.Window.create({
+			name: "example-auth-check-window",
+			alwaysOnTop: true,
+			maximizable: false,
+			minimizable: false,
+			autoShow: false,
+			defaultHeight: this._authOptions.loginHeight ?? 325,
+			defaultWidth: this._authOptions.loginWidth ?? 400,
+			includeInSnapshots: false,
+			resizable: false,
+			showTaskbarIcon: false,
+			saveWindowState: false,
+			url
+		});
+		let isAuthenticated = false;
+		try {
+			const info = await windowToCheck.getInfo();
+			if (info.url === this._authOptions.authenticatedUrl) {
+				isAuthenticated = true;
+			}
+		} catch (error) {
+			this._logger.error("Error encountered while checking session", error);
+		} finally {
+			if (windowToCheck !== undefined) {
+				await windowToCheck.close(true);
+			}
+		}
+		return isAuthenticated;
+	}
 }

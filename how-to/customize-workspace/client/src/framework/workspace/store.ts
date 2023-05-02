@@ -1,13 +1,13 @@
 import {
 	Storefront,
-	StorefrontLandingPage,
-	StorefrontNavigationSection,
-	StorefrontFooter,
-	StorefrontProvider,
 	StorefrontTemplate,
-	StorefrontNavigationItem,
-	StorefrontDetailedNavigationItem,
-	RegistrationMetaInfo
+	type RegistrationMetaInfo,
+	type StorefrontDetailedNavigationItem,
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type StorefrontNavigationItem,
+	type StorefrontNavigationSection,
+	type StorefrontProvider
 } from "@openfin/workspace";
 import { getApps, getAppsByTag } from "../apps";
 import { launch } from "../launch";
@@ -15,6 +15,7 @@ import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type {
 	CustomSettings,
+	StorefrontProviderOptions,
 	StorefrontSettingsLandingPageRow,
 	StorefrontSettingsNavigationItem
 } from "../shapes";
@@ -178,8 +179,10 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getNavigation: getNavigation.bind(this),
 			getLandingPage: getLandingPage.bind(this),
 			getFooter: getFooter.bind(this),
-			getApps: async () => getApps({ private: false }),
-			launchApp: launch
+			getApps: async () => addButtons(settings.storefrontProvider, await getApps({ private: false })),
+			launchApp: async (app) => {
+				await launch(app);
+			}
 		};
 	}
 	return null;
@@ -279,14 +282,10 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				)}. Only ${middleRowAppLimit} will be shown.`
 			);
 		}
-		const validatedMiddleRowApps = middleRowApps.slice(0, middleRowAppLimit) as [
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?,
-			PlatformApp?
-		];
+		const validatedMiddleRowApps = addButtons(
+			settings.storefrontProvider,
+			middleRowApps.slice(0, middleRowAppLimit)
+		) as [PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?, PlatformApp?];
 		landingPage.middleRow = {
 			title: middleRow.title,
 			apps: validatedMiddleRowApps
@@ -406,4 +405,25 @@ async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, l
 		title: definition.title,
 		items: detailedNavigationItems
 	};
+}
+
+function addButtons(options: StorefrontProviderOptions, apps: PlatformApp[]): PlatformApp[] {
+	if (options.primaryButton || Array.isArray(options.secondaryButtons)) {
+		return apps.map((app) => ({
+			...app,
+			primaryButton: app.primaryButton ?? options.primaryButton,
+			secondaryButtons:
+				app.secondaryButtons ?? Array.isArray(options.secondaryButtons)
+					? options.secondaryButtons.map((secondary) => ({
+							title: secondary.title,
+							action: {
+								id: secondary.action.id,
+								customData: secondary.action.customData ?? app
+							}
+					  }))
+					: undefined
+		}));
+	}
+
+	return apps;
 }

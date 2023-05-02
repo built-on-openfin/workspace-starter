@@ -1,14 +1,14 @@
 import {
 	Storefront,
-	App,
-	StorefrontLandingPage,
-	StorefrontNavigationSection,
-	StorefrontFooter,
-	StorefrontProvider,
-	StorefrontTemplate
+	StorefrontTemplate,
+	type App,
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type StorefrontNavigationSection,
+	type StorefrontProvider
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { getApps, themeBuilderApp, notificationStudio, processManager, developerContent } from "./apps";
+import { developerContent, getApps, notificationStudio, processManager, themeBuilderApp } from "./apps";
 
 const providerId = "use-theming";
 
@@ -40,12 +40,10 @@ export async function hide() {
 async function getStoreProvider(): Promise<StorefrontProvider> {
 	console.log("Getting the store provider.");
 
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	return {
 		id: providerId,
 		title: "Theming Platform",
-		icon: `${webRoot}favicon.ico`,
+		icon: "http://localhost:8080/favicon.ico",
 		getNavigation,
 		getLandingPage,
 		getFooter,
@@ -99,8 +97,6 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 async function getLandingPage(): Promise<StorefrontLandingPage> {
 	console.log("Getting the store landing page.");
 
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	const landingPage: StorefrontLandingPage = {
 		hero: {
 			title: "Custom Hero Title",
@@ -114,7 +110,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				}
 			},
 			image: {
-				src: `${webRoot}common/images/superhero-unsplash.jpg`
+				src: "http://localhost:8080/common/images/superhero-unsplash.jpg"
 			}
 		},
 		topRow: {
@@ -126,7 +122,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					description:
 						"A collection of example views from Expero showing the power of interop and context sharing.",
 					image: {
-						src: `${webRoot}common/images/coding-1-unsplash.jpg`
+						src: "http://localhost:8080/common/images/coding-1-unsplash.jpg"
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
@@ -139,7 +135,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					description:
 						"A collection of developer tools that can aid with building and debugging OpenFin applications.",
 					image: {
-						src: `${webRoot}common/images/coding-2-unsplash.jpg`
+						src: "http://localhost:8080/common/images/coding-2-unsplash.jpg"
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
@@ -160,7 +156,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					title: "Views",
 					description: "A collection of views made available through our catalog.",
 					image: {
-						src: `${webRoot}common/images/coding-4-unsplash.jpg`
+						src: "http://localhost:8080/common/images/coding-4-unsplash.jpg"
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
@@ -172,7 +168,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 					title: "Web Apps",
 					description: "A collection of web apps built using OpenFin.",
 					image: {
-						src: `${webRoot}common/images/coding-5-unsplash.jpg`
+						src: "http://localhost:8080/common/images/coding-5-unsplash.jpg"
 					},
 					templateId: StorefrontTemplate.AppGrid,
 					templateData: {
@@ -187,11 +183,9 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 }
 
 async function getFooter(): Promise<StorefrontFooter> {
-	const webRoot = window.location.href.replace("platform/provider.html", "");
-
 	console.log("Getting the store footer.");
 	return {
-		logo: { src: `${webRoot}favicon.ico`, size: "32" },
+		logo: { src: "http://localhost:8080/favicon.ico", size: "32" },
 		text: "Welcome to the OpenFin Sample Footer",
 		links: [
 			{

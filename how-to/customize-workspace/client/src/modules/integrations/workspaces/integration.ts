@@ -1,15 +1,13 @@
 import type {
-	ButtonStyle,
 	CLIFilter,
 	CLITemplate,
 	CustomTemplate,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	TemplateFragment
+	HomeSearchResult
 } from "@openfin/workspace";
-import type { CustomPaletteSet, Workspace, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Workspace, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { WorkspaceChangedLifecyclePayload } from "customize-workspace/shapes";
 import type { IntegrationHelpers, IntegrationModule } from "customize-workspace/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
@@ -22,12 +20,6 @@ import type { WorkspacesSettings } from "./shapes";
  * Implement the integration provider for workspaces.
  */
 export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "workspaces";
-
 	/**
 	 * The key to use for opening a workspace.
 	 * @internal
@@ -57,6 +49,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 * @internal
 	 */
 	private static readonly _ACTION_EXISTS_WORKSPACE = "Workspace Exists";
+
+	/**
+	 * Provider id.
+	 * @internal
+	 */
+	private _providerId: string;
 
 	/**
 	 * The settings from config.
@@ -110,7 +108,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("WorkspacesProvider");
-
+		this._providerId = definition.id;
 		this._integrationHelpers.subscribeLifecycleEvent(
 			"workspace-changed",
 			async (platform: WorkspacePlatformModule, payload: WorkspaceChangedLifecyclePayload) => {
@@ -146,13 +144,13 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 		return [
 			{
-				key: `${WorkspacesProvider._PROVIDER_ID}-help1`,
+				key: `${this._providerId}-help1`,
 				title: "Workspaces",
 				label: "Help",
 				icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 				actions: [],
 				data: {
-					providerId: WorkspacesProvider._PROVIDER_ID
+					providerId: this._providerId
 				},
 				template: "Custom" as CLITemplate.Custom,
 				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
@@ -204,7 +202,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 							icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 							actions: [],
 							data: {
-								providerId: WorkspacesProvider._PROVIDER_ID,
+								providerId: this._providerId,
 								tags: ["workspace"],
 								workspaceId: foundMatch.workspaceId
 							},
@@ -223,7 +221,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						label: "Suggestion",
 						actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 						data: {
-							providerId: WorkspacesProvider._PROVIDER_ID,
+							providerId: this._providerId,
 							tags: ["workspace"],
 							workspaceId: randomUUID(),
 							workspaceTitle: title
@@ -289,16 +287,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					await platform.Storage.saveWorkspace(workspace);
 
 					const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
-					const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
 					const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 
-					const savedWorkspace = this.getWorkspaceTemplate(
+					const savedWorkspace = await this.getWorkspaceTemplate(
 						workspace.workspaceId,
 						workspace.title,
 						shareEnabled,
 						true,
-						colorScheme,
-						palette
+						colorScheme
 					);
 
 					// And add the new one
@@ -330,169 +326,82 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		return handled;
 	}
 
-	private getWorkspaceTemplate(
+	private async getWorkspaceTemplate(
 		id: string,
 		title: string,
 		shareEnabled: boolean,
 		isCurrent: boolean,
-		colorScheme: ColorSchemeMode,
-		palette: CustomPaletteSet
-	): HomeSearchResult {
-		let actions = [];
-		let layout;
-		let data;
+		colorScheme: ColorSchemeMode
+	): Promise<HomeSearchResult> {
+		const actions = [
+			{
+				name: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
+				hotkey: "Enter"
+			}
+		];
+		const actionButtons: { title: string; action: string }[] = [
+			{
+				title: "Open",
+				action: WorkspacesProvider._ACTION_OPEN_WORKSPACE
+			}
+		];
+		let instructions;
 
 		if (isCurrent) {
-			layout = this.getOtherWorkspaceTemplate(shareEnabled, false, palette);
-			data = {
-				title,
-				instructions:
-					"This is the currently active workspace. You can use the Browser menu to update/rename this workspace",
-				openText: "Open",
-				shareText: "Share"
-			};
-			if (shareEnabled) {
-				actions.push({
-					name: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
-					hotkey: "CmdOrCtrl+Shift+S"
-				});
-			}
-			actions = actions.concat([
-				{
-					name: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
-					hotkey: "Enter"
-				}
-			]);
+			instructions =
+				"This is the currently active workspace. You can use the Browser menu to update/rename this workspace";
 		} else {
-			if (shareEnabled) {
-				actions.push({
-					name: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
-					hotkey: "CmdOrCtrl+Shift+S"
-				});
-			}
-			actions = actions.concat([
-				{
-					name: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
-					hotkey: "CmdOrCtrl+Shift+D"
-				},
-				{
-					name: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
-					hotkey: "Enter"
-				}
-			]);
-			layout = this.getOtherWorkspaceTemplate(shareEnabled, true, palette);
-			data = {
-				title,
-				instructions: "Use the buttons below to interact with your saved workspace",
-				openText: "Open",
-				deleteText: "Delete",
-				shareText: "Share"
-			};
+			instructions = "Use the buttons below to interact with your saved workspace";
+			actions.push({
+				name: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
+				hotkey: "CmdOrCtrl+Shift+D"
+			});
+			actionButtons.push({
+				title: "Delete",
+				action: WorkspacesProvider._ACTION_DELETE_WORKSPACE
+			});
 		}
+
+		if (shareEnabled) {
+			actions.push({
+				name: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
+				hotkey: "CmdOrCtrl+Shift+S"
+			});
+			actionButtons.push({
+				title: "Share",
+				action: WorkspacesProvider._ACTION_SHARE_WORKSPACE
+			});
+		}
+
+		const icon = this._settings.images.workspace.replace("{scheme}", colorScheme as string);
+
+		const layoutData = await this._integrationHelpers.templateHelpers.createLayout(
+			title,
+			icon,
+			[await this._integrationHelpers.templateHelpers.createText("instructions")],
+			actionButtons
+		);
 
 		return {
 			key: id,
 			title,
 			label: "Workspace",
-			icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
+			icon,
 			actions,
 			data: {
-				providerId: WorkspacesProvider._PROVIDER_ID,
+				providerId: this._providerId,
 				workspaceTitle: title,
 				workspaceId: id,
 				tags: ["workspace"]
 			},
 			template: "Custom" as CLITemplate.Custom,
 			templateContent: {
-				layout,
-				data
-			}
-		};
-	}
-
-	private getOtherWorkspaceTemplate(
-		enableShare: boolean,
-		enableDelete: boolean,
-		palette: CustomPaletteSet
-	): TemplateFragment {
-		const actionButtons: TemplateFragment[] = [
-			{
-				type: "Button",
-				action: WorkspacesProvider._ACTION_OPEN_WORKSPACE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "openText"
-					}
-				]
-			}
-		];
-
-		if (enableDelete) {
-			actionButtons.push({
-				type: "Button",
-				buttonStyle: "primary" as ButtonStyle.Primary,
-				action: WorkspacesProvider._ACTION_DELETE_WORKSPACE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "deleteText"
-					}
-				]
-			});
-		}
-
-		if (enableShare) {
-			actionButtons.push({
-				type: "Button",
-				buttonStyle: "primary" as ButtonStyle.Primary,
-				action: WorkspacesProvider._ACTION_SHARE_WORKSPACE,
-				children: [
-					{
-						type: "Text",
-						dataKey: "shareText"
-					}
-				]
-			});
-		}
-
-		return {
-			type: "Container",
-			style: {
-				padding: "10px",
-				display: "flex",
-				flexDirection: "column",
-				flex: 1
-			},
-			children: [
-				{
-					type: "Text",
-					dataKey: "title",
-					style: {
-						fontWeight: "bold",
-						fontSize: "16px",
-						paddingBottom: "5px",
-						marginBottom: "10px",
-						borderBottom: `1px solid ${palette.background6}`
-					}
-				},
-				{
-					type: "Text",
-					dataKey: "instructions",
-					style: {
-						flex: 1
-					}
-				},
-				{
-					type: "Container",
-					style: {
-						display: "flex",
-						justifyContent: "center",
-						gap: "10px"
-					},
-					children: actionButtons
+				layout: layoutData.layout,
+				data: {
+					...layoutData.data,
+					instructions
 				}
-			]
+			}
 		};
 	}
 
@@ -523,24 +432,24 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			const currentWorkspace = await platform.getCurrentWorkspace();
 			const currentWorkspaceId = currentWorkspace?.workspaceId;
 			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
-			const palette: CustomPaletteSet = await this._integrationHelpers.getCurrentPalette();
 
-			results = workspaces
+			const wksProm = workspaces
 				.filter(
 					(pg) =>
 						query.length === 0 || (query.length >= queryMinLength && pg.title.toLowerCase().includes(query))
 				)
-				.map((ws: Workspace, index: number) =>
+				.sort((a, b) => a.title.localeCompare(b.title))
+				.map(async (ws: Workspace) =>
 					this.getWorkspaceTemplate(
 						ws.workspaceId,
 						ws.title,
 						shareEnabled,
 						currentWorkspaceId === ws.workspaceId,
-						colorScheme,
-						palette
+						colorScheme
 					)
-				)
-				.sort((a, b) => a.title.localeCompare(b.title));
+				);
+
+			results = await Promise.all(wksProm);
 		}
 		return results;
 	}

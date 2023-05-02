@@ -1,6 +1,7 @@
+import type OpenFin from "@openfin/core";
 import {
-	ClientConfiguration,
-	NativeWindowIntegrationClient
+	NativeWindowIntegrationClient,
+	type ClientConfiguration
 } from "@openfin/native-window-integration-client";
 import asset from "@openfin/native-window-integration-client/lib/provider.zip";
 import type { App } from "@openfin/workspace-platform";

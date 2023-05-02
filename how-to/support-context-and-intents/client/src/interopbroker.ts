@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
@@ -8,10 +9,7 @@ const NO_APPS_FOUND = "NoAppsFound";
 const RESOLVER_TIMEOUT = "ResolverTimeout";
 
 export function interopOverride(
-	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
-	provider?: OpenFin.ChannelProvider,
-	options?: OpenFin.InteropBrokerOptions,
-	...args: unknown[]
+	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	class InteropOverride extends InteropBroker {
 		public async launchAppWithIntent(app: App, intent: OpenFin.Intent) {
@@ -99,7 +97,7 @@ export function interopOverride(
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
 			const url =
 				settings?.platformProvider?.intentPicker.url ||
-				window.location.href.replace("platform/provider.html", "common/windows/intents/picker.html");
+				"http://localhost:8080/common/windows/intents/picker.html";
 
 			const winOption = {
 				name: "intent-picker",
@@ -387,5 +385,5 @@ export function interopOverride(
 		}
 	}
 
-	return new InteropOverride(provider, options, ...args);
+	return new InteropOverride();
 }

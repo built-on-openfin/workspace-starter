@@ -1,5 +1,6 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
-import { BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import { getCurrentSync, type BrowserSnapshot } from "@openfin/workspace-platform";
 import { getSettings } from "./settings";
 import { randomUUID } from "./uuid";
 

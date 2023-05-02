@@ -5,16 +5,14 @@
 
 # Register With Platform Windows
 
-OpenFin Workspace empowers you to take advantage of our store component by using our Storefront API to register your own store and populate it with your custom content. This example additionally lets you populate the Home UI using the same data source. This gives you the choice of fetching your list of applications from a _Content Discovery Service_ or somewhere else. This example also shows you that you can use an existing Platform API application and register with these components without using the Browser component (if you have an existing app and don't want to migrate just yet). This example is based off the **Register with Store** starter.
-
-This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+OpenFin Workspace lets you customize the styling of the browser windows, you can specify your own template for the window layout.
 
 ## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Platform Windows](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv10.0.0%2Fregister-with-platform-windows%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Platform Windows](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fregister-with-platform-windows%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -24,7 +22,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 10.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -46,28 +44,17 @@ npm run start
 npm run client
 ```
 
-5. Type any character into the search box to show the default list of Applications.
-   You can now use the custom commands e.g. `/price MSFT.
-
-6. If you modify the project and wish to rebuild you can run setup again or the build command below:
+5. If you modify the project and wish to rebuild you can run setup again or the build command below:
 
 ```shell
 npm run build
 ```
 
-7. Type any character into the search box to show the default list of applications.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
-
-![Register with Platform Windows Home](openfin-register-with-platform-windows-home.gif)
-
-8. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
-
-![Register with Platform Windows Store](openfin-register-with-platform-windows-store.gif)
+6. On startup Home will be shown and you can launch one of the applications, instead of displaying the app in the standard window layout, it will be shown using a customized layout.
 
 ## How it works
 
-The behavior is the same as the [Register With Store Sample](../register-with-store/). Please look at that README for information about the settings and the code. The main difference is the platform windows specific part which is described below.
+The behavior is the same as the [Register With Home Basic Sample](../register-with-home-basic/). Please look at that README for information about the code. The main difference is the platform windows specific part which is described below.
 
 ## Custom Platform Windows
 
@@ -84,11 +71,6 @@ The platform api specific code:
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
 ## FAQ
-
-- The store isn't launching or the store command isn't showing on the home ui?
-
-  - It might be that the config defining the store is invalid. Open up the dev tools for the headless app and check the console log messages.
-  - Ensure that the bootstrap section in the customSettings of the manifest has store set to true.
 
 - I am not seeing what I expected?
 

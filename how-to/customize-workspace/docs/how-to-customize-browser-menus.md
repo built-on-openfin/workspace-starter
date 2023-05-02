@@ -40,7 +40,7 @@ The customization process for all 3 types of menu follows the same pattern. The 
 
 There is a standard set of menu entries for each of the menu types. You can add/remove or change all the menu entries.
 
-Each entry must specify `id` to identify the menu entry, `include` which determines if the entry should be displayed, `label` for the text to be displayed for the entry, `data` for the information specific to the menu entry and which action to perform, `position` which can determine where the menu entry should appear in relation to other menu entries. There is optional parameters of `separator` which can add a menu separator adjacent to the new entry and `conditions` which can provide more dynamic logic as to its visibility.
+Each entry must specify `id` to identify the menu entry, `include` which determines if the entry should be displayed, `label` for the text to be displayed for the entry, `data` for the information specific to the menu entry and which action to perform, `position` which can determine where the menu entry should appear in relation to other menu entries. There is optional parameters of `separator` which can add a menu separator adjacent to the new entry and `conditions` which can provide more dynamic logic as to its visibility. The other standard properties used by the menu item template (used by the npm packages) is also available so you can specify a submenu or icon if required.
 
 An example menu entry might look something like:
 
@@ -112,6 +112,24 @@ The following example create a menu entry to display the Notification Center wit
             }
         },
     ]
+}
+```
+
+## Including or Excluding Default Menu Entries
+
+By default when you specify menus through the browser provider we include the defaults provided by the Workspace Platform version you are using.
+
+If you want to have no menu (i.e. you specify an empty array for globalMenu and say you don't want the defaults) then the menu will not appear in your browser. If you just want the defaults you can not specify globalMenu etc settings and the defaults will apply.
+
+```json
+"browserProvider": {
+    "menuOptions": {
+    "includeDefaults": {
+     "globalMenu": false,
+     "pageMenu": false,
+     "viewMenu": false
+    }
+   }
 }
 ```
 

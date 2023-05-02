@@ -1,21 +1,20 @@
 import {
+	AuthorizationError,
 	connect,
-	ConnectionError,
 	enableLogging,
-	SalesforceRestApiQueryResponse,
-	SalesforceRestApiSObject,
 	type SalesforceConnection,
-	type SalesforceRestApiSearchResponse
+	type SalesforceRestApiQueryResult,
+	type SalesforceRestApiSearchResult
 } from "@openfin/salesforce";
 import {
 	ButtonStyle,
-	CLISearchResultLoading,
 	CLITemplate,
-	CustomTemplate,
 	type CLIDispatchedSearchResult,
 	type CLIFilter,
 	type CLISearchListenerResponse,
+	type CLISearchResultLoading,
 	type CLISearchResultSimpleText,
+	type CustomTemplate,
 	type HomeSearchResponse,
 	type HomeSearchResult,
 	type TemplateFragment
@@ -287,12 +286,17 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 					const action = data.mapping.actions[actionIdx];
 
-					if (!action.url && !action.intent) {
+					if (!action.url && !action.intent && !action.view) {
 						await this.openSalesforceView(data);
 					} else if (action.url) {
 						await fin.System.openUrlWithBrowser(
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
 						);
+					} else if (action.view) {
+						await this._integrationHelpers.launchView({
+							...action.view,
+							url: this.substituteProperties(data.mapping, data.obj, action.view.url, true)
+						});
 					} else if (action.intent && this._integrationHelpers.getInteropClient) {
 						try {
 							const client = await this._integrationHelpers.getInteropClient();
@@ -367,7 +371,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._salesForceConnection && query.length >= minLength) {
+			if (this._salesForceConnection && query.length >= minLength && !query.startsWith("/")) {
 				let selectedObjects: string[] = this._mappings.map((m) => m.label);
 				if (Array.isArray(filters) && filters.length > 0) {
 					const objectsFilter = filters.find(
@@ -403,16 +407,16 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 					homeResults.push(...searchResults);
 
-					lastResponse.respond(homeResults);
+					this._lastResponse.respond(homeResults);
 				} catch (err) {
 					await this.closeConnection();
-					if (err instanceof ConnectionError) {
+					if (err instanceof AuthorizationError) {
 						this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
 					}
 					this._logger.error("Error retrieving Salesforce search results", err);
 				}
 			}
-			lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
+			this._lastResponse.revoke(`${this._moduleDefinition.id}-searching`);
 		}, 500);
 
 		return {
@@ -483,8 +487,10 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				}
 			} catch (err) {
 				this._logger.error("Error connecting to API", err);
-				this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
-				this._lastResponse.respond([this.getReconnectSearchResult()]);
+				if (this._lastResponse) {
+					this._lastResponse.revoke(SalesforceIntegrationProvider._CONNECTING_SEARCH_RESULT_KEY);
+					this._lastResponse.respond([this.getReconnectSearchResult()]);
+				}
 			} finally {
 				this._isConnecting = false;
 			}
@@ -561,8 +567,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 		}
 
 		const batchedResults = await this.getBatchedResults<
-			| SalesforceRestApiSearchResponse<SalesforceRestApiSObject<SalesforceSearchResult>>
-			| SalesforceFeedElementPage
+			SalesforceRestApiSearchResult<SalesforceSearchResult> | SalesforceFeedElementPage
 		>(batch);
 
 		let results: SalesforceSearchResult[] = [];
@@ -953,7 +958,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 
 		if (batch.length > 0) {
 			const batchedResults = await this.getBatchedResults<
-				SalesforceRestApiQueryResponse<SalesforceRestApiSObject<SalesforceSearchResult>>
+				SalesforceRestApiQueryResult<SalesforceSearchResult>
 			>(batch);
 			for (let i = 0; i < referenceMappings.length; i++) {
 				if (batchedResults[i].records?.length > 0) {

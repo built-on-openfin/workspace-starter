@@ -3,9 +3,230 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v12.0.0 to v12.6.0
+
+### @openfin/workspace-platform Updates
+
+The layout types `LayoutComponentExtended` that were export from `@openfin/workspace-platform/client-api/src` have been removed, use OpenFin.LayoutItemConfig instead.
+
+### @openfin/workspace Updates
+
+The layout types `LayoutComponentExtended`, `LayoutComponentStateExtended`, `LayoutContentExtended` that were export from `@openfin/workspace` have been removed, use OpenFin.LayoutItemConfig instead.
+
+## Migrate from a previous version - From v11 to v12
+
+### @openfin/core Updates
+
+The Openfin runtime core types have been updated. When you move to the matching types for the runtime you may get a number of TypeScript errors:
+
+#### OpenFin Error
+
+```shell
+TS2503: Cannot find namespace 'OpenFin'.
+```
+
+#### OpenFin Error Resolution
+
+OpenFin is no longer made globally available by default. import the OpenFin type to resolve the issue.
+
+```javascript
+import type OpenFin from '@openfin/core';
+```
+
+#### Interop Broker Constructor Error
+
+```shell
+ TS2322: Type '(InteropBroker: Constructor<InteropBroker>, provider?: ChannelProvider, options?: InteropBrokerOptions, ...args: unknown[]) => InteropBroker' is not assignable to type 'OverrideCallback<InteropBroker, InteropBroker>'.
+```
+
+#### Interop Broker Constructor Error Resolution
+
+The constructor has changed and you no longer pass down options. Previously we had:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
+ provider?: OpenFin.ChannelProvider,
+ options?: OpenFin.InteropBrokerOptions,
+ ...args: unknown[]
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride(provider, options, ...args);
+}
+```
+
+And this has now become:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride();
+}
+```
+
+### Use of BrowserOverrideCallback Error
+
+```shell
+ TS2322: Type '(WorkspacePlatformProvider: Constructor<WorkspacePlatformProvider>) => Promise<Override>' is not assignable to type 'WorkspacePlatformOverrideCallback'.
+```
+
+You may get an error similar to the one above. Your Platform Override should use the updated Workspace type:
+
+#### Old WorkspacePlatformProvider approach
+
+```javascript
+import type { BrowserOverrideCallback } from "@openfin/workspace-platform";
+
+export const overrideCallback: BrowserOverrideCallback = async (WorkspacePlatformProvider) => {
+ class Override extends WorkspacePlatformProvider {
+    ...
+  }
+  return new Override();
+};
+```
+
+#### New WorkspacePlatformProvider approach
+
+```javascript
+import type { WorkspacePlatformOverrideCallback } from "@openfin/workspace-platform";
+
+export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+ class Override extends WorkspacePlatformProvider {
+    ...
+  }
+  return new Override();
+};
+```
+
+### Mixed Core Types Error
+
+If you have dependencies that bring in an earlier version of @openfin/core and you have TypeScript errors as shown above then you may see some additional errors relating to a type conflict. Resolve the other TypeScript errors first and this error should go away (TypeScript is trying to resolve issues and finds the additional copies of the @openfin/core types).
+
+Here is an example of what the error might say:
+
+```shell
+ TS2345: Argument of type 'import("/YOUR_PATH/node_modules/@openfin/core/src/api/view/Instance").View' is not assignable to parameter of type 'import("/YOUR_PATH/node_modules/OTHER_DEPENDENCY/node_modules/@openfin/core/src/api/view/Instance").View'.
+  Property '#private' in type 'View' refers to a different member that cannot be accessed from within type 'View'.
+```
+
+This should not be an issue if the other TypeScript errors have been resolved.
+
+### Workspace 12 Enhancements
+
+- Version Fallback Mechanism.
+  OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
+
+### Notification 1.21.0 Enhancements
+
+#### New UI to view Notifications
+
+Notification Center now provides end-users the ability to choose how notifications are viewed.
+
+Available options are:
+
+- All
+- Needs Attention (“persistent notifications”)
+- Grouped by Sender
+- Sort by Priority or Date continue to be available.
+
+#### View All Persistent Notifications
+
+End-users can now view or dismiss all persistent Notifications on their desktop with a single mouse click.
+
+### Workspace Subdomain
+
+OpenFin Workspace and Notifications assets are now delivered from the Workspace subdomain (workspace.openfin.co) by default.
+
+### Resolved Issues
+
+- Updated Store APIs can now make updates to Store buttons in real-time.
+- Resolved issue where queries with a lot of leading spaces calculated suggestion text positions incorrectly
+
+## What dependencies will I need for v12
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^12.6.0",
+                    "@openfin/workspace-platform": "^12.6.0"
+                }
+```
+
+You should update your dev dependencies
+
+```javascript
+"devDependencies": {
+                    "@openfin/core": "30.74.13"
+                   }
+```
+
+## Migrate from a previous version - From v10 to v11
+
+### Workspace 11 Enhancements
+
+- Fixed Panels for Pages - Workspace Platform and content providers can configure fixed panels on any side of a Browser Page. Developers can programmatically control the size, contents, and options of these panels. The panels are configured at the Page level and saved/restored with snapshots. End-user cannot rearrange, move, or remove these panels.
+- Custom Buttons and Landing Page in Store - An Application’s buttons and text in OpenFin Store are now fully customizable. Each application can have both a primary button and a set of secondary buttons. The Landing Page can display either an application or navigation item in any row.
+
+### Notification 1.20.0 Enhancements
+
+- Custom Toast Location - End-users can now set a specific location within a monitor for where their Notifications will display.
+
+These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
+
+## What dependencies will I need for v11
+
+You will need the following dependencies
+
+```javascript
+"dependencies": {
+                    "@openfin/workspace": "^11.0.0",
+                    "@openfin/workspace-platform": "^11.0.0"
+                }
+```
+
+### Interop Broker Constructor Changes
+
+The constructor has changed and you no longer pass down options. Previously we had:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
+ provider?: OpenFin.ChannelProvider,
+ options?: OpenFin.InteropBrokerOptions,
+ ...args: unknown[]
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride(provider, options, ...args);
+}
+```
+
+And this has now become:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride();
+}
+```
+
+Your broker can still override functions related to context groups and manifest configured context groups will still be used by the base implementation of the broker.
+
 ## Migrate from a previous version - From v9.2 to v10
 
-### Workspace Enhancements
+### Workspace 10 Enhancements
 
 - Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
 - New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
@@ -13,7 +234,7 @@
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
 - Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
 
-### Notification Enhancements
+### Notification 1.19.2 Enhancements
 
 - We now expose a show/hide API similar to the other workspace components (the toggle api still works)
 
