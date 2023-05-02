@@ -212,7 +212,7 @@ async function showPopup(
 				buttons
 			}
 		},
-		url: `${window.location.origin}/html/popup.html`,
+		url: "http://localhost:8080/html/popup.html",
 		x: parentCenter.x - halfWidth,
 		y: parentCenter.y - halfHeight,
 		width: dimensions.width,
