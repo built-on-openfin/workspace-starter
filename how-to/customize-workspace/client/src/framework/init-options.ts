@@ -35,8 +35,10 @@ let actionListeners: Map<
 	>
 >();
 let actionListenerMap: { [key: string]: string } = {};
-const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> =
-	new Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>>();
+const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map<
+	string,
+	Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>
+>();
 const listenerMap: { [key: string]: string } = {};
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";

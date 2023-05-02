@@ -428,7 +428,7 @@ module.exports = {
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'@typescript-eslint/comma-spacing': ['error'],
 				'@typescript-eslint/consistent-generic-constructors': ['error'],
-				'@typescript-eslint/consistent-indexed-object-style': ["error", "index-signature"],
+				'@typescript-eslint/consistent-indexed-object-style': ['error', 'index-signature'],
 				'@typescript-eslint/consistent-type-assertions': ['error'],
 				'@typescript-eslint/consistent-type-definitions': ['error'],
 				'@typescript-eslint/consistent-type-imports': [
