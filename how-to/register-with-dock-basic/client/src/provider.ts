@@ -88,7 +88,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 		getApps: async () => [],
 		getLandingPage: async () => ({} as StorefrontLandingPage),
 		getNavigation: async () => [],
-		getFooter: async () => ({} as StorefrontFooter),
+		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
 		launchApp: async () => {}
 	});
 }
