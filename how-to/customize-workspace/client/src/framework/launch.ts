@@ -97,7 +97,8 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 
 	if (!windowExists) {
 		try {
-			const createdWindow = await fin.Window.create(manifest);
+			const platform = getCurrentSync();
+			const createdWindow = await platform.createWindow(manifest);
 			identity = createdWindow.identity;
 			await bringWindowToFront({ window: createdWindow });
 		} catch (err) {
