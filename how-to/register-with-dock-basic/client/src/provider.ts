@@ -1,4 +1,10 @@
-import { Dock } from "@openfin/workspace";
+import {
+	Dock,
+	Home,
+	Storefront,
+	type StorefrontFooter,
+	type StorefrontLandingPage
+} from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
 import { dockGetCustomActions, register } from "./dock";
 
@@ -20,7 +26,10 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(PLATFORM_ICON);
+	await initializeWorkspacePlatform();
+
+	// Initialize dummy workspace components so that the buttons show in the dock.
+	await initializeWorkspaceComponents();
 
 	// Get the DOM elements from the provider.html page and initialize them
 	await initializeDOM();
@@ -28,17 +37,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Initialize the workspace platform.
- * @param icon The icon to use in windows.
  */
-async function initializeWorkspacePlatform(icon: string): Promise<void> {
+async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -56,6 +64,30 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 		// Get the custom actions from the dock which will be triggered
 		// when the buttons are clicked
 		customActions: dockGetCustomActions()
+	});
+}
+
+/**
+ * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ */
+async function initializeWorkspaceComponents(): Promise<void> {
+	await Home.register({
+		title: PLATFORM_TITLE,
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		onUserInput: async () => ({ results: [] }),
+		onResultDispatch: async () => {}
+	});
+
+	await Storefront.register({
+		title: PLATFORM_TITLE,
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		getApps: async () => [],
+		getLandingPage: async () => ({} as StorefrontLandingPage),
+		getNavigation: async () => [],
+		getFooter: async () => ({} as StorefrontFooter),
+		launchApp: async () => {}
 	});
 }
 
