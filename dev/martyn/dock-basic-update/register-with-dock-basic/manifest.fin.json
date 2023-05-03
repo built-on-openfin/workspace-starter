@@ -6,7 +6,7 @@
 		"version": "31.112.75.4"
 	},
 	"platform": {
-		"uuid": "launch-dock-basic",
+		"uuid": "register-with-dock-basic",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/dock-basic-update/register-with-dock-basic/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/dock-basic-update/register-with-dock-basic/platform/provider.html",
