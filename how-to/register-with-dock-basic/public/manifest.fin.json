@@ -6,7 +6,7 @@
 		"version": "31.112.75.4"
 	},
 	"platform": {
-		"uuid": "launch-dock-basic",
+		"uuid": "register-with-dock-basic",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",

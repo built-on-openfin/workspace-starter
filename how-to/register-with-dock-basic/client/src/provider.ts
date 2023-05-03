@@ -1,4 +1,11 @@
-import { Dock } from "@openfin/workspace";
+import {
+	Dock,
+	Home,
+	Storefront,
+	type StorefrontFooter,
+	type StorefrontLandingPage,
+	type WorkspaceButton
+} from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
 import { dockGetCustomActions, register } from "./dock";
 
@@ -12,6 +19,7 @@ let showStorefrontButton: HTMLInputElement | null;
 let showWorkspacesButton: HTMLInputElement | null;
 let customIconUrlInput: HTMLInputElement | null;
 let customOpenUrlInput: HTMLInputElement | null;
+let enableRearrangementButton: HTMLInputElement | null;
 
 const PLATFORM_ID = "register-with-dock-basic";
 const PLATFORM_TITLE = "Register With Dock Basic";
@@ -20,7 +28,10 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(PLATFORM_ICON);
+	await initializeWorkspacePlatform();
+
+	// Initialize dummy workspace components so that the buttons show in the dock.
+	await initializeWorkspaceComponents();
 
 	// Get the DOM elements from the provider.html page and initialize them
 	await initializeDOM();
@@ -28,17 +39,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Initialize the workspace platform.
- * @param icon The icon to use in windows.
  */
-async function initializeWorkspacePlatform(icon: string): Promise<void> {
+async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -60,6 +70,30 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 }
 
 /**
+ * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ */
+async function initializeWorkspaceComponents(): Promise<void> {
+	await Home.register({
+		title: PLATFORM_TITLE,
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		onUserInput: async () => ({ results: [] }),
+		onResultDispatch: async () => {}
+	});
+
+	await Storefront.register({
+		title: PLATFORM_TITLE,
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		getApps: async () => [],
+		getLandingPage: async () => ({} as StorefrontLandingPage),
+		getNavigation: async () => [],
+		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
+		launchApp: async () => {}
+	});
+}
+
+/**
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
@@ -71,6 +105,7 @@ async function initializeDOM(): Promise<void> {
 	showNotificationButton = document.querySelector<HTMLInputElement>("#showNotificationButton");
 	showStorefrontButton = document.querySelector<HTMLInputElement>("#showStorefrontButton");
 	showWorkspacesButton = document.querySelector<HTMLInputElement>("#showWorkspacesButton");
+	enableRearrangementButton = document.querySelector<HTMLInputElement>("#enableRearrangement");
 	customIconUrlInput = document.querySelector<HTMLInputElement>("#customIconUrl");
 	customOpenUrlInput = document.querySelector<HTMLInputElement>("#customOpenUrl");
 
@@ -80,15 +115,26 @@ async function initializeDOM(): Promise<void> {
 		registerButton.addEventListener("click", async () => {
 			setStates(null);
 			try {
+				const workspaceComponents: WorkspaceButton[] = [];
+
+				if (showHomeButton?.checked) {
+					workspaceComponents.push("home");
+				}
+				if (showNotificationButton?.checked) {
+					workspaceComponents.push("notifications");
+				}
+				if (showStorefrontButton?.checked) {
+					workspaceComponents.push("store");
+				}
+				if (showWorkspacesButton?.checked) {
+					workspaceComponents.push("switchWorkspace");
+				}
+
 				// Perform the dock registration which will configure
 				// it and add the buttons/menus
 				await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON, {
-					workspaceComponents: {
-						hideHomeButton: !showHomeButton?.checked ?? false,
-						hideNotificationsButton: !showNotificationButton?.checked ?? false,
-						hideStorefrontButton: !showStorefrontButton?.checked ?? false,
-						hideWorkspacesButton: !showWorkspacesButton?.checked ?? false
-					},
+					workspaceComponents,
+					disableUserRearrangement: !enableRearrangementButton?.checked ?? false,
 					customIconUrl: customIconUrlInput?.value ?? "",
 					customOpenUrl: customOpenUrlInput?.value ?? ""
 				});
@@ -128,6 +174,7 @@ function setStates(isRegistered: boolean | null): void {
 		showNotificationButton &&
 		showStorefrontButton &&
 		showWorkspacesButton &&
+		enableRearrangementButton &&
 		customIconUrlInput &&
 		customOpenUrlInput
 	) {
@@ -139,6 +186,7 @@ function setStates(isRegistered: boolean | null): void {
 		showNotificationButton.disabled = isRegistered === null || isRegistered;
 		showStorefrontButton.disabled = isRegistered === null || isRegistered;
 		showWorkspacesButton.disabled = isRegistered === null || isRegistered;
+		enableRearrangementButton.disabled = isRegistered === null || isRegistered;
 		customIconUrlInput.disabled = isRegistered === null || isRegistered;
 		customOpenUrlInput.disabled = isRegistered === null || isRegistered;
 	}
