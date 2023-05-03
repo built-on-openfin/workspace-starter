@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html style="width: 10; height: 10">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Integrate with Bloomberg Terminal</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://built-on-openfin.github.io/workspace-starter/dev/john/platform-window-instead-of-fin-window/common/style/app.css" />
+		<script src="../js/bbgtest.bundle.js"></script>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Integrate with Bloomberg Terminal</h1>
+				<h1 class="tag">Demonstrate integrating with the Bloomberg Terminal.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="https://built-on-openfin.github.io/workspace-starter/dev/john/platform-window-instead-of-fin-window/common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap20 scroll-vertical">
+			<div class="row gap20">
+				<pre id="logOutput" class="fill scroll-vertical" style="min-height: 130px; max-height: 110px"></pre>
+			</div>
+			<hr />
+
+			<div class="col gap5">
+				<h3>Fire Intents:</h3>
+				<fieldset class="row">
+					<label for="intentName">Intent Name:</label>
+					<select id="intentName">
+						<option value="ViewChart">View Chart</option>
+						<option value="ViewContact">View Contact</option>
+						<option value="ViewInstrument">View Instrument</option>
+						<option value="ViewQuote">View Quote</option>
+					</select>
+
+					<label for="intentValue">Value to pass for the Intent:</label>
+					<select id="intentValueChoice"></select>
+					<!-- <input type="text" id="intentValue"/> -->
+					<button type="button" id="btnQuery">Go</button>
+					<br />
+				</fieldset>
+			</div>
+		</main>
+		<footer>
+			<div class="row spread">
+				<button id="btnClear">Clear Log</button>
+				<div class="row gap10">
+					<button id="btnDisconnect">Disconnect From BBG Terminal</button>
+					<button id="btnConnect">Connect To BBG Terminal</button>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
