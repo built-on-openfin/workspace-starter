@@ -92,7 +92,7 @@ const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",
-	manifest: "http://localhost:8080/common/views/platform/of-info.json",
+	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{

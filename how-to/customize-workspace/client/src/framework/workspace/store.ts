@@ -181,7 +181,7 @@ async function getStoreProvider(): Promise<StorefrontProvider> {
 			getFooter: getFooter.bind(this),
 			getApps: async () => addButtons(settings.storefrontProvider, await getApps({ private: false })),
 			launchApp: async (app) => {
-				await launch(app);
+				await launch(app as PlatformApp);
 			}
 		};
 	}
