@@ -45,7 +45,7 @@ We include an example of this in the public folder of customize-workspace [apps-
       "hostManifests": {
         "OpenFin": {
           "type": "view",
-          "details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0-view.json"
+          "details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
         }
       },
       "localizedVersions": {

@@ -480,7 +480,7 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
   - Information related to intents has been put into it's own [IntentSupport.md](IntentSupport.md) file
 - How do I demonstrate context support?
 
-  - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](../common/public/views)folder. In there you will also see two examples of third-party content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview-view.json](../common/public/views/tradingview/preload-tradingview-view.json)
+  - The sample apps listed include a number examples of context sharing. They all share instruments (either using the fdc3 api or the interop api). Some examples are in the [public/views](../common/public/views)folder. In there you will also see two examples of third-party content (google and trading view) that use preload scripts to listen and react to passed instruments. The view manifests for google and trading view also show how you can define a default context group for a view (they are both defaulted to be on the green context group out of the box). An example can be found here [preload-tradingview.view.fin.json](../common/public/views/tradingview/preload-tradingview.view.fin.json)
 
 - Do I always need a view manifest if it just contains a url?
 

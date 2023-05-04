@@ -17,7 +17,7 @@ const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",
-	manifest: "http://localhost:8080/common/views/platform/of-info.json",
+	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
@@ -93,7 +93,7 @@ export const DEVELOPER_CONTENT: App = {
 	manifestType: "snapshot",
 	description:
 		"Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-	manifest: "http://localhost:8080/common/snapshots/snapshot.json",
+	manifest: "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
 	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",

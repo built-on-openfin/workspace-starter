@@ -18,7 +18,7 @@
 			"sourceRoot": "../common/public/views/manager-portal",
 			"sources": ["images/**/*", "data/**/*"],
 			"dest": "./common/views/manager-portal",
-			"dependsOn": "manager-portal/snapshot-manager-portal.json"
+			"dependsOn": "manager-portal/manager-portal.snapshot.fin.json"
 		},
 		{
 			"id": "package",
