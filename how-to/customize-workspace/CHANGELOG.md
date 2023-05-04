@@ -16,6 +16,7 @@
 - Added support for two new composite modules: pages and windows. They contain action and menu implementations. The modules have been added to the manifest and settings.json to show how they can be configured. They show up in the main browser menu and two of the window management options are referenced in the dock. The two modules provide the following actions: page-open, page-show, page-delete, window-show-all, window-hide-all, window-hide-others. The customize workspace MenuEntry type has been updated to extend the MenuItemTemplate so that icon's can be specified and sub menus can be specified for a menu entry.
 - Added default window positioning strategy for browser windows, which cascades them offset from the previous one
 - FDC3 v2 packages no longer in beta, updated to 2.0.1
+- Classic window apps are now launched via platform.createWindow instead of fin.Window.create. This allows consistent rules by default and takes advantage of our new offset window behavior.
 
 ## v12
 

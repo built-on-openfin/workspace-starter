@@ -652,7 +652,7 @@ export async function launch(appEntry: App) {
 
 ### Hand Crafted Snapshots might fail to load correctly
 
-In the store sample there is a [snapshot.json](../register-with-store/public/snapshot.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
+In the store sample there is a [developer.snapshot.fin.json](../register-with-store/public/developer.snapshot.fin.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
 
 ```javascript
 ...
