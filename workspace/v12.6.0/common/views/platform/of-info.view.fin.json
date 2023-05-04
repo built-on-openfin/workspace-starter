@@ -1,0 +1,8 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/views/platform/of-info/index.html",
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/style/style-changed-preload.js"
+		}
+	]
+}
