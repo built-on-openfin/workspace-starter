@@ -959,7 +959,15 @@
 				"id": "launch-app",
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-init-launch-app-restrictions/customize-workspace/js/modules/init-options/launch-app.bundle.js",
 				"data": {
-					"supportedActions": ["launch-app"]
+					"supportedActions": ["launch-app"],
+					"supportedManifestTypes": [
+						"view",
+						"inline-view",
+						"window",
+						"inline-window",
+						"snapshot",
+						"inline-snapshot"
+					]
 				}
 			}
 		]
