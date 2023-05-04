@@ -12,6 +12,13 @@ export type PlatformApp = App & {
 	instanceMode?: "multi" | "single";
 	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
 	customConfig?: { [key: string]: unknown };
+	manifest:
+		| string
+		| OpenFin.ViewOptions
+		| OpenFin.WindowOptions
+		| OpenFin.Snapshot
+		| OpenFin.ExternalProcessRequestType
+		| OpenFin.AppAssetInfo;
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:
 	 * - It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens for.
@@ -91,6 +98,15 @@ export type AppEndpointOptions =
 			inputId: string;
 			outputId?: string;
 	  };
+
+export type PlatformApps = PlatformApp[];
+
+export type PlatformViewOptions = OpenFin.ViewOptions;
+
+export type PlatformWindowOptions = OpenFin.WindowOptions;
+
+export type PlatformSnapshotOptions = OpenFin.Snapshot;
+
 /**
  * App Provider settings to configure where apps are fetched from.
  */
@@ -132,5 +148,5 @@ export interface AppProviderOptions {
 
 export interface AppsForIntent {
 	intent: { name: string; displayName: string };
-	apps: PlatformApp[];
+	apps: PlatformApps;
 }
