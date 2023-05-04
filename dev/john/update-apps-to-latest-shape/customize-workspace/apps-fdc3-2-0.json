@@ -141,7 +141,7 @@
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-apps-to-latest-shape/common/views/fdc3/workbench/fdc3-workbench-2-0-view.json"
+					"details": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-apps-to-latest-shape/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
 				}
 			},
 			"localizedVersions": {
