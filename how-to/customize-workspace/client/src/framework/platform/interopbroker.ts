@@ -705,8 +705,9 @@ export function interopOverride(
 					targetAppIdentifier.appId === this._unregisteredApp?.appId
 				) {
 					targetApp = this._unregisteredApp;
+				} else {
+					throw new Error(ResolveError.TargetAppUnavailable);
 				}
-				throw new Error(ResolveError.TargetAppUnavailable);
 			}
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
 			if (targetAppIdentifier.instanceId !== undefined) {
@@ -942,11 +943,20 @@ export function interopOverride(
 
 		private async getPreviewImage(target: {
 			capturePage: (options: { format?: string; quality?: number }) => Promise<string>;
+			identity: OpenFin.Identity;
 		}): Promise<string> {
-			const preview = await target.capturePage({ format: "jpg", quality: 85 });
-			if (preview !== undefined && preview !== null && preview !== "") {
-				return preview;
+			try {
+				const preview = await target.capturePage({ format: "jpg", quality: 85 });
+				if (preview !== undefined && preview !== null && preview !== "") {
+					return preview;
+				}
+			} catch (error) {
+				logger.error(
+					`Error while trying to capture a preview image of the view/window: ${target.identity.name}`,
+					error
+				);
 			}
+
 			return undefined;
 		}
 
@@ -973,7 +983,8 @@ export function interopOverride(
 					}
 				}
 			}
-			return intentNames;
+			// the unregisteredAppMeta data lists the supported intents but we only want to return intents that have active instances ready
+			return supportedIntentNames;
 		}
 
 		private async canAddUnregisteredApp(clientIdentity: ClientIdentity, intentName?: string) {
