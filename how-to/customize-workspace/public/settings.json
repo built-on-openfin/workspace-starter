@@ -959,7 +959,15 @@
 				"id": "launch-app",
 				"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
 				"data": {
-					"supportedActions": ["launch-app"]
+					"supportedActions": ["launch-app"],
+					"supportedManifestTypes": [
+						"view",
+						"inline-view",
+						"window",
+						"inline-window",
+						"snapshot",
+						"inline-snapshot"
+					]
 				}
 			}
 		]
