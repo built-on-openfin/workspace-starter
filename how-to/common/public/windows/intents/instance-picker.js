@@ -109,11 +109,7 @@ async function onIntentSelection(targetIntent) {
 async function onAppSelection(appId) {
 	const selectedApp = appLookup[appId];
 	await setupAppMetadata(appId);
-	if (
-		selectedApp?.customConfig === undefined ||
-		selectedApp?.customConfig?.instanceMode === undefined ||
-		selectedApp.customConfig.instanceMode !== 'single'
-	) {
+	if (selectedApp?.instanceMode === undefined || selectedApp.instanceMode !== 'single') {
 		const foundAppInstances = await fdc3.findInstances({ appId });
 		const addNewInstanceOption = appId !== unregisteredAppId;
 		await setupAppInstancesView(foundAppInstances, addNewInstanceOption);
