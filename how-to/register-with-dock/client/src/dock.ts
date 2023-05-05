@@ -181,6 +181,10 @@ async function openUrl(url: string): Promise<void> {
 	const platform = getCurrentSync();
 
 	// See if we already have a browser window open.
+	// We always use the first window for this demonstration
+	// and only hook up the event listeners to that window
+	// any additional windows would need this same logic
+	// in a production system
 	let browserWindows = await platform.Browser.getAllWindows();
 
 	let browserWindowTarget: OpenFin.Identity | undefined;
@@ -201,6 +205,9 @@ async function openUrl(url: string): Promise<void> {
 		browserWindows = await platform.Browser.getAllWindows();
 
 		if (browserWindows.length > 0) {
+			// Only hook-up the events to the first window
+			// any subsequent windows would not be hooked up
+			// and therefore not reflect the correct state of the buttons
 			const events: ("view-focused" | "options-changed" | "url-changed")[] = [
 				"view-focused",
 				"options-changed",
