@@ -7,7 +7,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP, THEME_BUILDER_APP, COMMON_STYLES_APP];
+	return [OPENFIN_INFORMATION_APP];
 }
 
 /**
@@ -34,51 +34,6 @@ export const OPENFIN_INFORMATION_APP: App = {
 		}
 	],
 	tags: ["view", "openfin"]
-};
-
-/**
- * App definition for the theme builder tool.
- */
-export const THEME_BUILDER_APP: App = {
-	appId: "theme-definition-builder",
-	title: "Theme Definition Builder",
-	description: "A tool to help in the building of a theme.",
-	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/theme-definition-builder/theme-definition-builder-view.json",
-	manifestType: "view",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "OpenFin",
-	intents: [],
-	images: [
-		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/images/previews/theme-definition-builder.png"
-		}
-	],
-	tags: ["view", "theme", "tool"]
-};
-
-/**
- * App definition for the common styles view.
- */
-export const COMMON_STYLES_APP: App = {
-	appId: "common-styles",
-	title: "Common Styles Example",
-	description: "A view demonstrating the common styles.",
-	manifest: "http://localhost:8080/common/style/style-view.json",
-	manifestType: "view",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "OpenFin",
-	intents: [],
-	images: [
-		{
-			src: "http://localhost:8080/common/images/previews/starter-style-guide.png"
-		}
-	],
-	tags: ["view", "theme", "tool"]
 };
 
 /**
