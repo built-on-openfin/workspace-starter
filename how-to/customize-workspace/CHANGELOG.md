@@ -15,6 +15,7 @@
 - Added default window positioning strategy for browser windows, which cascades them offset from the previous one
 - FDC3 v2 packages no longer in beta, updated to 2.0.1
 - Classic window apps are now launched via platform.createWindow instead of fin.Window.create. This allows consistent rules by default and takes advantage of our new offset window behavior.
+- Updated npm generate-schema command to generate additional schemas for the platform apps array, view manifests, window manifests and snapshots. Updated the vscode settings to support schema mapping for apps.json, \*.apps.fin.json (array of platform apps), \*.view.fin.json (view manifests), \*.window.fin.json (window manifests), \*.snapshot.fin.json (snapshots) and updated the existing json files to follow this naming convention. This will give you helpful intellisense when editing existing json files or creating new ones.
 
 ## v12
 
