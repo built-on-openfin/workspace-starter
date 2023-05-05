@@ -4,7 +4,7 @@
 		"name": "fdc3-workbench",
 		"title": "FDC3 Workbench",
 		"description": "Launch the official FDC3 Workbench",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/fdc3/workbench/fdc3-workbench-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{

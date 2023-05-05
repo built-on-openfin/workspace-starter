@@ -4,7 +4,7 @@
 		"name": "call-app",
 		"title": "Call Application",
 		"description": "Start a call.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/call-app.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/call-app.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -18,14 +18,12 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			},
 			{
 				"name": "OpenApp",
 				"displayName": "Open App",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -40,7 +38,7 @@
 		"name": "participant-selection",
 		"title": "Participant Selection",
 		"description": "Select a participant.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-selection.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-selection.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -63,7 +61,7 @@
 		"name": "participant-history",
 		"title": "Participant History",
 		"description": "View participant history.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-history.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-history.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -77,8 +75,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -93,7 +90,7 @@
 		"name": "investments-and-models",
 		"title": "Investments and Models",
 		"description": "View investments and models.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/investments-and-models.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/investments-and-models.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -107,8 +104,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -123,7 +119,7 @@
 		"name": "participant-summary-view",
 		"title": "Participant Summary",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-summary.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -137,8 +133,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -153,7 +148,7 @@
 		"name": "participant-summary-window",
 		"title": "Participant Summary Window",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/contact/participant-summary.window.fin.json",
 		"manifestType": "window",
 		"icons": [
 			{
@@ -167,8 +162,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -184,7 +178,7 @@
 		"title": "Client Overview",
 		"manifestType": "snapshot",
 		"description": "Provides a summary of the current client",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/snapshot-contact-overview.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/contact-overview.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/icon-blue.png"
@@ -192,14 +186,12 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"customConfig": { "instanceMode": "single" },
 		"publisher": "OpenFin",
 		"intents": [
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -221,7 +213,7 @@
 			"includeInSnapshots": false,
 			"customData": {
 				"settings": {
-					"snapshotUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/template-snapshot-contact-dashboard.json",
+					"snapshotUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/template-contact-dashboard.snapshot.fin.json",
 					"contextGroupName": "*",
 					"contextGroupToken": "{CONTEXT_GROUP}",
 					"intentName": "ViewContact",
@@ -243,12 +235,12 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"private": true,
-		"customConfig": { "instanceMode": "single" },
+		"instanceMode": "single",
+		"customConfig": {},
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/previews/view-contact-dashboard-launcher.png"
@@ -298,32 +290,27 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
 			},
 			{
 				"name": "StartChat",
 				"displayName": "Start a Chat",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
 			},
 			{
 				"name": "ViewChart",
 				"displayName": "View Chart",
-				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
 			},
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact Details",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			},
 			{
 				"name": "ViewQuote",
 				"displayName": "View Quote",
-				"contexts": ["fdc3.instrument"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument"]
 			},
 			{
 				"name": "ViewNews",
@@ -334,20 +321,17 @@
 					"fdc3.instrumentList",
 					"fdc3.organization",
 					"fdc3.portfolio"
-				],
-				"customConfig": {}
+				]
 			},
 			{
 				"name": "ViewAnalysis",
 				"displayName": "View Analysis",
-				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
 			},
 			{
 				"name": "ViewInstrument",
 				"displayName": "View Instrument Details",
-				"contexts": ["fdc3.instrument"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument"]
 			}
 		],
 		"images": [
@@ -372,8 +356,7 @@
 			{
 				"name": "CreateAppDefinition",
 				"displayName": "Create an App Definition",
-				"contexts": ["openfin.app"],
-				"customConfig": {}
+				"contexts": ["openfin.app"]
 			}
 		],
 		"images": [
@@ -507,7 +490,7 @@
 		"name": "preload-tradingview-view",
 		"title": "Trading View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/tradingview/preload-tradingview-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/tradingview/preload-tradingview.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -526,7 +509,7 @@
 		"name": "preload-google-view",
 		"title": "Google View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/google/preload-google-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/google/preload-google.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -657,7 +640,7 @@
 		"name": "openfin-information",
 		"title": "OpenFin Information",
 		"description": "Display information about the OpenFin environment",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/platform/of-info.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/platform/of-info.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -681,7 +664,7 @@
 		"title": "OpenFin Developer Docs",
 		"manifestType": "snapshot",
 		"description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/snapshot.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/snapshots/developer.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/icon-blue.png"
@@ -708,8 +691,7 @@
 			"alias": "winform-interop-example",
 			"version": "3.0.2",
 			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
+			"target": "OpenFin.Interop.Win.Sample.exe"
 		},
 		"icons": [
 			{
@@ -725,14 +707,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi", "dock", "developer"],
-		"data": {
-			"nwi": {
-				"name": "OpenFin.Interop.Win.Sample",
-				"title": "Interop Example Tool",
-				"lifetime": "application"
-			}
-		}
+		"tags": ["native", "appasset", "dock", "developer"]
 	},
 	{
 		"appId": "Notepad",
@@ -763,7 +738,7 @@
 		"title": "Hidden/Headless Window Example",
 		"manifestType": "window",
 		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/windows/hidden-window/hidden.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/windows/hidden-window/hidden.window.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/icon-blue.png"
@@ -782,7 +757,7 @@
 		"title": "Manager Portal",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/snapshot-manager-portal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/manager-portal.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/icon-blue.png"
@@ -805,7 +780,7 @@
 		"title": "Manager Portal (Fixed Views)",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager with fixed panels",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/snapshot-manager-portal-fixed.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/images/icon-blue.png"
@@ -827,7 +802,7 @@
 		"name": "my-team",
 		"title": "My Team",
 		"description": "View my team.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/my-team.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/my-team.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -846,7 +821,7 @@
 		"name": "annual-leave",
 		"title": "Annual Leave",
 		"description": "View the annual leave for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/annual-leave.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/annual-leave.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -865,7 +840,7 @@
 		"name": "manager-paths",
 		"title": "Manager Paths",
 		"description": "View the manager paths for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/manager-paths.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/manager-paths.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -884,7 +859,7 @@
 		"name": "company-comms",
 		"title": "Company Comms",
 		"description": "View the communications for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/company-comms.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/company-comms.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -903,7 +878,7 @@
 		"name": "company-cal",
 		"title": "Company Calendar",
 		"description": "View the calendar for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/company-cal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/views/manager-portal/company-cal.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -937,7 +912,7 @@
 		"name": "irs-rfq",
 		"title": "IRS: Request For Quote",
 		"description": "Request for quote for Interest Rate Swaps.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/windows/irs-rfq/irs-rfq.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/register-with-dock-advanced/common/windows/irs-rfq/irs-rfq.window.fin.json",
 		"manifestType": "window",
 		"icons": [
 			{
