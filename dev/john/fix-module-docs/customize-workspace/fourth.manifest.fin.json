@@ -1,0 +1,88 @@
+{
+	"$schema": "./schemas/manifest.schema.json",
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=fourth-workspace-starter-how-to-customize-workspace",
+		"version": "30.110.74.13"
+	},
+	"startup_app": {
+		"name": "fourth-workspace-starter-how-to-customize-workspace"
+	},
+	"platform": {
+		"uuid": "fourth-workspace-starter-how-to-customize-workspace",
+		"name": "fourth-workspace-starter-how-to-customize-workspace",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/favicon-32x32.png",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/shell/shell.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			}
+		},
+		"defaultViewOptions": {}
+	},
+	"snapshot": {
+		"windows": []
+	},
+	"appAssets": [],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Customize Workspace - Fourth Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"platformProvider": {
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace",
+			"sharing": true,
+			"initUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/js/provider.bundle.js"
+		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "example",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/js/modules/auth/example.bundle.js",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1
+					}
+				}
+			]
+		},
+		"endpointProvider": {
+			"modules": [],
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-module-docs/customize-workspace/settings.json"
+					}
+				}
+			]
+		}
+	}
+}
