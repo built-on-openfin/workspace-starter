@@ -656,7 +656,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v12.6.0/common/images/previews/of-info.png"
 			}
 		],
-		"tags": ["view", "openfin"]
+		"tags": ["view", "openfin", "versions"]
 	},
 	{
 		"appId": "openfin-developer-page",
