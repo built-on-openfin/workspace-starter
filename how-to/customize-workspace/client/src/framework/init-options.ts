@@ -24,15 +24,6 @@ let actionListeners = new Map<
 			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
 		}
 	>
-> = new Map<
-	string,
-	Map<
-		string,
-		{
-			lifecycle: InitOptionsLifecycle;
-			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
-		}
-	>
 >();
 let actionListenerMap: { [key: string]: string } = {};
 const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map<

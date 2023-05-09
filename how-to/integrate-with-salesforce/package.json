@@ -24,8 +24,8 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.2.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "13.0.2",
-		"@openfin/workspace-platform": "13.0.2"
+		"@openfin/workspace": "13.0.5",
+		"@openfin/workspace-platform": "13.0.5"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",

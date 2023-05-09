@@ -25,8 +25,8 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "13.0.2",
-		"@openfin/workspace-platform": "13.0.2",
+		"@openfin/workspace": "13.0.5",
+		"@openfin/workspace-platform": "13.0.5",
 		"csstype": "^3.1.2"
 	},
 	"devDependencies": {
