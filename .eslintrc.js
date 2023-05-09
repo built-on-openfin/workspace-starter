@@ -9,7 +9,7 @@ module.exports = {
 		'plugin:import/warnings',
 		'plugin:import/typescript',
 		'plugin:promise/recommended',
-		'plugin:unicorn/recommended'
+		'plugin:unicorn/all'
 	],
 	globals: {
 		fin: 'readonly',
@@ -334,7 +334,6 @@ module.exports = {
 		'unicorn/custom-error-definition': ['off'],
 		'unicorn/empty-brace-spaces': ['off'],
 		'unicorn/error-message': ['error'],
-		'unicorn/empty-brace-spaces': ['off'],
 		'unicorn/escape-case': ['error'],
 		'unicorn/expiring-todo-comments': ['error'],
 		'unicorn/explicit-length-check': ['off'],
@@ -363,12 +362,14 @@ module.exports = {
 		'unicorn/no-zero-fractions': ['error'],
 		'unicorn/number-literal-case': ['off'],
 		'unicorn/numeric-separators-style': ['off'],
+		'unicorn/prefer-at': ['off'],
 		'unicorn/prefer-add-event-listener': ['error'],
 		'unicorn/prefer-code-point': ['off'],
 		'unicorn/prefer-dataset': ['error'],
 		'unicorn/prefer-event-key': ['error'],
 		'unicorn/prefer-flat-map': ['error'],
 		'unicorn/prefer-includes': ['error'],
+		'unicorn/prefer-json-parse-buffer': ['off'],
 		'unicorn/prefer-modern-dom-apis': ['error'],
 		'unicorn/prefer-module': ['off'],
 		'unicorn/prefer-negative-index': ['error'],
@@ -383,6 +384,7 @@ module.exports = {
 		'unicorn/prefer-set-has': ['off'],
 		'unicorn/prefer-spread': ['off'],
 		'unicorn/prefer-starts-ends-with': ['error'],
+		'unicorn/prefer-string-replace-all': ['off'],
 		'unicorn/prefer-string-slice': ['error'],
 		'unicorn/prefer-switch': ['off'],
 		'unicorn/prefer-top-level-await': ['off'],
@@ -412,7 +414,8 @@ module.exports = {
 		{
 			extends: [
 				'plugin:@typescript-eslint/recommended',
-				'plugin:@typescript-eslint/recommended-requiring-type-checking'
+				'plugin:@typescript-eslint/recommended-requiring-type-checking',
+				'plugin:@typescript-eslint/strict'
 			],
 			files: ['*.ts'],
 			rules: {
@@ -420,10 +423,13 @@ module.exports = {
 				'@typescript-eslint/array-type': ['error'],
 				'@typescript-eslint/await-thenable': ['error'],
 				'@typescript-eslint/ban-ts-comment': ['error'],
+				'@typescript-eslint/ban-tslint-comment': ['off'],
 				'@typescript-eslint/ban-types': ['error'],
 				'@typescript-eslint/brace-style': ['error'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'@typescript-eslint/comma-spacing': ['error'],
+				'@typescript-eslint/consistent-generic-constructors': ['error'],
+				'@typescript-eslint/consistent-indexed-object-style': ['error', 'index-signature'],
 				'@typescript-eslint/consistent-type-assertions': ['error'],
 				'@typescript-eslint/consistent-type-definitions': ['error'],
 				'@typescript-eslint/consistent-type-imports': [
@@ -525,6 +531,7 @@ module.exports = {
 				'@typescript-eslint/no-unsafe-call': ['off'],
 				'@typescript-eslint/no-unsafe-member-access': ['off'],
 				'@typescript-eslint/no-unsafe-return': ['error'],
+				'@typescript-eslint/no-unsafe-enum-comparison': ['off'],
 				'@typescript-eslint/no-unused-expressions': ['error'],
 				'@typescript-eslint/no-unused-vars': [
 					'error',

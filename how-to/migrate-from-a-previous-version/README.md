@@ -712,13 +712,13 @@ Workspaces & Pages are no longer shown by default in the Home UI - We now provid
 
 The save icon is present on your browser's window and by default it will save your page to indexedDB. Version 5 provides APIs to get these pages. You can also specify a different storage location (e.g. you may decide you want to save them to a rest endpoint).
 
-If you have existing pages from version 1-4 that you need to migrate please contact support@openfin.co who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
+If you have existing pages from version 1-4 that you need to migrate please contact [support@openfin.co](mailto:support@openfin.co) who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
 
 ### The share capability is gone
 
 The ability to share content will come back but has been removed in order to plan an approach that suits the SDK first approach that we have in place.
 
-Please contact support@openfin.co who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
+Please contact [support@openfin.co](mailto:support@openfin.co) who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
 
 ### The Add New Page/View button (and right click context menu option) is hidden by default and needs to be configured
 

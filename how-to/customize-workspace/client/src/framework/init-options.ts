@@ -15,7 +15,7 @@ import { randomUUID } from "./uuid";
 
 const logger = createLogger("InitOptions");
 
-let actionListeners: Map<
+let actionListeners = new Map<
 	string,
 	Map<
 		string,
@@ -24,9 +24,9 @@ let actionListeners: Map<
 			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
 		}
 	>
-> = new Map();
+>();
 let actionListenerMap: { [key: string]: string } = {};
-const listeners: Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>> = new Map();
+const listeners = new Map<string, Map<string, (initOptions: UserAppConfigArgs) => Promise<void>>>();
 const listenerMap: { [key: string]: string } = {};
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
