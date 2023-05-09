@@ -42,15 +42,7 @@
 	"snapshot": {
 		"windows": []
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.0",
-			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
+	"appAssets": [],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Customize Workspace - Fourth Client",
