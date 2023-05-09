@@ -5,11 +5,11 @@
 
 # Support Context and Intents
 
-This sample is an extension of the register with store example. The sample covers:
+This sample covers:
 
 - Supporting Interop/FDC3 Context messages
 - Supporting Interop/FDC3 Intents
-- Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home, Store and in intent resolution
+- Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home and in intent resolution
 - Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
@@ -87,12 +87,11 @@ The [list of applications](../common/public/apps.json) contains a number of exam
 - Load views into OpenFin Browser
 - Launch an OpenFin application using its manifest file
 - Launch a native application
-- Launch a page using the snapshot manifest type
 - Launch through an intent: a view (single instance and multi instance) and a page (single instance and multi instance)
 
 These applications are read and transformed in order to be sent to our API.
 
-# Support Context and Intents - How is Intent Support implemented?
+# How is Intent Support implemented?
 
 Intent support is added to the sample in the following ways:
 
