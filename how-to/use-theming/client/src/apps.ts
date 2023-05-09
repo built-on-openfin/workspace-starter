@@ -33,7 +33,7 @@ export const OPENFIN_INFORMATION_APP: App = {
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin"]
+	tags: ["view", "openfin", "versions"]
 };
 
 /**
@@ -44,7 +44,7 @@ export const THEME_BUILDER_APP: App = {
 	title: "Theme Definition Builder",
 	description: "A tool to help in the building of a theme.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 	manifestType: "view",
 	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",

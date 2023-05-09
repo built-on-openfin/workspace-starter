@@ -33,7 +33,7 @@ export const OPENFIN_INFORMATION_APP: App = {
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin"]
+	tags: ["view", "openfin", "versions"]
 };
 
 /**
