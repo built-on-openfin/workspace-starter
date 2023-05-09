@@ -61,7 +61,7 @@ export interface SalesforceBatchResponseItem {
 	result: unknown;
 }
 
-export type SalesforceSearchResult = SalesforceRestApiSObject<{ [id: string]: unknown }>;
+export type SalesforceSearchResult = SalesforceRestApiSObject<{ [key: string]: unknown }>;
 
 /**
  * Model for the feed element page.

@@ -15,7 +15,7 @@ import { randomUUID } from "./uuid";
 
 const logger = createLogger("InitOptions");
 
-let actionListeners: Map<
+let actionListeners = new Map<
 	string,
 	Map<
 		string,

@@ -102,6 +102,6 @@ We don't want to include the logging code directly in external modules as it blo
 
 - [logger-provider.ts](../client/src/framework/logger-provider.ts)
 - [logger-shapes.ts](../client/src/framework/shapes/logger-shapes.ts)
-- console [log-provider.ts](../client/src/modules/log/console/log-provider.ts)
+- console [log.ts](../client/src/modules/log/console/log.ts)
 
 [<- Back to Table Of Contents](../README.md)

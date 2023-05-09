@@ -39,7 +39,7 @@ export function createText(
 export function createLabelledValue(
 	labelKey: string,
 	valueKey: string,
-	style?: { [prop: string]: string | number }
+	style?: { [key: string]: string | number }
 ): ContainerTemplateFragment {
 	return {
 		type: "container",
@@ -97,7 +97,7 @@ export function createTable(tableData: string[][]): TemplateFragment {
 export function createLabelledForm(
 	labelKey: string,
 	valueKey: string,
-	style?: { [prop: string]: string | number }
+	style?: { [key: string]: string | number }
 ): ContainerTemplateFragment {
 	return {
 		type: "container",
