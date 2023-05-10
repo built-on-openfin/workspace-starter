@@ -38,9 +38,6 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
@@ -62,23 +59,5 @@
 		"product": "Workspace Starter - Workspace Native Window Integration - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"platformProvider": {
-			"rootUrl": "http://localhost:8080"
-		},
-		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
-			"appAssetTag": "appasset"
-		},
-		"homeProvider": {
-			"id": "workspace-native-window-integration",
-			"title": "Home Starter",
-			"icon": "http://localhost:8080/favicon.ico",
-			"queryMinLength": 3,
-			"queryAgainst": ["title"]
-		}
 	}
 }
