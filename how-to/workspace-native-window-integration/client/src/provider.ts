@@ -6,7 +6,6 @@ import {
 	type App,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerRequest,
-	type HomeSearchResponse,
 	type HomeSearchResult,
 	type TemplateFragment,
 	type Workspace,
