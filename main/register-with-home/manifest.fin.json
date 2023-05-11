@@ -31,14 +31,11 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-home/favicon.ico",
-		"name": "Register With Home - v12.0.0",
+		"name": "Register With Home - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -49,9 +46,9 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appsSourceUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"manifestTypes": ["view", "snapshot", "manifest", "external"]
+			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/main/common/apps.json"],
+			"manifestTypes": ["view", "snapshot", "manifest", "external"],
+			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {
 			"id": "register-with-home",

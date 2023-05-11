@@ -4,7 +4,7 @@
 		"name": "call-app",
 		"title": "Call Application",
 		"description": "Start a call.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/call-app.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/call-app.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -18,14 +18,12 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			},
 			{
 				"name": "OpenApp",
 				"displayName": "Open App",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -40,7 +38,7 @@
 		"name": "participant-selection",
 		"title": "Participant Selection",
 		"description": "Select a participant.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-selection.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-selection.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -63,7 +61,7 @@
 		"name": "participant-history",
 		"title": "Participant History",
 		"description": "View participant history.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-history.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-history.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -77,8 +75,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -93,7 +90,7 @@
 		"name": "investments-and-models",
 		"title": "Investments and Models",
 		"description": "View investments and models.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/investments-and-models.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/investments-and-models.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -107,8 +104,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -123,7 +119,7 @@
 		"name": "participant-summary-view",
 		"title": "Participant Summary",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -137,8 +133,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -153,7 +148,7 @@
 		"name": "participant-summary-window",
 		"title": "Participant Summary Window",
 		"description": "View summary of the participant",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/contact/participant-summary.window.fin.json",
 		"manifestType": "window",
 		"icons": [
 			{
@@ -167,8 +162,7 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -184,7 +178,7 @@
 		"title": "Client Overview",
 		"manifestType": "snapshot",
 		"description": "Provides a summary of the current client",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/snapshot-contact-overview.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/contact-overview.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -192,14 +186,12 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"customConfig": { "instanceMode": "single" },
 		"publisher": "OpenFin",
 		"intents": [
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -221,7 +213,7 @@
 			"includeInSnapshots": false,
 			"customData": {
 				"settings": {
-					"snapshotUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/template-snapshot-contact-dashboard.json",
+					"snapshotUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/template-contact-dashboard.snapshot.fin.json",
 					"contextGroupName": "*",
 					"contextGroupToken": "{CONTEXT_GROUP}",
 					"intentName": "ViewContact",
@@ -243,12 +235,12 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"private": true,
-		"customConfig": { "instanceMode": "single" },
+		"instanceMode": "single",
+		"customConfig": {},
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/view-contact-dashboard-launcher.png"
@@ -261,7 +253,7 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -274,7 +266,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -284,7 +276,7 @@
 		"name": "interop-intent-view",
 		"title": "Intents using Interop API",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/interop-api/intent/interop-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -298,32 +290,27 @@
 			{
 				"name": "StartCall",
 				"displayName": "Start a Call",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
 			},
 			{
 				"name": "StartChat",
 				"displayName": "Start a Chat",
-				"contexts": ["fdc3.contact", "fdc3.contactList"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
 			},
 			{
 				"name": "ViewChart",
 				"displayName": "View Chart",
-				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
 			},
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact Details",
-				"contexts": ["fdc3.contact"],
-				"customConfig": {}
+				"contexts": ["fdc3.contact"]
 			},
 			{
 				"name": "ViewQuote",
 				"displayName": "View Quote",
-				"contexts": ["fdc3.instrument"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument"]
 			},
 			{
 				"name": "ViewNews",
@@ -334,25 +321,22 @@
 					"fdc3.instrumentList",
 					"fdc3.organization",
 					"fdc3.portfolio"
-				],
-				"customConfig": {}
+				]
 			},
 			{
 				"name": "ViewAnalysis",
 				"displayName": "View Analysis",
-				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
 			},
 			{
 				"name": "ViewInstrument",
 				"displayName": "View Instrument Details",
-				"contexts": ["fdc3.instrument"],
-				"customConfig": {}
+				"contexts": ["fdc3.instrument"]
 			}
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "intent", "openfin", "tools"]
@@ -362,7 +346,7 @@
 		"name": "app-definition-builder",
 		"title": "App Definition Builder",
 		"description": "A developer tool to help build an app definition",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/app/app-definition-builder/app-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/app/app-definition-builder/app-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -372,13 +356,12 @@
 			{
 				"name": "CreateAppDefinition",
 				"displayName": "Create an App Definition",
-				"contexts": ["openfin.app"],
-				"customConfig": {}
+				"contexts": ["openfin.app"]
 			}
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/app/images/previews/app-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/app/images/previews/app-definition-builder.png"
 			}
 		],
 		"tags": ["view", "app", "tools"]
@@ -388,7 +371,7 @@
 		"name": "theme-definition-builder",
 		"title": "Theme Definition Builder",
 		"description": "A tool to help in the building of a theme.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 		"manifestType": "view",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -397,7 +380,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/branding/images/previews/theme-definition-builder.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/branding/images/previews/theme-definition-builder.png"
 			}
 		],
 		"tags": ["view", "theme", "tools"]
@@ -488,7 +471,7 @@
 		"name": "page-layout",
 		"title": "Page Layout Tool",
 		"description": "A tool to help in the building of a page.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/layout/views/page-layout-snapshot.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/layout/views/page-layout-snapshot.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -497,7 +480,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/layout/images/previews/page-layout.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/layout/images/previews/page-layout.png"
 			}
 		],
 		"tags": ["view", "page", "tools"]
@@ -507,7 +490,7 @@
 		"name": "preload-tradingview-view",
 		"title": "Trading View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/tradingview/preload-tradingview-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/tradingview/preload-tradingview.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -526,7 +509,7 @@
 		"name": "preload-google-view",
 		"title": "Google View",
 		"description": "This is an example of a thirdparty site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/google/preload-google-view.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/google/preload-google.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -653,12 +636,35 @@
 		"tags": ["hero", "manifest", "tools"]
 	},
 	{
+		"appId": "openfin-information",
+		"name": "openfin-information",
+		"title": "OpenFin Information",
+		"description": "Display information about the OpenFin environment",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/of-info.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/of-info.png"
+			}
+		],
+		"tags": ["view", "openfin", "versions"]
+	},
+	{
 		"appId": "openfin-developer-page",
 		"name": "openfin-developer-page",
 		"title": "OpenFin Developer Docs",
 		"manifestType": "snapshot",
 		"description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/snapshot.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/snapshots/developer.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -680,8 +686,13 @@
 		"name": "OpenFin Winform Interop Example",
 		"title": "OpenFin Winform Interop Example",
 		"description": "A Winform application built in .NET 5 that shows the power of our interop api.",
-		"manifestType": "external",
-		"manifest": "winform-interop-example",
+		"manifestType": "inline-appasset",
+		"manifest": {
+			"alias": "winform-interop-example",
+			"version": "3.0.2",
+			"src": "https://built-on-openfin.github.io/workspace-starter/main/common/assets/native-interop-example.zip",
+			"target": "OpenFin.Interop.Win.Sample.exe"
+		},
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-winform-interop.png"
@@ -696,14 +707,7 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/previews/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "nwi", "dock", "developer"],
-		"data": {
-			"nwi": {
-				"name": "OpenFin.Interop.Win.Sample",
-				"title": "Interop Example Tool",
-				"lifetime": "application"
-			}
-		}
+		"tags": ["native", "appasset", "dock", "developer"]
 	},
 	{
 		"appId": "Notepad",
@@ -734,7 +738,7 @@
 		"title": "Hidden/Headless Window Example",
 		"manifestType": "window",
 		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/hidden-window/hidden.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/hidden-window/hidden.window.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -753,7 +757,7 @@
 		"title": "Manager Portal",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/snapshot-manager-portal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/manager-portal.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -776,7 +780,7 @@
 		"title": "Manager Portal (Fixed Views)",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager with fixed panels",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/snapshot-manager-portal-fixed.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
 		"icons": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png"
@@ -798,7 +802,7 @@
 		"name": "my-team",
 		"title": "My Team",
 		"description": "View my team.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/my-team.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/my-team.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -817,7 +821,7 @@
 		"name": "annual-leave",
 		"title": "Annual Leave",
 		"description": "View the annual leave for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/annual-leave.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/annual-leave.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -836,7 +840,7 @@
 		"name": "manager-paths",
 		"title": "Manager Paths",
 		"description": "View the manager paths for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/manager-paths.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/manager-paths.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -855,7 +859,7 @@
 		"name": "company-comms",
 		"title": "Company Comms",
 		"description": "View the communications for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/company-comms.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/company-comms.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -874,7 +878,7 @@
 		"name": "company-cal",
 		"title": "Company Calendar",
 		"description": "View the calendar for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/company-cal.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/views/manager-portal/company-cal.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -893,7 +897,7 @@
 		"name": "getting-started",
 		"title": "Getting Started Guide",
 		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/common/snapshots/snapshot-getting-started.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
@@ -908,7 +912,7 @@
 		"name": "irs-rfq",
 		"title": "IRS: Request For Quote",
 		"description": "Request for quote for Interest Rate Swaps.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/irs-rfq/irs-rfq.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/irs-rfq/irs-rfq.window.fin.json",
 		"manifestType": "window",
 		"icons": [
 			{
@@ -934,7 +938,7 @@
 		"name": "analytics-viewer",
 		"title": "Analytics Viewer",
 		"description": "This analytics viewer acts as a basic view to see the analytics events generated by the platform and workspace components if the events are published to the watched app channel.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/analytics/views/analytics-viewer/analytics-viewer-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/analytics/views/analytics-viewer/analytics-viewer-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -947,7 +951,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.0.0/analytics/views/analytics-viewer/analytics-viewer.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/analytics/views/analytics-viewer/analytics-viewer.png"
 			}
 		],
 		"tags": ["view", "analytics", "tools"]

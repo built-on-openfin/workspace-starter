@@ -51,7 +51,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon-32x32.png",
-		"name": "Customize Workspace - v12.0.0 - FDC3 Workspace",
+		"name": "Customize Workspace - v12.6.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -162,11 +162,14 @@
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
-			"windowOptions": {
-				"title": "FDC3 Workspace",
+			"defaultWindowOptions": {
 				"icon": "https://built-on-openfin.github.io/workspace-starter/main/common/favicon-32x32.png",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html"
+				"workspacePlatform": {
+					"pages": [],
+					"title": "FDC3 Workspace",
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/common/views/platform/new-tab/new-tab.html"
+				}
 			},
 			"toolbarButtons": [
 				{
@@ -282,8 +285,8 @@
 			]
 		},
 		"versionProvider": {
-			"minVersion": {
-				"workspace": "12.0.0"
+			"minimumVersion": {
+				"workspace": "12.6.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -305,6 +308,30 @@
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
+				{
+					"id": "apps",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
+					"title": "Apps",
+					"description": "Search Applications",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/js/modules/integrations/apps.bundle.js",
+					"data": {
+						"manifestTypeMapping": {
+							"view": { "entryLabel": "View", "actionName": "" },
+							"inline-view": { "entryLabel": "View", "actionName": "" },
+							"window": { "entryLabel": "Window", "actionName": "" },
+							"inline-window": { "entryLabel": "Window", "actionName": "" },
+							"snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"inline-snapshot": { "entryLabel": "Snapshot", "actionName": "Launch Snapshot" },
+							"manifest": { "entryLabel": "App", "actionName": "Launch App" },
+							"external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"inline-external": { "entryLabel": "Native App", "actionName": "Launch Native App" },
+							"desktop-browser": { "entryLabel": "Desktop Browser", "actionName": "" },
+							"endpoint": { "entryLabel": "Endpoint", "actionName": "Launch" },
+							"connection": { "entryLabel": "Connected App", "actionName": "Launch Connected App" }
+						}
+					}
+				},
 				{
 					"id": "workspaces",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-workspace/favicon.ico",
