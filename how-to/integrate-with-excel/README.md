@@ -62,7 +62,7 @@ This is a headless application. If you wish to debug it then you can update the 
 
 This example uses context to communicate the data from the Excel workbooks to any other components listening for the FDC3 messages.
 
-Just enter `/excel` to get a list of available workbooks.
+The list of apps in home will show the excel worksheets that are configured in manifest.fin.json.
 
 ![Integrate with Excel](integrate-with-excel.gif)
 
