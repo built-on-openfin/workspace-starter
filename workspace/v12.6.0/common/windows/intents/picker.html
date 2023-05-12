@@ -11,7 +11,7 @@
 	</head>
 
 	<body class="border">
-		<main id="intent-select-container" class="col">
+		<main id="intent-select-container" class="fill col gap20">
 			<header class="row spread middle">
 				<div class="col">
 					<h1 id="title">Intent Resolver</h1>
@@ -22,9 +22,9 @@
 				</div>
 			</header>
 			<div id="intent-container" class="fill scroll-vertical"></div>
-			<div class="row gap10">
-				<button id="cancel-intent-selection">Cancel</button>
-				<button id="move-next">Next</button>
+			<div class="row gap10 spread">
+				<button id="cancel-intent-selection" class="secondary">Cancel</button>
+				<button id="move-next">Next &gt;</button>
 			</div>
 		</main>
 		<main id="app-select-container" class="col fill gap20">
@@ -38,10 +38,10 @@
 				</div>
 			</header>
 			<div id="app-container" class="fill col scroll-vertical gap5"></div>
-			<div class="row gap10">
+			<div class="row gap10 spread">
+				<button id="back" class="secondary">&lt; Back</button>
+				<button id="cancel" class="secondary">Cancel</button>
 				<button id="launch">Launch</button>
-				<button id="back">Back</button>
-				<button id="cancel">Cancel</button>
 			</div>
 		</main>
 	</body>
