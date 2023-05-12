@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="width: 10; height: 10">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -27,22 +27,24 @@
 			<hr />
 
 			<div class="col gap5">
-				<h3>Fire Intents:</h3>
-				<fieldset class="row">
-					<label for="intentName">Intent Name:</label>
-					<select id="intentName">
-						<option value="ViewChart">View Chart</option>
-						<option value="ViewContact">View Contact</option>
-						<option value="ViewInstrument">View Instrument</option>
-						<option value="ViewQuote">View Quote</option>
-					</select>
-
-					<label for="intentValue">Value to pass for the Intent:</label>
-					<select id="intentValueChoice"></select>
-					<!-- <input type="text" id="intentValue"/> -->
+				<h3>Fire Intents</h3>
+				<div class="row gap10">
+					<fieldset class="row">
+						<label for="intentType">Intent Type</label>
+						<select id="intentType">
+							<option value="" disabled selected>Please select a value</option>
+							<option value="ViewChart">View Chart</option>
+							<option value="ViewContact">View Contact</option>
+							<option value="ViewInstrument">View Instrument</option>
+							<option value="ViewQuote">View Quote</option>
+						</select>
+					</fieldset>
+					<fieldset class="row">
+						<label for="intentValue">Intent Value</label>
+						<select id="intentValue"></select>
+					</fieldset>
 					<button type="button" id="btnQuery">Go</button>
-					<br />
-				</fieldset>
+				</div>
 			</div>
 		</main>
 		<footer>

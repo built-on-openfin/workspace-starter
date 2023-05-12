@@ -10,18 +10,11 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-bloomberg-basic/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-bloomberg-basic/platform/provider.html",
-		"preventQuitOnLastWindowClosed": false,
-		"defaultWindowOptions": {}
+		"preventQuitOnLastWindowClosed": false
 	},
 	"snapshot": {
 		"windows": [
 			{
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-bloomberg-basic/favicon-32x32.png",
-				"defaultHeight": 500,
-				"defaultWidth": 900,
-				"center": true,
-				"saveWindowState": true,
-				"alwaysOnTop": false,
 				"layout": {
 					"content": [
 						{
@@ -29,7 +22,6 @@
 							"componentName": "view",
 							"componentState": {
 								"name": "bbgTest",
-								"processAffinity": "ps_1",
 								"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-bloomberg-basic/platform/bbgtest.html",
 								"interop": {
 									"currentContextGroup": "green"
