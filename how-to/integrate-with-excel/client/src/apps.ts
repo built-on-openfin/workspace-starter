@@ -1,158 +1,139 @@
+import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
-import { getSettings } from "./settings";
+import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
-let cachedApps: App[];
-
-async function validateEntries(apps: App[]) {
-	let canLaunchExternalProcessResponse;
-
-	try {
-		canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.launchExternalProcess"
-		);
-	} catch (error) {
-		console.error("Error while querying for System.launchExternalProcess permission", error);
-	}
-	const canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
-
-	let canDownloadAppAssetsResponse;
-
-	try {
-		canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-	} catch (error) {
-		console.error("Error while querying for System.downloadAsset permission", error);
-	}
-
-	const canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
-
-	if (canLaunchExternalProcess && canDownloadAppAssets) {
-		return apps;
-	}
-
-	const validatedApps: App[] = [];
-	const rejectedAppIds = [];
-	const settings = await getSettings();
-	const appAssetTag = settings?.appProvider?.appAssetTag ?? "appasset";
-
-	for (let i = 0; i < apps.length; i++) {
-		if (apps[i].manifestType !== "external") {
-			validatedApps.push(apps[i]);
-		} else if (!canLaunchExternalProcess) {
-			rejectedAppIds.push(apps[i].appId);
-		} else if (Array.isArray(apps[i].tags) && apps[i].tags.includes(appAssetTag) && !canDownloadAppAssets) {
-			rejectedAppIds.push(apps[i].appId);
-		} else {
-			validatedApps.push(apps[i]);
-		}
-	}
-
-	if (rejectedAppIds.length > 0) {
-		console.warn(
-			"Apps.ts: validateEntries: Not passing the following list of applications as they will not be able to run on this machine due to missing permissions. Alternatively this logic could be moved to the launch function where a selection is not launched but the user is presented with a modal saying they can't launch it due to permissions.",
-			rejectedAppIds
-		);
-	}
-
-	return validatedApps;
+/**
+ * Get the list of apps to display.
+ * @returns List of app definitions.
+ */
+export function getApps(): App[] {
+	return [OPENFIN_INFORMATION_APP, FDC3_BROADCAST, INTEROP_BROADCAST];
 }
 
-async function getRestEntries(
-	url: string,
-	credentials?: "omit" | "same-origin" | "include",
-	cacheDuration?: number
-): Promise<App[]> {
-	const options = credentials !== undefined ? { credentials } : undefined;
-	if (url === undefined) {
-		return [];
-	}
-	const response = await fetch(url, options);
-
-	const apps: App[] = await response.json();
-
-	cachedApps = await validateEntries(apps);
-
-	if (cacheDuration !== undefined) {
-		const setTimeoutInMs = cacheDuration * 60 * 1000;
-		setTimeout(() => {
-			console.log("Clearing cache of apps as cache duration has passed.");
-			cachedApps = undefined;
-		}, setTimeoutInMs);
-	}
-
-	return cachedApps;
-}
-
-export async function getApps(): Promise<App[]> {
-	console.log("Requesting apps.");
-	try {
-		const settings = await getSettings();
-		const apps =
-			cachedApps ??
-			(await getRestEntries(
-				settings?.appProvider?.appsSourceUrl,
-				settings?.appProvider?.includeCredentialOnSourceRequest,
-				settings?.appProvider?.cacheDurationInMinutes
-			));
-		return apps;
-	} catch (err) {
-		console.error("Error retrieving apps. Returning empty list.", err);
-		return [];
-	}
-}
-
-export async function getAppsByTag(tags: string[], mustMatchAll = false): Promise<App[]> {
-	const apps = await getApps();
-	const filteredApps = apps.filter((value) => {
-		if (value.tags === undefined) {
-			return false;
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP: App = {
+	appId: "openfin-information",
+	title: "OpenFin Information",
+	description: "Display information about the OpenFin environment",
+	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+	manifestType: "view",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
 		}
-		let matchFound = false;
-		for (let i = 0; i < tags.length; i++) {
-			if (value.tags.includes(tags[i])) {
-				if (mustMatchAll) {
-					matchFound = true;
-				} else {
-					return true;
-				}
-			} else if (mustMatchAll) {
-				return false;
-			}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
-		return matchFound;
-	});
-	return filteredApps;
-}
+	],
+	tags: ["view", "openfin", "versions"]
+};
 
-export async function getApp(requestedApp: string | { appId: string }): Promise<App> {
-	const apps = await getApps();
-	let appId;
-	if (requestedApp !== undefined) {
-		if (typeof requestedApp === "string") {
-			appId = requestedApp;
-		} else {
-			appId = requestedApp.appId;
+/**
+ * App definition for the FDC3 Interop Broadcast View.
+ */
+export const FDC3_BROADCAST: App = {
+	appId: "fdc3-broadcast-view",
+	title: "Context using FDC3",
+	description:
+		"This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
+	manifest:
+		"https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/fdc3/context/fdc3-broadcast-view.json",
+	manifestType: "view",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-context-fdc3.png"
+		}
+	],
+	tags: ["view", "fdc3", "tools"]
+};
+
+/**
+ * App definition for the FDC3 Interop Broadcast View.
+ */
+export const INTEROP_BROADCAST: App = {
+	appId: "interop-broadcast-view",
+	title: "Context using Interop API",
+	description:
+		"This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
+	manifest:
+		"https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/interop-api/context/interop-broadcast-view.json",
+	manifestType: "view",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v12.6.0/interop/images/previews/view-context-interop-api.png"
+		}
+	],
+	tags: ["view", "interop", "tools"]
+};
+
+/**
+ * Launch the passed app using its manifest type to determine how to launch it.
+ * @param app The app to launch.
+ * @returns The value returned by the launch.
+ */
+export async function launchApp(
+	app: App
+): Promise<OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined> {
+	if (!app.manifest) {
+		console.error(`No manifest was provided for type ${app.manifestType}`);
+		return;
+	}
+
+	let ret: OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined;
+
+	console.log("Application launch requested:", app);
+
+	switch (app.manifestType) {
+		case AppManifestType.Snapshot: {
+			const platform = getCurrentSync();
+			ret = await platform.applySnapshot(app.manifest);
+			break;
+		}
+
+		case AppManifestType.View: {
+			const platform = getCurrentSync();
+			ret = await platform.createView({ manifestUrl: app.manifest });
+			break;
+		}
+
+		case AppManifestType.External: {
+			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
+			break;
+		}
+
+		default: {
+			ret = await fin.Application.startFromManifest(app.manifest);
+			break;
 		}
 	}
-	if (appId === undefined) {
-		return undefined;
-	}
-	const app = apps.find((entry) => entry.appId === appId);
 
-	return app;
-}
+	console.log("Finished application launch request");
 
-export async function getAppsByIntent(intent: string): Promise<App[]> {
-	const apps = await getApps();
-	const filteredApps = apps.filter((value) => {
-		if (value.intents === undefined) {
-			return false;
-		}
-		for (let i = 0; i < value.intents.length; i++) {
-			if (value.intents[i].name.toLowerCase() === intent.toLowerCase()) {
-				return true;
-			}
-		}
-		return false;
-	});
-	return filteredApps;
+	return ret;
 }
