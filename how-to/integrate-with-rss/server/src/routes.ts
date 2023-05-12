@@ -54,7 +54,13 @@ router.post("/proxy", async (request, response) => {
 				returnData = fetchResponse.statusText;
 			}
 		} catch (err) {
-			returnData = err.message;
+			if (err instanceof Error) {
+				returnData = err.message;
+			} else if (typeof err === "string") {
+				returnData = err;
+			} else {
+				returnData = JSON.stringify(err);
+			}
 		}
 	}
 
