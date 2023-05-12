@@ -3,7 +3,8 @@ import {
 	RSS_APP_CHANNEL_NAME,
 	RSS_WINDOW_NAME,
 	type RssChannelFeedUpdatePayload,
-	type RssFeedCache
+	type RssFeedCache,
+	type RssFeedCacheEntry
 } from "./shapes";
 
 /**
@@ -49,7 +50,7 @@ async function updateFeed(feed: RssFeedCache): Promise<void> {
 			titleElem.textContent = feed.title;
 		}
 
-		const entries = [];
+		const entries: RssFeedCacheEntry[] = [];
 		for (const entry in feed.entries) {
 			entries.push(feed.entries[entry]);
 		}
@@ -75,7 +76,7 @@ async function updateFeed(feed: RssFeedCache): Promise<void> {
 				title.textContent = entry.title;
 
 				const date = document.createElement("p");
-				date.textContent = new Date(entry.lastUpdated as number).toLocaleString();
+				date.textContent = new Date(entry.lastUpdated).toLocaleString();
 
 				const description = document.createElement("p");
 				description.textContent =
