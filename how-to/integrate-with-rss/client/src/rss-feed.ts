@@ -75,7 +75,7 @@ async function updateFeed(feed: RssFeedCache): Promise<void> {
 				title.textContent = entry.title;
 
 				const date = document.createElement("p");
-				date.textContent = new Date(entry.lastUpdated).toLocaleString();
+				date.textContent = new Date(entry.lastUpdated as number).toLocaleString();
 
 				const description = document.createElement("p");
 				description.textContent =
