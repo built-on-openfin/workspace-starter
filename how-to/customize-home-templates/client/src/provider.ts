@@ -9,7 +9,7 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => platformBootstrap());
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
@@ -48,8 +48,8 @@ async function initializeWorkspacePlatform(): Promise<void> {
 /**
  * Bring the platform to life.
  */
-export async function platformBootstrap(): Promise<void> {
-	console.log("Initialising the bootstrapper");
+export async function initializeWorkspaceComponents(): Promise<void> {
+	console.log("Initialising the workspace components");
 
 	// Register with home and show it
 	await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON);

@@ -323,7 +323,7 @@ const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlat
 		 * @param schemeType The scheme it was changed to.
 		 * @returns Nothing.
 		 */
-		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
 			// Override the platform callback to we can detect the theme has changed
 			// and tell the theme management about the change.
 			await setColorScheme(schemeType);

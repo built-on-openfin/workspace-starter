@@ -105,7 +105,7 @@ export function getThemeButton(): ToolbarButton {
  */
 export function getThemeActions(): CustomActionsMap {
 	return {
-		"change-theme": async (payload: CustomActionPayload) => {
+		"change-theme": async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
 				const platform = getCurrentSync();
 

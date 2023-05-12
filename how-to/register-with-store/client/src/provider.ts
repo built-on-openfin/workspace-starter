@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => platformBootstrap(customSettings));
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
@@ -56,8 +56,8 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * Bring the platform to life.
  * @param customSettings The custom settings from the manifest.
  */
-export async function platformBootstrap(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising the bootstrapper");
+export async function initializeWorkspaceComponents(customSettings: CustomSettings): Promise<void> {
+	console.log("Initialising the workspace components");
 
 	// Register with store and show it
 	await register(customSettings.appProvider, customSettings.storefrontProvider);
