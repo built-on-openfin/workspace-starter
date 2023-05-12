@@ -41,41 +41,28 @@
 		"target": ["desktop", "start-menu"]
 	},
 	"customSettings": {
-		"homeProvider": {
-			"id": "integrate-with-rss",
-			"title": "Integrate with RSS",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/favicon.ico"
-		},
-		"integrationProvider": {
-			"modules": [
+		"rss": {
+			"icons": {
+				"rss": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/icons/rss.svg",
+				"rssEntry": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/icons/rss-entry.svg"
+			},
+			"proxyUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/proxy",
+			"feedView": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/views/rss-feed.html",
+			"feeds": [
 				{
-					"id": "rss",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/favicon.ico",
-					"title": "RSS Provider",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/js/integrations/rss.bundle.js",
-					"data": {
-						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/",
-						"proxyUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/proxy",
-						"feedView": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-rss/views/rss-feed.html",
-						"feeds": [
-							{
-								"id": "openfin-tech",
-								"url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC61HthWWPCif1wrYNafuyqQ"
-							},
-							{
-								"id": "openfin-versions",
-								"url": "https://cdn.openfin.co/release/meta/rss"
-							},
-							{
-								"id": "youtube-trending",
-								"url": "https://www.youtube.com/feeds/videos.xml?playlist_id=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-"
-							}
-						],
-						"pollingInterval": 60
-					}
+					"id": "openfin-tech",
+					"url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC61HthWWPCif1wrYNafuyqQ"
+				},
+				{
+					"id": "openfin-versions",
+					"url": "https://cdn.openfin.co/release/meta/rss"
+				},
+				{
+					"id": "youtube-trending",
+					"url": "https://www.youtube.com/feeds/videos.xml?playlist_id=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-"
 				}
-			]
+			],
+			"pollingInterval": 60
 		}
 	}
 }
