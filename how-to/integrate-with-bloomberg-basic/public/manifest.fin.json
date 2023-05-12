@@ -10,18 +10,11 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": false,
-		"defaultWindowOptions": {}
+		"preventQuitOnLastWindowClosed": false
 	},
 	"snapshot": {
 		"windows": [
 			{
-				"icon": "http://localhost:8080/favicon-32x32.png",
-				"defaultHeight": 500,
-				"defaultWidth": 900,
-				"center": true,
-				"saveWindowState": true,
-				"alwaysOnTop": false,
 				"layout": {
 					"content": [
 						{
@@ -29,7 +22,6 @@
 							"componentName": "view",
 							"componentState": {
 								"name": "bbgTest",
-								"processAffinity": "ps_1",
 								"url": "http://localhost:8080/platform/bbgtest.html",
 								"interop": {
 									"currentContextGroup": "green"

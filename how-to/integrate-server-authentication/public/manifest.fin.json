@@ -36,11 +36,5 @@
 		"product": "Workspace Starter - Integrate Server Authentication - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"auth": {
-			"loginUrl": "http://localhost:8080/app/login",
-			"appUrl": "http://localhost:8080/app"
-		}
 	}
 }

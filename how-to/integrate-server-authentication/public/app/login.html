@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -48,7 +48,9 @@
 			textError.textContent = '';
 			const btnLogin = document.querySelector('#btnLogin');
 			btnLogin.addEventListener('click', async () => {
-				// On success this will set a cookie and redirect to app
+				// On success this will set a cookie and redirect to the page
+				// in RETURN_URL which is substituted by the web server
+				// based on the original request
 				fetch('http://localhost:8080/app/login', {
 					method: 'post',
 					redirect: 'follow',
@@ -58,7 +60,8 @@
 					},
 					body: JSON.stringify({
 						email: textEmailAddress.value,
-						password: textPassword.value
+						password: textPassword.value,
+						returnUrl: '{RETURN_URL}'
 					})
 				})
 					.then((response) => {

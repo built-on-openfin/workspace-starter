@@ -110,6 +110,7 @@ export const DEVELOPER_CONTENT: App = {
 /**
  * Launch the passed app using its manifest type to determine how to launch it.
  * @param app The app to launch.
+ * @returns The value returned by the launch.
  */
 export async function launchApp(
 	app: App
