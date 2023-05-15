@@ -8,7 +8,6 @@ module.exports = {
 		'plugin:import/errors',
 		'plugin:import/warnings',
 		'plugin:import/typescript',
-		'plugin:jsdoc/recommended',
 		'plugin:promise/recommended',
 		'plugin:unicorn/all'
 	],
@@ -34,13 +33,7 @@ module.exports = {
 		sourceType: 'module',
 		tsconfigRootDir: __dirname
 	},
-	plugins: ['promise', 'simple-import-sort', 'jsdoc', 'unicorn', 'unused-imports'],
-	settings: {
-		jsdoc: {
-			ignoreInternal: true,
-			mode: 'typescript'
-		}
-	},
+	plugins: ['promise', 'simple-import-sort', 'unicorn', 'unused-imports'],
 	root: true,
 	rules: {
 		'accessor-pairs': ['error'],
@@ -76,7 +69,7 @@ module.exports = {
 		'func-call-spacing': ['off'],
 		'func-name-matching': ['error'],
 		'func-names': ['error'],
-		'func-style': ['error', 'declaration'],
+		'func-style': ['off'],
 		'function-call-argument-newline': ['off'],
 		'function-paren-newline': ['off'],
 		'generator-star-spacing': ['error'],
@@ -409,97 +402,7 @@ module.exports = {
 		'wrap-iife': ['error'],
 		'wrap-regex': ['off'],
 		'yield-star-spacing': ['error'],
-		yoda: ['error'],
-		'jsdoc/check-access': 'error',
-		'jsdoc/check-alignment': 'error',
-		'jsdoc/check-examples': 'off',
-		'jsdoc/check-indentation': 'error',
-		'jsdoc/check-line-alignment': 'error',
-		'jsdoc/check-param-names': 'error',
-		'jsdoc/check-property-names': 'error',
-		'jsdoc/check-syntax': 'error',
-		'jsdoc/check-tag-names': 'error',
-		'jsdoc/check-types': 'error',
-		'jsdoc/check-values': 'error',
-		'jsdoc/empty-tags': 'error',
-		'jsdoc/implements-on-classes': 'error',
-		'jsdoc/match-description': 'off',
-		'jsdoc/newline-after-description': 'off',
-		'jsdoc/no-bad-blocks': 'error',
-		'jsdoc/no-defaults': 'error',
-		'jsdoc/no-types': 'error',
-		'jsdoc/no-undefined-types': 'error',
-		'jsdoc/require-asterisk-prefix': 'error',
-		'jsdoc/require-description': 'error',
-		'jsdoc/require-description-complete-sentence': 'off',
-		'jsdoc/require-example': 'off',
-		'jsdoc/require-file-overview': 'off',
-		'jsdoc/require-hyphen-before-param-description': 'off',
-		'jsdoc/require-jsdoc': [
-			'error',
-			{
-				require: {
-					ArrowFunctionExpression: false,
-					ClassDeclaration: true,
-					ClassExpression: true,
-					FunctionDeclaration: true,
-					FunctionExpression: true,
-					MethodDefinition: true
-				},
-				contexts: [
-					'FunctionDeclaration',
-					'FunctionExpression',
-					'MethodDefinition',
-					'TSDeclareFunction',
-					'TSEnumDeclaration',
-					'TSInterfaceDeclaration',
-					'TSMethodDeclaration',
-					'TSMethodSignature',
-					'TSPropertySignature:not(TSTypeLiteral > TSPropertySignature)',
-					'TSTypeAliasDeclaration'
-				]
-			}
-		],
-		'jsdoc/require-param': [
-			'error',
-			{
-				contexts: [
-					'FunctionDeclaration',
-					'FunctionExpression',
-					'MethodDefinition',
-					'TSDeclareFunction',
-					'TSMethodDeclaration',
-					'TSMethodSignature'
-				]
-			}
-		],
-		'jsdoc/require-param-description': 'error',
-		'jsdoc/require-param-name': 'error',
-		'jsdoc/require-param-type': 'off',
-		'jsdoc/require-property': 'error',
-		'jsdoc/require-property-description': 'error',
-		'jsdoc/require-property-name': 'error',
-		'jsdoc/require-property-type': 'error',
-		'jsdoc/require-returns': [
-			'error',
-			{
-				contexts: [
-					'FunctionDeclaration',
-					'FunctionExpression',
-					'MethodDefinition',
-					'TSDeclareFunction',
-					'TSMethodDeclaration',
-					'TSMethodSignature'
-				]
-			}
-		],
-		'jsdoc/require-returns-check': 'error',
-		'jsdoc/require-returns-description': 'error',
-		'jsdoc/require-returns-type': 'off',
-		'jsdoc/require-throws': 'error',
-		'jsdoc/require-yields': 'error',
-		'jsdoc/require-yields-check': 'error',
-		'jsdoc/valid-types': 2
+		yoda: ['error']
 	},
 	overrides: [
 		{
@@ -537,7 +440,7 @@ module.exports = {
 				],
 				'@typescript-eslint/default-param-last': ['error'],
 				'@typescript-eslint/dot-notation': ['error'],
-				'@typescript-eslint/explicit-function-return-type': ['error'],
+				'@typescript-eslint/explicit-function-return-type': ['off'],
 				'@typescript-eslint/explicit-member-accessibility': [
 					'error',
 					{
