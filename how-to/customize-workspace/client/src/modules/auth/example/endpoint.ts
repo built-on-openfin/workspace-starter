@@ -13,7 +13,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 	private _roleMapping: { [key: string]: ExampleUserRoleMapping };
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -66,9 +66,10 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 
 		if (response.ok) {
 			const json = await response.json();
-			if (Array.isArray(json)) {
+			if (Array.isArray(json) || Array.isArray(json?.applications)) {
 				// returned apps
-				return this.applyCurrentUserToApps(json) as unknown;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+				return this.applyCurrentUserToApps(json);
 			}
 			// settings
 			return this.applyCurrentUserToSettings(json) as unknown;
@@ -98,7 +99,9 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return { url, options };
 	}
 
-	private applyCurrentUserToApps(apps: PlatformApp[] = []): PlatformApp[] {
+	private applyCurrentUserToApps(
+		response: { tags: string[] }[] | { applications: { categories: string[] }[] }
+	): unknown {
 		const currentUser = getCurrentUser();
 		if (
 			currentUser === null ||
@@ -106,28 +109,49 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			this._roleMapping[currentUser.role] === undefined ||
 			this._roleMapping[currentUser.role].excludeAppsWithTag === undefined
 		) {
-			return apps;
+			return response as unknown;
 		}
 		const excludeTag = this._roleMapping[currentUser.role].excludeAppsWithTag;
-		const filteredApps: PlatformApp[] = [];
-		for (let i = 0; i < apps.length; i++) {
-			if (Array.isArray(apps[i].tags)) {
-				let include = true;
-				for (let t = 0; t < apps[i].tags.length; t++) {
-					const tag: string = apps[i].tags[t];
-					if (excludeTag.includes(tag)) {
-						include = false;
-						break;
+
+		const applications = [];
+		if (Array.isArray(response)) {
+			for (const app of response) {
+				if (Array.isArray(app.tags)) {
+					if (this.includeInResponse(app.tags, excludeTag)) {
+						applications.push(app as PlatformApp);
 					}
+				} else {
+					applications.push(app as PlatformApp);
 				}
-				if (include) {
-					filteredApps.push(apps[i]);
+			}
+			return applications as unknown;
+		}
+		for (const app of response.applications) {
+			if (Array.isArray(app.categories)) {
+				if (this.includeInResponse(app.categories, excludeTag)) {
+					applications.push(app as unknown);
 				}
 			} else {
-				filteredApps.push(apps[i]);
+				applications.push(app as unknown);
 			}
 		}
-		return filteredApps;
+		response.applications = applications;
+		return response;
+	}
+
+	private includeInResponse(tags: string[], excludeTags: string[]): boolean {
+		let include = true;
+		if (!Array.isArray(excludeTags)) {
+			return true;
+		}
+		for (const tag of tags) {
+			const currentTag: string = tag;
+			if (excludeTags.includes(currentTag)) {
+				include = false;
+				break;
+			}
+		}
+		return include;
 	}
 
 	private applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
@@ -156,18 +180,46 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 				Array.isArray(settings?.appProvider?.endpointIds)
 			) {
 				const appEndpoints = settings?.appProvider?.endpointIds;
-				for (let i = 0; i < appEndpoints.length; i++) {
-					if (typeof appEndpoints[i] === "string") {
-						const endpointToUpdate = settings.endpointProvider.endpoints.find(
-							(endpointEntry) => endpointEntry.id === appEndpoints[i] && endpointEntry.type === "fetch"
-						);
-						if (endpointToUpdate !== undefined) {
-							endpointToUpdate.type = "module";
-							// this if condition check is here to make typescript happy with the endpoint so that typeId can be set
-							if (endpointToUpdate.type === "module") {
-								endpointToUpdate.typeId = this._definition.id;
+				let count = 0;
+				const updateEndpoints = [];
+				for (const endpoint of appEndpoints) {
+					if (typeof endpoint === "string") {
+						if (endpoint.startsWith("http")) {
+							updateEndpoints.push({ position: count, url: endpoint });
+						} else {
+							const endpointToUpdate = settings.endpointProvider.endpoints.find(
+								(endpointEntry) => endpointEntry.id === endpoint && endpointEntry.type === "fetch"
+							);
+							if (endpointToUpdate !== undefined) {
+								endpointToUpdate.type = "module";
+								// this if condition check is here to make typescript happy with the endpoint so that typeId can be set
+								if (endpointToUpdate.type === "module") {
+									endpointToUpdate.typeId = this._definition.id;
+								}
 							}
 						}
+					}
+					count++;
+				}
+
+				if (updateEndpoints.length > 0) {
+					if (settings.endpointProvider === undefined) {
+						settings.endpointProvider = {
+							endpoints: []
+						};
+					}
+					for (const newEndpointEntry of updateEndpoints) {
+						const endpointId = `auth-example-endpoint-${newEndpointEntry.position}`;
+						settings.appProvider.endpointIds[newEndpointEntry.position] = endpointId;
+						settings.endpointProvider.endpoints.push({
+							id: endpointId,
+							type: "module",
+							typeId: this._definition.id,
+							options: {
+								method: "GET",
+								url: newEndpointEntry.url
+							}
+						});
 					}
 				}
 			}
@@ -188,41 +240,48 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		}
 
 		const excludeMenuActionIds = this._roleMapping[currentUser.role].excludeMenuAction;
+		const excludeMenuModuleIds = this._roleMapping[currentUser.role].excludeMenuModule;
 
 		if (Array.isArray(excludeMenuActionIds)) {
 			if (
 				Array.isArray(settings?.browserProvider?.globalMenu) &&
 				settings.browserProvider.globalMenu.length > 0
 			) {
-				for (let i = 0; i < settings.browserProvider.globalMenu.length; i++) {
-					const globalMenuActionId: string = settings.browserProvider.globalMenu[i]?.data?.action?.id;
+				for (const globalMenuEntry of settings.browserProvider.globalMenu) {
+					const globalMenuActionId: string = globalMenuEntry?.data?.action?.id;
 					if (excludeMenuActionIds.includes(globalMenuActionId)) {
-						settings.browserProvider.globalMenu[i].include = false;
+						globalMenuEntry.include = false;
 					}
 				}
 			}
-
 			if (
 				Array.isArray(settings?.browserProvider?.pageMenu) &&
 				settings.browserProvider.pageMenu.length > 0
 			) {
-				for (let i = 0; i < settings.browserProvider.pageMenu.length; i++) {
-					const pageMenuActionId: string = settings.browserProvider.pageMenu[i]?.data?.action?.id;
+				for (const pageMenuEntry of settings.browserProvider.pageMenu) {
+					const pageMenuActionId: string = pageMenuEntry?.data?.action?.id;
 					if (excludeMenuActionIds.includes(pageMenuActionId)) {
-						settings.browserProvider.pageMenu[i].include = false;
+						pageMenuEntry.include = false;
 					}
 				}
 			}
-
 			if (
 				Array.isArray(settings?.browserProvider?.viewMenu) &&
 				settings.browserProvider.viewMenu.length > 0
 			) {
-				for (let i = 0; i < settings.browserProvider.viewMenu.length; i++) {
-					const viewMenuActionId: string = settings.browserProvider.viewMenu[i]?.data?.action?.id;
+				for (const viewMenuEntry of settings.browserProvider.viewMenu) {
+					const viewMenuActionId: string = viewMenuEntry?.data?.action?.id;
 					if (excludeMenuActionIds.includes(viewMenuActionId)) {
-						settings.browserProvider.viewMenu[i].include = false;
+						viewMenuEntry.include = false;
 					}
+				}
+			}
+		}
+		if (Array.isArray(excludeMenuModuleIds) && Array.isArray(settings?.menusProvider?.modules)) {
+			for (const menuModule of settings.menusProvider.modules) {
+				const menuModuleId: string = menuModule.id;
+				if (excludeMenuModuleIds.includes(menuModuleId)) {
+					menuModule.enabled = false;
 				}
 			}
 		}

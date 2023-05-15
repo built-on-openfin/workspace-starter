@@ -26,4 +26,5 @@ export interface ExampleUserRoleMapping {
 	excludeAppsWithTag: string[];
 	preferredScheme: string;
 	excludeMenuAction: string[];
+	excludeMenuModule: string[];
 }

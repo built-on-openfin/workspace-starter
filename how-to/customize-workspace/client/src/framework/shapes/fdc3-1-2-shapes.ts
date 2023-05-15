@@ -60,6 +60,8 @@ export interface AppDefinition {
 	customConfig?: CustomConfig;
 	/** The list of intents implemented by the Application */
 	intents?: AppIntents[];
+	/** categories is not part of the FDC3 1.2 spec but we support tags in our own platform app structure and an equivalent categories was added to FDC3 2.0 so we map it if we find it in an FDC3 1.2 directory */
+	categories?: string[];
 }
 
 /** The successful response expected from a FDC3 1.2 request when all applications are requested. */
