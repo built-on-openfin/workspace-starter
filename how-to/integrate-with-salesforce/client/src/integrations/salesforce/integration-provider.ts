@@ -663,7 +663,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @returns The search result entry.
 	 * @internal
 	 */
-	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): HomeSearchResultSimpleText {
+	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): CLISearchResultSimpleText {
 		return {
 			actions: [{ name: "Reconnect", hotkey: "enter" }],
 			key: SalesforceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY,
@@ -674,7 +674,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				query,
 				filters
 			}
-		} as HomeSearchResultSimpleText;
+		} as CLISearchResultSimpleText;
 	}
 
 	private getBrowseSearchResult(): CLISearchResultSimpleText {

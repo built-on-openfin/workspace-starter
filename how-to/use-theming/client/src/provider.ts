@@ -12,7 +12,6 @@ import {
 	init,
 	type ColorSchemeOptionType,
 	type CustomThemeOptionsWithScheme,
-	type WorkspacePlatformOverrideCallback,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import { type CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
