@@ -1,11 +1,11 @@
-import type { Context } from "@openfin/core/src/OpenFin";
-import { type App, CLITemplate, Home } from "@openfin/workspace";
+import type OpenFin from "@openfin/core";
+import { CLITemplate, Home, type App } from "@openfin/workspace";
 import {
 	ColorSchemeOptionType,
 	getCurrentSync,
 	init,
 	type CustomThemeOptionsWithScheme,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
 
@@ -14,16 +14,16 @@ const PLATFORM_TITLE = "Use Theming Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
 
-	// Initialize dummy workspace components.
-	await initializeWorkspaceComponents();
-
 	// Now that the platform has initialized get the initial state
 	// of the theme and update the style preload channel with it
-	const platform = getCurrentSync();
 	const schemeType = await platform.Theme.getSelectedScheme();
 	await updateViewTheme(schemeType);
 });
@@ -107,7 +107,8 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		],
-		overrideCallback
+		// Override some platform methods so we can be notified of the color scheme changing
+		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
 	});
 }
 
@@ -141,14 +142,22 @@ async function initializeWorkspaceComponents(): Promise<void> {
 	});
 
 	await Home.show();
+
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async (event) => {
+		await Home.deregister(PLATFORM_ID);
+		await fin.Platform.getCurrentSync().quit();
+	});
 }
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The class to override.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+function createWorkspacePlatformOverride(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Override the platform methods so that we can intercept the
 	 * color scheme changing.
@@ -167,7 +176,7 @@ const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlat
 		}
 	}
 	return new Override();
-};
+}
 
 /**
  * Sends a channel message to all the views which have the theming
@@ -196,7 +205,7 @@ async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void>
 		type: "platform.theme",
 		schemeType: scheme,
 		palette: currentPalette
-	} as Context);
+	} as OpenFin.Context);
 }
 
 /**

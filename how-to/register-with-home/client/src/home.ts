@@ -3,13 +3,13 @@ import {
 	CLITemplate,
 	Home,
 	type App,
-	type CLIDispatchedSearchResult,
 	type CLIFilter,
-	type CLIProvider,
-	type CLISearchListenerRequest,
-	type CLISearchListenerResponse,
-	type CLISearchResponse,
+	type HomeProvider,
+	type HomeDispatchedSearchResult,
 	type HomeRegistration,
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync, type Page } from "@openfin/workspace-platform";
@@ -49,13 +49,18 @@ export async function register(
 
 	const queryMinLength = homeSettings.queryMinLength ?? 3;
 	const queryAgainst = homeSettings.queryAgainst;
-	let lastResponse: CLISearchListenerResponse;
+	let lastResponse: HomeSearchListenerResponse;
 
-	// The callback fired when the user types in the home query
-	const onUserInput = async (
-		request: CLISearchListenerRequest,
-		response: CLISearchListenerResponse
-	): Promise<CLISearchResponse> => {
+	/**
+	 * The callback fired when the user types in the home query.
+	 * @param request The request object from the home component.
+	 * @param response The response to use for async updates.
+	 * @returns The results to display in home.
+	 */
+	async function onUserInput(
+		request: HomeSearchListenerRequest,
+		response: HomeSearchListenerResponse
+	): Promise<HomeSearchResponse> {
 		const queryLower = request.query.toLowerCase();
 
 		// If the query starts with a / treat this as a help request
@@ -64,7 +69,7 @@ export async function register(
 			return { results: [] };
 		}
 
-		const filters: CLIFilter[] = request?.context?.selectedFilters;
+		const filters: CLIFilter[] | undefined = request?.context?.selectedFilters;
 		if (lastResponse !== undefined) {
 			lastResponse.close();
 		}
@@ -72,10 +77,13 @@ export async function register(
 		lastResponse.open();
 
 		return getResults(appSettings, queryLower, queryMinLength, queryAgainst, filters);
-	};
+	}
 
-	// The callback fired when a selection is made in home
-	const onSelection = async (result: CLIDispatchedSearchResult): Promise<void> => {
+	/**
+	 * The callback fired when a selection is made in home.
+	 * @param result The item that was selected in home.
+	 */
+	async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 		if (result.data !== undefined) {
 			// If the selected item could be a page or an app
 			const data: { pageId?: string } & App = result.data;
@@ -104,9 +112,9 @@ export async function register(
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
-	};
+	}
 
-	const cliProvider: CLIProvider = {
+	const homeProvider: HomeProvider = {
 		title: homeSettings.title,
 		id: homeSettings.id,
 		icon: homeSettings.icon,
@@ -114,7 +122,7 @@ export async function register(
 		onResultDispatch: onSelection
 	};
 
-	homeRegistration = await Home.register(cliProvider);
+	homeRegistration = await Home.register(homeProvider);
 	console.log("Home configured.");
 	console.log(homeRegistration);
 }
@@ -141,12 +149,12 @@ export async function deregister(homeSettings: HomeProviderSettings | undefined)
  * @returns The search response containing results and filters.
  */
 async function getResults(
-	appSettings: AppProviderSettings,
+	appSettings: AppProviderSettings | undefined,
 	queryLower: string,
 	queryMinLength = 3,
 	queryAgainst: string[] = ["title"],
 	filters?: CLIFilter[]
-): Promise<CLISearchResponse> {
+): Promise<HomeSearchResponse> {
 	const apps = await getApps(appSettings);
 
 	const platform = getCurrentSync();
@@ -226,7 +234,7 @@ async function getResults(
 			return textMatchFound && filterMatchFound;
 		});
 
-		const response: CLISearchResponse = {
+		const response: HomeSearchResponse = {
 			results: finalResults,
 			context: {
 				filters: getSearchFilters(tags)

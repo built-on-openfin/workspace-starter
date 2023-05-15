@@ -18,7 +18,7 @@ export function createInteropOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
 	/**
-	 *
+	 * Override the InteropBroken class.
 	 */
 	class InteropOverride extends InteropBroker {
 		/**

@@ -55,7 +55,7 @@ export async function initializeWorkspaceComponents(): Promise<void> {
 	await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON);
 	await Home.show();
 
-	// When the platform requests to be close we deregister from home and quit
+	// When the platform requests to be closed we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async () => {
 		await Home.deregister(PLATFORM_ID);

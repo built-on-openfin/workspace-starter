@@ -1,13 +1,14 @@
 import {
-	type CLIDispatchedSearchResult,
-	type CLIProvider,
-	type CLISearchListenerRequest,
-	type CLISearchResponse,
 	CLITemplate,
 	Home,
+	type App,
+	type HomeProvider,
+	type HomeDispatchedSearchResult,
 	type HomeRegistration,
-	type HomeSearchResult,
-	type App
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import { getApps, launchApp } from "./apps";
 
@@ -21,8 +22,16 @@ import { getApps, launchApp } from "./apps";
 export async function register(id: string, title: string, icon: string): Promise<HomeRegistration> {
 	console.log("Initialising home.");
 
-	// The callback fired when the user types in the home query
-	const onUserInput = async (request: CLISearchListenerRequest): Promise<CLISearchResponse> => {
+	/**
+	 * The callback fired when the user types in the home query.
+	 * @param request The request object from the home component.
+	 * @param response The response to use for async updates.
+	 * @returns The results to display in home.
+	 */
+	async function onUserInput(
+		request: HomeSearchListenerRequest,
+		response: HomeSearchListenerResponse
+	): Promise<HomeSearchResponse> {
 		const queryLower = request.query.toLowerCase();
 
 		// If the query starts with a / treat this as a help request
@@ -32,18 +41,21 @@ export async function register(id: string, title: string, icon: string): Promise
 		}
 
 		return getResults(queryLower);
-	};
+	}
 
-	// The callback fired when a selection is made in home
-	const onSelection = async (result: CLIDispatchedSearchResult): Promise<void> => {
+	/**
+	 * The callback fired when a selection is made in home.
+	 * @param result The item that was selected in home.
+	 */
+	async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 		if (result.data !== undefined) {
 			await launchApp(result.data as App);
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
-	};
+	}
 
-	const cliProvider: CLIProvider = {
+	const homeProvider: HomeProvider = {
 		id,
 		title,
 		icon,
@@ -51,7 +63,7 @@ export async function register(id: string, title: string, icon: string): Promise
 		onResultDispatch: onSelection
 	};
 
-	const homeRegistration = await Home.register(cliProvider);
+	const homeRegistration = await Home.register(homeProvider);
 	console.log("Home configured.");
 	console.log(homeRegistration);
 
@@ -63,8 +75,8 @@ export async function register(id: string, title: string, icon: string): Promise
  * @param queryLower Lower case version of query.
  * @returns The search response containing results.
  */
-async function getResults(queryLower: string): Promise<CLISearchResponse> {
-	const apps = await getApps();
+async function getResults(queryLower: string): Promise<HomeSearchResponse> {
+	const apps = getApps();
 
 	let filteredApps: App[];
 
