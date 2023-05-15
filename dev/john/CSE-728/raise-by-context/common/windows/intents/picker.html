@@ -1,0 +1,48 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Intent Picker</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script type="module" src="./picker.js"></script>
+		<script src="../../style/style-changed-preload.js"></script>
+		<link rel="stylesheet" href="../../style/app.css" />
+	</head>
+
+	<body class="border">
+		<main id="intent-select-container" class="fill col gap20">
+			<header class="row spread middle">
+				<div class="col">
+					<h1 id="title">Intent Resolver</h1>
+					<h1 class="tag">
+						Target Context Type:
+						<span id="target-context"></span>
+					</h1>
+				</div>
+			</header>
+			<div id="intent-container" class="fill scroll-vertical"></div>
+			<div class="row gap10 spread">
+				<button id="cancel-intent-selection" class="secondary">Cancel</button>
+				<button id="move-next">Next &gt;</button>
+			</div>
+		</main>
+		<main id="app-select-container" class="col fill gap20">
+			<header class="row spread middle drag">
+				<div class="col">
+					<h1>Application Picker</h1>
+					<h1 class="tag">
+						Target Intent:
+						<span id="target-intent"></span>
+					</h1>
+				</div>
+			</header>
+			<div id="app-container" class="fill col scroll-vertical gap5"></div>
+			<div class="row gap10 spread">
+				<button id="back" class="secondary">&lt; Back</button>
+				<button id="cancel" class="secondary">Cancel</button>
+				<button id="launch">Launch</button>
+			</div>
+		</main>
+	</body>
+</html>
