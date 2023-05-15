@@ -18,6 +18,10 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 let excelIntegration: ExcelIntegration | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	await initializeWorkspacePlatform();
 
@@ -29,9 +33,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 		excelIntegration = new ExcelIntegration();
 		await excelIntegration.initialize(customSettings.excel);
 	}
-
-	// Initialize dummy workspace components so that the buttons show in the dock.
-	await initializeWorkspaceComponents();
 });
 
 /**

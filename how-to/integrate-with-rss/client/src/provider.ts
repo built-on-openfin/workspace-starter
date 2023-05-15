@@ -16,6 +16,10 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 let rssIntegration: RssIntegration | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
@@ -28,9 +32,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 		rssIntegration = new RssIntegration();
 		await rssIntegration.initialize(customSettings.rss);
 	}
-
-	// Initialize the workspace components
-	await initializeWorkspaceComponents();
 });
 
 /**

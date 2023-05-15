@@ -9,12 +9,12 @@ import {
 import {
 	ButtonStyle,
 	CLITemplate,
-	type CLIDispatchedSearchResult,
 	type CLIFilter,
-	type CLISearchListenerResponse,
 	type CLISearchResultLoading,
 	type CLISearchResultSimpleText,
 	type CustomTemplate,
+	type HomeDispatchedSearchResult,
+	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
 	type TemplateFragment
@@ -114,7 +114,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	/**
 	 * The last search result response.
 	 */
-	private _lastResponse?: CLISearchListenerResponse;
+	private _lastResponse?: HomeSearchListenerResponse;
 
 	/**
 	 * Are we in a connecting state.
@@ -250,8 +250,8 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @returns True if the item was handled.
 	 */
 	public async itemSelection(
-		result: CLIDispatchedSearchResult,
-		lastResponse: CLISearchListenerResponse
+		result: HomeDispatchedSearchResult,
+		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		if (result.action.trigger === "focus-change") {
 			const data = result.data as SalesforceResultData;
@@ -353,7 +353,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: CLISearchListenerResponse,
+		lastResponse: HomeSearchListenerResponse,
 		options?: {
 			queryMinLength: number;
 			queryAgainst: string[];
@@ -663,7 +663,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 	 * @returns The search result entry.
 	 * @internal
 	 */
-	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): CLISearchResultSimpleText {
+	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): HomeSearchResultSimpleText {
 		return {
 			actions: [{ name: "Reconnect", hotkey: "enter" }],
 			key: SalesforceIntegrationProvider._RECONNECT_SEARCH_RESULT_KEY,
@@ -674,7 +674,7 @@ export class SalesforceIntegrationProvider implements IntegrationModule<Salesfor
 				query,
 				filters
 			}
-		} as CLISearchResultSimpleText;
+		} as HomeSearchResultSimpleText;
 	}
 
 	private getBrowseSearchResult(): CLISearchResultSimpleText {

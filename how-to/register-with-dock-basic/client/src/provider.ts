@@ -24,12 +24,13 @@ const PLATFORM_TITLE = "Register With Dock Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
-
-	// Initialize dummy workspace components so that the buttons show in the dock.
-	await initializeWorkspaceComponents();
 
 	// Get the DOM elements from the provider.html page and initialize them
 	await initializeDOM();
@@ -88,6 +89,11 @@ async function initializeWorkspaceComponents(): Promise<void> {
 		getNavigation: async () => [],
 		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
 		launchApp: async () => {}
+	});
+
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		await fin.Platform.getCurrentSync().quit();
 	});
 }
 
