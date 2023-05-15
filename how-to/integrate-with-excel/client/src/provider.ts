@@ -3,6 +3,7 @@ import {
 	CLITemplate,
 	Home,
 	type App,
+	type HomeDispatchedSearchResult,
 	type HomeSearchListenerRequest,
 	type HomeSearchResult
 } from "@openfin/workspace";
@@ -110,7 +111,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 				results
 			};
 		},
-		onResultDispatch: async (result) => {
+		onResultDispatch: async (result: HomeDispatchedSearchResult) => {
 			// If the result has the excel integration set then hand the result
 			// over to the integration to handle
 			if (result?.data?.providerId === "excel") {
