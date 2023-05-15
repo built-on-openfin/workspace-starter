@@ -9,6 +9,13 @@
 					"description": "The unique application identifier located within a specific application directory instance.",
 					"type": "string"
 				},
+				"categories": {
+					"description": "categories is not part of the FDC3 1.2 spec but we support tags in our own platform app structure and an equivalent categories was added to FDC3 2.0 so we map it if we find it in an FDC3 1.2 directory",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
 				"contactEmail": {
 					"description": "E-mail to receive queries about the application",
 					"type": "string"
