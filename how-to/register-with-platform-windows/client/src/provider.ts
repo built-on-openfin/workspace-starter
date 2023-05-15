@@ -1,6 +1,5 @@
-import { CLITemplate, Home } from "@openfin/workspace";
+import { CLITemplate, Home, type App } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
-import { register } from "./home";
 import { getApps, launchApp } from "./apps";
 
 const PLATFORM_ID = "register-with-platform-windows";
@@ -74,7 +73,7 @@ export async function initializeWorkspaceComponents(): Promise<void> {
 			// We only have apps, so just launch them
 			await launchApp(result.data as App);
 		}
-	);
+	});
 
 	await Home.show();
 

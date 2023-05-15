@@ -34,7 +34,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(themingPayload?.options));
+	await platform.once("platform-api-ready", async () =>
+		initializeWorkspaceComponents(themingPayload?.options)
+	);
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
@@ -159,7 +161,7 @@ async function initializeWorkspaceComponents(options?: ThemeDisplayOptions): Pro
 			getLandingPage: async () => ({} as StorefrontLandingPage),
 			getNavigation: async () => [],
 			getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
-			launchApp: async () => { }
+			launchApp: async () => {}
 		});
 
 		await Storefront.show();
@@ -290,49 +292,49 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
  * @returns The overridden class.
  */
 function createWorkspacePlatformOverride(
-	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>): WorkspacePlatformProvider {
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
+	/**
+	 * Override the platform methods so that we can intercept the
+	 * color scheme changing.
+	 */
+	class Override extends WorkspacePlatformProvider {
 		/**
-		 * Override the platform methods so that we can intercept the
-		 * color scheme changing.
+		 * Handles requests to create a window in the current platform.
+		 * @param options Window options for the window to be created.
+		 * @param identity The identity of the caller will be here.
+		 * @returns The created window.
 		 */
-		class Override extends WorkspacePlatformProvider {
-			/**
-			 * Handles requests to create a window in the current platform.
-			 * @param options Window options for the window to be created.
-			 * @param identity The identity of the caller will be here.
-			 * @returns The created window.
-			 */
-			public async createWindow(
-				options: OpenFin.PlatformWindowCreationOptions,
-				identity?: OpenFin.Identity
-			): Promise<OpenFin.Window> {
-				const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
-				if (!overrideDefaultButtons) {
-					// The window options don't override the toolbar buttons
-					// so we assume we are using the workspace defaults
-					// Since the defaults were created using the theme at startup
-					// we need to replace them with the current set of default
-					// buttons which are theme aware
-					options.workspacePlatform = options.workspacePlatform ?? {};
-					options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-					options.workspacePlatform.toolbarOptions.buttons = [getThemeButton()];
-				}
-
-				return super.createWindow(options, identity);
+		public async createWindow(
+			options: OpenFin.PlatformWindowCreationOptions,
+			identity?: OpenFin.Identity
+		): Promise<OpenFin.Window> {
+			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
+			if (!overrideDefaultButtons) {
+				// The window options don't override the toolbar buttons
+				// so we assume we are using the workspace defaults
+				// Since the defaults were created using the theme at startup
+				// we need to replace them with the current set of default
+				// buttons which are theme aware
+				options.workspacePlatform = options.workspacePlatform ?? {};
+				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
+				options.workspacePlatform.toolbarOptions.buttons = [getThemeButton()];
 			}
 
-			/**
-			 * The color scheme was changed.
-			 * @param schemeType The scheme it was changed to.
-			 * @returns Nothing.
-			 */
-			public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
-				// Override the platform callback to we can detect the theme has changed
-				// and tell the theme management about the change.
-				await setColorScheme(schemeType);
-				return super.setSelectedScheme(schemeType);
-			}
+			return super.createWindow(options, identity);
 		}
-		return new Override();
-	};
+
+		/**
+		 * The color scheme was changed.
+		 * @param schemeType The scheme it was changed to.
+		 * @returns Nothing.
+		 */
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
+			// Override the platform callback to we can detect the theme has changed
+			// and tell the theme management about the change.
+			await setColorScheme(schemeType);
+			return super.setSelectedScheme(schemeType);
+		}
+	}
+	return new Override();
 }
