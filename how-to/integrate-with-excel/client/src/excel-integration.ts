@@ -3,7 +3,7 @@ import type { InteropClient } from "@openfin/core/src/api/interop";
 import { enableLogging, getExcelApplication, type Cell, type ExcelApplication } from "@openfin/excel";
 import {
 	CLITemplate,
-	type CLIDispatchedSearchResult,
+	type HomeDispatchedSearchResult,
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
@@ -98,7 +98,7 @@ export class ExcelIntegration {
 	 * @param result The dispatched result.
 	 * @returns True if the item was handled.
 	 */
-	public async itemSelection(result: CLIDispatchedSearchResult): Promise<boolean> {
+	public async itemSelection(result: HomeDispatchedSearchResult): Promise<boolean> {
 		if (
 			result.action.name === ExcelIntegration._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
 			result.action.trigger === "user-action" &&

@@ -6,10 +6,16 @@ const PLATFORM_ID = "register-with-home-basic";
 const PLATFORM_TITLE = "Register With Home Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
+let homeRegistration: HomeRegistration | undefined;
+
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(PLATFORM_ICON);
+	await initializeWorkspacePlatform();
 
 	// Get the DOM elements from the provider.html page and initialize them
 	await initializeDOM();
@@ -17,17 +23,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Initialize the workspace platform.
- * @param icon The icon to use in windows.
  */
-async function initializeWorkspacePlatform(icon: string): Promise<void> {
+async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -46,6 +51,23 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 }
 
 /**
+ * Bring the platform to life.
+ */
+export async function initializeWorkspaceComponents(): Promise<void> {
+	console.log("Initialising the bootstrapper");
+
+	// When the platform requests to be close we deregister from home and quit
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		if (homeRegistration) {
+			await Home.deregister(PLATFORM_ID);
+		}
+
+		await fin.Platform.getCurrentSync().quit();
+	});
+}
+
+/**
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
@@ -57,8 +79,6 @@ async function initializeDOM(): Promise<void> {
 	const goButton = document.querySelector<HTMLButtonElement>("#go");
 
 	if (registerButton && deregisterButton && showButton && hideButton && queryInput && goButton) {
-		let homeRegistration: HomeRegistration | undefined;
-
 		// Disable all the buttons until the platform is registered
 		showButton.disabled = true;
 		hideButton.disabled = true;

@@ -62,7 +62,7 @@ When you register against a workspace component (e.g. Home) you are returned an 
 ```js
 import { Home } from '@openfin/workspace';
 
-const homeRegistration = await Home.register(cliProvider);
+const homeRegistration = await Home.register(homeProvider);
 const runningWorkspaceVersion: string = homeRegistration.workspaceVersion;
 const workspaceClientAPIVersion: string = homeRegistration.clientAPIVersion;
 ```

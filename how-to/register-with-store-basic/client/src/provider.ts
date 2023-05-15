@@ -1,4 +1,4 @@
-import { Storefront } from "@openfin/workspace";
+import { type StoreRegistration, Storefront } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
 import { register, storeGetCustomActions } from "./store";
 
@@ -6,10 +6,16 @@ const PLATFORM_ID = "register-with-store-basic";
 const PLATFORM_TITLE = "Register With Store Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
+let storeRegistration: StoreRegistration | undefined;
+
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(PLATFORM_ICON);
+	await initializeWorkspacePlatform();
 
 	// Get the DOM elements from the provider.html page and initialize them
 	await initializeDOM();
@@ -17,17 +23,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Initialize the workspace platform.
- * @param icon The icon to use in windows.
  */
-async function initializeWorkspacePlatform(icon: string): Promise<void> {
+async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initialising workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -49,6 +54,23 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 }
 
 /**
+ * Bring the platform to life.
+ */
+export async function initializeWorkspaceComponents(): Promise<void> {
+	console.log("Initialising the bootstrapper");
+
+	// When the platform requests to be close we deregister from home and quit
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		if (storeRegistration) {
+			await Storefront.deregister(PLATFORM_ID);
+		}
+
+		await fin.Platform.getCurrentSync().quit();
+	});
+}
+
+/**
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
@@ -65,7 +87,7 @@ async function initializeDOM(): Promise<void> {
 
 		registerStore.addEventListener("click", async () => {
 			registerStore.disabled = true;
-			await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON);
+			storeRegistration = await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON);
 			showStore.disabled = false;
 			hideStore.disabled = false;
 			deregisterStore.disabled = false;
@@ -77,6 +99,7 @@ async function initializeDOM(): Promise<void> {
 			deregisterStore.disabled = true;
 			registerStore.disabled = false;
 			await Storefront.deregister(PLATFORM_ID);
+			storeRegistration = undefined;
 		});
 
 		showStore.addEventListener("click", async () => {

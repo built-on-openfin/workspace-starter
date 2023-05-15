@@ -6,17 +6,17 @@ import {
 	type App,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
 	type HomeSearchResult,
 	type TemplateFragment,
-	type Workspace,
-	type HomeSearchListenerResponse
+	type Workspace
 } from "@openfin/workspace";
 import {
 	getCurrentSync,
 	init,
 	type CreateSavedWorkspaceRequest,
 	type UpdateSavedWorkspaceRequest,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
 import { applyDecoratedSnapshot, decorateSnapshot } from "./native-window-integration";
@@ -66,7 +66,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		],
 		// Override some platform methods so that we can augment snapshots with native window information
-		overrideCallback
+		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
 	});
 }
 
@@ -108,10 +108,12 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The class to override.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+function createWorkspacePlatformOverride(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Override the platform methods so that we can intercept the snapshot calls.
 	 */
@@ -170,7 +172,7 @@ const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlat
 		}
 	}
 	return new Override();
-};
+}
 
 /**
  * Get the results to show in home.

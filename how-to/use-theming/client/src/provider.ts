@@ -12,7 +12,7 @@ import {
 	init,
 	type ColorSchemeOptionType,
 	type CustomThemeOptionsWithScheme,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import { type CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import * as Notifications from "@openfin/workspace/notifications";
@@ -31,12 +31,15 @@ window.addEventListener("DOMContentLoaded", async () => {
 	// Check to see if there was a theming payload supplied on the command line
 	const themingPayload = await handleInitParams();
 
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () =>
+		initializeWorkspaceComponents(themingPayload?.options)
+	);
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform(themingPayload);
-
-	// Initialize dummy workspace components so that the buttons show in the dock.
-	await initializeWorkspaceComponents(themingPayload?.options);
 
 	// Subscribe to theme-restart events which can be triggered if a view
 	// has updated the theme and wants to restart.
@@ -108,7 +111,7 @@ async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Pro
 		},
 		theme: [customTheme],
 		// Override some platform methods so that we can handle theme changes.
-		overrideCallback,
+		overrideCallback: (provider) => createWorkspacePlatformOverride(provider),
 		// Custom actions provided for theming
 		customActions: getThemeActions()
 	});
@@ -284,10 +287,12 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The class to override.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+function createWorkspacePlatformOverride(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Override the platform methods so that we can intercept the
 	 * color scheme changing.
@@ -331,4 +336,4 @@ const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlat
 		}
 	}
 	return new Override();
-};
+}
