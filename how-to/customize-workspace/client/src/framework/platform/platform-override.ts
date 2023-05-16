@@ -428,6 +428,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			const hasTop = options?.defaultTop !== undefined;
 
 			if (!hasLeft || !hasTop) {
+				// Get the available rect for the display so we can take in to account
+				// OS menus, task bar etc
+				const monitorInfo = await fin.System.getMonitorInfo();
+				const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
+				const availableTop = monitorInfo.primaryMonitor.availableRect.top;
+
 				const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
 				const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
 				const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
@@ -459,9 +465,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					const foundWins = topLeftBounds.filter(
 						(topLeftWinBounds) =>
 							topLeftWinBounds.left >= leftPos &&
-							topLeftWinBounds.right <= leftPos + windowOffsetsX &&
+							topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
 							topLeftWinBounds.top >= topPos &&
-							topLeftWinBounds.bottom <= topPos + windowOffsetsY
+							topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
 					);
 
 					// If this slot has less than the current minimum use this slot
@@ -473,11 +479,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 				if (!hasLeft) {
 					const xOffset = minCountIndex * windowOffsetsX;
-					options.defaultLeft = windowDefaultLeft + xOffset;
+					options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
 				}
 				if (!hasTop) {
 					const yOffset = minCountIndex * windowOffsetsY;
-					options.defaultTop = windowDefaultTop + yOffset;
+					options.defaultTop = windowDefaultTop + yOffset + availableTop;
 				}
 			}
 
