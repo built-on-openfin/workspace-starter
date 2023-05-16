@@ -76,54 +76,54 @@ export async function authenticationInit(
  * PKCE workflow - https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce
  */
 export async function login(): Promise<void> {
-	const state = randomUUID();
-
 	removeProperty(STORE_ACCESS_TOKEN);
 
 	await busyCallback(true);
 
+	let completePoll: number | undefined;
+
+	/**
+	 * Cleanup the login window.
+	 * @param isManualClose Was the window closed by the user.
+	 */
+	async function cleanupWindow(isManualClose: boolean): Promise<void> {
+		informationCallback(
+			isManualClose
+				? "Login page was manually closed"
+				: "Login complete page was detected closing login window"
+		);
+		if (completePoll) {
+			window.clearInterval(completePoll);
+			completePoll = undefined;
+		}
+		if (authWin) {
+			const win = authWin;
+			authWin = undefined;
+
+			await win.removeAllListeners();
+
+			if (!isManualClose) {
+				await win.close(true);
+			}
+		}
+		await busyCallback(false);
+	}
+
+	const state = randomUUID();
+
 	const authUrl =
-		`https://${oktaSettings?.domain}/oauth2/v1/authorize?client_id=${oktaSettings?.clientId}&scope=openid email phone address groups profile` +
-		"&response_type=code" +
-		"&response_mode=query" +
-		"&nonce=nonceStatic" +
-		`&redirect_uri=${oktaSettings?.loginUrl}` +
-		`&code_challenge=${CODE_CHALLENGE}` +
-		"&code_challenge_method=S256" +
-		`&state=${state}&sessionToken=session_not_needed`;
+	`https://${oktaSettings?.domain}/oauth2/v1/authorize?client_id=${oktaSettings?.clientId}&scope=openid email phone address groups profile` +
+	"&response_type=code" +
+	"&response_mode=query" +
+	"&nonce=nonceStatic" +
+	`&redirect_uri=${oktaSettings?.loginUrl}` +
+	`&code_challenge=${CODE_CHALLENGE}` +
+	"&code_challenge_method=S256" +
+	`&state=${state}&sessionToken=session_not_needed`;
 
 	authWin = await showWindow(authUrl);
 
 	if (authWin) {
-		let completePoll: number | undefined;
-
-		/**
-		 * Cleanup the login window.
-		 * @param isManualClose Was the window closed by the user.
-		 */
-		async function cleanupWindow(isManualClose: boolean): Promise<void> {
-			informationCallback(
-				isManualClose
-					? "Login page was manually closed"
-					: "Login complete page was detected closing login window"
-			);
-			if (completePoll) {
-				window.clearInterval(completePoll);
-				completePoll = undefined;
-			}
-			if (authWin) {
-				const win = authWin;
-				authWin = undefined;
-
-				await win.removeAllListeners();
-
-				if (!isManualClose) {
-					await win.close(true);
-				}
-			}
-			await busyCallback(false);
-		}
-
 		await authWin.addListener("closed", async () => {
 			if (authWin) {
 				await cleanupWindow(true);
