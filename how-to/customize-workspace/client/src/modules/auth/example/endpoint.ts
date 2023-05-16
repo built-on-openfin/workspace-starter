@@ -1,8 +1,8 @@
-import type { CustomSettings, PlatformApp } from "customize-workspace/shapes";
+import type { CustomSettings } from "customize-workspace/shapes";
 import type { Endpoint, EndpointDefinition, FetchOptions } from "customize-workspace/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
-import type { ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
+import type { AppWithTagsOrCategories, ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
 export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
@@ -39,7 +39,9 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 	public async requestResponse(
 		endpointDefinition: EndpointDefinition<FetchOptions>,
 		request?: unknown
-	): Promise<unknown> {
+	): Promise<
+		CustomSettings | AppWithTagsOrCategories[] | { applications: AppWithTagsOrCategories[] } | null
+	> {
 		if (endpointDefinition.type !== "module") {
 			this._logger.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
@@ -66,13 +68,17 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 
 		if (response.ok) {
 			const json = await response.json();
-			if (Array.isArray(json) || Array.isArray(json?.applications)) {
+
+			if (Array.isArray(json)) {
 				// returned apps
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-				return this.applyCurrentUserToApps(json);
+				return this.applyCurrentUserToApps(json as AppWithTagsOrCategories[]);
+			} else if (Array.isArray(json.applications)) {
+				return {
+					applications: this.applyCurrentUserToApps(json.applications as AppWithTagsOrCategories[])
+				};
 			}
 			// settings
-			return this.applyCurrentUserToSettings(json) as unknown;
+			return this.applyCurrentUserToSettings(json as CustomSettings);
 		}
 		return null;
 	}
@@ -99,9 +105,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return { url, options };
 	}
 
-	private applyCurrentUserToApps(
-		response: { tags: string[] }[] | { applications: { categories: string[] }[] }
-	): unknown {
+	private applyCurrentUserToApps(apps: AppWithTagsOrCategories[]): AppWithTagsOrCategories[] {
 		const currentUser = getCurrentUser();
 		if (
 			currentUser === null ||
@@ -109,34 +113,24 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			this._roleMapping[currentUser.role] === undefined ||
 			this._roleMapping[currentUser.role].excludeAppsWithTag === undefined
 		) {
-			return response as unknown;
+			return apps;
 		}
 		const excludeTag = this._roleMapping[currentUser.role].excludeAppsWithTag;
 
-		const applications = [];
-		if (Array.isArray(response)) {
-			for (const app of response) {
-				if (Array.isArray(app.tags)) {
-					if (this.includeInResponse(app.tags, excludeTag)) {
-						applications.push(app as PlatformApp);
+		const applications: AppWithTagsOrCategories[] = [];
+		if (Array.isArray(apps)) {
+			for (const app of apps) {
+				const lookup: string[] = app.tags ?? app.categories;
+				if (Array.isArray(lookup)) {
+					if (this.includeInResponse(lookup, excludeTag)) {
+						applications.push(app);
 					}
 				} else {
-					applications.push(app as PlatformApp);
+					applications.push(app);
 				}
 			}
-			return applications as unknown;
 		}
-		for (const app of response.applications) {
-			if (Array.isArray(app.categories)) {
-				if (this.includeInResponse(app.categories, excludeTag)) {
-					applications.push(app as unknown);
-				}
-			} else {
-				applications.push(app as unknown);
-			}
-		}
-		response.applications = applications;
-		return response;
+		return applications;
 	}
 
 	private includeInResponse(tags: string[], excludeTags: string[]): boolean {

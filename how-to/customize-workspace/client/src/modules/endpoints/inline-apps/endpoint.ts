@@ -42,7 +42,6 @@ export class InlineAppModuleEndpoint implements Endpoint {
 			`Returning ${results.length} app entries from the inline apps endpoint with id: ${endpointDefinition.id}`
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return results;
 	}
 }
