@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Basic Home Example</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://built-on-openfin.github.io/workspace-starter/dev/martyn/sso-simplify/common/style/app.css" />
+		<script src="../js/provider.bundle.js"></script>
+	</head>
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Basic Home Example</h1>
+				<h1 class="tag">Demonstrate basic home interactions.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="https://built-on-openfin.github.io/workspace-starter/dev/martyn/sso-simplify/common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap20">
+			<p>
+				Please click the register button to add your platform to Home (it will start up Home and OpenFin
+				Workspace if it isn't already running). Once your platform is registered the show/hide buttons will be
+				enabled. Use show to show OpenFin home.
+			</p>
+			<p>This is a simple example showing how you can hand code a registration against OpenFin Home.</p>
+			<div class="row gap10">
+				<button id="register">Register A Platform With Home</button>
+				<button id="deregister">Deregister A Platform From Home</button>
+				<button id="show">Show Home</button>
+				<button id="hide">Hide Home</button>
+			</div>
+			<p>You can set the value in the Home query box manually, enter the test below.</p>
+			<div>
+				<fieldset class="row">
+					<label for="query">Query</label>
+					<input type="text" id="query" />
+					<button type="button" id="go">Go</button>
+				</fieldset>
+			</div>
+		</main>
+	</body>
+</html>
