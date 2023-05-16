@@ -81,7 +81,7 @@ npm run client
 npm run build
 ```
 
-![Integrate with SSO](openfin-integrate-with-sso.gif)
+![Integrate with SSO](openfin-integrate-with-auth0.gif)
 
 ---
 

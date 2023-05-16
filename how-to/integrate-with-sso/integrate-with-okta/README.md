@@ -36,11 +36,11 @@ After creating the Okta integration using one of the examples above, populate th
 
 ```json
 "customSettings": {
-  "okta": {
-   "domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
-   "clientId": "{YOUR_CLIENT_ID}",
+  "auth": {
+   "domain": "<DOMAIN>",
+   "clientId": "<CLIENTID>",
    "loginUrl": "http://localhost:8080/platform/login-complete.html",
-   "logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
+   "logoutUrl": "http://localhost:8080/platform/logout.html",
    "appUrl": "http://localhost:8080/platform/app.html",
    "verifyPollMs": 10000
   }
