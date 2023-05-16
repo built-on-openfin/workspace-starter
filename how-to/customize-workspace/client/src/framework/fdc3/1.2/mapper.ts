@@ -37,7 +37,7 @@ function getManifest(app: AppDefinition): unknown {
 }
 
 function getTags(app: AppDefinition & { tags?: string[] }): string[] {
-	const tags: string[] = app.tags ?? [];
+	const tags: string[] = app.tags ?? app.categories ?? [];
 	if (tags.length === 0) {
 		tags.push(app.manifestType);
 	}

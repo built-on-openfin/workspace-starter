@@ -779,6 +779,17 @@ export function interopOverride(
 			}
 			let userSelection: IntentPickerResponse;
 			if (intentsForSelection.length === 1) {
+				if (
+					(intent.name === undefined || intent.name === null || intent.name.trim() === "") &&
+					intentsForSelection[0]?.intent?.name !== undefined &&
+					intent?.context !== undefined &&
+					intent?.context?.type !== undefined
+				) {
+					logger.info(
+						`A request to raise an intent was passed and the intent name was not passed but a context was ${intent?.context?.type} with 1 matching intent. Name: ${intentsForSelection[0]?.intent?.name},  Display Name: ${intentsForSelection[0]?.intent?.displayName}. Updating intent object.`
+					);
+					intent.name = intentsForSelection[0]?.intent?.name;
+				}
 				userSelection = await this.launchIntentPicker({
 					apps: intentsForSelection[0].apps,
 					intent
@@ -788,6 +799,15 @@ export function interopOverride(
 					intent,
 					intents: intentsForSelection
 				});
+				if (
+					(intent.name === undefined || intent.name === null || intent.name.trim() === "") &&
+					userSelection?.intent?.name !== undefined
+				) {
+					logger.info(
+						`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
+					);
+					intent.name = userSelection?.intent?.name;
+				}
 			}
 
 			return this.handleIntentPickerSelection(userSelection, intent);
