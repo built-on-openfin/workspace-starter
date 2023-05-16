@@ -112,14 +112,14 @@ export async function login(): Promise<void> {
 	const state = randomUUID();
 
 	const authUrl =
-	`https://${oktaSettings?.domain}/oauth2/v1/authorize?client_id=${oktaSettings?.clientId}&scope=openid email phone address groups profile` +
-	"&response_type=code" +
-	"&response_mode=query" +
-	"&nonce=nonceStatic" +
-	`&redirect_uri=${oktaSettings?.loginUrl}` +
-	`&code_challenge=${CODE_CHALLENGE}` +
-	"&code_challenge_method=S256" +
-	`&state=${state}&sessionToken=session_not_needed`;
+		`https://${oktaSettings?.domain}/oauth2/v1/authorize?client_id=${oktaSettings?.clientId}&scope=openid email phone address groups profile` +
+		"&response_type=code" +
+		"&response_mode=query" +
+		"&nonce=nonceStatic" +
+		`&redirect_uri=${oktaSettings?.loginUrl}` +
+		`&code_challenge=${CODE_CHALLENGE}` +
+		"&code_challenge_method=S256" +
+		`&state=${state}&sessionToken=session_not_needed`;
 
 	authWin = await showWindow(authUrl);
 
@@ -153,7 +153,7 @@ export async function login(): Promise<void> {
 						let userDetails: { [id: string]: unknown } | undefined;
 						try {
 							userDetails = await checkTokenValidity(accessToken, false);
-						} catch { }
+						} catch {}
 						await authenticatedStateChanged(true, userDetails);
 					}
 				} else {
@@ -385,7 +385,10 @@ function pollTimerStart(isAuthenticated: boolean): void {
  * @param urls The urls to look for.
  * @returns The complete url if it has one it was looking for.
  */
-async function checkForUrls(win: OpenFin.Window | undefined, urls: (string | undefined)[]): Promise<URL | undefined> {
+async function checkForUrls(
+	win: OpenFin.Window | undefined,
+	urls: (string | undefined)[]
+): Promise<URL | undefined> {
 	if (!win) {
 		return undefined;
 	}
