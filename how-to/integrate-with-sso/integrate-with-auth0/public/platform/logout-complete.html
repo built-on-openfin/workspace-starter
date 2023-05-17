@@ -10,6 +10,13 @@
 	</head>
 
 	<body class="col fill gap20">
-		Logout Complete
+		Logging out...
+		<script>
+			fin.System.clearCache({
+				cookies: true,
+				localStorage: true
+			});
+			window.fin.me.close();
+		</script>
 	</body>
 </html>

@@ -21,6 +21,18 @@ export interface OktaSettings {
 	 */
 	clientId: string;
 	/**
+	 * The PKCE code verifier.
+	 * cryptographically random string using the chars A-Z, a-z, 0-9 and the punctuation chars hyphen, period, underscore and tilde.
+	 * see https://developer.okta.com/docs/guides/implement-grant-type/authcodepkce/main/#flow-specifics
+	 */
+	pkceCodeVerifier: string;
+	/**
+	 * The PKCE code challenge.
+	 * should be a calculated value of Base64-URL-encoded SHA256 hash of pkceCodeVerifier.
+	 * see https://developer.okta.com/docs/guides/implement-grant-type/authcodepkce/main/#flow-specifics
+	 */
+	pkceCodeChallenge: string;
+	/**
 	 * The login url to display on modal.
 	 */
 	loginUrl: string;

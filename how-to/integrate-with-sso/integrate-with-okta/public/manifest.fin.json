@@ -33,6 +33,8 @@
 		"auth": {
 			"domain": "<DOMAIN>",
 			"clientId": "<CLIENTID>",
+			"pkceCodeVerifier": "Zg6klgrnixQJ629GsawRMV8MjWvwRAr-vyvP1MHnB6X8WKZN",
+			"pkceCodeChallenge": "iF_7prUeJ6rr3jMG3LmhW3R1cZ2ecZavFqS0jtb6tzo",
 			"loginUrl": "http://localhost:8080/platform/login-complete.html",
 			"logoutUrl": "http://localhost:8080/platform/logout.html",
 			"appUrl": "http://localhost:8080/platform/app.html",

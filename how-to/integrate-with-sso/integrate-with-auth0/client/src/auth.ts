@@ -224,41 +224,14 @@ export async function logout(): Promise<void> {
 	await busyCallback(true);
 	authWin = await showWindow(authUrl);
 
-	let completePoll: number | undefined;
-
-	/**
-	 * Cleanup the login window.
-	 * @param isManualClose Was the window closed by the user.
-	 */
-	async function cleanupWindow(isManualClose: boolean): Promise<void> {
-		informationCallback(
-			isManualClose
-				? "Logout page was manually closed"
-				: "Logout complete page was detected closing logout window"
-		);
-		if (completePoll) {
-			window.clearInterval(completePoll);
-			completePoll = undefined;
-		}
-		if (authWin) {
-			const win = authWin;
-			authWin = undefined;
-
-			await win.removeAllListeners();
-			if (!isManualClose) {
-				await win.close(true);
-			}
-		}
-		await busyCallback(false);
-	}
-
 	await authWin.addListener("closed", async () => {
-		if (authWin) {
-			await cleanupWindow(true);
-		}
+		await cleanupWindow(true);
 	});
 
-	completePoll = window.setInterval(async () => {
+	/**
+	 * Check to see if the url has changed.
+	 */
+	async function checkUrlHasChanged(): Promise<void> {
 		const winUrl = await checkForUrls(authWin, auth0Settings.logoutUrls);
 
 		if (winUrl) {
@@ -267,7 +240,13 @@ export async function logout(): Promise<void> {
 			await cleanupWindow(false);
 			await authenticatedStateChanged(false);
 		}
-	}, 100);
+	}
+
+	await authWin.addListener("url-changed", async () => {
+		await checkUrlHasChanged();
+	});
+
+	await checkUrlHasChanged();
 }
 
 /**
@@ -277,6 +256,28 @@ export async function logout(): Promise<void> {
 export function expireAccessToken(): void {
 	removeProperty(STORE_ACCESS_TOKEN);
 	removeProperty(STORE_AUTH_STATE);
+}
+
+/**
+ * Cleanup the login window.
+ * @param isManualClose Was the window closed by the user.
+ */
+async function cleanupWindow(isManualClose: boolean): Promise<void> {
+	if (authWin) {
+		informationCallback(
+			isManualClose
+				? "Logout page was manually closed"
+				: "Logout complete page was detected closing logout window"
+		);
+		const win = authWin;
+		authWin = undefined;
+
+		await win.removeAllListeners();
+		if (!isManualClose) {
+			await win.close(true);
+		}
+		await busyCallback(false);
+	}
 }
 
 /**
@@ -342,7 +343,7 @@ async function checkForUrls(win: OpenFin.Window | undefined, urls: string[]): Pr
 	}
 
 	const winInfo = await win.getInfo();
-	const isCompleteUrl = urls.some((u) => winInfo.url.includes(u));
+	const isCompleteUrl = urls.some((u) => winInfo.url.startsWith(u));
 
 	if (isCompleteUrl) {
 		return new URL(winInfo.url);

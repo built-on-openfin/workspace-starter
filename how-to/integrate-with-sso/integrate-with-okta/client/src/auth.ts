@@ -2,16 +2,6 @@
 import type OpenFin from "@openfin/core";
 import type { OktaSettings } from "./shapes";
 
-/*
-code_verifier: cryptographically random string using the chars A-Z, a-z, 0-9 and the punctuation chars hyphen, period, underscore and tilde.
-codeChallenge: should be a calculated value of Base64-URL-encoded SHA256 hash of code_verifier.
-
-Note: Okta access token are hard coded to expire in 60 minutes, when using the Okta auth servers.
-https://support.okta.com/help/s/article/What-is-the-lifetime-of-the-JWT-tokens?language=en_US#:~:text=When%20using%20the%20Okta%20authorization,Refresh%20Token%3A%20100%20days
-*/
-const CODE_VERIFIER = "Zg6klgrnixQJ629GsawRMV8MjWvwRAr-vyvP1MHnB6X8WKZN";
-const CODE_CHALLENGE = "iF_7prUeJ6rr3jMG3LmhW3R1cZ2ecZavFqS0jtb6tzo";
-
 let storageRealm: string | undefined;
 const STORE_ACCESS_TOKEN = "token";
 
@@ -80,35 +70,6 @@ export async function login(): Promise<void> {
 
 	await busyCallback(true);
 
-	let completePoll: number | undefined;
-
-	/**
-	 * Cleanup the login window.
-	 * @param isManualClose Was the window closed by the user.
-	 */
-	async function cleanupWindow(isManualClose: boolean): Promise<void> {
-		informationCallback(
-			isManualClose
-				? "Login page was manually closed"
-				: "Login complete page was detected closing login window"
-		);
-		if (completePoll) {
-			window.clearInterval(completePoll);
-			completePoll = undefined;
-		}
-		if (authWin) {
-			const win = authWin;
-			authWin = undefined;
-
-			await win.removeAllListeners();
-
-			if (!isManualClose) {
-				await win.close(true);
-			}
-		}
-		await busyCallback(false);
-	}
-
 	const state = randomUUID();
 
 	const authUrl =
@@ -117,7 +78,7 @@ export async function login(): Promise<void> {
 		"&response_mode=query" +
 		"&nonce=nonceStatic" +
 		`&redirect_uri=${oktaSettings?.loginUrl}` +
-		`&code_challenge=${CODE_CHALLENGE}` +
+		`&code_challenge=${oktaSettings?.pkceCodeChallenge}` +
 		"&code_challenge_method=S256" +
 		`&state=${state}&sessionToken=session_not_needed`;
 
@@ -125,43 +86,14 @@ export async function login(): Promise<void> {
 
 	if (authWin) {
 		await authWin.addListener("closed", async () => {
-			if (authWin) {
-				await cleanupWindow(true);
-			}
+			await cleanupWindow(true);
 		});
 
-		completePoll = window.setInterval(async () => {
-			const winUrl = await checkForUrls(authWin, [oktaSettings?.loginUrl]);
-			console.log(`Inside completePoll - url: ${winUrl}`);
+		await authWin.addListener("url-changed", async () => {
+			await checkUrlHasChanged();
+		});
 
-			if (winUrl) {
-				const oktaCode = winUrl.searchParams.get("code");
-				console.log(`Okta code: ${oktaCode}`);
-
-				await cleanupWindow(false);
-
-				if (oktaCode) {
-					const accessToken = await getAccessToken(oktaCode);
-
-					if (accessToken === undefined) {
-						informationCallback("Could not retrieve access token.");
-						await authenticatedStateChanged(false);
-					} else {
-						informationCallback(`Okta Token: ${accessToken}`);
-						saveProperty(STORE_ACCESS_TOKEN, accessToken);
-
-						let userDetails: { [id: string]: unknown } | undefined;
-						try {
-							userDetails = await checkTokenValidity(accessToken, false);
-						} catch {}
-						await authenticatedStateChanged(true, userDetails);
-					}
-				} else {
-					informationCallback("No code in the login url");
-					await authenticatedStateChanged(false);
-				}
-			}
-		}, 100);
+		await checkUrlHasChanged();
 	}
 }
 
@@ -183,7 +115,7 @@ export async function getAccessToken(oktaCode: string): Promise<string | undefin
 					"grant_type=authorization_code" +
 					`&code=${oktaCode}` +
 					`&client_id=${oktaSettings?.clientId}` +
-					`&code_verifier=${CODE_VERIFIER}` +
+					`&code_verifier=${oktaSettings?.pkceCodeVerifier}` +
 					`&redirect_uri=${oktaSettings?.loginUrl}`
 			});
 
@@ -220,6 +152,67 @@ export async function logout(): Promise<void> {
 		informationCallback(handleError(err));
 	} finally {
 		await authenticatedStateChanged(false);
+	}
+}
+
+/**
+ * Cleanup the login window.
+ * @param isManualClose Was the window closed by the user.
+ */
+async function cleanupWindow(isManualClose: boolean): Promise<void> {
+	if (authWin) {
+		informationCallback(
+			isManualClose
+				? "Login page was manually closed"
+				: "Login complete page was detected closing login window"
+		);
+
+		const win = authWin;
+		authWin = undefined;
+
+		await win.removeAllListeners();
+
+		if (!isManualClose) {
+			await win.close(true);
+		}
+
+		await busyCallback(false);
+	}
+}
+
+/**
+ * Check to see if the url has changed.
+ */
+async function checkUrlHasChanged(): Promise<void> {
+	const winUrl = await checkForUrls(authWin, [oktaSettings?.loginUrl]);
+	console.log(`Inside completePoll - url: ${winUrl}`);
+
+	if (winUrl) {
+		const oktaCode = winUrl.searchParams.get("code");
+		console.log(`Okta code: ${oktaCode}`);
+
+		await cleanupWindow(false);
+
+		if (oktaCode) {
+			const accessToken = await getAccessToken(oktaCode);
+
+			if (accessToken === undefined) {
+				informationCallback("Could not retrieve access token.");
+				await authenticatedStateChanged(false);
+			} else {
+				informationCallback(`Okta Token: ${accessToken}`);
+				saveProperty(STORE_ACCESS_TOKEN, accessToken);
+
+				let userDetails: { [id: string]: unknown } | undefined;
+				try {
+					userDetails = await checkTokenValidity(accessToken, false);
+				} catch {}
+				await authenticatedStateChanged(true, userDetails);
+			}
+		} else {
+			informationCallback("No code in the login url");
+			await authenticatedStateChanged(false);
+		}
 	}
 }
 
