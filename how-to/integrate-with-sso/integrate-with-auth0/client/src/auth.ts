@@ -133,78 +133,17 @@ export async function login(): Promise<void> {
 
 	authWin = await showWindow(authUrl);
 
-	let completePoll: number | undefined;
-
-	/**
-	 * Cleanup the login window.
-	 * @param isManualClose Was the window closed by the user.
-	 */
-	async function cleanupWindow(isManualClose: boolean): Promise<void> {
-		informationCallback(
-			isManualClose
-				? "Login page was manually closed"
-				: "Login complete page was detected closing login window"
-		);
-		if (completePoll) {
-			window.clearInterval(completePoll);
-			completePoll = undefined;
-		}
-		if (authWin) {
-			const win = authWin;
-			authWin = undefined;
-
-			await win.removeAllListeners();
-			if (!isManualClose) {
-				await win.close(true);
-			}
-		}
-		await busyCallback(false);
-	}
-
 	await authWin.addListener("closed", async () => {
 		if (authWin) {
-			await cleanupWindow(true);
+			await cleanupWindow(true, true);
 		}
 	});
 
-	completePoll = window.setInterval(async () => {
-		const winUrl = await checkForUrls(authWin, [auth0Settings.loginUrl]);
+	await authWin.addListener("url-changed", async () => {
+		await checkLoginUrlChanged();
+	});
 
-		if (winUrl) {
-			const authenticatedResultOrError = await checkAuthenticationResult(winUrl);
-
-			if (authenticatedResultOrError?.err) {
-				informationCallback(
-					(authenticatedResultOrError.err.description ??
-						authenticatedResultOrError.err.original?.message) as string
-				);
-				removeProperty(STORE_ACCESS_TOKEN);
-			} else if (authenticatedResultOrError?.result?.accessToken) {
-				informationCallback(`Access token: ${authenticatedResultOrError.result.accessToken}`);
-				saveProperty(STORE_ACCESS_TOKEN, authenticatedResultOrError.result.accessToken);
-			}
-
-			await cleanupWindow(false);
-
-			if (authenticatedResultOrError?.result?.accessToken) {
-				informationCallback("Authenticated, show application");
-
-				webAuth.client.userInfo(authenticatedResultOrError.result.accessToken, async (err, userInfo) => {
-					if (err) {
-						informationCallback("Get userInfo failed");
-						informationCallback((err.original?.message ?? err.description) as string);
-						await authenticatedStateChanged(false);
-					} else {
-						informationCallback("Get userInfo success");
-						await authenticatedStateChanged(true, userInfo);
-					}
-				});
-			} else {
-				informationCallback("No access token in the authentication result");
-				await authenticatedStateChanged(false);
-			}
-		}
-	}, 100);
+	await checkLoginUrlChanged();
 }
 
 /**
@@ -225,28 +164,14 @@ export async function logout(): Promise<void> {
 	authWin = await showWindow(authUrl);
 
 	await authWin.addListener("closed", async () => {
-		await cleanupWindow(true);
+		await cleanupWindow(false, true);
 	});
-
-	/**
-	 * Check to see if the url has changed.
-	 */
-	async function checkUrlHasChanged(): Promise<void> {
-		const winUrl = await checkForUrls(authWin, auth0Settings.logoutUrls);
-
-		if (winUrl) {
-			removeProperty(STORE_ACCESS_TOKEN);
-			removeProperty(STORE_AUTH_STATE);
-			await cleanupWindow(false);
-			await authenticatedStateChanged(false);
-		}
-	}
 
 	await authWin.addListener("url-changed", async () => {
-		await checkUrlHasChanged();
+		await checkLogoutUrlHasChanged();
 	});
 
-	await checkUrlHasChanged();
+	await checkLogoutUrlHasChanged();
 }
 
 /**
@@ -259,15 +184,17 @@ export function expireAccessToken(): void {
 }
 
 /**
- * Cleanup the login window.
+ * Cleanup the auth window.
+ * @param isLogin Is this the login window.
  * @param isManualClose Was the window closed by the user.
  */
-async function cleanupWindow(isManualClose: boolean): Promise<void> {
+async function cleanupWindow(isLogin: boolean, isManualClose: boolean): Promise<void> {
 	if (authWin) {
+		const winType = isLogin ? "Login" : "Logout";
 		informationCallback(
 			isManualClose
-				? "Logout page was manually closed"
-				: "Logout complete page was detected closing logout window"
+				? `${winType} page was manually closed`
+				: `${winType} complete page was detected closing ${winType.toLowerCase()} window`
 		);
 		const win = authWin;
 		authWin = undefined;
@@ -277,6 +204,61 @@ async function cleanupWindow(isManualClose: boolean): Promise<void> {
 			await win.close(true);
 		}
 		await busyCallback(false);
+	}
+}
+
+async function checkLoginUrlChanged(): Promise<void> {
+	const winUrl = await checkForUrls(authWin, [auth0Settings.loginUrl]);
+
+	if (winUrl) {
+		const authenticatedResultOrError = await checkAuthenticationResult(winUrl);
+
+		if (authenticatedResultOrError?.err) {
+			informationCallback(
+				(authenticatedResultOrError.err.description ??
+					authenticatedResultOrError.err.original?.message) as string
+			);
+			removeProperty(STORE_ACCESS_TOKEN);
+		} else if (authenticatedResultOrError?.result?.accessToken) {
+			informationCallback(`Access token: ${authenticatedResultOrError.result.accessToken}`);
+			saveProperty(STORE_ACCESS_TOKEN, authenticatedResultOrError.result.accessToken);
+		}
+
+		await cleanupWindow(true, false);
+
+		if (authenticatedResultOrError?.result?.accessToken) {
+			informationCallback("Authenticated, show application");
+
+			const { webAuth } = createWebAuth();
+
+			webAuth.client.userInfo(authenticatedResultOrError.result.accessToken, async (err, userInfo) => {
+				if (err) {
+					informationCallback("Get userInfo failed");
+					informationCallback((err.original?.message ?? err.description) as string);
+					await authenticatedStateChanged(false);
+				} else {
+					informationCallback("Get userInfo success");
+					await authenticatedStateChanged(true, userInfo);
+				}
+			});
+		} else {
+			informationCallback("No access token in the authentication result");
+			await authenticatedStateChanged(false);
+		}
+	}
+}
+
+/**
+ * Check to see if the url has changed.
+ */
+async function checkLogoutUrlHasChanged(): Promise<void> {
+	const winUrl = await checkForUrls(authWin, auth0Settings.logoutUrls);
+
+	if (winUrl) {
+		removeProperty(STORE_ACCESS_TOKEN);
+		removeProperty(STORE_AUTH_STATE);
+		await cleanupWindow(false, false);
+		await authenticatedStateChanged(false);
 	}
 }
 
