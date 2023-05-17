@@ -30,17 +30,19 @@ This example uses [Okta](https://developer.okta.com/) as a provider for the SSO 
 Okta Integration Pre-Requisites:
 In order to integrate an SPA with Okta please refer to this link: <https://developer.okta.com/docs/guides/sign-into-spa-redirect/vue/main/>
 
-In order to integrate a Web App with Okta please refer to this link: <https://developer.okta.com/docs/guides/sign-into-web-app-redirect/node-express/main/>
+After creating the Okta integration using the example above, populate the `customSettings` in the `public/manifest.fin.json` file in the repo. The `domain` and `clientId` values can be viewed in the settings for the application on the Okta Admin management console.
 
-After creating the Okta integration using one of the examples above, populate the `customSettings` in the `public/manifest.fin.json` file in the repo. The `domain` and `clientId` values can be viewed in the settings for the application on the Okta Admin management console.
+The `pkceCodeVerifier` and `pkceCodeChallenge` are provided, but for more details on replacing these with your own values see [Implement authorization by grant type PKCE](https://developer.okta.com/docs/guides/implement-grant-type/authcodepkce/main/)
 
 ```json
 "customSettings": {
-  "okta": {
-   "domain": "{YOUR_OKTA_DOMAIN}/oauth2/",
-   "clientId": "{YOUR_CLIENT_ID}",
+  "auth": {
+   "domain": "<DOMAIN>",
+   "clientId": "<CLIENTID>",
+   "pkceCodeVerifier": "Zg6klgrnixQJ629GsawRMV8MjWvwRAr-vyvP1MHnB6X8WKZN",
+   "pkceCodeChallenge": "iF_7prUeJ6rr3jMG3LmhW3R1cZ2ecZavFqS0jtb6tzo",
    "loginUrl": "http://localhost:8080/platform/login-complete.html",
-   "logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
+   "logoutUrl": "http://localhost:8080/platform/logout.html",
    "appUrl": "http://localhost:8080/platform/app.html",
    "verifyPollMs": 10000
   }
