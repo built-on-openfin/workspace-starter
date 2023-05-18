@@ -19,8 +19,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fsupport-context-and-intents%2Fmanifest.fin.json)
-- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
+- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 

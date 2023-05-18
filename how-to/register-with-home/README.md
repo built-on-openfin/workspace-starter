@@ -14,7 +14,7 @@ This application you are about to install is a simple example of plugging in you
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Home](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fregister-with-home%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Home](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fregister-with-home%2Fmanifest.fin.json)
 
 ## Getting Started
 
