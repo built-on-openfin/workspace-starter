@@ -126,8 +126,6 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 				menuItemsToReturn[0].separator = this._settings.separator ?? "before";
 			}
 
-			// even thought the array is typed eslint will still complain so the rule is disabled here
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 			return menuItemsToReturn;
 		}
 	}

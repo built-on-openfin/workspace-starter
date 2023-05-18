@@ -5,12 +5,12 @@ import type { CustomSettings } from "./shapes";
 import { deregister, register, storeGetCustomActions } from "./store";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
-
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
+
+	// Load the settings from the manifest
+	const customSettings = await getManifestCustomSettings();
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows

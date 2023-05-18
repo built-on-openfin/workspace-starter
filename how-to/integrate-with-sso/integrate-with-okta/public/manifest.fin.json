@@ -13,9 +13,6 @@
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
@@ -30,11 +27,13 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"okta": {
+		"auth": {
 			"domain": "<DOMAIN>",
 			"clientId": "<CLIENTID>",
+			"pkceCodeVerifier": "Zg6klgrnixQJ629GsawRMV8MjWvwRAr-vyvP1MHnB6X8WKZN",
+			"pkceCodeChallenge": "iF_7prUeJ6rr3jMG3LmhW3R1cZ2ecZavFqS0jtb6tzo",
 			"loginUrl": "http://localhost:8080/platform/login-complete.html",
-			"logoutUrls": ["http://localhost:8080/platform/logout-complete.html"],
+			"logoutUrl": "http://localhost:8080/platform/logout.html",
 			"appUrl": "http://localhost:8080/platform/app.html",
 			"verifyPollMs": 10000
 		}

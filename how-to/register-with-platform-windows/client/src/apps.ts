@@ -7,7 +7,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP, FDC3_BROADCAST, INTEROP_BROADCAST];
+	return [OPENFIN_INFORMATION_APP];
 }
 
 /**
@@ -34,62 +34,6 @@ const OPENFIN_INFORMATION_APP: App = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
-};
-
-/**
- * App definition for the FDC3 Interop Broadcast View.
- */
-export const FDC3_BROADCAST: App = {
-	appId: "fdc3-broadcast-view",
-	title: "Context using FDC3",
-	description:
-		"This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
-	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/fdc3-broadcast-view.json",
-	manifestType: "view",
-	icons: [
-		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
-		}
-	],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "OpenFin",
-	intents: [],
-	images: [
-		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-fdc3.png"
-		}
-	],
-	tags: ["view", "fdc3", "tools"]
-};
-
-/**
- * App definition for the FDC3 Interop Broadcast View.
- */
-export const INTEROP_BROADCAST: App = {
-	appId: "interop-broadcast-view",
-	title: "Context using Interop API",
-	description:
-		"This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.json",
-	manifestType: "view",
-	icons: [
-		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
-		}
-	],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "OpenFin",
-	intents: [],
-	images: [
-		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-interop-api.png"
-		}
-	],
-	tags: ["view", "interop", "tools"]
 };
 
 /**

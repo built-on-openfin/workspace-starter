@@ -6,15 +6,12 @@
 		"version": "31.112.75.4"
 	},
 	"platform": {
-		"uuid": "integrate-with-sso",
+		"uuid": "integrate-with-auth0",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"defaultWindowOptions": {}
-	},
-	"snapshot": {
-		"windows": []
 	},
 	"shortcut": {
 		"company": "OpenFin",

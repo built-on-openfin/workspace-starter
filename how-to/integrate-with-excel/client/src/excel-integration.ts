@@ -3,42 +3,21 @@ import type { InteropClient } from "@openfin/core/src/api/interop";
 import { enableLogging, getExcelApplication, type Cell, type ExcelApplication } from "@openfin/excel";
 import {
 	CLITemplate,
-	type CLIDispatchedSearchResult,
-	type CLIFilter,
-	type CLISearchListenerResponse,
+	type HomeDispatchedSearchResult,
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import type { Integration, IntegrationHelpers, IntegrationModule } from "../../integrations-shapes";
-import type { ExcelAssetSettings, ExcelSettings, ExcelWorksheetSettings } from "./shapes";
+import { type ExcelAssetSettings, type ExcelSettings, type ExcelWorksheetSettings } from "./shapes";
 
 /**
- * Implement the integration provider for Excel.
+ * Implement the integration for Excel.
  */
-export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings> {
-	/**
-	 * Provider id.
-	 * @internal
-	 */
-	private static readonly _PROVIDER_ID = "excel";
-
+export class ExcelIntegration {
 	/**
 	 * The key to use for a sheet open action.
 	 * @internal
 	 */
 	private static readonly _EXCEL_PROVIDER_OPEN_KEY_ACTION = "Open Excel";
-
-	/**
-	 * The integration helpers.
-	 * @internal
-	 */
-	private _integrationHelpers: IntegrationHelpers | undefined;
-
-	/**
-	 * The module definition for the integration.
-	 * @internal
-	 */
-	private _moduleDefinition: Integration<ExcelSettings> | undefined;
 
 	/**
 	 * The settings for the integration.
@@ -56,23 +35,15 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	 * The interop clients for the different contexts.
 	 * @internal
 	 */
-	private _interopClients: { [id: string]: InteropClient };
+	private _interopClients?: { [id: string]: InteropClient };
 
 	/**
 	 * Initialize the module.
-	 * @param definition The definition of the module from configuration include custom options.
-	 * @param loggerCreator For logging entries.
-	 * @param helpers Helper methods for the module to interact with the application core.
+	 * @param settings The settings for the integration.
 	 * @returns Nothing.
 	 */
-	public async initialize(
-		definition: Integration<ExcelSettings>,
-		loggerCreator: () => void,
-		helpers: IntegrationHelpers
-	): Promise<void> {
-		this._integrationHelpers = helpers;
-		this._moduleDefinition = definition;
-		this._settings = definition.data;
+	public async initialize(settings: ExcelSettings): Promise<void> {
+		this._settings = settings;
 
 		const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 		const contextGroups = await brokerClient.getContextGroups();
@@ -101,24 +72,41 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	}
 
 	/**
+	 * Get a list of search results based on the query and filters.
+	 * @param query The query to search for.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResults(query: string): Promise<HomeSearchResponse> {
+		let filteredAssets: ExcelAssetSettings[] = [];
+		if (this._settings?.assets) {
+			if (query.length >= 3) {
+				filteredAssets = this._settings.assets.filter((a) =>
+					a.title.toLowerCase().includes(query.toLowerCase())
+				);
+			} else {
+				filteredAssets = this._settings.assets;
+			}
+		}
+
+		return {
+			results: filteredAssets.map((a) => this.createResult(a))
+		};
+	}
+
+	/**
 	 * An entry has been selected.
 	 * @param result The dispatched result.
-	 * @param lastResponse The last response.
 	 * @returns True if the item was handled.
 	 */
-	public async itemSelection(
-		result: CLIDispatchedSearchResult,
-		lastResponse: CLISearchListenerResponse
-	): Promise<boolean> {
+	public async itemSelection(result: HomeDispatchedSearchResult): Promise<boolean> {
 		if (
-			result.action.name === ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
+			result.action.name === ExcelIntegration._EXCEL_PROVIDER_OPEN_KEY_ACTION &&
 			result.action.trigger === "user-action" &&
-			result.data.workbook &&
-			this._integrationHelpers.launchAsset
+			result.data.workbook
 		) {
 			const excelAsset = result.data as ExcelAssetSettings;
 
-			await this._integrationHelpers.launchAsset({
+			await fin.System.launchExternalProcess({
 				alias: excelAsset.workbook
 			});
 
@@ -144,9 +132,11 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 							if (name === excelAsset.workbook) {
 								for (const worksheetSettings of excelAsset.worksheets) {
 									const worksheet = await workbook.getWorksheetByName(worksheetSettings.name);
-									await worksheet.addEventListener("change", async (cells) => {
-										await this.handleCellChanges(excelAsset, worksheetSettings, cells);
-									});
+									if (worksheet) {
+										await worksheet.addEventListener("change", async (cells) => {
+											await this.handleCellChanges(excelAsset, worksheetSettings, cells);
+										});
+									}
 								}
 							}
 						}
@@ -160,25 +150,6 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	}
 
 	/**
-	 * Get a list of search results based on the query and filters.
-	 * @param query The query to search for.
-	 * @param filters The filters to apply.
-	 * @param lastResponse The last search response used for updating existing results.
-	 * @returns The list of results and new filters.
-	 */
-	public async getSearchResults(
-		query: string,
-		filters: CLIFilter[],
-		lastResponse: CLISearchListenerResponse
-	): Promise<HomeSearchResponse> {
-		const results = this._settings?.assets.map((a) => this.createResult(a));
-
-		return {
-			results
-		};
-	}
-
-	/**
 	 * Create a search result.
 	 * @param excelAsset The excel document asset alias.
 	 * @returns The search result.
@@ -188,15 +159,15 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 			key: `excel-${excelAsset.workbook}`,
 			title: excelAsset.title,
 			label: "Excel",
-			icon: this._moduleDefinition.icon,
+			icon: this._settings?.icon,
 			actions: [
 				{
-					name: ExcelIntegrationProvider._EXCEL_PROVIDER_OPEN_KEY_ACTION,
+					name: ExcelIntegration._EXCEL_PROVIDER_OPEN_KEY_ACTION,
 					hotkey: "Enter"
 				}
 			],
 			data: {
-				providerId: ExcelIntegrationProvider._PROVIDER_ID,
+				providerId: "excel",
 				...excelAsset
 			},
 			template: CLITemplate.SimpleText,
@@ -209,7 +180,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	 * @returns The application.
 	 * @internal
 	 */
-	private async getExcel(): Promise<ExcelApplication> {
+	private async getExcel(): Promise<ExcelApplication | undefined> {
 		try {
 			this._excel = await getExcelApplication();
 			return this._excel;
@@ -221,7 +192,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 	/**
 	 * Handle the cell changes.
 	 * @param excelAsset The asset to use for processing the cell changes.
-	 * @param worksheetName The asset to use for processing the cell changes.
+	 * @param worksheet The asset to use for processing the cell changes.
 	 * @param cells The cells that have changed.
 	 */
 	private async handleCellChanges(
@@ -229,7 +200,7 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 		worksheet: ExcelWorksheetSettings,
 		cells: Cell[]
 	): Promise<void> {
-		if (worksheet.cellHandlers) {
+		if (this._interopClients && worksheet.cellHandlers) {
 			for (const cell of cells) {
 				const cellHandler = worksheet.cellHandlers.find((c) => c.cell === cell.address);
 
@@ -278,12 +249,14 @@ export class ExcelIntegrationProvider implements IntegrationModule<ExcelSettings
 									for (const cellHandler of cellHandlers) {
 										const worksheet = await workbook.getWorksheetByName(worksheetSettings.name);
 
-										let cellValue: string;
-										if (context.type === "fdc3.instrument" || context.type === "instrument") {
-											cellValue = context.id?.ticker;
-										}
-										if (cellValue !== undefined) {
-											await worksheet.setCellValues(cellHandler.cell, [[cellValue]]);
+										if (worksheet) {
+											let cellValue: string | undefined;
+											if (context.type === "fdc3.instrument" || context.type === "instrument") {
+												cellValue = context.id?.ticker;
+											}
+											if (cellValue !== undefined) {
+												await worksheet.setCellValues(cellHandler.cell, [[cellValue]]);
+											}
 										}
 									}
 								}

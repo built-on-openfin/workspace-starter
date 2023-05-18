@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { CustomActionPayload } from "@openfin/workspace-platform";
+import type { CustomActionPayload, WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import {
 	CustomActionCallerType,
 	GlobalContextMenuOptionType,
@@ -16,18 +16,17 @@ import {
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
 	type Workspace,
-	type WorkspacePlatformModule,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { CustomSettings } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
-
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
+	// Load the settings from the manifest
+	const customSettings = await getManifestCustomSettings();
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
@@ -70,7 +69,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
-		overrideCallback
+		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
 	});
 }
 
@@ -150,7 +149,14 @@ function getCustomActions(): CustomActionsMap {
 	};
 }
 
-export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @returns The overridden class.
+ */
+function createWorkspacePlatformOverride(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
@@ -365,4 +371,4 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 	}
 	return new Override();
-};
+}

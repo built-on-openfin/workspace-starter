@@ -94,7 +94,7 @@
 							"sales": {
 								"excludeAppsWithTag": ["tools", "developer", "versions"],
 								"preferredScheme": "light",
-								"excludeMenuAction": ["developer-inspect", "raise-create-app-definition-intent"]
+								"excludeMenuModule": ["developer-menus"]
 							}
 						}
 					}

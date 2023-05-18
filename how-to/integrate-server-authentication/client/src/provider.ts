@@ -1,6 +1,12 @@
 import { init } from "@openfin/workspace-platform";
 
+const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	await initializeWorkspacePlatform();
 
@@ -13,7 +19,38 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initialising workspace platform");
-	await init({ browser: {} });
+	await init({
+		browser: {
+			defaultWindowOptions: {
+				icon: PLATFORM_ICON,
+				workspacePlatform: {
+					pages: [],
+					favicon: PLATFORM_ICON
+				}
+			}
+		},
+		theme: [
+			{
+				label: "Default",
+				default: "dark",
+				palette: {
+					brandPrimary: "#0A76D3",
+					brandSecondary: "#383A40",
+					backgroundPrimary: "#1E1F23"
+				}
+			}
+		]
+	});
+}
+
+/**
+ * Bring the platform to life.
+ */
+export async function initializeWorkspaceComponents(): Promise<void> {
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		await fin.Platform.getCurrentSync().quit();
+	});
 }
 
 /**

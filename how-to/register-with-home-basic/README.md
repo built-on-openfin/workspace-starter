@@ -14,7 +14,7 @@ This example has a hard-coded list of apps that is returned from [apps.ts](clien
 The registration of a provider against Home looks like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: 'title',
   id: 'id',
   icon: 'http://pathto/icon',
@@ -22,7 +22,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 The example is a basic workspace platform that shows a UI allowing you to register against Home, show/hide Home and unregister the provider. No Storefront provider is registered or launched in this example (unless it is already running and has been registered by another application).

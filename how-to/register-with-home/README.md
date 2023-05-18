@@ -104,7 +104,7 @@ The **home provider** ([home.ts](client/src/home.ts)) imports the following:
 The registration of a provider against home will look like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
@@ -112,7 +112,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method reads the `customSettings` section of your [manifest file](public/manifest.fin.json):
@@ -162,7 +162,7 @@ The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Modu
 The registration of a provider against home will look like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
@@ -170,7 +170,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 ### Note About This Example

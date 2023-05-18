@@ -5,15 +5,13 @@ const PLATFORM_TITLE = "Integrate with Bloomberg Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
-
-	// When the provider window is closed quit the platform
-	const providerWindow = fin.Window.getCurrentSync();
-	await providerWindow.once("close-requested", async (event) => {
-		await fin.Platform.getCurrentSync().quit();
-	});
 });
 
 /**
@@ -45,6 +43,16 @@ async function initializeWorkspacePlatform(): Promise<void> {
 		],
 		// Override the platform interop so that we can handle intents
 		interopOverride
+	});
+}
+
+/**
+ * Bring the platform to life.
+ */
+export async function initializeWorkspaceComponents(): Promise<void> {
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		await fin.Platform.getCurrentSync().quit();
 	});
 }
 

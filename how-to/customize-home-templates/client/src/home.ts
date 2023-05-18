@@ -1,11 +1,11 @@
 import {
 	Home,
 	type HomeDispatchedSearchResult,
+	type HomeProvider,
+	type HomeRegistration,
 	type HomeSearchListenerRequest,
 	type HomeSearchListenerResponse,
-	type CLIProvider,
-	type CLISearchResponse,
-	type HomeRegistration
+	type HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, initializeSources, itemSelection } from "./sources";
 
@@ -21,11 +21,16 @@ export async function register(id: string, title: string, icon: string): Promise
 
 	let lastResponse: HomeSearchListenerResponse;
 
-	// The callback fired when the user types in the home query
-	const onUserInput = async (
+	/**
+	 * The callback fired when the user types in the home query.
+	 * @param request The request object from the home component.
+	 * @param response The response to use for async updates.
+	 * @returns The results to display in home.
+	 */
+	async function onUserInput(
 		request: HomeSearchListenerRequest,
 		response: HomeSearchListenerResponse
-	): Promise<CLISearchResponse> => {
+	): Promise<HomeSearchResponse> {
 		const queryLower = request.query.toLowerCase();
 
 		// If the query starts with a ? treat this as a help request
@@ -41,21 +46,24 @@ export async function register(id: string, title: string, icon: string): Promise
 		lastResponse.open();
 
 		return getSearchResults(request.query, [], lastResponse);
-	};
+	}
 
-	// The callback fired when a selection is made in home
-	const onSelection = async (result: HomeDispatchedSearchResult): Promise<void> => {
+	/**
+	 * The callback fired when a selection is made in home.
+	 * @param result The item that was selected in home.
+	 */
+	async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 		if (result.data !== undefined) {
 			await itemSelection(result, lastResponse);
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
-	};
+	}
 
 	// Important to note we enable the dispatchFocusEvents flag
 	// which means we receive `focus-change` events in the onSelection
 	// callback allowing us to lazy load a template
-	const cliProvider: CLIProvider = {
+	const homeProvider: HomeProvider = {
 		id,
 		title,
 		icon,
@@ -64,7 +72,7 @@ export async function register(id: string, title: string, icon: string): Promise
 		dispatchFocusEvents: true
 	};
 
-	const homeRegistration = await Home.register(cliProvider);
+	const homeRegistration = await Home.register(homeProvider);
 	console.log("Home configured.");
 	console.log(homeRegistration);
 

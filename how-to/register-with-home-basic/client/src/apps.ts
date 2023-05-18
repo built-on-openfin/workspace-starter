@@ -6,7 +6,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * Get the list of apps to display.
  * @returns List of app definitions.
  */
-export async function getApps(): Promise<App[]> {
+export function getApps(): App[] {
 	return [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
 }
 

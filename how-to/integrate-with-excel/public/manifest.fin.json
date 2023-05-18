@@ -58,76 +58,50 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"homeProvider": {
-			"id": "integrate-with-excel",
-			"title": "Integrate With Excel",
-			"icon": "http://localhost:8080/favicon.ico"
-		},
-		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
-			"appAssetTag": "appasset"
-		},
-		"browserProvider": {
-			"windowOptions": {
-				"icon": "http://localhost:8080/favicon.ico"
-			}
-		},
-		"integrationProvider": {
-			"modules": [
+		"excel": {
+			"icon": "http://localhost:8080/assets/excel.svg",
+			"assets": [
 				{
-					"id": "excel",
-					"icon": "http://localhost:8080/assets/excel.svg",
-					"title": "Excel Provider",
-					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/excel.bundle.js",
-					"data": {
-						"assets": [
-							{
-								"title": "Excel Interop Example",
-								"description": "Demonstrate interop with Excel workbook",
-								"workbook": "excel-interop-example.xlsx",
-								"worksheets": [
-									{
-										"name": "Sheet1",
-										"cellHandlers": [
-											{
-												"cell": "$B$3",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "green"
-											},
-											{
-												"cell": "$B$4",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "purple"
-											},
-											{
-												"cell": "$B$5",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "orange"
-											},
-											{
-												"cell": "$B$6",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "red"
-											},
-											{
-												"cell": "$B$7",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "pink"
-											},
-											{
-												"cell": "$B$8",
-												"types": ["instrument", "fdc3.instrument"],
-												"contextGroup": "yellow"
-											}
-										]
-									}
-								]
-							}
-						]
-					}
+					"title": "Excel Interop Example",
+					"description": "Demonstrate interop with Excel workbook",
+					"workbook": "excel-interop-example.xlsx",
+					"worksheets": [
+						{
+							"name": "Sheet1",
+							"cellHandlers": [
+								{
+									"cell": "$B$3",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "green"
+								},
+								{
+									"cell": "$B$4",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "purple"
+								},
+								{
+									"cell": "$B$5",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "orange"
+								},
+								{
+									"cell": "$B$6",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "red"
+								},
+								{
+									"cell": "$B$7",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "pink"
+								},
+								{
+									"cell": "$B$8",
+									"types": ["instrument", "fdc3.instrument"],
+									"contextGroup": "yellow"
+								}
+							]
+						}
+					]
 				}
 			]
 		}

@@ -22,7 +22,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/integrations/rss/index.ts',
+		entry: './client/src/rss-feed.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -37,11 +37,11 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'rss.bundle.js',
+			filename: 'rss-feed.bundle.js',
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'integrations')
+			path: path.resolve(__dirname, '..', 'public', 'js')
 		},
 		experiments: {
 			outputModule: true

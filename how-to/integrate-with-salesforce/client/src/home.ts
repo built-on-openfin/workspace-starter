@@ -94,7 +94,7 @@ export async function register(): Promise<HomeRegistration> {
 		}
 	};
 
-	const cliProvider: HomeProvider = {
+	const homeProvider: HomeProvider = {
 		title: settings.homeProvider.title,
 		id: settings.homeProvider.id,
 		icon: settings.homeProvider.icon,
@@ -103,7 +103,7 @@ export async function register(): Promise<HomeRegistration> {
 		dispatchFocusEvents: true
 	};
 
-	const registrationInfo = await Home.register(cliProvider);
+	const registrationInfo = await Home.register(homeProvider);
 	isHomeRegistered = true;
 	console.log("Home configured.");
 	return registrationInfo;
