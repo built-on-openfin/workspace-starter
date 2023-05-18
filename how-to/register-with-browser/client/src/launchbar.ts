@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import { ViewOptions } from "@openfin/core/src/OpenFin";
 import {
 	BrowserButtonType,
 	PanelPosition,
@@ -379,7 +378,7 @@ function createDefaultPageLayout(): PageLayout {
 							uuid: fin.me.uuid,
 							name: `${randomUUID()}-v1`,
 							url: "https://examples.com"
-						} as Partial<ViewOptions>
+						} as Partial<OpenFin.ViewOptions>
 					},
 					{
 						type: "component",
@@ -388,7 +387,7 @@ function createDefaultPageLayout(): PageLayout {
 							uuid: fin.me.uuid,
 							name: `${randomUUID()}-v2`,
 							url: "https://openfin.co"
-						} as Partial<ViewOptions>
+						} as Partial<OpenFin.ViewOptions>
 					}
 				]
 			}
