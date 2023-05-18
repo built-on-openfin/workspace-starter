@@ -42,6 +42,10 @@ const args = yargs(process.argv.slice(2))
 	.help()
 	.alias('help', 'h').argv;
 
+/**
+ * Package the items.
+ * @param cliArgs The CLI arguments.
+ */
 function packageItems(cliArgs) {
 	let publishDir = `public-${cliArgs.location}`;
 

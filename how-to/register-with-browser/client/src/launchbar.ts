@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import { ViewOptions } from "@openfin/core/src/OpenFin";
 import {
 	BrowserButtonType,
 	PanelPosition,
@@ -11,34 +12,6 @@ import {
 	type PageWithUpdatableRuntimeAttribs,
 	type ToolbarOptions
 } from "@openfin/workspace-platform";
-
-const DEFAULT_PAGE_LAYOUT: () => PageLayout = () => ({
-	content: [
-		{
-			type: "stack",
-			content: [
-				{
-					type: "component",
-					componentName: "view",
-					componentState: {
-						uuid: fin.me.uuid,
-						name: `${randomUUID()}-v1`,
-						url: "https://examples.com"
-					}
-				},
-				{
-					type: "component",
-					componentName: "view",
-					componentState: {
-						uuid: fin.me.uuid,
-						name: `${randomUUID()}-v2`,
-						url: "https://openfin.co"
-					}
-				}
-			]
-		}
-	]
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
 	// create browser window with view
@@ -125,7 +98,11 @@ document.addEventListener("DOMContentLoaded", async () => {
  * @returns The created window.
  */
 export async function createBrowserWindow(hasUnsavedChanges = true): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT(), hasUnsavedChanges);
+	const page: Page = await createPageWithLayout(
+		"Untitled Page",
+		createDefaultPageLayout(),
+		hasUnsavedChanges
+	);
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -150,7 +127,7 @@ export async function createBrowserWindowWithoutRequiringSave(): Promise<Browser
  * @returns The created browser window.
  */
 export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -168,7 +145,7 @@ export async function createBrowserWindowMaximized(): Promise<BrowserWindowModul
  * @returns The created browser window.
  */
 export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 
 	const options: BrowserCreateWindowRequest = {
@@ -188,7 +165,7 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
  * @returns The created browser window.
  */
 export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 	const toolbarOptions: ToolbarOptions = {
 		buttons: [
@@ -232,9 +209,9 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
  * @returns The created browser window.
  */
 export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
-	const page1: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
-	const page2: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
+	const page1: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page, page1, page2];
 
 	const options: BrowserCreateWindowRequest = {
@@ -251,8 +228,8 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
  * @returns The created browser window.
  */
 export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
-	const page1: Page = await createPageWithLayout("Locked Page", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
+	const page1: Page = await createPageWithLayout("Locked Page", createDefaultPageLayout());
 	const lockPage1: Page = { isLocked: true, ...page1 };
 	const pages: Page[] = [page, lockPage1];
 	const toolbarOptions: ToolbarOptions = {
@@ -306,8 +283,8 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
  * @returns The created browser window.
  */
 export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
-	const page: Page = await createPageWithLayout("Untitled Page", DEFAULT_PAGE_LAYOUT());
-	const page2: Page = await createPageWithLayout("Untitled Page (2)", DEFAULT_PAGE_LAYOUT());
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
+	const page2: Page = await createPageWithLayout("Untitled Page (2)", createDefaultPageLayout());
 
 	page.panels = [
 		{
@@ -386,6 +363,40 @@ export async function createPageWithLayout(
 }
 
 /**
+ * Create the default page layout.
+ * @returns The default page layout.
+ */
+function createDefaultPageLayout(): PageLayout {
+	return {
+		content: [
+			{
+				type: "stack",
+				content: [
+					{
+						type: "component",
+						componentName: "view",
+						componentState: {
+							uuid: fin.me.uuid,
+							name: `${randomUUID()}-v1`,
+							url: "https://examples.com"
+						} as Partial<ViewOptions>
+					},
+					{
+						type: "component",
+						componentName: "view",
+						componentState: {
+							uuid: fin.me.uuid,
+							name: `${randomUUID()}-v2`,
+							url: "https://openfin.co"
+						} as Partial<ViewOptions>
+					}
+				]
+			}
+		]
+	};
+}
+
+/**
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
@@ -397,10 +408,14 @@ export function randomUUID(): string {
 	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
 	// we are still using window.crypto.getRandomValues which is always available
 	// https://stackoverflow.com/a/2117523/2800218
-	const getRandomHex = (c: string): string =>
-		// eslint-disable-next-line no-bitwise, no-mixed-operators
-		(Number(c) ^ (window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4)))).toString(
-			16
+	// eslint-disable-next-line jsdoc/require-jsdoc
+	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		return (
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
 		);
+	}
 	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }
