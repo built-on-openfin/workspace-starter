@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LocalStorageEndpoint": () => (/* binding */ LocalStorageEndpoint)
+/* harmony export */   LocalStorageEndpoint: () => (/* binding */ LocalStorageEndpoint)
 /* harmony export */ });
 /* harmony import */ var _platform_local_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./platform-local-storage */ "./client/src/modules/endpoints/local-storage/platform-local-storage.ts");
 
@@ -106,7 +106,7 @@ class LocalStorageEndpoint {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PlatformLocalStorage": () => (/* binding */ PlatformLocalStorage)
+/* harmony export */   PlatformLocalStorage: () => (/* binding */ PlatformLocalStorage)
 /* harmony export */ });
 class PlatformLocalStorage {
     constructor(storageId, storageType, loggerCreator) {
@@ -242,7 +242,7 @@ var __webpack_exports__ = {};
   \*************************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _endpoint__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./endpoint */ "./client/src/modules/endpoints/local-storage/endpoint.ts");
 

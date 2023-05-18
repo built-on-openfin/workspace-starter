@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DeveloperActions": () => (/* binding */ DeveloperActions)
+/* harmony export */   DeveloperActions: () => (/* binding */ DeveloperActions)
 /* harmony export */ });
 /**
  * Implement the actions.
@@ -128,7 +128,7 @@ class DeveloperActions {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DevAnalyticsModule": () => (/* binding */ DevAnalyticsModule)
+/* harmony export */   DevAnalyticsModule: () => (/* binding */ DevAnalyticsModule)
 /* harmony export */ });
 /**
  * Implement the analytics module using the interop channels as the means of publishing the events.
@@ -223,7 +223,7 @@ class DevAnalyticsModule {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DeveloperMenus": () => (/* binding */ DeveloperMenus)
+/* harmony export */   DeveloperMenus: () => (/* binding */ DeveloperMenus)
 /* harmony export */ });
 /**
  * Implement the menus.
@@ -404,7 +404,7 @@ var __webpack_exports__ = {};
   \*********************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./client/src/modules/composite/developer/actions.ts");
 /* harmony import */ var _analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./analytics */ "./client/src/modules/composite/developer/analytics.ts");

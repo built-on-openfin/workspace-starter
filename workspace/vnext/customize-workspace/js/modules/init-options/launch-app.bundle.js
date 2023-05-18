@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "InitOptionsLaunchAppHandler": () => (/* binding */ InitOptionsLaunchAppHandler)
+/* harmony export */   InitOptionsLaunchAppHandler: () => (/* binding */ InitOptionsLaunchAppHandler)
 /* harmony export */ });
 class InitOptionsLaunchAppHandler {
     /**
@@ -134,7 +134,7 @@ var __webpack_exports__ = {};
   \*************************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _init_options__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init-options */ "./client/src/modules/init-options/launch-app/init-options.ts");
 

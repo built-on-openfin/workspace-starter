@@ -39,7 +39,7 @@ var __webpack_exports__ = {};
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CONTAINER_ID": () => (/* binding */ CONTAINER_ID)
+/* harmony export */   CONTAINER_ID: () => (/* binding */ CONTAINER_ID)
 /* harmony export */ });
 const CONTAINER_ID = "layout-container";
 const thisWindow = fin.Window.getCurrentSync();
