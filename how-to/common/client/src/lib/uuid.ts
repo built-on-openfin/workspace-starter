@@ -10,7 +10,11 @@ export function randomUUID(): string {
 	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
 	// we are still using window.crypto.getRandomValues which is always available
 	// https://stackoverflow.com/a/2117523/2800218
-	// eslint-disable-next-line jsdoc/require-jsdoc
+	/**
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
+	 */
 	function getRandomHex(c: string): string {
 		// eslint-disable-next-line no-bitwise
 		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
