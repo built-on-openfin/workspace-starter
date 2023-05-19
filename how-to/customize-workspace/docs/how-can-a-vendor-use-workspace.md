@@ -40,11 +40,12 @@ flowchart TD
     C -->|fdc3.contact| F[Orders View]
 ```
 
-### Client Platform Connects To Your Platform For Context
+### Client Platform Connects To Vendor Platform For Context
 
 ```mermaid
 flowchart TD
-    CA[Connect & Listen To Vendor Interop Broker] -->|Listen For Vendor Context| VC(Vendor Broadcasts to Connected Clients)
+    CC[Connect Interop Broker] -->|Connect To Vendor Broker| VC(Vendor Broadcasts to Connected Clients)
+    VC -->|broadcast fdc3.contact| CC
     subgraph vendor
         VA[Platform Launch] -->|Login| VB(Client List View)
         VB --> |broadcast fdc3.contact| VC{InteropBroker}
@@ -53,10 +54,11 @@ flowchart TD
         VC -->|fdc3.contact| VF[Orders View]
     end
     subgraph client
-        CA{Client InteropBroker Connects & Listens To Vendor Platform}
-        CA -->|fdc3.contact| CB[CRM View]
-        CA -->|fdc3.contact| CC[Past Trades View]
-        CA -->|fdc3.contact| CD[Orders View]
+        CA[Platform Launch] -->|Login| CB(Client Landing Page)
+        CB --> CC
+        CC{Client InteropBroker}
+        CC -->|fdc3.contact| CD[Client Contact Sheet]
+        CC -->|fdc3.contact| CE[Client Internal CRM]
     end
 ```
 
@@ -67,6 +69,21 @@ The vendor connecting to the client would be similar to the above diagram but th
 | If there are specific APIs and functions you want to expose to clients then you might want to use our [Channel API](https://developers.openfin.co/of-docs/docs/channels) so that you can build a specific API that your clients can connect to. <br> The Channel API is a low level (the Interop and FDC3 APIs are built on top of it) that lets you have granular control over the exposed functions and who is allowed to connect via the **onConnection** function (similar to how InteopBrokers validate connections). <br><h4>SDK Options</h4> To expose your functionality you have the following options:<ul><li>**Client connects to your service using the Channel API** - You could provide clients with details about your Service: <ul><li>The name of the channel to connect to.</li><li>The payload shape required when connecting.</li><li>The names of the functions they can call.</li><li>What objects your are expecting and the objects you will return.</li></ul> We don't recommend this approach as it involves the client using hardcoded strings for the channel name, function names and they will have no type definitions for the request/response objects. This can make upgrades harder as it will require more work from your clients.</li> <li>**Client connects to your service using an SDK you provide**. You can provide a .NET nuget package or npm package that can be used by your clients that would provide a friendly API to: <ul><li>Connect to your service.</li><li>Call actions as they would be strongly typed.</li><li>See intellisense and comments while working with your API<li>Know when updates are available via the NPM or Nuget Registry.</li></ul>This approach would let you change your Channel API name or behavior or even move away from the Channel API without breaking the contract with your clients.</li></ul> |
 
 <br> 
+
+### Client Platform Connects To Vendor Platform For Context
+
+```mermaid
+flowchart TD
+    CB[Connect To Vendor Channal API Service] -->|Connect To Channel API| VB(Vendor Accepts Connection & Provides functions)
+    CB -->|Call Function on Channel| VB
+    subgraph vendor
+        VA[Platform Launch] -->|Platform Starts| VB{Platform Provider}
+    end
+    subgraph client
+        CA[Platform Launch] -->|Login| CB(Client Page Or Service)
+    end
+```
+Once connected the client can call functions exposed by the Vendor's service and optionally the Vendor can call functions on the client connection on the Client's platform if they implement an agreed function. This flow can be using OpenFin APIs directly or it can be through a Vendor SDK.
 
 | Layouts                           |
 |------------------------------------------|
