@@ -28,7 +28,7 @@ export interface CustomSettings {
 }
 
 /**
- *
+ * Settings for the MS365 integration.
  */
 export interface Microsoft365Settings {
 	/**
