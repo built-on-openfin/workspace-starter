@@ -25,16 +25,42 @@ Just as web developers use to start off as mobile first and then build from ther
 
 | Context Aware                            |
 |------------------------------------------|
-| You have content that is beneficial to your client. While working with your platform they be selecting a contact, an organization, a portfolio or an instrument in one of your views. Other views within your application can react to that selection. This might be using our Interop or FDC3 APIs - see [what is FDC3](./what-is-fdc3.md). <br><h4>Sharing Context With Others</h4> Sharing context amongst your content is really useful and opens up the option for you to share this context with Client Platform's or be driven by a Client's platform. You can extend your platform to offer the following:<ul><li>**Client Platforms connect to your platform** (you can decide whether to allow a connection and whether the connection requires a token for validation purposes). By default a platform allows connections but you can override the **isConnectionAuthorized** function to provide your own logic. We have a pattern in customize workspace called connectionProvider where you can determine what should be allowed to connect to your broker and if a payload onconnection should be validated. See [How to manage connections to your platform](./how-to-manage-connections-to-your-platform.md). A client can then listen to your user channels (green, blue, etc) and react when you publish an object. They might also publish a context to your channels from their platform so that your application reacts. If you want to restrict possible actions and you have your own broker there is a function you can override: **isActionAuthorized**. The connectionProvider doesn't expose this yet so please talk to us if you have a use case. A discussion with the client is **necessary** to cover points such as: <ul><li>Connection requirements.</li><li>What types do you both agree to listen to.</li><li>What types can you publish to each other.</li><li>Are there channels that should not be used.</li></ul></li> <li>**Your Platform can connect to a client's platform**. Just like a client can connect to you, you in turn can connect to a client's platform in order to listen to the context they broadcast on user channels and react by broadcasting that within your platform through your InteropBroker. You can also publish your own context onto a matching channel on your client's platform (if they permit it). A discussion with the client is **necessary** to cover points such as: <ul><li>Connection requirements.</li><li>What types do you both agree to listen to.</li><li>What types can you publish to each other.</li><li>Are there channels that should not be used.</li></ul>This option isn't currently supported in customize via configuration but we are interested in exploring your use case and we do have examples of broker to broker communications in our [container starter](https://github.com/built-on-openfin/container-starter/tree/main/how-to/use-interop/setup-multi-platform-interop).</li></ul> ```mermaid
+| <h4>Sharing Context Within Your Platform</h4> You have content that is beneficial to your client. While working with your platform they be selecting a contact, an organization, a portfolio or an instrument in one of your views. Other views within your application can react to that selection. This might be using our Interop or FDC3 APIs - see [what is FDC3](./what-is-fdc3.md). <br><h4>Sharing Context With Others</h4> Sharing context with your content is really useful and opens up the option for you to share this context with a client's platform or to be driven by a client's platform. You can extend your platform to offer the following:<ul><li>**Client Platforms connect to your platform** (you can decide whether to allow a connection and whether the connection requires a token for validation purposes). By default a platform allows connections but you can override the **isConnectionAuthorized** function to provide your own logic. We have a pattern in customize workspace called connectionProvider where you can determine what should be allowed to connect to your broker and if a payload onconnection should be validated. See [How to manage connections to your platform](./how-to-manage-connections-to-your-platform.md). A client can then listen to your user channels (green, blue, etc) and react when you publish an object. They might also publish a context to your channels from their platform so that your application reacts. If you want to restrict possible actions and you have your own broker there is a function you can override: **isActionAuthorized**. The connectionProvider doesn't expose this yet so please talk to us if you have a use case. A discussion with the client is **necessary** to cover points such as: <ul><li>Connection requirements.</li><li>What types do you both agree to listen to.</li><li>What types can you publish to each other.</li><li>Are there channels that should not be used.</li></ul></li> <li>**Your Platform can connect to a client's platform**. Just like a client can connect to you, you in turn can connect to a client's platform in order to listen to the context they broadcast on user channels and react by broadcasting that within your platform through your InteropBroker. You can also publish your own context onto a matching channel on your client's platform (if they permit it). A discussion with the client is **necessary** to cover points such as: <ul><li>Connection requirements.</li><li>What types do you both agree to listen to.</li><li>What types can you publish to each other.</li><li>Are there channels that should not be used.</li></ul>This option isn't currently supported in customize via configuration but we are interested in exploring your use case and we do have examples of broker to broker communications in our [container starter](https://github.com/built-on-openfin/container-starter/tree/main/how-to/use-interop/setup-multi-platform-interop).</li></ul> |
+
+<br>
+
+### Context Sharing Within A Platform
+
+```mermaid
 flowchart TD
     A[Platform Launch] -->|Login| B(Client List View)
     B --> |broadcast fdc3.contact| C{InteropBroker}
     C -->|fdc3.contact| D[CRM View]
     C -->|fdc3.contact| E[Past Trades View]
     C -->|fdc3.contact| F[Orders View]
-```|
+```
 
-<br>
+### Client Platform Connects To Your Platform For Context
+
+```mermaid
+flowchart TD
+    CA[Connect & Listen To Vendor Interop Broker] -->|Listen For Vendor Context| VC(Vendor Broadcasts to Connected Clients)
+    subgraph vendor
+        VA[Platform Launch] -->|Login| VB(Client List View)
+        VB --> |broadcast fdc3.contact| VC{InteropBroker}
+        VC -->|fdc3.contact| VD[CRM View]
+        VC -->|fdc3.contact| VE[Past Trades View]
+        VC -->|fdc3.contact| VF[Orders View]
+    end
+    subgraph client
+        CA{Client InteropBroker Connects & Listens To Vendor Platform}
+        CA -->|fdc3.contact| CB[CRM View]
+        CA -->|fdc3.contact| CC[Past Trades View]
+        CA -->|fdc3.contact| CD[Orders View]
+    end
+```
+
+The vendor connecting to the client would be similar to the above diagram but the vendor would be doing the connection.
 
 | Services (SDKs)                            |
 |------------------------------------------|
