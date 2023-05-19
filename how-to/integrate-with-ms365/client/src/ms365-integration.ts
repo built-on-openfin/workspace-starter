@@ -838,7 +838,7 @@ export class Microsoft365Integration {
 			});
 
 			if (response?.data?.webLink) {
-				await this._integrationHelpers.launchView(response.data.webLink);
+				await this._integrationHelpers.launchView({ url: response.data.webLink });
 
 				return true;
 			}
@@ -866,7 +866,7 @@ export class Microsoft365Integration {
 			});
 
 			if (response?.data?.webLink) {
-				await this._integrationHelpers.launchView(response.data.webLink);
+				await this._integrationHelpers.launchView({ url: response.data.webLink });
 
 				return true;
 			}
@@ -906,7 +906,7 @@ export class Microsoft365Integration {
 						u.replace(Microsoft365Integration._TEAMS_URL, Microsoft365Integration._TEAMS_PROTOCOL)
 					);
 				} else if (this._integrationHelpers) {
-					await this._integrationHelpers.launchView(u);
+					await this._integrationHelpers.launchView({ url: u });
 				}
 				return true;
 			}

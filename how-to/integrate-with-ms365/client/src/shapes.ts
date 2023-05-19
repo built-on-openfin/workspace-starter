@@ -280,10 +280,10 @@ export interface IntegrationHelpers {
 
 	/**
 	 * Launch a view in the workspace.
-	 * @param view The view to launch.
+	 * @param viewOptions The view options to launch.
 	 * @returns The launched view.
 	 */
-	launchView(view: string): Promise<OpenFin.View>;
+	launchView(viewOptions: OpenFin.PlatformViewCreationOptions): Promise<OpenFin.View>;
 }
 
 /**

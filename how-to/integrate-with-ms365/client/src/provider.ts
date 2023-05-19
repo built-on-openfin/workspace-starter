@@ -210,9 +210,9 @@ function createHelpers(): IntegrationHelpers {
 	return {
 		templateHelpers,
 		getCurrentPalette: templateHelpers.getCurrentPalette,
-		launchView: async (url: string): Promise<OpenFin.View> => {
+		launchView: async (viewOptions: OpenFin.PlatformViewCreationOptions): Promise<OpenFin.View> => {
 			const platform = getCurrentSync();
-			return platform.createView({ url });
+			return platform.createView(viewOptions);
 		}
 	};
 }
