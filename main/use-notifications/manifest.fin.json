@@ -10,11 +10,7 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/use-notifications/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true,
-		"defaultWindowOptions": {}
-	},
-	"snapshot": {
-		"windows": []
+		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
 		"company": "OpenFin",
