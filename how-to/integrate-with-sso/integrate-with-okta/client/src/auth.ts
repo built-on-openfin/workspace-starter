@@ -101,7 +101,7 @@ export async function login(): Promise<void> {
  * @param oktaCode The okta code to use to get the token.
  * @returns The token.
  */
-export async function getAccessToken(oktaCode: string): Promise<string | undefined> {
+async function getAccessToken(oktaCode: string): Promise<string | undefined> {
 	if (oktaCode) {
 		try {
 			const response = await fetch(`https://${oktaSettings?.domain}/oauth2/v1/token`, {
@@ -425,7 +425,7 @@ function removeProperty(propName: string): void {
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
-export function randomUUID(): string {
+function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();

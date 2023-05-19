@@ -76,7 +76,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 /**
  * Bring the platform to life.
  */
-export async function initializeWorkspaceComponents(): Promise<void> {
+async function initializeWorkspaceComponents(): Promise<void> {
 	console.log("Initialising the workspace components");
 
 	// When the platform requests to be close we deregister from home and quit
@@ -90,7 +90,7 @@ export async function initializeWorkspaceComponents(): Promise<void> {
  * Read the custom settings from the manifest.fin.json
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
 

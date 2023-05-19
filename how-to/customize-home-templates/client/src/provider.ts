@@ -48,7 +48,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 /**
  * Bring the platform to life.
  */
-export async function initializeWorkspaceComponents(): Promise<void> {
+async function initializeWorkspaceComponents(): Promise<void> {
 	console.log("Initialising the workspace components");
 
 	// Register with home and show it
