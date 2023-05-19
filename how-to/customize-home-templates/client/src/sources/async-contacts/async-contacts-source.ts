@@ -325,7 +325,7 @@ export class AsyncContactsSource {
 	 * @param query The query to search for
 	 * @param results The result list to populate.
 	 */
-	private async contactsSync(query: string, results: HomeSearchResult[]) {
+	private async contactsSync(query: string, results: HomeSearchResult[]): Promise<void> {
 		const wildcard = query.trim().toLowerCase();
 
 		if (wildcard.length > 0) {
@@ -362,7 +362,7 @@ export class AsyncContactsSource {
 		query: string,
 		results: HomeSearchResult[],
 		lastResponse: HomeSearchListenerResponse
-	) {
+	): Promise<void> {
 		const wildcard = query.trim().toLowerCase();
 
 		if (wildcard.length > 0) {
@@ -407,7 +407,7 @@ export class AsyncContactsSource {
 		query: string,
 		results: HomeSearchResult[],
 		lastResponse: HomeSearchListenerResponse
-	) {
+	): Promise<void> {
 		const wildcard = query.trim().toLowerCase();
 
 		if (wildcard.length > 0) {

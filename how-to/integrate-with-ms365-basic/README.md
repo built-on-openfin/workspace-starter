@@ -13,7 +13,7 @@ The integration package utilized by this example is [@openfin/microsoft365](http
 
 For more information on the Microsoft 365 integration package and how you should configure your Microsoft 365 platform to be accessible from the OpenFin integration package see [Microsoft 365 Integration](https://developers.openfin.co/of-docs/docs/ms365-integration).
 
-When you have finished configuring your Microsoft 365 platform for access by the integration you should modify `settings.ts` to include your `CLIENT_ID` and `TENANT_ID`
+When you have finished configuring your Microsoft 365 platform for access by the integration you should modify `provider.ts` to include your `CLIENT_ID` and `TENANT_ID`
 
 ## Getting Started
 

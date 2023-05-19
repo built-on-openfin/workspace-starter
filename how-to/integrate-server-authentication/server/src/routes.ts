@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type NextFunction, type Request, type Response } from "express";
 import { readFile } from "fs/promises";
 import path from "path";
 
@@ -8,10 +8,16 @@ export default router;
 const sessionIds: { [id: string]: unknown } = {};
 const SESSION_COOKIE_NAME = "app-session-id";
 
-const corsMiddleware: express.Handler = (req, res, next) => {
+/**
+ * Middleware hook for CORS handling.
+ * @param req The request.
+ * @param res The response.
+ * @param next The next hook to call.
+ */
+function corsMiddleware(req: Request, res: Response, next: NextFunction): void {
 	// add logic here if you wish to support cors.
 	next();
-};
+}
 
 /**
  * Get the platform provider.html, if the user has no authentication cookie

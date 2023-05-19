@@ -10,11 +10,7 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true,
-		"defaultWindowOptions": {}
-	},
-	"snapshot": {
-		"windows": []
+		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
 		"company": "OpenFin",
