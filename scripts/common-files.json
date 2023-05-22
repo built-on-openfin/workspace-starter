@@ -1,7 +1,43 @@
 [
 	{
+		"name": "customize-home-templates",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/customize-home-templates/public",
+				"files": [
+					"favicon.ico"
+				]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/customize-home-templates/public/common",
+				"files": [
+					"dos.json"
+				]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/customize-home-templates/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/customize-home-templates/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
 		"name": "register-with-home-basic",
 		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-home-basic/public",
+				"files": [
+					"favicon.ico"
+				]
+			},			
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/register-with-home-basic/public/common",
@@ -12,8 +48,7 @@
 					"style/style-changed-preload.js",
 					"views/platform/of-info.view.fin.json",
 					"views/platform/of-info/**/*",
-					"dos.json",
-					"favicon.ico"
+					"dos.json"
 				]
 			},
 			{

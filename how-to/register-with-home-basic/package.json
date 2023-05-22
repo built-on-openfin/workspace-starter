@@ -8,9 +8,9 @@
 		"kill": "node ./scripts/kill.mjs",
 		"client": "node ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
-		"build": "webpack build --config ./client/webpack.config.js --mode=development",
-		"start": "npm run build-client",
-		"setup": "cd ../../ && npm install && cd how-to/register-with-home-basic && npm run build-client"
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080",
+		"setup": "cd ../../ && npm install && cd how-to/register-with-home-basic && npm run build"
 	},
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
@@ -20,6 +20,7 @@
 	},
 	"devDependencies": {
 		"@openfin/core": "30.74.13",
+		"openfin-adapter": "30.74.13",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.5",
 		"webpack": "^5.82.1",
