@@ -129,18 +129,18 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 				results = results.concat(
 					appResults.map(
 						(app) =>
-						({
-							key: app.appId,
-							title: app.title,
-							icon: app.icons[0]?.src,
-							data: app,
-							label: "View",
-							actions: [{ name: "Launch View", hotkey: "enter" }],
-							description: app.description,
-							shortDescription: app.description,
-							template: CLITemplate.SimpleText,
-							templateContent: app.description
-						} as HomeSearchResult)
+							({
+								key: app.appId,
+								title: app.title,
+								icon: app.icons[0]?.src,
+								data: app,
+								label: "View",
+								actions: [{ name: "Launch View", hotkey: "enter" }],
+								description: app.description,
+								shortDescription: app.description,
+								template: CLITemplate.SimpleText,
+								templateContent: app.description
+							} as HomeSearchResult)
 					)
 				);
 			}
