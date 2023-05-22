@@ -2164,7 +2164,7 @@ module.exports = Emoji;
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EmojiIntegrationProvider": () => (/* binding */ EmojiIntegrationProvider)
+/* harmony export */   EmojiIntegrationProvider: () => (/* binding */ EmojiIntegrationProvider)
 /* harmony export */ });
 /* harmony import */ var node_emoji__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! node-emoji */ "../../node_modules/node-emoji/index.js");
 /* harmony import */ var node_emoji__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_emoji__WEBPACK_IMPORTED_MODULE_0__);
@@ -2485,7 +2485,7 @@ var __webpack_exports__ = {};
   \********************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _integration__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./integration */ "./client/src/modules/integrations/emoji/integration.ts");
 

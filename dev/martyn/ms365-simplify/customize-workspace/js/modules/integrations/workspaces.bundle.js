@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "randomUUID": () => (/* binding */ randomUUID)
+/* harmony export */   randomUUID: () => (/* binding */ randomUUID)
 /* harmony export */ });
 function randomUUID() {
     if ("randomUUID" in window.crypto) {
@@ -35,7 +35,7 @@ function randomUUID() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "WorkspacesProvider": () => (/* binding */ WorkspacesProvider)
+/* harmony export */   WorkspacesProvider: () => (/* binding */ WorkspacesProvider)
 /* harmony export */ });
 /* harmony import */ var _framework_uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../framework/uuid */ "./client/src/framework/uuid.ts");
 
@@ -429,7 +429,7 @@ var __webpack_exports__ = {};
   \*************************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _integration__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./integration */ "./client/src/modules/integrations/workspaces/integration.ts");
 

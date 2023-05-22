@@ -1037,14 +1037,14 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getApp": () => (/* binding */ getApp),
-/* harmony export */   "getAppIcon": () => (/* binding */ getAppIcon),
-/* harmony export */   "getApps": () => (/* binding */ getApps),
-/* harmony export */   "getAppsByIntent": () => (/* binding */ getAppsByIntent),
-/* harmony export */   "getAppsByTag": () => (/* binding */ getAppsByTag),
-/* harmony export */   "getIntent": () => (/* binding */ getIntent),
-/* harmony export */   "getIntentsByContext": () => (/* binding */ getIntentsByContext),
-/* harmony export */   "init": () => (/* binding */ init)
+/* harmony export */   getApp: () => (/* binding */ getApp),
+/* harmony export */   getAppIcon: () => (/* binding */ getAppIcon),
+/* harmony export */   getApps: () => (/* binding */ getApps),
+/* harmony export */   getAppsByIntent: () => (/* binding */ getAppsByIntent),
+/* harmony export */   getAppsByTag: () => (/* binding */ getAppsByTag),
+/* harmony export */   getIntent: () => (/* binding */ getIntent),
+/* harmony export */   getIntentsByContext: () => (/* binding */ getIntentsByContext),
+/* harmony export */   init: () => (/* binding */ init)
 /* harmony export */ });
 /* harmony import */ var _connections__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./connections */ "./client/src/framework/connections.ts");
 /* harmony import */ var _directory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./directory */ "./client/src/framework/directory.ts");
@@ -1401,7 +1401,7 @@ function appIntentContains(contextType, resultType, appIntent) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "init": () => (/* binding */ init)
+/* harmony export */   init: () => (/* binding */ init)
 /* harmony export */ });
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth */ "./client/src/framework/auth.ts");
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
@@ -1487,14 +1487,14 @@ async function init(next, logger, listenForAuthChanges = false) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getUserInfo": () => (/* binding */ getUserInfo),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "isAuthenticationEnabled": () => (/* binding */ isAuthenticationEnabled),
-/* harmony export */   "isAuthenticationRequired": () => (/* binding */ isAuthenticationRequired),
-/* harmony export */   "login": () => (/* binding */ login),
-/* harmony export */   "logout": () => (/* binding */ logout),
-/* harmony export */   "subscribe": () => (/* binding */ subscribe),
-/* harmony export */   "unsubscribe": () => (/* binding */ unsubscribe)
+/* harmony export */   getUserInfo: () => (/* binding */ getUserInfo),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   isAuthenticationEnabled: () => (/* binding */ isAuthenticationEnabled),
+/* harmony export */   isAuthenticationRequired: () => (/* binding */ isAuthenticationRequired),
+/* harmony export */   login: () => (/* binding */ login),
+/* harmony export */   logout: () => (/* binding */ logout),
+/* harmony export */   subscribe: () => (/* binding */ subscribe),
+/* harmony export */   unsubscribe: () => (/* binding */ unsubscribe)
 /* harmony export */ });
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
@@ -1586,9 +1586,9 @@ async function getUserInfo() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getDefaultToolbarButtons": () => (/* binding */ getDefaultToolbarButtons),
-/* harmony export */   "updateBrowserWindowButtonsColorScheme": () => (/* binding */ updateBrowserWindowButtonsColorScheme),
-/* harmony export */   "updateToolbarButtons": () => (/* binding */ updateToolbarButtons)
+/* harmony export */   getDefaultToolbarButtons: () => (/* binding */ getDefaultToolbarButtons),
+/* harmony export */   updateBrowserWindowButtonsColorScheme: () => (/* binding */ updateBrowserWindowButtonsColorScheme),
+/* harmony export */   updateToolbarButtons: () => (/* binding */ updateToolbarButtons)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace-platform */ "../../node_modules/@openfin/workspace-platform/index.js");
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__);
@@ -1710,10 +1710,10 @@ function themeUrl(url, iconFolder, colorSchemeMode) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "checkCondition": () => (/* binding */ checkCondition),
-/* harmony export */   "checkConditions": () => (/* binding */ checkConditions),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "registerCondition": () => (/* binding */ registerCondition)
+/* harmony export */   checkCondition: () => (/* binding */ checkCondition),
+/* harmony export */   checkConditions: () => (/* binding */ checkConditions),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   registerCondition: () => (/* binding */ registerCondition)
 /* harmony export */ });
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
@@ -1776,14 +1776,14 @@ async function checkCondition(platform, conditionId) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "clearAction": () => (/* binding */ clearAction),
-/* harmony export */   "getConnectedAppSourceClients": () => (/* binding */ getConnectedAppSourceClients),
-/* harmony export */   "getConnectedApps": () => (/* binding */ getConnectedApps),
-/* harmony export */   "getConnectedSnapshotSourceClients": () => (/* binding */ getConnectedSnapshotSourceClients),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "isConnectionValid": () => (/* binding */ isConnectionValid),
-/* harmony export */   "launchConnectedApp": () => (/* binding */ launchConnectedApp),
-/* harmony export */   "registerAction": () => (/* binding */ registerAction)
+/* harmony export */   clearAction: () => (/* binding */ clearAction),
+/* harmony export */   getConnectedAppSourceClients: () => (/* binding */ getConnectedAppSourceClients),
+/* harmony export */   getConnectedApps: () => (/* binding */ getConnectedApps),
+/* harmony export */   getConnectedSnapshotSourceClients: () => (/* binding */ getConnectedSnapshotSourceClients),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   isConnectionValid: () => (/* binding */ isConnectionValid),
+/* harmony export */   launchConnectedApp: () => (/* binding */ launchConnectedApp),
+/* harmony export */   registerAction: () => (/* binding */ registerAction)
 /* harmony export */ });
 /* harmony import */ var _endpoint__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./endpoint */ "./client/src/framework/endpoint.ts");
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
@@ -2064,7 +2064,7 @@ async function isConnectionValid(identity, payload, options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DEFAULT_PALETTES": () => (/* binding */ DEFAULT_PALETTES)
+/* harmony export */   DEFAULT_PALETTES: () => (/* binding */ DEFAULT_PALETTES)
 /* harmony export */ });
 const DEFAULT_PALETTES = {
     light: {
@@ -2136,10 +2136,10 @@ const DEFAULT_PALETTES = {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addDirectory": () => (/* binding */ addDirectory),
-/* harmony export */   "getPlatformApps": () => (/* binding */ getPlatformApps),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "removeDirectory": () => (/* binding */ removeDirectory)
+/* harmony export */   addDirectory: () => (/* binding */ addDirectory),
+/* harmony export */   getPlatformApps: () => (/* binding */ getPlatformApps),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   removeDirectory: () => (/* binding */ removeDirectory)
 /* harmony export */ });
 /* harmony import */ var _fdc3_1_2_mapper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fdc3/1.2/mapper */ "./client/src/framework/fdc3/1.2/mapper.ts");
 /* harmony import */ var _fdc3_2_0_mapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fdc3/2.0/mapper */ "./client/src/framework/fdc3/2.0/mapper.ts");
@@ -2305,10 +2305,10 @@ async function getPlatformApps() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "action": () => (/* binding */ action),
-/* harmony export */   "hasEndpoint": () => (/* binding */ hasEndpoint),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "requestResponse": () => (/* binding */ requestResponse)
+/* harmony export */   action: () => (/* binding */ action),
+/* harmony export */   hasEndpoint: () => (/* binding */ hasEndpoint),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   requestResponse: () => (/* binding */ requestResponse)
 /* harmony export */ });
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
@@ -2431,10 +2431,10 @@ async function requestResponse(endpointId, request) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getInterop": () => (/* binding */ getInterop),
-/* harmony export */   "mapToAppMetaData": () => (/* binding */ mapToAppMetaData),
-/* harmony export */   "mapToPlatformApp": () => (/* binding */ mapToPlatformApp),
-/* harmony export */   "mapToPlatformApps": () => (/* binding */ mapToPlatformApps)
+/* harmony export */   getInterop: () => (/* binding */ getInterop),
+/* harmony export */   mapToAppMetaData: () => (/* binding */ mapToAppMetaData),
+/* harmony export */   mapToPlatformApp: () => (/* binding */ mapToPlatformApp),
+/* harmony export */   mapToPlatformApps: () => (/* binding */ mapToPlatformApps)
 /* harmony export */ });
 function getIcons(icons) {
     const appIcons = [];
@@ -2580,10 +2580,10 @@ function mapToAppMetaData(app) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getIntents": () => (/* binding */ getIntents),
-/* harmony export */   "mapToAppMetaData": () => (/* binding */ mapToAppMetaData),
-/* harmony export */   "mapToPlatformApp": () => (/* binding */ mapToPlatformApp),
-/* harmony export */   "mapToPlatformApps": () => (/* binding */ mapToPlatformApps)
+/* harmony export */   getIntents: () => (/* binding */ getIntents),
+/* harmony export */   mapToAppMetaData: () => (/* binding */ mapToAppMetaData),
+/* harmony export */   mapToPlatformApp: () => (/* binding */ mapToPlatformApp),
+/* harmony export */   mapToPlatformApps: () => (/* binding */ mapToPlatformApps)
 /* harmony export */ });
 function getManifestType(app) {
     let manifestType;
@@ -2728,8 +2728,8 @@ function mapToAppMetaData(app, resultType) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bringToFront": () => (/* binding */ bringToFront),
-/* harmony export */   "launch": () => (/* binding */ launch)
+/* harmony export */   bringToFront: () => (/* binding */ bringToFront),
+/* harmony export */   launch: () => (/* binding */ launch)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace-platform */ "../../node_modules/@openfin/workspace-platform/index.js");
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__);
@@ -3184,10 +3184,10 @@ async function bringToFront(appEntry, platformAppIdentifiers) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fireLifecycleEvent": () => (/* binding */ fireLifecycleEvent),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "subscribeLifecycleEvent": () => (/* binding */ subscribeLifecycleEvent),
-/* harmony export */   "unsubscribeLifecycleEvent": () => (/* binding */ unsubscribeLifecycleEvent)
+/* harmony export */   fireLifecycleEvent: () => (/* binding */ fireLifecycleEvent),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   subscribeLifecycleEvent: () => (/* binding */ subscribeLifecycleEvent),
+/* harmony export */   unsubscribeLifecycleEvent: () => (/* binding */ unsubscribeLifecycleEvent)
 /* harmony export */ });
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
@@ -3252,9 +3252,9 @@ function unsubscribeLifecycleEvent(subscriptionId, lifecycleEvent) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LoggerProvider": () => (/* binding */ LoggerProvider),
-/* harmony export */   "createLogger": () => (/* binding */ createLogger),
-/* harmony export */   "loggerProvider": () => (/* binding */ loggerProvider)
+/* harmony export */   LoggerProvider: () => (/* binding */ LoggerProvider),
+/* harmony export */   createLogger: () => (/* binding */ createLogger),
+/* harmony export */   loggerProvider: () => (/* binding */ loggerProvider)
 /* harmony export */ });
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules */ "./client/src/framework/modules.ts");
 
@@ -3322,7 +3322,7 @@ function createLogger(group) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "manifestTypes": () => (/* binding */ manifestTypes)
+/* harmony export */   manifestTypes: () => (/* binding */ manifestTypes)
 /* harmony export */ });
 const manifestTypes = {
     view: {
@@ -3413,14 +3413,14 @@ const manifestTypes = {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "closedownModule": () => (/* binding */ closedownModule),
-/* harmony export */   "closedownModules": () => (/* binding */ closedownModules),
-/* harmony export */   "getDefaultHelpers": () => (/* binding */ getDefaultHelpers),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "initializeModule": () => (/* binding */ initializeModule),
-/* harmony export */   "initializeModules": () => (/* binding */ initializeModules),
-/* harmony export */   "loadModule": () => (/* binding */ loadModule),
-/* harmony export */   "loadModules": () => (/* binding */ loadModules)
+/* harmony export */   closedownModule: () => (/* binding */ closedownModule),
+/* harmony export */   closedownModules: () => (/* binding */ closedownModules),
+/* harmony export */   getDefaultHelpers: () => (/* binding */ getDefaultHelpers),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   initializeModule: () => (/* binding */ initializeModule),
+/* harmony export */   initializeModules: () => (/* binding */ initializeModules),
+/* harmony export */   loadModule: () => (/* binding */ loadModule),
+/* harmony export */   loadModules: () => (/* binding */ loadModules)
 /* harmony export */ });
 /* harmony import */ var _apps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apps */ "./client/src/framework/apps.ts");
 /* harmony import */ var _launch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./launch */ "./client/src/framework/launch.ts");
@@ -3644,20 +3644,20 @@ function getDefaultHelpers(settings) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bringPageToFront": () => (/* binding */ bringPageToFront),
-/* harmony export */   "bringViewToFront": () => (/* binding */ bringViewToFront),
-/* harmony export */   "bringWindowToFront": () => (/* binding */ bringWindowToFront),
-/* harmony export */   "deletePageBounds": () => (/* binding */ deletePageBounds),
-/* harmony export */   "doesViewExist": () => (/* binding */ doesViewExist),
-/* harmony export */   "doesWindowExist": () => (/* binding */ doesWindowExist),
-/* harmony export */   "findViewNames": () => (/* binding */ findViewNames),
-/* harmony export */   "getAllVisibleWindows": () => (/* binding */ getAllVisibleWindows),
-/* harmony export */   "getDefaultWindowOptions": () => (/* binding */ getDefaultWindowOptions),
-/* harmony export */   "getPageBounds": () => (/* binding */ getPageBounds),
-/* harmony export */   "getPageForView": () => (/* binding */ getPageForView),
-/* harmony export */   "launchPage": () => (/* binding */ launchPage),
-/* harmony export */   "launchView": () => (/* binding */ launchView),
-/* harmony export */   "savePageBounds": () => (/* binding */ savePageBounds)
+/* harmony export */   bringPageToFront: () => (/* binding */ bringPageToFront),
+/* harmony export */   bringViewToFront: () => (/* binding */ bringViewToFront),
+/* harmony export */   bringWindowToFront: () => (/* binding */ bringWindowToFront),
+/* harmony export */   deletePageBounds: () => (/* binding */ deletePageBounds),
+/* harmony export */   doesViewExist: () => (/* binding */ doesViewExist),
+/* harmony export */   doesWindowExist: () => (/* binding */ doesWindowExist),
+/* harmony export */   findViewNames: () => (/* binding */ findViewNames),
+/* harmony export */   getAllVisibleWindows: () => (/* binding */ getAllVisibleWindows),
+/* harmony export */   getDefaultWindowOptions: () => (/* binding */ getDefaultWindowOptions),
+/* harmony export */   getPageBounds: () => (/* binding */ getPageBounds),
+/* harmony export */   getPageForView: () => (/* binding */ getPageForView),
+/* harmony export */   launchPage: () => (/* binding */ launchPage),
+/* harmony export */   launchView: () => (/* binding */ launchView),
+/* harmony export */   savePageBounds: () => (/* binding */ savePageBounds)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace-platform */ "../../node_modules/@openfin/workspace-platform/index.js");
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__);
@@ -3937,9 +3937,9 @@ async function getAllVisibleWindows() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getConfiguredSettings": () => (/* binding */ getConfiguredSettings),
-/* harmony export */   "getSettings": () => (/* binding */ getSettings),
-/* harmony export */   "isValid": () => (/* binding */ isValid)
+/* harmony export */   getConfiguredSettings: () => (/* binding */ getConfiguredSettings),
+/* harmony export */   getSettings: () => (/* binding */ getSettings),
+/* harmony export */   isValid: () => (/* binding */ isValid)
 /* harmony export */ });
 /* harmony import */ var _endpoint__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./endpoint */ "./client/src/framework/endpoint.ts");
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
@@ -4033,7 +4033,7 @@ async function isValid() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ColorSchemeMode": () => (/* binding */ ColorSchemeMode)
+/* harmony export */   ColorSchemeMode: () => (/* binding */ ColorSchemeMode)
 /* harmony export */ });
 var ColorSchemeMode;
 (function (ColorSchemeMode) {
@@ -4052,16 +4052,16 @@ var ColorSchemeMode;
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getCurrentColorSchemeMode": () => (/* binding */ getCurrentColorSchemeMode),
-/* harmony export */   "getCurrentIconFolder": () => (/* binding */ getCurrentIconFolder),
-/* harmony export */   "getCurrentPalette": () => (/* binding */ getCurrentPalette),
-/* harmony export */   "getCurrentThemeId": () => (/* binding */ getCurrentThemeId),
-/* harmony export */   "getThemes": () => (/* binding */ getThemes),
-/* harmony export */   "notifyColorScheme": () => (/* binding */ notifyColorScheme),
-/* harmony export */   "setCurrentColorSchemeMode": () => (/* binding */ setCurrentColorSchemeMode),
-/* harmony export */   "supportsColorSchemes": () => (/* binding */ supportsColorSchemes),
-/* harmony export */   "toggleScheme": () => (/* binding */ toggleScheme),
-/* harmony export */   "validateThemes": () => (/* binding */ validateThemes)
+/* harmony export */   getCurrentColorSchemeMode: () => (/* binding */ getCurrentColorSchemeMode),
+/* harmony export */   getCurrentIconFolder: () => (/* binding */ getCurrentIconFolder),
+/* harmony export */   getCurrentPalette: () => (/* binding */ getCurrentPalette),
+/* harmony export */   getCurrentThemeId: () => (/* binding */ getCurrentThemeId),
+/* harmony export */   getThemes: () => (/* binding */ getThemes),
+/* harmony export */   notifyColorScheme: () => (/* binding */ notifyColorScheme),
+/* harmony export */   setCurrentColorSchemeMode: () => (/* binding */ setCurrentColorSchemeMode),
+/* harmony export */   supportsColorSchemes: () => (/* binding */ supportsColorSchemes),
+/* harmony export */   toggleScheme: () => (/* binding */ toggleScheme),
+/* harmony export */   validateThemes: () => (/* binding */ validateThemes)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace-platform */ "../../node_modules/@openfin/workspace-platform/index.js");
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__);
@@ -4305,7 +4305,7 @@ async function toggleScheme() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "randomUUID": () => (/* binding */ randomUUID)
+/* harmony export */   randomUUID: () => (/* binding */ randomUUID)
 /* harmony export */ });
 function randomUUID() {
     if ("randomUUID" in window.crypto) {
@@ -4332,12 +4332,12 @@ function randomUUID() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MonitorVersionStatus": () => (/* binding */ MonitorVersionStatus),
-/* harmony export */   "getVersionInfo": () => (/* binding */ getVersionInfo),
-/* harmony export */   "getVersionStatus": () => (/* binding */ getVersionStatus),
-/* harmony export */   "init": () => (/* binding */ init),
-/* harmony export */   "manageVersionStatus": () => (/* binding */ manageVersionStatus),
-/* harmony export */   "setVersion": () => (/* binding */ setVersion)
+/* harmony export */   MonitorVersionStatus: () => (/* binding */ MonitorVersionStatus),
+/* harmony export */   getVersionInfo: () => (/* binding */ getVersionInfo),
+/* harmony export */   getVersionStatus: () => (/* binding */ getVersionStatus),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   manageVersionStatus: () => (/* binding */ manageVersionStatus),
+/* harmony export */   setVersion: () => (/* binding */ setVersion)
 /* harmony export */ });
 /* harmony import */ var _logger_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logger-provider */ "./client/src/framework/logger-provider.ts");
 
@@ -4780,7 +4780,7 @@ var __webpack_exports__ = {};
   \*****************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "init": () => (/* binding */ init)
+/* harmony export */   init: () => (/* binding */ init)
 /* harmony export */ });
 /* harmony import */ var _framework_auth_flow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./framework/auth-flow */ "./client/src/framework/auth-flow.ts");
 /* harmony import */ var _framework_logger_provider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./framework/logger-provider */ "./client/src/framework/logger-provider.ts");

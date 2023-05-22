@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PageActions": () => (/* binding */ PageActions)
+/* harmony export */   PageActions: () => (/* binding */ PageActions)
 /* harmony export */ });
 /**
  * Implement the actions.
@@ -96,7 +96,7 @@ class PageActions {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PageMenus": () => (/* binding */ PageMenus)
+/* harmony export */   PageMenus: () => (/* binding */ PageMenus)
 /* harmony export */ });
 /**
  * Implement the menus.
@@ -281,7 +281,7 @@ var __webpack_exports__ = {};
   \*****************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./client/src/modules/composite/pages/actions.ts");
 /* harmony import */ var _menus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menus */ "./client/src/modules/composite/pages/menus.ts");

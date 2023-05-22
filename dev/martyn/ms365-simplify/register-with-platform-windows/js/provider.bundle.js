@@ -2068,8 +2068,8 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getApps": () => (/* binding */ getApps),
-/* harmony export */   "launchApp": () => (/* binding */ launchApp)
+/* harmony export */   getApps: () => (/* binding */ getApps),
+/* harmony export */   launchApp: () => (/* binding */ launchApp)
 /* harmony export */ });
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/workspace-platform */ "../../node_modules/@openfin/workspace-platform/index.js");
 /* harmony import */ var _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__);

@@ -1037,7 +1037,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "randomUUID": () => (/* binding */ randomUUID)
+/* harmony export */   randomUUID: () => (/* binding */ randomUUID)
 /* harmony export */ });
 /**
  * Polyfills randomUUID if running in a non-secure context.
@@ -1077,11 +1077,11 @@ function randomUUID() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createContainer": () => (/* binding */ createContainer),
-/* harmony export */   "createLabelledForm": () => (/* binding */ createLabelledForm),
-/* harmony export */   "createLabelledValue": () => (/* binding */ createLabelledValue),
-/* harmony export */   "createTable": () => (/* binding */ createTable),
-/* harmony export */   "createText": () => (/* binding */ createText)
+/* harmony export */   createContainer: () => (/* binding */ createContainer),
+/* harmony export */   createLabelledForm: () => (/* binding */ createLabelledForm),
+/* harmony export */   createLabelledValue: () => (/* binding */ createLabelledValue),
+/* harmony export */   createTable: () => (/* binding */ createTable),
+/* harmony export */   createText: () => (/* binding */ createText)
 /* harmony export */ });
 function createContainer(containerType, children, style) {
     return {
