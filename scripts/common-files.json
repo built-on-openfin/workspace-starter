@@ -5,16 +5,12 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public",
 				"destFolder": "how-to/customize-home-templates/public",
-				"files": [
-					"favicon.ico"
-				]
+				"files": ["favicon.ico"]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/customize-home-templates/public/common",
-				"files": [
-					"dos.json"
-				]
+				"files": ["dos.json"]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",
@@ -34,10 +30,8 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public",
 				"destFolder": "how-to/register-with-home-basic/public",
-				"files": [
-					"favicon.ico"
-				]
-			},			
+				"files": ["favicon.ico"]
+			},
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/register-with-home-basic/public/common",
