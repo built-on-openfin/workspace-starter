@@ -84,7 +84,7 @@ Endpoints can be defined as:
 - share source - see [How To Customize Workspace And Browser Sharing](./how-to-customize-workspace-browser-page-sharing.md)
 - integration preferences source with integration management - see [How To Customize Home](./how-to-customize-home.md)
 - connection to your platform verification - see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)
-- an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported].
+- an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
 - version validation - You can configure the versionProvider options to specify an endpointId that should be called. This endpoint will return an object that defines what versions the platform should work against. See - [How To Add Versioning Support](./how-to-add-versioning-support.md)
 
 ## Source Reference
