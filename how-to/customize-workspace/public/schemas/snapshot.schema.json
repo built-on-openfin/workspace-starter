@@ -70,26 +70,14 @@
 		"DipRect": {
 			"additionalProperties": false,
 			"properties": {
-				"bottom": {
-					"type": "number"
-				},
 				"dipRect": {
 					"$ref": "#/definitions/RectangleByEdgePositions"
 				},
-				"left": {
-					"type": "number"
-				},
-				"right": {
-					"type": "number"
-				},
 				"scaledRect": {
 					"$ref": "#/definitions/RectangleByEdgePositions"
-				},
-				"top": {
-					"type": "number"
 				}
 			},
-			"required": ["bottom", "dipRect", "left", "right", "scaledRect", "top"],
+			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
 		"DipScaleRects": {
@@ -182,9 +170,6 @@
 		"TaskBar": {
 			"additionalProperties": false,
 			"properties": {
-				"dipRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
-				},
 				"edge": {
 					"description": "Which edge of a monitor the taskbar is on",
 					"type": "string"
@@ -192,12 +177,9 @@
 				"rect": {
 					"$ref": "#/definitions/RectangleByEdgePositions",
 					"description": "The taskbar coordinates."
-				},
-				"scaledRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
 				}
 			},
-			"required": ["dipRect", "edge", "rect", "scaledRect"],
+			"required": ["edge", "rect"],
 			"type": "object"
 		},
 		"ViewVisibilityOption": {
