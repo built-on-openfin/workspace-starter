@@ -66,7 +66,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		],
 		// Override some platform methods so that we can augment snapshots with native window information
-		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
+		overrideCallback
 	});
 }
 
@@ -111,7 +111,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-function createWorkspacePlatformOverride(
+function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
 ): WorkspacePlatformProvider {
 	/**

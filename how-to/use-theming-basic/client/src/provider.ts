@@ -108,7 +108,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		],
 		// Override some platform methods so we can be notified of the color scheme changing
-		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
+		overrideCallback
 	});
 }
 
@@ -155,7 +155,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-function createWorkspacePlatformOverride(
+function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
 ): WorkspacePlatformProvider {
 	/**

@@ -23,7 +23,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/integrations/salesforce/index.ts',
+		entry: './client/src/module-entry-point.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
