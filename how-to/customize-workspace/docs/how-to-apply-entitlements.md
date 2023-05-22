@@ -83,6 +83,12 @@ If you need to return different settings by user then you can have a cut down ma
  }
 ```
 
+## Endpoint Ids
+
+- platform-settings
+
+## How the platform checks for settings
+
 The customize workspace settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data).
 
 We have an example auth module that contains an auth provider and an endpoint provider. The purpose of this setup is to let you simulate server side filtering via the client side (so there is no server side logic dependency required in order to get an idea of how it could work). The auth module above has a customData setting that specifies a id to store the selected example user and a list of example users and associated role.

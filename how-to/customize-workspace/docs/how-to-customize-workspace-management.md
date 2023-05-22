@@ -23,6 +23,8 @@ A workspace platform lets you override the platform implementation so you can co
 
 Instead of modifying this file directly we allow you to specify the destination and source of workspaces through config and the definition of [endpoints](./how-to-define-endpoints.md).
 
+### Endpoint Ids
+
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints:
 
 - workspace-get

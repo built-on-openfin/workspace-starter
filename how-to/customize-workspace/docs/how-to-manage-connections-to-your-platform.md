@@ -146,6 +146,10 @@ The connectionProvider has a function that is used to see if a connection is lis
 
 ```
 
+## Endpoint Ids
+
+You can specify an endpoint that will receive the payload passed when an external application tries to connect to your platform. The id is the string specified by **connectionValidationEndpoint** (see below).
+
 The settings are as follows:
 
 - **connectionId**: This is the id of the channel api apps will connect to (apps do not need to connect to it for the broker connection if that is all they are doing). The channel name will be prefixed with the uuid of your platform. Given the example above the channel id will be {youruuid}-{connectionId}: **customize-workspace-workspace-connection**. Connected clients can explicitly call a disconnect function to let the workspace platform they are disconnecting e.g.
@@ -161,5 +165,9 @@ await _connectionService.DispatchAsync("disconnect");
 ## Example of Connecting Clients
 
 - [CSharp Starter - Integrate with Workspace](https://github.com/built-on-openfin/csharp-starter/tree/main/how-to/integrate-with-workspace)
+
+## Example of an Endpoint that accepts a Connection Payload (always returns true, not for production use)
+
+- [example-connection-validation](../client/src/modules/endpoints/example-connection-validation/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)

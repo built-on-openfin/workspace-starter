@@ -110,7 +110,14 @@ You can use the `/integrations` command to determine which modules are available
 
 An integration module must be `enabled` in the modules list for it to be managed, but if you don't want it to automatically be started you should set `autoStart` to false.
 
-The endpoints `integration-preferences-get` and `integration-preferences-set` are used to store the preferences as to which integrations are enabled. See [How To Define Endpoints](./how-to-define-endpoints.md) for more details.
+### Endpoint Ids
+
+The endpoints the platform looks for are:
+
+- integration-preferences-get
+- integration-preferences-set
+
+If these endpoints are specified then they are used to store the preferences as to which integrations are enabled. See [How To Define Endpoints](./how-to-define-endpoints.md) for more details. This feature lets users toggle the state of the integrations you permit them to see.
 
 ![Home Integrations](./assets/home-integrations.png)
 

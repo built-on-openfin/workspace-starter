@@ -29,8 +29,12 @@ Customize workspace supports the following manifest types (for the list in code 
 - **inline-snapshot**: This manifest type expects the manifest setting to have the snapshot json inline rather than a url to a json file.
 - **manifest**: This manifest type expects the manifest setting to point to a json file that is an openfin manifest. An openfin app.
 - **desktop-browser**: This manifest type expects the manifest setting to point to a url which will be launched in the default desktop browser.
-- **endpoint**: An endpoint (see [How To Define Endpoints](./how-to-define-endpoints.md)) is a generic target that supports an action or a request/response. This custom endpoint will be passed the app definition to the action implementation. What happens after that point is down to your own implementation. It is one way of extending launch behavior should you need to.
+- **endpoint**: An endpoint (see [How To Define Endpoints](./how-to-define-endpoints.md)) is a generic target that supports an action or a request/response. This custom endpoint will be passed the app definition to the action implementation. What happens after that point is down to your own implementation. We recommend using the other manifest types but if you wish to try a custom way of launching an app then this gives you one way of extending launch behavior should you need to.
 - **connection**: A connected app (see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)) could have provided a list of child views that can be launched from home. If a selection is made against one of these entries then it will be sent to the connected app in order for it to launch the requested view.
+
+## Endpoint Ids
+
+The endpoint manifest type can accept custom endpoint ids if none of the supported manifest types cover the use case you are trying to evaluate.
 
 ## Source Reference
 
