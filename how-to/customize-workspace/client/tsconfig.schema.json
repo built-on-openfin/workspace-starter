@@ -9,7 +9,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
-		"types": ["../common/types/fin"],
+		"types": ["./client/types/fin"],
 		"paths": {
 			"customize-workspace/*": ["./src/framework/*"]
 		}
