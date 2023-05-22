@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ConsoleAnalyticsModule": () => (/* binding */ ConsoleAnalyticsModule)
+/* harmony export */   ConsoleAnalyticsModule: () => (/* binding */ ConsoleAnalyticsModule)
 /* harmony export */ });
 /**
  * Implement the analytics module using the console.
@@ -113,7 +113,7 @@ var __webpack_exports__ = {};
   \*******************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _analytics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./analytics */ "./client/src/modules/analytics/console/analytics.ts");
 

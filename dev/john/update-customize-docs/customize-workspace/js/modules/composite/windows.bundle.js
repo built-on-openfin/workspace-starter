@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "WindowActions": () => (/* binding */ WindowActions)
+/* harmony export */   WindowActions: () => (/* binding */ WindowActions)
 /* harmony export */ });
 /* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helper */ "./client/src/modules/composite/windows/helper.ts");
 
@@ -87,7 +87,7 @@ class WindowActions {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getAllVisibleWindows": () => (/* binding */ getAllVisibleWindows)
+/* harmony export */   getAllVisibleWindows: () => (/* binding */ getAllVisibleWindows)
 /* harmony export */ });
 async function getAllVisibleWindows() {
     const platform = fin.Platform.getCurrentSync();
@@ -113,7 +113,7 @@ async function getAllVisibleWindows() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "WindowMenus": () => (/* binding */ WindowMenus)
+/* harmony export */   WindowMenus: () => (/* binding */ WindowMenus)
 /* harmony export */ });
 /* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helper */ "./client/src/modules/composite/windows/helper.ts");
 
@@ -277,7 +277,7 @@ var __webpack_exports__ = {};
   \*******************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./client/src/modules/composite/windows/actions.ts");
 /* harmony import */ var _menus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menus */ "./client/src/modules/composite/windows/menus.ts");

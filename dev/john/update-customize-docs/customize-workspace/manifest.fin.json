@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.13"
+		"version": "30.110.74.16"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-customize-workspace"

@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PagesProvider": () => (/* binding */ PagesProvider)
+/* harmony export */   PagesProvider: () => (/* binding */ PagesProvider)
 /* harmony export */ });
 /**
  * Implement the integration provider for pages.
@@ -295,7 +295,7 @@ var __webpack_exports__ = {};
   \********************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _integration__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./integration */ "./client/src/modules/integrations/pages/integration.ts");
 
