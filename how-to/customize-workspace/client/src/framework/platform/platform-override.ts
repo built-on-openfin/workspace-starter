@@ -34,7 +34,6 @@ import { closedown as closedownPlatform } from "./platform";
 
 const logger = createLogger("PlatformOverride");
 
-let isApplyingSnapshot: boolean = false;
 let windowDefaultLeft: number | undefined;
 let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
@@ -48,15 +47,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 
 		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
-			try {
-				// We set the is applying snapshot flag if closeExistingWindows is set so that
-				// we make sure the runtime doesn't quit when it thinks it no longer has windows open
-				// before the new snapshot is loaded
-				isApplyingSnapshot = args[0].options?.closeExistingWindows;
-				await Promise.all([super.applySnapshot(...args), applyClientSnapshot(args[0].snapshot)]);
-			} finally {
-				isApplyingSnapshot = false;
-			}
+			await Promise.all([super.applySnapshot(...args), applyClientSnapshot(args[0].snapshot)]);
 		}
 
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
@@ -380,15 +371,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 
 		public async quit(payload: undefined, callerIdentity: OpenFin.Identity) {
-			// Only quit if we are not applying a snapshot
-			if (!isApplyingSnapshot) {
-				const platform = getCurrentSync();
-				await fireLifecycleEvent(platform, "before-quit");
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "before-quit");
 
-				await closedownPlatform();
+			await closedownPlatform();
 
-				return super.quit(payload, callerIdentity);
-			}
+			return super.quit(payload, callerIdentity);
 		}
 
 		public async createWindow(

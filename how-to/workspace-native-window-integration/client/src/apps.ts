@@ -14,7 +14,7 @@ export function getApps(): (App & { data?: { nwi?: ConfigFragment } })[] {
 /**
  * App definition to use for demonstration which show OpenFin environment information.
  */
-export const OPENFIN_INFORMATION_APP: App = {
+const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",
@@ -40,7 +40,7 @@ export const OPENFIN_INFORMATION_APP: App = {
 /**
  * App definition for the winform app.
  */
-export const WINFORM_APP: App & { data?: { nwi?: ConfigFragment } } = {
+const WINFORM_APP: App & { data?: { nwi?: ConfigFragment } } = {
 	appId: "winform-interop-example",
 	title: "OpenFin Winform Interop Example",
 	description: "A Winform application built in .NET 5 that shows the power of our interop api.",
