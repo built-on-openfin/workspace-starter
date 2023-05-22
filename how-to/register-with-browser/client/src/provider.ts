@@ -69,7 +69,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
-		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
+		overrideCallback
 	});
 }
 
@@ -154,7 +154,7 @@ function getCustomActions(): CustomActionsMap {
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-function createWorkspacePlatformOverride(
+function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
 ): WorkspacePlatformProvider {
 	/**
