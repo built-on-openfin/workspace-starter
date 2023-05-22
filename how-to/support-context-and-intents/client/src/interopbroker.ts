@@ -506,7 +506,7 @@ export function createInteropOverride(
  * @param viewApp The application to launch as a view.
  * @returns The identity of the view that was launched.
  */
-export async function launchView(viewApp: App): Promise<OpenFin.Identity | undefined> {
+async function launchView(viewApp: App): Promise<OpenFin.Identity | undefined> {
 	if (!viewApp) {
 		console.warn("No app was passed to launchView");
 		return;
@@ -557,7 +557,7 @@ export async function launchView(viewApp: App): Promise<OpenFin.Identity | undef
  * @param snapshotApp The snapshot application to launch.
  * @returns The identity of the views in the snapshot that was launched.
  */
-export async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity[] | undefined> {
+async function launchSnapshot(snapshotApp: App): Promise<OpenFin.Identity[] | undefined> {
 	if (!snapshotApp) {
 		console.warn("No app was passed to launchSnapshot");
 		return;
@@ -684,7 +684,7 @@ async function getViewIdentities(identity: OpenFin.Identity): Promise<OpenFin.Id
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
-export function randomUUID(): string {
+function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();
