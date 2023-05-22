@@ -22,30 +22,32 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 let ms365Integration: Microsoft365Integration | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// Load the custom settings and initialize the ms365 integration
-	// we must do this before home is registered so that the initial
-	// home request for get results includes the ms365 results.
-	const customSettings = await getManifestCustomSettings();
-
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings.apps));
+	await platform.once("platform-api-ready", async () => {
+		// Load the custom settings and initialize the ms365 integration
+		// we must do this before home is registered so that the initial
+		// home request for get results includes the ms365 results.
+		const customSettings = await getManifestCustomSettings();
+
+		if (customSettings.ms365) {
+			ms365Integration = new Microsoft365Integration();
+			await ms365Integration.initialize(
+				{
+					id: "ms365",
+					title: "Microsoft 365",
+					data: customSettings.ms365
+				},
+				(group) => createLogger(group),
+				createHelpers()
+			);
+		}
+
+		await initializeWorkspaceComponents(customSettings.apps);
+	});
 
 	// The DOM is ready so initialize the platform
 	await initializeWorkspacePlatform();
-
-	if (customSettings.ms365) {
-		ms365Integration = new Microsoft365Integration();
-		await ms365Integration.initialize(
-			{
-				id: "ms365",
-				title: "Microsoft 365",
-				data: customSettings.ms365
-			},
-			(group) => createLogger(group),
-			createHelpers()
-		);
-	}
 });
 
 /**
@@ -120,18 +122,18 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 				results = results.concat(
 					appResults.map(
 						(app) =>
-							({
-								key: app.appId,
-								title: app.title,
-								icon: app.icons[0]?.src,
-								data: app,
-								label: "View",
-								actions: [{ name: "Launch View", hotkey: "enter" }],
-								description: app.description,
-								shortDescription: app.description,
-								template: CLITemplate.SimpleText,
-								templateContent: app.description
-							} as HomeSearchResult)
+						({
+							key: app.appId,
+							title: app.title,
+							icon: app.icons[0]?.src,
+							data: app,
+							label: "View",
+							actions: [{ name: "Launch View", hotkey: "enter" }],
+							description: app.description,
+							shortDescription: app.description,
+							template: CLITemplate.SimpleText,
+							templateContent: app.description
+						} as HomeSearchResult)
 					)
 				);
 			}
