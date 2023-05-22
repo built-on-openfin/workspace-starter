@@ -111,7 +111,7 @@ async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Pro
 		},
 		theme: [customTheme],
 		// Override some platform methods so that we can handle theme changes.
-		overrideCallback: (provider) => createWorkspacePlatformOverride(provider),
+		overrideCallback,
 		// Custom actions provided for theming
 		customActions: getThemeActions()
 	});
@@ -290,7 +290,7 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-function createWorkspacePlatformOverride(
+function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
 ): WorkspacePlatformProvider {
 	/**

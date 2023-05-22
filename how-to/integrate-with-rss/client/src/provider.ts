@@ -18,20 +18,22 @@ let rssIntegration: RssIntegration | undefined;
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+	await platform.once("platform-api-ready", async () => {
+		// Load the custom settings and initialize the rss integration
+		// we must do this before home is registered so that the initial
+		// home request for get results includes the rss results.
+		const customSettings = await getManifestCustomSettings();
+		if (customSettings.rss) {
+			rssIntegration = new RssIntegration();
+			await rssIntegration.initialize(customSettings.rss);
+		}
+
+		await initializeWorkspaceComponents();
+	});
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
-
-	// Load the custom settings and initialize the rss integration
-	// we must do this before home is registered so that the initial
-	// home request for get results includes the rss results.
-	const customSettings = await getManifestCustomSettings();
-	if (customSettings.rss) {
-		rssIntegration = new RssIntegration();
-		await rssIntegration.initialize(customSettings.rss);
-	}
 });
 
 /**
