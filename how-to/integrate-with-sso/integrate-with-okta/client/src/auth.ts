@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import type OpenFin from "@openfin/core";
 import type { OktaSettings } from "./shapes";
 
@@ -102,7 +101,7 @@ export async function login(): Promise<void> {
  * @param oktaCode The okta code to use to get the token.
  * @returns The token.
  */
-export async function getAccessToken(oktaCode: string): Promise<string | undefined> {
+async function getAccessToken(oktaCode: string): Promise<string | undefined> {
 	if (oktaCode) {
 		try {
 			const response = await fetch(`https://${oktaSettings?.domain}/oauth2/v1/token`, {
@@ -426,7 +425,7 @@ function removeProperty(propName: string): void {
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
-export function randomUUID(): string {
+function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();
@@ -435,15 +434,17 @@ export function randomUUID(): string {
 	// we are still using window.crypto.getRandomValues which is always available
 	// https://stackoverflow.com/a/2117523/2800218
 	/**
-	 * Generate a random hex number based on a string version of a number.
-	 * @param c The input value.
-	 * @returns The random hex number.
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
 	 */
 	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
 		return (
-			Number(c) ^
-			(window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4)))
-		).toString(16);
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
+		);
 	}
 	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }

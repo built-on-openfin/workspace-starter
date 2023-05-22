@@ -13,7 +13,7 @@ export function getApps(): App[] {
 /**
  * App definition to use for demonstration which show OpenFin environment information.
  */
-export const OPENFIN_INFORMATION_APP: App = {
+const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",

@@ -67,7 +67,7 @@ export async function setColorScheme(schemeType: ColorSchemeOptionType): Promise
  * other views that have the style preload script so that they can update
  * their color schemes.
  */
-export async function notifyColorScheme(): Promise<void> {
+async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
 
 	// Iterate all the browser windows and update their buttons.

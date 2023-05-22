@@ -13,7 +13,7 @@ The integration package utilized by this example is [@openfin/salesforce](https:
 
 For more information on the Salesforce integration package and how you should configure your Salesforce platform to be accessible from the OpenFin integration package see [Salesforce Integration](https://developers.openfin.co/of-docs/docs/salesforce-integration).
 
-When you have finished configuring your Salesforce platform for access by the integration you should modify `settings.ts` to include your `CONSUMER_KEY` and `ORG_URL`
+When you have finished configuring your Salesforce platform for access by the integration you should modify `provider.ts` to include your `CONSUMER_KEY` and `ORG_URL`
 
 ## Getting Started
 

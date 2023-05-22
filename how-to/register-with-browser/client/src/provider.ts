@@ -69,14 +69,14 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
-		overrideCallback: (provider) => createWorkspacePlatformOverride(provider)
+		overrideCallback
 	});
 }
 
 /**
  * Bring the platform to life.
  */
-export async function initializeWorkspaceComponents(): Promise<void> {
+async function initializeWorkspaceComponents(): Promise<void> {
 	console.log("Initialising the workspace components");
 
 	// When the platform requests to be close we deregister from home and quit
@@ -90,7 +90,7 @@ export async function initializeWorkspaceComponents(): Promise<void> {
  * Read the custom settings from the manifest.fin.json
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
 
@@ -154,7 +154,7 @@ function getCustomActions(): CustomActionsMap {
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @returns The overridden class.
  */
-function createWorkspacePlatformOverride(
+function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
 ): WorkspacePlatformProvider {
 	/**
