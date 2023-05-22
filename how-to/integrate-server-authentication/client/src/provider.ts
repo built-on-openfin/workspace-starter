@@ -46,7 +46,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 /**
  * Bring the platform to life.
  */
-export async function initializeWorkspaceComponents(): Promise<void> {
+async function initializeWorkspaceComponents(): Promise<void> {
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async () => {
 		await fin.Platform.getCurrentSync().quit();
