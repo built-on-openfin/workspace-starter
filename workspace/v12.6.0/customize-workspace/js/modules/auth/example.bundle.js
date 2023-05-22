@@ -8,7 +8,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "randomUUID": () => (/* binding */ randomUUID)
+/* harmony export */   randomUUID: () => (/* binding */ randomUUID)
 /* harmony export */ });
 function randomUUID() {
     if ("randomUUID" in window.crypto) {
@@ -35,7 +35,7 @@ function randomUUID() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ExampleAuthProvider": () => (/* binding */ ExampleAuthProvider)
+/* harmony export */   ExampleAuthProvider: () => (/* binding */ ExampleAuthProvider)
 /* harmony export */ });
 /* harmony import */ var _framework_uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../framework/uuid */ "./client/src/framework/uuid.ts");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./client/src/modules/auth/example/util.ts");
@@ -416,7 +416,7 @@ class ExampleAuthProvider {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ExampleAuthEndpoint": () => (/* binding */ ExampleAuthEndpoint)
+/* harmony export */   ExampleAuthEndpoint: () => (/* binding */ ExampleAuthEndpoint)
 /* harmony export */ });
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ "./client/src/modules/auth/example/util.ts");
 
@@ -653,10 +653,10 @@ class ExampleAuthEndpoint {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EXAMPLE_AUTH_CURRENT_USER_KEY": () => (/* binding */ EXAMPLE_AUTH_CURRENT_USER_KEY),
-/* harmony export */   "clearCurrentUser": () => (/* binding */ clearCurrentUser),
-/* harmony export */   "getCurrentUser": () => (/* binding */ getCurrentUser),
-/* harmony export */   "setCurrentUser": () => (/* binding */ setCurrentUser)
+/* harmony export */   EXAMPLE_AUTH_CURRENT_USER_KEY: () => (/* binding */ EXAMPLE_AUTH_CURRENT_USER_KEY),
+/* harmony export */   clearCurrentUser: () => (/* binding */ clearCurrentUser),
+/* harmony export */   getCurrentUser: () => (/* binding */ getCurrentUser),
+/* harmony export */   setCurrentUser: () => (/* binding */ setCurrentUser)
 /* harmony export */ });
 const EXAMPLE_AUTH_CURRENT_USER_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_CURRENT_USER`;
 function getCurrentUser() {
@@ -740,7 +740,7 @@ var __webpack_exports__ = {};
   \**************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "entryPoints": () => (/* binding */ entryPoints)
+/* harmony export */   entryPoints: () => (/* binding */ entryPoints)
 /* harmony export */ });
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth */ "./client/src/modules/auth/example/auth.ts");
 /* harmony import */ var _endpoint__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./endpoint */ "./client/src/modules/auth/example/endpoint.ts");
