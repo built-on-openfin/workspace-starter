@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Style Examples</title>
+		<link rel="stylesheet" href="./app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>This is the main title in the header</h1>
+				<h1 class="tag">The is the title tag in the header.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="../images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+
+		<main class="col gap10 scroll-horizontal">
+			<h1>Header 1</h1>
+			<h2>Header 2</h2>
+			<h3>Header 3</h3>
+			<h4>Header 4</h4>
+			<h5>Header 5</h5>
+			<p>A paragraph of text.</p>
+			<p class="primary">A primary element.</p>
+			<p class="error">An errored element.</p>
+			<p class="success">A success element.</p>
+
+			<form class="col gap20">
+				<fieldset>
+					<label for="sel1">Select Label</label>
+					<select id="sel1">
+						<option selected>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="sel2">Select Label [Disabled]</label>
+					<select id="sel2" disabled>
+						<option selected>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="sel3">Select Label [Invalid]</label>
+					<select id="sel3" required>
+						<option disabled value="" selected>Please Select</option>
+						<option>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="selm1">Select Multiple Label</label>
+					<select id="selm1" multiple>
+						<option selected>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="selm2">Select Multiple Label [Disabled]</label>
+					<select id="selm2" multiple disabled>
+						<option selected>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="selm3">Select Multiple Label [Invalid]</label>
+					<select id="selm3" multiple required>
+						<option>Value 1</option>
+						<option>Value 2</option>
+						<option>Value 3</option>
+						<option>Value 4</option>
+						<option>Value 5</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label for="it1">Input Text</label>
+					<input id="it1" type="text" />
+				</fieldset>
+				<fieldset>
+					<label for="it2">Input Text [Disabled]</label>
+					<input id="it2" type="text" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="it3">Input Text [Invalid]</label>
+					<input id="it3" type="text" required />
+				</fieldset>
+				<fieldset>
+					<label for="ip1">Input Password</label>
+					<input id="ip1" type="password" />
+				</fieldset>
+				<fieldset>
+					<label for="ip2">Input Password [Disabled]</label>
+					<input id="ip2" type="password" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="ip3">Input Password [Invalid]</label>
+					<input id="ip3" type="password" required />
+				</fieldset>
+				<fieldset>
+					<label for="iu1">Input Url</label>
+					<input id="iu1" type="url" />
+				</fieldset>
+				<fieldset>
+					<label for="iu2">Input Url [Disabled]</label>
+					<input id="iu2" type="url" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="iu3">Input Url [Invalid]</label>
+					<input id="iu3" type="url" required />
+				</fieldset>
+				<fieldset>
+					<label for="ie1">Input Email</label>
+					<input id="ie1" type="email" />
+				</fieldset>
+				<fieldset>
+					<label for="ie2">Input Email [Disabled]</label>
+					<input id="ie2" type="email" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="ie3">Input Email [Invalid]</label>
+					<input id="ie3" type="email" required />
+				</fieldset>
+				<fieldset>
+					<label for="in1">Input Number</label>
+					<input id="in1" type="number" />
+				</fieldset>
+				<fieldset>
+					<label for="in2">Input Number [Disabled]</label>
+					<input id="in2" type="number" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="in3">Input Number [Invalid]</label>
+					<input id="in3" type="number" required />
+				</fieldset>
+				<fieldset>
+					<label for="te1">Textarea</label>
+					<textarea id="te1" rows="5">Blah blah</textarea>
+				</fieldset>
+				<fieldset>
+					<label for="te2">Textarea [Disabled]</label>
+					<textarea id="te2" rows="5" disabled>Blah blah</textarea>
+				</fieldset>
+				<fieldset>
+					<label for="te3">Textarea [Invalid]</label>
+					<textarea id="te3" rows="5" required></textarea>
+				</fieldset>
+				<fieldset>
+					<label for="d1">Date</label>
+					<input type="date" id="d1" />
+				</fieldset>
+				<fieldset>
+					<label for="d2">Date [Disabled]</label>
+					<input type="date" id="d2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="d3">Date [Invalid]</label>
+					<input type="date" id="d3" required />
+				</fieldset>
+				<fieldset>
+					<label for="t1">Time</label>
+					<input type="time" id="t1" />
+				</fieldset>
+				<fieldset>
+					<label for="t2">Time [Disabled]</label>
+					<input type="time" id="t2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="t3">Time [Required]</label>
+					<input type="time" id="t3" required />
+				</fieldset>
+				<fieldset>
+					<label for="dt1">Date Time</label>
+					<input type="datetime-local" id="dt1" />
+				</fieldset>
+				<fieldset>
+					<label for="dt2">Date Time [Disabled]</label>
+					<input type="datetime-local" id="dt2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="dt3">Date Time [Invalid]</label>
+					<input type="datetime-local" id="dt3" required />
+				</fieldset>
+				<fieldset>
+					<label for="m1">Month</label>
+					<input type="month" id="m1" />
+				</fieldset>
+				<fieldset>
+					<label for="m2">Month [Disabled]</label>
+					<input type="month" id="m2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="m3">Month [Invalid]</label>
+					<input type="month" id="m3" required />
+				</fieldset>
+				<fieldset>
+					<label for="w1">Week</label>
+					<input type="week" id="w1" />
+				</fieldset>
+				<fieldset>
+					<label for="w2">Week [Disabled]</label>
+					<input type="week" id="w2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="w3">Week [Invalid]</label>
+					<input type="week" id="w3" required />
+				</fieldset>
+				<fieldset>
+					<label for="f1">File</label>
+					<input type="file" id="f1" />
+				</fieldset>
+				<fieldset>
+					<label for="f2">File [Disabled]</label>
+					<input type="file" id="f2" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="f3">File [Invalid]</label>
+					<input type="file" id="f3" required />
+				</fieldset>
+				<fieldset>
+					<label for="r1">Range Slider</label>
+					<input id="r1" type="range" />
+				</fieldset>
+				<fieldset>
+					<label for="r2">Range Slider [Disabled]</label>
+					<input id="r2" type="range" disabled />
+				</fieldset>
+				<fieldset>
+					<label for="col1">Color</label>
+					<input type="color" id="col1" value="#ff0000" />
+				</fieldset>
+				<fieldset>
+					<label for="col2">Color [Disabled]</label>
+					<input type="color" id="col2" value="#0000ff" disabled />
+				</fieldset>
+				<fieldset class="row">
+					<input type="checkbox" id="chk" checked="true" />
+					<label for="chk">Checkbox [Checked]</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="checkbox" id="chk2" />
+					<label for="chk2">Checkbox [Unchecked]</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="checkbox" id="chk3" disabled checked />
+					<label for="chk3">Checkbox [Disabled]</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="radio" id="rdo" checked="true" />
+					<label for="rdo">Radio [Unchecked]</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="radio" id="rdo2" />
+					<label for="rdo2">Radio [Checked]</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="radio" id="rdo3" disabled checked />
+					<label for="rdo3">Radio [Disabled]</label>
+				</fieldset>
+				<fieldset class="row wrap">
+					<button>Button OK</button>
+					<button class="secondary">Button Cancel</button>
+					<button disabled>Button OK [Disabled]</button>
+					<button class="secondary" disabled>Button Cancel [Disabled]</button>
+				</fieldset>
+				<fieldset class="row wrap">
+					<button class="small">Button Small OK</button>
+					<button class="small secondary">Button Small Cancel</button>
+					<button class="small" disabled>Button Small OK [Disabled]</button>
+					<button class="small secondary" disabled>Button Small Cancel [Disabled]</button>
+				</fieldset>
+				<fieldset class="row wrap">
+					<a href="https://www.openfin.co">Link</a>
+					<a href="https://www.openfin.co" disabled tabindex="-1">Link [Disabled]</a>
+					<a href="https://www.openfin.co" class="button">Link Button</a>
+					<a href="https://www.openfin.co" class="button" disabled tabindex="-1">Link Button [Disabled]</a>
+				</fieldset>
+				<fieldset>
+					<label>Code example</label>
+					<pre>Blah blah</pre>
+				</fieldset>
+				<fieldset>
+					<label>Separator</label>
+					<hr />
+				</fieldset>
+				<fieldset>
+					<label>Table</label>
+					<table>
+						<thead>
+							<tr>
+								<th>Title 1</th>
+								<th>Title 2</th>
+								<th>Title 3</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Data 1</td>
+								<td>Data 2</td>
+								<td>Data 3</td>
+								<td class="row gap10">
+									<button>Primary</button>
+									<button class="secondary">Secondary</button>
+									<button class="action-close plain image" title="Close">
+										<svg fill="currentColor" viewBox="0 0 30 30" width="16px" height="16px">
+											<path
+												d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z"
+											/>
+										</svg>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>Data 4</td>
+								<td>Data 5</td>
+								<td>Data 6</td>
+								<td class="row gap10">
+									<button>Primary</button>
+									<button class="secondary">Secondary</button>
+									<button class="action-close plain image" title="Close">
+										<svg fill="currentColor" viewBox="0 0 30 30" width="16px" height="16px">
+											<path
+												d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z"
+											/>
+										</svg>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>Data 7</td>
+								<td>Data 8</td>
+								<td>Data 9</td>
+								<td class="row gap10">
+									<button>Primary</button>
+									<button class="secondary">Secondary</button>
+									<button class="action-close plain image" title="Close">
+										<svg fill="currentColor" viewBox="0 0 30 30" width="16px" height="16px">
+											<path
+												d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z"
+											/>
+										</svg>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+				<fieldset>
+					<label>Responsive Table</label>
+					<div class="table width-full">
+						<div class="table-row header">
+							<div>Tag</div>
+							<div>Title</div>
+							<div class="right">Actions</div>
+						</div>
+						<div class="table-row">
+							<div data-name="Tag">Tag Data 1</div>
+							<div data-name="Title">Title Data 1</div>
+							<div data-name="Actions" class="right"><button class="small">Primary</button></div>
+						</div>
+						<div class="table-row">
+							<div data-name="Tag">Tag Data 2</div>
+							<div data-name="Title">Title Data 2</div>
+							<div data-name="Actions" class="right"><button class="small">Primary</button></div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<label for="img1">Image</label>
+					<img id="img1" class="width-full" alt="Test Image" src="../images/test-image.webp" />
+				</fieldset>
+				<fieldset>
+					<label for="img2">Image Border</label>
+					<img id="img2" class="width-full border" alt="Test Image" src="../images/test-image.webp" />
+				</fieldset>
+			</form>
+		</main>
+
+		<footer>
+			<div class="row spread middle">
+				<button>Footer Button</button>
+				<p>&copy; 2022</p>
+				<a href="https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin" target="_blank">
+					Footer Link
+				</a>
+			</div>
+		</footer>
+	</body>
+</html>
