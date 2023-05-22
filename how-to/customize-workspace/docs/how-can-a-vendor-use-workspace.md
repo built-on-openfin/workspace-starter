@@ -47,7 +47,7 @@ OpenFin Platforms are launched via a [manifest](https://developers.openfin.co/of
 
 #### Sharing Context Within Your Platform
 
-You have content that is beneficial to your client. While working with your platform they be selecting a contact, an organization, a portfolio or an instrument in one of your views. Other views within your application can react to that selection. This might be using our Interop or FDC3 APIs - see [what is FDC3](./what-is-fdc3.md).
+You have content that is beneficial to your client. When a client engages with your content they might be selecting an object such as a contact, organization, portfolio or instrument. Having your content react to this selection in a standardized way is beneficial as it saves time. This exchange of information can take advantage of our Interop or FDC3 APIs - see [what is FDC3](./what-is-fdc3.md).
 
 #### Sharing Context With Others
 
@@ -109,7 +109,7 @@ The vendor connecting to the client would be similar to the above diagram but th
 ### Services (SDKs)
 
 If there are specific APIs and functions you want to expose to clients then you might want to use our [Channel API](https://developers.openfin.co/of-docs/docs/channels) so that you can build a specific API that your clients can connect to.
-The Channel API is a low level (the Interop and FDC3 APIs are built on top of it) that lets you have granular control over the exposed functions and who is allowed to connect via the **onConnection** function (similar to how InteopBrokers validate connections).
+The Channel API is a low level API (the Interop and FDC3 APIs are built on top of it) that lets you have granular control over the exposed functions and who is allowed to connect via the **onConnection** function (similar to how InteropBrokers validate connections).
 
 #### SDK Options
 
@@ -137,7 +137,7 @@ To expose your functionality you have the following options:
 
 ```mermaid
 flowchart TD
-    CB[Connect To Vendor Channal API Service] -->|Connect To Channel API| VB(Vendor Accepts Connection & Provides functions)
+    CB[Connect To Vendor Channel API Service] -->|Connect To Channel API| VB(Vendor Accepts Connection & Provides functions)
     CB -->|Call Function on Channel| VB
     subgraph vendor
         VA[Platform Launch] -->|Platform Starts| VB{Platform Provider}
