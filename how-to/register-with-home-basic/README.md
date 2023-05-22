@@ -63,7 +63,7 @@ npm run client
 6. If you modify the project and wish to rebuild you can run setup again or the build command below:
 
 ```shell
-npm run build
+npm run build-client
 ```
 
 ![Register With Home Basic](openfin-register-with-home-basic.gif)
