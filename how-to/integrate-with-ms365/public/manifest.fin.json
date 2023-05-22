@@ -20,9 +20,6 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
@@ -37,78 +34,242 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"homeProvider": {
-			"id": "integrate-with-ms365",
-			"title": "Integrate with Microsoft 365",
-			"icon": "http://localhost:8080/favicon.ico"
-		},
-		"browserProvider": {
-			"windowOptions": {
-				"title": "Microsoft 365",
-				"icon": "http://localhost:8080/favicon.ico"
+		"ms365": {
+			"clientId": "***REMOVED***",
+			"tenantId": "***REMOVED***",
+			"redirectUri": "http://localhost:8080/oauth_redirect.html",
+			"permissions": [
+				"User.Read",
+				"Presence.Read",
+				"Presence.Read.All",
+				"Directory.Read.All",
+				"Mail.ReadWrite",
+				"Contacts.Read",
+				"Tasks.Read",
+				"Calendars.ReadWrite",
+				"Chat.Read",
+				"ChannelMessage.Read.All",
+				"TeamMember.Read.All",
+				"ChannelMember.Read.All",
+				"Files.Read.All",
+				"Sites.Read.All"
+			],
+			"disableGraphExplorer": false,
+			"enableLibLogging": false,
+			"images": {
+				"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
+				"teams": "http://localhost:8080/images/apps/teams.svg",
+				"word": "http://localhost:8080/images/apps/word.svg",
+				"excel": "http://localhost:8080/images/apps/excel.svg",
+				"onenote": "http://localhost:8080/images/apps/onenote.svg",
+				"powerpoint": "http://localhost:8080/images/apps/powerpoint.svg",
+				"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
+				"email": "http://localhost:8080/images/icons/email.svg",
+				"calendar": "http://localhost:8080/images/icons/calendar.svg",
+				"share": "http://localhost:8080/images/icons/share.svg",
+				"chat": "http://localhost:8080/images/icons/chat.svg",
+				"call": "http://localhost:8080/images/icons/call.svg",
+				"contact": "http://localhost:8080/images/icons/contact.svg",
+				"team": "http://localhost:8080/images/icons/team.svg",
+				"file": "http://localhost:8080/images/icons/file.svg",
+				"folder": "http://localhost:8080/images/icons/folder.svg",
+				"channel": "http://localhost:8080/images/icons/channel.svg",
+				"clock": "http://localhost:8080/images/icons/clock.svg",
+				"check": "http://localhost:8080/images/icons/check.svg",
+				"cross": "http://localhost:8080/images/icons/cross.svg"
 			}
 		},
-		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
-			"appAssetTag": "appasset"
-		},
-		"integrationProvider": {
-			"modules": [
-				{
-					"id": "ms365",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Microsoft 365",
-					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/ms365.bundle.js",
-					"data": {
-						"clientId": "",
-						"tenantId": "",
-						"redirectUri": "http://localhost:8080/oauth_redirect.html",
-						"permissions": [
-							"User.Read",
-							"Presence.Read",
-							"Presence.Read.All",
-							"Directory.Read.All",
-							"Mail.ReadWrite",
-							"Contacts.Read",
-							"Tasks.Read",
-							"Calendars.ReadWrite",
-							"Chat.Read",
-							"ChannelMessage.Read.All",
-							"TeamMember.Read.All",
-							"ChannelMember.Read.All",
-							"Files.Read.All",
-							"Sites.Read.All"
-						],
-						"disableGraphExplorer": false,
-						"enableLibLogging": false,
-						"images": {
-							"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
-							"teams": "http://localhost:8080/images/apps/teams.svg",
-							"word": "http://localhost:8080/images/apps/word.svg",
-							"excel": "http://localhost:8080/images/apps/excel.svg",
-							"onenote": "http://localhost:8080/images/apps/onenote.svg",
-							"powerpoint": "http://localhost:8080/images/apps/powerpoint.svg",
-							"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
-							"email": "http://localhost:8080/images/icons/email.svg",
-							"calendar": "http://localhost:8080/images/icons/calendar.svg",
-							"share": "http://localhost:8080/images/icons/share.svg",
-							"chat": "http://localhost:8080/images/icons/chat.svg",
-							"call": "http://localhost:8080/images/icons/call.svg",
-							"contact": "http://localhost:8080/images/icons/contact.svg",
-							"team": "http://localhost:8080/images/icons/team.svg",
-							"file": "http://localhost:8080/images/icons/file.svg",
-							"folder": "http://localhost:8080/images/icons/folder.svg",
-							"channel": "http://localhost:8080/images/icons/channel.svg",
-							"clock": "http://localhost:8080/images/icons/clock.svg",
-							"check": "http://localhost:8080/images/icons/check.svg",
-							"cross": "http://localhost:8080/images/icons/cross.svg"
-						}
+		"apps": [
+			{
+				"appId": "ms-365-teams",
+				"name": "ms-365-teams",
+				"title": "Microsoft Teams",
+				"description": "Launch Microsoft Teams.",
+				"manifest": "msteams:",
+				"manifestType": "desktop-browser",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/teams.svg"
 					}
-				}
-			]
-		}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "teams"]
+			},
+			{
+				"appId": "ms-365-outlook-mail",
+				"name": "ms-365-outlook-mail",
+				"title": "Microsoft Outlook Mail",
+				"description": "Launch Microsoft 365 Outlook Mail in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-outlook-mail-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/outlook-mail.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "mail"]
+			},
+			{
+				"appId": "ms-365-outlook-calendar",
+				"name": "ms-365-outlook-calendar",
+				"title": "Microsoft Outlook Calendar",
+				"description": "Launch Microsoft 365 Outlook Calendar in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-outlook-calendar-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/outlook-calendar.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "calendar"]
+			},
+			{
+				"appId": "ms-365-outlook-people",
+				"name": "ms-365-outlook-people",
+				"title": "Microsoft Outlook People",
+				"description": "Launch Microsoft 365 Outlook People in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-outlook-people-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/outlook-people.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "people"]
+			},
+			{
+				"appId": "ms-365-word",
+				"name": "ms-365-word",
+				"title": "Microsoft Word",
+				"description": "Launch Microsoft 365 Word in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-word-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/word.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "word"]
+			},
+			{
+				"appId": "ms-365-excel",
+				"name": "ms-365-excel",
+				"title": "Microsoft Excel",
+				"description": "Launch Microsoft 365 Excel in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-excel-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/excel.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "excel"]
+			},
+			{
+				"appId": "ms-365-powerpoint",
+				"name": "ms-365-powerpoint",
+				"title": "Microsoft PowerPoint",
+				"description": "Launch Microsoft 365 PowerPoint in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-powerpoint-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/powerpoint.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "powerpoint"]
+			},
+			{
+				"appId": "ms-365-sharepoint",
+				"name": "ms-365-sharepoint",
+				"title": "Microsoft SharePoint",
+				"description": "Launch Microsoft 365 SharePoint in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-sharepoint-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/sharepoint.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "sharepoint"]
+			},
+			{
+				"appId": "ms-365-onedrive",
+				"name": "ms-365-onedrive",
+				"title": "Microsoft OneDrive",
+				"description": "Launch Microsoft 365 OneDrive in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-onedrive-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/onedrive.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "onedrive"]
+			},
+			{
+				"appId": "ms-365-onenote",
+				"name": "ms-365-onenote",
+				"title": "Microsoft OneNote",
+				"description": "Launch Microsoft 365 OneNote in a view.",
+				"manifest": "http://localhost:8080/views/ms-365-onenote-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "http://localhost:8080/images/apps/onenote.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "onenote"]
+			}
+		]
 	}
 }

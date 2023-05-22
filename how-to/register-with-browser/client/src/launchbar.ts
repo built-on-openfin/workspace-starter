@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
  * @param hasUnsavedChanges Determines if the window has unsaved changed.
  * @returns The created window.
  */
-export async function createBrowserWindow(hasUnsavedChanges = true): Promise<BrowserWindowModule> {
+async function createBrowserWindow(hasUnsavedChanges = true): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout(
 		"Untitled Page",
 		createDefaultPageLayout(),
@@ -117,7 +117,7 @@ export async function createBrowserWindow(hasUnsavedChanges = true): Promise<Bro
  * Create a browser window which has changes so required saving.
  * @returns The created browser window.
  */
-export async function createBrowserWindowWithoutRequiringSave(): Promise<BrowserWindowModule> {
+async function createBrowserWindowWithoutRequiringSave(): Promise<BrowserWindowModule> {
 	return createBrowserWindow(false);
 }
 
@@ -125,7 +125,7 @@ export async function createBrowserWindowWithoutRequiringSave(): Promise<Browser
  * Create a browser window in its maximized state.
  * @returns The created browser window.
  */
-export async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
+async function createBrowserWindowMaximized(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 
@@ -143,7 +143,7 @@ export async function createBrowserWindowMaximized(): Promise<BrowserWindowModul
  * Create a browser window which has a single page and hidden tabs.
  * @returns The created browser window.
  */
-export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
+async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 
@@ -163,7 +163,7 @@ export async function createSinglePageNoTabWindow(): Promise<BrowserWindowModule
  * Create a window which has a custom toolbar.
  * @returns The created browser window.
  */
-export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
+async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const pages: Page[] = [page];
 	const toolbarOptions: ToolbarOptions = {
@@ -207,7 +207,7 @@ export async function createCustomToolbarWindow(): Promise<BrowserWindowModule> 
  * Create a window which has multiple pages.
  * @returns The created browser window.
  */
-export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
+async function createMultiPageWindow(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const page1: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const page2: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
@@ -226,7 +226,7 @@ export async function createMultiPageWindow(): Promise<BrowserWindowModule> {
  * Create a window with a locked page.
  * @returns The created browser window.
  */
-export async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
+async function createWindowWithLockedPage(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const page1: Page = await createPageWithLayout("Locked Page", createDefaultPageLayout());
 	const lockPage1: Page = { isLocked: true, ...page1 };
@@ -281,7 +281,7 @@ export async function createWindowWithLockedPage(): Promise<BrowserWindowModule>
  * Create a window which has fixed views.
  * @returns The created browser window.
  */
-export async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
+async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
 	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
 	const page2: Page = await createPageWithLayout("Untitled Page (2)", createDefaultPageLayout());
 
@@ -344,7 +344,7 @@ export async function createWindowWithFixedViews(): Promise<BrowserWindowModule>
  * @param hasUnsavedChanges Flag to determine if it has unsaved changed.
  * @returns The created page.
  */
-export async function createPageWithLayout(
+async function createPageWithLayout(
 	title: string,
 	layout: PageLayout,
 	hasUnsavedChanges = true
@@ -399,7 +399,7 @@ function createDefaultPageLayout(): PageLayout {
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
-export function randomUUID(): string {
+function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();

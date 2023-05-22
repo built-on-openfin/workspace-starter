@@ -53,7 +53,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 /**
  * Bring the platform to life.
  */
-export async function initializeWorkspaceComponents(): Promise<void> {
+async function initializeWorkspaceComponents(): Promise<void> {
 	console.log("Initialising the bootstrapper");
 
 	// When the platform requests to be close we deregister from home and quit

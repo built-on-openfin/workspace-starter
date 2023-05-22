@@ -412,7 +412,7 @@ function removeProperty(propName: string): void {
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */
-export function randomUUID(): string {
+function randomUUID(): string {
 	if ("randomUUID" in window.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();
