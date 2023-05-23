@@ -22,7 +22,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/ms365-integration.ts',
+		entry: './client/src/module-entry-point.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [

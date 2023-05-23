@@ -99,6 +99,8 @@ The service is configured via endpoints (see [How To Define Endpoints](./how-to-
 
 ```
 
+## Endpoint Ids
+
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints when implementing sharing:
 
 - share-get
