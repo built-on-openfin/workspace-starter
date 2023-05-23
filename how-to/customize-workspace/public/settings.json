@@ -260,7 +260,7 @@
 	},
 	"browserProvider": {
 		"defaultWindowOptions": {
-			"icon": "http://localhost:8080/favicon-32x32.png",
+			"icon": "http://localhost:8080/common/favicon-32x32.png",
 			"viewVisibility": {
 				"showViewsOnTabDrag": { "enabled": true },
 				"showViewsOnSplitterDrag": { "enabled": true },
@@ -527,7 +527,7 @@
 			{
 				"id": "default",
 				"label": "Default",
-				"logoUrl": "http://localhost:8080/favicon-32x32.png",
+				"logoUrl": "http://localhost:8080/common/favicon-32x32.png",
 				"default": "light",
 				"palettes": {
 					"light": {
@@ -593,14 +593,14 @@
 	"homeProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Home Starter",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"queryMinLength": 3,
 		"queryAgainst": ["title"]
 	},
 	"storefrontProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Custom Storefront",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"landingPage": {
 			"hero": {
 				"title": "Second Custom Hero Title",
@@ -724,7 +724,7 @@
 		],
 		"footer": {
 			"logo": {
-				"src": "http://localhost:8080/favicon-32x32.png",
+				"src": "http://localhost:8080/common/favicon-32x32.png",
 				"size": "32"
 			},
 			"text": "Welcome to the OpenFin Sample Footer",
@@ -835,7 +835,7 @@
 	"notificationProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Notification Starter",
-		"icon": "http://localhost:8080/favicon-32x32.png"
+		"icon": "http://localhost:8080/common/favicon-32x32.png"
 	},
 	"integrationProvider": {
 		"icon": "http://localhost:8080/favicon.ico",

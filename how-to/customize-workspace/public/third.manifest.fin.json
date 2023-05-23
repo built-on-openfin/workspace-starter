@@ -12,7 +12,7 @@
 	"platform": {
 		"name": "customize-workspace-for-fdc3",
 		"uuid": "customize-workspace-for-fdc3",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
@@ -50,7 +50,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"name": "Customize Workspace - v12.6.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},

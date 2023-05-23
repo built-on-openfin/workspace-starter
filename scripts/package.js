@@ -97,13 +97,7 @@ function packageItems(cliArgs) {
 			const workspaceUrl = [baseURL, DEFAULT_FOLDER, hostFolder, workspace.replace('how-to/', '')]
 				.filter(Boolean)
 				.join('/');
-			const commonUrl = [baseURL, DEFAULT_FOLDER, hostFolder, 'common'].filter(Boolean).join('/');
 			const commonOptions = [
-				{
-					files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`],
-					from: new RegExp(`http://localhost:${DEFAULT_PORT}/common`, 'g'),
-					to: commonUrl
-				},
 				{
 					files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`],
 					from: new RegExp(`http://localhost:${DEFAULT_PORT}`, 'g'),

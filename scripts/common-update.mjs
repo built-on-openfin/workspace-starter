@@ -18,6 +18,7 @@ async function run() {
 	const commonFiles = JSON.parse(commonFilesRaw);
 
 	for (const commonFileGroup of commonFiles) {
+		console.log();
 		console.log('Processing', commonFileGroup.name);
 		console.log();
 

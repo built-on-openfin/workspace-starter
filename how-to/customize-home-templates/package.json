@@ -9,7 +9,7 @@
 		"client": "node ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
-		"start": "npx --yes http-server ./public -p 8080",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
 		"setup": "cd ../../ && npm install && cd how-to/customize-home-templates && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",

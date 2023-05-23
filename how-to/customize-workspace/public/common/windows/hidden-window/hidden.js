@@ -35,17 +35,12 @@ async function init() {
 	addNotificationEventListener('notification-action', async (event) => {
 		const action = event?.result?.task;
 
-		switch (action) {
-			case 'Close': {
-				const me = fin.Window.wrapSync(fin.me.identity);
-				await me.close(true);
-				break;
-			}
-			default: {
-				console.log('Action triggered:', action);
-				await fin.me.show(true);
-				break;
-			}
+		if (action === 'Close') {
+			const me = fin.Window.wrapSync(fin.me.identity);
+			await me.close(true);
+		} else {
+			console.log('Action triggered:', action);
+			await fin.me.show(true);
 		}
 	});
 

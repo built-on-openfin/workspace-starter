@@ -25,6 +25,333 @@
 		]
 	},
 	{
+		"name": "integrate-server-authentication",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-server-authentication/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-server-authentication/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-server-authentication/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-server-authentication/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-bloomberg-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-bloomberg-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-bloomberg-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-bloomberg-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-bloomberg-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-excel",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-excel/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-excel/public/common",
+				"files": [
+					"images/icon-blue.png",
+					"style/app.css",
+					"style/style-changed-preload.js",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
+					"dos.json"
+				]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-excel/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-excel/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-ms365",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-ms365/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-ms365/public/common",
+				"files": ["style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-ms365/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-ms365/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-ms365-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-ms365-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-ms365-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-ms365-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-ms365-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-rss",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-rss/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-rss/public/common",
+				"files": ["style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-rss/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-rss/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-salesforce",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-salesforce/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-salesforce/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-salesforce/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-salesforce-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-salesforce-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-salesforce-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-salesforce-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-salesforce-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-auth0",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-auth0/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-auth0/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-auth0/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-auth0/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-okta",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-okta/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-okta/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-okta/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/integrate-with-sso/integrate-with-okta/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-browser",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-browser/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-browser/public/common",
+				"files": ["style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-browser/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-browser/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-dock-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-dock-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-dock-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-dock-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-dock-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-home",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-home/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-home/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-home/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-home/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
 		"name": "register-with-home-basic",
 		"fileGroups": [
 			{
@@ -53,6 +380,206 @@
 			{
 				"srcFolder": "how-to/customize-workspace/client/types",
 				"destFolder": "how-to/register-with-home-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-platform-windows",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-platform-windows/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-platform-windows/public/common",
+				"files": ["lib/wc-fin/**/*", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-platform-windows/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-platform-windows/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-store",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-store/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-store/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-store/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-store/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "register-with-store-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-store-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-store-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-store-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-store-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "support-context-and-intents",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/support-context-and-intents/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/support-context-and-intents/public/common",
+				"files": ["favicon-32x32.png", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/support-context-and-intents/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/support-context-and-intents/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "use-notifications",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/use-notifications/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/use-notifications/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/use-notifications/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/use-notifications/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "use-theming",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/use-theming/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/use-theming/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/use-theming/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/use-theming/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "use-theming-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/use-theming-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/use-theming-basic/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/use-theming-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/use-theming-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "workspace-native-window-integration",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/workspace-native-window-integration/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/workspace-native-window-integration/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/workspace-native-window-integration/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/workspace-native-window-integration/client/types",
 				"files": ["fin.d.ts"]
 			}
 		]

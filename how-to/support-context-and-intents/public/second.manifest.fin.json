@@ -7,7 +7,7 @@
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,

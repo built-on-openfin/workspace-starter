@@ -25,7 +25,9 @@ async function run(manifestUrl) {
 							const platform = fin.Platform.wrapSync({ uuid: manifest.platform.uuid });
 							await platform.quit();
 						}
-					} catch {}
+					} catch (err) {
+						console.error(err);
+					}
 				};
 				console.log(`Wrapped target platform: ${manifest.platform.uuid}`);
 			} else {
@@ -37,7 +39,9 @@ async function run(manifestUrl) {
 							const app = fin.Application.wrapSync({ uuid: manifest.startup_app.uuid });
 							await app.quit();
 						}
-					} catch {}
+					} catch (err) {
+						console.error(err);
+					}
 				};
 				console.log(`Wrapped classic app: ${manifest.startup_app.uuid}`);
 			}
