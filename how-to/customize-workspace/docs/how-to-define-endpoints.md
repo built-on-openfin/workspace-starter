@@ -72,15 +72,20 @@ We include examples of endpoint modules in the modules folder:
 - local-storage - shows how you can have an endpoint that can save and fetch from local storage
 - channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel
 - inline-apps - can be used to provide an array of apps inline inside of the endpointsProvider through the platform's manifest or the endpointProvider returned from a settings service (see [how to define apps](./how-to-define-apps.md))
+- example-connection-validation - an example of a module that can receive the uuid and payload of an application trying to connect to your platform and return whether or not the connection should be allowed. This module always returns true as it is an example and **not for production use**.
 
 Endpoints can be defined as:
 
+- platform settings - if you specify an endpoint called **platform-settings** then the platform will call it to fetch the settings it should use. See [How To Apply Entitlements](./how-to-apply-entitlements.md)
 - app sources - see [How To Define Apps](./how-to-define-apps.md)
 - workspaces source - see [How To Customize Workspace Management](./how-to-customize-workspace-management.md)
 - page source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
 - page bounds source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
 - share source - see [How To Customize Workspace And Browser Sharing](./how-to-customize-workspace-browser-page-sharing.md)
-- integration preferences source - see [How To Customize Integrations](./how-to-add-integrations-to-home.md)
+- integration preferences source with integration management - see [How To Customize Home](./how-to-customize-home.md)
+- connection to your platform verification - see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)
+- an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
+- version validation - You can configure the versionProvider options to specify an endpointId that should be called. This endpoint will return an object that defines what versions the platform should work against. See - [How To Add Versioning Support](./how-to-add-versioning-support.md)
 
 ## Source Reference
 
@@ -89,5 +94,6 @@ Endpoints can be defined as:
 - local-storage [endpoint](../client/src/modules/endpoints/local-storage/endpoint.ts)
 - channel [endpoint](../client/src/modules/endpoints/channel/endpoint.ts)
 - inline-apps [endpoint](../client/src/modules/endpoints/inline-apps/endpoint.ts)
+- example-connection-validation [endpoint](../client/src/modules/endpoints/example-connection-validation/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
