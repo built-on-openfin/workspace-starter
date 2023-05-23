@@ -35,8 +35,8 @@
 	},
 	"customSettings": {
 		"ms365": {
-			"clientId": "***REMOVED***",
-			"tenantId": "***REMOVED***",
+			"clientId": "",
+			"tenantId": "",
 			"redirectUri": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-ms365/oauth_redirect.html",
 			"permissions": [
 				"User.Read",
