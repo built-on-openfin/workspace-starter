@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -23,7 +23,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/favicon.ico",
 		"name": "Integrate With Salesforce - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -38,18 +38,18 @@
 			"consumerKey": "",
 			"orgUrl": "",
 			"enableLibLogging": true,
-			"preload": "http://localhost:8080/js/preload.js",
+			"preload": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/js/preload.js",
 			"iconMap": {
-				"salesforce": "http://localhost:8080/images/salesforce.svg",
-				"contact": "http://localhost:8080/images/contact.svg",
-				"account": "http://localhost:8080/images/account.svg",
-				"chatter": "http://localhost:8080/images/chatter.svg",
-				"note": "http://localhost:8080/images/note.svg",
-				"task": "http://localhost:8080/images/task.svg",
-				"dashboard": "http://localhost:8080/images/dashboard.svg",
-				"phone": "http://localhost:8080/images/phone.svg",
-				"chat": "http://localhost:8080/images/chat.svg",
-				"email": "http://localhost:8080/images/email.svg"
+				"salesforce": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/salesforce.svg",
+				"contact": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/contact.svg",
+				"account": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/account.svg",
+				"chatter": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/chatter.svg",
+				"note": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/note.svg",
+				"task": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/task.svg",
+				"dashboard": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/dashboard.svg",
+				"phone": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/phone.svg",
+				"chat": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/chat.svg",
+				"email": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-salesforce/images/email.svg"
 			}
 		}
 	}

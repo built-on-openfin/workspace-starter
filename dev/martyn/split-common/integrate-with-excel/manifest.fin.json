@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-excel",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-excel/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-excel/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -35,7 +35,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-excel/favicon.ico",
 		"name": "Integrate With Excel - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -43,7 +43,7 @@
 		{
 			"alias": "excel-interop-example.xlsx",
 			"version": "0.0.5",
-			"src": "http://localhost:8080/assets/excel-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-excel/assets/excel-interop-example.zip",
 			"target": "excel-interop-example.xlsx",
 			"forceDownload": true
 		}
@@ -56,7 +56,7 @@
 	},
 	"customSettings": {
 		"excel": {
-			"icon": "http://localhost:8080/assets/excel.svg",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-excel/assets/excel.svg",
 			"assets": [
 				{
 					"title": "Excel Interop Example",

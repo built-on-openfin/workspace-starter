@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-browser-from-window",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-browser/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-browser/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
@@ -27,10 +27,10 @@
 	},
 	"customSettings": {
 		"launchBarWindowSettings": {
-			"url": "http://localhost:8080/html/launch-bar.html",
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-browser/html/launch-bar.html",
 			"name": "launch-bar",
 			"frame": false,
-			"icon": "http://localhost:8080/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-browser/favicon.ico",
 			"defaultHeight": 470,
 			"defaultWidth": 340,
 			"defaultCentered": true,

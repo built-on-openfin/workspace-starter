@@ -11,7 +11,7 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "http://localhost:8080/common/images/icon-blue.png"
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
@@ -34,7 +34,7 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "http://localhost:8080/common/images/icon-blue.png"
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
@@ -108,7 +108,7 @@
 			"title": "FDC3 Workbench (1.2)",
 			"description": "Launch the official FDC3 Workbench with FDC3 1.2 enabled.",
 			"categories": ["developer tools", "tools", "training"],
-			"manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
+			"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
 			"manifestType": "view",
 			"icons": [
 				{
@@ -134,7 +134,7 @@
 			],
 			"images": [
 				{
-					"url": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/previews/fdc3-workbench.png"
 				}
 			]
 		}

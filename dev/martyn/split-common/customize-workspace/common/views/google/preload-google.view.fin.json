@@ -4,5 +4,5 @@
 	"interop": {
 		"currentContextGroup": "green"
 	},
-	"preloadScripts": [{ "url": "http://localhost:8080/common/views/google/preload-google.js" }]
+	"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/google/preload-google.js" }]
 }

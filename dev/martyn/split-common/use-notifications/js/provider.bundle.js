@@ -1110,9 +1110,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _openfin_workspace_notifications__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_openfin_workspace_notifications__WEBPACK_IMPORTED_MODULE_0__);
 
 const PLATFORM_ID = "use-notifications";
-const PLATFORM_ICON = "http://localhost:8080/images/icon-dot.png";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/use-notifications/images/icon-dot.png";
 const PLATFORM_TITLE = "Use Notifications";
-const NOTIFICATION_SOUND_URL = "http://localhost:8080/assets/notification.mp3";
+const NOTIFICATION_SOUND_URL = "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/use-notifications/assets/notification.mp3";
 // Keep track of notifications we are updating
 const updatableNotifications = {};
 let updatableNotificationTimer;

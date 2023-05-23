@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-store",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -35,7 +35,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/favicon.ico",
 		"name": "Register With Store - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -43,7 +43,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
@@ -56,14 +56,14 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
+			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps.json"],
 			"manifestTypes": ["view", "snapshot", "manifest", "external"],
 			"cacheDurationInMinutes": 1
 		},
 		"storefrontProvider": {
 			"id": "register-with-store",
 			"title": "Register With Store",
-			"icon": "http://localhost:8080/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/favicon.ico",
 			"landingPage": {
 				"hero": {
 					"title": "Custom Hero Title",
@@ -73,7 +73,7 @@
 						"tags": ["hero"]
 					},
 					"image": {
-						"src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/superhero-unsplash.jpg"
 					}
 				},
 				"topRow": {
@@ -83,7 +83,7 @@
 							"title": "Expero",
 							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-1-unsplash.jpg"
 							},
 							"tags": ["expero"]
 						},
@@ -91,7 +91,7 @@
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-2-unsplash.jpg"
 							},
 							"tags": ["tools"]
 						},
@@ -99,7 +99,7 @@
 							"title": "Learning Resource",
 							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-3-unsplash.jpg"
 							},
 							"tags": ["page"]
 						}
@@ -116,7 +116,7 @@
 							"title": "Views",
 							"description": "A collection of views made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-4-unsplash.jpg"
 							},
 							"tags": ["view"]
 						},
@@ -124,7 +124,7 @@
 							"title": "Web Apps",
 							"description": "A collection of web apps built using OpenFin.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-5-unsplash.jpg"
 							},
 							"tags": ["manifest"]
 						},
@@ -132,7 +132,7 @@
 							"title": "Native Apps",
 							"description": "A collection of native apps made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/images/coding-6-unsplash.jpg"
 							},
 							"tags": ["native"]
 						}
@@ -178,7 +178,7 @@
 				}
 			],
 			"footer": {
-				"logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+				"logo": { "src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/favicon.ico", "size": "32" },
 				"text": "Welcome to the OpenFin Sample Footer",
 				"links": [
 					{

@@ -11,9 +11,9 @@
 	"platform": {
 		"name": "workspace-native-window-integration",
 		"uuid": "workspace-native-window-integration",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/workspace-native-window-integration/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/workspace-native-window-integration/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -41,7 +41,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/workspace-native-window-integration/favicon.ico",
 		"name": "Workspace Native Window Integration - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -49,7 +49,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/workspace-native-window-integration/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}

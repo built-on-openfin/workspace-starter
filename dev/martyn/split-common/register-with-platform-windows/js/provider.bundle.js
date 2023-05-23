@@ -2088,11 +2088,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the OpenFin environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-platform-windows/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/icon-blue.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-platform-windows/common/images/icon-blue.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -2101,7 +2101,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-platform-windows/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "openfin", "versions"]
@@ -2231,7 +2231,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "register-with-platform-windows";
 const PLATFORM_TITLE = "Register With Platform Windows";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-platform-windows/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.
     const platform = fin.Platform.getCurrentSync();

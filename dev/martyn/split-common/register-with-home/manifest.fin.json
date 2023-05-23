@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-home",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -34,7 +34,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/favicon.ico",
 		"name": "Register With Home - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -46,14 +46,14 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
+			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/common/apps.json"],
 			"manifestTypes": ["view", "snapshot", "manifest", "external"],
 			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {
 			"id": "register-with-home",
 			"title": "Home Starter",
-			"icon": "http://localhost:8080/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		}

@@ -64,13 +64,13 @@
 																	"isClosable": false,
 																	"componentName": "view",
 																	"componentState": {
-																		"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
+																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/contact/participant-summary/index.html",
 																		"componentName": "view",
 																		"fdc3InteropApi": "1.2",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
-																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/style/style-changed-preload.js"
 																			}
 																		]
 																	}
@@ -80,13 +80,13 @@
 																	"isClosable": false,
 																	"componentName": "view",
 																	"componentState": {
-																		"url": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
+																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/contact/investments-and-models/index.html",
 																		"componentName": "view",
 																		"fdc3InteropApi": "1.2",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
-																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/style/style-changed-preload.js"
 																			}
 																		]
 																	}
@@ -106,13 +106,13 @@
 																	"isClosable": false,
 																	"componentName": "view",
 																	"componentState": {
-																		"url": "http://localhost:8080/common/views/contact/participant-history/index.html",
+																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/contact/participant-history/index.html",
 																		"componentName": "view",
 																		"fdc3InteropApi": "1.2",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
-																				"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/style/style-changed-preload.js"
 																			}
 																		]
 																	}
@@ -122,13 +122,13 @@
 																	"isClosable": false,
 																	"componentName": "view",
 																	"componentState": {
-																		"url": "http://localhost:8080/common/views/contact/participant-selection/index.html",
+																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/contact/participant-selection/index.html",
 																		"componentName": "view",
 																		"fdc3InteropApi": "1.2",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
-																				"url": "http://localhost:8080/common/style/style-changed-preload.js",
+																				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/style/style-changed-preload.js",
 																				"state": "succeeded"
 																			}
 																		]
@@ -151,7 +151,7 @@
 															"isClosable": false,
 															"componentName": "view",
 															"componentState": {
-																"url": "http://localhost:8080/common/views/platform/new-tab/new-tab.html?q={ID}",
+																"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/platform/new-tab/new-tab.html?q={ID}",
 																"componentName": "view"
 															}
 														}

@@ -12,9 +12,9 @@
 	"platform": {
 		"name": "customize-workspace-for-fdc3",
 		"uuid": "customize-workspace-for-fdc3",
-		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -50,7 +50,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/favicon-32x32.png",
 		"name": "Customize Workspace - v12.6.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
@@ -69,11 +69,11 @@
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
-			"rootUrl": "http://localhost:8080",
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace",
 			"sharing": true,
 			"interop": {
 				"intentResolver": {
-					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/windows/intents/instance-picker.html",
 					"height": 715,
 					"width": 665,
 					"fdc3InteropApi": "2.0"
@@ -85,7 +85,7 @@
 					"description": "If you can not find an application to support your action please check the instances associated with this entry to see if it satisfies your need.",
 					"icons": [
 						{
-							"src": "http://localhost:8080/favicon.ico"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico"
 						}
 					],
 					"publisher": "Multiple",
@@ -141,7 +141,7 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["http://localhost:8080/apps-fdc3-1-2.json", "http://localhost:8080/apps-fdc3-2-0.json"],
+			"endpointIds": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-1-2.json", "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-2-0.json"],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
@@ -157,18 +157,18 @@
 		"homeProvider": {
 			"id": "custom-fdc3-workspace",
 			"title": "FDC3 Workspace",
-			"icon": "http://localhost:8080/common/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/favicon-32x32.png",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
-				"icon": "http://localhost:8080/common/favicon-32x32.png",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/favicon-32x32.png",
 				"workspacePlatform": {
 					"pages": [],
 					"title": "FDC3 Workspace",
-					"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
-					"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/platform/new-tab/new-tab.html"
 				}
 			},
 			"toolbarButtons": [
@@ -179,7 +179,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/icons/{theme}/{scheme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
@@ -200,7 +200,7 @@
 				{
 					"id": "default",
 					"label": "Default",
-					"logoUrl": "http://localhost:8080/favicon.ico",
+					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico",
 					"default": "light",
 					"palettes": {
 						"light": {
@@ -268,7 +268,7 @@
 				{
 					"enabled": true,
 					"id": "interop",
-					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
 					}
@@ -280,7 +280,7 @@
 				{
 					"enabled": true,
 					"id": "console",
-					"url": "http://localhost:8080/js/modules/log/console.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/log/console.bundle.js"
 				}
 			]
 		},
@@ -290,7 +290,7 @@
 			},
 			"versionWindow": {
 				"name": "versioning",
-				"url": "http://localhost:8080/windows/version/version.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/windows/version/version.html",
 				"defaultCentered": true,
 				"showTaskbarIcon": false,
 				"autoShow": true,
@@ -303,18 +303,18 @@
 			}
 		},
 		"integrationProvider": {
-			"icon": "http://localhost:8080/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico",
 			"isManagementEnabled": false,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
 					"id": "apps",
-					"icon": "http://localhost:8080/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico",
 					"title": "Apps",
 					"description": "Search Applications",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/apps.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/integrations/apps.bundle.js",
 					"data": {
 						"manifestTypeMapping": {
 							"view": { "entryLabel": "View", "actionName": "" },
@@ -334,27 +334,27 @@
 				},
 				{
 					"id": "workspaces",
-					"icon": "http://localhost:8080/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico",
 					"title": "Workspaces",
 					"description": "Manage workspaces",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/integrations/workspaces.bundle.js",
 					"data": {
 						"images": {
-							"workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/icons/{scheme}/workspace.svg"
 						}
 					}
 				},
 				{
 					"id": "pages",
-					"icon": "http://localhost:8080/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/favicon.ico",
 					"title": "Pages",
 					"description": "Manage Pages",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/integrations/pages.bundle.js",
 					"data": {
 						"images": {
-							"page": "http://localhost:8080/icons/{scheme}/page.svg"
+							"page": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/icons/{scheme}/page.svg"
 						}
 					}
 				}

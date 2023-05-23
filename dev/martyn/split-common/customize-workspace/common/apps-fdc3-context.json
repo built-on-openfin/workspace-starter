@@ -4,7 +4,7 @@
 		"name": "fdc3-workbench",
 		"title": "FDC3 Workbench",
 		"description": "Launch the official FDC3 Workbench",
-		"manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -30,7 +30,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/previews/fdc3-workbench.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact", "instrument", "tools"]
@@ -44,7 +44,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -67,7 +67,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",

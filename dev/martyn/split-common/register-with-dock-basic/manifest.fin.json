@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-dock-basic",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-dock-basic/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-dock-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {

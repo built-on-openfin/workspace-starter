@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-store-basic",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store-basic/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -35,7 +35,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store-basic/favicon.ico",
 		"name": "Register With Store Basic - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},

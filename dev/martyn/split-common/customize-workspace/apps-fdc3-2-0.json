@@ -130,7 +130,7 @@
 			],
 			"screenshots": [
 				{
-					"src": "http://localhost:8080/common/images/previews/fdc3-workbench-2-0.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/previews/fdc3-workbench-2-0.png"
 				}
 			],
 			"contactEmail": "fdc3@finos.org,",
@@ -141,7 +141,7 @@
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
+					"details": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
 				}
 			},
 			"localizedVersions": {

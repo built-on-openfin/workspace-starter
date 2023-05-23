@@ -1,11 +1,11 @@
 {
-	"url": "http://localhost:8080/common/windows/irs-rfq/irs-rfq.html",
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/windows/irs-rfq/irs-rfq.html",
 	"defaultWidth": 800,
 	"defaultHeight": 540,
 	"frame": false,
 	"preloadScripts": [
 		{
-			"url": "http://localhost:8080/common/style/style-changed-preload.js"
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/style/style-changed-preload.js"
 		}
 	]
 }

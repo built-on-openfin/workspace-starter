@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
-		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -36,7 +36,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
@@ -50,13 +50,13 @@
 	"customSettings": {
 		"platformProvider": {
 			"intentPicker": {
-				"url": "http://localhost:8080/common/windows/intents/picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			}
 		},
 		"appProvider": {
-			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
+			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/apps.json"],
 			"cacheDurationInMinutes": 1,
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
 		}

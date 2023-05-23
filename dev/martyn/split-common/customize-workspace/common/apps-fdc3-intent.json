@@ -8,7 +8,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -86,7 +86,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/images/icon-blue.png"
 			}
 		],
 		"contactEmail": "contact@example.com",

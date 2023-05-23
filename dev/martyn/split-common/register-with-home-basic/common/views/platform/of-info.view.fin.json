@@ -1,8 +1,8 @@
 {
-	"url": "http://localhost:8080/common/views/platform/of-info/index.html",
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home-basic/common/views/platform/of-info/index.html",
 	"preloadScripts": [
 		{
-			"url": "http://localhost:8080/common/style/style-changed-preload.js"
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home-basic/common/style/style-changed-preload.js"
 		}
 	]
 }

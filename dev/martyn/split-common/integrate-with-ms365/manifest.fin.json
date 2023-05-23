@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -23,7 +23,7 @@
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/favicon.ico",
 		"name": "Integrate With Microsoft 365 - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -37,7 +37,7 @@
 		"ms365": {
 			"clientId": "",
 			"tenantId": "",
-			"redirectUri": "http://localhost:8080/oauth_redirect.html",
+			"redirectUri": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/oauth_redirect.html",
 			"permissions": [
 				"User.Read",
 				"Presence.Read",
@@ -57,26 +57,26 @@
 			"disableGraphExplorer": false,
 			"enableLibLogging": false,
 			"images": {
-				"microsoft365": "http://localhost:8080/images/apps/microsoft365.svg",
-				"teams": "http://localhost:8080/images/apps/teams.svg",
-				"word": "http://localhost:8080/images/apps/word.svg",
-				"excel": "http://localhost:8080/images/apps/excel.svg",
-				"onenote": "http://localhost:8080/images/apps/onenote.svg",
-				"powerpoint": "http://localhost:8080/images/apps/powerpoint.svg",
-				"outlook": "http://localhost:8080/images/apps/outlook-mail.svg",
-				"email": "http://localhost:8080/images/icons/email.svg",
-				"calendar": "http://localhost:8080/images/icons/calendar.svg",
-				"share": "http://localhost:8080/images/icons/share.svg",
-				"chat": "http://localhost:8080/images/icons/chat.svg",
-				"call": "http://localhost:8080/images/icons/call.svg",
-				"contact": "http://localhost:8080/images/icons/contact.svg",
-				"team": "http://localhost:8080/images/icons/team.svg",
-				"file": "http://localhost:8080/images/icons/file.svg",
-				"folder": "http://localhost:8080/images/icons/folder.svg",
-				"channel": "http://localhost:8080/images/icons/channel.svg",
-				"clock": "http://localhost:8080/images/icons/clock.svg",
-				"check": "http://localhost:8080/images/icons/check.svg",
-				"cross": "http://localhost:8080/images/icons/cross.svg"
+				"microsoft365": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/microsoft365.svg",
+				"teams": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/teams.svg",
+				"word": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/word.svg",
+				"excel": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/excel.svg",
+				"onenote": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/onenote.svg",
+				"powerpoint": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/powerpoint.svg",
+				"outlook": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/outlook-mail.svg",
+				"email": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/email.svg",
+				"calendar": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/calendar.svg",
+				"share": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/share.svg",
+				"chat": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/chat.svg",
+				"call": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/call.svg",
+				"contact": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/contact.svg",
+				"team": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/team.svg",
+				"file": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/file.svg",
+				"folder": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/folder.svg",
+				"channel": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/channel.svg",
+				"clock": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/clock.svg",
+				"check": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/check.svg",
+				"cross": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/icons/cross.svg"
 			}
 		},
 		"apps": [
@@ -89,7 +89,7 @@
 				"manifestType": "desktop-browser",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/teams.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/teams.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -104,11 +104,11 @@
 				"name": "ms-365-outlook-mail",
 				"title": "Microsoft Outlook Mail",
 				"description": "Launch Microsoft 365 Outlook Mail in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-outlook-mail-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-outlook-mail-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/outlook-mail.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/outlook-mail.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -123,11 +123,11 @@
 				"name": "ms-365-outlook-calendar",
 				"title": "Microsoft Outlook Calendar",
 				"description": "Launch Microsoft 365 Outlook Calendar in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-outlook-calendar-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-outlook-calendar-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/outlook-calendar.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/outlook-calendar.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -142,11 +142,11 @@
 				"name": "ms-365-outlook-people",
 				"title": "Microsoft Outlook People",
 				"description": "Launch Microsoft 365 Outlook People in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-outlook-people-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-outlook-people-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/outlook-people.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/outlook-people.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -161,11 +161,11 @@
 				"name": "ms-365-word",
 				"title": "Microsoft Word",
 				"description": "Launch Microsoft 365 Word in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-word-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-word-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/word.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/word.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -180,11 +180,11 @@
 				"name": "ms-365-excel",
 				"title": "Microsoft Excel",
 				"description": "Launch Microsoft 365 Excel in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-excel-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-excel-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/excel.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/excel.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -199,11 +199,11 @@
 				"name": "ms-365-powerpoint",
 				"title": "Microsoft PowerPoint",
 				"description": "Launch Microsoft 365 PowerPoint in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-powerpoint-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-powerpoint-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/powerpoint.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/powerpoint.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -218,11 +218,11 @@
 				"name": "ms-365-sharepoint",
 				"title": "Microsoft SharePoint",
 				"description": "Launch Microsoft 365 SharePoint in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-sharepoint-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-sharepoint-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/sharepoint.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/sharepoint.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -237,11 +237,11 @@
 				"name": "ms-365-onedrive",
 				"title": "Microsoft OneDrive",
 				"description": "Launch Microsoft 365 OneDrive in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-onedrive-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-onedrive-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/onedrive.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/onedrive.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -256,11 +256,11 @@
 				"name": "ms-365-onenote",
 				"title": "Microsoft OneNote",
 				"description": "Launch Microsoft 365 OneNote in a view.",
-				"manifest": "http://localhost:8080/views/ms-365-onenote-view.json",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/views/ms-365-onenote-view.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/images/apps/onenote.svg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/integrate-with-ms365/images/apps/onenote.svg"
 					}
 				],
 				"contactEmail": "contact@example.com",

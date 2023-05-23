@@ -12,9 +12,9 @@
 	"platform": {
 		"uuid": "fourth-workspace-starter-how-to-customize-workspace",
 		"name": "fourth-workspace-starter-how-to-customize-workspace",
-		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/shell/shell.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/shell/shell.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -51,20 +51,20 @@
 	},
 	"customSettings": {
 		"platformProvider": {
-			"rootUrl": "http://localhost:8080",
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace",
 			"sharing": true,
-			"initUrl": "http://localhost:8080/js/provider.bundle.js"
+			"initUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/provider.bundle.js"
 		},
 		"authProvider": {
 			"modules": [
 				{
 					"id": "example",
-					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/js/modules/auth/example.bundle.js",
 					"data": {
 						"autoLogin": false,
-						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
-						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/windows/modules/auth/example-logged-in.html",
 						"checkLoginStatusInSeconds": 1,
 						"checkSessionValidityInSeconds": -1
 					}
@@ -79,7 +79,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "http://localhost:8080/settings.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/settings.json"
 					}
 				}
 			]
