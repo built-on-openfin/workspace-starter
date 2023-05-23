@@ -35,8 +35,8 @@
 	},
 	"customSettings": {
 		"ms365": {
-			"clientId": "***REMOVED***",
-			"tenantId": "***REMOVED***",
+			"clientId": "",
+			"tenantId": "",
 			"redirectUri": "http://localhost:8080/oauth_redirect.html",
 			"permissions": [
 				"User.Read",
