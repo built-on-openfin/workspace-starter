@@ -1,0 +1,56 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
+		"version": "30.110.74.16"
+	},
+	"platform": {
+		"uuid": "integrate-with-salesforce",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Integrate With Salesforce - v12.6.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With SalesForce - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"salesforce": {
+			"consumerKey": "",
+			"orgUrl": "",
+			"enableLibLogging": true,
+			"preload": "http://localhost:8080/js/preload.js",
+			"iconMap": {
+				"salesforce": "http://localhost:8080/images/salesforce.svg",
+				"contact": "http://localhost:8080/images/contact.svg",
+				"account": "http://localhost:8080/images/account.svg",
+				"chatter": "http://localhost:8080/images/chatter.svg",
+				"note": "http://localhost:8080/images/note.svg",
+				"task": "http://localhost:8080/images/task.svg",
+				"dashboard": "http://localhost:8080/images/dashboard.svg",
+				"phone": "http://localhost:8080/images/phone.svg",
+				"chat": "http://localhost:8080/images/chat.svg",
+				"email": "http://localhost:8080/images/email.svg"
+			}
+		}
+	}
+}
