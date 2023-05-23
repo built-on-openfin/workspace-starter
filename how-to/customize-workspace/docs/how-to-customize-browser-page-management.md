@@ -21,13 +21,15 @@ A workspace platform lets you override the platform implementation so you can co
 
 Instead of modifying this file directly we allow you to specify the destination and source of pages through config and the definition of [endpoints](./how-to-define-endpoints.md).
 
+### Endpoint Ids
+
 Endpoints support an action and request/response function (see [How To Defined Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints:
 
 - page-get
 - page-set
 - page-remove
 
-We also have some additional endpoints that provide supporting information when a page is saved (such as the height/width and position of the window the page resided in at the point of save):
+We also have some additional endpoints that provide supporting information when a page is saved (such as the height/width and position of the window the page resided in at the point of save). **Note**: In the future we are looking at having this information stored as part of the snapshot so these endpoints will not be needed:
 
 - page-bounds-get
 - page-bounds-set
