@@ -99,6 +99,8 @@ The service is configured via endpoints (see [How To Define Endpoints](./how-to-
 
 ```
 
+## Endpoint Ids
+
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Customize workspace checks to see if you have specified the following endpoints when implementing sharing:
 
 - share-get
@@ -246,7 +248,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "31.112.75.4",
+                "runtimeVersion": "30.110.74.16",
                 "monitorInfo": { ... },
             },
             "windows": [

@@ -8,6 +8,13 @@ const Mocha = require('mocha');
 const path = require('path');
 const { Builder } = require('selenium-webdriver');
 
+/**
+ * Run the selenium tests.
+ * @param openFinRVM The location of the OpenFin RVM.
+ * @param manifestUrl The url of the manifest to launch.
+ * @param chromeDriverPort The port to use for chromedriver.
+ * @param devToolsPort The port to use for devtools.
+ */
 async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
 	let openFinRVMProcess;
@@ -74,6 +81,10 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	}
 }
 
+/**
+ * Run tests using mocha.
+ * @returns The test runner.
+ */
 async function runMochaTests() {
 	return new Promise((resolve, reject) => {
 		console.log();

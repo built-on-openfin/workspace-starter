@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 
-export const CONTAINER_ID = "layout-container";
+const CONTAINER_ID = "layout-container";
 
 const thisWindow: OpenFin.Window = fin.Window.getCurrentSync();
 

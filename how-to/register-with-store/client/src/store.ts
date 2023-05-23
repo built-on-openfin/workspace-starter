@@ -92,9 +92,6 @@ export async function deregister(storeSettings: StorefrontProviderSettings | und
  * @returns True if the configuration is valid.
  */
 function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSettings | undefined): boolean {
-	const idList: string[] = [];
-	let hasDuplicateIds = false;
-
 	if (
 		storeSettings === undefined ||
 		storeSettings.id === undefined ||
@@ -112,18 +109,8 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 		return false;
 	}
 
-	const validateId = (id: string | undefined, namespace: string, warning: string): void => {
-		if (id === undefined) {
-			console.warn(`${namespace}: ${warning}`);
-		} else if (idList.includes(id)) {
-			hasDuplicateIds = true;
-			console.error(
-				`${namespace}: The id is used in more than one place. Please have a unique and idempotent id: ${id}`
-			);
-		} else {
-			idList.push(id);
-		}
-	};
+	const idList: string[] = [];
+	let hasDuplicateIds = false;
 
 	const warningMessage =
 		"The id is not defined. This demo will generate an id based on title but you should have a unique and idempotent id when building your own store.";
@@ -131,10 +118,22 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 	console.log("Validating settings storefrontProvider navigation config");
 	const navigation = storeSettings.navigation;
 	for (let i = 0; i < navigation.length; i++) {
-		validateId(navigation[i].id, `storefrontProvider.navigation[${i}].id`, warningMessage);
+		hasDuplicateIds = validateId(
+			navigation[i].id,
+			`storefrontProvider.navigation[${i}].id`,
+			warningMessage,
+			idList,
+			hasDuplicateIds
+		);
 		const items = navigation[i].items;
 		for (let n = 0; n < items.length; n++) {
-			validateId(items[n]?.id, `storefrontProvider.navigation[${i}].items[${n}].id`, warningMessage);
+			hasDuplicateIds = validateId(
+				items[n]?.id,
+				`storefrontProvider.navigation[${i}].items[${n}].id`,
+				warningMessage,
+				idList,
+				hasDuplicateIds
+			);
 		}
 	}
 
@@ -142,7 +141,13 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 	const landingPage = storeSettings.landingPage;
 
 	if (landingPage?.hero?.cta !== undefined) {
-		validateId(landingPage.hero.cta.id, "storefrontProvider.landingPage.hero.cta.id", warningMessage);
+		hasDuplicateIds = validateId(
+			landingPage.hero.cta.id,
+			"storefrontProvider.landingPage.hero.cta.id",
+			warningMessage,
+			idList,
+			hasDuplicateIds
+		);
 	}
 
 	console.log("Validating settings storefrontProvider landing page top row config");
@@ -152,7 +157,13 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 		for (let i = 0; i < topRow.items.length; i++) {
 			const item = topRow.items[i];
 			if (item) {
-				validateId(item.id, `storefrontProvider.landingPage.topRow.items[${i}].id`, warningMessage);
+				hasDuplicateIds = validateId(
+					item.id,
+					`storefrontProvider.landingPage.topRow.items[${i}].id`,
+					warningMessage,
+					idList,
+					hasDuplicateIds
+				);
 			}
 		}
 	}
@@ -163,7 +174,13 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 		for (let i = 0; i < bottomRow.items.length; i++) {
 			const item = bottomRow.items[i];
 			if (item) {
-				validateId(item.id, `storefrontProvider.landingPage.bottomRow.items[${i}].id`, warningMessage);
+				hasDuplicateIds = validateId(
+					item.id,
+					`storefrontProvider.landingPage.bottomRow.items[${i}].id`,
+					warningMessage,
+					idList,
+					hasDuplicateIds
+				);
 			}
 		}
 	}
@@ -177,6 +194,35 @@ function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSetting
 	}
 
 	return true;
+}
+
+/**
+ * Validate the id.
+ * @param id The id to validate.
+ * @param namespace The name to use for message context.
+ * @param warning The warning to display.
+ * @param idList The list to add to if not a duplicate.
+ * @param hasDuplicateIds Do we already have duplicate ids.
+ * @returns True if a duplicate.
+ */
+function validateId(
+	id: string | undefined,
+	namespace: string,
+	warning: string,
+	idList: string[],
+	hasDuplicateIds: boolean
+): boolean {
+	if (id === undefined) {
+		console.warn(`${namespace}: ${warning}`);
+	} else if (idList.includes(id)) {
+		console.error(
+			`${namespace}: The id is used in more than one place. Please have a unique and idempotent id: ${id}`
+		);
+		return true;
+	} else {
+		idList.push(id);
+	}
+	return hasDuplicateIds;
 }
 
 /**

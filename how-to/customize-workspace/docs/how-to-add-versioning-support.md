@@ -41,6 +41,83 @@ By default the Version Provider will initialize even without configuration but y
   }
 ```
 
+### Endpoint Ids
+
+This configuration object supports specifying a custom endpoint Id which must exist in the endpoints array. See endpointId below and [How To Define Endpoints](./how-to-define-endpoints.md).
+
+### Full Version Provider Options
+
+```javascript
+{
+ /** The version of the the instance of this platform */
+ appVersion?: string;
+
+ /** You can specify if the platform should stop initializing if the version is less than any of the specified minimum versions */
+ minVersion?: MinimumVersion;
+
+ /** You can specify if the platform should stop initializing if the version is more than any of the specified maximum versions */
+ maxVersion?: MaximumVersion;
+
+ /**
+  * This window will be shown if an endpointId is not specified and min and max criteria has been specified and has not been met.
+  * This window will be shown to the user and the bootstrapping process will be stopped.
+  */
+ versionWindow?: Partial<OpenFin.WindowOptions>;
+
+ /**
+  * If you specify an endpoint then you are telling the platform to send information to this endpoint.
+  * The information sent will be the VersionRequest object.
+  * If you provide minimumVersion and maximumVersion information in the settings then the
+  * platform will use those to calculate what has failed validation (minimum and/or maximum) and pass
+  * those onto the endpoint.
+  *
+  * The endpoint then returns an object with status (this returns the version info you sent, the min/max rules and what has failed. The failures indicate the state of the platform.).
+  * If the status indicates that things need to be managed and should not proceed they will have a windowOptions property. This should be launched and that window will be built to
+  * support what should happen next.
+  * - Should the window tell the user that the setup isn't compatible and offer to shut down the platform?
+  * - Should it try to close the platform and launch a compatible manifest?
+  * - Should it notify the user that a newer version of the app is available and that they should restart?
+  * On the initial request while the platform is running an invalid status will result in the bootstrapping stopping.
+  */
+ endpointId?: string;
+
+ /**
+  * If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an
+  * interval to see if an update of your application is available.
+  */
+ versionCheckIntervalInSeconds?: number;
+}
+```
+
+### Version Request if Endpoint Id is specified
+
+```javascript
+export interface VersionRequest {
+  /** The collection version information */
+  versionInfo: VersionInfo;
+  /** The configured minimum limits */
+  minVersion?: MinimumVersion;
+  /** The configured maximum limits */
+  maxVersion?: MaximumVersion;
+  /** The version type that failed the minimum requirements */
+  minFail?: VersionType[];
+  /** The version type that failed the maximum requirements */
+  maxFail?: VersionType[];
+}
+```
+
+### Expected Version Response if Endpoint Id is specified
+
+```javascript
+/** If an endpoint has been used to get dynamic criteria what if anything has been the response. */
+export interface VersionResponse {
+  windowOptions?: OpenFin.WindowOptions;
+  status: 'compatible' | 'incompatible' | 'upgradeable';
+}
+```
+
+### Version
+
 ## Min and Max Limits
 
 Minimum and Maximum thresholds can be specified through the minimum and maximum setting by specifying the version type and the full version number (x.x.x.x for runtime and rvm and x.x.x for everything else).

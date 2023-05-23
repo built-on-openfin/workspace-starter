@@ -21,19 +21,21 @@ let excelIntegration: ExcelIntegration | undefined;
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+	await platform.once("platform-api-ready", async () => {
+		// Load the custom settings and initialize the excel integration
+		// we must do this before home is registered so that the initial
+		// home request for get results includes the excel results.
+		const customSettings = await getManifestCustomSettings();
+		if (customSettings.excel) {
+			excelIntegration = new ExcelIntegration();
+			await excelIntegration.initialize(customSettings.excel);
+		}
+
+		await initializeWorkspaceComponents();
+	});
 
 	// The DOM is ready so initialize the platform
 	await initializeWorkspacePlatform();
-
-	// Load the custom settings and initialize the excel integration
-	// we must do this before home is registered so that the initial
-	// home request for get results includes the excel results.
-	const customSettings = await getManifestCustomSettings();
-	if (customSettings.excel) {
-		excelIntegration = new ExcelIntegration();
-		await excelIntegration.initialize(customSettings.excel);
-	}
 });
 
 /**
@@ -140,7 +142,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
  * Read the custom settings from the manifest.fin.json.
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
 

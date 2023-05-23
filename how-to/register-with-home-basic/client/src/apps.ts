@@ -39,7 +39,7 @@ const OPENFIN_INFORMATION_APP: App = {
 /**
  * App definition for the Expero labs news gateway.
  */
-export const EXPERO_APP: App = {
+const EXPERO_APP: App = {
 	appId: "expero-company-news",
 	title: "Gateway - Company News",
 	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
@@ -64,7 +64,7 @@ export const EXPERO_APP: App = {
 /**
  * App definition for the OpenFin Notification Process Manager development tool.
  */
-export const PROCESS_MANAGER: App = {
+const PROCESS_MANAGER: App = {
 	appId: "openfin-process-manager",
 	title: "OpenFin Process Manager",
 	manifestType: "manifest",
@@ -87,7 +87,7 @@ export const PROCESS_MANAGER: App = {
 /**
  * App definition for a snapshot which includes development resources for OpenFin.
  */
-export const DEVELOPER_CONTENT: App = {
+const DEVELOPER_CONTENT: App = {
 	appId: "openfin-developer-page",
 	title: "OpenFin Developer Docs",
 	manifestType: "snapshot",

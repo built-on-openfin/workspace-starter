@@ -39,7 +39,7 @@ const OPENFIN_INFORMATION_APP: App = {
 /**
  * App definition for the FDC3 Interop Broadcast View.
  */
-export const FDC3_BROADCAST: App = {
+const FDC3_BROADCAST: App = {
 	appId: "fdc3-broadcast-view",
 	title: "Context using FDC3",
 	description:
@@ -67,7 +67,7 @@ export const FDC3_BROADCAST: App = {
 /**
  * App definition for the FDC3 Interop Broadcast View.
  */
-export const INTEROP_BROADCAST: App = {
+const INTEROP_BROADCAST: App = {
 	appId: "interop-broadcast-view",
 	title: "Context using Interop API",
 	description:

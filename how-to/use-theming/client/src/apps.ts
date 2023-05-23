@@ -13,7 +13,7 @@ export function getApps(): App[] {
 /**
  * App definition to use for demonstration which show OpenFin environment information.
  */
-export const OPENFIN_INFORMATION_APP: App = {
+const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",
@@ -62,7 +62,7 @@ export const THEME_BUILDER_APP: App = {
 /**
  * App definition for the common styles view.
  */
-export const COMMON_STYLES_APP: App = {
+const COMMON_STYLES_APP: App = {
 	appId: "common-styles",
 	title: "Common Styles Example",
 	description: "A view demonstrating the common styles.",
