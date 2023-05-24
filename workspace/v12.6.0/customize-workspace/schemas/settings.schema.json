@@ -370,13 +370,6 @@
                     "type": "boolean"
                 }
             },
-            "required": [
-                "autoShow",
-                "dock",
-                "home",
-                "notifications",
-                "store"
-            ],
             "type": "object"
         },
         "Bounds": {
@@ -438,7 +431,7 @@
             "properties": {
                 "defaultPageOptions": {
                     "$ref": "#/definitions/Pick",
-                    "description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
+                    "description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
                 },
                 "defaultViewOptions": {
                     "$ref": "#/definitions/ViewOptions",
@@ -844,6 +837,12 @@
                 "inputPlaceholder": {
                     "type": "string"
                 },
+                "linkDefault": {
+                    "type": "string"
+                },
+                "linkHover": {
+                    "type": "string"
+                },
                 "statusActive": {
                     "type": "string"
                 },
@@ -948,32 +947,16 @@
         "DipRect": {
             "additionalProperties": false,
             "properties": {
-                "bottom": {
-                    "type": "number"
-                },
                 "dipRect": {
                     "$ref": "#/definitions/RectangleByEdgePositions"
                 },
-                "left": {
-                    "type": "number"
-                },
-                "right": {
-                    "type": "number"
-                },
                 "scaledRect": {
                     "$ref": "#/definitions/RectangleByEdgePositions"
-                },
-                "top": {
-                    "type": "number"
                 }
             },
             "required": [
-                "bottom",
                 "dipRect",
-                "left",
-                "right",
-                "scaledRect",
-                "top"
+                "scaledRect"
             ],
             "type": "object"
         },
@@ -3383,9 +3366,6 @@
         "TaskBar": {
             "additionalProperties": false,
             "properties": {
-                "dipRect": {
-                    "$ref": "#/definitions/RectangleByEdgePositions"
-                },
                 "edge": {
                     "description": "Which edge of a monitor the taskbar is on",
                     "type": "string"
@@ -3393,16 +3373,11 @@
                 "rect": {
                     "$ref": "#/definitions/RectangleByEdgePositions",
                     "description": "The taskbar coordinates."
-                },
-                "scaledRect": {
-                    "$ref": "#/definitions/RectangleByEdgePositions"
                 }
             },
             "required": [
-                "dipRect",
                 "edge",
-                "rect",
-                "scaledRect"
+                "rect"
             ],
             "type": "object"
         },
@@ -3583,6 +3558,7 @@
             "additionalProperties": false,
             "description": "User-facing options for a view.",
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -3762,6 +3738,7 @@
                 }
             },
             "required": [
+                "_internalWorkspaceData",
                 "api",
                 "autoResize",
                 "autoplayPolicy",
@@ -3834,295 +3811,8 @@
             "additionalProperties": false,
             "description": "Options required to create a new window with {@link Window.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
             "properties": {
-                "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
-                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-                },
-                "alphaMask": {
-                    "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
-                },
-                "alwaysOnTop": {
-                    "type": "boolean"
-                },
-                "api": {
-                    "$ref": "#/definitions/Api",
-                    "description": "Configurations for API injection."
-                },
-                "applicationIcon": {
-                    "type": "string"
-                },
-                "aspectRatio": {
-                    "type": "number"
-                },
-                "autoShow": {
-                    "description": "Automatically show the window when it is created.",
-                    "type": "boolean"
-                },
-                "autoplayPolicy": {
-                    "$ref": "#/definitions/AutoplayPolicyOptions",
-                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-                },
-                "backgroundColor": {
-                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-                    "type": "string"
-                },
-                "closeOnLastViewRemoved": {
-                    "type": "boolean"
-                },
-                "contentCreation": {
-                    "$ref": "#/definitions/ContentCreationOptions",
-                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-                },
-                "contentNavigation": {
-                    "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contentRedirect": {
-                    "$ref": "#/definitions/Partial_5",
-                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contextMenu": {
-                    "type": "boolean"
-                },
-                "contextMenuOptions": {
-                    "$ref": "#/definitions/ContextMenuOptions",
-                    "description": "Configure the context menu when right-clicking on a window."
-                },
-                "contextMenuSettings": {
-                    "$ref": "#/definitions/ContextMenuSettings"
-                },
-                "cornerRounding": {
-                    "$ref": "#/definitions/Partial_3",
-                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
-                },
-                "customContext": {
-                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
-                },
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "customRequestHeaders": {
-                    "description": "Custom headers for requests sent by the window.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "Custom headers for requests sent by the window.",
-                        "properties": {
-                            "headers": {
-                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-                                "items": {
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    },
-                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-                                    "type": "object"
-                                },
-                                "type": "array"
-                            },
-                            "urlPatterns": {
-                                "description": "The URL patterns for which the headers will be applied.",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
-                            }
-                        },
-                        "required": [
-                            "headers",
-                            "urlPatterns"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "defaultCentered": {
-                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
-                    "type": "boolean"
-                },
-                "defaultHeight": {
-                    "type": "number"
-                },
-                "defaultLeft": {
-                    "type": "number"
-                },
-                "defaultTop": {
-                    "type": "number"
-                },
-                "defaultWidth": {
-                    "type": "number"
-                },
-                "experimental": {},
-                "fdc3InteropApi": {
-                    "type": "string"
-                },
-                "frame": {
-                    "type": "boolean"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "hideOnClose": {
-                    "type": "boolean"
-                },
-                "hotkeys": {
-                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A hotkey binding.",
-                        "properties": {
-                            "keys": {
-                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-                                "type": "string"
-                            },
-                            "preventDefault": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "keys"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "icon": {
-                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
-                    "type": "string"
-                },
-                "ignoreSavedWindowState": {
-                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
-                    "type": "boolean"
-                },
-                "includeInSnapshots": {
-                    "type": "boolean"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "layout": {},
-                "maxHeight": {
-                    "type": "number"
-                },
-                "maxWidth": {
-                    "type": "number"
-                },
-                "maximizable": {
-                    "type": "boolean"
-                },
-                "minHeight": {
-                    "type": "number"
-                },
-                "minWidth": {
-                    "type": "number"
-                },
-                "minimizable": {
-                    "type": "boolean"
-                },
-                "modalParentIdentity": {
-                    "$ref": "#/definitions/Identity",
-                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
-                },
                 "name": {
                     "type": "string"
-                },
-                "opacity": {
-                    "type": "number"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/Partial_6"
-                },
-                "preloadScripts": {
-                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A script that is run before page load.",
-                        "properties": {
-                            "mandatory": {
-                                "type": "boolean"
-                            },
-                            "state": {
-                                "description": "Preload script execution state.",
-                                "enum": [
-                                    "failed",
-                                    "load-failed",
-                                    "load-started",
-                                    "load-succeeded",
-                                    "succeeded"
-                                ],
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "The URL from which the script was loaded.",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "url"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "processAffinity": {
-                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-                    "type": "string"
-                },
-                "resizable": {
-                    "type": "boolean"
-                },
-                "resizeRegion": {
-                    "$ref": "#/definitions/ResizeRegion",
-                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
-                },
-                "saveWindowState": {
-                    "type": "boolean"
-                },
-                "shadow": {
-                    "type": "boolean"
-                },
-                "showBackgroundImages": {
-                    "type": "boolean"
-                },
-                "showTaskbarIcon": {
-                    "type": "boolean"
-                },
-                "smallWindow": {
-                    "type": "boolean"
-                },
-                "state": {
-                    "$ref": "#/definitions/WindowState"
-                },
-                "taskbarIcon": {
-                    "type": "string"
-                },
-                "taskbarIconGroup": {
-                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                },
-                "viewVisibility": {
-                    "$ref": "#/definitions/ViewVisibilityOptions",
-                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
-                },
-                "waitForPageLoad": {
-                    "type": "boolean"
-                },
-                "width": {
-                    "type": "number"
-                },
-                "workspacePlatform": {
-                    "$ref": "#/definitions/WorkspacePlatformOptions"
-                },
-                "x": {
-                    "type": "number"
-                },
-                "y": {
-                    "type": "number"
                 }
             },
             "required": [
@@ -4144,6 +3834,7 @@
         "WindowOptions": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -4437,6 +4128,7 @@
                 }
             },
             "required": [
+                "_internalWorkspaceData",
                 "accelerator",
                 "alphaMask",
                 "alwaysOnTop",
@@ -4544,6 +4236,7 @@
         "__type": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -5279,6 +4972,7 @@
         "__type_2": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -5491,6 +5185,7 @@
         "__type_22": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -5720,6 +5415,7 @@
         "__type_25": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -5943,6 +5639,13 @@
                 "iconUrl": {
                     "description": "Icon that appears on a page tab if there are no unsaved changes. If 'undefined', default icon will appear.",
                     "type": "string"
+                },
+                "panels": {
+                    "description": "Used to configure fixed views on the edges of the browser window. Only one panel per side is supported.",
+                    "items": {
+                        "$ref": "#/definitions/PanelConfig"
+                    },
+                    "type": "array"
                 },
                 "unsavedIconUrl": {
                     "description": "Icon that appears on a page tab if there are unsaved changes (dirty state). If 'undefined', default icon will appear.",
@@ -6390,6 +6093,7 @@
         "__type_5": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
                 "accelerator": {
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
