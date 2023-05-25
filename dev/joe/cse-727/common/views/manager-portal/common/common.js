@@ -1,6 +1,5 @@
 export const MANAGER_PORTAL_CHANNEL = 'manager-portal-channel';
 
-
 export function buildUrl(folder, filename) {
 	const path = window.location.pathname.split('/');
 	path.pop(); // Remove the index.html
@@ -17,28 +16,30 @@ export async function loadData(filename) {
 
 export async function loadTeamData() {
 	const teamData = loadData('team.json');
-	return await teamData.then((team) => {
-		const teamMembers = team;
-		const updatedTeamMembers = [];
-		// For each teamMember, randomize some dates for them.
-		for (const member of teamMembers) {
-			const updated = member;
-			const approvedDays = member.leave.approved
-			const awaitingDays = member.leave.awaitingApproval
-			updated.leave.approved = modifyDates(approvedDays);
-			updated.leave.awaitingApproval = modifyDates(awaitingDays);
-			updated.leave.lastUpdated = new Date();
-			updatedTeamMembers.push(updated);
-		}
-		return updatedTeamMembers;
-	}).catch((err) => {
-		console.log(err);
-		return teamData; // If all else fails, return the original file contents.
-	});
+	return await teamData
+		.then((team) => {
+			const teamMembers = team;
+			const updatedTeamMembers = [];
+			// For each teamMember, randomize some dates for them.
+			for (const member of teamMembers) {
+				const updated = member;
+				const approvedDays = member.leave.approved;
+				const awaitingDays = member.leave.awaitingApproval;
+				updated.leave.approved = modifyDates(approvedDays);
+				updated.leave.awaitingApproval = modifyDates(awaitingDays);
+				updated.leave.lastUpdated = new Date();
+				updatedTeamMembers.push(updated);
+			}
+			return updatedTeamMembers;
+		})
+		.catch((err) => {
+			console.log(err);
+			return teamData; // If all else fails, return the original file contents.
+		});
 }
 
 function modifyDates(dateArray) {
-	const newDates = []
+	const newDates = [];
 	for (let i = 0; i < dateArray.length; i++) {
 		const referenceDate = new Date();
 		const thisYear = referenceDate.getFullYear(); // Should be the current year.
@@ -56,7 +57,7 @@ function getRandomNum(upperBound) {
 }
 
 function zeroPadding(num, placeCount) {
-	return String(num).padStart(placeCount, '0')
+	return String(num).padStart(placeCount, '0');
 }
 
 export async function loadCompanyComms() {
