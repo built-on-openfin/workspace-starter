@@ -13,7 +13,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
 		"list-update-packages": "npx --yes npm-check-updates --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import,typescript",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,node-emoji,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import,typescript",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json",
 		"common-update": "node ./scripts/common-update.mjs"
 	},
@@ -50,7 +50,7 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.40.0",
+		"eslint": "8.41.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.0.0",
 		"eslint-config-prettier": "8.8.0",

@@ -19,11 +19,11 @@
 		"@openfin/workspace-platform": "12.6.7"
 	},
 	"devDependencies": {
-		"@openfin/core": "30.74.13",
-		"openfin-adapter": "30.74.13",
-		"ts-loader": "^9.4.2",
+		"@openfin/core": "30.74.16",
+		"openfin-adapter": "30.74.16",
+		"ts-loader": "^9.4.3",
 		"typescript": "^4.9.5",
-		"webpack": "^5.82.1",
+		"webpack": "^5.84.1",
 		"webpack-cli": "^5.1.1"
 	}
 }

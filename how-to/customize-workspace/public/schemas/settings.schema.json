@@ -370,13 +370,6 @@
                     "type": "boolean"
                 }
             },
-            "required": [
-                "autoShow",
-                "dock",
-                "home",
-                "notifications",
-                "store"
-            ],
             "type": "object"
         },
         "Bounds": {
