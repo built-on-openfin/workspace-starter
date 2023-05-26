@@ -5,6 +5,7 @@ interface LauncherSettings {
 	snapshotUrl?: string;
 	idToken?: string;
 	idName?: string;
+	idTokens?: { idToken: string; idName: string }[];
 	contextGroupName?: string;
 	contextGroupToken?: string;
 }
@@ -58,54 +59,74 @@ async function getContextGroupName(contextGroupName: string, contextGroupToken: 
 	return targetContextGroupName;
 }
 
+function updateIdToken(sourceText: string, idToken: string, idValue: string): string {
+	if (
+		idToken === undefined ||
+		idToken === null ||
+		idToken.trim().length === 0 ||
+		idValue === undefined ||
+		idValue === null ||
+		idValue.trim().length === 0
+	) {
+		return sourceText;
+	}
+	sourceText = sourceText.replaceAll(idToken, idValue);
+	return sourceText;
+}
+
+async function manageIntent(intent: OpenFin.Intent, settings: LauncherSettings) {
+	try {
+		const response = await fetch(settings.snapshotUrl, {
+			headers: {
+				Accept: "application/json"
+			}
+		});
+		if (response.status === 200) {
+			console.log("Received snapshot response");
+			let text = await response.text();
+			if (intent?.context?.id !== undefined) {
+				text = updateIdToken(text, settings.idToken, intent.context.id[settings.idName]);
+				if (Array.isArray(settings.idTokens)) {
+					for (const idTokenEntry of settings.idTokens) {
+						text = updateIdToken(text, idTokenEntry.idToken, intent.context.id[idTokenEntry.idName]);
+					}
+				}
+			}
+
+			const targetContextGroupName: string = await getContextGroupName(
+				settings.contextGroupName,
+				settings.contextGroupToken
+			);
+			if (targetContextGroupName !== undefined && settings.contextGroupToken !== undefined) {
+				text = text.replaceAll(settings.contextGroupToken, targetContextGroupName);
+			}
+			const snapshot: OpenFin.Snapshot = JSON.parse(text);
+			const platform = fin.Platform.getCurrentSync();
+			if (targetContextGroupName !== undefined) {
+				await fin.me.interop.joinContextGroup(targetContextGroupName);
+				await fin.me.interop.setContext(intent.context);
+			}
+			await platform.applySnapshot(snapshot);
+		}
+	} catch (error) {
+		console.error("Error while trying to handle intent request for:", intent.name, error);
+	}
+}
+
 async function launcherInit() {
 	const settings = await getLauncherSettings();
 
 	if (settings !== null) {
-		const snapshotUrl: string = settings.snapshotUrl;
-		const idName: string = settings.idName;
-		const contextGroupName: string = settings.contextGroupName;
-		const contextGroupToken: string = settings.contextGroupToken;
-		const idToken: string = settings.idToken;
-		const intentName: string = settings.intentName;
-
-		await fin.me.interop.registerIntentHandler(async (intent) => {
-			try {
-				const response = await fetch(snapshotUrl, {
-					headers: {
-						Accept: "application/json"
-					}
+		await fin.me.interop.registerIntentHandler((intent) => {
+			manageIntent(intent, settings)
+				.then((_) => {
+					console.log(`Intent ${settings.intentName} managed.`);
+					return true;
+				})
+				.catch((err) => {
+					console.error(`Error received while trying to resolve intent ${settings.intentName}`, err);
 				});
-				if (response.status === 200) {
-					console.log("Received snapshot response");
-					let text = await response.text();
-					if (
-						idName !== undefined &&
-						intent?.context?.id !== undefined &&
-						intent.context.id[idName] !== undefined
-					) {
-						text = text.replaceAll(idToken, intent.context.id[idName]);
-					}
-
-					const targetContextGroupName: string = await getContextGroupName(
-						contextGroupName,
-						contextGroupToken
-					);
-					if (targetContextGroupName !== undefined && contextGroupToken !== undefined) {
-						text = text.replaceAll(contextGroupToken, targetContextGroupName);
-					}
-					const snapshot: OpenFin.Snapshot = JSON.parse(text);
-					const platform = fin.Platform.getCurrentSync();
-					if (targetContextGroupName !== undefined) {
-						await fin.me.interop.joinContextGroup(targetContextGroupName);
-						await fin.me.interop.setContext(intent.context);
-					}
-					await platform.applySnapshot(snapshot);
-				}
-			} catch (error) {
-				console.error("Error while trying to handle intent request for:", intent.name, error);
-			}
-		}, intentName);
+		}, settings.intentName);
 	}
 }
 
