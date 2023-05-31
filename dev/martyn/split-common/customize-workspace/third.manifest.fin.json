@@ -138,7 +138,10 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-1-2.json", "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-2-0.json"],
+			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [

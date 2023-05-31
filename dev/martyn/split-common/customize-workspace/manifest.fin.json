@@ -150,8 +150,12 @@
 			"endpointIds": [
 				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/apps-fdc3-2-0.json"
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-expero.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-tools.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/customize-workspace/common/apps-fdc3-2-0.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,

@@ -39,15 +39,6 @@
 		"name": "Register With Store - v12.6.0",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Register With Store - Client",
@@ -56,8 +47,13 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps.json"],
-			"manifestTypes": ["view", "snapshot", "manifest", "external"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps-expero.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-store/common/apps-tools.json"
+			],
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "window", "inline-appasset"],
 			"cacheDurationInMinutes": 1
 		},
 		"storefrontProvider": {
@@ -153,10 +149,6 @@
 						},
 						{ "title": "Views", "tags": ["view"] },
 						{ "title": "Pages", "tags": ["page"] },
-						{
-							"title": "Manifest",
-							"tags": ["manifest"]
-						},
 						{
 							"title": "Native",
 							"tags": ["native"]
