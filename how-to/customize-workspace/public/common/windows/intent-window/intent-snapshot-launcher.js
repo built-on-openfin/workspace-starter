@@ -67,11 +67,11 @@ async function manageIntent(intent, settings) {
 	try {
 		const response = await fetch(settings.snapshotUrl, {
 			headers: {
-				Accept: "application/json"
+				Accept: 'application/json'
 			}
 		});
 		if (response.status === 200) {
-			console.log("Received snapshot response");
+			console.log('Received snapshot response');
 			let text = await response.text();
 			if (intent?.context?.id !== undefined) {
 				text = updateIdToken(text, settings.idToken, intent.context.id[settings.idName]);
@@ -98,7 +98,7 @@ async function manageIntent(intent, settings) {
 			await platform.applySnapshot(snapshot);
 		}
 	} catch (error) {
-		console.error("Error while trying to handle intent request for:", intent.name, error);
+		console.error('Error while trying to handle intent request for:', intent.name, error);
 	}
 }
 

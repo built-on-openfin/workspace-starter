@@ -2,7 +2,7 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies --v=1 --inspect",
+		"arguments": "--v=1 --inspect",
 		"version": "30.110.74.16"
 	},
 	"platform": {

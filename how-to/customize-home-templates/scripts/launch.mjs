@@ -56,7 +56,6 @@ async function run(manifestUrl) {
 			process.on('SIGINT', async () => {
 				console.log('Ctrl + C called');
 				await quit();
-				process.exit();
 			});
 
 			console.log(`You successfully connected to the manifest: ${manifestUrl}`);
