@@ -4,17 +4,13 @@
 	"description": "OpenFin Workspace -- Register with Home",
 	"main": "index.js",
 	"scripts": {
-		"dos": "npm --prefix ../common/ run dos",
-		"build": "npm run build-server & npm run build-client",
-		"build-server": "tsc --project ./server",
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
-		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
-		"start": "npm run server",
-		"client": "npm --prefix ../common/ run client",
-		"server": "node ./server/build/index.js",
-		"kill": "npm --prefix ../common/ run kill",
-		"setup": "cd ../../ && npm install && cd how-to/register-with-home && npm run build && npm --prefix ../common/ run build",
-		"validate": "npm --prefix ../../ run validate"
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"setup": "cd ../../ && npm install && cd how-to/register-with-home && npm run build"
 	},
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",

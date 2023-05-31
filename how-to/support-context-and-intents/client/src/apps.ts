@@ -95,6 +95,12 @@ async function validateEntries(appSettings: AppProviderSettings, apps: App[]): P
 				} else {
 					validatedApps.push(element);
 				}
+			} else {
+				console.warn(
+					"Apps.ts: validateEntries: Application is not in the list of supported manifest types",
+					element.appId,
+					manifestType
+				);
 			}
 		}
 	}

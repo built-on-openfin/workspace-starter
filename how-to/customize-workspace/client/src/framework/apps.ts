@@ -84,6 +84,8 @@ async function validateEntries(apps: PlatformApp[]) {
 			} else {
 				validatedApps.push(apps[i]);
 			}
+		} else {
+			logger.warn("Application is not in the list of supported manifest types", apps[i].appId, manifestType);
 		}
 	}
 
