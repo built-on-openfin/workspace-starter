@@ -48,6 +48,60 @@ async function getContextGroupName(contextGroupName, contextGroupToken) {
 	return targetContextGroupName;
 }
 
+function updateIdToken(sourceText, idToken, idValue) {
+	if (
+		idToken === undefined ||
+		idToken === null ||
+		idToken.trim().length === 0 ||
+		idValue === undefined ||
+		idValue === null ||
+		idValue.trim().length === 0
+	) {
+		return sourceText;
+	}
+	sourceText = sourceText.replaceAll(idToken, idValue);
+	return sourceText;
+}
+
+async function manageIntent(intent, settings) {
+	try {
+		const response = await fetch(settings.snapshotUrl, {
+			headers: {
+				Accept: "application/json"
+			}
+		});
+		if (response.status === 200) {
+			console.log("Received snapshot response");
+			let text = await response.text();
+			if (intent?.context?.id !== undefined) {
+				text = updateIdToken(text, settings.idToken, intent.context.id[settings.idName]);
+				if (Array.isArray(settings.idTokens)) {
+					for (const idTokenEntry of settings.idTokens) {
+						text = updateIdToken(text, idTokenEntry.idToken, intent.context.id[idTokenEntry.idName]);
+					}
+				}
+			}
+
+			const targetContextGroupName = await getContextGroupName(
+				settings.contextGroupName,
+				settings.contextGroupToken
+			);
+			if (targetContextGroupName !== undefined && settings.contextGroupToken !== undefined) {
+				text = text.replaceAll(settings.contextGroupToken, targetContextGroupName);
+			}
+			const snapshot = JSON.parse(text);
+			const platform = fin.Platform.getCurrentSync();
+			if (targetContextGroupName !== undefined) {
+				await fin.me.interop.joinContextGroup(targetContextGroupName);
+				await fin.me.interop.setContext(intent.context);
+			}
+			await platform.applySnapshot(snapshot);
+		}
+	} catch (error) {
+		console.error("Error while trying to handle intent request for:", intent.name, error);
+	}
+}
+
 async function launcherInit() {
 	const settings = await getLauncherSettings();
 
@@ -93,6 +147,16 @@ async function launcherInit() {
 				console.error('Error while trying to handle intent request for:', intent.name, error);
 			}
 		}, intentName);
+		await fin.me.interop.registerIntentHandler((intent) => {
+			manageIntent(intent, settings)
+				.then((_) => {
+					console.log(`Intent ${settings.intentName} managed.`);
+					return true;
+				})
+				.catch((err) => {
+					console.error(`Error received while trying to resolve intent ${settings.intentName}`, err);
+				});
+		}, settings.intentName);
 	}
 }
 
