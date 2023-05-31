@@ -48,9 +48,6 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Customize Workspace - Second Client",
