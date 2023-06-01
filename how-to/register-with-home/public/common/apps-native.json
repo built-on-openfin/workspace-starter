@@ -13,7 +13,7 @@
 		},
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-winform-interop.png"
+				"src": "http://localhost:8080/common/images/native/icon-winform-interop.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -36,7 +36,7 @@
 		"manifest": "notepad.exe",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-notepad.png"
+				"src": "http://localhost:8080/common/images/native/icon-notepad.png"
 			}
 		],
 		"contactEmail": "contact@example.com",

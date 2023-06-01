@@ -152,7 +152,9 @@
 				"http://localhost:8080/common/apps.json",
 				"http://localhost:8080/common/apps-contact.json",
 				"http://localhost:8080/common/apps-expero.json",
+				"http://localhost:8080/common/apps-interop.json",
 				"http://localhost:8080/common/apps-native.json",
+				"http://localhost:8080/common/apps-preload.json",
 				"http://localhost:8080/common/apps-tools.json",
 				"http://localhost:8080/common/apps-fdc3-1-2.json",
 				"http://localhost:8080/common/apps-fdc3-2-0.json"
@@ -569,7 +571,7 @@
 						"tags": ["hero"]
 					},
 					"image": {
-						"src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+						"src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
 					}
 				},
 				"topRow": {
@@ -579,7 +581,7 @@
 							"title": "Expero",
 							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
 							},
 							"tags": ["expero"],
 							"buttonTitle": "View"
@@ -588,7 +590,7 @@
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
 							"tags": ["tools"],
 							"buttonTitle": "View"
@@ -597,7 +599,7 @@
 							"title": "Learning Resource",
 							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
 							},
 							"tags": ["page"],
 							"buttonTitle": "View"
@@ -615,7 +617,7 @@
 							"title": "Views",
 							"description": "A collection of views made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
 							},
 							"tags": ["view"],
 							"buttonTitle": "View"
@@ -624,7 +626,7 @@
 							"title": "Web Apps",
 							"description": "A collection of web apps built using OpenFin.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
 							},
 							"tags": ["manifest"],
 							"buttonTitle": "View"
@@ -633,7 +635,7 @@
 							"title": "Native Apps",
 							"description": "A collection of native apps made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+								"src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
 							},
 							"tags": ["native"],
 							"buttonTitle": "View"

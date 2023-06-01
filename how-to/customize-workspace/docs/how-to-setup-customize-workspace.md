@@ -48,10 +48,10 @@ npm run thirdclient
 This runs the same code with slightly different settings to load an FDC3 directory and show a light theme: [third.manifest.fin.json](../public/third.manifest.fin.json)
 
 6. Type any character into the search box to show the default list of applications.
-   The [apps](../../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+   The [apps](../public/common/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
 7. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](../../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](../public/manifest.fin.json).
+   The [apps](../public/common/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](../public/manifest.fin.json).
 
 8. If you modify the project and want to rebuild.
 

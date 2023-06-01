@@ -32,15 +32,6 @@
 			}
 		}
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Support Context And Intents - Second Client",
@@ -56,7 +47,11 @@
 			}
 		},
 		"appProvider": {
-			"appSourceUrls": ["http://localhost:8080/common/apps.json"],
+			"appSourceUrls": [
+				"http://localhost:8080/common/apps-contact.json",
+				"http://localhost:8080/common/apps-interop.json",
+				"http://localhost:8080/common/apps-preload.json"
+			],
 			"cacheDurationInMinutes": 1,
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
 		}

@@ -124,7 +124,7 @@ async function onAppInstanceSelection(appId, instanceId) {
 	setElementVisibility(appPreviewImage, false);
 	const appMetadata = await fdc3.getAppMetadata({ appId, instanceId });
 	let preview;
-	if (appMetadata?.instanceMetadata !== undefined && appMetadata?.instanceMetadata?.preview !== undefined) {
+	if (appMetadata?.instanceMetadata?.preview !== undefined) {
 		preview = appMetadata.instanceMetadata.preview;
 		appPreviewImage.src = `data:image/jpg;base64,${preview}`;
 		setElementVisibility(appPreviewImage, true);
