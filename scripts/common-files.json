@@ -510,10 +510,10 @@
 					"images/previews/expero/expero-news-view.png",
 					"images/previews/tools/**/*",
 					"snapshots/developer.snapshot.fin.json",
-					"views/platform/of-info.view.fin.json",
-					"views/platform/of-info/**/*",
 					"style/app.css",
 					"style/style-changed-preload.js",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
 					"dos.json"
 				]
 			},
@@ -611,12 +611,12 @@
 					"icons/default/light/theme.svg",
 					"images/icon-blue.png",
 					"images/style/test-image.webp",
-					"views/platform/of-info.view.fin.json",
-					"views/platform/of-info/**/*",
+					"style/app.css",
 					"style/style-changed-preload.js",
 					"style/style-view.json",
 					"style/style.html",
-					"style/app.css",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
 					"dos.json"
 				]
 			},
@@ -646,12 +646,12 @@
 				"files": [
 					"images/icon-blue.png",
 					"images/style/test-image.webp",
-					"views/platform/of-info.view.fin.json",
-					"views/platform/of-info/**/*",
+					"style/app.css",
 					"style/style-changed-preload.js",
 					"style/style-view.json",
 					"style/style.html",
-					"style/app.css",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
 					"dos.json"
 				]
 			},
@@ -678,7 +678,16 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/workspace-native-window-integration/public/common",
-				"files": ["dos.json"]
+				"files": [
+					"assets/native-interop-example.zip",
+					"images/icon-blue.png",
+					"images/native/icon-winform-interop.png",
+					"style/app.css",
+					"style/style-changed-preload.js",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
+					"dos.json"
+				]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",
