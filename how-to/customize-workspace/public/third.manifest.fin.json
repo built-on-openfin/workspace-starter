@@ -138,10 +138,7 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": [
-				"http://localhost:8080/common/apps-fdc3-1-2.json",
-				"http://localhost:8080/common/apps-fdc3-2-0.json"
-			],
+			"endpointIds": ["http://localhost:8080/apps-fdc3-1-2.json", "http://localhost:8080/apps-fdc3-2-0.json"],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
