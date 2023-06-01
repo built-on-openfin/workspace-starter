@@ -21,7 +21,7 @@ async function notifyOfLoad() {
 		],
 		priority: 1,
 		indicator: {
-			color: IndicatorColor.GREEN,
+			color: 'green',
 			text: 'Hidden Window Loaded'
 		},
 		category: 'hidden',
@@ -32,7 +32,7 @@ async function notifyOfLoad() {
 }
 
 async function init() {
-	addNotificationEventListener('notification-action', async (event) => {
+	notifications.addEventListener('notification-action', async (event) => {
 		const action = event?.result?.task;
 
 		if (action === 'Close') {

@@ -26,14 +26,14 @@ const libor = Math.random() * 2;
 window.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-	currencyElement = document.querySelector < HTMLSelectElement > '#currency';
-	notionalElement = document.querySelector < HTMLInputElement > '#notional';
-	frequencyElement = document.querySelector < HTMLSelectElement > '#frequency';
-	tenorElement = document.querySelector < HTMLSelectElement > '#tenor';
-	effectiveDateElement = document.querySelector < HTMLInputElement > '#effectiveDate';
-	maturityDateElement = document.querySelector < HTMLInputElement > '#maturityDate';
-	accountElement = document.querySelector < HTMLSelectElement > '#account';
-	allocationElement = document.querySelector < HTMLSelectElement > '#allocation';
+	currencyElement = document.querySelector('#currency');
+	notionalElement = document.querySelector('#notional');
+	frequencyElement = document.querySelector('#frequency');
+	tenorElement = document.querySelector('#tenor');
+	effectiveDateElement = document.querySelector('#effectiveDate');
+	maturityDateElement = document.querySelector('#maturityDate');
+	accountElement = document.querySelector('#account');
+	allocationElement = document.querySelector('#allocation');
 
 	const closeButton = document.querySelector('#btnClose');
 	closeButton.addEventListener('click', async () => {
@@ -389,7 +389,7 @@ async function showInboundRFQ(rfqData) {
 	rfqData.deskExecuteStart = Date.now();
 	return showNotification(
 		rfqData,
-		IndicatorColor.YELLOW,
+		'yellow',
 		'INBOUND RFQ',
 		'account',
 		'#FF8C4C',
@@ -415,7 +415,7 @@ async function showQuote(rfqData) {
 	rfqData.clientExecuteStart = Date.now();
 	return showNotification(
 		rfqData,
-		IndicatorColor.GREEN,
+		'green',
 		'YOUR QUOTE',
 		'allocation',
 		'green',
@@ -442,7 +442,7 @@ async function showClientConfirmation(rfqData) {
 	rfqData.clientExecuteEnd = Date.now();
 	return showNotification(
 		rfqData,
-		IndicatorColor.GREEN,
+		'green',
 		'TRADE CONFIRMED',
 		'allocation',
 		'green',
@@ -472,7 +472,7 @@ async function showTraderConfirmation(rfqData) {
 	rfqData.deskExecuteEnd = Date.now();
 	return showNotification(
 		rfqData,
-		IndicatorColor.GREEN,
+		'green',
 		'INBOUND RFQ',
 		'allocation',
 		'green',
