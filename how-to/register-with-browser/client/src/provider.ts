@@ -272,7 +272,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a global context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -332,7 +332,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a view tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -352,7 +352,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a page tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.

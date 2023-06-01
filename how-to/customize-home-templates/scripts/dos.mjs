@@ -8,12 +8,20 @@ import { spawnSync } from 'child_process';
 // The common location for the DOS settings when running the local dev examples
 const DOS_URL = 'http://localhost:8080/common/dos.json';
 
+/**
+ * Run the process.
+ */
 async function run() {
 	console.log('Configure DOS');
 	console.log('=============');
 	console.log();
 	console.log(`Platform: ${process.platform}`);
 
+	/**
+	 * Wait for a keypress.
+	 * @param keyCode The key code to look for.
+	 * @returns Nothing.
+	 */
 	function waitForKey(keyCode) {
 		process.stdin.setRawMode(true);
 		return new Promise((resolve) => {

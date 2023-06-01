@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	Dock,
 	Home,
@@ -5,7 +6,7 @@ import {
 	type StorefrontFooter,
 	type StorefrontLandingPage
 } from "@openfin/workspace";
-import { init, type WorkspacePlatformOverrideCallback } from "@openfin/workspace-platform";
+import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import { type DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import { dockGetCustomActions, loadDockConfig, register, saveDockConfig } from "./dock";
 
@@ -91,7 +92,14 @@ async function initializeWorkspaceComponents(): Promise<void> {
 	await Dock.show();
 }
 
-export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @returns The overridden class.
+ */
+function overrideCallback(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
@@ -128,4 +136,4 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 	}
 
 	return new Override();
-};
+}

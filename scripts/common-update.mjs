@@ -7,6 +7,9 @@ import FastGlob from 'fast-glob';
 import fs from 'fs/promises';
 import path from 'path';
 
+/**
+ * Execute the process.
+ */
 async function run() {
 	console.log('Common Update');
 	console.log('=============');

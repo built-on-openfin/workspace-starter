@@ -1,4 +1,7 @@
-function init() {
+/**
+ * Initialize the DOM.
+ */
+function initializeDOM() {
 	if (window.fdc3) {
 		const actionButtons = document.querySelectorAll('[data-contact]');
 
@@ -43,6 +46,11 @@ function init() {
 	}
 }
 
+/**
+ * Update the participant.
+ * @param event The event.
+ * @param contacts The contacts data.
+ */
 function selectParticipant(event, contacts) {
 	const contact = contacts[event.target.dataset.contact];
 	if (contact !== undefined) {
@@ -50,6 +58,11 @@ function selectParticipant(event, contacts) {
 	}
 }
 
+/**
+ * Raise the intent for the contact.
+ * @param event The event being raised.
+ * @param contacts The contacts.
+ */
 function raiseIntent(event, contacts) {
 	const contact = contacts[event.target.dataset.contact];
 	if (contact !== undefined) {
@@ -57,4 +70,4 @@ function raiseIntent(event, contacts) {
 	}
 }
 
-window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('DOMContentLoaded', initializeDOM);

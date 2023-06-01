@@ -6,6 +6,10 @@
  */
 import { connect, launch } from 'openfin-adapter';
 
+/**
+ * Run the process.
+ * @param manifestUrl The manifest to launch.
+ */
 async function run(manifestUrl) {
 	try {
 		let quitRequested = false;
@@ -71,6 +75,12 @@ async function run(manifestUrl) {
 	}
 }
 
+/**
+ * Launch the manifest using the node adapter.
+ * @param manifestUrl The manifest to launch.
+ * @param exitMethod The method to call if the adapter connection exits.
+ * @returns The fin object representing the connection.
+ */
 async function launchFromNode(manifestUrl, exitMethod) {
 	try {
 		console.log(`Launching manifest...`);

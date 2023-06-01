@@ -312,12 +312,7 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/register-with-dock/public/common",
-				"files": [
-					"images/icon-blue.png", 
-					"style/app.css", 
-					"views/platform/new-tab/**/*",
-					"dos.json"
-				]
+				"files": ["images/icon-blue.png", "style/app.css", "views/platform/new-tab/**/*", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",

@@ -1,10 +1,19 @@
 const query = document.querySelector('#query');
 const action = document.querySelector('#action');
 
+/**
+ * Is the query text a url.
+ * @param value The value to test.
+ * @returns True if the input is a url.
+ */
 function isQueryAUrl(value) {
 	return /^https?:\/\//.test(value);
 }
 
+/**
+ * Switch the label based on the content.
+ * @param e The event to get the value from.
+ */
 function validateValue(e) {
 	if (isQueryAUrl(e.target.value)) {
 		action.textContent = 'Navigate To Url';
@@ -13,6 +22,9 @@ function validateValue(e) {
 	}
 }
 
+/**
+ * Open the query or search.
+ */
 function actionQuery() {
 	if (isQueryAUrl(query.value)) {
 		location.href = query.value;
@@ -21,6 +33,9 @@ function actionQuery() {
 	}
 }
 
+/**
+ * Init the content.
+ */
 async function init() {
 	query.addEventListener('input', validateValue);
 	query.addEventListener('keydown', (event) => {

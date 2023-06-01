@@ -18,6 +18,54 @@ let intent;
 let intents;
 let apps;
 
+/**
+ * Initialize the DOM.
+ */
+async function initializeDOM() {
+	intentSelectionContainer = document.querySelector('#intent-select-container');
+	targetContextLabel = document.querySelector('#target-context');
+	intentsContainer = document.querySelector('#intent-container');
+	nextBtn = document.querySelector('#move-next');
+	cancelIntentSelectionBtn = document.querySelector('#cancel-intent-selection');
+
+	appSelectionContainer = document.querySelector('#app-select-container');
+	targetIntentLabel = document.querySelector('#target-intent');
+	appsContainer = document.querySelector('#app-container');
+	backBtn = document.querySelector('#back');
+	launchBtn = document.querySelector('#launch');
+	launchBtn.disabled = true;
+	cancelAppSelectionBtn = document.querySelector('#cancel');
+
+	const data = await fin.me.getOptions();
+
+	if (data.customData !== undefined) {
+		apps = data.customData.apps;
+		intent = data.customData.intent;
+		intents = data.customData.intents;
+		if (data.customData.unregisteredAppId !== undefined) {
+			// this intent picker does not support instances and an unregistered app entry is a placeholder
+			// for any views/windows that register as intent handlers but are not linked to an app
+			apps = apps.filter((app) => app.appId !== data.customData.unregisteredAppId);
+		}
+		if (data.customData.title !== undefined) {
+			const title = document.querySelector('#title');
+			title.textContent = data.customData.title;
+		}
+	}
+
+	if (intents !== undefined) {
+		backBtn.style.display = 'block';
+		setupIntentView(intents);
+	} else {
+		backBtn.style.display = 'none';
+		setupAppView(apps);
+	}
+}
+
+/**
+ * Setup the view for the intents.
+ * @param setupIntents The intents to display.
+ */
 function setupIntentView(setupIntents) {
 	if (Array.isArray(setupIntents)) {
 		const listName = 'intent';
@@ -65,6 +113,10 @@ function setupIntentView(setupIntents) {
 	}
 }
 
+/**
+ * Setup the view for the apps.
+ * @param applications The apps to display.
+ */
 function setupAppView(applications) {
 	if (Array.isArray(applications)) {
 		const listName = 'app';
@@ -100,47 +152,6 @@ function setupAppView(applications) {
 	}
 }
 
-async function init() {
-	intentSelectionContainer = document.querySelector('#intent-select-container');
-	targetContextLabel = document.querySelector('#target-context');
-	intentsContainer = document.querySelector('#intent-container');
-	nextBtn = document.querySelector('#move-next');
-	cancelIntentSelectionBtn = document.querySelector('#cancel-intent-selection');
-
-	appSelectionContainer = document.querySelector('#app-select-container');
-	targetIntentLabel = document.querySelector('#target-intent');
-	appsContainer = document.querySelector('#app-container');
-	backBtn = document.querySelector('#back');
-	launchBtn = document.querySelector('#launch');
-	launchBtn.disabled = true;
-	cancelAppSelectionBtn = document.querySelector('#cancel');
-
-	const data = await fin.me.getOptions();
-
-	if (data.customData !== undefined) {
-		apps = data.customData.apps;
-		intent = data.customData.intent;
-		intents = data.customData.intents;
-		if (data.customData.unregisteredAppId !== undefined) {
-			// this intent picker does not support instances and an unregistered app entry is a placeholder
-			// for any views/windows that register as intent handlers but are not linked to an app
-			apps = apps.filter((app) => app.appId !== data.customData.unregisteredAppId);
-		}
-		if (data.customData.title !== undefined) {
-			const title = document.querySelector('#title');
-			title.textContent = data.customData.title;
-		}
-	}
-
-	if (intents !== undefined) {
-		backBtn.style.display = 'block';
-		setupIntentView(intents);
-	} else {
-		backBtn.style.display = 'none';
-		setupAppView(apps);
-	}
-}
-
 // this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
 window['getIntentSelection'] = async () => {
 	launchBtn.disabled = false;
@@ -151,5 +162,5 @@ window['getIntentSelection'] = async () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-	init();
+	initializeDOM();
 });
