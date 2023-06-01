@@ -1,6 +1,6 @@
 {
 	"name": "integrate-with-bloomberg-basic",
-	"version": "12.6.0",
+	"version": "13.0.0",
 	"description": "OpenFin Workspace - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
 	"main": "index.js",
 	"scripts": {
@@ -20,15 +20,14 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/bloomberg": "^1.1.0",
-		"@openfin/core": "30.74.16",
-		"@openfin/workspace": "12.6.7",
-		"@openfin/workspace-platform": "12.6.7"
+		"@openfin/core": "31.75.4",
+		"@openfin/workspace": "13.0.7",
+		"@openfin/workspace-platform": "13.0.7"
 	},
 	"devDependencies": {
-		"@types/node": "^20.2.5",
-		"openfin-adapter": "30.74.16",
+		"openfin-adapter": "31.75.4",
 		"ts-loader": "^9.4.3",
-		"typescript": "^4.9.5",
+		"typescript": "^5.0.4",
 		"webpack": "^5.85.0",
 		"webpack-cli": "^5.1.1"
 	}

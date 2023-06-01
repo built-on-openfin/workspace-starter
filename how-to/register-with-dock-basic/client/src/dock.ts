@@ -2,7 +2,7 @@ import {
 	Dock,
 	DockButtonNames,
 	type RegistrationMetaInfo,
-	type WorkspaceComponentButtonOptions
+	type WorkspaceButtonsConfig
 } from "@openfin/workspace";
 import {
 	CustomActionCallerType,
@@ -17,7 +17,7 @@ import {
  * @param title The title to use for the dock registration.
  * @param icon The icon to use for the dock registration.
  * @param options The options to pass to the dock provider.
- * @param options.workspaceComponents The workspace components options.
+ * @param options.workspaceButtons The workspace buttons.
  * @param options.customIconUrl Use a custom icon url.
  * @param options.customOpenUrl Use a custom open url.
  * @returns The registration details for dock.
@@ -27,7 +27,8 @@ export async function register(
 	title: string,
 	icon: string,
 	options: {
-		workspaceComponents: WorkspaceComponentButtonOptions;
+		workspaceComponents: WorkspaceButtonsConfig;
+		disableUserRearrangement: boolean;
 		customIconUrl: string;
 		customOpenUrl: string;
 	}
@@ -40,6 +41,8 @@ export async function register(
 			title,
 			icon,
 			workspaceComponents: options.workspaceComponents,
+			disableUserRearrangement: options.disableUserRearrangement,
+			skipSavedDockProviderConfig: true,
 			buttons: [
 				{
 					tooltip: "Google",

@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import os from 'os';
 import path from 'path';
 
 async function run(packageDir, configFile) {
@@ -10,12 +11,19 @@ async function run(packageDir, configFile) {
 	const configModule = await import(`file://${fullConfigFilename}`);
 	console.log('numberConfigurations:', configModule.default.length);
 
-	for (let i = 0; i < configModule.default.length; i++) {
-		spawn('npm', ['run', 'build-client-serial'], {
-			stdio: 'inherit',
-			env: { ...process.env, WEBPACK_CONFIG_INDEX: i },
-			shell: true
-		});
+	const chunkSize = Math.max(1, os.cpus().length / 2);
+	console.log('numberCpus:', chunkSize);
+
+	const numChunks = Math.ceil(configModule.default.length / chunkSize);
+
+	for (let chunk = 0; chunk < numChunks; chunk++) {
+		for (let i = chunk * chunkSize; i < Math.min(configModule.default.length, (chunk + 1) * chunkSize); i++) {
+			spawn('npm', ['run', 'build-client-serial'], {
+				stdio: 'inherit',
+				env: { ...process.env, WEBPACK_CONFIG_INDEX: i },
+				shell: true
+			});
+		}
 	}
 }
 

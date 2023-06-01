@@ -71,7 +71,6 @@ export function interopOverride(
 							title: "Intent Resolver",
 							...intentResolverOptions
 						};
-						// eslint-disable-next-line max-len
 						this._intentOptions = {
 							intentTimeout: 5000,
 							...customSettings?.platformProvider?.interop?.intentOptions

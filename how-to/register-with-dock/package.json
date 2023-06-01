@@ -1,0 +1,29 @@
+{
+	"name": "openfin-workspace--register-with-dock",
+	"version": "13.0.0",
+	"description": "OpenFin Workspace -- Register with dock",
+	"main": "index.js",
+	"scripts": {
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"setup": "cd ../../ && npm install && cd how-to/register-with-dock && npm run build"
+	},
+	"author": "martyn.janes@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/workspace": "13.0.7",
+		"@openfin/workspace-platform": "13.0.7"
+	},
+	"devDependencies": {
+		"@openfin/core": "31.75.4",
+		"openfin-adapter": "31.75.4",
+		"ts-loader": "^9.4.3",
+		"typescript": "^5.0.4",
+		"webpack": "^5.85.0",
+		"webpack-cli": "^5.1.1"
+	}
+}

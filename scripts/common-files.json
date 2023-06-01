@@ -302,6 +302,36 @@
 		]
 	},
 	{
+		"name": "register-with-dock",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/customize-workspace/public",
+				"destFolder": "how-to/register-with-dock/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/public/common",
+				"destFolder": "how-to/register-with-dock/public/common",
+				"files": [
+					"images/icon-blue.png", 
+					"style/app.css", 
+					"views/platform/new-tab/**/*",
+					"dos.json"
+				]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/scripts",
+				"destFolder": "how-to/register-with-dock/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/customize-workspace/client/types",
+				"destFolder": "how-to/register-with-dock/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
 		"name": "register-with-dock-basic",
 		"fileGroups": [
 			{
