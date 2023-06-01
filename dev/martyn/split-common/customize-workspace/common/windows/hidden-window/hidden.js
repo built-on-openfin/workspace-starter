@@ -1,3 +1,25 @@
+/**
+ * Initialize the DOM.
+ */
+async function initializeDOM() {
+	notifications.addEventListener('notification-action', async (event) => {
+		const action = event?.result?.task;
+
+		if (action === 'Close') {
+			const me = fin.Window.wrapSync(fin.me.identity);
+			await me.close(true);
+		} else {
+			console.log('Action triggered:', action);
+			await fin.me.show(true);
+		}
+	});
+
+	await notifyOfLoad();
+}
+
+/**
+ * Create a notification to show the window has been loaded.
+ */
 async function notifyOfLoad() {
 	const notification = {
 		body: 'The hidden window has been launched.',
@@ -31,24 +53,8 @@ async function notifyOfLoad() {
 	await notifications.create(notification);
 }
 
-async function init() {
-	notifications.addEventListener('notification-action', async (event) => {
-		const action = event?.result?.task;
-
-		if (action === 'Close') {
-			const me = fin.Window.wrapSync(fin.me.identity);
-			await me.close(true);
-		} else {
-			console.log('Action triggered:', action);
-			await fin.me.show(true);
-		}
-	});
-
-	await notifyOfLoad();
-}
-
 window.addEventListener('DOMContentLoaded', async () => {
 	console.log('Script loaded');
 
-	await init();
+	await initializeDOM();
 });
