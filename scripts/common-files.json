@@ -581,7 +581,7 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/use-notifications/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "style/style-changed-preload.js", "dos.json"]
+				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",
@@ -606,7 +606,19 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/use-theming/public/common",
-				"files": ["dos.json"]
+				"files": [
+					"icons/default/dark/theme.svg",
+					"icons/default/light/theme.svg",
+					"images/icon-blue.png",
+					"images/style/test-image.webp",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
+					"style/style-changed-preload.js",
+					"style/style-view.json",
+					"style/style.html",
+					"style/app.css",
+					"dos.json"
+				]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",
@@ -631,7 +643,17 @@
 			{
 				"srcFolder": "how-to/customize-workspace/public/common",
 				"destFolder": "how-to/use-theming-basic/public/common",
-				"files": ["dos.json"]
+				"files": [
+					"images/icon-blue.png",
+					"images/style/test-image.webp",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/of-info/**/*",
+					"style/style-changed-preload.js",
+					"style/style-view.json",
+					"style/style.html",
+					"style/app.css",
+					"dos.json"
+				]
 			},
 			{
 				"srcFolder": "how-to/customize-workspace/scripts",
