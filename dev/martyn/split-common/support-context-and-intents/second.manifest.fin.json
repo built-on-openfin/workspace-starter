@@ -32,15 +32,6 @@
 			}
 		}
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Support Context And Intents - Second Client",
@@ -56,7 +47,11 @@
 			}
 		},
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/apps.json"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/support-context-and-intents/common/apps-preload.json"
+			],
 			"cacheDurationInMinutes": 1,
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
 		}

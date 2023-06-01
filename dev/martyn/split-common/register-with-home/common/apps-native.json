@@ -13,7 +13,7 @@
 		},
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/common/images/icon-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/common/images/native/icon-winform-interop.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -36,7 +36,7 @@
 		"manifest": "notepad.exe",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/common/images/icon-notepad.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/split-common/register-with-home/common/images/native/icon-notepad.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
