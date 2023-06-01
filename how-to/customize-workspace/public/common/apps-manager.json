@@ -1,0 +1,143 @@
+[
+	{
+		"appId": "manager-portal",
+		"name": "manager-portal",
+		"title": "Manager Portal",
+		"manifestType": "snapshot",
+		"description": "Provides a portal for a manager",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
+			}
+		],
+		"tags": ["page", "openfin", "manager", "fcd3"]
+	},
+	{
+		"appId": "manager-portal-fixed-panels",
+		"name": "manager-portal-fixed-panels",
+		"title": "Manager Portal (Fixed Views)",
+		"manifestType": "snapshot",
+		"description": "Provides a portal for a manager with fixed panels",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
+			}
+		],
+		"tags": ["page", "openfin", "manager", "fcd3"]
+	},
+	{
+		"appId": "my-team",
+		"name": "my-team",
+		"title": "My Team",
+		"description": "View my team.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/my-team.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "annual-leave",
+		"name": "annual-leave",
+		"title": "Annual Leave",
+		"description": "View the annual leave for a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/annual-leave.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/annual-leave/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "manager-paths",
+		"name": "manager-paths",
+		"title": "Manager Paths",
+		"description": "View the manager paths for a team member.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-paths.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/manager-paths/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-comms",
+		"name": "company-comms",
+		"title": "Company Comms",
+		"description": "View the communications for the company.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-comms.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/company-comms/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	},
+	{
+		"appId": "company-cal",
+		"name": "company-cal",
+		"title": "Company Calendar",
+		"description": "View the calendar for the company.",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-cal.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/views/manager-portal/company-cal/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "manager", "fcd3"]
+	}
+]
