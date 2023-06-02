@@ -98,6 +98,7 @@
 			"additionalProperties": false,
 			"description": "Window options apply to all platform windows.\nAny {@link Window~options Window option} is also a valid Default Window option\nused by default in any window that is created in the current platform's scope.\nIndividual window options will override these defaults.",
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -492,6 +493,7 @@
 		"__type_10": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -1026,6 +1028,7 @@
 		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."

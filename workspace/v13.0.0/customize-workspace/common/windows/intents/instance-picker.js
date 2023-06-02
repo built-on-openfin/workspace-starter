@@ -108,8 +108,11 @@ async function onIntentSelection(targetIntent) {
 
 async function onAppSelection(appId) {
 	const selectedApp = appLookup[appId];
-	await setupAppMetadata(appId);
-	if (selectedApp?.instanceMode === undefined || selectedApp.instanceMode !== 'single') {
+	setupAppMetadata(appId);
+	if (
+		selectedApp?.instanceMode === undefined ||
+		(selectedApp.instanceMode !== 'single' && selectedApp.instanceMode !== 'new')
+	) {
 		const foundAppInstances = await fdc3.findInstances({ appId });
 		const addNewInstanceOption = appId !== unregisteredAppId;
 		await setupAppInstancesView(foundAppInstances, addNewInstanceOption);
@@ -133,7 +136,7 @@ async function onAppInstanceSelection(appId, instanceId) {
 	}
 }
 
-async function loadAppPreview(appId) {
+function loadAppPreview(appId) {
 	const appPreviewImage = document.querySelector('#preview');
 	setElementVisibility(appPreviewImage, false);
 	const appMetadata = appLookup[appId];
@@ -143,7 +146,7 @@ async function loadAppPreview(appId) {
 	}
 }
 
-async function setupAppMetadata(appId) {
+function setupAppMetadata(appId) {
 	const appMetadata = appLookup[appId];
 	if (appMetadata !== undefined) {
 		const appImage = document.querySelector('#logo');
@@ -215,7 +218,7 @@ async function init() {
 			}
 		}
 	}
-	setupIntentView(intents);
+	await setupIntentView(intents);
 
 	if (Array.isArray(apps)) {
 		for (const app of apps) {
