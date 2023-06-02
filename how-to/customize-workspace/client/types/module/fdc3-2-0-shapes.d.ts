@@ -7,40 +7,32 @@ interface Image {
 	type?: string;
 }
 export type Icon = Image;
-
 export interface Screenshot extends Image {
 	/** Optional caption for the image */
 	label?: string;
 }
-
 export interface WebAppDetails {
 	/** Application start URL. */
 	url: string;
 }
-
 export interface NativeAppDetails {
 	/** The path on disk from which the application is launched. */
 	path: string;
 	/** Arguments that must be passed on the command line to launch the app in the expected configuration. */
 	arguments?: string;
 }
-
 export interface OnlineNativeAppDetails {
 	/** Application URL */
 	url: string;
 }
-
 export interface CitrixAppDetails {
 	/** The Citrix alias / name of the virtual app (passed to the Citrix SelfService qlaunch parameter). */
 	alias: string;
 	/** Arguments that must be passed on the command line to launch the app in the expected configuration. */
 	arguments?: string;
 }
-
 /** Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OtherAppDetails {}
-
 export interface AppIntents {
 	/** An optional display name for the intent that may be used in UI instead of the name. */
 	displayName?: string;
@@ -52,9 +44,10 @@ export interface AppIntents {
 	 * */
 	resultType?: string;
 	/** Custom configuration for the intent that may be required for a particular desktop agent. **/
-	customConfig?: { [key: string]: unknown };
+	customConfig?: {
+		[key: string]: unknown;
+	};
 }
-
 export interface AppInterop {
 	/** Describes the app's interactions with intents. */
 	intents?: {
@@ -91,10 +84,8 @@ export interface AppInterop {
 		listensFor?: string[];
 	}[];
 }
-
 /** The technology type that is used to launch and run the application. Each application type implies a particular set of launch details. */
 export type AppDefinitionType = "web" | "native" | "citrix" | "onlineNative" | "other";
-
 export interface AppDefinition {
 	/** The unique application identifier located within a specific application directory instance. */
 	appId: string;
@@ -131,7 +122,9 @@ export interface AppDefinition {
 	/** The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be duplicated or overridden by details provided in the hostManifests OpenFin object.*/
 	details: WebAppDetails | NativeAppDetails | OnlineNativeAppDetails | CitrixAppDetails | OtherAppDetails;
 	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher. */
-	customConfig?: { [key: string]: unknown };
+	customConfig?: {
+		[key: string]: unknown;
+	};
 	/**
 	 * A mapping from host name to a host-specific application manifest object or URI from which that manifest can be retrieved.
 	 * The manifest should provide details required to launch and use the application within the specified host.
@@ -170,22 +163,24 @@ export interface AppDefinition {
 	 * (e.g. by providing customConfig or an alternative URL).
 	 * The keys to this object should be language tags as defined by IETF RFC 5646, e.g. en, en-GB or fr-FR.
 	 * */
-	localizedVersions?: { [key: string]: { [key: string]: string } };
+	localizedVersions?: {
+		[key: string]: {
+			[key: string]: string;
+		};
+	};
 }
-
 /** The successful response expected from a FDC3 2.0 request when all applications are requested. */
 export interface FDC3VTwoPointZeroAppDirectoryResponse {
 	/** The schema that helps guide the structure of the response */
 	$schema: string;
 	/** List of applications */
 	applications: AppDefinition[];
-
 	/** Response message providing status of query */
 	message?: string;
-
 	/** Metadata that provides information beyond the url path to help identify the format of the response that has been received. */
 	metadata?: {
 		type: "fdc3";
 		version: "2.0";
 	};
 }
+export {};

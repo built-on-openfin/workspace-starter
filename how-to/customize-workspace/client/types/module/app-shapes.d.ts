@@ -2,7 +2,6 @@ import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { App } from "@openfin/workspace";
 import type { AppInterop } from "./fdc3-2-0-shapes";
-
 export type PlatformApp = App & {
 	/** does the application wish to be automatically started when the platform is initialized. Default behavior is false. */
 	autostart?: boolean;
@@ -13,7 +12,9 @@ export type PlatformApp = App & {
 	 * app owner wants a new instance every time. And if an intent is raised and just the id of the app is specified it will always launch a new instance   */
 	instanceMode?: "multi" | "single" | "new";
 	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
-	customConfig?: { [key: string]: unknown };
+	customConfig?: {
+		[key: string]: unknown;
+	};
 	manifest:
 		| string
 		| OpenFin.ViewOptions
@@ -35,9 +36,7 @@ export type PlatformApp = App & {
 	/** name is provided for support for fdc3 mappings if not provided then appId is used as name. Internally we use appId.*/
 	name?: string;
 };
-
 export type PlatformAppInterop = AppInterop;
-
 /**
  * When fetching apps you can optionally provide a filter
  */
@@ -47,9 +46,7 @@ export interface AppFilterOptions {
 	/** Is this app marked as one that should be automatically started? */
 	autostart?: boolean;
 }
-
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
-
 export type ManifestTypeId =
 	| "view"
 	| "inline-view"
@@ -66,7 +63,6 @@ export type ManifestTypeId =
 	| "endpoint"
 	| "connection"
 	| "unregistered-app";
-
 export type ManifestTypesId =
 	| "view"
 	| "inlineView"
@@ -83,32 +79,24 @@ export type ManifestTypesId =
 	| "endpoint"
 	| "connection"
 	| "unregisteredApp";
-
 export interface ManifestType {
 	id: ManifestTypeId;
 	label: string;
 	description: string;
 }
-
 export type ManifestTypes = {
 	[key in ManifestTypesId]: ManifestType;
 };
-
 export type AppEndpointOptions =
 	| string
 	| {
 			inputId: string;
 			outputId?: string;
 	  };
-
 export type PlatformApps = PlatformApp[];
-
 export type PlatformViewOptions = OpenFin.ViewOptions;
-
 export type PlatformWindowOptions = OpenFin.WindowOptions;
-
 export type PlatformSnapshotOptions = OpenFin.Snapshot;
-
 /**
  * App Provider settings to configure where apps are fetched from.
  */
@@ -147,8 +135,10 @@ export interface AppProviderOptions {
 	 * */
 	manifestTypes?: ManifestTypeId[];
 }
-
 export interface AppsForIntent {
-	intent: { name: string; displayName: string };
+	intent: {
+		name: string;
+		displayName: string;
+	};
 	apps: PlatformApps;
 }

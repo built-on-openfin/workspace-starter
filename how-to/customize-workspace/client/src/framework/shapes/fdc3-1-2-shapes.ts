@@ -25,8 +25,10 @@ export interface CustomConfig {
 	autostart?: string | boolean;
 	/** Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may be that this app entry is mainly for responding to intent requests and shouldn't be launched directly. */
 	private?: string | boolean;
-	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */
-	instanceMode?: "multi" | "single";
+	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps. If multi should
+	 * we support multiple instances and let the user decide whether to launch a new instance or pick an existing one from the intent picker? If new it means the intent picker will not show the option to pick an instance because the
+	 * app owner wants a new instance every time. And if an intent is raised and just the id of the app is specified it will always launch a new instance   */
+	instanceMode?: "multi" | "single" | "new";
 }
 
 export interface AppDefinition {

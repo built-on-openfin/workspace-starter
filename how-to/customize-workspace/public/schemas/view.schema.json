@@ -140,6 +140,7 @@
 			"additionalProperties": false,
 			"description": "User-facing options for a view.",
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_2",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -306,6 +307,7 @@
 				}
 			},
 			"required": [
+				"_internalWorkspaceData",
 				"api",
 				"autoResize",
 				"autoplayPolicy",
@@ -681,6 +683,7 @@
 		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_2",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -851,6 +854,7 @@
 		"__type_2": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_2",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."

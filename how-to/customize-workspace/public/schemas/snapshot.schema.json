@@ -70,14 +70,26 @@
 		"DipRect": {
 			"additionalProperties": false,
 			"properties": {
+				"bottom": {
+					"type": "number"
+				},
 				"dipRect": {
 					"$ref": "#/definitions/RectangleByEdgePositions"
 				},
+				"left": {
+					"type": "number"
+				},
+				"right": {
+					"type": "number"
+				},
 				"scaledRect": {
 					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
+				"top": {
+					"type": "number"
 				}
 			},
-			"required": ["dipRect", "scaledRect"],
+			"required": ["bottom", "dipRect", "left", "right", "scaledRect", "top"],
 			"type": "object"
 		},
 		"DipScaleRects": {
@@ -170,6 +182,9 @@
 		"TaskBar": {
 			"additionalProperties": false,
 			"properties": {
+				"dipRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
 				"edge": {
 					"description": "Which edge of a monitor the taskbar is on",
 					"type": "string"
@@ -177,9 +192,12 @@
 				"rect": {
 					"$ref": "#/definitions/RectangleByEdgePositions",
 					"description": "The taskbar coordinates."
+				},
+				"scaledRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
 				}
 			},
-			"required": ["edge", "rect"],
+			"required": ["dipRect", "edge", "rect", "scaledRect"],
 			"type": "object"
 		},
 		"ViewVisibilityOption": {
@@ -207,6 +225,7 @@
 			"additionalProperties": false,
 			"description": "Options required to create a new window with {@link Window.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -534,6 +553,7 @@
 		"__type_10": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -1068,6 +1088,7 @@
 		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
