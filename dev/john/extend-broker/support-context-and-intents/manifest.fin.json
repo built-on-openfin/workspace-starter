@@ -39,15 +39,6 @@
 		"name": "Support Intents & Context - v13.0.0",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Support Context and Intents - Client",
@@ -57,15 +48,27 @@
 	"customSettings": {
 		"platformProvider": {
 			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/windows/intents/picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/support-context-and-intents/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			}
 		},
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/apps.json"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/support-context-and-intents/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/support-context-and-intents/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/support-context-and-intents/common/apps-preload.json"
+			],
 			"cacheDurationInMinutes": 1,
-			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+			"manifestTypes": [
+				"view",
+				"snapshot",
+				"manifest",
+				"external",
+				"inline-view",
+				"window",
+				"inline-appasset"
+			]
 		}
 	}
 }

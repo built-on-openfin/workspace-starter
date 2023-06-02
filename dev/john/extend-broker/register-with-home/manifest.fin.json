@@ -14,6 +14,7 @@
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
+				"downloadAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
 					"protocols": ["mailto"]
@@ -46,8 +47,14 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/apps.json"],
-			"manifestTypes": ["view", "snapshot", "manifest", "external"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home/common/apps-expero.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home/common/apps-tools.json"
+			],
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "window", "inline-appasset"],
 			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {

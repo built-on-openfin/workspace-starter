@@ -29,7 +29,7 @@
 		"sharing": true,
 		"interop": {
 			"intentResolver": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/windows/intents/instance-picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/windows/intents/instance-picker.html",
 				"height": 715,
 				"width": 665,
 				"fdc3InteropApi": "2.0"
@@ -98,8 +98,16 @@
 	},
 	"appProvider": {
 		"endpointIds": [
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-contact.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-expero.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-interop.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-manager.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-native.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-dev-extensions.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-preload.json",
+			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/apps-tools.json",
 			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/apps.json",
-			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/apps.json",
 			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/apps-fdc3-1-2.json",
 			"https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/apps-fdc3-2-0.json"
 		],
@@ -260,7 +268,7 @@
 	},
 	"browserProvider": {
 		"defaultWindowOptions": {
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 			"viewVisibility": {
 				"showViewsOnTabDrag": { "enabled": true },
 				"showViewsOnSplitterDrag": { "enabled": true },
@@ -269,8 +277,8 @@
 			"workspacePlatform": {
 				"pages": [],
 				"title": "Second Browser Starter",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/views/platform/new-tab/new-tab.html"
+				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/views/platform/new-tab/new-tab.html",
+				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/views/platform/new-tab/new-tab.html"
 			}
 		},
 		"globalMenu": [
@@ -366,7 +374,7 @@
 					"type": "Custom",
 					"tooltip": "Toggle Scheme",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/theme.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/theme.svg",
 					"action": {
 						"id": "toggle-scheme",
 						"customData": {}
@@ -415,7 +423,7 @@
 					"type": "Custom",
 					"tooltip": "Show Home",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/search.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/search.svg",
 					"action": {
 						"id": "home-show",
 						"customData": {}
@@ -429,7 +437,7 @@
 					"type": "Custom",
 					"tooltip": "Toggle Notification Center",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/bell.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/bell.svg",
 					"action": {
 						"id": "notification-toggle",
 						"customData": {}
@@ -443,7 +451,7 @@
 					"type": "Custom",
 					"tooltip": "Pin this window",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/pin.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/pin.svg",
 					"action": {
 						"id": "pin-window",
 						"customData": {
@@ -460,7 +468,7 @@
 					"type": "Custom",
 					"tooltip": "Unpin this window",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/pin-vertical.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/pin-vertical.svg",
 					"action": {
 						"id": "unpin-window",
 						"customData": {
@@ -505,7 +513,7 @@
 					"type": "Custom",
 					"tooltip": "Share",
 					"disabled": false,
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/share.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/share.svg",
 					"action": {
 						"id": "share",
 						"customData": {}
@@ -527,7 +535,7 @@
 			{
 				"id": "default",
 				"label": "Default",
-				"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+				"logoUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 				"default": "light",
 				"palettes": {
 					"light": {
@@ -593,14 +601,14 @@
 	"homeProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Home Starter",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 		"queryMinLength": 3,
 		"queryAgainst": ["title"]
 	},
 	"storefrontProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Custom Storefront",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 		"landingPage": {
 			"hero": {
 				"title": "Second Custom Hero Title",
@@ -610,7 +618,7 @@
 					"tags": ["hero"]
 				},
 				"image": {
-					"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/superhero-unsplash.jpg"
+					"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/superhero-unsplash.jpg"
 				}
 			},
 			"topRow": {
@@ -620,7 +628,7 @@
 						"title": "Expero",
 						"description": "A collection of example views from Expero showing the power of interop and context sharing.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-1-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-1-unsplash.jpg"
 						},
 						"tags": ["expero"],
 						"buttonTitle": "View"
@@ -629,7 +637,7 @@
 						"title": "Dev Tools",
 						"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-2-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-2-unsplash.jpg"
 						},
 						"tags": ["tools"],
 						"buttonTitle": "View"
@@ -638,7 +646,7 @@
 						"title": "Learning Resource",
 						"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-3-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-3-unsplash.jpg"
 						},
 						"tags": ["page"],
 						"buttonTitle": "View"
@@ -656,7 +664,7 @@
 						"title": "Views",
 						"description": "A collection of views made available through our catalog.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-4-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-4-unsplash.jpg"
 						},
 						"tags": ["view"],
 						"buttonTitle": "View"
@@ -665,7 +673,7 @@
 						"title": "Web Apps",
 						"description": "A collection of web apps built using OpenFin.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-5-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-5-unsplash.jpg"
 						},
 						"tags": ["manifest"],
 						"buttonTitle": "View"
@@ -674,7 +682,7 @@
 						"title": "Native Apps",
 						"description": "A collection of native apps made available through our catalog.",
 						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/coding-6-unsplash.jpg"
+							"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/store/coding-6-unsplash.jpg"
 						},
 						"tags": ["native"],
 						"buttonTitle": "View"
@@ -724,7 +732,7 @@
 		],
 		"footer": {
 			"logo": {
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 				"size": "32"
 			},
 			"text": "Welcome to the OpenFin Sample Footer",
@@ -771,7 +779,7 @@
 			{
 				"display": "group",
 				"tooltip": "Manager",
-				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/icon-gradient.png",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/images/icon-gradient.png",
 				"tags": ["manager"]
 			}
 		],
@@ -788,7 +796,7 @@
 			},
 			{
 				"tooltip": "Social",
-				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/share.svg",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/share.svg",
 				"options": [
 					{
 						"tooltip": "Twitter",
@@ -812,7 +820,7 @@
 			},
 			{
 				"tooltip": "Window Visibility",
-				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/icons/{theme}/{scheme}/windows.svg",
+				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/icons/{theme}/{scheme}/windows.svg",
 				"options": [
 					{
 						"tooltip": "Show All Windows",
@@ -835,7 +843,7 @@
 	"notificationProvider": {
 		"id": "second-customize-workspace",
 		"title": "Second Notification Starter",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png"
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png"
 	},
 	"integrationProvider": {
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon.ico",
@@ -1000,7 +1008,7 @@
 				"data": {
 					"windowOptions": {
 						"name": "about",
-						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/windows/version/about.html",
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/windows/version/about.html",
 						"defaultCentered": true,
 						"showTaskbarIcon": false,
 						"autoShow": true,

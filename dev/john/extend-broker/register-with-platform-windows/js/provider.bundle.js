@@ -2088,11 +2088,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the OpenFin environment",
-    manifest: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-platform-windows/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/icon-blue.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-platform-windows/common/images/icon-blue.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -2101,7 +2101,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-platform-windows/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "openfin", "versions"]

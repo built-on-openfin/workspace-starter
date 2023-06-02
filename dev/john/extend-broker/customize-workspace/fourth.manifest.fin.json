@@ -12,7 +12,7 @@
 	"platform": {
 		"uuid": "fourth-workspace-starter-how-to-customize-workspace",
 		"name": "fourth-workspace-starter-how-to-customize-workspace",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/customize-workspace/shell/shell.html",
 		"preventQuitOnLastWindowClosed": true,
@@ -38,9 +38,6 @@
 			}
 		},
 		"defaultViewOptions": {}
-	},
-	"snapshot": {
-		"windows": []
 	},
 	"appAssets": [],
 	"supportInformation": {

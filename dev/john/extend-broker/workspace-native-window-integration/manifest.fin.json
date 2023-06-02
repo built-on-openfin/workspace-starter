@@ -49,7 +49,7 @@
 		{
 			"alias": "winform-interop-example",
 			"version": "3.0.1",
-			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/workspace-native-window-integration/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe",
 			"forceDownload": false
 		}
