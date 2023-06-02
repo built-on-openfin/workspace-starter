@@ -3,7 +3,8 @@ import {
 	type AppIdentifier,
 	type AppMetadata,
 	type ImplementationMetadata,
-	type IntentResolution
+	type IntentResolution,
+	OpenError
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
@@ -262,7 +263,7 @@ export function interopOverride(
 					const appInstances = await this.fdc3HandleFindInstances(intentForSelection.apps[0], clientIdentity);
 					// if there are no instances launch a new one otherwise present the choice to the user
 					// by falling through to the next code block
-					if (appInstances.length === 0) {
+					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
 						const intentResolver = await this.launchAppWithIntent(intentForSelection.apps[0], intent);
 						if (intentResolver === null) {
 							throw new Error(ResolveError.NoAppsFound);
@@ -326,7 +327,11 @@ export function interopOverride(
 				if (appInstances.length === 1) {
 					appInstanceId = appInstances[0].instanceId;
 				}
-				if (appInstances.length === 0 || this.useSingleInstance(intentApps[0])) {
+				if (
+					appInstances.length === 0 ||
+					this.useSingleInstance(intentApps[0]) ||
+					this.createNewInstance(intentApps[0])
+				) {
 					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent, appInstanceId);
 					if (intentResolver === null) {
 						throw new Error(ResolveError.NoAppsFound);
@@ -370,7 +375,11 @@ export function interopOverride(
 				fdc3OpenOptions.context
 			);
 			try {
-				const result = await this.handleFiredIntent(openAppIntent, clientIdentity);
+				const requestedApp = await getApp(requestedId);
+				if (requestedApp === undefined || requestedApp === null) {
+					throw new Error(OpenError.AppNotFound);
+				}
+				const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
 				const identity: { appId: string; instanceId: string } = { appId: undefined, instanceId: undefined };
 				if (typeof result.source === "string") {
 					identity.appId = result.source;
@@ -380,8 +389,11 @@ export function interopOverride(
 				}
 				return identity;
 			} catch (intentError) {
-				if (intentError?.message === ResolveError.NoAppsFound) {
-					throw new Error(ResolveError.NoAppsFound);
+				if (
+					intentError?.message === ResolveError.TargetInstanceUnavailable ||
+					intentError?.message === ResolveError.IntentDeliveryFailed
+				) {
+					throw new Error(OpenError.AppTimeout);
 				}
 				throw intentError;
 			}
@@ -760,7 +772,7 @@ export function interopOverride(
 					return intentResolver;
 				}
 				const specifiedAppInstances = await this.fdc3HandleFindInstances(targetApp, clientIdentity);
-				if (specifiedAppInstances.length === 0) {
+				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
 					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
 					if (intentResolver === null) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
@@ -824,6 +836,10 @@ export function interopOverride(
 
 		private useSingleInstance(app: PlatformApp): boolean {
 			return app?.instanceMode === "single";
+		}
+
+		private createNewInstance(app: PlatformApp): boolean {
+			return app?.instanceMode === "new";
 		}
 
 		private async captureWindowApiUsage(id: OpenFin.ClientIdentity): Promise<ApiMetadata> {

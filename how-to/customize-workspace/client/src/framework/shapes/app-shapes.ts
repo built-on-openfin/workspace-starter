@@ -8,8 +8,10 @@ export type PlatformApp = App & {
 	autostart?: boolean;
 	/** This indicates that an entry in the directory is something that shouldn't be displayed in a UI (e.g. store, dock, home) but can be launched via an API (from an fdc3, interop api, function or intent picker (as this UI was driven by an API)) */
 	private?: boolean;
-	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps.  */
-	instanceMode?: "multi" | "single";
+	/** This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps. If multi should
+	 * we support multiple instances and let the user decide whether to launch a new instance or pick an existing one from the intent picker? If new it means the intent picker will not show the option to pick an instance because the
+	 * app owner wants a new instance every time. And if an intent is raised and just the id of the app is specified it will always launch a new instance   */
+	instanceMode?: "multi" | "single" | "new";
 	/** An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher */
 	customConfig?: { [key: string]: unknown };
 	manifest:

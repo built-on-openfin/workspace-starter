@@ -225,6 +225,7 @@
 			"additionalProperties": false,
 			"description": "Options required to create a new window with {@link Window.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -552,6 +553,7 @@
 		"__type_10": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
@@ -1086,6 +1088,7 @@
 		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
+				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
