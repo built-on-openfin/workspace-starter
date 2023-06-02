@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Participant Summary</title>
+		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
+		<link rel="stylesheet" href="../../../style/app.css" />
+		<script defer="defer" src="./index.js"></script>
+	</head>
+
+	<body class="small col fill gap20">
+		<div class="row spread">
+			<h3>Participant Summary</h3>
+			<fin-context-group-picker
+				id="context-group-picker"
+				show-list-on-click="false"
+				class="border"
+				style="min-height: 26px"
+			></fin-context-group-picker>
+		</div>
+
+		<main class="form col gap10 scroll-vertical">
+			<h4 id="username" class="primary">John McHugh</h4>
+			<div class="form-group">
+				<fieldset>
+					<label>Username</label>
+					<div id="email" class="primary">john.mchugh@gmail.com</div>
+				</fieldset>
+				<fieldset>
+					<label>Password Status</label>
+					<div>Active</div>
+				</fieldset>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>SSN</label>
+					<div>XXX-XXX-XXX</div>
+				</fieldset>
+				<fieldset>
+					<label>DOB</label>
+					<div>04/23/1987</div>
+				</fieldset>
+				<fieldset>
+					<label>Age</label>
+					<div>35</div>
+				</fieldset>
+				<fieldset>
+					<label>Marital Status</label>
+					<div>Married</div>
+				</fieldset>
+				<fieldset>
+					<label>Gender Identity</label>
+					<div>Male</div>
+				</fieldset>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>Address</label>
+					<div>
+						1234 Main St.
+						<br />
+						Brooklyn NY 11214
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Email</label>
+					<div id="email" class="primary">john.mchugh@gmail.com</div>
+				</fieldset>
+				<fieldset>
+					<label>Phone</label>
+					<div>999-311-111</div>
+				</fieldset>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>Employment</label>
+					<div>Active</div>
+				</fieldset>
+				<fieldset>
+					<label>Date of hire</label>
+					<div>12/12/2010</div>
+				</fieldset>
+				<fieldset>
+					<label>Employee number</label>
+					<div>999-311-111</div>
+				</fieldset>
+			</div>
+		</main>
+	</body>
+</html>
