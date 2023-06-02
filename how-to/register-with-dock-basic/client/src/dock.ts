@@ -17,7 +17,8 @@ import {
  * @param title The title to use for the dock registration.
  * @param icon The icon to use for the dock registration.
  * @param options The options to pass to the dock provider.
- * @param options.workspaceButtons The workspace buttons.
+ * @param options.workspaceComponents The workspace buttons.
+ * @param options.disableUserRearrangement Stop the user from rearranging the buttons.
  * @param options.customIconUrl Use a custom icon url.
  * @param options.customOpenUrl Use a custom open url.
  * @returns The registration details for dock.

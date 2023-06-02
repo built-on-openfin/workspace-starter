@@ -1764,10 +1764,10 @@ export class Microsoft365Integration {
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
-		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.name) {
+		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.address) {
 			pairs.push({
 				label: "From",
-				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address
+				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address ?? ""
 			});
 		}
 

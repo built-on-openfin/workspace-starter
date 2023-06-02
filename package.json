@@ -14,7 +14,8 @@
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
 		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,node-emoji,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
-		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json"
+		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json",
+		"common-update": "node ./scripts/common-update.mjs"
 	},
 	"workspaces": [
 		"how-to/*",
@@ -49,12 +50,12 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.40.0",
+		"eslint": "8.41.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.0.0",
 		"eslint-config-prettier": "8.8.0",
 		"eslint-plugin-import": "2.26.0",
-		"eslint-plugin-jsdoc": "44.2.4",
+		"eslint-plugin-jsdoc": "46.1.0",
 		"eslint-plugin-prettier": "4.2.1",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
@@ -64,7 +65,7 @@
 		"fs-extra": "11.1.1",
 		"markdownlint-cli": "0.34.0",
 		"prettier": "2.8.8",
-		"replace-in-file": "6.3.5",
+		"replace-in-file": "7.0.1",
 		"yargs": "17.7.2"
 	},
 	"overrides": {

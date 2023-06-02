@@ -4,17 +4,14 @@
 	"description": "OpenFin Workspace -- Integrate with Server Authentication",
 	"main": "index.js",
 	"scripts": {
-		"dos": "npm --prefix ../common/ run dos",
-		"build": "npm run build-server & npm run build-client",
-		"build-server": "tsc --project ./server",
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
-		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
-		"start": "npm run server",
-		"client": "npm --prefix ../common/ run client",
-		"server": "node ./server/build/index.js",
-		"kill": "npm --prefix ../common/ run kill",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-server-authentication && npm run build && npm --prefix ../common/ run build",
-		"validate": "npm --prefix ../../ run validate"
+		"build-server": "tsc --project ./server",
+		"build": "npm run build-server && npm run build-client",
+		"start": "node ./server/build/index.js",
+		"setup": "cd ../../ && npm install && cd how-to/integrate-server-authentication && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
@@ -28,11 +25,11 @@
 		"@types/auth0-js": "^9.14.7",
 		"@types/cookie-parser": "^1.4.3",
 		"@types/express": "^4.17.17",
-		"@types/node": "^20.2.0",
 		"express": "^4.18.2",
-		"ts-loader": "^9.4.2",
-		"typescript": "^5.0.4",
-		"webpack": "^5.83.1",
+		"openfin-adapter": "31.75.4",
+		"ts-loader": "^9.4.3",
+		"typescript": "^5.1.3",
+		"webpack": "^5.85.0",
 		"webpack-cli": "^5.1.1"
 	}
 }

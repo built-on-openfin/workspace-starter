@@ -94,38 +94,9 @@ function packageItems(cliArgs) {
 		}
 
 		try {
-			const workspaceUrl = [baseURL, DEFAULT_FOLDER, hostFolder, workspace.replace('how-to/', '')]
-				.filter(Boolean)
-				.join('/');
-			const commonUrl = [baseURL, DEFAULT_FOLDER, hostFolder, 'common'].filter(Boolean).join('/');
-			const commonOptions = [
-				{
-					files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`],
-					from: new RegExp(`http://localhost:${DEFAULT_PORT}/common`, 'g'),
-					to: commonUrl
-				},
-				{
-					files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`],
-					from: new RegExp(`http://localhost:${DEFAULT_PORT}`, 'g'),
-					to: workspaceUrl
-				},
-				{
-					files: `${targetDir}/**/*.html`,
-					from: /(src|href)="\/common/g,
-					to: `$1="${commonUrl}`
-				}
-			];
-
-			for (const common of commonOptions) {
-				const replaceResults = replace.sync(common);
-				console.log('Replacement results for:', replaceResults);
-				console.log(`Workspace URLs replaced with: ${workspaceUrl}`);
-				console.log(`Common URLs replaced with: ${commonUrl}`);
-			}
-
 			const rootUrl = [baseURL, DEFAULT_FOLDER, hostFolder, item].filter(Boolean).join('/');
 			const options = {
-				files: `${targetDir}/**/*.json`,
+				files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`, `${targetDir}/**/*.html`],
 				from: new RegExp(`http://localhost:${DEFAULT_PORT}`, 'g'),
 				to: rootUrl
 			};

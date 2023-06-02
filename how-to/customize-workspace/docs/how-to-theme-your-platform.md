@@ -14,7 +14,7 @@ The theme is defined in the themeProvider settings:
         "themes": [
             {
                 "label": "Dark",
-                "logoUrl": "http://localhost:8080/favicon-32x32.png",
+                "logoUrl": "http://localhost:8080/common/favicon-32x32.png",
                 "palette": {
                     "brandPrimary": "#0A76D3",
                     "brandSecondary": "#383A40",
@@ -52,7 +52,7 @@ The theme is defined in the themeProvider settings:
             },
             {
                 "label": "Light",
-                "logoUrl": "http://localhost:8080/favicon-32x32.png",
+                "logoUrl": "http://localhost:8080/common/favicon-32x32.png",
                 "palette": {
                     "brandPrimary": "#399BB8",
                     "brandSecondary": null,

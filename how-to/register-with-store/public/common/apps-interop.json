@@ -1,0 +1,95 @@
+[
+	{
+		"appId": "interop-broadcast-view",
+		"name": "interop-broadcast-view",
+		"title": "Context using Interop API",
+		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-context-interop-api.png"
+			}
+		],
+		"tags": ["view", "interop", "tools"]
+	},
+	{
+		"appId": "interop-intent-view",
+		"name": "interop-intent-view",
+		"title": "Intents using Interop API",
+		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "StartCall",
+				"displayName": "Start a Call",
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
+			},
+			{
+				"name": "StartChat",
+				"displayName": "Start a Chat",
+				"contexts": ["fdc3.contact", "fdc3.contactList"]
+			},
+			{
+				"name": "ViewChart",
+				"displayName": "View Chart",
+				"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+			},
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact Details",
+				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "ViewQuote",
+				"displayName": "View Quote",
+				"contexts": ["fdc3.instrument"]
+			},
+			{
+				"name": "ViewNews",
+				"displayName": "View News",
+				"contexts": [
+					"fdc3.country",
+					"fdc3.instrument",
+					"fdc3.instrumentList",
+					"fdc3.organization",
+					"fdc3.portfolio"
+				]
+			},
+			{
+				"name": "ViewAnalysis",
+				"displayName": "View Analysis",
+				"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+			},
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument Details",
+				"contexts": ["fdc3.instrument"]
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-intents-interop-api.png"
+			}
+		],
+		"tags": ["view", "interop", "intent", "openfin", "tools"]
+	}
+]

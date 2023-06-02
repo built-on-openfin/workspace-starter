@@ -9,13 +9,13 @@
 		},
 		{
 			"id": "common",
-			"sourceRoot": "../common/public",
+			"sourceRoot": "../public/common",
 			"sources": ["icons/**/*", "windows/intents/**/*"],
 			"dest": "./common"
 		},
 		{
 			"id": "manager-portal",
-			"sourceRoot": "../common/public/views/manager-portal",
+			"sourceRoot": "../public/common/views/manager-portal",
 			"sources": ["images/**/*", "data/**/*"],
 			"dest": "./common/views/manager-portal",
 			"dependsOn": "manager-portal/manager-portal.snapshot.fin.json"

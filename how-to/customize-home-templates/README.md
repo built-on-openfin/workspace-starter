@@ -63,9 +63,9 @@ This is a headless application. If you wish to debug it then you can update the 
 
 ## How it works
 
-The Server in this example serves the sample and serves files from the [common](../common/) folder.
+The Server in this example serves the sample and serves files from the [common](./public/common/) folder.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](./public/common/dos.json)
 - Sample data required by the sample
 
 ### How this example works
