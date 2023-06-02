@@ -12,7 +12,7 @@
 	"platform": {
 		"uuid": "second-workspace-starter-how-to-customize-workspace",
 		"name": "second-workspace-starter-how-to-customize-workspace",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
@@ -47,9 +47,6 @@
 				}
 			}
 		}
-	},
-	"snapshot": {
-		"windows": []
 	},
 	"supportInformation": {
 		"company": "OpenFin",

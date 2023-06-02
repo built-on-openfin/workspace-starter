@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>OpenFin Information</title>
+		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
+		<link rel="stylesheet" href="../../../style/app.css" />
+		<script defer="defer" src="./of-info.js"></script>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>OpenFin Information</h1>
+				<h1 class="tag">Information about the OpenFin environment</h1>
+			</div>
+			<div class="row middle gap10">
+				<image src="../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="fill col scroll-vertical gap10">
+			<fieldset>
+				<label for="rvmVersion">RVM Version</label>
+				<span id="rvmVersion"></span>
+			</fieldset>
+			<fieldset>
+				<label for="rvmPath">RVM Path</label>
+				<span id="rvmPath"></span>
+			</fieldset>
+			<fieldset>
+				<label for="appLogDirectory">App Log Directory</label>
+				<span id="appLogDirectory"></span>
+			</fieldset>
+			<hr />
+			<fieldset>
+				<label for="runtimeVersion">Runtime Version</label>
+				<span id="runtimeVersion"></span>
+			</fieldset>
+			<fieldset>
+				<label for="chromeVersion">Chrome Version</label>
+				<span id="chromeVersion"></span>
+			</fieldset>
+			<fieldset>
+				<label for="electronVersion">Electron Version</label>
+				<span id="electronVersion"></span>
+			</fieldset>
+			<hr />
+			<fieldset>
+				<label for="platformIdentity">Platform Identity</label>
+				<span id="platformIdentity" class="nowrap"></span>
+			</fieldset>
+		</main>
+	</body>
+</html>

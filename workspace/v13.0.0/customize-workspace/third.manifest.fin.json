@@ -12,7 +12,7 @@
 	"platform": {
 		"name": "customize-workspace-for-fdc3",
 		"uuid": "customize-workspace-for-fdc3",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
@@ -44,13 +44,10 @@
 			"fdc3InteropApi": "2.0"
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/favicon-32x32.png",
 		"name": "Customize Workspace - v13.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
@@ -73,7 +70,7 @@
 			"sharing": true,
 			"interop": {
 				"intentResolver": {
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/windows/intents/instance-picker.html",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/windows/intents/instance-picker.html",
 					"height": 715,
 					"width": 665,
 					"fdc3InteropApi": "2.0"
@@ -157,18 +154,18 @@
 		"homeProvider": {
 			"id": "custom-fdc3-workspace",
 			"title": "FDC3 Workspace",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/favicon-32x32.png",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/favicon-32x32.png",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/favicon-32x32.png",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/favicon-32x32.png",
 				"workspacePlatform": {
 					"pages": [],
 					"title": "FDC3 Workspace",
-					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/views/platform/new-tab/new-tab.html",
-					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/views/platform/new-tab/new-tab.html"
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/views/platform/new-tab/new-tab.html"
 				}
 			},
 			"toolbarButtons": [
@@ -179,7 +176,7 @@
 						"type": "Custom",
 						"tooltip": "Show Home",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/common/icons/{theme}/{scheme}/search.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/customize-workspace/common/icons/{theme}/{scheme}/search.svg",
 						"action": {
 							"id": "home-show",
 							"customData": {}
