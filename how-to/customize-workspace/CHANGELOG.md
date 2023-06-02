@@ -2,6 +2,9 @@
 
 ## v13
 
+- App definition instanceMode extension. New options added: "new" (new means a new instance will be created if an intent is raised and the app specified but no instance id even if there are existing instances. The intent picker will also not show instances as the app provider has indicated they want to just launch a new instance).
+- If you app meta data indicates it supports the intent "OpenApp" and therefore fdc3.open then a new instance will be created if fdc3.open is called unless your app instance mode is "single". This is regardless of setting "multi" or "new" in instanceMode. If the intent "OpenApp" is called directly (not through fdc3.open) and your instanceMode is "multi" then it will prompt the user (through the intent resolver) to pick an instance or launch a new instance.
+
 ## v12.6
 
 - BREAKING CHANGE (unless you update your manifest): Decoupled home from App logic. Home supported searching for apps plus an array of configurable integrations. If you didn't like the implementation with regards to how apps were filtered or searched and rendered then you didn't have a choice. This update means that our app support is now a module that can be configured in the integration provider (to maintain existing behavior or let you plug in your own). If you don't want app support simply don't add our app module or your own. This gives more flexibility.

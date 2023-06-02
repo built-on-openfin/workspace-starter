@@ -68,7 +68,7 @@ The following field is custom to this platform and is optional:
 
 - private - default value is false. Should this app entry be available for api usage (e.g. intents) but not be visible in e.g. Home, Store, Dock? Similar to how a private npm package can be used by some people but not everyone.
 - autostart - default value is false. Should this app be launched after bootstrapping.
-- instanceMode - default mode is multi. Value can be "single"|"multi".
+- instanceMode - default mode is multi. Value can be "single"|"multi"|"new" (new means a new instance will be created if an intent is raised and the app specified but no instance id even if there are existing instances. The intent picker will also not show instances as the app provider has indicated they want to just launch a new instance).
 
 These settings are expressed by setting the customConfig of an app definition:
 
