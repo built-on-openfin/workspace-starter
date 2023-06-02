@@ -47,7 +47,7 @@ export const EXPERO_APP: App = {
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/expero-news-view.png"
+			src: "http://localhost:8080/common/images/previews/expero/expero-news-view.png"
 		}
 	],
 	tags: ["expero", "view", "interop"]
@@ -70,7 +70,7 @@ export const PROCESS_MANAGER: App = {
 	intents: [],
 	images: [
 		{
-			src: "http://localhost:8080/common/images/previews/openfin-process-manager.png"
+			src: "http://localhost:8080/common/images/previews/tools/openfin-process-manager.png"
 		}
 	],
 	tags: ["hero", "manifest", "tools"]

@@ -25,7 +25,7 @@ The approach that we have taken is that you define your landing page properties 
       "tags": ["hero"]
      },
      "image": {
-      "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+      "src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
      }
     },
     "topRow": {
@@ -35,7 +35,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Expero",
        "description": "A collection of example views from Expero showing the power of interop and context sharing.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
        },
        "tags": ["expero"],
       "buttonTitle": "View"
@@ -44,7 +44,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Dev Tools",
        "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
        },
        "tags": ["tools"],
       "buttonTitle": "View"
@@ -53,7 +53,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Learning Resource",
        "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
        },
        "tags": ["page"],
       "buttonTitle": "View"
@@ -71,7 +71,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Views",
        "description": "A collection of views made available through our catalog.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
        },
        "tags": ["view"],
       "buttonTitle": "View"
@@ -80,7 +80,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Web Apps",
        "description": "A collection of web apps built using OpenFin.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
        },
        "tags": ["manifest"],
       "buttonTitle": "View"
@@ -89,7 +89,7 @@ The approach that we have taken is that you define your landing page properties 
        "title": "Native Apps",
        "description": "A collection of native apps made available through our catalog.",
        "image": {
-        "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+        "src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
        },
        "tags": ["native"],
       "buttonTitle": "View"

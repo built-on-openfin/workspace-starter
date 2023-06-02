@@ -47,7 +47,7 @@ npm run client
 ```
 
 5. Type any character into the search box to show the default list of Applications.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
+   The [apps](./public/common/) apps\*.json files are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
 
 6. Build the project if you have changed the code.
 
@@ -65,13 +65,13 @@ This is a headless application. If you wish to debug it then you can update the 
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
-- [A list of applications](../common/public/apps.json)
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](./public/common/dos.json)
+- [A list of applications](./public/common/) apps\*.json
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](../common/public/apps.json) contains a number of examples:
+The [list of applications](../public/common/) apps\*.json contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin Application using it's manifest file

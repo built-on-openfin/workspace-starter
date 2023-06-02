@@ -1,0 +1,204 @@
+[
+	{
+		"appId": "call-app",
+		"name": "call-app",
+		"title": "Call Application",
+		"description": "Start a call.",
+		"manifest": "http://localhost:8080/common/views/contact/call-app.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "StartCall",
+				"displayName": "Start a Call",
+				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "OpenApp",
+				"displayName": "Open App",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/call-app.png"
+			}
+		],
+		"tags": ["view", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "participant-selection",
+		"name": "participant-selection",
+		"title": "Participant Selection",
+		"description": "Select a participant.",
+		"manifest": "http://localhost:8080/common/views/contact/participant-selection.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/participant-selection.png"
+			}
+		],
+		"tags": ["view", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "participant-history",
+		"name": "participant-history",
+		"title": "Participant History",
+		"description": "View participant history.",
+		"manifest": "http://localhost:8080/common/views/contact/participant-history.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/participant-history.png"
+			}
+		],
+		"tags": ["view", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "investments-and-models",
+		"name": "investments-and-models",
+		"title": "Investments and Models",
+		"description": "View investments and models.",
+		"manifest": "http://localhost:8080/common/views/contact/investments-and-models.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/investments-and-models.png"
+			}
+		],
+		"tags": ["view", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "participant-summary-view",
+		"name": "participant-summary-view",
+		"title": "Participant Summary",
+		"description": "View summary of the participant",
+		"manifest": "http://localhost:8080/common/views/contact/participant-summary.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/participant-summary-view.png"
+			}
+		],
+		"tags": ["view", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "participant-summary-window",
+		"name": "participant-summary-window",
+		"title": "Participant Summary Window",
+		"description": "View summary of the participant",
+		"manifest": "http://localhost:8080/common/views/contact/participant-summary.window.fin.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/participant-summary-window.png"
+			}
+		],
+		"tags": ["window", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "client-overview",
+		"name": "client-overview",
+		"title": "Client Overview",
+		"manifestType": "snapshot",
+		"description": "Provides a summary of the current client",
+		"manifest": "http://localhost:8080/common/snapshots/contact-overview.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/contact/client-overview.png"
+			}
+		],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	}
+]

@@ -7,25 +7,25 @@ export interface BootstrapOptions {
 	/**
 	 * Should the platform register against the store component?
 	 * */
-	store: boolean;
+	store?: boolean;
 	/**
 	 * Should the platform register against the home component?
 	 * */
-	home: boolean;
+	home?: boolean;
 	/**
 	 * Should the platform register against the dock component?
 	 * */
-	dock: boolean;
+	dock?: boolean;
 	/**
 	 * Should the platform register itself against the notification center
 	 * and have a platform specific tab show up?
 	 * */
-	notifications: boolean;
+	notifications?: boolean;
 	/**
 	 * Which components should auto show after the bootstrapping process. As home vanishes
 	 * on blur we suggest adding home last if you wish it to show.
 	 * */
-	autoShow: BootstrapComponents[];
+	autoShow?: BootstrapComponents[];
 
 	/**
 	 * Should the platform launch one or more apps at the end of the bootstrapping process

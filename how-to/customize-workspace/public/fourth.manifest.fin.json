@@ -12,7 +12,7 @@
 	"platform": {
 		"uuid": "fourth-workspace-starter-how-to-customize-workspace",
 		"name": "fourth-workspace-starter-how-to-customize-workspace",
-		"icon": "http://localhost:8080/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/shell/shell.html",
 		"preventQuitOnLastWindowClosed": true,
@@ -38,9 +38,6 @@
 			}
 		},
 		"defaultViewOptions": {}
-	},
-	"snapshot": {
-		"windows": []
 	},
 	"appAssets": [],
 	"supportInformation": {

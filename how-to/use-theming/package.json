@@ -4,18 +4,14 @@
 	"description": "OpenFin Workspace -- Use Theming",
 	"main": "index.js",
 	"scripts": {
-		"dos": "npm --prefix ../common/ run dos",
-		"build": "npm run build-server & npm run build-client",
-		"build-server": "tsc --project ./server",
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
+		"secondclient": "node ./scripts/launch.mjs \"http://localhost:8080/manifest.fin.json?$$action=apply-theme&$$payload=eyJwYWxldHRlIjp7ImJyYW5kUHJpbWFyeSI6IiM1MDRDRkYiLCJicmFuZFNlY29uZGFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMSI6IiNGRkZGRkYiLCJiYWNrZ3JvdW5kMiI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMyI6IiNGM0Y1RjgiLCJiYWNrZ3JvdW5kNCI6IiNFQ0VFRjEiLCJiYWNrZ3JvdW5kNSI6IiNERERGRTQiLCJiYWNrZ3JvdW5kNiI6IiNDOUNCRDIiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiNFQ0VFRjEiLCJpbnB1dENvbG9yIjoiIzFFMUYyMyIsImlucHV0UGxhY2Vob2xkZXIiOiIjMzgzQTQwIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjMUUxRjIzIiwidGV4dEhlbHAiOiIjMkYzMTM2IiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSJ9LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==\"",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
-		"build-client-prod": "webpack build --config ./client/webpack.config.js --mode=production",
-		"start": "npm run server",
-		"client": "npm --prefix ../common/ run client",
-		"secondclient": "npm --prefix ../common/ run client \"http://localhost:8080/manifest.fin.json?$$action=apply-theme&$$payload=eyJwYWxldHRlIjp7ImJyYW5kUHJpbWFyeSI6IiM1MDRDRkYiLCJicmFuZFNlY29uZGFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMSI6IiNGRkZGRkYiLCJiYWNrZ3JvdW5kMiI6IiNGQUZCRkUiLCJiYWNrZ3JvdW5kMyI6IiNGM0Y1RjgiLCJiYWNrZ3JvdW5kNCI6IiNFQ0VFRjEiLCJiYWNrZ3JvdW5kNSI6IiNERERGRTQiLCJiYWNrZ3JvdW5kNiI6IiNDOUNCRDIiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiNFQ0VFRjEiLCJpbnB1dENvbG9yIjoiIzFFMUYyMyIsImlucHV0UGxhY2Vob2xkZXIiOiIjMzgzQTQwIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjMUUxRjIzIiwidGV4dEhlbHAiOiIjMkYzMTM2IiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSJ9LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==\"",
-		"server": "node ./server/build/index.js",
-		"kill": "npm --prefix ../common/ run kill",
-		"setup": "cd ../../ && npm install && cd how-to/use-theming && npm run build && npm --prefix ../common/ run build",
-		"validate": "npm --prefix ../../ run validate"
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"setup": "cd ../../ && npm install && cd how-to/use-theming && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
@@ -24,12 +20,10 @@
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
-		"@types/express": "^4.17.17",
-		"@types/node": "^20.2.0",
-		"express": "^4.18.2",
-		"ts-loader": "^9.4.2",
-		"typescript": "^5.0.4",
-		"webpack": "^5.83.1",
+		"openfin-adapter": "31.75.4",
+		"ts-loader": "^9.4.3",
+		"typescript": "^5.1.3",
+		"webpack": "^5.85.0",
 		"webpack-cli": "^5.1.1"
 	}
 }

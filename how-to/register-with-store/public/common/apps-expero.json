@@ -1,0 +1,68 @@
+[
+	{
+		"appId": "expero-company-news",
+		"name": "expero-company-news",
+		"title": "Gateway - Company News",
+		"manifest": "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://openfin-iex.experolabs.com/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Expero",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/expero/expero-news-view.png"
+			}
+		],
+		"tags": ["expero", "view", "interop"]
+	},
+	{
+		"appId": "expero-description",
+		"name": "expero-description",
+		"title": "Gateway - Description",
+		"manifest": "https://openfin-iex.experolabs.com/openfin/manifests/description.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://openfin-iex.experolabs.com/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Expero",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/expero/expero-description-view.png"
+			}
+		],
+		"tags": ["expero", "view", "interop"]
+	},
+	{
+		"appId": "expero-stock-quote",
+		"name": "expero-stock-quote",
+		"title": "Gateway - Stock Quote",
+		"manifest": "https://openfin-iex.experolabs.com/openfin/manifests/stock-quote.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "https://openfin-iex.experolabs.com/favicon.ico"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Expero",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/expero/expero-stock-view.png"
+			}
+		],
+		"tags": ["expero", "view", "interop"]
+	}
+]

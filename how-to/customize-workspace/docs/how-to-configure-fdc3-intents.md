@@ -85,12 +85,12 @@ window['getIntentSelection'] = async () => {
 
 ### Simple Intent Resolver
 
-- [picker.html](../../common/public/windows/intents/picker.html)
-- [picker.js](../../common/public/windows/intents/picker.js)
+- [picker.html](../public/common/windows/intents/picker.html)
+- [picker.js](../public/common/windows/intents/picker.js)
 
 ### Advanced Intent Resolver
 
-- [instance-picker.html](../../common/public/windows/intents/instance-picker.html)
-- [instance-picker.js](../../common/public/windows/intents/instance-picker.js)
+- [instance-picker.html](../public/common/windows/intents/instance-picker.html)
+- [instance-picker.js](../public/common/windows/intents/instance-picker.js)
 
 [<- Back to Table Of Contents](../README.md)

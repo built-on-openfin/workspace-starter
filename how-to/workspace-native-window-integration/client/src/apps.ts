@@ -46,7 +46,7 @@ const WINFORM_APP: App & { data?: { nwi?: ConfigFragment } } = {
 	description: "A Winform application built in .NET 5 that shows the power of our interop api.",
 	manifestType: "external",
 	manifest: "winform-interop-example",
-	icons: [{ src: "http://localhost:8080/common/images/icon-winform-interop.png" }],
+	icons: [{ src: "http://localhost:8080/common/images/native/icon-winform-interop.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",

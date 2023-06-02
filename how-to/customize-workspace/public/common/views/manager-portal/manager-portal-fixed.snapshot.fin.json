@@ -1,0 +1,231 @@
+{
+	"windows": [
+		{
+			"defaultHeight": 900,
+			"defaultLeft": 50,
+			"defaultTop": 50,
+			"defaultWidth": 1400,
+			"workspacePlatform": {
+				"pages": [
+					{
+						"pageId": "028cde44-6c61-4cb0-9995-a378b80e3306",
+						"title": "Manager Portal",
+						"layout": {
+							"content": [
+								{
+									"type": "row",
+									"content": [
+										{
+											"type": "stack",
+											"width": 20,
+											"content": [
+												{
+													"type": "component",
+													"componentName": "view",
+													"componentState": {
+														"name": "internal-generated-view-b9880bc2-2983-4b3c-a496-77d94783cb7e",
+														"url": "http://localhost:8080/common/views/manager-portal/my-team/index.html",
+														"uuid": "b9880bc2-2983-4b3c-a496-77d94783cb7e",
+														"fdc3InteropApi": "1.2",
+														"interop": {
+															"currentContextGroup": "orange"
+														},
+														"permissions": {
+															"System": {
+																"openUrlWithBrowser": {
+																	"enabled": true,
+																	"protocols": ["mailto"]
+																}
+															}
+														},
+														"componentName": "view"
+													}
+												}
+											]
+										},
+										{
+											"type": "column",
+											"width": 80,
+											"content": [
+												{
+													"type": "stack",
+													"width": 50,
+													"height": 50,
+													"activeItemIndex": 1,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "internal-generated-view-0dd98149-16fb-4cf0-9b2a-d5bff2519d9b",
+																"url": "http://localhost:8080/common/views/manager-portal/keeping-track/index.html",
+																"uuid": "0dd98149-16fb-4cf0-9b2a-d5bff2519d9b",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																},
+																"componentName": "view"
+															}
+														},
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "internal-generated-view-ef70ccee-2613-4f99-8a01-8cfba31064ba",
+																"url": "http://localhost:8080/common/views/manager-portal/annual-leave/index.html",
+																"uuid": "ef70ccee-2613-4f99-8a01-8cfba31064ba",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																},
+																"componentName": "view"
+															}
+														},
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"name": "internal-generated-view-f898522a-5d85-4e9e-93eb-378179f0f909",
+																"url": "http://localhost:8080/common/views/manager-portal/360-feedback/index.html",
+																"uuid": "f898522a-5d85-4e9e-93eb-378179f0f909",
+																"fdc3InteropApi": "1.2",
+																"interop": {
+																	"currentContextGroup": "orange"
+																},
+																"componentName": "view"
+															}
+														}
+													]
+												},
+												{
+													"type": "row",
+													"isClosable": false,
+													"reorderEnabled": false,
+													"title": "",
+													"height": 50,
+													"content": [
+														{
+															"type": "stack",
+															"height": 50,
+															"width": 50,
+															"content": [
+																{
+																	"type": "component",
+																	"componentName": "view",
+																	"componentState": {
+																		"name": "internal-generated-view-b38f525a-77a9-48d9-bd02-b895cfbbf074",
+																		"url": "http://localhost:8080/common/views/manager-portal/manager-paths/index.html",
+																		"uuid": "b38f525a-77a9-48d9-bd02-b895cfbbf074",
+																		"fdc3InteropApi": "1.2",
+																		"interop": {
+																			"currentContextGroup": "orange"
+																		},
+																		"componentName": "view"
+																	}
+																}
+															]
+														},
+														{
+															"type": "stack",
+															"width": 50,
+															"content": [
+																{
+																	"type": "component",
+																	"componentName": "view",
+																	"componentState": {
+																		"name": "internal-generated-view-5292442d-4d19-4d71-bcf1-ca9081ec50b0",
+																		"url": "http://localhost:8080/common/views/manager-portal/company-comms/index.html",
+																		"uuid": "5292442d-4d19-4d71-bcf1-ca9081ec50b0",
+																		"fdc3InteropApi": "1.2",
+																		"interop": {
+																			"currentContextGroup": "orange"
+																		},
+																		"componentName": "view"
+																	}
+																},
+																{
+																	"type": "component",
+																	"componentName": "view",
+																	"componentState": {
+																		"name": "internal-generated-view-5292442d-4d19-4d71-bcf1-ca9081ec50b1",
+																		"url": "http://localhost:8080/common/views/manager-portal/company-cal/index.html",
+																		"uuid": "5292442d-4d19-4d71-bcf1-ca9081ec50b1",
+																		"fdc3InteropApi": "1.2",
+																		"interop": {
+																			"currentContextGroup": "orange"
+																		},
+																		"componentName": "view"
+																	}
+																},
+																{
+																	"type": "component",
+																	"componentName": "view",
+																	"componentState": {
+																		"name": "internal-generated-view-935bb258-ded4-4a85-ad92-0f2a742d4d42",
+																		"url": "http://localhost:8080/common/views/manager-portal/franchise-comms/index.html",
+																		"uuid": "935bb258-ded4-4a85-ad92-0f2a742d4d42",
+																		"fdc3InteropApi": "1.2",
+																		"interop": {
+																			"currentContextGroup": "orange"
+																		},
+																		"componentName": "view"
+																	}
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						"panels": [
+							{
+								"position": "Top",
+								"height": "40px",
+								"viewOptions": {
+									"name": "manager-portal-header-panel",
+									"url": "http://localhost:8080/common/panels/header-panel.html",
+									"preloadScripts": [
+										{
+											"url": "http://localhost:8080/common/style/style-changed-preload.js"
+										}
+									]
+								}
+							},
+							{
+								"position": "Left",
+								"width": "40px",
+								"extendToTop": true,
+								"viewOptions": {
+									"name": "manager-portal-nav-panel",
+									"url": "http://localhost:8080/common/panels/nav-panel.html",
+									"preloadScripts": [
+										{
+											"url": "http://localhost:8080/common/style/style-changed-preload.js"
+										}
+									]
+								}
+							},
+							{
+								"position": "Bottom",
+								"height": "40px",
+								"viewOptions": {
+									"name": "manager-portal-footer-panel",
+									"url": "http://localhost:8080/common/panels/footer-panel.html",
+									"preloadScripts": [
+										{
+											"url": "http://localhost:8080/common/style/style-changed-preload.js"
+										}
+									]
+								}
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
