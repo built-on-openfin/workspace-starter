@@ -185,6 +185,11 @@
 					"enabled": true,
 					"id": "local-storage",
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/process-context/customize-workspace/js/modules/endpoints/local-storage.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "context-processor",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/process-context/customize-workspace/js/modules/endpoints/example.context.processor.bundle.js"
 				}
 			],
 			"endpoints": [
@@ -221,6 +226,12 @@
 						"method": "SET",
 						"dataType": "integration-preferences"
 					}
+				},
+				{
+					"id": "interopbroker.process.org.dayofinterest",
+					"type": "module",
+					"typeId": "context-processor",
+					"options": {}
 				}
 			]
 		},
