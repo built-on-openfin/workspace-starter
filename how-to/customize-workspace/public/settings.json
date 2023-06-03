@@ -140,6 +140,11 @@
 				"enabled": true,
 				"id": "example-connection-validation",
 				"url": "http://localhost:8080/js/modules/endpoints/example.connection.validation.bundle.js"
+			},
+			{
+				"enabled": true,
+				"id": "context-processor",
+				"url": "http://localhost:8080/js/modules/endpoints/example.context.processor.bundle.js"
 			}
 		],
 		"endpoints": [
@@ -262,6 +267,12 @@
 				"id": "connection-verification",
 				"type": "module",
 				"typeId": "example-connection-validation",
+				"options": {}
+			},
+			{
+				"id": "interopbroker.process.org.dayofinterest",
+				"type": "module",
+				"typeId": "context-processor",
 				"options": {}
 			}
 		]

@@ -567,6 +567,33 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/endpoints/example-context-processor/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'example.context.processor.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

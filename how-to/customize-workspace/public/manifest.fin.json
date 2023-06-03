@@ -185,6 +185,11 @@
 					"enabled": true,
 					"id": "local-storage",
 					"url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+				},
+				{
+					"enabled": true,
+					"id": "context-processor",
+					"url": "http://localhost:8080/js/modules/endpoints/example.context.processor.bundle.js"
 				}
 			],
 			"endpoints": [
@@ -221,6 +226,12 @@
 						"method": "SET",
 						"dataType": "integration-preferences"
 					}
+				},
+				{
+					"id": "interopbroker.process.org.dayofinterest",
+					"type": "module",
+					"typeId": "context-processor",
+					"options": {}
 				}
 			]
 		},

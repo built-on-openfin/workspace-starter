@@ -1,6 +1,8 @@
+import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import { type Endpoint, type EndpointDefinition } from "./endpoint-shapes";
 
 export interface IntentRegistrationPayload {
 	fdc3Version: string;
@@ -54,4 +56,25 @@ export interface PlatformInteropBrokerOptions {
 export interface ApiMetadata {
 	type: "fdc3" | "interop";
 	version?: "1.2" | "2.0" | string;
+}
+
+export interface ContextToProcess<T extends OpenFin.Context = OpenFin.Context> {
+	context: T;
+}
+
+export interface ProcessedContext<T extends OpenFin.Context = OpenFin.Context> {
+	context: T;
+}
+
+export interface ContextProcessorEndpoint extends Omit<Endpoint, "action"> {
+	/**
+	 * Takes a context object and returns an enriched version
+	 * @param endpointDefinition The definition of the endpoint (which is passed by the endpoint provider).
+	 * @param request The request containing the context to process that is passed by the interopbroker.
+	 * @returns The response containing the enriched or original context object.
+	 */
+	requestResponse(
+		endpointDefinition: EndpointDefinition<unknown>,
+		request: ContextToProcess
+	): Promise<ProcessedContext>;
 }
