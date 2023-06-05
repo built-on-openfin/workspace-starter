@@ -4,19 +4,19 @@
 	"json.schemas": [
 		{
 			"fileMatch": ["/apps.json", "/*.apps.fin.json"],
-			"url": "./how-to/customize-workspace/public/schemas/platform-apps.schema.json"
+			"url": "./how-to/workspace-platform-starter/public/schemas/platform-apps.schema.json"
 		},
 		{
 			"fileMatch": ["/*.view.fin.json"],
-			"url": "./how-to/customize-workspace/public/schemas/view.schema.json"
+			"url": "./how-to/workspace-platform-starter/public/schemas/view.schema.json"
 		},
 		{
 			"fileMatch": ["/*.window.fin.json"],
-			"url": "./how-to/customize-workspace/public/schemas/window.schema.json"
+			"url": "./how-to/workspace-platform-starter/public/schemas/window.schema.json"
 		},
 		{
 			"fileMatch": ["/*.snapshot.fin.json"],
-			"url": "./how-to/customize-workspace/public/schemas/snapshot.schema.json"
+			"url": "./how-to/workspace-platform-starter/public/schemas/snapshot.schema.json"
 		}
 	]
 }
