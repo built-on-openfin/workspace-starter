@@ -32,24 +32,34 @@ export async function loadTeamData() {
 
 function modifyDates(dateArray) {
 	const newDates = [];
+	let lastRandDay = 0;
+	let lastRandMonth = 0;
 	for (let i = 0; i < dateArray.length; i++) {
 		const referenceDate = new Date();
 		const thisYear = referenceDate.getFullYear(); // Should be the current year.
 		const newMonthToUse = getRandomNum(11); // A random number from 1-12
-		const newDayToUse = getRandomNum(28); // A random number from 1-28
-		const newDateString = `${thisYear}-${newMonthToUse}-${newDayToUse}`;
+		const newDayToUse = getRandomNum(26); // A random number from 1-26
+		let newDateString = `${thisYear}-${zeroPadding(newMonthToUse)}-${zeroPadding(newDayToUse)}`;
+		if (dateArray.length > 4 && i > 3) {
+			// If there are more than 4 days in the array and we're on the 4th element, start making the days consecutive.
+			if (lastRandDay === 0 && lastRandMonth === 0) {
+				lastRandDay = newDayToUse;
+				lastRandMonth = newMonthToUse;
+			}
+			lastRandDay++;
+			newDateString = `${thisYear}-${zeroPadding(lastRandMonth)}-${zeroPadding(lastRandDay)}`;
+		}
 		newDates.push(newDateString);
 	}
 	return newDates;
 }
 
 function getRandomNum(upperBound) {
-	const random = Math.floor(Math.random() * upperBound) + 1;
-	return zeroPadding(random, 2);
+	return Math.floor(Math.random() * upperBound) + 1;
 }
 
-function zeroPadding(num, placeCount) {
-	return String(num).padStart(placeCount, '0');
+function zeroPadding(num) {
+	return String(num).padStart(2, '0');
 }
 
 export async function loadCompanyComms() {
