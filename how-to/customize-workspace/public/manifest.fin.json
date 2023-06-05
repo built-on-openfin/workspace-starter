@@ -231,7 +231,10 @@
 					"id": "interopbroker.process.org.dayofinterest",
 					"type": "module",
 					"typeId": "context-processor",
-					"options": {}
+					"options": {
+						"logContext": true,
+						"logProcessedContext": true
+					}
 				}
 			]
 		},

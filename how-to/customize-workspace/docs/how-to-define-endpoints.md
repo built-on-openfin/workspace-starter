@@ -96,6 +96,6 @@ Endpoints can be defined as:
 - channel [endpoint](../client/src/modules/endpoints/channel/endpoint.ts)
 - inline-apps [endpoint](../client/src/modules/endpoints/inline-apps/endpoint.ts)
 - example-connection-validation [endpoint](../client/src/modules/endpoints/example-connection-validation/endpoint.ts)
-- example-context-processor [endpoint](../client//src//modules//endpoints//example-context-processor/endpoint.ts)
+- example-context-processor [endpoint](../client/src/modules/endpoints/example-context-processor/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)

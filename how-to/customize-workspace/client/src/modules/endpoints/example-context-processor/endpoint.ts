@@ -6,6 +6,7 @@ import {
 } from "customize-workspace/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "customize-workspace/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "customize-workspace/shapes/module-shapes";
+import { type ContextProcessorSettings } from "./shapes";
 
 export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint {
 	private _logger: Logger;
@@ -33,10 +34,11 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 	 * @returns The response containing the enriched or original context object.
 	 */
 	public async requestResponse(
-		endpointDefinition: EndpointDefinition<unknown>,
+		endpointDefinition: EndpointDefinition<ContextProcessorSettings>,
 		request: ContextToProcess
 	): Promise<ProcessedContext> {
-		const response = { context: request?.context };
+		// decouple the request from the response.
+		const response = { context: JSON.parse(JSON.stringify(request?.context)) };
 
 		if (endpointDefinition.type !== "module") {
 			this._logger.warn(
@@ -50,6 +52,9 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 		);
 
 		if (request?.context?.type === "org.dayofinterest") {
+			if (endpointDefinition?.options?.logContext) {
+				this._logger.info(`Context Type ${request.context.type} matched. Incoming context:`, request.context);
+			}
 			if (request.context.id?.date !== undefined) {
 				// we would do more validation in a real app
 				const targetDate = new Date(request.context.id.date);
@@ -70,6 +75,12 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 				}
 				if (!this.isValid(response.context.id.iso)) {
 					response.context.id.iso = `${targetDate.toISOString()}`;
+				}
+				if (endpointDefinition?.options?.logContext) {
+					this._logger.info(
+						`Context Type ${response.context.type} matched. Processed context:`,
+						response.context
+					);
 				}
 			} else {
 				this._logger.warn(

@@ -121,9 +121,8 @@ export function interopOverride(
 
 		/**
 		 * Sets a context for the context group of the incoming current entity.
-		 * @param { SetContextOptions } setContextOptions - New context to set.
-		 * @param { ClientIdentity } clientIdentity - Identity of the client sender.
-		 * @return { void }
+		 * @param setContextOptions - New context to set.
+		 * @param clientIdentity - Identity of the client sender.
 		 */
 		public async setContext(
 			sentContext: { context: OpenFin.Context },
