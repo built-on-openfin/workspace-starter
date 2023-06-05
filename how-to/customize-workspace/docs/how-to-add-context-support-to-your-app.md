@@ -140,6 +140,47 @@ if (window.fdc3 !== undefined) {
 
 As you can see it is very similar to the system channel approach with the one difference being you create a specific channel to broadcast against instead of using the one you are bound to.
 
+## Context Objects
+
+You can see a list of FDC3 Context Object Definitions here: [FDC3 Context](https://fdc3.finos.org/docs/context/ref/Context).
+
+## Custom Context Objects
+
+If the types listed do not fit your needs the spec was built with extension in mind. You can create your own object types. Remember that you have to specify a type property and the suggestion is to use your organization as part of the namespace in order to avoid conflicts. E.g.
+
+```json
+{
+  "type": "org.dayofinterest",
+  "id": {
+    "date": "2024/12/24"
+  }
+}
+```
+
+## What if I have content from multiple content providers and some of them need different ids?
+
+As a platform you can take advantage of having your own interop broker. You can override a function and enrich a context object before it is passed onto all subscribers.
+
+```javascript
+/**
+   * Sets a context for the context group of the incoming current entity.
+   * @param { SetContextOptions } setContextOptions - New context to set.
+   * @param { ClientIdentity } clientIdentity - Identity of the client sender.
+   * @return { void }
+   */
+  public async setContext(
+   sentContext: { context: OpenFin.Context },
+   clientIdentity: OpenFin.ClientIdentity
+  ): Promise<void> {
+   // enrich context object here if pieces of data are missing
+   super.setContext(sentContext, clientIdentity);
+  }
+```
+
+If you are a platform owner with a variable number of apps from different content providers then you can come up with a pattern where you can dynamically add logic for specific types of context object that could be owned by yourself or one of the teams within your organization.
+
+We have an example of what this could be like in customize workspace. You can define endpoints ([See how to define endpoints](./how-to-define-endpoints.md)) that support a requestResponse function where the context will be passed to the function, enriched and then returned. This could be a single JavaScript module for one or more context types or you might have teams that build and own their own JavaScript module for their specific context types. This will let your platform scale without requiring direct changes to your broker's setContext function.
+
 ## Test Harnesses
 
 It is useful to be able to test your app against something. When you reference the common apps feed in your instance of customize workspace you get a number of useful utilities. We provide two entries related to context sharing in FDC3:

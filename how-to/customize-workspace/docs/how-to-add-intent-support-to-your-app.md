@@ -75,7 +75,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How Do I Listen For Intents Triggered By raiseIntentForcontext?
+## How Do I Listen For Intents Triggered By raiseIntentForContext?
 
 The code is the same as listening for intents triggered by raiseIntent as it ends up resolving to a selected intent.
 
@@ -94,6 +94,31 @@ if (window.fdc3 !== undefined) {
 ## How Do I Flag What Intents My App Supports?
 
 This would be done in your app definition. See [how to define an app](./how-to-define-apps.md). An app definition supports an array of intents and our App Definition Builder helps you select from the official list of intents when defining your app.
+
+## Context Objects Passed/Received from an Intent
+
+You can see a list of FDC3 Context Object Definitions here: [FDC3 Context](https://fdc3.finos.org/docs/context/ref/Context).
+
+## Custom Context Objects
+
+If the types listed do not fit your needs the spec was built with extension in mind. You can create your own object types. Remember that you have to specify a type property and the suggestion is to use your organization as part of the namespace in order to avoid conflicts. E.g.
+
+```json
+{
+  "type": "org.dayofinterest",
+  "id": {
+    "date": "2024/12/24"
+  }
+}
+```
+
+## What if more than one app can raise the intent but not provide all the required information?
+
+As a platform you can take advantage of having your own interop broker. You can update your intent implementation to enrich a context object before it is sent to the target app.
+
+If you are a platform owner with a variable number of apps from different content providers then you can come up with a pattern where you can dynamically add logic for specific types of context object that could be owned by yourself or one of the teams within your organization.
+
+We have an example of what this could be like in customize workspace. You can define endpoints ([See how to define endpoints](./how-to-define-endpoints.md)) that support a requestResponse function where the context will be passed to the function, enriched and then returned. This could be a single JavaScript module for one or more context types or you might have teams that build and own their own JavaScript module for their specific context types. This will let your platform scale without requiring direct changes to your broker's setContext function.
 
 ## Test Harnesses
 

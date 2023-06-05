@@ -11,15 +11,18 @@ import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type {
 	ApiMetadata,
+	ContextToProcess,
 	IntentOptions,
 	IntentPickerResponse,
 	IntentRegistrationEntry,
 	IntentRegistrationPayload,
 	IntentResolverOptions,
-	IntentTargetMetaData
+	IntentTargetMetaData,
+	ProcessedContext
 } from "customize-workspace/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
+import { hasEndpoint, requestResponse } from "../endpoint";
 import { mapToAppMetaData as mapTo12AppMetaData } from "../fdc3/1.2/mapper";
 import { mapToAppMetaData as mapTo20AppMetaData } from "../fdc3/2.0/mapper";
 import { bringToFront, launch } from "../launch";
@@ -114,6 +117,19 @@ export function interopOverride(
 			logger.info("Is action authorized", action, payload, identity);
 			// perform check here if you wish and return true/false accordingly
 			return true;
+		}
+
+		/**
+		 * Sets a context for the context group of the incoming current entity.
+		 * @param setContextOptions - New context to set.
+		 * @param clientIdentity - Identity of the client sender.
+		 */
+		public async setContext(
+			sentContext: { context: OpenFin.Context },
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<void> {
+			sentContext.context = await this.processContext(sentContext.context);
+			super.setContext(sentContext, clientIdentity);
 		}
 
 		public async handleInfoForIntentsByContext(
@@ -566,6 +582,10 @@ export function interopOverride(
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] = [];
 			let existingInstance = true;
+
+			if (intent?.context !== undefined) {
+				intent.context = await this.processContext(intent.context);
+			}
 
 			if (instanceId !== undefined) {
 				// an instance of an application was selected
@@ -1096,6 +1116,18 @@ export function interopOverride(
 				logger.info("Assigned the following unregistered app to represent the app.", app);
 			}
 			return app.appId;
+		}
+
+		private async processContext(context: OpenFin.Context): Promise<OpenFin.Context> {
+			const endpointId = `interopbroker.process.${context.type}`;
+			if (hasEndpoint(endpointId)) {
+				logger.info(`Processing context ${context.type} with endpoint ${endpointId}`);
+				const processedContext = await requestResponse<ContextToProcess, ProcessedContext>(endpointId, {
+					context
+				});
+				return processedContext.context;
+			}
+			return context;
 		}
 	}
 
