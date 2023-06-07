@@ -107,7 +107,7 @@ async function launchFromNode(manifestUrl, exitMethod) {
 		console.error('Error: Failed launching manifest');
 		console.error(e.message);
 		if (e.message.includes('Could not locate')) {
-			console.error('Is the web server running ?');
+			console.error('Is the web server running and the manifest JSON valid ?');
 		}
 	}
 }
