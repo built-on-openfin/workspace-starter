@@ -6,7 +6,7 @@
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
 		"kill": "node ./scripts/kill.mjs",
-		"client": "node ./scripts/launch.mjs",
+		"client": "node --dns-result-order=ipv4first ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
