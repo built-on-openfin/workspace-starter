@@ -1,18 +1,12 @@
 import type OpenFin from "@openfin/core";
-import { Home, Integrations } from '@openfin/workspace'
+import { Home, Integrations } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
+import { type WorkflowIntegration } from "@openfin/workspace-platform/client-api/src/shapes/integrations";
 import { type CustomSettings } from "./shapes";
-import { WorkflowIntegration } from "@openfin/workspace-platform/client-api/src/shapes/integrations";
 
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// When the platform api is ready we bootstrap the platform.
-	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => {
-		// Once the platform is initialized then show home as the microflow show be registered
-	});
-
 	// The DOM is ready so initialize the platform
 	await initializeWorkspacePlatform();
 });
@@ -27,10 +21,10 @@ async function initializeWorkspacePlatform(): Promise<void> {
 	if (customSettings.ms365) {
 		const msft365WorkflowIntegration = new Integrations.Microsoft365WorkflowIntegration({
 			connect: {
-					 clientId: customSettings.ms365.clientId,
-					 redirectUri: customSettings.ms365.redirectUri,
-					 tenantId: customSettings.ms365.tenantId
-				 }
+				clientId: customSettings.ms365.clientId,
+				redirectUri: customSettings.ms365.redirectUri,
+				tenantId: customSettings.ms365.tenantId
+			}
 		});
 		integrations.push(msft365WorkflowIntegration as unknown as WorkflowIntegration);
 	}

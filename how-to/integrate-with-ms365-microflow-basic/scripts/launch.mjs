@@ -87,7 +87,6 @@ async function launchFromNode(manifestUrl, exitMethod) {
 		console.log();
 
 		const port = await launch({ manifestUrl });
-console.log("Port:", port);
 		// We will use the port to connect from Node to determine when OpenFin exists.
 		const fin = await connect({
 			uuid: `dev-connection-${Date.now()}`, // Supply an addressable Id for the connection

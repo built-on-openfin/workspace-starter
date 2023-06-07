@@ -70,7 +70,7 @@ npm run build
 
 ## Admin Permissions
 
-To access some of data in the graph API you might need specific permissions that needs to be granted by an administrator. 
+To access some of data in the graph API you might need specific permissions that needs to be granted by an administrator.
 
 ### Note About This Example
 
