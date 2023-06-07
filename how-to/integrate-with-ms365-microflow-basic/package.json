@@ -9,7 +9,7 @@
 		"client": "node ./scripts/launch.mjs",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
-		"start": "npx --yes http-server ./public -a 127.0.0.1",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
 		"setup": "cd ../../ && npm install && cd how-to/integrate-with-ms365 && npm run build"
 	},
 	"author": "john.mandia@openfin.co",
