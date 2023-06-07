@@ -5,6 +5,7 @@ import type {
 import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 export class ConnectionValidationEndpoint implements Endpoint {
 	private _logger: Logger;
@@ -18,10 +19,10 @@ export class ConnectionValidationEndpoint implements Endpoint {
 	 */
 	public async initialize(
 		definition: ModuleDefinition,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
 	) {
-		this._logger = createLogger("ConnectionValidationEndpoint");
+		this._logger = loggerCreator("ConnectionValidationEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 
@@ -33,7 +34,7 @@ export class ConnectionValidationEndpoint implements Endpoint {
 	 */
 	public async requestResponse(
 		endpointDefinition: EndpointDefinition<unknown>,
-		request?: ConnectionPayloadVerificationRequest<unknown>
+		request?: ConnectionPayloadVerificationRequest
 	): Promise<ConnectionPayloadVerificationResponse> {
 		const defaultValue = { isValid: false };
 
@@ -43,7 +44,7 @@ export class ConnectionValidationEndpoint implements Endpoint {
 			);
 			return defaultValue;
 		}
-		if (this._logger !== undefined) {
+		if (!isEmpty(this._logger)) {
 			this._logger.info(
 				"This payload verification module is an example that always returns true. Please replace with one that validates the connection either locally or by using a rest service."
 			);

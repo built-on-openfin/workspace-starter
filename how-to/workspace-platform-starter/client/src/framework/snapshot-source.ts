@@ -3,6 +3,7 @@ import { getConnectedSnapshotSourceClients } from "./connections";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import type { ClientSnapshot, PlatformApp } from "./shapes/app-shapes";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("SnapshotSource");
 
@@ -32,9 +33,7 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 	);
 
 	const decoratedSnapshot: OpenFin.Snapshot = Object.assign(snapshot, {
-		clientSnapshots: clientSnapshots.filter(
-			(snapshotSource) => snapshotSource !== undefined
-		)
+		clientSnapshots: clientSnapshots.filter((snapshotSource) => !isEmpty(snapshotSource))
 	});
 
 	return decoratedSnapshot;
@@ -45,7 +44,8 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
  * @param snapshot The snapshot.
  */
 export async function applyClientSnapshot(
-	snapshot: OpenFin.Snapshot & { clientSnapshots?: ClientSnapshot[] }): Promise<void> {
+	snapshot: OpenFin.Snapshot & { clientSnapshots?: ClientSnapshot[] }
+): Promise<void> {
 	if (Array.isArray(snapshot?.clientSnapshots)) {
 		const sources = await getConnectedSnapshotSourceClients();
 		await Promise.all(
@@ -63,10 +63,10 @@ export async function applyClientSnapshot(
 								`Snapshot source: ${clientSnapshot.identity.uuid} is not able to apply the snapshot.`
 							);
 						}
-					} else if (clientSnapshot?.snapshot !== undefined) {
-						const app: PlatformApp | undefined =
-							clientSnapshot.snapshot?.App ?? clientSnapshot.snapshot?.app;
-						if (app !== undefined) {
+					} else if (!isEmpty(clientSnapshot?.snapshot)) {
+						const sn = clientSnapshot?.snapshot;
+						const app: PlatformApp | undefined = sn?.App ?? sn?.app;
+						if (!isEmpty(app)) {
 							logger.info(
 								`Client not connected but snapshot contains an app definition. Launching app definition for ${clientSnapshot.identity.uuid}`
 							);

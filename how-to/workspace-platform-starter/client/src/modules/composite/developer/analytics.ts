@@ -1,8 +1,12 @@
 import type OpenFin from "@openfin/core";
 import type { InteropClient } from "@openfin/core/src/api/interop";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes";
-import type { AnalyticsModule, PlatformAnalyticsEvent } from "workspace-platform-starter/shapes/analytics-shapes";
+import type {
+	AnalyticsModule,
+	PlatformAnalyticsEvent
+} from "workspace-platform-starter/shapes/analytics-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { DevAnalyticsOptions } from "./shapes";
 
 /**
@@ -42,7 +46,7 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 		this._logger.info(
 			`Using channel name: ${channelName} and contextType: ${this._contextType}. These can be customized by passing data settings: sessionContextGroupName and contextType in the module settings.`
 		);
-		if (helpers.getInteropClient !== undefined && helpers.subscribeLifecycleEvent !== undefined) {
+		if (!isEmpty(helpers.getInteropClient) && !isEmpty(helpers.subscribeLifecycleEvent)) {
 			this._logger.info("Subscribing to the after bootstrap event.");
 			const lifeCycleAfterBootstrapSubscriptionId = this._helpers.subscribeLifecycleEvent(
 				"after-bootstrap",
@@ -50,7 +54,7 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 					this._logger.info("After bootstrap lifecycle event received. Getting interop client.");
 					this._interopClient = await helpers.getInteropClient();
 					this._channel = await this._interopClient.joinSessionContextGroup(channelName);
-					if (this._helpers.unsubscribeLifecycleEvent !== undefined) {
+					if (!isEmpty(this._helpers.unsubscribeLifecycleEvent)) {
 						this._helpers.unsubscribeLifecycleEvent(lifeCycleAfterBootstrapSubscriptionId, "after-bootstrap");
 					}
 				}
@@ -71,7 +75,7 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 			this._logger.warn("We were not passed an array of analytical events.");
 			return;
 		}
-		if (this._channel !== undefined) {
+		if (!isEmpty(this._channel)) {
 			let platformAnalyticEvents: PlatformAnalyticsEvent[] = [];
 			if (this._cachedAnalyticEvents.length > 0) {
 				this._logger.info(`Adding ${this._cachedAnalyticEvents.length} analytic events.`);

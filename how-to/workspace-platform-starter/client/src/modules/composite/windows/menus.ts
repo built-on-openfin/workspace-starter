@@ -1,8 +1,13 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { Menus } from "workspace-platform-starter/shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { MenuEntry, MenuType, RelatedMenuId } from "workspace-platform-starter/shapes/menu-shapes";
+import type {
+	MenuEntry,
+	MenuType,
+	Menus,
+	RelatedMenuId
+} from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import { getAllVisibleWindows } from "./helper";
 import type { WindowMenuSettings } from "./shapes";
 
@@ -13,26 +18,26 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _settings: WindowMenuSettings;
+	private _settings?: WindowMenuSettings;
 
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition<WindowMenuSettings>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = createLogger("WindowMenus");
+		this._logger = loggerCreator("WindowMenus");
 		this._settings = definition.data;
 	}
 
@@ -47,14 +52,14 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 		platform: WorkspacePlatformModule,
 		relatedMenuId?: RelatedMenuId
 	): Promise<MenuEntry[] | undefined> {
-		if (menuType === "global" && relatedMenuId.windowIdentity !== undefined) {
+		if (menuType === "global" && !isEmpty(relatedMenuId.windowIdentity)) {
 			// you can customize the browser main menu here
 			const includeShowAllWindows =
-				this._settings?.showAllWindows?.include === undefined || this._settings?.showAllWindows?.include;
+				isEmpty(this._settings?.showAllWindows?.include) || this._settings?.showAllWindows?.include;
 			const includeHideAllWindows =
-				this._settings?.hideAllWindows?.include === undefined || this._settings?.hideAllWindows?.include;
+				isEmpty(this._settings?.hideAllWindows?.include) || this._settings?.hideAllWindows?.include;
 			const includeHideOtherWindows =
-				this._settings?.hideOtherWindows?.include === undefined || this._settings?.hideOtherWindows?.include;
+				isEmpty(this._settings?.hideOtherWindows?.include) || this._settings?.hideOtherWindows?.include;
 
 			const availableWindows = await getAllVisibleWindows();
 

@@ -12,14 +12,13 @@ import * as authProvider from "./auth";
 import { updateToolbarButtons } from "./buttons";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
-import { MANIFEST_TYPES } from "./manifest-types";
 import { closedownModules, initializeModules, loadModules } from "./modules";
-import { getDefaultWindowOptions, launchView } from "./platform/browser";
+import { launchView } from "./platform/browser";
 import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import { showShareOptions } from "./share";
 import { toggleScheme } from "./themes";
-import { getViewWindowIdentity } from "./view";
+import { isEmpty, isStringValue } from "./utils";
 import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
@@ -64,7 +63,6 @@ export async function init(
 		await initializeModules<Actions, ActionHelpers>(modules, {
 			...helpers,
 			updateToolbarButtons,
-			manifestTypes: MANIFEST_TYPES,
 			callerTypes: CustomActionCallerType
 		});
 	}
@@ -93,13 +91,11 @@ export async function getActions(): Promise<CustomActionsMap> {
 	// Merge the module actions
 	const platform = getCurrentSync();
 	for (const actionModule of modules) {
-		if (actionModule.implementation) {
-			const modActions = await actionModule.implementation.get(platform);
-			platformActionMap = {
-				...platformActionMap,
-				...modActions
-			};
-		}
+		const modActions = await actionModule.implementation.get(platform);
+		platformActionMap = {
+			...platformActionMap,
+			...modActions
+		};
 	}
 
 	logger.info("Action Ids", Object.keys(platformActionMap));
@@ -114,21 +110,23 @@ export async function getActions(): Promise<CustomActionsMap> {
  */
 export function registerAction(actionName: string, action: () => Promise<void>): void {
 	if (getActionsCalled) {
-		logger.error(`registerAction has been called for action ${actionName} but it is too late for the action to be used by the platform`);
+		logger.error(
+			`registerAction has been called for action ${actionName} but it is too late for the action to be used by the platform`
+		);
 		return;
 	}
 
-	if (actionName === undefined || actionName === null || actionName.trim().length === 0) {
+	if (!isStringValue(actionName)) {
 		logger.warn("Unable to register action. The action name was not specified.");
 		return;
 	}
 
-	if (action === undefined) {
+	if (isEmpty(action)) {
 		logger.warn("Unable to register action as no action was passed.");
 		return;
 	}
 
-	if (customActionMap[actionName] !== undefined) {
+	if (!isEmpty(customActionMap[actionName])) {
 		logger.warn(
 			`Unable to add action to custom actions as an action with the name ${actionName} has already been registered`
 		);
@@ -146,7 +144,9 @@ export function registerAction(actionName: string, action: () => Promise<void>):
 async function getPlatformActions(): Promise<CustomActionsMap> {
 	const actionMap: CustomActionsMap = {};
 
-	actionMap[PLATFORM_ACTION_IDS.moveViewToNewWindow] = async (payload: CustomActionPayload): Promise<void> => {
+	actionMap[PLATFORM_ACTION_IDS.moveViewToNewWindow] = async (
+		payload: CustomActionPayload
+	): Promise<void> => {
 		if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 			const platform = getCurrentSync();
 			const initialView = await platform.createView({
@@ -167,17 +167,19 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		}
 	};
 
-	actionMap[PLATFORM_ACTION_IDS.movePageToNewWindow] = async (payload: CustomActionPayload): Promise<void> => {
+	actionMap[PLATFORM_ACTION_IDS.movePageToNewWindow] = async (
+		payload: CustomActionPayload
+	): Promise<void> => {
 		if (payload.callerType === CustomActionCallerType.PageTabContextMenu) {
-			const windowOptions = await getDefaultWindowOptions();
-			if (windowOptions.workspacePlatform) {
-				const platform = getCurrentSync();
-				const win = platform.Browser.wrapSync(payload.windowIdentity);
-				const page = await win.getPage(payload.pageId);
-				windowOptions.workspacePlatform.pages = [page];
-				await platform.createWindow(windowOptions);
-				await win.removePage(page.pageId);
-			}
+			const platform = getCurrentSync();
+			const win = platform.Browser.wrapSync(payload.windowIdentity);
+			const page = await win.getPage(payload.pageId);
+			await platform.createWindow({
+				workspacePlatform: {
+					pages: [page]
+				}
+			});
+			await win.removePage(page.pageId);
 		}
 	};
 
@@ -188,7 +190,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const options = await browserWindow.openfinWindow.getOptions();
 			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
 			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
+			if (currentToolbarOptions) {
 				const newButtons = await updateToolbarButtons(
 					currentToolbarOptions.buttons,
 					payload.customData.sourceId as string,
@@ -204,7 +206,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const options = await browserWindow.openfinWindow.getOptions();
 			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
 			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
+			if (!isEmpty(currentToolbarOptions)) {
 				const newButtons = await updateToolbarButtons(
 					currentToolbarOptions.buttons,
 					payload.customData.sourceId as string,
@@ -222,7 +224,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const options = await browserWindow.openfinWindow.getOptions();
 			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
 			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
-			if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
+			if (!isEmpty(currentToolbarOptions)) {
 				const newButtons = await updateToolbarButtons(
 					currentToolbarOptions.buttons,
 					payload.customData.sourceId as string,
@@ -251,18 +253,19 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		await authProvider.logout();
 	};
 
-	actionMap[PLATFORM_ACTION_IDS.launchApp] = async (
-		payload: CustomActionPayload
-	): Promise<void> => {
-		if (payload.callerType === CustomActionCallerType.CustomButton ||
-			payload.callerType === CustomActionCallerType.CustomDropdownItem) {
+	actionMap[PLATFORM_ACTION_IDS.launchApp] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.CustomDropdownItem
+		) {
 			if (payload.customData?.appId) {
 				const app = await getApp(payload.customData.appId as string);
 				if (app) {
 					await launch(app);
 				} else {
 					logger.error(
-						`Unable to find app with id '${payload.customData.appId
+						`Unable to find app with id '${
+							payload.customData.appId
 						}' in call to launchApp action from source '${payload.customData?.source ?? "unknown source"}'`
 					);
 				}
@@ -272,11 +275,11 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		}
 	};
 
-	actionMap[PLATFORM_ACTION_IDS.launchView] = async (
-		payload: CustomActionPayload
-	): Promise<void> => {
-		if (payload.callerType === CustomActionCallerType.CustomButton ||
-			payload.callerType === CustomActionCallerType.CustomDropdownItem) {
+	actionMap[PLATFORM_ACTION_IDS.launchView] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.CustomDropdownItem
+		) {
 			if (payload.customData?.url) {
 				await launchView(payload.customData?.url as string);
 			} else {
@@ -285,11 +288,11 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		}
 	};
 
-	actionMap[PLATFORM_ACTION_IDS.toggleScheme] = async (
-		payload: CustomActionPayload
-	): Promise<void> => {
-		if (payload.callerType === CustomActionCallerType.CustomButton ||
-			payload.callerType === CustomActionCallerType.CustomDropdownItem) {
+	actionMap[PLATFORM_ACTION_IDS.toggleScheme] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.CustomDropdownItem
+		) {
 			await toggleScheme();
 		}
 	};
@@ -297,3 +300,26 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 	return actionMap;
 }
 
+/**
+ * Get the identity of the window containing a view.
+ * @param view The view to get the containing window identity.
+ * @returns The identity of the containing window.
+ */
+async function getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
+	const currentWindow = await view.getCurrentWindow();
+
+	// If the view does is not yet attached to a window, wait for the
+	// target-changed even which means it has been attached
+	if (isEmpty(currentWindow.identity.name) || currentWindow.identity.name === fin.me.identity.uuid) {
+		return new Promise<OpenFin.Identity>((resolve, reject) => {
+			view
+				.once("target-changed", async () => {
+					const hostWindow = await view.getCurrentWindow();
+					resolve(hostWindow.identity);
+				})
+				.catch(() => {});
+		});
+	}
+
+	return currentWindow.identity;
+}

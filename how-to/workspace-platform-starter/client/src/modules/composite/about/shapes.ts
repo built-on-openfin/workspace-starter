@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { MenuEntryDynamic } from "workspace-platform-starter/shapes";
+import type { MenuEntryDynamic } from "workspace-platform-starter/shapes/menu-shapes";
 export interface SharedState {
 	aboutWindow?: OpenFin.WindowOptions;
 }

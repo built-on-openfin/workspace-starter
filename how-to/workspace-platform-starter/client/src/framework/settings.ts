@@ -4,6 +4,7 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import type { ModuleHelpers } from "./shapes";
 import type { CustomSettings } from "./shapes/setting-shapes";
+import { isEmpty } from "./utils";
 
 let customSettings: CustomSettings | undefined;
 const logger = createLogger("Settings");
@@ -23,7 +24,7 @@ export async function getManifestCustomSettings(): Promise<CustomSettings> {
  * @returns The custom settings for the application.
  */
 export async function getSettings(): Promise<CustomSettings> {
-	if (customSettings === undefined) {
+	if (isEmpty(customSettings)) {
 		// Get the settings from the manifest
 		customSettings = await getManifestCustomSettings();
 
@@ -63,7 +64,7 @@ export async function isValidHostForManifest(): Promise<boolean> {
 	let validationUrl: string;
 	let validHosts: string[] = [];
 
-	if (hostPage !== undefined) {
+	if (!isEmpty(hostPage)) {
 		validationUrl = host.replace(hostPage, "manifest-hosts.json");
 		logger.info("Using hosts validation url:", validationUrl);
 		validHosts = await getValidHosts(validationUrl);

@@ -12,7 +12,7 @@ import {
 	findViewNames
 } from "./platform/browser";
 import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
-import { objectClone, randomUUID } from "./utils";
+import { isEmpty, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -25,7 +25,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 	try {
 		logger.info("Application launch requested", platformApp);
 
-		if (platformApp === undefined || platformApp === null) {
+		if (isEmpty(platformApp)) {
 			logger.warn("An empty app definition was passed to launch");
 			return [];
 		}
@@ -76,7 +76,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 			case MANIFEST_TYPES.Manifest.id: {
 				const manifestApp = await fin.Application.startFromManifest(app.manifest);
 				const manifestUUID = manifestApp?.identity?.uuid;
-				if (manifestUUID !== undefined) {
+				if (!isEmpty(manifestUUID)) {
 					platformAppIdentities.push({
 						uuid: manifestUUID,
 						name: manifestUUID,
@@ -95,7 +95,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 						app.manifest,
 						{ payload: app }
 					);
-					if (identity === undefined || identity === null) {
+					if (isEmpty(identity)) {
 						logger.warn(
 							`App with id: ${app.appId} encountered when launched using endpoint: ${app.manifest}.`
 						);
@@ -114,7 +114,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 					"An app defined by a connection (connected app) has been selected. Passing selection to connection"
 				);
 				const identity = await launchConnectedApp(app);
-				if (identity !== undefined && identity !== null) {
+				if (!isEmpty(identity)) {
 					platformAppIdentities.push({ ...identity, appId: app.appId });
 				}
 				break;
@@ -208,7 +208,10 @@ export async function bringToFront(
 			break;
 		}
 		default: {
-			logger.error("We do not support the manifest type so this app cannot be brought to front.", platformApp);
+			logger.error(
+				"We do not support the manifest type so this app cannot be brought to front.",
+				platformApp
+			);
 		}
 	}
 }
@@ -252,7 +255,7 @@ function getManifest<T>(platformApp: PlatformApp): T {
  * @returns The identity of the window launched.
  */
 async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
-	if (windowApp === undefined || windowApp === null) {
+	if (isEmpty(windowApp)) {
 		logger.warn("No app was passed to launchWindow");
 		return;
 	}
@@ -278,7 +281,7 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	}
 
 	let name = manifest.name;
-	let wasNameSpecified = name !== undefined;
+	let wasNameSpecified = !isEmpty(name);
 
 	if (!wasNameSpecified && windowApp?.instanceMode === "single") {
 		logger.info(
@@ -321,7 +324,7 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
  * @returns The identity of the view launched.
  */
 async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
-	if (viewApp === undefined || viewApp === null) {
+	if (isEmpty(viewApp)) {
 		logger.warn("No app was passed to launchView");
 		return;
 	}
@@ -348,7 +351,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 
 	let name = manifest.name;
 
-	let wasNameSpecified = name !== undefined;
+	let wasNameSpecified = !isEmpty(name);
 
 	if (!wasNameSpecified && viewApp?.instanceMode === "single") {
 		logger.info(
@@ -390,7 +393,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
  * @returns The identities of the snapshot parts launched.
  */
 async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIdentifier[] | undefined> {
-	if (snapshotApp === undefined || snapshotApp === null) {
+	if (isEmpty(snapshotApp)) {
 		logger.warn("No app was passed to launchSnapshot");
 		return;
 	}

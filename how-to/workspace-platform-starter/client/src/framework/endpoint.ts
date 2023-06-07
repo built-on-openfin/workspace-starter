@@ -7,6 +7,7 @@ import type {
 	FetchOptions
 } from "./shapes/endpoint-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("Endpoint");
 const endpointDefinitions: EndpointDefinition[] = [];
@@ -17,7 +18,10 @@ let modules: ModuleEntry<Endpoint>[] = [];
  * @param options The options for the endpoint provider.
  * @param helpers Module helpers to pass to any loaded modules.
  */
-export async function init(options: EndpointProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: EndpointProviderOptions | undefined,
+	helpers: ModuleHelpers
+): Promise<void> {
 	if (options) {
 		const newEndpoints = options.endpoints ?? [];
 
@@ -49,7 +53,7 @@ export function hasEndpoint(id: string): boolean {
 export async function action<T>(endpointId: string, request?: T): Promise<boolean> {
 	const endpoint = getEndpointDefinition(endpointId);
 
-	if (endpoint === undefined) {
+	if (isEmpty(endpoint)) {
 		return false;
 	}
 
@@ -90,7 +94,7 @@ export async function action<T>(endpointId: string, request?: T): Promise<boolea
 export async function requestResponse<T, R>(endpointId: string, request?: T): Promise<R | undefined> {
 	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
-	if (endpoint === undefined) {
+	if (isEmpty(endpoint)) {
 		return;
 	}
 
@@ -134,7 +138,7 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 async function getModuleEndpoint(moduleId: string): Promise<Endpoint | undefined> {
 	const endpoints = modules.find((entry) => entry.definition.id === moduleId);
 
-	if (endpoints === undefined) {
+	if (isEmpty(endpoints)) {
 		logger.warn(`Specified Endpoint Module Id: ${moduleId} is not available`);
 		return;
 	}
@@ -150,7 +154,7 @@ async function getModuleEndpoint(moduleId: string): Promise<Endpoint | undefined
 function getEndpointDefinition(endpointId: string): EndpointDefinition | undefined {
 	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
-	if (endpoint === undefined) {
+	if (isEmpty(endpoint)) {
 		logger.warn(`Specified Endpoint Id ${endpointId} is not available`);
 	}
 
@@ -170,7 +174,7 @@ function getRequestOptions(
 	request: unknown
 ): { url: string; options: FetchOptions } {
 	if (options.method === "GET") {
-		if (request !== undefined) {
+		if (!isEmpty(request)) {
 			const requestParams = request as { [id: string]: string };
 			const keys = Object.keys(requestParams);
 			if (keys.length > 0) {
@@ -180,7 +184,7 @@ function getRequestOptions(
 				}
 			}
 		}
-	} else if (options.method === "POST" && request !== undefined) {
+	} else if (options.method === "POST" && !isEmpty(request)) {
 		options.body = JSON.stringify(request);
 	}
 

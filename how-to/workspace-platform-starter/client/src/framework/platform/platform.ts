@@ -20,7 +20,7 @@ import { getManifestCustomSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import * as shareProvider from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
-import { randomUUID } from "../utils";
+import { isEmpty, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
@@ -36,7 +36,8 @@ export async function init(): Promise<boolean> {
 		customSettings.authProvider,
 		async () => setupPlatform(customSettings),
 		logger,
-		true);
+		true
+	);
 
 	if (!isValid) {
 		logger.error(
@@ -99,13 +100,13 @@ async function setupPlatform(customSettings: CustomSettings): Promise<boolean> {
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
-	if (settings?.browserProvider !== undefined) {
-		browser.defaultWindowOptions = await getDefaultWindowOptions();
+	if (!isEmpty(settings?.browserProvider)) {
+		browser.defaultWindowOptions = await getDefaultWindowOptions(settings.browserProvider);
 	}
-	if (settings?.browserProvider?.defaultPageOptions !== undefined) {
+	if (!isEmpty(settings?.browserProvider?.defaultPageOptions)) {
 		browser.defaultPageOptions = settings.browserProvider.defaultPageOptions;
 	}
-	if (settings?.browserProvider?.defaultViewOptions !== undefined) {
+	if (!isEmpty(settings?.browserProvider?.defaultViewOptions)) {
 		browser.defaultViewOptions = settings.browserProvider.defaultViewOptions;
 	}
 

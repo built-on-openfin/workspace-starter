@@ -13,7 +13,7 @@ import type {
 	ConnectionValidationResponse,
 	SnapshotSourceConnection
 } from "./shapes/connection-shapes";
-import { isStringValue, objectClone } from "./utils";
+import { isEmpty, isStringValue, objectClone } from "./utils";
 
 const APP_SOURCE_TYPE_ID = "appSource";
 const SNAPSHOT_SOURCE_TYPE_ID = "snapshotSource";
@@ -39,29 +39,30 @@ export async function init(options: ConnectionProviderOptions | undefined): Prom
 	initialized = true;
 	connectionOptions = options;
 
-	if (connectionOptions?.connectionId !== undefined) {
+	const connectionId = connectionOptions?.connectionId;
+	if (!isEmpty(connectionId)) {
 		try {
 			connectionService = await fin.InterApplicationBus.Channel.create(
-				`${fin.me.identity.uuid}-${connectionOptions.connectionId}`
+				`${fin.me.identity.uuid}-${connectionId}`
 			);
 			logger.info("Configuring connection provider");
 			connectionService.onConnection(async (identity, payload) => {
 				// can reject a connection here by throwing an error
 				logger.info("Client connection request identity", JSON.stringify(identity));
-				logger.info("Client connection has request payload", payload !== undefined);
+				logger.info("Client connection has request payload", !isEmpty(payload));
 
 				const validatedConnection = await getConnectionListing(identity);
 				let isValid = false;
 				let errorMessage =
 					"This connection has failed the validation check and cannot connect to the requested application";
-				if (validatedConnection !== undefined) {
+				if (!isEmpty(validatedConnection)) {
 					isValid = true;
 					if (validatedConnection.validatePayload) {
 						const response = await isConnectionValid(identity, payload);
 						isValid = response.isValid;
 					}
 					if (isValid) {
-						if (connectedClients[identity.uuid] !== undefined) {
+						if (!isEmpty(connectedClients[identity.uuid])) {
 							isValid = false;
 							errorMessage = `This platform can only accept one connection from an external connection. The uuid (${identity.uuid}) is already registered.`;
 						} else {
@@ -120,7 +121,7 @@ export async function init(options: ConnectionProviderOptions | undefined): Prom
  * @returns True if the action was registered.
  */
 export function registerAction(actionName: string, action: () => Promise<void>): boolean {
-	if (registeredActions[actionName] === undefined) {
+	if (isEmpty(registeredActions[actionName])) {
 		logger.info(`Adding action ${actionName} to available actions list`);
 		registeredActions[actionName] = action;
 		return true;
@@ -135,7 +136,7 @@ export function registerAction(actionName: string, action: () => Promise<void>):
  * @returns True if the action was removed.
  */
 export function clearAction(actionName: string): boolean {
-	if (registeredActions[actionName] === undefined) {
+	if (isEmpty(registeredActions[actionName])) {
 		logger.warn(`Cannot remove action ${actionName} from available actions list as it is not registered`);
 		return false;
 	}
@@ -148,10 +149,12 @@ export function clearAction(actionName: string): boolean {
  * Get any connections that support apps.
  * @returns The list of connections supporting apps.
  */
-export async function getConnectedAppSourceClients(): Promise<{
-	identity: OpenFin.Identity;
-	connectionData: AppSourceConnection;
-}[]> {
+export async function getConnectedAppSourceClients(): Promise<
+	{
+		identity: OpenFin.Identity;
+		connectionData: AppSourceConnection;
+	}[]
+> {
 	const connectionsToReturn: {
 		identity: OpenFin.Identity;
 		connectionData: AppSourceConnection;
@@ -187,8 +190,9 @@ export async function getConnectedApps(): Promise<PlatformApp[]> {
 		const supportedManifestTypes: string[] = connectedSource?.connectionData?.manifestTypes ?? [];
 		let validatedApps: PlatformApp[] = [];
 		if (supportedManifestTypes.length > 0) {
-			validatedApps = connectionApps.filter((connectionApp) =>
-				connectionApp.manifestType && supportedManifestTypes.includes(connectionApp.manifestType)
+			validatedApps = connectionApps.filter(
+				(connectionApp) =>
+					connectionApp.manifestType && supportedManifestTypes.includes(connectionApp.manifestType)
 			);
 		} else {
 			validatedApps = connectionApps;
@@ -215,7 +219,7 @@ export async function getConnectedApps(): Promise<PlatformApp[]> {
 export async function launchConnectedApp(app: PlatformApp): Promise<OpenFin.Identity | undefined> {
 	const connectedSources = await getConnectedAppSourceClients();
 	const connectedSource = connectedSources.find((entry) => entry.identity.uuid === app.manifest);
-	if (app.manifestType === MANIFEST_TYPES.Connection.id && connectedSource !== undefined) {
+	if (app.manifestType === MANIFEST_TYPES.Connection.id && !isEmpty(connectedSource)) {
 		logger.info(`Launching app: ${app.appId} against connection: ${connectedSource.identity.uuid}`);
 		await connectionService.dispatch(connectedSource.identity, "launchApp", app);
 		return connectedSource.identity;
@@ -229,8 +233,9 @@ export async function launchConnectedApp(app: PlatformApp): Promise<OpenFin.Iden
  * Get connection snapshot source clients.
  * @returns The list of connected snapshot source clients.
  */
-export async function getConnectedSnapshotSourceClients():
-	Promise<{ identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[]> {
+export async function getConnectedSnapshotSourceClients(): Promise<
+	{ identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[]
+> {
 	const connectionsToReturn: { identity: OpenFin.Identity; connectionData: SnapshotSourceConnection }[] = [];
 
 	const availableConnections = Object.values(connectedClients);
@@ -262,7 +267,7 @@ export async function isConnectionValid<T>(
 	const responseToReturn: ConnectionValidationResponse = { isValid: false };
 
 	try {
-		if (identity?.uuid === undefined) {
+		if (isEmpty(identity?.uuid)) {
 			logger.warn(
 				"An identity without a UUID was passed to the validate connection function. Validation cannot happen.",
 				identity,
@@ -271,7 +276,7 @@ export async function isConnectionValid<T>(
 			return responseToReturn;
 		}
 
-		if (connectionOptions === undefined || connectionOptions?.connections === undefined) {
+		if (isEmpty(connectionOptions?.connections)) {
 			if (options?.type === "broker") {
 				logger.info(
 					"No connection provider options specified and broker connection requested. Implementing default broker behavior which is to allow a connection."
@@ -287,27 +292,26 @@ export async function isConnectionValid<T>(
 
 		const listedConnection = await getConnectionListing(identity);
 
-		if (listedConnection === undefined) {
+		if (isEmpty(listedConnection)) {
 			logger.warn("Connection is not allowed so unable to validate request", identity);
 			return responseToReturn;
 		}
 		if (listedConnection.validatePayload) {
-			if (!isStringValue(connectionOptions.connectionValidationEndpoint)) {
+			const connectionValidationEndpoint = connectionOptions?.connectionValidationEndpoint;
+			if (!isStringValue(connectionValidationEndpoint)) {
 				logger.warn(
 					"This connection has been defined as requiring payload verification but the platform has not provided a connection validation endpoint to use for the verification process. For backwards compatibility this connection is valid unless the broker specifies it wishes to validate."
 				);
 				responseToReturn.isValid = true;
 				return responseToReturn;
 			}
-			if (endpointProvider.hasEndpoint(connectionOptions.connectionValidationEndpoint)) {
+			if (endpointProvider.hasEndpoint(connectionValidationEndpoint)) {
 				const request = { identity, payload, options };
-				logger.info(
-					`Connection validation being handled by endpoint: ${connectionOptions.connectionValidationEndpoint}`
-				);
+				logger.info(`Connection validation being handled by endpoint: ${connectionValidationEndpoint}`);
 				const response = await endpointProvider.requestResponse<
-					ConnectionPayloadVerificationRequest<unknown>,
+					ConnectionPayloadVerificationRequest,
 					ConnectionPayloadVerificationResponse
-				>(connectionOptions.connectionValidationEndpoint, request);
+				>(connectionValidationEndpoint, request);
 				if (!response?.isValid) {
 					logger.warn(`Connection validation request for ${JSON.stringify(identity)} failed validation`);
 					return responseToReturn;
@@ -320,11 +324,13 @@ export async function isConnectionValid<T>(
 				return responseToReturn;
 			}
 		}
-		if (options?.type !== undefined) {
-			const supportedType = listedConnection.connectionTypes.find((entry) => entry.type === options.type);
-			if (supportedType === undefined) {
+
+		const optionsType = options?.type;
+		if (!isEmpty(optionsType)) {
+			const supportedType = listedConnection.connectionTypes.find((entry) => entry.type === optionsType);
+			if (isEmpty(supportedType)) {
 				logger.warn(
-					`The connection that is being validated does not support the required connection type: ${options.type}`
+					`The connection that is being validated does not support the required connection type: ${optionsType}`
 				);
 				return responseToReturn;
 			}
@@ -357,7 +363,7 @@ function isActionSupported(identity: OpenFin.Identity, payload: { action: string
 		if (Array.isArray(actionSettings.supportedActions) && actionSettings.supportedActions.length > 0) {
 			supportedActions = actionSettings.supportedActions;
 		}
-		if (requestedAction !== undefined && supportedActions.includes(actionId)) {
+		if (!isEmpty(requestedAction) && supportedActions.includes(actionId)) {
 			return true;
 		}
 	}
@@ -411,13 +417,13 @@ async function getConnectionListing(identity: OpenFin.Identity): Promise<Connect
 		(entry) => entry.identity.uuid === identity.uuid
 	);
 
-	if (listedConnection !== undefined) {
+	if (!isEmpty(listedConnection)) {
 		return listedConnection;
 	}
 
 	// No connection found so look for a wildcard uuid
 	const defaultConnection = connectionOptions?.connections.find((entry) => entry.identity.uuid === "*");
-	if (defaultConnection !== undefined) {
+	if (!isEmpty(defaultConnection)) {
 		logger.info(
 			`A specific listing for connection ${identity.uuid} isn't listed but there is a default * entry and it will be used for this connection.`
 		);
@@ -428,4 +434,3 @@ async function getConnectionListing(identity: OpenFin.Identity): Promise<Connect
 
 	return defaultConnection;
 }
-

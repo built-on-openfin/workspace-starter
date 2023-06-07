@@ -2,6 +2,7 @@ import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { RaiseIntentPayload, ShareContextPayload } from "./shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 export class InitOptionsInteropHandler implements InitOptionsHandler {
 	private _logger: Logger;
@@ -13,8 +14,12 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
-		this._logger = createLogger("InitOptionsInteropHandler");
+	public async initialize(
+		definition: ModuleDefinition,
+		loggerCreator: LoggerCreator,
+		helpers: ModuleHelpers
+	) {
+		this._logger = loggerCreator("InitOptionsInteropHandler");
 		// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
 		this._logger.info("The handler has been loaded");
 	}
@@ -28,7 +33,7 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 		requestedAction: string,
 		payload?: RaiseIntentPayload | ShareContextPayload
 	): Promise<void> {
-		if (payload === undefined) {
+		if (isEmpty(payload)) {
 			this._logger.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
 			);
@@ -60,7 +65,7 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 		const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 		const contextGroups = await brokerClient.getContextGroups();
 		const targetContextGroup = contextGroups.find((group) => group.id === payload.contextGroup);
-		if (targetContextGroup !== undefined) {
+		if (!isEmpty(targetContextGroup)) {
 			await brokerClient.joinContextGroup(targetContextGroup.id);
 			this._logger.info(
 				`Received context to send. Context Group ${targetContextGroup.id}. Context: ${JSON.stringify(

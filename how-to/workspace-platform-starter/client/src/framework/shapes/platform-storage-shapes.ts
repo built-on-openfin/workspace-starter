@@ -1,3 +1,6 @@
+/**
+ * Interface for a storage provider.
+ */
 export interface PlatformStorage<T> {
 	/**
 	 * Get items that are stored
@@ -9,6 +12,7 @@ export interface PlatformStorage<T> {
 	/**
 	 * Save an item against storage
 	 * @param id The identity of the item to store or update
+	 * @param entry The entry to store.
 	 * @returns Nothing.
 	 */
 	set(id: string, entry: T): Promise<void>;

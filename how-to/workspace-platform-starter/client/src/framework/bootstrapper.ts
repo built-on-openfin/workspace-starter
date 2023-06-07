@@ -15,31 +15,12 @@ import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
-import {
-	deregister as deregisterDock,
-	minimize as minimizeDock,
-	register as registerDock,
-	show as showDock
-} from "./workspace/dock";
-import {
-	deregister as deregisterHome,
-	hide as hideHome,
-	register as registerHome,
-	show as showHome
-} from "./workspace/home";
-import {
-	deregister as deregisterNotifications,
-	register as registerNotifications,
-	show as showNotifications,
-	hide as hideNotifications
-} from "./workspace/notifications";
-import {
-	deregister as deregisterStore,
-	hide as hideStore,
-	register as registerStore,
-	show as showStore
-} from "./workspace/store";
+import * as dockComponent from "./workspace/dock";
+import * as homeComponent from "./workspace/home";
+import * as notificationsComponent from "./workspace/notifications";
+import * as storeComponent from "./workspace/store";
 
 const logger = createLogger("Bootstrapper");
 
@@ -54,9 +35,9 @@ export async function init(): Promise<boolean> {
 	// you can kick off your bootstrapping process here where you may decide to prompt for authentication,
 	// gather reference data etc before starting workspace and interacting with it.
 	logger.info("Initializing the bootstrapper");
-	const settings = await getSettings();
+	const customSettings = await getSettings();
 
-	bootstrapOptions = { ...settings.bootstrap };
+	bootstrapOptions = { ...customSettings.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
@@ -73,46 +54,58 @@ export async function init(): Promise<boolean> {
 
 	if (bootstrapOptions.home) {
 		// only register search logic once workspace is running
-		homeRegistration = await registerHome();
-		workspaceMetaInfo = {
-			workspaceVersion: homeRegistration.workspaceVersion,
-			clientAPIVersion: homeRegistration.clientAPIVersion
-		};
-		registeredComponents.push("home");
-		registerAction("show-home", async () => {
-			await showHome();
-		});
-		registerAction("hide-home", async () => {
-			await hideHome();
-		});
+		homeRegistration = await homeComponent.register(customSettings.homeProvider);
+		if (homeRegistration) {
+			workspaceMetaInfo = {
+				workspaceVersion: homeRegistration.workspaceVersion,
+				clientAPIVersion: homeRegistration.clientAPIVersion
+			};
+			registeredComponents.push("home");
+			registerAction("show-home", async () => {
+				await homeComponent.show();
+			});
+			registerAction("hide-home", async () => {
+				await homeComponent.hide();
+			});
+		}
 	}
 
 	logger.info("Registering integrations");
-	await registerIntegration(settings.integrationProvider, moduleHelpers, homeRegistration);
+	await registerIntegration(customSettings.integrationProvider, moduleHelpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
-		workspaceMetaInfo = await registerStore();
-		registeredComponents.push("store");
-		registerAction("show-store", async () => {
-			await showStore();
-		});
-		registerAction("hide-store", async () => {
-			await hideStore();
-		});
+		const storeRegistration = await storeComponent.register();
+		if (storeRegistration) {
+			if (!workspaceMetaInfo) {
+				workspaceMetaInfo = storeRegistration;
+			}
+			registeredComponents.push("store");
+			registerAction("show-store", async () => {
+				await storeComponent.show();
+			});
+			registerAction("hide-store", async () => {
+				await storeComponent.hide();
+			});
+		}
 	}
 
 	if (bootstrapOptions.dock) {
-		workspaceMetaInfo = await registerDock(bootstrapOptions);
-		registeredComponents.push("dock");
-		registerAction("show-dock", async () => {
-			await showDock();
-		});
-		registerAction("minimize-dock", async () => {
-			await minimizeDock();
-		});
+		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
+		if (dockRegistration) {
+			if (!workspaceMetaInfo) {
+				workspaceMetaInfo = dockRegistration;
+			}
+			registeredComponents.push("dock");
+			registerAction("show-dock", async () => {
+				await dockComponent.show();
+			});
+			registerAction("minimize-dock", async () => {
+				await dockComponent.minimize();
+			});
+		}
 	}
 
-	if (workspaceMetaInfo !== undefined) {
+	if (!isEmpty(workspaceMetaInfo)) {
 		// we match the versions of workspace related packages
 		versionProvider.setVersion("workspacePlatformClient", workspaceMetaInfo.clientAPIVersion);
 		versionProvider.setVersion("workspaceClient", workspaceMetaInfo.clientAPIVersion);
@@ -120,16 +113,16 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.notifications) {
-		notificationMetaInfo = await registerNotifications();
+		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
 		registerAction("show-notifications", async () => {
-			await showNotifications();
+			await notificationsComponent.show();
 		});
 		registerAction("hide-notifications", async () => {
-			await hideNotifications();
+			await notificationsComponent.hide();
 		});
 	}
 
-	if (notificationMetaInfo !== undefined) {
+	if (!isEmpty(notificationMetaInfo)) {
 		versionProvider.setVersion("notificationCenter", notificationMetaInfo.workspaceVersion);
 	}
 
@@ -177,11 +170,11 @@ export async function init(): Promise<boolean> {
 
 	for (const autoShow of bootstrapOptions.autoShow) {
 		if (autoShow === "home") {
-			await showHome();
+			await homeComponent.show();
 		} else if (autoShow === "store") {
-			await showStore();
+			await storeComponent.show();
 		} else if (autoShow === "dock") {
-			await showDock();
+			await dockComponent.show();
 		}
 	}
 
@@ -216,7 +209,7 @@ export async function init(): Promise<boolean> {
 
 	// Once the platform is started and everything is bootstrapped initialize the init options
 	// listener so that it is ready to handle initial params or subsequent requests.
-	await registerInitOptionsListener(settings?.initOptionsProvider, moduleHelpers, "after-bootstrap");
+	await registerInitOptionsListener(customSettings?.initOptionsProvider, moduleHelpers, "after-bootstrap");
 
 	// Let any other modules participate in the lifecycle
 	await fireLifecycleEvent(platform, "after-bootstrap");
@@ -263,16 +256,16 @@ async function deregister(): Promise<void> {
 		logger.info("Deregister has been called.");
 		await deregisterIntegration();
 		if (bootstrapOptions?.dock) {
-			await deregisterDock();
+			await dockComponent.deregister();
 		}
 		if (bootstrapOptions?.store) {
-			await deregisterStore();
+			await storeComponent.deregister();
 		}
 		if (bootstrapOptions?.home) {
-			await deregisterHome();
+			await homeComponent.deregister();
 		}
 		if (bootstrapOptions?.notifications) {
-			await deregisterNotifications();
+			await notificationsComponent.deregister();
 		}
 		logger.info("Finished deregister.");
 		deregistered = true;

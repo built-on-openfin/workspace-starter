@@ -8,6 +8,7 @@ import type {
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 /**
  * Implement the actions.
@@ -53,7 +54,7 @@ export class OpacityActions implements Actions {
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
 					.toolbarOptions;
 				await browserWindow.openfinWindow.updateOptions({ opacity: 0.7 });
-				if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
+				if (!isEmpty(currentToolbarOptions)) {
 					const newButtons = await this._helpers.updateToolbarButtons(
 						currentToolbarOptions.buttons,
 						payload.customData.sourceId as string,
@@ -73,7 +74,7 @@ export class OpacityActions implements Actions {
 					.toolbarOptions;
 				await browserWindow.openfinWindow.updateOptions({ opacity: 1 });
 
-				if (currentToolbarOptions !== undefined && currentToolbarOptions !== null) {
+				if (!isEmpty(currentToolbarOptions)) {
 					const newButtons = await this._helpers.updateToolbarButtons(
 						currentToolbarOptions.buttons,
 						payload.customData.sourceId as string,

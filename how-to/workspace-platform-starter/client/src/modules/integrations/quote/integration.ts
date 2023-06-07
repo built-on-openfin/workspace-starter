@@ -18,13 +18,14 @@ import {
 	PointElement,
 	TimeScale
 } from "chart.js";
+import { DateTime } from "luxon";
 import type {
 	IntegrationHelpers,
-	IntegrationModule,
-	LoggerCreator,
-	ModuleDefinition
-} from "workspace-platform-starter/shapes";
-import { DateTime } from "luxon";
+	IntegrationModule
+} from "workspace-platform-starter/shapes/integrations-shapes";
+import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 
 /**
@@ -163,7 +164,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					data = quoteData.data.chart;
 				}
 
-				if (price !== undefined) {
+				if (!isEmpty(price)) {
 					const graphImage = await this.renderGraph(data);
 
 					const quoteResult: HomeSearchResult = {

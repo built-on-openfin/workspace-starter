@@ -9,8 +9,11 @@ import type {
 	Page
 } from "@openfin/workspace";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { PageChangedLifecyclePayload } from "workspace-platform-starter/shapes";
-import type { IntegrationHelpers, IntegrationModule } from "workspace-platform-starter/shapes/integrations-shapes";
+import type {
+	IntegrationHelpers,
+	IntegrationModule
+} from "workspace-platform-starter/shapes/integrations-shapes";
+import type { PageChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";

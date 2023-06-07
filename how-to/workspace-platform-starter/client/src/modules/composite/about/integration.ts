@@ -7,7 +7,10 @@ import type {
 	HomeSearchResult,
 	TemplateFragment
 } from "@openfin/workspace";
-import type { IntegrationHelpers, IntegrationModule } from "workspace-platform-starter/shapes/integrations-shapes";
+import type {
+	IntegrationHelpers,
+	IntegrationModule
+} from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { AboutProviderSettings } from "./shapes";
@@ -162,7 +165,7 @@ export class AboutProvider implements IntegrationModule<unknown> {
 
 		children.push(titleFragment);
 
-		if (this._definition?.data?.description !== undefined) {
+		if (!isEmpty(this._definition?.data?.description)) {
 			data.description = this._definition.data.description;
 			const descriptionFragment = (await this._integrationHelpers.templateHelpers.createText(
 				"description",

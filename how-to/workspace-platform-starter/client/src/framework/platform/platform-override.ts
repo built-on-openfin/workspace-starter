@@ -29,6 +29,7 @@ import type {
 } from "../shapes/lifecycle-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
+import { isEmpty } from "../utils";
 import { deletePageBounds, getAllVisibleWindows, savePageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
@@ -53,7 +54,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			if (query !== undefined) {
+			if (!isEmpty(query)) {
 				logger.info(`Saved workspaces requested with query: ${query}`);
 			}
 			const getWorkspacesEndpointId = "workspace-get";
@@ -186,7 +187,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			if (query !== undefined) {
+			if (!isEmpty(query)) {
 				logger.info(`Saved pages requested with query: ${query}`);
 			}
 			const getPagesEndpointId = "page-get";
@@ -391,7 +392,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				return super.createWindow(options, identity);
 			}
 
-			if (!windowPositioningStrategy || windowDefaultLeft === undefined || windowDefaultTop === undefined) {
+			if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
 				const app = await fin.Application.getCurrent();
 				const platformManifest: OpenFin.Manifest = await app.getManifest();
 				logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
@@ -412,8 +413,8 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 			logger.info("Create Window", options);
 
-			const hasLeft = options?.defaultLeft !== undefined;
-			const hasTop = options?.defaultTop !== undefined;
+			const hasLeft = !isEmpty(options?.defaultLeft);
+			const hasTop = !isEmpty(options?.defaultTop);
 
 			if (!hasLeft || !hasTop) {
 				// Get the available rect for the display so we can take in to account

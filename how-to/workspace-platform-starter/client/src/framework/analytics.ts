@@ -16,7 +16,10 @@ const logger = createLogger("Analytics");
  * @param options The options for the analytics provider.
  * @param helpers Module helpers to pass to any loaded modules.
  */
-export async function init(options: AnalyticsProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: AnalyticsProviderOptions | undefined,
+	helpers: ModuleHelpers
+): Promise<void> {
 	if (options) {
 		logger.info("Initializing with options", options);
 		modules = await loadModules<AnalyticsModule>(options, "analytics");
@@ -33,7 +36,7 @@ export async function closedown(): Promise<void> {
 }
 
 /**
- * Is the analytics provider enabled
+ * Is the analytics provider enabled.
  * @returns True if analytics is enabled.
  */
 export function isEnabled(): boolean {

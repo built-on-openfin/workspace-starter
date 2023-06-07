@@ -6,16 +6,21 @@ import {
 	type BrowserWindowModule,
 	type Page
 } from "@openfin/workspace-platform";
+import { type BrowserProviderOptions } from "workspace-platform-starter/shapes";
 import { getDefaultToolbarButtons } from "../buttons";
 import * as endpointProvider from "../endpoint";
-import { getSettings } from "../settings";
+import { isEmpty, isStringValue } from "../utils";
 
+/**
+ *
+ * @param layout
+ */
 export function findViewNames(layout) {
 	const collectedNames: string[] = [];
 
 	JSON.stringify(layout, (_, nestedValue) => {
 		// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
-		if (nestedValue?.name?.length && nestedValue.url !== undefined) {
+		if (nestedValue?.name?.length && !isEmpty(nestedValue.url)) {
 			collectedNames.push(nestedValue.name as string);
 		}
 		return nestedValue as unknown;
@@ -24,6 +29,12 @@ export function findViewNames(layout) {
 	return collectedNames;
 }
 
+/**
+ *
+ * @param name
+ * @param uuid
+ * @param bringToFrontIfExists
+ */
 export async function doesViewExist(name: string, uuid: string, bringToFrontIfExists: boolean = false) {
 	const view = fin.View.wrapSync({ name, uuid });
 	let exists = false;
@@ -39,18 +50,24 @@ export async function doesViewExist(name: string, uuid: string, bringToFrontIfEx
 	return exists;
 }
 
+/**
+ *
+ * @param target
+ * @param target.identity
+ * @param target.view
+ */
 export async function bringViewToFront(target: { identity?: OpenFin.Identity; view?: OpenFin.View }) {
-	let targetView: OpenFin.View;
+	let targetView: OpenFin.View | undefined;
 
-	if (target.identity !== undefined) {
+	if (!isEmpty(target.identity)) {
 		targetView = fin.View.wrapSync(target.identity);
-	} else if (target.view !== undefined) {
+	} else if (!isEmpty(target.view)) {
 		targetView = target.view;
 	}
 
-	if (targetView !== undefined) {
+	if (!isEmpty(targetView)) {
 		const hostPage = await getPageForView(targetView);
-		if (hostPage !== undefined) {
+		if (!isEmpty(hostPage)) {
 			await bringPageToFront({ page: hostPage });
 		} else {
 			const windowHost = await targetView.getCurrentWindow();
@@ -60,6 +77,12 @@ export async function bringViewToFront(target: { identity?: OpenFin.Identity; vi
 	}
 }
 
+/**
+ *
+ * @param name
+ * @param uuid
+ * @param bringToFrontIfExists
+ */
 export async function doesWindowExist(name: string, uuid: string, bringToFrontIfExists: boolean = false) {
 	const win = fin.Window.wrapSync({ name, uuid });
 	let exists = false;
@@ -75,40 +98,57 @@ export async function doesWindowExist(name: string, uuid: string, bringToFrontIf
 	return exists;
 }
 
+/**
+ *
+ * @param target
+ * @param target.identity
+ * @param target.window
+ */
 export async function bringWindowToFront(target: { identity?: OpenFin.Identity; window?: OpenFin.Window }) {
-	let targetWindow: OpenFin.Window;
+	let targetWindow: OpenFin.Window | undefined;
 
-	if (target.identity !== undefined) {
+	if (!isEmpty(target.identity)) {
 		targetWindow = fin.Window.wrapSync(target.identity);
-	} else if (target.window !== undefined) {
+	} else if (!isEmpty(target.window)) {
 		targetWindow = target.window;
 	}
-	const windowState = await targetWindow.getState();
-	if (windowState === "minimized") {
-		await targetWindow.restore();
-	}
-	if (await targetWindow.isShowing()) {
-		await targetWindow.setAsForeground();
+
+	if (targetWindow) {
+		const windowState = await targetWindow.getState();
+		if (windowState === "minimized") {
+			await targetWindow.restore();
+		}
+		if (await targetWindow.isShowing()) {
+			await targetWindow.setAsForeground();
+		}
 	}
 }
 
+/**
+ *
+ * @param target
+ * @param target.identity
+ * @param target.identity.window
+ * @param target.identity.pageId
+ * @param target.page
+ */
 export async function bringPageToFront(target: {
 	identity?: { window: OpenFin.Identity; pageId: string };
 	page?: AttachedPage;
 }) {
-	let targetPage: AttachedPage;
-	let parentWindow: BrowserWindowModule;
+	let targetPage: AttachedPage | undefined;
+	let parentWindow: BrowserWindowModule | undefined;
 	const platform = getCurrentSync();
 
-	if (target.identity?.pageId !== undefined && target?.identity?.window !== undefined) {
+	if (!isEmpty(target.identity?.pageId) && !isEmpty(target?.identity?.window)) {
 		parentWindow = platform.Browser.wrapSync(target.identity.window);
 		targetPage = await parentWindow.getPage(target.identity.pageId);
-	} else if (target.page !== undefined) {
+	} else if (!isEmpty(target.page)) {
 		targetPage = target.page;
 		parentWindow = platform.Browser.wrapSync(targetPage.parentIdentity);
 	}
 
-	if (targetPage !== undefined && parentWindow !== undefined) {
+	if (!isEmpty(targetPage) && !isEmpty(parentWindow)) {
 		try {
 			const pages = await parentWindow.getPages();
 			if (pages.length > 1) {
@@ -121,6 +161,10 @@ export async function bringPageToFront(target: {
 	await bringWindowToFront({ identity: parentWindow.identity });
 }
 
+/**
+ *
+ * @param view
+ */
 export async function getPageForView(view: OpenFin.View): Promise<AttachedPage | undefined> {
 	const parentWindow: OpenFin.Window = await view.getCurrentWindow();
 	let pagesToInspect: AttachedPage[] = [];
@@ -146,9 +190,13 @@ export async function getPageForView(view: OpenFin.View): Promise<AttachedPage |
 	return matchingPage;
 }
 
+/**
+ *
+ * @param pageId
+ */
 export async function savePageBounds(pageId: string) {
 	const bounds = await getPageBounds(pageId);
-	if (bounds !== null) {
+	if (!isEmpty(bounds)) {
 		const setPageBoundsEndpointId = "page-bounds-set";
 		if (endpointProvider.hasEndpoint(setPageBoundsEndpointId)) {
 			await endpointProvider.action<{ id: string; payload: OpenFin.Bounds }>(setPageBoundsEndpointId, {
@@ -159,6 +207,10 @@ export async function savePageBounds(pageId: string) {
 	}
 }
 
+/**
+ *
+ * @param pageId
+ */
 export async function deletePageBounds(pageId: string) {
 	const removePageBoundsEndpointId = "page-bounds-remove";
 	if (endpointProvider.hasEndpoint(removePageBoundsEndpointId)) {
@@ -166,7 +218,15 @@ export async function deletePageBounds(pageId: string) {
 	}
 }
 
-export async function getPageBounds(pageId: string, fromStorage = false): Promise<OpenFin.Bounds | undefined> {
+/**
+ *
+ * @param pageId
+ * @param fromStorage
+ */
+export async function getPageBounds(
+	pageId: string,
+	fromStorage = false
+): Promise<OpenFin.Bounds | undefined> {
 	let bounds: OpenFin.Bounds | undefined;
 
 	if (fromStorage) {
@@ -188,7 +248,7 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 			}
 		}
 
-		if (windowId !== undefined) {
+		if (!isEmpty(windowId)) {
 			const hostWindow = platform.Browser.wrapSync(windowId);
 
 			bounds = await hostWindow.openfinWindow.getBounds();
@@ -197,9 +257,14 @@ export async function getPageBounds(pageId: string, fromStorage = false): Promis
 	return bounds;
 }
 
+/**
+ *
+ * @param page
+ * @param bounds
+ */
 export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 	let customBounds = bounds;
-	if (customBounds === undefined) {
+	if (isEmpty(customBounds)) {
 		customBounds = await getPageBounds(page.pageId, true);
 	}
 
@@ -210,7 +275,7 @@ export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 		}
 	};
 
-	if (customBounds !== undefined && customBounds !== null) {
+	if (!isEmpty(customBounds)) {
 		const monitors = await fin.System.getMonitorInfo();
 
 		newWindow.height = customBounds.height;
@@ -218,13 +283,13 @@ export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 		newWindow.defaultHeight = customBounds.height;
 		newWindow.defaultWidth = customBounds.width;
 
-		if (monitors.virtualScreen !== undefined) {
-			if (monitors.virtualScreen.left !== undefined && customBounds.left >= monitors.virtualScreen.left) {
+		if (!isEmpty(monitors.virtualScreen)) {
+			if (!isEmpty(monitors.virtualScreen.left) && customBounds.left >= monitors.virtualScreen.left) {
 				newWindow.x = customBounds.left;
 				newWindow.defaultLeft = customBounds.left;
 			}
 
-			if (monitors.virtualScreen.top !== undefined && customBounds.top >= monitors.virtualScreen.top) {
+			if (!isEmpty(monitors.virtualScreen.top) && customBounds.top >= monitors.virtualScreen.top) {
 				newWindow.y = customBounds.top;
 				newWindow.defaultTop = customBounds.top;
 			}
@@ -234,6 +299,11 @@ export async function launchPage(page: Page, bounds?: OpenFin.Bounds) {
 	return platform.Browser.createWindow(newWindow);
 }
 
+/**
+ *
+ * @param view
+ * @param targetIdentity
+ */
 export async function launchView(
 	view: OpenFin.PlatformViewCreationOptions | string,
 	targetIdentity?: OpenFin.Identity
@@ -248,60 +318,69 @@ export async function launchView(
 	return platform.createView(viewOptions, targetIdentity);
 }
 
-export async function getDefaultWindowOptions(): Promise<Partial<BrowserCreateWindowRequest>> {
-	const settings = await getSettings();
+/**
+ *
+ * @param browserProvider
+ */
+export async function getDefaultWindowOptions(
+	browserProvider: BrowserProviderOptions
+): Promise<Partial<BrowserCreateWindowRequest>> {
+	const legacyWindowOptions = browserProvider?.windowOptions ?? {};
+	const defaultWindowOptions = browserProvider?.defaultWindowOptions ?? {};
 
-	const windowOptions = settings?.browserProvider?.windowOptions ?? {};
-	const defaultWindowOptions = settings?.browserProvider.defaultWindowOptions ?? {};
+	let wsPlatform = defaultWindowOptions.workspacePlatform;
 
-	if (defaultWindowOptions.workspacePlatform === undefined) {
-		defaultWindowOptions.workspacePlatform = {
-			pages: null
+	if (isEmpty(wsPlatform)) {
+		// Pages has to be null
+		wsPlatform = {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			pages: null as unknown as any
 		};
 	}
 
-	// start backwards compatibility
-	if (windowOptions.title !== undefined && defaultWindowOptions?.workspacePlatform?.title === undefined) {
-		defaultWindowOptions.workspacePlatform.title = windowOptions.title;
-	}
+	if (wsPlatform) {
+		// start backwards compatibility
+		if (isStringValue(legacyWindowOptions.title) && !isStringValue(wsPlatform.title)) {
+			wsPlatform.title = legacyWindowOptions.title;
+		}
 
-	if (
-		windowOptions.newPageUrl !== undefined &&
-		defaultWindowOptions?.workspacePlatform?.newPageUrl === undefined
-	) {
-		defaultWindowOptions.workspacePlatform.newPageUrl = windowOptions.newPageUrl;
-	}
+		if (isStringValue(legacyWindowOptions.newPageUrl) && !isStringValue(wsPlatform?.newPageUrl)) {
+			wsPlatform.newPageUrl = legacyWindowOptions.newPageUrl;
+		}
 
-	if (
-		windowOptions.newTabUrl !== undefined &&
-		defaultWindowOptions?.workspacePlatform?.newTabUrl === undefined
-	) {
-		defaultWindowOptions.workspacePlatform.newTabUrl = windowOptions.newTabUrl;
-	}
+		if (isStringValue(legacyWindowOptions.newTabUrl) && !isStringValue(wsPlatform?.newTabUrl)) {
+			wsPlatform.newTabUrl = legacyWindowOptions.newTabUrl;
+		}
 
-	if (windowOptions?.icon !== undefined && defaultWindowOptions?.icon === undefined) {
-		defaultWindowOptions.icon = windowOptions.icon;
-	}
+		if (isStringValue(legacyWindowOptions?.icon) && !isStringValue(defaultWindowOptions?.icon)) {
+			defaultWindowOptions.icon = legacyWindowOptions.icon;
+		}
 
-	if (
-		defaultWindowOptions?.icon !== undefined &&
-		defaultWindowOptions?.workspacePlatform?.favicon === undefined
-	) {
-		defaultWindowOptions.workspacePlatform.favicon = defaultWindowOptions.icon;
-	}
-	// end backwards compatibility
+		if (
+			isStringValue(defaultWindowOptions?.icon) &&
+			!isStringValue(defaultWindowOptions?.workspacePlatform?.favicon)
+		) {
+			wsPlatform.favicon = defaultWindowOptions.icon;
+		}
+		// end backwards compatibility
 
-	if (Array.isArray(settings.browserProvider.toolbarButtons)) {
-		// we are going to override the ones specified at the workspace platform level
-		// as this is our more flexible extension with conditions
-		defaultWindowOptions.workspacePlatform.toolbarOptions = {
-			buttons: await getDefaultToolbarButtons()
-		};
+		if (Array.isArray(browserProvider?.toolbarButtons)) {
+			// we are going to override the ones specified at the workspace platform level
+			// as this is our more flexible extension with conditions
+			wsPlatform.toolbarOptions = {
+				buttons: await getDefaultToolbarButtons()
+			};
+		}
+
+		defaultWindowOptions.workspacePlatform = wsPlatform;
 	}
 
 	return defaultWindowOptions;
 }
 
+/**
+ *
+ */
 export async function getAllVisibleWindows(): Promise<OpenFin.Window[]> {
 	const platform = fin.Platform.getCurrentSync();
 	const windows = await platform.Application.getChildWindows();

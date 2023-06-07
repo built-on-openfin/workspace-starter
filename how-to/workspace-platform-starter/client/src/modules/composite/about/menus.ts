@@ -1,7 +1,6 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { Menus } from "workspace-platform-starter/shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { MenuEntry, MenuType } from "workspace-platform-starter/shapes/menu-shapes";
+import type { MenuEntry, MenuType, Menus } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { AboutMenusSettings } from "./shapes";
 
@@ -22,16 +21,16 @@ export class AboutMenus implements Menus<AboutMenusSettings> {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition<AboutMenusSettings>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = createLogger("DeveloperMenus");
+		this._logger = loggerCreator("DeveloperMenus");
 		this._settings = definition.data;
 	}
 

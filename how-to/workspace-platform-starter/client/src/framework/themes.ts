@@ -6,7 +6,7 @@ import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import { ColorSchemeMode, type PlatformCustomTheme, type PlatformCustomThemes } from "./shapes/theme-shapes";
-import { isStringValue } from "./utils";
+import { isEmpty, isStringValue } from "./utils";
 
 const logger = createLogger("Themes");
 
@@ -189,11 +189,11 @@ export function validateThemes(themes?: PlatformCustomThemes): PlatformCustomThe
 			const themeToValidate: Partial<PlatformCustomTheme> = theme;
 
 			// perform defensive check in case null or undefined is specified.
-			if ("palette" in themeToValidate && (themeToValidate.palette === null || themeToValidate.palette === undefined)) {
+			if ("palette" in themeToValidate && isEmpty(themeToValidate.palette)) {
 				delete themeToValidate.palette;
 			}
 
-			if ("palettes" in themeToValidate && (themeToValidate.palettes === null || themeToValidate.palettes === undefined)) {
+			if ("palettes" in themeToValidate && isEmpty(themeToValidate.palettes)) {
 				delete themeToValidate.palettes;
 			}
 
@@ -205,7 +205,7 @@ export function validateThemes(themes?: PlatformCustomThemes): PlatformCustomThe
 						themeToValidate.label ?? "",
 						DEFAULT_PALETTES[ColorSchemeMode.Dark]
 					);
-					isValid = themeToValidate.palette !== undefined;
+					isValid = !isEmpty(themeToValidate.palette);
 				} else if ("palettes" in themeToValidate) {
 					const palettes = {
 						dark: validatePalette(
@@ -219,9 +219,7 @@ export function validateThemes(themes?: PlatformCustomThemes): PlatformCustomThe
 							DEFAULT_PALETTES[ColorSchemeMode.Light]
 						)
 					};
-					isValid =
-						palettes[ColorSchemeMode.Dark] !== undefined &&
-						palettes[ColorSchemeMode.Light] !== undefined;
+					isValid = !isEmpty(palettes[ColorSchemeMode.Dark]) && !isEmpty(palettes[ColorSchemeMode.Light]);
 
 					themeToValidate.palettes = palettes as { dark: CustomPaletteSet; light: CustomPaletteSet };
 				}
@@ -236,7 +234,9 @@ export function validateThemes(themes?: PlatformCustomThemes): PlatformCustomThe
 						platformThemes.push(themeToValidate as PlatformCustomTheme);
 					}
 				} else {
-					logger.warn(`Found a theme that does not contain any colors: ${themeToValidate.id ?? themeToValidate.label}`);
+					logger.warn(
+						`Found a theme that does not contain any colors: ${themeToValidate.id ?? themeToValidate.label}`
+					);
 				}
 			}
 		}
@@ -328,7 +328,7 @@ function hasScheme(theme: PlatformCustomTheme, scheme: string): boolean {
 	}
 
 	if ("palettes" in theme) {
-		return theme.palettes[scheme as ColorSchemeMode] !== undefined;
+		return !isEmpty(theme.palettes[scheme as ColorSchemeMode]);
 	}
 
 	return false;

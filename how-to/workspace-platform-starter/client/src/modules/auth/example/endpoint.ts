@@ -1,7 +1,12 @@
-import type { CustomSettings } from "workspace-platform-starter/shapes";
-import type { Endpoint, EndpointDefinition, FetchOptions } from "workspace-platform-starter/shapes/endpoint-shapes";
+import type {
+	Endpoint,
+	EndpointDefinition,
+	FetchOptions
+} from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { CustomSettings } from "workspace-platform-starter/shapes/setting-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { AppWithTagsOrCategories, ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
@@ -21,10 +26,10 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 	 */
 	public async initialize(
 		definition: ModuleDefinition<ExampleEndpointOptions>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
 	) {
-		this._logger = createLogger("ExampleAuthEndpoint");
+		this._logger = loggerCreator("ExampleAuthEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 		this._roleMapping = definition?.data?.roleMapping;
 		this._definition = definition;
@@ -48,7 +53,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			);
 			return null;
 		}
-		if (this._logger !== undefined) {
+		if (!isEmpty(this._logger)) {
 			this._logger.info(
 				"This auth endpoint module is an example that that simulates requesting a http endpoint and manipulating it based on the current example user as if it was the server doing the manipulation. DO NOT USE THIS MODULE IN PRODUCTION."
 			);
@@ -89,7 +94,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		request: unknown
 	): { url: string; options: FetchOptions } {
 		if (options.method === "GET") {
-			if (request !== undefined) {
+			if (!isEmpty(request)) {
 				const keys = Object.keys(request);
 				if (keys.length > 0) {
 					const length = keys.length;
@@ -98,7 +103,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 					}
 				}
 			}
-		} else if (options.method === "POST" && request !== undefined) {
+		} else if (options.method === "POST" && !isEmpty(request)) {
 			options.body = JSON.stringify(request);
 		}
 
@@ -108,10 +113,10 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 	private applyCurrentUserToApps(apps: AppWithTagsOrCategories[]): AppWithTagsOrCategories[] {
 		const currentUser = getCurrentUser();
 		if (
-			currentUser === null ||
-			this._roleMapping === undefined ||
-			this._roleMapping[currentUser.role] === undefined ||
-			this._roleMapping[currentUser.role].excludeAppsWithTag === undefined
+			isEmpty(currentUser) ||
+			isEmpty(this._roleMapping) ||
+			isEmpty(this._roleMapping[currentUser.role]) ||
+			isEmpty(this._roleMapping[currentUser.role].excludeAppsWithTag)
 		) {
 			return apps;
 		}
@@ -150,11 +155,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 
 	private applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 		const currentUser = getCurrentUser();
-		if (
-			currentUser === null ||
-			this._roleMapping === undefined ||
-			this._roleMapping[currentUser.role] === undefined
-		) {
+		if (isEmpty(currentUser) || isEmpty(this._roleMapping) || isEmpty(this._roleMapping[currentUser.role])) {
 			return settings;
 		}
 
@@ -184,7 +185,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 							const endpointToUpdate = settings.endpointProvider.endpoints.find(
 								(endpointEntry) => endpointEntry.id === endpoint && endpointEntry.type === "fetch"
 							);
-							if (endpointToUpdate !== undefined) {
+							if (!isEmpty(endpointToUpdate)) {
 								endpointToUpdate.type = "module";
 								// this if condition check is here to make typescript happy with the endpoint so that typeId can be set
 								if (endpointToUpdate.type === "module") {
@@ -197,7 +198,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 				}
 
 				if (updateEndpoints.length > 0) {
-					if (settings.endpointProvider === undefined) {
+					if (isEmpty(settings.endpointProvider)) {
 						settings.endpointProvider = {
 							endpoints: []
 						};
@@ -222,7 +223,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		if (
 			Array.isArray(settings?.themeProvider?.themes) &&
 			settings.themeProvider.themes.length > 0 &&
-			this._roleMapping[currentUser.role].preferredScheme !== undefined
+			!isEmpty(this._roleMapping[currentUser.role].preferredScheme)
 		) {
 			settings.themeProvider.themes[0].default =
 				this._roleMapping[currentUser.role].preferredScheme === "dark" ? "dark" : "light";

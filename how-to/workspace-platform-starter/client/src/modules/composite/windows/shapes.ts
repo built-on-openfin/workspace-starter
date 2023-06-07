@@ -1,4 +1,4 @@
-import type { MenuPosition, MenuSeparatorPosition } from "workspace-platform-starter/shapes";
+import type { MenuPosition, MenuSeparatorPosition } from "workspace-platform-starter/shapes/menu-shapes";
 
 export interface WindowMenuEntry {
 	/**

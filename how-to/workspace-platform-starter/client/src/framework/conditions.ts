@@ -3,6 +3,7 @@ import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type { ConditionMap, Conditions, ConditionsProviderOptions } from "./shapes/conditions-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("ConditionProvider");
 const allConditions: ConditionMap = {};
@@ -44,7 +45,7 @@ export function registerCondition(
 	conditionChecker: () => Promise<boolean>,
 	override: boolean = true
 ): void {
-	if (allConditions[conditionName] !== undefined) {
+	if (!isEmpty(allConditions[conditionName])) {
 		if (override) {
 			logger.warn(
 				"Replacing existing condition checker that has been registered with this name:",

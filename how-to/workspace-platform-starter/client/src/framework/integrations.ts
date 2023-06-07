@@ -33,6 +33,7 @@ import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("Integrations");
 
@@ -113,7 +114,7 @@ export async function init(
 		// Now filter the list to those with autoStart set, or nothing set
 		const initModules: ModuleEntry<IntegrationModule, IntegrationHelpers>[] = [];
 		for (const integration of integrationModules) {
-			const integrationPreference = await getPreference(integration.definition.id);
+			const integrationPreference = await getPreferences(integration.definition.id);
 			integration.definition.autoStart =
 				integrationPreference?.autoStart ?? integration.definition.autoStart ?? true;
 			if (integration.definition.autoStart) {
@@ -159,6 +160,8 @@ export async function closedown(): Promise<void> {
  * @param lastResponse The last search response used for updating existing results.
  * @param selectedSources Selected sources filters list.
  * @param options Options for the search query.
+ * @param options.queryMinLength The minimum length before a query is actioned.
+ * @param options.queryAgainst The fields in the data to query against.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
@@ -260,7 +263,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 				command,
 				[
 					integrationProviderOptions.commandDescription ??
-					`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
+						`Allows the management of ${commandKeyword} for this platform. You can decide whether enabled integrations should be included when a query is entered.`
 				],
 				[command]
 			)
@@ -301,7 +304,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
  */
 export async function itemSelection(
 	result: HomeDispatchedSearchResult,
-	lastResponse?: HomeSearchListenerResponse
+	lastResponse: HomeSearchListenerResponse
 ): Promise<boolean> {
 	if (result.data) {
 		if (
@@ -332,6 +335,10 @@ export async function itemSelection(
 	return false;
 }
 
+/**
+ * Get the home results for integration management.
+ * @returns The home results.
+ */
 export async function getManagementResults(): Promise<HomeSearchResponse> {
 	if (!integrationProviderOptions) {
 		logger.error("IntegrationProvider is not available, make sure your have called init");
@@ -378,38 +385,57 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 	return homeResponse;
 }
 
-async function setPreference(integrationId: string, autoStart: boolean) {
+/**
+ * Set a preferences using an endpoint.
+ * @param integrationId The integration id to set the preference for.
+ * @param preferences The preferences for the integration.
+ * @param preferences.autoStart The autoStart preference.
+ */
+async function setPreferences(integrationId: string, preferences: { autoStart: boolean }): Promise<void> {
 	const integrationPreferenceEndpointId = "integration-preferences-set";
 	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
 		const success = await endpointProvider.action<{ id: string; payload: { autoStart: boolean } }>(
 			integrationPreferenceEndpointId,
-			{ id: integrationId, payload: { autoStart } }
+			{ id: integrationId, payload: preferences }
 		);
 		if (success) {
-			logger.info(`Saved integration: ${integrationId} preference. AutoStart: ${autoStart}`);
+			logger.info(`Saved integration: ${integrationId} preference. AutoStart: ${preferences.autoStart}`);
 		} else {
-			logger.info(`Unable to save integration: ${integrationId} preference. AutoStart: ${autoStart}`);
+			logger.info(
+				`Unable to save integration: ${integrationId} preference. AutoStart: ${preferences.autoStart}`
+			);
 		}
 	}
 }
 
-async function getPreference(integrationId: string): Promise<{ autoStart: boolean }> {
+/**
+ * Get the preferences for the integration.
+ * @param integrationId The integration to get the preferences for.
+ * @returns The preferences if they exist.
+ */
+async function getPreferences(integrationId: string): Promise<{ autoStart: boolean } | undefined> {
 	const integrationPreferenceEndpointId = "integration-preferences-get";
 	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		const preference = await endpointProvider.requestResponse<{ id: string }, { autoStart: boolean }>(
+		const preferences = await endpointProvider.requestResponse<{ id: string }, { autoStart: boolean }>(
 			integrationPreferenceEndpointId,
 			{ id: integrationId }
 		);
-		if (preference !== undefined && preference !== null) {
+		if (!isEmpty(preferences)) {
 			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
 			logger.info(`Unable to get preference for integration: ${integrationId}`);
 		}
-		return preference;
+		return preferences;
 	}
-	return null;
 }
 
+/**
+ * Update the status of an integration result.
+ * @param lastResponse The last response to use for the update.
+ * @param integrationId The integration to update.
+ * @param shouldAutoStart The autoStart flag.
+ * @returns True if the integration status was updated.
+ */
 async function updateIntegrationStatus(
 	lastResponse: HomeSearchListenerResponse,
 	integrationId: string,
@@ -420,7 +446,7 @@ async function updateIntegrationStatus(
 	}
 
 	const integration = integrationModules.find((entry) => entry.definition.id === integrationId);
-	if (integration === undefined) {
+	if (isEmpty(integration)) {
 		logger.warn(`Unable to find specified integration: ${integrationId} in enabled modules`);
 		return false;
 	}
@@ -440,7 +466,7 @@ async function updateIntegrationStatus(
 	);
 	lastResponse.respond([result]);
 
-	await setPreference(integration.definition.id, shouldAutoStart);
+	await setPreferences(integration.definition.id, { autoStart: shouldAutoStart });
 
 	return true;
 }
@@ -457,8 +483,8 @@ async function updateIntegrationStatus(
 async function createResult(
 	id: string,
 	name: string,
-	description: string,
-	icon: string,
+	description: string | undefined,
+	icon: string | undefined,
 	autoStart: boolean
 ): Promise<HomeSearchResult> {
 	const buttonAction = autoStart ? "Turn Off Integration" : "Turn On Integration";
@@ -516,7 +542,7 @@ async function createResult(
 			data: {
 				title: name,
 				description: description ?? "You can enable/disable an integrations features",
-				icon,
+				icon: icon ?? "",
 				status: `Integration State: ${autoStart ? "On" : "Off"}`,
 				btnText: buttonAction
 			}

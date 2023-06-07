@@ -22,6 +22,7 @@ import type {
 	MenuType,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
+import { isBoolean, isEmpty } from "./utils";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
@@ -56,7 +57,7 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 		for (const menuItem of configEntries) {
 			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
 
-			if (include || include === undefined) {
+			if (include || isEmpty(include)) {
 				const canShow = await checkConditions(platform, conditions);
 
 				if (canShow) {
@@ -106,10 +107,8 @@ export async function getGlobalMenu(
 	const menuEntries = (settings?.browserProvider?.globalMenu ?? []).concat(
 		await getModuleMenuEntries<GlobalContextMenuOptionType>("global", relatedMenuId)
 	);
-	if (
-		settings?.browserProvider?.menuOptions?.includeDefaults?.globalMenu !== undefined &&
-		!settings.browserProvider.menuOptions.includeDefaults.globalMenu
-	) {
+	const globalMenu = settings?.browserProvider?.menuOptions?.includeDefaults?.globalMenu;
+	if (isBoolean(globalMenu) && !globalMenu) {
 		return buildMenu(undefined, menuEntries);
 	}
 	return buildMenu(defaultGlobalContextMenu, menuEntries);
@@ -129,10 +128,8 @@ export async function getPageMenu(
 	const menuEntries = (settings?.browserProvider?.pageMenu ?? []).concat(
 		await getModuleMenuEntries<PageTabContextMenuOptionType>("page", relatedMenuId)
 	);
-	if (
-		settings?.browserProvider?.menuOptions?.includeDefaults?.pageMenu !== undefined &&
-		!settings.browserProvider.menuOptions.includeDefaults.pageMenu
-	) {
+	const pageMenu = settings?.browserProvider?.menuOptions?.includeDefaults?.pageMenu;
+	if (isBoolean(pageMenu) && !pageMenu) {
 		return buildMenu(undefined, menuEntries);
 	}
 	return buildMenu(defaultPageContextMenu, menuEntries);
@@ -152,10 +149,8 @@ export async function getViewMenu(
 	const menuEntries = (settings?.browserProvider?.viewMenu ?? []).concat(
 		await getModuleMenuEntries<ViewTabMenuOptionType>("view", relatedMenuId)
 	);
-	if (
-		settings?.browserProvider?.menuOptions?.includeDefaults?.viewMenu !== undefined &&
-		!settings.browserProvider.menuOptions.includeDefaults.viewMenu
-	) {
+	const viewMenu = settings?.browserProvider?.menuOptions?.includeDefaults?.viewMenu;
+	if (isBoolean(viewMenu) && !viewMenu) {
 		return buildMenu(undefined, menuEntries);
 	}
 	return buildMenu(defaultViewContextMenu, menuEntries);
@@ -193,7 +188,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 		let entryIndex: number;
 
 		if (positionType === "Custom") {
-			if (positionCustomId === undefined) {
+			if (isEmpty(positionCustomId)) {
 				logger.warn("Entry type is specified as custom but no customId was provided");
 			}
 
@@ -220,17 +215,18 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 					break;
 				}
 				case "replaceLabel": {
-					if (entry === undefined || entry.label === undefined) {
+					const label = entry?.label;
+					if (isEmpty(label)) {
 						logger.warn(
 							`Asked to replace label of menu entry but not provided an entry to grab a label from or given an empty label. Target menu data type: ${positionType}`
 						);
 					} else {
-						menuEntries[entryIndex].label = entry.label;
+						menuEntries[entryIndex].label = label;
 					}
 					break;
 				}
 				case "after": {
-					if (entry === undefined) {
+					if (isEmpty(entry)) {
 						logger.warn(
 							`You cannot insert a menu entry after the menu entry with data type: ${positionType} if you do not specify a menu entry`
 						);
@@ -240,7 +236,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 					break;
 				}
 				case "before": {
-					if (entry === undefined) {
+					if (isEmpty(entry)) {
 						logger.warn(
 							`You cannot insert a menu entry before the menu entry with data type: ${positionType} if you do not specify a menu entry`
 						);
@@ -270,11 +266,9 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
 	const platform = getCurrentSync();
 	let menuEntries: MenuEntry<T>[] = [];
 	for (const menuModule of modules) {
-		if (menuModule.implementation) {
-			const entries = await menuModule.implementation.get(menuType, platform, relatedMenuId);
-			if (entries) {
-				menuEntries = menuEntries.concat(entries as MenuEntry<T>[]);
-			}
+		const entries = await menuModule.implementation.get(menuType, platform, relatedMenuId);
+		if (entries) {
+			menuEntries = menuEntries.concat(entries as MenuEntry<T>[]);
 		}
 	}
 	return menuEntries;

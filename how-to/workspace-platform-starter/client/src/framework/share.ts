@@ -6,7 +6,8 @@ import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
 import { getPageBounds, launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
-import type { ShareEntry, SharePageData, ShareWorkspaceData } from "./shapes/share-shapes";
+import type { ShareStoreEntry, SharePageData, ShareWorkspaceData } from "./shapes/share-shapes";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("Share");
 
@@ -70,9 +71,11 @@ export function isShareEnabled(): boolean {
  * @param payload.x The x position of the mouse click.
  * @param payload.y The y position of the mouse click.
  */
-export async function showShareOptions(
-	payload: { windowIdentity: OpenFin.Identity; x: number; y: number }
-): Promise<void> {
+export async function showShareOptions(payload: {
+	windowIdentity: OpenFin.Identity;
+	x: number;
+	y: number;
+}): Promise<void> {
 	if (shareRegistered) {
 		logger.info("Share called with payload:", payload);
 
@@ -167,7 +170,8 @@ async function notifyOfSuccessfulLoad(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon:
+			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.GREEN,
 			text: "Share Request Applied"
@@ -207,7 +211,8 @@ async function notifyOfSuccess(url: string, expiryInHours: number): Promise<void
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon:
+			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.BLUE,
 			text: "Share Request Raised"
@@ -246,7 +251,8 @@ async function notifyOfFailure(body: string): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon:
+			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Failed"
@@ -284,7 +290,8 @@ async function notifyOfExpiry(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon:
+			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Expired"
@@ -303,7 +310,7 @@ async function notifyOfExpiry(): Promise<void> {
 async function saveSharedPage(data: SharePageData): Promise<void> {
 	let page: Page | undefined;
 	let bounds: OpenFin.Bounds | undefined;
-	if (data.page !== undefined && data.bounds !== undefined) {
+	if (!isEmpty(data.page) && !isEmpty(data.bounds)) {
 		page = data.page;
 		bounds = data.bounds;
 	} else {
@@ -316,7 +323,7 @@ async function saveSharedPage(data: SharePageData): Promise<void> {
 				bounds = await targetWindow.openfinWindow.getBounds();
 				useStorage = false;
 			}
-		} catch { }
+		} catch {}
 		if (useStorage) {
 			page = await platform.Storage.getPage(data.pageId);
 			bounds = await getPageBounds(data.pageId, true);
@@ -339,18 +346,19 @@ async function saveSharedPage(data: SharePageData): Promise<void> {
 async function saveSharedWorkspace(data?: ShareWorkspaceData): Promise<void> {
 	let snapshot = null;
 
-	if (data?.workspaceId === undefined) {
+	const workspaceId = data?.workspaceId;
+	if (isEmpty(workspaceId)) {
 		const platform = getCurrentSync();
 		snapshot = await platform.getSnapshot();
 	} else {
 		const platform = getCurrentSync();
-		const savedWorkspace = await platform.Storage.getWorkspace(data.workspaceId);
-		if (savedWorkspace !== null) {
+		const savedWorkspace = await platform.Storage.getWorkspace(workspaceId);
+		if (!isEmpty(savedWorkspace)) {
 			snapshot = savedWorkspace.snapshot;
 		}
 	}
 
-	if (snapshot === null || snapshot === undefined) {
+	if (isEmpty(snapshot)) {
 		await notifyOfFailure("Unable to action your workspace share request.");
 	} else {
 		const payload = {
@@ -374,14 +382,14 @@ async function saveShareRequest(payload: unknown): Promise<void> {
 
 		if (response) {
 			let id = response.id;
-			if (id === undefined) {
+			if (isEmpty(id)) {
 				const indexOfId = response.url.lastIndexOf("/");
 				if (indexOfId !== -1) {
 					id = response.url.slice(indexOfId + 1);
 				}
 			}
 
-			if (id === undefined) {
+			if (isEmpty(id)) {
 				await notifyOfFailure("The share request you raised could not be generated.");
 				return;
 			}
@@ -420,8 +428,8 @@ async function saveShareRequest(payload: unknown): Promise<void> {
  */
 async function loadSharedEntry(id: string): Promise<void> {
 	try {
-		const shareEntry = await requestResponse<{ id: string }, ShareEntry>("share-get", { id });
-		if (shareEntry !== undefined && shareEntry !== null) {
+		const shareEntry = await requestResponse<{ id: string }, ShareStoreEntry>("share-get", { id });
+		if (!isEmpty(shareEntry)) {
 			if (shareEntry.type === "page") {
 				await launchPage(shareEntry.data.page, shareEntry.data.bounds);
 			} else if (shareEntry.type === "workspace") {
@@ -441,4 +449,3 @@ async function loadSharedEntry(id: string): Promise<void> {
 		await notifyOfFailure("The specified share link cannot be loaded.");
 	}
 }
-

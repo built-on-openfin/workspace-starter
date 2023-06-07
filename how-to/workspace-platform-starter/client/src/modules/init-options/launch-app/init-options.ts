@@ -2,6 +2,7 @@ import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { LaunchAppPayload, LaunchAppOptions } from "./shapes";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 
 export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchAppOptions> {
 	private _logger: Logger;
@@ -19,10 +20,10 @@ export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchApp
 	 */
 	public async initialize(
 		definition: ModuleDefinition<LaunchAppOptions>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	) {
-		this._logger = createLogger("InitOptionsLaunchAppHandler");
+		this._logger = loggerCreator("InitOptionsLaunchAppHandler");
 		this._helpers = helpers;
 		this._definition = definition;
 		this._logger.info("The handler has been loaded");
@@ -34,7 +35,7 @@ export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchApp
 	 * @param payload The payload for the action.
 	 */
 	public async action(requestedAction: string, payload?: LaunchAppPayload): Promise<void> {
-		if (payload === undefined) {
+		if (isEmpty(payload)) {
 			this._logger.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
 			);
@@ -45,14 +46,14 @@ export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchApp
 				const appId = payload?.appId;
 				this._logger.info(`The following appId was passed and requested to launch: ${appId}`);
 
-				if (appId === undefined || appId === null || appId === "") {
+				if (!isStringValue(appId)) {
 					this._logger.error(
 						"The init handler received an appId in the wrong format and is unable to launch it"
 					);
 					return;
 				}
 
-				if (this._helpers.launchApp === undefined || this._helpers.getApps() === undefined) {
+				if (isEmpty(this._helpers.launchApp) || isEmpty(this._helpers.getApps)) {
 					this._logger.warn(
 						`Unable to launch app with appId: ${appId} as a launchApp and getApps (to verify appId) function was not passed to this module via the module helpers.`
 					);
@@ -62,7 +63,7 @@ export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchApp
 				const apps = await this._helpers.getApps();
 				const app = apps.find((entry) => entry.appId === appId);
 
-				if (app === undefined) {
+				if (isEmpty(app)) {
 					this._logger.warn(
 						`Unable to launch app with appId: ${appId} because the app is not listed in the directory.`
 					);

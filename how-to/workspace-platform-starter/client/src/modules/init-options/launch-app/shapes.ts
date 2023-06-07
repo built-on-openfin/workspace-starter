@@ -1,4 +1,4 @@
-import { type InitOptionsHandlerOptions } from "workspace-platform-starter/shapes";
+import { type InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
 
 export interface LaunchAppPayload {
 	appId: string;

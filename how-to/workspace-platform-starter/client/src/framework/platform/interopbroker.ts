@@ -1,25 +1,14 @@
 import {
+	OpenError,
 	ResolveError,
 	type AppIdentifier,
 	type AppMetadata,
 	type ImplementationMetadata,
-	type IntentResolution,
-	OpenError
+	type IntentResolution
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
-import type {
-	ApiMetadata,
-	ContextToProcess,
-	IntentOptions,
-	IntentPickerResponse,
-	IntentRegistrationEntry,
-	IntentRegistrationPayload,
-	IntentResolverOptions,
-	IntentTargetMetaData,
-	ProcessedContext
-} from "workspace-platform-starter/shapes/interopbroker-shapes";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
@@ -30,6 +19,18 @@ import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
+import type {
+	ApiMetadata,
+	ContextToProcess,
+	IntentOptions,
+	IntentPickerResponse,
+	IntentRegistrationEntry,
+	IntentRegistrationPayload,
+	IntentResolverOptions,
+	IntentTargetMetaData,
+	ProcessedContext
+} from "../shapes/interopbroker-shapes";
+import { isEmpty, isStringValue } from "../utils";
 
 const logger = createLogger("InteropBroker");
 
@@ -47,18 +48,18 @@ export function interopOverride(
 
 		private _intentOptions: IntentOptions;
 
-		private _unregisteredApp: PlatformApp;
+		private _unregisteredApp: PlatformApp | undefined;
 
 		constructor() {
 			super();
 			logger.info("Interop Broker Constructor fetching settings.");
 			getSettings()
 				.then((customSettings) => {
-					if (customSettings?.platformProvider !== undefined) {
-						let intentResolverOptions: IntentResolverOptions;
+					if (!isEmpty(customSettings?.platformProvider)) {
+						let intentResolverOptions: IntentResolverOptions | undefined;
 						if (
-							customSettings?.platformProvider?.interop?.intentResolver === undefined &&
-							customSettings?.platformProvider?.intentPicker !== undefined
+							isEmpty(customSettings?.platformProvider?.interop?.intentResolver) &&
+							!isEmpty(customSettings?.platformProvider?.intentPicker)
 						) {
 							logger.warn(
 								"Please use platformProvider.interop.intentResolver instead of platformProvider.intentPicker for your settings."
@@ -80,7 +81,7 @@ export function interopOverride(
 							...customSettings?.platformProvider?.interop?.intentOptions
 						};
 						this._unregisteredApp = customSettings?.platformProvider?.interop?.unregisteredApp;
-						if (this._unregisteredApp !== undefined) {
+						if (!isEmpty(this._unregisteredApp)) {
 							this._unregisteredApp.manifestType = MANIFEST_TYPES.UnregisteredApp.id;
 						}
 						return true;
@@ -141,7 +142,7 @@ export function interopOverride(
 			let requestedResultType: string;
 			let request: { context: { type: string }; metadata: { resultType: string } };
 			// eslint-disable-next-line @typescript-eslint/dot-notation
-			if (contextOptions["type"] !== undefined) {
+			if (!isEmpty(contextOptions["type"])) {
 				// eslint-disable-next-line @typescript-eslint/dot-notation
 				requestedContextType = contextOptions["type"];
 			} else {
@@ -161,8 +162,8 @@ export function interopOverride(
 				apps: entry.apps.map((app) => {
 					let resultType: string;
 					if (
-						app?.interop?.intents?.listensFor !== undefined &&
-						app.interop.intents.listensFor[entry.intent.name] !== undefined
+						!isEmpty(app?.interop?.intents?.listensFor) &&
+						!isEmpty(app.interop.intents.listensFor[entry.intent.name])
 					) {
 						resultType = app.interop.intents.listensFor[entry.intent.name].resultType;
 					}
@@ -181,12 +182,12 @@ export function interopOverride(
 		) {
 			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
 			let contextType: string;
-			if (intentOptions?.context?.type !== undefined && intentOptions?.context.type !== "fdc3.nothing") {
+			if (!isEmpty(intentOptions?.context?.type) && intentOptions?.context.type !== "fdc3.nothing") {
 				contextType = intentOptions?.context.type;
 			}
 
 			const result = await getIntent(intentOptions.name, contextType, intentOptions?.metadata?.resultType);
-			if (result === null) {
+			if (isEmpty(result)) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
 			const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
@@ -195,8 +196,8 @@ export function interopOverride(
 				apps: result.apps.map((app) => {
 					let resultType: string;
 					if (
-						app?.interop?.intents?.listensFor !== undefined &&
-						app.interop.intents.listensFor[result.intent.name] !== undefined
+						!isEmpty(app?.interop?.intents?.listensFor) &&
+						!isEmpty(app.interop.intents.listensFor[result.intent.name])
 					) {
 						resultType = app.interop.intents.listensFor[result.intent.name].resultType;
 					}
@@ -222,7 +223,7 @@ export function interopOverride(
 			};
 
 			// app specified flow
-			if (targetAppIdentifier !== undefined) {
+			if (!isEmpty(targetAppIdentifier)) {
 				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent,
@@ -281,7 +282,7 @@ export function interopOverride(
 					// by falling through to the next code block
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
 						const intentResolver = await this.launchAppWithIntent(intentForSelection.apps[0], intent);
-						if (intentResolver === null) {
+						if (isEmpty(intentResolver)) {
 							throw new Error(ResolveError.NoAppsFound);
 						}
 						return this.shapeIntentResolver(intentResolver, usesAppIdentity);
@@ -312,7 +313,7 @@ export function interopOverride(
 			const targetAppIdentifier = this.getApplicationIdentity(intent.metadata);
 			const usesAppIdentifier = this.usesApplicationIdentity(clientIdentity);
 
-			if (targetAppIdentifier !== undefined) {
+			if (!isEmpty(targetAppIdentifier)) {
 				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent,
@@ -349,7 +350,7 @@ export function interopOverride(
 					this.createNewInstance(intentApps[0])
 				) {
 					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent, appInstanceId);
-					if (intentResolver === null) {
+					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.NoAppsFound);
 					}
 					return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
@@ -370,7 +371,7 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		): Promise<AppIdentifier> {
-			if (fdc3OpenOptions?.app === undefined || fdc3OpenOptions?.app === null) {
+			if (isEmpty(fdc3OpenOptions?.app)) {
 				logger.error("A request to fdc3.open did not pass an fdc3OpenOptions object");
 				throw new Error(ResolveError.NoAppsFound);
 			}
@@ -392,7 +393,7 @@ export function interopOverride(
 			);
 			try {
 				const requestedApp = await getApp(requestedId);
-				if (requestedApp === undefined || requestedApp === null) {
+				if (isEmpty(requestedApp)) {
 					throw new Error(OpenError.AppNotFound);
 				}
 				const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
@@ -453,15 +454,15 @@ export function interopOverride(
 			logger.info("fdc3HandleGetAppMetadata call received.", app, clientIdentity);
 			// this will only be called by FDC3 2.0+
 			let platformApp = await getApp(app.appId);
-			if ((platformApp === undefined || platformApp === null) && app.appId === this._unregisteredApp?.appId) {
+			if (isEmpty(platformApp) && app.appId === this._unregisteredApp?.appId) {
 				platformApp = this._unregisteredApp;
 			}
-			if (platformApp !== undefined && platformApp !== null) {
+			if (!isEmpty(platformApp)) {
 				const appMetaData: AppMetadata = mapTo20AppMetaData(platformApp);
-				if (app.instanceId !== undefined) {
+				if (!isEmpty(app.instanceId)) {
 					const allConnectedClients = await this.getAllClientInfo();
 					const connectedClient = allConnectedClients.find((client) => client.endpointId === app.instanceId);
-					if (connectedClient !== undefined && connectedClient.uuid === fin.me.identity.uuid) {
+					if (!isEmpty(connectedClient) && connectedClient.uuid === fin.me.identity.uuid) {
 						const identity = { uuid: connectedClient.uuid, name: connectedClient.name };
 						let title: string;
 						let preview: string;
@@ -512,7 +513,7 @@ export function interopOverride(
 					clientIdentity
 				)) as ImplementationMetadata;
 				const appId = await this.lookupAppId(clientIdentity);
-				if (appId !== undefined) {
+				if (!isEmpty(appId)) {
 					const updatedResponse = {
 						...response,
 						appMetadata: { appId, instanceId: clientIdentity.endpointId }
@@ -529,12 +530,12 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<void> {
 			logger.info("intentHandlerRegistered:", payload, clientIdentity);
-			if (payload !== undefined) {
+			if (!isEmpty(payload)) {
 				const intentName: string = payload.handlerId.replace("intent-handler-", "");
 
 				let trackedIntentHandler = this._trackedIntentHandlers[intentName];
 
-				if (trackedIntentHandler === undefined) {
+				if (isEmpty(trackedIntentHandler)) {
 					trackedIntentHandler = [];
 					this._trackedIntentHandlers[intentName] = trackedIntentHandler;
 				}
@@ -543,13 +544,13 @@ export function interopOverride(
 					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
 				);
 
-				if (trackedHandler === undefined) {
+				if (isEmpty(trackedHandler)) {
 					logger.info(
 						`intentHandler endpoint not registered. Registering ${clientIdentity.endpointId} against intent ${intentName} and looking up app name.`
 					);
 					const appId = await this.lookupAppId(clientIdentity);
 
-					if (appId === undefined) {
+					if (isEmpty(appId)) {
 						logger.warn(
 							"Unable to determine app id based on name. This app will not be tracked via intent handler registration."
 						);
@@ -566,7 +567,7 @@ export function interopOverride(
 				}
 
 				const clientReadyKey = this.getClientReadyKey(clientIdentity, intentName);
-				if (this._clientReadyRequests[clientReadyKey] !== undefined) {
+				if (!isEmpty(this._clientReadyRequests[clientReadyKey])) {
 					logger.info("Resolving client ready request.");
 					this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
 				}
@@ -583,17 +584,17 @@ export function interopOverride(
 			let platformIdentities: PlatformAppIdentifier[] = [];
 			let existingInstance = true;
 
-			if (intent?.context !== undefined) {
+			if (!isEmpty(intent?.context)) {
 				intent.context = await this.processContext(intent.context);
 			}
 
-			if (instanceId !== undefined) {
+			if (!isEmpty(instanceId)) {
 				// an instance of an application was selected
 				const allConnectedClients = await this.getAllClientInfo();
 				const clientInfo = allConnectedClients.find(
 					(connectedClient) => connectedClient.endpointId === instanceId
 				);
-				if (clientInfo !== undefined) {
+				if (!isEmpty(clientInfo)) {
 					logger.info(`App Id: ${app.appId} and instance Id: ${instanceId} was provided and found.`);
 					// the connected instance is available
 					platformIdentities.push({
@@ -708,12 +709,12 @@ export function interopOverride(
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
 		): Promise<Omit<IntentResolution, "getResult">> {
 			let selectedApp = await getApp(userSelection.appId);
-			if ((selectedApp === undefined || selectedApp === null) && this._unregisteredApp !== undefined) {
+			if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
 				selectedApp = this._unregisteredApp;
 			}
 			const instanceId: string = userSelection.instanceId;
 			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
-			if (intentResolver === null) {
+			if (isEmpty(intentResolver)) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
 			return intentResolver;
@@ -730,9 +731,9 @@ export function interopOverride(
 			let targetApp = await getApp(targetAppIdentifier.appId);
 
 			// if the specified app isn't available then let the caller know
-			if (targetApp === undefined || targetApp === null) {
+			if (isEmpty(targetApp)) {
 				if (
-					targetAppIdentifier.instanceId !== undefined &&
+					!isEmpty(targetAppIdentifier.instanceId) &&
 					targetAppIdentifier.appId === this._unregisteredApp?.appId
 				) {
 					targetApp = this._unregisteredApp;
@@ -741,7 +742,7 @@ export function interopOverride(
 				}
 			}
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
-			if (targetAppIdentifier.instanceId !== undefined) {
+			if (!isEmpty(targetAppIdentifier.instanceId)) {
 				const availableAppInstances = await this.fdc3HandleFindInstances(targetAppIdentifier, clientIdentity);
 				if (
 					availableAppInstances.length === 0 ||
@@ -762,7 +763,7 @@ export function interopOverride(
 
 			const supportedIntents = targetApp.intents.filter((intentEntry) => {
 				let contextMatch: boolean = true;
-				if (intent?.context?.type !== undefined) {
+				if (!isEmpty(intent?.context?.type)) {
 					contextMatch = intentEntry.contexts?.includes(intent.context.type);
 					if (targetByContext) {
 						return contextMatch;
@@ -783,7 +784,7 @@ export function interopOverride(
 				// everything that supports that context type
 				intent.name = supportedIntents[0].name;
 				// check for instances
-				if (targetAppIdentifier.instanceId !== undefined) {
+				if (!isEmpty(targetAppIdentifier.instanceId)) {
 					const intentResolver = await this.launchAppWithIntent(
 						targetApp,
 						intent,
@@ -794,7 +795,7 @@ export function interopOverride(
 				const specifiedAppInstances = await this.fdc3HandleFindInstances(targetApp, clientIdentity);
 				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
 					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
-					if (intentResolver === null) {
+					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
 					return intentResolver;
@@ -811,10 +812,10 @@ export function interopOverride(
 			let userSelection: IntentPickerResponse;
 			if (intentsForSelection.length === 1) {
 				if (
-					(intent.name === undefined || intent.name === null || intent.name.trim() === "") &&
-					intentsForSelection[0]?.intent?.name !== undefined &&
-					intent?.context !== undefined &&
-					intent?.context?.type !== undefined
+					!isStringValue(intent.name) &&
+					!isEmpty(intentsForSelection[0]?.intent?.name) &&
+					!isEmpty(intent?.context) &&
+					!isEmpty(intent?.context?.type)
 				) {
 					logger.info(
 						`A request to raise an intent was passed and the intent name was not passed but a context was ${intent?.context?.type} with 1 matching intent. Name: ${intentsForSelection[0]?.intent?.name},  Display Name: ${intentsForSelection[0]?.intent?.displayName}. Updating intent object.`
@@ -830,10 +831,7 @@ export function interopOverride(
 					intent,
 					intents: intentsForSelection
 				});
-				if (
-					(intent.name === undefined || intent.name === null || intent.name.trim() === "") &&
-					userSelection?.intent?.name !== undefined
-				) {
+				if (!isStringValue(intent.name) && !isEmpty(userSelection?.intent?.name)) {
 					logger.info(
 						`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
 					);
@@ -866,7 +864,7 @@ export function interopOverride(
 			try {
 				const target = fin.Window.wrapSync(id);
 				const options = await target.getOptions();
-				if (options.fdc3InteropApi !== undefined) {
+				if (!isEmpty(options.fdc3InteropApi)) {
 					return {
 						type: "fdc3",
 						version: options.fdc3InteropApi
@@ -881,7 +879,7 @@ export function interopOverride(
 			try {
 				const target = fin.View.wrapSync(id);
 				const options = await target.getOptions();
-				if (options.fdc3InteropApi !== undefined) {
+				if (!isEmpty(options.fdc3InteropApi)) {
 					return {
 						type: "fdc3",
 						version: options.fdc3InteropApi
@@ -897,13 +895,13 @@ export function interopOverride(
 			payload?: { apiVersion?: { type: "interop" | "fdc3"; version: string } }
 		) {
 			const key = `${id.uuid}-${id.name}`;
-			let apiVersion: ApiMetadata;
-			if (this._trackedClientConnections[key] === undefined) {
+			let apiVersion: ApiMetadata | undefined;
+			if (isEmpty(this._trackedClientConnections[key])) {
 				if (id.uuid !== fin.me.identity.uuid) {
-					if (payload?.apiVersion?.type !== undefined) {
+					if (!isEmpty(payload?.apiVersion?.type)) {
 						this._trackedClientConnections[key] = payload?.apiVersion;
 						// eslint-disable-next-line @typescript-eslint/dot-notation
-					} else if (id["connectionUrl"] !== undefined) {
+					} else if (!isEmpty(id["connectionUrl"])) {
 						// if they haven't specified apiVersion meta data and it is external and has a url then we will assume fdc3 2.0
 						this._trackedClientConnections[key] = { type: "fdc3", version: "2.0" };
 					} else {
@@ -913,7 +911,7 @@ export function interopOverride(
 				} else {
 					// eslint-disable-next-line @typescript-eslint/dot-notation
 					const entityType = id["entityType"];
-					if (entityType !== undefined) {
+					if (!isEmpty(entityType)) {
 						switch (entityType) {
 							case "window": {
 								apiVersion = await this.captureWindowApiUsage(id);
@@ -931,14 +929,14 @@ export function interopOverride(
 						}
 					} else {
 						apiVersion = await this.captureViewApiUsage(id);
-						if (apiVersion === null) {
+						if (isEmpty(apiVersion)) {
 							// perhaps it is a window
 							apiVersion = await this.captureWindowApiUsage(id);
 						}
 					}
 				}
 			}
-			if (apiVersion !== null && apiVersion !== undefined) {
+			if (!isEmpty(apiVersion)) {
 				this._trackedClientConnections[key] = apiVersion;
 			}
 		}
@@ -966,7 +964,7 @@ export function interopOverride(
 			return new Promise<string>((resolve, reject) => {
 				const registeredHandlers = this._trackedIntentHandlers[intentName];
 				let existingInstanceId: string;
-				if (registeredHandlers !== undefined) {
+				if (!isEmpty(registeredHandlers)) {
 					for (const handler of registeredHandlers) {
 						if (
 							handler.clientIdentity.uuid === identity.uuid &&
@@ -977,12 +975,12 @@ export function interopOverride(
 						}
 					}
 				}
-				if (existingInstanceId !== undefined) {
+				if (!isEmpty(existingInstanceId)) {
 					resolve(existingInstanceId);
 				}
 				const key = this.getClientReadyKey(identity, intentName);
 				const timerId = setTimeout(() => {
-					if (this._clientReadyRequests[key] !== undefined) {
+					if (!isEmpty(this._clientReadyRequests[key])) {
 						delete this._clientReadyRequests[key];
 						reject(ResolveError.IntentDeliveryFailed);
 					}
@@ -1002,7 +1000,7 @@ export function interopOverride(
 		}): Promise<string> {
 			try {
 				const preview = await target.capturePage({ format: "jpg", quality: 85 });
-				if (preview !== undefined && preview !== null && preview !== "") {
+				if (isStringValue(preview)) {
 					return preview;
 				}
 			} catch (error) {
@@ -1018,7 +1016,7 @@ export function interopOverride(
 		private async getUnregisteredAppIntentByContext(type: string, clientIdentity: ClientIdentity) {
 			const intentNames: string[] = [];
 			const supportedIntentNames: string[] = [];
-			if (this?._unregisteredApp === undefined) {
+			if (isEmpty(this?._unregisteredApp)) {
 				return intentNames;
 			}
 			if (Array.isArray(this?._unregisteredApp?.intents)) {
@@ -1043,11 +1041,11 @@ export function interopOverride(
 		}
 
 		private async canAddUnregisteredApp(clientIdentity: ClientIdentity, intentName?: string) {
-			if (this?._unregisteredApp === undefined) {
+			if (isEmpty(this?._unregisteredApp)) {
 				return false;
 			}
 			if (
-				intentName !== undefined &&
+				!isEmpty(intentName) &&
 				this._unregisteredApp.intents.findIndex((intent) => intent.name === intentName) === -1
 			) {
 				return false;
@@ -1060,7 +1058,7 @@ export function interopOverride(
 		}
 
 		private getApplicationIdentity(metadata: OpenFin.IntentMetadata<IntentTargetMetaData>): AppIdentifier {
-			if (metadata?.target === undefined || metadata.target === null) {
+			if (isEmpty(metadata?.target)) {
 				return undefined;
 			}
 			if (typeof metadata.target === "string") {
@@ -1070,7 +1068,7 @@ export function interopOverride(
 				return { appId: metadata.target };
 			}
 
-			if (metadata.target?.appId === undefined) {
+			if (isEmpty(metadata.target?.appId)) {
 				return undefined;
 			}
 
@@ -1079,7 +1077,7 @@ export function interopOverride(
 
 		private usesApplicationIdentity(clientIdentity: OpenFin.ClientIdentity): boolean {
 			const apiMetadata = this.getApiVersion(clientIdentity);
-			if (apiMetadata === undefined) {
+			if (isEmpty(apiMetadata)) {
 				return false;
 			}
 			return apiMetadata.type === "fdc3" && apiMetadata.version === "2.0";
@@ -1087,7 +1085,7 @@ export function interopOverride(
 
 		private async lookupAppId(clientIdentity: OpenFin.ClientIdentity): Promise<string> {
 			const nameParts = clientIdentity.name.split("/");
-			let app: PlatformApp;
+			let app: PlatformApp | undefined;
 
 			if (nameParts.length === 1 || nameParts.length === 2) {
 				app = await getApp(nameParts[0]);
@@ -1096,14 +1094,14 @@ export function interopOverride(
 				app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
 			}
 
-			const appNotFound = app === undefined || app === null;
+			const appNotFound = isEmpty(app);
 
 			if (appNotFound && clientIdentity.uuid !== fin.me.identity.uuid) {
 				logger.warn("Lookup made by a non-registered app that is outside of this platform.", clientIdentity);
 				return;
 			}
 
-			if (appNotFound && this._unregisteredApp === undefined) {
+			if (appNotFound && isEmpty(this._unregisteredApp)) {
 				logger.warn(
 					"Lookup made by a non-registered app that falls under this platform. No unregistered placeholder app is specified.",
 					clientIdentity

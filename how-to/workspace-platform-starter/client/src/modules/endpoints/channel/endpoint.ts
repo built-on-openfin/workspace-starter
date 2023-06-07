@@ -1,19 +1,24 @@
 import type { EndpointDefinition, Endpoint } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 export class ChannelEndpoint implements Endpoint {
 	private _logger: Logger;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
-		this._logger = createLogger("ChannelEndpoint");
+	public async initialize(
+		definition: ModuleDefinition,
+		loggerCreator: LoggerCreator,
+		helpers: ModuleHelpers
+	) {
+		this._logger = loggerCreator("ChannelEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 
@@ -36,7 +41,7 @@ export class ChannelEndpoint implements Endpoint {
 		}>,
 		request?: { payload?: unknown }
 	): Promise<boolean> {
-		if (request === undefined) {
+		if (isEmpty(request)) {
 			this._logger.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
 			return false;
 		}
@@ -51,9 +56,9 @@ export class ChannelEndpoint implements Endpoint {
 		const logError = endpointDefinition?.options?.logError ?? true;
 
 		if (
-			endpointDefinition.options === undefined ||
-			endpointDefinition.options.actionName === undefined ||
-			endpointDefinition.options.channelName === undefined
+			isEmpty(endpointDefinition.options) ||
+			isEmpty(endpointDefinition.options.actionName) ||
+			isEmpty(endpointDefinition.options.channelName)
 		) {
 			if (logWarn) {
 				this._logger.warn(
@@ -64,15 +69,12 @@ export class ChannelEndpoint implements Endpoint {
 		}
 
 		try {
-			const channel = await fin.InterApplicationBus.Channel.connect(
-				endpointDefinition.options.channelName as string,
-				{
-					wait: endpointDefinition.options.wait,
-					payload: endpointDefinition.options.payload
-				}
-			);
+			const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
+				wait: endpointDefinition.options.wait,
+				payload: endpointDefinition.options.payload
+			});
 			if (
-				endpointDefinition.options.uuid !== undefined &&
+				!isEmpty(endpointDefinition.options.uuid) &&
 				endpointDefinition.options.uuid !== channel.providerIdentity.uuid
 			) {
 				if (logWarn) {
@@ -85,7 +87,7 @@ export class ChannelEndpoint implements Endpoint {
 			if (logInfo) {
 				this._logger.info(`Sending action for endpoint id: ${endpointDefinition.id}`);
 			}
-			await channel.dispatch(endpointDefinition.options.actionName as string, request?.payload);
+			await channel.dispatch(endpointDefinition.options.actionName, request?.payload);
 			await channel.disconnect();
 			return true;
 		} catch (error) {
@@ -118,7 +120,7 @@ export class ChannelEndpoint implements Endpoint {
 			default?: "object" | "array";
 		}>,
 		request?: { payload?: unknown }
-	): Promise<unknown | null> {
+	): Promise<unknown> {
 		let defaultValue: unknown = null;
 
 		if (endpointDefinition.type !== "module") {
@@ -131,7 +133,7 @@ export class ChannelEndpoint implements Endpoint {
 		const logWarn = endpointDefinition?.options?.logWarn ?? true;
 		const logError = endpointDefinition?.options?.logError ?? true;
 
-		if (endpointDefinition?.options?.default !== undefined) {
+		if (!isEmpty(endpointDefinition?.options?.default)) {
 			if (endpointDefinition.options.default === "array") {
 				defaultValue = [];
 			} else if (endpointDefinition.options.default === "object") {
@@ -139,9 +141,9 @@ export class ChannelEndpoint implements Endpoint {
 			}
 		}
 		if (
-			endpointDefinition.options === undefined ||
-			endpointDefinition.options.actionName === undefined ||
-			endpointDefinition.options.channelName === undefined
+			isEmpty(endpointDefinition.options) ||
+			isEmpty(endpointDefinition.options.actionName) ||
+			isEmpty(endpointDefinition.options.channelName)
 		) {
 			if (logWarn) {
 				this._logger.warn(
@@ -151,15 +153,12 @@ export class ChannelEndpoint implements Endpoint {
 			return defaultValue;
 		}
 		try {
-			const channel = await fin.InterApplicationBus.Channel.connect(
-				endpointDefinition.options.channelName as string,
-				{
-					wait: endpointDefinition.options.wait,
-					payload: endpointDefinition.options.payload
-				}
-			);
+			const channel = await fin.InterApplicationBus.Channel.connect(endpointDefinition.options.channelName, {
+				wait: endpointDefinition.options.wait,
+				payload: endpointDefinition.options.payload
+			});
 			if (
-				endpointDefinition.options.uuid !== undefined &&
+				!isEmpty(endpointDefinition.options.uuid) &&
 				endpointDefinition.options.uuid !== channel.providerIdentity.uuid
 			) {
 				if (logWarn) {
@@ -173,7 +172,7 @@ export class ChannelEndpoint implements Endpoint {
 				this._logger.info(`Sending request response for endpoint: ${endpointDefinition.id}`);
 			}
 			const response: unknown = await channel.dispatch(
-				endpointDefinition.options.actionName as string,
+				endpointDefinition.options.actionName,
 				request?.payload
 			);
 			await channel.disconnect();

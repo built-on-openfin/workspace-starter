@@ -1,6 +1,6 @@
 import type { AppMetadata } from "@finos/fdc3";
 import type { AppIntent } from "@openfin/workspace";
-import type { PlatformApp } from "workspace-platform-starter/shapes";
+import type { PlatformApp } from "../../shapes/app-shapes";
 import type {
 	AppDefinition,
 	WebAppDetails,
@@ -8,6 +8,7 @@ import type {
 	OnlineNativeAppDetails,
 	AppInterop
 } from "../../shapes/fdc3-2-0-shapes";
+import { isEmpty } from "../../utils";
 
 function getManifestType(app: AppDefinition): string {
 	let manifestType: string;
@@ -41,9 +42,9 @@ function getManifest(app: AppDefinition): unknown {
 
 	switch (app.type) {
 		case "web": {
-			if (app?.details !== undefined) {
+			if (!isEmpty(app?.details)) {
 				if (
-					app.hostManifests?.OpenFin?.details !== undefined &&
+					!isEmpty(app.hostManifests?.OpenFin?.details) &&
 					typeof app.hostManifests.OpenFin.details === "object"
 				) {
 					manifest = {
@@ -61,14 +62,14 @@ function getManifest(app: AppDefinition): unknown {
 			break;
 		}
 		case "native": {
-			if (app?.details !== undefined) {
+			if (!isEmpty(app?.details)) {
 				// our native api supports path and arguments.
 				manifest = app.details as NativeAppDetails;
 			}
 			break;
 		}
 		case "onlineNative": {
-			if (app?.details !== undefined) {
+			if (!isEmpty(app?.details)) {
 				manifest = (app?.details as OnlineNativeAppDetails).url;
 			}
 			break;
@@ -87,7 +88,7 @@ function getManifest(app: AppDefinition): unknown {
 export function getIntents(interop: AppInterop): AppIntent[] {
 	const intents: AppIntent[] = [];
 
-	if (interop?.intents?.listensFor === undefined) {
+	if (isEmpty(interop?.intents?.listensFor)) {
 		return intents;
 	}
 

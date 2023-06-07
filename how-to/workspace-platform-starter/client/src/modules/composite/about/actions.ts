@@ -8,6 +8,7 @@ import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/a
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { AboutActionSettings, SharedState } from "./shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 /**
  * Implement the actions.
  */
@@ -40,16 +41,16 @@ export class AboutActions implements Actions {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition<AboutActionSettings>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ActionHelpers
 	): Promise<void> {
-		this._logger = createLogger("AboutAction");
+		this._logger = loggerCreator("AboutAction");
 		this._helpers = helpers;
 		this._definition = definition;
 		this._sharedState.aboutWindow = await this.getAboutWindow();
@@ -64,7 +65,7 @@ export class AboutActions implements Actions {
 		actionMap["show-about"] = async (payload: CustomActionPayload) => {
 			if (
 				payload.callerType === this._helpers.callerTypes.GlobalContextMenu &&
-				this._sharedState?.aboutWindow !== undefined
+				!isEmpty(this._sharedState?.aboutWindow)
 			) {
 				const aboutWindow = fin.Window.wrapSync({
 					uuid: fin.me.identity.uuid,
@@ -95,7 +96,7 @@ export class AboutActions implements Actions {
 
 	/** Gets about window options enriched with VersionInfo */
 	private async getAboutWindow(): Promise<OpenFin.WindowOptions> {
-		if (this._definition?.data?.windowOptions === undefined) {
+		if (isEmpty(this._definition?.data?.windowOptions)) {
 			this._logger.info("No about window configuration provided.");
 			return undefined;
 		}
@@ -104,17 +105,17 @@ export class AboutActions implements Actions {
 			...this._definition.data.windowOptions
 		};
 
-		if (validatedWindowOptions.url === undefined) {
+		if (isEmpty(validatedWindowOptions.url)) {
 			this._logger.error(
 				"An about version window configuration was set but a url was not provided. A window cannot be launched."
 			);
 			return undefined;
 		}
-		if (validatedWindowOptions.name === undefined) {
+		if (isEmpty(validatedWindowOptions.name)) {
 			validatedWindowOptions.name = `${fin.me.identity.uuid}-versioning-about`;
 		}
 
-		if (validatedWindowOptions?.customData?.versionInfo !== undefined) {
+		if (!isEmpty(validatedWindowOptions?.customData?.versionInfo)) {
 			this._logger.info("Enriching customData versionInfo provided by about version window configuration.");
 			validatedWindowOptions.customData.versionInfo = {
 				...validatedWindowOptions.customData.versionInfo,
@@ -122,7 +123,7 @@ export class AboutActions implements Actions {
 			};
 		} else {
 			this._logger.info("Setting customData versionInfo for about version window configuration.");
-			if (validatedWindowOptions.customData === undefined) {
+			if (isEmpty(validatedWindowOptions.customData)) {
 				validatedWindowOptions.customData = {};
 			}
 			validatedWindowOptions.customData.versionInfo = await this._helpers.getVersionInfo();

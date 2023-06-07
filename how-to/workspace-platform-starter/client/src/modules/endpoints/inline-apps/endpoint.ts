@@ -13,8 +13,12 @@ export class InlineAppModuleEndpoint implements Endpoint {
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
-		this._logger = createLogger("InlineAppModuleEndpoint");
+	public async initialize(
+		definition: ModuleDefinition,
+		loggerCreator: LoggerCreator,
+		helpers: ModuleHelpers
+	) {
+		this._logger = loggerCreator("InlineAppModuleEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 

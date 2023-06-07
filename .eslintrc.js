@@ -423,7 +423,7 @@ module.exports = {
 		'jsdoc/check-values': 'error',
 		'jsdoc/empty-tags': 'error',
 		'jsdoc/implements-on-classes': 'error',
-		'jsdoc/match-description': ['error', {matchDescription: '[A-Z].*\\.'}],
+		'jsdoc/match-description': ['error'],
 		'jsdoc/newline-after-description': 'off',
 		'jsdoc/no-bad-blocks': 'error',
 		'jsdoc/no-defaults': 'error',

@@ -86,7 +86,9 @@ export function subscribeLifecycleEvent(
 		handler: lifecycleHandler
 	});
 	allLifecycleEvents[lifecycleEvent] = handlers;
-	logger.info(`Subscription for lifecycle event ${lifecycleEvent} received. Subscription id: ${subscriptionId} returned`);
+	logger.info(
+		`Subscription for lifecycle event ${lifecycleEvent} received. Subscription id: ${subscriptionId} returned`
+	);
 	return subscriptionId;
 }
 

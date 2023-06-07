@@ -7,10 +7,14 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { PlatformApp } from "workspace-platform-starter/shapes";
-import type { IntegrationHelpers, IntegrationModule } from "workspace-platform-starter/shapes/integrations-shapes";
+import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import type {
+	IntegrationHelpers,
+	IntegrationModule
+} from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 import type { AppSettings } from "./shapes";
 
 /**
@@ -199,7 +203,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 						} else if (path.length === 2) {
 							const specifiedTarget = entry[path[0]];
 							let targetValue: string | string[];
-							if (specifiedTarget !== undefined && specifiedTarget !== null) {
+							if (!isEmpty(specifiedTarget)) {
 								targetValue = specifiedTarget[path[1]];
 							}
 
@@ -238,12 +242,12 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (tagFilters.length > 0) {
 					filterMatchFound = tagFilters.some((filter) => {
 						if (Array.isArray(filter.options)) {
-							if (entry.data?.app?.tags !== undefined) {
+							if (!isEmpty(entry.data?.app?.tags)) {
 								return filter.options.every(
 									(option) => !option.isSelected || entry.data.app.tags.includes(option.value)
 								);
 							}
-						} else if (filter.options.isSelected && entry.data?.app?.tags !== undefined) {
+						} else if (filter.options.isSelected && !isEmpty(entry.data?.app?.tags)) {
 							return entry.data.app.tags.includes(filter.options.value);
 						}
 						return true;
@@ -313,19 +317,11 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 				const manifestTypeMapping = this._settings.manifestTypeMapping[app.manifestType];
 
-				if (manifestTypeMapping !== undefined) {
-					if (
-						manifestTypeMapping.entryLabel !== undefined &&
-						manifestTypeMapping.entryLabel !== null &&
-						manifestTypeMapping.entryLabel.length > 0
-					) {
+				if (!isEmpty(manifestTypeMapping)) {
+					if (isStringValue(manifestTypeMapping.entryLabel)) {
 						entry.label = manifestTypeMapping.entryLabel;
 					}
-					if (
-						manifestTypeMapping.actionName !== undefined &&
-						manifestTypeMapping.actionName !== null &&
-						manifestTypeMapping.actionName.length > 0
-					) {
+					if (isStringValue(manifestTypeMapping.actionName)) {
 						action.name = manifestTypeMapping.actionName;
 					}
 				}
@@ -333,7 +329,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				entry.actions = [action];
 				entry.icon = this.getAppIcon(app);
 
-				if (app.description !== undefined) {
+				if (!isEmpty(app.description)) {
 					entry.description = app.description;
 					entry.shortDescription = app.description;
 				}
@@ -358,7 +354,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	}
 
 	private async rebuildResults(): Promise<void> {
-		if (this._lastResponse !== undefined && Array.isArray(this._lastResultIds)) {
+		if (!isEmpty(this._lastResponse) && Array.isArray(this._lastResultIds)) {
 			this._logger.info("Rebuilding results...");
 			const lastResultIds = this._lastResultIds.slice();
 			const appResponse = await this.getResults(

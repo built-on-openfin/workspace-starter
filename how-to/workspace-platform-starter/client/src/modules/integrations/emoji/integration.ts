@@ -9,13 +9,13 @@ import {
 	type PlainContainerTemplateFragment,
 	type TemplateFragment
 } from "@openfin/workspace";
+import * as emoji from "node-emoji";
 import type {
 	IntegrationHelpers,
-	IntegrationModule,
-	LoggerCreator,
-	ModuleDefinition
-} from "workspace-platform-starter/shapes";
-import * as emoji from "node-emoji";
+	IntegrationModule
+} from "workspace-platform-starter/shapes/integrations-shapes";
+import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 
 /**
  * Implement the integration provider for Emojis.

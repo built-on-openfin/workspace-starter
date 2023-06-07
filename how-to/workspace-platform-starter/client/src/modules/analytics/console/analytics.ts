@@ -1,5 +1,8 @@
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes";
-import type { AnalyticsModule, PlatformAnalyticsEvent } from "workspace-platform-starter/shapes/analytics-shapes";
+import type {
+	AnalyticsModule,
+	PlatformAnalyticsEvent
+} from "workspace-platform-starter/shapes/analytics-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ConsoleAnalyticsOptions } from "./shapes";
 

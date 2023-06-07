@@ -20,6 +20,7 @@ import type {
 	StorefrontSettingsNavigationItem
 } from "../shapes";
 import type { PlatformApp } from "../shapes/app-shapes";
+import { isEmpty } from "../utils";
 
 const logger = createLogger("Store");
 
@@ -29,7 +30,7 @@ let registrationInfo: RegistrationMetaInfo;
 export async function register(): Promise<RegistrationMetaInfo> {
 	logger.info("Initializing the storefront provider");
 	const provider = await getStoreProvider();
-	if (provider !== null) {
+	if (!isEmpty(provider)) {
 		try {
 			registrationInfo = await Storefront.register(provider);
 			logger.info("Version:", registrationInfo);
@@ -86,16 +87,16 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 	let hasDuplicateIds = false;
 
 	if (
-		config === undefined ||
-		config.storefrontProvider === undefined ||
-		config.storefrontProvider.id === undefined ||
-		config.storefrontProvider.title === undefined ||
-		(config.storefrontProvider.footer === undefined &&
-			config.storefrontProvider.landingPage !== undefined &&
-			config.storefrontProvider.landingPage.topRow !== undefined &&
-			config.storefrontProvider.landingPage.middleRow !== undefined &&
-			config.storefrontProvider.landingPage.bottomRow !== undefined &&
-			config.storefrontProvider.navigation !== undefined)
+		isEmpty(config) ||
+		isEmpty(config.storefrontProvider) ||
+		isEmpty(config.storefrontProvider.id) ||
+		isEmpty(config.storefrontProvider.title) ||
+		(isEmpty(config.storefrontProvider.footer) &&
+			!isEmpty(config.storefrontProvider.landingPage) &&
+			!isEmpty(config.storefrontProvider.landingPage.topRow) &&
+			!isEmpty(config.storefrontProvider.landingPage.middleRow) &&
+			!isEmpty(config.storefrontProvider.landingPage.bottomRow) &&
+			!isEmpty(config.storefrontProvider.navigation))
 	) {
 		logger.error(
 			"StorefrontProvider is not correctly configured in the customSettings of this manifest. You must ensure that storefrontProvider is defined, that it has an id and title and that the footer, landingPage (top row, middle row and bottom row) and navigation sections have been defined"
@@ -104,7 +105,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 	}
 
 	const validateId = (id: string, namespace: string, warning: string) => {
-		if (id === undefined) {
+		if (isEmpty(id)) {
 			logger.warn(`${namespace}: ${warning}`);
 		} else if (idList.includes(id)) {
 			hasDuplicateIds = true;
@@ -132,14 +133,14 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 	logger.info("Validating settings storefrontProvider landing page hero config");
 	const landingPage = config.storefrontProvider.landingPage;
 
-	if (landingPage?.hero?.cta !== undefined) {
+	if (!isEmpty(landingPage?.hero?.cta)) {
 		validateId(landingPage.hero.cta.id, "storefrontProvider.landingPage.hero.cta.id", warningMessage);
 	}
 
 	logger.info("Validating settings storefrontProvider landing page top row config");
 	const topRow = landingPage.topRow;
 
-	if (topRow.items !== undefined) {
+	if (!isEmpty(topRow.items)) {
 		for (let i = 0; i < topRow.items.length; i++) {
 			validateId(topRow.items[i].id, `storefrontProvider.landingPage.topRow.items[${i}].id`, warningMessage);
 		}
@@ -147,7 +148,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 
 	logger.info("Validating settings storefrontProvider landing page bottom row config");
 	const bottomRow = landingPage.bottomRow;
-	if (bottomRow.items !== undefined) {
+	if (!isEmpty(bottomRow.items)) {
 		for (let i = 0; i < bottomRow.items.length; i++) {
 			validateId(
 				bottomRow.items[i].id,
@@ -160,7 +161,7 @@ function isStorefrontConfigurationValid(config: CustomSettings): boolean {
 	logger.info("Validating ids, checking for duplicate ids");
 	if (hasDuplicateIds) {
 		logger.error(
-			"You have defined duplicate ids (please see the other error messages) which could result in strange behaviour (if we are routing by id and you have two or more items that resolve to the same id then it could navigate to something unexpected. Please ensure ids are unique and idempotent"
+			"You have defined duplicate ids (please see the other error messages) which could result in strange behavior (if we are routing by id and you have two or more items that resolve to the same id then it could navigate to something unexpected. Please ensure ids are unique and idempotent"
 		);
 		return false;
 	}
@@ -195,11 +196,11 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 	const settings = await getSettings();
 	const navigationSections: [StorefrontNavigationSection?, StorefrontNavigationSection?] = [];
 
-	if (settings?.storefrontProvider?.navigation === undefined) {
+	if (isEmpty(settings?.storefrontProvider?.navigation)) {
 		return [];
 	}
 
-	for (let i = 0; i < settings.storefrontProvider.navigation.length; i++) {
+	for (const navItem of settings.storefrontProvider.navigation) {
 		if (navigationSections.length === navigationSectionLimit) {
 			logger.info(
 				"More than 2 navigation sections defined in StorefrontProvider settings. Only two are taken"
@@ -207,14 +208,9 @@ async function getNavigation(): Promise<[StorefrontNavigationSection?, Storefron
 			break;
 		}
 		const navigationSection: StorefrontNavigationSection = {
-			id:
-				settings.storefrontProvider.navigation[i].id ??
-				getId(settings.storefrontProvider.navigation[i].title),
-			title: settings.storefrontProvider.navigation[i].title,
-			items: (await getNavigationItems(
-				settings.storefrontProvider.navigation[i].items,
-				navigationSectionItemLimit
-			)) as [
+			id: navItem.id ?? getId(navItem.title),
+			title: navItem.title,
+			items: (await getNavigationItems(navItem.items, navigationSectionItemLimit)) as [
 				StorefrontNavigationItem,
 				StorefrontNavigationItem?,
 				StorefrontNavigationItem?,
@@ -241,7 +237,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 	const storeFrontDetailedNavigationItemTopRowLimit = 4;
 	const middleRowAppLimit = 6;
 
-	if (settings?.storefrontProvider?.landingPage?.hero !== undefined) {
+	if (!isEmpty(settings?.storefrontProvider?.landingPage?.hero)) {
 		const hero = settings.storefrontProvider.landingPage.hero;
 		const cta = await getNavigationItem(hero.cta.id, hero.cta.title, hero.cta.tags);
 		landingPage.hero = {
@@ -252,7 +248,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		};
 	}
 
-	if (settings?.storefrontProvider?.landingPage?.topRow !== undefined) {
+	if (!isEmpty(settings?.storefrontProvider?.landingPage?.topRow)) {
 		const row = await getLandingPageRow(
 			settings?.storefrontProvider?.landingPage?.topRow,
 			storeFrontDetailedNavigationItemTopRowLimit
@@ -270,7 +266,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		logger.error("You need to have a topRow defined in your landing page");
 	}
 
-	if (settings?.storefrontProvider?.landingPage?.middleRow !== undefined) {
+	if (!isEmpty(settings?.storefrontProvider?.landingPage?.middleRow)) {
 		const middleRow = settings.storefrontProvider.landingPage.middleRow;
 		const middleRowApps = await getAppsByTag(middleRow.tags, false, { private: false });
 		if (middleRowApps.length > middleRowAppLimit) {
@@ -294,7 +290,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 		logger.error("You need to have a middleRow defined in your landing page");
 	}
 
-	if (settings?.storefrontProvider?.landingPage?.bottomRow !== undefined) {
+	if (!isEmpty(settings?.storefrontProvider?.landingPage?.bottomRow)) {
 		const row = await getLandingPageRow(
 			settings.storefrontProvider.landingPage.bottomRow,
 			storeFrontDetailedNavigationItemBottomRowLimit
@@ -317,7 +313,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 async function getFooter(): Promise<StorefrontFooter> {
 	logger.info("Getting the store footer");
 	const settings = await getSettings();
-	if (settings?.storefrontProvider?.footer !== undefined) {
+	if (!isEmpty(settings?.storefrontProvider?.footer)) {
 		return settings.storefrontProvider.footer;
 	}
 	logger.error("Storefront is being initialized without a footer configured");
@@ -352,7 +348,7 @@ async function getNavigationItem(
 
 	const apps = await getAppsByTag(tags, false, { private: false });
 
-	if (apps !== undefined && apps.length > 0) {
+	if (!isEmpty(apps) && apps.length > 0) {
 		navigationItem.templateData.apps = apps;
 	}
 
@@ -362,8 +358,8 @@ async function getNavigationItem(
 async function getNavigationItems(items: StorefrontSettingsNavigationItem[], limit: number) {
 	const navigationItems: StorefrontNavigationItem[] = [];
 
-	for (let i = 0; i < items.length; i++) {
-		const navigationItem = await getNavigationItem(items[i].id, items[i].title, items[i].tags);
+	for (const navItem of items) {
+		const navigationItem = await getNavigationItem(navItem.id, navItem.title, navItem.tags);
 		navigationItems.push(navigationItem);
 	}
 
@@ -378,19 +374,15 @@ async function getNavigationItems(items: StorefrontSettingsNavigationItem[], lim
 async function getLandingPageRow(definition: StorefrontSettingsLandingPageRow, limit: number) {
 	const items: StorefrontDetailedNavigationItem[] = [];
 
-	for (let i = 0; i < definition.items.length; i++) {
-		const navigationItem = await getNavigationItem(
-			definition.items[i].id,
-			definition.items[i].title,
-			definition.items[i].tags
-		);
-		const item: StorefrontDetailedNavigationItem = {
-			description: definition.items[i].description,
-			image: definition.items[i].image,
-			buttonTitle: definition.items[i].buttonTitle,
+	for (const item of definition.items) {
+		const navigationItem = await getNavigationItem(item.id, item.title, item.tags);
+		const navItem: StorefrontDetailedNavigationItem = {
+			description: item.description,
+			image: item.image,
+			buttonTitle: item.buttonTitle,
 			...navigationItem
 		};
-		items.push(item);
+		items.push(navItem);
 	}
 
 	if (items.length > limit) {

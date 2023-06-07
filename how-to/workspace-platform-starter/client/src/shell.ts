@@ -1,8 +1,9 @@
-import { getManifestCustomSettings } from "workspace-platform-starter/settings";
 import { init as initAuthFlow } from "./framework/auth-flow";
 import { createLogger } from "./framework/logger-provider";
+import { getManifestCustomSettings } from "./framework/settings";
 import type { Logger } from "./framework/shapes/logger-shapes";
 import type { PlatformProviderOptions } from "./framework/shapes/platform-shapes";
+import { isStringValue } from "./framework/utils";
 
 let logger: Logger;
 
@@ -33,11 +34,8 @@ export async function init(): Promise<boolean> {
  * @returns True if the provider was valid.
  */
 async function initProvider(platformSettings: PlatformProviderOptions | undefined): Promise<boolean> {
-	if (
-		platformSettings?.initUrl === undefined ||
-		platformSettings?.initUrl === null ||
-		platformSettings?.initUrl.trim() === ""
-	) {
+	const initUrl = platformSettings?.initUrl;
+	if (!isStringValue(initUrl)) {
 		logger.error(
 			"When using the shell you must specify an initUrl for your platform in the manifest settings in order for progress to proceed."
 		);
@@ -45,14 +43,10 @@ async function initProvider(platformSettings: PlatformProviderOptions | undefine
 	}
 
 	try {
-		const mod: { init: () => Promise<boolean> } = await import(
-			/* webpackIgnore: true */ platformSettings.initUrl
-		);
+		const mod: { init: () => Promise<boolean> } = await import(/* webpackIgnore: true */ initUrl);
 
 		if (!mod?.init) {
-			logger.error(
-				`The specified provider module '${platformSettings.initUrl}' has no exported init function`
-			);
+			logger.error(`The specified provider module '${initUrl}' has no exported init function`);
 			return false;
 		}
 

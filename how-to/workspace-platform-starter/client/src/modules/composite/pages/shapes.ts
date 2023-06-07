@@ -1,4 +1,4 @@
-import type { MenuPosition } from "workspace-platform-starter/shapes";
+import type { MenuPosition } from "workspace-platform-starter/shapes/menu-shapes";
 
 export interface PageMenuEntry {
 	/**

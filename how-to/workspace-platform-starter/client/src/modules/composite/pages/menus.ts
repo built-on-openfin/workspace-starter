@@ -1,9 +1,14 @@
 import type OpenFin from "@openfin/core";
 import type { GlobalContextMenuOptionType, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { Menus } from "workspace-platform-starter/shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { MenuEntry, MenuType, RelatedMenuId } from "workspace-platform-starter/shapes/menu-shapes";
+import type {
+	MenuEntry,
+	MenuType,
+	Menus,
+	RelatedMenuId
+} from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { PageMenuSettings } from "./shapes";
 
 /**
@@ -23,16 +28,16 @@ export class PageMenus implements Menus<PageMenuSettings> {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition<PageMenuSettings>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = createLogger("PageMenus");
+		this._logger = loggerCreator("PageMenus");
 		this._settings = definition.data;
 	}
 
@@ -47,13 +52,12 @@ export class PageMenus implements Menus<PageMenuSettings> {
 		platform: WorkspacePlatformModule,
 		relatedMenuId?: RelatedMenuId
 	): Promise<MenuEntry[] | undefined> {
-		if (menuType === "global" && relatedMenuId.windowIdentity !== undefined) {
+		if (menuType === "global" && !isEmpty(relatedMenuId.windowIdentity)) {
 			// you can customize the browser main menu here
 			const pages: Page[] = await platform.Storage.getPages();
 			const includeDeletePage =
-				this._settings?.deletePage?.include === undefined || this._settings?.deletePage?.include;
-			const includeShowPage =
-				this._settings?.showPage?.include === undefined || this._settings?.showPage?.include;
+				isEmpty(this._settings?.deletePage?.include) || this._settings?.deletePage?.include;
+			const includeShowPage = isEmpty(this._settings?.showPage?.include) || this._settings?.showPage?.include;
 			const showPagesMenu: OpenFin.MenuItemTemplate[] = [];
 			const showPageMenuEntry: MenuEntry = {
 				label: this._settings?.showPage?.menuLabel ?? "Show Page",
@@ -99,7 +103,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 				for (const page of pages) {
 					const existingPage = allOpenPages.find((openPage) => page.pageId === openPage.pageId);
 					const isActiveExistingPageOnCurrentWindow =
-						existingPage !== undefined &&
+						!isEmpty(existingPage) &&
 						existingPage.parentIdentity.name === browserWindowIdentity.name &&
 						existingPage?.isActive;
 					showPagesMenu.push({
@@ -109,11 +113,10 @@ export class PageMenus implements Menus<PageMenuSettings> {
 						data: {
 							type: "Custom" as GlobalContextMenuOptionType.Custom,
 							action: {
-								id: existingPage !== undefined ? "page-show" : "page-open",
+								id: !isEmpty(existingPage) ? "page-show" : "page-open",
 								customData: {
 									pageId: page.pageId,
-									windowIdentity:
-										existingPage !== undefined ? existingPage.parentIdentity : browserWindowIdentity
+									windowIdentity: !isEmpty(existingPage) ? existingPage.parentIdentity : browserWindowIdentity
 								}
 							}
 						}
@@ -121,7 +124,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 					deletePagesMenu.push({
 						label: page.title,
 						type: "normal",
-						enabled: existingPage === undefined,
+						enabled: isEmpty(existingPage),
 						data: {
 							type: "Custom" as GlobalContextMenuOptionType.Custom,
 							action: {

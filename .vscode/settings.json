@@ -1,5 +1,18 @@
 {
-	"cSpell.words": ["actioned", "appasset", "templating"],
+	"cSpell.words": [
+		"actioned",
+		"appasset",
+		"bootstrapper",
+		"closedown",
+		"companyname",
+		"csstype",
+		"finos",
+		"interopbroker",
+		"openfin",
+		"qlaunch",
+		"templating"
+	],
+	"cSpell.ignorePaths": ["**/.eslintrc.js", "**/settings.json", "**/package.json"],
 	"files.eol": "\n",
 	"json.schemas": [
 		{

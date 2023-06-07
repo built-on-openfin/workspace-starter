@@ -1,31 +1,100 @@
 import type OpenFin from "@openfin/core";
 import type { Page } from "@openfin/workspace-platform";
 
+/**
+ * All of the share custom data types.
+ */
+export type ShareCustomData = SharePageData | ShareWorkspaceData;
+
+/**
+ * The payload for sharing page data.
+ */
 export interface SharePageData {
+	/**
+	 * The type of the data.
+	 */
 	type: "page";
+
+	/**
+	 * The window identity of the sharing page.
+	 */
 	windowIdentity: OpenFin.Identity;
+
+	/**
+	 * The page id of the shared page.
+	 */
 	pageId: string;
+
+	/**
+	 * The page data.
+	 */
 	page?: Page;
+
+	/**
+	 * The bounds for the page.
+	 */
 	bounds?: OpenFin.Bounds;
 }
 
+/**
+ * The payload for sharing workspace data.
+ */
 export interface ShareWorkspaceData {
+	/**
+	 * The type of the data.
+	 */
 	type: "workspace";
+
+	/**
+	 * The id of the shared workspace.
+	 */
 	workspaceId?: string;
 }
 
-export type ShareEntry = ShareEntryPage | ShareEntryWorkspace | ShareEntryUnknown;
+/**
+ * The combined shared store types.
+ */
+export type ShareStoreEntry = ShareEntryStorePage | ShareEntryStoreWorkspace | ShareEntryStoreUnknown;
 
-interface ShareEntryPage {
+/**
+ * Share stored entry for page.
+ */
+interface ShareEntryStorePage {
+	/**
+	 * The type of the data.
+	 */
 	type: "page";
-	data: { page: Page; bounds: OpenFin.Bounds };
+	/**
+	 * The data to store.
+	 */
+	data: {
+		page: Page;
+		bounds: OpenFin.Bounds;
+	};
 }
 
-interface ShareEntryWorkspace {
+/**
+ * Share stored entry for workspace.
+ */
+interface ShareEntryStoreWorkspace {
+	/**
+	 * The type of the data.
+	 */
 	type: "workspace";
-	data: { snapshot: string };
+	/**
+	 * The data to store.
+	 */
+	data: {
+		snapshot: string;
+	};
 }
 
-interface ShareEntryUnknown {
+/**
+ * Share stored entry for unknown.
+ */
+interface ShareEntryStoreUnknown {
+	/**
+	 * The type of the data.
+	 */
 	type: "other";
 }

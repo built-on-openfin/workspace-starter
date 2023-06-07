@@ -1,10 +1,55 @@
 /**
+ * Test if a value is a undefined or null.
+ * @param value The value to test.
+ * @returns True if the value is null or undefined.
+ */
+export function isEmpty(value: unknown): value is null | undefined {
+	return value === undefined || value === null;
+}
+
+/**
+ * Test if a value is a string.
+ * @param value The value to test.
+ * @returns True if the value is a string.
+ */
+export function isString(value: unknown): value is string {
+	return value !== undefined && value !== null && typeof value === "string";
+}
+
+/**
  * Test if a value is a string that is not empty.
  * @param value The value to test.
  * @returns True if the value is a string that is not empty.
  */
 export function isStringValue(value: unknown): value is string {
-	return value !== undefined && value !== null && typeof (value) === "string" && value.trim().length > 0;
+	return isString(value) && value.trim().length > 0;
+}
+
+/**
+ * Test if a value is a number.
+ * @param value The value to test.
+ * @returns True if the value is a number.
+ */
+export function isNumber(value: unknown): value is number {
+	return value !== undefined && value !== null && typeof value === "number";
+}
+
+/**
+ * Test if a value is a boolean.
+ * @param value The value to test.
+ * @returns True if the value is a boolean.
+ */
+export function isBoolean(value: unknown): value is boolean {
+	return value !== undefined && value !== null && typeof value === "boolean";
+}
+
+/**
+ * Test if a value is an integer.
+ * @param value The value to test.
+ * @returns True if the value is an integer.
+ */
+export function isInteger(value: unknown): value is number {
+	return isNumber(value) && Number.isInteger(value);
 }
 
 /**

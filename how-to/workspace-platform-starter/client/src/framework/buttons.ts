@@ -1,3 +1,4 @@
+import { type CustomButtonConfig } from "@openfin/workspace";
 import {
 	BrowserButtonType,
 	getCurrentSync,
@@ -9,12 +10,12 @@ import {
 import { checkConditions } from "./conditions";
 import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
-import type { ToolbarButtonDefinition } from "./shapes/browser-shapes";
+import type { WorkspacePlatformToolbarButton } from "./shapes/browser-shapes";
 import type { ColorSchemeMode } from "./shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder } from "./themes";
 import { objectClone } from "./utils";
 
-let configToolbarButtons: ToolbarButtonDefinition[] | undefined;
+let configToolbarButtons: WorkspacePlatformToolbarButton[] | undefined;
 let defaultToolbarButtons: ToolbarButton[] | undefined;
 
 /**
@@ -95,7 +96,8 @@ export async function updateBrowserWindowButtonsColorScheme(
 ): Promise<void> {
 	if (configToolbarButtons) {
 		const options = await browserWindow.openfinWindow.getOptions();
-		const currentToolbarButtons = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions?.buttons;
+		const currentToolbarButtons = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions
+			?.buttons;
 
 		if (Array.isArray(currentToolbarButtons)) {
 			const updatedButtons = [];
@@ -108,11 +110,12 @@ export async function updateBrowserWindowButtonsColorScheme(
 					if (buttonId) {
 						// Find the original button from config so that we can use the original
 						// iconUrl with any schema placeholders
-						const configButton = configToolbarButtons.find(
+						const originalButton = configToolbarButtons.find(
 							(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
 						);
-						if (configButton?.button.iconUrl) {
-							button.iconUrl = themeUrl(configButton.button.iconUrl, iconFolder, colorSchemeMode);
+						const btn = originalButton?.button as CustomButtonConfig;
+						if (btn?.iconUrl) {
+							button.iconUrl = themeUrl(btn.iconUrl, iconFolder, colorSchemeMode);
 						}
 					}
 				}
@@ -128,7 +131,7 @@ export async function updateBrowserWindowButtonsColorScheme(
  * Get the list of buttons as they are defined in the configuration.
  * @returns The list of configuration buttons.
  */
-async function getConfigToolbarButtons(): Promise<ToolbarButtonDefinition[]> {
+async function getConfigToolbarButtons(): Promise<WorkspacePlatformToolbarButton[]> {
 	if (Array.isArray(configToolbarButtons)) {
 		return configToolbarButtons;
 	}

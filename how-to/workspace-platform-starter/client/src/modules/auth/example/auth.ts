@@ -5,6 +5,7 @@ import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter
 import { randomUUID } from "../../../framework/uuid";
 import type { ExampleOptions, ExampleUser } from "./shapes";
 import { clearCurrentUser, EXAMPLE_AUTH_CURRENT_USER_KEY, getCurrentUser } from "./util";
+import { isEmpty, isNumber, isStringValue } from "workspace-platform-starter/utils";
 
 export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	private _authOptions: ExampleOptions;
@@ -49,13 +50,13 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 */
 	public async initialize(
 		definition: ModuleDefinition<ExampleOptions>,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	) {
-		this._logger = createLogger("AuthExample");
+		this._logger = loggerCreator("AuthExample");
 		this._authenticatedKey = `${fin.me.identity.uuid}-EXAMPLE_AUTH_IS_AUTHENTICATED`;
 
-		if (this._authOptions === undefined) {
+		if (isEmpty(this._authOptions)) {
 			this._logger.info(`Setting options: ${JSON.stringify(definition.data, null, 4)}`);
 			this._authOptions = definition.data;
 			this._authenticated = Boolean(localStorage.getItem(this._authenticatedKey));
@@ -119,7 +120,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	public unsubscribe(from: string): boolean {
 		let matchFound = false;
 		const eventType = this._subscribeIdMap[from];
-		if (eventType === undefined) {
+		if (isEmpty(eventType)) {
 			this._logger.warn(`You have tried to unsubscribe with a key ${from} that is invalid`);
 			return false;
 		}
@@ -164,7 +165,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 * @returns True if authentication is required.
 	 */
 	public async isAuthenticationRequired(): Promise<boolean> {
-		if (this._authenticated === undefined) {
+		if (isEmpty(this._authenticated)) {
 			this._authenticated = false;
 		}
 		return !this._authenticated;
@@ -219,7 +220,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 * Get user information from the auth provider.
 	 */
 	public async getUserInfo(): Promise<unknown> {
-		if (this._authenticated === undefined || !this._authenticated) {
+		if (isEmpty(this._authenticated) || !this._authenticated) {
 			this._logger.warn("Unable to retrieve user info unless the user is authenticated");
 			return null;
 		}
@@ -235,7 +236,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 					const authMatch = new RegExp(this._authOptions.authenticatedUrl, "i");
 
 					try {
-						if (win !== undefined) {
+						if (!isEmpty(win)) {
 							const info = await win.getInfo();
 							if (authMatch.test(info.url)) {
 								await win.close(true);
@@ -247,7 +248,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 						this._logger.error(
 							`Error while checking if login window automatically redirected. Error ${error.message}`
 						);
-						if (win !== undefined) {
+						if (!isEmpty(win)) {
 							await win.show(true);
 						}
 					}
@@ -264,7 +265,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 						}
 					});
 					statusCheck = window.setInterval(async () => {
-						if (win !== undefined) {
+						if (!isEmpty(win)) {
 							const info = await win.getInfo();
 							if (authMatch.test(info.url)) {
 								window.clearInterval(statusCheck);
@@ -286,9 +287,9 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 
 	private checkForSessionExpiry(force = false) {
 		if (
-			this._authOptions?.checkSessionValidityInSeconds !== undefined &&
+			isNumber(this._authOptions?.checkSessionValidityInSeconds) &&
 			this._authOptions?.checkSessionValidityInSeconds > -1 &&
-			this._sessionExpiryCheckId === undefined
+			isEmpty(this._sessionExpiryCheckId)
 		) {
 			this._sessionExpiryCheckId = window.setTimeout(async () => {
 				this._sessionExpiryCheckId = undefined;
@@ -323,7 +324,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	}
 
 	private async handleLogout(resolve: (success: boolean) => void): Promise<void> {
-		if (this._authenticated === undefined || !this._authenticated) {
+		if (isEmpty(this._authenticated) || !this._authenticated) {
 			this._logger.error("You have requested to log out but are not logged in");
 			resolve(false);
 			return;
@@ -333,11 +334,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 		this._authenticated = false;
 		localStorage.removeItem(this._authenticatedKey);
 		clearCurrentUser();
-		if (
-			this._authOptions.logoutUrl !== undefined &&
-			this._authOptions.logoutUrl !== null &&
-			this._authOptions.logoutUrl.trim().length > 0
-		) {
+		if (isStringValue(this._authOptions.logoutUrl)) {
 			try {
 				const win = await this.openLogoutWindow(this._authOptions.logoutUrl);
 				setTimeout(async () => {
@@ -419,7 +416,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 		} catch (error) {
 			this._logger.error("Error encountered while checking session", error);
 		} finally {
-			if (windowToCheck !== undefined) {
+			if (!isEmpty(windowToCheck)) {
 				await windowToCheck.close(true);
 			}
 		}

@@ -12,58 +12,57 @@ import type {
 	VersionStatusData,
 	VersionType
 } from "./shapes/version-shapes";
+import { isEmpty, isInteger } from "./utils";
 
 const versionInfo: VersionInfo = {};
 let versionOptions: VersionProviderOptions;
-let minVersion: MinimumVersion;
-let maxVersion: MaximumVersion;
-let versionWindowConfiguration: OpenFin.WindowOptions;
-let endpoints: EndpointProvider;
-let endpointId: string;
+let minVersion: MinimumVersion | undefined;
+let maxVersion: MaximumVersion | undefined;
+let versionWindowConfiguration: OpenFin.WindowOptions | undefined;
+let endpointProvider: EndpointProvider | undefined;
+let endpointId: string | undefined;
 let minFail: VersionType[] = [];
 let maxFail: VersionType[] = [];
 let settingsBasedWindowConfiguration = false;
 let isMonitoringEnabled = false;
-let monitoringId: number;
+let monitoringId: number | undefined;
 let versionCheckIntervalInSeconds: number;
 
 const logger = createLogger("VersionProvider");
 
 /**
- * Initialize the Version Provider
- * @param versionProviderOptions The options that guide how this version provider behaves
- * @param endpointProvider The provider that allows the setting and retrieval of data without needing to know about the implementation
+ * Initialize the Version Provider.
+ * @param options The options that guide how this version provider behaves
+ * @param initEndpointProvider The provider that allows the setting and retrieval of data without needing to know about the implementation
  */
 export async function init(
-	versionProviderOptions?: VersionProviderOptions,
-	endpointProvider?: EndpointProvider
+	options?: VersionProviderOptions,
+	initEndpointProvider?: EndpointProvider
 ): Promise<void> {
-	if (versionProviderOptions === undefined) {
+	if (isEmpty(options)) {
 		logger.info("Version provider options not passed");
 	} else {
-		versionOptions = versionProviderOptions;
-		versionInfo.app = versionProviderOptions.appVersion;
-		minVersion = versionProviderOptions.minVersion;
-		maxVersion = versionProviderOptions.maxVersion;
-		versionWindowConfiguration = versionProviderOptions.versionWindow as OpenFin.WindowOptions;
-		endpointId = versionProviderOptions.endpointId;
-		settingsBasedWindowConfiguration = versionWindowConfiguration !== undefined;
+		versionOptions = options;
+		versionInfo.app = options.appVersion;
+		minVersion = options.minVersion;
+		maxVersion = options.maxVersion;
+		versionWindowConfiguration = options.versionWindow as OpenFin.WindowOptions;
+		endpointId = options.endpointId;
+		settingsBasedWindowConfiguration = !isEmpty(versionWindowConfiguration);
 
-		if (
-			versionProviderOptions.versionCheckIntervalInSeconds !== undefined &&
-			versionProviderOptions.versionCheckIntervalInSeconds !== null &&
-			Number.isInteger(versionProviderOptions.versionCheckIntervalInSeconds)
-		) {
-			versionCheckIntervalInSeconds = versionProviderOptions.versionCheckIntervalInSeconds;
+		if (isInteger(options.versionCheckIntervalInSeconds)) {
+			versionCheckIntervalInSeconds = options.versionCheckIntervalInSeconds;
 		}
 
-		isMonitoringEnabled =
-			versionCheckIntervalInSeconds !== undefined &&
-			versionProviderOptions.endpointId !== undefined &&
-			endpointProvider.hasEndpoint(versionProviderOptions.endpointId);
-		logger.info("Initialized with the following settings", versionProviderOptions);
+		if (initEndpointProvider) {
+			isMonitoringEnabled =
+				!isEmpty(versionCheckIntervalInSeconds) &&
+				!isEmpty(options.endpointId) &&
+				initEndpointProvider.hasEndpoint(options.endpointId);
+		}
+		logger.info("Initialized with the following settings", options);
 	}
-	endpoints = endpointProvider;
+	endpointProvider = initEndpointProvider;
 }
 
 /**
@@ -74,7 +73,7 @@ export async function init(
  * @param versionNumber The number you wish to assign against this version
  */
 export function setVersion(versionType: VersionType, versionNumber: string): void {
-	let versionLabel: string;
+	let versionLabel: string | undefined;
 	let setVersionNumber = false;
 
 	switch (versionType) {
@@ -86,7 +85,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "notificationCenter": {
 			versionLabel = "Notification Center Version";
-			setVersionNumber = versionInfo.notificationCenter === undefined;
+			setVersionNumber = isEmpty(versionInfo.notificationCenter);
 			if (setVersionNumber) {
 				versionInfo.notificationCenter = versionNumber;
 			} else {
@@ -98,7 +97,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "platformClient": {
 			versionLabel = "Platform Client Version";
-			setVersionNumber = versionInfo.platformClient === undefined;
+			setVersionNumber = isEmpty(versionInfo.platformClient);
 			if (setVersionNumber) {
 				versionInfo.platformClient = versionNumber;
 			} else {
@@ -110,7 +109,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "rvm": {
 			versionLabel = "RVM Version";
-			setVersionNumber = versionInfo.rvm === undefined;
+			setVersionNumber = isEmpty(versionInfo.rvm);
 			if (setVersionNumber) {
 				versionInfo.rvm = versionNumber;
 			} else {
@@ -122,7 +121,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "runtime": {
 			versionLabel = "Runtime Version";
-			setVersionNumber = versionInfo.runtime === undefined;
+			setVersionNumber = isEmpty(versionInfo.runtime);
 			if (setVersionNumber) {
 				versionInfo.runtime = versionNumber;
 			} else {
@@ -134,7 +133,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "workspacePlatformClient": {
 			versionLabel = "Workspace Platform Client Version";
-			setVersionNumber = versionInfo.workspacePlatformClient === undefined;
+			setVersionNumber = isEmpty(versionInfo.workspacePlatformClient);
 			if (setVersionNumber) {
 				versionInfo.workspacePlatformClient = versionNumber;
 			} else {
@@ -146,7 +145,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "workspace": {
 			versionLabel = "Workspace Version";
-			setVersionNumber = versionInfo.workspace === undefined;
+			setVersionNumber = isEmpty(versionInfo.workspace);
 			if (setVersionNumber) {
 				versionInfo.workspace = versionNumber;
 			} else {
@@ -158,7 +157,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 		}
 		case "workspaceClient": {
 			versionLabel = "Workspace Client Version";
-			setVersionNumber = versionInfo.workspaceClient === undefined;
+			setVersionNumber = isEmpty(versionInfo.workspaceClient);
 			if (setVersionNumber) {
 				versionInfo.workspaceClient = versionNumber;
 			} else {
@@ -176,69 +175,74 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 }
 
 /**
- * Version information can be set against the version provider and easily retrieved using this function
+ * Version information can be set against the version provider and easily retrieved using this function.
  * @returns VersionInfo - an object containing information related to this platform and it's dependencies
  */
 export async function getVersionInfo(): Promise<VersionInfo> {
 	return versionInfo;
 }
 
-/** Inspect the platform and platform requirements and return a status to indicate version state */
+/**
+ * Inspect the platform and platform requirements and return a status to indicate version state.
+ * @returns The version status.
+ */
 export async function getVersionStatus(): Promise<VersionStatus> {
-	if (minVersion === undefined) {
+	if (isEmpty(minVersion)) {
 		logger.info("No minimum versions have been specified.");
 	} else {
 		const checks = Object.keys(minVersion) as VersionType[];
 
-		for (let i = 0; i < checks.length; i++) {
-			const versionToCheck = checks[i];
-			if (versionInfo[versionToCheck] !== undefined) {
-				const currentVersion: string = versionInfo[versionToCheck];
-				const limitVersion: string = minVersion[versionToCheck];
+		for (const check of checks) {
+			const versionToCheck = check;
+			if (!isEmpty(versionInfo[versionToCheck])) {
+				const currentVersion: string | undefined = versionInfo[versionToCheck];
+				const limitVersion: string | undefined = minVersion[versionToCheck];
 				compareVersion(versionToCheck, true, currentVersion, limitVersion);
 			}
 		}
 	}
 
-	if (maxVersion === undefined) {
+	if (isEmpty(maxVersion)) {
 		logger.info("No maximum versions have been specified.");
 	} else {
 		const checks = Object.keys(maxVersion) as VersionType[];
 
-		for (let i = 0; i < checks.length; i++) {
-			const versionToCheck = checks[i];
-			if (versionInfo[versionToCheck] !== undefined) {
-				const currentVersion: string = versionInfo[versionToCheck];
-				const limitVersion: string = maxVersion[versionToCheck];
+		for (const check of checks) {
+			const versionToCheck = check;
+			if (!isEmpty(versionInfo[versionToCheck])) {
+				const currentVersion: string | undefined = versionInfo[versionToCheck];
+				const limitVersion: string | undefined = maxVersion[versionToCheck];
 				compareVersion(versionToCheck, false, currentVersion, limitVersion);
 			}
 		}
 	}
 
-	if (endpointId !== undefined && endpoints !== undefined && endpoints.hasEndpoint(endpointId)) {
+	if (!isEmpty(endpointId) && !isEmpty(endpointProvider) && endpointProvider.hasEndpoint(endpointId)) {
 		try {
-			const response = await endpoints.requestResponse<VersionRequest, VersionResponse>(
+			const response = await endpointProvider.requestResponse<VersionRequest, VersionResponse>(
 				endpointId,
 				getVersionStatusData()
 			);
 			logger.info("Response received from version endpoint: ", response);
-			if (response?.status !== undefined) {
-				if (Array.isArray(response.status.minFail)) {
-					minFail = response?.status?.minFail;
+			const status = response?.status;
+			if (!isEmpty(status)) {
+				if (Array.isArray(status.minFail)) {
+					minFail = status?.minFail;
 				}
-				if (Array.isArray(response.status.maxFail)) {
-					maxFail = response.status.maxFail;
+				if (Array.isArray(status.maxFail)) {
+					maxFail = status.maxFail;
 				}
 			}
-			if (response?.status?.minVersion) {
-				minVersion = response.status.minVersion;
+			if (status?.minVersion) {
+				minVersion = status.minVersion;
 			}
-			if (response?.status?.maxVersion) {
-				maxVersion = response.status.maxVersion;
+			if (status?.maxVersion) {
+				maxVersion = status.maxVersion;
 			}
-			if (response.windowOptions !== undefined) {
+			const windowOptions = response?.windowOptions;
+			if (!isEmpty(windowOptions)) {
 				settingsBasedWindowConfiguration = false;
-				versionWindowConfiguration = validateVersionWindow(response.windowOptions);
+				versionWindowConfiguration = validateVersionWindow(windowOptions);
 				logger.info("Fetched version window configuration from endpoint:", endpointId);
 			}
 		} catch (error) {
@@ -271,7 +275,7 @@ export async function getVersionStatus(): Promise<VersionStatus> {
 export async function manageVersionStatus(status: VersionStatus): Promise<boolean> {
 	if (status !== "compatible") {
 		const windowOptions = validateVersionWindow(versionWindowConfiguration);
-		if (windowOptions === undefined) {
+		if (isEmpty(windowOptions)) {
 			logger.warn(
 				"The status of the platform version is in a non compatible state but we do not have a window to launch to react to this state."
 			);
@@ -288,10 +292,12 @@ export async function manageVersionStatus(status: VersionStatus): Promise<boolea
 	return false;
 }
 
-/** If configured via Version Provider Settings, this method will start monitoring to see if an upgrade is available */
-export async function MonitorVersionStatus() {
+/**
+ * If configured via Version Provider Settings, this method will start monitoring to see if an upgrade is available.
+ */
+export async function MonitorVersionStatus(): Promise<void> {
 	if (isMonitoringEnabled) {
-		if (monitoringId === undefined) {
+		if (isEmpty(monitoringId)) {
 			logger.info("Monitoring is enabled and not running. Starting the monitoring process.");
 			await startMonitoring();
 		} else {
@@ -302,8 +308,11 @@ export async function MonitorVersionStatus() {
 	}
 }
 
-async function startMonitoring() {
-	if (monitoringId !== undefined) {
+/**
+ * Start monitoring the versions.
+ */
+async function startMonitoring(): Promise<void> {
+	if (!isEmpty(monitoringId)) {
 		clearTimeout(monitoringId);
 		monitoringId = undefined;
 	}
@@ -319,26 +328,33 @@ async function startMonitoring() {
 	}, versionCheckIntervalInSeconds * 1000);
 }
 
-function validateVersionWindow(windowOptionsToValidate: OpenFin.WindowOptions): OpenFin.WindowOptions {
-	if (windowOptionsToValidate === undefined) {
+/**
+ * Validate the version window options.
+ * @param windowOptionsToValidate The window options to validate.
+ * @returns The validate window options.
+ */
+function validateVersionWindow(
+	windowOptionsToValidate: OpenFin.WindowOptions | undefined
+): OpenFin.WindowOptions | undefined {
+	if (isEmpty(windowOptionsToValidate)) {
 		logger.info("No version window configuration provided.");
 		return undefined;
 	}
 
 	const validatedWindowOptions = { ...windowOptionsToValidate };
 
-	if (validatedWindowOptions.url === undefined) {
+	if (isEmpty(validatedWindowOptions.url)) {
 		logger.error(
 			"A version window configuration was set but a url was not provided. A window cannot be launched."
 		);
 		return undefined;
 	}
-	if (validatedWindowOptions.name === undefined) {
+	if (isEmpty(validatedWindowOptions.name)) {
 		validatedWindowOptions.name = `${fin.me.identity.uuid}-versioning`;
 	}
 
 	if (settingsBasedWindowConfiguration) {
-		if (validatedWindowOptions.customData !== undefined) {
+		if (!isEmpty(validatedWindowOptions.customData)) {
 			logger.info("Enriching customData provided by version window configuration.");
 			validatedWindowOptions.customData = {
 				...validatedWindowOptions.customData,
@@ -354,17 +370,30 @@ function validateVersionWindow(windowOptionsToValidate: OpenFin.WindowOptions): 
 	return validatedWindowOptions;
 }
 
+/**
+ * Get the version data as an object.
+ * @returns The combined version data.
+ */
 function getVersionStatusData(): VersionStatusData {
 	return { minVersion, maxVersion, versionInfo, minFail, maxFail };
 }
 
+/**
+ * Check the version to see if it is in range.
+ * @param versionToCheck The version to compare.
+ * @param isMinLimit Is this a minimum limit version check.
+ * @param type The type of version being checked.
+ * @param baseVersion The base version to compare to.
+ * @param limitVersion The limit of the version being checked.
+ * @returns True if the version is out of range.
+ */
 function isGreaterThanOrLessThan(
 	versionToCheck: string,
 	isMinLimit: boolean,
 	type: string,
 	baseVersion: string,
 	limitVersion: string
-) {
+): boolean | undefined {
 	const maxOrMinLabel = isMinLimit ? "minimum" : "maximum";
 	if (Number.parseInt(baseVersion, 10) > Number.parseInt(limitVersion, 10)) {
 		logger.info(
@@ -383,21 +412,23 @@ function isGreaterThanOrLessThan(
 		}
 		return true;
 	}
-	return null;
 }
 
+/**
+ * Compare the versions.
+ * @param versionToCheck The version to compare.
+ * @param isMinLimit Is this a minimum limit version check.
+ * @param currentVersion The current version to compare to.
+ * @param limitVersion The limit of the version being checked.
+ * @returns True if the version is out of range.
+ */
 function compareVersion(
 	versionToCheck: VersionType,
 	isMinLimit: boolean,
-	currentVersion: string,
-	limitVersion: string
-): boolean {
-	if (
-		currentVersion === undefined ||
-		currentVersion === null ||
-		limitVersion === undefined ||
-		limitVersion === null
-	) {
+	currentVersion: string | undefined,
+	limitVersion: string | undefined
+): boolean | undefined {
+	if (isEmpty(currentVersion) || isEmpty(limitVersion)) {
 		logger.warn(
 			`A check was requested for ${versionToCheck} but either the base version or limit version was not specified.`
 		);
@@ -426,7 +457,7 @@ function compareVersion(
 			limitVersionList[i]
 		);
 
-		if (isValid !== null) {
+		if (!isEmpty(isValid)) {
 			if (!isValid) {
 				if (isMinLimit) {
 					minFail.push(versionToCheck);

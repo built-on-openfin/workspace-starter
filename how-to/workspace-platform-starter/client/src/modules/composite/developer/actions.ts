@@ -7,6 +7,7 @@ import type {
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isStringValue } from "workspace-platform-starter/utils";
 
 /**
  * Implement the actions.
@@ -25,16 +26,16 @@ export class DeveloperActions implements Actions {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ActionHelpers
 	): Promise<void> {
-		this._logger = createLogger("DeveloperActions");
+		this._logger = loggerCreator("DeveloperActions");
 		this._helpers = helpers;
 	}
 
@@ -77,12 +78,7 @@ export class DeveloperActions implements Actions {
 						const options = await view.getOptions();
 						const info = await view.getInfo();
 						const name = options.name;
-						const fdc3InteropApi =
-							options.fdc3InteropApi !== undefined &&
-							options.fdc3InteropApi !== null &&
-							options.fdc3InteropApi.length > 0
-								? options.fdc3InteropApi
-								: "1.2";
+						const fdc3InteropApi = isStringValue(options.fdc3InteropApi) ? options.fdc3InteropApi : "1.2";
 						const preloads =
 							Array.isArray(options.preloadScripts) && options.preloadScripts.length > 0
 								? options.preloadScripts

@@ -5,6 +5,7 @@ import type { EndpointProvider, PlatformApp } from "./shapes";
 import type { DirectoryApps, DirectoryEndpoint } from "./shapes/directory-shapes";
 import type { FDC3VOnePointTwoAppDirectoryResponse } from "./shapes/fdc3-1-2-shapes";
 import type { FDC3VTwoPointZeroAppDirectoryResponse } from "./shapes/fdc3-2-0-shapes";
+import { isEmpty } from "./utils";
 
 const logger = createLogger("Directory");
 let endpoints: EndpointProvider | undefined;
@@ -32,7 +33,7 @@ export async function init(endpointProvider: EndpointProvider): Promise<void> {
  */
 export function addDirectoryEndpoint(endpoint: DirectoryEndpoint): boolean {
 	if (endpoints) {
-		if (endpoint?.id === undefined) {
+		if (isEmpty(endpoint?.id)) {
 			logger.error(
 				"A directory entry didn't specify an id and it needs an id to be registered. It cannot be added as a directory endpoint.",
 				endpoint
@@ -48,18 +49,18 @@ export function addDirectoryEndpoint(endpoint: DirectoryEndpoint): boolean {
 			return false;
 		}
 
-		if (endpoint.endpointId === undefined && endpoint.map === undefined && endpoint.url === undefined) {
+		if (isEmpty(endpoint.endpointId) && isEmpty(endpoint.map) && isEmpty(endpoint.url)) {
 			logger.error("A directory endpoint must either specify a url, endpoint or a map.");
 			return false;
 		}
 
-		if (endpoint?.endpointId !== undefined && !endpoints.hasEndpoint(endpoint.endpointId)) {
+		if (!isEmpty(endpoint?.endpointId) && !endpoints.hasEndpoint(endpoint.endpointId)) {
 			logger.error(
 				`A directory entry specifies an endpoint that does not exist: ${endpoint.endpointId} and it can therefore not be added as a directory endpoint. Id: ${endpoint.id}`,
 				endpoint
 			);
 			return false;
-		} else if (endpoint?.map !== undefined) {
+		} else if (!isEmpty(endpoint?.map)) {
 			if (!endpoints.hasEndpoint(endpoint.map.inputId)) {
 				logger.error(
 					`A directory entry specifies an endpoint map input id that does not exist: ${endpoint.map.inputId} and it can therefore not be added as a directory endpoint. Id: ${endpoint.id}`,
@@ -75,8 +76,7 @@ export function addDirectoryEndpoint(endpoint: DirectoryEndpoint): boolean {
 				return false;
 			}
 		} else if (
-			endpoint?.url?.path !== undefined &&
-			endpoint.url.path !== null &&
+			!isEmpty(endpoint?.url) &&
 			(endpoint.url.path.trim().length === 0 || !endpoint.url.path.startsWith("http"))
 		) {
 			logger.error(
@@ -138,13 +138,11 @@ export async function getPlatformApps(): Promise<PlatformApp[]> {
  * @param results The result to map to platform apps.
  * @returns The list of mapped apps.
  */
-async function getApps(
-	results: DirectoryApps
-): Promise<PlatformApp[]> {
+async function getApps(results: DirectoryApps): Promise<PlatformApp[]> {
 	if (Array.isArray(results)) {
 		const openfinApps = mapOpenFinResults(results);
 		return openfinApps;
-	} else if (results.metadata?.type === "fdc3" && results?.metadata?.version !== undefined) {
+	} else if (results.metadata?.type === "fdc3" && !isEmpty(results?.metadata?.version)) {
 		const version = results.metadata.version;
 		switch (version) {
 			case "1.2": {
@@ -178,7 +176,6 @@ async function getApps(
 	return [];
 }
 
-
 /**
  * Map platform apps from the OpenFin format to standard PlatformApp.
  * @param applications The applications to map.
@@ -188,9 +185,9 @@ function mapOpenFinResults(applications: PlatformApp[]): PlatformApp[] {
 	const platformApps: PlatformApp[] = [];
 
 	for (const app of applications) {
-		if (Array.isArray(app.intents) && app.interop === undefined) {
+		if (Array.isArray(app.intents) && isEmpty(app.interop)) {
 			app.interop = getInterop(app.intents);
-		} else if (app.interop !== undefined && !Array.isArray(app.intents)) {
+		} else if (!isEmpty(app.interop) && !Array.isArray(app.intents)) {
 			app.intents = getIntents(app.interop);
 		}
 		platformApps.push(app);
@@ -206,38 +203,35 @@ function mapOpenFinResults(applications: PlatformApp[]): PlatformApp[] {
  */
 async function getResults(directoryEndpoint: DirectoryEndpoint): Promise<PlatformApp[]> {
 	if (endpoints) {
-		if (directoryEndpoint.endpointId !== undefined) {
+		if (!isEmpty(directoryEndpoint.endpointId)) {
 			logger.info(`Fetching apps from endpoint id: ${directoryEndpoint.endpointId}.`);
-			const results = await endpoints.requestResponse<
-				never,
-				DirectoryApps
-			>(directoryEndpoint.endpointId);
+			const results = await endpoints.requestResponse<never, DirectoryApps>(directoryEndpoint.endpointId);
 			if (results) {
 				return getApps(results);
 			}
-		} else if (directoryEndpoint.url !== undefined) {
+		} else if (!isEmpty(directoryEndpoint.url)) {
 			logger.info(`Fetching apps from url: ${directoryEndpoint.url.path}`);
-			const resp = await fetch(directoryEndpoint.url.path, { credentials: directoryEndpoint.url.credentials });
+			const resp = await fetch(directoryEndpoint.url.path, {
+				credentials: directoryEndpoint.url.credentials
+			});
 			const results:
 				| PlatformApp[]
 				| FDC3VTwoPointZeroAppDirectoryResponse
 				| FDC3VOnePointTwoAppDirectoryResponse = await resp.json();
 			return getApps(results);
-		} else if (directoryEndpoint.map !== undefined) {
+		} else if (!isEmpty(directoryEndpoint.map)) {
 			if (!directoryEndpoint.map.outputId) {
-				logger.error(
-					`Mapping from App Source: ${directoryEndpoint.map.inputId} has no outputId`
-				);
+				logger.error(`Mapping from App Source: ${directoryEndpoint.map.inputId} has no outputId`);
 			} else {
 				logger.info(
 					`Mapping from App Source: ${directoryEndpoint.map.inputId} to Platform App using: ${directoryEndpoint.map.outputId}`
 				);
 				const inputResults = await endpoints.requestResponse<never, unknown>(directoryEndpoint.map.inputId);
 				logger.info(`Received response from ${directoryEndpoint.map.inputId}`);
-				const outputResults = await endpoints.requestResponse<
-					unknown,
-					DirectoryApps
-				>(directoryEndpoint.map.outputId, inputResults);
+				const outputResults = await endpoints.requestResponse<unknown, DirectoryApps>(
+					directoryEndpoint.map.outputId,
+					inputResults
+				);
 
 				if (outputResults) {
 					return getApps(outputResults);
@@ -246,7 +240,8 @@ async function getResults(directoryEndpoint: DirectoryEndpoint): Promise<Platfor
 		}
 	}
 
-	logger.error(`Directory entry ${directoryEndpoint.id} does not have any supported way of fetching applications.`);
+	logger.error(
+		`Directory entry ${directoryEndpoint.id} does not have any supported way of fetching applications.`
+	);
 	return [];
 }
-

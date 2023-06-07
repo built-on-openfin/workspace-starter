@@ -11,7 +11,7 @@ import type {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./shapes/init-options-shapes";
-import { randomUUID } from "./utils";
+import { isEmpty, randomUUID } from "./utils";
 
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
@@ -86,9 +86,9 @@ export async function init(
 		userAppConfigArgs?: UserAppConfigArgs;
 	};
 
-	if (customInitOptions?.userAppConfigArgs !== undefined) {
+	if (!isEmpty(customInitOptions?.userAppConfigArgs)) {
 		logger.info("Received during startup", customInitOptions?.userAppConfigArgs);
-		if (customInitOptions?.userAppConfigArgs[ACTION_PARAM_NAME] !== undefined) {
+		if (!isEmpty(customInitOptions?.userAppConfigArgs[ACTION_PARAM_NAME])) {
 			await notifyActionListeners(customInitOptions?.userAppConfigArgs, lifecycle);
 		} else {
 			await notifyListeners(customInitOptions?.userAppConfigArgs);
@@ -155,7 +155,7 @@ export function registerListener(
  */
 export function removeListener(subscriptionId: string): boolean {
 	let removed = false;
-	if (listenerMap[subscriptionId] !== undefined) {
+	if (!isEmpty(listenerMap[subscriptionId])) {
 		const paramName = listenerMap[subscriptionId];
 		const listener = listeners[paramName];
 		delete listenerMap[subscriptionId];
@@ -174,7 +174,7 @@ export function removeListener(subscriptionId: string): boolean {
  */
 export function removeActionListener(id: string): boolean {
 	let removed = false;
-	if (actionListenerMap[id] !== undefined) {
+	if (!isEmpty(actionListenerMap[id])) {
 		const action = actionListenerMap[id];
 		const actionListener = actionListeners[action];
 		delete actionListenerMap[id];
@@ -209,12 +209,16 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
  * @param initOptions The init options to extract from.
  * @param lifecycle The lifecycle event to use.
  */
-async function notifyActionListeners(initOptions: UserAppConfigArgs, lifecycle: InitOptionsLifecycle): Promise<void> {
+async function notifyActionListeners(
+	initOptions: UserAppConfigArgs,
+	lifecycle: InitOptionsLifecycle
+): Promise<void> {
 	const action = initOptions[ACTION_PARAM_NAME];
-	const payload =
-		initOptions[ACTION_PAYLOAD_PARAM_NAME] !== undefined ? extractPayloadFromParams(initOptions) : undefined;
+	const payload = !isEmpty(initOptions[ACTION_PAYLOAD_PARAM_NAME])
+		? extractPayloadFromParams(initOptions)
+		: undefined;
 	const availableListeners = actionListeners[action];
-	if (availableListeners !== undefined && availableListeners !== null) {
+	if (!isEmpty(availableListeners)) {
 		const subscriberIds = Object.keys(availableListeners);
 
 		for (const subscriberId of subscriberIds) {
@@ -247,18 +251,18 @@ async function notifyListeners(initOptions: UserAppConfigArgs): Promise<void> {
 	let listenerId: string | undefined;
 
 	for (const id of customParamIds) {
-		if (initOptions[id] !== undefined) {
+		if (!isEmpty(initOptions[id])) {
 			listenerId = id;
 			break;
 		}
 	}
 
-	if (listenerId !== undefined) {
+	if (!isEmpty(listenerId)) {
 		logger.info(
 			`Init param has been passed and it has a matching listener (${listenerId}). Passing on init options to listeners`
 		);
 		const availableListeners = listeners[listenerId];
-		if (availableListeners !== undefined && availableListeners !== null) {
+		if (!isEmpty(availableListeners)) {
 			const subscriberIds = Object.keys(availableListeners);
 
 			for (const subscriberId of subscriberIds) {
@@ -286,9 +290,9 @@ async function notifyListeners(initOptions: UserAppConfigArgs): Promise<void> {
  * @param event.userAppConfigArgs The config args containing the init options.
  */
 async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }): Promise<void> {
-	if (event?.userAppConfigArgs !== undefined) {
+	if (!isEmpty(event?.userAppConfigArgs)) {
 		logger.info("Received while platform is running", event.userAppConfigArgs);
-		if (event.userAppConfigArgs[ACTION_PARAM_NAME] !== undefined) {
+		if (!isEmpty(event.userAppConfigArgs[ACTION_PARAM_NAME])) {
 			await notifyActionListeners(event.userAppConfigArgs, "after-bootstrap");
 		} else {
 			await notifyListeners(event.userAppConfigArgs);

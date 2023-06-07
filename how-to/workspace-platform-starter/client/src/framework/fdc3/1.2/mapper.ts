@@ -1,10 +1,8 @@
 import type { Image } from "@openfin/workspace";
-import type { PlatformApp } from "workspace-platform-starter/shapes";
-import type {
-	AppInterop,
-	AppIntents as FDC3TwoPointZeroAppIntents
-} from "workspace-platform-starter/shapes/fdc3-2-0-shapes";
+import type { PlatformApp } from "../../shapes";
 import type { AppDefinition, AppIcon, AppImage, AppIntents, AppMetadata } from "../../shapes/fdc3-1-2-shapes";
+import type { AppInterop, AppIntents as FDC3TwoPointZeroAppIntents } from "../../shapes/fdc3-2-0-shapes";
+import { isBoolean, isEmpty, isStringValue } from "../../utils";
 
 function getIcons(icons: AppIcon[]): Image[] {
 	const appIcons: Image[] = [];
@@ -54,7 +52,7 @@ function getAutostart(app: AppDefinition): boolean {
 }
 
 function getValue(flag: string | boolean, defaultFlag: boolean) {
-	if (flag !== undefined && flag !== null && flag !== "") {
+	if (isStringValue(flag) || isBoolean(flag)) {
 		switch (flag) {
 			case "False":
 			case "false":
@@ -131,14 +129,14 @@ export function mapToAppMetaData(app: PlatformApp): AppMetadata {
 	const images: string[] = [];
 	if (Array.isArray(app.icons)) {
 		for (const icon of app.icons) {
-			if (icon.src !== undefined) {
+			if (!isEmpty(icon.src)) {
 				icons.push(icon.src);
 			}
 		}
 	}
 	if (Array.isArray(app.images)) {
 		for (const image of app.images) {
-			if (image.src !== undefined) {
+			if (!isEmpty(image.src)) {
 				images.push(image.src);
 			}
 		}

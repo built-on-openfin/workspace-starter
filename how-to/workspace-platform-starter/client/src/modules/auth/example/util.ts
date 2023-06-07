@@ -1,10 +1,11 @@
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { ExampleUser } from "./shapes";
 
 export const EXAMPLE_AUTH_CURRENT_USER_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_CURRENT_USER`;
 
 export function getCurrentUser(): ExampleUser | null {
 	const storedUser = localStorage.getItem(EXAMPLE_AUTH_CURRENT_USER_KEY);
-	if (storedUser === null) {
+	if (isEmpty(storedUser)) {
 		return null;
 	}
 	return JSON.parse(storedUser) as ExampleUser;

@@ -8,6 +8,7 @@ import type {
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 /**
  * Implement the actions.
@@ -26,16 +27,16 @@ export class PageActions implements Actions {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ActionHelpers
 	): Promise<void> {
-		this._logger = createLogger("PageActions");
+		this._logger = loggerCreator("PageActions");
 		this._helpers = helpers;
 	}
 
@@ -49,11 +50,11 @@ export class PageActions implements Actions {
 			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const targetWindowIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
-				if (pageId !== undefined) {
+				if (!isEmpty(pageId)) {
 					const page = await platform.Storage.getPage(pageId);
 
-					if (page !== undefined && page !== null) {
-						if (targetWindowIdentity !== undefined) {
+					if (!isEmpty(page)) {
+						if (!isEmpty(targetWindowIdentity)) {
 							this._logger.info(
 								`Adding page with id: ${pageId} to the current window with name: ${targetWindowIdentity.name}`
 							);
@@ -80,7 +81,7 @@ export class PageActions implements Actions {
 			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const parentIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
-				if (pageId !== undefined && parentIdentity !== undefined) {
+				if (!isEmpty(pageId) && !isEmpty(parentIdentity)) {
 					this._logger.info(
 						`Showing page with id: ${pageId} by bringing window with name: ${parentIdentity.name} to the foreground.`
 					);
@@ -98,7 +99,7 @@ export class PageActions implements Actions {
 		actionMap["page-delete"] = async (payload: CustomActionPayload) => {
 			if (payload.callerType !== this._helpers.callerTypes.API) {
 				const pageId: string = payload?.customData?.pageId;
-				if (pageId !== undefined) {
+				if (!isEmpty(pageId)) {
 					this._logger.info(`Deleting page with id: ${pageId}`);
 					await platform.Storage.deletePage(pageId);
 				}

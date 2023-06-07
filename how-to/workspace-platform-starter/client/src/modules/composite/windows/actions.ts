@@ -8,6 +8,7 @@ import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/a
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { getAllVisibleWindows } from "./helper";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 /**
  * Implement the actions.
@@ -26,16 +27,16 @@ export class WindowActions implements Actions {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
 	public async initialize(
 		definition: ModuleDefinition,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers: ActionHelpers
 	): Promise<void> {
-		this._logger = createLogger("WindowActions");
+		this._logger = loggerCreator("WindowActions");
 		this._helpers = helpers;
 	}
 
@@ -66,7 +67,7 @@ export class WindowActions implements Actions {
 						await visibleWindow.bringToFront();
 					}
 				}
-				if (windowInitiator !== undefined) {
+				if (!isEmpty(windowInitiator)) {
 					await windowInitiator.setAsForeground();
 				}
 			}

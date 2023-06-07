@@ -1,6 +1,6 @@
-import { PlatformApp } from "./app-shapes";
-import { FDC3VOnePointTwoAppDirectoryResponse } from "./fdc3-1-2-shapes";
-import { FDC3VTwoPointZeroAppDirectoryResponse } from "./fdc3-2-0-shapes";
+import { type PlatformApp } from "./app-shapes";
+import { type FDC3VOnePointTwoAppDirectoryResponse } from "./fdc3-1-2-shapes";
+import { type FDC3VTwoPointZeroAppDirectoryResponse } from "./fdc3-2-0-shapes";
 
 /**
  * Endpoint definition for a directory.
@@ -30,4 +30,10 @@ export interface DirectoryEndpoint {
 	};
 }
 
-export type DirectoryApps = PlatformApp[] | FDC3VTwoPointZeroAppDirectoryResponse | FDC3VOnePointTwoAppDirectoryResponse;
+/**
+ * The different app formats that can be in a directory.
+ */
+export type DirectoryApps =
+	| PlatformApp[]
+	| FDC3VTwoPointZeroAppDirectoryResponse
+	| FDC3VOnePointTwoAppDirectoryResponse;

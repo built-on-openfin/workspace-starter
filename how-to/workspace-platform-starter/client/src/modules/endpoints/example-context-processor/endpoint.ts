@@ -6,11 +6,14 @@ import {
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { objectClone } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue, objectClone } from "workspace-platform-starter/utils";
 import { type ContextProcessorSettings } from "./shapes";
 
 export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint {
-	private _logger: Logger;
+	/**
+	 * Logged for messages.
+	 */
+	private _logger?: Logger;
 
 	/**
 	 * Initialize the module.
@@ -21,10 +24,10 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 	 */
 	public async initialize(
 		definition: ModuleDefinition,
-		createLogger: LoggerCreator,
+		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
 	) {
-		this._logger = createLogger("ExampleContextProcessorEndpoint");
+		this._logger = loggerCreator("ExampleContextProcessorEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 
@@ -56,26 +59,27 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 			if (endpointDefinition?.options?.logContext) {
 				this._logger.info(`Context Type ${request.context.type} matched. Incoming context:`, request.context);
 			}
-			if (request.context.id?.date !== undefined) {
+			const contextId = request.context.id;
+			if (contextId && !isEmpty(contextId.date)) {
 				// we would do more validation in a real app
-				const targetDate = new Date(request.context.id.date);
-				if (!this.isValid(response.context.id.day)) {
-					response.context.id.day = `${targetDate.getDate()}`;
+				const targetDate = new Date(contextId.date);
+				if (!isStringValue(contextId.day)) {
+					contextId.day = `${targetDate.getDate()}`;
 				}
-				if (!this.isValid(response.context.id.month)) {
-					response.context.id.month = `${targetDate.getMonth() + 1}`;
+				if (!isStringValue(contextId.month)) {
+					contextId.month = `${targetDate.getMonth() + 1}`;
 				}
-				if (!this.isValid(response.context.id.year)) {
-					response.context.id.year = `${targetDate.getFullYear()}`;
+				if (!isStringValue(contextId.year)) {
+					contextId.year = `${targetDate.getFullYear()}`;
 				}
-				if (!this.isValid(response.context.id.epoch)) {
-					response.context.id.epoch = `${targetDate.getTime() / 1000}`;
+				if (!isStringValue(contextId.epoch)) {
+					contextId.epoch = `${targetDate.getTime() / 1000}`;
 				}
-				if (!this.isValid(response.context.id.utc)) {
-					response.context.id.utc = `${targetDate.toUTCString()}`;
+				if (!isStringValue(contextId.utc)) {
+					contextId.utc = `${targetDate.toUTCString()}`;
 				}
-				if (!this.isValid(response.context.id.iso)) {
-					response.context.id.iso = `${targetDate.toISOString()}`;
+				if (!isStringValue(contextId.iso)) {
+					contextId.iso = `${targetDate.toISOString()}`;
 				}
 				if (endpointDefinition?.options?.logContext) {
 					this._logger.info(
@@ -90,13 +94,5 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 			}
 		}
 		return response;
-	}
-
-	/**
-	 * Does the id need to be set
-	 * @param id The property from within the id object.
-	 */
-	private isValid(id: string): boolean {
-		return id !== undefined && id !== null && id.trim().length > 0;
 	}
 }

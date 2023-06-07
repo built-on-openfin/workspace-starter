@@ -3,6 +3,7 @@ import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/lo
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { PlatformLocalStorage } from "./platform-local-storage";
 import type { IPlatformStorage } from "./platform-storage-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 export class LocalStorageEndpoint implements Endpoint {
 	private _logger: Logger;
@@ -25,9 +26,13 @@ export class LocalStorageEndpoint implements Endpoint {
 	 * @param helpers Helper methods for the module to interact with the application core.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition, createLogger: LoggerCreator, helpers: ModuleHelpers) {
-		this._loggerCreator = createLogger;
-		this._logger = createLogger("LocalStorageEndpoint");
+	public async initialize(
+		definition: ModuleDefinition,
+		loggerCreator: LoggerCreator,
+		helpers: ModuleHelpers
+	) {
+		this._loggerCreator = loggerCreator;
+		this._logger = loggerCreator("LocalStorageEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 
@@ -41,7 +46,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		endpointDefinition: EndpointDefinition<{ dataType: string; method: "REMOVE" | "SET" }>,
 		request?: { id: string; payload?: unknown }
 	): Promise<boolean> {
-		if (request === undefined) {
+		if (isEmpty(request)) {
 			this._logger.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
 			return false;
 		}
@@ -60,7 +65,7 @@ export class LocalStorageEndpoint implements Endpoint {
 			await localStorage.remove(id);
 			return true;
 		} else if (method === "SET") {
-			if (request.payload === undefined) {
+			if (isEmpty(request.payload)) {
 				this._logger.warn(`The payload needs to be specified for this action: ${endpointDefinition.id}`);
 				return false;
 			}
@@ -91,7 +96,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		const localStorage = this.getStorage<unknown>(dataType as string);
 
 		if (method === "GET") {
-			if (request?.id === undefined) {
+			if (isEmpty(request?.id)) {
 				return localStorage.getAll();
 			}
 			return localStorage.get(request.id);
@@ -101,7 +106,7 @@ export class LocalStorageEndpoint implements Endpoint {
 
 	private getStorage<T>(id: string): IPlatformStorage<T> {
 		let localStorage: IPlatformStorage<T> = this._storage[id] as PlatformLocalStorage<T>;
-		if (localStorage === undefined) {
+		if (isEmpty(localStorage)) {
 			localStorage = new PlatformLocalStorage<T>(id, id, this._loggerCreator);
 			this._storage[id] = localStorage;
 		}

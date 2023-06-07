@@ -9,7 +9,10 @@ let modules: ModuleEntry<LogProvider>[] = [];
  * @param options Options for the logger provider.
  * @param helpers Module helpers to pass to any loaded modules.
  */
-export async function init(options: LoggerProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: LoggerProviderOptions | undefined,
+	helpers: ModuleHelpers
+): Promise<void> {
 	if (options) {
 		modules = await loadModules<LogProvider>(options, "log");
 		await initializeModules(modules, helpers);
@@ -30,16 +33,13 @@ export async function closedown(): Promise<void> {
  */
 export function createLogger(group: string): Logger {
 	return {
-		info: (message: unknown, ...optionalParams: unknown[]) =>
-			log(group, "info", message, ...optionalParams),
-		warn: (message: unknown, ...optionalParams: unknown[]) =>
-			log(group, "warn", message, ...optionalParams),
+		info: (message: unknown, ...optionalParams: unknown[]) => log(group, "info", message, ...optionalParams),
+		warn: (message: unknown, ...optionalParams: unknown[]) => log(group, "warn", message, ...optionalParams),
 		error: (message: unknown, ...optionalParams: unknown[]) =>
 			log(group, "error", message, ...optionalParams),
 		trace: (message: unknown, ...optionalParams: unknown[]) =>
 			log(group, "trace", message, ...optionalParams),
-		debug: (message: unknown, ...optionalParams: unknown[]) =>
-			log(group, "debug", message, ...optionalParams)
+		debug: (message: unknown, ...optionalParams: unknown[]) => log(group, "debug", message, ...optionalParams)
 	};
 }
 
@@ -53,10 +53,8 @@ export function createLogger(group: string): Logger {
 function log(group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void {
 	let hasLogged = false;
 	for (const logProviderEntry of modules) {
-		if (logProviderEntry.implementation) {
-			hasLogged = true;
-			logProviderEntry.implementation.log(fin.me.identity.name, group, level, message, ...optionalParams);
-		}
+		hasLogged = true;
+		logProviderEntry.implementation.log(fin.me.identity.name, group, level, message, ...optionalParams);
 	}
 
 	if (!hasLogged) {

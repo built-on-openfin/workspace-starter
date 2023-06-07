@@ -21,6 +21,7 @@ import {
 	getCurrentPalette,
 	getCurrentThemeId
 } from "./themes";
+import { isEmpty } from "./utils";
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Modules");
@@ -124,10 +125,11 @@ export async function loadModule<
 				for (const entryPoint of entryPoints) {
 					loadedModules[moduleDefinition.url][entryPoint as ModuleTypes] = {
 						// If the moduleType is the type being loaded then we can store the
-						// definition as well
-						definition: entryPoint === moduleType ? moduleDefinition : undefined,
+						// definition as well, otherwise create a dummy entry
+						definition: entryPoint === moduleType ? moduleDefinition : ({} as ModuleDefinition),
 						isInitialised: false,
-						implementation: mod.entryPoints[entryPoint as ModuleTypes]
+						// Store the entry point or a dummy implementation for other types
+						implementation: mod.entryPoints[entryPoint as ModuleTypes] ?? ({} as ModuleImplementation)
 					};
 				}
 			} catch (err) {
@@ -179,16 +181,12 @@ export async function initializeModule<
 >(moduleEntry: ModuleEntry<M, H, O, D>, helpers: H): Promise<M | undefined> {
 	if (!moduleEntry.isInitialised) {
 		if (moduleEntry.implementation?.initialize) {
-			if (!moduleEntry.definition) {
-				logger.error("Error initializing module, there is no definition");
-			} else {
-				try {
-					logger.info(`Initializing module '${moduleEntry.definition.id}'`);
-					await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
-					moduleEntry.isInitialised = true;
-				} catch (err) {
-					logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
-				}
+			try {
+				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
+				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
+				moduleEntry.isInitialised = true;
+			} catch (err) {
+				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
 			}
 		} else {
 			moduleEntry.isInitialised = true;
@@ -226,11 +224,11 @@ export async function closedownModule<
 	if (moduleEntry.isInitialised) {
 		if (moduleEntry.implementation?.closedown) {
 			try {
-				logger.info(`Closing down module '${moduleEntry.definition?.id}'`);
+				logger.info(`Closing down module '${moduleEntry.definition.id}'`);
 				await moduleEntry.implementation.closedown();
 				moduleEntry.isInitialised = false;
 			} catch (err) {
-				logger.error(`Error closing down module ${moduleEntry.definition?.id}`, err);
+				logger.error(`Error closing down module ${moduleEntry.definition.id}`, err);
 			}
 		} else {
 			moduleEntry.isInitialised = false;
@@ -258,7 +256,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
-			if (app === undefined || app === null) {
+			if (isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);

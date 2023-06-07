@@ -1,4 +1,4 @@
-import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes";
+import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { SharedState } from "./shapes";
@@ -29,11 +29,14 @@ export class AboutConditions implements Conditions {
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
-	 * @param createLogger For logging entries.
+	 * @param loggerCreator For logging entries.
 	 * @returns Nothing.
 	 */
-	public async initialize(definition: ModuleDefinition<unknown>, createLogger: LoggerCreator): Promise<void> {
-		this._logger = createLogger("AboutCondition");
+	public async initialize(
+		definition: ModuleDefinition<unknown>,
+		loggerCreator: LoggerCreator
+	): Promise<void> {
+		this._logger = loggerCreator("AboutCondition");
 		this._definition = definition;
 		this._logger.info("Condition Initialized");
 	}
@@ -44,7 +47,7 @@ export class AboutConditions implements Conditions {
 	public async get(): Promise<ConditionMap> {
 		const conditionMap: ConditionMap = {};
 
-		conditionMap["has-about"] = async () => this._sharedState.aboutWindow !== undefined;
+		conditionMap["has-about"] = async () => !isEmpty(this._sharedState.aboutWindow);
 
 		return conditionMap;
 	}

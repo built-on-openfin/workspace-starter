@@ -1,59 +1,57 @@
 import {
 	Home,
+	type HomeProvider,
 	type CLIFilter,
-	type CLIProvider,
-	type CLISearchListenerRequest,
-	type CLISearchListenerResponse,
-	type CLISearchResponse,
 	type HomeDispatchedSearchResult,
-	type HomeRegistration
+	type HomeRegistration,
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { createLogger } from "../logger-provider";
-import { getSettings } from "../settings";
+import { type HomeProviderOptions } from "../shapes/home-shapes";
+import { isEmpty } from "../utils";
+
+const HOME_SOURCE_FILTERS = "sources";
+const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 
 const logger = createLogger("Home");
 
-const HOME_SOURCE_FILTERS = "sources";
-
-const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
-
+let homeProviderOptions: HomeProviderOptions | undefined;
 let registrationInfo: HomeRegistration | undefined;
-let queryMinLengthSetting = 3;
-let queryAgainstSetting = ["title"];
-let enableSourceFilter;
-let lastResponse: CLISearchListenerResponse;
-let sourceFilterLabel = HOME_SOURCE_DEFAULT_FILTER_LABEL;
+let lastResponse: HomeSearchListenerResponse;
 
-export async function register(): Promise<HomeRegistration> {
+/**
+ * Register the home component.
+ * @param options The options for the home provider.
+ * @returns The registration.
+ */
+export async function register(
+	options: HomeProviderOptions | undefined
+): Promise<HomeRegistration | undefined> {
 	if (!registrationInfo) {
+		homeProviderOptions = options;
 		logger.info("Initializing home");
-		const settings = await getSettings();
 		if (
-			settings.homeProvider === undefined ||
-			settings.homeProvider.id === undefined ||
-			settings.homeProvider.title === undefined
+			isEmpty(homeProviderOptions) ||
+			isEmpty(homeProviderOptions.id) ||
+			isEmpty(homeProviderOptions.title)
 		) {
 			logger.warn(
 				"Provider not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 			);
-			return null;
+			return;
 		}
 
-		const { queryMinLength, queryAgainst, sourceFilter, ...cliSettings } = settings.homeProvider;
-		queryMinLengthSetting = queryMinLength ?? queryMinLengthSetting;
-		queryAgainstSetting = queryAgainst ?? queryAgainstSetting;
-		enableSourceFilter = !(sourceFilter?.disabled ?? false);
-		sourceFilterLabel = sourceFilter?.label ?? sourceFilterLabel;
-
-		const cliProvider: CLIProvider = {
-			...cliSettings,
+		const homeProvider: HomeProvider = {
+			...homeProviderOptions,
 			onUserInput,
 			onResultDispatch: onSelection,
 			dispatchFocusEvents: true
 		};
 
-		registrationInfo = await Home.register(cliProvider);
+		registrationInfo = await Home.register(homeProvider);
 		logger.info("Version:", registrationInfo);
 		logger.info("Home provider initialized");
 	}
@@ -61,34 +59,54 @@ export async function register(): Promise<HomeRegistration> {
 	return registrationInfo;
 }
 
-export async function show() {
+/**
+ * Show the home component.
+ * @returns Nothing.
+ */
+export async function show(): Promise<void> {
 	logger.info("Show Home called.");
 	return Home.show();
 }
 
-export async function hide() {
+/**
+ * Hide the home component.
+ * @returns Nothing.
+ */
+export async function hide(): Promise<void> {
 	logger.info("Hide Home called.");
 	return Home.hide();
 }
 
-export async function deregister() {
+/**
+ * Deregister the home component.
+ * @returns Nothing.
+ */
+export async function deregister(): Promise<void> {
 	if (registrationInfo) {
 		registrationInfo = undefined;
-		const settings = await getSettings();
 		logger.info("About to call Home deregister.");
-		return Home.deregister(settings.homeProvider.id);
+		if (homeProviderOptions) {
+			await Home.deregister(homeProviderOptions.id);
+			homeProviderOptions = undefined;
+		}
 	}
 	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
+/**
+ * Handle user input from the home component.
+ * @param request The request from the home component.
+ * @param response The response to the home component.
+ * @returns The search response.
+ */
 async function onUserInput(
-	request: CLISearchListenerRequest,
-	response: CLISearchListenerResponse
-): Promise<CLISearchResponse> {
+	request: HomeSearchListenerRequest,
+	response: HomeSearchListenerResponse
+): Promise<HomeSearchResponse> {
 	try {
-		const filters: CLIFilter[] = request?.context?.selectedFilters;
+		const filters: CLIFilter[] = request?.context?.selectedFilters ?? [];
 
-		if (lastResponse !== undefined) {
+		if (!isEmpty(lastResponse)) {
 			lastResponse.close();
 		}
 		lastResponse = response;
@@ -107,6 +125,8 @@ async function onUserInput(
 			};
 			return searchResults;
 		}
+
+		const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
 
 		let selectedSourceFilterOptions: string[] = [];
 		if (enableSourceFilter && filters) {
@@ -129,8 +149,8 @@ async function onUserInput(
 			lastResponse,
 			selectedSourceFilterOptions,
 			{
-				queryMinLength: queryMinLengthSetting,
-				queryAgainst: queryAgainstSetting
+				queryMinLength: homeProviderOptions?.queryMinLength ?? 3,
+				queryAgainst: homeProviderOptions?.queryAgainst ?? ["title"]
 			}
 		);
 
@@ -143,7 +163,7 @@ async function onUserInput(
 			searchResults.context.filters = searchResults.context.filters ?? [];
 			searchResults.context.filters.push({
 				id: HOME_SOURCE_FILTERS,
-				title: sourceFilterLabel,
+				title: homeProviderOptions?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
 				options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
 			});
 		}
@@ -151,14 +171,16 @@ async function onUserInput(
 		// Remove any empty filter lists as these can cause the UI to continually
 		// expand and collapse as you type
 		const finalFilters = [];
-		if (Array.isArray(searchResults.context?.filters)) {
-			for (const filter of searchResults.context.filters) {
+		const contextFilters = searchResults.context?.filters;
+		if (Array.isArray(contextFilters)) {
+			for (const filter of contextFilters) {
 				if (Array.isArray(filter.options) && filter.options.length > 0) {
 					finalFilters.push(filter);
 				}
 			}
 		}
 		if (finalFilters.length > 0) {
+			searchResults.context = searchResults.context ?? {};
 			searchResults.context.filters = finalFilters;
 		}
 		if (!Array.isArray(searchResults?.results)) {
@@ -174,8 +196,12 @@ async function onUserInput(
 	return { results: [] };
 }
 
-async function onSelection(result: HomeDispatchedSearchResult) {
-	if (result.data !== undefined) {
+/**
+ * Handle the selection of a search result.
+ * @param result The result that was selected.
+ */
+async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
+	if (!isEmpty(result.data)) {
 		const handled = await itemSelection(result, lastResponse);
 
 		if (result.action.trigger === "user-action") {

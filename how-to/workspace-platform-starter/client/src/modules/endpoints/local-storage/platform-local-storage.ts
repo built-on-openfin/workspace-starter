@@ -1,5 +1,6 @@
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { PlatformStorage } from "workspace-platform-starter/shapes/platform-storage-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 	private readonly _storageTypeName: string;
@@ -15,13 +16,13 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 	}
 
 	public async get(id: string): Promise<T> {
-		if (id === undefined) {
+		if (isEmpty(id)) {
 			this._logger.error(`No id was specified for getting a ${this._storageTypeName} entry`);
 			return null;
 		}
 		const store = this.getCompleteStore();
 		const savedEntry = store[id];
-		if (savedEntry === undefined || savedEntry === null) {
+		if (isEmpty(savedEntry)) {
 			this._logger.warn(`No ${this._storageTypeName} entry was found for id ${id}`);
 			return null;
 		}
@@ -29,7 +30,7 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 	}
 
 	public async set(id: string, entry: T): Promise<void> {
-		if (id === undefined) {
+		if (isEmpty(id)) {
 			this._logger.error(`You need to provide a id for the ${this._storageTypeName} entry you wish to save`);
 		} else {
 			const store = this.getCompleteStore();
@@ -51,13 +52,13 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 	}
 
 	public async remove(id: string): Promise<void> {
-		if (id === undefined) {
+		if (isEmpty(id)) {
 			this._logger.error(`An id to clear the saved ${this._storageTypeName} was not provided`);
 		} else {
 			const store = this.getCompleteStore();
 			const entry = store[id];
 
-			if (entry !== undefined) {
+			if (!isEmpty(entry)) {
 				delete store[id];
 				this.setCompleteStore(store);
 			} else {
@@ -68,7 +69,7 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 
 	private getCompleteStore() {
 		const store = localStorage.getItem(this._storageKey);
-		if (store === null) {
+		if (isEmpty(store)) {
 			this._logger.info(`Storage has no ${this._storageTypeName} entries. Creating store`);
 			this.setCompleteStore({});
 			return {};
