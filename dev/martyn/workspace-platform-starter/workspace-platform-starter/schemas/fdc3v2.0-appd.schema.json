@@ -4,13 +4,14 @@
 	"definitions": {
 		"AppDefinition": {
 			"additionalProperties": false,
+			"description": "Definition for an FDC3 2.0 Application.",
 			"properties": {
 				"appId": {
 					"description": "The unique application identifier located within a specific application directory instance.",
 					"type": "string"
 				},
 				"categories": {
-					"description": "An array of string categories that describe the application. These are meant as a hint to catalogs or stores listing apps and can be used by the Workspace Home filter.",
+					"description": "An array of string categories that describe the application. These are meant as a hint to catalogs or stores\nlisting apps and can be used by the Workspace Home filter.",
 					"items": {
 						"type": "string"
 					},
@@ -47,37 +48,37 @@
 							"$ref": "#/definitions/OtherAppDetails"
 						}
 					],
-					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be duplicated or overridden by details provided in the hostManifests OpenFin object."
+					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests OpenFin object."
 				},
 				"hostManifests": {
 					"additionalProperties": false,
-					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be retrieved.\nThe manifest should provide details required to launch and use the application within the specified host.\nThe manifest MAY duplicate or override information provided in the details field. For web entries the url is fetched from the details\nbut you would want to specify custom view manifest options (or point to a manifest) in the hostManifests.OpenFin.details setting.\nFor Windows or Snapshots (other ways of rendering urls) please use the type other and then specify the manifest type in the\nhostManifests.OpenFin.type setting along with the relevant details.",
+					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details.",
 					"properties": {
 						"OpenFin": {
 							"additionalProperties": false,
 							"properties": {
 								"config": {
 									"additionalProperties": false,
-									"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app manifest but how the platform can manage the app.",
+									"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
 									"properties": {
 										"autostart": {
-											"description": "does the application wish to be automatically started when the platform is initialized. Default behavior is false.",
+											"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
 											"type": "boolean"
 										},
 										"instanceMode": {
-											"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of this application and only show the app even if the intent resolver ui supports instances of apps. If multi should\nwe support multiple instances and let the user decide whether to launch a new instance or pick an existing one from the intent picker? If new it means the intent picker will not show the option to pick an instance because the\napp owner wants a new instance every time. And if an intent is raised and just the id of the app is specified it will always launch a new instance",
+											"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
 											"enum": ["multi", "new", "single"],
 											"type": "string"
 										},
 										"private": {
-											"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it is intended to be a background window that acts as an intent handler)",
+											"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
 											"type": "boolean"
 										}
 									},
 									"type": "object"
 								},
 								"details": {
-									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if using an inline type or extending the details from the root."
+									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
 								},
 								"type": {
 									"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
@@ -91,18 +92,18 @@
 					"type": "object"
 				},
 				"icons": {
-					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or STORE Components",
+					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or\nSTORE Components",
 					"items": {
-						"$ref": "#/definitions/Image"
+						"$ref": "#/definitions/AppImage"
 					},
 					"type": "array"
 				},
 				"interop": {
 					"$ref": "#/definitions/AppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and intents, for use by other app developers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
 				},
 				"lang": {
-					"description": "A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC 5646.",
+					"description": "A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC\n5646.",
 					"type": "string"
 				},
 				"localizedVersions": {
@@ -112,7 +113,7 @@
 						},
 						"type": "object"
 					},
-					"description": "Provides localized alternatives to any field of the app definition, which may also refer to an alternative version of the application that is also localized\n(e.g. by providing customConfig or an alternative URL).\nThe keys to this object should be language tags as defined by IETF RFC 5646, e.g. en, en-GB or fr-FR.",
+					"description": "Provides localized alternatives to any field of the app definition, which may also refer to an alternative\nversion of the application that is also localized (e.g. by providing customConfig or an alternative URL). The\nkeys to this object should be language tags as defined by IETF RFC 5646, e.g. en, en-GB or fr-FR.",
 					"type": "object"
 				},
 				"moreInfo": {
@@ -128,7 +129,7 @@
 					"type": "string"
 				},
 				"screenshots": {
-					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional description/tooltip. These images could be used in the\nOpenFin Workspace STORE and HOME components or it could be used by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
+					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
 					"items": {
 						"$ref": "#/definitions/Screenshot"
 					},
@@ -148,10 +149,10 @@
 				},
 				"type": {
 					"$ref": "#/definitions/AppDefinitionType",
-					"description": "The technology type that is used to launch and run the application. Each application type implies a particular set of launch details."
+					"description": "The technology type that is used to launch and run the application. Each application type implies a particular\nset of launch details."
 				},
 				"version": {
-					"description": "Version of the application. This allows multiple app versions to be defined using the same app name. This can be a triplet but can also include things like 1.2.5 (BETA)",
+					"description": "Version of the application. This allows multiple app versions to be defined using the same app name. This can be\na triplet but can also include things like 1.2.5 (BETA)",
 					"type": "string"
 				}
 			},
@@ -159,15 +160,36 @@
 			"type": "object"
 		},
 		"AppDefinitionType": {
-			"description": "The technology type that is used to launch and run the application. Each application type implies a particular set of launch details.",
+			"description": "The technology type that is used to launch and run the application. Each application type implies a particular set of\nlaunch details.",
 			"enum": ["citrix", "native", "onlineNative", "other", "web"],
 			"type": "string"
 		},
+		"AppImage": {
+			"additionalProperties": false,
+			"description": "Definition for app image.",
+			"properties": {
+				"size": {
+					"description": "Image dimension formatted as <height>x<width>",
+					"type": "string"
+				},
+				"src": {
+					"description": "Image url",
+					"type": "string"
+				},
+				"type": {
+					"description": "Image media type. If not present the platform may use the src file extension",
+					"type": "string"
+				}
+			},
+			"required": ["src"],
+			"type": "object"
+		},
 		"AppIntents": {
 			"additionalProperties": false,
+			"description": "Application intents.",
 			"properties": {
 				"contexts": {
-					"description": "Required. A comma separated list of the types of contexts the intent offered by the application can process, where the first part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
+					"description": "Required. A comma separated list of the types of contexts the intent offered by the application can process,\nwhere the first part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
 					"items": {
 						"type": "string"
 					},
@@ -175,7 +197,7 @@
 				},
 				"customConfig": {
 					"additionalProperties": {},
-					"description": "Custom configuration for the intent that may be required for a particular desktop agent. *",
+					"description": "Custom configuration for the intent that may be required for a particular desktop agent.",
 					"type": "object"
 				},
 				"displayName": {
@@ -183,7 +205,7 @@
 					"type": "string"
 				},
 				"resultType": {
-					"description": "An optional type for output returned by the application, if any, when resolving this intent. May indicate a context type by type name (e.g. \"fdc3.instrument\"), a channel (e.g. \"channel\") or a combination\nthat indicates a channel that returns a particular context type (e.g. \"channel<fdc3.instrument>\").",
+					"description": "An optional type for output returned by the application, if any, when resolving this intent. May indicate a\ncontext type by type name (e.g. \"fdc3.instrument\"), a channel (e.g. \"channel\") or a combination that indicates a\nchannel that returns a particular context type (e.g. \"channel<fdc3.instrument>\").",
 					"type": "string"
 				}
 			},
@@ -192,6 +214,7 @@
 		},
 		"AppInterop": {
 			"additionalProperties": false,
+			"description": "Application interop.",
 			"properties": {
 				"appChannels": {
 					"description": "Describes the application's use of App Channels.",
@@ -234,7 +257,7 @@
 							"additionalProperties": {
 								"$ref": "#/definitions/AppIntents"
 							},
-							"description": "A mapping of Intents names that an app listens for via fdc3.addIntentListener() or fin.me.interop.registerIntentHandler.\nUsed to support intent resolution by the interop broker. Replaces the intents array used previously.",
+							"description": "A mapping of Intents names that an app listens for via fdc3.addIntentListener() or\nfin.me.interop.registerIntentHandler. Used to support intent resolution by the interop broker. Replaces the\nintents array used previously.",
 							"type": "object"
 						},
 						"raises": {
@@ -244,7 +267,7 @@
 								},
 								"type": "array"
 							},
-							"description": "A mapping of Intent names that an app raises (via fdc3.raiseIntent) to an array of context type names that it may be raised with. Use the intent name \"any\" to represent use of the fdc3.raiseIntentForContext\nand fdc3.findIntentForContext functions, which allow the user to select from intents available for a specified context type.",
+							"description": "A mapping of Intent names that an app raises (via fdc3.raiseIntent) to an array of context type names that it\nmay be raised with. Use the intent name \"any\" to represent use of the fdc3.raiseIntentForContext and\nfdc3.findIntentForContext functions, which allow the user to select from intents available for a specified\ncontext type.",
 							"type": "object"
 						}
 					},
@@ -276,6 +299,7 @@
 		},
 		"CitrixAppDetails": {
 			"additionalProperties": false,
+			"description": "Citrix application details.",
 			"properties": {
 				"alias": {
 					"description": "The Citrix alias / name of the virtual app (passed to the Citrix SelfService qlaunch parameter).",
@@ -310,7 +334,7 @@
 				},
 				"metadata": {
 					"additionalProperties": false,
-					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been received.",
+					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been\nreceived.",
 					"properties": {
 						"type": {
 							"enum": ["fdc3"],
@@ -328,27 +352,9 @@
 			"required": ["$schema", "applications"],
 			"type": "object"
 		},
-		"Image": {
-			"additionalProperties": false,
-			"properties": {
-				"size": {
-					"description": "Image dimension formatted as <height>x<width>",
-					"type": "string"
-				},
-				"src": {
-					"description": "Image url",
-					"type": "string"
-				},
-				"type": {
-					"description": "Image media type. If not present the platform may use the src file extension",
-					"type": "string"
-				}
-			},
-			"required": ["src"],
-			"type": "object"
-		},
 		"NativeAppDetails": {
 			"additionalProperties": false,
+			"description": "Native application details.",
 			"properties": {
 				"arguments": {
 					"description": "Arguments that must be passed on the command line to launch the app in the expected configuration.",
@@ -364,6 +370,7 @@
 		},
 		"OnlineNativeAppDetails": {
 			"additionalProperties": false,
+			"description": "Online native application details.",
 			"properties": {
 				"url": {
 					"description": "Application URL",
@@ -380,6 +387,7 @@
 		},
 		"Screenshot": {
 			"additionalProperties": false,
+			"description": "Definition for screenshot.",
 			"properties": {
 				"label": {
 					"description": "Optional caption for the image",
@@ -403,6 +411,7 @@
 		},
 		"WebAppDetails": {
 			"additionalProperties": false,
+			"description": "Application web details.",
 			"properties": {
 				"url": {
 					"description": "Application start URL.",
