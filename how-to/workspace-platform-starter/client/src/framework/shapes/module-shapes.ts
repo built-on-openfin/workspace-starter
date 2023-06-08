@@ -1,5 +1,5 @@
 import type { InteropClient } from "@openfin/core/src/api/interop";
-import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";

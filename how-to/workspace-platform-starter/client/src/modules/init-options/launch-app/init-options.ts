@@ -1,7 +1,7 @@
 import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue } from "../../../framework/utils";
 import type { LaunchAppOptions, LaunchAppPayload } from "./shapes";
 
 /**

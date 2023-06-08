@@ -1,14 +1,14 @@
-import type OpenFin from "@openfin/core";
-import type {
-	BrowserCreateWindowRequest,
-	CustomActionPayload,
-	CustomActionsMap,
-	WorkspacePlatformModule
+import {
+	CustomActionCallerType,
+	type BrowserCreateWindowRequest,
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 
 /**
  * Implement the actions.
@@ -49,9 +49,9 @@ export class OpacityActions implements Actions {
 		const actionMap: CustomActionsMap = {};
 
 		actionMap["change-opacity"] = async (payload: CustomActionPayload): Promise<void> => {
-			if (this._helpers && payload.callerType === this._helpers.callerTypes.CustomButton) {
+			if (this._helpers && payload.callerType === CustomActionCallerType.CustomButton) {
 				this._logger?.info("Change Opacity Triggered");
-				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
+				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
 					.toolbarOptions;
@@ -68,9 +68,9 @@ export class OpacityActions implements Actions {
 		};
 
 		actionMap["restore-opacity"] = async (payload: CustomActionPayload): Promise<void> => {
-			if (this._helpers && payload.callerType === this._helpers.callerTypes.CustomButton) {
+			if (this._helpers && payload.callerType === CustomActionCallerType.CustomButton) {
 				this._logger?.info("Restore Opacity Triggered");
-				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
+				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
 					.toolbarOptions;

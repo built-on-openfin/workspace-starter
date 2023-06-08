@@ -5,11 +5,11 @@ import {
 	type CustomActionsMap,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isStringValue } from "workspace-platform-starter/utils";
+import { MANIFEST_TYPES } from "../../../framework/manifest-types";
+import { isStringValue } from "../../../framework/utils";
 
 /**
  * Implement the actions.

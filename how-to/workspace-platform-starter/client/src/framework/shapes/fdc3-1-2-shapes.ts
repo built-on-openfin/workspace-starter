@@ -76,7 +76,7 @@ export interface AppDefinition {
 	/**
 	 * An optional set of name value pairs that can be used to deliver custom data from an App Directory to a platform.
 	 */
-	customConfig?: AppCustomConfig;
+	customConfig?: CustomConfig;
 
 	/**
 	 * The list of intents implemented by the Application
@@ -139,7 +139,7 @@ export interface AppIntents {
 /**
  * Custom config definition.
  */
-export interface AppCustomConfig {
+export interface CustomConfig {
 	/**
 	 * Additional properties in the config.
 	 */

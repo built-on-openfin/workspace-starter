@@ -6,24 +6,24 @@ import type {
 } from "workspace-platform-starter/shapes/analytics-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 import type { DevAnalyticsOptions } from "./shapes";
 
 /**
  * Implement the analytics module using the interop channels as the means of publishing the events.
  */
 export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> {
-	private _logger: Logger;
+	private _logger?: Logger;
 
-	private _interopClient: InteropClient;
+	private _interopClient: InteropClient | undefined;
 
-	private _channel: OpenFin.SessionContextGroup;
+	private _channel?: OpenFin.SessionContextGroup;
 
-	private _contextType: string;
+	private _contextType?: string;
 
 	private _cachedAnalyticEvents: PlatformAnalyticsEvent[] = [];
 
-	private _helpers: ModuleHelpers;
+	private _helpers?: ModuleHelpers;
 
 	/**
 	 * Initialize the module.
@@ -46,16 +46,23 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 		this._logger.info(
 			`Using channel name: ${channelName} and contextType: ${this._contextType}. These can be customized by passing data settings: sessionContextGroupName and contextType in the module settings.`
 		);
-		if (!isEmpty(helpers.getInteropClient) && !isEmpty(helpers.subscribeLifecycleEvent)) {
+		if (!isEmpty(helpers.subscribeLifecycleEvent)) {
 			this._logger.info("Subscribing to the after bootstrap event.");
-			const lifeCycleAfterBootstrapSubscriptionId = this._helpers.subscribeLifecycleEvent(
+			const lifeCycleAfterBootstrapSubscriptionId = helpers.subscribeLifecycleEvent(
 				"after-bootstrap",
 				async (_platform) => {
-					this._logger.info("After bootstrap lifecycle event received. Getting interop client.");
-					this._interopClient = await helpers.getInteropClient();
-					this._channel = await this._interopClient.joinSessionContextGroup(channelName);
-					if (!isEmpty(this._helpers.unsubscribeLifecycleEvent)) {
-						this._helpers.unsubscribeLifecycleEvent(lifeCycleAfterBootstrapSubscriptionId, "after-bootstrap");
+					if (!isEmpty(helpers.getInteropClient)) {
+						this._logger?.info("After bootstrap lifecycle event received. Getting interop client.");
+						this._interopClient = await helpers.getInteropClient();
+						if (this._interopClient) {
+							this._channel = await this._interopClient.joinSessionContextGroup(channelName);
+							if (!isEmpty(this._helpers?.unsubscribeLifecycleEvent)) {
+								this._helpers?.unsubscribeLifecycleEvent(
+									lifeCycleAfterBootstrapSubscriptionId,
+									"after-bootstrap"
+								);
+							}
+						}
 					}
 				}
 			);
@@ -72,13 +79,13 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 	 */
 	public async handleAnalytics(events: PlatformAnalyticsEvent[]): Promise<void> {
 		if (!Array.isArray(events)) {
-			this._logger.warn("We were not passed an array of analytical events.");
+			this._logger?.warn("We were not passed an array of analytical events.");
 			return;
 		}
 		if (!isEmpty(this._channel)) {
 			let platformAnalyticEvents: PlatformAnalyticsEvent[] = [];
 			if (this._cachedAnalyticEvents.length > 0) {
-				this._logger.info(`Adding ${this._cachedAnalyticEvents.length} analytic events.`);
+				this._logger?.info(`Adding ${this._cachedAnalyticEvents.length} analytic events.`);
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				platformAnalyticEvents.push(...this._cachedAnalyticEvents);
 				this._cachedAnalyticEvents = [];
@@ -92,7 +99,7 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 			const filteredCount = platformAnalyticEvents.length;
 
 			if (eventCount !== filteredCount) {
-				this._logger.info(
+				this._logger?.info(
 					`Filtered out ${
 						eventCount - filteredCount
 					} events as they were of type interop and not from the browser and we send events out over interop`
@@ -104,7 +111,7 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 				name: "Analytic Events",
 				events: platformAnalyticEvents
 			};
-			await this._channel.setContext(context);
+			await this._channel.setContext(context as OpenFin.Context);
 		} else {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			this._cachedAnalyticEvents.push(...events);
@@ -115,6 +122,6 @@ export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> 
 	 * Close down the module. If this module had any cached events it needed to process it could try and flush them here.
 	 */
 	public async closedown?(): Promise<void> {
-		this._logger.info("closing down");
+		this._logger?.info("closing down");
 	}
 }

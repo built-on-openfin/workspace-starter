@@ -1,4 +1,4 @@
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 import type { ExampleUser } from "./shapes";
 
 export const EXAMPLE_AUTH_CURRENT_USER_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_CURRENT_USER`;

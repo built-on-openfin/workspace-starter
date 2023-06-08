@@ -1,5 +1,5 @@
 import type { InteropClient } from "@openfin/core/src/api/interop";
-import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
@@ -25,7 +25,7 @@ export interface ModuleDefinition<O = unknown> {
 	/**
 	 * The title of the module.
 	 */
-	title?: string;
+	title: string;
 	/**
 	 * The description of the module.
 	 */
@@ -56,59 +56,64 @@ export interface ModuleDefinition<O = unknown> {
  */
 export interface ModuleHelpers {
 	/**
-	 * The root url for the provider.
-	 */
-	rootUrl?: string;
-	/**
-	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace platform or a restarted instance of the platform.
+	 * A unique id that represents this session. This lets you know if it was a long running instance of a workspace
+	 * platform or a restarted instance of the platform.
 	 */
 	sessionId: string;
 	/**
 	 * Get the list of apps supported by this platform and/or user.
+	 * @returns The list of platform apps available from the module.
 	 */
 	getApps?(): Promise<PlatformApp[]>;
 	/**
 	 * Get the current theme id.
+	 * @returns The current theme id.
 	 */
 	getCurrentThemeId(): Promise<string>;
 	/**
 	 * Get the current icon folder.
+	 * @returns the platform icon folder.
 	 */
 	getCurrentIconFolder(): Promise<string>;
 	/**
 	 * Get the current palette.
+	 * @returns The current palette.
 	 */
 	getCurrentPalette(): Promise<CustomPaletteSet>;
 	/**
 	 * Get the current color scheme.
+	 * @returns The current color scheme.
 	 */
 	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 	/**
-	 * Get the version information related to the platform you are running in. If you request
-	 * the version info on initialization or you execute early you might not receive all of the
-	 * version related information as you may be early. Subscribe to the life cycle event
-	 * 'after-bootstrap' to ensure you have all the related versioning information.
+	 * Get the version information related to the platform you are running in. If you request the version info on
+	 * initialization or you execute early you might not receive all of the version related information as you may be
+	 * early. Subscribe to the life cycle event 'after-bootstrap' to ensure you have all the related versioning
+	 * information.
+	 * @returns The version info.
 	 */
 	getVersionInfo?(): Promise<VersionInfo>;
 	/**
-	 * Returns an interop client that can be used to broadcast context and raise intents. The
-	 * function could be undefined if you are not allowed to use the function or the returned
-	 * InteropClient could be undefined if you try to fetch it before the broker is fully initialized.
-	 * Please listen for the life cycle event 'after-bootstrap' before trying to call this function.
-	 * If you need to handle data before bootstrapping is complete then you can cache it and use it
-	 * once the application is bootstrapped and ready.
+	 * Returns an interop client that can be used to broadcast context and raise intents. The function could be
+	 * undefined if you are not allowed to use the function or the returned InteropClient could be undefined if you try
+	 * to fetch it before the broker is fully initialized. Please listen for the life cycle event 'after-bootstrap'
+	 * before trying to call this function. If you need to handle data before bootstrapping is complete then you can
+	 * cache it and use it once the application is bootstrapped and ready.
+	 * @returns The interop client.
 	 */
 	getInteropClient?(): Promise<InteropClient | undefined>;
 	/**
-	 * If available, this function lets you request the launch of an application that is available to this
-	 * platform and the current user.
+	 * If available, this function lets you request the launch of an application that is available to this platform and
+	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
+	 * @returns Nothing.
 	 */
 	launchApp?(appId: string): Promise<void>;
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
+	 * @returns A subscription id to be used with unsubscribe.
 	 */
 	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
 	/**
@@ -165,13 +170,22 @@ export interface Module<D = unknown, H = ModuleHelpers> {
  * Module entry.
  */
 export interface ModuleEntry<
-	M extends ModuleImplementation<O, H> = unknown,
+	M extends ModuleImplementation<O, H> = ModuleImplementation<unknown, unknown>,
 	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 > {
+	/**
+	 * The definition for the module.
+	 */
 	definition: D;
+	/**
+	 * The implementation for the module.
+	 */
 	implementation: M;
+	/**
+	 * Has the module been initialized.
+	 */
 	isInitialized: boolean;
 }
 /**

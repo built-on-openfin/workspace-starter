@@ -3,9 +3,18 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
  * The default log levels.
  */
 export type LogLevel = "info" | "error" | "warn" | "trace" | "debug";
+/**
+ * The configuration options for logging.
+ */
 export interface LogOptions {
+	/**
+	 * The log levels to capture.
+	 */
 	levels?: LogLevel[];
 }
+/**
+ * Log provider module interface.
+ */
 export interface LogProvider<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
 	 * Log data as information.
@@ -17,8 +26,14 @@ export interface LogProvider<O = unknown, H = ModuleHelpers> extends ModuleImple
 	 */
 	log(identity: string, group: string, level: LogLevel, message: unknown, ...optionalParams: unknown[]): void;
 }
-/** Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the platform */
+/**
+ * Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the
+ * platform
+ */
 export type LoggerProviderOptions = ModuleList;
+/**
+ * Interface for a logger.
+ */
 export interface Logger {
 	/**
 	 * Log data as information.
@@ -51,4 +66,7 @@ export interface Logger {
 	 */
 	debug(message: unknown, ...optionalParams: unknown[]): void;
 }
+/**
+ * Definition of method which can create a grouped logger.
+ */
 export type LoggerCreator = (group: string) => Logger;

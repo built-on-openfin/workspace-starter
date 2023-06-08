@@ -8,7 +8,7 @@ import type {
 	RelatedMenuId
 } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 import type { PageMenuSettings } from "./shapes";
 
 /**

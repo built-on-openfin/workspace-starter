@@ -62,8 +62,7 @@ export async function init(
 		// Initialize the modules
 		await initializeModules<Actions, ActionHelpers>(modules, {
 			...helpers,
-			updateToolbarButtons,
-			callerTypes: CustomActionCallerType
+			updateToolbarButtons
 		});
 	}
 }

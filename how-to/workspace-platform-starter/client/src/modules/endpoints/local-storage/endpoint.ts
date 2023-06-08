@@ -2,7 +2,7 @@ import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/sh
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { PlatformStorage } from "workspace-platform-starter/shapes/platform-storage-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 import { PlatformLocalStorage } from "./platform-local-storage";
 
 /**

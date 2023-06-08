@@ -8,7 +8,7 @@ import type {
 } from "@openfin/workspace";
 import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
-import type { IShareCustomData } from "./share-shapes";
+import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 /**
  * Integration helpers provides environment methods and data.
@@ -37,17 +37,20 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 	/**
 	 * Launch a snapshot.
-	 * @param snapshotUrl The snapshot url
+	 * @param snapshotUrl The snapshot url.
+	 * @returns The identities that constitute the snapshot.
 	 */
 	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 	/**
 	 * Open a url with the browser.
 	 * @param url The url to open.
+	 * @returns Nothing.
 	 */
 	openUrl?(url: string): Promise<void>;
 	/**
 	 * Set the home search query.
 	 * @param query The query to set.
+	 * @returns Nothing.
 	 */
 	setSearchQuery?(query: string): Promise<void>;
 	/**
@@ -59,10 +62,12 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	/**
 	 * Share data.
 	 * @param options The sharing options.
+	 * @returns Nothing.
 	 */
-	share?(options?: IShareCustomData): Promise<void>;
+	share?(options?: ShareCustomData): Promise<void>;
 	/**
 	 * Get the current platform.
+	 * @returns The current platform.
 	 */
 	getPlatform?(): WorkspacePlatformModule;
 }
@@ -119,6 +124,8 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(

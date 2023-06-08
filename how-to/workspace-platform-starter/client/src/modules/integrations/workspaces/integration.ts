@@ -16,7 +16,7 @@ import type { WorkspaceChangedLifecyclePayload } from "workspace-platform-starte
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
-import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
+import { isEmpty, randomUUID } from "../../../framework/utils";
 import type { WorkspacesSettings } from "./shapes";
 
 /**

@@ -1,6 +1,7 @@
 import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isEmpty } from "../../../framework/utils";
 import type { SharedState } from "./shapes";
 /**
  * Implement the conditions.

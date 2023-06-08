@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "../../../framework/utils";
 import type { ExampleOptions, ExampleUser } from "./shapes";
 import { EXAMPLE_AUTH_CURRENT_USER_KEY, clearCurrentUser, getCurrentUser } from "./util";
 

@@ -8,6 +8,7 @@ import {
 	type HomeSearchResult,
 	type TemplateFragment
 } from "@openfin/workspace";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import {
 	CategoryScale,
 	Chart,
@@ -19,13 +20,14 @@ import {
 	TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
+import { type TemplateHelpers } from "workspace-platform-starter/shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty } from "../../../framework/utils";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 
 /**
@@ -42,7 +44,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	 * Provider id.
 	 * @internal
 	 */
-	private _providerId: string;
+	private _providerId?: string;
 
 	/**
 	 * The integration manager.
@@ -80,27 +82,31 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	 * @returns The list of help entries.
 	 */
 	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
-		return [
-			{
-				key: `${this._providerId}-help`,
-				title: "/quote",
-				label: "Help",
-				actions: [],
-				data: {
-					providerId: this._providerId,
-					populateQuery: "/quote "
-				},
-				template: "Custom" as CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					"/quote",
-					[
-						"The quote command can be used to search for details of an instrument.",
-						"For example to search for Microsoft instrument."
-					],
-					["/quote MSFT"]
-				)
-			}
-		];
+		if (this._integrationHelpers?.templateHelpers) {
+			return [
+				{
+					key: `${this._providerId}-help`,
+					title: "/quote",
+					label: "Help",
+					actions: [],
+					data: {
+						providerId: this._providerId,
+						populateQuery: "/quote "
+					},
+					template: "Custom" as CLITemplate.Custom,
+					templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+						"/quote",
+						[
+							"The quote command can be used to search for details of an instrument.",
+							"For example to search for Microsoft instrument."
+						],
+						["/quote MSFT"]
+					)
+				}
+			];
+		}
+
+		return [];
 	}
 
 	/**
@@ -117,7 +123,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 			result.action.trigger === "user-action" &&
 			result.action.name === QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION &&
 			result.data.url &&
-			this._integrationHelpers.openUrl
+			this._integrationHelpers?.openUrl
 		) {
 			await this._integrationHelpers.openUrl(result.data.url as string);
 			return true;
@@ -156,45 +162,50 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 
 				let price;
 				let company;
-				let data: { x: number; y: number }[];
+				let data: { x: number; y: number }[] | undefined;
 
 				if (quoteData?.data?.lastSalePrice) {
-					price = quoteData.data.lastSalePrice;
+					price = quoteData.data.lastSalePrice.toString();
 					company = quoteData.data.company;
 					data = quoteData.data.chart;
 				}
 
-				if (!isEmpty(price)) {
+				if (!isEmpty(data) && !isEmpty(price) && !isEmpty(company)) {
 					const graphImage = await this.renderGraph(data);
 
-					const quoteResult: HomeSearchResult = {
-						key: `quote-${symbol}`,
-						title: symbol,
-						label: "Information",
-						actions: [
-							{
-								name: QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION,
-								hotkey: "Enter"
-							}
-						],
-						data: {
-							providerId: this._providerId,
-							url: `https://www.nasdaq.com/market-activity/stocks/${symbol.toLowerCase()}`
-						},
-						template: "Custom" as CLITemplate.Custom,
-						templateContent: {
-							layout: await this.getQuoteTemplate(),
+					if (this._integrationHelpers?.templateHelpers) {
+						const quoteResult: HomeSearchResult = {
+							key: `quote-${symbol}`,
+							title: symbol,
+							label: "Information",
+							actions: [
+								{
+									name: QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION,
+									hotkey: "Enter"
+								}
+							],
 							data: {
-								symbol,
-								priceTitle: "Price",
-								price,
-								company,
-								graph: graphImage,
-								detailsTitle: "Details"
+								providerId: this._providerId,
+								url: `https://www.nasdaq.com/market-activity/stocks/${symbol.toLowerCase()}`
+							},
+							template: "Custom" as CLITemplate.Custom,
+							templateContent: {
+								layout: await this.getQuoteTemplate(
+									this._integrationHelpers.templateHelpers,
+									await this._integrationHelpers.getCurrentPalette()
+								),
+								data: {
+									symbol,
+									priceTitle: "Price",
+									price,
+									company,
+									graph: graphImage,
+									detailsTitle: "Details"
+								}
 							}
-						}
-					};
-					results.push(quoteResult);
+						};
+						results.push(quoteResult);
+					}
 				}
 			}
 		}
@@ -235,75 +246,81 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 		canvas.height = 110;
 		const ctx = canvas.getContext("2d");
 
-		const chart = new Chart(ctx, {
-			type: "line",
-			data: {
-				labels: data.map((d) => d.x),
-				datasets: [
-					{
-						fill: "origin",
-						backgroundColor: "green",
-						radius: 0,
-						data
-					} as never
-				]
-			},
-			options: {
-				animation: false,
-				responsive: false,
-				scales: {
-					x: {
-						display: false
-					}
+		if (ctx) {
+			const chart = new Chart(ctx, {
+				type: "line",
+				data: {
+					labels: data.map((d) => d.x),
+					datasets: [
+						{
+							fill: "origin",
+							backgroundColor: "green",
+							radius: 0,
+							data
+						} as never
+					]
 				},
-				plugins: {
-					legend: {
-						display: false
+				options: {
+					animation: false,
+					responsive: false,
+					scales: {
+						x: {
+							display: false
+						}
+					},
+					plugins: {
+						legend: {
+							display: false
+						}
 					}
 				}
-			}
-		});
-		chart.update();
-		return chart.toBase64Image("image/jpeg", 1);
+			});
+			chart.update();
+			return chart.toBase64Image("image/jpeg", 1);
+		}
+		return "";
 	}
 
 	/**
 	 * Get the template for the quote.
+	 * @param templateHelpers Template helpers.
+	 * @param palette Custom palette.
 	 * @returns The quote template.
 	 */
-	private async getQuoteTemplate(): Promise<TemplateFragment> {
-		const palette = await this._integrationHelpers.getCurrentPalette();
-
-		const templateFragment: TemplateFragment = await this._integrationHelpers.templateHelpers.createContainer(
+	private async getQuoteTemplate(
+		templateHelpers: TemplateHelpers,
+		palette: CustomPaletteSet
+	): Promise<TemplateFragment> {
+		const templateFragment: TemplateFragment = await templateHelpers.createContainer(
 			"column",
 			[
-				await this._integrationHelpers.templateHelpers.createContainer(
+				await templateHelpers.createContainer(
 					"row",
 					[
-						await this._integrationHelpers.templateHelpers.createText("symbol", 18, { fontWeight: "bold" }),
-						await this._integrationHelpers.templateHelpers.createText("price", 18)
+						await templateHelpers.createText("symbol", 18, { fontWeight: "bold" }),
+						await templateHelpers.createText("price", 18)
 					],
 					{
 						justifyContent: "space-between"
 					}
 				),
-				await this._integrationHelpers.templateHelpers.createText("company", 12, {
+				await templateHelpers.createText("company", 12, {
 					color: palette.textDefault,
 					margin: "5px 0px"
 				}),
-				await this._integrationHelpers.templateHelpers.createContainer(
+				await templateHelpers.createContainer(
 					"column",
-					[await this._integrationHelpers.templateHelpers.createImage("graph", "History")],
+					[await templateHelpers.createImage("graph", "History")],
 					{
 						backgroundColor: "black",
 						borderRadius: "5px",
 						padding: "5px"
 					}
 				),
-				await this._integrationHelpers.templateHelpers.createContainer(
+				await templateHelpers.createContainer(
 					"row",
 					[
-						await this._integrationHelpers.templateHelpers.createButton(
+						await templateHelpers.createButton(
 							"primary" as ButtonStyle.Primary,
 							"detailsTitle",
 							QuoteIntegrationProvider._QUOTE_PROVIDER_DETAILS_ACTION,
