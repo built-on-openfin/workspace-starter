@@ -4,6 +4,7 @@
  * It uses the OpenFin NodeJS adapter to launch the url specified on the command line.
  * Pressing Ctrl+C/Command+C will terminate the application.
  */
+import { setDefaultResultOrder } from "dns";
 import { connect, launch } from 'openfin-adapter';
 
 /**
@@ -120,5 +121,13 @@ console.log(`Platform: ${process.platform}`);
 const launchArgs = process.argv.slice(2);
 const manifest = launchArgs.length > 0 ? launchArgs[0] : 'http://localhost:8080/manifest.fin.json';
 console.log(`Manifest: ${manifest}`);
+
+try {
+	setDefaultResultOrder("ipv4first");
+} catch {
+	// Early versions of node do not support this method, but those earlier versions
+	// also do not have the same issue with interface ordering, so it doesn't matter
+	// that it hasn't been called.
+}
 
 run(manifest).catch((err) => console.error(err));
