@@ -25,6 +25,9 @@ const libor = Math.random() * 2;
 
 window.addEventListener('DOMContentLoaded', init);
 
+/**
+ * Initialize the DOM elements.
+ */
 async function init() {
 	currencyElement = document.querySelector('#currency');
 	notionalElement = document.querySelector('#notional');
@@ -123,6 +126,9 @@ async function init() {
 	});
 }
 
+/**
+ * Clear the form.
+ */
 function clearForm() {
 	currencyElement.value = 'USD';
 	notionalElement.value = '';
@@ -135,6 +141,10 @@ function clearForm() {
 	updateSummary();
 }
 
+/**
+ * Gather the data from the form.
+ * @returns The data.
+ */
 function gatherData() {
 	const currency = currencyElement.value;
 	const tenor = tenorElement.value;
@@ -214,6 +224,11 @@ function gatherData() {
 	};
 }
 
+/**
+ * Create a title based on the data.
+ * @param rfqData The data to create the title from.
+ * @returns Title.
+ */
 function createTitle(rfqData) {
 	return rfqData.notional !== undefined
 		? `IRS: ${rfqData.swapType.toUpperCase()} ${rfqData.currency}@${rfqData.libor.toFixed(3)}% vs ${
@@ -222,6 +237,9 @@ function createTitle(rfqData) {
 		: `IRS: ${rfqData.swapType.toUpperCase()} ${rfqData.currency}`;
 }
 
+/**
+ * Update the maturity values.
+ */
 function updateMaturity() {
 	const effectiveDate = effectiveDateElement.valueAsDate;
 
@@ -240,6 +258,9 @@ function updateMaturity() {
 	}
 }
 
+/**
+ * Update the summary.
+ */
 function updateSummary() {
 	const rfqData = gatherData();
 
@@ -266,6 +287,11 @@ function updateSummary() {
 	rfqButton.disabled = rfqData.notional === undefined || effectiveDateElement.valueAsDate === null;
 }
 
+/**
+ * Format a timestamp to a date.
+ * @param timestamp The timestamp to format.
+ * @returns The formatted date.
+ */
 function formatShortDate(timestamp) {
 	if (timestamp === null) {
 		return '';
@@ -274,6 +300,19 @@ function formatShortDate(timestamp) {
 	return `${date.getDate()} ${date.toLocaleString('en-US', { month: 'short' })} ${date.getFullYear()}`;
 }
 
+/**
+ * Show a notification.
+ * @param rfqData The rfq data.
+ * @param indicatorColor The indicator color.
+ * @param indicatorValue The indicator value.
+ * @param accountOrAllocation Is it an account or allocation.
+ * @param summaryColor The summary color.
+ * @param summaryTitle The summary title.
+ * @param summaryValue The summary value.
+ * @param isDeskRate Is it a desk rate.
+ * @param actionButtons The action buttons.
+ * @returns The id of the notification.
+ */
 async function showNotification(
 	rfqData,
 	indicatorColor,
@@ -384,6 +423,11 @@ async function showNotification(
 	return id;
 }
 
+/**
+ * Show inbound frq notification.
+ * @param rfqData The data to use in the notification.
+ * @returns The id.
+ */
 async function showInboundRFQ(rfqData) {
 	const title = createTitle(rfqData);
 	rfqData.deskExecuteStart = Date.now();
@@ -411,6 +455,11 @@ async function showInboundRFQ(rfqData) {
 	);
 }
 
+/**
+ * Show quote notification.
+ * @param rfqData The data ot use in the notification.
+ * @returns The id.
+ */
 async function showQuote(rfqData) {
 	rfqData.clientExecuteStart = Date.now();
 	return showNotification(
@@ -437,6 +486,11 @@ async function showQuote(rfqData) {
 	);
 }
 
+/**
+ * Show client confirmation data.
+ * @param rfqData The data for the notification.
+ * @returns The id.
+ */
 async function showClientConfirmation(rfqData) {
 	const title = createTitle(rfqData);
 	rfqData.clientExecuteEnd = Date.now();
@@ -467,6 +521,11 @@ async function showClientConfirmation(rfqData) {
 	);
 }
 
+/**
+ * Show trader notification.
+ * @param rfqData The data for the notification.
+ * @returns The id.
+ */
 async function showTraderConfirmation(rfqData) {
 	const title = createTitle(rfqData);
 	rfqData.deskExecuteEnd = Date.now();
@@ -527,6 +586,13 @@ function randomUUID() {
 	return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, getRandomHex);
 }
 
+/**
+ * Create a container element for the home template.
+ * @param containerType The type of container.
+ * @param children The children to include in the container.
+ * @param style Additional CSS properties to use.
+ * @returns The container fragment.
+ */
 function createContainer(containerType, children, style) {
 	return {
 		type: 'container',
@@ -539,6 +605,13 @@ function createContainer(containerType, children, style) {
 	};
 }
 
+/**
+ * Create a text element.
+ * @param dataKey The data key to lookup in the data object.
+ * @param fontSize The size of the font.
+ * @param style Additional CSS properties to use.
+ * @returns The text fragment.
+ */
 function createText(dataKey, fontSize, style) {
 	return {
 		type: 'text',
@@ -550,6 +623,13 @@ function createText(dataKey, fontSize, style) {
 	};
 }
 
+/**
+ * Create a labelled value.
+ * @param labelKey The data key to lookup in the data object for the label.
+ * @param valueKey The data key to lookup in the data object for the value.
+ * @param style Additional CSS properties to use.
+ * @returns The label and value fragment.
+ */
 function createLabelledForm(labelKey, valueKey, style) {
 	return {
 		type: 'container',

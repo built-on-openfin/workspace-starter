@@ -1,3 +1,6 @@
+/**
+ * Initialize.
+ */
 async function init() {
 	if (window.fin !== undefined) {
 		try {

@@ -1,3 +1,37 @@
+/**
+ * Initialize.
+ * @returns True if initialized.
+ */
+async function init() {
+	if (window.fin !== undefined) {
+		const currentWindow = fin.Window.getCurrentSync();
+		const options = await currentWindow.getOptions();
+		const customData = options.customData ?? {};
+
+		const versionInfo = customData.versionInfo ?? {};
+		const keys = Object.keys(versionInfo);
+
+		for (let i = 0; i < keys.length; i++) {
+			const currentKey = keys[i];
+			addVersion(currentKey, versionInfo[currentKey]);
+		}
+		return true;
+	}
+	return false;
+}
+
+init()
+	.then((setupRun) => {
+		console.log('Version info rendered.', setupRun);
+		return true;
+	})
+	.catch((reason) => console.error('There was an issue reviewing the version info.', reason));
+
+/**
+ * Add a version.
+ * @param versionType The version type.
+ * @param currentVersion The current version.
+ */
 function addVersion(versionType, currentVersion) {
 	const lstVersions = document.querySelector('#lstVersions');
 	const colHeaders = Array.from(lstVersions.children[0].children).map((header) => header.textContent);
@@ -23,28 +57,3 @@ function addVersion(versionType, currentVersion) {
 
 	lstVersions.append(row);
 }
-
-async function init() {
-	if (window.fin !== undefined) {
-		const currentWindow = fin.Window.getCurrentSync();
-		const options = await currentWindow.getOptions();
-		const customData = options.customData ?? {};
-
-		const versionInfo = customData.versionInfo ?? {};
-		const keys = Object.keys(versionInfo);
-
-		for (let i = 0; i < keys.length; i++) {
-			const currentKey = keys[i];
-			addVersion(currentKey, versionInfo[currentKey]);
-		}
-		return true;
-	}
-	return false;
-}
-
-init()
-	.then((setupRun) => {
-		console.log('Version info rendered.', setupRun);
-		return true;
-	})
-	.catch((reason) => console.error('There was an issue reviewing the version info.', reason));

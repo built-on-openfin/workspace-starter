@@ -9,7 +9,7 @@ export class AboutConditions implements Conditions {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The settings for the conditions.
@@ -22,6 +22,10 @@ export class AboutConditions implements Conditions {
 	 */
 	private readonly _sharedState: SharedState;
 
+	/**
+	 * Create a new instance of AboutConditions.
+	 * @param sharedState The shared state data.
+	 */
 	constructor(sharedState: SharedState) {
 		this._sharedState = sharedState;
 	}
@@ -43,11 +47,12 @@ export class AboutConditions implements Conditions {
 
 	/**
 	 * Get the conditions from the module.
+	 * @returns Map of the conditions from the module.
 	 */
 	public async get(): Promise<ConditionMap> {
 		const conditionMap: ConditionMap = {};
 
-		conditionMap["has-about"] = async () => !isEmpty(this._sharedState.aboutWindow);
+		conditionMap["has-about"] = async (): Promise<boolean> => !isEmpty(this._sharedState.aboutWindow);
 
 		return conditionMap;
 	}

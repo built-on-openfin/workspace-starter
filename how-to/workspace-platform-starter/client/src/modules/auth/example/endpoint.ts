@@ -10,12 +10,15 @@ import { isEmpty } from "workspace-platform-starter/utils";
 import type { AppWithTagsOrCategories, ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
+/**
+ * Example authentication endpoint.
+ */
 export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
-	private _definition: ModuleDefinition<ExampleEndpointOptions>;
+	private _definition?: ModuleDefinition<ExampleEndpointOptions>;
 
-	private _logger: Logger;
+	private _logger?: Logger;
 
-	private _roleMapping: { [key: string]: ExampleUserRoleMapping };
+	private _roleMapping?: { [key: string]: ExampleUserRoleMapping };
 
 	/**
 	 * Initialize the module.
@@ -28,7 +31,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		definition: ModuleDefinition<ExampleEndpointOptions>,
 		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._logger = loggerCreator("ExampleAuthEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 		this._roleMapping = definition?.data?.roleMapping;
@@ -48,7 +51,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		CustomSettings | AppWithTagsOrCategories[] | { applications: AppWithTagsOrCategories[] } | null
 	> {
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return null;
@@ -61,9 +64,9 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 
 		const { url, ...options }: FetchOptions = endpointDefinition.options;
 
-		const req = this.getRequestOptions(url as string, options, request);
+		const req = this.getRequestOptions(url as string, options, request as { [id: string]: string });
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
-			this._logger.warn(
+			this._logger?.warn(
 				`${endpointDefinition.id} specifies a type: ${endpointDefinition.type} with a method ${req.options.method} that is not supported.`
 			);
 			return null;
@@ -88,10 +91,17 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return null;
 	}
 
+	/**
+	 * Convert the options to request data.
+	 * @param url The url.
+	 * @param options The options.
+	 * @param request The request object to convert.
+	 * @returns The converted options.
+	 */
 	private getRequestOptions(
 		url: string,
 		options: FetchOptions,
-		request: unknown
+		request: { [id: string]: string }
 	): { url: string; options: FetchOptions } {
 		if (options.method === "GET") {
 			if (!isEmpty(request)) {
@@ -99,7 +109,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 				if (keys.length > 0) {
 					const length = keys.length;
 					for (let i = 0; i < length; i++) {
-						url = url.replace(`[${keys[i]}]`, encodeURIComponent(request[keys[i]] as string));
+						url = url.replace(`[${keys[i]}]`, encodeURIComponent(request[keys[i]]));
 					}
 				}
 			}
@@ -110,6 +120,11 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return { url, options };
 	}
 
+	/**
+	 * Apply the current user settings to the applications.
+	 * @param apps The list of apps.
+	 * @returns The list of apps filtered for use by the user.
+	 */
 	private applyCurrentUserToApps(apps: AppWithTagsOrCategories[]): AppWithTagsOrCategories[] {
 		const currentUser = getCurrentUser();
 		if (
@@ -125,7 +140,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		const applications: AppWithTagsOrCategories[] = [];
 		if (Array.isArray(apps)) {
 			for (const app of apps) {
-				const lookup: string[] = app.tags ?? app.categories;
+				const lookup: string[] | undefined = app.tags ?? app.categories;
 				if (Array.isArray(lookup)) {
 					if (this.includeInResponse(lookup, excludeTag)) {
 						applications.push(app);
@@ -138,6 +153,12 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return applications;
 	}
 
+	/**
+	 * Compare the tags with the exclude list to see if they should be used.
+	 * @param tags The tags to check.
+	 * @param excludeTags The exclude list to check against.
+	 * @returns True if the item should be included.
+	 */
 	private includeInResponse(tags: string[], excludeTags: string[]): boolean {
 		let include = true;
 		if (!Array.isArray(excludeTags)) {
@@ -153,14 +174,25 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		return include;
 	}
 
+	/**
+	 * Apply the user settings to the custom settings.
+	 * @param settings The settings to filter.
+	 * @returns The filtered settings.
+	 */
 	private applyCurrentUserToSettings(settings: CustomSettings): CustomSettings {
 		const currentUser = getCurrentUser();
-		if (isEmpty(currentUser) || isEmpty(this._roleMapping) || isEmpty(this._roleMapping[currentUser.role])) {
+		if (
+			isEmpty(currentUser) ||
+			isEmpty(this._roleMapping) ||
+			isEmpty(this._roleMapping[currentUser.role]) ||
+			isEmpty(this._definition)
+		) {
 			return settings;
 		}
 
-		if (Array.isArray(settings?.endpointProvider?.modules)) {
-			settings.endpointProvider.modules.push({
+		const modules = settings?.endpointProvider?.modules;
+		if (Array.isArray(modules)) {
+			modules.push({
 				data: this._definition,
 				enabled: this._definition.enabled,
 				id: this._definition.id,
@@ -170,19 +202,17 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 				title: this._definition.title,
 				url: this._definition.url
 			});
-			if (
-				Array.isArray(settings?.endpointProvider?.endpoints) &&
-				Array.isArray(settings?.appProvider?.endpointIds)
-			) {
-				const appEndpoints = settings?.appProvider?.endpointIds;
+			const appEndpointProviders = settings?.endpointProvider?.endpoints;
+			const appEndpointIds = settings?.appProvider?.endpointIds;
+			if (Array.isArray(appEndpointProviders) && Array.isArray(appEndpointIds)) {
 				let count = 0;
 				const updateEndpoints = [];
-				for (const endpoint of appEndpoints) {
+				for (const endpoint of appEndpointIds) {
 					if (typeof endpoint === "string") {
 						if (endpoint.startsWith("http")) {
 							updateEndpoints.push({ position: count, url: endpoint });
 						} else {
-							const endpointToUpdate = settings.endpointProvider.endpoints.find(
+							const endpointToUpdate = appEndpointProviders.find(
 								(endpointEntry) => endpointEntry.id === endpoint && endpointEntry.type === "fetch"
 							);
 							if (!isEmpty(endpointToUpdate)) {
@@ -205,8 +235,8 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 					}
 					for (const newEndpointEntry of updateEndpoints) {
 						const endpointId = `auth-example-endpoint-${newEndpointEntry.position}`;
-						settings.appProvider.endpointIds[newEndpointEntry.position] = endpointId;
-						settings.endpointProvider.endpoints.push({
+						appEndpointIds[newEndpointEntry.position] = endpointId;
+						appEndpointProviders.push({
 							id: endpointId,
 							type: "module",
 							typeId: this._definition.id,
@@ -220,15 +250,18 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			}
 		}
 
+		const themeProvider = settings.themeProvider;
+
 		if (
-			Array.isArray(settings?.themeProvider?.themes) &&
-			settings.themeProvider.themes.length > 0 &&
+			!isEmpty(themeProvider) &&
+			Array.isArray(themeProvider.themes) &&
+			themeProvider.themes.length > 0 &&
 			!isEmpty(this._roleMapping[currentUser.role].preferredScheme)
 		) {
-			settings.themeProvider.themes[0].default =
+			themeProvider.themes[0].default =
 				this._roleMapping[currentUser.role].preferredScheme === "dark" ? "dark" : "light";
 			const storedSchemePreference = `${fin.me.identity.uuid}-SelectedColorScheme`;
-			this._logger.warn(
+			this._logger?.warn(
 				"This is a demo module where we are clearing the locally stored scheme preference in order to show different scheme's light/dark based on user selection. This means that it will always be set to what is in the role mapping initially and not what it is set to locally on restart."
 			);
 			localStorage.removeItem(storedSchemePreference);
@@ -237,43 +270,41 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 		const excludeMenuActionIds = this._roleMapping[currentUser.role].excludeMenuAction;
 		const excludeMenuModuleIds = this._roleMapping[currentUser.role].excludeMenuModule;
 
-		if (Array.isArray(excludeMenuActionIds)) {
-			if (
-				Array.isArray(settings?.browserProvider?.globalMenu) &&
-				settings.browserProvider.globalMenu.length > 0
-			) {
-				for (const globalMenuEntry of settings.browserProvider.globalMenu) {
-					const globalMenuActionId: string = globalMenuEntry?.data?.action?.id;
-					if (excludeMenuActionIds.includes(globalMenuActionId)) {
+		const browserProviders = settings.browserProvider;
+		if (!isEmpty(browserProviders) && Array.isArray(excludeMenuActionIds)) {
+			if (Array.isArray(browserProviders.globalMenu) && browserProviders.globalMenu.length > 0) {
+				for (const globalMenuEntry of browserProviders.globalMenu) {
+					const globalMenuActionId: string | undefined = globalMenuEntry?.data?.action?.id;
+					if (globalMenuActionId && excludeMenuActionIds.includes(globalMenuActionId)) {
 						globalMenuEntry.include = false;
 					}
 				}
 			}
-			if (
-				Array.isArray(settings?.browserProvider?.pageMenu) &&
-				settings.browserProvider.pageMenu.length > 0
-			) {
-				for (const pageMenuEntry of settings.browserProvider.pageMenu) {
-					const pageMenuActionId: string = pageMenuEntry?.data?.action?.id;
-					if (excludeMenuActionIds.includes(pageMenuActionId)) {
+			if (Array.isArray(browserProviders.pageMenu) && browserProviders.pageMenu.length > 0) {
+				for (const pageMenuEntry of browserProviders.pageMenu) {
+					const pageMenuActionId: string | undefined = pageMenuEntry?.data?.action?.id;
+					if (pageMenuActionId && excludeMenuActionIds.includes(pageMenuActionId)) {
 						pageMenuEntry.include = false;
 					}
 				}
 			}
-			if (
-				Array.isArray(settings?.browserProvider?.viewMenu) &&
-				settings.browserProvider.viewMenu.length > 0
-			) {
-				for (const viewMenuEntry of settings.browserProvider.viewMenu) {
-					const viewMenuActionId: string = viewMenuEntry?.data?.action?.id;
-					if (excludeMenuActionIds.includes(viewMenuActionId)) {
+			if (Array.isArray(browserProviders.viewMenu) && browserProviders.viewMenu.length > 0) {
+				for (const viewMenuEntry of browserProviders.viewMenu) {
+					const viewMenuActionId: string | undefined = viewMenuEntry?.data?.action?.id;
+					if (viewMenuActionId && excludeMenuActionIds.includes(viewMenuActionId)) {
 						viewMenuEntry.include = false;
 					}
 				}
 			}
 		}
-		if (Array.isArray(excludeMenuModuleIds) && Array.isArray(settings?.menusProvider?.modules)) {
-			for (const menuModule of settings.menusProvider.modules) {
+
+		const menusProvider = settings.menusProvider;
+		if (
+			!isEmpty(menusProvider) &&
+			Array.isArray(excludeMenuModuleIds) &&
+			Array.isArray(menusProvider.modules)
+		) {
+			for (const menuModule of menusProvider.modules) {
 				const menuModuleId: string = menuModule.id;
 				if (excludeMenuModuleIds.includes(menuModuleId)) {
 					menuModule.enabled = false;

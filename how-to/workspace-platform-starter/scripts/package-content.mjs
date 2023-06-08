@@ -39,6 +39,13 @@ import path from 'path';
 	}
 })();
 
+/**
+ * Package the content.
+ * @param manifest The manifest file to start.
+ * @param env The environment we are packaging for.
+ * @param host The host to point to in the files.
+ * @returns The final packaged directory.
+ */
 async function packageContent(manifest, env, host) {
 	const packageConfig = await readJsonFile('./scripts/package-config.json');
 
@@ -135,6 +142,16 @@ async function packageContent(manifest, env, host) {
 	return packagedDirectory;
 }
 
+/**
+ * Copy files and replace and env vars.
+ * @param packageConfig The package configuration.
+ * @param env The environment variables.
+ * @param src The source file.
+ * @param dest The dest file.
+ * @param packagedDirectory The packaged directory.
+ * @param host The host.
+ * @param cache Cache for already processed files.
+ */
 async function copyFileWithReplace(packageConfig, env, src, dest, packagedDirectory, host, cache) {
 	const normalizedSrc = forwardSlash(path.relative('.', src));
 	if (!cache.includes(normalizedSrc)) {
@@ -187,6 +204,16 @@ async function copyFileWithReplace(packageConfig, env, src, dest, packagedDirect
 	}
 }
 
+/**
+ * Find Find assets in a file.
+ * @param packageConfig The packaging configuration.
+ * @param env The environment variables.
+ * @param src The source file.
+ * @param fileContent The content of the file.
+ * @param packagedDirectory The packaged directory.
+ * @param host The host.
+ * @param cache The cache of already processed file.
+ */
 async function locateAssets(packageConfig, env, src, fileContent, packagedDirectory, host, cache) {
 	// Find all entries that contain the host name
 	const reHost = new RegExp(`${host}(.*)"`, 'g');
@@ -241,6 +268,15 @@ async function locateAssets(packageConfig, env, src, fileContent, packagedDirect
 	}
 }
 
+/**
+ * Copy an asset.
+ * @param packageConfig The packaging configuration.
+ * @param env The environment variables.
+ * @param url The url.
+ * @param packagedDirectory The packaged directory.
+ * @param host The host.
+ * @param cache The cache of already processed file.
+ */
 async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache) {
 	let srcName;
 	let destName;
@@ -270,10 +306,20 @@ async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache
 	}
 }
 
+/**
+ * Replace back slashes with forward slashes.
+ * @param input The input to replace.
+ * @returns The replaced content.
+ */
 function forwardSlash(input) {
 	return input.replace(/\\/g, '/');
 }
 
+/**
+ * Does the specified file exist.
+ * @param filename The filename to check for existence.
+ * @returns True if the file exists.
+ */
 async function fileExists(filename) {
 	try {
 		const stats = await fs.stat(filename);
@@ -283,6 +329,11 @@ async function fileExists(filename) {
 	}
 }
 
+/**
+ * Read a file as JSON.
+ * @param filename The name of the file to read.
+ * @returns The JSON for the file.
+ */
 async function readJsonFile(filename) {
 	try {
 		const content = await fs.readFile(filename, 'utf8');

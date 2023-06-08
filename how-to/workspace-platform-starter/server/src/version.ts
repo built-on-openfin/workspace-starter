@@ -2,7 +2,11 @@ import express from "express";
 import { readFileSync } from "fs";
 import path from "path";
 
-export function init(app: express.Application) {
+/**
+ * Initialize the routes for the versioning info.
+ * @param app The express app to extend.
+ */
+export function init(app: express.Application): void {
 	console.log(
 		"Configuring the /version service. This can be specified as an endpoint in the endpoint provider:",
 		`

@@ -1,5 +1,5 @@
-import { getInterop, mapToPlatformApps as mapFDC3OnePointTwoToPlatformApp } from "./fdc3/1.2/mapper";
-import { getIntents, mapToPlatformApps as mapFDC3TwoPointZeroToPlatformApp } from "./fdc3/2.0/mapper";
+import { mapInterop, mapToPlatformApp as mapFDC3OnePointTwoToPlatformApp } from "./fdc3/1.2/mapper";
+import { mapIntents, mapToPlatformApp as mapFDC3TwoPointZeroToPlatformApp } from "./fdc3/2.0/mapper";
 import { createLogger } from "./logger-provider";
 import type { EndpointProvider, PlatformApp } from "./shapes";
 import type { DirectoryApps, DirectoryEndpoint } from "./shapes/directory-shapes";
@@ -146,16 +146,14 @@ async function getApps(results: DirectoryApps): Promise<PlatformApp[]> {
 		const version = results.metadata.version;
 		switch (version) {
 			case "1.2": {
-				const mappedApps: PlatformApp[] = mapFDC3OnePointTwoToPlatformApp(
-					(results as FDC3VOnePointTwoAppDirectoryResponse).applications
+				return (results as FDC3VOnePointTwoAppDirectoryResponse).applications.map((a) =>
+					mapFDC3OnePointTwoToPlatformApp(a)
 				);
-				return mappedApps;
 			}
 			case "2.0": {
-				const mappedApps: PlatformApp[] = mapFDC3TwoPointZeroToPlatformApp(
-					(results as FDC3VTwoPointZeroAppDirectoryResponse).applications
+				return (results as FDC3VTwoPointZeroAppDirectoryResponse).applications.map((a) =>
+					mapFDC3TwoPointZeroToPlatformApp(a)
 				);
-				return mappedApps;
 			}
 			default: {
 				throw new Error(`Unknown/Unsupported FDC3 version specified: ${version}`);
@@ -163,15 +161,13 @@ async function getApps(results: DirectoryApps): Promise<PlatformApp[]> {
 		}
 	} else if (Array.isArray(results.applications) && results.applications.length > 0) {
 		if ("type" in results.applications[0]) {
-			const mappedApps: PlatformApp[] = mapFDC3TwoPointZeroToPlatformApp(
-				(results as FDC3VTwoPointZeroAppDirectoryResponse).applications
+			return (results as FDC3VTwoPointZeroAppDirectoryResponse).applications.map((a) =>
+				mapFDC3TwoPointZeroToPlatformApp(a)
 			);
-			return mappedApps;
 		}
-		const mappedApps: PlatformApp[] = mapFDC3OnePointTwoToPlatformApp(
-			(results as FDC3VOnePointTwoAppDirectoryResponse).applications
+		return (results as FDC3VOnePointTwoAppDirectoryResponse).applications.map((a) =>
+			mapFDC3OnePointTwoToPlatformApp(a)
 		);
-		return mappedApps;
 	}
 	return [];
 }
@@ -186,9 +182,9 @@ function mapOpenFinResults(applications: PlatformApp[]): PlatformApp[] {
 
 	for (const app of applications) {
 		if (Array.isArray(app.intents) && isEmpty(app.interop)) {
-			app.interop = getInterop(app.intents);
+			app.interop = mapInterop(app.intents);
 		} else if (!isEmpty(app.interop) && !Array.isArray(app.intents)) {
-			app.intents = getIntents(app.interop);
+			app.intents = mapIntents(app.interop);
 		}
 		platformApps.push(app);
 	}

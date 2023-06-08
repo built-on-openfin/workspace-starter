@@ -1,3 +1,17 @@
+window.addEventListener('DOMContentLoaded', () => {
+	init()
+		.then((success) => {
+			console.log('successfully ran manifest launcher.', success);
+			return true;
+		})
+		.catch((reason) => {
+			console.error('Unable to run agent for the following reason.', reason);
+		});
+});
+
+/**
+ * Launch a manifest.
+ */
 async function init() {
 	try {
 		if (window.fin === undefined) {
@@ -40,14 +54,3 @@ async function init() {
 		await app.quit(true);
 	}
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-	init()
-		.then((success) => {
-			console.log('successfully ran manifest launcher.', success);
-			return true;
-		})
-		.catch((reason) => {
-			console.error('Unable to run agent for the following reason.', reason);
-		});
-});

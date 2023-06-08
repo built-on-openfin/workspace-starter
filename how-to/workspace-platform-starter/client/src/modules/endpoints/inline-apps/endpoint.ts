@@ -3,11 +3,14 @@ import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/sh
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 
+/**
+ * App module for inline apps.
+ */
 export class InlineAppModuleEndpoint implements Endpoint {
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -17,7 +20,7 @@ export class InlineAppModuleEndpoint implements Endpoint {
 		definition: ModuleDefinition,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._logger = loggerCreator("InlineAppModuleEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
@@ -35,14 +38,14 @@ export class InlineAppModuleEndpoint implements Endpoint {
 		request?: unknown
 	): Promise<PlatformApp[]> {
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return [];
 		}
 		const results: PlatformApp[] = endpointDefinition?.options?.apps ?? [];
 
-		this._logger.info(
+		this._logger?.info(
 			`Returning ${results.length} app entries from the inline apps endpoint with id: ${endpointDefinition.id}`
 		);
 

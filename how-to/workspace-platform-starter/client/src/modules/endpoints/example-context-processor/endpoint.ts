@@ -9,6 +9,9 @@ import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter
 import { isEmpty, isStringValue, objectClone } from "workspace-platform-starter/utils";
 import { type ContextProcessorSettings } from "./shapes";
 
+/**
+ * Example context processor endpoint.
+ */
 export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint {
 	/**
 	 * Logged for messages.
@@ -26,13 +29,13 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 		definition: ModuleDefinition,
 		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._logger = loggerCreator("ExampleContextProcessorEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
 
 	/**
-	 * Takes a context object and returns an enriched version
+	 * Takes a context object and returns an enriched version.
 	 * @param endpointDefinition The definition of the endpoint (which is passed by the endpoint provider).
 	 * @param request The request containing the context to process that is passed by the interopbroker.
 	 * @returns The response containing the enriched or original context object.
@@ -45,19 +48,22 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 		const response = { context: objectClone(request?.context) };
 
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return response;
 		}
 
-		this._logger.info(
+		this._logger?.info(
 			"This is an example of an endpoint that can process a context object that was passed to the broker and needs processing."
 		);
 
 		if (request?.context?.type === "org.dayofinterest") {
 			if (endpointDefinition?.options?.logContext) {
-				this._logger.info(`Context Type ${request.context.type} matched. Incoming context:`, request.context);
+				this._logger?.info(
+					`Context Type ${request.context.type} matched. Incoming context:`,
+					request.context
+				);
 			}
 			const contextId = request.context.id;
 			if (contextId && !isEmpty(contextId.date)) {
@@ -82,13 +88,13 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 					contextId.iso = `${targetDate.toISOString()}`;
 				}
 				if (endpointDefinition?.options?.logContext) {
-					this._logger.info(
+					this._logger?.info(
 						`Context Type ${response.context.type} matched. Processed context:`,
 						response.context
 					);
 				}
 			} else {
-				this._logger.warn(
+				this._logger?.warn(
 					`Unable to process ${request.context.type} as it did not have date as part of the id`
 				);
 			}

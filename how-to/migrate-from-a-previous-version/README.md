@@ -594,7 +594,7 @@ So this:
 import { fin } from 'openfin-adapter/src/mock';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   await fin.Platform.init({});
 }
 ```
@@ -605,7 +605,7 @@ becomes:
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
   await workspacePlatformInit({
     browser
@@ -686,7 +686,7 @@ import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/works
 import { getSettings } from './settings';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let settings = await getSettings();
   let browser: BrowserInitConfig = {};
 
@@ -754,7 +754,7 @@ This is best done through default window options.
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
 
   browser.defaultWindowOptions = {
@@ -782,7 +782,7 @@ This is done when you initialize your platform:
 import { init as workspacePlatformInit, CustomThemeOptions } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   const theme: CustomThemeOptions[] = [
     {
       label: 'Starter Theme',

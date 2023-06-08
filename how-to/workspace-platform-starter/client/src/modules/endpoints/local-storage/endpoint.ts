@@ -1,26 +1,29 @@
 import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { PlatformLocalStorage } from "./platform-local-storage";
-import type { IPlatformStorage } from "./platform-storage-shapes";
+import type { PlatformStorage } from "workspace-platform-starter/shapes/platform-storage-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
+import { PlatformLocalStorage } from "./platform-local-storage";
 
+/**
+ * Endpoint for local storage.
+ */
 export class LocalStorageEndpoint implements Endpoint {
-	private _logger: Logger;
+	private _logger?: Logger;
 
-	private _loggerCreator: LoggerCreator;
+	private _loggerCreator?: LoggerCreator;
 
-	private _storage: { [key: string]: IPlatformStorage<unknown> } = {};
+	private _storage: { [key: string]: PlatformStorage<unknown> } = {};
 
 	/**
-	 * Create a new instance of InlineAppModuleEndpoint
+	 * Create a new instance of LocalStorageEndpoint.
 	 */
 	constructor() {
 		this._storage = {};
 	}
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -30,7 +33,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		definition: ModuleDefinition,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._loggerCreator = loggerCreator;
 		this._logger = loggerCreator("LocalStorageEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
@@ -39,7 +42,11 @@ export class LocalStorageEndpoint implements Endpoint {
 	/**
 	 * Handle an action sent to the endpoint.
 	 * @param endpointDefinition The definition of the endpoint.
+	 * @param endpointDefinition.dataType The type of the data.
+	 * @param endpointDefinition.method The method to use.
 	 * @param request The request to process.
+	 * @param request.id The id of the storage item.
+	 * @param request.payload The payload to store.
 	 * @returns True if processed.
 	 */
 	public async action(
@@ -47,11 +54,11 @@ export class LocalStorageEndpoint implements Endpoint {
 		request?: { id: string; payload?: unknown }
 	): Promise<boolean> {
 		if (isEmpty(request)) {
-			this._logger.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
+			this._logger?.warn(`A request is required for this action: ${endpointDefinition.id}. Returning false`);
 			return false;
 		}
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to perform action: ${endpointDefinition.id}`
 			);
 			return false;
@@ -66,7 +73,7 @@ export class LocalStorageEndpoint implements Endpoint {
 			return true;
 		} else if (method === "SET") {
 			if (isEmpty(request.payload)) {
-				this._logger.warn(`The payload needs to be specified for this action: ${endpointDefinition.id}`);
+				this._logger?.warn(`The payload needs to be specified for this action: ${endpointDefinition.id}`);
 				return false;
 			}
 			await localStorage.set(request.id, request.payload);
@@ -78,7 +85,11 @@ export class LocalStorageEndpoint implements Endpoint {
 	/**
 	 * Handle a request response on an endpoint.
 	 * @param endpointDefinition The definition of the endpoint.
+	 * @param endpointDefinition.dataType The type of the data.
+	 * @param endpointDefinition.method The method to use.
 	 * @param request The request to process.
+	 * @param request.id The id of the storage item.
+	 * @param request.query The payload to get.
 	 * @returns The response to the request, or null of not handled.
 	 */
 	public async requestResponse(
@@ -86,7 +97,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		request?: { id?: string; query?: string }
 	): Promise<unknown | null> {
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return null;
@@ -96,16 +107,22 @@ export class LocalStorageEndpoint implements Endpoint {
 		const localStorage = this.getStorage<unknown>(dataType as string);
 
 		if (method === "GET") {
-			if (isEmpty(request?.id)) {
+			const id = request?.id;
+			if (isEmpty(id)) {
 				return localStorage.getAll();
 			}
-			return localStorage.get(request.id);
+			return localStorage.get(id);
 		}
 		return null;
 	}
 
-	private getStorage<T>(id: string): IPlatformStorage<T> {
-		let localStorage: IPlatformStorage<T> = this._storage[id] as PlatformLocalStorage<T>;
+	/**
+	 * Get the storage for the specified id.
+	 * @param id The id of the storage to get.
+	 * @returns The storage for the requested id.
+	 */
+	private getStorage<T>(id: string): PlatformStorage<T> {
+		let localStorage: PlatformStorage<T> = this._storage[id] as PlatformLocalStorage<T>;
 		if (isEmpty(localStorage)) {
 			localStorage = new PlatformLocalStorage<T>(id, id, this._loggerCreator);
 			this._storage[id] = localStorage;

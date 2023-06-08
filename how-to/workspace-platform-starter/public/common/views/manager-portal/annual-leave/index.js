@@ -9,6 +9,9 @@ let teamData;
 const smallCalendar = new Calendar('smallCalendar', 'small');
 const largeCalendar = new Calendar('largeCalendar', 'large');
 
+/**
+ * Initialize the view.
+ */
 async function init() {
 	teamData = await loadTeamData();
 
@@ -18,6 +21,9 @@ async function init() {
 	updateMember();
 }
 
+/**
+ * Initialize the DOM.
+ */
 async function initDom() {
 	smallCalendar.init((year, month, day, monthNamesLong) => {
 		document.querySelector('.currentMonthYear').textContent = `${monthNamesLong[month]} ${year}`;
@@ -34,12 +40,20 @@ async function initDom() {
 	});
 }
 
+/**
+ * Handle a context.
+ * @param ctx The context.
+ */
 function handleContext(ctx) {
 	if (ctx.type === 'fdc3.contact') {
 		updateMember(ctx);
 	}
 }
 
+/**
+ * Update a member.
+ * @param fcd3Contact The contact to update.
+ */
 function updateMember(fcd3Contact) {
 	const teamMember = fcd3Contact ? teamData.find((m) => m.id === fcd3Contact.id.FDS_ID) : undefined;
 

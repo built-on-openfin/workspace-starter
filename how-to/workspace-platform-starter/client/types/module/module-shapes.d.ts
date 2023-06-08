@@ -123,7 +123,7 @@ export interface ModuleHelpers {
  */
 export interface ModuleImplementation<O = unknown, H = ModuleHelpers> {
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -172,7 +172,7 @@ export interface ModuleEntry<
 > {
 	definition: D;
 	implementation: M;
-	isInitialised: boolean;
+	isInitialized: boolean;
 }
 /**
  * Collection of module entries by type.

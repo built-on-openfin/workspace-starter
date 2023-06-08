@@ -1,6 +1,7 @@
 import type {
 	CLIFilter,
 	CLITemplate,
+	HomeAction,
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
@@ -13,6 +14,8 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { type VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { AboutProviderSettings } from "./shapes";
 
 /**
@@ -35,7 +38,7 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The integration helpers.
@@ -53,13 +56,13 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * Provided alternate labels for the version types
 	 * @internal
 	 */
-	private _versionTypeMap: { [key: string]: string };
+	private _versionTypeMap?: { [key: string]: string };
 
 	/**
 	 * Provided alternate labels for the version types
 	 * @internal
 	 */
-	private _excludeVersionType: string[];
+	private _excludeVersionType?: string[];
 
 	/**
 	 * Initialize the module.
@@ -85,25 +88,29 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * @returns The list of help entries.
 	 */
 	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
-		return [
-			{
-				key: `${AboutProvider._PROVIDER_ID}-help`,
-				title: AboutProvider._ABOUT_COMMAND,
-				label: "Help",
-				icon: this._definition?.icon,
-				actions: [],
-				data: {
-					providerId: AboutProvider._PROVIDER_ID,
-					populateQuery: AboutProvider._ABOUT_COMMAND
-				},
-				template: "Custom" as CLITemplate.Custom,
-				templateContent: await this._integrationHelpers.templateHelpers.createHelp(
-					AboutProvider._ABOUT_COMMAND,
-					["The about command lists the version information related to this platform."],
-					[AboutProvider._ABOUT_COMMAND]
-				)
-			}
-		];
+		if (this._integrationHelpers) {
+			return [
+				{
+					key: `${AboutProvider._PROVIDER_ID}-help`,
+					title: AboutProvider._ABOUT_COMMAND,
+					label: "Help",
+					icon: this._definition?.icon,
+					actions: [],
+					data: {
+						providerId: AboutProvider._PROVIDER_ID,
+						populateQuery: AboutProvider._ABOUT_COMMAND
+					},
+					template: "Custom" as CLITemplate.Custom,
+					templateContent: await this._integrationHelpers.templateHelpers.createHelp(
+						AboutProvider._ABOUT_COMMAND,
+						["The about command lists the version information related to this platform."],
+						[AboutProvider._ABOUT_COMMAND]
+					)
+				}
+			];
+		}
+
+		return [];
 	}
 
 	/**
@@ -112,6 +119,8 @@ export class AboutProvider implements IntegrationModule<unknown> {
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -128,84 +137,94 @@ export class AboutProvider implements IntegrationModule<unknown> {
 				results: []
 			};
 		}
-		const palette = await this._integrationHelpers.getCurrentPalette();
 
-		const versionInfo = await this._integrationHelpers.getVersionInfo();
+		if (this._integrationHelpers?.getVersionInfo) {
+			const palette = await this._integrationHelpers.getCurrentPalette();
 
-		const actions = [];
+			const versionInfo = await this._integrationHelpers.getVersionInfo();
 
-		const data: { [id: string]: string } = {};
+			const actions: HomeAction[] = [];
 
-		const tableData: string[][] = [];
-		tableData.push(["Version Type", "Version"]);
+			const data: { [id: string]: string } = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-		const keys = Object.keys(versionInfo);
+			const tableData: string[][] = [];
+			tableData.push(["Version Type", "Version"]);
 
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			if (!this._excludeVersionType.includes(key)) {
-				const label = this._versionTypeMap[key] ?? keys[i];
-				tableData.push([label, (versionInfo[keys[i]] ?? "unknown") as string]);
+			if (versionInfo && this._versionTypeMap && this._excludeVersionType) {
+				const keys = Object.keys(versionInfo);
+
+				for (let i = 0; i < keys.length; i++) {
+					const key = keys[i];
+					const versionForKey = versionInfo[key as keyof VersionInfo];
+					if (!this._excludeVersionType.includes(key) && versionForKey) {
+						const label = this._versionTypeMap[key] ?? key;
+						tableData.push([label, (versionForKey ?? "unknown") as string]);
+					}
+				}
 			}
-		}
 
-		data.title = this._definition?.data?.title ?? "Versions";
+			data.title = this._definition?.data?.title ?? "Versions";
 
-		const children: TemplateFragment[] = [];
-		const titleFragment = (await this._integrationHelpers.templateHelpers.createTitle(
-			"title",
-			undefined,
-			undefined,
-			{
-				marginBottom: "10px",
-				borderBottom: `1px solid ${palette.background6}`
-			}
-		)) as TemplateFragment;
-
-		children.push(titleFragment);
-
-		if (!isEmpty(this._definition?.data?.description)) {
-			data.description = this._definition.data.description;
-			const descriptionFragment = (await this._integrationHelpers.templateHelpers.createText(
-				"description",
+			const children: TemplateFragment[] = [];
+			const titleFragment = (await this._integrationHelpers.templateHelpers.createTitle(
+				"title",
+				undefined,
 				undefined,
 				{
-					marginBottom: "10px"
+					marginBottom: "10px",
+					borderBottom: `1px solid ${palette.background6}`
 				}
 			)) as TemplateFragment;
-			children.push(descriptionFragment);
+
+			children.push(titleFragment);
+
+			const desc = this._definition?.data?.description;
+			if (!isEmpty(desc)) {
+				data.description = desc;
+				const descriptionFragment = (await this._integrationHelpers.templateHelpers.createText(
+					"description",
+					undefined,
+					{
+						marginBottom: "10px"
+					}
+				)) as TemplateFragment;
+				children.push(descriptionFragment);
+			}
+
+			const tableFragment = (await this._integrationHelpers.templateHelpers.createTable(
+				tableData,
+				[],
+				0,
+				data
+			)) as TemplateFragment;
+
+			children.push(tableFragment);
+
+			const result: HomeSearchResult = {
+				key: "about-info",
+				title: AboutProvider._ABOUT_COMMAND,
+				label: "Version",
+				icon: this._definition?.icon,
+				actions,
+				data: {
+					providerId: AboutProvider._PROVIDER_ID
+				},
+				template: "Custom" as CLITemplate.Custom,
+				templateContent: {
+					layout: await this._integrationHelpers.templateHelpers.createContainer("column", children, {
+						padding: "10px"
+					}),
+					data
+				}
+			};
+
+			return {
+				results: [result]
+			};
 		}
 
-		const tableFragment = (await this._integrationHelpers.templateHelpers.createTable(
-			tableData,
-			[],
-			0,
-			data
-		)) as TemplateFragment;
-
-		children.push(tableFragment);
-
-		const result = {
-			key: "about-info",
-			title: AboutProvider._ABOUT_COMMAND,
-			label: "Version",
-			icon: this._definition?.icon,
-			actions,
-			data: {
-				providerId: AboutProvider._PROVIDER_ID
-			},
-			template: "Custom" as CLITemplate.Custom,
-			templateContent: {
-				layout: await this._integrationHelpers.templateHelpers.createContainer("column", children, {
-					padding: "10px"
-				}),
-				data
-			}
-		};
-
 		return {
-			results: [result]
+			results: []
 		};
 	}
 

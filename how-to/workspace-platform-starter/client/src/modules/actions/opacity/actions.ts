@@ -17,15 +17,15 @@ export class OpacityActions implements Actions {
 	/**
 	 * The helper methods to use.
 	 */
-	private _helpers: ActionHelpers;
+	private _helpers?: ActionHelpers;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -42,13 +42,15 @@ export class OpacityActions implements Actions {
 
 	/**
 	 * Get the actions from the module.
+	 * @param platform The platform module.
+	 * @returns The map of custom actions.
 	 */
 	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
 		const actionMap: CustomActionsMap = {};
 
-		actionMap["change-opacity"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
-				this._logger.info("Change Opacity Triggered");
+		actionMap["change-opacity"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (this._helpers && payload.callerType === this._helpers.callerTypes.CustomButton) {
+				this._logger?.info("Change Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
@@ -65,9 +67,9 @@ export class OpacityActions implements Actions {
 			}
 		};
 
-		actionMap["restore-opacity"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.CustomButton) {
-				this._logger.info("Restore Opacity Triggered");
+		actionMap["restore-opacity"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (this._helpers && payload.callerType === this._helpers.callerTypes.CustomButton) {
+				this._logger?.info("Restore Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity as OpenFin.Identity);
 				const options = await browserWindow.openfinWindow.getOptions();
 				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform

@@ -1,14 +1,17 @@
 import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { RaiseIntentPayload, ShareContextPayload } from "./shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
+import type { RaiseIntentPayload, ShareContextPayload } from "./shapes";
 
+/**
+ * Init options interop handler.
+ */
 export class InitOptionsInteropHandler implements InitOptionsHandler {
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -18,7 +21,7 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 		definition: ModuleDefinition,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._logger = loggerCreator("InitOptionsInteropHandler");
 		// the init function could be passed limits (e.g. only support the following intents or contexts. Only publish to the following context groups etc.)
 		this._logger.info("The handler has been loaded");
@@ -34,7 +37,7 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 		payload?: RaiseIntentPayload | ShareContextPayload
 	): Promise<void> {
 		if (isEmpty(payload)) {
-			this._logger.warn(
+			this._logger?.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
 			);
 			return;
@@ -51,23 +54,31 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 				}
 			}
 		} catch (error) {
-			this._logger.error(`Error trying to perform action ${requestedAction}.`, error);
+			this._logger?.error(`Error trying to perform action ${requestedAction}.`, error);
 		}
 	}
 
-	private async raiseIntent(payload: RaiseIntentPayload) {
+	/**
+	 * Raise an intent.
+	 * @param payload The payload to send.
+	 */
+	private async raiseIntent(payload: RaiseIntentPayload): Promise<void> {
 		const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
-		this._logger.info(`Received intent to raise. Intent Request ${JSON.stringify(payload, null, 4)}.`);
+		this._logger?.info(`Received intent to raise. Intent Request ${JSON.stringify(payload, null, 4)}.`);
 		await brokerClient.fireIntent(payload);
 	}
 
-	private async shareContext(payload: ShareContextPayload) {
+	/**
+	 * Share context.
+	 * @param payload The payload to share.
+	 */
+	private async shareContext(payload: ShareContextPayload): Promise<void> {
 		const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 		const contextGroups = await brokerClient.getContextGroups();
 		const targetContextGroup = contextGroups.find((group) => group.id === payload.contextGroup);
 		if (!isEmpty(targetContextGroup)) {
 			await brokerClient.joinContextGroup(targetContextGroup.id);
-			this._logger.info(
+			this._logger?.info(
 				`Received context to send. Context Group ${targetContextGroup.id}. Context: ${JSON.stringify(
 					payload.context,
 					null,

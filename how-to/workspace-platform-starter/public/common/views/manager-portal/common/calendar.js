@@ -1,4 +1,12 @@
+/**
+ * Calendar class.
+ */
 export class Calendar {
+	/**
+	 * Create a new instance of Calendar.
+	 * @param rootElem The root dom element to connect with.
+	 * @param variant The variant of the calendar.
+	 */
 	constructor(rootElem, variant) {
 		this.rootElem = document.querySelector(`#${rootElem}`);
 		this.variant = variant;
@@ -13,18 +21,30 @@ export class Calendar {
 		);
 	}
 
+	/**
+	 * Set the state of the days.
+	 * @param approved The approved days.
+	 * @param awaitingApproval The awaiting approval days.
+	 */
 	setDayStates(approved, awaitingApproval) {
 		this.approvedDays = approved;
 		this.awaitingApprovalDays = awaitingApproval;
 		this.populateDays();
 	}
 
+	/**
+	 * Initialize the component.
+	 * @param dateChanged The date changed event.
+	 */
 	init(dateChanged) {
 		this.dateChanged = dateChanged;
 
 		this.reset();
 	}
 
+	/**
+	 * Reset the calendar.
+	 */
 	reset() {
 		const now = new Date();
 		this.day = now.getDate();
@@ -35,6 +55,9 @@ export class Calendar {
 		this.populateMonthYear();
 	}
 
+	/**
+	 * Populate the month and year.
+	 */
 	populateMonthYear() {
 		this.populateDays();
 		if (this.dateChanged) {
@@ -42,6 +65,9 @@ export class Calendar {
 		}
 	}
 
+	/**
+	 * Populate the header.
+	 */
 	populateHeader() {
 		const headerElem = this.rootElem.querySelector('.calendar-header');
 		headerElem.innerHTML = '';
@@ -54,6 +80,9 @@ export class Calendar {
 		}
 	}
 
+	/**
+	 * Populate the days.
+	 */
 	populateDays() {
 		const firstDayOfMonth = new Date(this.year, this.month, 1);
 
@@ -167,6 +196,10 @@ export class Calendar {
 		}
 	}
 
+	/**
+	 * Increment the month.
+	 * @param inc The increment.
+	 */
 	monthIncrement(inc) {
 		this.month += inc;
 		if (this.month < 0) {

@@ -8,6 +8,15 @@ export function isEmpty(value: unknown): value is null | undefined {
 }
 
 /**
+ * Test if a value is an object.
+ * @param value The value to test.
+ * @returns True if the value is an object.
+ */
+export function isObject(value: unknown): value is object {
+	return value !== undefined && value !== null && typeof value === "object";
+}
+
+/**
  * Test if a value is a string.
  * @param value The value to test.
  * @returns True if the value is a string.

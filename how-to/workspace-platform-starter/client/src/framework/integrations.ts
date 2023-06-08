@@ -200,7 +200,7 @@ export async function getSearchResults(
 	const sourceFilters: string[] = [];
 	for (const integrationModule of integrationModules) {
 		if (
-			integrationModule.isInitialised &&
+			integrationModule.isInitialized &&
 			integrationModule.implementation.getSearchResults &&
 			(integrationModule.definition.excludeFromSourceFilter ||
 				selectedSources.length === 0 ||
@@ -273,7 +273,7 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	}
 
 	for (const integrationModule of integrationModules) {
-		if (integrationModule.isInitialised && integrationModule.implementation.getHelpSearchEntries) {
+		if (integrationModule.isInitialized && integrationModule.implementation.getHelpSearchEntries) {
 			try {
 				const helpSearchEntries = await integrationModule.implementation.getHelpSearchEntries();
 
@@ -357,7 +357,7 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
 			integrationModule.definition.title,
 			integrationModule.definition.description,
 			integrationModule.definition.icon,
-			integrationModule?.isInitialised ?? false
+			integrationModule?.isInitialized ?? false
 		);
 		homeResponse.results.push(result);
 	}
@@ -451,9 +451,9 @@ async function updateIntegrationStatus(
 		return false;
 	}
 
-	if (shouldAutoStart && !integration.isInitialised) {
+	if (shouldAutoStart && !integration.isInitialized) {
 		await initializeModule(integration, integrationHelpers);
-	} else if (!shouldAutoStart && integration.isInitialised) {
+	} else if (!shouldAutoStart && integration.isInitialized) {
 		await closedownModule(integration);
 	}
 

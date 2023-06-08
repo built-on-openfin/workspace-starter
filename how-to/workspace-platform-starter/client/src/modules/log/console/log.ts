@@ -9,15 +9,15 @@ export class ConsoleLogProvider implements LogProvider<ConsoleLogOptions> {
 	/**
 	 * The levels of logging to include.
 	 */
-	private _includeLevels: LogLevel[];
+	private _includeLevels?: LogLevel[];
 
 	/**
 	 * The last group identity output.
 	 */
-	private _lastGroupIdentity: string;
+	private _lastGroupIdentity?: string;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -46,7 +46,7 @@ export class ConsoleLogProvider implements LogProvider<ConsoleLogOptions> {
 		message: unknown,
 		...optionalParams: unknown[]
 	): void {
-		if (this._includeLevels.includes(level)) {
+		if (this._includeLevels?.includes(level)) {
 			this.handleGroup(group, identity);
 			console[level](message, ...optionalParams);
 		}
@@ -66,6 +66,7 @@ export class ConsoleLogProvider implements LogProvider<ConsoleLogOptions> {
 	/**
 	 * Handle a group.
 	 * @param group The group.
+	 * @param identity The identity.
 	 */
 	private handleGroup(group: string, identity: string): void {
 		const newGroupIdentity = `${group} ${identity}`;

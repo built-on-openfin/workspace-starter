@@ -6,12 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let teamData;
 
+/**
+ * Initialize the view.
+ */
 async function init() {
 	teamData = await loadTeamData();
 	await initDom();
 	await initFdc3Listener(handleContext);
 }
 
+/**
+ * Initialize the DOM components.
+ */
 async function initDom() {
 	const memberListElem = document.querySelector('.team-member-list');
 
@@ -66,6 +72,10 @@ async function initDom() {
 	await selectTeamMember(teamData[0]);
 }
 
+/**
+ * Select a team member.
+ * @param member The member to select.
+ */
 async function selectTeamMember(member) {
 	if (window.fdc3) {
 		const fdc3Contact = {
@@ -81,6 +91,10 @@ async function selectTeamMember(member) {
 	}
 }
 
+/**
+ * Set the aria state for the selected member.
+ * @param memberElem The member to select.
+ */
 function visualSelectMemberElem(memberElem) {
 	const memberListElem = document.querySelector('.team-member-list');
 
@@ -90,12 +104,20 @@ function visualSelectMemberElem(memberElem) {
 	memberElem.setAttribute('aria-selected', true);
 }
 
+/**
+ * Handle a context.
+ * @param ctx The context.
+ */
 function handleContext(ctx) {
 	if (ctx.type === 'fdc3.contact') {
 		updateMember(ctx);
 	}
 }
 
+/**
+ * Update a member.
+ * @param fcd3Contact The contact to update.
+ */
 function updateMember(fcd3Contact) {
 	const teamMemberIndex = fcd3Contact ? teamData.findIndex((m) => m.id === fcd3Contact.id.FDS_ID) : -1;
 

@@ -18,7 +18,7 @@ export interface SharePageData {
 	/**
 	 * The window identity of the sharing page.
 	 */
-	windowIdentity: OpenFin.Identity;
+	windowIdentity?: OpenFin.Identity;
 
 	/**
 	 * The page id of the shared page.

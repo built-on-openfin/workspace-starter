@@ -11,12 +11,12 @@ export class AboutMenus implements Menus<AboutMenusSettings> {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _settings: AboutMenusSettings;
+	private _settings?: AboutMenusSettings;
 
 	/**
 	 * Initialize the module.
@@ -38,6 +38,7 @@ export class AboutMenus implements Menus<AboutMenusSettings> {
 	 * Get the menus from the module.
 	 * @param menuType The type of menu to get the entries for.
 	 * @param platform The current platform.
+	 * @returns The menu entries.
 	 */
 	public async get(menuType: MenuType, platform: WorkspacePlatformModule): Promise<MenuEntry[] | undefined> {
 		if (menuType === "global") {

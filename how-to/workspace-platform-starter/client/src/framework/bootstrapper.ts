@@ -74,7 +74,7 @@ export async function init(): Promise<boolean> {
 	await registerIntegration(customSettings.integrationProvider, moduleHelpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
-		const storeRegistration = await storeComponent.register();
+		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
 		if (storeRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = storeRegistration;

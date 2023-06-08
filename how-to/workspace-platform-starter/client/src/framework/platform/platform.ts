@@ -29,6 +29,10 @@ import { PLATFORM_VERSION } from "./platform-version";
 
 const logger = loggerProvider.createLogger("Platform");
 
+/**
+ * Initialize the platform.
+ * @returns True if the platform was initialized.
+ */
 export async function init(): Promise<boolean> {
 	const customSettings = await getManifestCustomSettings();
 
@@ -48,7 +52,12 @@ export async function init(): Promise<boolean> {
 	return isValid;
 }
 
-async function setupPlatform(customSettings: CustomSettings): Promise<boolean> {
+/**
+ * Setup the platform.
+ * @param manifestSettings The custom setting to use for setting up the platform.
+ * @returns True if the platform setup was successful.
+ */
+async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	const sessionId: string = randomUUID();
@@ -57,20 +66,21 @@ async function setupPlatform(customSettings: CustomSettings): Promise<boolean> {
 
 	let helpers: ModuleHelpers = getDefaultHelpers();
 
-	await initOptionsProvider.init(customSettings?.initOptionsProvider, "after-auth", helpers);
+	await initOptionsProvider.init(manifestSettings?.initOptionsProvider, helpers, "after-auth");
 
-	const settings: CustomSettings = await getSettings();
+	// We reload the settings now that endpoints have been configured.
+	const customSettings: CustomSettings = await getSettings();
 
 	helpers = getDefaultHelpers();
-	await loggerProvider.init(settings?.loggerProvider, helpers);
+	await loggerProvider.init(customSettings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
 
-	await endpointProvider.init(settings?.endpointProvider, helpers);
+	await endpointProvider.init(customSettings?.endpointProvider, helpers);
 
 	const runtimeVersion = await fin.System.getVersion();
 
-	await versionProvider.init(settings?.versionProvider, endpointProvider);
+	await versionProvider.init(customSettings?.versionProvider, endpointProvider);
 	versionProvider.setVersion("runtime", runtimeVersion);
 	try {
 		const rvmInfo = await fin.System.getRvmInfo();
@@ -80,39 +90,39 @@ async function setupPlatform(customSettings: CustomSettings): Promise<boolean> {
 	}
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
-	await connectionProvider.init(settings?.connectionProvider);
-	await menusProvider.init(settings?.menusProvider, helpers);
-	await analyticsProvider.init(settings?.analyticsProvider, helpers);
-	await appProvider.init(settings?.appProvider, endpointProvider);
-	await conditionsProvider.init(settings?.conditionsProvider, helpers);
+	await connectionProvider.init(customSettings?.connectionProvider);
+	await menusProvider.init(customSettings?.menusProvider, helpers);
+	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);
+	await appProvider.init(customSettings?.appProvider, endpointProvider);
+	await conditionsProvider.init(customSettings?.conditionsProvider, helpers);
 	conditionsProvider.registerCondition(
 		"authenticated",
 		async () => isAuthenticationEnabled() && !(await isAuthenticationRequired()),
 		false
 	);
-	conditionsProvider.registerCondition("sharing", async () => isShareEnabled(), false);
+	conditionsProvider.registerCondition("sharing", async () => shareProvider.isShareEnabled(), false);
 	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
 
-	await lifecycleProvider.init(settings?.lifecycleProvider, helpers);
+	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	await shareProvider.init({ enabled: settings.platformProvider?.sharing ?? true });
+	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
-	if (!isEmpty(settings?.browserProvider)) {
-		browser.defaultWindowOptions = await getDefaultWindowOptions(settings.browserProvider);
+	if (!isEmpty(customSettings?.browserProvider)) {
+		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings.browserProvider);
 	}
-	if (!isEmpty(settings?.browserProvider?.defaultPageOptions)) {
-		browser.defaultPageOptions = settings.browserProvider.defaultPageOptions;
+	if (!isEmpty(customSettings?.browserProvider?.defaultPageOptions)) {
+		browser.defaultPageOptions = customSettings.browserProvider?.defaultPageOptions;
 	}
-	if (!isEmpty(settings?.browserProvider?.defaultViewOptions)) {
-		browser.defaultViewOptions = settings.browserProvider.defaultViewOptions;
+	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
+		browser.defaultViewOptions = customSettings.browserProvider?.defaultViewOptions;
 	}
 
 	logger.info("Specifying following browser options", browser);
 
-	await actionsProvider.init(settings?.actionsProvider, helpers);
+	await actionsProvider.init(customSettings?.actionsProvider, helpers);
 
 	const customActions = await actionsProvider.getActions();
 	const theme = await getThemes();
@@ -134,6 +144,9 @@ async function setupPlatform(customSettings: CustomSettings): Promise<boolean> {
 	return true;
 }
 
+/**
+ * Closedown the platform.
+ */
 export async function closedown(): Promise<void> {
 	await shareProvider.closedown();
 }

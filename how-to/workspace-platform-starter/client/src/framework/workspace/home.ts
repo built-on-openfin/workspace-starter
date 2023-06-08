@@ -60,6 +60,22 @@ export async function register(
 }
 
 /**
+ * Deregister the home component.
+ * @returns Nothing.
+ */
+export async function deregister(): Promise<void> {
+	if (registrationInfo) {
+		registrationInfo = undefined;
+		logger.info("About to call Home deregister.");
+		if (homeProviderOptions) {
+			await Home.deregister(homeProviderOptions.id);
+			homeProviderOptions = undefined;
+		}
+	}
+	logger.warn("Unable to deregister home as there is an indication it was never registered");
+}
+
+/**
  * Show the home component.
  * @returns Nothing.
  */
@@ -75,22 +91,6 @@ export async function show(): Promise<void> {
 export async function hide(): Promise<void> {
 	logger.info("Hide Home called.");
 	return Home.hide();
-}
-
-/**
- * Deregister the home component.
- * @returns Nothing.
- */
-export async function deregister(): Promise<void> {
-	if (registrationInfo) {
-		registrationInfo = undefined;
-		logger.info("About to call Home deregister.");
-		if (homeProviderOptions) {
-			await Home.deregister(homeProviderOptions.id);
-			homeProviderOptions = undefined;
-		}
-	}
-	logger.warn("Unable to deregister home as there is an indication it was never registered");
 }
 
 /**

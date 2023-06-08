@@ -7,14 +7,14 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+import { isEmpty, isObject, isStringValue } from "workspace-platform-starter/utils";
 import type { AppSettings } from "./shapes";
 
 /**
@@ -31,18 +31,18 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * Provider id.
 	 * @internal
 	 */
-	private _providerId: string;
+	private _providerId?: string;
 
 	/**
 	 * The settings from config.
 	 */
-	private _settings: AppSettings;
+	private _settings?: AppSettings;
 
 	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The integration helpers.
@@ -99,9 +99,12 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("AppProvider");
 		this._providerId = definition.id;
-		this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
-			await this.rebuildResults();
-		});
+
+		if (this._integrationHelpers.subscribeLifecycleEvent) {
+			this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
+				await this.rebuildResults();
+			});
+		}
 	}
 
 	/**
@@ -118,6 +121,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -147,7 +152,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		let handled = false;
-		if (result.action.trigger === "user-action") {
+		if (result.action.trigger === "user-action" && this._integrationHelpers?.launchApp) {
 			const data: {
 				app: { appId?: string };
 			} = result.data;
@@ -161,6 +166,16 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		return handled;
 	}
 
+	/**
+	 * Get the results for the apps.
+	 * @param queryLower The query.
+	 * @param filters The filters to apply.
+	 * @param options The query options.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param cachedApps The cached apps.
+	 * @returns The search response.
+	 */
 	private async getResults(
 		queryLower: string,
 		filters: CLIFilter[],
@@ -170,104 +185,116 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		},
 		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {
-		const apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
-		this._lastAppResults = apps;
-		this._lastQuery = queryLower;
-		this._lastQueryMinLength = options?.queryMinLength;
-		this._lastQueryAgainst = options?.queryAgainst;
-		this._lastCLIFilters = filters;
-		const appSearchEntries = await this.mapAppEntriesToSearchEntries(apps);
+		if (this._integrationHelpers?.getApps) {
+			const apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
 
-		const tags: string[] = [];
+			this._lastAppResults = apps;
+			this._lastQuery = queryLower;
+			this._lastQueryMinLength = options?.queryMinLength;
+			this._lastQueryAgainst = options?.queryAgainst;
+			this._lastCLIFilters = filters;
+			const appSearchEntries = await this.mapAppEntriesToSearchEntries(apps);
 
-		if (appSearchEntries.length > 0) {
-			const finalResults = appSearchEntries.filter((entry) => {
-				let textMatchFound = true;
-				let filterMatchFound = true;
+			const tags: string[] = [];
 
-				const isCommand = queryLower.startsWith("/");
+			if (appSearchEntries.length > 0) {
+				const finalResults = appSearchEntries.filter((entry) => {
+					let textMatchFound = true;
+					let filterMatchFound = true;
 
-				if (queryLower.length >= options.queryMinLength || isCommand) {
-					textMatchFound = options.queryAgainst.some((target) => {
-						const path = target.split(".");
-						if (path.length === 1) {
-							const targetValue = entry[path[0]];
+					const isCommand = queryLower.startsWith("/");
 
-							if (typeof targetValue === "string") {
-								const lowerTarget = targetValue.toLowerCase();
-								if (isCommand) {
-									return lowerTarget.startsWith(queryLower);
+					if (queryLower.length >= options.queryMinLength || isCommand) {
+						textMatchFound = options.queryAgainst.some((target) => {
+							const entryObject = entry as unknown as {
+								[id: string]: string | string[] | { [id: string]: string | string[] };
+							};
+							const path = target.split(".");
+							if (path.length === 1) {
+								const targetValue: { [id: string]: string | string[] } | string | string[] | undefined =
+									entryObject[path[0]];
+
+								if (isStringValue(targetValue)) {
+									const lowerTarget = targetValue.toLowerCase();
+									if (isCommand) {
+										return lowerTarget.startsWith(queryLower);
+									}
+									return lowerTarget.includes(queryLower);
 								}
-								return lowerTarget.includes(queryLower);
-							}
-						} else if (path.length === 2) {
-							const specifiedTarget = entry[path[0]];
-							let targetValue: string | string[];
-							if (!isEmpty(specifiedTarget)) {
-								targetValue = specifiedTarget[path[1]];
-							}
+							} else if (path.length === 2) {
+								const specifiedTarget = entryObject[path[0]] as { [id: string]: string | string[] };
 
-							if (typeof targetValue === "string") {
-								const lowerTarget = targetValue.toLowerCase();
-								if (isCommand) {
-									return lowerTarget.startsWith(queryLower);
-								}
-								return lowerTarget.includes(queryLower);
-							}
+								if (isObject(specifiedTarget)) {
+									let targetValue: string | string[] | undefined;
+									if (!isEmpty(specifiedTarget)) {
+										targetValue = specifiedTarget[path[1]];
+									}
 
-							if (Array.isArray(targetValue)) {
-								if (
-									targetValue.length > 0 &&
-									typeof targetValue[0] === "string" &&
-									targetValue.some((matchTarget) => matchTarget.toLowerCase().startsWith(queryLower))
-								) {
-									return true;
+									if (isStringValue(targetValue)) {
+										const lowerTarget = targetValue.toLowerCase();
+										if (isCommand) {
+											return lowerTarget.startsWith(queryLower);
+										}
+										return lowerTarget.includes(queryLower);
+									}
+
+									if (Array.isArray(targetValue)) {
+										if (
+											targetValue.length > 0 &&
+											isStringValue(targetValue[0]) &&
+											targetValue.some((mt) => mt.toLowerCase().startsWith(queryLower))
+										) {
+											return true;
+										}
+										this._logger?.warn(
+											`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${JSON.stringify(
+												specifiedTarget
+											)}`
+										);
+									}
 								}
-								this._logger.warn(
-									`Manifest configuration for search specified a queryAgainst target that is an array but not an array of strings. Only string values and arrays are supported: ${specifiedTarget}`
+							} else {
+								this._logger?.warn(
+									"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
 								);
 							}
-						} else {
-							this._logger.warn(
-								"The manifest configuration for search has a queryAgainst entry that has a depth greater than 1. You can search for e.g. data.tags if data has tags in it and it is either a string or an array of strings"
-							);
-						}
-						return false;
-					});
-				}
+							return false;
+						});
+					}
 
-				const tagFilters = Array.isArray(filters)
-					? filters.filter((f) => f.id === AppProvider._HOME_TAG_FILTERS)
-					: [];
-				if (tagFilters.length > 0) {
-					filterMatchFound = tagFilters.some((filter) => {
-						if (Array.isArray(filter.options)) {
-							if (!isEmpty(entry.data?.app?.tags)) {
-								return filter.options.every(
-									(option) => !option.isSelected || entry.data.app.tags.includes(option.value)
-								);
+					const tagFilters = Array.isArray(filters)
+						? filters.filter((f) => f.id === AppProvider._HOME_TAG_FILTERS)
+						: [];
+					if (tagFilters.length > 0) {
+						filterMatchFound = tagFilters.some((filter) => {
+							if (Array.isArray(filter.options)) {
+								if (!isEmpty(entry.data?.app?.tags)) {
+									return filter.options.every(
+										(option) => !option.isSelected || entry.data.app.tags.includes(option.value)
+									);
+								}
+							} else if (filter.options.isSelected && !isEmpty(entry.data?.app?.tags)) {
+								return entry.data.app.tags.includes(filter.options.value);
 							}
-						} else if (filter.options.isSelected && !isEmpty(entry.data?.app?.tags)) {
-							return entry.data.app.tags.includes(filter.options.value);
-						}
-						return true;
-					});
-				}
+							return true;
+						});
+					}
 
-				if (textMatchFound && Array.isArray(entry.data?.app?.tags)) {
-					tags.push(...(entry.data.app.tags as string[]));
-				}
-				return textMatchFound && filterMatchFound;
-			});
+					if (textMatchFound && Array.isArray(entry.data?.app?.tags)) {
+						tags.push(...(entry.data.app.tags as string[]));
+					}
+					return textMatchFound && filterMatchFound;
+				});
 
-			this._lastResultIds = finalResults.map((entry) => entry.key);
+				this._lastResultIds = finalResults.map((entry) => entry.key);
 
-			return {
-				results: finalResults,
-				context: {
-					filters: this.getSearchFilters(tags.filter(Boolean))
-				}
-			};
+				return {
+					results: finalResults,
+					context: {
+						filters: this.getSearchFilters(tags.filter(Boolean))
+					}
+				};
+			}
 		}
 		this._lastResultIds = [];
 		return {
@@ -278,6 +305,11 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		};
 	}
 
+	/**
+	 * Get search filters.
+	 * @param tags The tags to create the filters from.
+	 * @returns The filters.
+	 */
 	private getSearchFilters(tags: string[]): CLIFilter[] {
 		if (Array.isArray(tags)) {
 			const filters: CLIFilter[] = [];
@@ -304,58 +336,86 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		return [];
 	}
 
+	/**
+	 * Maps platform apps to search results.
+	 * @param apps The apps to convert.
+	 * @returns The search results.
+	 */
 	private async mapAppEntriesToSearchEntries(apps: PlatformApp[]): Promise<HomeSearchResult[]> {
 		const appResults: HomeSearchResult[] = [];
 		if (Array.isArray(apps)) {
+			const typeMapping = this._settings?.manifestTypeMapping;
+
 			for (const app of apps) {
-				const action = { name: "Launch View", hotkey: "enter" };
-				const entry: Partial<HomeSearchResult> = {
-					key: app.appId,
-					title: app.title,
-					data: { app, providerId: this._providerId }
-				};
+				const manifestType = app.manifestType;
+				if (isStringValue(manifestType)) {
+					const action = { name: "Launch View", hotkey: "enter" };
+					const entry: Partial<HomeSearchResult> = {
+						key: app.appId,
+						title: app.title,
+						data: { app, providerId: this._providerId }
+					};
 
-				const manifestTypeMapping = this._settings.manifestTypeMapping[app.manifestType];
+					if (!isEmpty(typeMapping)) {
+						const manifestTypeMapping = typeMapping[manifestType as ManifestTypeId];
 
-				if (!isEmpty(manifestTypeMapping)) {
-					if (isStringValue(manifestTypeMapping.entryLabel)) {
-						entry.label = manifestTypeMapping.entryLabel;
+						if (!isEmpty(manifestTypeMapping)) {
+							if (isStringValue(manifestTypeMapping.entryLabel)) {
+								entry.label = manifestTypeMapping.entryLabel;
+							}
+							if (isStringValue(manifestTypeMapping.actionName)) {
+								action.name = manifestTypeMapping.actionName;
+							}
+						}
 					}
-					if (isStringValue(manifestTypeMapping.actionName)) {
-						action.name = manifestTypeMapping.actionName;
+
+					entry.actions = [action];
+					entry.icon = this.getAppIcon(app);
+
+					if (!isEmpty(app.description)) {
+						entry.description = app.description;
+						entry.shortDescription = app.description;
 					}
+
+					entry.template = "Custom" as CLITemplate.Custom;
+					entry.templateContent = await this._integrationHelpers?.templateHelpers.createApp(
+						app,
+						entry.icon ?? "",
+						action.name
+					);
+
+					appResults.push(entry as HomeSearchResult);
 				}
-
-				entry.actions = [action];
-				entry.icon = this.getAppIcon(app);
-
-				if (!isEmpty(app.description)) {
-					entry.description = app.description;
-					entry.shortDescription = app.description;
-				}
-
-				entry.template = "Custom" as CLITemplate.Custom;
-				entry.templateContent = await this._integrationHelpers.templateHelpers.createApp(
-					app,
-					entry.icon,
-					action.name
-				);
-
-				appResults.push(entry as HomeSearchResult);
 			}
 		}
 		return appResults;
 	}
 
+	/**
+	 * Get the icon for an application.
+	 * @param app The application to get the icon for.
+	 * @returns The icon.
+	 */
 	private getAppIcon(app: PlatformApp): string | undefined {
 		if (Array.isArray(app.icons) && app.icons.length > 0) {
 			return app.icons[0].src as string;
 		}
 	}
 
+	/**
+	 * Rebuild the results if the theme changes.
+	 */
 	private async rebuildResults(): Promise<void> {
-		if (!isEmpty(this._lastResponse) && Array.isArray(this._lastResultIds)) {
-			this._logger.info("Rebuilding results...");
+		if (
+			!isEmpty(this._lastResponse) &&
+			Array.isArray(this._lastResultIds) &&
+			this._lastQuery &&
+			this._lastCLIFilters &&
+			this._lastQueryAgainst &&
+			this._lastQueryMinLength &&
+			this._lastResultIds
+		) {
+			this._logger?.info("Rebuilding results...");
 			const lastResultIds = this._lastResultIds.slice();
 			const appResponse = await this.getResults(
 				this._lastQuery,
@@ -363,12 +423,12 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				{ queryMinLength: this._lastQueryMinLength, queryAgainst: this._lastQueryAgainst },
 				this._lastAppResults
 			);
-			const removeResultIds = lastResultIds.filter((id) => !this._lastResultIds.includes(id));
+			const removeResultIds = lastResultIds.filter((id) => !this._lastResultIds?.includes(id));
 			if (removeResultIds.length > 0) {
 				this._lastResponse.revoke(...removeResultIds);
 			}
 			this._lastResponse.respond(appResponse.results);
-			this._logger.info("Results rebuilt.");
+			this._logger?.info("Results rebuilt.");
 		}
 	}
 }

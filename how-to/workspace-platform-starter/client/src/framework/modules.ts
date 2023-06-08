@@ -127,7 +127,7 @@ export async function loadModule<
 						// If the moduleType is the type being loaded then we can store the
 						// definition as well, otherwise create a dummy entry
 						definition: entryPoint === moduleType ? moduleDefinition : ({} as ModuleDefinition),
-						isInitialised: false,
+						isInitialized: false,
 						// Store the entry point or a dummy implementation for other types
 						implementation: mod.entryPoints[entryPoint as ModuleTypes] ?? ({} as ModuleImplementation)
 					};
@@ -179,21 +179,21 @@ export async function initializeModule<
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>, helpers: H): Promise<M | undefined> {
-	if (!moduleEntry.isInitialised) {
+	if (!moduleEntry.isInitialized) {
 		if (moduleEntry.implementation?.initialize) {
 			try {
 				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
 				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
-				moduleEntry.isInitialised = true;
+				moduleEntry.isInitialized = true;
 			} catch (err) {
 				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
 			}
 		} else {
-			moduleEntry.isInitialised = true;
+			moduleEntry.isInitialized = true;
 		}
 	}
 
-	return moduleEntry.isInitialised ? moduleEntry.implementation : undefined;
+	return moduleEntry.isInitialized ? moduleEntry.implementation : undefined;
 }
 
 /**
@@ -221,17 +221,17 @@ export async function closedownModule<
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>): Promise<void> {
-	if (moduleEntry.isInitialised) {
+	if (moduleEntry.isInitialized) {
 		if (moduleEntry.implementation?.closedown) {
 			try {
 				logger.info(`Closing down module '${moduleEntry.definition.id}'`);
 				await moduleEntry.implementation.closedown();
-				moduleEntry.isInitialised = false;
+				moduleEntry.isInitialized = false;
 			} catch (err) {
 				logger.error(`Error closing down module ${moduleEntry.definition.id}`, err);
 			}
 		} else {
-			moduleEntry.isInitialised = false;
+			moduleEntry.isInitialized = false;
 		}
 	}
 }

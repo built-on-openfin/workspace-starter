@@ -301,7 +301,7 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	let windowExists = false;
 
 	if (wasNameSpecified) {
-		windowExists = await doesWindowExist(identity.name, identity.uuid, true);
+		windowExists = await doesWindowExist(identity, true);
 	}
 
 	if (!windowExists) {
@@ -371,7 +371,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 	let viewExists = false;
 
 	if (wasNameSpecified) {
-		viewExists = await doesViewExist(identity.name, identity.uuid, true);
+		viewExists = await doesViewExist(identity, true);
 	}
 
 	if (!viewExists) {
@@ -443,7 +443,7 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 				}
 
 				// these views should be readonly and cannot be pulled out of the page or closed
-				if (!(await doesViewExist(viewId, fin.me.identity.uuid, false))) {
+				if (!(await doesViewExist({ name: viewId, uuid: fin.me.identity.uuid }))) {
 					windowsToCreate.push(currentWindow);
 				}
 			}

@@ -7,11 +7,14 @@ import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/lo
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 
+/**
+ * Example connection validation endpoint.
+ */
 export class ConnectionValidationEndpoint implements Endpoint {
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
 	 * @param helpers Helper methods for the module to interact with the application core.
@@ -21,7 +24,7 @@ export class ConnectionValidationEndpoint implements Endpoint {
 		definition: ModuleDefinition,
 		loggerCreator: LoggerCreator,
 		helpers?: ModuleHelpers
-	) {
+	): Promise<void> {
 		this._logger = loggerCreator("ConnectionValidationEndpoint");
 		this._logger.info("Was passed the following options", definition.data);
 	}
@@ -39,7 +42,7 @@ export class ConnectionValidationEndpoint implements Endpoint {
 		const defaultValue = { isValid: false };
 
 		if (endpointDefinition.type !== "module") {
-			this._logger.warn(
+			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return defaultValue;
@@ -52,7 +55,7 @@ export class ConnectionValidationEndpoint implements Endpoint {
 			this._logger.info(`Supplied options: ${JSON.stringify(request?.options)}`);
 		}
 		defaultValue.isValid = true;
-		this._logger.info("Setting isValid to true");
+		this._logger?.info("Setting isValid to true");
 		return defaultValue;
 	}
 }

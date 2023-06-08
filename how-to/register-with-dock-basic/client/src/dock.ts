@@ -34,7 +34,7 @@ export async function register(
 		customOpenUrl: string;
 	}
 ): Promise<RegistrationMetaInfo | undefined> {
-	console.log("Initialising the dock provider.");
+	console.log("Initializing the dock provider.");
 
 	try {
 		const metaInfo = await Dock.register({

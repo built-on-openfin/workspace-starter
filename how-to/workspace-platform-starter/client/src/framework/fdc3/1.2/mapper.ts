@@ -4,90 +4,11 @@ import type { AppDefinition, AppIcon, AppImage, AppIntents, AppMetadata } from "
 import type { AppInterop, AppIntents as FDC3TwoPointZeroAppIntents } from "../../shapes/fdc3-2-0-shapes";
 import { isBoolean, isEmpty, isStringValue } from "../../utils";
 
-function getIcons(icons: AppIcon[]): Image[] {
-	const appIcons: Image[] = [];
-	if (!Array.isArray(icons)) {
-		return appIcons;
-	}
-	for (const appIcon of icons) {
-		appIcons.push({ src: appIcon.icon });
-	}
-	return appIcons;
-}
-
-function getImages(images: AppImage[]): Image[] {
-	const appImages: Image[] = [];
-	if (!Array.isArray(images)) {
-		return appImages;
-	}
-	for (const appImage of images) {
-		appImages.push({ src: appImage.url });
-	}
-	return appImages;
-}
-
-function getManifest(app: AppDefinition): unknown {
-	if (typeof app.manifest === "string" && app.manifest.startsWith("{")) {
-		return JSON.parse(app.manifest);
-	}
-
-	return app.manifest;
-}
-
-function getTags(app: AppDefinition & { tags?: string[] }): string[] {
-	const tags: string[] = app.tags ?? app.categories ?? [];
-	if (tags.length === 0) {
-		tags.push(app.manifestType);
-	}
-
-	return tags;
-}
-
-function getPrivate(app: AppDefinition): boolean {
-	return getValue(app?.customConfig?.private, false);
-}
-
-function getAutostart(app: AppDefinition): boolean {
-	return getValue(app?.customConfig?.autostart, false);
-}
-
-function getValue(flag: string | boolean, defaultFlag: boolean) {
-	if (isStringValue(flag) || isBoolean(flag)) {
-		switch (flag) {
-			case "False":
-			case "false":
-			case false:
-				return false;
-			case "True":
-			case "true":
-			case true:
-				return true;
-			default:
-				// if someone has defined a flag then the likely hood was to override the default value
-				return !defaultFlag;
-		}
-	}
-	return defaultFlag;
-}
-
-export function getInterop(intents: AppIntents[]): AppInterop {
-	const listensFor: { [key: string]: FDC3TwoPointZeroAppIntents } = {};
-
-	for (const intent of intents) {
-		listensFor[intent.name] = {
-			contexts: intent.contexts,
-			customConfig: intent.customConfig,
-			displayName: intent.displayName
-		};
-	}
-
-	const interop: AppInterop = {
-		intents: { listensFor }
-	};
-
-	return interop;
-}
-
+/**
+ * Map the app definition to a platform app.
+ * @param app The app definition to map.
+ * @returns The platform app.
+ */
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 	const platformApp: PlatformApp = {
 		appId: app.appId,
@@ -98,32 +19,27 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		description: app.description,
 		customConfig: app.customConfig,
 		intents: app.intents,
-		interop: getInterop(app.intents),
-		tags: getTags(app),
+		interop: mapInterop(app.intents),
+		tags: mapTags(app),
 		version: app.version,
-		publisher: app.publisher,
+		publisher: app.publisher ?? "",
 		contactEmail: app.contactEmail,
 		supportEmail: app.supportEmail,
-		icons: getIcons(app.icons),
-		images: getImages(app.images),
-		private: getPrivate(app),
-		autostart: getAutostart(app),
+		icons: mapIcons(app.icons),
+		images: mapImages(app.images),
+		private: mapPrivate(app),
+		autostart: mapAutostart(app),
 		instanceMode: app.customConfig?.instanceMode,
 		tooltip: app.tooltip
 	};
 	return platformApp;
 }
 
-export function mapToPlatformApps(apps: AppDefinition[]): PlatformApp[] {
-	const platformApps: PlatformApp[] = [];
-
-	for (const app of apps) {
-		platformApps.push(mapToPlatformApp(app));
-	}
-
-	return platformApps;
-}
-
+/**
+ * Map the platform app to app metadata.
+ * @param app The application to map.
+ * @returns The app metadata.
+ */
 export function mapToAppMetaData(app: PlatformApp): AppMetadata {
 	const icons: string[] = [];
 	const images: string[] = [];
@@ -152,4 +68,133 @@ export function mapToAppMetaData(app: PlatformApp): AppMetadata {
 		version: app.version
 	};
 	return appMetaData;
+}
+
+/**
+ * Map the app definition interop data to app interop format.
+ * @param intents The intents to map.
+ * @returns The app interop.
+ */
+export function mapInterop(intents: AppIntents[] | undefined): AppInterop | undefined {
+	if (isEmpty(intents)) {
+		return;
+	}
+
+	const listensFor: { [key: string]: FDC3TwoPointZeroAppIntents } = {};
+
+	for (const intent of intents) {
+		listensFor[intent.name] = {
+			contexts: intent.contexts,
+			customConfig: intent.customConfig,
+			displayName: intent.displayName
+		};
+	}
+
+	const interop: AppInterop = {
+		intents: { listensFor }
+	};
+
+	return interop;
+}
+
+/**
+ * Map the icon format.
+ * @param icons The icons to map.
+ * @returns The mapped icons.
+ */
+function mapIcons(icons: AppIcon[] | undefined): Image[] {
+	if (!Array.isArray(icons)) {
+		return [];
+	}
+	const appIcons: Image[] = [];
+	for (const appIcon of icons) {
+		appIcons.push({ src: appIcon.icon });
+	}
+	return appIcons;
+}
+
+/**
+ * Map the image format.
+ * @param images The images to map.
+ * @returns The mapped images.
+ */
+function mapImages(images: AppImage[] | undefined): Image[] {
+	if (!Array.isArray(images)) {
+		return [];
+	}
+	const appImages: Image[] = [];
+	for (const appImage of images) {
+		appImages.push({ src: appImage.url });
+	}
+	return appImages;
+}
+
+/**
+ * Get the manifest which can be plain string or JSON.
+ * @param app The app to get the manifest from.
+ * @returns The manifest.
+ */
+function getManifest(app: AppDefinition): unknown {
+	if (typeof app.manifest === "string" && app.manifest.startsWith("{")) {
+		return JSON.parse(app.manifest);
+	}
+
+	return app.manifest;
+}
+
+/**
+ * Map the tags.
+ * @param app The app definition to map the tags for.
+ * @returns The mapped tags,
+ */
+function mapTags(app: AppDefinition & { tags?: string[] }): string[] {
+	const tags: string[] = app.tags ?? app.categories ?? [];
+	if (tags.length === 0) {
+		tags.push(app.manifestType);
+	}
+
+	return tags;
+}
+
+/**
+ * Map the private flag.
+ * @param app The app containing the app.
+ * @returns The flag or false if not found.
+ */
+function mapPrivate(app: AppDefinition): boolean {
+	return mapBooleanValue(app?.customConfig?.private, false);
+}
+
+/**
+ * Map the autostart flag.
+ * @param app The app containing the app.
+ * @returns The flag or false if not found.
+ */
+function mapAutostart(app: AppDefinition): boolean {
+	return mapBooleanValue(app?.customConfig?.autostart, false);
+}
+
+/**
+ * Map a boolean or string to a real boolean value.
+ * @param flag The flag to convert.
+ * @param defaultFlag The default value if missing.
+ * @returns The mapped flag.
+ */
+function mapBooleanValue(flag: string | boolean | undefined, defaultFlag: boolean): boolean {
+	if (isStringValue(flag) || isBoolean(flag)) {
+		switch (flag) {
+			case "False":
+			case "false":
+			case false:
+				return false;
+			case "True":
+			case "true":
+			case true:
+				return true;
+			default:
+				// if someone has defined a flag then the likely hood was to override the default value
+				return !defaultFlag;
+		}
+	}
+	return defaultFlag;
 }

@@ -8,9 +8,91 @@ import type {
 	OnlineNativeAppDetails,
 	AppInterop
 } from "../../shapes/fdc3-2-0-shapes";
-import { isEmpty } from "../../utils";
+import { isEmpty, isObject } from "../../utils";
 
-function getManifestType(app: AppDefinition): string {
+/**
+ * Map the app definition to a platform app.
+ * @param app The app definition to map.
+ * @returns The platform app.
+ */
+export function mapToPlatformApp(app: AppDefinition): PlatformApp {
+	const platformApp: PlatformApp = {
+		appId: app.appId,
+		name: app.name ?? app.appId,
+		title: app.title || app.name,
+		manifestType: mapManifestType(app),
+		manifest: getManifest(app) as string,
+		description: app.description,
+		instanceMode: app?.hostManifests?.OpenFin?.config?.instanceMode,
+		intents: mapIntents(app.interop),
+		interop: app.interop,
+		customConfig: app.customConfig,
+		tags: app.categories,
+		version: app.version,
+		publisher: app.publisher ?? "",
+		contactEmail: app.contactEmail,
+		supportEmail: app.supportEmail,
+		icons: app.icons ?? [],
+		images: app.screenshots,
+		private: app?.hostManifests?.OpenFin?.config?.private,
+		autostart: app?.hostManifests?.OpenFin?.config?.autostart
+	};
+	return platformApp;
+}
+
+/**
+ * Map the platform app to app metadata.
+ * @param app The application to map.
+ * @param resultType The result type to include in the data.
+ * @returns The app metadata.
+ */
+export function mapToAppMetaData(app: PlatformApp, resultType?: string): AppMetadata {
+	const appMetaData: AppMetadata = {
+		appId: app.appId,
+		description: app.description,
+		icons: app.icons,
+		name: app.name,
+		screenshots: app.images,
+		title: app.title,
+		tooltip: app.tooltip,
+		version: app.version,
+		resultType
+	};
+	return appMetaData;
+}
+
+/**
+ * Map the app definition interop data to app interop format.
+ * @param interop The interop to map.
+ * @returns The app interop.
+ */
+export function mapIntents(interop: AppInterop | undefined): AppIntent[] {
+	const intents: AppIntent[] = [];
+
+	const listensFor = interop?.intents?.listensFor;
+	if (isEmpty(listensFor)) {
+		return intents;
+	}
+
+	const intentIds = Object.keys(listensFor);
+	for (let i = 0; i < intentIds.length; i++) {
+		const intentName = intentIds[i];
+		intents.push({
+			name: intentName,
+			displayName: listensFor[intentName].displayName ?? "",
+			contexts: listensFor[intentName].contexts
+		});
+	}
+
+	return intents;
+}
+
+/**
+ * Map the manifest type.
+ * @param app The app definition to map the manifest type for.
+ * @returns The mapped manifest type.
+ */
+function mapManifestType(app: AppDefinition): string {
 	let manifestType: string;
 
 	switch (app.type) {
@@ -27,7 +109,7 @@ function getManifestType(app: AppDefinition): string {
 			break;
 		}
 		case "other": {
-			manifestType = app.hostManifests?.OpenFin?.type;
+			manifestType = app.hostManifests?.OpenFin?.type ?? "";
 			break;
 		}
 		default: {
@@ -37,20 +119,23 @@ function getManifestType(app: AppDefinition): string {
 	return manifestType;
 }
 
-function getManifest(app: AppDefinition): unknown {
+/**
+ * Get the manifest which can be plain string or JSON.
+ * @param app The app to get the manifest from.
+ * @returns The manifest.
+ */
+function getManifest(app: AppDefinition): string | unknown {
 	let manifest: string | unknown;
 
 	switch (app.type) {
 		case "web": {
 			if (!isEmpty(app?.details)) {
-				if (
-					!isEmpty(app.hostManifests?.OpenFin?.details) &&
-					typeof app.hostManifests.OpenFin.details === "object"
-				) {
+				const hostDetails = app.hostManifests?.OpenFin?.details;
+				if (isObject(hostDetails)) {
 					manifest = {
 						url: (app?.details as WebAppDetails).url,
 						fdc3InteropApi: "2.0",
-						...app.hostManifests.OpenFin.details
+						...hostDetails
 					};
 				} else {
 					manifest = {
@@ -83,74 +168,4 @@ function getManifest(app: AppDefinition): unknown {
 		}
 	}
 	return manifest;
-}
-
-export function getIntents(interop: AppInterop): AppIntent[] {
-	const intents: AppIntent[] = [];
-
-	if (isEmpty(interop?.intents?.listensFor)) {
-		return intents;
-	}
-
-	const intentIds = Object.keys(interop.intents.listensFor);
-	for (let i = 0; i < intentIds.length; i++) {
-		const intentName = intentIds[i];
-		intents.push({
-			name: intentName,
-			displayName: interop.intents.listensFor[intentName].displayName,
-			contexts: interop.intents.listensFor[intentName].contexts
-		});
-	}
-
-	return intents;
-}
-
-export function mapToPlatformApp(app: AppDefinition): PlatformApp {
-	const platformApp: PlatformApp = {
-		appId: app.appId,
-		name: app.name ?? app.appId,
-		title: app.title || app.name,
-		manifestType: getManifestType(app),
-		manifest: getManifest(app) as string,
-		description: app.description,
-		instanceMode: app?.hostManifests?.OpenFin?.config?.instanceMode,
-		intents: getIntents(app.interop),
-		interop: app.interop,
-		customConfig: app.customConfig,
-		tags: app.categories,
-		version: app.version,
-		publisher: app.publisher,
-		contactEmail: app.contactEmail,
-		supportEmail: app.supportEmail,
-		icons: app.icons,
-		images: app.screenshots,
-		private: app?.hostManifests?.OpenFin?.config?.private,
-		autostart: app?.hostManifests?.OpenFin?.config?.autostart
-	};
-	return platformApp;
-}
-
-export function mapToPlatformApps(apps: AppDefinition[]): PlatformApp[] {
-	const platformApps: PlatformApp[] = [];
-
-	for (const app of apps) {
-		platformApps.push(mapToPlatformApp(app));
-	}
-
-	return platformApps;
-}
-
-export function mapToAppMetaData(app: PlatformApp, resultType?: string): AppMetadata {
-	const appMetaData: AppMetadata = {
-		appId: app.appId,
-		description: app.description,
-		icons: app.icons,
-		name: app.name,
-		screenshots: app.images,
-		title: app.title,
-		tooltip: app.tooltip,
-		version: app.version,
-		resultType
-	};
-	return appMetaData;
 }

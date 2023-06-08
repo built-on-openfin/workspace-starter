@@ -1,9 +1,21 @@
 import { type InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
 
-export interface LaunchAppPayload {
-	appId: string;
+/**
+ * Options for the launch app integration.
+ */
+export interface LaunchAppOptions extends InitOptionsHandlerOptions {
+	/**
+	 * Supported manifest types.
+	 */
+	supportedManifestTypes: string[];
 }
 
-export interface LaunchAppOptions extends InitOptionsHandlerOptions {
-	supportedManifestTypes: string[];
+/**
+ * The payload for launching an app.
+ */
+export interface LaunchAppPayload {
+	/**
+	 * The app id.
+	 */
+	appId: string;
 }

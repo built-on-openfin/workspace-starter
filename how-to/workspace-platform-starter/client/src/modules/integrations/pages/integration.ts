@@ -45,18 +45,18 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * Provider id.
 	 * @internal
 	 */
-	private _providerId: string;
+	private _providerId?: string;
 
 	/**
 	 * The settings from config.
 	 */
-	private _settings: PagesSettings;
+	private _settings?: PagesSettings;
 
 	/**
 	 * The settings for the integration.
 	 * @internal
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The integration helpers.
@@ -100,28 +100,33 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
 		this._providerId = definition.id;
-		this._integrationHelpers.subscribeLifecycleEvent(
-			"page-changed",
-			async (platform: WorkspacePlatformModule, payload: PageChangedLifecyclePayload) => {
-				if (payload.action === "create") {
-					await this.rebuildResults(platform);
-				} else if (payload.action === "update") {
-					const lastResult = this._lastResults?.find((res) => res.key === payload.id);
-					if (lastResult) {
-						lastResult.title = payload.page.title;
-						lastResult.data.workspaceTitle = payload.page.title;
-						(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
-						this.resultAddUpdate([lastResult]);
+		if (this._integrationHelpers.subscribeLifecycleEvent) {
+			this._integrationHelpers.subscribeLifecycleEvent(
+				"page-changed",
+				async (platform: WorkspacePlatformModule, unknownPayload: unknown): Promise<void> => {
+					const payload = unknownPayload as PageChangedLifecyclePayload;
+					if (payload.action === "create") {
+						await this.rebuildResults(platform);
+					} else if (payload.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+						if (lastResult && payload.page) {
+							lastResult.title = payload.page.title;
+							lastResult.data.workspaceTitle = payload.page.title;
+							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
+							this.resultAddUpdate([lastResult]);
+						}
+					} else if (payload.action === "delete") {
+						this.resultRemove(payload.id as string);
 					}
-				} else if (payload.action === "delete") {
-					this.resultRemove(payload.id as string);
 				}
-			}
-		);
-		this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
-			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
-			await this.rebuildResults(platform);
-		});
+			);
+			this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
+				if (this._integrationHelpers?.getPlatform) {
+					const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+					await this.rebuildResults(platform);
+				}
+			});
+		}
 	}
 
 	/**
@@ -138,6 +143,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
 	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -149,23 +156,22 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 			queryAgainst: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
-		const pages: Page[] = await platform.Storage.getPages();
-		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-		const queryLower = query.toLowerCase();
+		let pageResults: HomeSearchResult[] = [];
 
-		this._lastResponse = lastResponse;
-		this._lastQuery = queryLower;
-		this._lastQueryMinLength = options.queryMinLength;
+		if (this._integrationHelpers?.getPlatform) {
+			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+			const pages: Page[] = await platform.Storage.getPages();
+			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
+			const queryLower = query.toLowerCase();
 
-		const pageResults: HomeSearchResult[] = await this.buildResults(
-			pages,
-			queryLower,
-			options.queryMinLength,
-			colorScheme
-		);
+			this._lastResponse = lastResponse;
+			this._lastQuery = queryLower;
+			this._lastQueryMinLength = options.queryMinLength;
 
-		this._lastResults = pageResults;
+			pageResults = await this.buildResults(pages, queryLower, options.queryMinLength, colorScheme);
+
+			this._lastResults = pageResults;
+		}
 
 		return {
 			results: pageResults
@@ -192,19 +198,25 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				handled = true;
 
 				if (result.action.name === PagesProvider._ACTION_LAUNCH_PAGE) {
-					const platform = this._integrationHelpers.getPlatform();
-					const pageToLaunch = await platform.Storage.getPage(data.pageId);
-					await this._integrationHelpers.launchPage(pageToLaunch);
+					if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
+						const platform = this._integrationHelpers.getPlatform();
+						const pageToLaunch = await platform.Storage.getPage(data.pageId);
+						await this._integrationHelpers.launchPage(pageToLaunch);
+					}
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
-					const platform = this._integrationHelpers.getPlatform();
-					await platform.Storage.deletePage(data.pageId);
-					// Deleting the page will eventually trigger the "delete" lifecycle
-					// event which will remove it from the result list
+					if (this._integrationHelpers?.getPlatform) {
+						const platform = this._integrationHelpers.getPlatform();
+						await platform.Storage.deletePage(data.pageId);
+						// Deleting the page will eventually trigger the "delete" lifecycle
+						// event which will remove it from the result list
+					}
 				} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
-					await this._integrationHelpers.share({ pageId: data.pageId });
+					if (this._integrationHelpers?.share) {
+						await this._integrationHelpers.share({ type: "page", pageId: data.pageId });
+					}
 				} else {
 					handled = false;
-					this._logger.warn(`Unrecognized action for page selection: ${data.pageId}`);
+					this._logger?.warn(`Unrecognized action for page selection: ${data.pageId}`);
 				}
 			}
 		}
@@ -212,84 +224,122 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		return handled;
 	}
 
+	/**
+	 * Get the template for a page.
+	 * @param id The id of the item.
+	 * @param title The title of the page.
+	 * @param shareEnabled Is sharing enabled.
+	 * @param colorScheme The current color scheme.
+	 * @returns The home result.
+	 */
 	private async getPageTemplate(
 		id: string,
 		title: string,
 		shareEnabled: boolean,
 		colorScheme: ColorSchemeMode
 	): Promise<HomeSearchResult> {
-		const actions = [
-			{
-				name: PagesProvider._ACTION_LAUNCH_PAGE,
-				hotkey: "Enter"
-			},
-			{
-				name: PagesProvider._ACTION_DELETE_PAGE,
-				hotkey: "CmdOrCtrl+Shift+D"
-			}
-		];
-		const actionButtons: { title: string; action: string }[] = [
-			{
-				title: "Launch",
-				action: PagesProvider._ACTION_LAUNCH_PAGE
-			},
-			{
-				title: "Delete",
-				action: PagesProvider._ACTION_DELETE_PAGE
-			}
-		];
+		if (this._integrationHelpers && this._settings) {
+			const actions = [
+				{
+					name: PagesProvider._ACTION_LAUNCH_PAGE,
+					hotkey: "Enter"
+				},
+				{
+					name: PagesProvider._ACTION_DELETE_PAGE,
+					hotkey: "CmdOrCtrl+Shift+D"
+				}
+			];
+			const actionButtons: { title: string; action: string }[] = [
+				{
+					title: "Launch",
+					action: PagesProvider._ACTION_LAUNCH_PAGE
+				},
+				{
+					title: "Delete",
+					action: PagesProvider._ACTION_DELETE_PAGE
+				}
+			];
 
-		if (shareEnabled) {
-			actions.push({
-				name: PagesProvider._ACTION_SHARE_PAGE,
-				hotkey: "CmdOrCtrl+Shift+S"
-			});
-			actionButtons.push({
-				title: "Share",
-				action: PagesProvider._ACTION_SHARE_PAGE
-			});
+			if (shareEnabled) {
+				actions.push({
+					name: PagesProvider._ACTION_SHARE_PAGE,
+					hotkey: "CmdOrCtrl+Shift+S"
+				});
+				actionButtons.push({
+					title: "Share",
+					action: PagesProvider._ACTION_SHARE_PAGE
+				});
+			}
+
+			const icon = this._settings.images.page.replace("{scheme}", colorScheme as string);
+
+			const layoutData = await this._integrationHelpers.templateHelpers.createLayout(
+				title,
+				icon,
+				[await this._integrationHelpers.templateHelpers.createText("instructions")],
+				actionButtons
+			);
+
+			return {
+				key: id,
+				title,
+				label: "Page",
+				icon,
+				actions,
+				data: {
+					providerId: this._providerId,
+					pageTitle: title,
+					pageId: id,
+					tags: ["page"]
+				},
+				template: "Custom" as CLITemplate.Custom,
+				templateContent: {
+					layout: layoutData.layout,
+					data: {
+						...layoutData.data,
+						instructions: "Use the buttons below to interact with your saved page"
+					}
+				}
+			};
 		}
-
-		const icon = this._settings.images.page.replace("{scheme}", colorScheme as string);
-
-		const layoutData = await this._integrationHelpers.templateHelpers.createLayout(
-			title,
-			icon,
-			[await this._integrationHelpers.templateHelpers.createText("instructions")],
-			actionButtons
-		);
-
 		return {
 			key: id,
 			title,
 			label: "Page",
-			icon,
-			actions,
+			actions: [],
 			data: {
 				providerId: this._providerId,
 				pageTitle: title,
 				pageId: id,
 				tags: ["page"]
 			},
-			template: "Custom" as CLITemplate.Custom,
-			templateContent: {
-				layout: layoutData.layout,
-				data: {
-					...layoutData.data,
-					instructions: "Use the buttons below to interact with your saved page"
-				}
-			}
+			template: "Plain" as CLITemplate.Plain,
+			templateContent: undefined
 		};
 	}
 
+	/**
+	 * Rebuild the results after color scheme change.
+	 * @param platform The workspace platform.
+	 */
 	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
-		const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
+		if (this._integrationHelpers && this._lastQuery && this._lastQueryMinLength) {
+			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 
-		const pages: Page[] = await platform.Storage.getPages();
-		const results = await this.buildResults(pages, this._lastQuery, this._lastQueryMinLength, colorScheme);
-		this.resultAddUpdate(results);
+			const pages: Page[] = await platform.Storage.getPages();
+			const results = await this.buildResults(pages, this._lastQuery, this._lastQueryMinLength, colorScheme);
+			this.resultAddUpdate(results);
+		}
 	}
 
+	/**
+	 * Build the results for the pages.
+	 * @param pages The list of workspaces to build the results for.
+	 * @param query The query.
+	 * @param queryMinLength The min query length.
+	 * @param colorScheme The color scheme.
+	 * @returns The list of home search results.
+	 */
 	private async buildResults(
 		pages: Page[],
 		query: string,
@@ -298,8 +348,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	): Promise<HomeSearchResult[]> {
 		let results: HomeSearchResult[] = [];
 
-		if (Array.isArray(pages)) {
-			const shareEnabled: boolean = await this._integrationHelpers.condition("sharing");
+		if (this._integrationHelpers && Array.isArray(pages)) {
+			let shareEnabled: boolean = false;
+			if (this._integrationHelpers.condition) {
+				shareEnabled = await this._integrationHelpers.condition("sharing");
+			}
 
 			const pgsProm = pages
 				.filter(
@@ -315,6 +368,10 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		return results;
 	}
 
+	/**
+	 * Add or update a result.
+	 * @param results The results to add or update.
+	 */
 	private resultAddUpdate(results: HomeSearchResult[]): void {
 		if (this._lastResults) {
 			for (const result of results) {
@@ -331,6 +388,10 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		}
 	}
 
+	/**
+	 * Remove a result.
+	 * @param id The id of the item to remove.
+	 */
 	private resultRemove(id: string): void {
 		if (this._lastResults) {
 			const resultIndex = this._lastResults.findIndex((res) => res.key === id);

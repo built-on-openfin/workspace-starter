@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let teamData;
 
+/**
+ * Initialize the view.
+ */
 async function init() {
 	teamData = await loadTeamData();
 
@@ -16,6 +19,9 @@ async function init() {
 	updateMember();
 }
 
+/**
+ * Initialize the DOM.
+ */
 function initDom() {
 	document.querySelector('#btnReview').addEventListener('click', async () => {
 		const plat = fin.Platform.getCurrentSync();
@@ -23,12 +29,20 @@ function initDom() {
 	});
 }
 
+/**
+ * Handle a context.
+ * @param ctx The context.
+ */
 function handleContext(ctx) {
 	if (ctx.type === 'fdc3.contact') {
 		updateMember(ctx);
 	}
 }
 
+/**
+ * Update a member.
+ * @param fcd3Contact The contact to update.
+ */
 function updateMember(fcd3Contact) {
 	const teamMember = fcd3Contact ? teamData.find((m) => m.id === fcd3Contact.id.FDS_ID) : undefined;
 

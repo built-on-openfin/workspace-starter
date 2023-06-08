@@ -40,7 +40,7 @@ export async function register(
 	icon: string,
 	newTabUrl: string
 ): Promise<DockProviderRegistration | undefined> {
-	console.log("Initialising the dock provider.");
+	console.log("Initializing the dock provider.");
 
 	try {
 		platformTitle = title;

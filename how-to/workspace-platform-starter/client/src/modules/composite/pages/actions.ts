@@ -1,9 +1,10 @@
 import type OpenFin from "@openfin/core";
-import type {
-	BrowserCreateWindowRequest,
-	CustomActionPayload,
-	CustomActionsMap,
-	WorkspacePlatformModule
+import {
+	CustomActionCallerType,
+	type BrowserCreateWindowRequest,
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
@@ -17,12 +18,12 @@ export class PageActions implements Actions {
 	/**
 	 * The helper methods to use.
 	 */
-	private _helpers: ActionHelpers;
+	private _helpers?: ActionHelpers;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * Initialize the module.
@@ -42,12 +43,14 @@ export class PageActions implements Actions {
 
 	/**
 	 * Get the actions from the module.
+	 * @param platform The platform module.
+	 * @returns The map of custom actions.
 	 */
 	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
 		const actionMap: CustomActionsMap = {};
 
-		actionMap["page-open"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType !== this._helpers.callerTypes.API) {
+		actionMap["page-open"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType !== CustomActionCallerType.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const targetWindowIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (!isEmpty(pageId)) {
@@ -55,14 +58,14 @@ export class PageActions implements Actions {
 
 					if (!isEmpty(page)) {
 						if (!isEmpty(targetWindowIdentity)) {
-							this._logger.info(
+							this._logger?.info(
 								`Adding page with id: ${pageId} to the current window with name: ${targetWindowIdentity.name}`
 							);
 							const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
 							await targetWindow.addPage(page);
 							await targetWindow.setActivePage(pageId);
 						} else {
-							this._logger.info(
+							this._logger?.info(
 								`Adding page with id: ${pageId} to the current a new window as no window identity was provided (likely unable to add a page to the window)`
 							);
 							const newWindow: BrowserCreateWindowRequest = {
@@ -77,12 +80,12 @@ export class PageActions implements Actions {
 			}
 		};
 
-		actionMap["page-show"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType !== this._helpers.callerTypes.API) {
+		actionMap["page-show"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType !== CustomActionCallerType.API) {
 				const pageId: string = payload?.customData?.pageId;
 				const parentIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (!isEmpty(pageId) && !isEmpty(parentIdentity)) {
-					this._logger.info(
+					this._logger?.info(
 						`Showing page with id: ${pageId} by bringing window with name: ${parentIdentity.name} to the foreground.`
 					);
 					const pageWindow = platform.Browser.wrapSync(parentIdentity);
@@ -96,11 +99,11 @@ export class PageActions implements Actions {
 			}
 		};
 
-		actionMap["page-delete"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType !== this._helpers.callerTypes.API) {
+		actionMap["page-delete"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType !== CustomActionCallerType.API) {
 				const pageId: string = payload?.customData?.pageId;
 				if (!isEmpty(pageId)) {
-					this._logger.info(`Deleting page with id: ${pageId}`);
+					this._logger?.info(`Deleting page with id: ${pageId}`);
 					await platform.Storage.deletePage(pageId);
 				}
 			}

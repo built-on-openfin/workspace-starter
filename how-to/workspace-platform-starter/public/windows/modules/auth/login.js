@@ -1,3 +1,6 @@
+/**
+ * Initialize.
+ */
 async function init() {
 	const options = await fin.Window.getCurrentSync().getOptions();
 	const EXAMPLE_AUTH_CURRENT_USER_KEY = `${fin.me.identity.uuid}-EXAMPLE_AUTH_CURRENT_USER`;

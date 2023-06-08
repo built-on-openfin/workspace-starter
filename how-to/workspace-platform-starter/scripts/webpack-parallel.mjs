@@ -2,6 +2,11 @@ import { spawn } from 'child_process';
 import os from 'os';
 import path from 'path';
 
+/**
+ * Run the process.
+ * @param packageDir The directory for the package json.
+ * @param configFile The config file to read.
+ */
 async function run(packageDir, configFile) {
 	console.log('packagerDir:', packageDir);
 	console.log('configFile:', configFile);

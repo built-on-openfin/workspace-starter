@@ -1,3 +1,6 @@
+/**
+ * Initialize the DOM.
+ */
 async function init() {
 	const ticker = document.querySelector('#ticker');
 	const execute = document.querySelector('#execute');

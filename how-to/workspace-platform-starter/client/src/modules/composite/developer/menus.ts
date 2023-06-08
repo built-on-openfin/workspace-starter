@@ -10,7 +10,7 @@ export class DeveloperMenus implements Menus {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * Initialize the module.
@@ -31,6 +31,7 @@ export class DeveloperMenus implements Menus {
 	 * Get the menus from the module.
 	 * @param menuType The type of menu to get the entries for.
 	 * @param platform The current platform.
+	 * @returns The menu entries.
 	 */
 	public async get(menuType: MenuType, platform: WorkspacePlatformModule): Promise<MenuEntry[] | undefined> {
 		if (menuType === "global") {

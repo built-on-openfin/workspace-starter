@@ -10,9 +10,9 @@ import type { ConsoleAnalyticsOptions } from "./shapes";
  * Implement the analytics module using the console.
  */
 export class ConsoleAnalyticsModule implements AnalyticsModule<ConsoleAnalyticsOptions> {
-	private _logger: Logger;
+	private _logger?: Logger;
 
-	private _logEvent: (message: string, events: PlatformAnalyticsEvent[]) => void;
+	private _logEvent?: (message: string, events: PlatformAnalyticsEvent[]) => void;
 
 	/**
 	 * Initialize the module.
@@ -31,9 +31,11 @@ export class ConsoleAnalyticsModule implements AnalyticsModule<ConsoleAnalyticsO
 		this._logger.info("Session Id: ", helpers.sessionId);
 		const logLevel =
 			definition?.data?.eventLogLevel === "trace" ? "debug" : definition?.data?.eventLogLevel ?? "info";
-		this._logEvent = (message, events) => {
+		this._logEvent = (message, events): void => {
 			// we don't want to trace the function so we log it as debug/verbose
-			this._logger[logLevel](message, JSON.stringify(events));
+			if (this._logger) {
+				this._logger[logLevel](message, JSON.stringify(events));
+			}
 		};
 	}
 
@@ -42,13 +44,17 @@ export class ConsoleAnalyticsModule implements AnalyticsModule<ConsoleAnalyticsO
 	 * @param events one of more analytic events.
 	 */
 	public async handleAnalytics(events: PlatformAnalyticsEvent[]): Promise<void> {
-		this._logEvent("Received the following analytics events", events);
+		if (this._logEvent) {
+			this._logEvent("Received the following analytics events", events);
+		}
 	}
 
 	/**
 	 * Closedown the module. If this module had any cached events it needed to process it could try and flush them here.
 	 */
 	public async closedown?(): Promise<void> {
-		this._logger.info("closing down");
+		if (this._logger) {
+			this._logger.info("closing down");
+		}
 	}
 }

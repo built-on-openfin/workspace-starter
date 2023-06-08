@@ -18,12 +18,12 @@ export class PageMenus implements Menus<PageMenuSettings> {
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _settings: PageMenuSettings;
+	private _settings?: PageMenuSettings;
 
 	/**
 	 * Initialize the module.
@@ -46,13 +46,14 @@ export class PageMenus implements Menus<PageMenuSettings> {
 	 * @param menuType The type of menu to get the entries for.
 	 * @param platform The current platform.
 	 * @param relatedMenuId The related menu information (viewId/viewIds, pageId and window Id based on the type of menu).
+	 * @returns The menu entries.
 	 */
 	public async get(
 		menuType: MenuType,
 		platform: WorkspacePlatformModule,
 		relatedMenuId?: RelatedMenuId
 	): Promise<MenuEntry[] | undefined> {
-		if (menuType === "global" && !isEmpty(relatedMenuId.windowIdentity)) {
+		if (menuType === "global" && !isEmpty(relatedMenuId?.windowIdentity)) {
 			// you can customize the browser main menu here
 			const pages: Page[] = await platform.Storage.getPages();
 			const includeDeletePage =
@@ -86,26 +87,28 @@ export class PageMenus implements Menus<PageMenuSettings> {
 
 			const deletePagesMenu: OpenFin.MenuItemTemplate[] = [];
 
-			let browserWindowIdentity: OpenFin.Identity = relatedMenuId.windowIdentity;
+			let browserWindowIdentity: OpenFin.Identity | undefined = relatedMenuId?.windowIdentity;
 
-			const browserWindow = platform.Browser.wrapSync(browserWindowIdentity);
+			if (browserWindowIdentity) {
+				const browserWindow = platform.Browser.wrapSync(browserWindowIdentity);
 
-			const options = await browserWindow.openfinWindow.getOptions();
-			const workspaceOptions: OpenFin.WorkspacePlatformOptions = options.workspacePlatform;
+				const options = await browserWindow.openfinWindow.getOptions();
+				const workspaceOptions: OpenFin.WorkspacePlatformOptions = options.workspacePlatform;
 
-			if (workspaceOptions.disableMultiplePages === true) {
-				browserWindowIdentity = undefined;
+				if (workspaceOptions.disableMultiplePages === true) {
+					browserWindowIdentity = undefined;
+				}
 			}
 
 			const allOpenPages = await platform.Browser.getAllAttachedPages();
 
 			if (pages.length > 0) {
 				for (const page of pages) {
-					const existingPage = allOpenPages.find((openPage) => page.pageId === openPage.pageId);
+					const existing = allOpenPages.find((openPage) => page.pageId === openPage.pageId);
 					const isActiveExistingPageOnCurrentWindow =
-						!isEmpty(existingPage) &&
-						existingPage.parentIdentity.name === browserWindowIdentity.name &&
-						existingPage?.isActive;
+						!isEmpty(existing?.parentIdentity) &&
+						existing?.parentIdentity.name === browserWindowIdentity?.name &&
+						existing?.isActive;
 					showPagesMenu.push({
 						label: page.title,
 						type: "normal",
@@ -113,10 +116,10 @@ export class PageMenus implements Menus<PageMenuSettings> {
 						data: {
 							type: "Custom" as GlobalContextMenuOptionType.Custom,
 							action: {
-								id: !isEmpty(existingPage) ? "page-show" : "page-open",
+								id: !isEmpty(existing) ? "page-show" : "page-open",
 								customData: {
 									pageId: page.pageId,
-									windowIdentity: !isEmpty(existingPage) ? existingPage.parentIdentity : browserWindowIdentity
+									windowIdentity: !isEmpty(existing) ? existing.parentIdentity : browserWindowIdentity
 								}
 							}
 						}
@@ -124,7 +127,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 					deletePagesMenu.push({
 						label: page.title,
 						type: "normal",
-						enabled: isEmpty(existingPage),
+						enabled: isEmpty(existing),
 						data: {
 							type: "Custom" as GlobalContextMenuOptionType.Custom,
 							action: {

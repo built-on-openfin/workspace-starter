@@ -11,7 +11,7 @@ import {
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
 	type Workspace,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";
@@ -39,18 +39,50 @@ let windowDefaultLeft: number | undefined;
 let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
 
-export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @returns The overridden class.
+ */
+export function overrideCallback(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
+	/**
+	 * Create a class which overrides the platform provider.
+	 */
 	class Override extends WorkspacePlatformProvider {
-		public async getSnapshot(...args: [undefined, OpenFin.ClientIdentity]) {
-			const snapshot = await super.getSnapshot(...args);
+		/**
+		 * Gets the current state of windows and their views and returns a snapshot object containing that info.
+		 * @param payload Undefined unless you've defined a custom `getSnapshot` protocol.
+		 * @param identity Identity of the entity that called getSnapshot.
+		 * @returns Snapshot of current platform state.
+		 */
+		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
+			const snapshot = await super.getSnapshot(payload, identity);
 
+			// Decorate the default snapshot with additional information for connection clients.
 			return decorateSnapshot(snapshot);
 		}
 
-		public async applySnapshot(...args: [OpenFin.ApplySnapshotPayload, OpenFin.ClientIdentity]) {
-			await Promise.all([super.applySnapshot(...args), applyClientSnapshot(args[0].snapshot)]);
+		/**
+		 * Handles requests to apply a snapshot to the current Platform.
+		 * @param payload Payload containing the snapshot to be applied, as well as any options.
+		 * @param identity Identity of the entity that called applySnapshot.
+		 * Undefined if called internally (e.g. when opening the initial snapshot).
+		 */
+		public async applySnapshot(
+			payload: OpenFin.ApplySnapshotPayload,
+			identity?: OpenFin.Identity
+		): Promise<void> {
+			// Use the decorated snapshot to open any connected clients
+			await Promise.all([super.applySnapshot(payload, identity), applyClientSnapshot(payload.snapshot)]);
 		}
 
+		/**
+		 * Implementation for getting a list of saved workspaces from persistent storage.
+		 * @param query an optional query.
+		 * @returns The list of saved workspaces.
+		 */
 		public async getSavedWorkspaces(query?: string): Promise<Workspace[]> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -66,8 +98,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					{ query?: string },
 					{ [key: string]: Workspace }
 				>(getWorkspacesEndpointId, { query });
-				logger.info("Returning saved workspaces from custom storage");
-				return Object.values(workspacesResponse);
+
+				if (workspacesResponse) {
+					logger.info("Returning saved workspaces from custom storage");
+					return Object.values(workspacesResponse);
+				}
+				logger.warn("No response getting saved workspaces from custom storage");
+				return [];
 			}
 			logger.info("Requesting saved workspaces from default storage");
 			const savedWorkspaces = await super.getSavedWorkspaces(query);
@@ -75,6 +112,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return savedWorkspaces;
 		}
 
+		/**
+		 * Implementation for getting a single workspace in persistent storage.
+		 * @param id The id of the workspace to get.
+		 * @returns The workspace.
+		 */
 		public async getSavedWorkspace(id: string): Promise<Workspace> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -86,8 +128,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 					getWorkspaceEndpointId,
 					{ id }
 				);
-				logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
-				return workspaceResponse;
+				if (workspaceResponse) {
+					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
+					return workspaceResponse;
+				}
+				logger.warn(`No response getting saved workspace from custom storage for workspace id: ${id}`);
+				return {} as Workspace;
 			}
 			logger.info(`Requesting saved workspace from default storage for workspace id: ${id}`);
 			const savedWorkspace = await super.getSavedWorkspace(id);
@@ -95,6 +141,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return savedWorkspace;
 		}
 
+		/**
+		 * Implementation for creating a saved workspace in persistent storage.
+		 * @param req the create saved workspace request.
+		 */
 		public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -124,6 +174,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as WorkspaceChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for updating a saved workspace in persistent storage.
+		 * @param req the update saved workspace request.
+		 */
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -159,6 +213,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as WorkspaceChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for deleting a saved workspace in persistent storage.
+		 * @param id of the id of the workspace to delete.
+		 */
 		public async deleteSavedWorkspace(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
@@ -184,6 +242,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as WorkspaceChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for getting a list of saved pages from persistent storage.
+		 * @param query an optional query.
+		 * @returns The list of pages.
+		 */
 		public async getSavedPages(query?: string): Promise<Page[]> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
@@ -195,11 +258,15 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
 				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
-					{ query: string },
+					{ query?: string },
 					{ [key: string]: Page }
 				>(getPagesEndpointId, { query });
-				logger.info("Returning saved pages from custom storage");
-				return Object.values(pagesResponse);
+				if (pagesResponse) {
+					logger.info("Returning saved pages from custom storage");
+					return Object.values(pagesResponse);
+				}
+				logger.warn("No response getting saved pages from custom storage");
+				return [];
 			}
 			logger.info("Getting saved pages from default storage");
 			const pagesResponse = await super.getSavedPages(query);
@@ -207,6 +274,11 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return pagesResponse;
 		}
 
+		/**
+		 * Implementation for getting a single page in persistent storage.
+		 * @param id The id of the page to get.
+		 * @returns The page.
+		 */
 		public async getSavedPage(id: string): Promise<Page> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
@@ -217,8 +289,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
 					id
 				});
-				logger.info(`Returning saved page from custom storage for page id: ${id}`);
-				return pageResponse;
+				if (pageResponse) {
+					logger.info(`Returning saved page from custom storage for page id: ${id}`);
+					return pageResponse;
+				}
+
+				logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
+				return {} as Page;
 			}
 			logger.info(`Getting saved page with id ${id} from default storage`);
 			const pageResponse = await super.getSavedPage(id);
@@ -226,6 +303,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return pageResponse;
 		}
 
+		/**
+		 * Implementation for creating a saved page in persistent storage.
+		 * @param req the create saved page request.
+		 */
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			// always save page bounds regardless of storage for pages
 			await savePageBounds(req.page.pageId);
@@ -259,6 +340,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as PageChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for updating a saved page in persistent storage.
+		 * @param req the update saved page request.
+		 */
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
 			// save page bounds even if using default storage for pages.
 			await savePageBounds(req.pageId);
@@ -292,6 +377,10 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as PageChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for deleting a saved page in persistent storage.
+		 * @param id of the id of the page to delete.
+		 */
 		public async deleteSavedPage(id: string): Promise<void> {
 			// save page bounds even if using default storage for pages.
 			await deletePageBounds(id);
@@ -320,6 +409,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			} as PageChangedLifecyclePayload);
 		}
 
+		/**
+		 * Implementation for showing a global context menu given a menu template,
+		 * handler callback, and screen coordinates.
+		 * @param req the payload received by the provider call
+		 * @param callerIdentity OF identity of the entity from which the request originated
+		 */
 		public async openGlobalContextMenu(
 			req: OpenGlobalContextMenuPayload,
 			callerIdentity: OpenFin.Identity
@@ -336,6 +431,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			}
 		}
 
+		/**
+		 * Implementation for showing a view tab context menu given a menu template,
+		 * handler callback, and screen coordinates.
+		 * @param req the payload received by the provider call
+		 * @param callerIdentity OF identity of the entity from which the request originated
+		 */
 		public async openViewTabContextMenu(
 			req: OpenViewTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
@@ -355,6 +456,12 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			}
 		}
 
+		/**
+		 * Implementation for showing a page tab context menu given a menu template,
+		 * handler callback, and screen coordinates.
+		 * @param req the payload received by the provider call
+		 * @param callerIdentity OF identity of the entity from which the request originated
+		 */
 		public async openPageTabContextMenu(
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
@@ -371,7 +478,13 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			}
 		}
 
-		public async quit(payload: undefined, callerIdentity: OpenFin.Identity) {
+		/**
+		 * Closes the current Platform and all child windows and views.
+		 * @param payload Undefined unless you have implemented a custom quite protocol.
+		 * @param callerIdentity Identity of the entity that called quit.
+		 * @returns Nothing.
+		 */
+		public async quit(payload: undefined, callerIdentity: OpenFin.Identity): Promise<void> {
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "before-quit");
 
@@ -380,6 +493,14 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return super.quit(payload, callerIdentity);
 		}
 
+		/**
+		 * Handles requests to create a window in the current platform.
+		 * @param options Window options for the window to be created.
+		 * @param identity If createWindow was called, the identity of the caller will be here. If `createWindow` was
+		 * called as part of applying a snapshot or creating a view without a target window, `identity` will be
+		 * undefined.
+		 * @returns The created window.
+		 */
 		public async createWindow(
 			options: OpenFin.PlatformWindowCreationOptions,
 			identity?: OpenFin.Identity
@@ -509,14 +630,24 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 			return window;
 		}
 
-		public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
+		/**
+		 * Implementation for setting selected scheme.
+		 * @param schemeType Scheme to be set
+		 * @returns Nothing.
+		 */
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
 			// The color scheme has been updated, so update the theme
 			await setCurrentColorSchemeMode(schemeType);
 
 			return super.setSelectedScheme(schemeType);
 		}
 
-		public async handleAnalytics(events: AnalyticsEvent[]) {
+		/**
+		 * Implementation for handling Workspace analytics events.
+		 * @param events The list of analytics events to process.
+		 * @returns Nothing.
+		 */
+		public async handleAnalytics(events: AnalyticsEvent[]): Promise<void> {
 			if (analyticsProvider.isEnabled()) {
 				const platformEvents: PlatformAnalyticsEvent[] = [];
 				const timestamp = new Date();
@@ -525,7 +656,9 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 				}
 				await analyticsProvider.handleAnalytics(platformEvents);
 			}
+
+			return super.handleAnalytics(events);
 		}
 	}
 	return new Override();
-};
+}

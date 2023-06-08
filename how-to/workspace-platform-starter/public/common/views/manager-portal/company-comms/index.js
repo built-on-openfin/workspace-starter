@@ -6,12 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let companyComms;
 
+/**
+ * Initialize the view.
+ */
 async function init() {
 	companyComms = await loadCompanyComms();
 
 	await initDom();
 }
 
+/**
+ * Initialize the DOM.
+ */
 async function initDom() {
 	const companyCommsListElem = document.querySelector('.company-comms-list');
 

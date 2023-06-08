@@ -213,7 +213,7 @@ export interface ModuleEntry<
 	/**
 	 * Has the module been initialized.
 	 */
-	isInitialised: boolean;
+	isInitialized: boolean;
 }
 
 /**

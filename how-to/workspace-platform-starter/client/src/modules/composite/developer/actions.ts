@@ -1,9 +1,11 @@
 import type OpenFin from "@openfin/core";
-import type {
-	CustomActionPayload,
-	CustomActionsMap,
-	WorkspacePlatformModule
+import {
+	CustomActionCallerType,
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
@@ -16,12 +18,12 @@ export class DeveloperActions implements Actions {
 	/**
 	 * The helper methods to use.
 	 */
-	private _helpers: ActionHelpers;
+	private _helpers?: ActionHelpers;
 
 	/**
 	 * The helper methods to use.
 	 */
-	private _logger: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * Initialize the module.
@@ -41,22 +43,24 @@ export class DeveloperActions implements Actions {
 
 	/**
 	 * Get the actions from the module.
+	 * @param platform The platform module.
+	 * @returns The map of custom actions.
 	 */
 	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
 		const actionMap: CustomActionsMap = {};
 
-		actionMap["developer-inspect"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.ViewTabContextMenu) {
+		actionMap["developer-inspect"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 				for (let i = 0; i < payload.selectedViews.length; i++) {
 					const identity: OpenFin.Identity = payload.selectedViews[i];
 					const view = fin.View.wrapSync(identity);
 					await view.showDeveloperTools();
 				}
-			} else if (payload.callerType === this._helpers.callerTypes.PageTabContextMenu) {
+			} else if (payload.callerType === CustomActionCallerType.PageTabContextMenu) {
 				const pageWindowIdentity: OpenFin.Identity = payload.windowIdentity;
 				const pageWindow = fin.Window.wrapSync(pageWindowIdentity);
 				await pageWindow.showDeveloperTools();
-			} else if (payload.callerType === this._helpers.callerTypes.GlobalContextMenu) {
+			} else if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
 				const target = payload?.customData?.target === "platform" ? "platform" : "window";
 				const targetIdentity: OpenFin.Identity =
 					target === "window"
@@ -67,14 +71,14 @@ export class DeveloperActions implements Actions {
 			}
 		};
 
-		actionMap["raise-create-app-definition-intent"] = async (payload: CustomActionPayload) => {
-			if (payload.callerType === this._helpers.callerTypes.ViewTabContextMenu) {
+		actionMap["raise-create-app-definition-intent"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
 				const brokerClient = fin.Interop.connectSync(fin.me.identity.uuid, {});
 				for (let i = 0; i < payload.selectedViews.length; i++) {
 					const viewIdentity = payload.selectedViews[i];
 					const intentName = "CreateAppDefinition";
 					try {
-						const view = fin.View.wrapSync(viewIdentity as OpenFin.Identity);
+						const view = fin.View.wrapSync(viewIdentity);
 						const options = await view.getOptions();
 						const info = await view.getInfo();
 						const name = options.name;
@@ -100,9 +104,9 @@ export class DeveloperActions implements Actions {
 							name,
 							title: info.title,
 							description: info.title,
-							manifestType: this._helpers.manifestTypes.inlineView.id,
+							manifestType: MANIFEST_TYPES.InlineView.id,
 							manifest,
-							tags: [this._helpers.manifestTypes.view.id],
+							tags: [MANIFEST_TYPES.View.id],
 							icons,
 							images: [],
 							publisher: "",
@@ -119,7 +123,7 @@ export class DeveloperActions implements Actions {
 						};
 						await brokerClient.fireIntent(intent);
 					} catch (error) {
-						this._logger.error(
+						this._logger?.error(
 							`Error while trying to raise intent ${intentName} for view ${viewIdentity.name}`,
 							error
 						);

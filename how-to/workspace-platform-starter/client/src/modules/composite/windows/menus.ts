@@ -46,13 +46,14 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 	 * @param menuType The type of menu to get the entries for.
 	 * @param platform The current platform.
 	 * @param relatedMenuId The related menu information (viewId/viewIds, pageId and window Id based on the type of menu).
+	 * @returns The menu entries.
 	 */
 	public async get(
 		menuType: MenuType,
 		platform: WorkspacePlatformModule,
 		relatedMenuId?: RelatedMenuId
 	): Promise<MenuEntry[] | undefined> {
-		if (menuType === "global" && !isEmpty(relatedMenuId.windowIdentity)) {
+		if (menuType === "global" && !isEmpty(relatedMenuId?.windowIdentity)) {
 			// you can customize the browser main menu here
 			const includeShowAllWindows =
 				isEmpty(this._settings?.showAllWindows?.include) || this._settings?.showAllWindows?.include;
@@ -127,8 +128,8 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 				menuItemsToReturn.push(hideOtherWindowsEntry);
 			}
 
-			if (this._settings.separator !== "none" && menuItemsToReturn.length > 0) {
-				menuItemsToReturn[0].separator = this._settings.separator ?? "before";
+			if (this._settings?.separator !== "none" && menuItemsToReturn.length > 0) {
+				menuItemsToReturn[0].separator = this._settings?.separator ?? "before";
 			}
 
 			return menuItemsToReturn;
