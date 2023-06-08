@@ -97,3 +97,17 @@ export function randomUUID(): string {
 	}
 	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }
+
+/**
+ * Format an error to a readable string.
+ * @param err The error to format.
+ * @returns The formatted error.
+ */
+export function formatError(err: unknown): string {
+	if (err instanceof Error) {
+		return err.message;
+	} else if (typeof err === "string") {
+		return err;
+	}
+	return JSON.stringify(err);
+}

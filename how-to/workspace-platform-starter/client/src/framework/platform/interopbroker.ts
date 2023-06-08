@@ -19,8 +19,10 @@ import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
+import { type AppMetadata as AppMetadataV1Point2 } from "../shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
+	CaptureApiPayload,
 	ContextToProcess,
 	IntentOptions,
 	IntentPickerResponse,
@@ -30,13 +32,21 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext
 } from "../shapes/interopbroker-shapes";
-import { isEmpty, isStringValue } from "../utils";
+import { formatError, isEmpty, isString, isStringValue } from "../utils";
 
 const logger = createLogger("InteropBroker");
 
+/**
+ * Override the platform interop.
+ * @param InteropBroker The base interop broker class.
+ * @returns The overloaded broker.
+ */
 export function interopOverride(
 	InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
 ): OpenFin.InteropBroker {
+	/**
+	 * Extend the InteropBroker to handle intents.
+	 */
 	class InteropOverride extends InteropBroker {
 		private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] } = {};
 
@@ -44,12 +54,15 @@ export function interopOverride(
 
 		private readonly _trackedClientConnections: { [key: string]: ApiMetadata } = {};
 
-		private _intentResolverOptions: IntentResolverOptions;
+		private _intentResolverOptions?: IntentResolverOptions;
 
-		private _intentOptions: IntentOptions;
+		private _intentOptions?: IntentOptions;
 
 		private _unregisteredApp: PlatformApp | undefined;
 
+		/**
+		 * Create a new instance of InteropBroker.
+		 */
 		constructor() {
 			super();
 			logger.info("Interop Broker Constructor fetching settings.");
@@ -93,6 +106,12 @@ export function interopOverride(
 				});
 		}
 
+		/**
+		 * Is the connection authorized.
+		 * @param id The id of the client identity to check.
+		 * @param payload The payload to send with the authorization check.
+		 * @returns True if the connection is authorized.
+		 */
 		public async isConnectionAuthorized(id: OpenFin.ClientIdentity, payload?: unknown): Promise<boolean> {
 			logger.info("Interop connection being made by the following identity. About to verify connection", id);
 			const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
@@ -105,11 +124,18 @@ export function interopOverride(
 				}
 			}
 			if (response.isValid) {
-				await this.captureApiVersion(id, payload);
+				await this.captureApiVersion(id, payload as CaptureApiPayload);
 			}
 			return response.isValid;
 		}
 
+		/**
+		 * Is the action authorized.
+		 * @param action The action to check for authorization.
+		 * @param payload The payload to send while checking the authorization.
+		 * @param identity The identity of the client.
+		 * @returns True if the action is authorized.
+		 */
 		public async isActionAuthorized(
 			action: string,
 			payload: unknown,
@@ -122,8 +148,9 @@ export function interopOverride(
 
 		/**
 		 * Sets a context for the context group of the incoming current entity.
-		 * @param setContextOptions - New context to set.
-		 * @param clientIdentity - Identity of the client sender.
+		 * @param sentContext New context to set.
+		 * @param sentContext.context The context to send.
+		 * @param clientIdentity Identity of the client sender.
 		 */
 		public async setContext(
 			sentContext: { context: OpenFin.Context },
@@ -133,22 +160,32 @@ export function interopOverride(
 			super.setContext(sentContext, clientIdentity);
 		}
 
+		/**
+		 * Handle the information for intents by context.
+		 * @param contextOptions The context options.
+		 * @param clientIdentity The client.
+		 * @returns The intents mapped to app metadata.
+		 */
 		public async handleInfoForIntentsByContext(
 			contextOptions: OpenFin.Context | OpenFin.FindIntentsByContextOptions,
 			clientIdentity: OpenFin.ClientIdentity
-		) {
-			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
+		): Promise<
+			{
+				intent: { name: string; displayName?: string };
+				apps: (AppMetadataV1Point2 | AppMetadata)[];
+			}[]
+		> {
 			let requestedContextType: string;
-			let requestedResultType: string;
+			let requestedResultType: string | undefined;
 			let request: { context: { type: string }; metadata: { resultType: string } };
-			// eslint-disable-next-line @typescript-eslint/dot-notation
-			if (!isEmpty(contextOptions["type"])) {
-				// eslint-disable-next-line @typescript-eslint/dot-notation
-				requestedContextType = contextOptions["type"];
+			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
+
+			if ("type" in contextOptions) {
+				requestedContextType = contextOptions.type;
 			} else {
 				request = contextOptions as { context: { type: string }; metadata: { resultType: string } };
-				requestedContextType = request?.context?.type;
-				requestedResultType = request?.metadata?.resultType;
+				requestedContextType = request.context.type;
+				requestedResultType = request.metadata.resultType;
 			}
 			const intents = await getIntentsByContext(requestedContextType, requestedResultType);
 
@@ -160,12 +197,10 @@ export function interopOverride(
 			const mappedIntents = intents.map((entry) => ({
 				intent: entry.intent,
 				apps: entry.apps.map((app) => {
-					let resultType: string;
-					if (
-						!isEmpty(app?.interop?.intents?.listensFor) &&
-						!isEmpty(app.interop.intents.listensFor[entry.intent.name])
-					) {
-						resultType = app.interop.intents.listensFor[entry.intent.name].resultType;
+					let resultType: string | undefined;
+					const listensFor = app?.interop?.intents?.listensFor;
+					if (!isEmpty(listensFor) && !isEmpty(listensFor[entry.intent.name])) {
+						resultType = listensFor[entry.intent.name].resultType;
 					}
 					const appEntry = isFDC32 ? mapTo20AppMetaData(app, resultType) : mapTo12AppMetaData(app);
 
@@ -176,30 +211,40 @@ export function interopOverride(
 			return mappedIntents;
 		}
 
+		/**
+		 * Handle the information for and intent.
+		 * @param intentOptions The intent options.
+		 * @param clientIdentity The client.
+		 * @returns The intents mapped to app metadata.
+		 */
 		public async handleInfoForIntent(
 			intentOptions: OpenFin.InfoForIntentOptions,
 			clientIdentity: OpenFin.ClientIdentity
-		) {
+		): Promise<{
+			intent: { name: string; displayName?: string };
+			apps: (AppMetadataV1Point2 | AppMetadata)[];
+		}> {
 			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
-			let contextType: string;
-			if (!isEmpty(intentOptions?.context?.type) && intentOptions?.context.type !== "fdc3.nothing") {
-				contextType = intentOptions?.context.type;
+			let contextType: string | undefined;
+
+			const optContextType = intentOptions?.context?.type;
+			if (!isEmpty(optContextType) && optContextType !== "fdc3.nothing") {
+				contextType = optContextType;
 			}
 
 			const result = await getIntent(intentOptions.name, contextType, intentOptions?.metadata?.resultType);
 			if (isEmpty(result)) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
+
 			const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
 			const response = {
 				intent: result.intent,
 				apps: result.apps.map((app) => {
-					let resultType: string;
-					if (
-						!isEmpty(app?.interop?.intents?.listensFor) &&
-						!isEmpty(app.interop.intents.listensFor[result.intent.name])
-					) {
-						resultType = app.interop.intents.listensFor[result.intent.name].resultType;
+					let resultType: string | undefined;
+					const listensFor = app?.interop?.intents?.listensFor;
+					if (!isEmpty(listensFor) && !isEmpty(listensFor[result.intent.name])) {
+						resultType = listensFor[result.intent.name].resultType;
 					}
 					const appEntry = isFDC32 ? mapTo20AppMetaData(app, resultType) : mapTo12AppMetaData(app);
 
@@ -210,23 +255,29 @@ export function interopOverride(
 			return response;
 		}
 
+		/**
+		 * Handle the fired intent for context.
+		 * @param contextForIntent The context for the intent.
+		 * @param contextForIntent.type The type of the intent.
+		 * @param contextForIntent.metadata The metadata for the intent.
+		 * @param clientIdentity The client identity.
+		 * @returns The intent resolution.
+		 */
 		public async handleFiredIntentForContext(
 			contextForIntent: { type: string; metadata?: OpenFin.IntentMetadata<IntentTargetMetaData> },
 			clientIdentity: ClientIdentity
-		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version: string }> {
+		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version?: string }> {
 			const targetAppIdentifier = this.getApplicationIdentity(contextForIntent.metadata);
 			const usesAppIdentity = this.usesApplicationIdentity(clientIdentity);
-			const intent = {
-				context: contextForIntent,
-				name: undefined,
-				displayName: undefined
+			const intent: Partial<OpenFin.Intent & { displayName?: string }> = {
+				context: contextForIntent
 			};
 
 			// app specified flow
 			if (!isEmpty(targetAppIdentifier)) {
 				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
-					intent,
+					intent as OpenFin.Intent,
 					true,
 					clientIdentity
 				);
@@ -241,12 +292,11 @@ export function interopOverride(
 				clientIdentity
 			);
 
-			if (unregisteredAppIntents.length > 0) {
-				const unregisteredApp: PlatformApp = this._unregisteredApp;
+			if (unregisteredAppIntents.length > 0 && !isEmpty(this._unregisteredApp)) {
 				const matchedIntents: string[] = [];
 				for (const intentForSelection of intentsForSelection) {
 					if (unregisteredAppIntents.includes(intentForSelection.intent.name)) {
-						intentForSelection.apps.push(unregisteredApp);
+						intentForSelection.apps.push(this._unregisteredApp);
 						matchedIntents.push(intentForSelection.intent.name);
 					}
 				}
@@ -255,11 +305,15 @@ export function interopOverride(
 				);
 
 				for (const missingIntentMatch of missingIntentMatches) {
-					const missingIntent = unregisteredApp.intents.find((entry) => entry.name === missingIntentMatch);
-					intentsForSelection.push({
-						intent: { name: missingIntent.name, displayName: missingIntent.displayName },
-						apps: [unregisteredApp]
-					});
+					const missingIntent = this._unregisteredApp.intents?.find(
+						(entry) => entry.name === missingIntentMatch
+					);
+					if (missingIntent) {
+						intentsForSelection.push({
+							intent: { name: missingIntent.name, displayName: missingIntent.displayName },
+							apps: [this._unregisteredApp]
+						});
+					}
 				}
 			}
 
@@ -281,7 +335,10 @@ export function interopOverride(
 					// if there are no instances launch a new one otherwise present the choice to the user
 					// by falling through to the next code block
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
-						const intentResolver = await this.launchAppWithIntent(intentForSelection.apps[0], intent);
+						const intentResolver = await this.launchAppWithIntent(
+							intentForSelection.apps[0],
+							intent as OpenFin.Intent
+						);
 						if (isEmpty(intentResolver)) {
 							throw new Error(ResolveError.NoAppsFound);
 						}
@@ -301,14 +358,20 @@ export function interopOverride(
 			// update intent with user selection
 			intent.displayName = userSelection.intent.displayName;
 			intent.name = userSelection.intent.name;
-			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent as OpenFin.Intent);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 		}
 
+		/**
+		 * Handle a fired intent.
+		 * @param intent The intent to handle.
+		 * @param clientIdentity The client identity.
+		 * @returns The intent resolution.
+		 */
 		public async handleFiredIntent(
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
 			clientIdentity: OpenFin.ClientIdentity
-		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version: string }> {
+		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version?: string }> {
 			logger.info("Received request for a raised intent", intent);
 			const targetAppIdentifier = this.getApplicationIdentity(intent.metadata);
 			const usesAppIdentifier = this.usesApplicationIdentity(clientIdentity);
@@ -325,7 +388,7 @@ export function interopOverride(
 
 			const intentApps = await getAppsByIntent(intent.name);
 
-			if (await this.canAddUnregisteredApp(clientIdentity, intent.name)) {
+			if (this._unregisteredApp && (await this.canAddUnregisteredApp(clientIdentity, intent.name))) {
 				// We have unregistered app instances that support this intent and support for unregistered instances is enabled
 				intentApps.push(this._unregisteredApp);
 			}
@@ -340,7 +403,7 @@ export function interopOverride(
 				const appInstances = await this.fdc3HandleFindInstances(intentApps[0], clientIdentity);
 				// if there are no instances launch a new one otherwise present the choice to the user
 				// by falling through to the next code block
-				let appInstanceId: string;
+				let appInstanceId: string | undefined;
 				if (appInstances.length === 1) {
 					appInstanceId = appInstances[0].instanceId;
 				}
@@ -366,10 +429,17 @@ export function interopOverride(
 			return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 		}
 
+		/**
+		 * Handle the FDC3 open.
+		 * @param fdc3OpenOptions The options for the open.
+		 * @param fdc3OpenOptions.app The platform app or its id.
+		 * @param fdc3OpenOptions.context The context being opened.
+		 * @param clientIdentity The client identity.
+		 * @returns The application identifier.
+		 */
 		public async fdc3HandleOpen(
-			fdc3OpenOptions: { app: (PlatformApp & { name?: string }) | string; context: OpenFin.Context },
+			fdc3OpenOptions: { app: PlatformApp | string; context: OpenFin.Context },
 			clientIdentity: OpenFin.ClientIdentity
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		): Promise<AppIdentifier> {
 			if (isEmpty(fdc3OpenOptions?.app)) {
 				logger.error("A request to fdc3.open did not pass an fdc3OpenOptions object");
@@ -397,25 +467,28 @@ export function interopOverride(
 					throw new Error(OpenError.AppNotFound);
 				}
 				const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
-				const identity: { appId: string; instanceId: string } = { appId: undefined, instanceId: undefined };
+				let appId: string;
+				let instanceId: string | undefined;
 				if (typeof result.source === "string") {
-					identity.appId = result.source;
+					appId = result.source;
 				} else {
-					identity.appId = result.source.appId;
-					identity.instanceId = result.source.instanceId;
+					appId = result.source.appId;
+					instanceId = result.source.instanceId;
 				}
-				return identity;
+				return { appId, instanceId };
 			} catch (intentError) {
-				if (
-					intentError?.message === ResolveError.TargetInstanceUnavailable ||
-					intentError?.message === ResolveError.IntentDeliveryFailed
-				) {
+				const error = formatError(intentError);
+				if (error === ResolveError.TargetInstanceUnavailable || error === ResolveError.IntentDeliveryFailed) {
 					throw new Error(OpenError.AppTimeout);
 				}
 				throw intentError;
 			}
 		}
 
+		/**
+		 * The client has disconnected form the broker.
+		 * @param clientIdentity The identity of the client that disconnected.
+		 */
 		public async clientDisconnected(clientIdentity: OpenFin.ClientIdentity): Promise<void> {
 			logger.info("Client Disconnected.", clientIdentity);
 
@@ -428,6 +501,12 @@ export function interopOverride(
 			await super.clientDisconnected(clientIdentity);
 		}
 
+		/**
+		 * Handle FDC3 find instances.
+		 * @param app The app identifier to find.
+		 * @param clientIdentity The client identity.
+		 * @returns The instance of the app.
+		 */
 		public async fdc3HandleFindInstances(
 			app: AppIdentifier,
 			clientIdentity: OpenFin.ClientIdentity
@@ -438,7 +517,7 @@ export function interopOverride(
 				const entries = value.filter((entry) => entry.appId === app.appId);
 				for (const entry of entries) {
 					endpointApps[entry.clientIdentity.endpointId] = {
-						appId: entry.appId,
+						appId: entry.appId ?? "",
 						instanceId: entry.clientIdentity.endpointId
 					};
 				}
@@ -447,6 +526,12 @@ export function interopOverride(
 			return Object.values(endpointApps);
 		}
 
+		/**
+		 * Handle request to get FDC3 app metadata.
+		 * @param app The app to get the metadata for.
+		 * @param clientIdentity The client identity.
+		 * @returns The app metadata.
+		 */
 		public async fdc3HandleGetAppMetadata(
 			app: AppIdentifier,
 			clientIdentity: OpenFin.ClientIdentity
@@ -464,8 +549,8 @@ export function interopOverride(
 					const connectedClient = allConnectedClients.find((client) => client.endpointId === app.instanceId);
 					if (!isEmpty(connectedClient) && connectedClient.uuid === fin.me.identity.uuid) {
 						const identity = { uuid: connectedClient.uuid, name: connectedClient.name };
-						let title: string;
-						let preview: string;
+						let title: string | undefined;
+						let preview: string | undefined;
 						try {
 							if (connectedClient.entityType === "window") {
 								const instanceWindow = fin.Window.wrapSync(identity);
@@ -500,6 +585,13 @@ export function interopOverride(
 			throw new Error("TargetAppUnavailable");
 		}
 
+		/**
+		 * Handle the request to get FDC3 info.
+		 * @param payload The payload.
+		 * @param payload.fdc3Version The version info to get.
+		 * @param clientIdentity The client identity.
+		 * @returns The info.
+		 */
 		public async fdc3HandleGetInfo(
 			payload: {
 				fdc3Version: string;
@@ -525,6 +617,12 @@ export function interopOverride(
 			return super.fdc3HandleGetInfo(payload, clientIdentity);
 		}
 
+		/**
+		 * Handle an intent handler being registered.
+		 * @param payload The payload.
+		 * @param clientIdentity The client identity.
+		 * @returns Nothing.
+		 */
 		public async intentHandlerRegistered(
 			payload: IntentRegistrationPayload,
 			clientIdentity: OpenFin.ClientIdentity
@@ -575,13 +673,20 @@ export function interopOverride(
 			await super.intentHandlerRegistered(payload, clientIdentity);
 		}
 
+		/**
+		 * Launch an app with intent.
+		 * @param app The application to launch.
+		 * @param intent The intent to open it with.
+		 * @param instanceId The instance of the app.
+		 * @returns The intent resolution.
+		 */
 		private async launchAppWithIntent(
 			app: PlatformApp,
 			intent: OpenFin.Intent,
 			instanceId?: string
 		): Promise<Omit<IntentResolution, "getResult">> {
 			logger.info("Launching app with intent");
-			let platformIdentities: PlatformAppIdentifier[] = [];
+			let platformIdentities: PlatformAppIdentifier[] | undefined = [];
 			let existingInstance = true;
 
 			if (!isEmpty(intent?.context)) {
@@ -610,12 +715,12 @@ export function interopOverride(
 
 			if (platformIdentities.length === 0) {
 				platformIdentities = await launch(app);
-				if (platformIdentities.length === 0) {
+				if (!platformIdentities?.length) {
 					throw new Error(ResolveError.IntentDeliveryFailed);
 				}
 				existingInstance = false;
 				if (platformIdentities.length === 1) {
-					const intentTimeout: number = this._intentOptions.intentTimeout;
+					const intentTimeout: number | undefined = this._intentOptions?.intentTimeout;
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 					instanceId = await this.onClientReady(platformIdentities[0], intent.name, intentTimeout);
 				}
@@ -642,25 +747,29 @@ export function interopOverride(
 			};
 		}
 
+		/**
+		 * Launch the intent picker.
+		 * @param launchOptions The options for launching the picker.
+		 * @param launchOptions.apps The apps to pick from.
+		 * @param launchOptions.intent The intent to pick.
+		 * @param launchOptions.intents The intents to pick from.
+		 * @returns The response from the intent picker.
+		 */
 		private async launchIntentPicker(launchOptions: {
 			apps?: PlatformApp[];
 			intent?: Partial<AppIntent>;
 			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
 		}): Promise<IntentPickerResponse> {
-			// show menu
-			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
-			// the window can then use raiseIntent against a specific app (the selected one).
-			const height = this._intentResolverOptions.height;
-			const width = this._intentResolverOptions.width;
-			const interopApiVersion = this._intentResolverOptions.fdc3InteropApi;
-			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
-			const url = this._intentResolverOptions.url;
+			// launch a new window and optionally pass the available intents as customData.apps as part of the window
+			// options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
+			// the provider so we are using it as a way of determining the root (so it works with root hosting and
+			// subdirectory based hosting if a url is not provided)
 			const winOption = {
 				name: "intent-picker",
 				includeInSnapshot: false,
-				fdc3InteropApi: interopApiVersion,
-				defaultWidth: width,
-				defaultHeight: height,
+				fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
+				defaultWidth: this._intentResolverOptions?.width,
+				defaultHeight: this._intentResolverOptions?.height,
 				showTaskbarIcon: false,
 				saveWindowState: false,
 				defaultCentered: true,
@@ -671,7 +780,7 @@ export function interopOverride(
 					intents: launchOptions.intents,
 					unregisteredAppId: this._unregisteredApp?.appId
 				},
-				url,
+				url: this._intentResolverOptions?.url,
 				frame: false,
 				autoShow: true,
 				alwaysOnTop: true
@@ -680,20 +789,15 @@ export function interopOverride(
 			const win = await fin.Window.create(winOption);
 			const webWindow = win.getWebWindow();
 			try {
-				// eslint-disable-next-line @typescript-eslint/dot-notation
-				const selectedAppId = await webWindow["getIntentSelection"]();
+				// eslint-disable-next-line @typescript-eslint/dot-notation, @typescript-eslint/no-explicit-any
+				const selectedAppId = await (webWindow as unknown as any)["getIntentSelection"]();
 				return selectedAppId as {
 					appId: string;
 					instanceId?: string;
 					intent: AppIntent;
 				};
 			} catch (error) {
-				let message: string;
-				if (typeof error === "string") {
-					message = error;
-				} else {
-					message = error?.message;
-				}
+				const message = formatError(error);
 
 				if (message?.includes(ResolveError.UserCancelled)) {
 					logger.info("App for intent not selected/launched by user", launchOptions.intent);
@@ -704,6 +808,12 @@ export function interopOverride(
 			}
 		}
 
+		/**
+		 * Handle the intent picker selection.
+		 * @param userSelection The user selection from the intent picker.
+		 * @param intent The intent.
+		 * @returns The intent resolution.
+		 */
 		private async handleIntentPickerSelection(
 			userSelection: IntentPickerResponse,
 			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
@@ -712,7 +822,10 @@ export function interopOverride(
 			if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
 				selectedApp = this._unregisteredApp;
 			}
-			const instanceId: string = userSelection.instanceId;
+			if (isEmpty(selectedApp)) {
+				throw new Error(ResolveError.NoAppsFound);
+			}
+			const instanceId: string | undefined = userSelection.instanceId;
 			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
 			if (isEmpty(intentResolver)) {
 				throw new Error(ResolveError.NoAppsFound);
@@ -720,6 +833,14 @@ export function interopOverride(
 			return intentResolver;
 		}
 
+		/**
+		 * Handle a targeted intent.
+		 * @param targetAppIdentifier The identifier for the target app.
+		 * @param intent The intent.
+		 * @param targetByContext Perform the target by context.
+		 * @param clientIdentity The client identity.
+		 * @returns The intent resolution.
+		 */
 		private async handleTargetedIntent(
 			targetAppIdentifier: AppIdentifier,
 			intent: OpenFin.Intent,
@@ -763,8 +884,9 @@ export function interopOverride(
 
 			const supportedIntents = targetApp.intents.filter((intentEntry) => {
 				let contextMatch: boolean = true;
-				if (!isEmpty(intent?.context?.type)) {
-					contextMatch = intentEntry.contexts?.includes(intent.context.type);
+				const contextType = intent.context?.type;
+				if (!isEmpty(contextType)) {
+					contextMatch = intentEntry.contexts?.includes(contextType);
 					if (targetByContext) {
 						return contextMatch;
 					}
@@ -842,25 +964,46 @@ export function interopOverride(
 			return this.handleIntentPickerSelection(userSelection, intent);
 		}
 
+		/**
+		 * Shape the intent resolver.
+		 * @param intentResolver The intent resolver to shape.
+		 * @param usesAppIdentifier Should it use the app identifier.
+		 * @returns The shaped intent resolver.
+		 */
 		private shapeIntentResolver(
 			intentResolver: Omit<IntentResolution, "getResult">,
 			usesAppIdentifier: boolean
-		): Omit<IntentResolution, "getResult"> | { source: string; version: string } {
+		): Omit<IntentResolution, "getResult"> | { source: string; version?: string } {
 			if (usesAppIdentifier) {
 				return intentResolver;
 			}
 			return { source: intentResolver.source.appId, version: intentResolver.version };
 		}
 
+		/**
+		 * Should we use a single instance of the app.
+		 * @param app The app to check.
+		 * @returns True if we should use a single instance.
+		 */
 		private useSingleInstance(app: PlatformApp): boolean {
 			return app?.instanceMode === "single";
 		}
 
+		/**
+		 * Should we always use a new instance of the app.
+		 * @param app The app to check.
+		 * @returns True if we should always use a new instance.
+		 */
 		private createNewInstance(app: PlatformApp): boolean {
 			return app?.instanceMode === "new";
 		}
 
-		private async captureWindowApiUsage(id: OpenFin.ClientIdentity): Promise<ApiMetadata> {
+		/**
+		 * Get the fdc3 usage from a window.
+		 * @param id The if of the view to get the info from.
+		 * @returns The api metadata.
+		 */
+		private async captureWindowApiUsage(id: OpenFin.ClientIdentity): Promise<ApiMetadata | undefined> {
 			try {
 				const target = fin.Window.wrapSync(id);
 				const options = await target.getOptions();
@@ -870,12 +1013,15 @@ export function interopOverride(
 						version: options.fdc3InteropApi
 					};
 				}
-			} catch {
-				return null;
-			}
+			} catch {}
 		}
 
-		private async captureViewApiUsage(id: OpenFin.ClientIdentity): Promise<ApiMetadata> {
+		/**
+		 * Get the dc3 usage from a view.
+		 * @param id The id of the window to get the info from.
+		 * @returns The api metadata.
+		 */
+		private async captureViewApiUsage(id: OpenFin.ClientIdentity): Promise<ApiMetadata | undefined> {
 			try {
 				const target = fin.View.wrapSync(id);
 				const options = await target.getOptions();
@@ -885,23 +1031,26 @@ export function interopOverride(
 						version: options.fdc3InteropApi
 					};
 				}
-			} catch {
-				return null;
-			}
+			} catch {}
 		}
 
+		/**
+		 * Capture the API version.
+		 * @param id The client identity to capture from.
+		 * @param payload The payload.
+		 */
 		private async captureApiVersion(
-			id: OpenFin.ClientIdentity,
-			payload?: { apiVersion?: { type: "interop" | "fdc3"; version: string } }
-		) {
+			id: OpenFin.ClientIdentity & { connectionUrl?: string; entityType?: string },
+			payload?: CaptureApiPayload
+		): Promise<void> {
 			const key = `${id.uuid}-${id.name}`;
 			let apiVersion: ApiMetadata | undefined;
 			if (isEmpty(this._trackedClientConnections[key])) {
 				if (id.uuid !== fin.me.identity.uuid) {
-					if (!isEmpty(payload?.apiVersion?.type)) {
-						this._trackedClientConnections[key] = payload?.apiVersion;
-						// eslint-disable-next-line @typescript-eslint/dot-notation
-					} else if (!isEmpty(id["connectionUrl"])) {
+					const payloadApiVersion = payload?.apiVersion;
+					if (!isEmpty(payloadApiVersion) && !isEmpty(payloadApiVersion?.type)) {
+						this._trackedClientConnections[key] = payloadApiVersion;
+					} else if (!isEmpty(id.connectionUrl)) {
 						// if they haven't specified apiVersion meta data and it is external and has a url then we will assume fdc3 2.0
 						this._trackedClientConnections[key] = { type: "fdc3", version: "2.0" };
 					} else {
@@ -909,8 +1058,7 @@ export function interopOverride(
 						this._trackedClientConnections[key] = { type: "interop" };
 					}
 				} else {
-					// eslint-disable-next-line @typescript-eslint/dot-notation
-					const entityType = id["entityType"];
+					const entityType = id.entityType;
 					if (!isEmpty(entityType)) {
 						switch (entityType) {
 							case "window": {
@@ -941,21 +1089,43 @@ export function interopOverride(
 			}
 		}
 
+		/**
+		 * Get the api version for the identity.
+		 * @param id The identity to get the api version for.
+		 * @returns The api metadata.
+		 */
 		private getApiVersion(id: OpenFin.Identity): ApiMetadata {
 			const key = `${id.uuid}-${id.name}`;
 			const apiVersion: ApiMetadata = this._trackedClientConnections[key];
 			return apiVersion;
 		}
 
+		/**
+		 * Remove the api version for the identity.
+		 * @param id The identity to remove the api version for.
+		 */
 		private removeApiVersion(id: OpenFin.Identity): void {
 			const key = `${id.uuid}-${id.name}`;
 			delete this._trackedClientConnections[key];
 		}
 
+		/**
+		 * Get a key that can be used for an identity and client.
+		 * @param identity The identity to use in the key.
+		 * @param intentName The intent to use in the key
+		 * @returns The key.
+		 */
 		private getClientReadyKey(identity: OpenFin.Identity, intentName: string): string {
 			return `${identity.uuid}/${identity.name}/${intentName}`;
 		}
 
+		/**
+		 * Handle client ready event.
+		 * @param identity The identity of the client.
+		 * @param intentName The intent name.
+		 * @param timeout The timeout to wait for the client.
+		 * @returns The instance id.
+		 */
 		private async onClientReady(
 			identity: OpenFin.Identity,
 			intentName: string,
@@ -963,7 +1133,7 @@ export function interopOverride(
 		): Promise<string> {
 			return new Promise<string>((resolve, reject) => {
 				const registeredHandlers = this._trackedIntentHandlers[intentName];
-				let existingInstanceId: string;
+				let existingInstanceId: string | undefined;
 				if (!isEmpty(registeredHandlers)) {
 					for (const handler of registeredHandlers) {
 						if (
@@ -985,7 +1155,7 @@ export function interopOverride(
 						reject(ResolveError.IntentDeliveryFailed);
 					}
 				}, timeout);
-				this._clientReadyRequests[key] = (instanceId: string) => {
+				this._clientReadyRequests[key] = (instanceId: string): void => {
 					clearTimeout(timerId);
 					// clear the callback asynchronously
 					delete this._clientReadyRequests[key];
@@ -994,10 +1164,17 @@ export function interopOverride(
 			});
 		}
 
+		/**
+		 * Get a preview image for a window/view.
+		 * @param target The target identity to capture.
+		 * @param target.capturePage The capture page method of the entity.
+		 * @param target.identity The identity of the entity being captured.
+		 * @returns The captured preview image.
+		 */
 		private async getPreviewImage(target: {
-			capturePage: (options: { format?: string; quality?: number }) => Promise<string>;
+			capturePage: (options?: OpenFin.CapturePageOptions) => Promise<string>;
 			identity: OpenFin.Identity;
-		}): Promise<string> {
+		}): Promise<string | undefined> {
 			try {
 				const preview = await target.capturePage({ format: "jpg", quality: 85 });
 				if (isStringValue(preview)) {
@@ -1009,11 +1186,18 @@ export function interopOverride(
 					error
 				);
 			}
-
-			return undefined;
 		}
 
-		private async getUnregisteredAppIntentByContext(type: string, clientIdentity: ClientIdentity) {
+		/**
+		 * Get the unregistered app intent by context.
+		 * @param type The context type to get.
+		 * @param clientIdentity The client identity.
+		 * @returns The list of supported intents.
+		 */
+		private async getUnregisteredAppIntentByContext(
+			type: string,
+			clientIdentity: ClientIdentity
+		): Promise<string[]> {
 			const intentNames: string[] = [];
 			const supportedIntentNames: string[] = [];
 			if (isEmpty(this?._unregisteredApp)) {
@@ -1040,13 +1224,22 @@ export function interopOverride(
 			return supportedIntentNames;
 		}
 
-		private async canAddUnregisteredApp(clientIdentity: ClientIdentity, intentName?: string) {
+		/**
+		 * Can we add an unregistered app.
+		 * @param clientIdentity The client identity.
+		 * @param intentName The intent name.
+		 * @returns True if we can add the app.
+		 */
+		private async canAddUnregisteredApp(
+			clientIdentity: ClientIdentity,
+			intentName?: string
+		): Promise<boolean> {
 			if (isEmpty(this?._unregisteredApp)) {
 				return false;
 			}
 			if (
 				!isEmpty(intentName) &&
-				this._unregisteredApp.intents.findIndex((intent) => intent.name === intentName) === -1
+				this._unregisteredApp.intents?.findIndex((intent) => intent.name === intentName) === -1
 			) {
 				return false;
 			}
@@ -1057,24 +1250,37 @@ export function interopOverride(
 			return instances.length > 0;
 		}
 
-		private getApplicationIdentity(metadata: OpenFin.IntentMetadata<IntentTargetMetaData>): AppIdentifier {
-			if (isEmpty(metadata?.target)) {
-				return undefined;
+		/**
+		 * Get an application identity.
+		 * @param metadata The metadata for the app.
+		 * @returns The app identifier.
+		 */
+		private getApplicationIdentity(
+			metadata: OpenFin.IntentMetadata<IntentTargetMetaData> | undefined
+		): AppIdentifier | undefined {
+			const target = metadata?.target;
+			if (isEmpty(target)) {
+				return;
 			}
-			if (typeof metadata.target === "string") {
-				if (metadata.target.trim().length === 0) {
+			if (isString(target)) {
+				if (target.trim().length === 0) {
 					return undefined;
 				}
-				return { appId: metadata.target };
+				return { appId: target };
 			}
 
-			if (isEmpty(metadata.target?.appId)) {
+			if (isEmpty(target.appId)) {
 				return undefined;
 			}
 
-			return { appId: metadata.target.appId, instanceId: metadata.target.instanceId };
+			return { appId: target.appId, instanceId: target.instanceId };
 		}
 
+		/**
+		 * Does the app use application identity.
+		 * @param clientIdentity The client app to check.
+		 * @returns True if the app uses application identity.
+		 */
 		private usesApplicationIdentity(clientIdentity: OpenFin.ClientIdentity): boolean {
 			const apiMetadata = this.getApiVersion(clientIdentity);
 			if (isEmpty(apiMetadata)) {
@@ -1083,7 +1289,12 @@ export function interopOverride(
 			return apiMetadata.type === "fdc3" && apiMetadata.version === "2.0";
 		}
 
-		private async lookupAppId(clientIdentity: OpenFin.ClientIdentity): Promise<string> {
+		/**
+		 * Lookup an application identity.
+		 * @param clientIdentity The client identity to use.
+		 * @returns The application identity.
+		 */
+		private async lookupAppId(clientIdentity: OpenFin.ClientIdentity): Promise<string | undefined> {
 			const nameParts = clientIdentity.name.split("/");
 			let app: PlatformApp | undefined;
 
@@ -1113,9 +1324,14 @@ export function interopOverride(
 				app = this._unregisteredApp;
 				logger.info("Assigned the following unregistered app to represent the app.", app);
 			}
-			return app.appId;
+			return app?.appId;
 		}
 
+		/**
+		 * Process a context.
+		 * @param context The context to process.
+		 * @returns The processed context.
+		 */
 		private async processContext(context: OpenFin.Context): Promise<OpenFin.Context> {
 			const endpointId = `interopbroker.process.${context.type}`;
 			if (hasEndpoint(endpointId)) {
@@ -1123,7 +1339,9 @@ export function interopOverride(
 				const processedContext = await requestResponse<ContextToProcess, ProcessedContext>(endpointId, {
 					context
 				});
-				return processedContext.context;
+				if (processedContext?.context) {
+					return processedContext?.context;
+				}
 			}
 			return context;
 		}

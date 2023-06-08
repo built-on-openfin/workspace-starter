@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isNumber, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import type { ExampleOptions, ExampleUser } from "./shapes";
 import { EXAMPLE_AUTH_CURRENT_USER_KEY, clearCurrentUser, getCurrentUser } from "./util";
 
@@ -259,9 +259,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 								}
 							} catch (error) {
 								this._logger?.error(
-									`Error while checking if login window automatically redirected. Error ${this.formatError(
-										error
-									)}`
+									`Error while checking if login window automatically redirected. Error ${formatError(error)}`
 								);
 								if (!isEmpty(win)) {
 									await win.show(true);
@@ -474,19 +472,5 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 			}
 		}
 		return isAuthenticated;
-	}
-
-	/**
-	 * Format an error to a readable string.
-	 * @param err The error to format.
-	 * @returns The formatted error.
-	 */
-	private formatError(err: unknown): string {
-		if (err instanceof Error) {
-			return err.message;
-		} else if (typeof err === "string") {
-			return err;
-		}
-		return JSON.stringify(err);
 	}
 }

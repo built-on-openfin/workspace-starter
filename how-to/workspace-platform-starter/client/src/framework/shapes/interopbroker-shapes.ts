@@ -180,3 +180,13 @@ export interface ContextProcessorEndpoint extends Omit<Endpoint, "action"> {
 		request: ContextToProcess
 	): Promise<ProcessedContext>;
 }
+
+/**
+ * The payload to use for the capture API.
+ */
+export interface CaptureApiPayload {
+	/**
+	 * The api version.
+	 */
+	apiVersion?: ApiMetadata;
+}
