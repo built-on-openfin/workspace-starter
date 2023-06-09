@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-auth0",
-	"version": "13.0.0",
+	"version": "13.1.0",
 	"description": "OpenFin Workspace -- Integrate with Auth0",
 	"main": "index.js",
 	"scripts": {
@@ -15,8 +15,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "13.0.7",
-		"@openfin/workspace-platform": "13.0.7",
+		"@openfin/workspace": "13.1.0",
+		"@openfin/workspace-platform": "13.1.0",
 		"auth0-js": "^9.21.0"
 	},
 	"devDependencies": {
