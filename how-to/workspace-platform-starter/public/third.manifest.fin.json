@@ -66,6 +66,7 @@
 			"autoShow": ["home"]
 		},
 		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
 			"sharing": true,
 			"interop": {
 				"intentResolver": {
@@ -264,6 +265,7 @@
 				{
 					"enabled": true,
 					"id": "interop",
+					"title": "Interop Init Options",
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
@@ -276,6 +278,7 @@
 				{
 					"enabled": true,
 					"id": "console",
+					"title": "Console Logger",
 					"url": "http://localhost:8080/js/modules/log/console.bundle.js"
 				}
 			]

@@ -48,12 +48,14 @@
 	},
 	"customSettings": {
 		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
 			"sharing": true,
 			"initUrl": "http://localhost:8080/js/provider.bundle.js"
 		},
 		"authProvider": {
 			"modules": [
 				{
+					"title": "Example Authentication",
 					"id": "example",
 					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
 					"data": {

@@ -75,6 +75,7 @@
 			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
 			"sharing": true,
 			"interop": {
 				"intentResolver": {
@@ -181,11 +182,13 @@
 		"endpointProvider": {
 			"modules": [
 				{
+					"title": "Local Storage",
 					"enabled": true,
 					"id": "local-storage",
 					"url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
 				},
 				{
+					"title": "Context Processor",
 					"enabled": true,
 					"id": "context-processor",
 					"url": "http://localhost:8080/js/modules/endpoints/example.context.processor.bundle.js"
@@ -959,6 +962,7 @@
 				{
 					"enabled": true,
 					"id": "interop",
+					"title": "Init Options Interop",
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
@@ -967,6 +971,7 @@
 				{
 					"enabled": true,
 					"id": "launch-app",
+					"title": "Init Options Launch App",
 					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
 					"data": {
 						"supportedActions": ["launch-app"],
@@ -987,6 +992,7 @@
 				{
 					"enabled": true,
 					"id": "console",
+					"title": "Console Logger",
 					"url": "http://localhost:8080/js/modules/log/console.bundle.js"
 				}
 			]
@@ -996,16 +1002,19 @@
 				{
 					"enabled": true,
 					"id": "opacity",
+					"title": "Opacity Action",
 					"url": "http://localhost:8080/js/modules/actions/opacity.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "developer-actions",
+					"title": "Developer Actions",
 					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "about-actions",
+					"title": "About Actions",
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
 					"data": {
 						"windowOptions": {
@@ -1025,11 +1034,13 @@
 				{
 					"enabled": true,
 					"id": "page-actions",
+					"title": "Page Actions",
 					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "window-actions",
+					"title": "Window Actions",
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				}
 			]
@@ -1039,6 +1050,7 @@
 				{
 					"enabled": true,
 					"id": "about-conditions",
+					"title": "About Conditions",
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js"
 				}
 			]
@@ -1094,6 +1106,7 @@
 				{
 					"enabled": true,
 					"id": "analytics.console",
+					"title": "Console Analytics",
 					"url": "http://localhost:8080/js/modules/analytics/console.bundle.js",
 					"data": {
 						"eventLogLevel": "info"
@@ -1102,6 +1115,7 @@
 				{
 					"enabled": true,
 					"id": "analytics.dev.channel",
+					"title": "Analytics Dev Channel",
 					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
 					"data": {}
 				}
@@ -1133,6 +1147,7 @@
 				{
 					"enabled": true,
 					"id": "developer-menus",
+					"title": "Developer Menus",
 					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js",
 					"data": {}
 				},

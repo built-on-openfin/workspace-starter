@@ -3337,23 +3337,7 @@
                 "items": {
                     "description": "The items in the row.",
                     "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "buttonTitle": {
-                                "type": "string"
-                            },
-                            "description": {
-                                "type": "string"
-                            },
-                            "image": {
-                                "$ref": "#/definitions/Image"
-                            }
-                        },
-                        "required": [
-                            "description",
-                            "image"
-                        ],
-                        "type": "object"
+                        "$ref": "#/definitions/StorefrontSettingsRowNavigationItem"
                     },
                     "type": "array"
                 },
@@ -3389,7 +3373,43 @@
                 }
             },
             "required": [
-                "id",
+                "tags",
+                "title"
+            ],
+            "type": "object"
+        },
+        "StorefrontSettingsRowNavigationItem": {
+            "additionalProperties": false,
+            "description": "Extends the row navigation item.",
+            "properties": {
+                "buttonTitle": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "This should be an idempotent and unique ID (think GUID) that doesn't change for this navigation item regardless\nof how many times it is regenerated (e.g. e.g. more items can be added or the title changed but the ID stays the\nsame). As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a\nnew page and the re-requested navigation item has a different ID then the store will not be able to find a match\nand it won't be able to render the navigation item.",
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/Image"
+                },
+                "tags": {
+                    "description": "The Storefront API has a collection of apps for a navigation item. Tags is an approach for how you can determine\nwhat apps should be included in a navigation item. i.e we filter the apps list by one or more tags and assign\nthose apps to the navigation item.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "description": "The title for the navigation item",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description",
+                "image",
                 "tags",
                 "title"
             ],

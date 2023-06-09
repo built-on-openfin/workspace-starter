@@ -402,7 +402,7 @@ async function getFooter(): Promise<StorefrontFooter> {
  * @returns The navigation item.
  */
 async function getNavigationItem(
-	id: string,
+	id: string | undefined,
 	title: string,
 	tags: string[]
 ): Promise<StorefrontNavigationItem> {
