@@ -147,9 +147,9 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 		const results = [];
 
 		if (query.startsWith("/quote ") && this._settings?.rootUrl) {
-			let symbol = query.slice(7);
+			let symbol = query.slice(7).trim();
 
-			if (symbol.length > 0 && /^[a-z]+$/i.test(symbol)) {
+			if (symbol.length >= 2 && /^[a-z]+$/i.test(symbol)) {
 				symbol = symbol.toUpperCase();
 
 				const now = DateTime.now();
