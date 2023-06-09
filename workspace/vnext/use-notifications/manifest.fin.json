@@ -10,17 +10,13 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true,
-		"defaultWindowOptions": {}
-	},
-	"snapshot": {
-		"windows": []
+		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/use-notifications/favicon.ico",
-		"name": "Use Notifications - v13.0.0",
+		"name": "Use Notifications - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

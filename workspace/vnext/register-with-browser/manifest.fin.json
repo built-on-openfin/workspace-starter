@@ -2,7 +2,7 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--v=1 --inspect --disable-features=CookiesWithoutSameSiteMustSecure,SameSiteByDefaultCookies",
+		"arguments": "--v=1 --inspect",
 		"version": "31.112.75.4"
 	},
 	"platform": {
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Launch Browser Windows - v13.0.0",
+		"name": "Launch Browser Windows - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

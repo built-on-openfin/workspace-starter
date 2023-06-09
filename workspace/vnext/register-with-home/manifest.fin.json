@@ -14,6 +14,7 @@
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
+				"downloadAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
 					"protocols": ["mailto"]
@@ -35,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/favicon.ico",
-		"name": "Register With Home - v13.0.0",
+		"name": "Register With Home - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -46,8 +47,14 @@
 	},
 	"customSettings": {
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/workspace/vnext/common/apps.json"],
-			"manifestTypes": ["view", "snapshot", "manifest", "external"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/common/apps-expero.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/common/apps-tools.json"
+			],
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "window", "inline-appasset"],
 			"cacheDurationInMinutes": 1
 		},
 		"homeProvider": {
