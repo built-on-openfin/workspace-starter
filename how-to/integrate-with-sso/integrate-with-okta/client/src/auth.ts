@@ -35,7 +35,7 @@ export async function authenticationInit(
 	busyCallback = busyCb;
 	informationCallback = informationCb;
 
-	informationCallback("Initialising the authentication");
+	informationCallback("Initializing the authentication");
 
 	if (!oktaSettings) {
 		informationCallback("Error: Settings missing cannot continue");
@@ -62,7 +62,7 @@ export async function authenticationInit(
 
 /**
  * Perform the login workflow.
- * PKCE workflow - https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce
+ * PKCE workflow - https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce.
  */
 export async function login(): Promise<void> {
 	removeProperty(STORE_ACCESS_TOKEN);

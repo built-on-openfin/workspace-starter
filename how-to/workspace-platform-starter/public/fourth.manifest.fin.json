@@ -1,0 +1,86 @@
+{
+	"$schema": "./schemas/manifest.schema.json",
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=fourth-workspace-starter-how-to-workspace-platform-starter",
+		"version": "31.112.75.4"
+	},
+	"startup_app": {
+		"name": "fourth-workspace-starter-how-to-workspace-platform-starter"
+	},
+	"platform": {
+		"uuid": "fourth-workspace-starter-how-to-workspace-platform-starter",
+		"name": "fourth-workspace-starter-how-to-workspace-platform-starter",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/shell/shell.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			}
+		},
+		"defaultViewOptions": {}
+	},
+	"appAssets": [],
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Workspace Platform Starter - Fourth Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"platformProvider": {
+			"rootUrl": "http://localhost:8080",
+			"sharing": true,
+			"initUrl": "http://localhost:8080/js/provider.bundle.js"
+		},
+		"authProvider": {
+			"modules": [
+				{
+					"title": "Example Authentication",
+					"id": "example",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1
+					}
+				}
+			]
+		},
+		"endpointProvider": {
+			"modules": [],
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:8080/settings.json"
+					}
+				}
+			]
+		}
+	}
+}

@@ -1,6 +1,6 @@
 /**
  * This script is used to update this example with some of the common source files
- * shared across all the examples. The source of all the files is the customize-workspace
+ * shared across all the examples. The source of all the files is the workspace-platform-starter
  * example project.
  */
 import FastGlob from 'fast-glob';

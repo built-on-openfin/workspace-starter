@@ -183,7 +183,7 @@ function initializeDOM(): void {
 }
 
 /**
- * Connect to Bloomberg Terminal
+ * Connect to Bloomberg Terminal.
  */
 async function connectToBBGTerminal(): Promise<void> {
 	try {

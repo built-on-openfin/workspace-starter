@@ -65,7 +65,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param themingPayload Is there a custom theming payload to use for the theme.
  */
 async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 
 	// Build the custom palette based on anything in the theming payload.
 	let customTheme: CustomThemeOptions | CustomThemeOptionsWithScheme;
@@ -242,7 +242,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 	}
 
 	// If run was requested when we are already running restart the app
-	// as we can only update the theming options by re-initialising the platform.
+	// as we can only update the theming options by re-initializing the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.Application.addListener("run-requested", async (params?: CustomUserAppArgs) => {
 		console.log("Run requested with action", params?.userAppConfigArgs?.action);
