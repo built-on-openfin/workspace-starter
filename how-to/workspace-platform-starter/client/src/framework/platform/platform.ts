@@ -6,8 +6,8 @@ import {
 import * as actionsProvider from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
-import { isAuthenticationEnabled, isAuthenticationRequired } from "../auth";
-import { init as initAuthFlow } from "../auth-flow";
+import * as auth from "../auth";
+import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
@@ -15,7 +15,7 @@ import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import * as loggerProvider from "../logger-provider";
 import * as menusProvider from "../menu";
-import { getDefaultHelpers, init as modulesInit } from "../modules";
+import * as modules from "../modules";
 import { getManifestCustomSettings, getSettings } from "../settings";
 import type { CustomSettings, ModuleHelpers } from "../shapes";
 import * as shareProvider from "../share";
@@ -36,7 +36,7 @@ const logger = loggerProvider.createLogger("Platform");
 export async function init(): Promise<boolean> {
 	const customSettings = await getManifestCustomSettings();
 
-	const isValid = await initAuthFlow(
+	const isValid = await authFlow.init(
 		customSettings.authProvider,
 		async () => setupPlatform(customSettings),
 		logger,
@@ -60,18 +60,15 @@ export async function init(): Promise<boolean> {
 async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
-	const sessionId: string = randomUUID();
+	await modules.init(randomUUID());
 
-	await modulesInit(sessionId);
-
-	let helpers: ModuleHelpers = getDefaultHelpers();
+	const helpers: ModuleHelpers = modules.getDefaultHelpers();
 
 	await initOptionsProvider.init(manifestSettings?.initOptionsProvider, helpers, "after-auth");
 
 	// We reload the settings now that endpoints have been configured.
 	const customSettings: CustomSettings = await getSettings();
 
-	helpers = getDefaultHelpers();
 	await loggerProvider.init(customSettings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
@@ -97,7 +94,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await conditionsProvider.init(customSettings?.conditionsProvider, helpers);
 	conditionsProvider.registerCondition(
 		"authenticated",
-		async () => isAuthenticationEnabled() && !(await isAuthenticationRequired()),
+		async () => auth.isAuthenticationEnabled() && !(await auth.isAuthenticationRequired()),
 		false
 	);
 	conditionsProvider.registerCondition("sharing", async () => shareProvider.isShareEnabled(), false);

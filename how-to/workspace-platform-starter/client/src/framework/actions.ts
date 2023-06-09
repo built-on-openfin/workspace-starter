@@ -25,7 +25,7 @@ const logger = createLogger("Actions");
 
 let modules: ModuleEntry<Actions>[] = [];
 const customActionMap: CustomActionsMap = {};
-let getActionsCalled: boolean = false;
+let isInitialized: boolean = false;
 
 /**
  * These Ids are for actions built in to the platform.
@@ -78,8 +78,12 @@ export async function closedown(): Promise<void> {
  * Get all the actions we want to register with the platform.
  * @returns The map of all the custom actions.
  */
-export async function getActions(): Promise<CustomActionsMap> {
-	getActionsCalled = true;
+export async function getActions(): Promise<CustomActionsMap | undefined> {
+	if (isInitialized) {
+		logger.error("The actions can only be used once when configuring the platform");
+		return;
+	}
+	isInitialized = true;
 
 	// Get the platform actions
 	let platformActionMap: CustomActionsMap = await getPlatformActions();
@@ -108,7 +112,7 @@ export async function getActions(): Promise<CustomActionsMap> {
  * @param action The action to be performed.
  */
 export function registerAction(actionName: string, action: () => Promise<void>): void {
-	if (getActionsCalled) {
+	if (isInitialized) {
 		logger.error(
 			`registerAction has been called for action ${actionName} but it is too late for the action to be used by the platform`
 		);
