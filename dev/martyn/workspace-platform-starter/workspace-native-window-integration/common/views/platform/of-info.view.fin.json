@@ -1,8 +1,0 @@
-{
-	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/workspace-platform-starter/workspace-native-window-integration/common/views/platform/of-info/index.html",
-	"preloadScripts": [
-		{
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/workspace-platform-starter/workspace-native-window-integration/common/style/style-changed-preload.js"
-		}
-	]
-}

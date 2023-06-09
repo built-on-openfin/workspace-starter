@@ -1,8 +1,0 @@
-{
-	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home-basic/common/views/platform/of-info/index.html",
-	"preloadScripts": [
-		{
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/extend-broker/register-with-home-basic/common/style/style-changed-preload.js"
-		}
-	]
-}
