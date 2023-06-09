@@ -12,7 +12,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
@@ -82,7 +82,7 @@
 		{
 			"appId": "fdc3-context-view-2-0",
 			"name": "fdc3-context-view-2-0",
-			"title": "Contexts using FDC3 (2.0)",
+			"title": "Context using FDC3 (2.0)",
 			"description": "This view allows you to experiment with the broadcasting and listening of contexts using the fdc3 api.",
 			"categories": ["developer tools", "tools", "training"],
 			"version": "2.0.0",

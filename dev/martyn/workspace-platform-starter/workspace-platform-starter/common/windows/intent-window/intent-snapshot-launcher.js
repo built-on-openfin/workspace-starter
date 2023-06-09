@@ -7,47 +7,6 @@ async function init() {
 	const settings = await getLauncherSettings();
 
 	if (settings) {
-		const snapshotUrl = settings.snapshotUrl;
-		const idName = settings.idName;
-		const contextGroupName = settings.contextGroupName;
-		const contextGroupToken = settings.contextGroupToken;
-		const idToken = settings.idToken;
-		const intentName = settings.intentName;
-
-		await fin.me.interop.registerIntentHandler(async (intent) => {
-			try {
-				const response = await fetch(snapshotUrl, {
-					headers: {
-						Accept: 'application/json'
-					}
-				});
-				if (response.status === 200) {
-					console.log('Received snapshot response');
-					let text = await response.text();
-					if (
-						idName !== undefined &&
-						intent?.context?.id !== undefined &&
-						intent.context.id[idName] !== undefined
-					) {
-						text = text.replaceAll(idToken, intent.context.id[idName]);
-					}
-
-					const targetContextGroupName = await getContextGroupName(contextGroupName, contextGroupToken);
-					if (targetContextGroupName !== undefined && contextGroupToken !== undefined) {
-						text = text.replaceAll(contextGroupToken, targetContextGroupName);
-					}
-					const snapshot = JSON.parse(text);
-					const platform = fin.Platform.getCurrentSync();
-					if (targetContextGroupName !== undefined) {
-						await fin.me.interop.joinContextGroup(targetContextGroupName);
-						await fin.me.interop.setContext(intent.context);
-					}
-					await platform.applySnapshot(snapshot);
-				}
-			} catch (error) {
-				console.error('Error while trying to handle intent request for:', intent.name, error);
-			}
-		}, intentName);
 		await fin.me.interop.registerIntentHandler((intent) => {
 			manageIntent(intent, settings)
 				.then((_) => {
