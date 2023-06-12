@@ -42,7 +42,7 @@ export async function register(
 		const buttons = await buildButtons();
 		logger.info("Dock register about to be called.");
 
-		const registration = await buildRegistration(buttons);
+		const registration = await buildDockProvider(buttons);
 
 		if (registration) {
 			registrationInfo = await Dock.register(registration);
@@ -70,9 +70,9 @@ export async function deregister(): Promise<void> {
 		registrationInfo = undefined;
 		dockProviderOptions = undefined;
 		logger.info("Dock deregister about to be called.");
-		await Dock.deregister();
+		return Dock.deregister();
 	}
-	logger.warn("Unable to deregister home as there is an indication it was never registered");
+	logger.warn("Unable to deregister dock as there is an indication it was never registered");
 }
 
 /**
@@ -80,7 +80,7 @@ export async function deregister(): Promise<void> {
  * @param buttons The buttons to display on the dock.
  * @returns The dock provider options.
  */
-async function buildRegistration(buttons: DockButton[]): Promise<DockProvider | undefined> {
+async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | undefined> {
 	if (dockProviderOptions) {
 		registeredButtons = buttons;
 
@@ -284,9 +284,18 @@ async function updateDockColorScheme(): Promise<void> {
 		const newButtons = await buildButtons();
 
 		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
-			const dockProvider = await buildRegistration(newButtons);
+			const dockProvider = await buildDockProvider(newButtons);
 			if (dockProvider) {
-				await registrationInfo.updateDockProviderConfig(dockProvider);
+				// updateDockProviderConfig was added in v13, fallback if it doesn't exist
+				if (registrationInfo?.updateDockProviderConfig) {
+					await registrationInfo.updateDockProviderConfig(dockProvider);
+				} else {
+					await deregister();
+					await Dock.register(dockProvider);
+					if (registeredBootstrapOptions?.autoShow?.includes("dock")) {
+						await show();
+					}
+				}
 			}
 		}
 	}
