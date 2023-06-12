@@ -97,9 +97,9 @@ async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 }
 
 /**
- * Register the platform's custom home registration
+ * Allow the registration of a home integration for this platform.
  */
-async function registerPlatformHomeIntegration() {
+async function registerPlatformHomeIntegration(): Promise<void> {
 	const id = "my-custom-home-registration";
 	const title = "Custom Platform Home Registration";
 	const icon = PLATFORM_ICON;
