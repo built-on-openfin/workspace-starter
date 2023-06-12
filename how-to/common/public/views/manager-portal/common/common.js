@@ -37,7 +37,8 @@ function modifyDates(dateArray) {
 	for (let i = 0; i < dateArray.length; i++) {
 		const referenceDate = new Date();
 		const thisYear = referenceDate.getFullYear(); // Should be the current year.
-		const newMonthToUse = getRandomNum(11); // A random number from 1-12
+		const thisMonth = referenceDate.getMonth(); // Should be the current year.
+		const newMonthToUse = thisMonth + getRandomNum(2); // This month, +/- 1-2 months for variablility
 		const newDayToUse = getRandomNum(26); // A random number from 1-26
 		let newDateString = `${thisYear}-${zeroPadding(newMonthToUse)}-${zeroPadding(newDayToUse)}`;
 		if (dateArray.length > 4 && i > 3) {
