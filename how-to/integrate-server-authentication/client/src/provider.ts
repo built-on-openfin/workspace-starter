@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -57,7 +57,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
  * Initialize the application.
  */
 async function initializeApplication(): Promise<void> {
-	console.log("Initialising the authentication");
+	console.log("Initializing the authentication");
 
 	// On an initial login with no valid auth cookie the provider.html
 	// request to the web server will be redirected to the content of the

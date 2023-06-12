@@ -50,7 +50,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 
 	await init({
 		browser: {
@@ -181,7 +181,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/intent/fdc3-intent-view.html",
+							url: " https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/intent/fdc3-intent-view.html",
 							fdc3InteropApi: "1.2",
 							interop: {
 								currentContextGroup: "green"

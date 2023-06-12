@@ -134,7 +134,7 @@ export class SalesforceIntegration {
 	};
 
 	/**
-	 * Create a new instance of SalesforceIntegrationProvider
+	 * Create a new instance of SalesforceIntegrationProvider.
 	 */
 	constructor() {
 		this._referenceCache = {};
@@ -143,7 +143,7 @@ export class SalesforceIntegration {
 	}
 
 	/**
-	 * Initialise the module.
+	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param definition.id The id to use when the integration is used as a module.
 	 * @param definition.title The title to use when the integration is used as a module.

@@ -31,7 +31,7 @@ export async function register(
 	appSettings: AppProviderSettings | undefined,
 	homeSettings: HomeProviderSettings | undefined
 ): Promise<HomeRegistration | undefined> {
-	console.log("Initialising home.");
+	console.log("Initializing home.");
 
 	if (appSettings === undefined) {
 		console.warn(

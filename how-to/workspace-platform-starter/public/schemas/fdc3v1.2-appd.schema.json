@@ -1,0 +1,201 @@
+{
+	"$ref": "#/definitions/FDC3VOnePointTwoAppDirectoryResponse",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"AppDefinition": {
+			"additionalProperties": false,
+			"description": "Definition for an FDC3 1.2 Application.",
+			"properties": {
+				"appId": {
+					"description": "The unique application identifier located within a specific application directory instance.",
+					"type": "string"
+				},
+				"categories": {
+					"description": "categories is not part of the FDC3 1.2 spec but we support tags in our own platform app structure and an\nequivalent categories was added to FDC3 2.0 so we map it if we find it in an FDC3 1.2 directory",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"contactEmail": {
+					"description": "E-mail to receive queries about the application",
+					"type": "string"
+				},
+				"customConfig": {
+					"$ref": "#/definitions/CustomConfig",
+					"description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a platform."
+				},
+				"description": {
+					"description": "Description of the application. This will typically be a 1-2 paragraph style blurb about the application. This\nshould be plain text.",
+					"type": "string"
+				},
+				"icons": {
+					"description": "Holds Icons used for the application. The icon can be used in the OpenFin Workspace HOME, STORE and DOCK\ncomponents.",
+					"items": {
+						"$ref": "#/definitions/AppIcon"
+					},
+					"type": "array"
+				},
+				"images": {
+					"description": "Array of images to show the user when they are looking at app description.",
+					"items": {
+						"$ref": "#/definitions/AppImage"
+					},
+					"type": "array"
+				},
+				"intents": {
+					"description": "The list of intents implemented by the Application",
+					"items": {
+						"$ref": "#/definitions/AppIntents"
+					},
+					"type": "array"
+				},
+				"manifest": {
+					"description": "URI or full JSON of the application manifest providing all details related to launch and use requirements as\ndescribed by OpenFin. The format of this manifest for this platform is OpenFin specific, but can be identified by\nthe manifestType attribute.",
+					"type": "string"
+				},
+				"manifestType": {
+					"description": "The manifest type which relates to the format and structure of the manifest content. The definition is based on\nwhat is supported by the platform this application directory is running against.",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the application. The name should be unique within an App Directory instance.",
+					"type": "string"
+				},
+				"publisher": {
+					"description": "The name of the company that owns the application. The publisher has control over their namespace/app/signature.",
+					"type": "string"
+				},
+				"supportEmail": {
+					"description": "E-mail to receive queries about the application",
+					"type": "string"
+				},
+				"title": {
+					"description": "Title for the application, Can be used in the OpenFin Workspace HOME, STORE and DOCK components.",
+					"type": "string"
+				},
+				"tooltip": {
+					"description": "Optional tooltip description e.g. for a OpenFin Workspace Dock button",
+					"type": "string"
+				},
+				"version": {
+					"description": "Version of the application. This allows multiple app versions to be defined using the same app name. This can be\na triplet but can also include things like 1.2.5 (BETA)",
+					"type": "string"
+				}
+			},
+			"required": ["appId", "manifest", "manifestType", "name"],
+			"type": "object"
+		},
+		"AppIcon": {
+			"additionalProperties": false,
+			"description": "Icons for app definition.",
+			"properties": {
+				"icon": {
+					"description": "A url to the image.",
+					"type": "string"
+				}
+			},
+			"required": ["icon"],
+			"type": "object"
+		},
+		"AppImage": {
+			"additionalProperties": false,
+			"description": "Images for app definition.",
+			"properties": {
+				"url": {
+					"description": "A url to the image.",
+					"type": "string"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		},
+		"AppIntents": {
+			"additionalProperties": false,
+			"description": "Intents for app definition",
+			"properties": {
+				"contexts": {
+					"description": "A comma separated list of the types of contexts the intent offered by the application can process. where the\nfirst part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"customConfig": {
+					"additionalProperties": {},
+					"description": "Custom configuration for the intent that may be required by a platform.",
+					"type": "object"
+				},
+				"displayName": {
+					"description": "An optional display name for the intent that may be used in UI instead of the name.",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the intent to 'launch'. In this case the name of an Intent supported by an Application.",
+					"type": "string"
+				}
+			},
+			"required": ["contexts", "displayName", "name"],
+			"type": "object"
+		},
+		"CustomConfig": {
+			"additionalProperties": {},
+			"description": "Custom config definition.",
+			"properties": {
+				"autostart": {
+					"description": "does the application wish to be automatically started when the platform is initialized. Default behavior is\nfalse.",
+					"type": ["string", "boolean"]
+				},
+				"instanceMode": {
+					"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one instance of\nthis application and only show the app even if the intent resolver ui supports instances of apps. If multi should\nwe support multiple instances and let the user decide whether to launch a new instance or pick an existing one\nfrom the intent picker? If new it means the intent picker will not show the option to pick an instance because\nthe app owner wants a new instance every time. And if an intent is raised and just the id of the app is specified\nit will always launch a new instance",
+					"enum": ["multi", "new", "single"],
+					"type": "string"
+				},
+				"private": {
+					"description": "Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may\nbe that this app entry is mainly for responding to intent requests and shouldn't be launched directly.",
+					"type": ["string", "boolean"]
+				}
+			},
+			"type": "object"
+		},
+		"FDC3VOnePointTwoAppDirectoryResponse": {
+			"additionalProperties": false,
+			"description": "The successful response expected from a FDC3 1.2 request when all\napplications are requested.",
+			"properties": {
+				"$schema": {
+					"description": "The schema that helps guide the structure of the response.",
+					"type": "string"
+				},
+				"applications": {
+					"description": "List of applications",
+					"items": {
+						"$ref": "#/definitions/AppDefinition"
+					},
+					"type": "array"
+				},
+				"message": {
+					"description": "Response message providing status of query",
+					"type": "string"
+				},
+				"metadata": {
+					"additionalProperties": false,
+					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been\nreceived.",
+					"properties": {
+						"type": {
+							"enum": ["fdc3"],
+							"type": "string"
+						},
+						"version": {
+							"enum": ["1.2"],
+							"type": "string"
+						}
+					},
+					"required": ["type", "version"],
+					"type": "object"
+				}
+			},
+			"required": ["$schema", "applications"],
+			"type": "object"
+		}
+	}
+}

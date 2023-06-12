@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -52,7 +52,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspaceComponents(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising the bootstrapper");
+	console.log("Initializing the bootstrapper");
 
 	// Register with home and show it
 	await register(customSettings.appProvider, customSettings.homeProvider);

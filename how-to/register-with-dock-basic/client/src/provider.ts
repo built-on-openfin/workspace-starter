@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {

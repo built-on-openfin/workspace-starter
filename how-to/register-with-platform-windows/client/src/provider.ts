@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	// We set the browser configuration to null to tell the platform we will
 	// be using platform api windows
 	await init({
@@ -48,7 +48,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
  * Bring the platform to life.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initialising the bootstrapper");
+	console.log("Initializing the bootstrapper");
 
 	await Home.register({
 		title: PLATFORM_TITLE,

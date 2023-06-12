@@ -9,7 +9,7 @@ const path = require('path');
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
 // e.g. if the manifest runtime version is 31.112.75.4 then the chromedriver version should be '112.0.0'
 const manifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5843;
 const devToolsPort = 9123;
 

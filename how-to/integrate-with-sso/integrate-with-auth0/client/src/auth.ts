@@ -34,7 +34,7 @@ export async function authenticationInit(
 	busyCallback = busyCb;
 	informationCallback = informationCb;
 
-	informationCallback("Initialising the authentication");
+	informationCallback("Initializing the authentication");
 
 	if (!auth0Settings) {
 		informationCallback("Error: Settings missing cannot continue");

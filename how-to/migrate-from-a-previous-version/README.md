@@ -158,8 +158,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^13.0.7",
-                    "@openfin/workspace-platform": "^13.0.7"
+                    "@openfin/workspace": "^13.1.0",
+                    "@openfin/workspace-platform": "^13.1.0"
                 }
 ```
 
@@ -232,11 +232,11 @@ Your broker can still override functions related to context groups and manifest 
 
 ### Workspace 10 Enhancements
 
-- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
+- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The workspace-platform-starter example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
 - New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
 - API Control Over Home Search String - You can now trigger an update to the text shown in the Home Search Box. We provide examples of this in the customize-home-templates example (where the help search entry can update the search box when selected).
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
-- Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
+- Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The workspace-platform-starter sample gives an example of this.
 
 ### Notification 1.19.2 Enhancements
 
@@ -337,12 +337,12 @@ We have introduced new starters:
 - register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
 - integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
 - common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
-- customize-workspace - customize workspace continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
+- workspace-platform-starter - workspace platform starter continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
 
   - DockProvider - Dock support has been added and is configurable through the manifest file
   - An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
   - InitOptionsProvider - More module types supported. You can now create a module for handling init option params and we include an example that allows external apps to raise an intent or pass context via querystring parameters that target a platform.
-  - ConnectionProvider - The concept of connections has been added to customize-workspace. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
+  - ConnectionProvider - The concept of connections has been added to workspace-platform-starter. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
 
 ## Migrate from a previous version - From v7.0 to v8.0
 
@@ -390,13 +390,13 @@ The structure of the how-to samples has been updated. The views (content) and so
 
 A new npm command **"npm run setup"** has also been introduced that takes advantage of our npm workspaces support and installs from the root directory and then builds the sample you are currently in and the common directory.
 
-Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only customize-workspace supports inline-view as a manifestType as it is supported by the sample and will not be recognized by the workspace api).
+Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only workspace-platform-starter supports inline-view as a manifestType as it is supported by the sample and will not be recognized by the workspace api).
 
 # Migrate from a previous version - From v6.0 to v7.0
 
 The main focus of this release is on introducing support for Workspace Management APIs and adding a UI for Workspace Management to the Browser.
 
-If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the customize-workspace example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
+If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the workspace-platform-starter example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
 
 - [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
 
@@ -594,7 +594,7 @@ So this:
 import { fin } from 'openfin-adapter/src/mock';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   await fin.Platform.init({});
 }
 ```
@@ -605,7 +605,7 @@ becomes:
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
   await workspacePlatformInit({
     browser
@@ -686,7 +686,7 @@ import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/works
 import { getSettings } from './settings';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let settings = await getSettings();
   let browser: BrowserInitConfig = {};
 
@@ -754,7 +754,7 @@ This is best done through default window options.
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
 
   browser.defaultWindowOptions = {
@@ -782,7 +782,7 @@ This is done when you initialize your platform:
 import { init as workspacePlatformInit, CustomThemeOptions } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   const theme: CustomThemeOptions[] = [
     {
       label: 'Starter Theme',

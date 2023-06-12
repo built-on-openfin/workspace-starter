@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Support Intents & Context - v13.0.0",
+		"name": "Support Intents & Context - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

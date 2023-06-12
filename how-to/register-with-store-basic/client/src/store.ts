@@ -18,7 +18,7 @@ export async function register(
 	title: string,
 	icon: string
 ): Promise<StoreRegistration | undefined> {
-	console.log("Initialising the storefront provider.");
+	console.log("Initializing the storefront provider.");
 	try {
 		const metaInfo = await Storefront.register({
 			id,

@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -57,7 +57,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
  * Bring the platform to life.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initialising the bootstrapper");
+	console.log("Initializing the bootstrapper");
 
 	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();

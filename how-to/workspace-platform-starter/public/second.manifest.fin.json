@@ -1,0 +1,115 @@
+{
+	"$schema": "./schemas/manifest.schema.json",
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=second-workspace-starter-how-to-workspace-platform-starter",
+		"version": "31.112.75.4"
+	},
+	"startup_app": {
+		"name": "second-workspace-starter-how-to-workspace-platform-starter"
+	},
+	"platform": {
+		"uuid": "second-workspace-starter-how-to-workspace-platform-starter",
+		"name": "second-workspace-starter-how-to-workspace-platform-starter",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto", "msteams", "tel"]
+					}
+				}
+			}
+		},
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto", "msteams", "tel"]
+					}
+				}
+			}
+		}
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Workspace Platform Starter - Second Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"authProvider": {
+			"modules": [
+				{
+					"id": "auth-example",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"title": "Example Auth",
+					"data": {
+						"autoLogin": false,
+						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
+						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"checkLoginStatusInSeconds": 1,
+						"checkSessionValidityInSeconds": -1,
+						"customData": {
+							"users": [
+								{ "name": "Josh Smith (Developer)", "email": "josh@smith.com", "role": "developer" },
+								{ "name": "Sam Barns (Sales)", "email": "sam@barns.com", "role": "sales" }
+							]
+						}
+					}
+				}
+			]
+		},
+		"endpointProvider": {
+			"modules": [
+				{
+					"id": "auth-example-endpoint",
+					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"title": "Example Auth Endpoint",
+					"data": {
+						"roleMapping": {
+							"developer": {
+								"excludeAppsWithTag": ["expero", "contact", "manager", "irs"],
+								"preferredScheme": "dark"
+							},
+							"sales": {
+								"excludeAppsWithTag": ["tools", "developer", "versions"],
+								"preferredScheme": "light",
+								"excludeMenuModule": ["developer-menus"]
+							}
+						}
+					}
+				}
+			],
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "module",
+					"typeId": "auth-example-endpoint",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:8080/settings.json"
+					}
+				}
+			]
+		}
+	}
+}
