@@ -14,7 +14,7 @@ The approach that we have taken is that you define your landing page properties 
 ```json
 "storefrontProvider": {
    "id": "workspace-platform-starter",
-   "title": "Custom Storefront",
+   "title": "Workspace Platform Starter",
    "icon": "http://localhost:8080/favicon.ico",
    "landingPage": {
     "hero": {

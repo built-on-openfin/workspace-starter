@@ -571,14 +571,14 @@
 		},
 		"homeProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Home Starter",
+			"title": "Workspace Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Custom Storefront",
+			"title": "Workspace Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"landingPage": {
 				"hero": {
@@ -721,7 +721,7 @@
 		},
 		"dockProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Home Starter",
+			"title": "Workspace Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"workspaceComponents": {
 				"hideHomeButton": false,
@@ -805,7 +805,7 @@
 		},
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Notification Starter",
+			"title": "Workspace Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"integrationProvider": {

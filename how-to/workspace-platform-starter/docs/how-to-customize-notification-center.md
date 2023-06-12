@@ -30,7 +30,7 @@ As with the other workspace components you can set the `id`, `title` and `icon` 
 ```json
 "notificationProvider": {
     "id": "workspace-platform-starter",
-    "title": "Home Starter",
+    "title": "Workspace Platform Starter",
     "icon": "http://localhost:8080/favicon.ico"
 }
 ```
