@@ -3,7 +3,8 @@ import {
 	DockButtonNames,
 	type CustomActionSpecifier,
 	type DockButton,
-	type RegistrationMetaInfo
+	type DockProvider,
+	type DockProviderRegistration
 } from "@openfin/workspace";
 import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
@@ -18,7 +19,7 @@ import { isEmpty } from "../utils";
 
 const logger = createLogger("Dock");
 
-let registrationInfo: RegistrationMetaInfo | undefined;
+let registrationInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
 let registeredBootstrapOptions: BootstrapOptions | undefined;
 let lifeCycleSubscriptionId: string | undefined;
@@ -33,16 +34,24 @@ let registeredButtons: DockButton[];
 export async function register(
 	options: DockProviderOptions | undefined,
 	bootstrapOptions?: BootstrapOptions
-): Promise<RegistrationMetaInfo | undefined> {
+): Promise<DockProviderRegistration | undefined> {
 	if (!registrationInfo && options) {
 		dockProviderOptions = options;
 		registeredBootstrapOptions = bootstrapOptions;
 
 		const buttons = await buildButtons();
 		logger.info("Dock register about to be called.");
-		await finalizeRegistration(buttons);
 
-		lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
+		const registration = await buildRegistration(buttons);
+
+		if (registration) {
+			registrationInfo = await Dock.register(registration);
+
+			logger.info("Version:", registrationInfo);
+			logger.info("Dock provider initialized");
+
+			lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
+		}
 	}
 
 	return registrationInfo;
@@ -69,10 +78,13 @@ export async function deregister(): Promise<void> {
 /**
  * Build the dock registration.
  * @param buttons The buttons to display on the dock.
+ * @returns The dock provider options.
  */
-async function finalizeRegistration(buttons: DockButton[]): Promise<void> {
+async function buildRegistration(buttons: DockButton[]): Promise<DockProvider | undefined> {
 	if (dockProviderOptions) {
-		registrationInfo = await Dock.register({
+		registeredButtons = buttons;
+
+		return {
 			id: dockProviderOptions.id,
 			title: dockProviderOptions.title,
 			icon: dockProviderOptions.icon,
@@ -87,12 +99,7 @@ async function finalizeRegistration(buttons: DockButton[]): Promise<void> {
 					dockProviderOptions.workspaceComponents?.hideNotificationsButton
 			},
 			buttons
-		});
-
-		registeredButtons = buttons;
-
-		logger.info("Version:", registrationInfo);
-		logger.info("Dock provider initialized");
+		};
 	}
 }
 
@@ -277,8 +284,10 @@ async function updateDockColorScheme(): Promise<void> {
 		const newButtons = await buildButtons();
 
 		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
-			await deregister();
-			await finalizeRegistration(newButtons);
+			const dockProvider = await buildRegistration(newButtons);
+			if (dockProvider) {
+				await registrationInfo.updateDockProviderConfig(dockProvider);
+			}
 		}
 	}
 }
