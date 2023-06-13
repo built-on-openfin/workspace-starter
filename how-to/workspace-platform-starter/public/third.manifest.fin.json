@@ -285,7 +285,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "13.1.0"
+				"workspace": "next"
 			},
 			"versionWindow": {
 				"name": "versioning",
