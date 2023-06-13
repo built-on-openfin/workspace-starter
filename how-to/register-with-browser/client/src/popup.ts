@@ -1,8 +1,11 @@
 import type OpenFin from "@openfin/core";
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", initDOM);
 
-async function init() {
+/**
+ * Initialize the DOM components.
+ */
+async function initDOM(): Promise<void> {
 	const options = await fin.me.getOptions();
 
 	if (options.customData?.title) {
