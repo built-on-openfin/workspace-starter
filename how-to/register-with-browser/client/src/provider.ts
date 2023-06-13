@@ -195,11 +195,6 @@ async function showPopup(
 	const halfWidth = dimensions.width / 2;
 	const halfHeight = dimensions.height / 2;
 
-	const parentCenter = {
-		x: parentBounds.left + halfParentWidth,
-		y: parentBounds.top + halfParentHeight
-	};
-
 	const result = await browserWindow.showPopupWindow({
 		name: randomUUID(),
 		initialOptions: {
@@ -213,8 +208,8 @@ async function showPopup(
 			}
 		},
 		url: "http://localhost:8080/html/popup.html",
-		x: parentCenter.x - halfWidth,
-		y: parentCenter.y - halfHeight,
+		x: halfParentWidth - halfWidth,
+		y: halfParentHeight - halfHeight,
 		width: dimensions.width,
 		height: dimensions.height
 	});
