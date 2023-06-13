@@ -1,0 +1,8 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/joe/fixing-calendar-initial-state/common/views/platform/of-info/index.html",
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/joe/fixing-calendar-initial-state/common/style/style-changed-preload.js"
+		}
+	]
+}
