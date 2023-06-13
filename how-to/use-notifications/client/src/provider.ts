@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 /**
  * Initialize the DOM elements.
  */
-async function initializeDom() {
+async function initializeDom(): Promise<void> {
 	loggingElement = document.querySelector("#logging");
 	codeElement = document.querySelector("#code");
 	const loggingContainer: HTMLDivElement | null = document.querySelector("#logging-container");
@@ -236,7 +236,7 @@ async function initializeDom() {
 /**
  * Initialize the listeners for the events from the notification center.
  */
-async function initializeListeners() {
+async function initializeListeners(): Promise<void> {
 	// Listen for new notifications being created
 	addNotificationEventListener("notification-created", (event) => {
 		loggingAddEntry(`Created: ${event.notification.id}`);
@@ -254,8 +254,10 @@ async function initializeListeners() {
 		}
 	});
 
-	addNotificationEventListener("notification-action", (event) => {
-		if (event?.result?.BODY_CLICK === "dismiss_event") {
+	addNotificationEventListener("notification-action", async (event) => {
+		if (event?.result?.actionId === "open-web-site") {
+			await fin.System.openUrlWithBrowser(event?.result?.url as string);
+		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
 			if (event.notification?.customData?.action) {
 				loggingAddEntry(
 					`\tData: ${
@@ -349,7 +351,7 @@ function showNotificationCount(count: number): void {
 /**
  * Display a very basic simple notification.
  */
-async function showSimpleNotification() {
+async function showSimpleNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification",
@@ -367,7 +369,7 @@ async function showSimpleNotification() {
 /**
  * Show a notification which can be dismissed by clicking on the body.
  */
-async function showSimpleNotificationBodyDismiss() {
+async function showSimpleNotificationBodyDismiss(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification that be dismissed by clicking the body",
@@ -386,7 +388,7 @@ async function showSimpleNotificationBodyDismiss() {
 /**
  * Show a notification which can be dismissed by clicking on the body and then trigger a custom action.
  */
-async function showSimpleNotificationBodyDismissAction() {
+async function showSimpleNotificationBodyDismissAction(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification that be dismissed by clicking the body and trigger custom action",
@@ -412,7 +414,7 @@ async function showSimpleNotificationBodyDismissAction() {
  * Show a notification which has action buttons, the events returned will
  * be handled the the notification-action listener.
  */
-async function showActionableNotification() {
+async function showActionableNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Actionable Notification",
 		body: "This is a notification that has an action",
@@ -448,7 +450,7 @@ async function showActionableNotification() {
  * Show a notification which has form fields, the data from the form will
  * be returned to the notification-form-submitted listener.
  */
-async function showFormNotification() {
+async function showFormNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Form Notification",
 		body: "This is a notification that has form data",
@@ -503,7 +505,7 @@ async function showFormNotification() {
 /**
  * Show a notification that can be updated.
  */
-async function showUpdatableNotification() {
+async function showUpdatableNotification(): Promise<void> {
 	const id = randomUUID();
 	const notification: NotificationOptions & { customData: { count: number } } = {
 		title: "Updatable Notification",
@@ -542,7 +544,7 @@ async function showUpdatableNotification() {
 /**
  * Show a notification with custom content.
  */
-async function showCustomNotification() {
+async function showCustomNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Custom Notification",
 		toast: "transient",
@@ -620,6 +622,22 @@ async function showCustomNotification() {
 											}
 										}
 									]
+								},
+								{
+									type: "image",
+									dataKey: "exampleImageUrl",
+									style: {
+										height: "100px"
+									}
+								},
+								{
+									type: "actionableText",
+									dataKey: "actionableUrlTitle",
+									tooltipKey: "actionableUrlTooltip",
+									onClick: {
+										actionId: "open-web-site",
+										url: "https://openfin.co"
+									}
 								},
 								{
 									type: "container",
@@ -743,7 +761,10 @@ async function showCustomNotification() {
 			d02: "250",
 			d10: "550",
 			d11: "650",
-			d12: "750"
+			d12: "750",
+			exampleImageUrl: "http://localhost:8080/images/example.png",
+			actionableUrlTitle: "OpenFin Website",
+			actionableUrlTooltip: "http://www.openfin.co"
 		}
 	};
 
@@ -755,7 +776,7 @@ async function showCustomNotification() {
  * Show a notification and play a sound with it.
  * @param notificationSoundUrl The url of the sounds file to play.
  */
-async function showSoundNotification(notificationSoundUrl: string) {
+async function showSoundNotification(notificationSoundUrl: string): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Sound Notification",
 		body: "This is a notification with sound 🔉",
@@ -774,7 +795,7 @@ async function showSoundNotification(notificationSoundUrl: string) {
 /**
  * Display a notification that has an indicator bar on the left.
  */
-async function showIndicatorNotification() {
+async function showIndicatorNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Indicator Notification",
 		toast: "transient",
@@ -825,7 +846,7 @@ async function showIndicatorNotification() {
  * Play a sound.
  * @param notificationSoundUrl The url of the notification to play.
  */
-async function playNotification(notificationSoundUrl: string) {
+async function playNotification(notificationSoundUrl: string): Promise<void> {
 	const audio = new Audio(notificationSoundUrl);
 	await audio.play();
 }
@@ -834,7 +855,7 @@ async function playNotification(notificationSoundUrl: string) {
  * Add a listener which checks for the connection changed event.
  * @param callback The callback to call when the connection state changes.
  */
-function addConnectionChangedEventListener(callback: (status: provider.ProviderStatus) => void) {
+function addConnectionChangedEventListener(callback: (status: provider.ProviderStatus) => void): void {
 	if (statusIntervalId === undefined) {
 		statusIntervalId = window.setInterval(async () => {
 			const status = await provider.getStatus();
@@ -858,10 +879,18 @@ function randomUUID(): string {
 	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
 	// we are still using window.crypto.getRandomValues which is always available
 	// https://stackoverflow.com/a/2117523/2800218
-	const getRandomHex = (c: string): string =>
-		// eslint-disable-next-line no-bitwise, no-mixed-operators
-		(Number(c) ^ (window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4)))).toString(
-			16
+	/**
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
+	 */
+	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		return (
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
 		);
+	}
 	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }

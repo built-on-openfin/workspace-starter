@@ -42,7 +42,7 @@ describe('Register with Home', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('30.110.74.13');
+		expect(version).to.equal('31.112.75.4');
 	});
 
 	it('The identity should be set', async () => {
@@ -57,7 +57,7 @@ describe('Register with Home', () => {
 	});
 
 	it('Can launch notification center in a security realm', async () => {
-		const launched = await OpenFinNotifications.launchInSecurityRealm('');
+		const launched = await OpenFinNotifications.launch();
 		expect(launched).to.equal(true);
 
 		if (launched) {

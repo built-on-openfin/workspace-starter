@@ -12,7 +12,7 @@ OpenFin Workspace lets you customize the styling of the browser windows, you can
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Platform Windows](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fregister-with-platform-windows%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Platform Windows](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fregister-with-platform-windows%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -61,7 +61,7 @@ The behavior is the same as the [Register With Home Basic Sample](../register-wi
 The platform api specific code:
 
 - [platform.ts](client/src/platform.ts) - specifying null for browser when initialing your platform against workspace so that the default workspace browser component is not used.
-- [manifest.fin.json](public/manifest.fin.json) - if you look at the **defaultWindowOptions** within the platform configuration you will see that the url is specified as: "url": "http://localhost:8080/windows/platform-window.html". This is how an existing platform app would define a custom template to use to host the layout system. This page is used every time you launch a view from home or the store component. **This is optional. If you do not want a custom template then you can remove this url setting from the defaultWindowOptions setting**.
+- [manifest.fin.json](public/manifest.fin.json) - if you look at the **defaultWindowOptions** within the platform configuration you will see that the url is specified as: `"url": "http://localhost:8080/windows/platform-window.html"`. This is how an existing platform app would define a custom template to use to host the layout system. This page is used every time you launch a view from home or the store component. **This is optional. If you do not want a custom template then you can remove this url setting from the defaultWindowOptions setting**.
 - [platform-window.html](public/windows/platform-window.html) - this is the html template where you specify your custom html. It is important to include a hook for our layout system (see layout-container within the html). You can see that it brings in two scripts.
   - [platform-window.ts](client/src/platform-window.ts) - this file binds to the buttons for closing, minimizing and maximizing your custom window
   - [public/lib/wc-fin/wc-fin.esm.js](public/lib/wc-fin/wc-fin.esm.js) - this is a script that registers a web component that is used in the html template: `<fin-context-group-picker show-list-on-click="false" ></fin-context-group-picker>`. The web component is an example of a context group picker that will assign a context group to every view in the window. The picker is an example which can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin) and the settings for this particular component can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker)

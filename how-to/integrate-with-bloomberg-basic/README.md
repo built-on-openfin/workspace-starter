@@ -42,7 +42,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -65,9 +65,9 @@ npm run client
 
 ```
 
-### Please note: In the manifest.json file, please change "http://localhost:8080" under snapshot/windows/layout/content to point to your domain
+### Please note: In the manifest.json file, please change `http://localhost:8080` under snapshot/windows/layout/content to point to your domain
 
-"url": "http://localhost:8080/platform/bbgtest.html",
+`"url": "http://localhost:8080/platform/bbgtest.html"`
 
 ### Please also note that you must establish a connection to the Bloomberg Terminal and verify that you receive the "connected" message prior to raising any intents. You may connect to the Bloomberg Terminal via the "Connect to Bloomberg Terminal" button
 

@@ -14,7 +14,7 @@ This application you are about to install is a simple example of plugging in you
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Home](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fregister-with-home%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Home](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fregister-with-home%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -47,7 +47,7 @@ npm run client
 ```
 
 5. Type any character into the search box to show the default list of Applications.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
+   The [apps](./public/common/) apps\*.json files are displayed as described in their respective files (OpenFin Home is not reading this rest point directly it is being read by the Workspace Platform app and passed to Home via our API).
 
 6. Build the project if you have changed the code.
 
@@ -65,13 +65,13 @@ This is a headless application. If you wish to debug it then you can update the 
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
-- [A list of applications](../common/public/apps.json)
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](./public/common/dos.json)
+- [A list of applications](./public/common/) apps\*.json
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](../common/public/apps.json) contains a number of examples:
+The [list of applications](../public/common/) apps\*.json contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin Application using it's manifest file
@@ -104,7 +104,7 @@ The **home provider** ([home.ts](client/src/home.ts)) imports the following:
 The registration of a provider against home will look like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
@@ -112,7 +112,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method reads the `customSettings` section of your [manifest file](public/manifest.fin.json):
@@ -162,7 +162,7 @@ The [launch.ts](client/src/launch.ts) file imports [OpenFin's Workspace NPM Modu
 The registration of a provider against home will look like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
@@ -170,7 +170,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 ### Note About This Example

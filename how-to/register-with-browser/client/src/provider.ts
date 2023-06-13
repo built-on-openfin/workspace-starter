@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { CustomActionPayload } from "@openfin/workspace-platform";
+import type { CustomActionPayload, WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import {
 	CustomActionCallerType,
 	GlobalContextMenuOptionType,
@@ -16,25 +16,24 @@ import {
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
 	type Workspace,
-	type WorkspacePlatformModule,
-	type WorkspacePlatformOverrideCallback
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { CustomSettings } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
-
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => platformBootstrap());
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
+	// Load the settings from the manifest
+	const customSettings = await getManifestCustomSettings();
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform(customSettings);
 
 	// If we have launch bar settings then open the window
-	// The content is from launch-bar.html and is driven by launchbar.ts
+	// The content is from launch-bar.html and is driven by launch-bar.ts
 	if (customSettings.launchBarWindowSettings) {
 		await fin.Window.create(customSettings.launchBarWindowSettings);
 	}
@@ -45,7 +44,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -77,8 +76,8 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 /**
  * Bring the platform to life.
  */
-export async function platformBootstrap(): Promise<void> {
-	console.log("Initialising the bootstrapper");
+async function initializeWorkspaceComponents(): Promise<void> {
+	console.log("Initializing the workspace components");
 
 	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
@@ -88,10 +87,10 @@ export async function platformBootstrap(): Promise<void> {
 }
 
 /**
- * Read the custom settings from the manifest.fin.json
+ * Read the custom settings from the manifest.fin.json.
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
 
@@ -172,6 +171,17 @@ function getCustomActions(): CustomActionsMap {
 	};
 }
 
+/**
+ * Show a popup window.
+ * @param dimensions The dimensions of the popup window.
+ * @param dimensions.width The window width.
+ * @param dimensions.height The window height.
+ * @param parentIdentity The parent window to be relative to.
+ * @param title The title of the window.
+ * @param instructions The instructions for the window.
+ * @param buttons The buttons for the window.
+ * @returns The result of the window.
+ */
 async function showPopup(
 	dimensions: { width: number; height: number },
 	parentIdentity: OpenFin.Identity,
@@ -222,7 +232,14 @@ async function showPopup(
 	}
 }
 
-export const overrideCallback: WorkspacePlatformOverrideCallback = async (WorkspacePlatformProvider) => {
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @returns The overridden class.
+ */
+function overrideCallback(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
@@ -338,7 +355,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 		/**
 		 * Implementation for showing a global context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -398,7 +415,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 		/**
 		 * Implementation for showing a view tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -418,7 +435,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 
 		/**
 		 * Implementation for showing a page tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -437,7 +454,7 @@ export const overrideCallback: WorkspacePlatformOverrideCallback = async (Worksp
 		}
 	}
 	return new Override();
-};
+}
 
 /**
  * Polyfills randomUUID if running in a non-secure context.
@@ -451,10 +468,18 @@ function randomUUID(): string {
 	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
 	// we are still using window.crypto.getRandomValues which is always available
 	// https://stackoverflow.com/a/2117523/2800218
-	const getRandomHex = (c: string): string =>
-		// eslint-disable-next-line no-bitwise, no-mixed-operators
-		(Number(c) ^ (window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4)))).toString(
-			16
+	/**
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
+	 */
+	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		return (
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
 		);
+	}
 	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }

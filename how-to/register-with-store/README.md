@@ -16,7 +16,7 @@ This application also shows you how to use the new @openfin/workspace-platform n
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Store](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fregister-with-store%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Store](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fregister-with-store%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -26,7 +26,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -55,7 +55,7 @@ npm run build
 ```
 
 6. Storefront will be shown and your store will be listed.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
+   The [apps](./public/common/) apps\*.json are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 ![Register with Storefront](openfin-register-with-store-storefront.gif)
 
@@ -63,13 +63,13 @@ npm run build
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](../common/public/dos.json)
-- [A list of applications](../common/public/apps.json)
+- [A Desktop Owner Settings file](./public/common/dos.json)
+- [A list of applications](./public/common/) apps\*.json
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](../common/public/apps.json) contains a number of examples:
+The [list of applications](./public/common/) apps\*.json contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin application using its manifest file
@@ -145,7 +145,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
           "tags": ["hero"]
         },
         "image": {
-          "src": "http://localhost:8080/common/images/superhero-unsplash.jpg"
+          "src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
         }
       },
       "topRow": {
@@ -155,7 +155,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Expero",
             "description": "A collection of example views from Expero showing the power of interop and context sharing.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
             },
             "tags": ["expero"]
           },
@@ -163,7 +163,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Dev Tools",
             "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
             },
             "tags": ["tools"]
           },
@@ -171,7 +171,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Learning Resource",
             "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-3-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
             },
             "tags": ["page"]
           }
@@ -188,7 +188,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Views",
             "description": "A collection of views made available through our catalog.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
             },
             "tags": ["view"]
           },
@@ -196,7 +196,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Web Apps",
             "description": "A collection of web apps built using OpenFin.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
             },
             "tags": ["manifest"]
           },
@@ -204,7 +204,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
             "title": "Native Apps",
             "description": "A collection of native apps made available through our catalog.",
             "image": {
-              "src": "http://localhost:8080/common/images/coding-6-unsplash.jpg"
+              "src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
             },
             "tags": ["native"]
           }
@@ -306,7 +306,7 @@ When a user selects a result in OpenFin Home, it is returned to the search provi
 
 The [app.ts](client/src/app.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
 
-The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps.json](../common/public/apps.json) file (simulating your server) will populate both.
+The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps\*.json](../public/common/) file (simulating your server) will populate both.
 
 ### Note About This Example
 

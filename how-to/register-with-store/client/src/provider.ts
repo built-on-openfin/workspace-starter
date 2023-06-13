@@ -5,12 +5,12 @@ import type { CustomSettings } from "./shapes";
 import { deregister, register, storeGetCustomActions } from "./store";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
-
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => platformBootstrap(customSettings));
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
+
+	// Load the settings from the manifest
+	const customSettings = await getManifestCustomSettings();
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -56,8 +56,8 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * Bring the platform to life.
  * @param customSettings The custom settings from the manifest.
  */
-export async function platformBootstrap(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising the bootstrapper");
+async function initializeWorkspaceComponents(customSettings: CustomSettings): Promise<void> {
+	console.log("Initializing the workspace components");
 
 	// Register with store and show it
 	await register(customSettings.appProvider, customSettings.storefrontProvider);
@@ -75,7 +75,7 @@ export async function platformBootstrap(customSettings: CustomSettings): Promise
  * Read the custom settings from the manifest.fin.json.
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
 

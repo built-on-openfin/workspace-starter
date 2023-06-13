@@ -1,0 +1,12 @@
+{
+	"url": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
+	"fdc3InteropApi": "1.2",
+	"interop": {
+		"currentContextGroup": "green"
+	},
+	"preloadScripts": [
+		{
+			"url": "http://localhost:8080/common/style/style-changed-preload.js"
+		}
+	]
+}

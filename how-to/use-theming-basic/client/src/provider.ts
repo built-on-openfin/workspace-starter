@@ -1,48 +1,45 @@
-import type { Context } from "@openfin/core/src/OpenFin";
-import { Home } from "@openfin/workspace";
+import type OpenFin from "@openfin/core";
+import { CLITemplate, Home, type App } from "@openfin/workspace";
 import {
 	ColorSchemeOptionType,
 	getCurrentSync,
 	init,
-	type CustomThemeOptionsWithScheme
+	type CustomThemeOptionsWithScheme,
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import { register } from "./home";
+import { getApps, launchApp } from "./apps";
 
 const PLATFORM_ID = "use-theming-basic";
 const PLATFORM_TITLE = "Use Theming Basic";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// When the platform api is ready we bootstrap the platform.
+	const platform = getCurrentSync();
+	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(PLATFORM_ICON);
-
-	// Register the home component
-	await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON);
-
-	// Show the home component
-	await Home.show();
+	await initializeWorkspacePlatform();
 
 	// Now that the platform has initialized get the initial state
 	// of the theme and update the style preload channel with it
-	const platform = getCurrentSync();
 	const schemeType = await platform.Theme.getSelectedScheme();
 	await updateViewTheme(schemeType);
 });
 
 /**
  * Initialize the workspace platform.
- * @param icon The icon to use in windows.
  */
-async function initializeWorkspacePlatform(icon: string): Promise<void> {
-	console.log("Initialising workspace platform");
+async function initializeWorkspacePlatform(): Promise<void> {
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
-				icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -110,27 +107,75 @@ async function initializeWorkspacePlatform(icon: string): Promise<void> {
 				}
 			}
 		],
-		overrideCallback: async (WorkspacePlatformProvider) => {
-			/**
-			 * Override the platform methods so that we can intercept the
-			 * color scheme changing.
-			 */
-			class Override extends WorkspacePlatformProvider {
-				/**
-				 * The color scheme was changed.
-				 * @param schemeType The scheme it was changed to.
-				 * @returns Nothing.
-				 */
-				public async setSelectedScheme(schemeType: ColorSchemeOptionType) {
-					// Override the platform callback to we can detect the theme has changed
-					// and send this information to all the views with the preload script.
-					await updateViewTheme(schemeType);
-					return super.setSelectedScheme(schemeType);
-				}
-			}
-			return new Override();
+		// Override some platform methods so we can be notified of the color scheme changing
+		overrideCallback
+	});
+}
+
+/**
+ * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ */
+async function initializeWorkspaceComponents(): Promise<void> {
+	await Home.register({
+		title: PLATFORM_TITLE,
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		onUserInput: async () => ({
+			// Always return just the apps list in home
+			results: getApps().map((app) => ({
+				key: app.appId,
+				title: app.title,
+				icon: app.icons[0]?.src,
+				data: app,
+				label: "View",
+				actions: [{ name: "Launch View", hotkey: "enter" }],
+				description: app.description,
+				shortDescription: app.description,
+				template: CLITemplate.SimpleText,
+				templateContent: app.description
+			}))
+		}),
+		onResultDispatch: async (result) => {
+			// We only have apps, so just launch them
+			await launchApp(result.data as App);
 		}
 	});
+
+	await Home.show();
+
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async (event) => {
+		await Home.deregister(PLATFORM_ID);
+		await fin.Platform.getCurrentSync().quit();
+	});
+}
+
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @returns The overridden class.
+ */
+function overrideCallback(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
+	/**
+	 * Override the platform methods so that we can intercept the
+	 * color scheme changing.
+	 */
+	class Override extends WorkspacePlatformProvider {
+		/**
+		 * The color scheme was changed.
+		 * @param schemeType The scheme it was changed to.
+		 * @returns Nothing.
+		 */
+		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
+			// Override the platform callback to we can detect the theme has changed
+			// and send this information to all the views with the preload script.
+			await updateViewTheme(schemeType);
+			return super.setSelectedScheme(schemeType);
+		}
+	}
+	return new Override();
 }
 
 /**
@@ -160,7 +205,7 @@ async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void>
 		type: "platform.theme",
 		schemeType: scheme,
 		palette: currentPalette
-	} as Context);
+	} as OpenFin.Context);
 }
 
 /**

@@ -1,4 +1,41 @@
 {
-	"cSpell.words": ["actioned", "appasset", "templating"],
-	"files.eol": "\n"
+	"cSpell.words": [
+		"actioned",
+		"appasset",
+		"bootstrapper",
+		"closedown",
+		"companyname",
+		"Contoso",
+		"csstype",
+		"favicons",
+		"finos",
+		"interopbroker",
+		"libor",
+		"maximizable",
+		"minimizable",
+		"Northwind",
+		"openfin",
+		"qlaunch",
+		"templating"
+	],
+	"cSpell.ignorePaths": ["**/.eslintrc.js", "**/settings.json", "**/package.json"],
+	"files.eol": "\n",
+	"json.schemas": [
+		{
+			"fileMatch": ["/apps.json", "/*.apps.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/platform-apps.schema.json"
+		},
+		{
+			"fileMatch": ["/*.view.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/view.schema.json"
+		},
+		{
+			"fileMatch": ["/*.window.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/window.schema.json"
+		},
+		{
+			"fileMatch": ["/*.snapshot.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/snapshot.schema.json"
+		}
+	]
 }

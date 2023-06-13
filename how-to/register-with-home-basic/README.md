@@ -14,7 +14,7 @@ This example has a hard-coded list of apps that is returned from [apps.ts](clien
 The registration of a provider against Home looks like the following:
 
 ```javascript
-const cliProvider: CLIProvider = {
+const homeProvider: HomeProvider = {
   title: 'title',
   id: 'id',
   icon: 'http://pathto/icon',
@@ -22,7 +22,7 @@ const cliProvider: CLIProvider = {
   onResultDispatch: onSelection
 };
 
-await Home.register(cliProvider);
+await Home.register(homeProvider);
 ```
 
 The example is a basic workspace platform that shows a UI allowing you to register against Home, show/hide Home and unregister the provider. No Storefront provider is registered or launched in this example (unless it is already running and has been registered by another application).
@@ -35,7 +35,7 @@ The example is a basic workspace platform that shows a UI allowing you to regist
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -63,7 +63,7 @@ npm run client
 6. If you modify the project and wish to rebuild you can run setup again or the build command below:
 
 ```shell
-npm run build
+npm run build-client
 ```
 
 ![Register With Home Basic](openfin-register-with-home-basic.gif)

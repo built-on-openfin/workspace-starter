@@ -1,0 +1,182 @@
+{
+	"$schema": "./schemas/fdc3v2.0-appd.schema.json",
+	"applications": [
+		{
+			"appId": "fdc3-intent-view-2-0",
+			"name": "fdc3-intent-view-2-0",
+			"title": "Intents using FDC3 (2.0)",
+			"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 api.",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "Intents using FDC3",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-intents-fdc3.png",
+					"label": "Intents using FDC3"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "other",
+			"details": {},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"StartCall": {
+							"displayName": "Start a Call",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						"StartChat": {
+							"displayName": "Start a Chat",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						"ViewChart": {
+							"displayName": "View Chart",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+						},
+						"ViewContact": {
+							"displayName": "View Contact Details",
+							"contexts": ["fdc3.contact"]
+						},
+						"ViewQuote": {
+							"displayName": "View Quote",
+							"contexts": ["fdc3.instrument"]
+						},
+						"ViewNews": {
+							"displayName": "View News",
+							"contexts": [
+								"fdc3.country",
+								"fdc3.instrument",
+								"fdc3.instrumentList",
+								"fdc3.organization",
+								"fdc3.portfolio"
+							]
+						},
+						"ViewAnalysis": {
+							"displayName": "View Analysis",
+							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+						},
+						"ViewInstrument": {
+							"displayName": "View Instrument",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList"]
+						}
+					}
+				},
+				"userChannels": {},
+				"appChannels": []
+			},
+			"hostManifests": {
+				"OpenFin": {
+					"type": "view",
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
+				}
+			}
+		},
+		{
+			"appId": "fdc3-context-view-2-0",
+			"name": "fdc3-context-view-2-0",
+			"title": "Context using FDC3 (2.0)",
+			"description": "This view allows you to experiment with the broadcasting and listening of contexts using the fdc3 api.",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "Context using FDC3",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-context-fdc3.png",
+					"label": "Contexts using FDC3"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "other",
+			"details": {
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+			},
+			"interop": {},
+			"hostManifests": {
+				"OpenFin": {
+					"type": "view",
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
+				}
+			}
+		},
+		{
+			"appId": "fdc3-workbench-2-0",
+			"name": "fdc3-workbench-2-0",
+			"title": "FDC3 Workbench (2.0)",
+			"description": "Development and test tool for FDC3 desktop agents and apps",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "FDC3 Workbench",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "http://localhost:8080/common/images/previews/fdc3-workbench-2-0.png"
+				}
+			],
+			"contactEmail": "fdc3@finos.org,",
+			"supportEmail": "fdc3-maintainers@finos.org,",
+			"publisher": "FDC3",
+			"type": "other",
+			"details": {},
+			"hostManifests": {
+				"OpenFin": {
+					"type": "view",
+					"details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
+				}
+			},
+			"localizedVersions": {
+				"fr-FR": {
+					"title": "FDC3 Table de travail",
+					"description": "Outil de développement et de test pour les desktop agents et applications FDC3"
+				}
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewContact": {
+							"displayName": "View Contact",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						"ViewInstrument": {
+							"displayName": "View Instrument",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList"]
+						}
+					}
+				},
+				"userChannels": {
+					"broadcasts": ["fdc3.instrument"],
+					"listensFor": [
+						"fdc3.instrument",
+						"fdc3.instrumentList",
+						"fdc3.position",
+						"fdc3.portfolio",
+						"fdc3.chart",
+						"fdc3.timeRange"
+					]
+				},
+				"appChannels": []
+			}
+		}
+	],
+	"message": "OK"
+}

@@ -1,0 +1,53 @@
+[
+	{
+		"appId": "winform-interop-example",
+		"name": "OpenFin Winform Interop Example",
+		"title": "OpenFin Winform Interop Example",
+		"description": "A Winform application built in .NET 5 that shows the power of our interop api.",
+		"manifestType": "inline-appasset",
+		"manifest": {
+			"alias": "winform-interop-example",
+			"version": "3.0.2",
+			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"target": "OpenFin.Interop.Win.Sample.exe"
+		},
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/native/icon-winform-interop.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/native/openfin-winform-interop.png"
+			}
+		],
+		"tags": ["native", "appasset", "dock", "developer"]
+	},
+	{
+		"appId": "Notepad",
+		"name": "Notepad",
+		"title": "Notepad",
+		"description": "Open Notepad and start taking some quick notes.",
+		"manifestType": "external",
+		"manifest": "notepad.exe",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/native/icon-notepad.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/native/microsoft-notepad-native.png"
+			}
+		],
+		"tags": ["native", "dock"]
+	}
+]

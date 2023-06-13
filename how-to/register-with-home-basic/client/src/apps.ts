@@ -6,7 +6,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * Get the list of apps to display.
  * @returns List of app definitions.
  */
-export async function getApps(): Promise<App[]> {
+export function getApps(): App[] {
 	return [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
 }
 
@@ -17,7 +17,7 @@ const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
 	description: "Display information about the OpenFin environment",
-	manifest: "http://localhost:8080/common/views/platform/of-info.json",
+	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
@@ -33,13 +33,13 @@ const OPENFIN_INFORMATION_APP: App = {
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin"]
+	tags: ["view", "openfin", "versions"]
 };
 
 /**
  * App definition for the Expero labs news gateway.
  */
-export const EXPERO_APP: App = {
+const EXPERO_APP: App = {
 	appId: "expero-company-news",
 	title: "Gateway - Company News",
 	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
@@ -64,7 +64,7 @@ export const EXPERO_APP: App = {
 /**
  * App definition for the OpenFin Notification Process Manager development tool.
  */
-export const PROCESS_MANAGER: App = {
+const PROCESS_MANAGER: App = {
 	appId: "openfin-process-manager",
 	title: "OpenFin Process Manager",
 	manifestType: "manifest",
@@ -87,13 +87,13 @@ export const PROCESS_MANAGER: App = {
 /**
  * App definition for a snapshot which includes development resources for OpenFin.
  */
-export const DEVELOPER_CONTENT: App = {
+const DEVELOPER_CONTENT: App = {
 	appId: "openfin-developer-page",
 	title: "OpenFin Developer Docs",
 	manifestType: "snapshot",
 	description:
 		"Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
-	manifest: "http://localhost:8080/common/snapshots/snapshot.json",
+	manifest: "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
 	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",

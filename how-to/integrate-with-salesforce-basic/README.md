@@ -13,7 +13,7 @@ The integration package utilized by this example is [@openfin/salesforce](https:
 
 For more information on the Salesforce integration package and how you should configure your Salesforce platform to be accessible from the OpenFin integration package see [Salesforce Integration](https://developers.openfin.co/of-docs/docs/salesforce-integration).
 
-When you have finished configuring your Salesforce platform for access by the integration you should modify `settings.ts` to include your `CONSUMER_KEY` and `ORG_URL`
+When you have finished configuring your Salesforce platform for access by the integration you should modify `provider.ts` to include your `CONSUMER_KEY` and `ORG_URL`
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ When you have finished configuring your Salesforce platform for access by the in
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 

@@ -11,10 +11,10 @@ jobs:
           node-version: '19'
           registry-url: 'https://registry.npmjs.org'
       - run: npm run setup
-        working-directory: ./how-to/customize-workspace
+        working-directory: ./how-to/workspace-platform-starter
       - run: NAME=@openfin/default-workspace-platform npm run prepare-package
-        working-directory: ./how-to/customize-workspace
+        working-directory: ./how-to/workspace-platform-starter
       - run: npm publish --access restricted
-        working-directory: ./how-to/customize-workspace/packaged
+        working-directory: ./how-to/workspace-platform-starter/packaged
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,221 @@
+[
+	{
+		"appId": "view-contact-dashboard-launcher",
+		"name": "view-contact-dashboard-launcher",
+		"title": "View Contact Dashboard",
+		"description": "A hidden window that acts as an intent target and launches and snapshot and optionally publishes a context object to a specific context group",
+		"manifest": {
+			"name": "view-contact-dashboard-launcher",
+			"url": "http://localhost:8080/common/windows/intent-window/intent-snapshot-launcher.html",
+			"autoShow": false,
+			"includeInSnapshots": false,
+			"customData": {
+				"settings": {
+					"snapshotUrl": "http://localhost:8080/common/snapshots/template-contact-dashboard.snapshot.fin.json",
+					"contextGroupName": "*",
+					"contextGroupToken": "{CONTEXT_GROUP}",
+					"intentName": "ViewContact",
+					"idToken": "{ID}",
+					"idName": "email"
+				}
+			}
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"private": true,
+		"instanceMode": "single",
+		"customConfig": {},
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/view-contact-dashboard-launcher.png"
+			}
+		],
+		"tags": ["window", "fdc3", "interop", "contact"]
+	},
+	{
+		"appId": "starter-style-guide",
+		"name": "starter-style-guide",
+		"title": "Starter Style Guide",
+		"description": "A style guide used to aid in the building of workspace starter samples.",
+		"manifest": "http://localhost:8080/common/style/style-view.json",
+		"manifestType": "view",
+		"icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/starter-style-guide.png"
+			}
+		],
+		"tags": ["view", "style", "tools"]
+	},
+	{
+		"appId": "openfin-versions-workspace",
+		"name": "openfin-versions-workspace",
+		"title": "OpenFin Versions - Workspace",
+		"description": "Launch the OpenFin Workspace Versions page. This launches the url as a view to demonstrate the capability. This is an example of a inline-view entry in the app catalog.",
+		"manifest": {
+			"url": "https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace",
+			"name": "openfin-versions"
+		},
+		"manifestType": "inline-view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["versions", "view"]
+	},
+	{
+		"appId": "openfin-versions-runtime",
+		"name": "openfin-versions-runtime",
+		"title": "OpenFin Versions - Runtime",
+		"description": "Launch the OpenFin Runtime Versions page. This launches in a classic window to demonstrate the capability. This is a example of an inline-window entry in the app catalog.",
+		"manifest": {
+			"url": "https://developer.openfin.co/versions/?product=Runtime"
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["versions", "window"]
+	},
+	{
+		"appId": "openfin-versions-integrations",
+		"name": "openfin-versions-integrations",
+		"title": "OpenFin Versions - Integrations",
+		"description": "Launch the OpenFin Integrations Versions page. This launches the url into the desktop browser to demonstrate the capability. This is an example of a desktop-browser entry in the app catalog.",
+		"manifest": "https://developer.openfin.co/versions/?product=Runtime#/?product=Integrations",
+		"manifestType": "desktop-browser",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["versions", "desktop-browser"]
+	},
+	{
+		"appId": "openfin-information",
+		"name": "openfin-information",
+		"title": "OpenFin Information",
+		"description": "Display information about the OpenFin environment",
+		"manifest": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/of-info.png"
+			}
+		],
+		"tags": ["view", "openfin", "versions"]
+	},
+	{
+		"appId": "openfin-developer-page",
+		"name": "openfin-developer-page",
+		"title": "OpenFin Developer Docs",
+		"manifestType": "snapshot",
+		"description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
+		"manifest": "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/openfin-page-docs.png"
+			}
+		],
+		"tags": ["page", "developer"]
+	},
+	{
+		"appId": "hidden-window-example",
+		"name": "hidden-window-example",
+		"title": "Hidden/Headless Window Example",
+		"manifestType": "window",
+		"description": "An example of launching a window that will not be captured as part of a saved workspace and will run headless in the background. This window generates a notification to show that it can be a window with a specific purpose (listening for notifications to create). The notification lets you show or close the hidden window. Only one instance can be running at a time. This window could be launched as part of your bootstrapping logic or in reaction to a particular event. It is listed in home as a way of launching the example.",
+		"manifest": "http://localhost:8080/common/windows/hidden-window/hidden.window.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["window", "headless", "developer"]
+	},
+	{
+		"appId": "irs-rfq",
+		"name": "irs-rfq",
+		"title": "IRS: Request For Quote",
+		"description": "Request for quote for Interest Rate Swaps.",
+		"manifest": "http://localhost:8080/common/windows/irs-rfq/irs-rfq.window.fin.json",
+		"manifestType": "window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "http://localhost:8080/common/images/previews/irs-rfq.png"
+			},
+			{
+				"src": "http://localhost:8080/common/images/previews/irs-rfq-notification1.png"
+			}
+		],
+		"tags": ["view", "irs", "finance"]
+	}
+]
