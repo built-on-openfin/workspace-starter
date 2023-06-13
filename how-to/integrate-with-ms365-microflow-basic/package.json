@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-microflows-basic",
-	"version": "13.1.0",
+	"version": "next",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 Microflows - Basic",
 	"main": "index.js",
 	"scripts": {

@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-wdio",
-	"version": "13.1.0",
+	"version": "next",
 	"scripts": {
 		"build": "echo Nothing to build",
 		"test": "wdio run wdio.conf.js",

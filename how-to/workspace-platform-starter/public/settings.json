@@ -1131,7 +1131,7 @@
 	"versionProvider": {
 		"appVersion": "1.0.0",
 		"minVersion": {
-			"workspace": "13.1.0"
+			"workspace": "next"
 		},
 		"versionWindow": {
 			"name": "versioning",
