@@ -30,7 +30,52 @@ export async function loadData(filename) {
  * @returns The team data.
  */
 export async function loadTeamData() {
-	return loadData('team.json');
+	const teamData = await loadData('team.json');
+	const updatedTeamMembers = [];
+	// For each teamMember, randomize some dates for them.
+	for (const member of teamData) {
+		const updated = member;
+		const approvedDays = member.leave.approved;
+		const awaitingDays = member.leave.awaitingApproval;
+		updated.leave.approved = modifyDates(approvedDays);
+		updated.leave.awaitingApproval = modifyDates(awaitingDays);
+		updated.leave.lastUpdated = new Date();
+		updatedTeamMembers.push(updated);
+	}
+	return updatedTeamMembers;
+}
+
+function modifyDates(dateArray) {
+	const newDates = [];
+	let lastRandDay = 0;
+	let lastRandMonth = 0;
+	for (let i = 0; i < dateArray.length; i++) {
+		const referenceDate = new Date();
+		const thisYear = referenceDate.getFullYear(); // Should be the current year.
+		const thisMonth = referenceDate.getMonth(); // Should be the current year.
+		const newMonthToUse = thisMonth + getRandomNum(2); // This month, +/- 1-2 months for variablility
+		const newDayToUse = getRandomNum(26); // A random number from 1-26
+		let newDateString = `${thisYear}-${zeroPadding(newMonthToUse)}-${zeroPadding(newDayToUse)}`;
+		if (dateArray.length > 4 && i > 3) {
+			// If there are more than 4 days in the array and we're on the 4th element, start making the days consecutive.
+			if (lastRandDay === 0 && lastRandMonth === 0) {
+				lastRandDay = newDayToUse;
+				lastRandMonth = newMonthToUse;
+			}
+			lastRandDay++;
+			newDateString = `${thisYear}-${zeroPadding(lastRandMonth)}-${zeroPadding(lastRandDay)}`;
+		}
+		newDates.push(newDateString);
+	}
+	return newDates;
+}
+
+function getRandomNum(upperBound) {
+	return Math.floor(Math.random() * upperBound) + 1;
+}
+
+function zeroPadding(num) {
+	return String(num).padStart(2, '0');
 }
 
 /**
