@@ -136,19 +136,19 @@
 				"enabled": true,
 				"title": "Local Storage",
 				"id": "local-storage",
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoints/local-storage.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoint/local-storage.bundle.js"
 			},
 			{
 				"enabled": true,
 				"id": "example-connection-validation",
 				"title": "Example Connection Validation",
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoints/example.connection.validation.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoint/example.connection.validation.bundle.js"
 			},
 			{
 				"enabled": true,
 				"id": "context-processor",
 				"title": "Example Context Processor",
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoints/example.context.processor.bundle.js"
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/endpoint/example.context.processor.bundle.js"
 			}
 		],
 		"endpoints": [
