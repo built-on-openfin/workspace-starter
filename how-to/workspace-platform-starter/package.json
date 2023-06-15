@@ -13,6 +13,7 @@
 		"build-client": "npm run prebuild-client && npm run build-client-parallel",
 		"build-client-parallel": "node scripts/webpack-parallel.mjs ./client/webpack.config.js",
 		"build-client-serial": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build-templates": "webpack build --config ./templates/webpack.config.js --mode=development",
 		"start": "npm run server",
 		"client": "node ./scripts/launch.mjs",
 		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
@@ -30,7 +31,8 @@
 		"generate-window-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
 		"generate-snapshot-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
-		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME"
+		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
+		"generate-module": "node ./templates/scripts/generate-module.mjs"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [

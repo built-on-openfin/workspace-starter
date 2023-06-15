@@ -112,7 +112,7 @@ export interface StorefrontSettingsNavigationItem {
 	 * new page and the re-requested navigation item has a different ID then the store will not be able to find a match
 	 * and it won't be able to render the navigation item.
 	 */
-	id: string;
+	id?: string;
 	/**
 	 * The title for the navigation item
 	 */
@@ -125,6 +125,12 @@ export interface StorefrontSettingsNavigationItem {
 	tags: string[];
 }
 /**
+ * Extends the row navigation item.
+ */
+export interface StorefrontSettingsRowNavigationItem
+	extends StorefrontSettingsNavigationItem,
+		StorefrontNavigationItemDetails {}
+/**
  * Landing page row containing title and items.
  */
 export interface StorefrontSettingsLandingPageRow {
@@ -135,5 +141,5 @@ export interface StorefrontSettingsLandingPageRow {
 	/**
 	 * The items in the row.
 	 */
-	items: (StorefrontSettingsNavigationItem & StorefrontNavigationItemDetails)[];
+	items: StorefrontSettingsRowNavigationItem[];
 }

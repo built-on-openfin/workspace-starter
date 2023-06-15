@@ -158,7 +158,7 @@ The settings are as follows:
 await _connectionService.DispatchAsync("disconnect");
 ```
 
-- **connectionValidationEndpoint**: This is the id of an endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) that will be used to validate the identity and payload of a connecting client (see [example connection validation endpoint module](../client/src/modules/endpoints/example-connection-validation/endpoint.ts) that is loaded but always returns true).
+- **connectionValidationEndpoint**: This is the id of an endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) that will be used to validate the identity and payload of a connecting client (see [example connection validation endpoint module](../client/src/modules/endpoint/example-connection-validation/endpoint.ts) that is loaded but always returns true).
 - **supportedActions**: An array of default supported actions.
 - **connections**: An array of connections your platform supports (as you can see in the example above we have added an entry for workspace platform view/window connections and an entry to allow all other connections but require payload verification).
 
@@ -168,6 +168,6 @@ await _connectionService.DispatchAsync("disconnect");
 
 ## Example of an Endpoint that accepts a Connection Payload (always returns true, not for production use)
 
-- [example-connection-validation](../client/src/modules/endpoints/example-connection-validation/endpoint.ts)
+- [example-connection-validation](../client/src/modules/endpoint/example-connection-validation/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)

@@ -37,7 +37,7 @@ Endpoints are defined via settings and the endpointProvider:
    {
     "enabled": true,
     "id": "local-storage",
-    "url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+    "url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
    }
   ],
   "endpoints": [
@@ -86,16 +86,16 @@ Endpoints can be defined as:
 - connection to your platform verification - see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)
 - an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
 - version validation - You can configure the versionProvider options to specify an endpointId that should be called. This endpoint will return an object that defines what versions the platform should work against. See - [How To Add Versioning Support](./how-to-add-versioning-support.md)
-- Context Object enrichment (either when a context object is broadcast or a context object is passed when raising an intent or calling fdc3.open) See [How to add context support to your app](./how-to-add-context-support-to-your-app.md) and [How to add intent support to your app](./how-to-add-intent-support-to-your-app.md). The interop broker will check to see if any endpoints match the id of a context type: e.g. **interopbroker.process.fdc3.contact** or **interopbroker.process.org.dayofinterest**. The latter is not an official fdc3 context type. It is an example of an organization specific namespace that takes a date as an id but also has other optional id settings that could be used by other apps. We have created a module [example-context-processor](../client/src/modules/endpoints/example-context-processor/endpoint.ts) and added an entry into the endpoints and endpoint module section of the endpointProvider settings in manifest.fin.json and settings.json found in the public directory.
+- Context Object enrichment (either when a context object is broadcast or a context object is passed when raising an intent or calling fdc3.open) See [How to add context support to your app](./how-to-add-context-support-to-your-app.md) and [How to add intent support to your app](./how-to-add-intent-support-to-your-app.md). The interop broker will check to see if any endpoints match the id of a context type: e.g. **interopbroker.process.fdc3.contact** or **interopbroker.process.org.dayofinterest**. The latter is not an official fdc3 context type. It is an example of an organization specific namespace that takes a date as an id but also has other optional id settings that could be used by other apps. We have created a module [example-context-processor](../client/src/modules/endpoint/example-context-processor/endpoint.ts) and added an entry into the endpoints and endpoint module section of the endpointProvider settings in manifest.fin.json and settings.json found in the public directory.
 
 ## Source Reference
 
 - [endpoint.ts](../client/src/framework/endpoint.ts)
 - [endpoint-shapes.ts](../client/src/framework/shapes/endpoint-shapes.ts)
-- local-storage [endpoint](../client/src/modules/endpoints/local-storage/endpoint.ts)
-- channel [endpoint](../client/src/modules/endpoints/channel/endpoint.ts)
-- inline-apps [endpoint](../client/src/modules/endpoints/inline-apps/endpoint.ts)
-- example-connection-validation [endpoint](../client/src/modules/endpoints/example-connection-validation/endpoint.ts)
-- example-context-processor [endpoint](../client/src/modules/endpoints/example-context-processor/endpoint.ts)
+- local-storage [endpoint](../client/src/modules/endpoint/local-storage/endpoint.ts)
+- channel [endpoint](../client/src/modules/endpoint/channel/endpoint.ts)
+- inline-apps [endpoint](../client/src/modules/endpoint/inline-apps/endpoint.ts)
+- example-connection-validation [endpoint](../client/src/modules/endpoint/example-connection-validation/endpoint.ts)
+- example-context-processor [endpoint](../client/src/modules/endpoint/example-context-processor/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
