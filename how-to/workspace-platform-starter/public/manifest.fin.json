@@ -37,9 +37,15 @@
 				}
 			},
 			"viewVisibility": {
-				"showViewsOnTabDrag": { "enabled": true },
-				"showViewsOnSplitterDrag": { "enabled": true },
-				"showViewsOnWindowResize": { "enabled": true }
+				"showViewsOnTabDrag": {
+					"enabled": true
+				},
+				"showViewsOnSplitterDrag": {
+					"enabled": true
+				},
+				"showViewsOnWindowResize": {
+					"enabled": true
+				}
 			}
 		},
 		"defaultViewOptions": {
@@ -185,13 +191,13 @@
 					"title": "Local Storage",
 					"enabled": true,
 					"id": "local-storage",
-					"url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
 				},
 				{
 					"title": "Context Processor",
 					"enabled": true,
 					"id": "context-processor",
-					"url": "http://localhost:8080/js/modules/endpoints/example.context.processor.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/example.context.processor.bundle.js"
 				}
 			],
 			"endpoints": [

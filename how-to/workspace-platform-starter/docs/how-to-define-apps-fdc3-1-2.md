@@ -114,6 +114,6 @@ Our guides show how to:
 ## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)
-- [inline-apps/endpoint.ts](../client/src/modules/endpoints/inline-apps/endpoint.ts)
+- [inline-apps/endpoint.ts](../client/src/modules/endpoint/inline-apps/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)
