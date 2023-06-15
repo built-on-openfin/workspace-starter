@@ -37,9 +37,15 @@
 				}
 			},
 			"viewVisibility": {
-				"showViewsOnTabDrag": { "enabled": true },
-				"showViewsOnSplitterDrag": { "enabled": true },
-				"showViewsOnWindowResize": { "enabled": true }
+				"showViewsOnTabDrag": {
+					"enabled": true
+				},
+				"showViewsOnSplitterDrag": {
+					"enabled": true
+				},
+				"showViewsOnWindowResize": {
+					"enabled": true
+				}
 			}
 		},
 		"defaultViewOptions": {
@@ -185,13 +191,13 @@
 					"title": "Local Storage",
 					"enabled": true,
 					"id": "local-storage",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/workspace-platform-starter/js/modules/endpoints/local-storage.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/workspace-platform-starter/js/modules/endpoint/local-storage.bundle.js"
 				},
 				{
 					"title": "Context Processor",
 					"enabled": true,
 					"id": "context-processor",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/workspace-platform-starter/js/modules/endpoints/example.context.processor.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/workspace-platform-starter/js/modules/endpoint/example.context.processor.bundle.js"
 				}
 			],
 			"endpoints": [
