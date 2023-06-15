@@ -1,6 +1,7 @@
 const path = require('path');
 
-const configs = [{
+const configs = [
+	{
 		entry: './client/src/provider.ts',
 		devtool: 'inline-source-map',
 		module: {
