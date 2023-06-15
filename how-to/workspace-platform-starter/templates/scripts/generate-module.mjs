@@ -123,7 +123,7 @@ async function generateModule(moduleType, moduleNameTitleCase) {
 	const kebabType = titleCaseToKebabCase(titleType);
 	const kebabName = titleCaseToKebabCase(moduleNameTitleCase);
 	const pascalName = titleCaseToPascalCase(moduleNameTitleCase);
-	const moduleOutputDir = path.join(MODULES_ROOT, moduleType, kebabName);
+	const moduleOutputDir = path.join(MODULES_ROOT, kebabType, kebabName);
 
 	console.log();
 	console.log('Module Output Directory', moduleOutputDir);
@@ -190,7 +190,8 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -206,7 +207,7 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 	}
 `;
 
-	await fs.writeFile(WEBPACK_CONFIG_FILE, webPackConfig.replace(entriesRegEx, `= [${entries}];`), 'utf8');
+	await fs.writeFile(WEBPACK_CONFIG_FILE, webPackConfig.replace(entriesRegEx, `= [\n\t${entries}];`), 'utf8');
 }
 
 /**

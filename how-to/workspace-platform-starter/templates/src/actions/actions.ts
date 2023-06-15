@@ -1,21 +1,22 @@
-import type {
-	Logger,
-	LoggerCreator,
-	LogLevel,
-	LogProvider
-} from "workspace-platform-starter/shapes/logger-shapes";
+import {
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type WorkspacePlatformModule
+} from "@openfin/workspace-platform";
+import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleLogProviderOptions } from "./shapes";
+import type { ExampleActionsProviderOptions } from "./shapes";
 
 /**
- * Implementation for the example log provider.
+ * Implementation for the example actions provider.
  */
-export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions> {
+export class ExampleActionsProvider implements Actions<ExampleActionsProviderOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
+	private _definition: ModuleDefinition<ExampleActionsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -37,12 +38,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleLogProviderOptions>,
+		definition: ModuleDefinition<ExampleActionsProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator("ExampleLogProvider");
+		this._logger = loggerCreator("ExampleActionsProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
@@ -62,20 +63,18 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	}
 
 	/**
-	 * Log data.
-	 * @param identity The identity sending the message.
-	 * @param group The group sending the log message.
-	 * @param level The level of the message to log.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * Get the actions from the module.
+	 * @param platform The platform module.
+	 * @returns The map of custom actions.
 	 */
-	public log(
-		identity: string,
-		group: string,
-		level: LogLevel,
-		message: unknown,
-		...optionalParams: unknown[]
-	): void {
-		// TODO: Log the information
+	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
+		const actionMap: CustomActionsMap = {};
+
+		// TODO: Add entries to the actions map
+		actionMap["my-action"] = async (payload: CustomActionPayload): Promise<void> => {
+			// Perform your action
+		};
+
+		return actionMap;
 	}
 }

@@ -1,21 +1,17 @@
-import type {
-	Logger,
-	LoggerCreator,
-	LogLevel,
-	LogProvider
-} from "workspace-platform-starter/shapes/logger-shapes";
+import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleLogProviderOptions } from "./shapes";
+import type { ExampleInitOptionsProviderOptions } from "./shapes";
 
 /**
- * Implementation for the example log provider.
+ * Implementation for the example init options provider.
  */
-export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions> {
+export class ExampleInitOptionsProvider implements InitOptionsHandler<ExampleInitOptionsProviderOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
+	private _definition: ModuleDefinition<ExampleInitOptionsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -37,12 +33,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleLogProviderOptions>,
+		definition: ModuleDefinition<ExampleInitOptionsProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator("ExampleLogProvider");
+		this._logger = loggerCreator("ExampleInitOptionsProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
@@ -62,20 +58,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	}
 
 	/**
-	 * Log data.
-	 * @param identity The identity sending the message.
-	 * @param group The group sending the log message.
-	 * @param level The level of the message to log.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * Handle the init options action.
+	 * @param requestedAction The requested action.
+	 * @param payload The payload for the action.
+	 * @returns Nothing.
 	 */
-	public log(
-		identity: string,
-		group: string,
-		level: LogLevel,
-		message: unknown,
-		...optionalParams: unknown[]
-	): void {
-		// TODO: Log the information
+	public async action(requestedAction: string, payload?: unknown): Promise<void> {
+		// TODO: Handle the init options
 	}
 }

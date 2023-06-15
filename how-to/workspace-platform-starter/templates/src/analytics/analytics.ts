@@ -1,21 +1,20 @@
 import type {
-	Logger,
-	LoggerCreator,
-	LogLevel,
-	LogProvider
-} from "workspace-platform-starter/shapes/logger-shapes";
+	AnalyticsModule,
+	PlatformAnalyticsEvent
+} from "workspace-platform-starter/shapes/analytics-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleLogProviderOptions } from "./shapes";
+import type { ExampleAnalyticsProviderOptions } from "./shapes";
 
 /**
- * Implementation for the example log provider.
+ * Implementation for the example analytics provider.
  */
-export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions> {
+export class ExampleAnalyticsProvider implements AnalyticsModule<ExampleAnalyticsProviderOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
+	private _definition: ModuleDefinition<ExampleAnalyticsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -37,12 +36,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleLogProviderOptions>,
+		definition: ModuleDefinition<ExampleAnalyticsProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator("ExampleLogProvider");
+		this._logger = loggerCreator("ExampleAnalyticsProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
@@ -62,20 +61,11 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	}
 
 	/**
-	 * Log data.
-	 * @param identity The identity sending the message.
-	 * @param group The group sending the log message.
-	 * @param level The level of the message to log.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * Handle a list of analytics events.
+	 * @param events The events to handle.
+	 * @returns Nothing.
 	 */
-	public log(
-		identity: string,
-		group: string,
-		level: LogLevel,
-		message: unknown,
-		...optionalParams: unknown[]
-	): void {
-		// TODO: Log the information
+	public async handleAnalytics(events: PlatformAnalyticsEvent[]): Promise<void> {
+		// TODO: Handle the analytics events
 	}
 }

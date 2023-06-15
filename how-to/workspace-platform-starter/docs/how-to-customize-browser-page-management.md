@@ -51,7 +51,7 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
    {
     "enabled": true,
     "id": "local-storage",
-    "url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+    "url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
    }
   ],
   "endpoints": [
@@ -169,7 +169,7 @@ Please see [How To Workspace Platform Starter And Browser Page Sharing](./how-to
 ## Source Reference
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
-- [platform-local-storage.ts](../client/src/modules/endpoints/local-storage/platform-local-storage.ts)
+- [platform-local-storage.ts](../client/src/modules/endpoint/local-storage/platform-local-storage.ts)
 - [Pages Composite Module](../client/src/modules/composite/pages/)
 
 [<- Back to Table Of Contents](../README.md)

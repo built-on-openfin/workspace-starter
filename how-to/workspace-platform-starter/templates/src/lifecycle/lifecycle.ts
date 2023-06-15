@@ -1,21 +1,18 @@
-import type {
-	Logger,
-	LoggerCreator,
-	LogLevel,
-	LogProvider
-} from "workspace-platform-starter/shapes/logger-shapes";
+import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleLogProviderOptions } from "./shapes";
+import type { ExampleLifecycleProviderOptions } from "./shapes";
 
 /**
- * Implementation for the example log provider.
+ * Implementation for the example lifecycle provider.
  */
-export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions> {
+export class ExampleLifecycleProvider implements Lifecycle<ExampleLifecycleProviderOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
+	private _definition: ModuleDefinition<ExampleLifecycleProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -37,12 +34,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleLogProviderOptions>,
+		definition: ModuleDefinition<ExampleLifecycleProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator("ExampleLogProvider");
+		this._logger = loggerCreator("ExampleLifecycleProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
@@ -62,20 +59,20 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	}
 
 	/**
-	 * Log data.
-	 * @param identity The identity sending the message.
-	 * @param group The group sending the log message.
-	 * @param level The level of the message to log.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * Get the lifecycle events.
+	 * @returns The map of lifecycle events.
 	 */
-	public log(
-		identity: string,
-		group: string,
-		level: LogLevel,
-		message: unknown,
-		...optionalParams: unknown[]
-	): void {
-		// TODO: Log the information
+	public async get(): Promise<LifecycleEventMap> {
+		const lifecycleMap: LifecycleEventMap = {};
+
+		// TODO: Add handlers for lifecycle events
+		lifecycleMap["after-bootstrap"] = async (
+			platform: WorkspacePlatformModule,
+			customData?: unknown
+		): Promise<void> => {
+			// TODO: Add some logic to be processed in the lifecycle event
+		};
+
+		return lifecycleMap;
 	}
 }

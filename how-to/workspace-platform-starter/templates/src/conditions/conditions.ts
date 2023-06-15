@@ -1,21 +1,18 @@
-import type {
-	Logger,
-	LoggerCreator,
-	LogLevel,
-	LogProvider
-} from "workspace-platform-starter/shapes/logger-shapes";
+import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleLogProviderOptions } from "./shapes";
+import type { ExampleConditionsProviderOptions } from "./shapes";
 
 /**
- * Implementation for the example log provider.
+ * Implementation for the example conditions provider.
  */
-export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions> {
+export class ExampleConditionsProvider implements Conditions<ExampleConditionsProviderOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
+	private _definition: ModuleDefinition<ExampleConditionsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -37,12 +34,12 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleLogProviderOptions>,
+		definition: ModuleDefinition<ExampleConditionsProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator("ExampleLogProvider");
+		this._logger = loggerCreator("ExampleConditionsProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
@@ -62,20 +59,16 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	}
 
 	/**
-	 * Log data.
-	 * @param identity The identity sending the message.
-	 * @param group The group sending the log message.
-	 * @param level The level of the message to log.
-	 * @param message The message to log.
-	 * @param optionalParams Optional parameters for details.
+	 * Get the conditions from the module.
+	 * @returns Map of the conditions from the module.
 	 */
-	public log(
-		identity: string,
-		group: string,
-		level: LogLevel,
-		message: unknown,
-		...optionalParams: unknown[]
-	): void {
-		// TODO: Log the information
+	public async get(): Promise<ConditionMap> {
+		const conditionsMap: ConditionMap = {};
+
+		// TODO: Add entries to the conditions map
+		// TODO: Perform some logic to calculate the condition
+		conditionsMap["my-condition"] = async (platform: WorkspacePlatformModule): Promise<boolean> => true;
+
+		return conditionsMap;
 	}
 }
