@@ -57,6 +57,7 @@
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/support-context-and-intents/common/apps-contact.json",
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/support-context-and-intents/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/support-context-and-intents/common/apps-native.json",
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/support-context-and-intents/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,
