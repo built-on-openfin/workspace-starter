@@ -566,6 +566,9 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/support-context-and-intents/public/common",
 				"files": [
+					"assets/native-interop-example.zip",
+					"images/native/icon-winform-interop.png",
+					"images/native/icon-notepad.png",
 					"images/icon-blue.png",
 					"snapshots/contact-overview.snapshot.fin.json",
 					"style/app.css",
