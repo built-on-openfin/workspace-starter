@@ -75,6 +75,25 @@ async function initializeWorkspacePlatform(): Promise<void> {
 }
 
 /**
+ * Allow the registration of a home integration for this platform.
+ */
+async function registerPlatformHomeIntegration(): Promise<void> {
+	const id = "my-custom-home-registration";
+	const title = "Custom Platform Home Registration";
+	const icon = PLATFORM_ICON;
+	const homeProvider: HomeProvider = {
+		id,
+		title,
+		icon,
+		onUserInput,
+		onResultDispatch: onSelection
+	};
+
+	await Home.register(homeProvider);
+	console.log("Home configured.");
+}
+
+/**
  * The callback fired when the user types in the home query.
  * @param request The request object from the home component.
  * @param response The response to use for async updates.
@@ -94,25 +113,6 @@ async function onUserInput(
  */
 async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 	console.log("Home user action on returned results");
-}
-
-/**
- * Allow the registration of a home integration for this platform.
- */
-async function registerPlatformHomeIntegration(): Promise<void> {
-	const id = "my-custom-home-registration";
-	const title = "Custom Platform Home Registration";
-	const icon = PLATFORM_ICON;
-	const homeProvider: HomeProvider = {
-		id,
-		title,
-		icon,
-		onUserInput,
-		onResultDispatch: onSelection
-	};
-
-	await Home.register(homeProvider);
-	console.log("Home configured.");
 }
 
 /**
