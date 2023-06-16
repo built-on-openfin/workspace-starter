@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
-import { type ConfigFragment } from "@openfin/native-window-integration-client";
-import { type App } from "@openfin/workspace";
+import type { ConfigFragment } from "@openfin/native-window-integration-client";
+import type { App } from "@openfin/workspace";
 import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
 /**

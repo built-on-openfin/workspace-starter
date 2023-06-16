@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import { type App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
 /**

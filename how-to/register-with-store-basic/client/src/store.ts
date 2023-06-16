@@ -160,7 +160,7 @@ export async function register(
 				await launchApp(app);
 			}
 		});
-		console.log("Storefront provider initialised.", metaInfo);
+		console.log("Storefront provider initialized.", metaInfo);
 		return metaInfo;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content store provider", err);

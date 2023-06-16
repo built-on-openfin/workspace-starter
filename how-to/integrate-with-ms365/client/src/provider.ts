@@ -12,7 +12,7 @@ import {
 import { getCurrentSync, init } from "@openfin/workspace-platform";
 import { launchApp } from "./apps";
 import { Microsoft365Integration } from "./ms365-integration";
-import { type CustomSettings, type IntegrationHelpers, type Logger } from "./shapes";
+import type { CustomSettings, IntegrationHelpers, Logger } from "./shapes";
 import * as templateHelpers from "./template-helpers";
 
 const PLATFORM_ID = "integrate-with-ms365";

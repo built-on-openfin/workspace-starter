@@ -14,7 +14,7 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { type VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
+import type { VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
 import { isEmpty } from "../../../framework/utils";
 import type { AboutProviderSettings } from "./shapes";
 
@@ -153,12 +153,11 @@ export class AboutProvider implements IntegrationModule<unknown> {
 			if (versionInfo && this._versionTypeMap && this._excludeVersionType) {
 				const keys = Object.keys(versionInfo);
 
-				for (let i = 0; i < keys.length; i++) {
-					const key = keys[i];
+				for (const key of keys) {
 					const versionForKey = versionInfo[key as keyof VersionInfo];
 					if (!this._excludeVersionType.includes(key) && versionForKey) {
 						const label = this._versionTypeMap[key] ?? key;
-						tableData.push([label, (versionForKey ?? "unknown") as string]);
+						tableData.push([label, versionForKey ?? "unknown"]);
 					}
 				}
 			}
@@ -191,12 +190,12 @@ export class AboutProvider implements IntegrationModule<unknown> {
 				children.push(descriptionFragment);
 			}
 
-			const tableFragment = (await this._integrationHelpers.templateHelpers.createTable(
+			const tableFragment = await this._integrationHelpers.templateHelpers.createTable(
 				tableData,
 				[],
 				0,
 				data
-			)) as TemplateFragment;
+			);
 
 			children.push(tableFragment);
 

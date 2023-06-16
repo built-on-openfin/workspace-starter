@@ -7,7 +7,7 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import { type ExcelAssetSettings, type ExcelSettings, type ExcelWorksheetSettings } from "./shapes";
+import type { ExcelAssetSettings, ExcelSettings, ExcelWorksheetSettings } from "./shapes";
 
 /**
  * Implement the integration for Excel.

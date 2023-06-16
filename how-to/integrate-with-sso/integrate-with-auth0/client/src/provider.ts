@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { init } from "@openfin/workspace-platform";
 import { expireAccessToken, authenticationInit, login, logout } from "./auth";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-auth0";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";

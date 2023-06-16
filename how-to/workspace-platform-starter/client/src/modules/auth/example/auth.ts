@@ -253,7 +253,8 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 									const info = await win.getInfo();
 									if (authMatch.test(info.url)) {
 										await win.close(true);
-										return resolve(true);
+										resolve(true);
+										return;
 									}
 									await win.show(true);
 								}
@@ -274,7 +275,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 									statusCheck = undefined;
 									this._logger?.info("Auth Window cancelled by user");
 									win = undefined;
-									return resolve(false);
+									resolve(false);
 								}
 							});
 							statusCheck = window.setInterval(async () => {
@@ -284,10 +285,10 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 										window.clearInterval(statusCheck);
 										await win.removeAllListeners();
 										await win.close(true);
-										return resolve(true);
+										resolve(true);
 									}
 								} else {
-									return resolve(false);
+									resolve(false);
 								}
 							}, this._authOptions.checkLoginStatusInSeconds ?? 1 * 1000);
 							return true;
@@ -342,8 +343,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 		const subscriberIds = Object.keys(subscribers);
 		subscriberIds.reverse();
 
-		for (let i = 0; i < subscriberIds.length; i++) {
-			const subscriberId = subscriberIds[i];
+		for (const subscriberId of subscriberIds) {
 			this._logger?.info(
 				`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
 			);
@@ -380,7 +380,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 				}, 2000);
 			} catch (error) {
 				this._logger?.error(`Error while launching logout window. ${error}`);
-				return resolve(false);
+				resolve(false);
 			}
 		} else {
 			await this.notifySubscribers("logged-out", this._loggedOutSubscribers);

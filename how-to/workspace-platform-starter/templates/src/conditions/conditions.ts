@@ -1,6 +1,6 @@
-import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleConditionsProviderOptions } from "./shapes";
 
@@ -12,7 +12,7 @@ export class ExampleConditionsProvider implements Conditions<ExampleConditionsPr
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleConditionsProviderOptions> | undefined;
+	private _definition?: ModuleDefinition<ExampleConditionsProviderOptions>;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleConditionsProvider implements Conditions<ExampleConditionsPr
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers?: ModuleHelpers;
 
 	/**
 	 * Initialize the module.

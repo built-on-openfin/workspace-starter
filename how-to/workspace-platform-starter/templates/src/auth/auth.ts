@@ -1,5 +1,5 @@
-import { type AuthEventTypes, type AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { AuthEventTypes, AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
 import type { ExampleAuthProviderOptions } from "./shapes";
@@ -12,7 +12,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleAuthProviderOptions> | undefined;
+	private _definition?: ModuleDefinition<ExampleAuthProviderOptions>;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers?: ModuleHelpers;
 
 	/**
 	 * Map a subscription id to an event.

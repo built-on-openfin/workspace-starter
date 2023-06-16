@@ -1,15 +1,15 @@
-import {
-	type CLIFilter,
-	type HomeDispatchedSearchResult,
-	type HomeSearchListenerResponse,
-	type HomeSearchResponse,
-	type HomeSearchResult
+import type {
+	CLIFilter,
+	HomeDispatchedSearchResult,
+	HomeSearchListenerResponse,
+	HomeSearchResponse,
+	HomeSearchResult
 } from "@openfin/workspace";
 import type {
 	IntegrationHelpers,
 	IntegrationModule
 } from "workspace-platform-starter/shapes/integrations-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleIntegrationsProviderOptions } from "./shapes";
 
@@ -21,7 +21,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleIntegrationsProviderOptions> | undefined;
+	private _definition?: ModuleDefinition<ExampleIntegrationsProviderOptions>;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -33,7 +33,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: IntegrationHelpers | undefined;
+	private _helpers?: IntegrationHelpers;
 
 	/**
 	 * Initialize the module.
