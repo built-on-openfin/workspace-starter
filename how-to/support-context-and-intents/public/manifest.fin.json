@@ -57,6 +57,7 @@
 			"appSourceUrls": [
 				"http://localhost:8080/common/apps-contact.json",
 				"http://localhost:8080/common/apps-interop.json",
+				"http://localhost:8080/common/apps-native.json",
 				"http://localhost:8080/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,
