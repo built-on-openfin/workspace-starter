@@ -1,14 +1,14 @@
 import type OpenFin from "@openfin/core";
-import { type SalesforceRestApiSObject } from "@openfin/salesforce";
-import {
-	type ButtonStyle,
-	type ButtonTemplateFragment,
-	type ImageTemplateFragment,
-	type PlainContainerTemplateFragment,
-	type TemplateFragment,
-	type TextTemplateFragment
+import type { SalesforceRestApiSObject } from "@openfin/salesforce";
+import type {
+	ButtonStyle,
+	ButtonTemplateFragment,
+	ImageTemplateFragment,
+	PlainContainerTemplateFragment,
+	TemplateFragment,
+	TextTemplateFragment
 } from "@openfin/workspace";
-import { type CustomPaletteSet } from "@openfin/workspace-platform";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type * as CSS from "csstype";
 
 /**

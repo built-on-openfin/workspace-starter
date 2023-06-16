@@ -65,7 +65,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		}
 
 		const { dataType, method } = endpointDefinition.options;
-		const localStorage = this.getStorage<unknown>(dataType as string);
+		const localStorage = this.getStorage<unknown>(dataType);
 
 		if (method === "REMOVE") {
 			const id: string = request.id;
@@ -95,7 +95,7 @@ export class LocalStorageEndpoint implements Endpoint {
 	public async requestResponse(
 		endpointDefinition: EndpointDefinition<{ dataType: string; method: "GET" }>,
 		request?: { id?: string; query?: string }
-	): Promise<unknown | null> {
+	): Promise<unknown> {
 		if (endpointDefinition.type !== "module") {
 			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
@@ -104,7 +104,7 @@ export class LocalStorageEndpoint implements Endpoint {
 		}
 
 		const { dataType, method } = endpointDefinition.options;
-		const localStorage = this.getStorage<unknown>(dataType as string);
+		const localStorage = this.getStorage<unknown>(dataType);
 
 		if (method === "GET") {
 			const id = request?.id;

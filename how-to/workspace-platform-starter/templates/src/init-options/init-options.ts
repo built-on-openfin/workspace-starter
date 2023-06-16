@@ -1,5 +1,5 @@
 import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleInitOptionsProviderOptions } from "./shapes";
 
@@ -11,7 +11,7 @@ export class ExampleInitOptionsProvider implements InitOptionsHandler<ExampleIni
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<ExampleInitOptionsProviderOptions> | undefined;
+	private _definition?: ModuleDefinition<ExampleInitOptionsProviderOptions>;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -23,7 +23,7 @@ export class ExampleInitOptionsProvider implements InitOptionsHandler<ExampleIni
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers?: ModuleHelpers;
 
 	/**
 	 * Initialize the module.

@@ -7,7 +7,7 @@ import {
 	type Page,
 	type PageLayout
 } from "@openfin/workspace-platform";
-import { type BrowserProviderOptions } from "workspace-platform-starter/shapes";
+import type { BrowserProviderOptions } from "workspace-platform-starter/shapes";
 import { getDefaultToolbarButtons } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { isEmpty, isStringValue } from "../utils";

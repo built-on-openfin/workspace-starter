@@ -1,13 +1,13 @@
 import type { EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
-import {
-	type ContextProcessorEndpoint,
-	type ContextToProcess,
-	type ProcessedContext
+import type {
+	ContextProcessorEndpoint,
+	ContextToProcess,
+	ProcessedContext
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isStringValue, objectClone } from "../../../framework/utils";
-import { type ContextProcessorSettings } from "./shapes";
+import type { ContextProcessorSettings } from "./shapes";
 
 /**
  * Example context processor endpoint.
@@ -44,15 +44,15 @@ export class ExampleContextProcessorEndpoint implements ContextProcessorEndpoint
 		endpointDefinition: EndpointDefinition<ContextProcessorSettings>,
 		request: ContextToProcess
 	): Promise<ProcessedContext> {
-		// decouple the request from the response.
-		const response = { context: objectClone(request?.context) };
-
 		if (endpointDefinition.type !== "module") {
 			this._logger?.warn(
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
-			return response;
+			return { context: objectClone(request?.context) };
 		}
+
+		// decouple the request from the response.
+		const response = { context: objectClone(request?.context) };
 
 		this._logger?.info(
 			"This is an example of an endpoint that can process a context object that was passed to the broker and needs processing."

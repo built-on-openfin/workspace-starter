@@ -120,6 +120,7 @@ module.exports = {
 		'linebreak-style': ['error'],
 		'lines-around-comment': ['off'],
 		'lines-between-class-members': ['off'],
+		'logical-assignment-operators': ['off'],
 		'max-classes-per-file': ['error'],
 		'max-depth': ['off'],
 		'max-len': [
@@ -525,6 +526,7 @@ module.exports = {
 				'@typescript-eslint/brace-style': ['error'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'@typescript-eslint/comma-spacing': ['error'],
+				'@typescript-eslint/no-confusing-void-expression': ['off'],
 				'@typescript-eslint/consistent-generic-constructors': ['error'],
 				'@typescript-eslint/consistent-indexed-object-style': ['error', 'index-signature'],
 				'@typescript-eslint/consistent-type-assertions': ['error'],
@@ -535,6 +537,7 @@ module.exports = {
 						fixStyle: 'inline-type-imports'
 					}
 				],
+				'@typescript-eslint/object-curly-spacing': ['off'],
 				'@typescript-eslint/default-param-last': ['error'],
 				'@typescript-eslint/dot-notation': ['error'],
 				'@typescript-eslint/explicit-function-return-type': ['error'],
@@ -551,6 +554,7 @@ module.exports = {
 				'@typescript-eslint/indent': ['off'],
 				'@typescript-eslint/init-declarations': ['off'],
 				'@typescript-eslint/keyword-spacing': ['off'],
+				'@typescript-eslint/lines-around-comment': ['off'],
 				'@typescript-eslint/lines-between-class-members': ['error'],
 				'@typescript-eslint/member-delimiter-style': ['error'],
 				'@typescript-eslint/member-ordering': ['error'],
@@ -602,6 +606,7 @@ module.exports = {
 				'@typescript-eslint/no-inferrable-types': ['off'],
 				'@typescript-eslint/no-invalid-this': ['off'],
 				'@typescript-eslint/no-invalid-void-type': ['error'],
+				'@typescript-eslint/no-loop-func': ['off'],
 				'@typescript-eslint/no-magic-numbers': ['off'],
 				'@typescript-eslint/no-misused-new': ['error'],
 				'@typescript-eslint/no-misused-promises': [
@@ -614,6 +619,7 @@ module.exports = {
 				'@typescript-eslint/no-non-null-asserted-optional-chain': ['error'],
 				'@typescript-eslint/no-non-null-assertion': ['error'],
 				'@typescript-eslint/no-parameter-properties': ['error'],
+				'@typescript-eslint/no-redundant-type-constituents': ['off'],
 				'@typescript-eslint/no-require-imports': ['error'],
 				'@typescript-eslint/no-shadow': ['error'],
 				'@typescript-eslint/no-this-alias': ['error'],
@@ -667,6 +673,7 @@ module.exports = {
 				'@typescript-eslint/restrict-template-expressions': ['off'],
 				'@typescript-eslint/return-await': ['error'],
 				'@typescript-eslint/semi': ['error'],
+				'@typescript-eslint/sort-type-constituents': ['off'],
 				'@typescript-eslint/space-before-function-paren': [
 					'error',
 					{

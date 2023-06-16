@@ -91,7 +91,7 @@ export async function register(
 			]
 		});
 		console.log(metaInfo);
-		console.log("Dock provider initialised.");
+		console.log("Dock provider initialized.");
 		return metaInfo;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content dock provider", err);

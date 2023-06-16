@@ -1,6 +1,6 @@
 import type { User } from "@microsoft/microsoft-graph-types";
 import { TeamsConnection, connect, type Microsoft365Connection } from "@openfin/microsoft365";
-import { type GraphListResponse } from "@openfin/microsoft365/types/rest-api/rest-api.types";
+import type { GraphListResponse } from "@openfin/microsoft365/types/rest-api/rest-api.types";
 
 // The CLIENT_ID and TENANT_ID need to be populated with values that can be
 // used to access your MS365 deployment
