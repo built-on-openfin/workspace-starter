@@ -26,7 +26,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				tenantId: customSettings.ms365.tenantId
 			}
 		});
-		integrations.push(msft365WorkflowIntegration as unknown as WorkflowIntegration);
+		integrations.push(msft365WorkflowIntegration);
 	}
 	await init({
 		browser: {

@@ -55,7 +55,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		});
-		integrations.push(msft365WorkflowIntegration as unknown as WorkflowIntegration);
+		integrations.push(msft365WorkflowIntegration);
 	}
 	await init({
 		browser: {

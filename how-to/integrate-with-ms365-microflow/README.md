@@ -72,6 +72,10 @@ npm run build
 
 To access some of data in the graph API you might need specific permissions that needs to be granted by an administrator.
 
+## Additional Documentation
+
+[Working with OpenFin's Microsoft Microflow](https://developers.openfin.co/of-docs/docs/microflows-microsoft)
+
 ### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
