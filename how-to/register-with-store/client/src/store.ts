@@ -41,7 +41,7 @@ export async function register(
 	appSettings: AppProviderSettings | undefined,
 	storeSettings: StorefrontProviderSettings | undefined
 ): Promise<StoreRegistration | undefined> {
-	console.log("Initialising the storefront provider.");
+	console.log("Initializing the storefront provider.");
 
 	if (!appSettings) {
 		console.warn("The appSettings has not been configured for store");
@@ -62,7 +62,7 @@ export async function register(
 				}
 			});
 
-			console.log("Storefront provider initialised.");
+			console.log("Storefront provider initialized.");
 
 			return storeRegistration;
 		} catch (err) {
@@ -226,13 +226,14 @@ function validateId(
 }
 
 /**
- * This function is used when a navigation item or section hasn't been configured with an ID.
- * This is to simplify configuration for this demo.
- * In a real application you would need an idempotent and unique ID (think GUID) that doesn't change for that navigation item/section regardless of how
- * many times it is regenerated (eg more items can be added to the item/section but the ID stays the same).
- * As you navigate around the store this ID is used as a route. So if a user clicks on a link, navigates to a new page and the re-requested navigation item has
- * a different ID then the store will not be able to find a match and it won't be able to render the navigation item.
- * A real application would not use this approach (as an update to the tag list would result in a new ID which would fail if the config was fetched from a server and not a manifest)
+ * This function is used when a navigation item or section hasn't been configured with an ID. This is to simplify
+ * configuration for this demo. In a real application you would need an idempotent and unique ID (think GUID) that
+ * doesn't change for that navigation item/section regardless of how many times it is regenerated (eg more items can be
+ * added to the item/section but the ID stays the same). As you navigate around the store this ID is used as a route. So
+ * if a user clicks on a link, navigates to a new page and the re-requested navigation item has a different ID then the
+ * store will not be able to find a match and it won't be able to render the navigation item. A real application would
+ * not use this approach (as an update to the tag list would result in a new ID which would fail if the config was
+ * fetched from a server and not a manifest).
  * @param title The title of the item to get an id for.
  * @param tags The tags of the items to get an id for.
  * @returns A calculated id.

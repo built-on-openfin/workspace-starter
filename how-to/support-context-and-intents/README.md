@@ -9,7 +9,7 @@ This sample covers:
 
 - Supporting Interop/FDC3 Context messages
 - Supporting Interop/FDC3 Intents
-- Using a golden data source (in [apps.json](../common/public/apps.json)) to drive the apps that show up in Home and in intent resolution
+- Using a golden data source (in [apps](./public/common/) apps\*.json) to drive the apps that show up in Home and in intent resolution
 - Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
@@ -19,8 +19,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
-- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.6.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
+- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -30,7 +30,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.6.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -61,10 +61,10 @@ npm run secondclient
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
 5. Type any character into the search box to show the default list of applications.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+   The [apps](./public/common/) apps\*.json are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
 
 6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
-   The [apps](../common/public/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
+   The [apps](./public/common/) apps\*.json are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
 
 7. If you modify and want to build the code you can run npm run build.
 
@@ -76,13 +76,13 @@ npm run build
 
 The Server in this example provides two sets of content over HTTP GET.
 
-- [A Desktop Owner Settings file](../common/public/dos.json)
-- [A list of applications](../common/public/apps.json)
+- [A Desktop Owner Settings file](./public/common/dos.json)
+- [A list of applications](./public/common/) apps\*.json
 - Examples of View and Snapshot Manifest Types
 
 ### List of Applications
 
-The [list of applications](../common/public/apps.json) contains a number of examples:
+The [list of applications](../public/common/) apps\*.json contains a number of examples:
 
 - Load views into OpenFin Browser
 - Launch an OpenFin application using its manifest file
@@ -97,13 +97,13 @@ Intent support is added to the sample in the following ways:
 
 - An implementation of InteropBroker is provided in [interopbroker.ts](client/src/interopbroker.ts) and it overrides handleInfoForIntentsByContext, handleInfoForIntent, handleFiredIntentForContext and handleFiredIntent
 - [provider.ts](client/src/provider.ts) uses this implementation when calling the init function from the @openfin/workspace-platform npm module.
-- We have provided a view that demonstrates raising and listening to an intent [fdc3-intent-view.json](../common/public/views/fdc3/intent/fdc3-intent-view.json) and [interop-intent-view.json](../common/public/views/interop/intent/interop-intent-view.json). The intent views have been setup so you can see ones that support a single instance and a version that can be launched multiple times.
-- We have provided a view that demonstrates broadcasting/setting context and listening for context [fdc3-broadcast-view.json](../common/public/views/fdc3/context/fdc3-broadcast-view.json) and [interop-broadcast-view.json](../common/public/views/interop/context/interop-broadcast-view.json).
+- We have provided a view that demonstrates raising and listening to an intent [fdc3-intent-view.json](./public/common/views/fdc3/intent/fdc3-intent-view.json) and [interop-intent-view.json](./public/common/views/interop/intent/interop-intent-view.json). The intent views have been setup so you can see ones that support a single instance and a version that can be launched multiple times.
+- We have provided a view that demonstrates broadcasting/setting context and listening for context [fdc3-broadcast-view.json](./public/common/views/fdc3/context/fdc3-broadcast-view.json) and [interop-broadcast-view.json](./public/common/views/interop/context/interop-broadcast-view.json).
 - We have added pages that contain the interop and fdc3 views to show launching a page where multiple views receive the intent. This contains two types of page:
-  - singe instance - we only want one instance of this page to be launched and the views within it to be passed the intent context each time. This page is represented as a snapshot: [snapshot-intent-single-instance.json](../common/public/snapshots/snapshot-intent-single-instance.json). To support this approach the example disables the option of closing the views or moving the views outside of the page.
-  - multi instance - each time an intent is raised a new copy of this page is launched and the intent is passed to the views within it: [snapshot-intent-multi-instance.json](../common/public/snapshots/snapshot-intent-multi-instance.json). This page doesn't impose any restrictions so you can close or pull out views.
-- Provide an example intent/app picker if a context supports more than one intent or an intent supports more than one application: [picker.html](../common/public/windows/intents/picker.html)
-- Update [apps.json](../common/public/apps.json) to add the new views/pages and specify that they support intents in their metadata.
+  - singe instance - we only want one instance of this page to be launched and the views within it to be passed the intent context each time. This page is represented as a snapshot: [snapshot-intent-single-instance.json](./public/common/snapshots/snapshot-intent-single-instance.json). To support this approach the example disables the option of closing the views or moving the views outside of the page.
+  - multi instance - each time an intent is raised a new copy of this page is launched and the intent is passed to the views within it: [snapshot-intent-multi-instance.json](./public/common/snapshots/snapshot-intent-multi-instance.json). This page doesn't impose any restrictions so you can close or pull out views.
+- Provide an example intent/app picker if a context supports more than one intent or an intent supports more than one application: [picker.html](./public/common/windows/intents/picker.html)
+- Update [apps.json](./public/common/apps.json) to add the new views/pages and specify that they support intents in their metadata.
 - Update [apps.ts](client/src/apps.ts) to support getting apps that support intents or context types.
 
 ## Using the Sample

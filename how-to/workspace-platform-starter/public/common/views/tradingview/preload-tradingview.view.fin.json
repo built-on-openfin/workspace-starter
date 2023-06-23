@@ -1,0 +1,12 @@
+{
+	"url": "https://www.tradingview.com/chart/?symbol=AAPL",
+	"fdc3InteropApi": "1.2",
+	"interop": {
+		"currentContextGroup": "green"
+	},
+	"preloadScripts": [
+		{
+			"url": "http://localhost:8080/common/views/tradingview/preload-tradingview.js"
+		}
+	]
+}

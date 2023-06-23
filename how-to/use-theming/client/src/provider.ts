@@ -14,12 +14,11 @@ import {
 	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import { type CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
+import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import * as Notifications from "@openfin/workspace/notifications";
 import { THEME_BUILDER_APP, getApps, launchApp } from "./apps";
 import { DEFAULT_PALETTES } from "./default-palettes";
-import type { CustomUserAppArgs, InitParams, ThemingPayload } from "./shapes";
-import { type ThemeDisplayOptions } from "./shapes";
+import type { CustomUserAppArgs, InitParams, ThemeDisplayOptions, ThemingPayload } from "./shapes";
 import { getThemeActions, getThemeButton, initColorScheme, setColorScheme } from "./theming";
 
 const PLATFORM_ID = "use-theming";
@@ -65,7 +64,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param themingPayload Is there a custom theming payload to use for the theme.
  */
 async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 
 	// Build the custom palette based on anything in the theming payload.
 	let customTheme: CustomThemeOptions | CustomThemeOptionsWithScheme;
@@ -242,7 +241,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 	}
 
 	// If run was requested when we are already running restart the app
-	// as we can only update the theming options by re-initialising the platform.
+	// as we can only update the theming options by re-initializing the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.Application.addListener("run-requested", async (params?: CustomUserAppArgs) => {
 		console.log("Run requested with action", params?.userAppConfigArgs?.action);

@@ -31,7 +31,7 @@ export async function register(
 	appSettings: AppProviderSettings | undefined,
 	homeSettings: HomeProviderSettings | undefined
 ): Promise<HomeRegistration | undefined> {
-	console.log("Initialising home.");
+	console.log("Initializing home.");
 
 	if (appSettings === undefined) {
 		console.warn(
@@ -309,8 +309,16 @@ function mapAppEntriesToSearchEntries(apps: App[]): HomeSearchResult[] {
 				entry.actions = [action];
 			} else if (app.manifestType === "external") {
 				action.name = "Launch Native App";
-				entry.actions = [action];
 				entry.label = "Native App";
+				entry.actions = [action];
+			} else if (app.manifestType === "window") {
+				entry.label = "Window";
+				action.name = "Launch Window";
+				entry.actions = [action];
+			} else if (app.manifestType === "inline-appasset") {
+				action.name = "Launch App Asset";
+				entry.label = "Native App Asset";
+				entry.actions = [action];
 			}
 
 			if (Array.isArray(app.icons) && app.icons.length > 0) {

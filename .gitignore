@@ -3,9 +3,8 @@ build
 out
 .DS_STORE
 how-to/*/package-lock.json
-how-to/customize-workspace/packaged
-how-to/customize-workspace/public/js/assets/provider.zip
-how-to/customize-workspace/client/types/
+how-to/workspace-platform-starter/packaged
+how-to/workspace-platform-starter/public/js/assets/provider.zip
 how-to/integrate-with-salesforce/public/js/preload.js
 how-to/integrate-with-salesforce-basic/public/js/preload.js
 # Bundle/builds
@@ -13,3 +12,4 @@ how-to/integrate-with-salesforce-basic/public/js/preload.js
 **/build
 ./public*/
 updatable-packages.txt
+public-github

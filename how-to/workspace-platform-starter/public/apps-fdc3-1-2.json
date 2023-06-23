@@ -1,0 +1,142 @@
+{
+	"$schema": "./schemas/fdc3v1.2-appd.schema.json",
+	"applications": [
+		{
+			"appId": "fdc3-broadcast-view",
+			"name": "fdc3-broadcast-view",
+			"title": "Context using FDC3 (1.2)",
+			"description": "This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
+			"categories": ["developer tools", "tools", "training"],
+			"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
+			"manifestType": "view",
+			"icons": [
+				{
+					"icon": "http://localhost:8080/common/images/icon-blue.png"
+				}
+			],
+			"contactEmail": "contact@example.com",
+			"supportEmail": "support@example.com",
+			"publisher": "OpenFin",
+			"intents": [],
+			"images": [
+				{
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-context-fdc3.png"
+				}
+			]
+		},
+		{
+			"appId": "fdc3-intent-view",
+			"name": "fdc3-intent-view",
+			"title": "Intents using FDC3 (1.2)",
+			"description": "This view allows you to experiment with the raising and listening of intents using the fdc3 api.",
+			"categories": ["developer tools", "tools", "training"],
+			"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/intent/fdc3-intent-view.json",
+			"manifestType": "view",
+			"icons": [
+				{
+					"icon": "http://localhost:8080/common/images/icon-blue.png"
+				}
+			],
+			"contactEmail": "contact@example.com",
+			"supportEmail": "support@example.com",
+			"publisher": "OpenFin",
+			"intents": [
+				{
+					"name": "StartCall",
+					"displayName": "Start a Call",
+					"contexts": ["fdc3.contact", "fdc3.contactList"],
+					"customConfig": {}
+				},
+				{
+					"name": "StartChat",
+					"displayName": "Start a Chat",
+					"contexts": ["fdc3.contact", "fdc3.contactList"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewChart",
+					"displayName": "View Chart",
+					"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewContact",
+					"displayName": "View Contact Details",
+					"contexts": ["fdc3.contact"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewQuote",
+					"displayName": "View Quote",
+					"contexts": ["fdc3.instrument"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewNews",
+					"displayName": "View News",
+					"contexts": [
+						"fdc3.country",
+						"fdc3.instrument",
+						"fdc3.instrumentList",
+						"fdc3.organization",
+						"fdc3.portfolio"
+					],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewAnalysis",
+					"displayName": "View Analysis",
+					"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewInstrument",
+					"displayName": "View Instrument Details",
+					"contexts": ["fdc3.instrument", "fdc3.instrumentList"],
+					"customConfig": {}
+				}
+			],
+			"images": [
+				{
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/images/previews/view-intents-fdc3.png"
+				}
+			]
+		},
+		{
+			"appId": "fdc3-workbench",
+			"name": "fdc3-workbench",
+			"title": "FDC3 Workbench (1.2)",
+			"description": "Launch the official FDC3 Workbench with FDC3 1.2 enabled.",
+			"categories": ["developer tools", "tools", "training"],
+			"manifest": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
+			"manifestType": "view",
+			"icons": [
+				{
+					"icon": "https://fdc3.finos.org/toolbox/fdc3-workbench/favicon.ico"
+				}
+			],
+			"contactEmail": "contact@example.com",
+			"supportEmail": "support@example.com",
+			"publisher": "OpenFin",
+			"intents": [
+				{
+					"name": "ViewContact",
+					"displayName": "View Contact",
+					"contexts": ["fdc3.contact"],
+					"customConfig": {}
+				},
+				{
+					"name": "ViewInstrument",
+					"displayName": "View Instrument",
+					"contexts": ["fdc3.instrument"],
+					"customConfig": {}
+				}
+			],
+			"images": [
+				{
+					"url": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
+				}
+			]
+		}
+	]
+}

@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -59,7 +59,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspaceComponents(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising the bootstrapper");
+	console.log("Initializing the bootstrapper");
 
 	// Register with home and show it
 	await Home.register({
@@ -82,8 +82,8 @@ async function initializeWorkspaceComponents(customSettings: CustomSettings): Pr
 					title: app.title,
 					icon: app.icons[0]?.src,
 					data: app,
-					label: "View",
-					actions: [{ name: "Launch View", hotkey: "enter" }],
+					label: app.manifestType === "inline-appasset" || app.manifestType === "external" ? "App" : "View",
+					actions: [{ name: "Launch", hotkey: "enter" }],
 					description: app.description,
 					shortDescription: app.description,
 					template: CLITemplate.SimpleText,

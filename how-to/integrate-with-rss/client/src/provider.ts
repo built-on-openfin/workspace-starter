@@ -7,7 +7,7 @@ import {
 } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
 import { RssIntegration } from "./rss-integration";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-rss";
 const PLATFORM_TITLE = "Integrate with RSS";
@@ -40,7 +40,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {

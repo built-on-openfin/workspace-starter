@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "12.6.0",
+	"version": "13.0.0",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "npm run build --workspaces",
@@ -10,11 +10,13 @@
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"prettier": "prettier --config .prettierrc --write .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"start": "echo You must be in a folder for a specific how-to to use npm run start e.g. ./how-to/register-with-home",
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
-		"list-update-packages": "npx --yes npm-check-updates --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import,typescript",
-		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json"
+		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,node-emoji,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
+		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf ./package-lock.json",
+		"common-update": "node ./scripts/common-update.mjs"
 	},
 	"workspaces": [
 		"how-to/*",
@@ -49,11 +51,12 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.40.0",
+		"eslint": "8.42.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.0.0",
 		"eslint-config-prettier": "8.8.0",
 		"eslint-plugin-import": "2.26.0",
+		"eslint-plugin-jsdoc": "46.2.6",
 		"eslint-plugin-prettier": "4.2.1",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
@@ -63,25 +66,10 @@
 		"fs-extra": "11.1.1",
 		"markdownlint-cli": "0.34.0",
 		"prettier": "2.8.8",
-		"replace-in-file": "6.3.5",
+		"replace-in-file": "7.0.1",
 		"yargs": "17.7.2"
 	},
 	"overrides": {
-		"tsutils": {
-			"typescript": "4.9.5"
-		},
-		"ts-loader": {
-			"typescript": "4.9.5"
-		},
-		"ts-jest": {
-			"typescript": "4.9.5"
-		},
-		"ts-node": {
-			"typescript": "4.9.5"
-		},
-		"puppeteer-core": {
-			"typescript": "4.9.5"
-		},
 		"parse-bmfont-xml": {
 			"xml2js": "0.5.0"
 		}

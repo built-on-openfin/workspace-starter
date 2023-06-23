@@ -254,8 +254,10 @@ async function initializeListeners(): Promise<void> {
 		}
 	});
 
-	addNotificationEventListener("notification-action", (event) => {
-		if (event?.result?.BODY_CLICK === "dismiss_event") {
+	addNotificationEventListener("notification-action", async (event) => {
+		if (event?.result?.actionId === "open-web-site") {
+			await fin.System.openUrlWithBrowser(event?.result?.url as string);
+		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
 			if (event.notification?.customData?.action) {
 				loggingAddEntry(
 					`\tData: ${
@@ -622,6 +624,22 @@ async function showCustomNotification(): Promise<void> {
 									]
 								},
 								{
+									type: "image",
+									dataKey: "exampleImageUrl",
+									style: {
+										height: "100px"
+									}
+								},
+								{
+									type: "actionableText",
+									dataKey: "actionableUrlTitle",
+									tooltipKey: "actionableUrlTooltip",
+									onClick: {
+										actionId: "open-web-site",
+										url: "https://openfin.co"
+									}
+								},
+								{
 									type: "container",
 									style: {
 										display: "grid",
@@ -743,7 +761,10 @@ async function showCustomNotification(): Promise<void> {
 			d02: "250",
 			d10: "550",
 			d11: "650",
-			d12: "750"
+			d12: "750",
+			exampleImageUrl: "http://localhost:8080/images/example.png",
+			actionableUrlTitle: "OpenFin Website",
+			actionableUrlTooltip: "http://www.openfin.co"
 		}
 	};
 

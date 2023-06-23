@@ -1,6 +1,6 @@
 import type { User } from "@microsoft/microsoft-graph-types";
 import { TeamsConnection, connect, type Microsoft365Connection } from "@openfin/microsoft365";
-import { type GraphListResponse } from "@openfin/microsoft365/types/rest-api/rest-api.types";
+import type { GraphListResponse } from "@openfin/microsoft365/types/rest-api/rest-api.types";
 
 // The CLIENT_ID and TENANT_ID need to be populated with values that can be
 // used to access your MS365 deployment
@@ -21,6 +21,7 @@ let btnQuery: HTMLButtonElement | null;
 let txtQuery: HTMLInputElement | null;
 let tableResults: HTMLTableElement | null;
 let bodyResults: HTMLTableSectionElement | null;
+let username: HTMLDivElement | null;
 
 // Wait for the DOM to finish loading
 window.addEventListener("DOMContentLoaded", async () => {
@@ -40,6 +41,7 @@ async function initializeDOM(): Promise<void> {
 	txtQuery = document.querySelector<HTMLInputElement>("#txtQuery");
 	tableResults = document.querySelector<HTMLTableElement>("#tableResults");
 	bodyResults = document.querySelector<HTMLTableSectionElement>("#bodyResults");
+	username = document.querySelector<HTMLDivElement>("#username");
 
 	if (
 		errorStatus &&
@@ -49,7 +51,8 @@ async function initializeDOM(): Promise<void> {
 		btnQuery &&
 		txtQuery &&
 		tableResults &&
-		bodyResults
+		bodyResults &&
+		username
 	) {
 		updateConnectionStatus();
 		if (CLIENT_ID === "" || TENANT_ID === "") {
@@ -72,6 +75,10 @@ async function initializeDOM(): Promise<void> {
 					connectionStatus.textContent = "Microsoft 365 is connecting";
 				}
 				ms365Connection = await connect(CLIENT_ID, TENANT_ID, REDIRECT_URL);
+
+				if (username && ms365Connection.currentUser.displayName) {
+					username.textContent = ms365Connection.currentUser.displayName;
+				}
 			} catch (err) {
 				if (errorStatus) {
 					errorStatus.textContent = `Error connecting to Microsoft 365\n${formatError(err)}`;
@@ -83,10 +90,18 @@ async function initializeDOM(): Promise<void> {
 		btnDisconnect.addEventListener("click", async () => {
 			try {
 				users = [];
+				if (txtQuery) {
+					txtQuery.value = "";
+				}
 				if (ms365Connection) {
 					await ms365Connection.disconnect();
 				}
-			} catch {}
+			} catch {
+			} finally {
+				if (username) {
+					username.textContent = "Not connected";
+				}
+			}
 			ms365Connection = undefined;
 			updateConnectionStatus();
 		});

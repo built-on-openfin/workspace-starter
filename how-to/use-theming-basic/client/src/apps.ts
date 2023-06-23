@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import { type App } from "@openfin/workspace";
+import type { App } from "@openfin/workspace";
 import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
 /**
@@ -7,7 +7,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP];
+	return [OPENFIN_INFORMATION_APP, COMMON_STYLES_APP];
 }
 
 /**
@@ -34,6 +34,28 @@ const OPENFIN_INFORMATION_APP: App = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
+};
+
+/**
+ * App definition for the common styles view.
+ */
+const COMMON_STYLES_APP: App = {
+	appId: "common-styles",
+	title: "Common Styles Example",
+	description: "A view demonstrating the common styles.",
+	manifest: "http://localhost:8080/common/style/style-view.json",
+	manifestType: "view",
+	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/starter-style-guide.png"
+		}
+	],
+	tags: ["view", "theme", "tool"]
 };
 
 /**

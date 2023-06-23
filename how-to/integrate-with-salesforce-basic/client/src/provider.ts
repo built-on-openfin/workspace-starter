@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -123,19 +123,19 @@ async function initializeDOM(): Promise<void> {
 		});
 
 		btnDisconnect.addEventListener("click", async () => {
-			if (username) {
-				try {
-					contacts = [];
-					if (salesforceConnection) {
-						await salesforceConnection.disconnect();
-					}
-				} catch {
-				} finally {
+			try {
+				contacts = [];
+				if (salesforceConnection) {
+					await salesforceConnection.disconnect();
+				}
+			} catch {
+			} finally {
+				if (username) {
 					username.textContent = "Not connected";
 				}
-				salesforceConnection = undefined;
-				updateConnectionStatus();
 			}
+			salesforceConnection = undefined;
+			updateConnectionStatus();
 		});
 
 		btnQuery.addEventListener("click", async () => {

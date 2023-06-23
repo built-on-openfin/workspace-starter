@@ -20,7 +20,7 @@ import { getApps, launchApp } from "./apps";
  * @returns The registration details for home.
  */
 export async function register(id: string, title: string, icon: string): Promise<HomeRegistration> {
-	console.log("Initialising home.");
+	console.log("Initializing home.");
 
 	/**
 	 * The callback fired when the user types in the home query.

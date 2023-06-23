@@ -5,7 +5,7 @@
 
 # Versioning Information
 
-In the customize workspace sample we give an example of a [versioning strategy](../../customize-workspace/docs/how-to-add-versioning-support.md). There is a lot of logic under the covers to handle different approaches but this document shows how you can easily get information related to:
+In the workspace platform starter sample we give an example of a [versioning strategy](../../workspace-platform-starter/docs/how-to-add-versioning-support.md). There is a lot of logic under the covers to handle different approaches but this document shows how you can easily get information related to:
 
 - app - examples of how you can specify and read your app version
 - rvm - what rvm version are you running against?
@@ -81,4 +81,4 @@ const notificationApiVersion = VERSION;
 
 ## What can you do with this information
 
-As shown by the customize-workspace example you can use this information to determine whether or not your platform should run, what information you should present to your user or if you should close this platform and launch a different version that matches the current environment. You might also decide to use this versioning information to progressively enhance your app.
+As shown by the workspace-platform-starter example you can use this information to determine whether or not your platform should run, what information you should present to your user or if you should close this platform and launch a different version that matches the current environment. You might also decide to use this versioning information to progressively enhance your app.

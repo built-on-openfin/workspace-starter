@@ -10,7 +10,7 @@ import {
 import { init } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
 import { ExcelIntegration } from "./excel-integration";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-excel";
 const PLATFORM_TITLE = "Integrate with Excel";
@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 
 	await init({
 		browser: {

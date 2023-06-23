@@ -1,0 +1,8 @@
+{
+	"url": "https://www.google.com/search?q=aapl",
+	"fdc3InteropApi": "1.2",
+	"interop": {
+		"currentContextGroup": "green"
+	},
+	"preloadScripts": [{ "url": "http://localhost:8080/common/views/google/preload-google.js" }]
+}

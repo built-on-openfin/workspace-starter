@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await initializeWorkspacePlatform(customSettings);
 
 	// If we have launch bar settings then open the window
-	// The content is from launch-bar.html and is driven by launchbar.ts
+	// The content is from launch-bar.html and is driven by launch-bar.ts
 	if (customSettings.launchBarWindowSettings) {
 		await fin.Window.create(customSettings.launchBarWindowSettings);
 	}
@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -77,7 +77,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * Bring the platform to life.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initialising the workspace components");
+	console.log("Initializing the workspace components");
 
 	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
@@ -87,7 +87,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 }
 
 /**
- * Read the custom settings from the manifest.fin.json
+ * Read the custom settings from the manifest.fin.json.
  * @returns The custom settings from the manifest.
  */
 async function getManifestCustomSettings(): Promise<CustomSettings> {
@@ -272,7 +272,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a global context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -332,7 +332,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a view tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.
@@ -352,7 +352,7 @@ function overrideCallback(
 
 		/**
 		 * Implementation for showing a page tab context menu given a menu template,
-		 * handler callback, and screen coordinates. For an example of overriding, see {@link WorkspacePlatformOverrideCallback}.
+		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
 		 * @returns Nothing.

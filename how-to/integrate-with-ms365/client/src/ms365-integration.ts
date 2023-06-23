@@ -227,8 +227,8 @@ export class Microsoft365Integration {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 
-		this._moduleDefinition.title = this._moduleDefinition.title ?? "Microsoft 365";
-		this._settings.graphExplorerPrefix = this._settings.graphExplorerPrefix ?? "ms";
+		this._moduleDefinition.title ??= "Microsoft 365";
+		this._settings.graphExplorerPrefix ??= "ms";
 
 		this._logger = loggerCreator(this._moduleDefinition.title);
 		this._logger.info(`Initializing ${this._moduleDefinition.title}`);
@@ -1764,10 +1764,10 @@ export class Microsoft365Integration {
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
-		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.name) {
+		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.address) {
 			pairs.push({
 				label: "From",
-				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address
+				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address ?? ""
 			});
 		}
 
@@ -3055,12 +3055,12 @@ export class Microsoft365Integration {
 	 */
 	private driveItemIsImage(driveItem: DriveItem): boolean {
 		return (
-			(driveItem.file?.mimeType?.startsWith("image/") ||
-				driveItem.name?.endsWith(".jpeg") ||
-				driveItem.name?.endsWith(".jpg") ||
-				driveItem.name?.endsWith(".gif") ||
-				driveItem.name?.endsWith(".webp") ||
-				driveItem.name?.endsWith(".png")) ??
+			driveItem.file?.mimeType?.startsWith("image/") ??
+			driveItem.name?.endsWith(".jpeg") ??
+			driveItem.name?.endsWith(".jpg") ??
+			driveItem.name?.endsWith(".gif") ??
+			driveItem.name?.endsWith(".webp") ??
+			driveItem.name?.endsWith(".png") ??
 			false
 		);
 	}

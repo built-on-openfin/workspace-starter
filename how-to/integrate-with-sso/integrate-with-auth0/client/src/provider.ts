@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { init } from "@openfin/workspace-platform";
 import { expireAccessToken, authenticationInit, login, logout } from "./auth";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-auth0";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the workspace platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initialising workspace platform");
+	console.log("Initializing workspace platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {

@@ -18,7 +18,7 @@ export async function register(
 	title: string,
 	icon: string
 ): Promise<StoreRegistration | undefined> {
-	console.log("Initialising the storefront provider.");
+	console.log("Initializing the storefront provider.");
 	try {
 		const metaInfo = await Storefront.register({
 			id,
@@ -69,7 +69,7 @@ export async function register(
 						}
 					},
 					image: {
-						src: "http://localhost:8080/common/images/superhero-unsplash.jpg"
+						src: "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
 					}
 				},
 				topRow: {
@@ -81,7 +81,7 @@ export async function register(
 							description:
 								"A collection of example views from Expero showing the power of interop and context sharing.",
 							image: {
-								src: "http://localhost:8080/common/images/coding-1-unsplash.jpg"
+								src: "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
@@ -95,7 +95,7 @@ export async function register(
 							description:
 								"A collection of developer tools that can aid with building and debugging OpenFin applications.",
 							image: {
-								src: "http://localhost:8080/common/images/coding-2-unsplash.jpg"
+								src: "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
@@ -117,7 +117,7 @@ export async function register(
 							title: "Views",
 							description: "A collection of views made available through our catalog.",
 							image: {
-								src: "http://localhost:8080/common/images/coding-4-unsplash.jpg"
+								src: "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
@@ -130,7 +130,7 @@ export async function register(
 							title: "Web Apps",
 							description: "A collection of web apps built using OpenFin.",
 							image: {
-								src: "http://localhost:8080/common/images/coding-5-unsplash.jpg"
+								src: "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
@@ -160,7 +160,7 @@ export async function register(
 				await launchApp(app);
 			}
 		});
-		console.log("Storefront provider initialised.", metaInfo);
+		console.log("Storefront provider initialized.", metaInfo);
 		return metaInfo;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content store provider", err);
