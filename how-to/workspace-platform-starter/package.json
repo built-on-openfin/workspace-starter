@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
-	"version": "next",
+	"version": "13.1.5",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
@@ -43,8 +43,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next",
+		"@openfin/workspace": "13.1.5",
+		"@openfin/workspace-platform": "13.1.5",
 		"csstype": "^3.1.2",
 		"chart.js": "^4.3.0",
 		"node-emoji": "^1.11.0"

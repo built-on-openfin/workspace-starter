@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365",
-	"version": "next",
+	"version": "13.1.5",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365",
 	"main": "index.js",
 	"scripts": {
@@ -18,8 +18,8 @@
 		"@finos/fdc3": "^2.0.3",
 		"@microsoft/microsoft-graph-types": "^2.33.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next",
+		"@openfin/workspace": "13.1.5",
+		"@openfin/workspace-platform": "13.1.5",
 		"csstype": "^3.1.2"
 	},
 	"devDependencies": {

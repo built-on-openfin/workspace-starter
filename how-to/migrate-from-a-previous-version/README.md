@@ -164,8 +164,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^next",
-                    "@openfin/workspace-platform": "^next"
+                    "@openfin/workspace": "^12.1.5",
+                    "@openfin/workspace-platform": "^12.1.5"
                 }
 ```
 

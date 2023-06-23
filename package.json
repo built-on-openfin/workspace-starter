@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "next",
+	"version": "13.1.5",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "npm run build --workspaces",
