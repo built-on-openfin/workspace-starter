@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.16"
+		"version": "31.112.75.4"
 	},
 	"platform": {
 		"uuid": "support-context-and-intents",
@@ -36,18 +36,9 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/favicon.ico",
-		"name": "Support Intents & Context - v12.6.0",
+		"name": "Support Intents & Context - v13.0.0",
 		"target": ["desktop", "start-menu"]
 	},
-	"appAssets": [
-		{
-			"alias": "winform-interop-example",
-			"version": "3.0.1",
-			"src": "https://built-on-openfin.github.io/workspace-starter/main/common/assets/native-interop-example.zip",
-			"target": "OpenFin.Interop.Win.Sample.exe",
-			"forceDownload": false
-		}
-	],
 	"supportInformation": {
 		"company": "OpenFin",
 		"product": "Workspace Starter - Support Context and Intents - Client",
@@ -57,15 +48,28 @@
 	"customSettings": {
 		"platformProvider": {
 			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/main/common/windows/intents/picker.html",
+				"url": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			}
 		},
 		"appProvider": {
-			"appSourceUrls": ["https://built-on-openfin.github.io/workspace-starter/main/common/apps.json"],
+			"appSourceUrls": [
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-preload.json"
+			],
 			"cacheDurationInMinutes": 1,
-			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+			"manifestTypes": [
+				"view",
+				"snapshot",
+				"manifest",
+				"external",
+				"inline-view",
+				"window",
+				"inline-appasset"
+			]
 		}
 	}
 }
