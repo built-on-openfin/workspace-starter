@@ -7,7 +7,7 @@ import {
 } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
 import { RssIntegration } from "./rss-integration";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-rss";
 const PLATFORM_TITLE = "Integrate with RSS";

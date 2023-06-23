@@ -170,9 +170,10 @@ describe("Register with Home", () => {
 
 		const ids = await OpenFinHome.searchResultIds();
 
-		expect(ids.length).equal(2);
+		expect(ids.length).equal(3);
 		expect(ids[0]).equal("interop-broadcast-view");
 		expect(ids[1]).equal("interop-intent-view");
+		expect(ids[2]).equal("winform-interop-example");
 
 		await WebDriver.saveScreenshot();
 	});
@@ -199,20 +200,24 @@ describe("Register with Home", () => {
 
 	it("Can get the filter ids", async () => {
 		const filterIds = await OpenFinHome.filtersIds();
-		expect(filterIds.length).equal(5);
-		expect(filterIds[0]).equal("intent");
-		expect(filterIds[1]).equal("interop");
-		expect(filterIds[2]).equal("openfin");
-		expect(filterIds[3]).equal("tools");
-		expect(filterIds[4]).equal("view");
+		expect(filterIds.length).equal(9);
+		expect(filterIds[0]).equal("appasset");
+		expect(filterIds[1]).equal("developer");
+		expect(filterIds[2]).equal("dock");
+		expect(filterIds[3]).equal("intent");
+		expect(filterIds[4]).equal("interop");
+		expect(filterIds[5]).equal("native");
+		expect(filterIds[6]).equal("openfin");
+		expect(filterIds[7]).equal("tools");
+		expect(filterIds[8]).equal("view");
 	});
 
 	it("Set a filter by index", async () => {
-		const state = await OpenFinHome.filtersByIndexGet(1);
+		const state = await OpenFinHome.filtersByIndexGet(4);
 		expect(state).equal(false);
 
-		await OpenFinHome.filtersByIndexSet(1, true);
-		const state2 = await OpenFinHome.filtersByIndexGet(1);
+		await OpenFinHome.filtersByIndexSet(4, true);
+		const state2 = await OpenFinHome.filtersByIndexGet(4);
 		expect(state2).equal(true);
 	});
 

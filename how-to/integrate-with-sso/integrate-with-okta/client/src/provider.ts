@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { init } from "@openfin/workspace-platform";
 import { authenticationInit, expireAccessToken, login, logout } from "./auth";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-okta";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
