@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-store-basic/favicon.ico",
-		"name": "Register With Store Basic - vnext",
+		"name": "Register With Store Basic - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

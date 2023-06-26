@@ -24,7 +24,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
-		"name": "Integrate With Salesforce - vnext",
+		"name": "Integrate With Salesforce - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
