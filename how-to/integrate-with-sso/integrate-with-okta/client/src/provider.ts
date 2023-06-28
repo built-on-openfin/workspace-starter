@@ -185,7 +185,7 @@ function logInformation(info: string): void {
 	const logElem = document.querySelector("#logOutput");
 
 	if (logElem) {
-		logElem.textContent = `${logElem.textContent + info}\n\n`;
+		logElem.textContent = `${logElem.textContent}${info}\n\n`;
 		logElem.scrollTop = logElem.scrollHeight;
 	}
 }
