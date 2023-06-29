@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Versioning</title>
+		<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+		<link rel="stylesheet" href="../../common/style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Versioning</h1>
+			</div>
+			<div class="row middle gap10">
+				<image src="../../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col gap10 scroll-horizontal">
+			<h3>An upgrade of this application is available</h3>
+			<p>
+				You are currently on version:
+				<span id="current-version"></span>
+				and the following version is available:
+				<span id="new-version"></span>
+				.
+			</p>
+			<p>Please restart the application to pick up the latest version.</p>
+		</main>
+		<footer>
+			<div class="row spread">
+				<button id="restart" class="right">Restart Platform</button>
+			</div>
+		</footer>
+		<script src="./version.js"></script>
+	</body>
+</html>
