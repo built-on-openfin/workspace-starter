@@ -1431,13 +1431,17 @@
             "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
-        "IntegrationModuleDefinition": {
+        "IntegrationModuleDefinition<unknown>": {
             "additionalProperties": false,
             "description": "Integration definition.",
             "properties": {
                 "autoStart": {
                     "description": "Does the integration start automatically if enabled (default is true).",
                     "type": "boolean"
+                },
+                "baseScore": {
+                    "description": "A number which is used as the base score when sorting module results.",
+                    "type": "number"
                 },
                 "data": {
                     "$ref": "#/definitions/ModuleDefinition.O",
@@ -1506,7 +1510,7 @@
                 "integrations": {
                     "description": "This is the old module list name, remove in future.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -1517,7 +1521,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }

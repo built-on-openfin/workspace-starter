@@ -23,7 +23,8 @@ import { DateTime } from "luxon";
 import type { TemplateHelpers } from "workspace-platform-starter/shapes";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
@@ -35,16 +36,22 @@ import type { QuoteResult, QuoteSettings } from "./shapes";
  */
 export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings> {
 	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 1100;
+
+	/**
 	 * The key to use for a quote result.
 	 * @internal
 	 */
 	private static readonly _QUOTE_PROVIDER_DETAILS_ACTION = "Quote Details";
 
 	/**
-	 * Provider id.
+	 * The module definition.
 	 * @internal
 	 */
-	private _providerId?: string;
+	private _definition: IntegrationModuleDefinition<QuoteSettings> | undefined;
 
 	/**
 	 * The integration manager.
@@ -72,7 +79,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 	): Promise<void> {
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
-		this._providerId = definition.id;
+		this._definition = definition;
 
 		Chart.register(LineController, CategoryScale, LinearScale, LineElement, PointElement, TimeScale, Filler);
 	}
@@ -85,12 +92,13 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 		if (this._integrationHelpers?.templateHelpers) {
 			return [
 				{
-					key: `${this._providerId}-help`,
+					key: `${this._definition?.id}-help`,
+					score: this._definition?.baseScore ?? QuoteIntegrationProvider._DEFAULT_BASE_SCORE,
 					title: "/quote",
 					label: "Help",
 					actions: [],
 					data: {
-						providerId: this._providerId,
+						providerId: this._definition?.id,
 						populateQuery: "/quote "
 					},
 					template: "Custom" as CLITemplate.Custom,
@@ -176,6 +184,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					if (this._integrationHelpers?.templateHelpers) {
 						const quoteResult: HomeSearchResult = {
 							key: `quote-${symbol}`,
+							score: this._definition?.baseScore ?? QuoteIntegrationProvider._DEFAULT_BASE_SCORE,
 							title: symbol,
 							label: "Information",
 							actions: [
@@ -185,7 +194,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 								}
 							],
 							data: {
-								providerId: this._providerId,
+								providerId: this._definition?.id,
 								url: `https://www.nasdaq.com/market-activity/stocks/${symbol.toLowerCase()}`
 							},
 							template: "Custom" as CLITemplate.Custom,

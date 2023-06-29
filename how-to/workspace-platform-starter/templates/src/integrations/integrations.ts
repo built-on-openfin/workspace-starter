@@ -7,10 +7,10 @@ import type {
 } from "@openfin/workspace";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleIntegrationsProviderOptions } from "./shapes";
 
 /**
@@ -18,10 +18,22 @@ import type { ExampleIntegrationsProviderOptions } from "./shapes";
  */
 export class ExampleIntegrationsProvider implements IntegrationModule<ExampleIntegrationsProviderOptions> {
 	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 100000;
+
+	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleIntegrationsProviderOptions>;
+	private _definition?: IntegrationModuleDefinition<ExampleIntegrationsProviderOptions>;
+
+	/**
+	 * The module definition including settings.
+	 * @internal
+	 */
+	private _settings?: ExampleIntegrationsProviderOptions;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -43,13 +55,14 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleIntegrationsProviderOptions>,
+		definition: IntegrationModuleDefinition<ExampleIntegrationsProviderOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
 		this._definition = definition;
 		this._logger = loggerCreator("ExampleIntegrationsProvider");
 		this._helpers = helpers;
+		this._settings = this._definition.data;
 
 		this._logger.info("Initializing");
 
@@ -99,6 +112,13 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 		const returnFilters: CLIFilter[] = [];
 
 		// TODO: Perform logic to populate results and return filters
+		// TODO: Update the _DEFAULT_BASE_SCORE value
+		// To correctly order the results in home set their score field
+		// e.g. score: this._definition?.baseScore ?? ExampleIntegrationsProvider._DEFAULT_BASE_SCORE
+
+		// Make sure the data has a providerId property set so that the result
+		// selection can be matched back to this provider
+		// e.g. data: { providerId: this._definition?.id }
 
 		return {
 			results,

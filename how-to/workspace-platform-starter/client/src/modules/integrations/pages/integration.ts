@@ -11,7 +11,8 @@ import type {
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { PageChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
@@ -23,6 +24,12 @@ import type { PagesSettings } from "./shapes";
  * Implement the integration provider for pages.
  */
 export class PagesProvider implements IntegrationModule<PagesSettings> {
+	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 200;
+
 	/**
 	 * The key to use for launching a page.
 	 * @internal
@@ -42,13 +49,14 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	private static readonly _ACTION_SHARE_PAGE = "Share Page";
 
 	/**
-	 * Provider id.
+	 * The module definition.
 	 * @internal
 	 */
-	private _providerId?: string;
+	private _definition: IntegrationModuleDefinition<PagesSettings> | undefined;
 
 	/**
 	 * The settings from config.
+	 * @internal
 	 */
 	private _settings?: PagesSettings;
 
@@ -99,7 +107,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 		this._logger = loggerCreator("PagesProvider");
-		this._providerId = definition.id;
+		this._definition = definition;
+
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
 			this._integrationHelpers.subscribeLifecycleEvent(
 				"page-changed",
@@ -282,12 +291,13 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 			return {
 				key: id,
+				score: this._definition?.baseScore ?? PagesProvider._DEFAULT_BASE_SCORE,
 				title,
 				label: "Page",
 				icon,
 				actions,
 				data: {
-					providerId: this._providerId,
+					providerId: this._definition?.id,
 					pageTitle: title,
 					pageId: id,
 					tags: ["page"]
@@ -304,11 +314,12 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		}
 		return {
 			key: id,
+			score: this._definition?.baseScore ?? PagesProvider._DEFAULT_BASE_SCORE,
 			title,
 			label: "Page",
 			actions: [],
 			data: {
-				providerId: this._providerId,
+				providerId: this._definition?.id,
 				pageTitle: title,
 				pageId: id,
 				tags: ["page"]
