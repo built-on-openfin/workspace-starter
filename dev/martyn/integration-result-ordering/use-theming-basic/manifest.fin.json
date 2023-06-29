@@ -1,0 +1,28 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "use-theming-basic",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integration-result-ordering/use-theming-basic/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integration-result-ordering/use-theming-basic/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integration-result-ordering/use-theming-basic/favicon.ico",
+		"name": "Use Theming - Basic - v13.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Use Theming Basic - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	}
+}
