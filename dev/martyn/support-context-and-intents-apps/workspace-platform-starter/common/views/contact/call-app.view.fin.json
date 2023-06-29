@@ -1,9 +1,0 @@
-{
-	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/support-context-and-intents-apps/workspace-platform-starter/common/views/contact/call-app/index.html",
-	"fdc3InteropApi": "2.0",
-	"preloadScripts": [
-		{
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/support-context-and-intents-apps/workspace-platform-starter/common/style/style-changed-preload.js"
-		}
-	]
-}
