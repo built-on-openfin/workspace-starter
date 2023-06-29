@@ -30,7 +30,7 @@ import type {
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
-import { deletePageBounds, getAllVisibleWindows, savePageBounds } from "./browser";
+import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
 const logger = createLogger("PlatformOverride");
@@ -308,8 +308,24 @@ export function overrideCallback(
 		 * @param req the create saved page request.
 		 */
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
-			// always save page bounds regardless of storage for pages
-			await savePageBounds(req.page.pageId);
+			const platform = getCurrentSync();
+
+			if (req.page.customData === undefined) {
+				req.page.customData = {};
+			}
+
+			let windowBounds = await getPageBounds(req.page.pageId);
+
+			if (isEmpty(windowBounds)) {
+				// likely this is a new save page as implementation as we were unable to find this page id in the available pages
+				const parentIdentity = await platform.Browser.getLastFocusedWindow();
+				const parentWindow = fin.Window.wrapSync(parentIdentity);
+				windowBounds = await parentWindow.getBounds();
+			}
+
+			if (windowBounds !== undefined && windowBounds !== null) {
+				req.page.customData.windowBounds = windowBounds;
+			}
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
@@ -332,7 +348,6 @@ export function overrideCallback(
 				logger.info(`Saved page with id: ${req.page.pageId} to default storage`);
 			}
 
-			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "page-changed", {
 				action: "create",
 				id: req.page.pageId,
@@ -345,9 +360,13 @@ export function overrideCallback(
 		 * @param req the update saved page request.
 		 */
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
-			// save page bounds even if using default storage for pages.
-			await savePageBounds(req.pageId);
-
+			const windowBounds = await getPageBounds(req.page.pageId);
+			if (!isEmpty(windowBounds)) {
+				if (req.page.customData === undefined) {
+					req.page.customData = {};
+				}
+				req.page.customData.windowBounds = windowBounds;
+			}
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const setPageEndpointId = "page-set";
@@ -382,9 +401,6 @@ export function overrideCallback(
 		 * @param id of the id of the page to delete.
 		 */
 		public async deleteSavedPage(id: string): Promise<void> {
-			// save page bounds even if using default storage for pages.
-			await deletePageBounds(id);
-
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			const removePageEndpointId = "page-remove";

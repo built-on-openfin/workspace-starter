@@ -1,7 +1,6 @@
 import type OpenFin from "@openfin/core";
 import {
 	CustomActionCallerType,
-	type BrowserCreateWindowRequest,
 	type CustomActionPayload,
 	type CustomActionsMap,
 	type WorkspacePlatformModule
@@ -64,16 +63,15 @@ export class PageActions implements Actions {
 							const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
 							await targetWindow.addPage(page);
 							await targetWindow.setActivePage(pageId);
-						} else {
+						} else if (this._helpers?.launchPage !== undefined) {
 							this._logger?.info(
-								`Adding page with id: ${pageId} to the current a new window as no window identity was provided (likely unable to add a page to the window)`
+								`Adding page with id: ${pageId} to a new window as no window identity was provided (likely unable to add a page to the window)`
 							);
-							const newWindow: BrowserCreateWindowRequest = {
-								workspacePlatform: {
-									pages: [page]
-								}
-							};
-							await platform.Browser.createWindow(newWindow);
+							await this._helpers.launchPage(page);
+						} else {
+							this._logger?.error(
+								"We are unable to launch a page as this module has not been passed the launchPage function."
+							);
 						}
 					}
 				}

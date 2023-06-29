@@ -6,7 +6,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
@@ -30,14 +30,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 		view: OpenFin.PlatformViewCreationOptions | string,
 		targetIdentity?: OpenFin.Identity
 	): Promise<OpenFin.View>;
-
-	/**
-	 * Launch a page in the workspace.
-	 * @param page The page to launch.
-	 * @param bounds The optional bounds for the page.
-	 * @returns The window created.
-	 */
-	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 
 	/**
 	 * Launch a snapshot.

@@ -223,33 +223,6 @@
 				}
 			},
 			{
-				"id": "page-bounds-get",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "GET",
-					"dataType": "page-bounds"
-				}
-			},
-			{
-				"id": "page-bounds-set",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "SET",
-					"dataType": "page-bounds"
-				}
-			},
-			{
-				"id": "page-bounds-remove",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "REMOVE",
-					"dataType": "page-bounds"
-				}
-			},
-			{
 				"id": "integration-preferences-get",
 				"type": "module",
 				"typeId": "local-storage",
