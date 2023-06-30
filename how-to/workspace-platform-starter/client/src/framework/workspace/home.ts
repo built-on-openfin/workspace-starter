@@ -10,7 +10,7 @@ import {
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { createLogger } from "../logger-provider";
-import { type HomeProviderOptions } from "../shapes/home-shapes";
+import type { HomeProviderOptions } from "../shapes/home-shapes";
 import { isEmpty } from "../utils";
 
 const HOME_SOURCE_FILTERS = "sources";

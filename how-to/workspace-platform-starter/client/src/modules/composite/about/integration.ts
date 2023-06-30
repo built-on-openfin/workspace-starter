@@ -15,7 +15,7 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { type VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
+import type { VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
 import { isEmpty } from "../../../framework/utils";
 import type { AboutProviderSettings } from "./shapes";
 

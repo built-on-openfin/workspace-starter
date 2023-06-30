@@ -10,7 +10,7 @@ import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
-import { type PlatformApp } from "../shapes/app-shapes";
+import type { PlatformApp } from "../shapes/app-shapes";
 import type { BootstrapOptions } from "../shapes/bootstrap-shapes";
 import type { DockProviderOptions } from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";

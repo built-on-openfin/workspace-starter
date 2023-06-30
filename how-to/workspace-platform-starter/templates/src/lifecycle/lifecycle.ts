@@ -1,6 +1,6 @@
-import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleLifecycleProviderOptions } from "./shapes";
 

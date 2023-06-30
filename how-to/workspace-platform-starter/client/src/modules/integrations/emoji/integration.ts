@@ -1,17 +1,17 @@
-import {
-	type ButtonStyle,
-	type CLIFilter,
-	type CLITemplate,
-	type HomeDispatchedSearchResult,
-	type HomeSearchListenerResponse,
-	type HomeSearchResponse,
-	type HomeSearchResult,
-	type PlainContainerTemplateFragment,
-	type TemplateFragment
+import type {
+	ButtonStyle,
+	CLIFilter,
+	CLITemplate,
+	HomeDispatchedSearchResult,
+	HomeSearchListenerResponse,
+	HomeSearchResponse,
+	HomeSearchResult,
+	PlainContainerTemplateFragment,
+	TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import * as emoji from "node-emoji";
-import { type TemplateHelpers } from "workspace-platform-starter/shapes";
+import type { TemplateHelpers } from "workspace-platform-starter/shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
