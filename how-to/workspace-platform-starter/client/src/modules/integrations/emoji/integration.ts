@@ -1,20 +1,21 @@
-import {
-	type ButtonStyle,
-	type CLIFilter,
-	type CLITemplate,
-	type HomeDispatchedSearchResult,
-	type HomeSearchListenerResponse,
-	type HomeSearchResponse,
-	type HomeSearchResult,
-	type PlainContainerTemplateFragment,
-	type TemplateFragment
+import type {
+	ButtonStyle,
+	CLIFilter,
+	CLITemplate,
+	HomeDispatchedSearchResult,
+	HomeSearchListenerResponse,
+	HomeSearchResponse,
+	HomeSearchResult,
+	PlainContainerTemplateFragment,
+	TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import * as emoji from "node-emoji";
-import { type TemplateHelpers } from "workspace-platform-starter/shapes";
+import type { TemplateHelpers } from "workspace-platform-starter/shapes";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
@@ -23,6 +24,12 @@ import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-
  * Implement the integration provider for Emojis.
  */
 export class EmojiIntegrationProvider implements IntegrationModule {
+	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 2000;
+
 	/**
 	 * The key to use for a emoji result.
 	 * @internal
@@ -42,16 +49,16 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 	private static readonly _EMOJI_PROVIDER_COPY_EMOJI_ACTION = "Copy Emoji";
 
 	/**
+	 * The module definition.
+	 * @internal
+	 */
+	private _definition: IntegrationModuleDefinition | undefined;
+
+	/**
 	 * The integration helpers.
 	 * @internal
 	 */
 	private _integrationHelpers: IntegrationHelpers | undefined;
-
-	/**
-	 * The settings for the integration.
-	 * @internal
-	 */
-	private _definition: ModuleDefinition | undefined;
 
 	/**
 	 * Initialize the module.
@@ -65,8 +72,8 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 		loggerCreator: LoggerCreator,
 		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._integrationHelpers = helpers;
 		this._definition = definition;
+		this._integrationHelpers = helpers;
 	}
 
 	/**
@@ -78,6 +85,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 			return [
 				{
 					key: `${this._definition.id}-help`,
+					score: this._definition?.baseScore ?? EmojiIntegrationProvider._DEFAULT_BASE_SCORE,
 					title: "/emoji",
 					label: "Help",
 					icon: this._definition?.icon,
@@ -208,6 +216,7 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 	): Promise<HomeSearchResult> {
 		return {
 			key: `emoji-${key}`,
+			score: this._definition?.baseScore ?? EmojiIntegrationProvider._DEFAULT_BASE_SCORE,
 			title: key,
 			label: "Information",
 			actions: [

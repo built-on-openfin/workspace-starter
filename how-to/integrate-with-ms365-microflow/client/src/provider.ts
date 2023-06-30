@@ -9,8 +9,8 @@ import {
 	Integrations
 } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
-import { type WorkflowIntegration } from "@openfin/workspace-platform/client-api/src/shapes/integrations";
-import { type CustomSettings } from "./shapes";
+import type { WorkflowIntegration } from "@openfin/workspace-platform/client-api/src/shapes/integrations";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 const CUSTOM_MICROFLOW_ICON = "http://localhost:8080/microsoft-365-icon.svg";

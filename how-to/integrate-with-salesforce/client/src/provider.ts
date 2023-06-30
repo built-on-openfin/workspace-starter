@@ -9,7 +9,7 @@ import {
 } from "@openfin/workspace";
 import { getCurrentSync, init } from "@openfin/workspace-platform";
 import { SalesforceIntegration } from "./salesforce-integration";
-import { type CustomSettings, type IntegrationHelpers, type Logger } from "./shapes";
+import type { CustomSettings, IntegrationHelpers, Logger } from "./shapes";
 import * as templateHelpers from "./template-helpers";
 
 const PLATFORM_ID = "integrate-with-salesforce";

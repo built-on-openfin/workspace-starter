@@ -1,16 +1,17 @@
-import {
-	type CLIFilter,
-	type CLITemplate,
-	type CustomTemplate,
-	type HomeDispatchedSearchResult,
-	type HomeSearchListenerResponse,
-	type HomeSearchResponse,
-	type HomeSearchResult
+import type {
+	CLIFilter,
+	CLITemplate,
+	CustomTemplate,
+	HomeDispatchedSearchResult,
+	HomeSearchListenerResponse,
+	HomeSearchResponse,
+	HomeSearchResult
 } from "@openfin/workspace";
 import type { Workspace, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { WorkspaceChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
@@ -23,6 +24,12 @@ import type { WorkspacesSettings } from "./shapes";
  * Implement the integration provider for workspaces.
  */
 export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings> {
+	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 100;
+
 	/**
 	 * The key to use for opening a workspace.
 	 * @internal
@@ -54,10 +61,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	private static readonly _ACTION_EXISTS_WORKSPACE = "Workspace Exists";
 
 	/**
-	 * Provider id.
+	 * The module definition.
 	 * @internal
 	 */
-	private _providerId?: string;
+	private _definition: IntegrationModuleDefinition<WorkspacesSettings> | undefined;
 
 	/**
 	 * The settings from config.
@@ -110,8 +117,9 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	): Promise<void> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
+		this._definition = definition;
 		this._logger = loggerCreator("WorkspacesProvider");
-		this._providerId = definition.id;
+
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
 			this._integrationHelpers.subscribeLifecycleEvent(
 				"workspace-changed",
@@ -153,13 +161,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 			return [
 				{
-					key: `${this._providerId}-help1`,
+					key: `${this._definition?.id}-help1`,
+					score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 					title: "Workspaces",
 					label: "Help",
 					icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 					actions: [],
 					data: {
-						providerId: this._providerId
+						providerId: this._definition?.id
 					},
 					template: "Custom" as CLITemplate.Custom,
 					templateContent: await this._integrationHelpers.templateHelpers.createHelp(
@@ -212,11 +221,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						results: [
 							{
 								key: WorkspacesProvider._ACTION_EXISTS_WORKSPACE,
+								score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 								title: `Workspace ${foundMatch.title} already exists.`,
 								icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 								actions: [],
 								data: {
-									providerId: this._providerId,
+									providerId: this._definition?.id,
 									tags: ["workspace"],
 									workspaceId: foundMatch.workspaceId
 								},
@@ -230,12 +240,13 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					results: [
 						{
 							key: WorkspacesProvider._ACTION_SAVE_WORKSPACE,
+							score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 							title: `Save Current Workspace as ${title}`,
 							icon: this._settings.images.workspace.replace("{scheme}", colorScheme as string),
 							label: "Suggestion",
 							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 							data: {
-								providerId: this._providerId,
+								providerId: this._definition?.id,
 								tags: ["workspace"],
 								workspaceId: randomUUID(),
 								workspaceTitle: title
@@ -419,12 +430,13 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 			return {
 				key: id,
+				score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 				title,
 				label: "Workspace",
 				icon,
 				actions,
 				data: {
-					providerId: this._providerId,
+					providerId: this._definition?.id,
 					workspaceTitle: title,
 					workspaceId: id,
 					tags: ["workspace"]
@@ -441,11 +453,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		}
 		return {
 			key: id,
+			score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 			title,
 			label: "Workspace",
 			actions: [],
 			data: {
-				providerId: this._providerId,
+				providerId: this._definition?.id,
 				workspaceTitle: title,
 				workspaceId: id,
 				tags: ["workspace"]

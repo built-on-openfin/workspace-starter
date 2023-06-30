@@ -18,7 +18,7 @@
 	"dependencies": {
 		"@openfin/workspace": "13.1.5",
 		"@openfin/workspace-platform": "13.1.5",
-		"fast-xml-parser": "4.2.4"
+		"fast-xml-parser": "4.2.5"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
@@ -27,9 +27,9 @@
 		"express": "^4.18.2",
 		"openfin-adapter": "31.75.4",
 		"node-fetch": "cjs",
-		"ts-loader": "^9.4.3",
-		"typescript": "^5.1.3",
-		"webpack": "^5.86.0",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6",
+		"webpack": "^5.88.1",
 		"webpack-cli": "^5.1.4"
 	}
 }

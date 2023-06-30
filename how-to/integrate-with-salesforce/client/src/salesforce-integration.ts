@@ -43,6 +43,12 @@ import type {
  */
 export class SalesforceIntegration {
 	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 600000;
+
+	/**
 	 * The key to use for a Salesforce result.
 	 * @internal
 	 */
@@ -82,7 +88,9 @@ export class SalesforceIntegration {
 	 * The module definition.
 	 * @internal
 	 */
-	private _moduleDefinition: { id: string; title: string; data: SalesforceSettings } | undefined;
+	private _definition:
+		| { id: string; title: string; baseScore?: number; data: SalesforceSettings }
+		| undefined;
 
 	/**
 	 * The settings.
@@ -157,14 +165,14 @@ export class SalesforceIntegration {
 		loggerCreator: (group: string) => Logger,
 		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._moduleDefinition = definition;
+		this._definition = definition;
 		this._integrationHelpers = helpers;
 		this._settings = definition.data;
 
-		this._moduleDefinition.title = this._moduleDefinition.title ?? "Salesforce";
+		this._definition.title = this._definition.title ?? "Salesforce";
 
-		this._logger = loggerCreator(this._moduleDefinition.title);
-		this._logger?.info(`Initializing ${this._moduleDefinition.title}`);
+		this._logger = loggerCreator(this._definition.title);
+		this._logger?.info(`Initializing ${this._definition.title}`);
 
 		if (!this._settings.orgUrl) {
 			this._logger?.error("Configuration is missing orgUrl");
@@ -223,13 +231,14 @@ export class SalesforceIntegration {
 		if (this._mappings) {
 			return [
 				{
-					key: `${this._moduleDefinition?.id}-help1`,
-					title: this._moduleDefinition?.title ?? "",
+					key: `${this._definition?.id}-help1`,
+					score: this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE,
+					title: this._definition?.title ?? "",
 					label: "Help",
 					icon: this._settings?.iconMap.salesforce,
 					actions: [],
 					data: {
-						providerId: this._moduleDefinition?.id
+						providerId: this._definition?.id
 					},
 					template: CLITemplate.Custom,
 					templateContent: await templateHelpers.createHelp(
@@ -429,7 +438,7 @@ export class SalesforceIntegration {
 						this._logger?.error("Error retrieving Salesforce search results", err);
 					}
 				}
-				this._lastResponse.revoke(`${this._moduleDefinition?.id}-searching`);
+				this._lastResponse.revoke(`${this._definition?.id}-searching`);
 			}
 		}, 500);
 
@@ -466,7 +475,7 @@ export class SalesforceIntegration {
 					query === undefined ||
 					query === null ||
 					query === "" ||
-					`Browse ${this._moduleDefinition?.title}`.toLowerCase().includes(query.toLowerCase())
+					`Browse ${this._definition?.title}`.toLowerCase().includes(query.toLowerCase())
 				) {
 					results.push(this.getBrowseSearchResult());
 				}
@@ -663,12 +672,13 @@ export class SalesforceIntegration {
 	 */
 	private createSearchingResult(): CLISearchResultLoading<HomeAction> {
 		return {
-			key: `${this._moduleDefinition?.id}-searching`,
+			key: `${this._definition?.id}-searching`,
+			score: this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE,
 			title: "Searching ...",
 			icon: this._settings?.iconMap.salesforce ?? "",
 			actions: [],
 			data: {
-				providerId: this._moduleDefinition?.id
+				providerId: this._definition?.id
 			},
 			template: CLITemplate.Loading,
 			templateContent: ""
@@ -684,12 +694,13 @@ export class SalesforceIntegration {
 	 */
 	private getReconnectSearchResult(query?: string, filters?: CLIFilter[]): CLISearchResultSimpleText {
 		return {
-			actions: [{ name: "Reconnect", hotkey: "enter" }],
 			key: SalesforceIntegration._RECONNECT_SEARCH_RESULT_KEY,
+			score: this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE,
 			icon: this._settings?.iconMap.salesforce ?? "",
-			title: `Reconnect to ${this._moduleDefinition?.title}`,
+			title: `Reconnect to ${this._definition?.title}`,
+			actions: [{ name: "Reconnect", hotkey: "enter" }],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				query,
 				filters
 			}
@@ -702,17 +713,18 @@ export class SalesforceIntegration {
 	 */
 	private getBrowseSearchResult(): CLISearchResultSimpleText {
 		return {
+			key: SalesforceIntegration._BROWSE_SEARCH_RESULT_KEY,
+			score: this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE,
 			actions: [{ name: "Browse", hotkey: "enter" }],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				url: this._settings?.orgUrl,
 				tags: ["salesforce"]
 			} as SalesforceResultData,
 			icon: this._settings?.iconMap.salesforce ?? "",
-			key: SalesforceIntegration._BROWSE_SEARCH_RESULT_KEY,
 			template: CLITemplate.SimpleText,
 			templateContent: "Open a browser window at the Salesforce home page",
-			title: `Browse ${this._moduleDefinition?.title}`
+			title: `Browse ${this._definition?.title}`
 		} as CLISearchResultSimpleText;
 	}
 
@@ -722,12 +734,13 @@ export class SalesforceIntegration {
 	 */
 	private getConnectingSearchResult(): CLISearchResultLoading<HomeAction> {
 		return {
-			icon: this._settings?.iconMap.salesforce,
 			key: SalesforceIntegration._BROWSE_SEARCH_RESULT_KEY,
+			score: this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE,
+			icon: this._settings?.iconMap.salesforce,
 			actions: [],
 			template: CLITemplate.Loading,
 			templateContent: "",
-			title: `Connecting to ${this._moduleDefinition?.title}`
+			title: `Connecting to ${this._definition?.title}`
 		};
 	}
 
@@ -980,14 +993,19 @@ export class SalesforceIntegration {
 		if (titleField && searchResult[titleField.field]) {
 			title = this.getFieldContent(searchResult, titleField.field, titleField.fieldSub);
 		}
+
+		const mappingIndex = this._mappings.findIndex((m) => m.sourceType === mapping?.sourceType);
+		const itemScore = Math.max(mappingIndex + 1, 1) * 100;
+
 		return {
 			actions: [{ name: "View", hotkey: "enter" }],
 			label: mapping?.label,
 			key: searchResult.Id,
 			title,
 			icon: this._settings?.iconMap[mapping?.iconKey ?? ""],
+			score: (this._definition?.baseScore ?? SalesforceIntegration._DEFAULT_BASE_SCORE) + itemScore,
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				url: `${this._settings?.orgUrl}/${searchResult.Id}`,
 				tags: ["salesforce"],
 				obj: searchResult,

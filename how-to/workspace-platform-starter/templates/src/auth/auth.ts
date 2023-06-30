@@ -1,5 +1,5 @@
-import { type AuthEventTypes, type AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { AuthEventTypes, AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
 import type { ExampleAuthProviderOptions } from "./shapes";

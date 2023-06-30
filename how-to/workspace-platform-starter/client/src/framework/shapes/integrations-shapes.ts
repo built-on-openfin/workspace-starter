@@ -106,7 +106,7 @@ export interface IntegrationProviderOptions extends ModuleList<IntegrationModule
 /**
  * Integration definition.
  */
-export interface IntegrationModuleDefinition extends ModuleDefinition {
+export interface IntegrationModuleDefinition<O = unknown> extends ModuleDefinition<O> {
 	/**
 	 * Does the integration start automatically if enabled (default is true).
 	 */
@@ -117,6 +117,11 @@ export interface IntegrationModuleDefinition extends ModuleDefinition {
 	 * and its results will always be included.
 	 */
 	excludeFromSourceFilter?: boolean;
+
+	/**
+	 * A number which is used as the base score when sorting module results.
+	 */
+	baseScore?: number;
 
 	/**
 	 * This is the old property, it will be remapped to url.

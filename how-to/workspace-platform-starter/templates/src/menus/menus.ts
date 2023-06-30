@@ -1,5 +1,5 @@
-import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
-import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type {
 	MenuEntry,
 	Menus,

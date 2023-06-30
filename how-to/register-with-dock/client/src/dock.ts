@@ -13,9 +13,9 @@ import {
 	type CustomActionsMap,
 	type ToolbarButton
 } from "@openfin/workspace-platform";
-import {
-	type DockDropdownConfig,
-	type DockProviderConfigWithIdentity
+import type {
+	DockDropdownConfig,
+	DockProviderConfigWithIdentity
 } from "@openfin/workspace-platform/client-api/src";
 
 let platformTitle: string | undefined;

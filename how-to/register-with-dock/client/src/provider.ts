@@ -7,7 +7,7 @@ import {
 	type StorefrontLandingPage
 } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import { type DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import { dockGetCustomActions, loadDockConfig, register, saveDockConfig } from "./dock";
 
 const PLATFORM_ID = "register-with-dock";

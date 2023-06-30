@@ -19,7 +19,7 @@ import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
 import { getSettings } from "../settings";
 import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
-import { type AppMetadata as AppMetadataV1Point2 } from "../shapes/fdc3-1-2-shapes";
+import type { AppMetadata as AppMetadataV1Point2 } from "../shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
 	CaptureApiPayload,
