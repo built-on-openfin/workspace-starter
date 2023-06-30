@@ -63,7 +63,7 @@ export class PageActions implements Actions {
 							const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
 							await targetWindow.addPage(page);
 							await targetWindow.setActivePage(pageId);
-						} else if (this._helpers?.launchPage !== undefined) {
+						} else if (this._helpers?.launchPage) {
 							this._logger?.info(
 								`Adding page with id: ${pageId} to a new window as no window identity was provided (likely unable to add a page to the window)`
 							);
