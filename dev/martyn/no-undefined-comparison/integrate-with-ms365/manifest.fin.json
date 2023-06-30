@@ -1,0 +1,275 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "integrate-with-ms365",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["msteams", "tel"]
+				}
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/favicon.ico",
+		"name": "Integrate With Microsoft 365 - v13.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With Microsoft 365 - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"ms365": {
+			"clientId": "",
+			"tenantId": "",
+			"redirectUri": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/oauth_redirect.html",
+			"permissions": [
+				"User.Read",
+				"Presence.Read",
+				"Presence.Read.All",
+				"Directory.Read.All",
+				"Mail.ReadWrite",
+				"Contacts.Read",
+				"Tasks.Read",
+				"Calendars.ReadWrite",
+				"Chat.Read",
+				"ChannelMessage.Read.All",
+				"TeamMember.Read.All",
+				"ChannelMember.Read.All",
+				"Files.Read.All",
+				"Sites.Read.All"
+			],
+			"disableGraphExplorer": false,
+			"enableLibLogging": false,
+			"images": {
+				"microsoft365": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/microsoft365.svg",
+				"teams": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/teams.svg",
+				"word": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/word.svg",
+				"excel": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/excel.svg",
+				"onenote": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/onenote.svg",
+				"powerpoint": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/powerpoint.svg",
+				"outlook": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/outlook-mail.svg",
+				"email": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/email.svg",
+				"calendar": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/calendar.svg",
+				"share": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/share.svg",
+				"chat": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/chat.svg",
+				"call": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/call.svg",
+				"contact": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/contact.svg",
+				"team": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/team.svg",
+				"file": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/file.svg",
+				"folder": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/folder.svg",
+				"channel": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/channel.svg",
+				"clock": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/clock.svg",
+				"check": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/check.svg",
+				"cross": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/icons/cross.svg"
+			}
+		},
+		"apps": [
+			{
+				"appId": "ms-365-teams",
+				"name": "ms-365-teams",
+				"title": "Microsoft Teams",
+				"description": "Launch Microsoft Teams.",
+				"manifest": "msteams:",
+				"manifestType": "desktop-browser",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/teams.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "teams"]
+			},
+			{
+				"appId": "ms-365-outlook-mail",
+				"name": "ms-365-outlook-mail",
+				"title": "Microsoft Outlook Mail",
+				"description": "Launch Microsoft 365 Outlook Mail in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-outlook-mail-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/outlook-mail.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "mail"]
+			},
+			{
+				"appId": "ms-365-outlook-calendar",
+				"name": "ms-365-outlook-calendar",
+				"title": "Microsoft Outlook Calendar",
+				"description": "Launch Microsoft 365 Outlook Calendar in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-outlook-calendar-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/outlook-calendar.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "calendar"]
+			},
+			{
+				"appId": "ms-365-outlook-people",
+				"name": "ms-365-outlook-people",
+				"title": "Microsoft Outlook People",
+				"description": "Launch Microsoft 365 Outlook People in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-outlook-people-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/outlook-people.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "outlook", "people"]
+			},
+			{
+				"appId": "ms-365-word",
+				"name": "ms-365-word",
+				"title": "Microsoft Word",
+				"description": "Launch Microsoft 365 Word in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-word-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/word.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "word"]
+			},
+			{
+				"appId": "ms-365-excel",
+				"name": "ms-365-excel",
+				"title": "Microsoft Excel",
+				"description": "Launch Microsoft 365 Excel in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-excel-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/excel.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "excel"]
+			},
+			{
+				"appId": "ms-365-powerpoint",
+				"name": "ms-365-powerpoint",
+				"title": "Microsoft PowerPoint",
+				"description": "Launch Microsoft 365 PowerPoint in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-powerpoint-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/powerpoint.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "powerpoint"]
+			},
+			{
+				"appId": "ms-365-sharepoint",
+				"name": "ms-365-sharepoint",
+				"title": "Microsoft SharePoint",
+				"description": "Launch Microsoft 365 SharePoint in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-sharepoint-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/sharepoint.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "sharepoint"]
+			},
+			{
+				"appId": "ms-365-onedrive",
+				"name": "ms-365-onedrive",
+				"title": "Microsoft OneDrive",
+				"description": "Launch Microsoft 365 OneDrive in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-onedrive-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/onedrive.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "onedrive"]
+			},
+			{
+				"appId": "ms-365-onenote",
+				"name": "ms-365-onenote",
+				"title": "Microsoft OneNote",
+				"description": "Launch Microsoft 365 OneNote in a view.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/views/ms-365-onenote-view.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/no-undefined-comparison/integrate-with-ms365/images/apps/onenote.svg"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["view", "microsoft", "365", "onenote"]
+			}
+		]
+	}
+}
