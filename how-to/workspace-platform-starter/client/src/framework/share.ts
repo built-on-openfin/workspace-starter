@@ -309,10 +309,8 @@ async function notifyOfExpiry(): Promise<void> {
  */
 async function saveSharedPage(data: SharePageData): Promise<void> {
 	let page: Page | undefined;
-	let bounds: OpenFin.Bounds | undefined;
-	if (!isEmpty(data.page) && !isEmpty(data.bounds)) {
+	if (!isEmpty(data.page)) {
 		page = data.page;
-		bounds = data.bounds;
 	} else {
 		const platform = getCurrentSync();
 		let useStorage = true;
@@ -320,20 +318,37 @@ async function saveSharedPage(data: SharePageData): Promise<void> {
 			if (data.windowIdentity) {
 				const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
 				page = await targetWindow.getPage(data.pageId);
-				bounds = await targetWindow.openfinWindow.getBounds();
+				if (isEmpty(page?.customData)) {
+					page.customData = {};
+				}
+				page.customData.windowBounds = await targetWindow.openfinWindow.getBounds();
 				useStorage = false;
 			}
 		} catch {}
+		if (isEmpty(page) && !isEmpty(data.pageId)) {
+			// we haven't got a passed page and we were not given a window identity but we do have a pageId
+			// check to see if it is an active page to get the latest information
+			const attachedPages = await platform.Browser.getAllAttachedPages();
+			for (const attachedPage of attachedPages) {
+				if (attachedPage.pageId === data.pageId) {
+					page = { ...attachedPage };
+					if (isEmpty(page.customData)) {
+						page.customData = {};
+					}
+					page.customData.windowBounds = getPageBounds(data.pageId);
+					useStorage = false;
+					break;
+				}
+			}
+		}
 		if (useStorage) {
 			page = await platform.Storage.getPage(data.pageId);
-			bounds = await getPageBounds(data.pageId, true);
 		}
 	}
 	const payload = {
 		type: "page",
 		data: {
-			page,
-			bounds
+			page
 		}
 	};
 	await saveShareRequest(payload);
@@ -431,7 +446,7 @@ async function loadSharedEntry(id: string): Promise<void> {
 		const shareEntry = await requestResponse<{ id: string }, ShareStoreEntry>("share-get", { id });
 		if (!isEmpty(shareEntry)) {
 			if (shareEntry.type === "page") {
-				await launchPage(shareEntry.data.page, shareEntry.data.bounds);
+				await launchPage(shareEntry.data.page);
 			} else if (shareEntry.type === "workspace") {
 				const platform = getCurrentSync();
 				await platform.applySnapshot(shareEntry.data.snapshot);

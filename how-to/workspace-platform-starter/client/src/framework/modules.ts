@@ -4,6 +4,7 @@ import { getApp, getApps } from "./apps";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
+import { launchPage } from "./platform/browser";
 import type { PlatformApp } from "./shapes";
 import type {
 	Module,
@@ -264,6 +265,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 		},
+		launchPage,
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent
 	};

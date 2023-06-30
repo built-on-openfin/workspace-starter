@@ -9,7 +9,6 @@ import {
 } from "@openfin/workspace-platform";
 import { type BrowserProviderOptions } from "workspace-platform-starter/shapes";
 import { getDefaultToolbarButtons } from "../buttons";
-import * as endpointProvider from "../endpoint";
 import { isEmpty, isStringValue } from "../utils";
 
 /**
@@ -280,37 +279,9 @@ export async function getPageForView(view: OpenFin.View): Promise<AttachedPage |
 }
 
 /**
- * Save the bounds of the specified page.
- * @param pageId The id of the page to save the bounds for.
- */
-export async function savePageBounds(pageId: string): Promise<void> {
-	const bounds = await getPageBounds(pageId);
-	if (!isEmpty(bounds)) {
-		const setPageBoundsEndpointId = "page-bounds-set";
-		if (endpointProvider.hasEndpoint(setPageBoundsEndpointId)) {
-			await endpointProvider.action<{ id: string; payload: OpenFin.Bounds }>(setPageBoundsEndpointId, {
-				id: pageId,
-				payload: bounds
-			});
-		}
-	}
-}
-
-/**
- * Delete the stored bounds of the specified page.
- * @param pageId The id of the page to delete the bounds for.
- */
-export async function deletePageBounds(pageId: string): Promise<void> {
-	const removePageBoundsEndpointId = "page-bounds-remove";
-	if (endpointProvider.hasEndpoint(removePageBoundsEndpointId)) {
-		await endpointProvider.action<{ id: string }>(removePageBoundsEndpointId, { id: pageId });
-	}
-}
-
-/**
  * Get the bounds of the specified page.
  * @param pageId The if of the page to get the bounds for.
- * @param fromStorage Get the bounds from storage instead of the actual page.
+ * @param fromStorage Get the bounds from storage instead of the actual page if available.
  * @returns The bounds for the page.
  */
 export async function getPageBounds(
@@ -318,32 +289,41 @@ export async function getPageBounds(
 	fromStorage = false
 ): Promise<OpenFin.Bounds | undefined> {
 	let bounds: OpenFin.Bounds | undefined;
-
+	const platform = getCurrentSync();
 	if (fromStorage) {
-		const getPageBoundsEndpointId = "page-bounds-get";
-		if (endpointProvider.hasEndpoint(getPageBoundsEndpointId)) {
-			bounds = await endpointProvider.requestResponse<{ id: string }, OpenFin.Bounds>(
-				getPageBoundsEndpointId,
-				{ id: pageId }
-			);
-		}
-	} else {
-		const platform = getCurrentSync();
-		const pages = await platform.Browser.getAllAttachedPages();
-		let windowId: OpenFin.Identity | undefined;
-
-		for (const page of pages) {
-			if (page.pageId === pageId) {
-				windowId = page.parentIdentity;
-			}
-		}
-
-		if (!isEmpty(windowId)) {
-			const hostWindow = platform.Browser.wrapSync(windowId);
-
-			bounds = await hostWindow.openfinWindow.getBounds();
+		const page = await platform.Storage.getPage(pageId);
+		if (!isEmpty(page?.customData?.windowBounds)) {
+			return page?.customData?.windowBounds;
 		}
 	}
+
+	const pages = await platform.Browser.getAllAttachedPages();
+	let windowId: OpenFin.Identity | undefined;
+
+	for (const page of pages) {
+		if (page.pageId === pageId) {
+			windowId = page.parentIdentity;
+			break;
+		}
+	}
+
+	if (isEmpty(windowId)) {
+		// check to see if we are talking about a saved page that isn't currently open
+		const savedPage = await platform.Storage.getPage(pageId);
+		if (!isEmpty(savedPage)) {
+			// the requested page is not currently open but is a saved page so try and fetch it from storage as a fallback
+			return savedPage?.customData?.windowBounds;
+		}
+		// it is not an active page and it isn't saved so it is likely a new instance of an existing page (save as)
+		// use the current windowId
+		windowId = await platform.Browser.getLastFocusedWindow();
+	}
+
+	if (!isEmpty(windowId)) {
+		const hostWindow = platform.Browser.wrapSync(windowId);
+		bounds = await hostWindow.openfinWindow.getBounds();
+	}
+
 	return bounds;
 }
 
@@ -355,8 +335,8 @@ export async function getPageBounds(
  */
 export async function launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule> {
 	let customBounds = bounds;
-	if (isEmpty(customBounds)) {
-		customBounds = await getPageBounds(page.pageId, true);
+	if (isEmpty(customBounds) && !isEmpty(page.customData?.windowBounds)) {
+		customBounds = page.customData.windowBounds;
 	}
 
 	const platform = getCurrentSync();

@@ -29,11 +29,6 @@ export interface SharePageData {
 	 * The page data.
 	 */
 	page?: Page;
-
-	/**
-	 * The bounds for the page.
-	 */
-	bounds?: OpenFin.Bounds;
 }
 
 /**
@@ -69,7 +64,6 @@ interface ShareEntryStorePage {
 	 */
 	data: {
 		page: Page;
-		bounds: OpenFin.Bounds;
 	};
 }
 
