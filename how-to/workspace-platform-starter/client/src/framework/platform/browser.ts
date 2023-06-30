@@ -292,7 +292,7 @@ export async function getPageBounds(
 	const platform = getCurrentSync();
 	if (fromStorage) {
 		const page = await platform.Storage.getPage(pageId);
-		if (page?.customData?.windowBounds !== undefined) {
+		if (!isEmpty(page?.customData?.windowBounds)) {
 			return page?.customData?.windowBounds;
 		}
 	}
@@ -303,6 +303,7 @@ export async function getPageBounds(
 	for (const page of pages) {
 		if (page.pageId === pageId) {
 			windowId = page.parentIdentity;
+			break;
 		}
 	}
 

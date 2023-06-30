@@ -310,7 +310,7 @@ export function overrideCallback(
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			const platform = getCurrentSync();
 
-			if (req.page.customData === undefined) {
+			if (isEmpty(req.page.customData)) {
 				req.page.customData = {};
 			}
 
@@ -323,7 +323,7 @@ export function overrideCallback(
 				windowBounds = await parentWindow.getBounds();
 			}
 
-			if (windowBounds !== undefined && windowBounds !== null) {
+			if (!isEmpty(windowBounds)) {
 				req.page.customData.windowBounds = windowBounds;
 			}
 
@@ -362,7 +362,7 @@ export function overrideCallback(
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
 			const windowBounds = await getPageBounds(req.page.pageId);
 			if (!isEmpty(windowBounds)) {
-				if (req.page.customData === undefined) {
+				if (isEmpty(req.page.customData)) {
 					req.page.customData = {};
 				}
 				req.page.customData.windowBounds = windowBounds;

@@ -318,7 +318,7 @@ async function saveSharedPage(data: SharePageData): Promise<void> {
 			if (data.windowIdentity) {
 				const targetWindow = platform.Browser.wrapSync(data.windowIdentity);
 				page = await targetWindow.getPage(data.pageId);
-				if (page?.customData === undefined) {
+				if (isEmpty(page?.customData)) {
 					page.customData = {};
 				}
 				page.customData.windowBounds = await targetWindow.openfinWindow.getBounds();
@@ -332,7 +332,7 @@ async function saveSharedPage(data: SharePageData): Promise<void> {
 			for (const attachedPage of attachedPages) {
 				if (attachedPage.pageId === data.pageId) {
 					page = { ...attachedPage };
-					if (page.customData === undefined) {
+					if (isEmpty(page.customData)) {
 						page.customData = {};
 					}
 					page.customData.windowBounds = getPageBounds(data.pageId);

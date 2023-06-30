@@ -24,10 +24,6 @@ export interface SharePageData {
 	 * The page data.
 	 */
 	page?: Page;
-	/**
-	 * The bounds for the page.
-	 */
-	bounds?: OpenFin.Bounds;
 }
 /**
  * The payload for sharing workspace data.
@@ -59,7 +55,6 @@ interface ShareEntryStorePage {
 	 */
 	data: {
 		page: Page;
-		bounds: OpenFin.Bounds;
 	};
 }
 /**
