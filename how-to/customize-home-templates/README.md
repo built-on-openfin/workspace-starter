@@ -85,6 +85,8 @@ The commands implemented are:
 /contacts-partial <contact name>
 /tree-inline
 /tree-query
+/loading
+/error
 ```
 
 The **/quote** command demonstrates a template that is built dynamically with a graph image.
@@ -98,6 +100,10 @@ The contacts commands demonstrate different approaches to retrieving data.
 - **/contacts** - Retrieves the contact list asynchronously and then only retrieves the details for an item when they are selected, using the additional `Loading` template as a placeholder while the data is loaded. Also by searching for a contact starting with the letter E it will initially show the `Error` template, the contact will work when selecting reload.
 
 - **/tree-inline** and **/tree-query** The tree commands do not actually perform any function other than showing the help. To search for tree structured use a query such as `Acme`, `Bee`, `Chad`, `Dock`. This then demonstrates how to navigate through a tree like data structure and back up.
+
+- **/loading** Demonstrates how to use the built-in loading template to show a busy spinner, and then replace the result when it is no longer needed.
+
+- **/error** Demonstrates how to use the built-in error template to show an error result with a reload button, and then replace the result when it is no longer needed or reloaded.
 
 e.g.
 
@@ -113,6 +119,8 @@ acme
 bee
 chad
 dock
+/loading
+/error
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -136,6 +144,22 @@ Dock
 ```
 
 ![Customize Home Template Tree](customize-home-templates-tree.gif)
+
+e.g.
+
+```shell
+/loading
+```
+
+![Customize Home Template Loading](customize-home-templates-loading.gif)
+
+e.g.
+
+```shell
+/error
+```
+
+![Customize Home Template error](customize-home-templates-error.gif)
 
 ### Contact data
 
