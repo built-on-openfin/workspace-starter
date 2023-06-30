@@ -4,6 +4,7 @@
  * @returns True if the value is null or undefined.
  */
 export function isEmpty(value: unknown): value is null | undefined {
+	// eslint-disable-next-line no-restricted-syntax
 	return value === undefined || value === null;
 }
 
@@ -13,6 +14,7 @@ export function isEmpty(value: unknown): value is null | undefined {
  * @returns True if the value is an object.
  */
 export function isObject(value: unknown): value is object {
+	// eslint-disable-next-line no-restricted-syntax
 	return value !== undefined && value !== null && typeof value === "object";
 }
 
@@ -22,6 +24,7 @@ export function isObject(value: unknown): value is object {
  * @returns True if the value is a string.
  */
 export function isString(value: unknown): value is string {
+	// eslint-disable-next-line no-restricted-syntax
 	return value !== undefined && value !== null && typeof value === "string";
 }
 
@@ -40,6 +43,7 @@ export function isStringValue(value: unknown): value is string {
  * @returns True if the value is a number.
  */
 export function isNumber(value: unknown): value is number {
+	// eslint-disable-next-line no-restricted-syntax
 	return value !== undefined && value !== null && typeof value === "number";
 }
 
@@ -49,6 +53,7 @@ export function isNumber(value: unknown): value is number {
  * @returns True if the value is a boolean.
  */
 export function isBoolean(value: unknown): value is boolean {
+	// eslint-disable-next-line no-restricted-syntax
 	return value !== undefined && value !== null && typeof value === "boolean";
 }
 
@@ -67,6 +72,7 @@ export function isInteger(value: unknown): value is number {
  * @returns The clone of the object.
  */
 export function objectClone<T>(obj: T): T {
+	// eslint-disable-next-line no-restricted-syntax
 	return obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
 }
 
