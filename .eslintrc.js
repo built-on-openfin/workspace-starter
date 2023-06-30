@@ -96,7 +96,7 @@ module.exports = {
 		'import/no-named-as-default': ['warn'],
 		'import/no-named-as-default-member': ['warn'],
 		'import/no-unresolved': ['off'],
-		// 'import/no-unused-modules': [1, { unusedExports: true }],
+		'import/no-unused-modules': ['off'],
 		'import/order': [
 			'error',
 			{
@@ -156,6 +156,7 @@ module.exports = {
 		'no-cond-assign': ['error'],
 		'no-confusing-arrow': ['error'],
 		'no-console': ['off'],
+		'no-constant-binary-expression': ['error'],
 		'no-const-assign': ['off'],
 		'no-constant-condition': ['error'],
 		'no-constructor-return': ['error'],
@@ -603,6 +604,7 @@ module.exports = {
 				'@typescript-eslint/no-floating-promises': ['error'],
 				'@typescript-eslint/no-for-in-array': ['error'],
 				'@typescript-eslint/no-implied-eval': ['error'],
+				'@typescript-eslint/no-import-type-side-effects': ['error'],
 				'@typescript-eslint/no-inferrable-types': ['off'],
 				'@typescript-eslint/no-invalid-this': ['off'],
 				'@typescript-eslint/no-invalid-void-type': ['error'],
@@ -652,12 +654,7 @@ module.exports = {
 				'@typescript-eslint/prefer-function-type': ['error'],
 				'@typescript-eslint/prefer-includes': ['error'],
 				'@typescript-eslint/prefer-namespace-keyword': ['error'],
-				'@typescript-eslint/prefer-nullish-coalescing': [
-					'error',
-					{
-						allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: true
-					}
-				],
+				'@typescript-eslint/prefer-nullish-coalescing': ['error'],
 				'@typescript-eslint/prefer-optional-chain': ['error'],
 				'@typescript-eslint/prefer-readonly': ['error'],
 				'@typescript-eslint/prefer-readonly-parameter-types': ['off'],
