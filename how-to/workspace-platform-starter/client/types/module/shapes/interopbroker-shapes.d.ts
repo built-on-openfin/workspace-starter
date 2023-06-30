@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
-import type { Endpoint, EndpointDefinition } from "./endpoint-shapes";
+import { type Endpoint, type EndpointDefinition } from "./endpoint-shapes";
 /**
  * Options for the platform interop broker.
  */

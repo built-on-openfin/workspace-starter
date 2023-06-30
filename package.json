@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "13.0.0",
+	"version": "13.1.5",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "npm run build --workspaces",
@@ -27,6 +27,8 @@
 		"how-to/hints-and-tips",
 		"how-to/integrate-server-authentication",
 		"how-to/integrate-with-ms365-basic",
+		"how-to/integrate-with-ms365-microflow",
+		"how-to/integrate-with-ms365-microflow-basic",
 		"how-to/integrate-with-rss",
 		"how-to/integrate-with-salesforce-basic",
 		"how-to/integrate-with-sso",

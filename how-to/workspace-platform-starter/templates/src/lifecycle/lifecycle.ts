@@ -1,6 +1,6 @@
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleLifecycleProviderOptions } from "./shapes";
 
@@ -12,7 +12,7 @@ export class ExampleLifecycleProvider implements Lifecycle<ExampleLifecycleProvi
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleLifecycleProviderOptions>;
+	private _definition: ModuleDefinition<ExampleLifecycleProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleLifecycleProvider implements Lifecycle<ExampleLifecycleProvi
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

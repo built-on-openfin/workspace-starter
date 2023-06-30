@@ -45,7 +45,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: IntegrationHelpers;
+	private _helpers: IntegrationHelpers | undefined;
 
 	/**
 	 * Initialize the module.

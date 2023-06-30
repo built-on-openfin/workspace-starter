@@ -29,13 +29,7 @@ Endpoints support an action and request/response function (see [How To Defined E
 - page-set
 - page-remove
 
-We also have some additional endpoints that provide supporting information when a page is saved (such as the height/width and position of the window the page resided in at the point of save). **Note**: In the future we are looking at having this information stored as part of the snapshot so these endpoints will not be needed:
-
-- page-bounds-get
-- page-bounds-set
-- page-bounds-remove
-
-If you provide endpoints with these ids then workspace platform starter will use them instead of the default indexedDB implementation and in the case of the page-bounds endpoints it will capture additional supporting information if these endpoints are defined.
+If you provide endpoints with these ids then workspace platform starter will use them instead of the default indexedDB implementation.
 
 This frees you up to fetch and save your pages from/to anywhere in any way that works for you.
 
@@ -80,33 +74,6 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
     "options": {
      "method": "REMOVE",
      "dataType": "page"
-    }
-   },
-   {
-    "id": "page-bounds-get",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "GET",
-     "dataType": "page-bounds"
-    }
-   },
-   {
-    "id": "page-bounds-set",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "SET",
-     "dataType": "page-bounds"
-    }
-   },
-   {
-    "id": "page-bounds-remove",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "REMOVE",
-     "dataType": "page-bounds"
     }
    }
   ]

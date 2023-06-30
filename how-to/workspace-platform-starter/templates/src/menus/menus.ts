@@ -1,5 +1,5 @@
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import { type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type {
 	MenuEntry,
 	Menus,
@@ -17,7 +17,7 @@ export class ExampleMenusProvider implements Menus<ExampleMenusProviderOptions> 
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleMenusProviderOptions>;
+	private _definition: ModuleDefinition<ExampleMenusProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -29,7 +29,7 @@ export class ExampleMenusProvider implements Menus<ExampleMenusProviderOptions> 
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

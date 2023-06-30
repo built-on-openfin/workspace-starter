@@ -329,7 +329,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private getSearchFilters(tags: string[]): CLIFilter[] {
 		if (Array.isArray(tags)) {
 			const filters: CLIFilter[] = [];
-			const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b));
+			const uniqueTags = [...new Set(tags)].sort();
 			const tagFilter: CLIFilter = {
 				id: AppProvider._HOME_TAG_FILTERS,
 				title: "Tags",
@@ -415,7 +415,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 */
 	private getAppIcon(app: PlatformApp): string | undefined {
 		if (Array.isArray(app.icons) && app.icons.length > 0) {
-			return app.icons[0].src;
+			return app.icons[0].src as string;
 		}
 	}
 

@@ -140,7 +140,7 @@ async function initializeDOM(): Promise<void> {
 				// it and add the buttons/menus
 				await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON, {
 					workspaceComponents,
-					disableUserRearrangement: !(enableRearrangementButton?.checked ?? true),
+					disableUserRearrangement: !enableRearrangementButton?.checked ?? false,
 					customIconUrl: customIconUrlInput?.value ?? "",
 					customOpenUrl: customOpenUrlInput?.value ?? ""
 				});

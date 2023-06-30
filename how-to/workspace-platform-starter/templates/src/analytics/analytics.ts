@@ -2,7 +2,7 @@ import type {
 	AnalyticsModule,
 	PlatformAnalyticsEvent
 } from "workspace-platform-starter/shapes/analytics-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleAnalyticsProviderOptions } from "./shapes";
 
@@ -14,7 +14,7 @@ export class ExampleAnalyticsProvider implements AnalyticsModule<ExampleAnalytic
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleAnalyticsProviderOptions>;
+	private _definition: ModuleDefinition<ExampleAnalyticsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -26,7 +26,7 @@ export class ExampleAnalyticsProvider implements AnalyticsModule<ExampleAnalytic
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

@@ -1,11 +1,11 @@
-import type {
-	CLIFilter,
-	CLITemplate,
-	CustomTemplate,
-	HomeDispatchedSearchResult,
-	HomeSearchListenerResponse,
-	HomeSearchResponse,
-	HomeSearchResult
+import {
+	type CLIFilter,
+	type CLITemplate,
+	type CustomTemplate,
+	type HomeDispatchedSearchResult,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse,
+	type HomeSearchResult
 } from "@openfin/workspace";
 import type { Workspace, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {

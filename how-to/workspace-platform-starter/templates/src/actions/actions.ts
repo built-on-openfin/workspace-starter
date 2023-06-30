@@ -1,10 +1,10 @@
-import type {
-	CustomActionPayload,
-	CustomActionsMap,
-	WorkspacePlatformModule
+import {
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import { type Logger, type LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleActionsProviderOptions } from "./shapes";
 
@@ -28,7 +28,7 @@ export class ExampleActionsProvider implements Actions<ExampleActionsProviderOpt
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

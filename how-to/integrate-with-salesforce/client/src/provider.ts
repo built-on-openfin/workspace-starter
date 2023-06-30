@@ -9,7 +9,7 @@ import {
 } from "@openfin/workspace";
 import { getCurrentSync, init } from "@openfin/workspace-platform";
 import { SalesforceIntegration } from "./salesforce-integration";
-import type { CustomSettings, IntegrationHelpers, Logger } from "./shapes";
+import { type CustomSettings, type IntegrationHelpers, type Logger } from "./shapes";
 import * as templateHelpers from "./template-helpers";
 
 const PLATFORM_ID = "integrate-with-salesforce";
@@ -181,7 +181,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/interop/fdc3/intent/fdc3-intent-view.html",
+							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v13.1.0/interop/fdc3/intent/fdc3-intent-view.html",
 							fdc3InteropApi: "1.2",
 							interop: {
 								currentContextGroup: "green"

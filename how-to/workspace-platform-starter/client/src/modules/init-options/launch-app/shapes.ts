@@ -1,4 +1,4 @@
-import type { InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
+import { type InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
 
 /**
  * Options for the launch app integration.

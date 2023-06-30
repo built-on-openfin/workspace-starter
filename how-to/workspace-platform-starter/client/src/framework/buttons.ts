@@ -1,4 +1,4 @@
-import type { CustomButtonConfig } from "@openfin/workspace";
+import { type CustomButtonConfig } from "@openfin/workspace";
 import {
 	BrowserButtonType,
 	getCurrentSync,

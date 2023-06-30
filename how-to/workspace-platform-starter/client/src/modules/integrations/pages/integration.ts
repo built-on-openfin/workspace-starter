@@ -125,7 +125,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 							this.resultAddUpdate([lastResult]);
 						}
 					} else if (payload.action === "delete") {
-						this.resultRemove(payload.id);
+						this.resultRemove(payload.id as string);
 					}
 				}
 			);
