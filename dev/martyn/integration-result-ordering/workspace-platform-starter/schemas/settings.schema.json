@@ -749,7 +749,7 @@
                 },
                 "type": {
                     "$ref": "#/definitions/BrowserButtonType.Custom",
-                    "description": "Type of cutom browser button"
+                    "description": "Type of custom browser button"
                 }
             },
             "required": [
@@ -835,6 +835,9 @@
                     "type": "string"
                 },
                 "inputBackground": {
+                    "type": "string"
+                },
+                "inputBorder": {
                     "type": "string"
                 },
                 "inputColor": {
@@ -1313,6 +1316,9 @@
                 "NewPage",
                 "NewWindow",
                 "OpenStorefront",
+                "Print",
+                "PrintAll",
+                "PrintScreen",
                 "Quit",
                 "RenameWorkspace",
                 "RestoreChanges",
@@ -2466,6 +2472,9 @@
                         }
                     },
                     "type": "object"
+                },
+                "customData": {
+                    "description": "Optional property to attach custom metadata to the page object, such as version or timestamp. Must be serializable."
                 },
                 "description": {
                     "description": "An optional UI friendly description of the page.",
@@ -3808,6 +3817,8 @@
                 "NewView",
                 "OpenWithDefaultBrowser",
                 "Print",
+                "PrintAll",
+                "PrintScreen",
                 "ReloadTab",
                 "RemoveFromChannel"
             ],

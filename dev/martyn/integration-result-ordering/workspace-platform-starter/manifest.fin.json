@@ -63,7 +63,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integration-result-ordering/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v13.0.0",
+		"name": "Workspace Platform Starter - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -916,10 +916,10 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
@@ -1136,7 +1136,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "13.0.0"
+				"workspace": "13.1.5"
 			},
 			"versionWindow": {
 				"name": "versioning",
