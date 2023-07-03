@@ -22,6 +22,7 @@ import * as shareProvider from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { isEmpty, randomUUID } from "../utils";
 import * as versionProvider from "../version";
+import * as microflowProvider from "../workspace/microflow";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
@@ -124,6 +125,9 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	const customActions = await actionsProvider.getActions();
 	const theme = await getThemes();
 
+	await microflowProvider.init(customSettings?.microflowProvider);
+	const integrations = await microflowProvider.register();
+
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {
 		logger.info("Platform API Ready");
@@ -136,7 +140,8 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 		theme,
 		customActions,
 		interopOverride,
-		overrideCallback
+		overrideCallback,
+		integrations
 	});
 	return true;
 }
