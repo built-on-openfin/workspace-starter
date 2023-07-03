@@ -157,51 +157,51 @@
 		]
 	},
 	{
-		"name": "integrate-with-ms365-microflow",
+		"name": "integrate-with-ms365-low-code",
 		"fileGroups": [
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow/public",
-				"destFolder": "how-to/integrate-with-ms365-microflow/public",
+				"srcFolder": "how-to/integrate-with-ms365-low-code/public",
+				"destFolder": "how-to/integrate-with-ms365-low-code/public",
 				"files": ["favicon.ico"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow/public/common",
-				"destFolder": "how-to/integrate-with-ms365-microflow/public/common",
+				"srcFolder": "how-to/integrate-with-ms365-low-code/public/common",
+				"destFolder": "how-to/integrate-with-ms365-low-code/public/common",
 				"files": ["dos.json"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow/scripts",
-				"destFolder": "how-to/integrate-with-ms365-microflow/scripts",
+				"srcFolder": "how-to/integrate-with-ms365-low-code/scripts",
+				"destFolder": "how-to/integrate-with-ms365-low-code/scripts",
 				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow/client/types",
-				"destFolder": "how-to/integrate-with-ms365-microflow/client/types",
+				"srcFolder": "how-to/integrate-with-ms365-low-code/client/types",
+				"destFolder": "how-to/integrate-with-ms365-low-code/client/types",
 				"files": ["fin.d.ts"]
 			}
 		]
 	},
 	{
-		"name": "integrate-with-ms365-microflow-basic",
+		"name": "integrate-with-ms365-low-code-basic",
 		"fileGroups": [
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow-basic/public",
-				"destFolder": "how-to/integrate-with-ms365-microflow-basic/public",
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public",
 				"files": ["favicon.ico"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow-basic/public/common",
-				"destFolder": "how-to/integrate-with-ms365-microflow-basic/public/common",
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
 				"files": ["dos.json"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow-basic/scripts",
-				"destFolder": "how-to/integrate-with-ms365-microflow-basic/scripts",
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
 				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-microflow-basic/client/types",
-				"destFolder": "how-to/integrate-with-ms365-microflow-basic/client/types",
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
 				"files": ["fin.d.ts"]
 			}
 		]

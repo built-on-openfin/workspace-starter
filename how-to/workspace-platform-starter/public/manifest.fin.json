@@ -1192,11 +1192,11 @@
 				}
 			]
 		},
-		"microflowProvider": {
-			"microflows": [
+		"lowCodeIntegrationProvider": {
+			"lowCodeIntegrations": [
 				{
 					"id": "ms365",
-					"title": "Microsoft 365 Microflow Integration",
+					"title": "Microsoft 365 Low Code Integration",
 					"type": "ms365",
 					"enabled": false,
 					"data": {

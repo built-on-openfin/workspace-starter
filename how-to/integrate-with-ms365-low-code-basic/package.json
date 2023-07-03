@@ -1,7 +1,7 @@
 {
-	"name": "openfin-workspace--integrate-with-ms365-microflows-basic",
+	"name": "openfin-workspace--integrate-with-ms365-low-code-basic",
 	"version": "13.1.5",
-	"description": "OpenFin Workspace -- Integrate with Microsoft 365 Microflows - Basic",
+	"description": "OpenFin Workspace -- Integrate with Microsoft 365 Low Code - Basic",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-ms365 && npm run build"
+		"setup": "cd ../../ && npm install && cd how-to/integrate-with-ms365-low-code-basic && npm run build"
 	},
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
