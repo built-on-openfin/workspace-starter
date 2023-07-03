@@ -70,8 +70,8 @@ async function initializeMicroflows(): Promise<void> {
 export async function init(options: MicroflowProviderOptions | undefined): Promise<void> {
 	if (!isEmpty(options)) {
 		logger.info("MicroflowProvider initialized with options.");
+		microflowOptions = options;
 	}
-	microflowOptions = options;
 }
 
 /**
