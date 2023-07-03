@@ -14,7 +14,7 @@ import type { IntegrationProviderOptions } from "./integrations-shapes";
 import type { LifecycleProviderOptions } from "./lifecycle-shapes";
 import type { LoggerProviderOptions } from "./logger-shapes";
 import type { MenusProviderOptions } from "./menu-shapes";
-import { MicroflowProviderOptions } from "./microflow-shapes";
+import type { MicroflowProviderOptions } from "./microflow-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";

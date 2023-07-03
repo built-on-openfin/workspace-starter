@@ -30,9 +30,8 @@ let deregistered = false;
 
 /**
  * Used to register home related actions.
- * @returns Nothing
  */
-async function registerHomeSupportedActions() {
+function registerHomeSupportedActions(): void {
 	registerAction("show-home", async () => {
 		await homeComponent.show();
 	});
@@ -75,7 +74,7 @@ export async function init(): Promise<boolean> {
 				clientAPIVersion: homeRegistration.clientAPIVersion
 			};
 			registeredComponents.push("home");
-			await registerHomeSupportedActions();
+			registerHomeSupportedActions();
 		}
 	}
 
@@ -166,7 +165,7 @@ export async function init(): Promise<boolean> {
 	await microflowProvider.initializeWorkflows();
 	if (microflowProvider.hasRegisteredMicroflows() && !registeredComponents.includes("home")) {
 		registeredComponents.push("home");
-		await registerHomeSupportedActions();
+		registerHomeSupportedActions();
 	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);

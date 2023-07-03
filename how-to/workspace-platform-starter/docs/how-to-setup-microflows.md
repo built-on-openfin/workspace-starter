@@ -20,7 +20,7 @@ To enable microflows you need to add a microflowProvider section to your customS
    "microflows": [{
     "id": "ms365",
     "title": "Microsoft 365 Microflow Integration",
-    "type": "MS365",
+    "type": "ms365",
     "enabled": false,
     "data": {
      "connect": {

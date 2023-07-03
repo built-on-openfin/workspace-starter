@@ -8,7 +8,7 @@ export interface MicroflowDefinition extends Omit<ModuleDefinition<Microsoft365I
 	/**
 	 * The types of supported Microflow
 	 */
-	type: "MS365";
+	type: "ms365";
 }
 /**
  * The options available when utilizing Microflows.

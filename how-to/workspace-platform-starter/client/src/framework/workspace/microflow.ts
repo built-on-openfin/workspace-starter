@@ -15,7 +15,7 @@ const requiresSearchInitialization: string[] = [];
  * creates a list of microflows that still need their search integration initialized.
  */
 async function initializeMicroflows(): Promise<void> {
-	const microflowDefinitions = microflowOptions?.microflows || [];
+	const microflowDefinitions = microflowOptions?.microflows ?? [];
 	if (microflowDefinitions.length > 0) {
 		logger.info("Initializing defined and enabled Microflows.");
 	}
@@ -25,7 +25,7 @@ async function initializeMicroflows(): Promise<void> {
 				microflows = {};
 			}
 			switch (microflowDefinition.type) {
-				case "MS365": {
+				case "ms365": {
 					try {
 						if (!isEmpty(microflowDefinition.data)) {
 							const ms365Microflow = new Integrations.Microsoft365WorkflowIntegration(
