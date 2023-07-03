@@ -122,7 +122,7 @@ export interface FetchOptions {
 	/**
 	 * The HTTP methods for fetch.
 	 */
-	method?: "GET" | "POST";
+	method?: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
 	/**
 	 * Credentials to send with the fetch.
 	 */
