@@ -19,6 +19,7 @@ import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
 import * as homeComponent from "./workspace/home";
+import * as microflowProvider from "./workspace/microflow";
 import * as notificationsComponent from "./workspace/notifications";
 import * as storeComponent from "./workspace/store";
 
@@ -26,6 +27,19 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
+
+/**
+ * Used to register home related actions.
+ * @returns Nothing
+ */
+async function registerHomeSupportedActions() {
+	registerAction("show-home", async () => {
+		await homeComponent.show();
+	});
+	registerAction("hide-home", async () => {
+		await homeComponent.hide();
+	});
+}
 
 /**
  * Bootstrap the workspace components.
@@ -61,12 +75,7 @@ export async function init(): Promise<boolean> {
 				clientAPIVersion: homeRegistration.clientAPIVersion
 			};
 			registeredComponents.push("home");
-			registerAction("show-home", async () => {
-				await homeComponent.show();
-			});
-			registerAction("hide-home", async () => {
-				await homeComponent.hide();
-			});
+			await registerHomeSupportedActions();
 		}
 	}
 
@@ -152,6 +161,13 @@ export async function init(): Promise<boolean> {
 
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
+
+	// register any instantiated microflows that require registering
+	await microflowProvider.initializeWorkflows();
+	if (microflowProvider.hasRegisteredMicroflows() && !registeredComponents.includes("home")) {
+		registeredComponents.push("home");
+		await registerHomeSupportedActions();
+	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
 	// Remove any entries from autoShow that have not been registered
