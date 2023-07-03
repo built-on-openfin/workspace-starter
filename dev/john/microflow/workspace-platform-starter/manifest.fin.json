@@ -1198,7 +1198,7 @@
 					"id": "ms365",
 					"title": "Microsoft 365 Microflow Integration",
 					"type": "MS365",
-					"enabled": true,
+					"enabled": false,
 					"data": {
 						"connect": {
 							"clientId": "",
