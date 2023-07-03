@@ -2229,7 +2229,7 @@
                 "type": {
                     "description": "The types of supported Microflow",
                     "enum": [
-                        "MS365"
+                        "ms365"
                     ],
                     "type": "string"
                 }
