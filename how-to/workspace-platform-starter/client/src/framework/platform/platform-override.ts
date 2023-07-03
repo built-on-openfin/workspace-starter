@@ -33,6 +33,14 @@ import { isEmpty } from "../utils";
 import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 
+const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
+const WORKSPACE_ENDPOINT_ID_SET = "workspace-set";
+const WORKSPACE_ENDPOINT_ID_REMOVE = "workspace-remove";
+
+const PAGE_ENDPOINT_ID_GET = "page-get";
+const PAGE_ENDPOINT_ID_REMOVE = "page-remove";
+const PAGE_ENDPOINT_ID_SET = "page-set";
+
 const logger = createLogger("PlatformOverride");
 
 let windowDefaultLeft: number | undefined;
@@ -89,15 +97,13 @@ export function overrideCallback(
 			if (!isEmpty(query)) {
 				logger.info(`Saved workspaces requested with query: ${query}`);
 			}
-			const getWorkspacesEndpointId = "workspace-get";
-
-			logger.info(`Checking for custom workspace storage with endpoint id: ${getWorkspacesEndpointId}`);
-			if (endpointProvider.hasEndpoint(getWorkspacesEndpointId)) {
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
 				logger.info("Requesting saved workspaces from custom storage");
 				const workspacesResponse = await endpointProvider.requestResponse<
 					{ query?: string },
 					{ [key: string]: Workspace }
-				>(getWorkspacesEndpointId, { query });
+				>(WORKSPACE_ENDPOINT_ID_GET, { query });
 
 				if (workspacesResponse) {
 					logger.info("Returning saved workspaces from custom storage");
@@ -120,12 +126,11 @@ export function overrideCallback(
 		public async getSavedWorkspace(id: string): Promise<Workspace> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const getWorkspaceEndpointId = "workspace-get";
-			logger.info(`Checking for custom workspace storage with endpoint id: ${getWorkspaceEndpointId}`);
-			if (endpointProvider.hasEndpoint(getWorkspaceEndpointId)) {
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
 				logger.info(`Requesting saved workspace from custom storage for workspace id: ${id}`);
 				const workspaceResponse = await endpointProvider.requestResponse<{ id: string }, Workspace>(
-					getWorkspaceEndpointId,
+					WORKSPACE_ENDPOINT_ID_GET,
 					{ id }
 				);
 				if (workspaceResponse) {
@@ -148,11 +153,10 @@ export function overrideCallback(
 		public async createSavedWorkspace(req: CreateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const setWorkspaceEndpointId = "workspace-set";
-			logger.info(`Checking for custom workspace storage with endpoint id: ${setWorkspaceEndpointId}`);
-			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
-					setWorkspaceEndpointId,
+					WORKSPACE_ENDPOINT_ID_SET,
 					{ id: req.workspace.workspaceId, payload: req.workspace }
 				);
 				if (success) {
@@ -181,11 +185,10 @@ export function overrideCallback(
 		public async updateSavedWorkspace(req: UpdateSavedWorkspaceRequest): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const setWorkspaceEndpointId = "workspace-set";
-			logger.info(`Checking for custom workspace storage with endpoint id: ${setWorkspaceEndpointId}`);
-			if (endpointProvider.hasEndpoint(setWorkspaceEndpointId)) {
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
 				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
-					setWorkspaceEndpointId,
+					WORKSPACE_ENDPOINT_ID_SET,
 					{ id: req.workspace.workspaceId, payload: req.workspace }
 				);
 				if (success) {
@@ -220,10 +223,9 @@ export function overrideCallback(
 		public async deleteSavedWorkspace(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
-			const removeWorkspaceEndpointId = "workspace-remove";
-			logger.info(`Checking for custom workspace storage with endpoint id: ${removeWorkspaceEndpointId}`);
-			if (endpointProvider.hasEndpoint(removeWorkspaceEndpointId)) {
-				const success = await endpointProvider.action<{ id: string }>(removeWorkspaceEndpointId, { id });
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_REMOVE}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_REMOVE)) {
+				const success = await endpointProvider.action<{ id: string }>(WORKSPACE_ENDPOINT_ID_REMOVE, { id });
 				if (success) {
 					logger.info(`Removed workspace with id: ${id} from custom storage`);
 				} else {
@@ -253,14 +255,13 @@ export function overrideCallback(
 			if (!isEmpty(query)) {
 				logger.info(`Saved pages requested with query: ${query}`);
 			}
-			const getPagesEndpointId = "page-get";
-			logger.info(`Checking for custom page storage with endpoint id: ${getPagesEndpointId}`);
-			if (endpointProvider.hasEndpoint(getPagesEndpointId)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
 					{ query?: string },
 					{ [key: string]: Page }
-				>(getPagesEndpointId, { query });
+				>(PAGE_ENDPOINT_ID_GET, { query });
 				if (pagesResponse) {
 					logger.info("Returning saved pages from custom storage");
 					return Object.values(pagesResponse);
@@ -282,13 +283,15 @@ export function overrideCallback(
 		public async getSavedPage(id: string): Promise<Page> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const getPageEndpointId = "page-get";
-			logger.info(`Checking for custom page storage with endpoint id: ${getPageEndpointId}`);
-			if (endpointProvider.hasEndpoint(getPageEndpointId)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 				logger.info(`Getting saved page from custom storage for page id: ${id}`);
-				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(getPageEndpointId, {
-					id
-				});
+				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(
+					PAGE_ENDPOINT_ID_GET,
+					{
+						id
+					}
+				);
 				if (pageResponse) {
 					logger.info(`Returning saved page from custom storage for page id: ${id}`);
 					return pageResponse;
@@ -329,11 +332,10 @@ export function overrideCallback(
 
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const setPageEndpointId = "page-set";
-			logger.info(`Checking for custom page storage with endpoint id: ${setPageEndpointId}`);
-			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Saving page with id: ${req.page.pageId} to custom storage`);
-				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
+				const success = await endpointProvider.action<{ id: string; payload: Page }>(PAGE_ENDPOINT_ID_SET, {
 					id: req.page.pageId,
 					payload: req.page
 				});
@@ -369,11 +371,10 @@ export function overrideCallback(
 			}
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const setPageEndpointId = "page-set";
-			logger.info(`Checking for custom page storage with endpoint id: ${setPageEndpointId}`);
-			if (endpointProvider.hasEndpoint(setPageEndpointId)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Updating saved page and saving to custom storage with page id: ${req.page.pageId}`);
-				const success = await endpointProvider.action<{ id: string; payload: Page }>(setPageEndpointId, {
+				const success = await endpointProvider.action<{ id: string; payload: Page }>(PAGE_ENDPOINT_ID_SET, {
 					id: req.page.pageId,
 					payload: req.page
 				});
@@ -403,11 +404,10 @@ export function overrideCallback(
 		public async deleteSavedPage(id: string): Promise<void> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
-			const removePageEndpointId = "page-remove";
-			logger.info(`Checking for custom page storage with endpoint id: ${removePageEndpointId}`);
-			if (endpointProvider.hasEndpoint(removePageEndpointId)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_REMOVE}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_REMOVE)) {
 				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
-				const success = await endpointProvider.action<{ id: string }>(removePageEndpointId, { id });
+				const success = await endpointProvider.action<{ id: string }>(PAGE_ENDPOINT_ID_REMOVE, { id });
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {

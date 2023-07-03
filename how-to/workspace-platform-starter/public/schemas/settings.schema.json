@@ -1262,8 +1262,11 @@
                 "method": {
                     "description": "The HTTP methods for fetch.",
                     "enum": [
+                        "DELETE",
                         "GET",
-                        "POST"
+                        "PATCH",
+                        "POST",
+                        "PUT"
                     ],
                     "type": "string"
                 },
