@@ -1191,6 +1191,28 @@
 					"data": {}
 				}
 			]
+		},
+		"microflowProvider": {
+			"microflows": [
+				{
+					"id": "ms365",
+					"title": "Microsoft 365 Microflow Integration",
+					"type": "MS365",
+					"enabled": false,
+					"data": {
+						"connect": {
+							"clientId": "",
+							"tenantId": "",
+							"redirectUri": ""
+						},
+						"workflows": {
+							"search": {
+								"disableAutoInitialize": true
+							}
+						}
+					}
+				}
+			]
 		}
 	}
 }
