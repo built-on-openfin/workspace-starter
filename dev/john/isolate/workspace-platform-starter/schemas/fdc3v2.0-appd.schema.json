@@ -1,0 +1,425 @@
+{
+	"$ref": "#/definitions/FDC3VTwoPointZeroAppDirectoryResponse",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"AppDefinition": {
+			"additionalProperties": false,
+			"description": "Definition for an FDC3 2.0 Application.",
+			"properties": {
+				"appId": {
+					"description": "The unique application identifier located within a specific application directory instance.",
+					"type": "string"
+				},
+				"categories": {
+					"description": "An array of string categories that describe the application. These are meant as a hint to catalogs or stores\nlisting apps and can be used by the Workspace Home filter.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"contactEmail": {
+					"description": "Optional e-mail to receive queries about the application",
+					"type": "string"
+				},
+				"customConfig": {
+					"additionalProperties": {},
+					"description": "An optional set of name value pairs that can be used to deliver custom data from an App Directory to a launcher.",
+					"type": "object"
+				},
+				"description": {
+					"description": "Description of the application. This will typically be a 1-2 paragraph style blurb about the application.",
+					"type": "string"
+				},
+				"details": {
+					"anyOf": [
+						{
+							"$ref": "#/definitions/WebAppDetails"
+						},
+						{
+							"$ref": "#/definitions/NativeAppDetails"
+						},
+						{
+							"$ref": "#/definitions/OnlineNativeAppDetails"
+						},
+						{
+							"$ref": "#/definitions/CitrixAppDetails"
+						},
+						{
+							"$ref": "#/definitions/OtherAppDetails"
+						}
+					],
+					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests OpenFin object."
+				},
+				"hostManifests": {
+					"additionalProperties": false,
+					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details.",
+					"properties": {
+						"OpenFin": {
+							"additionalProperties": false,
+							"properties": {
+								"config": {
+									"additionalProperties": false,
+									"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
+									"properties": {
+										"autostart": {
+											"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
+											"type": "boolean"
+										},
+										"instanceMode": {
+											"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
+											"enum": ["multi", "new", "single"],
+											"type": "string"
+										},
+										"private": {
+											"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
+											"type": "boolean"
+										}
+									},
+									"type": "object"
+								},
+								"details": {
+									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
+								},
+								"type": {
+									"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
+									"type": "string"
+								}
+							},
+							"type": "object"
+						}
+					},
+					"required": ["OpenFin"],
+					"type": "object"
+				},
+				"icons": {
+					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or\nSTORE Components",
+					"items": {
+						"$ref": "#/definitions/AppImage"
+					},
+					"type": "array"
+				},
+				"interop": {
+					"$ref": "#/definitions/AppInterop",
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
+				},
+				"lang": {
+					"description": "A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC\n5646.",
+					"type": "string"
+				},
+				"localizedVersions": {
+					"additionalProperties": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object"
+					},
+					"description": "Provides localized alternatives to any field of the app definition, which may also refer to an alternative\nversion of the application that is also localized (e.g. by providing customConfig or an alternative URL). The\nkeys to this object should be language tags as defined by IETF RFC 5646, e.g. en, en-GB or fr-FR.",
+					"type": "object"
+				},
+				"moreInfo": {
+					"description": "Optional URL that provides more information about the application",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the application. The name should be unique within an App Directory instance.",
+					"type": "string"
+				},
+				"publisher": {
+					"description": "The name of the company that owns the application. The publisher has control over their namespace/app/signature.",
+					"type": "string"
+				},
+				"screenshots": {
+					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
+					"items": {
+						"$ref": "#/definitions/Screenshot"
+					},
+					"type": "array"
+				},
+				"supportEmail": {
+					"description": "Optional e-mail to receive support requests for the application",
+					"type": "string"
+				},
+				"title": {
+					"description": "The title for the application, if missing use appName, typically used in a launcher UI.",
+					"type": "string"
+				},
+				"tooltip": {
+					"description": "Optional tooltip description e.g. for a launcher or dock component",
+					"type": "string"
+				},
+				"type": {
+					"$ref": "#/definitions/AppDefinitionType",
+					"description": "The technology type that is used to launch and run the application. Each application type implies a particular\nset of launch details."
+				},
+				"version": {
+					"description": "Version of the application. This allows multiple app versions to be defined using the same app name. This can be\na triplet but can also include things like 1.2.5 (BETA)",
+					"type": "string"
+				}
+			},
+			"required": ["appId", "details", "name", "type"],
+			"type": "object"
+		},
+		"AppDefinitionType": {
+			"description": "The technology type that is used to launch and run the application. Each application type implies a particular set of\nlaunch details.",
+			"enum": ["citrix", "native", "onlineNative", "other", "web"],
+			"type": "string"
+		},
+		"AppImage": {
+			"additionalProperties": false,
+			"description": "Definition for app image.",
+			"properties": {
+				"size": {
+					"description": "Image dimension formatted as <height>x<width>",
+					"type": "string"
+				},
+				"src": {
+					"description": "Image url",
+					"type": "string"
+				},
+				"type": {
+					"description": "Image media type. If not present the platform may use the src file extension",
+					"type": "string"
+				}
+			},
+			"required": ["src"],
+			"type": "object"
+		},
+		"AppIntents": {
+			"additionalProperties": false,
+			"description": "Application intents.",
+			"properties": {
+				"contexts": {
+					"description": "Required. A comma separated list of the types of contexts the intent offered by the application can process,\nwhere the first part of the context type is the namespace e.g.\"fdc3.contact, org.companyname.contact\"",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"customConfig": {
+					"additionalProperties": {},
+					"description": "Custom configuration for the intent that may be required for a particular desktop agent.",
+					"type": "object"
+				},
+				"displayName": {
+					"description": "An optional display name for the intent that may be used in UI instead of the name.",
+					"type": "string"
+				},
+				"resultType": {
+					"description": "An optional type for output returned by the application, if any, when resolving this intent. May indicate a\ncontext type by type name (e.g. \"fdc3.instrument\"), a channel (e.g. \"channel\") or a combination that indicates a\nchannel that returns a particular context type (e.g. \"channel<fdc3.instrument>\").",
+					"type": "string"
+				}
+			},
+			"required": ["contexts"],
+			"type": "object"
+		},
+		"AppInterop": {
+			"additionalProperties": false,
+			"description": "Application interop.",
+			"properties": {
+				"appChannels": {
+					"description": "Describes the application's use of App Channels.",
+					"items": {
+						"additionalProperties": false,
+						"properties": {
+							"broadcasts": {
+								"description": "Context type names that are broadcast by the application on the channel.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							"description": {
+								"description": "A description of how the channel is used.",
+								"type": "string"
+							},
+							"listensFor": {
+								"description": "Context type names that the application listens for on the channel.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							"name": {
+								"description": "The name of the App Channel.",
+								"type": "string"
+							}
+						},
+						"required": ["name"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"intents": {
+					"additionalProperties": false,
+					"description": "Describes the app's interactions with intents.",
+					"properties": {
+						"listensFor": {
+							"additionalProperties": {
+								"$ref": "#/definitions/AppIntents"
+							},
+							"description": "A mapping of Intents names that an app listens for via fdc3.addIntentListener() or\nfin.me.interop.registerIntentHandler. Used to support intent resolution by the interop broker. Replaces the\nintents array used previously.",
+							"type": "object"
+						},
+						"raises": {
+							"additionalProperties": {
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							"description": "A mapping of Intent names that an app raises (via fdc3.raiseIntent) to an array of context type names that it\nmay be raised with. Use the intent name \"any\" to represent use of the fdc3.raiseIntentForContext and\nfdc3.findIntentForContext functions, which allow the user to select from intents available for a specified\ncontext type.",
+							"type": "object"
+						}
+					},
+					"type": "object"
+				},
+				"userChannels": {
+					"additionalProperties": false,
+					"description": "Describes the application's use of context types on User Channels.",
+					"properties": {
+						"broadcasts": {
+							"description": "Context type names that are broadcast by the application.",
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						},
+						"listensFor": {
+							"description": "Context type names that the application listens for.",
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"CitrixAppDetails": {
+			"additionalProperties": false,
+			"description": "Citrix application details.",
+			"properties": {
+				"alias": {
+					"description": "The Citrix alias / name of the virtual app (passed to the Citrix SelfService qlaunch parameter).",
+					"type": "string"
+				},
+				"arguments": {
+					"description": "Arguments that must be passed on the command line to launch the app in the expected configuration.",
+					"type": "string"
+				}
+			},
+			"required": ["alias"],
+			"type": "object"
+		},
+		"FDC3VTwoPointZeroAppDirectoryResponse": {
+			"additionalProperties": false,
+			"description": "The successful response expected from a FDC3 2.0 request when all applications are requested.",
+			"properties": {
+				"$schema": {
+					"description": "The schema that helps guide the structure of the response",
+					"type": "string"
+				},
+				"applications": {
+					"description": "List of applications",
+					"items": {
+						"$ref": "#/definitions/AppDefinition"
+					},
+					"type": "array"
+				},
+				"message": {
+					"description": "Response message providing status of query",
+					"type": "string"
+				},
+				"metadata": {
+					"additionalProperties": false,
+					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been\nreceived.",
+					"properties": {
+						"type": {
+							"enum": ["fdc3"],
+							"type": "string"
+						},
+						"version": {
+							"enum": ["2.0"],
+							"type": "string"
+						}
+					},
+					"required": ["type", "version"],
+					"type": "object"
+				}
+			},
+			"required": ["$schema", "applications"],
+			"type": "object"
+		},
+		"NativeAppDetails": {
+			"additionalProperties": false,
+			"description": "Native application details.",
+			"properties": {
+				"arguments": {
+					"description": "Arguments that must be passed on the command line to launch the app in the expected configuration.",
+					"type": "string"
+				},
+				"path": {
+					"description": "The path on disk from which the application is launched.",
+					"type": "string"
+				}
+			},
+			"required": ["path"],
+			"type": "object"
+		},
+		"OnlineNativeAppDetails": {
+			"additionalProperties": false,
+			"description": "Online native application details.",
+			"properties": {
+				"url": {
+					"description": "Application URL",
+					"type": "string"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		},
+		"OtherAppDetails": {
+			"additionalProperties": false,
+			"description": "Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section",
+			"type": "object"
+		},
+		"Screenshot": {
+			"additionalProperties": false,
+			"description": "Definition for screenshot.",
+			"properties": {
+				"label": {
+					"description": "Optional caption for the image",
+					"type": "string"
+				},
+				"size": {
+					"description": "Image dimension formatted as <height>x<width>",
+					"type": "string"
+				},
+				"src": {
+					"description": "Image url",
+					"type": "string"
+				},
+				"type": {
+					"description": "Image media type. If not present the platform may use the src file extension",
+					"type": "string"
+				}
+			},
+			"required": ["src"],
+			"type": "object"
+		},
+		"WebAppDetails": {
+			"additionalProperties": false,
+			"description": "Application web details.",
+			"properties": {
+				"url": {
+					"description": "Application start URL.",
+					"type": "string"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		}
+	}
+}
