@@ -19,5 +19,5 @@ export interface LowCodeIntegrationProviderOptions {
 	/**
 	 * An array of low code integration definitions to use.
 	 */
-	lowCodeIntegrations: LowCodeIntegrationDefinition[];
+	modules: LowCodeIntegrationDefinition[];
 }

@@ -1193,7 +1193,7 @@
 			]
 		},
 		"lowCodeIntegrationProvider": {
-			"lowCodeIntegrations": [
+			"modules": [
 				{
 					"id": "ms365",
 					"title": "Microsoft 365 Low Code Integration",

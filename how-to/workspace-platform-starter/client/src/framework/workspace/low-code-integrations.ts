@@ -15,7 +15,7 @@ const requiresSearchInitialization: string[] = [];
  * creates a list of low code integrations that still need their search integration initialized.
  */
 async function initializeLowCodeIntegrations(): Promise<void> {
-	const lowCodeDefinitions = lowCodeIntegrationProviderOptions?.lowCodeIntegrations ?? [];
+	const lowCodeDefinitions = lowCodeIntegrationProviderOptions?.modules ?? [];
 	if (lowCodeDefinitions.length > 0) {
 		logger.info("Initializing defined and enabled Low Code Integrations.");
 	}

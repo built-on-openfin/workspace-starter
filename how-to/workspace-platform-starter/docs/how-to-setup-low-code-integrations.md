@@ -17,7 +17,7 @@ To enable low code integrations you need to add a lowCodeIntegrationProvider sec
 
 ```json
 "lowCodeIntegrationProvider": {
-   "lowCodeIntegrations": [{
+   "modules": [{
     "id": "ms365",
     "title": "Microsoft 365 Low Code Integration",
     "type": "ms365",
@@ -38,11 +38,11 @@ To enable low code integrations you need to add a lowCodeIntegrationProvider sec
   }
 ```
 
-In the example above we have provided the lowCodeIntegrations array with a single entry. This entry is to use the MS365 low code integration (specified via the type) and the data within it is the settings required when registering a low code integration. In the example of the Microsoft 365 Low Code Integration you still need to ensure you have the Microsoft tenant and all the related permissions setup. Please see [Working with OpenFin's Microsoft Low Code Integration](https://developers.openfin.co/of-docs/docs/microflows-microsoft). You'll notice we have specified disableAutoInitialize. This is because we want the Low Code Integration home registration to appear after our own home registration icon:
+In the example above we have provided the modules array with a single entry. This entry is to use the MS365 low code integration (specified via the type) and the data within it is the settings required when registering a low code integration. In the example of the Microsoft 365 Low Code Integration you still need to ensure you have the Microsoft tenant and all the related permissions setup. Please see [Working with OpenFin's Microsoft Low Code Integration](https://developers.openfin.co/of-docs/docs/microflows-microsoft). You'll notice we have specified disableAutoInitialize. This is because we want the Low Code Integration home registration to appear after our own home registration icon:
 
 ```json
 "lowCodeIntegrationProvider": {
-   "lowCodeIntegrations": [{
+   "modules": [{
     ...
      "workflows": {
       "search": {

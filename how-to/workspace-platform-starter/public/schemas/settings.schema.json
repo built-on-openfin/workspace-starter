@@ -1820,7 +1820,7 @@
             "additionalProperties": false,
             "description": "The options available when utilizing Low Code Integrations.",
             "properties": {
-                "lowCodeIntegrations": {
+                "modules": {
                     "description": "An array of low code integration definitions to use.",
                     "items": {
                         "$ref": "#/definitions/LowCodeIntegrationDefinition"
@@ -1829,7 +1829,7 @@
                 }
             },
             "required": [
-                "lowCodeIntegrations"
+                "modules"
             ],
             "type": "object"
         },
