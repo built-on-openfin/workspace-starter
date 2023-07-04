@@ -955,13 +955,13 @@
                     "$ref": "#/definitions/LoggerProviderOptions",
                     "description": "The logger provider options."
                 },
+                "lowCodeIntegrationProvider": {
+                    "$ref": "#/definitions/LowCodeIntegrationProviderOptions",
+                    "description": "The low code integration provider options."
+                },
                 "menusProvider": {
                     "$ref": "#/definitions/MenusProviderOptions",
                     "description": "The menus provider options."
-                },
-                "microflowProvider": {
-                    "$ref": "#/definitions/MicroflowProviderOptions",
-                    "description": "The microflow provider options."
                 },
                 "notificationProvider": {
                     "$ref": "#/definitions/NotificationProviderOptions",
@@ -1769,6 +1769,70 @@
             "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
+        "LowCodeIntegrationDefinition": {
+            "additionalProperties": false,
+            "description": "A definition consisting of common settings across Low Code integrations (similar to modules) to help describe the entry and a type and data that helps\nidentify the type of Low Code integration the entry is about.",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/ModuleDefinition.O_1",
+                    "description": "Custom data for the module."
+                },
+                "description": {
+                    "description": "The description of the module.",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Is the module enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon for the module.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id of the module.",
+                    "type": "string"
+                },
+                "info": {
+                    "description": "Url to more information.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "The title of the module.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "The types of supported Low Code Integration",
+                    "enum": [
+                        "ms365"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "title",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LowCodeIntegrationProviderOptions": {
+            "additionalProperties": false,
+            "description": "The options available when utilizing Low Code Integrations.",
+            "properties": {
+                "lowCodeIntegrations": {
+                    "description": "An array of low code integration definitions to use.",
+                    "items": {
+                        "$ref": "#/definitions/LowCodeIntegrationDefinition"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "lowCodeIntegrations"
+            ],
+            "type": "object"
+        },
         "ManifestTypeId": {
             "description": "Manifest types used in manifest files.",
             "enum": [
@@ -2196,70 +2260,6 @@
         "MenusProviderOptions": {
             "$ref": "#/definitions/ModuleList_7",
             "description": "List of modules."
-        },
-        "MicroflowDefinition": {
-            "additionalProperties": false,
-            "description": "A definition consisting of common settings across Microflows (similar to modules) to help describe the entry and a type and data that helps\nidentify the type of Microflow the entry is about.",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/ModuleDefinition.O_1",
-                    "description": "Custom data for the module."
-                },
-                "description": {
-                    "description": "The description of the module.",
-                    "type": "string"
-                },
-                "enabled": {
-                    "description": "Is the module enabled.",
-                    "type": "boolean"
-                },
-                "icon": {
-                    "description": "The icon for the module.",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "The id of the module.",
-                    "type": "string"
-                },
-                "info": {
-                    "description": "Url to more information.",
-                    "type": "string"
-                },
-                "title": {
-                    "description": "The title of the module.",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "The types of supported Microflow",
-                    "enum": [
-                        "ms365"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "title",
-                "type"
-            ],
-            "type": "object"
-        },
-        "MicroflowProviderOptions": {
-            "additionalProperties": false,
-            "description": "The options available when utilizing Microflows.",
-            "properties": {
-                "microflows": {
-                    "description": "An array of Microflow definitions to use.",
-                    "items": {
-                        "$ref": "#/definitions/MicroflowDefinition"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "microflows"
-            ],
-            "type": "object"
         },
         "Microsoft365ConnectionConfig": {
             "additionalProperties": false,

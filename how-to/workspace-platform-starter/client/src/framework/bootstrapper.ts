@@ -19,7 +19,7 @@ import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
 import * as homeComponent from "./workspace/home";
-import * as microflowProvider from "./workspace/microflow";
+import * as lowCodeIntegrationProvider from "./workspace/low-code-integrations";
 import * as notificationsComponent from "./workspace/notifications";
 import * as storeComponent from "./workspace/store";
 
@@ -161,9 +161,9 @@ export async function init(): Promise<boolean> {
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
 
-	// register any instantiated microflows that require registering
-	await microflowProvider.initializeWorkflows();
-	if (microflowProvider.hasRegisteredMicroflows() && !registeredComponents.includes("home")) {
+	// register any instantiated low code integrations that require registering
+	await lowCodeIntegrationProvider.initializeWorkflows();
+	if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
 		registeredComponents.push("home");
 		registerHomeSupportedActions();
 	}

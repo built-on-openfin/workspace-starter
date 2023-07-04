@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { Home, Integrations } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
-import type { WorkflowIntegration } from "@openfin/workspace-platform/client-api/src/shapes/integrations";
+import type { WorkflowIntegration } from "@openfin/workspace-platform";
 import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
