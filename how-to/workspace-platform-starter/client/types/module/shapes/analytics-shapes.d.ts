@@ -4,12 +4,12 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
  * Definition of an analytics module.
  */
 export interface AnalyticsModule<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
-    /**
-     * Handle a list of analytics events.
-     * @param events The events to handle.
-     * @returns Nothing.
-     */
-    handleAnalytics(events: PlatformAnalyticsEvent[]): Promise<void>;
+	/**
+	 * Handle a list of analytics events.
+	 * @param events The events to handle.
+	 * @returns Nothing.
+	 */
+	handleAnalytics(events: PlatformAnalyticsEvent[]): Promise<void>;
 }
 /**
  * A list of modules that will be loaded and then called when analytical events come in from the platform or workspace
@@ -25,12 +25,12 @@ export declare const PLATFORM_ANALYTICS_SOURCE = "WorkspacePlatform";
  * source.
  */
 export interface PlatformAnalyticsEvent extends Omit<AnalyticsEvent, "source"> {
-    /**
-     * The source of the event.
-     */
-    source: typeof PLATFORM_ANALYTICS_SOURCE | AnalyticsSource;
-    /**
-     * The timestamp for the event.
-     */
-    timestamp: Date;
+	/**
+	 * The source of the event.
+	 */
+	source: typeof PLATFORM_ANALYTICS_SOURCE | AnalyticsSource;
+	/**
+	 * The timestamp for the event.
+	 */
+	timestamp: Date;
 }
