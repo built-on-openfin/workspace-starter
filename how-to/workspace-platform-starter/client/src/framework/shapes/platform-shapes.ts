@@ -32,4 +32,22 @@ export interface PlatformProviderOptions {
 	 * settings
 	 */
 	intentPicker?: IntentResolverOptions;
+
+	/**
+	 * When storing page/workspace data using endpoints disable the mapping which reduces the payload size.
+	 */
+	disableStorageMapping?: boolean;
+}
+
+/**
+ * The metadata sent with platform storage endpoint requests.
+ */
+export interface PlatformStorageMetadata {
+	/**
+	 * The version information for the storage payload.
+	 */
+	version: {
+		workspacePlatformClient: string | undefined;
+		workspaceClient: string | undefined;
+	};
 }

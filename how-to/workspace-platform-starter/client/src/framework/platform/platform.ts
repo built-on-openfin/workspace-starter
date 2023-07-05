@@ -140,7 +140,12 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 		theme,
 		customActions,
 		interopOverride,
-		overrideCallback,
+		overrideCallback: async (platformConstructor) =>
+			overrideCallback(
+				platformConstructor,
+				customSettings?.platformProvider,
+				await versionProvider.getVersionInfo()
+			),
 		integrations
 	});
 	return true;

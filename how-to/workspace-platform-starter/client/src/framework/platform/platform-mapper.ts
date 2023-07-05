@@ -129,11 +129,11 @@ type ComponentStateKeys =
 	| "componentName";
 
 /**
- * Cleanup the workspace data to include only relevant information.
- * @param workspace The workspace to cleanup.
- * @returns The cleaned workspace.
+ * Map the platform workspace data to storage version.
+ * @param workspace The workspace to map.
+ * @returns The storage workspace.
  */
-export function cleanupWorkspace(workspace: Workspace | undefined): Workspace {
+export function mapPlatformWorkspaceToStorage(workspace: Workspace | undefined): Workspace {
 	if (isEmpty(workspace)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return undefined as any as Workspace;
@@ -142,7 +142,7 @@ export function cleanupWorkspace(workspace: Workspace | undefined): Workspace {
 	const clone: Workspace = objectClone(workspace);
 
 	for (const win of clone.snapshot.windows) {
-		cleanupClonedWindow(win);
+		platformWorkspaceWindowToStorage(win);
 	}
 
 	// Remove platform dependent information
@@ -180,33 +180,30 @@ export function cleanupWorkspace(workspace: Workspace | undefined): Workspace {
 	// remove platform dependent props
 	removeProp<unknown, WorkspaceSnapshotKeys>(clone.snapshot, "snapshotDetails");
 
-	console.log("Original workspace", workspace);
-	console.log("Clean workspace", clone);
-
 	return clone;
 }
 
 /**
- * Cleanup the page data to include only relevant information.
- * @param page The page to cleanup.
- * @returns The cleaned page.
+ * Map the platform page data to storage version.
+ * @param page The page to map.
+ * @returns The mapped page.
  */
-export function cleanupPage(page: Page | undefined): Page {
+export function mapPlatformPageToStorage(page: Page | undefined): Page {
 	if (isEmpty(page)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return undefined as any as Page;
 	}
 
 	const clone = objectClone(page);
-	cleanupClonedPage(clone);
+	platformPageToStorage(clone);
 	return clone;
 }
 
 /**
- * Cleanup the window data to include only relevant information.
- * @param window The window to cleanup.
+ * Map the platform window data to storage.
+ * @param window The window to map.
  */
-function cleanupClonedWindow(window: BrowserSnapshotWindow): void {
+function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 	const windowDefaults: {
 		propName: BrowserWindowKeys;
 		defaultValue: unknown;
@@ -414,16 +411,16 @@ function cleanupClonedWindow(window: BrowserSnapshotWindow): void {
 		removeProp<unknown, WorkspacePlatformKeys>(window.workspacePlatform, "_internalDeferShowOptions");
 
 		for (const page of window.workspacePlatform.pages) {
-			cleanupClonedPage(page);
+			platformPageToStorage(page);
 		}
 	}
 }
 
 /**
- * Cleanup the page data to include only relevant information.
- * @param page The page to cleanup.
+ * Map the platform page data to storage.
+ * @param page The page to map.
  */
-export function cleanupClonedPage(page: Page): void {
+export function platformPageToStorage(page: Page): void {
 	const pageDefaults: {
 		propName: PageKeys;
 		defaultValue: unknown;
@@ -438,14 +435,14 @@ export function cleanupClonedPage(page: Page): void {
 		removePropIfNonDefault<unknown, PageKeys>(page, pageDefault.propName, pageDefault.defaultValue);
 	}
 
-	cleanupClonedPageLayout(page.layout);
+	platformPageLayoutToStorage(page.layout);
 }
 
 /**
- * Cleanup the page layout data to include only relevant information.
- * @param pageLayout The page to cleanup.
+ * Map the page layout to storage.
+ * @param pageLayout The page layout to map.
  */
-export function cleanupClonedPageLayout(pageLayout: PageLayout): void {
+export function platformPageLayoutToStorage(pageLayout: PageLayout): void {
 	const pageLayoutDefaults: {
 		propName: PageLayoutKeys;
 		defaultValue: unknown;
@@ -537,16 +534,16 @@ export function cleanupClonedPageLayout(pageLayout: PageLayout): void {
 
 	if (pageLayout.content) {
 		for (const component of pageLayout.content) {
-			cleanupClonedLayoutComponent(component);
+			platformLayoutComponentToStorage(component);
 		}
 	}
 }
 
 /**
- * Cleanup the layout content data to include only relevant information.
- * @param component The layout content to cleanup.
+ * Map the platform layout content data to storage.
+ * @param component The layout content to map.
  */
-function cleanupClonedLayoutComponent(component: ComponentType): void {
+function platformLayoutComponentToStorage(component: ComponentType): void {
 	const componentDefaults: {
 		propName: ComponentKey;
 		defaultValue: unknown;
@@ -642,7 +639,7 @@ function cleanupClonedLayoutComponent(component: ComponentType): void {
 
 	if (component.content) {
 		for (const comp of component.content) {
-			cleanupClonedLayoutComponent(comp);
+			platformLayoutComponentToStorage(comp);
 		}
 	}
 }
