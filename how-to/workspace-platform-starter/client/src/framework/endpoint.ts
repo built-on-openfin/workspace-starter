@@ -197,9 +197,13 @@ function getRequestOptions(
 			}
 		}
 
+		options.headers = options.headers ?? {};
+		options.headers.Accept = "application/json";
+
 		// Send the body as JSON only for post, put and patch
 		if (options.method === "POST" || options.method === "PUT" || options.method === "PATCH") {
 			options.body = JSON.stringify(requestClone);
+			options.headers["Content-Type"] = "application/json";
 		}
 	}
 
