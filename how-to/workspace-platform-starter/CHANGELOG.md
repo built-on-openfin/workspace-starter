@@ -9,6 +9,7 @@
 - Fetch endpoints now support DELETE, PUT and PATCH http verbs
 - Page and Workspace storage using custom endpoints now reduces the JSON stored to just the essential data
 - Page and Workspace storage now separates the endpoints for getting all the entries `-list` and a single entry `-get`
+- Page and Workspace request now include the platform id in the request
 - Endpoint fetch requests now add the `Content-Type` and `Accept` headers with `application/json`
 
 ## v13
