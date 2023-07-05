@@ -8,8 +8,10 @@
 - Fetch endpoints substitute url params for all http verbs
 - Fetch endpoints now support DELETE, PUT and PATCH http verbs
 - Page and Workspace storage using custom endpoints now reduces the JSON stored to just the essential data
+- Platform Provider has additional `disableStorageMapping` flag which disables the above mapping
 - Page and Workspace storage now separates the endpoints for getting all the entries `-list` and a single entry `-get`
 - Page and Workspace requests now include the platform uuid in the request
+- Page and Workspace requests now include additional metadata in the request
 - Endpoint fetch requests now add the `Content-Type` and `Accept` headers with `application/json`
 
 ## v13

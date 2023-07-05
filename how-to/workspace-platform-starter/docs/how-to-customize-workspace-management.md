@@ -27,6 +27,7 @@ Instead of modifying this file directly we allow you to specify the destination 
 
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Workspace platform starter checks to see if you have specified the following endpoints:
 
+- workspace-list
 - workspace-get
 - workspace-set
 - workspace-remove
@@ -51,6 +52,15 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
    }
   ],
   "endpoints": [
+   {
+    "id": "workspace-list",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "GET",
+     "dataType": "workspace"
+    }
+   },
    {
     "id": "workspace-get",
     "type": "module",
