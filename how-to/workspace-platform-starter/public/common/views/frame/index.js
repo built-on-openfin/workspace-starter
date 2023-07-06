@@ -19,6 +19,10 @@ async function initializeDOM() {
 		const frame = document.createElement('iframe');
 		frame.title = options?.customData?.frame?.title;
 		frame.src = options.customData.frame.url;
+		const sandbox = options?.customData?.frame?.sandbox;
+		if (sandbox !== undefined && sandbox !== null) {
+			frame.sandbox = sandbox;
+		}
 		document.body.append(frame);
 
 		fin.me.interop.addContextHandler((context) => {

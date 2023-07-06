@@ -228,7 +228,8 @@
 			"customData": {
 				"frame": {
 					"url": "http://localhost:8080/common/views/frame/example-content/example.html",
-					"title": "Example Frame"
+					"title": "Example Frame",
+					"sandbox": "allow-forms allow-same-origin allow-scripts"
 				}
 			},
 			"api": {
