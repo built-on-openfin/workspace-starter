@@ -186,7 +186,7 @@ export function overrideCallback(
 					metaData: {
 						version: {
 							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							workspaceClient: versionInfo.workspaceClient
+							platformClient: versionInfo.platformClient
 						}
 					},
 					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
@@ -230,7 +230,7 @@ export function overrideCallback(
 					metaData: {
 						version: {
 							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							workspaceClient: versionInfo.workspaceClient
+							platformClient: versionInfo.platformClient
 						}
 					},
 					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
@@ -402,7 +402,7 @@ export function overrideCallback(
 					metaData: {
 						version: {
 							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							workspaceClient: versionInfo.workspaceClient
+							platformClient: versionInfo.platformClient
 						}
 					},
 					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
@@ -453,7 +453,7 @@ export function overrideCallback(
 					metaData: {
 						version: {
 							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							workspaceClient: versionInfo.workspaceClient
+							platformClient: versionInfo.platformClient
 						}
 					},
 					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
