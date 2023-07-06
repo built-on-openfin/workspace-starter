@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Example Application To Frame</title>
+		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
+		<link rel="stylesheet" href="../../../style/app.css" />
+		<style>
+			body {
+				height: 100vh;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+		<script type="module" src="../framed/framed.js"></script>
+		<script defer="defer" src="./example.index.js"></script>
+	</head>
+	<body class="small col fill gap20">
+		<h3>A Simple Framed Example</h3>
+		<p>
+			This example imports a script framed.js that allows the parent view's title to be updated when this
+			framed content changes it's title (triggered by the button below).
+		</p>
+		<p>
+			If the fin api is injected into the frame and the preload capability is available then the preload.js
+			script brings in the logic to update the title and the framed.js logic will not run.
+		</p>
+		<p>
+			This Framed App example is used to demonstrate that you can control whether the fin api is injected into
+			frames and the available options and how you could still have communication between child and parent
+			without the fin api.
+		</p>
+		<p>
+			The content you try to frame by updating the Framed App Manifest's custom data must support being framed
+			by the origin of the parent.
+		</p>
+		<button id="change-title">Change Title</button>
+		<h4>Context Type Received</h4>
+		<p id="context-type-received">None</p>
+		<button id="add-context-listener">Add Context Listener</button>
+		<button id="remove-context-listener">Remove Context Listener</button>
+		<button id="broadcast-context">Broadcast Context</button>
+	</body>
+</html>
