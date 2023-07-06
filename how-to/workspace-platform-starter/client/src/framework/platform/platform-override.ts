@@ -27,16 +27,21 @@ import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
 } from "../shapes/lifecycle-shapes";
+import type { PlatformProviderOptions, PlatformStorageMetadata } from "../shapes/platform-shapes";
+import type { VersionInfo } from "../shapes/version-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
 import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
+import { mapPlatformPageToStorage, mapPlatformWorkspaceToStorage } from "./platform-mapper";
 
+const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
 const WORKSPACE_ENDPOINT_ID_SET = "workspace-set";
 const WORKSPACE_ENDPOINT_ID_REMOVE = "workspace-remove";
 
+const PAGE_ENDPOINT_ID_LIST = "page-list";
 const PAGE_ENDPOINT_ID_GET = "page-get";
 const PAGE_ENDPOINT_ID_REMOVE = "page-remove";
 const PAGE_ENDPOINT_ID_SET = "page-set";
@@ -46,15 +51,22 @@ const logger = createLogger("PlatformOverride");
 let windowDefaultLeft: number | undefined;
 let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
+let disableStorageMapping: boolean | undefined;
 
 /**
  * Override methods in the platform.
  * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param platformProviderSettings The settings for the platform provider.
+ * @param versionInfo The app version info.
  * @returns The overridden class.
  */
 export function overrideCallback(
-	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
+	platformProviderSettings: PlatformProviderOptions | undefined,
+	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
+	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
+
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
@@ -97,17 +109,22 @@ export function overrideCallback(
 			if (!isEmpty(query)) {
 				logger.info(`Saved workspaces requested with query: ${query}`);
 			}
-			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
-			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
+			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_LIST}`);
+			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_LIST)) {
 				logger.info("Requesting saved workspaces from custom storage");
 				const workspacesResponse = await endpointProvider.requestResponse<
-					{ query?: string },
-					{ [key: string]: Workspace }
-				>(WORKSPACE_ENDPOINT_ID_GET, { query });
+					{ platform: string; query?: string },
+					{
+						[key: string]: {
+							metaData: PlatformStorageMetadata;
+							payload: Workspace;
+						};
+					}
+				>(WORKSPACE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 
 				if (workspacesResponse) {
 					logger.info("Returning saved workspaces from custom storage");
-					return Object.values(workspacesResponse);
+					return Object.values(workspacesResponse).map((response) => response.payload);
 				}
 				logger.warn("No response getting saved workspaces from custom storage");
 				return [];
@@ -129,13 +146,16 @@ export function overrideCallback(
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
 				logger.info(`Requesting saved workspace from custom storage for workspace id: ${id}`);
-				const workspaceResponse = await endpointProvider.requestResponse<{ id: string }, Workspace>(
-					WORKSPACE_ENDPOINT_ID_GET,
-					{ id }
-				);
+				const workspaceResponse = await endpointProvider.requestResponse<
+					{ platform: string; id: string },
+					{
+						metaData: PlatformStorageMetadata;
+						payload: Workspace;
+					}
+				>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
 				if (workspaceResponse) {
 					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
-					return workspaceResponse;
+					return workspaceResponse.payload;
 				}
 				logger.warn(`No response getting saved workspace from custom storage for workspace id: ${id}`);
 				return {} as Workspace;
@@ -155,10 +175,22 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
-					WORKSPACE_ENDPOINT_ID_SET,
-					{ id: req.workspace.workspaceId, payload: req.workspace }
-				);
+				const success = await endpointProvider.action<{
+					platform: string;
+					id: string;
+					metaData: PlatformStorageMetadata;
+					payload: Workspace;
+				}>(WORKSPACE_ENDPOINT_ID_SET, {
+					platform: fin.me.identity.uuid,
+					id: req.workspace.workspaceId,
+					metaData: {
+						version: {
+							workspacePlatformClient: versionInfo.workspacePlatformClient,
+							platformClient: versionInfo.platformClient
+						}
+					},
+					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+				});
 				if (success) {
 					logger.info(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				} else {
@@ -187,10 +219,22 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{ id: string; payload: Workspace }>(
-					WORKSPACE_ENDPOINT_ID_SET,
-					{ id: req.workspace.workspaceId, payload: req.workspace }
-				);
+				const success = await endpointProvider.action<{
+					platform: string;
+					id: string;
+					metaData: PlatformStorageMetadata;
+					payload: Workspace;
+				}>(WORKSPACE_ENDPOINT_ID_SET, {
+					platform: fin.me.identity.uuid,
+					id: req.workspace.workspaceId,
+					metaData: {
+						version: {
+							workspacePlatformClient: versionInfo.workspacePlatformClient,
+							platformClient: versionInfo.platformClient
+						}
+					},
+					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+				});
 				if (success) {
 					logger.info(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
 				} else {
@@ -225,7 +269,10 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_REMOVE)) {
-				const success = await endpointProvider.action<{ id: string }>(WORKSPACE_ENDPOINT_ID_REMOVE, { id });
+				const success = await endpointProvider.action<{ platform: string; id: string }>(
+					WORKSPACE_ENDPOINT_ID_REMOVE,
+					{ platform: fin.me.identity.uuid, id }
+				);
 				if (success) {
 					logger.info(`Removed workspace with id: ${id} from custom storage`);
 				} else {
@@ -255,16 +302,21 @@ export function overrideCallback(
 			if (!isEmpty(query)) {
 				logger.info(`Saved pages requested with query: ${query}`);
 			}
-			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
-			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
+			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_LIST}`);
+			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_LIST)) {
 				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
-					{ query?: string },
-					{ [key: string]: Page }
-				>(PAGE_ENDPOINT_ID_GET, { query });
+					{ platform: string; query?: string },
+					{
+						[key: string]: {
+							metaData: PlatformStorageMetadata;
+							payload: Page;
+						};
+					}
+				>(PAGE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 				if (pagesResponse) {
 					logger.info("Returning saved pages from custom storage");
-					return Object.values(pagesResponse);
+					return Object.values(pagesResponse).map((ws) => ws.payload);
 				}
 				logger.warn("No response getting saved pages from custom storage");
 				return [];
@@ -286,15 +338,19 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 				logger.info(`Getting saved page from custom storage for page id: ${id}`);
-				const pageResponse = await endpointProvider.requestResponse<{ id: string }, Page>(
-					PAGE_ENDPOINT_ID_GET,
+				const pageResponse = await endpointProvider.requestResponse<
+					{ platform: string; id: string },
 					{
-						id
+						metaData: PlatformStorageMetadata;
+						payload: Page;
 					}
-				);
+				>(PAGE_ENDPOINT_ID_GET, {
+					platform: fin.me.identity.uuid,
+					id
+				});
 				if (pageResponse) {
 					logger.info(`Returning saved page from custom storage for page id: ${id}`);
-					return pageResponse;
+					return pageResponse.payload;
 				}
 
 				logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
@@ -335,9 +391,21 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Saving page with id: ${req.page.pageId} to custom storage`);
-				const success = await endpointProvider.action<{ id: string; payload: Page }>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<{
+					platform: string;
+					id: string;
+					metaData: PlatformStorageMetadata;
+					payload: Page;
+				}>(PAGE_ENDPOINT_ID_SET, {
+					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
-					payload: req.page
+					metaData: {
+						version: {
+							workspacePlatformClient: versionInfo.workspacePlatformClient,
+							platformClient: versionInfo.platformClient
+						}
+					},
+					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
 				});
 				if (success) {
 					logger.info(`Saved page with id: ${req.page.pageId} to custom storage`);
@@ -374,9 +442,21 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Updating saved page and saving to custom storage with page id: ${req.page.pageId}`);
-				const success = await endpointProvider.action<{ id: string; payload: Page }>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<{
+					platform: string;
+					id: string;
+					metaData: PlatformStorageMetadata;
+					payload: Page;
+				}>(PAGE_ENDPOINT_ID_SET, {
+					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
-					payload: req.page
+					metaData: {
+						version: {
+							workspacePlatformClient: versionInfo.workspacePlatformClient,
+							platformClient: versionInfo.platformClient
+						}
+					},
+					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
 				});
 				if (success) {
 					logger.info(`Updated page with id: ${req.page.pageId} against custom storage`);
@@ -407,7 +487,10 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_REMOVE)) {
 				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
-				const success = await endpointProvider.action<{ id: string }>(PAGE_ENDPOINT_ID_REMOVE, { id });
+				const success = await endpointProvider.action<{ platform: string; id: string }>(
+					PAGE_ENDPOINT_ID_REMOVE,
+					{ platform: fin.me.identity.uuid, id }
+				);
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {

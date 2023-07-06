@@ -169,6 +169,15 @@
 				}
 			},
 			{
+				"id": "workspace-list",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "workspace"
+				}
+			},
+			{
 				"id": "workspace-get",
 				"type": "module",
 				"typeId": "local-storage",
@@ -193,6 +202,15 @@
 				"options": {
 					"method": "REMOVE",
 					"dataType": "workspace"
+				}
+			},
+			{
+				"id": "page-list",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "page"
 				}
 			},
 			{

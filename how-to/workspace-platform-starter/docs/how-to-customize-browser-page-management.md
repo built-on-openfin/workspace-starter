@@ -25,6 +25,7 @@ Instead of modifying this file directly we allow you to specify the destination 
 
 Endpoints support an action and request/response function (see [How To Defined Endpoints](./how-to-define-endpoints.md)). Workspace platform starter checks to see if you have specified the following endpoints:
 
+- page-list
 - page-get
 - page-set
 - page-remove
@@ -49,6 +50,15 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
    }
   ],
   "endpoints": [
+   {
+    "id": "page-list",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "GET",
+     "dataType": "page"
+    }
+   },
    {
     "id": "page-get",
     "type": "module",
@@ -86,6 +96,18 @@ As you can see from the configuration above:
 2. Each endpoint definition references that module using type and typeId and passes options specific to the particular endpoint.
 
 If you use the live launch section on the [Main Page](../README.md) and launch the second example and save a page you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your pages.
+
+## Data storage
+
+The endpoint storage maps the page data to simplify it, you can disable this mapping by setting `disableStorageMapping` in platform storage.
+
+```json
+"customSettings": {
+   "platformProvider": {
+      "disableStorageMapping": true
+    }
+}
+```
 
 ## Can I Manage Pages From Home?
 
