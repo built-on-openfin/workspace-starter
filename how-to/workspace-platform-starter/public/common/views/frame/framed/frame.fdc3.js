@@ -1,6 +1,8 @@
 const listeners = {};
 const contextCache = {};
 
+window.addEventListener('message', handleEvent, false);
+
 /**
  * Handles the message from the child frame.
  * @param message message from child frame
@@ -48,8 +50,6 @@ function handleEvent(event) {
 		handleMessage(data);
 	}
 }
-
-window.addEventListener('message', handleEvent, false);
 
 /**
  * Polyfills randomUUID if running in a non-secure context.
