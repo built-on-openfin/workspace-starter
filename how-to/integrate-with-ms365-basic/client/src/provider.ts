@@ -57,7 +57,7 @@ async function initializeDOM(): Promise<void> {
 		updateConnectionStatus();
 		if (CLIENT_ID === "" || TENANT_ID === "") {
 			errorStatus.textContent =
-				"You must complete the CLIENT_ID and TENANT_ID in settings.ts before the example will function";
+				"You must complete the CLIENT_ID and TENANT_ID in provider.ts before the example will function";
 			btnConnect.disabled = true;
 			return;
 		}

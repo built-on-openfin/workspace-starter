@@ -1,22 +1,21 @@
 import {
 	connect,
 	enableLogging,
-	type SalesforceConnection,
-	type SalesforceRestApiSObjectContact,
-	type SalesforceRestApiSearchResult
-} from "@openfin/salesforce";
+	type ServiceNowEntities,
+	type ServiceNowConnection
+} from "@openfin/servicenow";
 import { getCurrentSync, init } from "@openfin/workspace-platform";
 
-// The CONSUMER_KEY and ORG_URL need to be populated with values that can be
-// used to access your Salesforce deployment
-const CONSUMER_KEY: string = "";
-const ORG_URL: string = "";
+// The INSTANCE_URL and CLIENT_ID need to be populated with values that can be
+// used to access your ServiceNow deployment
+const INSTANCE_URL: string = "";
+const CLIENT_ID: string = "";
 
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 // Connection and current list of contacts
-let salesforceConnection: SalesforceConnection | undefined;
-let contacts: SalesforceRestApiSObjectContact[] = [];
+let serviceNowConnection: ServiceNowConnection | undefined;
+let contacts: ServiceNowEntities.Core.Contact[] = [];
 
 // The DOM elements
 let errorStatus: HTMLDivElement | null;
@@ -94,29 +93,29 @@ async function initializeDOM(): Promise<void> {
 		username
 	) {
 		updateConnectionStatus();
-		if (CONSUMER_KEY === "" || ORG_URL === "") {
+		if (INSTANCE_URL === "" || CLIENT_ID === "") {
 			errorStatus.textContent =
-				"You must complete the CONSUMER_KEY and ORG_URL in provider.ts before the example will function";
+				"You must complete the INSTANCE_URL and CLIENT_ID in provider.ts before the example will function";
 			btnConnect.disabled = true;
 			return;
 		}
 
 		btnConnect.addEventListener("click", async () => {
 			if (btnConnect && connectionStatus && username && errorStatus) {
-				salesforceConnection = undefined;
+				serviceNowConnection = undefined;
 				updateConnectionStatus();
 
 				try {
 					errorStatus.textContent = "";
 					contacts = [];
 					btnConnect.disabled = true;
-					connectionStatus.textContent = "Salesforce is connecting";
+					connectionStatus.textContent = "ServiceNow is connecting";
 					enableLogging();
-					salesforceConnection = await connect(ORG_URL, CONSUMER_KEY);
+					serviceNowConnection = await connect(INSTANCE_URL, CLIENT_ID);
 
-					username.textContent = salesforceConnection.currentUser.Username;
+					username.textContent = (serviceNowConnection.currentUser.name as string) ?? "Unknown name";
 				} catch (err) {
-					errorStatus.textContent = `Error connecting to Salesforce\n${formatError(err)}`;
+					errorStatus.textContent = `Error connecting to ServiceNow\n${formatError(err)}`;
 				}
 				updateConnectionStatus();
 			}
@@ -128,8 +127,8 @@ async function initializeDOM(): Promise<void> {
 				if (txtQuery) {
 					txtQuery.value = "";
 				}
-				if (salesforceConnection) {
-					await salesforceConnection.disconnect();
+				if (serviceNowConnection) {
+					await serviceNowConnection.disconnect();
 				}
 			} catch {
 			} finally {
@@ -137,12 +136,12 @@ async function initializeDOM(): Promise<void> {
 					username.textContent = "Not connected";
 				}
 			}
-			salesforceConnection = undefined;
+			serviceNowConnection = undefined;
 			updateConnectionStatus();
 		});
 
 		btnQuery.addEventListener("click", async () => {
-			if (btnQuery && txtQuery && errorStatus && salesforceConnection) {
+			if (btnQuery && txtQuery && errorStatus && serviceNowConnection) {
 				try {
 					btnQuery.disabled = true;
 					txtQuery.disabled = true;
@@ -151,20 +150,18 @@ async function initializeDOM(): Promise<void> {
 					contacts = [];
 					updateContactsTable();
 
-					const query = txtQuery.value;
+					const query = `nameLIKE${encodeURIComponent(txtQuery.value)}`;
 
-					const sfQuery = `FIND {${query}} IN ALL FIELDS RETURNING Contact(Department, Email, Id, Name, Phone, Title) LIMIT 10`;
+					const response = await serviceNowConnection.executeApiRequest<ServiceNowEntities.Core.Contact[]>(
+						`/api/now/v2/table/customer_contact?sysparm_query=${query}`
+					);
 
-					const response = await salesforceConnection.executeApiRequest<
-						SalesforceRestApiSearchResult<SalesforceRestApiSObjectContact>
-					>(`/services/data/vXX.X/search?q=${encodeURIComponent(sfQuery)}`);
-
-					if (response.data?.searchRecords?.length) {
-						contacts = response.data.searchRecords;
+					if (response.data?.length) {
+						contacts = response.data;
 						updateContactsTable();
 					}
 				} catch (err) {
-					errorStatus.textContent = `Error querying Salesforce\n${formatError(err)}`;
+					errorStatus.textContent = `Error querying ServiceNow\n${formatError(err)}`;
 				} finally {
 					btnQuery.disabled = false;
 					txtQuery.disabled = false;
@@ -193,14 +190,14 @@ function formatError(err: unknown): string {
  */
 function updateConnectionStatus(): void {
 	if (errorStatus && btnConnect && btnDisconnect && connectionStatus && btnQuery && txtQuery) {
-		if (salesforceConnection) {
-			connectionStatus.textContent = "Salesforce is connected";
+		if (serviceNowConnection) {
+			connectionStatus.textContent = "ServiceNow is connected";
 			btnConnect.disabled = true;
 			btnDisconnect.disabled = false;
 			btnQuery.disabled = false;
 			txtQuery.disabled = false;
 		} else {
-			connectionStatus.textContent = "Salesforce is disconnected";
+			connectionStatus.textContent = "ServiceNow is disconnected";
 			btnConnect.disabled = false;
 			btnDisconnect.disabled = true;
 			btnQuery.disabled = true;
@@ -221,10 +218,10 @@ function updateContactsTable(): void {
 		} else {
 			for (const contact of contacts) {
 				const nameCell = document.createElement("td");
-				nameCell.textContent = contact.Name;
+				nameCell.textContent = contact.name as string;
 
 				const emailCell = document.createElement("td");
-				emailCell.textContent = contact.Email;
+				emailCell.textContent = contact.email as string;
 
 				const openButton = document.createElement("button");
 				openButton.textContent = "Open";
@@ -251,15 +248,13 @@ function updateContactsTable(): void {
  * Open a contact view.
  * @param contact The contact to view.
  */
-async function openContact(contact: SalesforceRestApiSObjectContact): Promise<void> {
+async function openContact(contact: ServiceNowEntities.Core.Contact): Promise<void> {
 	const viewOptions = {
-		url: `${ORG_URL}/${contact.Id}`,
-		fdc3InteropApi: "1.2",
+		url: `${INSTANCE_URL}nav_to.do?uri=customer_contact.do?sys_id=${contact.sys_id}`,
+		fdc3InteropApi: "2.0",
 		interop: {
 			currentContextGroup: "green"
-		},
-		customData: { buttonLabel: "Process Participant" },
-		target: { name: "", url: "", uuid: "" }
+		}
 	};
 
 	const platform = getCurrentSync();

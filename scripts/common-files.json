@@ -277,6 +277,31 @@
 		]
 	},
 	{
+		"name": "integrate-with-servicenow-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/workspace-platform-starter/public",
+				"destFolder": "how-to/integrate-with-servicenow-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/public/common",
+				"destFolder": "how-to/integrate-with-servicenow-basic/public/common",
+				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/scripts",
+				"destFolder": "how-to/integrate-with-servicenow-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/client/types",
+				"destFolder": "how-to/integrate-with-servicenow-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
 		"name": "integrate-with-auth0",
 		"fileGroups": [
 			{
