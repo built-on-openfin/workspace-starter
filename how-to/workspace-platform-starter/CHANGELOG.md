@@ -12,6 +12,7 @@
 - BREAKING CHANGE: Page and Workspace storage now separates the endpoints for getting all the entries `-list` and a single entry `-get`
 - Page and Workspace requests now include the platform uuid in the request
 - BREAKING CHANGE: Page and Workspace requests now include additional metadata in the request
+- BREAKING CHANGE: Local storage endpoint module has been update to accommodate the above change
 - Endpoint fetch requests now add the `Content-Type` and `Accept` headers with `application/json`
 
 ## v13
