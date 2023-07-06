@@ -21,12 +21,12 @@ module.exports = {
 		'**/node_modules/*',
 		'**/*.bundle.js',
 		'**/build/**/*.js',
-		'preload.js',
 		'**/wc-fin/*.js',
 		'**/3rd-party/*',
 		'**/*.d.ts',
 		'**/settings.schema.json',
-		'**/reports/*'
+		'**/reports/*',
+		'**/integrate-with-salesforce/public/js/preload.js'
 	],
 	parserOptions: {
 		ecmaVersion: 2020,
