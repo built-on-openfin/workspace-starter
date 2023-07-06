@@ -1,5 +1,35 @@
 let acceptableOrigin;
 
+window.addEventListener('DOMContentLoaded', initializeDOM);
+
+/**
+ * Initialize the DOM.
+ */
+async function initializeDOM() {
+	const options = await fin.me.getOptions();
+	if (options?.customData?.frame?.title) {
+		document.title = options.customData.frame.title;
+	}
+	if (options?.customData?.frame?.url) {
+		acceptableOrigin = new URL(options.customData.frame.url).origin;
+		console.log('Setting up message listener.');
+		window.addEventListener('message', handleEvent, false);
+		console.log('Listener added');
+		console.log('Setting framed url.');
+		const frame = document.createElement('iframe');
+		frame.title = options?.customData?.frame?.title;
+		frame.src = options.customData.frame.url;
+		document.body.append(frame);
+
+		fin.me.interop.addContextHandler((context) => {
+			frame.contentWindow.postMessage(
+				{ action: 'context-received', data: { context } },
+				new URL(options.customData.frame.url).origin
+			);
+		});
+	}
+}
+
 /**
  * Handles the message from the child frame.
  * @param message message from child frame
@@ -38,32 +68,3 @@ function handleEvent(event) {
 		handleMessage(data);
 	}
 }
-
-/**
- * Initialize the DOM.
- */
-async function initializeDOM() {
-	const options = await fin.me.getOptions();
-	if (options?.customData?.frame?.title) {
-		document.title = options.customData.frame.title;
-	}
-	if (options?.customData?.frame?.url) {
-		acceptableOrigin = new URL(options.customData.frame.url).origin;
-		console.log('Setting up message listener.');
-		window.addEventListener('message', handleEvent, false);
-		console.log('Listener added');
-		console.log('Setting framed url.');
-		const frame = document.createElement('iframe');
-		frame.title = options?.customData?.frame?.title;
-		frame.src = options.customData.frame.url;
-		document.body.append(frame);
-
-		fin.me.interop.addContextHandler((context) => {
-			frame.contentWindow.postMessage(
-				{ action: 'context-received', data: { context } },
-				new URL(options.customData.frame.url).origin
-			);
-		});
-	}
-}
-window.addEventListener('DOMContentLoaded', initializeDOM);
