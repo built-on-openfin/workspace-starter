@@ -132,3 +132,5 @@ In this snippet we are using the view options to specify whether the fdc3 api sh
 ```
 
 The preload script uses Mutation Observers and postMessage to ensure that the View title is updated as the iframed content's title is updated.
+
+![Example of a Framed App](framed-app-example.gif)
