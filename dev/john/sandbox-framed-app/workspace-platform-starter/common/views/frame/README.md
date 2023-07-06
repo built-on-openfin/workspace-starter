@@ -6,7 +6,7 @@ If the fin api is injected then you can use the fin api or the full fdc3 api.
 
 If the fin api is available (the fdc3 api will also be available if it is available to the view) then the preload script specified in the apps.json file (preload.js) will be included and this adds logic that monitors the iframe's title and updates the views's title so that the content tab reflects the iframed content and not the view.
 
-If the fin api is disabled (and therefore the fdc3 api) for the iframed content then we have an example.html page that loads a script framed.js that enables the title monitoring and provides a basic fdc3 API that supports broadcasting on system/user channels or adding a context listener.
+If the fin api is disabled (and therefore the fdc3 api) for the iframed content then we have an example.html page that loads a script ["framed.js"](./framed/framed.js) that enables the title monitoring and provides a basic fdc3 API that supports broadcasting on system/user channels or adding a context listener.
 
 This is just an example of how you can use the OpenFin APIs, browser APIs (postMessage) and OpenFin settings.
 
@@ -27,7 +27,8 @@ A lot of sites do not allow their content to be contained within an iframe unles
     "customData": {
       "frame": {
         "url": "http://localhost:8080/common/views/frame/example-content/example.html",
-        "title": "Example Frame"
+        "title": "Example Frame",
+        "sandbox": "allow-forms allow-same-origin allow-scripts"
       }
     },
     "api": {
@@ -67,7 +68,8 @@ A lot of sites do not allow their content to be contained within an iframe unles
     "customData": {
       "frame": {
         "url": "http://localhost:8080/common/views/frame/example-content/example.html",
-        "title": "Example Frame"
+        "title": "Example Frame",
+        "sandbox": "allow-forms allow-same-origin allow-scripts"
       }
     }
   },
@@ -75,7 +77,24 @@ A lot of sites do not allow their content to be contained within an iframe unles
 }
 ```
 
-Through customData you can specify the url the iframe should load and the default title you want to assign to the view.
+Through customData you can specify:
+
+- url: the url the iframe should load and the default title you want to assign to the view.
+- title: the initial title that should be assigned to the view/tab on load
+- sandbox: Restrictions you wish to put on the framed content. If you don't want it sandboxed then remove the sandbox setting from custom data. If you want the most restrictive sandbox then set it to an empty string. Otherwise set the permissions you wish to give the framed content ([sandboxed iframes](https://web.dev/sandboxed-iframes/)).
+
+In the example above we have provided the following defaults:
+
+- The framed content can submit a form
+- The framed content can access same origin data (e.g. cookies, localstorage etc)
+- The framed content can execute JavaScript
+
+The framed content cannot:
+
+- Open new windows (so it can't open a new window and have access to the fin API if you don't want to as you specified that restriction to the frame)
+- Navigate the parent (top) to a different url (so it could load itself into the parent view).
+
+This is just an example to show how you could use iframes in an OpenFin Platform, please read the ([sandboxed iframes](https://web.dev/sandboxed-iframes/)) post and read around if you want to know more about iframes and sandboxing.
 
 ### API Settings
 

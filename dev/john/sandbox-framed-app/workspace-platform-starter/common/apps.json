@@ -228,7 +228,8 @@
 			"customData": {
 				"frame": {
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/sandbox-framed-app/workspace-platform-starter/common/views/frame/example-content/example.html",
-					"title": "Example Frame"
+					"title": "Example Frame",
+					"sandbox": "allow-forms allow-same-origin allow-scripts"
 				}
 			},
 			"api": {
