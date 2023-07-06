@@ -99,6 +99,18 @@ As you can see from the configuration above:
 
 If you use the live launch section on the [Main Page](../README.md) and launch the second example and save a workspace you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your workspaces.
 
+## Data storage
+
+The endpoint storage maps the workspace data to simplify it, you can disable this mapping by setting `disableStorageMapping` in platform storage.
+
+```json
+"customSettings": {
+   "platformProvider": {
+      "disableStorageMapping": true
+    }
+}
+```
+
 ## Can I Manage Workspaces From Home?
 
 We include support for doing workspace management from home in workspace platform starter. It is enabled by default as an integration provider.

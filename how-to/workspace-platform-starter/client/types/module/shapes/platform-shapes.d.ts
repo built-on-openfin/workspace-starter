@@ -41,6 +41,6 @@ export interface PlatformStorageMetadata {
 	 */
 	version: {
 		workspacePlatformClient: string | undefined;
-		workspaceClient: string | undefined;
+		platformClient: string | undefined;
 	};
 }
