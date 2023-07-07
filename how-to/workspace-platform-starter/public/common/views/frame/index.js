@@ -1,4 +1,5 @@
 let acceptableOrigin;
+const finFrames = [];
 
 window.addEventListener('DOMContentLoaded', initializeDOM);
 
@@ -51,6 +52,24 @@ function handleMessage(message) {
 				fin.me.interop.setContext(context);
 			} catch (error) {
 				console.warn('You are not bound to a system context group and are unable to set context', error);
+			}
+			break;
+		}
+		case 'broadcast-context': {
+			try {
+				const context = message?.data?.context;
+				console.log('setting context on system contextual group', context);
+				fin.me.interop.setContext(context);
+			} catch (error) {
+				console.warn('You are not bound to a system context group and are unable to set context', error);
+			}
+			break;
+		}
+		case 'send-identity': {
+			const identity = message?.data?.identity;
+			if (identity !== undefined) {
+				console.log('Adding identity of OpenFin enabled frame.', identity);
+				finFrames.push(identity);
 			}
 			break;
 		}
