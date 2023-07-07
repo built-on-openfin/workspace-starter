@@ -1,7 +1,6 @@
 const listeners = {};
 const contextCache = {};
-
-window.addEventListener('message', handleEvent, false);
+let initialized = false;
 
 /**
  * Handles the message from the child frame.
@@ -33,7 +32,7 @@ function handleMessage(message) {
 			break;
 		}
 		default: {
-			console.warn(`Unknown action passed from frame: ${message.action}`);
+			console.warn(`FDC3 Module: Unsupported action passed from frame: ${message.action}`);
 		}
 	}
 }
@@ -43,8 +42,8 @@ function handleMessage(message) {
  * @param event postMessage event that is sent from child frame
  */
 function handleEvent(event) {
-	console.log('Received event', event);
-	console.log('Acceptable domain', parent.origin);
+	console.log('FDC3 Module: Received event', event);
+	console.log('FDC3 Module: Acceptable domain', parent.origin);
 	const { data, origin } = event;
 	if (origin === parent.origin) {
 		handleMessage(data);
@@ -84,6 +83,10 @@ export function randomUUID() {
  * @returns fdc3 cut down api
  */
 export function getFDC3Client() {
+	if (!initialized) {
+		window.addEventListener('message', handleEvent, false);
+		initialized = true;
+	}
 	return {
 		broadcast: async (context) => {
 			parent.postMessage({ action: 'broadcast-context', data: { context } }, '*');
@@ -92,7 +95,7 @@ export function getFDC3Client() {
 			const typeId = contextType ?? '*';
 			if (handler === undefined) {
 				throw new Error(
-					'You must specify either null or a specific type of context object to listen for as the first argument and a function to handle the context as the second argument.'
+					'FDC3 Module: You must specify either null or a specific type of context object to listen for as the first argument and a function to handle the context as the second argument.'
 				);
 			}
 			if (listeners[typeId] === undefined) {
