@@ -1,7 +1,7 @@
 {
-	"name": "openfin-workspace--integrate-with-servicenow-basic",
+	"name": "openfin-workspace--integrate-with-servicenow",
 	"version": "13.1.5",
-	"description": "OpenFin Workspace -- Integrate with ServiceNow - Basic",
+	"description": "OpenFin Workspace -- Integrate with ServiceNow",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
@@ -10,14 +10,17 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-servicenow-basic && npm run build"
+		"setup": "cd ../../ && npm install && cd how-to/integrate-with-servicenow && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
+		"@finos/fdc3": "^2.0.3",
+		"@microsoft/microsoft-graph-types": "^2.35.0",
 		"@openfin/servicenow": "^1.0.0-beta.4",
 		"@openfin/workspace": "13.1.5",
-		"@openfin/workspace-platform": "13.1.5"
+		"@openfin/workspace-platform": "13.1.5",
+		"csstype": "^3.1.2"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",

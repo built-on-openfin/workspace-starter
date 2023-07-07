@@ -1,0 +1,53 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "integrate-with-servicenow",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto", "tel"]
+				}
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Integrate With ServiceNow - v13.1.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With ServiceNow - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"servicenow": {
+			"instanceUrl": "",
+			"clientId": "",
+			"enableLibLogging": true,
+			"images": {
+				"servicenow": "http://localhost:8080/images/apps/servicenow.svg",
+				"contact": "http://localhost:8080/images/types/contact.svg",
+				"account": "http://localhost:8080/images/types/account.svg",
+				"case": "http://localhost:8080/images/types/case.svg",
+				"task": "http://localhost:8080/images/types/task.svg",
+				"incident": "http://localhost:8080/images/types/incident.svg",
+				"call": "http://localhost:8080/images/icons/call.svg",
+				"email": "http://localhost:8080/images/icons/email.svg"
+			}
+		}
+	}
+}
