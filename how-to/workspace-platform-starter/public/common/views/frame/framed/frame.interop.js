@@ -66,11 +66,9 @@ function requestContextGroup() {
  * @param connect should it update the frames fin.me.interop with a fin.Interop.connectSync so it is synced with the current broker - default true.
  */
 export function init(connect = true) {
-	setTimeout(() => {
-		if (connect) {
-			fin.me.interop = fin.Interop.connectSync(fin.me.identity.uuid);
-		}
-		window.addEventListener('message', handleEvent, false);
-		requestContextGroup();
-	}, 4000);
+	if (connect) {
+		fin.me.interop = fin.Interop.connectSync(fin.me.identity.uuid);
+	}
+	window.addEventListener('message', handleEvent, false);
+	requestContextGroup();
 }
