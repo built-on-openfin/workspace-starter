@@ -148,7 +148,7 @@ async function initializeDOM(): Promise<void> {
 				} catch (err) {
 					if (err instanceof AuthTokenExpiredError) {
 						await ms365Connection.disconnect();
-						errorStatus.textContent = "Authentication token expired";
+						errorStatus.textContent = "Session expired, please reconnect and try the operation again";
 					} else {
 						errorStatus.textContent = `Error querying Microsoft 365\n${formatError(err)}`;
 					}
