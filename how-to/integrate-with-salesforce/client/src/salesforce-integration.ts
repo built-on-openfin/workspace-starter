@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import {
-	AuthorizationError,
+	AuthTokenExpiredError,
 	connect,
 	enableLogging,
 	type SalesforceConnection,
@@ -431,11 +431,13 @@ export class SalesforceIntegration {
 
 						this._lastResponse.respond(homeResults);
 					} catch (err) {
-						await this.closeConnection();
-						if (err instanceof AuthorizationError) {
-							this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
+						if (err instanceof AuthTokenExpiredError) {
+							this._logger?.error("Auth token expired, reconnecting");
+							this._salesForceConnection = undefined;
+							await this.openConnection();
+						} else {
+							this._logger?.error("Error retrieving Salesforce search results", err);
 						}
-						this._logger?.error("Error retrieving Salesforce search results", err);
 					}
 				}
 				this._lastResponse.revoke(`${this._definition?.id}-searching`);

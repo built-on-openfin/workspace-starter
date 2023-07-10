@@ -1,10 +1,5 @@
-import {
-	connect,
-	enableLogging,
-	type ServiceNowEntities,
-	type ServiceNowConnection
-} from "@openfin/servicenow";
 import type OpenFin from "@openfin/core";
+import type { ServiceNowEntities } from "@openfin/servicenow";
 import type {
 	ButtonStyle,
 	ButtonTemplateFragment,

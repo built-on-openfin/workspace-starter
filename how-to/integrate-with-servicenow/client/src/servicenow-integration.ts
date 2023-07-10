@@ -2,7 +2,8 @@ import {
 	connect,
 	enableLogging,
 	type ServiceNowEntities,
-	type ServiceNowConnection
+	type ServiceNowConnection,
+	AuthTokenExpiredError
 } from "@openfin/servicenow";
 import {
 	ButtonStyle,
@@ -393,7 +394,13 @@ export class ServiceNowIntegration {
 						lastResponse.respond(homeResults);
 					}
 				} catch (err) {
-					this._logger?.error(this.formatError(err));
+					if (err instanceof AuthTokenExpiredError) {
+						this._logger?.error("Auth token expired, reconnecting");
+						this._serviceNowConnection = undefined;
+						await this.connectToServiceNow();
+					} else {
+						this._logger?.error(this.formatError(err));
+					}
 				}
 			}
 			lastResponse.revoke(`${this._definition?.id}-searching`);

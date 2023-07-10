@@ -14,6 +14,7 @@ import type {
 	User
 } from "@microsoft/microsoft-graph-types";
 import {
+	AuthTokenExpiredError,
 	connect,
 	enableLogging,
 	TeamsConnection,
@@ -24,14 +25,14 @@ import {
 	ButtonStyle,
 	CLITemplate,
 	type CLIFilter,
+	type CLISearchResultCustom,
+	type CLISearchResultLoading,
+	type HomeAction,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	type TemplateFragment,
-	type CLISearchResultLoading,
-	type HomeAction,
-	type CLISearchResultCustom
+	type TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type {
@@ -586,13 +587,19 @@ export class Microsoft365Integration {
 						lastResponse.respond(homeResults);
 					}
 				} catch (err) {
-					const message = err instanceof Error ? err.message : err;
-					lastResponse.respond([
-						await this.createGraphJsonResult(this._integrationHelpers.templateHelpers, palette, {
-							status: 400,
-							data: message
-						})
-					]);
+					if (err instanceof AuthTokenExpiredError) {
+						this._logger?.error("Auth token expired, reconnecting");
+						this._ms365Connection = undefined;
+						await this.connectToMS365();
+					} else {
+						const message = err instanceof Error ? err.message : err;
+						lastResponse.respond([
+							await this.createGraphJsonResult(this._integrationHelpers.templateHelpers, palette, {
+								status: 400,
+								data: message
+							})
+						]);
+					}
 				}
 			}
 			lastResponse.revoke(`${this._definition?.id}-searching`);
