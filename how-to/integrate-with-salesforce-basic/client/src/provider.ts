@@ -167,7 +167,7 @@ async function initializeDOM(): Promise<void> {
 				} catch (err) {
 					if (err instanceof AuthTokenExpiredError) {
 						await salesforceConnection.disconnect();
-						errorStatus.textContent = "Authentication token expired";
+						errorStatus.textContent = "Session expired, please reconnect and try the operation again";
 					} else {
 						errorStatus.textContent = `Error querying Salesforce\n${formatError(err)}`;
 					}
