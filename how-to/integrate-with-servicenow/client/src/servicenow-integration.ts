@@ -1,23 +1,23 @@
 import {
+	AuthTokenExpiredError,
 	connect,
 	enableLogging,
-	type ServiceNowEntities,
 	type ServiceNowConnection,
-	AuthTokenExpiredError
+	type ServiceNowEntities
 } from "@openfin/servicenow";
 import {
 	ButtonStyle,
 	CLITemplate,
 	type CLIFilter,
+	type CLISearchResultCustom,
+	type CLISearchResultLoading,
+	type CustomTemplateData,
+	type HomeAction,
 	type HomeDispatchedSearchResult,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	type TemplateFragment,
-	type CLISearchResultLoading,
-	type HomeAction,
-	type CLISearchResultCustom,
-	type CustomTemplateData
+	type TemplateFragment
 } from "@openfin/workspace";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type {
@@ -27,9 +27,9 @@ import type {
 	IntegrationHelpers,
 	Logger,
 	ServiceNowBatchRequest,
+	ServiceNowIncident,
 	ServiceNowObjectTypes,
 	ServiceNowSettings,
-	THEMED_ICONS,
 	TemplateHelpers
 } from "./shapes";
 
@@ -82,7 +82,7 @@ export class ServiceNowIntegration {
 		Account: "customer_account",
 		Contact: "customer_contact",
 		Case: "sn_customerservice_case",
-		Task: "",
+		Task: "task",
 		Incident: "incident"
 	};
 
@@ -167,15 +167,6 @@ export class ServiceNowIntegration {
 		}
 
 		await this.connectToServiceNow();
-
-		// For themed icons we fetch the svg content so that we can replace colors
-		// when they are used, instead of linking directly to the source
-		const themedIcons: THEMED_ICONS[] = ["call", "email"];
-		for (const themedIcon of themedIcons) {
-			const response = await fetch(this._settings.images[themedIcon]);
-			const svg = await response.text();
-			this._settings.images[themedIcon] = this.svgToInline(svg);
-		}
 	}
 
 	/**
@@ -212,7 +203,7 @@ export class ServiceNowIntegration {
 						"ServiceNow",
 						[
 							"The ServiceNow integration can be used to search multiple data source in your platform.",
-							"Using a freeform query will search the content of Cases, Accounts, Tasks, and Incidents"
+							"Using a freeform query will search the content of Contacts, Accounts, Cases, Tasks and Incidents"
 						],
 						[]
 					)
@@ -331,9 +322,22 @@ export class ServiceNowIntegration {
 							batchRequest.rest_requests.push({
 								id: "Case",
 								method: "GET",
-								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Case}?=${this.buildSearchQuery(
+								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Case}?${this.buildSearchQuery(
 									query,
 									["number", "case", "short_description"],
+									["sys_id", "number"],
+									10
+								)}`
+							});
+						}
+
+						if (includeOptions.includes("Task")) {
+							batchRequest.rest_requests.push({
+								id: "Task",
+								method: "GET",
+								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Task}?${this.buildSearchQuery(
+									query,
+									["number", "short_description"],
 									["sys_id", "number"],
 									10
 								)}`
@@ -346,7 +350,7 @@ export class ServiceNowIntegration {
 								method: "GET",
 								url: `/api/now/v2/table/${
 									ServiceNowIntegration._TABLE_NAMES.Incident
-								}?=${this.buildSearchQuery(query, ["number", "short_description"], ["sys_id", "number"], 10)}`
+								}?${this.buildSearchQuery(query, ["number", "short_description"], ["sys_id", "number"], 10)}`
 							});
 						}
 
@@ -385,8 +389,13 @@ export class ServiceNowIntegration {
 								homeResults.push(await this.createLoadingResult(cs, "number", "Case"));
 							}
 						}
+						if (results.Task) {
+							for (const task of results.Task as ServiceNowEntities.CSM.Task[]) {
+								homeResults.push(await this.createLoadingResult(task, "number", "Task"));
+							}
+						}
 						if (results.Incident) {
-							for (const incident of results.Incident as ServiceNowEntities.CSM.Case[]) {
+							for (const incident of results.Incident as ServiceNowIncident[]) {
 								homeResults.push(await this.createLoadingResult(incident, "number", "Incident"));
 							}
 						}
@@ -470,7 +479,11 @@ export class ServiceNowIntegration {
 							actionData.obj as ServiceNowEntities.CSM.Account
 						),
 					Case: async () =>
-						this.createCaseResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Case)
+						this.createCaseResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Case),
+					Task: async () =>
+						this.createTaskResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Task),
+					Incident: async () =>
+						this.createIncidentResult(templateHelpers, palette, actionData.obj as ServiceNowIncident)
 				};
 
 				const typeHandler = resultHandlers[objType];
@@ -841,9 +854,9 @@ export class ServiceNowIntegration {
 					openTitle: "Open",
 					openImage: this._settings?.images.servicenow ?? "",
 					emailTitle: "E-mail",
-					emailImage: this.getThemedIcon("email", palette),
+					emailImage: this._settings?.images.email ?? "",
 					callTitle: "Call",
-					callImage: this.getThemedIcon("call", palette)
+					callImage: this._settings?.images.call ?? ""
 				}
 			}
 		};
@@ -972,9 +985,9 @@ export class ServiceNowIntegration {
 					openTitle: "Open",
 					openImage: this._settings?.images.servicenow ?? "",
 					emailTitle: "E-mail",
-					emailImage: this.getThemedIcon("email", palette),
+					emailImage: this._settings?.images.email ?? "",
 					callTitle: "Call",
-					callImage: this.getThemedIcon("call", palette)
+					callImage: this._settings?.images.call ?? ""
 				}
 			}
 		};
@@ -1035,7 +1048,7 @@ export class ServiceNowIntegration {
 		}
 
 		if ((cs.sys_updated_on as string)?.length) {
-			pairs.push({ label: "Updated On", value: cs.sys_updated_on as string });
+			pairs.push({ label: "Updated On", value: this.formatDate(cs.sys_updated_on) });
 		}
 
 		const buttons: {
@@ -1078,6 +1091,221 @@ export class ServiceNowIntegration {
 				objType: "Case",
 				obj: cs,
 				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Case}.do?sys_id=${cs.sys_id}`
+			} as ActionData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: templateContent.layout,
+				data: {
+					...templateContent.data,
+					...this.mapPairsToData(pairs),
+					openTitle: "Open",
+					openImage: this._settings?.images.servicenow ?? ""
+				}
+			}
+		};
+	}
+
+	/**
+	 * Create a result to show a task.
+	 * @param templateHelpers To help with creating templates.
+	 * @param palette The current palette.
+	 * @param task The task details.
+	 * @returns The task template.
+	 */
+	private async createTaskResult(
+		templateHelpers: TemplateHelpers,
+		palette: CustomPaletteSet,
+		task: ServiceNowEntities.CSM.Task
+	): Promise<CLISearchResultCustom<HomeAction>> {
+		const pairs: {
+			label: string;
+			value?: string;
+			links?: string[];
+			srcs?: string[];
+			wide?: boolean;
+		}[] = [];
+
+		if (
+			task.assigned_to &&
+			typeof task.assigned_to === "object" &&
+			"display_value" in task.assigned_to &&
+			task.assigned_to.display_value?.length
+		) {
+			pairs.push({ label: "Assigned To", value: task.assigned_to.display_value });
+		}
+
+		if (
+			task.account &&
+			typeof task.account === "object" &&
+			"display_value" in task.account &&
+			task.account.display_value?.length
+		) {
+			pairs.push({ label: "Account", value: task.account.display_value });
+		}
+
+		if ((task.short_description as string)?.length) {
+			pairs.push({ label: "Description", value: task.short_description as string });
+		}
+
+		if ((task.state as string)?.length) {
+			pairs.push({ label: "State", value: task.state as string });
+		}
+
+		if ((task.priority as string)?.length) {
+			pairs.push({ label: "Priority", value: task.priority as string });
+		}
+
+		if ((task.approval as string)?.length) {
+			pairs.push({ label: "Approval", value: task.approval as string });
+		}
+
+		if ((task.sys_updated_on as string)?.length) {
+			pairs.push({ label: "Updated On", value: this.formatDate(task.sys_updated_on) });
+		}
+
+		const buttons: {
+			titleKey: string;
+			action: string;
+			imageKey: string;
+			imageAltText: string;
+		}[] = [
+			{
+				titleKey: "openTitle",
+				action: ServiceNowIntegration._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
+
+		const templateContent = await this.createLayoutTemplate(
+			task.number as string,
+			this._settings?.images.contact,
+			[await this.createPairsLayout(templateHelpers, palette, pairs)],
+			buttons,
+			templateHelpers,
+			palette
+		);
+
+		return {
+			key: `${this._definition?.id}-${task.sys_id}`,
+			score: this.objectTypeToOrder("Task"),
+			title: task.number as string,
+			label: "Task",
+			icon: this._settings?.images.task,
+			actions: [
+				{
+					name: ServiceNowIntegration._ACTION_OPEN,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: this._definition?.id,
+				objType: "Task",
+				obj: task,
+				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Task}.do?sys_id=${task.sys_id}`
+			} as ActionData,
+			template: CLITemplate.Custom,
+			templateContent: {
+				layout: templateContent.layout,
+				data: {
+					...templateContent.data,
+					...this.mapPairsToData(pairs),
+					openTitle: "Open",
+					openImage: this._settings?.images.servicenow ?? ""
+				}
+			}
+		};
+	}
+
+	/**
+	 * Create a result to show a incident.
+	 * @param templateHelpers To help with creating templates.
+	 * @param palette The current palette.
+	 * @param incident The incident details.
+	 * @returns The incident template.
+	 */
+	private async createIncidentResult(
+		templateHelpers: TemplateHelpers,
+		palette: CustomPaletteSet,
+		incident: ServiceNowIncident
+	): Promise<CLISearchResultCustom<HomeAction>> {
+		const pairs: {
+			label: string;
+			value?: string;
+			links?: string[];
+			srcs?: string[];
+			wide?: boolean;
+		}[] = [];
+
+		if (
+			incident.assigned_to &&
+			typeof incident.assigned_to === "object" &&
+			"display_value" in incident.assigned_to &&
+			incident.assigned_to.display_value?.length
+		) {
+			pairs.push({ label: "Assigned To", value: incident.assigned_to.display_value });
+		}
+
+		if ((incident.short_description as string)?.length) {
+			pairs.push({ label: "Description", value: incident.short_description as string });
+		}
+
+		if ((incident.state as string)?.length) {
+			pairs.push({ label: "State", value: incident.state as string });
+		}
+
+		if ((incident.priority as string)?.length) {
+			pairs.push({ label: "Priority", value: incident.priority as string });
+		}
+
+		if ((incident.approval as string)?.length) {
+			pairs.push({ label: "Approval", value: incident.approval as string });
+		}
+
+		if ((incident.sys_updated_on as string)?.length) {
+			pairs.push({ label: "Updated On", value: this.formatDate(incident.sys_updated_on) });
+		}
+
+		const buttons: {
+			titleKey: string;
+			action: string;
+			imageKey: string;
+			imageAltText: string;
+		}[] = [
+			{
+				titleKey: "openTitle",
+				action: ServiceNowIntegration._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
+
+		const templateContent = await this.createLayoutTemplate(
+			incident.number as string,
+			this._settings?.images.contact,
+			[await this.createPairsLayout(templateHelpers, palette, pairs)],
+			buttons,
+			templateHelpers,
+			palette
+		);
+
+		return {
+			key: `${this._definition?.id}-${incident.sys_id}`,
+			score: this.objectTypeToOrder("Incident"),
+			title: incident.number as string,
+			label: "Incident",
+			icon: this._settings?.images.incident,
+			actions: [
+				{
+					name: ServiceNowIntegration._ACTION_OPEN,
+					hotkey: "Enter"
+				}
+			],
+			data: {
+				providerId: this._definition?.id,
+				objType: "Incident",
+				obj: incident,
+				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Incident}.do?sys_id=${incident.sys_id}`
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
@@ -1355,7 +1583,7 @@ export class ServiceNowIntegration {
 		}
 		return `sysparm_query=${parts.join(
 			"^OR"
-		)}&sysparm_limit=${limit}&sysparm_display_value=${retrieveFields.join(",")}^ORDERBYDESCsys_updated_on`;
+		)}^ORDERBYDESCsys_updated_on&sysparm_limit=${limit}&sysparm_fields=${retrieveFields.join(",")}`;
 	}
 
 	/**
@@ -1389,28 +1617,14 @@ export class ServiceNowIntegration {
 	}
 
 	/**
-	 * Convert and svg into inline format.
-	 * @param svg The SVG to convert.
-	 * @returns The converted image.
+	 * Format a date.
+	 * @param date The date to format.
+	 * @returns The formatted date.
 	 */
-	private svgToInline(svg: string): string {
-		return `data:image/svg+xml;utf8,${svg.replace(/#/g, "%23")}`;
-	}
-
-	/**
-	 * Get a theme version of an icon.
-	 * @param themedIcon The theme icon to them.
-	 * @param palette The palette to use for theming.
-	 * @returns The themed icon.
-	 */
-	private getThemedIcon(themedIcon: THEMED_ICONS, palette: CustomPaletteSet): string {
-		if (!this._settings?.images[themedIcon]) {
-			return "";
+	private formatDate(date: unknown): string {
+		if (typeof date === "string") {
+			return new Date(date).toLocaleString();
 		}
-		const icon = this._settings.images[themedIcon];
-		if (icon.startsWith("data:image/svg+xml")) {
-			return icon.replace(/rgb\(0,0,0\)/g, palette.textDefault?.replace(/#/g, "%23") ?? "0,0,0");
-		}
-		return icon;
+		return "";
 	}
 }

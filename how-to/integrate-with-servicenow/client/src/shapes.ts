@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import type OpenFin from "@openfin/core";
 import type { ServiceNowEntities } from "@openfin/servicenow";
 import type {
@@ -373,4 +374,92 @@ export interface TemplateHelpers {
 		fontSize?: number,
 		style?: CSS.Properties
 	): Promise<TemplateFragment>;
+}
+
+/**
+ * Incident from the `incident` table.
+ */
+export interface ServiceNowIncident extends ServiceNowEntities.Core.BaseEntity {
+	parent: unknown;
+	made_sla: unknown;
+	caused_by: unknown;
+	watch_list: unknown;
+	sn_esign_document: unknown;
+	upon_reject: unknown;
+	child_incidents: unknown;
+	hold_reason: unknown;
+	origin_table: unknown;
+	task_effective_number: unknown;
+	approval_history: unknown;
+	skills: unknown;
+	number: unknown;
+	resolved_by: unknown;
+	opened_by: string | ServiceNowEntities.Core.Link;
+	user_input: unknown;
+	state: unknown;
+	route_reason: unknown;
+	knowledge: unknown;
+	order: unknown;
+	calendar_stc: unknown;
+	closed_at: unknown;
+	cmdb_ci: unknown;
+	delivery_plan: unknown;
+	contract: unknown;
+	impact: unknown;
+	active: unknown;
+	business_service: unknown;
+	business_impact: unknown;
+	priority: unknown;
+	rfc: unknown;
+	time_worked: unknown;
+	expected_start: unknown;
+	opened_at: unknown;
+	business_duration: unknown;
+	group_list: unknown;
+	work_end: unknown;
+	caller_id: string | ServiceNowEntities.Core.Link;
+	reopened_time: unknown;
+	resolved_at: unknown;
+	subcategory: null;
+	needs_attention: unknown;
+	universal_request: unknown;
+	short_description: unknown;
+	close_code: null;
+	correlation_display: unknown;
+	work_start: unknown;
+	assignment_group: unknown;
+	additional_assignee_list: unknown;
+	business_stc: unknown;
+	cause: unknown;
+	description: unknown;
+	origin_id: unknown;
+	calendar_duration: unknown;
+	close_notes: unknown;
+	notify: unknown;
+	service_offering: unknown;
+	closed_by: unknown;
+	follow_up: unknown;
+	parent_incident: unknown;
+	contact_type: unknown;
+	sn_esign_esignature_configuration: unknown;
+	reopened_by: unknown;
+	incident_state: unknown;
+	urgency: unknown;
+	problem_id: unknown;
+	company: unknown;
+	reassignment_count: unknown;
+	activity_due: unknown;
+	action_status: unknown;
+	assigned_to: string | ServiceNowEntities.Core.Link;
+	severity: unknown;
+	comments: unknown;
+	approval: unknown;
+	sla_due: unknown;
+	due_date: unknown;
+	reopen_count: unknown;
+	escalation: unknown;
+	upon_approval: unknown;
+	correlation_id: unknown;
+	location: unknown;
+	category: unknown;
 }
