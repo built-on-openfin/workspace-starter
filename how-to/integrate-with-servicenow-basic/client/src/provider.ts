@@ -1,8 +1,9 @@
 import {
+	AuthTokenExpiredError,
 	connect,
 	enableLogging,
-	type ServiceNowEntities,
-	type ServiceNowConnection
+	type ServiceNowConnection,
+	type ServiceNowEntities
 } from "@openfin/servicenow";
 import { getCurrentSync, init } from "@openfin/workspace-platform";
 
@@ -161,7 +162,12 @@ async function initializeDOM(): Promise<void> {
 						updateContactsTable();
 					}
 				} catch (err) {
-					errorStatus.textContent = `Error querying ServiceNow\n${formatError(err)}`;
+					if (err instanceof AuthTokenExpiredError) {
+						await serviceNowConnection.disconnect();
+						errorStatus.textContent = "Authentication token expired";
+					} else {
+						errorStatus.textContent = `Error querying ServiceNow\n${formatError(err)}`;
+					}
 				} finally {
 					btnQuery.disabled = false;
 					txtQuery.disabled = false;

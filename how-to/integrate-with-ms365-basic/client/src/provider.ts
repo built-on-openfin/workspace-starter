@@ -1,5 +1,10 @@
 import type { User } from "@microsoft/microsoft-graph-types";
-import { TeamsConnection, connect, type Microsoft365Connection } from "@openfin/microsoft365";
+import {
+	AuthTokenExpiredError,
+	TeamsConnection,
+	connect,
+	type Microsoft365Connection
+} from "@openfin/microsoft365";
 import type { GraphListResponse } from "@openfin/microsoft365/types/rest-api/rest-api.types";
 
 // The CLIENT_ID and TENANT_ID need to be populated with values that can be
@@ -141,7 +146,12 @@ async function initializeDOM(): Promise<void> {
 						updateUserTable();
 					}
 				} catch (err) {
-					errorStatus.textContent = `Error querying Microsoft 365\n${formatError(err)}`;
+					if (err instanceof AuthTokenExpiredError) {
+						await ms365Connection.disconnect();
+						errorStatus.textContent = "Authentication token expired";
+					} else {
+						errorStatus.textContent = `Error querying Microsoft 365\n${formatError(err)}`;
+					}
 				} finally {
 					btnQuery.disabled = false;
 					txtQuery.disabled = false;

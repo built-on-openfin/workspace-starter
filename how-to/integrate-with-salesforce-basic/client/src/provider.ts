@@ -1,4 +1,5 @@
 import {
+	AuthTokenExpiredError,
 	connect,
 	enableLogging,
 	type SalesforceConnection,
@@ -164,7 +165,12 @@ async function initializeDOM(): Promise<void> {
 						updateContactsTable();
 					}
 				} catch (err) {
-					errorStatus.textContent = `Error querying Salesforce\n${formatError(err)}`;
+					if (err instanceof AuthTokenExpiredError) {
+						await salesforceConnection.disconnect();
+						errorStatus.textContent = "Authentication token expired";
+					} else {
+						errorStatus.textContent = `Error querying Salesforce\n${formatError(err)}`;
+					}
 				} finally {
 					btnQuery.disabled = false;
 					txtQuery.disabled = false;
