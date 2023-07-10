@@ -47,7 +47,9 @@ The theme is defined in the themeProvider settings:
                     "background3": null,
                     "background4": null,
                     "background5": null,
-                    "background6": null
+                    "background6": null,
+                    "linkDefault": null,
+                    "linkHover": null
                 }
             },
             {
@@ -85,7 +87,9 @@ The theme is defined in the themeProvider settings:
                     "background3": "#ECEEF1",
                     "background4": "#ECEEF1",
                     "background5": "#DDDFE4",
-                    "background6": "#ffffff"
+                    "background6": "#ffffff",
+                    "linkDefault": null,
+                    "linkHover": null
                 }
             }
         ]

@@ -362,7 +362,9 @@ export const DEFAULT_PALETTES: {
 		contentBackground2: "#000000",
 		contentBackground3: "#000000",
 		contentBackground4: "#000000",
-		contentBackground5: "#000000"
+		contentBackground5: "#000000",
+		linkDefault: "#6CADE5",
+		linkHover: "#0A76D3"
 	},
 	dark: {
 		brandPrimary: "#0070D2",
@@ -390,6 +392,8 @@ export const DEFAULT_PALETTES: {
 		contentBackground2: "#000000",
 		contentBackground3: "#000000",
 		contentBackground4: "#000000",
-		contentBackground5: "#000000"
+		contentBackground5: "#000000",
+		linkDefault: "#6CADE5",
+		linkHover: "#0A76D3"
 	}
 };
