@@ -23,14 +23,9 @@ export interface CustomSettings {
 }
 
 /**
- * Icons that support theming.
- */
-export type THEMED_ICONS = "call" | "email";
-
-/**
  * All the image keys.
  */
-export type IMAGES = "servicenow" | "contact" | "account" | "case" | "task" | "incident" | THEMED_ICONS;
+export type IMAGES = "servicenow" | "contact" | "account" | "case" | "task" | "incident" | "call" | "email";
 
 /**
  * Settings for the ServiceNow integration.
