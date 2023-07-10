@@ -27,7 +27,6 @@ import type {
 	IntegrationHelpers,
 	Logger,
 	ServiceNowBatchRequest,
-	ServiceNowIncident,
 	ServiceNowObjectTypes,
 	ServiceNowSettings,
 	TemplateHelpers
@@ -395,7 +394,7 @@ export class ServiceNowIntegration {
 							}
 						}
 						if (results.Incident) {
-							for (const incident of results.Incident as ServiceNowIncident[]) {
+							for (const incident of results.Incident as ServiceNowEntities.Core.Incident[]) {
 								homeResults.push(await this.createLoadingResult(incident, "number", "Incident"));
 							}
 						}
@@ -483,7 +482,11 @@ export class ServiceNowIntegration {
 					Task: async () =>
 						this.createTaskResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Task),
 					Incident: async () =>
-						this.createIncidentResult(templateHelpers, palette, actionData.obj as ServiceNowIncident)
+						this.createIncidentResult(
+							templateHelpers,
+							palette,
+							actionData.obj as ServiceNowEntities.Core.Incident
+						)
 				};
 
 				const typeHandler = resultHandlers[objType];
@@ -1227,7 +1230,7 @@ export class ServiceNowIntegration {
 	private async createIncidentResult(
 		templateHelpers: TemplateHelpers,
 		palette: CustomPaletteSet,
-		incident: ServiceNowIncident
+		incident: ServiceNowEntities.Core.Incident
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		const pairs: {
 			label: string;
