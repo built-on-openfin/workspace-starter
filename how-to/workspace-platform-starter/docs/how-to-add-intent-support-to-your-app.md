@@ -33,7 +33,7 @@ if (window.fdc3 !== undefined) {
     type: 'fdc3.contact',
     name: 'John McHugh',
     id: {
-      email: 'john.mchugh@gmail.com'
+      email: 'john.mchugh@example.com'
     }
   };
   const intent = 'StartCall';
@@ -68,7 +68,7 @@ if (window.fdc3 !== undefined) {
     type: 'fdc3.contact',
     name: 'John McHugh',
     id: {
-      email: 'john.mchugh@gmail.com'
+      email: 'john.mchugh@example.com'
     }
   };
   await fdc3.raiseIntentForContext(context);

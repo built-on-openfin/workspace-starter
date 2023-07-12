@@ -1,58 +1,81 @@
+import * as usersModule from '../common/contacts.js';
+
+window.addEventListener('DOMContentLoaded', initializeDOM);
+
 /**
  * Initialize the DOM.
  */
-function initializeDOM() {
+async function initializeDOM() {
 	if (window.fdc3) {
-		const actionButtons = document.querySelectorAll('[data-contact]');
+		await usersModule.initialize();
 
-		const contacts = {
-			john: {
-				type: 'fdc3.contact',
-				name: 'John McHugh',
-				id: {
-					email: 'john.mchugh@gmail.com'
-				}
-			},
-			james: {
-				type: 'fdc3.contact',
-				name: 'James Bond',
-				id: {
-					email: 'bond_james@grandhotels.com'
-				}
-			},
-			avi: {
-				type: 'fdc3.contact',
-				name: 'Avi Green',
-				id: {
-					email: 'avi.green@3rnfnf.onmicrosoft.com'
-				}
-			},
-			ashley: {
-				type: 'fdc3.contact',
-				name: 'Ashley James',
-				id: {
-					email: 'ashley.james@3rnfnf.onmicrosoft.com'
-				}
-			}
-		};
+		const users = usersModule.getUsers();
 
-		for (let i = 0; i < actionButtons.length; i++) {
-			if (i % 2 === 0) {
-				actionButtons[i].addEventListener('click', (e) => selectParticipant(e, contacts));
-			} else {
-				actionButtons[i].addEventListener('click', (e) => raiseIntent(e, contacts));
-			}
+		const tbody = document.querySelector('tbody');
+
+		for (const user of users) {
+			const image = document.createElement('img');
+			image.src = usersModule.getProfilePic(user);
+			image.width = 28;
+			image.height = 28;
+			image.classList.add('profile-pic');
+			image.style.borderRadius = '5px';
+
+			const imageCell = document.createElement('td');
+			imageCell.append(image);
+
+			const dateCell = document.createElement('td');
+			dateCell.textContent = user.interactionDate;
+
+			const nameCell = document.createElement('td');
+			nameCell.textContent = user.name;
+
+			const emailCell = document.createElement('td');
+			emailCell.textContent = user.email;
+
+			const typeCell = document.createElement('td');
+			typeCell.textContent = user.interactionType;
+
+			const actionRow = document.createElement('div');
+			actionRow.classList.add('row');
+			actionRow.classList.add('gap10');
+
+			const selectButton = document.createElement('button');
+			selectButton.textContent = 'Select';
+			selectButton.classList.add('small');
+			selectButton.addEventListener('click', () => selectParticipant(user));
+
+			const raiseIntentButton = document.createElement('button');
+			raiseIntentButton.textContent = 'Raise Intent';
+			raiseIntentButton.classList.add('small');
+			raiseIntentButton.classList.add('secondary');
+			raiseIntentButton.addEventListener('click', () => raiseIntent(user));
+
+			const actionCell = document.createElement('td');
+			actionCell.append(actionRow);
+
+			const row = document.createElement('tr');
+			row.append(imageCell);
+			row.append(dateCell);
+			row.append(nameCell);
+			row.append(emailCell);
+			row.append(typeCell);
+			row.append(actionCell);
+
+			actionRow.append(selectButton);
+			actionRow.append(raiseIntentButton);
+
+			tbody.append(row);
 		}
 	}
 }
 
 /**
  * Update the participant.
- * @param event The event.
- * @param contacts The contacts data.
+ * @param user The selected user.
  */
-function selectParticipant(event, contacts) {
-	const contact = contacts[event.target.dataset.contact];
+function selectParticipant(user) {
+	const contact = usersModule.userToFdc3Context(user);
 	if (contact !== undefined) {
 		window.fdc3.broadcast(contact);
 	}
@@ -60,14 +83,11 @@ function selectParticipant(event, contacts) {
 
 /**
  * Raise the intent for the contact.
- * @param event The event being raised.
- * @param contacts The contacts.
+ * @param user The selected user.
  */
-function raiseIntent(event, contacts) {
-	const contact = contacts[event.target.dataset.contact];
+function raiseIntent(user) {
+	const contact = usersModule.userToFdc3Context(user);
 	if (contact !== undefined) {
 		window.fdc3.raiseIntent('ViewContact', contact);
 	}
 }
-
-window.addEventListener('DOMContentLoaded', initializeDOM);

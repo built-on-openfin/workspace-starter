@@ -77,7 +77,7 @@ if (window.fdc3 !== undefined) {
     type: 'fdc3.contact',
     name: 'John McHugh',
     id: {
-      email: 'john.mchugh@notreal.com'
+      email: 'john.mchugh@example.com'
     }
   };
 
@@ -124,7 +124,7 @@ if (window.fdc3 !== undefined) {
     type: 'fdc3.contact',
     name: 'John McHugh',
     id: {
-      email: 'john.mchugh@notreal.com'
+      email: 'john.mchugh@example.com'
     }
   };
 
