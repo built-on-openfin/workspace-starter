@@ -495,6 +495,7 @@
 					"style/style-changed-preload.js",
 					"views/platform/of-info.view.fin.json",
 					"views/platform/of-info/**/*",
+					"lib/**/*",
 					"dos.json"
 				]
 			},
