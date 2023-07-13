@@ -6,7 +6,13 @@
 		<title>Participant Summary</title>
 		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
 		<link rel="stylesheet" href="../../../style/app.css" />
-		<script defer="defer" src="./index.js"></script>
+		<script defer="defer" src="./index.js" type="module"></script>
+		<script type="module" src="../../../lib/wc-fin/wc-fin.esm.js"></script>
+		<style>
+			.profile-pic {
+				border-radius: 5px;
+			}
+		</style>
 	</head>
 
 	<body class="small col fill gap20">
@@ -21,37 +27,51 @@
 		</div>
 
 		<main class="form col gap10 scroll-vertical">
-			<h4 id="username" class="primary">John McHugh</h4>
+			<h4 id="username" class="primary">Ashley James</h4>
 			<div class="form-group">
-				<fieldset>
-					<label>Username</label>
-					<div id="email" class="primary">john.mchugh@gmail.com</div>
-				</fieldset>
-				<fieldset>
-					<label>Password Status</label>
-					<div>Active</div>
-				</fieldset>
+				<div class="row spread">
+					<div class="col gap10">
+						<fieldset>
+							<label>Username</label>
+							<div id="email" class="primary">ashley.james@example.com</div>
+						</fieldset>
+						<fieldset>
+							<label>Password Status</label>
+							<div>Active</div>
+						</fieldset>
+					</div>
+					<div class="col">
+						<img
+							id="profile-pic"
+							src="../data/avatars/ashley.james.png"
+							alt="Profile"
+							width="64px"
+							height="64px"
+							class="border profile-pic"
+						/>
+					</div>
+				</div>
 			</div>
 			<div class="form-group">
 				<fieldset>
 					<label>SSN</label>
-					<div>XXX-XXX-XXX</div>
+					<div id="ssn">100-123-101</div>
 				</fieldset>
 				<fieldset>
 					<label>DOB</label>
-					<div>04/23/1987</div>
+					<div id="dob">04/23/1987</div>
 				</fieldset>
 				<fieldset>
 					<label>Age</label>
-					<div>35</div>
+					<div id="age">35</div>
 				</fieldset>
 				<fieldset>
 					<label>Marital Status</label>
-					<div>Married</div>
+					<div id="marital-status">Married</div>
 				</fieldset>
 				<fieldset>
 					<label>Gender Identity</label>
-					<div>Male</div>
+					<div id="gender">Female</div>
 				</fieldset>
 			</div>
 			<div class="form-group">
@@ -65,7 +85,7 @@
 				</fieldset>
 				<fieldset>
 					<label>Email</label>
-					<div id="email" class="primary">john.mchugh@gmail.com</div>
+					<div id="email" class="primary">ashley.james@example.com</div>
 				</fieldset>
 				<fieldset>
 					<label>Phone</label>
