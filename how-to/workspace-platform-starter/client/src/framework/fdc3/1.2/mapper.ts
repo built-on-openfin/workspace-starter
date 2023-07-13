@@ -1,6 +1,13 @@
 import type { Image } from "@openfin/workspace";
 import type { PlatformApp } from "../../shapes";
-import type { AppDefinition, AppIcon, AppImage, AppIntents, AppMetadata, CustomConfig } from "../../shapes/fdc3-1-2-shapes";
+import type {
+	AppDefinition,
+	AppIcon,
+	AppImage,
+	AppIntents,
+	AppMetadata,
+	CustomConfig
+} from "../../shapes/fdc3-1-2-shapes";
 import type { AppInterop, AppIntents as FDC3TwoPointZeroAppIntents } from "../../shapes/fdc3-2-0-shapes";
 import { isBoolean, isEmpty, isStringValue } from "../../utils";
 
@@ -134,17 +141,19 @@ export function mapInteropFromFDC3(intents: AppIntents[] | undefined): AppIntero
 function mapIntentsFromPlatformApp(app: PlatformApp): AppIntents[] {
 	const intents: AppIntents[] = [];
 	const passedIntents = app.interop?.intents?.listensFor;
-	if(!isEmpty(passedIntents)) {
+	if (!isEmpty(passedIntents)) {
 		const keys = Object.keys(passedIntents);
-		for(const key of keys) {
+		for (const key of keys) {
 			const displayName: string = passedIntents[key].displayName ?? key;
-			intents.push({ name: key,
+			intents.push({
+				name: key,
 				displayName,
 				contexts: passedIntents[key].contexts,
-				customConfig: passedIntents[key].customConfig });
+				customConfig: passedIntents[key].customConfig
+			});
 		}
 	}
-	if(intents.length === 0 && !isEmpty(app.intents)) {
+	if (intents.length === 0 && !isEmpty(app.intents)) {
 		return app.intents;
 	}
 	return intents;
@@ -157,9 +166,9 @@ function mapIntentsFromPlatformApp(app: PlatformApp): AppIntents[] {
  */
 function mapCustomConfigFromPlatformApp(app: PlatformApp): CustomConfig {
 	const config: CustomConfig = {
-		"autostart": mapBooleanValue(app?.autostart, false).toString(),
-		"instanceMode": app.instanceMode,
-		"private": mapBooleanValue(app.private, false).toString()
+		autostart: mapBooleanValue(app?.autostart, false).toString(),
+		instanceMode: app.instanceMode,
+		private: mapBooleanValue(app.private, false).toString()
 	};
 	return config;
 }
@@ -186,7 +195,7 @@ function mapIconsFromFDC3(icons: AppIcon[] | undefined): Image[] {
  * @returns The array of app icons in FDC3 1.2 format.
  */
 function mapIconsFromPlatformApp(app: PlatformApp): AppIcon[] {
-	if(!Array.isArray(app.icons)) {
+	if (!Array.isArray(app.icons)) {
 		return [];
 	}
 	const appIcons: AppIcon[] = [];

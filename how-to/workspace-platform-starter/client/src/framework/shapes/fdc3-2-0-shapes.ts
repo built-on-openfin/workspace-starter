@@ -125,14 +125,14 @@ export interface AppDefinition {
 }
 
 /**
-* A mapping from host name to a host-specific application manifest object or URI from which that manifest can be
-* retrieved. The manifest should provide details required to launch and use the application within the specified
-* host. The manifest MAY duplicate or override information provided in the details field. For web entries the url
-* is fetched from the details but you would want to specify custom view manifest options (or point to a manifest)
-* in the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use
-* the type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the
-* relevant details.
-*/
+ * A mapping from host name to a host-specific application manifest object or URI from which that manifest can be
+ * retrieved. The manifest should provide details required to launch and use the application within the specified
+ * host. The manifest MAY duplicate or override information provided in the details field. For web entries the url
+ * is fetched from the details but you would want to specify custom view manifest options (or point to a manifest)
+ * in the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use
+ * the type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the
+ * relevant details.
+ */
 export interface HostManifests {
 	/**
 	 * The OpenFin settings for this FDC3 2.0 App Definition

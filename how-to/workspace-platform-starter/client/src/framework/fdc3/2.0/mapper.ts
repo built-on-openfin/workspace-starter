@@ -13,7 +13,6 @@ import type {
 } from "../../shapes/fdc3-2-0-shapes";
 import { isEmpty, isObject } from "../../utils";
 
-
 /**
  * Map the app definition to a platform app.
  * @param app The app definition to map.
@@ -123,7 +122,7 @@ export function mapIntentsFromFDC3(interop: AppInterop | undefined): AppIntent[]
  * @returns The app interop definition.
  */
 function getInteropFromPlatformApp(app: PlatformApp): AppInterop {
-	if(!isEmpty(app.interop)) {
+	if (!isEmpty(app.interop)) {
 		return app.interop;
 	}
 	const interop: AppInterop = {
@@ -132,12 +131,12 @@ function getInteropFromPlatformApp(app: PlatformApp): AppInterop {
 		}
 	};
 
-	if(Array.isArray(app.intents) && app.intents.length > 0) {
-		const listensFor: { [key: string]: AppIntents} = {};
-		for(const intent of app.intents) {
+	if (Array.isArray(app.intents) && app.intents.length > 0) {
+		const listensFor: { [key: string]: AppIntents } = {};
+		for (const intent of app.intents) {
 			listensFor[intent.name] = { displayName: intent.displayName, contexts: intent.contexts };
 		}
-		if(!isEmpty(interop.intents)) {
+		if (!isEmpty(interop.intents)) {
 			interop.intents.listensFor = listensFor;
 		}
 	}
@@ -184,7 +183,7 @@ function mapManifestTypeFromFDC3(app: AppDefinition): string {
  */
 function mapTypeFromPlatformApp(app: PlatformApp): AppDefinitionType {
 	let type: AppDefinitionType = "other";
-	if(isEmpty(app.manifestType)) {
+	if (isEmpty(app.manifestType)) {
 		return type;
 	}
 	switch (app.manifestType) {
@@ -274,4 +273,3 @@ function getHostManifestsFromPlatformApp(app: PlatformApp): HostManifests {
 	};
 	return hostManifests;
 }
-
