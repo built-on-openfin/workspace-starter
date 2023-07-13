@@ -1,5 +1,5 @@
-import { mapInterop, mapToPlatformApp as mapFDC3OnePointTwoToPlatformApp } from "./fdc3/1.2/mapper";
-import { mapIntents, mapToPlatformApp as mapFDC3TwoPointZeroToPlatformApp } from "./fdc3/2.0/mapper";
+import { mapInteropFromFDC3, mapToPlatformApp as mapFDC3OnePointTwoToPlatformApp } from "./fdc3/1.2/mapper";
+import { mapIntentsFromFDC3, mapToPlatformApp as mapFDC3TwoPointZeroToPlatformApp } from "./fdc3/2.0/mapper";
 import { createLogger } from "./logger-provider";
 import type { EndpointProvider, PlatformApp } from "./shapes";
 import type { DirectoryApps, DirectoryEndpoint } from "./shapes/directory-shapes";
@@ -182,9 +182,9 @@ function mapOpenFinResults(applications: PlatformApp[]): PlatformApp[] {
 
 	for (const app of applications) {
 		if (Array.isArray(app.intents) && isEmpty(app.interop)) {
-			app.interop = mapInterop(app.intents);
+			app.interop = mapInteropFromFDC3(app.intents);
 		} else if (!isEmpty(app.interop) && !Array.isArray(app.intents)) {
-			app.intents = mapIntents(app.interop);
+			app.intents = mapIntentsFromFDC3(app.interop);
 		}
 		platformApps.push(app);
 	}

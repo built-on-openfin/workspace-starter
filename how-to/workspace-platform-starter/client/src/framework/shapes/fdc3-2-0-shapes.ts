@@ -104,48 +104,7 @@ export interface AppDefinition {
 	 * the type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the
 	 * relevant details.
 	 */
-	hostManifests?: {
-		OpenFin: {
-			/**
-			 * this is the manifest type id used by OpenFin and specified if root type is defined as other.
-			 */
-			type?: string;
-
-			/**
-			 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
-			 * using an inline type or extending the details from the root.
-			 */
-			details?: unknown;
-
-			/**
-			 * An area for config related to this app for the platform hosting it. This isn't specific to the app
-			 * manifest but how the platform can manage the app.
-			 */
-			config?: {
-				/**
-				 * does the application wish to be automatically started when the platform is initialized. Default
-				 * behavior is false.
-				 */
-				autostart?: boolean;
-
-				/**
-				 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
-				 * is intended to be a background window that acts as an intent handler)
-				 */
-				private?: boolean;
-
-				/**
-				 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
-				 * instance of this application and only show the app even if the intent resolver ui supports instances
-				 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
-				 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
-				 * not show the option to pick an instance because the app owner wants a new instance every time. And if
-				 * an intent is raised and just the id of the app is specified it will always launch a new instance
-				 */
-				instanceMode?: "multi" | "single" | "new";
-			};
-		};
-	};
+	hostManifests?: HostManifests;
 
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:
@@ -163,6 +122,61 @@ export interface AppDefinition {
 	 * keys to this object should be language tags as defined by IETF RFC 5646, e.g. en, en-GB or fr-FR.
 	 */
 	localizedVersions?: { [key: string]: { [key: string]: string } };
+}
+
+/**
+* A mapping from host name to a host-specific application manifest object or URI from which that manifest can be
+* retrieved. The manifest should provide details required to launch and use the application within the specified
+* host. The manifest MAY duplicate or override information provided in the details field. For web entries the url
+* is fetched from the details but you would want to specify custom view manifest options (or point to a manifest)
+* in the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use
+* the type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the
+* relevant details.
+*/
+export interface HostManifests {
+	/**
+	 * The OpenFin settings for this FDC3 2.0 App Definition
+	 */
+	OpenFin: {
+		/**
+		 * this is the manifest type id used by OpenFin and specified if root type is defined as other.
+		 */
+		type?: string;
+
+		/**
+		 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
+		 * using an inline type or extending the details from the root.
+		 */
+		details?: unknown;
+
+		/**
+		 * An area for config related to this app for the platform hosting it. This isn't specific to the app
+		 * manifest but how the platform can manage the app.
+		 */
+		config?: {
+			/**
+			 * does the application wish to be automatically started when the platform is initialized. Default
+			 * behavior is false.
+			 */
+			autostart?: boolean;
+
+			/**
+			 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
+			 * is intended to be a background window that acts as an intent handler)
+			 */
+			private?: boolean;
+
+			/**
+			 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
+			 * instance of this application and only show the app even if the intent resolver ui supports instances
+			 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
+			 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
+			 * not show the option to pick an instance because the app owner wants a new instance every time. And if
+			 * an intent is raised and just the id of the app is specified it will always launch a new instance
+			 */
+			instanceMode?: "multi" | "single" | "new";
+		};
+	};
 }
 
 /**
