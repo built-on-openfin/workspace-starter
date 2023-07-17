@@ -1,4 +1,5 @@
 let users = [];
+let avatarRoot = '../data/avatars/';
 
 /**
  * Initialize the users data.
@@ -7,6 +8,8 @@ export async function initialize() {
 	const customSettings = await getManifestCustomSettings();
 
 	const response = await fetch(customSettings.contactsProvider?.url ?? '../data/contacts.json');
+
+	avatarRoot = customSettings.contactsProvider?.avatarRoot ?? avatarRoot;
 
 	users = await response.json();
 }
@@ -53,7 +56,7 @@ export function getUsers() {
  */
 export function getProfilePic(user) {
 	const emailParts = user.email.split('@');
-	return `../data/avatars/${emailParts[0]}.png`;
+	return `${avatarRoot}${emailParts[0]}.png`;
 }
 
 /**
