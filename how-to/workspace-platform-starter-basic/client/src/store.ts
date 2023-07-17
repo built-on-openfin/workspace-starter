@@ -41,7 +41,7 @@ export async function register(
 							title: "All Apps",
 							description: "All of your applications.",
 							image: {
-								src: "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
+								src: platformSettings.icon
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {

@@ -37,32 +37,6 @@ export async function launchApp(
 			break;
 		}
 
-		case "window": {
-			const manifestResponse = await fetch(app.manifest);
-			const manifest: OpenFin.WindowOptions = await manifestResponse.json();
-			const platform = getCurrentSync();
-			ret = await platform.createWindow(manifest);
-			break;
-		}
-
-		case "inline-appasset": {
-			const appAssetInfo: OpenFin.AppAssetInfo = app.manifest as unknown as OpenFin.AppAssetInfo;
-			try {
-				await fin.System.downloadAsset(appAssetInfo, (progress) => {
-					const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
-					console.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${app.appId}`);
-				});
-
-				ret = await fin.System.launchExternalProcess({
-					alias: appAssetInfo.alias,
-					arguments: appAssetInfo.args
-				});
-			} catch (error) {
-				console.error(`Error trying to download app asset with app id: ${app.appId}`, error);
-			}
-			break;
-		}
-
 		default: {
 			ret = await fin.Application.startFromManifest(app.manifest);
 			break;
