@@ -9,6 +9,20 @@ async function initializeDOM() {
 	if (window.fdc3) {
 		await usersModule.initialize();
 
+		let hasViewContactIntentHandler = false;
+		try {
+			const info = await fin.me.interop.getInfoForIntent({
+				name: 'ViewContact'
+			});
+			if (info) {
+				hasViewContactIntentHandler = true;
+			}
+		} catch {}
+
+		if (!hasViewContactIntentHandler) {
+			console.warn('No ViewContact intent handler is available, will not show Raise Intent button');
+		}
+
 		const users = usersModule.getUsers();
 
 		const tbody = document.querySelector('tbody');
@@ -40,17 +54,6 @@ async function initializeDOM() {
 			actionRow.classList.add('row');
 			actionRow.classList.add('gap10');
 
-			const selectButton = document.createElement('button');
-			selectButton.textContent = 'Select';
-			selectButton.classList.add('small');
-			selectButton.addEventListener('click', () => selectParticipant(user));
-
-			const raiseIntentButton = document.createElement('button');
-			raiseIntentButton.textContent = 'Raise Intent';
-			raiseIntentButton.classList.add('small');
-			raiseIntentButton.classList.add('secondary');
-			raiseIntentButton.addEventListener('click', () => raiseIntent(user));
-
 			const actionCell = document.createElement('td');
 			actionCell.append(actionRow);
 
@@ -62,8 +65,21 @@ async function initializeDOM() {
 			row.append(typeCell);
 			row.append(actionCell);
 
+			const selectButton = document.createElement('button');
+			selectButton.textContent = 'Select';
+			selectButton.classList.add('small');
+			selectButton.addEventListener('click', () => selectParticipant(user));
+
 			actionRow.append(selectButton);
-			actionRow.append(raiseIntentButton);
+
+			if (hasViewContactIntentHandler) {
+				const raiseIntentButton = document.createElement('button');
+				raiseIntentButton.textContent = 'Raise Intent';
+				raiseIntentButton.classList.add('small');
+				raiseIntentButton.classList.add('secondary');
+				raiseIntentButton.addEventListener('click', () => raiseIntent(user));
+				actionRow.append(raiseIntentButton);
+			}
 
 			tbody.append(row);
 		}
