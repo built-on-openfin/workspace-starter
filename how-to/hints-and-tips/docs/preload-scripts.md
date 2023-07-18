@@ -32,7 +32,7 @@ To define a preload to be injected into your platform provider your would define
 
 ### Window
 
-This is any Window regardless of whether or not it is containing a layout (e.g. Classic Windows and Platform Windows). You can define preload scripts for all Windows (via Default Window Options) or just for specific windows when you launch them by specifying the preloadScripts setting in the window options of that specific window.
+This is any Window regardless of whether or not it is containing a layout (e.g. Classic Windows and Platform Windows). You can define preload scripts for all Windows (via Default Window Options - doesn't apply to windows launched via fin.Window.create which doesn't go through your platform) or just for specific windows when you launch them by specifying the preloadScripts setting in the window options of that specific window.
 
 #### Default Window Options
 
