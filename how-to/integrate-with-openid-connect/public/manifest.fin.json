@@ -1,0 +1,38 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "integrate-with-openid-connect",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "http://localhost:8080/favicon.ico",
+		"name": "Integrate with OpenId Connect - v13.1.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With OpenId Connect - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"auth": {
+			"providerUrl": "<PROVIDERURL>",
+			"clientId": "<CLIENTID>",
+			"loginRedirectUrl": "http://localhost:8080/oidc_login.html",
+			"logoutRedirectUrl": "http://localhost:8080/oidc_logout.html"
+		},
+		"appWindowUrl": "http://localhost:8080/platform/app.html",
+		"appManifestUrl": "http://localhost:8080/second.manifest.fin.json"
+	}
+}

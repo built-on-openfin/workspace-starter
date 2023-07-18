@@ -1,0 +1,33 @@
+{
+	"name": "openfin-workspace--integrate-with-openid-connect",
+	"version": "13.1.5",
+	"description": "OpenFin Workspace -- Integrate with OpenId Connect",
+	"main": "index.js",
+	"scripts": {
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"setup": "cd ../../ && npm install && cd how-to/integrate-with-openid-connect && npm run build"
+	},
+	"author": "ameet.jayawant@openfin.co",
+	"contributors": [
+		"martyn.janes@openfin.co"
+	],
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/workspace": "13.1.5",
+		"@openfin/workspace-platform": "13.1.5",
+		"@openfin/openid-connect": "^1.0.0-beta.1"
+	},
+	"devDependencies": {
+		"@openfin/core": "31.75.4",
+		"openfin-adapter": "31.75.4",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6",
+		"webpack": "^5.88.1",
+		"webpack-cli": "^5.1.4"
+	}
+}

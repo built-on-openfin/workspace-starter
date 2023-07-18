@@ -20,8 +20,7 @@
 	},
 	"workspaces": [
 		"how-to/*",
-		"how-to/automation-testing/*",
-		"how-to/integrate-with-sso/*"
+		"how-to/automation-testing/*"
 	],
 	"packageExclude": [
 		"how-to/hints-and-tips",
@@ -29,11 +28,9 @@
 		"how-to/integrate-with-ms365-basic",
 		"how-to/integrate-with-ms365-low-code",
 		"how-to/integrate-with-ms365-low-code-basic",
+		"how-to/integrate-with-openid-connect",
 		"how-to/integrate-with-rss",
 		"how-to/integrate-with-salesforce-basic",
-		"how-to/integrate-with-sso",
-		"how-to/integrate-with-sso/integrate-with-auth0",
-		"how-to/integrate-with-sso/integrate-with-okta",
 		"how-to/migrate-from-a-previous-version",
 		"how-to/automation-testing",
 		"how-to/automation-testing/register-with-home-js",

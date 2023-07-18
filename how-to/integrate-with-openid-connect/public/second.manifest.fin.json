@@ -1,0 +1,26 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=integrate-with-openid-connect-app",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "integrate-with-openid-connect-app",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "http://localhost:8080/platform/app.html"
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With OpenId Connect - App",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"auth": {
+			"providerUrl": "<PROVIDERURL>",
+			"clientId": "<CLIENTID>"
+		}
+	}
+}
