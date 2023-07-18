@@ -23,7 +23,7 @@ A lot of sites do not allow their content to be contained within an iframe unles
   "title": "Framed App",
   "description": "An example of framing an application, injecting the fin and fdc3 apis and wiring up context group assignment and title updates.",
   "manifest": {
-   "url": "http://localhost:8080/common/views/frame/index.html",
+   "url": "http://localhost:8080/common/views/frame/parent/index.html",
    "customData": {
     "frame": {
      "url": "http://localhost:8080/common/views/frame/example-content/example.html",
@@ -63,7 +63,7 @@ A lot of sites do not allow their content to be contained within an iframe unles
   "title": "Framed App (No API Injection)",
   "description": "An example of framing an application, not injecting APIs but using a script loaded by the parent and the child and browser APIs (Postmessage) to sync title changes and provide a basic fdc3 api.",
   "manifest": {
-   "url": "http://localhost:8080/common/views/frame/index.html",
+   "url": "http://localhost:8080/common/views/frame/parent/index.html",
    "customData": {
     "frame": {
      "url": "http://localhost:8080/common/views/frame/example-content/example.html",
@@ -103,7 +103,7 @@ A lot of sites do not allow their content to be contained within an iframe unles
 ```json
 {
   "manifest": {
-    "url": "http://localhost:8080/common/views/frame/index.html",
+    "url": "http://localhost:8080/common/views/frame/parent/index.html",
     "customData": {
       "frame": {
         "url": "http://localhost:8080/common/views/frame/example-content/example.html",
@@ -140,7 +140,7 @@ This is just an example to show how you could use iframes in an OpenFin Platform
 ```json
 {
   "manifest": {
-    "url": "http://localhost:8080/common/views/frame/index.html",
+    "url": "http://localhost:8080/common/views/frame/parent/index.html",
     "api": {
       "iframe": {
         "crossOriginInjection": false,
@@ -159,7 +159,7 @@ In this snippet we are using the view options to specify whether the fdc3 api sh
 ```json
 {
   "manifest": {
-    "url": "http://localhost:8080/common/views/frame/index.html",
+    "url": "http://localhost:8080/common/views/frame/parent/index.html",
     "preloadScripts": [
       {
         "url": "http://localhost:8080/common/views/frame/framed/framed.preload.js"
