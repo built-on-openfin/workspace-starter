@@ -144,7 +144,7 @@ async function initializeDOM(customSettings: CustomSettings): Promise<void> {
 }
 
 /**
- * Login using the OIDC provider.
+ * Login using the provider.
  * @param customSettings The custom settings.
  */
 async function login(customSettings: CustomSettings): Promise<void> {
@@ -167,7 +167,7 @@ async function login(customSettings: CustomSettings): Promise<void> {
 }
 
 /**
- * Logout using the OIDC provider.
+ * Logout using the provider.
  * @param customSettings The custom settings.
  */
 async function logout(customSettings: CustomSettings): Promise<void> {
