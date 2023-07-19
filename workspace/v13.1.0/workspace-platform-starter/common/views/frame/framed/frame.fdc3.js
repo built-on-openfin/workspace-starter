@@ -1,5 +1,6 @@
 const listeners = {};
 const contextCache = {};
+const fdc3AcceptableDomains = [location.origin];
 let initialized = false;
 
 /**
@@ -43,9 +44,9 @@ function handleMessage(message) {
  */
 function handleEvent(event) {
 	console.log('FDC3 Module: Received event', event);
-	console.log('FDC3 Module: Acceptable domain', parent.origin);
+	console.log('FDC3 Module: Acceptable domain(s)', fdc3AcceptableDomains);
 	const { data, origin } = event;
-	if (origin === parent.origin) {
+	if (fdc3AcceptableDomains.includes(origin)) {
 		handleMessage(data);
 	}
 }
@@ -82,8 +83,15 @@ export function randomUUID() {
  * Returns a reduced fdc3 client api.
  * @returns fdc3 cut down api
  */
-export function getFDC3Client() {
+export async function getFDC3Client() {
 	if (!initialized) {
+		try {
+			const acceptableHostsResponse = await fetch('../../../../manifest-hosts.json');
+			const acceptableHosts = await acceptableHostsResponse.json();
+			fdc3AcceptableDomains.push(...acceptableHosts);
+		} catch {
+			console.warn(`No json file with permitted hosts available. Keeping current origin: ${location.origin}`);
+		}
 		window.addEventListener('message', handleEvent, false);
 		initialized = true;
 	}

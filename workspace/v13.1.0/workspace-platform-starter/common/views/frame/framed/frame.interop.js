@@ -1,3 +1,6 @@
+const interopAcceptableDomains = [location.origin];
+let initialized = false;
+
 /**
  * Handles the message from the child frame.
  * @param message message from child frame
@@ -46,9 +49,9 @@ function handleMessage(message) {
  */
 function handleEvent(event) {
 	console.log('Interop Module: Received event', event);
-	console.log('Interop Module: Acceptable domain', parent.origin);
+	console.log('Interop Module: Acceptable domain', interopAcceptableDomains);
 	const { data, origin } = event;
-	if (origin === parent.origin) {
+	if (interopAcceptableDomains.includes(origin)) {
 		handleMessage(data);
 	}
 }
@@ -65,10 +68,21 @@ function requestContextGroup() {
  * Initializes this module so that it listens for send messages and changes the context group based on what it has been told.
  * @param connect should it update the frames fin.me.interop with a fin.Interop.connectSync so it is synced with the current broker - default true.
  */
-export function init(connect = true) {
-	if (connect) {
-		fin.me.interop = fin.Interop.connectSync(fin.me.identity.uuid);
+export async function init(connect = true) {
+	if (!initialized) {
+		try {
+			const acceptableHostsResponse = await fetch('../../../../manifest-hosts.json');
+			const acceptableHosts = await acceptableHostsResponse.json();
+			interopAcceptableDomains.push(...acceptableHosts);
+		} catch {
+			console.warn(`No json file with permitted hosts available. Keeping current origin: ${location.origin}`);
+		}
+
+		if (connect) {
+			fin.me.interop = fin.Interop.connectSync(fin.me.identity.uuid);
+		}
+		window.addEventListener('message', handleEvent, false);
+		requestContextGroup();
+		initialized = true;
 	}
-	window.addEventListener('message', handleEvent, false);
-	requestContextGroup();
 }

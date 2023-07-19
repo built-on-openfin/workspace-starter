@@ -3,7 +3,7 @@
 	if (window.fdc3 === undefined) {
 		try {
 			const fdc3Module = await import('../framed/frame.fdc3.js');
-			window.fdc3 = fdc3Module.getFDC3Client();
+			window.fdc3 = await fdc3Module.getFDC3Client();
 			window.dispatchEvent(new Event('fdc3Ready'));
 		} catch (fdc3Error) {
 			console.error('Framed: Error setting up fdc3 module.', fdc3Error);
