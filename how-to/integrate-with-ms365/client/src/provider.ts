@@ -141,7 +141,7 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 								shortDescription: app.description,
 								template: CLITemplate.SimpleText,
 								templateContent: app.description
-							} as HomeSearchResult)
+							}) as HomeSearchResult
 					)
 				);
 			}

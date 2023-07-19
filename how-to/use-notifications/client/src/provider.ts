@@ -1,5 +1,7 @@
+import { init, getCurrentSync, ColorSchemeOptionType } from "@openfin/workspace-platform";
 import {
 	ActionBodyClickType,
+	IndicatorColor,
 	VERSION,
 	addEventListener as addNotificationEventListener,
 	create,
@@ -12,8 +14,7 @@ import {
 	update,
 	type NotificationOptions,
 	type TemplateMarkdown,
-	type UpdatableNotificationOptions,
-	IndicatorColor
+	type UpdatableNotificationOptions
 } from "@openfin/workspace/notifications";
 
 const PLATFORM_ID = "use-notifications";
@@ -41,7 +42,50 @@ let lastConnectionStatus: boolean | undefined;
 window.addEventListener("DOMContentLoaded", async () => {
 	await initializeDom();
 	await initializeListeners();
+
+	// The DOM is ready so initialize the platform
+	// Provide default icons and default theme for the browser windows
+	await initializeWorkspacePlatform();
 });
+
+/**
+ * Initialize the workspace platform.
+ */
+async function initializeWorkspacePlatform(): Promise<void> {
+	console.log("Initializing workspace platform");
+	await init({
+		browser: {
+			defaultWindowOptions: {
+				icon: PLATFORM_ICON,
+				workspacePlatform: {
+					pages: [],
+					favicon: PLATFORM_ICON
+				}
+			}
+		},
+		theme: [
+			{
+				label: "Default",
+				default: "light",
+				palettes: {
+					dark: {
+						brandPrimary: "#0A76D3",
+						brandSecondary: "#383A40",
+						backgroundPrimary: "#1E1F23"
+					},
+					light: {
+						brandPrimary: "#0A76D3",
+						brandSecondary: "#1E1F23",
+						backgroundPrimary: "#FAFBFE",
+						// Demonstrate changing the link color for notifications
+						linkDefault: "#FF0000",
+						linkHover: "#00FF00"
+					}
+				}
+			}
+		]
+	});
+}
 
 /**
  * Initialize the DOM elements.
@@ -122,6 +166,21 @@ async function initializeDom(): Promise<void> {
 			await deregisterPlatform(PLATFORM_ID);
 			loggingAddEntry("Platform deregistered");
 			activePlatform = undefined;
+		});
+	}
+
+	const btnToggleTheme = document.querySelector("#btnPlatformToggleTheme");
+	if (btnToggleTheme) {
+		btnToggleTheme.addEventListener("click", async () => {
+			const platform = getCurrentSync();
+			const currentScheme = await platform.Theme.getSelectedScheme();
+			if (currentScheme === ColorSchemeOptionType.Light) {
+				window.document.body.classList.remove("theme-light");
+				await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);
+			} else {
+				window.document.body.classList.add("theme-light");
+				await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Light);
+			}
 		});
 	}
 

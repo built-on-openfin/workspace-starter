@@ -202,8 +202,7 @@ export async function getSearchResults(
 		if (
 			integrationModule.isInitialized &&
 			integrationModule.implementation.getSearchResults &&
-			(integrationModule.definition.excludeFromSourceFilter ||
-				selectedSources.length === 0 ||
+			((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
 				selectedSources.includes(integrationModule.definition.title))
 		) {
 			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse, options));

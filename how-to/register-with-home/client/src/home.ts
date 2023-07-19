@@ -40,7 +40,7 @@ export async function register(
 		return;
 	}
 
-	if (homeSettings === undefined || homeSettings.id === undefined || homeSettings.title === undefined) {
+	if (homeSettings?.id === undefined || homeSettings.title === undefined) {
 		console.warn(
 			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
 		);

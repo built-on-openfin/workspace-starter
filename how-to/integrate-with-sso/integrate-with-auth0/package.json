@@ -17,7 +17,7 @@
 	"dependencies": {
 		"@openfin/workspace": "13.1.5",
 		"@openfin/workspace-platform": "13.1.5",
-		"auth0-js": "^9.21.0"
+		"auth0-js": "^9.22.1"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
@@ -25,7 +25,7 @@
 		"openfin-adapter": "31.75.4",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6",
-		"webpack": "^5.88.1",
+		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}
 }

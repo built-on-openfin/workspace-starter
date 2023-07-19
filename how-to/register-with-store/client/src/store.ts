@@ -93,14 +93,12 @@ export async function deregister(storeSettings: StorefrontProviderSettings | und
  */
 function isStorefrontConfigurationValid(storeSettings: StorefrontProviderSettings | undefined): boolean {
 	if (
-		storeSettings === undefined ||
-		storeSettings.id === undefined ||
+		storeSettings?.id === undefined ||
 		storeSettings.title === undefined ||
 		storeSettings.footer === undefined ||
-		storeSettings.landingPage === undefined ||
-		storeSettings.landingPage.topRow === undefined ||
-		storeSettings.landingPage.middleRow === undefined ||
-		storeSettings.landingPage.bottomRow === undefined ||
+		storeSettings.landingPage?.topRow === undefined ||
+		storeSettings.landingPage?.middleRow === undefined ||
+		storeSettings.landingPage?.bottomRow === undefined ||
 		storeSettings.navigation === undefined
 	) {
 		console.error(
