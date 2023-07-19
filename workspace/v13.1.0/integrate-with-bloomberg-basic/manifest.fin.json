@@ -37,7 +37,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-bloomberg-basic/favicon.ico",
-		"name": "Integrate with Bloomberg Terminal - Basic - 13.1.0",
+		"name": "Integrate with Bloomberg Terminal - Basic - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
