@@ -18,8 +18,8 @@ jobs:
           scope: '@openfin'
       - name: Install dependencies
         env:
-           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm install
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
       - name: Run prettier
         run: npx prettier --config .prettierrc --check .
       - name: Run eslint
