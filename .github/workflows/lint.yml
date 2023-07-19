@@ -7,8 +7,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -16,15 +14,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
       - name: Install dependencies
-        run: |-
-          npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
       - name: Run prettier
-        run: |-
-          npx prettier --config .prettierrc --check .
+        run: npx prettier --config .prettierrc --check .
       - name: Run eslint
-        run: |-
-          npm run eslint
+        run: npm run eslint
       - name: Run markdownlint
-        run: |-
-          npm run markdownlint
+        run: npm run markdownlint
