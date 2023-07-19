@@ -87,9 +87,9 @@ async function initializeWorkspaceComponents(): Promise<void> {
 		id: PLATFORM_ID,
 		icon: PLATFORM_ICON,
 		getApps: async () => [],
-		getLandingPage: async () => ({} as StorefrontLandingPage),
+		getLandingPage: async () => ({}) as StorefrontLandingPage,
 		getNavigation: async () => [],
-		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
+		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] }) as unknown as StorefrontFooter,
 		launchApp: async () => {}
 	});
 
@@ -140,7 +140,7 @@ async function initializeDOM(): Promise<void> {
 				// it and add the buttons/menus
 				await register(PLATFORM_ID, PLATFORM_TITLE, PLATFORM_ICON, {
 					workspaceComponents,
-					disableUserRearrangement: !enableRearrangementButton?.checked ?? false,
+					disableUserRearrangement: !(enableRearrangementButton?.checked ?? true),
 					customIconUrl: customIconUrlInput?.value ?? "",
 					customOpenUrl: customOpenUrlInput?.value ?? ""
 				});

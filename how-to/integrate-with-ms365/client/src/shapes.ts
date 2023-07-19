@@ -1,15 +1,15 @@
 import type { Entity } from "@microsoft/microsoft-graph-types";
 import type OpenFin from "@openfin/core";
-import {
-	type App,
-	type ButtonStyle,
-	type ButtonTemplateFragment,
-	type ImageTemplateFragment,
-	type PlainContainerTemplateFragment,
-	type TemplateFragment,
-	type TextTemplateFragment
+import type {
+	App,
+	ButtonStyle,
+	ButtonTemplateFragment,
+	ImageTemplateFragment,
+	PlainContainerTemplateFragment,
+	TemplateFragment,
+	TextTemplateFragment
 } from "@openfin/workspace";
-import { type CustomPaletteSet } from "@openfin/workspace-platform";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import type * as CSS from "csstype";
 
 /**

@@ -10,7 +10,7 @@ import {
 import { init } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
 import { ExcelIntegration } from "./excel-integration";
-import { type CustomSettings } from "./shapes";
+import type { CustomSettings } from "./shapes";
 
 const PLATFORM_ID = "integrate-with-excel";
 const PLATFORM_TITLE = "Integrate with Excel";
@@ -105,7 +105,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 							shortDescription: app.description,
 							template: CLITemplate.SimpleText,
 							templateContent: app.description
-						} as HomeSearchResult)
+						}) as HomeSearchResult
 				)
 			);
 

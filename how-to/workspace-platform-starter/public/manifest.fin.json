@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "31.112.75.4"
+		"version": "32.114.76.10"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-workspace-platform-starter"
@@ -37,9 +37,15 @@
 				}
 			},
 			"viewVisibility": {
-				"showViewsOnTabDrag": { "enabled": true },
-				"showViewsOnSplitterDrag": { "enabled": true },
-				"showViewsOnWindowResize": { "enabled": true }
+				"showViewsOnTabDrag": {
+					"enabled": true
+				},
+				"showViewsOnSplitterDrag": {
+					"enabled": true
+				},
+				"showViewsOnWindowResize": {
+					"enabled": true
+				}
 			}
 		},
 		"defaultViewOptions": {
@@ -57,7 +63,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter - v13.0.0",
+		"name": "Workspace Platform Starter - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -185,13 +191,13 @@
 					"title": "Local Storage",
 					"enabled": true,
 					"id": "local-storage",
-					"url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
 				},
 				{
 					"title": "Context Processor",
 					"enabled": true,
 					"id": "context-processor",
-					"url": "http://localhost:8080/js/modules/endpoints/example.context.processor.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/example.context.processor.bundle.js"
 				}
 			],
 			"endpoints": [
@@ -535,7 +541,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						},
 						"dark": {
 							"brandPrimary": "#0A76D3",
@@ -563,7 +571,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						}
 					}
 				}
@@ -910,20 +920,26 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/preload.js",
+						"enableLibLogging": true,
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/task.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
@@ -1124,7 +1140,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "13.0.0"
+				"workspace": "14.0.11"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -1177,6 +1193,28 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
 					"data": {}
+				}
+			]
+		},
+		"lowCodeIntegrationProvider": {
+			"modules": [
+				{
+					"id": "ms365",
+					"title": "Microsoft 365 Low Code Integration",
+					"type": "ms365",
+					"enabled": false,
+					"data": {
+						"connect": {
+							"clientId": "",
+							"tenantId": "",
+							"redirectUri": ""
+						},
+						"workflows": {
+							"search": {
+								"disableAutoInitialize": true
+							}
+						}
+					}
 				}
 			]
 		}

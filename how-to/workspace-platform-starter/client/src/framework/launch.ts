@@ -427,7 +427,14 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		const viewIds: PlatformAppIdentifier[] = [];
 
 		for (const currentWindow of windows) {
-			const getViewIdsForLayout = findViewNames(currentWindow.layout);
+			let getViewIdsForLayout = findViewNames(currentWindow.layout);
+			if (Array.isArray(currentWindow.workspacePlatform?.pages)) {
+				for (const page of currentWindow.workspacePlatform.pages) {
+					getViewIdsForLayout = getViewIdsForLayout.concat(findViewNames(page.layout));
+				}
+			}
+			getViewIdsForLayout = [...new Set(getViewIdsForLayout)];
+
 			if (getViewIdsForLayout.length === 0) {
 				const uuid = randomUUID();
 				const name = `${snapshotApp.appId}/${uuid}`;

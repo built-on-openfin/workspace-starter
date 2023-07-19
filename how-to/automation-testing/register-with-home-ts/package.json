@@ -1,18 +1,18 @@
 {
 	"name": "automation-testing-register-with-home",
-	"version": "13.0.0",
+	"version": "14.0.11",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"build": "echo Nothing to build",
-		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --workspace 13.0.7 --testFailCount 1",
-		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --workspace 13.0.7 --testFailCount 1",
-		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 13.0.7 --testFailCount 1",
-		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 13.0.7 --testFailCount 1",
-		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 13.0.7 --testFailCount 1",
-		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 13.0.7 --testFailCount 1",
-		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --workspace 13.0.7 --testFailCount 1",
-		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 13.0.7 --testFailCount 1",
-		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 13.0.7 --testFailCount 1"
+		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --workspace 14.0.11 --testFailCount 1",
+		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --workspace 14.0.11 --testFailCount 1",
+		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 14.0.11 --testFailCount 1",
+		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jasmine --workspace 14.0.11 --testFailCount 1",
+		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 14.0.11 --testFailCount 1",
+		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --framework jest --workspace 14.0.11 --testFailCount 1",
+		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --workspace 14.0.11 --testFailCount 1",
+		"test-remote-mocha-selenium": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 14.0.11 --testFailCount 1",
+		"test-local-mocha-selenium": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --driver=selenium --workspace 14.0.11 --testFailCount 1"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",

@@ -14,12 +14,11 @@ import {
 	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import { type CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
+import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import * as Notifications from "@openfin/workspace/notifications";
 import { THEME_BUILDER_APP, getApps, launchApp } from "./apps";
 import { DEFAULT_PALETTES } from "./default-palettes";
-import type { CustomUserAppArgs, InitParams, ThemingPayload } from "./shapes";
-import { type ThemeDisplayOptions } from "./shapes";
+import type { CustomUserAppArgs, InitParams, ThemeDisplayOptions, ThemingPayload } from "./shapes";
 import { getThemeActions, getThemeButton, initColorScheme, setColorScheme } from "./theming";
 
 const PLATFORM_ID = "use-theming";
@@ -157,9 +156,9 @@ async function initializeWorkspaceComponents(options?: ThemeDisplayOptions): Pro
 			id: PLATFORM_ID,
 			icon: PLATFORM_ICON,
 			getApps: async () => [],
-			getLandingPage: async () => ({} as StorefrontLandingPage),
+			getLandingPage: async () => ({}) as StorefrontLandingPage,
 			getNavigation: async () => [],
-			getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
+			getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] }) as unknown as StorefrontFooter,
 			launchApp: async () => {}
 		});
 

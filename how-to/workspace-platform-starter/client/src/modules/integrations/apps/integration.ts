@@ -10,7 +10,8 @@ import type {
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import type {
 	IntegrationHelpers,
-	IntegrationModule
+	IntegrationModule,
+	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
@@ -22,6 +23,12 @@ import type { AppSettings } from "./shapes";
  */
 export class AppProvider implements IntegrationModule<AppSettings> {
 	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 0;
+
+	/**
 	 * The key used to filter out by tag.
 	 * @internal
 	 */
@@ -32,6 +39,12 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @internal
 	 */
 	private _providerId?: string;
+
+	/**
+	 * The module definition.
+	 * @internal
+	 */
+	private _definition: IntegrationModuleDefinition<AppSettings> | undefined;
 
 	/**
 	 * The settings from config.
@@ -80,7 +93,9 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 */
 	private _lastAppResults?: PlatformApp[];
 
-	/** The list of the ids of the last set of results */
+	/**
+	 * The list of the ids of the last set of results
+	 */
 	private _lastResultIds?: string[];
 
 	/**
@@ -97,6 +112,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	): Promise<void> {
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
+		this._definition = definition;
 		this._logger = loggerCreator("AppProvider");
 		this._providerId = definition.id;
 
@@ -313,7 +329,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private getSearchFilters(tags: string[]): CLIFilter[] {
 		if (Array.isArray(tags)) {
 			const filters: CLIFilter[] = [];
-			const uniqueTags = [...new Set(tags)].sort();
+			const uniqueTags = [...new Set(tags)].sort((a, b) => a.localeCompare(b));
 			const tagFilter: CLIFilter = {
 				id: AppProvider._HOME_TAG_FILTERS,
 				title: "Tags",
@@ -352,6 +368,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					const action = { name: "Launch View", hotkey: "enter" };
 					const entry: Partial<HomeSearchResult> = {
 						key: app.appId,
+						score: this._definition?.baseScore ?? AppProvider._DEFAULT_BASE_SCORE,
 						title: app.title,
 						data: { app, providerId: this._providerId }
 					};
@@ -398,7 +415,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 */
 	private getAppIcon(app: PlatformApp): string | undefined {
 		if (Array.isArray(app.icons) && app.icons.length > 0) {
-			return app.icons[0].src as string;
+			return app.icons[0].src;
 		}
 	}
 

@@ -1,5 +1,9 @@
 const path = require('path');
 
+const alias = {
+	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
+};
+
 const configs = [
 	{
 		entry: './client/src/provider.ts',
@@ -14,7 +18,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -41,7 +46,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -68,7 +74,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -83,7 +90,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/endpoints/local-storage/index.ts',
+		entry: './client/src/modules/endpoint/local-storage/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -95,7 +102,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -103,14 +111,14 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
 		},
 		experiments: {
 			outputModule: true
 		}
 	},
 	{
-		entry: './client/src/modules/endpoints/channel/index.ts',
+		entry: './client/src/modules/endpoint/channel/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -122,7 +130,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -130,14 +139,14 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
 		},
 		experiments: {
 			outputModule: true
 		}
 	},
 	{
-		entry: './client/src/modules/endpoints/inline-apps/index.ts',
+		entry: './client/src/modules/endpoint/inline-apps/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -149,7 +158,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -157,7 +167,7 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
 		},
 		experiments: {
 			outputModule: true
@@ -176,7 +186,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -203,7 +214,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -230,7 +242,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -257,7 +270,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -272,7 +286,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/endpoints/example-connection-validation/index.ts',
+		entry: './client/src/modules/endpoint/example-connection-validation/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -284,7 +298,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -292,7 +307,7 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
 		},
 		experiments: {
 			outputModule: true
@@ -311,7 +326,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -338,7 +354,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -365,7 +382,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -392,7 +410,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -419,7 +438,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -446,7 +466,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -473,7 +494,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -500,7 +522,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -527,7 +550,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -554,7 +578,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -569,7 +594,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/endpoints/example-context-processor/index.ts',
+		entry: './client/src/modules/endpoint/example-context-processor/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -581,7 +606,8 @@ const configs = [
 			]
 		},
 		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
 		},
 		externals: { fin: 'fin' },
 		output: {
@@ -589,7 +615,35 @@ const configs = [
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoints')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/framework/fdc3/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'fdc3.mapper.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'common', 'lib', 'fdc3')
 		},
 		experiments: {
 			outputModule: true

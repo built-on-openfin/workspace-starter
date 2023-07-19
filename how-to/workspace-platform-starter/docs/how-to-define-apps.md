@@ -183,7 +183,7 @@ The endpoint module is called **inline-apps** and it lets you specify an array o
         {
             "enabled": true,
             "id": "inline-apps",
-            "url": "http://localhost:8080/js/modules/endpoints/inline-apps.bundle.js"
+            "url": "http://localhost:8080/js/modules/endpoint/inline-apps.bundle.js"
         }
     ],
     "endpoints": [
@@ -230,7 +230,7 @@ In the above example we would have the following app endpointId definition:
         },
 ```
 
-The inline-apps endpoint module can be seen [here](../client/src/modules/endpoints/inline-apps/endpoint.ts).
+The inline-apps endpoint module can be seen [here](../client/src/modules/endpoint/inline-apps/endpoint.ts).
 
 ## Where Are Apps Used?
 
@@ -251,6 +251,6 @@ Our guides show how to:
 
 - [apps.ts](../client/src/framework/apps.ts)
 - [directory.ts](../client/src/framework/directory.ts)
-- [inline-apps/endpoint.ts](../client/src/modules/endpoints/inline-apps/endpoint.ts)
+- [inline-apps/endpoint.ts](../client/src/modules/endpoint/inline-apps/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)

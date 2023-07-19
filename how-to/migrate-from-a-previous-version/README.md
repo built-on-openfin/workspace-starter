@@ -3,6 +3,14 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v13.1 to v14
+
+## Migrate from a previous version - From v13 to v13.1
+
+This release contains new features such as MicroFlows (please see release notes), printing and the ability add customData when saving/reading a page object.
+
+There are no breaking changes.
+
 ## Migrate from a previous version - From v12.6 to v13
 
 The dock `WorkspaceComponentButtonOptions` have been deprecated, use `WorkspaceButtonsConfig` instead.
@@ -158,8 +166,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^13.0.7",
-                    "@openfin/workspace-platform": "^13.0.7"
+                    "@openfin/workspace": "^12.1.5",
+                    "@openfin/workspace-platform": "^12.1.5"
                 }
 ```
 
@@ -167,7 +175,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "31.75.4"
+                    "@openfin/core": "32.76.10"
                    }
 ```
 

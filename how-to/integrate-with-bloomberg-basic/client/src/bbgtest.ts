@@ -68,100 +68,102 @@ function initializeDOM(): void {
 
 	if (intentTypeElement) {
 		intentTypeElement.addEventListener("change", (event) => {
-			if (btnQuery) {
-				btnQuery.disabled = true;
+			if (intentTypeElement?.value) {
+				if (btnQuery) {
+					btnQuery.disabled = true;
+				}
+				switch (intentTypeElement?.value) {
+					case "ViewChart":
+						logInformation(
+							"Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP"
+						);
+						selectedIntentType = "ViewChart";
+						fdc3Denomination = "fdc3.instrument";
+						bbgMnemonic = "GP";
+						populateSelect(intentValueElement, [
+							{
+								value: "ORCL",
+								label: "Oracle Corp"
+							},
+							{
+								value: "MSFT",
+								label: "Microsoft"
+							},
+							{
+								value: "IBM",
+								label: "IBM"
+							}
+						]);
+						break;
+					case "ViewContact":
+						logInformation(
+							"Intent to be fired is ViewContact. Content Type is fdc3.contact. Bloomberg Terminal Mnemonic: BIO"
+						);
+						selectedIntentType = "ViewContact";
+						fdc3Denomination = "fdc3.contact";
+						bbgMnemonic = "BIO";
+						populateSelect(intentValueElement, [
+							{
+								value: "William Henry Gates",
+								label: "William Henry Gates"
+							},
+							{
+								value: "Larry Ellison",
+								label: "Larry Ellison"
+							},
+							{
+								value: "Robert Iger",
+								label: "Robert Iger"
+							}
+						]);
+						break;
+					case "ViewInstrument":
+						logInformation(
+							"Intent to be fired is ViewInstrument. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: DES"
+						);
+						selectedIntentType = "ViewInstrument";
+						fdc3Denomination = "fdc3.instrument";
+						bbgMnemonic = "DES";
+						populateSelect(intentValueElement, [
+							{
+								value: "ORCL",
+								label: "Oracle Corp"
+							},
+							{
+								value: "MSFT",
+								label: "Microsoft"
+							},
+							{
+								value: "IBM",
+								label: "IBM"
+							}
+						]);
+						break;
+					case "ViewQuote":
+						logInformation(
+							"Intent to be fired is ViewQuote. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: Q"
+						);
+						selectedIntentType = "ViewQuote";
+						fdc3Denomination = "fdc3.instrument";
+						bbgMnemonic = "Q";
+						populateSelect(intentValueElement, [
+							{
+								value: "ORCL",
+								label: "Oracle Corp"
+							},
+							{
+								value: "MSFT",
+								label: "Microsoft"
+							},
+							{
+								value: "IBM",
+								label: "IBM"
+							}
+						]);
+						break;
+				}
+				updateState();
 			}
-			switch (intentTypeElement?.value) {
-				case "ViewChart":
-					logInformation(
-						"Intent to be fired is ViewChart. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: GP"
-					);
-					selectedIntentType = "ViewChart";
-					fdc3Denomination = "fdc3.instrument";
-					bbgMnemonic = "GP";
-					populateSelect(intentValueElement, [
-						{
-							value: "ORCL",
-							label: "Oracle Corp"
-						},
-						{
-							value: "MSFT",
-							label: "Microsoft"
-						},
-						{
-							value: "IBM",
-							label: "IBM"
-						}
-					]);
-					break;
-				case "ViewContact":
-					logInformation(
-						"Intent to be fired is ViewContact. Content Type is fdc3.contact. Bloomberg Terminal Mnemonic: BIO"
-					);
-					selectedIntentType = "ViewContact";
-					fdc3Denomination = "fdc3.contact";
-					bbgMnemonic = "BIO";
-					populateSelect(intentValueElement, [
-						{
-							value: "William Henry Gates",
-							label: "William Henry Gates"
-						},
-						{
-							value: "Larry Ellison",
-							label: "Larry Ellison"
-						},
-						{
-							value: "Robert Iger",
-							label: "Robert Iger"
-						}
-					]);
-					break;
-				case "ViewInstrument":
-					logInformation(
-						"Intent to be fired is ViewInstrument. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: DES"
-					);
-					selectedIntentType = "ViewInstrument";
-					fdc3Denomination = "fdc3.instrument";
-					bbgMnemonic = "DES";
-					populateSelect(intentValueElement, [
-						{
-							value: "ORCL",
-							label: "Oracle Corp"
-						},
-						{
-							value: "MSFT",
-							label: "Microsoft"
-						},
-						{
-							value: "IBM",
-							label: "IBM"
-						}
-					]);
-					break;
-				case "ViewQuote":
-					logInformation(
-						"Intent to be fired is ViewQuote. Content Type is fdc3.instrument. Bloomberg Terminal Mnemonic: Q"
-					);
-					selectedIntentType = "ViewQuote";
-					fdc3Denomination = "fdc3.instrument";
-					bbgMnemonic = "Q";
-					populateSelect(intentValueElement, [
-						{
-							value: "ORCL",
-							label: "Oracle Corp"
-						},
-						{
-							value: "MSFT",
-							label: "Microsoft"
-						},
-						{
-							value: "IBM",
-							label: "IBM"
-						}
-					]);
-					break;
-			}
-			updateState();
 		});
 	}
 
@@ -233,17 +235,6 @@ async function fireIntentForBBG(): Promise<void> {
 			let intent: OpenFin.Intent;
 
 			switch (selectedIntentType) {
-				case "ViewChart":
-					intent = {
-						name: selectedIntentType,
-						context: {
-							type: fdc3Denomination,
-							id: {
-								ticker: selectedIntentValue
-							}
-						}
-					};
-					break;
 				case "ViewContact":
 					intent = {
 						name: selectedIntentType,
@@ -304,7 +295,7 @@ function updateState(): void {
  */
 function logInformation(info: string): void {
 	if (logOutput) {
-		logOutput.textContent = `${logOutput.textContent + info}\n\n`;
+		logOutput.textContent = `${logOutput.textContent}${info}\n\n`;
 		logOutput.scrollTop = logOutput.scrollHeight;
 	}
 }

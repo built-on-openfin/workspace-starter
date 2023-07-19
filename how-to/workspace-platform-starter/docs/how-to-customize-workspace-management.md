@@ -27,6 +27,7 @@ Instead of modifying this file directly we allow you to specify the destination 
 
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Workspace platform starter checks to see if you have specified the following endpoints:
 
+- workspace-list
 - workspace-get
 - workspace-set
 - workspace-remove
@@ -47,10 +48,19 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
    {
     "enabled": true,
     "id": "local-storage",
-    "url": "http://localhost:8080/js/modules/endpoints/local-storage.bundle.js"
+    "url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
    }
   ],
   "endpoints": [
+   {
+    "id": "workspace-list",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "GET",
+     "dataType": "workspace"
+    }
+   },
    {
     "id": "workspace-get",
     "type": "module",
@@ -89,6 +99,18 @@ As you can see from the configuration above:
 
 If you use the live launch section on the [Main Page](../README.md) and launch the second example and save a workspace you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your workspaces.
 
+## Data storage
+
+The endpoint storage maps the workspace data to simplify it, you can disable this mapping by setting `disableStorageMapping` in platform storage.
+
+```json
+"customSettings": {
+   "platformProvider": {
+      "disableStorageMapping": true
+    }
+}
+```
+
 ## Can I Manage Workspaces From Home?
 
 We include support for doing workspace management from home in workspace platform starter. It is enabled by default as an integration provider.
@@ -102,6 +124,6 @@ Please see [How To Workspace Platform Starter And Browser Page Sharing](./how-to
 ## Source Reference
 
 - [platform-override.ts](../client/src/framework/platform/platform-override.ts)
-- [platform-local-storage.ts](../client/src/modules/endpoints/local-storage/platform-local-storage.ts)
+- [platform-local-storage.ts](../client/src/modules/endpoint/local-storage/platform-local-storage.ts)
 
 [<- Back to Table Of Contents](../README.md)

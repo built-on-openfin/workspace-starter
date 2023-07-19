@@ -57,7 +57,7 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 		for (const menuItem of configEntries) {
 			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
 
-			if (include || isEmpty(include)) {
+			if (include ?? isEmpty(include)) {
 				const canShow = await checkConditions(platform, conditions);
 
 				if (canShow) {
@@ -208,7 +208,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 			}
 		}
 
-		if (entryIndex !== -1) {
+		if (entryIndex !== -1 && positionOperation) {
 			switch (positionOperation) {
 				case "delete": {
 					menuEntries.splice(entryIndex);

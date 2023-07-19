@@ -217,5 +217,84 @@
 			}
 		],
 		"tags": ["view", "irs", "finance"]
+	},
+	{
+		"appId": "openfin-frame",
+		"name": "openfin-frame",
+		"title": "Framed App",
+		"description": "An example of framing an application, injecting the fin and fdc3 apis and wiring up context group assignment and title updates.",
+		"manifest": {
+			"url": "http://localhost:8080/common/views/frame/parent/index.html",
+			"customData": {
+				"frame": {
+					"url": "http://localhost:8080/common/views/frame/example-content/example.html",
+					"title": "Example Frame",
+					"sandbox": "allow-forms allow-same-origin allow-scripts"
+				}
+			},
+			"api": {
+				"iframe": {
+					"crossOriginInjection": true,
+					"sameOriginInjection": true
+				}
+			},
+			"fdc3InteropApi": "2.0",
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/common/views/frame/framed/framed.preload.js"
+				}
+			]
+		},
+		"manifestType": "inline-view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["developer", "view"]
+	},
+	{
+		"appId": "openfin-frame-no-api",
+		"name": "openfin-frame-no-api",
+		"title": "Framed App (No API Injection)",
+		"description": "An example of framing an application, not injecting APIs but using a script loaded by the parent and the child and browser APIs (Postmessage) to sync title changes and provide a basic fdc3 api.",
+		"manifest": {
+			"url": "http://localhost:8080/common/views/frame/parent/index.html",
+			"customData": {
+				"frame": {
+					"url": "http://localhost:8080/common/views/frame/example-content/example.html",
+					"title": "Example Frame (No API Injection)",
+					"sandbox": "allow-forms allow-same-origin allow-scripts"
+				}
+			},
+			"api": {
+				"iframe": {
+					"crossOriginInjection": false,
+					"sameOriginInjection": false
+				}
+			},
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/common/views/frame/framed/framed.preload.js"
+				}
+			]
+		},
+		"manifestType": "inline-view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["developer", "view"]
 	}
 ]

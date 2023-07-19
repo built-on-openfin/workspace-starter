@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "es2021",
+		"module": "ES2020",
+		"sourceMap": true,
+		"outDir": "build",
+		"skipLibCheck": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node",
+		"types": ["../client/types/fin"],
+		"paths": {
+			"workspace-platform-starter/*": ["../client/types/module/*"],
+			"workspace-platform-starter/utils": ["../client/src/framework/utils"]
+		}
+	},
+	"include": ["./src/**/*.ts"]
+}

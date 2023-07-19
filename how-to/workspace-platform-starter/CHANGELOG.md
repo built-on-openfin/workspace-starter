@@ -1,5 +1,23 @@
 # Changelog
 
+## v14
+
+## v13.1
+
+- BREAKING CHANGE: Removed the logic that supported saving page window bounds into local storage or a defined endpoint (so if you created custom endpoints for saving this information please note that it is now in the page data). This was used when saving a page or sharing a page. It now uses the new customData property on the PageObject to append windowBounds. We also now capture the page bounds when Save Page AND Save Page As is called.
+- Added baseScore to integration modules to help with ordering of results, integration should use this value for the score property of results they return
+- Added support for OpenFin Workspace's Microsoft Low Code Integration (see [How To Setup Low Code Integrations](./docs/how-to-setup-low-code-integrations.md))
+- Fetch endpoints substitute url params for all http verbs
+- Fetch endpoints now support DELETE, PUT and PATCH http verbs
+- Page and Workspace storage using custom endpoints now reduces the JSON stored to just the essential data
+- Platform Provider has additional `disableStorageMapping` flag which disables the above mapping
+- BREAKING CHANGE: Page and Workspace storage now separates the endpoints for getting all the entries `-list` and a single entry `-get`
+- Page and Workspace requests now include the platform uuid in the request
+- BREAKING CHANGE: Page and Workspace requests now include additional metadata in the request
+- BREAKING CHANGE: Local storage endpoint module has been updated to accommodate the above change
+- Endpoint fetch requests now add the `Content-Type` and `Accept` headers with `application/json`
+- Added a common example app - Framed App in [common/views/frame](./public/common/views/frame/README.md). Which gives an example of loading a iframed app as if it was a view and using the sandboxing and API restrictions while showing communication between the view and the frame.
+
 ## v13
 
 - Renamed application to Workspace Platform Starter (WPS)

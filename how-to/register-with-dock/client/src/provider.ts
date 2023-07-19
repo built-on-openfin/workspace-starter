@@ -7,7 +7,7 @@ import {
 	type StorefrontLandingPage
 } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import { type DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import { dockGetCustomActions, loadDockConfig, register, saveDockConfig } from "./dock";
 
 const PLATFORM_ID = "register-with-dock";
@@ -79,9 +79,9 @@ async function initializeWorkspaceComponents(): Promise<void> {
 		id: PLATFORM_ID,
 		icon: PLATFORM_ICON,
 		getApps: async () => [],
-		getLandingPage: async () => ({} as StorefrontLandingPage),
+		getLandingPage: async () => ({}) as StorefrontLandingPage,
 		getNavigation: async () => [],
-		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] } as unknown as StorefrontFooter),
+		getFooter: async () => ({ logo: { src: PLATFORM_ICON }, links: [] }) as unknown as StorefrontFooter,
 		launchApp: async () => {}
 	});
 

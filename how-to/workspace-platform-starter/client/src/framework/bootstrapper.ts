@@ -19,6 +19,7 @@ import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
 import * as homeComponent from "./workspace/home";
+import * as lowCodeIntegrationProvider from "./workspace/low-code-integrations";
 import * as notificationsComponent from "./workspace/notifications";
 import * as storeComponent from "./workspace/store";
 
@@ -26,6 +27,18 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
+
+/**
+ * Used to register home related actions.
+ */
+function registerHomeSupportedActions(): void {
+	registerAction("show-home", async () => {
+		await homeComponent.show();
+	});
+	registerAction("hide-home", async () => {
+		await homeComponent.hide();
+	});
+}
 
 /**
  * Bootstrap the workspace components.
@@ -61,12 +74,7 @@ export async function init(): Promise<boolean> {
 				clientAPIVersion: homeRegistration.clientAPIVersion
 			};
 			registeredComponents.push("home");
-			registerAction("show-home", async () => {
-				await homeComponent.show();
-			});
-			registerAction("hide-home", async () => {
-				await homeComponent.hide();
-			});
+			registerHomeSupportedActions();
 		}
 	}
 
@@ -152,6 +160,13 @@ export async function init(): Promise<boolean> {
 
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
+
+	// register any instantiated low code integrations that require registering
+	await lowCodeIntegrationProvider.initializeWorkflows();
+	if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
+		registeredComponents.push("home");
+		registerHomeSupportedActions();
+	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
 	// Remove any entries from autoShow that have not been registered

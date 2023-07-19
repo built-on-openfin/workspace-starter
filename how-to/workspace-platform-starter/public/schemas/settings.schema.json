@@ -38,7 +38,7 @@
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_42"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -280,7 +280,7 @@
             "type": "object"
         },
         "ApplicationIdentity": {
-            "$ref": "#/definitions/__type_29"
+            "$ref": "#/definitions/__type_31"
         },
         "Array": {
             "items": {
@@ -554,7 +554,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_41"
         },
         "ColorSchemeOption": {
             "enum": [
@@ -685,7 +685,7 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_38"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_8"
@@ -749,7 +749,7 @@
                 },
                 "type": {
                     "$ref": "#/definitions/BrowserButtonType.Custom",
-                    "description": "Type of cutom browser button"
+                    "description": "Type of custom browser button"
                 }
             },
             "required": [
@@ -835,6 +835,9 @@
                     "type": "string"
                 },
                 "inputBackground": {
+                    "type": "string"
+                },
+                "inputBorder": {
                     "type": "string"
                 },
                 "inputColor": {
@@ -952,6 +955,10 @@
                     "$ref": "#/definitions/LoggerProviderOptions",
                     "description": "The logger provider options."
                 },
+                "lowCodeIntegrationProvider": {
+                    "$ref": "#/definitions/LowCodeIntegrationProviderOptions",
+                    "description": "The low code integration provider options."
+                },
                 "menusProvider": {
                     "$ref": "#/definitions/MenusProviderOptions",
                     "description": "The menus provider options."
@@ -979,6 +986,9 @@
             },
             "type": "object"
         },
+        "DeepPartial": {
+            "$ref": "#/definitions/__type_29"
+        },
         "DipRect": {
             "additionalProperties": false,
             "properties": {
@@ -996,7 +1006,7 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_33"
+            "$ref": "#/definitions/__type_35"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1192,7 +1202,7 @@
             "type": "object"
         },
         "ExternalProcessRequestType": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_39"
         },
         "FetchEndpointDefinition": {
             "additionalProperties": false,
@@ -1259,8 +1269,11 @@
                 "method": {
                     "description": "The HTTP methods for fetch.",
                     "enum": [
+                        "DELETE",
                         "GET",
-                        "POST"
+                        "PATCH",
+                        "POST",
+                        "PUT"
                     ],
                     "type": "string"
                 },
@@ -1313,6 +1326,9 @@
                 "NewPage",
                 "NewWindow",
                 "OpenStorefront",
+                "Print",
+                "PrintAll",
+                "PrintScreen",
                 "Quit",
                 "RenameWorkspace",
                 "RestoreChanges",
@@ -1405,6 +1421,9 @@
         "Identity": {
             "$ref": "#/definitions/__type_3"
         },
+        "Identity_1": {
+            "$ref": "#/definitions/__type_30"
+        },
         "Image": {
             "additionalProperties": false,
             "description": "Detailed metadata describing an image.",
@@ -1431,13 +1450,17 @@
             "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
-        "IntegrationModuleDefinition": {
+        "IntegrationModuleDefinition<unknown>": {
             "additionalProperties": false,
             "description": "Integration definition.",
             "properties": {
                 "autoStart": {
                     "description": "Does the integration start automatically if enabled (default is true).",
                     "type": "boolean"
+                },
+                "baseScore": {
+                    "description": "A number which is used as the base score when sorting module results.",
+                    "type": "number"
                 },
                 "data": {
                     "$ref": "#/definitions/ModuleDefinition.O",
@@ -1506,7 +1529,7 @@
                 "integrations": {
                     "description": "This is the old module list name, remove in future.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -1517,7 +1540,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -1569,7 +1592,7 @@
             "$ref": "#/definitions/__type_11"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_40"
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -1729,6 +1752,70 @@
         "LoggerProviderOptions": {
             "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
+        },
+        "LowCodeIntegrationDefinition": {
+            "additionalProperties": false,
+            "description": "A definition consisting of common settings across Low Code integrations (similar to modules) to help describe the entry and a type and data that helps\nidentify the type of Low Code integration the entry is about.",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/ModuleDefinition.O_1",
+                    "description": "Custom data for the module."
+                },
+                "description": {
+                    "description": "The description of the module.",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Is the module enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon for the module.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id of the module.",
+                    "type": "string"
+                },
+                "info": {
+                    "description": "Url to more information.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "The title of the module.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "The types of supported Low Code Integration",
+                    "enum": [
+                        "ms365"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "title",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LowCodeIntegrationProviderOptions": {
+            "additionalProperties": false,
+            "description": "The options available when utilizing Low Code Integrations.",
+            "properties": {
+                "modules": {
+                    "description": "An array of low code integration definitions to use.",
+                    "items": {
+                        "$ref": "#/definitions/LowCodeIntegrationDefinition"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "modules"
+            ],
+            "type": "object"
         },
         "ManifestTypeId": {
             "description": "Manifest types used in manifest files.",
@@ -2158,11 +2245,136 @@
             "$ref": "#/definitions/ModuleList_7",
             "description": "List of modules."
         },
+        "Microsoft365ConnectionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "clientId": {
+                    "description": "The client ID of the Microsoft 365 application.",
+                    "type": "string"
+                },
+                "redirectUri": {
+                    "description": "The redirect URI of the Microsoft 365 application.",
+                    "type": "string"
+                },
+                "tenantId": {
+                    "description": "The tenant ID of the Microsoft 365 application.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "clientId",
+                "redirectUri",
+                "tenantId"
+            ],
+            "type": "object"
+        },
+        "Microsoft365IntegrationConfig": {
+            "additionalProperties": false,
+            "description": "Configuration object for the Microsoft 365 workflow integration.",
+            "properties": {
+                "connect": {
+                    "$ref": "#/definitions/Microsoft365ConnectionConfig"
+                },
+                "workflows": {
+                    "$ref": "#/definitions/Microsoft365Workflows"
+                }
+            },
+            "required": [
+                "connect"
+            ],
+            "type": "object"
+        },
+        "Microsoft365Workflows": {
+            "additionalProperties": false,
+            "properties": {
+                "search": {
+                    "$ref": "#/definitions/MicrosoftSearchWorkflowConfig",
+                    "description": "The Search workflow for the Microsoft 365 integration.\n\nThis workflow is used to search for Microsoft 365 entities.\n\nTo disable the Search workflow, set the disabled property in the workflow config to `false`.\n\nSee {@link MicrosoftSearchWorkflowConfig} for configuration options."
+                }
+            },
+            "type": "object"
+        },
+        "MicrosoftEntityTypeConfig": {
+            "additionalProperties": false,
+            "description": "Configuration object for the Microsoft 365 workflow integration.\n\nUsed for choosing which Microsoft 365 entities to include in the search results.",
+            "properties": {
+                "chatMessage": {
+                    "default": true,
+                    "description": "Whether or not to include messages (Teams Messages) in the search results.\n\n`'Chat.Read' OR 'Chat.ReadWrite' AND 'ChannelMessage.Read.All'` OAuth scopes are required to access this data.\nIf these scopes are not provided, user Authentication will fail.\n\nFuthermore, the `openUrlWithBrowser` permission must be enabled in the application manifest. This should support the `msteams` protocols. This is used for opening the Teams client when action-ing a Teams message.\nSee the [Developer Guide](https://developers.openfin.co/of-docs/docs/api-security) for more information.",
+                    "type": "boolean"
+                },
+                "contact": {
+                    "default": true,
+                    "description": "Whether or not to include contacts (Outlook Contacts) in the search results.\n\n`'Contacts.Read.Shared'` OAuth scopes are required to access this data.\nIf these scopes are not provided, user Authentication will fail.",
+                    "type": "boolean"
+                },
+                "drive": {
+                    "default": true,
+                    "description": "Whether or not to include files (OneDrive Files) in the search results.",
+                    "type": "boolean"
+                },
+                "event": {
+                    "default": true,
+                    "description": "Whether or not to include events (Outlook Calendar Events) in the search results.\n\n`'Calendars.Read' OR 'Calendars.ReadWrite'` OAuth scopes are required to access this data.\nIf these scopes are not provided, user Authentication will fail.",
+                    "type": "boolean"
+                },
+                "list": {
+                    "default": true,
+                    "description": "Whether or not to include lists (SharePoint Lists) in the search results.\n\n`'Sites.Read.All' OR 'Sites.ReadWrite.All' AND 'Mail.ReadWrite.Shared'` OAuth scope is required to access this data.",
+                    "type": "boolean"
+                },
+                "message": {
+                    "default": true,
+                    "description": "Whether or not to include messages (Outlook Emails) in the search results.\n\n`'Mail.ReadWrite.Shared'` OAuth scopes are required to access this data.\nIf these scopes are not provided, user Authentication will fail.",
+                    "type": "boolean"
+                },
+                "user": {
+                    "default": true,
+                    "description": "Whether or not to include users (People) in the search results.\n\n`'User.Read.All' AND 'Presence.Read.All'` OAuth scopes are required to access this data.\nIf these scopes are not provided, user Authentication will fail.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "MicrosoftSearchWorkflowConfig": {
+            "additionalProperties": false,
+            "description": "Configuration object for the Microsoft 365 Search workflow integration.\n\nAll properties are optional. If they are omitted, the default values will be used.",
+            "properties": {
+                "disableAutoInitialize": {
+                    "default": false,
+                    "description": "If false, will automatically initialize the workflow when the Workspace Platform is initialized.\nElse, will need to be initialized by calling initializeWorkflow.",
+                    "type": "boolean"
+                },
+                "disabled": {
+                    "default": false,
+                    "description": "If true, will disable this workflow.",
+                    "type": "boolean"
+                },
+                "homeProvider": {
+                    "$ref": "#/definitions/DeepPartial",
+                    "description": "Configuration object for the HomeProvider.\n\nUse this to configure the HomeProvider for example, adding a custom logo or name.\n\nSee {@link HomeProvider} for configuration options."
+                },
+                "microsoftEntityTypeConfig": {
+                    "$ref": "#/definitions/MicrosoftEntityTypeConfig",
+                    "description": "Configuration object for the Microsoft 365 entity types to include in the search results.\n\nUse this to enable/disable the different Microsoft 365 entity types.\n\nSee {@link MicrosoftEntityTypeConfig} for configuration options."
+                },
+                "useTeamsDeepLink": {
+                    "default": true,
+                    "description": "The `msteams://` deep link can be used to open a Microsoft Teams chat in the Microsoft Teams desktop application.\n\nThis _requires_ that the user has the Microsoft Teams desktop application installed. Else the call will silently fail.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "MinimumVersion": {
             "$ref": "#/definitions/VersionInfo",
             "description": "Information about the version of the platform and it's dependencies"
         },
         "ModuleDefinition.O": {},
+        "ModuleDefinition.O_1": {
+            "$ref": "#/definitions/Microsoft365IntegrationConfig",
+            "description": "Configuration object for the Microsoft 365 workflow integration."
+        },
         "ModuleDefinition<unknown>": {
             "additionalProperties": false,
             "description": "The definition of a module with generic data for options.",
@@ -2352,10 +2564,10 @@
             "type": "object"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_37"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_31"
+            "$ref": "#/definitions/__type_33"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -2462,6 +2674,9 @@
                         }
                     },
                     "type": "object"
+                },
+                "customData": {
+                    "description": "Optional property to attach custom metadata to the page object, such as version or timestamp. Must be serializable."
                 },
                 "description": {
                     "description": "An optional UI friendly description of the page.",
@@ -2981,6 +3196,10 @@
             "additionalProperties": false,
             "description": "Platform provider options.",
             "properties": {
+                "disableStorageMapping": {
+                    "description": "When storing page/workspace data using endpoints disable the mapping which reduces the payload size.",
+                    "type": "boolean"
+                },
                 "initUrl": {
                     "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth\nlogic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate\nthe provider bundle and provide an example in our docs.",
                     "type": "string"
@@ -3009,7 +3228,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_32"
+            "$ref": "#/definitions/__type_34"
         },
         "PreDefinedButtonConfig": {
             "additionalProperties": false,
@@ -3062,12 +3281,20 @@
             "$ref": "#/definitions/__type_6"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_36"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_10"
         },
         "ScoreOrder": {
+            "description": "The order to sort scored search results in.",
+            "enum": [
+                "ascending",
+                "descending"
+            ],
+            "type": "string"
+        },
+        "ScoreOrder_1": {
             "description": "The order to sort scored search results in.",
             "enum": [
                 "ascending",
@@ -3092,7 +3319,7 @@
             "type": "object"
         },
         "Snapshot": {
-            "$ref": "#/definitions/__type_30"
+            "$ref": "#/definitions/__type_32"
         },
         "SnapshotSourceConnection": {
             "additionalProperties": false,
@@ -3804,6 +4031,8 @@
                 "NewView",
                 "OpenWithDefaultBrowser",
                 "Print",
+                "PrintAll",
+                "PrintScreen",
                 "ReloadTab",
                 "RemoveFromChannel"
             ],
@@ -5711,13 +5940,59 @@
         "__type_29": {
             "additionalProperties": false,
             "properties": {
-                "uuid": {
+                "clientAPIVersion": {
+                    "description": "version of client SDK,  set by the API",
+                    "type": "string"
+                },
+                "commandCode": {
+                    "description": "A keycode that can be used to interact with this Search Provider.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "A short description of the Search Provider.",
+                    "type": "string"
+                },
+                "dispatchFocusEvents": {
+                    "description": "If set, focusing on a search result will trigger onResultDispatch callback.",
+                    "type": "boolean"
+                },
+                "hidden": {
+                    "description": "A flag to indicate this provider will not be displayed as a command.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "An icon that a UI can display for the Search Provider.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "A unique ID used to identify the search provider.",
+                    "type": "string"
+                },
+                "identity": {
+                    "$ref": "#/definitions/Identity_1",
+                    "description": "The OpenFin identity that registered this search provider."
+                },
+                "inputPlaceholder": {
+                    "description": "The placeholder string to be displayed in a UI when targeting this specific Search Provider.",
+                    "type": "string"
+                },
+                "listTitle": {
+                    "description": "A title to display above the result list in a UI when targeting this specific Search Provider.",
+                    "type": "string"
+                },
+                "logoUrl": {
+                    "description": "Logo to show render when targeting this specific Search Provider.",
+                    "type": "string"
+                },
+                "scoreOrder": {
+                    "$ref": "#/definitions/ScoreOrder_1",
+                    "description": "The order to sort the score in. The default is `ascending`."
+                },
+                "title": {
+                    "description": "A UI friendly title for the search provider.",
                     "type": "string"
                 }
             },
-            "required": [
-                "uuid"
-            ],
             "type": "object"
         },
         "__type_3": {
@@ -5739,6 +6014,32 @@
             "type": "object"
         },
         "__type_30": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_31": {
+            "additionalProperties": false,
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_32": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -5785,7 +6086,7 @@
             ],
             "type": "object"
         },
-        "__type_31": {
+        "__type_33": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -5882,7 +6183,7 @@
             ],
             "type": "object"
         },
-        "__type_32": {
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -5900,7 +6201,7 @@
             ],
             "type": "object"
         },
-        "__type_33": {
+        "__type_35": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -5916,7 +6217,7 @@
             ],
             "type": "object"
         },
-        "__type_34": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -5940,7 +6241,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -5998,7 +6299,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_38": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -6029,7 +6330,7 @@
             },
             "type": "object"
         },
-        "__type_37": {
+        "__type_39": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -6066,11 +6367,29 @@
             },
             "type": "object"
         },
-        "__type_38": {
+        "__type_4": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_40": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_39": {
+        "__type_41": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -6091,25 +6410,7 @@
             },
             "type": "object"
         },
-        "__type_4": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
-                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_40": {
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

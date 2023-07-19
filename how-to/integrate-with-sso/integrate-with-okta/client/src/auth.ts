@@ -352,22 +352,25 @@ function pollTimerStop(): void {
  */
 function pollTimerStart(isAuthenticated: boolean): void {
 	if ((oktaSettings?.verifyPollMs ?? 0) > 0 && isAuthenticated) {
-		pollTimerId = window.setInterval(async () => {
-			const accessToken = loadProperty(STORE_ACCESS_TOKEN);
-			if (accessToken) {
-				const userInfo = await checkTokenValidity(accessToken, false);
-				if (!userInfo) {
-					informationCallback("Access token no longer valid, logout");
-					removeProperty(STORE_ACCESS_TOKEN);
-					await authenticatedStateChanged(false);
+		pollTimerId = window.setInterval(
+			async () => {
+				const accessToken = loadProperty(STORE_ACCESS_TOKEN);
+				if (accessToken) {
+					const userInfo = await checkTokenValidity(accessToken, false);
+					if (!userInfo) {
+						informationCallback("Access token no longer valid, logout");
+						removeProperty(STORE_ACCESS_TOKEN);
+						await authenticatedStateChanged(false);
+					} else {
+						informationCallback("Access token still valid");
+					}
 				} else {
-					informationCallback("Access token still valid");
+					informationCallback("Access token not found, logout");
+					await authenticatedStateChanged(false);
 				}
-			} else {
-				informationCallback("Access token not found, logout");
-				await authenticatedStateChanged(false);
-			}
-		}, oktaSettings?.verifyPollMs);
+			},
+			oktaSettings?.verifyPollMs
+		);
 	}
 }
 
