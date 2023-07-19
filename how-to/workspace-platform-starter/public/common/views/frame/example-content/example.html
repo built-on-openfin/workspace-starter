@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Example Application To Frame</title>
+		<title>A Simple Framed Example</title>
 		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
 		<link rel="stylesheet" href="../../../style/app.css" />
 		<style>
@@ -19,23 +19,27 @@
 		<script defer="defer" src="./example.index.js"></script>
 	</head>
 	<body class="small col fill gap20">
-		<h3>A Simple Framed Example</h3>
+		<h3 id="title">A Simple Framed Example</h3>
 		<p>
 			This example imports a script framed.js that allows the parent view's title to be updated when this
 			framed content changes it's title (triggered by the button below).
 		</p>
 		<p>
-			If the fin api is injected into the frame and the preload capability is available then the preload.js
-			script brings in the logic to update the title and the framed.js logic will not run.
+			If the fin api is injected into the frame and the preload capability is available then the
+			framed.preload.js script brings in the logic to update the title and the framed.js logic will not run.
 		</p>
 		<p>
 			This Framed App example is used to demonstrate that you can control whether the fin api is injected into
-			frames and the available options and how you could still have communication between child and parent
-			without the fin api.
+			frames and how you can still have cross origin communication between parent and child using standard
+			browser APIs (postMessage).
 		</p>
 		<p>
 			The content you try to frame by updating the Framed App Manifest's custom data must support being framed
 			by the origin of the parent.
+		</p>
+		<p>
+			This is an example to perform tests against framed content to see how it can behave whether the runtime
+			injects the fin/fdc3 api or not.
 		</p>
 		<button id="change-title">Change Title</button>
 		<h4>Context Type Received</h4>
