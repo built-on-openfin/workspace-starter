@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-wdio",
-	"version": "13.1.5",
+	"version": "14.0.11",
 	"scripts": {
 		"build": "echo Nothing to build",
 		"test": "wdio run wdio.conf.js",
@@ -10,13 +10,13 @@
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.0.13",
 		"@openfin/automation-native": "^1.0.13",
-		"@wdio/cli": "8.11.2",
-		"@wdio/local-runner": "8.11.2",
-		"@wdio/mocha-framework": "8.11.0",
-		"@wdio/shared-store-service": "8.11.2",
-		"@wdio/spec-reporter": "8.11.2",
+		"@wdio/cli": "8.13.5",
+		"@wdio/local-runner": "8.13.4",
+		"@wdio/mocha-framework": "8.12.1",
+		"@wdio/shared-store-service": "8.13.4",
+		"@wdio/spec-reporter": "8.12.2",
 		"chai": "4.3.7",
-		"chromedriver": "112.0.0",
+		"chromedriver": "114.0.0",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"wdio-chromedriver-service": "8.1.1"

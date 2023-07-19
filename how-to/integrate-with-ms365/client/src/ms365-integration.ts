@@ -546,7 +546,7 @@ export class Microsoft365Integration {
 							for (const teamAndChannels of this._teamsAndChannelsCache) {
 								if (
 									includeOptions.includes("Team") &&
-									(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ||
+									(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ??
 										teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
 								) {
 									homeResults.push(
@@ -562,7 +562,7 @@ export class Microsoft365Integration {
 								if (includeOptions.includes("Channel")) {
 									for (const channel of teamAndChannels.channels) {
 										if (
-											channel.displayName?.toLowerCase().includes(lowerQuery) ||
+											channel.displayName?.toLowerCase().includes(lowerQuery) ??
 											channel.description?.toLowerCase().includes(lowerQuery)
 										) {
 											homeResults.push(
@@ -931,7 +931,7 @@ export class Microsoft365Integration {
 	 * @returns True if the url was opened.
 	 */
 	private async handleShareContact(actionData: ActionData): Promise<boolean> {
-		if (actionData?.emails && actionData?.emails[0]) {
+		if (actionData?.emails?.[0]) {
 			const fdc3Contact: Fdc3Contact = {
 				type: "fdc3.contact",
 				name: actionData.name,
@@ -1777,7 +1777,7 @@ export class Microsoft365Integration {
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
-		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.address) {
+		if (message.sender?.emailAddress?.name ?? message.sender?.emailAddress?.address) {
 			pairs.push({
 				label: "From",
 				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address ?? ""
@@ -3026,7 +3026,7 @@ export class Microsoft365Integration {
 		} else if (this.driveItemIsImage(driveItem)) {
 			if (driveItem.thumbnails && Array.isArray(driveItem.thumbnails) && driveItem.thumbnails.length > 0) {
 				const thumbnailSet = driveItem.thumbnails[0];
-				if (thumbnailSet?.small || thumbnailSet.medium) {
+				if (thumbnailSet?.small ?? thumbnailSet.medium) {
 					return thumbnailSet.small?.url ?? thumbnailSet.medium?.url;
 				}
 			}

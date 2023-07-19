@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-dock-basic",
-	"version": "13.1.5",
+	"version": "14.0.11",
 	"description": "OpenFin Workspace -- Register with dock basic",
 	"main": "index.js",
 	"scripts": {
@@ -15,15 +15,15 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "13.1.5",
-		"@openfin/workspace-platform": "13.1.5"
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next"
 	},
 	"devDependencies": {
-		"@openfin/core": "31.75.4",
-		"openfin-adapter": "31.75.4",
+		"@openfin/core": "32.76.10",
+		"openfin-adapter": "32.76.10",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6",
-		"webpack": "^5.88.1",
+		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}
 }

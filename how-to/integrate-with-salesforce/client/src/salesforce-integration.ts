@@ -304,7 +304,7 @@ export class SalesforceIntegration {
 				if (result.action.name.startsWith("button-action-")) {
 					const actionIdx = Number.parseInt(result.action.name.replace("button-action-", ""), 10);
 
-					const action = data.mapping?.actions && data.mapping.actions[actionIdx];
+					const action = data.mapping?.actions?.[actionIdx];
 
 					if (!action?.url && !action?.intent && !action?.view) {
 						await this.openSalesforceView(data);
@@ -802,7 +802,7 @@ export class SalesforceIntegration {
 
 		let value = searchResult[field] as string | { [id: string]: string };
 
-		if (subField !== undefined && value !== null && value !== undefined) {
+		if (subField !== undefined && value !== undefined) {
 			value = (value as { [id: string]: string })[subField];
 		}
 
@@ -911,7 +911,7 @@ export class SalesforceIntegration {
 		if (headerParts.image) {
 			headerChildren.push(headerParts.image);
 		}
-		if (headerParts.header || headerParts.subHeader) {
+		if (headerParts.header ?? headerParts.subHeader) {
 			const headerTitleParts: TemplateFragment[] = [];
 			if (headerParts.header) {
 				headerTitleParts.push(headerParts.header);
