@@ -163,4 +163,25 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 		// TODO: Add logic to get the user information
 		return true;
 	}
+
+	/**
+	 * Notify subscribers of an event change.
+	 * @param eventType The event to notify.
+	 * @param authEventType The type of authentication event to send to.
+	 */
+	private async notifySubscribers(eventType: string, authEventType: AuthEventTypes): Promise<void> {
+		const subscribers = this._eventSubscribers[authEventType];
+
+		if (subscribers) {
+			const subscriberIds = Object.keys(subscribers);
+			subscriberIds.reverse();
+
+			for (const subscriberId of subscriberIds) {
+				this._logger?.info(
+					`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
+				);
+				await subscribers[subscriberId]();
+			}
+		}
+	}
 }

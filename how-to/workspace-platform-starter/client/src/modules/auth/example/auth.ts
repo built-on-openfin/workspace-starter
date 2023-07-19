@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
+import type { AuthEventTypes, AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "../../../framework/utils";
@@ -10,26 +10,52 @@ import { EXAMPLE_AUTH_CURRENT_USER_KEY, clearCurrentUser, getCurrentUser } from 
  * Example authentication provider.
  */
 export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
+	/**
+	 * The options for the provider.
+	 * @internal
+	 */
 	private _authOptions?: ExampleOptions;
 
+	/**
+	 * The logger for displaying information from the module.
+	 * @internal
+	 */
 	private _logger?: Logger;
 
-	private readonly _subscribeIdMap: { [key: string]: string };
+	/**
+	 * Map a subscription id to an event.
+	 * @internal
+	 */
+	private readonly _subscribeIdMap: { [key: string]: AuthEventTypes };
 
-	private readonly _loggedInSubscribers: { [id: string]: () => Promise<void> };
+	/**
+	 * Callbacks for event subscribers.
+	 * @internal
+	 */
+	private readonly _eventSubscribers: { [event in AuthEventTypes]?: { [id: string]: () => Promise<void> } };
 
-	private readonly _beforeLoggedOutSubscribers: { [id: string]: () => Promise<void> };
-
-	private readonly _loggedOutSubscribers: { [id: string]: () => Promise<void> };
-
-	private readonly _sessionExpiredSubscribers: { [id: string]: () => Promise<void> };
-
+	/**
+	 * The key for the authenticated user.
+	 * @internal
+	 */
 	private _authenticatedKey?: string;
 
+	/**
+	 * The current user.
+	 * @internal
+	 */
 	private _currentUser?: ExampleUser;
 
+	/**
+	 * Are we authenticated.
+	 * @internal
+	 */
 	private _authenticated?: boolean;
 
+	/**
+	 * The id for the expiry check timer.
+	 * @internal
+	 */
 	private _sessionExpiryCheckId?: number;
 
 	/**
@@ -37,10 +63,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 */
 	constructor() {
 		this._subscribeIdMap = {};
-		this._loggedInSubscribers = {};
-		this._beforeLoggedOutSubscribers = {};
-		this._loggedOutSubscribers = {};
-		this._sessionExpiredSubscribers = {};
+		this._eventSubscribers = {};
 	}
 
 	/**
@@ -77,40 +100,17 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 * @param callback The callback to fire when the event occurs.
 	 * @returns Subscription id for unsubscribing or undefined if event type is not available.
 	 */
-	public subscribe(
-		to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
-		callback: () => Promise<void>
-	): string | undefined {
-		const key = randomUUID();
-		let matchFound = false;
-		switch (to) {
-			case "logged-in": {
-				matchFound = true;
-				this._loggedInSubscribers[key] = callback;
-				break;
-			}
-			case "before-logged-out": {
-				matchFound = true;
-				this._beforeLoggedOutSubscribers[key] = callback;
-				break;
-			}
-			case "logged-out": {
-				matchFound = true;
-				this._loggedOutSubscribers[key] = callback;
-				break;
-			}
-			case "session-expired": {
-				matchFound = true;
-				this._sessionExpiredSubscribers[key] = callback;
-				break;
-			}
-		}
+	public subscribe(to: AuthEventTypes, callback: () => Promise<void>): string | undefined {
+		const subscriptionId = randomUUID();
 
-		if (matchFound) {
-			this._subscribeIdMap[key] = to;
-			this._logger?.info(`Subscription to ${to} events registered. Subscription Id: ${key}`);
-			return key;
-		}
+		const toMap = this._eventSubscribers[to] ?? {};
+		toMap[subscriptionId] = callback;
+		this._eventSubscribers[to] = toMap;
+
+		this._subscribeIdMap[subscriptionId] = to;
+		this._logger?.info(`Subscription to ${to} events registered. Subscription Id: ${subscriptionId}`);
+
+		return subscriptionId;
 	}
 
 	/**
@@ -119,38 +119,19 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 	 * @returns True if the unsubscribe was successful.
 	 */
 	public unsubscribe(subscriptionId: string): boolean {
-		let matchFound = false;
 		const eventType = this._subscribeIdMap[subscriptionId];
 		if (isEmpty(eventType)) {
 			this._logger?.warn(`You have tried to unsubscribe with a key ${subscriptionId} that is invalid`);
 			return false;
 		}
 
-		switch (eventType) {
-			case "logged-in": {
-				matchFound = true;
-				delete this._loggedInSubscribers[subscriptionId];
-				break;
-			}
-			case "before-logged-out": {
-				matchFound = true;
-				delete this._beforeLoggedOutSubscribers[subscriptionId];
-				break;
-			}
-			case "logged-out": {
-				matchFound = true;
-				delete this._loggedOutSubscribers[subscriptionId];
-				break;
-			}
-			case "session-expired": {
-				matchFound = true;
-				delete this._sessionExpiredSubscribers[subscriptionId];
-				break;
-			}
+		const eventSubscribers = this._eventSubscribers[eventType];
+		if (!isEmpty(eventSubscribers)) {
+			delete eventSubscribers[subscriptionId];
 		}
 
-		delete this._subscribeIdMap[subscriptionId];
-		if (matchFound) {
+		if (this._subscribeIdMap[subscriptionId]) {
+			delete this._subscribeIdMap[subscriptionId];
 			this._logger?.info(
 				`Subscription to ${eventType} events with subscription Id: ${subscriptionId} has been cleared`
 			);
@@ -196,7 +177,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 				localStorage.setItem(this._authenticatedKey, this._authenticated.toString());
 			}
 			this.checkForSessionExpiry();
-			await this.notifySubscribers("logged-in", this._loggedInSubscribers);
+			await this.notifySubscribers("logged-in");
 		} else {
 			clearCurrentUser();
 		}
@@ -326,7 +307,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 							localStorage.removeItem(this._authenticatedKey);
 						}
 						clearCurrentUser();
-						await this.notifySubscribers("session-expired", this._sessionExpiredSubscribers);
+						await this.notifySubscribers("session-expired");
 					}
 				}
 			}, validity * 1000);
@@ -335,22 +316,21 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 
 	/**
 	 * Notify subscribers of an event change.
-	 * @param eventType The event to notify.
-	 * @param subscribers The subscribers for the event.
+	 * @param authEventType The type of authentication event to send to.
 	 */
-	private async notifySubscribers(
-		eventType: string,
-		subscribers: { [id: string]: () => Promise<void> }
-	): Promise<void> {
-		const subscriberIds = Object.keys(subscribers);
-		subscriberIds.reverse();
+	private async notifySubscribers(authEventType: AuthEventTypes): Promise<void> {
+		const subscribers = this._eventSubscribers[authEventType];
 
-		for (let i = 0; i < subscriberIds.length; i++) {
-			const subscriberId = subscriberIds[i];
-			this._logger?.info(
-				`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
-			);
-			await subscribers[subscriberId]();
+		if (subscribers) {
+			const subscriberIds = Object.keys(subscribers);
+			subscriberIds.reverse();
+
+			for (const subscriberId of subscriberIds) {
+				this._logger?.info(
+					`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${authEventType}`
+				);
+				await subscribers[subscriberId]();
+			}
 		}
 	}
 
@@ -366,7 +346,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 			return;
 		}
 		this._logger?.info("Log out requested");
-		await this.notifySubscribers("before-logged-out", this._beforeLoggedOutSubscribers);
+		await this.notifySubscribers("before-logged-out");
 		this._authenticated = false;
 		if (this._authenticatedKey) {
 			localStorage.removeItem(this._authenticatedKey);
@@ -378,7 +358,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 				const win = await this.openLogoutWindow(logoutUrl);
 				setTimeout(async () => {
 					await win.close();
-					await this.notifySubscribers("logged-out", this._loggedOutSubscribers);
+					await this.notifySubscribers("logged-out");
 					resolve(true);
 				}, 2000);
 			} catch (error) {
@@ -386,7 +366,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 				return resolve(false);
 			}
 		} else {
-			await this.notifySubscribers("logged-out", this._loggedOutSubscribers);
+			await this.notifySubscribers("logged-out");
 			resolve(true);
 		}
 	}
