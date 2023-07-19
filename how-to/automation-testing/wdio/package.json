@@ -16,7 +16,7 @@
 		"@wdio/shared-store-service": "8.13.4",
 		"@wdio/spec-reporter": "8.12.2",
 		"chai": "4.3.7",
-		"chromedriver": "114.0.0",
+		"chromedriver": "114.0.3",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"wdio-chromedriver-service": "8.1.1"
