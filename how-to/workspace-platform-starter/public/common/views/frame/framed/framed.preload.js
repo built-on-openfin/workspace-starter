@@ -19,7 +19,7 @@ if (window !== window.top && window.top === window.parent) {
 
 		try {
 			const interopModule = await import('../framed/frame.interop.js');
-			interopModule.init();
+			await interopModule.init();
 		} catch (err) {
 			console.error('Framed Preload: Error initializing interop setup.', err);
 		}

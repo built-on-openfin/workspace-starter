@@ -277,19 +277,22 @@ export class ExampleAuthProvider implements AuthProvider<ExampleOptions> {
 									return resolve(false);
 								}
 							});
-							statusCheck = window.setInterval(async () => {
-								if (!isEmpty(win)) {
-									const info = await win.getInfo();
-									if (authMatch.test(info.url)) {
-										window.clearInterval(statusCheck);
-										await win.removeAllListeners();
-										await win.close(true);
-										return resolve(true);
+							statusCheck = window.setInterval(
+								async () => {
+									if (!isEmpty(win)) {
+										const info = await win.getInfo();
+										if (authMatch.test(info.url)) {
+											window.clearInterval(statusCheck);
+											await win.removeAllListeners();
+											await win.close(true);
+											return resolve(true);
+										}
+									} else {
+										return resolve(false);
 									}
-								} else {
-									return resolve(false);
-								}
-							}, this._authOptions.checkLoginStatusInSeconds ?? 1 * 1000);
+								},
+								this._authOptions.checkLoginStatusInSeconds ?? 1 * 1000
+							);
 							return true;
 						}
 						return false;
