@@ -130,12 +130,12 @@ export function createInteropOverride(
 			// show menu
 			// launch a new window and optionally pass the available intents as customData.apps as part of the window options
 			// the window can then use raiseIntent against a specific app (the selected one). This is a very basic example.
-			const height = customSettings?.platformProvider?.intentPicker?.height || 400;
-			const width = customSettings?.platformProvider?.intentPicker?.width || 400;
+			const height = customSettings?.platformProvider?.intentPicker?.height ?? 400;
+			const width = customSettings?.platformProvider?.intentPicker?.width ?? 400;
 
 			// this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
 			const url =
-				customSettings?.platformProvider?.intentPicker?.url ||
+				customSettings?.platformProvider?.intentPicker?.url ??
 				"http://localhost:8080/common/windows/intents/picker.html";
 
 			const winOption = {

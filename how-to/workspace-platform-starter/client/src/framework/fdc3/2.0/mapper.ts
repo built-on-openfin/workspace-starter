@@ -19,7 +19,7 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 	const platformApp: PlatformApp = {
 		appId: app.appId,
 		name: app.name ?? app.appId,
-		title: app.title || app.name,
+		title: app.title ?? app.name,
 		manifestType: mapManifestType(app),
 		manifest: getManifest(app) as string,
 		description: app.description,
@@ -75,8 +75,7 @@ export function mapIntents(interop: AppInterop | undefined): AppIntent[] {
 	}
 
 	const intentIds = Object.keys(listensFor);
-	for (let i = 0; i < intentIds.length; i++) {
-		const intentName = intentIds[i];
+	for (const intentName of intentIds) {
 		intents.push({
 			name: intentName,
 			displayName: listensFor[intentName].displayName ?? "",
