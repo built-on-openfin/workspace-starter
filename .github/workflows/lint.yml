@@ -14,10 +14,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
       - name: Install dependencies
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-           GITHUB_TOKEN: ${{secrets.OF_GITHUB_TOKEN}}
         run: npm install
       - name: Run prettier
         run: npx prettier --config .prettierrc --check .
