@@ -528,6 +528,10 @@ export class ServiceNowIntegration {
 				await fin.System.openUrlWithBrowser(`tel:${actionData.phone}`);
 				return true;
 			}
+			case ServiceNowIntegration._ACTION_CONNECT: {
+				await this.connectToServiceNow();
+				return true;
+			}
 			default:
 				if (this._integrationHelpers) {
 					await this._integrationHelpers.launchView({ url: actionData.url });
@@ -952,7 +956,7 @@ export class ServiceNowIntegration {
 
 		const templateContent = await this.createLayoutTemplate(
 			account.name as string,
-			this._settings?.images.contact,
+			this._settings?.images.account,
 			[await this.createPairsLayout(templateHelpers, palette, pairs)],
 			buttons,
 			templateHelpers,
@@ -1070,7 +1074,7 @@ export class ServiceNowIntegration {
 
 		const templateContent = await this.createLayoutTemplate(
 			cs.number as string,
-			this._settings?.images.contact,
+			this._settings?.images.case,
 			[await this.createPairsLayout(templateHelpers, palette, pairs)],
 			buttons,
 			templateHelpers,
@@ -1182,7 +1186,7 @@ export class ServiceNowIntegration {
 
 		const templateContent = await this.createLayoutTemplate(
 			task.number as string,
-			this._settings?.images.contact,
+			this._settings?.images.task,
 			[await this.createPairsLayout(templateHelpers, palette, pairs)],
 			buttons,
 			templateHelpers,
@@ -1285,7 +1289,7 @@ export class ServiceNowIntegration {
 
 		const templateContent = await this.createLayoutTemplate(
 			incident.number as string,
-			this._settings?.images.contact,
+			this._settings?.images.incident,
 			[await this.createPairsLayout(templateHelpers, palette, pairs)],
 			buttons,
 			templateHelpers,
