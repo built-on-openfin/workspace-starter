@@ -369,8 +369,6 @@ export class ServiceNowIntegration {
 							if (response.status === 200 && Array.isArray(response.data)) {
 								results[request.id] = response.data;
 							}
-
-							console.log(response);
 						}
 
 						if (results.Contact) {
