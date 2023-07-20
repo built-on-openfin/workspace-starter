@@ -257,6 +257,34 @@ We have a number of integrations we have built to allow you to configure workspa
 
 In our manifests we also give examples of plugging in our other how-tos (e.g. how-to/integrate-with-salesforce).
 
+## Ordering of results
+
+Results are ordered by populating the `score` property of a result, it is a number and is sorted in ascending order.
+
+By default each integration has a `_DEFAULT_BASE_SCORE` property which is used to order it's results, these have been allocated to produce a sensibly ordered set of results. So when you return results from an integration you should base the score of this property.
+
+You can also override these defaults by setting the `baseScore` property in the module definition in configuration. e.g.
+
+```json
+{
+  "id": "apps",
+  "icon": "http://localhost:8080/favicon.ico",
+  "title": "Apps",
+  "baseScore": 1000,
+  ...
+}
+```
+
+For every search result you return from an integration you should use either the value from the definition or the default value as follows:
+
+```json
+{
+   "key": "my-result",
+   "score": this._definition?.baseScore ?? _DEFAULT_BASE_SCORE,
+   ...
+}
+```
+
 ## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)
