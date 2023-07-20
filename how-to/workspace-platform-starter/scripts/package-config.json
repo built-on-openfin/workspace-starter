@@ -1,0 +1,55 @@
+{
+	"manifestHost": "http://localhost:8080",
+	"contentPacks": [
+		{
+			"id": "public",
+			"sourceRoot": "./public",
+			"sources": ["manifest-hosts.json"],
+			"dest": "./"
+		},
+		{
+			"id": "common",
+			"sourceRoot": "../public/common",
+			"sources": ["icons/**/*", "windows/intents/**/*"],
+			"dest": "./common"
+		},
+		{
+			"id": "manager-portal",
+			"sourceRoot": "../public/common/views/manager-portal",
+			"sources": ["images/**/*", "data/**/*"],
+			"dest": "./common/views/manager-portal",
+			"dependsOn": "manager-portal/manager-portal.snapshot.fin.json"
+		},
+		{
+			"id": "package",
+			"sourceRoot": "./",
+			"sources": [
+				"package.json",
+				"docs/**/*",
+				"README.md",
+				"LICENSE.md",
+				"CHANGELOG.md",
+				"client/types/*.*",
+				"client/types/module/**",
+				"public/schemas/**"
+			],
+			"dest": "../",
+			"dependsOn": "package"
+		}
+	],
+	"replaceTypes": [".json", ".html", ".js"],
+	"tokens": {
+		"local": {
+			"MYKEY": "value"
+		}
+	},
+	"hosts": {
+		"local": [
+			"127.0.0.1",
+			"built-on-openfin.github.io",
+			"openfin.github.io",
+			"samples.openfin.co",
+			"cdn.openfin.co"
+		]
+	}
+}

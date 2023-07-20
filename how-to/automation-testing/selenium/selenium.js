@@ -8,10 +8,23 @@ const Mocha = require('mocha');
 const path = require('path');
 const { Builder } = require('selenium-webdriver');
 
+/**
+ * Run the selenium tests.
+ * @param openFinRVM The location of the OpenFin RVM.
+ * @param manifestUrl The url of the manifest to launch.
+ * @param chromeDriverPort The port to use for chromedriver.
+ * @param devToolsPort The port to use for devtools.
+ */
 async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
 	let openFinRVMProcess;
 	try {
+		console.log('Removing any existing OpenFin processes');
+		await fkill(
+			['OpenFin.exe', 'OpenFinRVM.exe', 'chromedriver.exe', 'OpenFin', 'OpenFinRVM', 'chromedriver'],
+			{ silent: true, force: true }
+		);
+
 		// Spawn the OpenFin runtime with a specific debugging port and also
 		// configure the selenium web driver to use the same port for debugger address
 		console.log('Start OpenFin Runtime');
@@ -68,6 +81,10 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	}
 }
 
+/**
+ * Run tests using mocha.
+ * @returns The test runner.
+ */
 async function runMochaTests() {
 	return new Promise((resolve, reject) => {
 		console.log();
@@ -89,7 +106,7 @@ async function runMochaTests() {
 }
 
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
-// e.g. if the manifest runtime version is 30.110.74.7 then the chromedriver version should be "108.0.0"
+// e.g. if the manifest runtime version is 32.114.76.10 then the chromedriver version should be "114.0.0"
 const testManifestUrl =
 	'https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5678;

@@ -13,7 +13,7 @@ The integration package utilized by this example is [@openfin/microsoft365](http
 
 For more information on the Microsoft 365 integration package and how you should configure your Microsoft 365 platform to be accessible from the OpenFin integration package see [Microsoft 365 Integration](https://developers.openfin.co/of-docs/docs/ms365-integration).
 
-When you have finished configuring your Microsoft 365 platform for access by the integration you should modify `settings.ts` to include your `CLIENT_ID` and `TENANT_ID`
+When you have finished configuring your Microsoft 365 platform for access by the integration you should modify `provider.ts` to include your `CLIENT_ID` and `TENANT_ID`
 
 ## Getting Started
 
@@ -23,8 +23,8 @@ When you have finished configuring your Microsoft 365 platform for access by the
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 14.0.11 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).

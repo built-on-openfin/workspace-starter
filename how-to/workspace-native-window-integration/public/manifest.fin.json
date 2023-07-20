@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.7"
+		"version": "32.114.76.10"
 	},
 	"startup_app": {
 		"name": "workspace-native-window-integration"
@@ -38,14 +38,11 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Native Window Integration - v12.0.0",
+		"name": "Workspace Native Window Integration - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [
@@ -62,23 +59,5 @@
 		"product": "Workspace Starter - Workspace Native Window Integration - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"platformProvider": {
-			"rootUrl": "http://localhost:8080"
-		},
-		"appProvider": {
-			"appsSourceUrl": "http://localhost:8080/apps.json",
-			"includeCredentialOnSourceRequest": "include",
-			"cacheDurationInMinutes": 1,
-			"appAssetTag": "appasset"
-		},
-		"homeProvider": {
-			"id": "workspace-native-window-integration",
-			"title": "Home Starter",
-			"icon": "http://localhost:8080/favicon.ico",
-			"queryMinLength": 3,
-			"queryAgainst": ["title"]
-		}
 	}
 }

@@ -1,115 +1,156 @@
 import {
+	CLITemplate,
 	Home,
-	HomeDispatchedSearchResult,
-	HomeProvider,
-	HomeRegistration,
-	HomeSearchListenerRequest,
-	HomeSearchListenerResponse,
-	HomeSearchResponse
+	type HomeDispatchedSearchResult,
+	type HomeProvider,
+	type HomeRegistration,
+	type HomeSearchListenerRequest,
+	type HomeSearchListenerResponse,
+	type HomeSearchResponse
 } from "@openfin/workspace";
-import { getHelpSearchEntries, getSearchResults, itemSelection } from "./integrations";
-import { getSettings } from "./settings";
+import { getHelpSearchEntries, getSearchResults, initializeSources, itemSelection } from "./sources";
 
-let isHomeRegistered = false;
-
-export async function register(): Promise<HomeRegistration> {
-	console.log("Initialising home.");
-	const settings = await getSettings();
-	if (
-		settings.homeProvider === undefined ||
-		settings.homeProvider.id === undefined ||
-		settings.homeProvider.title === undefined
-	) {
-		console.warn(
-			"homeProvider: not configured in the customSettings of your manifest correctly. Ensure you have the homeProvider object defined in customSettings with the following defined: id, title"
-		);
-		return;
-	}
+/**
+ * Register with the home component.
+ * @param id The id to register the provider with.
+ * @param title The title to use for the home registration.
+ * @param icon The icon to use for the home registration.
+ * @returns The registration details for home.
+ */
+export async function register(id: string, title: string, icon: string): Promise<HomeRegistration> {
+	console.log("Initializing home.");
 
 	let lastResponse: HomeSearchListenerResponse;
 
-	const onUserInput = async (
+	/**
+	 * The callback fired when the user types in the home query.
+	 * @param request The request object from the home component.
+	 * @param response The response to use for async updates.
+	 * @returns The results to display in home.
+	 */
+	async function onUserInput(
 		request: HomeSearchListenerRequest,
 		response: HomeSearchListenerResponse
-	): Promise<HomeSearchResponse> => {
-		try {
-			const queryLower = request.query.toLowerCase();
-			if (lastResponse !== undefined) {
-				lastResponse.close();
-			}
-			lastResponse = response;
-			lastResponse.open();
+	): Promise<HomeSearchResponse> {
+		const queryLower = request.query.toLowerCase();
 
-			const searchResults: HomeSearchResponse = {
-				results: [],
-				context: {
-					filters: []
-				}
-			};
-
-			if (queryLower === "?") {
-				searchResults.results = searchResults.results.concat(await getHelpSearchEntries());
-			} else {
-				const integrationResults = await getSearchResults(request.query, undefined, lastResponse, {
-					queryMinLength: 3,
-					queryAgainst: []
-				});
-				if (Array.isArray(integrationResults.results)) {
-					searchResults.results = searchResults.results.concat(integrationResults.results);
-				}
-				if (Array.isArray(integrationResults.context.filters)) {
-					searchResults.context.filters = searchResults.context.filters.concat(
-						integrationResults.context.filters
-					);
-				}
-			}
-
-			return searchResults;
-		} catch (err) {
-			console.error("Exception while getting search list results", err);
+		// If the query starts with a ? treat this as a help request
+		// so we don't have any additional entries to show
+		if (queryLower.startsWith("?")) {
+			return { results: await getHelpSearchEntries() };
 		}
-	};
 
-	const onSelection = async (result: HomeDispatchedSearchResult) => {
+		if (lastResponse !== undefined) {
+			lastResponse.close();
+		}
+		lastResponse = response;
+		lastResponse.open();
+
+		if (queryLower.startsWith("/loading")) {
+			// Example command showing the default loading template
+			// Selecting the template will show a loaded page
+			return {
+				results: [
+					{
+						key: "loading-0001",
+						title: "Example loading indicator",
+						label: "Information",
+						actions: [],
+						data: {},
+						template: CLITemplate.Loading,
+						templateContent: ""
+					}
+				]
+			};
+		} else if (queryLower.startsWith("/error")) {
+			// Example command showing the default error template
+			// Selecting or reloading the template will show a loaded page
+			return {
+				results: [
+					{
+						key: "error-0001",
+						title: "Example error indicator",
+						label: "Information",
+						actions: [],
+						data: {},
+						template: CLITemplate.Error,
+						templateContent: ""
+					}
+				]
+			};
+		}
+
+		return getSearchResults(request.query, [], lastResponse);
+	}
+
+	/**
+	 * The callback fired when a selection is made in home.
+	 * @param result The item that was selected in home.
+	 */
+	async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 		if (result.data !== undefined) {
-			const handled = await itemSelection(result, lastResponse);
-
+			let handled = false;
+			if (result.action.trigger === "user-action" && result.key === "loading-0001") {
+				lastResponse.revoke("loading-0001");
+				lastResponse.respond([
+					{
+						key: "content-0001",
+						title: "Example Content",
+						label: "Information",
+						actions: [],
+						data: {},
+						template: CLITemplate.SimpleText,
+						templateContent: "Result loaded"
+					}
+				]);
+				handled = true;
+			} else if (
+				result.key === "error-0001" &&
+				(result.action.trigger === "user-action" || result.action.trigger === "reload")
+			) {
+				lastResponse.revoke("error-0001");
+				lastResponse.respond([
+					{
+						key: "content-0001",
+						title: "Example Content",
+						label: "Information",
+						actions: [],
+						data: {},
+						template: CLITemplate.SimpleText,
+						templateContent: "Result loaded"
+					}
+				]);
+				handled = true;
+			} else if (result.action.trigger === "user-action" && result.key === "content-0001") {
+				lastResponse.revoke("content-0001");
+				handled = true;
+			}
 			if (!handled) {
-				console.warn(`Result not handled ${result.key}`, result.data);
+				await itemSelection(result, lastResponse);
 			}
 		} else {
 			console.warn("Unable to execute result without data being passed");
 		}
-	};
+	}
 
-	const cliProvider: HomeProvider = {
-		title: settings.homeProvider.title,
-		id: settings.homeProvider.id,
-		icon: settings.homeProvider.icon,
+	// Important to note we enable the dispatchFocusEvents flag
+	// which means we receive `focus-change` events in the onSelection
+	// callback allowing us to lazy load a template
+	const homeProvider: HomeProvider = {
+		id,
+		title,
+		icon,
 		onUserInput,
 		onResultDispatch: onSelection,
 		dispatchFocusEvents: true
 	};
 
-	const registrationInfo = await Home.register(cliProvider);
-	isHomeRegistered = true;
+	const homeRegistration = await Home.register(homeProvider);
 	console.log("Home configured.");
+	console.log(homeRegistration);
 
-	return registrationInfo;
-}
+	// Initialize all the data sources
+	await initializeSources(homeRegistration);
 
-export async function show() {
-	return Home.show();
-}
-
-export async function hide() {
-	return Home.hide();
-}
-
-export async function deregister() {
-	if (isHomeRegistered) {
-		const settings = await getSettings();
-		return Home.deregister(settings.homeProvider.id);
-	}
-	console.warn("Unable to deregister home as there is an indication it was never registered");
+	return homeRegistration;
 }

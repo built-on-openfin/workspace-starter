@@ -1,0 +1,31 @@
+{
+	"name": "openfin-workspace--integrate-with-auth0",
+	"version": "14.0.11",
+	"description": "OpenFin Workspace -- Integrate with Auth0",
+	"main": "index.js",
+	"scripts": {
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"client": "node ./scripts/launch.mjs",
+		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"setup": "cd ../../../ && npm install && cd how-to/integrate-with-sso/integrate-with-auth0 && npm run build"
+	},
+	"author": "martyn.janes@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next",
+		"auth0-js": "^9.22.1"
+	},
+	"devDependencies": {
+		"@openfin/core": "32.76.10",
+		"@types/auth0-js": "^9.21.0",
+		"openfin-adapter": "32.76.10",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6",
+		"webpack": "^5.88.2",
+		"webpack-cli": "^5.1.4"
+	}
+}

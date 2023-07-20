@@ -16,7 +16,7 @@ To run this sample you can:
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 - Launch the Github hosted version of this sample to interact with it by going to the following link:
 
-[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv12.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
+[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fcustomize-home-templates%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -26,8 +26,8 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 12.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [desktop-owner-settings.bat](../common/desktop-owner-settings.bat) that adds the Windows registry key for you, pointing to a local desktop owner
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 14.0.11 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+   This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
    (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
@@ -63,9 +63,9 @@ This is a headless application. If you wish to debug it then you can update the 
 
 ## How it works
 
-The Server in this example serves the sample and serves files from the [common](../common/) folder.
+The Server in this example serves the sample and serves files from the [common](./public/common/) folder.
 
-- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](../common/public/dos.json)
+- [A Desktop Owner Settings file to pin the version of OpenFin Workspace (Optional)](./public/common/dos.json)
 - Sample data required by the sample
 
 ### How this example works
@@ -83,6 +83,10 @@ The commands implemented are:
 /contacts <contact name>
 /contacts-sync <contact name>
 /contacts-partial <contact name>
+/tree-inline
+/tree-query
+/loading
+/error
 ```
 
 The **/quote** command demonstrates a template that is built dynamically with a graph image.
@@ -95,6 +99,12 @@ The contacts commands demonstrate different approaches to retrieving data.
 - **/contacts-partial** - Retrieves the contact list asynchronously and then retrieves all the contact details in the background, updating the results when it has the detailed data
 - **/contacts** - Retrieves the contact list asynchronously and then only retrieves the details for an item when they are selected, using the additional `Loading` template as a placeholder while the data is loaded. Also by searching for a contact starting with the letter E it will initially show the `Error` template, the contact will work when selecting reload.
 
+- **/tree-inline** and **/tree-query** The tree commands do not actually perform any function other than showing the help. To search for tree structured use a query such as `Acme`, `Bee`, `Chad`, `Dock`. This then demonstrates how to navigate through a tree like data structure and back up.
+
+- **/loading** Demonstrates how to use the built-in loading template to show a busy spinner, and then replace the result when it is no longer needed.
+
+- **/error** Demonstrates how to use the built-in error template to show an error result with a reload button, and then replace the result when it is no longer needed or reloaded.
+
 e.g.
 
 ```shell
@@ -105,6 +115,12 @@ e.g.
 /contacts emma
 /contacts-sync john
 /contacts-partial john
+acme
+bee
+chad
+dock
+/loading
+/error
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -117,6 +133,33 @@ e.g.
 ```
 
 ![Customize Home Template Emoji](customize-home-templates-emoji.gif)
+
+e.g.
+
+```shell
+Acme
+Bee
+Chad
+Dock
+```
+
+![Customize Home Template Tree](customize-home-templates-tree.gif)
+
+e.g.
+
+```shell
+/loading
+```
+
+![Customize Home Template Loading](customize-home-templates-loading.gif)
+
+e.g.
+
+```shell
+/error
+```
+
+![Customize Home Template error](customize-home-templates-error.gif)
 
 ### Contact data
 

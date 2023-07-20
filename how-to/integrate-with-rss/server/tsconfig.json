@@ -6,9 +6,9 @@
 		"rootDir": "./src",
 		"outDir": "build",
 		"skipLibCheck": true,
+		"strict": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"importsNotUsedAsValues": "error",
 		"moduleResolution": "node"
 	},
 	"include": ["./src/**/*.ts"]

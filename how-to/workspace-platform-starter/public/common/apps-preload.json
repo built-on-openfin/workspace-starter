@@ -1,0 +1,40 @@
+[
+	{
+		"appId": "preload-google-view",
+		"name": "preload-google-view",
+		"title": "Google View",
+		"description": "This is an example of a third-party site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
+		"manifest": "http://localhost:8080/common/views/google/preload-google.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "fdc3", "preload"]
+	},
+	{
+		"appId": "preload-tradingview-view",
+		"name": "preload-tradingview-view",
+		"title": "Trading View",
+		"description": "This is an example of a third-party site that is listening for contextual fdc3 messages and using the passed ticker to update itself through the use of preload scripts.",
+		"manifest": "http://localhost:8080/common/views/tradingview/preload-tradingview.view.fin.json",
+		"manifestType": "view",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["view", "fdc3", "preload"]
+	}
+]

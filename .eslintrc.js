@@ -8,8 +8,9 @@ module.exports = {
 		'plugin:import/errors',
 		'plugin:import/warnings',
 		'plugin:import/typescript',
+		'plugin:jsdoc/recommended',
 		'plugin:promise/recommended',
-		'plugin:unicorn/recommended'
+		'plugin:unicorn/all'
 	],
 	globals: {
 		fin: 'readonly',
@@ -20,12 +21,12 @@ module.exports = {
 		'**/node_modules/*',
 		'**/*.bundle.js',
 		'**/build/**/*.js',
-		'preload.js',
 		'**/wc-fin/*.js',
 		'**/3rd-party/*',
 		'**/*.d.ts',
 		'**/settings.schema.json',
-		'**/reports/*'
+		'**/reports/*',
+		'**/integrate-with-salesforce/public/js/preload.js'
 	],
 	parserOptions: {
 		ecmaVersion: 2020,
@@ -33,7 +34,13 @@ module.exports = {
 		sourceType: 'module',
 		tsconfigRootDir: __dirname
 	},
-	plugins: ['promise', 'simple-import-sort', 'unicorn', 'unused-imports'],
+	plugins: ['promise', 'simple-import-sort', 'jsdoc', 'unicorn', 'unused-imports'],
+	settings: {
+		jsdoc: {
+			ignoreInternal: true,
+			mode: 'typescript'
+		}
+	},
 	root: true,
 	rules: {
 		'accessor-pairs': ['error'],
@@ -69,7 +76,7 @@ module.exports = {
 		'func-call-spacing': ['off'],
 		'func-name-matching': ['error'],
 		'func-names': ['error'],
-		'func-style': ['off'],
+		'func-style': ['error', 'declaration'],
 		'function-call-argument-newline': ['off'],
 		'function-paren-newline': ['off'],
 		'generator-star-spacing': ['error'],
@@ -84,11 +91,12 @@ module.exports = {
 		'import/export': ['error'],
 		'import/named': ['off'],
 		'import/namespace': ['error'],
-		'import/no-duplicates': ['warn'],
+		'import/no-duplicates': ['error'],
 		'import/no-extraneous-dependencies': ['off'],
-		'import/no-named-as-default': ['warn'],
-		'import/no-named-as-default-member': ['warn'],
+		'import/no-named-as-default': ['error'],
+		'import/no-named-as-default-member': ['error'],
 		'import/no-unresolved': ['off'],
+		'import/no-unused-modules': ['off'],
 		'import/order': [
 			'error',
 			{
@@ -112,6 +120,7 @@ module.exports = {
 		'linebreak-style': ['error'],
 		'lines-around-comment': ['off'],
 		'lines-between-class-members': ['off'],
+		'logical-assignment-operators': ['off'],
 		'max-classes-per-file': ['error'],
 		'max-depth': ['off'],
 		'max-len': [
@@ -147,6 +156,7 @@ module.exports = {
 		'no-cond-assign': ['error'],
 		'no-confusing-arrow': ['error'],
 		'no-console': ['off'],
+		'no-constant-binary-expression': ['error'],
 		'no-const-assign': ['off'],
 		'no-constant-condition': ['error'],
 		'no-constructor-return': ['error'],
@@ -276,7 +286,7 @@ module.exports = {
 		'no-useless-return': ['error'],
 		'no-var': ['error'],
 		'no-void': ['error'],
-		'no-warning-comments': ['error'],
+		'no-warning-comments': ['off'],
 		'no-whitespace-before-property': ['error'],
 		'no-with': ['error'],
 		'nonblock-statement-body-position': ['error'],
@@ -334,7 +344,6 @@ module.exports = {
 		'unicorn/custom-error-definition': ['off'],
 		'unicorn/empty-brace-spaces': ['off'],
 		'unicorn/error-message': ['error'],
-		'unicorn/empty-brace-spaces': ['off'],
 		'unicorn/escape-case': ['error'],
 		'unicorn/expiring-todo-comments': ['error'],
 		'unicorn/explicit-length-check': ['off'],
@@ -363,12 +372,14 @@ module.exports = {
 		'unicorn/no-zero-fractions': ['error'],
 		'unicorn/number-literal-case': ['off'],
 		'unicorn/numeric-separators-style': ['off'],
+		'unicorn/prefer-at': ['off'],
 		'unicorn/prefer-add-event-listener': ['error'],
 		'unicorn/prefer-code-point': ['off'],
 		'unicorn/prefer-dataset': ['error'],
 		'unicorn/prefer-event-key': ['error'],
 		'unicorn/prefer-flat-map': ['error'],
 		'unicorn/prefer-includes': ['error'],
+		'unicorn/prefer-json-parse-buffer': ['off'],
 		'unicorn/prefer-modern-dom-apis': ['error'],
 		'unicorn/prefer-module': ['off'],
 		'unicorn/prefer-negative-index': ['error'],
@@ -379,10 +390,10 @@ module.exports = {
 		'unicorn/prefer-optional-catch-binding': ['error'],
 		'unicorn/prefer-query-selector': ['error'],
 		'unicorn/prefer-reflect-apply': ['error'],
-		'unicorn/prefer-replace-all': ['off'],
 		'unicorn/prefer-set-has': ['off'],
 		'unicorn/prefer-spread': ['off'],
 		'unicorn/prefer-starts-ends-with': ['error'],
+		'unicorn/prefer-string-replace-all': ['off'],
 		'unicorn/prefer-string-slice': ['error'],
 		'unicorn/prefer-switch': ['off'],
 		'unicorn/prefer-top-level-await': ['off'],
@@ -400,7 +411,97 @@ module.exports = {
 		'wrap-iife': ['error'],
 		'wrap-regex': ['off'],
 		'yield-star-spacing': ['error'],
-		yoda: ['error']
+		yoda: ['error'],
+		'jsdoc/check-access': 'error',
+		'jsdoc/check-alignment': 'error',
+		'jsdoc/check-examples': 'off',
+		'jsdoc/check-indentation': 'error',
+		'jsdoc/check-line-alignment': 'error',
+		'jsdoc/check-param-names': 'error',
+		'jsdoc/check-property-names': 'error',
+		'jsdoc/check-syntax': 'error',
+		'jsdoc/check-tag-names': 'error',
+		'jsdoc/check-types': 'error',
+		'jsdoc/check-values': 'error',
+		'jsdoc/empty-tags': 'error',
+		'jsdoc/implements-on-classes': 'error',
+		'jsdoc/match-description': ['error'],
+		'jsdoc/newline-after-description': 'off',
+		'jsdoc/no-bad-blocks': 'error',
+		'jsdoc/no-defaults': 'error',
+		'jsdoc/no-types': 'error',
+		'jsdoc/no-undefined-types': 'error',
+		'jsdoc/require-asterisk-prefix': 'error',
+		'jsdoc/require-description': 'error',
+		'jsdoc/require-description-complete-sentence': 'off',
+		'jsdoc/require-example': 'off',
+		'jsdoc/require-file-overview': 'off',
+		'jsdoc/require-hyphen-before-param-description': 'off',
+		'jsdoc/require-jsdoc': [
+			'error',
+			{
+				require: {
+					ArrowFunctionExpression: false,
+					ClassDeclaration: true,
+					ClassExpression: true,
+					FunctionDeclaration: true,
+					FunctionExpression: true,
+					MethodDefinition: true
+				},
+				contexts: [
+					'FunctionDeclaration',
+					'FunctionExpression',
+					'MethodDefinition',
+					'TSDeclareFunction',
+					'TSEnumDeclaration',
+					'TSInterfaceDeclaration',
+					'TSMethodDeclaration',
+					'TSMethodSignature',
+					'TSPropertySignature:not(TSTypeLiteral > TSPropertySignature)',
+					'TSTypeAliasDeclaration'
+				]
+			}
+		],
+		'jsdoc/require-param': [
+			'error',
+			{
+				contexts: [
+					'FunctionDeclaration',
+					'FunctionExpression',
+					'MethodDefinition',
+					'TSDeclareFunction',
+					'TSMethodDeclaration',
+					'TSMethodSignature'
+				]
+			}
+		],
+		'jsdoc/require-param-description': 'error',
+		'jsdoc/require-param-name': 'error',
+		'jsdoc/require-param-type': 'off',
+		'jsdoc/require-property': 'error',
+		'jsdoc/require-property-description': 'error',
+		'jsdoc/require-property-name': 'error',
+		'jsdoc/require-property-type': 'error',
+		'jsdoc/require-returns': [
+			'error',
+			{
+				contexts: [
+					'FunctionDeclaration',
+					'FunctionExpression',
+					'MethodDefinition',
+					'TSDeclareFunction',
+					'TSMethodDeclaration',
+					'TSMethodSignature'
+				]
+			}
+		],
+		'jsdoc/require-returns-check': 'error',
+		'jsdoc/require-returns-description': 'error',
+		'jsdoc/require-returns-type': 'off',
+		'jsdoc/require-throws': 'error',
+		'jsdoc/require-yields': 'error',
+		'jsdoc/require-yields-check': 'error',
+		'jsdoc/valid-types': 2
 	},
 	overrides: [
 		{
@@ -412,7 +513,8 @@ module.exports = {
 		{
 			extends: [
 				'plugin:@typescript-eslint/recommended',
-				'plugin:@typescript-eslint/recommended-requiring-type-checking'
+				'plugin:@typescript-eslint/recommended-requiring-type-checking',
+				'plugin:@typescript-eslint/strict'
 			],
 			files: ['*.ts'],
 			rules: {
@@ -420,15 +522,26 @@ module.exports = {
 				'@typescript-eslint/array-type': ['error'],
 				'@typescript-eslint/await-thenable': ['error'],
 				'@typescript-eslint/ban-ts-comment': ['error'],
+				'@typescript-eslint/ban-tslint-comment': ['off'],
 				'@typescript-eslint/ban-types': ['error'],
 				'@typescript-eslint/brace-style': ['error'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'@typescript-eslint/comma-spacing': ['error'],
+				'@typescript-eslint/no-confusing-void-expression': ['off'],
+				'@typescript-eslint/consistent-generic-constructors': ['error'],
+				'@typescript-eslint/consistent-indexed-object-style': ['error', 'index-signature'],
 				'@typescript-eslint/consistent-type-assertions': ['error'],
 				'@typescript-eslint/consistent-type-definitions': ['error'],
+				'@typescript-eslint/consistent-type-imports': [
+					'error',
+					{
+						fixStyle: 'inline-type-imports'
+					}
+				],
+				'@typescript-eslint/object-curly-spacing': ['off'],
 				'@typescript-eslint/default-param-last': ['error'],
 				'@typescript-eslint/dot-notation': ['error'],
-				'@typescript-eslint/explicit-function-return-type': ['off'],
+				'@typescript-eslint/explicit-function-return-type': ['error'],
 				'@typescript-eslint/explicit-member-accessibility': [
 					'error',
 					{
@@ -442,6 +555,7 @@ module.exports = {
 				'@typescript-eslint/indent': ['off'],
 				'@typescript-eslint/init-declarations': ['off'],
 				'@typescript-eslint/keyword-spacing': ['off'],
+				'@typescript-eslint/lines-around-comment': ['off'],
 				'@typescript-eslint/lines-between-class-members': ['error'],
 				'@typescript-eslint/member-delimiter-style': ['error'],
 				'@typescript-eslint/member-ordering': ['error'],
@@ -478,7 +592,6 @@ module.exports = {
 				'@typescript-eslint/no-array-constructor': ['error'],
 				'@typescript-eslint/no-base-to-string': ['error'],
 				'@typescript-eslint/no-dupe-class-members': ['error'],
-				'@typescript-eslint/no-duplicate-imports': ['error'],
 				'@typescript-eslint/no-dynamic-delete': ['off'],
 				'@typescript-eslint/no-empty-function': ['off'],
 				'@typescript-eslint/no-empty-interface': ['error'],
@@ -490,9 +603,11 @@ module.exports = {
 				'@typescript-eslint/no-floating-promises': ['error'],
 				'@typescript-eslint/no-for-in-array': ['error'],
 				'@typescript-eslint/no-implied-eval': ['error'],
+				'@typescript-eslint/no-import-type-side-effects': ['error'],
 				'@typescript-eslint/no-inferrable-types': ['off'],
 				'@typescript-eslint/no-invalid-this': ['off'],
 				'@typescript-eslint/no-invalid-void-type': ['error'],
+				'@typescript-eslint/no-loop-func': ['off'],
 				'@typescript-eslint/no-magic-numbers': ['off'],
 				'@typescript-eslint/no-misused-new': ['error'],
 				'@typescript-eslint/no-misused-promises': [
@@ -504,7 +619,7 @@ module.exports = {
 				'@typescript-eslint/no-namespace': ['error'],
 				'@typescript-eslint/no-non-null-asserted-optional-chain': ['error'],
 				'@typescript-eslint/no-non-null-assertion': ['error'],
-				'@typescript-eslint/no-parameter-properties': ['error'],
+				'@typescript-eslint/no-redundant-type-constituents': ['off'],
 				'@typescript-eslint/no-require-imports': ['error'],
 				'@typescript-eslint/no-shadow': ['error'],
 				'@typescript-eslint/no-this-alias': ['error'],
@@ -515,10 +630,12 @@ module.exports = {
 				'@typescript-eslint/no-unnecessary-qualifier': ['error'],
 				'@typescript-eslint/no-unnecessary-type-arguments': ['error'],
 				'@typescript-eslint/no-unnecessary-type-assertion': ['error'],
+				'@typescript-eslint/no-unsafe-argument': ['off'],
 				'@typescript-eslint/no-unsafe-assignment': ['off'],
 				'@typescript-eslint/no-unsafe-call': ['off'],
 				'@typescript-eslint/no-unsafe-member-access': ['off'],
-				'@typescript-eslint/no-unsafe-return': ['error'],
+				'@typescript-eslint/no-unsafe-return': ['off'],
+				'@typescript-eslint/no-unsafe-enum-comparison': ['off'],
 				'@typescript-eslint/no-unused-expressions': ['error'],
 				'@typescript-eslint/no-unused-vars': [
 					'error',
@@ -535,12 +652,7 @@ module.exports = {
 				'@typescript-eslint/prefer-function-type': ['error'],
 				'@typescript-eslint/prefer-includes': ['error'],
 				'@typescript-eslint/prefer-namespace-keyword': ['error'],
-				'@typescript-eslint/prefer-nullish-coalescing': [
-					'error',
-					{
-						allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: true
-					}
-				],
+				'@typescript-eslint/prefer-nullish-coalescing': ['error'],
 				'@typescript-eslint/prefer-optional-chain': ['error'],
 				'@typescript-eslint/prefer-readonly': ['error'],
 				'@typescript-eslint/prefer-readonly-parameter-types': ['off'],
@@ -556,6 +668,7 @@ module.exports = {
 				'@typescript-eslint/restrict-template-expressions': ['off'],
 				'@typescript-eslint/return-await': ['error'],
 				'@typescript-eslint/semi': ['error'],
+				'@typescript-eslint/sort-type-constituents': ['off'],
 				'@typescript-eslint/space-before-function-paren': [
 					'error',
 					{
@@ -576,6 +689,30 @@ module.exports = {
 				],
 				'@typescript-eslint/unbound-method': ['error'],
 				'@typescript-eslint/unified-signatures': ['error']
+			}
+		},
+		{
+			files: ['how-to/workspace-platform-starter/client/**/*.ts'],
+			rules: {
+				'no-restricted-syntax': [
+					'error',
+					{
+						selector: "BinaryExpression[operator='==='][right.type='Identifier'][right.name='undefined']",
+						message: 'Instead of using "=== undefined", please use the utils method isEmpty'
+					},
+					{
+						selector: "BinaryExpression[operator='!=='][right.type='Identifier'][right.name='undefined']",
+						message: 'Instead of using "!== undefined", please use the utils method !isEmpty'
+					},
+					{
+						selector: "BinaryExpression[operator='==='][right.type='Identifier'][right.name='null']",
+						message: 'Instead of using "=== null", please use the utils method isEmpty'
+					},
+					{
+						selector: "BinaryExpression[operator='!=='][right.type='Identifier'][right.name='null']",
+						message: 'Instead of using "!== null", please use the utils method !isEmpty'
+					}
+				]
 			}
 		}
 	]

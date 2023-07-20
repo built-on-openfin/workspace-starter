@@ -3,24 +3,20 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.7"
+		"version": "32.114.76.10"
 	},
 	"platform": {
 		"uuid": "use-notifications",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/notifications/notifications.html",
-		"preventQuitOnLastWindowClosed": true,
-		"defaultWindowOptions": {}
-	},
-	"snapshot": {
-		"windows": []
+		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Use Notifications - v12.0.0",
+		"name": "Use Notifications - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -28,9 +24,5 @@
 		"product": "Workspace Starter - Use Notifications - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"customProviderIcon": "http://localhost:8080/images/icon-dot.png",
-		"notificationSoundUrl": "http://localhost:8080/assets/notification.mp3"
 	}
 }

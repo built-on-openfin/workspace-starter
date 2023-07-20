@@ -3,6 +3,28 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v13.1 to v14
+
+## Migrate from a previous version - From v13 to v13.1
+
+This release contains new features such as MicroFlows (please see release notes), printing and the ability add customData when saving/reading a page object.
+
+There are no breaking changes.
+
+## Migrate from a previous version - From v12.6 to v13
+
+The dock `WorkspaceComponentButtonOptions` have been deprecated, use `WorkspaceButtonsConfig` instead.
+
+## Migrate from a previous version - From v12.0.0 to v12.6
+
+### @openfin/workspace-platform Updates
+
+The layout types `LayoutComponentExtended` that were export from `@openfin/workspace-platform/client-api/src` have been removed, use OpenFin.LayoutItemConfig instead.
+
+### @openfin/workspace Updates
+
+The layout types `LayoutComponentExtended`, `LayoutComponentStateExtended`, `LayoutContentExtended` that were export from `@openfin/workspace` have been removed, use OpenFin.LayoutItemConfig instead.
+
 ## Migrate from a previous version - From v11 to v12
 
 ### @openfin/core Updates
@@ -109,11 +131,34 @@ This should not be an issue if the other TypeScript errors have been resolved.
 
 ### Workspace 12 Enhancements
 
-- To be updated upon release.
+- Version Fallback Mechanism.
+  OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
 
 ### Notification 1.21.0 Enhancements
 
-- To be updated upon release.
+#### New UI to view Notifications
+
+Notification Center now provides end-users the ability to choose how notifications are viewed.
+
+Available options are:
+
+- All
+- Needs Attention (“persistent notifications”)
+- Grouped by Sender
+- Sort by Priority or Date continue to be available.
+
+#### View All Persistent Notifications
+
+End-users can now view or dismiss all persistent Notifications on their desktop with a single mouse click.
+
+### Workspace Subdomain
+
+OpenFin Workspace and Notifications assets are now delivered from the Workspace subdomain (workspace.openfin.co) by default.
+
+### Resolved Issues
+
+- Updated Store APIs can now make updates to Store buttons in real-time.
+- Resolved issue where queries with a lot of leading spaces calculated suggestion text positions incorrectly
 
 ## What dependencies will I need for v12
 
@@ -121,8 +166,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^12.0.0",
-                    "@openfin/workspace-platform": "^12.0.0"
+                    "@openfin/workspace": "^12.1.5",
+                    "@openfin/workspace-platform": "^12.1.5"
                 }
 ```
 
@@ -130,7 +175,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "^30.74.7"
+                    "@openfin/core": "32.76.10"
                    }
 ```
 
@@ -158,15 +203,48 @@ You will need the following dependencies
                 }
 ```
 
+### Interop Broker Constructor Changes
+
+The constructor has changed and you no longer pass down options. Previously we had:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>,
+ provider?: OpenFin.ChannelProvider,
+ options?: OpenFin.InteropBrokerOptions,
+ ...args: unknown[]
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride(provider, options, ...args);
+}
+```
+
+And this has now become:
+
+```javascript
+export function interopOverride(
+ InteropBroker: OpenFin.Constructor<OpenFin.InteropBroker>
+): OpenFin.InteropBroker {
+ class InteropOverride extends InteropBroker {
+  ....
+ }
+ return new InteropOverride();
+}
+```
+
+Your broker can still override functions related to context groups and manifest configured context groups will still be used by the base implementation of the broker.
+
 ## Migrate from a previous version - From v9.2 to v10
 
 ### Workspace 10 Enhancements
 
-- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The customize-workspace example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
+- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The workspace-platform-starter example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
 - New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
 - API Control Over Home Search String - You can now trigger an update to the text shown in the Home Search Box. We provide examples of this in the customize-home-templates example (where the help search entry can update the search box when selected).
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
-- Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The customize-workspace sample gives an example of this.
+- Workspace Analytics - In your platform override you can now add a function that will receive analytic events. The workspace-platform-starter sample gives an example of this.
 
 ### Notification 1.19.2 Enhancements
 
@@ -267,12 +345,12 @@ We have introduced new starters:
 - register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
 - integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
 - common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
-- customize-workspace - customize workspace continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
+- workspace-platform-starter - workspace platform starter continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
 
   - DockProvider - Dock support has been added and is configurable through the manifest file
   - An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
   - InitOptionsProvider - More module types supported. You can now create a module for handling init option params and we include an example that allows external apps to raise an intent or pass context via querystring parameters that target a platform.
-  - ConnectionProvider - The concept of connections has been added to customize-workspace. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
+  - ConnectionProvider - The concept of connections has been added to workspace-platform-starter. How do you support other applications e.g. Native C# apps to provide listing for their child views? How do they get launched when selected and how can the child views be captured in a snapshot (by becoming a snapshot source).
 
 ## Migrate from a previous version - From v7.0 to v8.0
 
@@ -320,13 +398,13 @@ The structure of the how-to samples has been updated. The views (content) and so
 
 A new npm command **"npm run setup"** has also been introduced that takes advantage of our npm workspaces support and installs from the root directory and then builds the sample you are currently in and the common directory.
 
-Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only customize-workspace supports inline-view as a manifestType as it is supported by the sample and will not be recognized by the workspace api).
+Samples that used the apps.json file can still do so but most will be updated to point to the apps.json file in common (so there is consistency across samples). The manifest for samples that point to the common/apps.json have a new setting in the manifest appProvider section. This tells the sample which manifestTypes from within the apps.json file you wish to support (e.g. only workspace-platform-starter supports inline-view as a manifestType as it is supported by the sample and will not be recognized by the workspace api).
 
 # Migrate from a previous version - From v6.0 to v7.0
 
 The main focus of this release is on introducing support for Workspace Management APIs and adding a UI for Workspace Management to the Browser.
 
-If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the customize-workspace example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
+If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the workspace-platform-starter example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
 
 - [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
 
@@ -524,7 +602,7 @@ So this:
 import { fin } from 'openfin-adapter/src/mock';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   await fin.Platform.init({});
 }
 ```
@@ -535,7 +613,7 @@ becomes:
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
   await workspacePlatformInit({
     browser
@@ -586,7 +664,7 @@ export async function launch(appEntry: App) {
 
 ### Hand Crafted Snapshots might fail to load correctly
 
-In the store sample there is a [snapshot.json](../register-with-store/public/snapshot.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
+In the store sample there is a [developer.snapshot.fin.json](../register-with-store/public/developer.snapshot.fin.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
 
 ```javascript
 ...
@@ -616,7 +694,7 @@ import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/works
 import { getSettings } from './settings';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let settings = await getSettings();
   let browser: BrowserInitConfig = {};
 
@@ -646,13 +724,13 @@ Workspaces & Pages are no longer shown by default in the Home UI - We now provid
 
 The save icon is present on your browser's window and by default it will save your page to indexedDB. Version 5 provides APIs to get these pages. You can also specify a different storage location (e.g. you may decide you want to save them to a rest endpoint).
 
-If you have existing pages from version 1-4 that you need to migrate please contact support@openfin.co who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
+If you have existing pages from version 1-4 that you need to migrate please contact [support@openfin.co](mailto:support@openfin.co) who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
 
 ### The share capability is gone
 
 The ability to share content will come back but has been removed in order to plan an approach that suits the SDK first approach that we have in place.
 
-Please contact support@openfin.co who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
+Please contact [support@openfin.co](mailto:support@openfin.co) who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
 
 ### The Add New Page/View button (and right click context menu option) is hidden by default and needs to be configured
 
@@ -684,7 +762,7 @@ This is best done through default window options.
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   let browser: BrowserInitConfig = {};
 
   browser.defaultWindowOptions = {
@@ -712,7 +790,7 @@ This is done when you initialize your platform:
 import { init as workspacePlatformInit, CustomThemeOptions } from '@openfin/workspace-platform';
 
 export async function init() {
-  console.log('Initialising platform');
+  console.log('Initializing platform');
   const theme: CustomThemeOptions[] = [
     {
       label: 'Starter Theme',

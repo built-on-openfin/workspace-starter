@@ -6,11 +6,11 @@
 		"rootDir": "./src",
 		"outDir": "build",
 		"skipLibCheck": true,
+		"strict": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"importsNotUsedAsValues": "error",
 		"moduleResolution": "node",
-		"types": ["../../common/types/fin"]
+		"types": ["./types/fin", "./types/zip"]
 	},
 	"include": ["./src/**/*.ts"]
 }

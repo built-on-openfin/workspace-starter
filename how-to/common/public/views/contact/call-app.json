@@ -1,9 +1,0 @@
-{
-	"url": "http://localhost:8080/common/views/contact/call-app/index.html",
-	"fdc3InteropApi": "1.2",
-	"preloadScripts": [
-		{
-			"url": "http://localhost:8080/common/style/style-changed-preload.js"
-		}
-	]
-}

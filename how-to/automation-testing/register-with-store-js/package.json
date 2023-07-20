@@ -1,23 +1,23 @@
 {
 	"name": "automation-testing-register-with-store-js",
-	"version": "12.0.0",
+	"version": "14.0.11",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"build": "echo Nothing to build",
-		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace next",
-		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace next",
-		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace next",
-		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace next",
-		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v12.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace next",
-		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace next",
-		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage --workspace next"
+		"test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace 14.0.11",
+		"test-local-mocha": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --workspace 14.0.11",
+		"test-remote-jasmine": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 14.0.11",
+		"test-local-jasmine": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jasmine --workspace 14.0.11",
+		"test-remote-jest": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-store/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace 14.0.11",
+		"test-local-jest": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --framework jest --workspace 14.0.11",
+		"test-offline": "of-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.js --offline --storageFolder=./offline-storage --workspace 14.0.11"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-cli": "^1.0.1",
-		"@openfin/automation-helpers": "^1.0.1",
-		"@openfin/automation-native": "^1.0.1",
+		"@openfin/automation-cli": "^1.0.13",
+		"@openfin/automation-helpers": "^1.0.13",
+		"@openfin/automation-native": "^1.0.13",
 		"chai": "4.3.7"
 	}
 }

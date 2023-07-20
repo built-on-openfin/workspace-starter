@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "30.110.74.7"
+		"version": "32.114.76.10"
 	},
 	"platform": {
 		"uuid": "customize-home-templates",
@@ -30,14 +30,11 @@
 			}
 		}
 	},
-	"snapshot": {
-		"windows": []
-	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Customize Home Templates - v12.0.0",
+		"name": "Customize Home Templates - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -45,44 +42,5 @@
 		"product": "Workspace Starter - Customize Home Templates - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
-	},
-	"customSettings": {
-		"homeProvider": {
-			"id": "customize-home-templates",
-			"title": "Customize Home Templates",
-			"icon": "http://localhost:8080/favicon.ico"
-		},
-		"integrationProvider": {
-			"modules": [
-				{
-					"id": "quote",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Quote Provider",
-					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/quote.bundle.js",
-					"data": {
-						"rootUrl": "http://localhost:8080/quotes/"
-					}
-				},
-				{
-					"id": "emoji",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Emoji Provider",
-					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/emoji.bundle.js",
-					"data": {}
-				},
-				{
-					"id": "async",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Async Provider",
-					"enabled": true,
-					"url": "http://localhost:8080/js/integrations/async.bundle.js",
-					"data": {
-						"rootUrl": "http://localhost:8080/contacts/"
-					}
-				}
-			]
-		}
 	}
 }

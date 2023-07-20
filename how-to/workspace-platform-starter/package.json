@@ -1,0 +1,63 @@
+{
+	"name": "openfin-workspace--workspace-platform-starter",
+	"version": "14.0.11",
+	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
+	"main": "dist/js/provider.bundle.js",
+	"types": "client/types/provider.d.ts",
+	"scripts": {
+		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
+		"kill": "node ./scripts/kill.mjs",
+		"build": "npm run build-server & npm run build-client",
+		"build-server": "tsc --project ./server",
+		"prebuild-client": "node -p \"'// Generated from package.json version at build time. Do not modify directly.\\nexport const PLATFORM_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > client/src/framework/platform/platform-version.ts",
+		"build-client": "npm run prebuild-client && npm run build-client-parallel",
+		"build-client-parallel": "node scripts/webpack-parallel.mjs ./client/webpack.config.js",
+		"build-client-serial": "webpack build --config ./client/webpack.config.js --mode=development",
+		"build-templates": "webpack build --config ./templates/webpack.config.js --mode=development",
+		"start": "npm run server",
+		"client": "node ./scripts/launch.mjs",
+		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
+		"thirdclient": "node ./scripts/launch.mjs http://localhost:8080/third.manifest.fin.json",
+		"fourthclient": "node ./scripts/launch.mjs http://localhost:8080/fourth.manifest.fin.json",
+		"server": "node ./server/build/index.js",
+		"setup": "cd ../../ && npm install && cd how-to/workspace-platform-starter && npm run build",
+		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
+		"generate-schema": "npm run generate-settings-schema && npm run generate-fdc3v2-schema && npm run generate-fdc3v1-schema && npm run generate-platform-apps-schema && npm run generate-view-options-schema && npm run generate-window-options-schema && npm run generate-snapshot-options-schema",
+		"generate-settings-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",
+		"generate-fdc3v2-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VTwoPointZeroAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v2.0-appd.schema.json",
+		"generate-fdc3v1-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VOnePointTwoAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v1.2-appd.schema.json",
+		"generate-platform-apps-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformApps --topRef --required --noExtraProps --aliasRefs --out public/schemas/platform-apps.schema.json",
+		"generate-view-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformViewOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/view.schema.json",
+		"generate-window-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
+		"generate-snapshot-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
+		"package-content": "node ./scripts/package-content.mjs",
+		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
+		"generate-module": "node ./templates/scripts/generate-module.mjs"
+	},
+	"author": "john.mandia@openfin.co",
+	"contributors": [
+		"adam.saland@openfin.co",
+		"martyn.janes@openfin.co",
+		"pj.singh@openfin.co"
+	],
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@finos/fdc3": "^2.0.3",
+		"@openfin/workspace": "next",
+		"@openfin/workspace-platform": "next",
+		"csstype": "^3.1.2",
+		"chart.js": "^4.3.0",
+		"node-emoji": "^1.11.0"
+	},
+	"devDependencies": {
+		"@openfin/core": "32.76.10",
+		"@types/express": "^4.17.17",
+		"express": "^4.18.2",
+		"fast-glob": "^3.3.0",
+		"openfin-adapter": "32.76.10",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6",
+		"webpack": "^5.88.2",
+		"webpack-cli": "^5.1.4"
+	}
+}

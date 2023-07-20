@@ -1,26 +1,21 @@
 import type OpenFin from "@openfin/core";
-import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 
-interface BrowserProvider {
-	windowOptions: {
-		title?: string;
-		icon?: string;
-		newTabUrl?: string;
-		newPageUrl?: string;
-	};
-}
-
-interface ThemeProvider {
-	themes: CustomThemeOptions[];
-}
-
-export interface LaunchBarWindowSettings extends OpenFin.WindowCreationOptions {
-	url: string;
-	options: object;
-}
-
+/**
+ * The custom settings stored in the manifest.fin.json
+ */
 export interface CustomSettings {
-	bootstrap?: { launchBarWindowSettings?: LaunchBarWindowSettings };
-	browserProvider?: BrowserProvider;
-	themeProvider?: ThemeProvider;
+	/**
+	 * The settings for the launch bar window.
+	 */
+	launchBarWindowSettings?: LaunchBarWindowSettings;
+}
+
+/**
+ * The settings for the launch bar window.
+ */
+export interface LaunchBarWindowSettings extends OpenFin.WindowCreationOptions {
+	/**
+	 * The url of the launch bar.
+	 */
+	url: string;
 }
