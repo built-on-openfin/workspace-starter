@@ -1,0 +1,46 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--v=1 --inspect",
+		"version": "31.112.75.4"
+	},
+	"platform": {
+		"uuid": "customize-home-templates",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/manifest-hosts-file-system/customize-home-templates/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/manifest-hosts-file-system/customize-home-templates/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/manifest-hosts-file-system/customize-home-templates/favicon.ico",
+		"name": "Customize Home Templates - v13.1.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Customize Home Templates - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	}
+}
