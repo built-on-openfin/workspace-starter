@@ -166,10 +166,9 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 
 	/**
 	 * Notify subscribers of an event change.
-	 * @param eventType The event to notify.
 	 * @param authEventType The type of authentication event to send to.
 	 */
-	private async notifySubscribers(eventType: string, authEventType: AuthEventTypes): Promise<void> {
+	private async notifySubscribers(authEventType: AuthEventTypes): Promise<void> {
 		const subscribers = this._eventSubscribers[authEventType];
 
 		if (subscribers) {
@@ -178,7 +177,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 
 			for (const subscriberId of subscriberIds) {
 				this._logger?.info(
-					`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${eventType}`
+					`Notifying subscriber with subscription Id: ${subscriberId} of event type: ${authEventType}`
 				);
 				await subscribers[subscriberId]();
 			}
