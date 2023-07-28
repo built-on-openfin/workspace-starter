@@ -259,7 +259,7 @@ export class ServiceNowIntegration {
 
 		const apps: HomeSearchResult[] = [];
 
-		if (this._integrationHelpers) {
+		if ((query.length === 0 || "servicenow".startsWith(query.toLowerCase())) && this._integrationHelpers) {
 			apps.push(
 				await this.createAppResult(
 					this._integrationHelpers?.templateHelpers,
