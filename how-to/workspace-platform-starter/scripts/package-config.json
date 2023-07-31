@@ -16,7 +16,7 @@
 		{
 			"id": "common",
 			"sourceRoot": "./public/common",
-			"sources": ["icons/**/*", "windows/intents/**/*", "views/contact/data/**/*"],
+			"sources": ["icons/**/*", "windows/intents/**/*"],
 			"dest": "./common"
 		},
 		{
