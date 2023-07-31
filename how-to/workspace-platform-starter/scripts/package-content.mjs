@@ -278,31 +278,40 @@ async function locateAssets(packageConfig, env, src, fileContent, packagedDirect
  * @param cache The cache of already processed file.
  */
 async function copyAsset(packageConfig, env, url, packagedDirectory, host, cache) {
-	let srcName;
-	let destName;
+	// Skip any assets with placeholders in
+	if (!(url.includes('{') && url.includes('}'))) {
+		let srcName;
+		let destName;
 
-	// replace \ with //
-	// and remove any /public from the start of the url
-	url = forwardSlash(url).replace(/^\/?public/, '');
+		// replace \ with //
+		// and remove any /public from the start of the url
+		url = forwardSlash(url).replace(/^\/?public/, '');
 
-	const commonPack = packageConfig.contentPacks.find((p) => p.id === 'common');
-	if (commonPack && (url.startsWith(commonPack.sourceRoot) || url.startsWith('/common/'))) {
-		// If the content is referenced through the common part of the url
-		// replace it with the details for the common asset pack
-		const file = url.replace(commonPack.sourceRoot, '').replace(/^\/common\//, '');
-		srcName = path.join(commonPack.sourceRoot, file);
-		destName = path.join(packagedDirectory, commonPack.dest, file);
-	} else {
-		// No common reference in the content, so just use the public pack
-		const publicPack = packageConfig.contentPacks.find((p) => p.id === 'public');
-		if (publicPack) {
-			srcName = path.join(publicPack.sourceRoot, url);
-			destName = path.join(packagedDirectory, publicPack.dest, url);
+		// remove any query params
+		const queryParamIndex = url.indexOf('?');
+		if (queryParamIndex >= 0) {
+			url = url.slice(0, queryParamIndex);
 		}
-	}
 
-	if (srcName && destName) {
-		await copyFileWithReplace(packageConfig, env, srcName, destName, packagedDirectory, host, cache);
+		const commonPack = packageConfig.contentPacks.find((p) => p.id === 'common');
+		if (commonPack && (url.startsWith(commonPack.sourceRoot) || url.startsWith('/common/'))) {
+			// If the content is referenced through the common part of the url
+			// replace it with the details for the common asset pack
+			const file = url.replace(commonPack.sourceRoot, '').replace(/^\/common\//, '');
+			srcName = path.join(commonPack.sourceRoot, file);
+			destName = path.join(packagedDirectory, commonPack.dest, file);
+		} else {
+			// No common reference in the content, so just use the public pack
+			const publicPack = packageConfig.contentPacks.find((p) => p.id === 'public');
+			if (publicPack) {
+				srcName = path.join(publicPack.sourceRoot, url);
+				destName = path.join(packagedDirectory, publicPack.dest, url);
+			}
+		}
+
+		if (srcName && destName) {
+			await copyFileWithReplace(packageConfig, env, srcName, destName, packagedDirectory, host, cache);
+		}
 	}
 }
 
