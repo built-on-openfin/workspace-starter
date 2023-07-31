@@ -2,6 +2,12 @@
 	"manifestHost": "http://localhost:8080",
 	"contentPacks": [
 		{
+			"id": "platform",
+			"sourceRoot": "./public",
+			"sources": ["./platform/provider.html", "./js/provider.bundle.js"],
+			"dest": "./"
+		},
+		{
 			"id": "public",
 			"sourceRoot": "./public",
 			"sources": ["manifest-hosts.json"],
@@ -9,16 +15,22 @@
 		},
 		{
 			"id": "common",
-			"sourceRoot": "../public/common",
-			"sources": ["icons/**/*", "windows/intents/**/*"],
+			"sourceRoot": "./public/common",
+			"sources": ["icons/**/*", "windows/intents/**/*", "views/contact/data/**/*"],
 			"dest": "./common"
 		},
 		{
 			"id": "manager-portal",
-			"sourceRoot": "../public/common/views/manager-portal",
+			"sourceRoot": "./public/common/views/manager-portal",
 			"sources": ["images/**/*", "data/**/*"],
 			"dest": "./common/views/manager-portal",
 			"dependsOn": "manager-portal/manager-portal.snapshot.fin.json"
+		},
+		{
+			"id": "schemas",
+			"sourceRoot": "./public/schemas",
+			"sources": ["**"],
+			"dest": "./schemas"
 		},
 		{
 			"id": "package",
@@ -30,11 +42,10 @@
 				"LICENSE.md",
 				"CHANGELOG.md",
 				"client/types/*.*",
-				"client/types/module/**",
-				"public/schemas/**"
+				"client/types/module/**"
 			],
 			"dest": "../",
-			"dependsOn": "package"
+			"dependsOn": "schemas"
 		}
 	],
 	"replaceTypes": [".json", ".html", ".js"],

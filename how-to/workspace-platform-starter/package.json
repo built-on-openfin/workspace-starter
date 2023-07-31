@@ -31,7 +31,7 @@
 		"generate-window-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
 		"generate-snapshot-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
-		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
+		"prepare-package": "npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
 		"generate-module": "node ./templates/scripts/generate-module.mjs"
 	},
 	"author": "john.mandia@openfin.co",
@@ -45,8 +45,8 @@
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/workspace": "13.0.7",
 		"@openfin/workspace-platform": "13.0.7",
-		"csstype": "^3.1.2",
 		"chart.js": "^4.3.0",
+		"csstype": "^3.1.2",
 		"node-emoji": "^1.11.0"
 	},
 	"devDependencies": {
