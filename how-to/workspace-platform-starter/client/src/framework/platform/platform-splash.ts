@@ -54,13 +54,13 @@ export async function open(): Promise<void> {
 								header.style.color = palette.textDefault;
 								header.textContent = manifest.shortcut?.name ?? "OpenFin";
 							}
-							const progressLabel = webWin.document.querySelector<HTMLElement>("#progressLabel");
-							if (progressLabel) {
-								progressLabel.style.color = palette.textDefault;
-							}
 							const progress = webWin.document.querySelector<HTMLElement>("#progress");
 							if (progress) {
 								progress.style.color = palette.textDefault;
+							}
+							const loader = webWin.document.querySelector<HTMLElement>("#loader");
+							if (loader) {
+								loader.style.color = palette.textDefault;
 							}
 						}
 					}
@@ -91,7 +91,7 @@ export async function updateProgress(progress: string): Promise<void> {
 		if (webWin) {
 			const elem = webWin.document.querySelector("#progress");
 			if (elem) {
-				elem.textContent = progress;
+				elem.textContent = `Initializing ${progress}...`;
 			}
 		}
 	}
