@@ -15,6 +15,7 @@
 - BREAKING CHANGE: Local storage endpoint module has been updated to accommodate the above change
 - Endpoint fetch requests now add the `Content-Type` and `Accept` headers with `application/json`
 - Added a common example app - Framed App in [common/views/frame](./public/common/views/frame/README.md). Which gives an example of loading a iframed app as if it was a view and using the sandboxing and API restrictions while showing communication between the view and the frame.
+- Added customizable splash screen
 
 ## v13
 
