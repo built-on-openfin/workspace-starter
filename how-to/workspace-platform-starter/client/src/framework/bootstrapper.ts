@@ -66,6 +66,14 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo | undefined;
 	let notificationMetaInfo: RegistrationMetaInfo | undefined;
 
+	await PlatformSplash.updateProgress("Integrations");
+	logger.info("Registering integrations");
+	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
+		if (homeRegistration?.setSearchQuery) {
+			await homeRegistration?.setSearchQuery(query);
+		}
+	});
+
 	if (bootstrapOptions.home) {
 		await PlatformSplash.updateProgress("Home");
 
@@ -80,10 +88,6 @@ export async function init(): Promise<boolean> {
 			registerHomeSupportedActions();
 		}
 	}
-
-	await PlatformSplash.updateProgress("Integrations");
-	logger.info("Registering integrations");
-	await registerIntegration(customSettings.integrationProvider, moduleHelpers, homeRegistration);
 
 	if (bootstrapOptions.store) {
 		await PlatformSplash.updateProgress("Store");
