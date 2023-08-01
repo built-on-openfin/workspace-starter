@@ -971,6 +971,10 @@
                     "$ref": "#/definitions/PlatformProviderOptions",
                     "description": "The platform provider options."
                 },
+                "splashScreenProvider": {
+                    "$ref": "#/definitions/SplashScreenProviderOptions",
+                    "description": "The splash screen provider options."
+                },
                 "storefrontProvider": {
                     "$ref": "#/definitions/StorefrontProviderOptions",
                     "description": "The storefront provider options."
@@ -3336,6 +3340,45 @@
             "required": [
                 "type"
             ],
+            "type": "object"
+        },
+        "SplashScreenProviderOptions": {
+            "additionalProperties": false,
+            "description": "The manifest settings for splash screen.",
+            "properties": {
+                "backgroundColor": {
+                    "description": "The background color, defaults to theme background.",
+                    "type": "string"
+                },
+                "borderColor": {
+                    "description": "The border color, defaults to theme border.",
+                    "type": "string"
+                },
+                "disabled": {
+                    "description": "If the disabled flag is set the splash screen will not be shown.",
+                    "type": "boolean"
+                },
+                "height": {
+                    "description": "The height for the splash screen, defaults to 130.",
+                    "type": "number"
+                },
+                "icon": {
+                    "description": "This defaults to manifest.platform.icon if not provided.",
+                    "type": "string"
+                },
+                "textColor": {
+                    "description": "The text color, defaults to theme text.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "This defaults to manifest.shortcut.name if not provided.",
+                    "type": "string"
+                },
+                "width": {
+                    "description": "The width for the splash screen, defaults to 400.",
+                    "type": "number"
+                }
+            },
             "type": "object"
         },
         "StoreButtonConfig": {
