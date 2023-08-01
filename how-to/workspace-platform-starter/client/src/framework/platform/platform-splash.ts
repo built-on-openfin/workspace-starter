@@ -40,6 +40,11 @@ export async function open(): Promise<void> {
 				}
 			}
 
+			const header = webWin.document.querySelector<HTMLElement>("#header");
+			if (header) {
+				header.textContent = manifest.shortcut?.name ?? "OpenFin";
+			}
+
 			if (customSettings?.themeProvider?.themes?.length) {
 				const theme = customSettings.themeProvider.themes[0];
 				if ("palettes" in theme) {
@@ -49,10 +54,8 @@ export async function open(): Promise<void> {
 						webWin.document.body.style.backgroundColor = palette?.backgroundPrimary;
 
 						if (palette?.textDefault) {
-							const header = webWin.document.querySelector<HTMLElement>("#header");
 							if (header) {
 								header.style.color = palette.textDefault;
-								header.textContent = manifest.shortcut?.name ?? "OpenFin";
 							}
 							const progress = webWin.document.querySelector<HTMLElement>("#progress");
 							if (progress) {
