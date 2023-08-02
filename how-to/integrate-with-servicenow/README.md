@@ -23,8 +23,8 @@ When configuring CORS, the URL that you need to add is: `http://localhost:8080`,
 
 Once you have completed the configuration steps, update the `customSettings` section in the sample app's [manifest file](./public/manifest.fin.json) as follows:
 
-- **`instanceUrl`**: the url of your ServiceNow instance
-- **`clientId`**: the client id of your application
+- **`instanceUrl`** the url of your ServiceNow instance
+- **`clientId`** the client id of your application
 
 With ServiceNow configured and the sample custom settings updated, you can continue to run the sample.
 
