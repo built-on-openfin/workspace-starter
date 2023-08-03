@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-rss",
-	"version": "14.0.11",
+	"version": "14.0.16",
 	"description": "OpenFin Workspace -- Integrate with RSS",
 	"main": "index.js",
 	"scripts": {
@@ -18,7 +18,7 @@
 	"dependencies": {
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next",
-		"fast-xml-parser": "4.2.6"
+		"fast-xml-parser": "4.2.7"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",

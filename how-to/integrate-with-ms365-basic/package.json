@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-basic",
-	"version": "14.0.11",
+	"version": "14.0.16",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -15,7 +15,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@microsoft/microsoft-graph-types": "^2.35.0",
+		"@microsoft/microsoft-graph-types": "^2.38.0",
 		"@openfin/microsoft365": "1.0.1",
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next"

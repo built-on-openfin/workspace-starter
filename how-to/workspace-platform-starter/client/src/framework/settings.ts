@@ -75,22 +75,37 @@ export async function isValidHostForManifest(): Promise<boolean> {
 	const manifestUrl = info.manifestUrl;
 	logger.info(`Source of initial settings: ${manifestUrl}`);
 
-	const url = new URL(manifestUrl);
-	const sourceUrl = new URL(location.href);
-	if (!validHosts.includes(sourceUrl.hostname)) {
-		logger.info("Adding current host to the list of valid hosts:", sourceUrl.hostname);
-		validHosts.push(sourceUrl.hostname);
+	const sourceUrlHostName = matchUrl(location.href, validHosts);
+	if (sourceUrlHostName) {
+		logger.info("Adding current host to the list of valid hosts:", sourceUrlHostName);
+		validHosts.push(sourceUrlHostName);
 	}
-	logger.info(`Checking manifest host: ${url.hostname} vs valid list: ${JSON.stringify(validHosts)}`);
-	const isValidHost = validHosts.includes(url.hostname);
-	if (isValidHost) {
+
+	const urlHostName = matchUrl(manifestUrl, validHosts);
+	logger.info(`Checking manifest host: ${urlHostName} vs valid list: ${JSON.stringify(validHosts)}`);
+	if (urlHostName) {
 		logger.info("The source of the initial settings is valid");
 	} else {
 		logger.warn(
 			`The source of the initial settings ${manifestUrl} does not match any of the valid host names. Please update the list if required.`
 		);
 	}
-	return isValidHost;
+	return !isEmpty(urlHostName);
+}
+
+/**
+ * Match a url to the valid hosts.
+ * @param url The url to try and match.
+ * @param validHosts The list of valid hosts.
+ * @returns The valid part of the name if it matches.
+ */
+function matchUrl(url: string, validHosts: string[]): string | undefined {
+	if (url.startsWith("file:///")) {
+		const path = url.replace("file:///", "").toLowerCase();
+		return validHosts.some((vh) => path.startsWith(vh.toLowerCase())) ? path : undefined;
+	}
+	const u = new URL(url);
+	return validHosts.includes(u.hostname) ? u.hostname : undefined;
 }
 
 /**

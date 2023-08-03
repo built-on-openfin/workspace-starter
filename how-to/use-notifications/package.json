@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-notifications",
-	"version": "14.0.11",
+	"version": "14.0.16",
 	"description": "OpenFin Workspace -- Use Notifications",
 	"main": "index.js",
 	"scripts": {

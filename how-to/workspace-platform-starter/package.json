@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
-	"version": "14.0.11",
+	"version": "14.0.16",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
@@ -31,7 +31,7 @@
 		"generate-window-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
 		"generate-snapshot-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
-		"prepare-package": "npm run generate-types && npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
+		"prepare-package": "npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
 		"generate-module": "node ./templates/scripts/generate-module.mjs"
 	},
 	"author": "john.mandia@openfin.co",
@@ -45,15 +45,15 @@
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/workspace": "next",
 		"@openfin/workspace-platform": "next",
+		"chart.js": "^4.3.3",
 		"csstype": "^3.1.2",
-		"chart.js": "^4.3.0",
 		"node-emoji": "^1.11.0"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",
 		"@types/express": "^4.17.17",
 		"express": "^4.18.2",
-		"fast-glob": "^3.3.0",
+		"fast-glob": "^3.3.1",
 		"openfin-adapter": "32.76.10",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6",

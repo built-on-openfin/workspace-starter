@@ -1,4 +1,4 @@
-import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 
 /**
  * The default dark and light palettes.
