@@ -222,6 +222,25 @@
 					}
 				],
 				"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "new-page-url",
+				"name": "new-page-url",
+				"title": "New Page",
+				"manifestType": "view",
+				"description": "Search Google or open a url",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter-basic/common/views/platform/new-tab.view.fin.json",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter-basic/common/images/icon-blue.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["page", "openfin"]
 			}
 		]
 	}
