@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Versioning</title>
+		<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+		<link rel="stylesheet" href="../../common/style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Versioning</h1>
+			</div>
+			<div class="row middle gap10">
+				<image src="../../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col gap10 scroll-horizontal">
+			<h3>Platform Requirements Not Met</h3>
+			<p>
+				Unfortunately this platform cannot run on this machine as the following conditions have not been met:
+			</p>
+			<div class="table width-full" id="lstVersions">
+				<div class="table-row header">
+					<div>Version Type</div>
+					<div>Current Version</div>
+					<div>Minimum Version</div>
+					<div>Maximum Version</div>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="row spread">
+				<button id="launch" class="left">Launch Compatible Version</button>
+				<button id="close" class="right">Close Platform</button>
+			</div>
+		</footer>
+		<script src="./version.js"></script>
+	</body>
+</html>
