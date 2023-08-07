@@ -26,6 +26,12 @@
 			"dest": "./schemas"
 		},
 		{
+			"id": "schemas",
+			"sourceRoot": "./public/schemas",
+			"sources": ["**"],
+			"dest": "./schemas"
+		},
+		{
 			"id": "package",
 			"sourceRoot": "./",
 			"sources": [
