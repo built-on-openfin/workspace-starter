@@ -20,14 +20,14 @@
 	"dependencies": {
 		"@openfin/workspace": "13.1.5",
 		"@openfin/workspace-platform": "13.1.5",
-		"chart.js": "^4.3.0",
+		"chart.js": "^4.3.3",
 		"csstype": "^3.1.2",
 		"luxon": "^3.3.0",
 		"node-emoji": "1.11.0"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
-		"@types/luxon": "^3.3.0",
+		"@types/luxon": "^3.3.1",
 		"@types/node-emoji": "^1.8.2",
 		"openfin-adapter": "31.75.4",
 		"ts-loader": "^9.4.4",
