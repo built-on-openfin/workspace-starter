@@ -16,7 +16,7 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
-		"@microsoft/microsoft-graph-types": "^2.35.0",
+		"@microsoft/microsoft-graph-types": "^2.38.0",
 		"@openfin/microsoft365": "1.0.1",
 		"@openfin/workspace": "13.1.5",
 		"@openfin/workspace-platform": "13.1.5",
