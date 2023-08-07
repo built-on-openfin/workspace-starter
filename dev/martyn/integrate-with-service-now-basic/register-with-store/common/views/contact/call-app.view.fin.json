@@ -1,0 +1,9 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrate-with-service-now-basic/register-with-store/common/views/contact/call-app/index.html",
+	"fdc3InteropApi": "2.0",
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/integrate-with-service-now-basic/register-with-store/common/style/style-changed-preload.js"
+		}
+	]
+}
