@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-basic",
-	"version": "14.0.16",
+	"version": "14.0.17",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -17,8 +17,8 @@
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.38.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next"
+		"@openfin/workspace": "14.0.17",
+		"@openfin/workspace-platform": "14.0.17"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",

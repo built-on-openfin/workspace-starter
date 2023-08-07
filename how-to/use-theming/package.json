@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-theming",
-	"version": "14.0.16",
+	"version": "14.0.17",
 	"description": "OpenFin Workspace -- Use Theming",
 	"main": "index.js",
 	"scripts": {
@@ -16,7 +16,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "next"
+		"@openfin/workspace": "14.0.17"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",

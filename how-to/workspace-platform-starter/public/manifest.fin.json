@@ -63,7 +63,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter - vnext",
+		"name": "Workspace Platform Starter - v14.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -920,26 +920,26 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/preload.js",
 						"enableLibLogging": true,
 						"iconMap": {
-							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/salesforce.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/task.svg",
-							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/dashboard.svg",
-							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/phone.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/chat.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-salesforce/images/email.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
@@ -1140,7 +1140,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "14.0.16"
+				"workspace": "14.0.17"
 			},
 			"versionWindow": {
 				"name": "versioning",

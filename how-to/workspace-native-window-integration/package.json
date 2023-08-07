@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-native-window-integration",
-	"version": "14.0.16",
+	"version": "14.0.17",
 	"description": "OpenFin Workspace Example Application -- An example of an application that takes advantage of our native window integration.",
 	"main": "index.js",
 	"scripts": {
@@ -16,8 +16,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/native-window-integration-client": "0.0.17",
-		"@openfin/workspace": "next",
-		"@openfin/workspace-platform": "next",
+		"@openfin/workspace": "14.0.17",
+		"@openfin/workspace-platform": "14.0.17",
 		"file-loader": "^6.2.0"
 	},
 	"devDependencies": {
