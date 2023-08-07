@@ -50,9 +50,19 @@ Please see our security page for more information about OpenFin Security: [Secur
 
 Workspace Platform Starter can fetch it's configuration solely from a manifest or from a manifest and a settings endpoint (see [How To Apply Entitlements](./how-to-apply-entitlements.md) defined in a manifest.
 
-You may have your code on one server and your manifest coming from another. Workspace Platform Starter code looks for a [manifest-hosts.json](../public/manifest-hosts.json) file to see if the host from which the manifest comes is in the list of trusted hosts. It will only continue to run if it finds a match.
+You may have your code on one server and your manifest coming from another. Workspace Platform Starter code looks for a [manifest-hosts.json](../public/manifest-hosts.json) file to see if the host from which the manifest comes is in the list of trusted hosts. It will only continue to run if it finds a match. e.g.
+
+```json
+["localhost", "127.0.0.1", "my.hosting.domain"]
+```
 
 The json file is currently configured to support localhost manifests and OpenFin related domains. Please update it to reflect your own host names.
+
+If you are launching a manifest from a file system instead of a web server you must include the containing path in the `manifest-hosts` file. For example if you are serving the manifest from `C:/my-app/manifest.fin.json` you should include the following entry (the matching is case-insensitive).
+
+```json
+["localhost", "127.0.0.1", "my.hosting.domain", "C:/my-app/"]
+```
 
 ### Secure who can connect to your platform
 
