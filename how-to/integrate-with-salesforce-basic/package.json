@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce-basic",
-	"version": "14.0.17",
+	"version": "14.0.18",
 	"description": "OpenFin Workspace -- Integrate with Salesforce - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -16,8 +16,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/salesforce": "2.2.0",
-		"@openfin/workspace": "14.0.17",
-		"@openfin/workspace-platform": "14.0.17"
+		"@openfin/workspace": "14.0.18",
+		"@openfin/workspace-platform": "14.0.18"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",
