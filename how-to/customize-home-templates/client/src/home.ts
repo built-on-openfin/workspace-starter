@@ -32,6 +32,9 @@ export async function register(id: string, title: string, icon: string): Promise
 		request: HomeSearchListenerRequest,
 		response: HomeSearchListenerResponse
 	): Promise<HomeSearchResponse> {
+		console.log("Query", request.query);
+		console.log("isSuggestion", request.context.isSuggestion ?? false);
+
 		const queryLower = request.query.toLowerCase();
 
 		// If the query starts with a ? treat this as a help request
@@ -80,7 +83,9 @@ export async function register(id: string, title: string, icon: string): Promise
 			};
 		}
 
-		return getSearchResults(request.query, [], lastResponse);
+		return getSearchResults(request.query, [], lastResponse, {
+			isSuggestion: request.context?.isSuggestion ?? false
+		});
 	}
 
 	/**
@@ -129,7 +134,7 @@ export async function register(id: string, title: string, icon: string): Promise
 				await itemSelection(result, lastResponse);
 			}
 		} else {
-			console.warn("Unable to execute result without data being passed");
+			// console.warn("Unable to execute result without data being passed");
 		}
 	}
 
