@@ -289,7 +289,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "14.0.17"
+				"workspace": "14.0.18"
 			},
 			"versionWindow": {
 				"name": "versioning",
