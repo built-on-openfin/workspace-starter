@@ -392,11 +392,11 @@ async function showPrintMenu(position: { x: number; y: number }): Promise<void> 
 
 	const template: OpenFin.MenuItemTemplate[] = [
 		{
-			label: "Print views",
+			label: "Print All",
 			data: { type: "views" }
 		},
 		{
-			label: "Print window",
+			label: "Print Screen",
 			data: { type: "window" }
 		}
 	];
