@@ -37,7 +37,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Register With Platform Windows - vnext",
+		"name": "Register With Platform Windows - v14.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

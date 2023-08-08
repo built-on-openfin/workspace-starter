@@ -5,10 +5,9 @@ import type {
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	Page
+	HomeSearchResult
 } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,

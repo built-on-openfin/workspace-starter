@@ -796,7 +796,9 @@
 					"style/app.css",
 					"style/style-changed-preload.js",
 					"views/contact/**/*",
+					"views/platform/new-tab.view.fin.json",
 					"views/platform/of-info.view.fin.json",
+					"views/platform/new-tab/**/*",
 					"views/platform/of-info/**/*",
 					"dos.json"
 				]

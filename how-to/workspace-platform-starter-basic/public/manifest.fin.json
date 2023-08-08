@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter Basic - vnext",
+		"name": "Workspace Platform Starter Basic - v14.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -222,6 +222,25 @@
 					}
 				],
 				"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "new-page-url",
+				"name": "new-page-url",
+				"title": "New Page",
+				"manifestType": "view",
+				"description": "Search Google or open a url",
+				"manifest": "http://localhost:8080/common/views/platform/new-tab.view.fin.json",
+				"icons": [
+					{
+						"src": "http://localhost:8080/common/images/icon-blue.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "OpenFin",
+				"intents": [],
+				"images": [],
+				"tags": ["page", "openfin"]
 			}
 		]
 	}
