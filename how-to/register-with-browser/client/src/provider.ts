@@ -392,16 +392,12 @@ async function showPrintMenu(position: { x: number; y: number }): Promise<void> 
 
 	const template: OpenFin.MenuItemTemplate[] = [
 		{
-			label: "Print view",
-			data: { type: "view" }
+			label: "Print views",
+			data: { type: "views" }
 		},
 		{
-			label: "Print page",
-			data: { type: "page" }
-		},
-		{
-			label: "Print screenshot",
-			data: { type: "screen" }
+			label: "Print window",
+			data: { type: "window" }
 		}
 	];
 
@@ -413,11 +409,14 @@ async function showPrintMenu(position: { x: number; y: number }): Promise<void> 
 
 	if (r.result === "closed") {
 		console.log("Menu dismissed");
-	} else if (r.data.type === "view") {
-		console.log("Print view");
-	} else if (r.data.type === "page") {
-		console.log("Print page");
-	} else if (r.data.type === "screen") {
-		console.log("Print screen");
+	} else if (r.data.type === "views") {
+		await browserWindow.openfinWindow.print({
+			content: "views",
+			includeSelf: false
+		});
+	} else if (r.data.type === "window") {
+		await browserWindow.openfinWindow.print({
+			content: "screenshot"
+		});
 	}
 }
