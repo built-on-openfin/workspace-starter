@@ -584,6 +584,27 @@ export class Microsoft365Integration {
 						}
 
 						lastResponse.respond(homeResults);
+
+						const resultTypes: Set<string> = new Set<string>();
+						for (const searchResult of homeResults) {
+							if (searchResult.label) {
+								resultTypes.add(searchResult.label);
+							}
+						}
+
+						const newFilters = resultTypes.entries();
+						lastResponse.updateContext({
+							filters: [
+								{
+									id: Microsoft365Integration._MS365_FILTERS,
+									title: "Microsoft 365",
+									options: [...newFilters].map((f) => ({
+										value: f[0],
+										isSelected: true
+									}))
+								}
+							]
+						});
 					}
 				} catch (err) {
 					const message = err instanceof Error ? err.message : err;
@@ -599,19 +620,7 @@ export class Microsoft365Integration {
 		}, 500);
 
 		return {
-			results: query.length >= minLength ? [this.createSearchingResult()] : [],
-			context: {
-				filters: [
-					{
-						id: Microsoft365Integration._MS365_FILTERS as string,
-						title: "Microsoft 365",
-						options: defaultFilters.map((o) => ({
-							value: o,
-							isSelected: true
-						}))
-					}
-				]
-			}
+			results: query.length >= minLength ? [this.createSearchingResult()] : []
 		};
 	}
 
