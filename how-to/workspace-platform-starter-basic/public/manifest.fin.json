@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter Basic - v14.0.0",
+		"name": "Workspace Platform Starter Basic - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

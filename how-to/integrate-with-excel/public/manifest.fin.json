@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Excel - v14.0.0",
+		"name": "Integrate With Excel - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"appAssets": [

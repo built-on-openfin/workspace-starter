@@ -16,7 +16,7 @@ To run this sample you can:
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 - Launch the Github hosted version of this sample to interact with it by going to the following link:
 
-[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv14.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
+[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fcustomize-home-templates%2Fmanifest.fin.json)
 
 ## Getting Started
 

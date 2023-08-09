@@ -45,7 +45,7 @@ const FDC3_BROADCAST: App = {
 	description:
 		"This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/fdc3-broadcast-view.json",
 	manifestType: "view",
 	icons: [
 		{
@@ -58,7 +58,7 @@ const FDC3_BROADCAST: App = {
 	intents: [],
 	images: [
 		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-context-fdc3.png"
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-fdc3.png"
 		}
 	],
 	tags: ["view", "fdc3", "tools"]
@@ -73,7 +73,7 @@ const INTEROP_BROADCAST: App = {
 	description:
 		"This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.json",
 	manifestType: "view",
 	icons: [
 		{
@@ -86,7 +86,7 @@ const INTEROP_BROADCAST: App = {
 	intents: [],
 	images: [
 		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-context-interop-api.png"
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-interop-api.png"
 		}
 	],
 	tags: ["view", "interop", "tools"]

@@ -44,7 +44,7 @@ export const THEME_BUILDER_APP: App = {
 	title: "Theme Definition Builder",
 	description: "A tool to help in the building of a theme.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/theme-definition-builder/theme-definition-builder-view.json",
 	manifestType: "view",
 	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
 	contactEmail: "contact@example.com",
@@ -53,7 +53,7 @@ export const THEME_BUILDER_APP: App = {
 	intents: [],
 	images: [
 		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/branding/images/previews/theme-definition-builder.png"
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/branding/images/previews/theme-definition-builder.png"
 		}
 	],
 	tags: ["view", "theme", "tool"]

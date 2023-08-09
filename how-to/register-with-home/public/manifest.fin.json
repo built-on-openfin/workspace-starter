@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Register With Home - v14.0.0",
+		"name": "Register With Home - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
