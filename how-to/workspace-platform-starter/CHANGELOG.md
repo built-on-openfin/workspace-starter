@@ -1,5 +1,7 @@
 # Changelog
 
+## v14
+
 ## v13.1
 
 - BREAKING CHANGE: Removed the logic that supported saving page window bounds into local storage or a defined endpoint (so if you created custom endpoints for saving this information please note that it is now in the page data). This was used when saving a page or sharing a page. It now uses the new customData property on the PageObject to append windowBounds. We also now capture the page bounds when Save Page AND Save Page As is called.

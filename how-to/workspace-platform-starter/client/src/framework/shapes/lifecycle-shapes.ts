@@ -1,5 +1,5 @@
-import type { Page, Workspace } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Workspace } from "@openfin/workspace";
+import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**

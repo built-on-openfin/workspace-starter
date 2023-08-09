@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import type { InteropClient } from "@openfin/core/src/api/interop";
 import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
@@ -102,7 +101,7 @@ export interface ModuleHelpers {
 	 * cache it and use it once the application is bootstrapped and ready.
 	 * @returns The interop client.
 	 */
-	getInteropClient?(): Promise<InteropClient | undefined>;
+	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.

@@ -7,7 +7,6 @@ import {
 	type IntentResolution
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
-import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
@@ -265,7 +264,7 @@ export function interopOverride(
 		 */
 		public async handleFiredIntentForContext(
 			contextForIntent: { type: string; metadata?: OpenFin.IntentMetadata<IntentTargetMetaData> },
-			clientIdentity: ClientIdentity
+			clientIdentity: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult"> | { source: string; version?: string }> {
 			const targetAppIdentifier = this.getApplicationIdentity(contextForIntent.metadata);
 			const usesAppIdentity = this.usesApplicationIdentity(clientIdentity);
@@ -845,7 +844,7 @@ export function interopOverride(
 			targetAppIdentifier: AppIdentifier,
 			intent: OpenFin.Intent,
 			targetByContext: boolean,
-			clientIdentity: ClientIdentity
+			clientIdentity: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult">> {
 			// app specified flow
 			const intentsForSelection: AppsForIntent[] = [];
@@ -1196,7 +1195,7 @@ export function interopOverride(
 		 */
 		private async getUnregisteredAppIntentByContext(
 			type: string,
-			clientIdentity: ClientIdentity
+			clientIdentity: OpenFin.ClientIdentity
 		): Promise<string[]> {
 			const intentNames: string[] = [];
 			const supportedIntentNames: string[] = [];
@@ -1231,7 +1230,7 @@ export function interopOverride(
 		 * @returns True if we can add the app.
 		 */
 		private async canAddUnregisteredApp(
-			clientIdentity: ClientIdentity,
+			clientIdentity: OpenFin.ClientIdentity,
 			intentName?: string
 		): Promise<boolean> {
 			if (isEmpty(this?._unregisteredApp)) {

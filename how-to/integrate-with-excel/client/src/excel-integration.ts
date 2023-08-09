@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import type { InteropClient } from "@openfin/core/src/api/interop";
 import { enableLogging, getExcelApplication, type Cell, type ExcelApplication } from "@openfin/excel";
 import {
 	CLITemplate,
@@ -35,7 +34,7 @@ export class ExcelIntegration {
 	 * The interop clients for the different contexts.
 	 * @internal
 	 */
-	private _interopClients?: { [id: string]: InteropClient };
+	private _interopClients?: { [id: string]: OpenFin.InteropClient };
 
 	/**
 	 * Initialize the module.
