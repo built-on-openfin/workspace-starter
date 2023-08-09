@@ -421,15 +421,34 @@ export class SalesforceIntegration {
 								this.buildTemplate(
 									r,
 									// we clone this so reference deletions don't affect the original
-									JSON.parse(JSON.stringify(maps[r.attributes.type])) as SalesforceMapping,
+									this.objectClone(maps[r.attributes.type]),
 									CLITemplate.Loading
 								)
 							)
 						);
 
-						homeResults.push(...searchResults);
+						this._lastResponse.respond(searchResults);
 
-						this._lastResponse.respond(homeResults);
+						const resultTypes: Set<string> = new Set<string>();
+						for (const searchResult of searchResults) {
+							if (searchResult.label) {
+								resultTypes.add(searchResult.label);
+							}
+						}
+
+						const newFilters = resultTypes.entries();
+						this._lastResponse.updateContext({
+							filters: [
+								{
+									id: SalesforceIntegration._OBJECTS_FILTER_ID as string,
+									title: "Salesforce",
+									options: [...newFilters].map((f) => ({
+										value: f[0],
+										isSelected: true
+									}))
+								}
+							]
+						});
 					} catch (err) {
 						await this.closeConnection();
 						if (err instanceof AuthorizationError) {
@@ -443,22 +462,7 @@ export class SalesforceIntegration {
 		}, 500);
 
 		return {
-			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []),
-			context: {
-				filters:
-					query.length >= minLength && this._mappings
-						? [
-								{
-									id: SalesforceIntegration._OBJECTS_FILTER_ID as string,
-									title: "Salesforce",
-									options: this._mappings.map((o) => ({
-										value: o.label ?? "",
-										isSelected: true
-									}))
-								}
-						  ]
-						: undefined
-			}
+			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : [])
 		};
 	}
 
@@ -1587,5 +1591,15 @@ export class SalesforceIntegration {
 		}
 
 		return finalActions;
+	}
+
+	/**
+	 * Deep clone an object.
+	 * @param obj The object to clone.
+	 * @returns The clone of the object.
+	 */
+	private objectClone<T>(obj: T): T {
+		// eslint-disable-next-line no-restricted-syntax
+		return obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
 	}
 }
