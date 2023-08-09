@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-excel",
-	"version": "13.1.5",
+	"version": "14.0.18",
 	"description": "OpenFin Workspace -- Integrate with Excel",
 	"main": "index.js",
 	"scripts": {
@@ -16,12 +16,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/excel": "^1.4.1",
-		"@openfin/workspace": "13.1.5",
-		"@openfin/workspace-platform": "13.1.5"
+		"@openfin/workspace": "14.0.18",
+		"@openfin/workspace-platform": "14.0.18"
 	},
 	"devDependencies": {
-		"@openfin/core": "31.75.4",
-		"openfin-adapter": "31.75.4",
+		"@openfin/core": "32.76.10",
+		"openfin-adapter": "32.76.10",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6",
 		"webpack": "^5.88.2",

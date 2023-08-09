@@ -22,7 +22,7 @@ We map this format to our internal Platform App format. We include an example of
       "name": "fdc3-workbench",
       "title": "FDC3 Workbench (1.2)",
       "description": "Launch the official FDC3 Workbench with FDC3 1.2 enabled.",
-      "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
+      "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
       "manifestType": "view",
       "icons": [
         {
@@ -48,7 +48,7 @@ We map this format to our internal Platform App format. We include an example of
       ],
       "images": [
         {
-          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/common/images/previews/fdc3-workbench.png"
+          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/common/images/previews/fdc3-workbench.png"
         }
       ]
     }

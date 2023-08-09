@@ -1,4 +1,5 @@
-import type { AnalyticsEvent, AnalyticsSource } from "@openfin/workspace/common/src/utils/usage-register";
+import type { AnalyticsEvent } from "@openfin/workspace-platform";
+import type { AnalyticsSource } from "@openfin/workspace/common/src/utils/usage-register";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**

@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
-import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
