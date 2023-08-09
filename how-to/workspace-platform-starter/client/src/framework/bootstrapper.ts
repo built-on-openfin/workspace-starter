@@ -11,6 +11,7 @@ import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
+import * as PlatformSplash from "./platform/platform-splash";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
@@ -65,7 +66,19 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo | undefined;
 	let notificationMetaInfo: RegistrationMetaInfo | undefined;
 
+	await PlatformSplash.updateProgress("Integrations");
+	logger.info("Registering integrations");
+	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
+		if (homeRegistration?.setSearchQuery) {
+			await homeRegistration?.setSearchQuery(query);
+		} else {
+			logger.warn("Home registration setSearchQuery called by integration, but it is not available");
+		}
+	});
+
 	if (bootstrapOptions.home) {
+		await PlatformSplash.updateProgress("Home");
+
 		// only register search logic once workspace is running
 		homeRegistration = await homeComponent.register(customSettings.homeProvider);
 		if (homeRegistration) {
@@ -78,10 +91,9 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
-	logger.info("Registering integrations");
-	await registerIntegration(customSettings.integrationProvider, moduleHelpers, homeRegistration);
-
 	if (bootstrapOptions.store) {
+		await PlatformSplash.updateProgress("Store");
+
 		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
 		if (storeRegistration) {
 			if (!workspaceMetaInfo) {
@@ -98,6 +110,8 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.dock) {
+		await PlatformSplash.updateProgress("Dock");
+
 		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
 		if (dockRegistration) {
 			if (!workspaceMetaInfo) {
@@ -121,6 +135,8 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.notifications) {
+		await PlatformSplash.updateProgress("Notifications");
+
 		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
 		registerAction("show-notifications", async () => {
 			await notificationsComponent.show();
@@ -150,6 +166,8 @@ export async function init(): Promise<boolean> {
 		await analyticsProvider.handleAnalytics([analyticsEvent]);
 	}
 
+	await PlatformSplash.updateProgress("Versions");
+
 	logger.info("Checking to see if version management is required.");
 	if (await versionProvider.manageVersionStatus(versionStatus)) {
 		// version status had to be managed so it couldn't just continue. Stop initialization.
@@ -160,6 +178,8 @@ export async function init(): Promise<boolean> {
 
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
+
+	await PlatformSplash.updateProgress("Low Code Integrations");
 
 	// register any instantiated low code integrations that require registering
 	await lowCodeIntegrationProvider.initializeWorkflows();
@@ -244,6 +264,7 @@ export async function init(): Promise<boolean> {
 async function autoStartApps(): Promise<void> {
 	const apps = await getApps({ autostart: true });
 	if (Array.isArray(apps) && apps.length > 0) {
+		await PlatformSplash.updateProgress("Auto Start Apps");
 		logger.info(
 			`Apps have been marked that they should autostart after the bootstrapping process and the platform has not set autostartApps to false in the bootstrapping options. ${apps.length} app(s) will be launched.`
 		);
