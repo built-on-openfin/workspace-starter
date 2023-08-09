@@ -8,13 +8,13 @@ import {
 	type StorefrontFooter,
 	type StorefrontLandingPage
 } from "@openfin/workspace";
+import type { CustomThemeOptions } from "@openfin/workspace-platform";
 import {
 	init,
 	type ColorSchemeOptionType,
 	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import type { CustomThemeOptions } from "@openfin/workspace/common/src/api/theming";
 import * as Notifications from "@openfin/workspace/notifications";
 import { THEME_BUILDER_APP, getApps, launchApp } from "./apps";
 import { DEFAULT_PALETTES } from "./default-palettes";

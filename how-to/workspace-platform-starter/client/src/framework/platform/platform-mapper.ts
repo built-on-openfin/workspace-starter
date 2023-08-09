@@ -1,6 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { PageLayout } from "@openfin/workspace";
-import type { BrowserSnapshotWindow, Page, Workspace } from "@openfin/workspace-platform";
+import type { BrowserSnapshotWindow, Page, PageLayout, Workspace } from "@openfin/workspace-platform";
 import { isEmpty, objectClone } from "workspace-platform-starter/utils";
 
 /**

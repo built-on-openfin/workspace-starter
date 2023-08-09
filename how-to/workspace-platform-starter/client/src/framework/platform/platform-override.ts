@@ -1,6 +1,7 @@
 import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
+	type AnalyticsEvent,
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
@@ -13,7 +14,6 @@ import {
 	type Workspace,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";
 import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";

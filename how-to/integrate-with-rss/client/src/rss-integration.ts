@@ -1,18 +1,17 @@
 import type OpenFin from "@openfin/core";
-import type { ChannelProvider } from "@openfin/core/src/api/interappbus/channel/provider";
 import {
 	ButtonStyle,
 	CLITemplate,
 	type HomeDispatchedSearchResult,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	type Page,
 	type TemplateFragment
 } from "@openfin/workspace";
 import {
 	getCurrentSync,
 	type BrowserCreateWindowRequest,
-	type BrowserWindowModule
+	type BrowserWindowModule,
+	type Page
 } from "@openfin/workspace-platform";
 import {
 	addEventListener as addNotificationEventListener,
@@ -70,7 +69,7 @@ export class RssIntegration {
 	/**
 	 * The channel for issuing feed updates.
 	 */
-	private _channelProvider: ChannelProvider | undefined;
+	private _channelProvider: OpenFin.ChannelProvider | undefined;
 
 	/**
 	 * The subscribers for the feeds.
