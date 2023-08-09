@@ -169,6 +169,15 @@
 				}
 			},
 			{
+				"id": "workspace-list",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "workspace"
+				}
+			},
+			{
 				"id": "workspace-get",
 				"type": "module",
 				"typeId": "local-storage",
@@ -196,6 +205,15 @@
 				}
 			},
 			{
+				"id": "page-list",
+				"type": "module",
+				"typeId": "local-storage",
+				"options": {
+					"method": "GET",
+					"dataType": "page"
+				}
+			},
+			{
 				"id": "page-get",
 				"type": "module",
 				"typeId": "local-storage",
@@ -220,33 +238,6 @@
 				"options": {
 					"method": "REMOVE",
 					"dataType": "page"
-				}
-			},
-			{
-				"id": "page-bounds-get",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "GET",
-					"dataType": "page-bounds"
-				}
-			},
-			{
-				"id": "page-bounds-set",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "SET",
-					"dataType": "page-bounds"
-				}
-			},
-			{
-				"id": "page-bounds-remove",
-				"type": "module",
-				"typeId": "local-storage",
-				"options": {
-					"method": "REMOVE",
-					"dataType": "page-bounds"
 				}
 			},
 			{
@@ -582,7 +573,9 @@
 						"contentBackground2": "#000000",
 						"contentBackground3": "#000000",
 						"contentBackground4": "#000000",
-						"contentBackground5": "#000000"
+						"contentBackground5": "#000000",
+						"linkDefault": "#6CADE5",
+						"linkHover": "#0A76D3"
 					},
 					"dark": {
 						"brandPrimary": "#0A76D3",
@@ -610,7 +603,9 @@
 						"contentBackground2": "#000000",
 						"contentBackground3": "#000000",
 						"contentBackground4": "#000000",
-						"contentBackground5": "#000000"
+						"contentBackground5": "#000000",
+						"linkDefault": "#6CADE5",
+						"linkHover": "#0A76D3"
 					}
 				}
 			}
@@ -923,20 +918,20 @@
 			},
 			{
 				"id": "salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/favicon.ico",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/favicon.ico",
 				"title": "Salesforce",
 				"enabled": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
-					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/preload.js",
+					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/js/preload.js",
 					"iconMap": {
-						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/contact.svg",
-						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/account.svg",
-						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/chatter.svg",
-						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/note.svg",
-						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/task.svg"
+						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/contact.svg",
+						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/note.svg",
+						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/task.svg"
 					}
 				}
 			},
@@ -1131,7 +1126,7 @@
 	"versionProvider": {
 		"appVersion": "1.0.0",
 		"minVersion": {
-			"workspace": "13.0.0"
+			"workspace": "13.1.5"
 		},
 		"versionWindow": {
 			"name": "versioning",

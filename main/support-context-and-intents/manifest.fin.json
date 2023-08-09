@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/favicon.ico",
-		"name": "Support Intents & Context - v13.0.0",
+		"name": "Support Intents & Context - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -57,7 +57,6 @@
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-contact.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-interop.json",
-				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-native.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,

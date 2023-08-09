@@ -51,45 +51,8 @@
 					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests OpenFin object."
 				},
 				"hostManifests": {
-					"additionalProperties": false,
-					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details.",
-					"properties": {
-						"OpenFin": {
-							"additionalProperties": false,
-							"properties": {
-								"config": {
-									"additionalProperties": false,
-									"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
-									"properties": {
-										"autostart": {
-											"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
-											"type": "boolean"
-										},
-										"instanceMode": {
-											"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
-											"enum": ["multi", "new", "single"],
-											"type": "string"
-										},
-										"private": {
-											"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
-											"type": "boolean"
-										}
-									},
-									"type": "object"
-								},
-								"details": {
-									"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
-								},
-								"type": {
-									"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
-									"type": "string"
-								}
-							},
-							"type": "object"
-						}
-					},
-					"required": ["OpenFin"],
-					"type": "object"
+					"$ref": "#/definitions/HostManifests",
+					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details."
 				},
 				"icons": {
 					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or\nSTORE Components",
@@ -350,6 +313,48 @@
 				}
 			},
 			"required": ["$schema", "applications"],
+			"type": "object"
+		},
+		"HostManifests": {
+			"additionalProperties": false,
+			"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details.",
+			"properties": {
+				"OpenFin": {
+					"additionalProperties": false,
+					"description": "The OpenFin settings for this FDC3 2.0 App Definition",
+					"properties": {
+						"config": {
+							"additionalProperties": false,
+							"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
+							"properties": {
+								"autostart": {
+									"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
+									"type": "boolean"
+								},
+								"instanceMode": {
+									"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
+									"enum": ["multi", "new", "single"],
+									"type": "string"
+								},
+								"private": {
+									"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
+									"type": "boolean"
+								}
+							},
+							"type": "object"
+						},
+						"details": {
+							"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
+						},
+						"type": {
+							"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
+							"type": "string"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"required": ["OpenFin"],
 			"type": "object"
 		},
 		"NativeAppDetails": {

@@ -48,7 +48,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/favicon-32x32.png",
-		"name": "Workspace Platform Starter - v13.0.0 - FDC3 Workspace",
+		"name": "Workspace Platform Starter - v13.1.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -226,7 +226,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						},
 						"dark": {
 							"brandPrimary": "#0A76D3",
@@ -254,7 +256,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						}
 					}
 				}
@@ -285,7 +289,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "13.0.0"
+				"workspace": "13.1.5"
 			},
 			"versionWindow": {
 				"name": "versioning",
