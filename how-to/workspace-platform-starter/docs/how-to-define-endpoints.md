@@ -80,7 +80,6 @@ Endpoints can be defined as:
 - app sources - see [How To Define Apps](./how-to-define-apps.md)
 - workspaces source - see [How To Workspace Platform Starter Management](./how-to-workspace-platform-starter-management.md)
 - page source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
-- page bounds source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
 - share source - see [How To Workspace Platform Starter And Browser Sharing](./how-to-workspace-platform-starter-browser-page-sharing.md)
 - integration preferences source with integration management - see [How To Customize Home](./how-to-customize-home.md)
 - connection to your platform verification - see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)

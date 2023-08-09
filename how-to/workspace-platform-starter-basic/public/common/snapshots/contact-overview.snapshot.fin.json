@@ -1,0 +1,703 @@
+{
+	"windows": [
+		{
+			"accelerator": {
+				"devtools": false,
+				"zoom": false,
+				"reload": false,
+				"reloadIgnoringCache": false
+			},
+			"alphaMask": {
+				"blue": -1,
+				"green": -1,
+				"red": -1
+			},
+			"alwaysOnBottom": false,
+			"alwaysOnTop": false,
+			"api": {
+				"iframe": {
+					"crossOriginInjection": false,
+					"sameOriginInjection": true,
+					"enableDeprecatedSharedName": false
+				}
+			},
+			"applicationIcon": "",
+			"aspectRatio": 0,
+			"backgroundThrottling": true,
+			"contentCreation": {
+				"rules": []
+			},
+			"contentNavigation": {
+				"whitelist": ["<all_urls>"],
+				"blacklist": []
+			},
+			"contentRedirect": {
+				"whitelist": ["<all_urls>"],
+				"blacklist": []
+			},
+			"contextMenuSettings": {
+				"enable": true,
+				"devtools": true,
+				"reload": false
+			},
+			"cornerRounding": {
+				"height": 8,
+				"width": 8
+			},
+			"enableJumpList": false,
+			"defaultHeight": 800,
+			"defaultWidth": 932,
+			"draggable": false,
+			"experimental": {
+				"api": {
+					"batching": {
+						"renderer": {
+							"enabled": false,
+							"maxSize": 1.7976931348623157e308,
+							"ttl": 0
+						}
+					},
+					"breadcrumbs": false,
+					"iframe": {
+						"crossOriginInjection": false,
+						"sameOriginInjection": true,
+						"enableDeprecatedSharedName": false
+					}
+				},
+				"v2Api": true,
+				"showFavicons": true,
+				"defaultFaviconUrl": "https://cdn.openfin.co/workspace/5.5.0/icons/defaultFavicon.svg"
+			},
+			"frame": false,
+			"icon": "http://localhost:8080/favicon.ico",
+			"maxHeight": -1,
+			"maxWidth": -1,
+			"maximizable": true,
+			"minHeight": 200,
+			"minWidth": 200,
+			"minimizable": true,
+			"opacity": 1,
+			"resizable": true,
+			"resize": true,
+			"resizeRegion": {
+				"bottomRightCorner": 20,
+				"size": 7,
+				"sides": {
+					"top": true,
+					"right": true,
+					"bottom": true,
+					"left": true
+				}
+			},
+			"saveWindowState": false,
+			"shadow": false,
+			"showTaskbarIcon": true,
+			"showBackgroundImages": false,
+			"smallWindow": false,
+			"spellCheck": false,
+			"state": "normal",
+			"taskbarIcon": "",
+			"transparent": false,
+			"waitForPageLoad": false,
+			"backgroundColor": "#FAFBFE",
+			"fdc3InteropApi": "",
+			"title": "Customers",
+			"height": 800,
+			"width": 932,
+			"center": false,
+			"x": 1901,
+			"y": -447,
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
+					}
+				}
+			},
+			"preloadScripts": [],
+			"layout": {
+				"settings": {
+					"hasHeaders": true,
+					"constrainDragToContainer": true,
+					"reorderEnabled": true,
+					"selectionEnabled": false,
+					"popoutWholeStack": false,
+					"blockedPopoutsThrowError": true,
+					"closePopoutsOnUnload": true,
+					"showPopoutIcon": false,
+					"showMaximiseIcon": false,
+					"showCloseIcon": false,
+					"responsiveMode": "onload",
+					"tabOverlapAllowance": 0,
+					"reorderOnTabMenuClick": true,
+					"tabControlOffset": 10,
+					"constrainDragToHeaders": false,
+					"preventDragOut": false,
+					"preventDragIn": false
+				},
+				"dimensions": {
+					"borderWidth": 3,
+					"borderGrabWidth": 15,
+					"minItemHeight": 10,
+					"minItemWidth": 10,
+					"headerHeight": 30,
+					"dragProxyWidth": 300,
+					"dragProxyHeight": 200
+				},
+				"labels": {
+					"close": "close",
+					"maximise": "maximise",
+					"minimise": "minimise",
+					"popout": "open in new window",
+					"popin": "pop in",
+					"tabDropdown": "additional tabs"
+				},
+				"content": [
+					{
+						"type": "row",
+						"isClosable": true,
+						"reorderEnabled": true,
+						"title": "",
+						"content": [
+							{
+								"type": "column",
+								"width": 100,
+								"isClosable": true,
+								"reorderEnabled": true,
+								"title": "",
+								"content": [
+									{
+										"type": "row",
+										"height": 65.83442838370564,
+										"isClosable": true,
+										"reorderEnabled": true,
+										"title": "",
+										"content": [
+											{
+												"type": "stack",
+												"width": 50,
+												"height": 100,
+												"isClosable": true,
+												"reorderEnabled": true,
+												"title": "",
+												"activeItemIndex": 0,
+												"content": [
+													{
+														"type": "component",
+														"componentName": "view",
+														"componentState": {
+															"bounds": {
+																"x": 1,
+																"y": 1,
+																"width": 0,
+																"height": 0
+															},
+															"contextMenu": true,
+															"detachOnClose": false,
+															"isClosable": true,
+															"preventDragOut": false,
+															"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
+															"componentName": "view",
+															"fdc3InteropApi": "1.2",
+															"interop": {
+																"currentContextGroup": "green"
+															},
+															"preloadScripts": [
+																{
+																	"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																}
+															],
+															"hotkeys": [
+																{
+																	"command": "stack.nextTab",
+																	"keys": "Ctrl+Tab"
+																},
+																{
+																	"command": "stack.previousTab",
+																	"keys": "Ctrl+Shift+Tab"
+																},
+																{
+																	"command": "view.zoomIn",
+																	"keys": "Ctrl+="
+																},
+																{
+																	"command": "view.zoomInNumPad",
+																	"keys": "Ctrl+numadd"
+																},
+																{
+																	"command": "view.zoomOut",
+																	"keys": "Ctrl+-"
+																},
+																{
+																	"command": "view.zoomOutNumPad",
+																	"keys": "Ctrl+numsub"
+																},
+																{
+																	"command": "view.zoomReset",
+																	"keys": "Ctrl+0"
+																},
+																{
+																	"command": "view.detach",
+																	"keys": "Ctrl+Shift+D"
+																},
+																{
+																	"command": "view.focusLeft",
+																	"keys": "Ctrl+Shift+Left"
+																},
+																{
+																	"command": "view.focusRight",
+																	"keys": "Ctrl+Shift+Right"
+																},
+																{
+																	"command": "view.focusUp",
+																	"keys": "Ctrl+Shift+Up"
+																},
+																{
+																	"command": "view.focusDown",
+																	"keys": "Ctrl+Shift+Down"
+																},
+																{
+																	"command": "stack.nth-tab-1",
+																	"keys": "Ctrl+1"
+																},
+																{
+																	"command": "stack.nth-tab-2",
+																	"keys": "Ctrl+2"
+																},
+																{
+																	"command": "stack.nth-tab-3",
+																	"keys": "Ctrl+3"
+																},
+																{
+																	"command": "stack.nth-tab-4",
+																	"keys": "Ctrl+4"
+																},
+																{
+																	"command": "stack.nth-tab-5",
+																	"keys": "Ctrl+5"
+																},
+																{
+																	"command": "stack.nth-tab-6",
+																	"keys": "Ctrl+6"
+																},
+																{
+																	"command": "stack.nth-tab-7",
+																	"keys": "Ctrl+7"
+																},
+																{
+																	"command": "stack.nth-tab-8",
+																	"keys": "Ctrl+8"
+																},
+																{
+																	"command": "stack.nth-tab-9",
+																	"keys": "Ctrl+9"
+																}
+															],
+															"backgroundThrottling": true,
+															"autoResize": {
+																"width": false,
+																"height": false
+															},
+															"initialUrl": "http://localhost:8080/common/views/contact/participant-summary/index.html",
+															"processAffinity": "x",
+															"zoomLevel": 0
+														},
+														"isClosable": true,
+														"reorderEnabled": true,
+														"title": "Participant Summary"
+													}
+												]
+											},
+											{
+												"type": "stack",
+												"width": 50,
+												"height": 100,
+												"isClosable": true,
+												"reorderEnabled": true,
+												"title": "",
+												"activeItemIndex": 0,
+												"content": [
+													{
+														"type": "component",
+														"componentName": "view",
+														"componentState": {
+															"bounds": {
+																"x": 1,
+																"y": 1,
+																"width": 0,
+																"height": 0
+															},
+															"contextMenu": true,
+															"detachOnClose": false,
+															"isClosable": true,
+															"preventDragOut": false,
+															"url": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
+															"componentName": "view",
+															"fdc3InteropApi": "1.2",
+															"interop": {
+																"currentContextGroup": "green"
+															},
+															"preloadScripts": [
+																{
+																	"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																}
+															],
+															"hotkeys": [
+																{
+																	"command": "stack.nextTab",
+																	"keys": "Ctrl+Tab"
+																},
+																{
+																	"command": "stack.previousTab",
+																	"keys": "Ctrl+Shift+Tab"
+																},
+																{
+																	"command": "view.zoomIn",
+																	"keys": "Ctrl+="
+																},
+																{
+																	"command": "view.zoomInNumPad",
+																	"keys": "Ctrl+numadd"
+																},
+																{
+																	"command": "view.zoomOut",
+																	"keys": "Ctrl+-"
+																},
+																{
+																	"command": "view.zoomOutNumPad",
+																	"keys": "Ctrl+numsub"
+																},
+																{
+																	"command": "view.zoomReset",
+																	"keys": "Ctrl+0"
+																},
+																{
+																	"command": "view.detach",
+																	"keys": "Ctrl+Shift+D"
+																},
+																{
+																	"command": "view.focusLeft",
+																	"keys": "Ctrl+Shift+Left"
+																},
+																{
+																	"command": "view.focusRight",
+																	"keys": "Ctrl+Shift+Right"
+																},
+																{
+																	"command": "view.focusUp",
+																	"keys": "Ctrl+Shift+Up"
+																},
+																{
+																	"command": "view.focusDown",
+																	"keys": "Ctrl+Shift+Down"
+																},
+																{
+																	"command": "stack.nth-tab-1",
+																	"keys": "Ctrl+1"
+																},
+																{
+																	"command": "stack.nth-tab-2",
+																	"keys": "Ctrl+2"
+																},
+																{
+																	"command": "stack.nth-tab-3",
+																	"keys": "Ctrl+3"
+																},
+																{
+																	"command": "stack.nth-tab-4",
+																	"keys": "Ctrl+4"
+																},
+																{
+																	"command": "stack.nth-tab-5",
+																	"keys": "Ctrl+5"
+																},
+																{
+																	"command": "stack.nth-tab-6",
+																	"keys": "Ctrl+6"
+																},
+																{
+																	"command": "stack.nth-tab-7",
+																	"keys": "Ctrl+7"
+																},
+																{
+																	"command": "stack.nth-tab-8",
+																	"keys": "Ctrl+8"
+																},
+																{
+																	"command": "stack.nth-tab-9",
+																	"keys": "Ctrl+9"
+																}
+															],
+															"backgroundThrottling": true,
+															"autoResize": {
+																"width": false,
+																"height": false
+															},
+															"initialUrl": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
+															"processAffinity": "x",
+															"zoomLevel": 0
+														},
+														"isClosable": true,
+														"reorderEnabled": true,
+														"title": "Investments & Models"
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "row",
+										"height": 34.16557161629436,
+										"isClosable": true,
+										"reorderEnabled": true,
+										"title": "",
+										"content": [
+											{
+												"type": "column",
+												"width": 100,
+												"isClosable": true,
+												"reorderEnabled": true,
+												"title": "",
+												"content": [
+													{
+														"type": "stack",
+														"width": 100,
+														"height": 100,
+														"isClosable": true,
+														"reorderEnabled": true,
+														"title": "",
+														"activeItemIndex": 0,
+														"content": [
+															{
+																"type": "component",
+																"componentName": "view",
+																"componentState": {
+																	"bounds": {
+																		"x": 1,
+																		"y": 1,
+																		"width": 0,
+																		"height": 0
+																	},
+																	"contextMenu": true,
+																	"detachOnClose": false,
+																	"isClosable": true,
+																	"preventDragOut": false,
+																	"url": "http://localhost:8080/common/views/contact/participant-history/index.html",
+																	"componentName": "view",
+																	"fdc3InteropApi": "1.2",
+																	"interop": {
+																		"currentContextGroup": "green"
+																	},
+																	"preloadScripts": [
+																		{
+																			"url": "http://localhost:8080/common/style/style-changed-preload.js"
+																		}
+																	],
+																	"hotkeys": [
+																		{
+																			"command": "stack.nextTab",
+																			"keys": "Ctrl+Tab"
+																		},
+																		{
+																			"command": "stack.previousTab",
+																			"keys": "Ctrl+Shift+Tab"
+																		},
+																		{
+																			"command": "view.zoomIn",
+																			"keys": "Ctrl+="
+																		},
+																		{
+																			"command": "view.zoomInNumPad",
+																			"keys": "Ctrl+numadd"
+																		},
+																		{
+																			"command": "view.zoomOut",
+																			"keys": "Ctrl+-"
+																		},
+																		{
+																			"command": "view.zoomOutNumPad",
+																			"keys": "Ctrl+numsub"
+																		},
+																		{
+																			"command": "view.zoomReset",
+																			"keys": "Ctrl+0"
+																		},
+																		{
+																			"command": "view.detach",
+																			"keys": "Ctrl+Shift+D"
+																		},
+																		{
+																			"command": "view.focusLeft",
+																			"keys": "Ctrl+Shift+Left"
+																		},
+																		{
+																			"command": "view.focusRight",
+																			"keys": "Ctrl+Shift+Right"
+																		},
+																		{
+																			"command": "view.focusUp",
+																			"keys": "Ctrl+Shift+Up"
+																		},
+																		{
+																			"command": "view.focusDown",
+																			"keys": "Ctrl+Shift+Down"
+																		},
+																		{
+																			"command": "stack.nth-tab-1",
+																			"keys": "Ctrl+1"
+																		},
+																		{
+																			"command": "stack.nth-tab-2",
+																			"keys": "Ctrl+2"
+																		},
+																		{
+																			"command": "stack.nth-tab-3",
+																			"keys": "Ctrl+3"
+																		},
+																		{
+																			"command": "stack.nth-tab-4",
+																			"keys": "Ctrl+4"
+																		},
+																		{
+																			"command": "stack.nth-tab-5",
+																			"keys": "Ctrl+5"
+																		},
+																		{
+																			"command": "stack.nth-tab-6",
+																			"keys": "Ctrl+6"
+																		},
+																		{
+																			"command": "stack.nth-tab-7",
+																			"keys": "Ctrl+7"
+																		},
+																		{
+																			"command": "stack.nth-tab-8",
+																			"keys": "Ctrl+8"
+																		},
+																		{
+																			"command": "stack.nth-tab-9",
+																			"keys": "Ctrl+9"
+																		}
+																	],
+																	"backgroundThrottling": true,
+																	"autoResize": {
+																		"width": false,
+																		"height": false
+																	},
+																	"initialUrl": "http://localhost:8080/common/views/contact/participant-history/index.html",
+																	"processAffinity": "x",
+																	"zoomLevel": 0
+																},
+																"isClosable": true,
+																"reorderEnabled": true,
+																"title": "Participant History"
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				],
+				"isClosable": true,
+				"reorderEnabled": true,
+				"title": "",
+				"openPopouts": [],
+				"maximisedItemId": null
+			},
+			"hotkeys": [
+				{
+					"command": "stack.nextTab",
+					"keys": "Ctrl+Tab"
+				},
+				{
+					"command": "stack.previousTab",
+					"keys": "Ctrl+Shift+Tab"
+				},
+				{
+					"command": "view.zoomIn",
+					"keys": "Ctrl+="
+				},
+				{
+					"command": "view.zoomInNumPad",
+					"keys": "Ctrl+numadd"
+				},
+				{
+					"command": "view.zoomOut",
+					"keys": "Ctrl+-"
+				},
+				{
+					"command": "view.zoomOutNumPad",
+					"keys": "Ctrl+numsub"
+				},
+				{
+					"command": "view.zoomReset",
+					"keys": "Ctrl+0"
+				},
+				{
+					"command": "view.detach",
+					"keys": "Ctrl+Shift+D"
+				},
+				{
+					"command": "view.focusLeft",
+					"keys": "Ctrl+Shift+Left"
+				},
+				{
+					"command": "view.focusRight",
+					"keys": "Ctrl+Shift+Right"
+				},
+				{
+					"command": "view.focusUp",
+					"keys": "Ctrl+Shift+Up"
+				},
+				{
+					"command": "view.focusDown",
+					"keys": "Ctrl+Shift+Down"
+				},
+				{
+					"command": "stack.nth-tab-1",
+					"keys": "Ctrl+1"
+				},
+				{
+					"command": "stack.nth-tab-2",
+					"keys": "Ctrl+2"
+				},
+				{
+					"command": "stack.nth-tab-3",
+					"keys": "Ctrl+3"
+				},
+				{
+					"command": "stack.nth-tab-4",
+					"keys": "Ctrl+4"
+				},
+				{
+					"command": "stack.nth-tab-5",
+					"keys": "Ctrl+5"
+				},
+				{
+					"command": "stack.nth-tab-6",
+					"keys": "Ctrl+6"
+				},
+				{
+					"command": "stack.nth-tab-7",
+					"keys": "Ctrl+7"
+				},
+				{
+					"command": "stack.nth-tab-8",
+					"keys": "Ctrl+8"
+				},
+				{
+					"command": "stack.nth-tab-9",
+					"keys": "Ctrl+9"
+				}
+			],
+			"includeInSnapshots": true,
+			"closeOnLastViewRemoved": false
+		}
+	]
+}

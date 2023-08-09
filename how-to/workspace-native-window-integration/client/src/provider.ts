@@ -207,7 +207,7 @@ async function getHomeSearchResults(query: string): Promise<HomeSearchResult[]> 
 				shortDescription: app.description,
 				template: CLITemplate.SimpleText,
 				templateContent: app.description
-			} as HomeSearchResult)
+			}) as HomeSearchResult
 	);
 
 	// Add the workspaces to the result list
@@ -231,7 +231,7 @@ async function getHomeSearchResults(query: string): Promise<HomeSearchResult[]> 
 							openText: "Launch"
 						}
 					}
-				} as HomeSearchResult)
+				}) as HomeSearchResult
 		)
 	);
 

@@ -7,6 +7,7 @@ import {
 	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
+import * as Notifications from "@openfin/workspace/notifications";
 import { getApps, launchApp } from "./apps";
 
 const PLATFORM_ID = "use-theming-basic";
@@ -74,7 +75,9 @@ async function initializeWorkspacePlatform(): Promise<void> {
 						contentBackground2: "#000000",
 						contentBackground3: "#000000",
 						contentBackground4: "#000000",
-						contentBackground5: "#000000"
+						contentBackground5: "#000000",
+						linkDefault: "#6CADE5",
+						linkHover: "#0A76D3"
 					},
 					dark: {
 						brandPrimary: "#0A76D3",
@@ -102,7 +105,9 @@ async function initializeWorkspacePlatform(): Promise<void> {
 						contentBackground2: "#000000",
 						contentBackground3: "#000000",
 						contentBackground4: "#000000",
-						contentBackground5: "#000000"
+						contentBackground5: "#000000",
+						linkDefault: "#6CADE5",
+						linkHover: "#0A76D3"
 					}
 				}
 			}
@@ -143,9 +148,16 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 	await Home.show();
 
+	await Notifications.registerPlatform({
+		id: PLATFORM_ID,
+		icon: PLATFORM_ICON,
+		title: PLATFORM_TITLE
+	});
+
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
 		await Home.deregister(PLATFORM_ID);
+		await Notifications.deregisterPlatform(PLATFORM_ID);
 		await fin.Platform.getCurrentSync().quit();
 	});
 }
@@ -188,7 +200,7 @@ async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void>
 	const themes = await platform.Theme.getThemes();
 
 	let scheme: "dark" | "light";
-	if (schemeType === ColorSchemeOptionType.System) {
+	if (schemeType === ColorSchemeOptionType.System || !schemeType) {
 		scheme = getSystemPreferredColorScheme();
 	} else {
 		scheme = schemeType;

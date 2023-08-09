@@ -12,7 +12,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleAuthProviderOptions>;
+	private _definition: ModuleDefinition<ExampleAuthProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleAuthProvider implements AuthProvider<ExampleAuthProviderOpti
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Map a subscription id to an event.

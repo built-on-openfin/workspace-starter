@@ -6,7 +6,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { BrowserWindowModule, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
@@ -28,13 +28,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 		view: OpenFin.PlatformViewCreationOptions | string,
 		targetIdentity?: OpenFin.Identity
 	): Promise<OpenFin.View>;
-	/**
-	 * Launch a page in the workspace.
-	 * @param page The page to launch.
-	 * @param bounds The optional bounds for the page.
-	 * @returns The window created.
-	 */
-	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 	/**
 	 * Launch a snapshot.
 	 * @param snapshotUrl The snapshot url.
@@ -99,7 +92,7 @@ export interface IntegrationProviderOptions extends ModuleList<IntegrationModule
 /**
  * Integration definition.
  */
-export interface IntegrationModuleDefinition extends ModuleDefinition {
+export interface IntegrationModuleDefinition<O = unknown> extends ModuleDefinition<O> {
 	/**
 	 * Does the integration start automatically if enabled (default is true).
 	 */
@@ -109,6 +102,10 @@ export interface IntegrationModuleDefinition extends ModuleDefinition {
 	 * and its results will always be included.
 	 */
 	excludeFromSourceFilter?: boolean;
+	/**
+	 * A number which is used as the base score when sorting module results.
+	 */
+	baseScore?: number;
 	/**
 	 * This is the old property, it will be remapped to url.
 	 */

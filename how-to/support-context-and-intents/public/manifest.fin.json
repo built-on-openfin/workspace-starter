@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Support Intents & Context - v13.0.0",
+		"name": "Support Intents & Context - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -57,7 +57,6 @@
 			"appSourceUrls": [
 				"http://localhost:8080/common/apps-contact.json",
 				"http://localhost:8080/common/apps-interop.json",
-				"http://localhost:8080/common/apps-native.json",
 				"http://localhost:8080/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,

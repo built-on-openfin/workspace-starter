@@ -25,17 +25,12 @@ Instead of modifying this file directly we allow you to specify the destination 
 
 Endpoints support an action and request/response function (see [How To Defined Endpoints](./how-to-define-endpoints.md)). Workspace platform starter checks to see if you have specified the following endpoints:
 
+- page-list
 - page-get
 - page-set
 - page-remove
 
-We also have some additional endpoints that provide supporting information when a page is saved (such as the height/width and position of the window the page resided in at the point of save). **Note**: In the future we are looking at having this information stored as part of the snapshot so these endpoints will not be needed:
-
-- page-bounds-get
-- page-bounds-set
-- page-bounds-remove
-
-If you provide endpoints with these ids then workspace platform starter will use them instead of the default indexedDB implementation and in the case of the page-bounds endpoints it will capture additional supporting information if these endpoints are defined.
+If you provide endpoints with these ids then workspace platform starter will use them instead of the default indexedDB implementation.
 
 This frees you up to fetch and save your pages from/to anywhere in any way that works for you.
 
@@ -55,6 +50,15 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
    }
   ],
   "endpoints": [
+   {
+    "id": "page-list",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "GET",
+     "dataType": "page"
+    }
+   },
    {
     "id": "page-get",
     "type": "module",
@@ -81,33 +85,6 @@ Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) 
      "method": "REMOVE",
      "dataType": "page"
     }
-   },
-   {
-    "id": "page-bounds-get",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "GET",
-     "dataType": "page-bounds"
-    }
-   },
-   {
-    "id": "page-bounds-set",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "SET",
-     "dataType": "page-bounds"
-    }
-   },
-   {
-    "id": "page-bounds-remove",
-    "type": "module",
-    "typeId": "local-storage",
-    "options": {
-     "method": "REMOVE",
-     "dataType": "page-bounds"
-    }
    }
   ]
  },
@@ -119,6 +96,18 @@ As you can see from the configuration above:
 2. Each endpoint definition references that module using type and typeId and passes options specific to the particular endpoint.
 
 If you use the live launch section on the [Main Page](../README.md) and launch the second example and save a page you will be able to use dev tools to see that it is saved to localstorage instead of indexedDB. You can then create your own endpoints with custom logic or use our fetch builtin implementation to save and fetch your pages.
+
+## Data storage
+
+The endpoint storage maps the page data to simplify it, you can disable this mapping by setting `disableStorageMapping` in platform storage.
+
+```json
+"customSettings": {
+   "platformProvider": {
+      "disableStorageMapping": true
+    }
+}
+```
 
 ## Can I Manage Pages From Home?
 

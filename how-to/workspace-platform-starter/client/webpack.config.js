@@ -620,6 +620,34 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/framework/fdc3/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'fdc3.mapper.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'common', 'lib', 'fdc3')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

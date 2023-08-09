@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
-	"version": "13.0.0",
+	"version": "13.1.5",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"main": "dist/js/provider.bundle.js",
 	"types": "client/types/provider.d.ts",
@@ -23,13 +23,13 @@
 		"setup": "cd ../../ && npm install && cd how-to/workspace-platform-starter && npm run build",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
 		"generate-schema": "npm run generate-settings-schema && npm run generate-fdc3v2-schema && npm run generate-fdc3v1-schema && npm run generate-platform-apps-schema && npm run generate-view-options-schema && npm run generate-window-options-schema && npm run generate-snapshot-options-schema",
-		"generate-settings-schema": "npx typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",
-		"generate-fdc3v2-schema": "npx typescript-json-schema client/tsconfig.schema.json FDC3VTwoPointZeroAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v2.0-appd.schema.json",
-		"generate-fdc3v1-schema": "npx typescript-json-schema client/tsconfig.schema.json FDC3VOnePointTwoAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v1.2-appd.schema.json",
-		"generate-platform-apps-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformApps --topRef --required --noExtraProps --aliasRefs --out public/schemas/platform-apps.schema.json",
-		"generate-view-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformViewOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/view.schema.json",
-		"generate-window-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
-		"generate-snapshot-options-schema": "npx typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
+		"generate-settings-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",
+		"generate-fdc3v2-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VTwoPointZeroAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v2.0-appd.schema.json",
+		"generate-fdc3v1-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VOnePointTwoAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v1.2-appd.schema.json",
+		"generate-platform-apps-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformApps --topRef --required --noExtraProps --aliasRefs --out public/schemas/platform-apps.schema.json",
+		"generate-view-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformViewOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/view.schema.json",
+		"generate-window-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
+		"generate-snapshot-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
 		"generate-module": "node ./templates/scripts/generate-module.mjs"
@@ -43,9 +43,9 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
-		"@openfin/workspace": "13.0.7",
-		"@openfin/workspace-platform": "13.0.7",
-		"chart.js": "^4.3.0",
+		"@openfin/workspace": "13.1.5",
+		"@openfin/workspace-platform": "13.1.5",
+		"chart.js": "^4.3.3",
 		"csstype": "^3.1.2",
 		"node-emoji": "^1.11.0"
 	},
@@ -53,11 +53,11 @@
 		"@openfin/core": "31.75.4",
 		"@types/express": "^4.17.17",
 		"express": "^4.18.2",
-		"fast-glob": "^3.2.12",
+		"fast-glob": "^3.3.1",
 		"openfin-adapter": "31.75.4",
-		"ts-loader": "^9.4.3",
-		"typescript": "^5.1.3",
-		"webpack": "^5.87.0",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6",
+		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}
 }

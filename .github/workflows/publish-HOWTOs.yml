@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RELEASE_BRANCH_PREFIX: 'workspace/'
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

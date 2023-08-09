@@ -7,7 +7,9 @@ import type {
 	FetchOptions
 } from "./shapes/endpoint-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import { isEmpty } from "./utils";
+import { isEmpty, isStringValue, objectClone } from "./utils";
+
+const SUPPORTED_HTTP_METHODS: string[] = ["GET", "POST", "DELETE", "PUT", "PATCH"];
 
 const logger = createLogger("Endpoint");
 const endpointDefinitions: EndpointDefinition[] = [];
@@ -64,14 +66,18 @@ export async function action<T>(endpointId: string, request?: T): Promise<boolea
 		const { url, ...options } = endpoint.options;
 		if (url) {
 			const req = getRequestOptions(url, options, request);
-			if (req.options.method !== "GET" && req.options.method !== "POST") {
+			if (!isStringValue(req.options.method) || !SUPPORTED_HTTP_METHODS.includes(req.options.method)) {
 				logger.warn(
 					`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 				);
 				return false;
 			}
-			const response = await fetch(req.url, req.options);
-			return response.ok;
+			try {
+				const response = await fetch(req.url, req.options);
+				return response.ok;
+			} catch (err) {
+				logger.error(`${endpointId} action returned an error during fetch`, err);
+			}
 		}
 	} else if (endpointType === "module") {
 		const resolvedEndpoint = await getModuleEndpoint(endpoint.typeId);
@@ -105,17 +111,21 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 		const { url, ...options } = endpoint.options;
 		if (url) {
 			const req = getRequestOptions(url, options, request);
-			if (req.options.method !== "GET" && req.options.method !== "POST") {
+			if (!isStringValue(req.options.method) || !SUPPORTED_HTTP_METHODS.includes(req.options.method)) {
 				logger.warn(
 					`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
 				);
 				return;
 			}
-			const response = await fetch(req.url, req.options);
+			try {
+				const response = await fetch(req.url, req.options);
 
-			if (response.ok) {
-				const json = await response.json();
-				return json as R;
+				if (response.ok) {
+					const json = await response.json();
+					return json as R;
+				}
+			} catch (err) {
+				logger.error(`${endpointId} requestResponse returned an error during fetch`, err);
 			}
 		}
 		return;
@@ -173,19 +183,28 @@ function getRequestOptions(
 	options: FetchOptions,
 	request: unknown
 ): { url: string; options: FetchOptions } {
-	if (options.method === "GET") {
-		if (!isEmpty(request)) {
-			const requestParams = request as { [id: string]: string };
-			const keys = Object.keys(requestParams);
-			if (keys.length > 0) {
-				const length = keys.length;
-				for (let i = 0; i < length; i++) {
-					url = url.replace(`[${keys[i]}]`, encodeURIComponent(requestParams[keys[i]]));
-				}
+	const requestClone = objectClone(request) as { [id: string]: string };
+
+	if (!isEmpty(requestClone)) {
+		// Replace any url params with request object parameters
+		// and remove them from the requestClone for all HTTP methods
+		const keys = Object.keys(requestClone);
+		for (const key of keys) {
+			const substituteKey = `[${key}]`;
+			if (url.includes(substituteKey)) {
+				url = url.replace(substituteKey, encodeURIComponent(requestClone[key]));
+				delete requestClone[key];
 			}
 		}
-	} else if (options.method === "POST" && !isEmpty(request)) {
-		options.body = JSON.stringify(request);
+
+		options.headers = options.headers ?? {};
+		options.headers.Accept = "application/json";
+
+		// Send the body as JSON only for post, put and patch
+		if (options.method === "POST" || options.method === "PUT" || options.method === "PATCH") {
+			options.body = JSON.stringify(requestClone);
+			options.headers["Content-Type"] = "application/json";
+		}
 	}
 
 	return { url, options };

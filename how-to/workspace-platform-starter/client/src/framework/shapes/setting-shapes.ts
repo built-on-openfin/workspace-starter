@@ -13,6 +13,7 @@ import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
 import type { LifecycleProviderOptions } from "./lifecycle-shapes";
 import type { LoggerProviderOptions } from "./logger-shapes";
+import type { LowCodeIntegrationProviderOptions } from "./low-code-integration-shapes";
 import type { MenusProviderOptions } from "./menu-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
@@ -78,6 +79,11 @@ export interface CustomSettings {
 	 * The integration provider options.
 	 */
 	integrationProvider?: IntegrationProviderOptions;
+
+	/**
+	 * The low code integration provider options.
+	 */
+	lowCodeIntegrationProvider?: LowCodeIntegrationProviderOptions;
 
 	/**
 	 * The notification provider options.

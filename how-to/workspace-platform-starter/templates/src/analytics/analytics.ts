@@ -14,7 +14,7 @@ export class ExampleAnalyticsProvider implements AnalyticsModule<ExampleAnalytic
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleAnalyticsProviderOptions>;
+	private _definition: ModuleDefinition<ExampleAnalyticsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -26,7 +26,7 @@ export class ExampleAnalyticsProvider implements AnalyticsModule<ExampleAnalytic
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

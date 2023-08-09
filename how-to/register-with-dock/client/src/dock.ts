@@ -52,7 +52,7 @@ export async function register(
 			...buildDockConfiguration()
 		});
 		console.log(registration);
-		console.log("Dock provider initialized.");
+		console.log("Dock provider initialised.");
 		return registration;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content dock provider", err);

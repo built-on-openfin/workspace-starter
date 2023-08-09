@@ -15,7 +15,7 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleLogProviderOptions>;
+	private _definition: ModuleDefinition<ExampleLogProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -27,7 +27,7 @@ export class ExampleLogProvider implements LogProvider<ExampleLogProviderOptions
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

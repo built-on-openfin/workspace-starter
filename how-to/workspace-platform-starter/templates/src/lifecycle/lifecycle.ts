@@ -12,7 +12,7 @@ export class ExampleLifecycleProvider implements Lifecycle<ExampleLifecycleProvi
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleLifecycleProviderOptions>;
+	private _definition: ModuleDefinition<ExampleLifecycleProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleLifecycleProvider implements Lifecycle<ExampleLifecycleProvi
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

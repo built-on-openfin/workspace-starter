@@ -157,6 +157,56 @@
 		]
 	},
 	{
+		"name": "integrate-with-ms365-low-code",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code/public",
+				"destFolder": "how-to/integrate-with-ms365-low-code/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code/public/common",
+				"destFolder": "how-to/integrate-with-ms365-low-code/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code/scripts",
+				"destFolder": "how-to/integrate-with-ms365-low-code/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code/client/types",
+				"destFolder": "how-to/integrate-with-ms365-low-code/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "integrate-with-ms365-low-code-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
+				"files": ["dos.json"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
 		"name": "integrate-with-rss",
 		"fileGroups": [
 			{
@@ -445,6 +495,7 @@
 					"style/style-changed-preload.js",
 					"views/platform/of-info.view.fin.json",
 					"views/platform/of-info/**/*",
+					"lib/**/*",
 					"dos.json"
 				]
 			},
@@ -566,9 +617,6 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/support-context-and-intents/public/common",
 				"files": [
-					"assets/native-interop-example.zip",
-					"images/native/icon-winform-interop.png",
-					"images/native/icon-notepad.png",
 					"images/icon-blue.png",
 					"snapshots/contact-overview.snapshot.fin.json",
 					"style/app.css",
@@ -725,6 +773,44 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/workspace-native-window-integration/client/types",
+				"files": ["fin.d.ts"]
+			}
+		]
+	},
+	{
+		"name": "workspace-platform-starter-basic",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/workspace-platform-starter/public",
+				"destFolder": "how-to/workspace-platform-starter-basic/public",
+				"files": ["favicon.ico"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/public/common",
+				"destFolder": "how-to/workspace-platform-starter-basic/public/common",
+				"files": [
+					"images/icon-blue.png",
+					"images/previews/of-info.png",
+					"images/previews/contact/**/*",
+					"snapshots/contact-overview.snapshot.fin.json",
+					"style/app.css",
+					"style/style-changed-preload.js",
+					"views/contact/**/*",
+					"views/platform/new-tab.view.fin.json",
+					"views/platform/of-info.view.fin.json",
+					"views/platform/new-tab/**/*",
+					"views/platform/of-info/**/*",
+					"dos.json"
+				]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/scripts",
+				"destFolder": "how-to/workspace-platform-starter-basic/scripts",
+				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter/client/types",
+				"destFolder": "how-to/workspace-platform-starter-basic/client/types",
 				"files": ["fin.d.ts"]
 			}
 		]

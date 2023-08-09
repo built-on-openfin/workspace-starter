@@ -1,5 +1,6 @@
+import type OpenFin from "@openfin/core";
 import type { InteropClient } from "@openfin/core/src/api/interop";
-import type { CustomPaletteSet } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { LoggerCreator } from "./logger-shapes";
@@ -109,6 +110,13 @@ export interface ModuleHelpers {
 	 * @returns Nothing.
 	 */
 	launchApp?(appId: string): Promise<void>;
+	/**
+	 * Launch a page in the workspace.
+	 * @param page The page to launch.
+	 * @param bounds The optional bounds for the page.
+	 * @returns The window created.
+	 */
+	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.

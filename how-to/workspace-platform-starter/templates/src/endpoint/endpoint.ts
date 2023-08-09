@@ -11,7 +11,7 @@ export class ExampleEndpointProvider implements Endpoint<ExampleEndpointProvider
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleEndpointProviderOptions>;
+	private _definition: ModuleDefinition<ExampleEndpointProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -23,7 +23,7 @@ export class ExampleEndpointProvider implements Endpoint<ExampleEndpointProvider
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.

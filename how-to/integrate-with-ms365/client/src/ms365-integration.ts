@@ -53,6 +53,12 @@ import type {
  */
 export class Microsoft365Integration {
 	/**
+	 * The default base score for ordering.
+	 * @internal
+	 */
+	private static readonly _DEFAULT_BASE_SCORE = 500000;
+
+	/**
 	 * The key to use for a call key action.
 	 * @internal
 	 */
@@ -146,7 +152,9 @@ export class Microsoft365Integration {
 	 * The module definition.
 	 * @internal
 	 */
-	private _moduleDefinition: { id: string; title: string; data: Microsoft365Settings } | undefined;
+	private _definition:
+		| { id: string; title: string; baseScore?: number; data: Microsoft365Settings }
+		| undefined;
 
 	/**
 	 * The settings for the integration.
@@ -223,15 +231,15 @@ export class Microsoft365Integration {
 		loggerCreator: (group: string) => Logger,
 		helpers: IntegrationHelpers
 	): Promise<void> {
-		this._moduleDefinition = definition;
+		this._definition = definition;
 		this._settings = definition.data;
 		this._integrationHelpers = helpers;
 
-		this._moduleDefinition.title ??= "Microsoft 365";
+		this._definition.title ??= "Microsoft 365";
 		this._settings.graphExplorerPrefix ??= "ms";
 
-		this._logger = loggerCreator(this._moduleDefinition.title);
-		this._logger.info(`Initializing ${this._moduleDefinition.title}`);
+		this._logger = loggerCreator(this._definition.title);
+		this._logger.info(`Initializing ${this._definition.title}`);
 
 		if (!this._settings.clientId) {
 			this._logger.error("Configuration is missing clientId");
@@ -303,13 +311,14 @@ export class Microsoft365Integration {
 
 			return [
 				{
-					key: `${this._moduleDefinition?.id}-help1`,
-					title: this._moduleDefinition?.title ?? "",
+					key: `${this._definition?.id}-help1`,
+					score: this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE,
+					title: this._definition?.title ?? "",
 					label: "Help",
 					icon: this._settings?.images.microsoft365,
 					actions: [],
 					data: {
-						providerId: this._moduleDefinition?.id
+						providerId: this._definition?.id
 					},
 					template: CLITemplate.Custom,
 					templateContent: await this._integrationHelpers?.templateHelpers.createHelp(
@@ -322,13 +331,14 @@ export class Microsoft365Integration {
 					)
 				},
 				{
-					key: `${this._moduleDefinition?.id}-help2`,
-					title: `${this._moduleDefinition?.title} Recent`,
+					key: `${this._definition?.id}-help2`,
+					score: this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE,
+					title: `${this._definition?.title} Recent`,
 					label: "Help",
 					icon: this._settings?.images.microsoft365,
 					actions: [],
 					data: {
-						providerId: this._moduleDefinition?.id,
+						providerId: this._definition?.id,
 						populateQuery: "/recent"
 					},
 					template: CLITemplate.Custom,
@@ -536,7 +546,7 @@ export class Microsoft365Integration {
 							for (const teamAndChannels of this._teamsAndChannelsCache) {
 								if (
 									includeOptions.includes("Team") &&
-									(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ||
+									(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ??
 										teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
 								) {
 									homeResults.push(
@@ -552,7 +562,7 @@ export class Microsoft365Integration {
 								if (includeOptions.includes("Channel")) {
 									for (const channel of teamAndChannels.channels) {
 										if (
-											channel.displayName?.toLowerCase().includes(lowerQuery) ||
+											channel.displayName?.toLowerCase().includes(lowerQuery) ??
 											channel.description?.toLowerCase().includes(lowerQuery)
 										) {
 											homeResults.push(
@@ -585,7 +595,7 @@ export class Microsoft365Integration {
 					]);
 				}
 			}
-			lastResponse.revoke(`${this._moduleDefinition?.id}-searching`);
+			lastResponse.revoke(`${this._definition?.id}-searching`);
 		}, 500);
 
 		return {
@@ -686,7 +696,7 @@ export class Microsoft365Integration {
 			}, 0);
 
 			if (this._connectLastResponse) {
-				this._connectLastResponse.revoke(`${this._moduleDefinition?.id}-connect`);
+				this._connectLastResponse.revoke(`${this._definition?.id}-connect`);
 				this._connectLastResponse = undefined;
 			}
 		} catch (err) {
@@ -718,7 +728,7 @@ export class Microsoft365Integration {
 	): Promise<boolean> {
 		switch (actionName) {
 			case Microsoft365Integration._ACTION_CONNECT:
-				lastResponse.revoke(`${this._moduleDefinition?.id}-connect`);
+				lastResponse.revoke(`${this._definition?.id}-connect`);
 				await this.connectToMS365();
 				return true;
 			case Microsoft365Integration._ACTION_TEAMS_CALL:
@@ -921,7 +931,7 @@ export class Microsoft365Integration {
 	 * @returns True if the url was opened.
 	 */
 	private async handleShareContact(actionData: ActionData): Promise<boolean> {
-		if (actionData?.emails && actionData?.emails[0]) {
+		if (actionData?.emails?.[0]) {
 			const fdc3Contact: Fdc3Contact = {
 				type: "fdc3.contact",
 				name: actionData.name,
@@ -1148,8 +1158,9 @@ export class Microsoft365Integration {
 		);
 
 		return {
-			key: `${this._moduleDefinition?.id}-connect`,
-			title: this._moduleDefinition?.title ?? "",
+			key: `${this._definition?.id}-connect`,
+			score: this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE,
+			title: this._definition?.title ?? "",
 			label: "Connect",
 			icon: this._settings?.images.microsoft365,
 			actions: [
@@ -1159,14 +1170,14 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id
+				providerId: this._definition?.id
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
 				layout,
 				data: {
-					title: `${this._moduleDefinition?.title} Connection`,
-					description: `${this._moduleDefinition?.title} failed to connect due to the following error`,
+					title: `${this._definition?.title} Connection`,
+					description: `${this._definition?.title} failed to connect due to the following error`,
 					error: this._connectionError ?? "Unknown connection error",
 					connect: "Connect"
 				}
@@ -1180,12 +1191,13 @@ export class Microsoft365Integration {
 	 */
 	private createSearchingResult(): CLISearchResultLoading<HomeAction> {
 		return {
-			key: `${this._moduleDefinition?.id}-searching`,
+			key: `${this._definition?.id}-searching`,
+			score: this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE,
 			title: "Searching ...",
 			icon: this._settings?.images.microsoft365,
 			actions: [],
 			data: {
-				providerId: this._moduleDefinition?.id
+				providerId: this._definition?.id
 			} as ActionData,
 			template: CLITemplate.Loading,
 			templateContent: ""
@@ -1205,7 +1217,8 @@ export class Microsoft365Integration {
 		response: GraphResponse
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		return {
-			key: `${this._moduleDefinition?.id}-rest`,
+			key: `${this._definition?.id}-rest`,
+			score: this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE,
 			title: "Graph Result",
 			label: response.status === 200 ? "JSON" : "Error",
 			icon: this._settings?.images.microsoft365,
@@ -1216,7 +1229,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				json: response.data
 			} as ActionData,
 			template: CLITemplate.Custom,
@@ -1275,14 +1288,14 @@ export class Microsoft365Integration {
 		}
 
 		return {
-			key: `${this._moduleDefinition?.id}-${obj.id}`,
+			key: `${this._definition?.id}-${obj.id}`,
 			score: this.objectTypeToOrder(objType),
 			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
 			label,
 			icon: mimeIcon ?? this.getThemedIcon(icons[objType], palette),
 			actions: [],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType,
 				obj,
 				state: "loading"
@@ -1469,7 +1482,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${user.id}`,
+			key: `${this._definition?.id}-${user.id}`,
 			score: this.objectTypeToOrder("User"),
 			title: user.displayName ?? "",
 			label: "User",
@@ -1481,7 +1494,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "User",
 				obj: user,
 				emails: [user.mail],
@@ -1680,7 +1693,7 @@ export class Microsoft365Integration {
 		}
 
 		return {
-			key: `${this._moduleDefinition?.id}-${contact.id}`,
+			key: `${this._definition?.id}-${contact.id}`,
 			score: this.objectTypeToOrder("Contact"),
 			title: contact.displayName ?? "",
 			label: "Contact",
@@ -1692,7 +1705,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Contact",
 				obj: contact,
 				emails: [email],
@@ -1764,7 +1777,7 @@ export class Microsoft365Integration {
 	): Promise<CLISearchResultCustom<HomeAction>> {
 		const pairs: { label: string; value: string; wide?: boolean }[] = [];
 
-		if (message.sender?.emailAddress?.name || message.sender?.emailAddress?.address) {
+		if (message.sender?.emailAddress?.name ?? message.sender?.emailAddress?.address) {
 			pairs.push({
 				label: "From",
 				value: message.sender.emailAddress?.name ?? message.sender.emailAddress?.address ?? ""
@@ -1801,7 +1814,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${message.id}`,
+			key: `${this._definition?.id}-${message.id}`,
 			score: this.objectTypeToOrder("Message"),
 			title: message.subject ?? "Untitled Message",
 			label: "Message",
@@ -1813,7 +1826,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Message",
 				obj: message,
 				url: message.webLink
@@ -1940,7 +1953,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${event.id}`,
+			key: `${this._definition?.id}-${event.id}`,
 			score: this.objectTypeToOrder("Event"),
 			title: event.subject ?? "Untitled Event",
 			label: "Event",
@@ -1952,7 +1965,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Event",
 				obj: event,
 				url: event.webLink
@@ -2086,7 +2099,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${chatMessage.id}`,
+			key: `${this._definition?.id}-${chatMessage.id}`,
 			score: this.objectTypeToOrder("ChatMessage"),
 			title: chatMessage.summary ?? "Untitled Chat Message",
 			label: "Chat Message",
@@ -2098,7 +2111,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Event",
 				obj: chatMessage,
 				url: chatMessage.webUrl,
@@ -2219,7 +2232,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${team.id}`,
+			key: `${this._definition?.id}-${team.id}`,
 			score: this.objectTypeToOrder("Team"),
 			title: team.displayName ?? "Untitled Team",
 			label: "Team",
@@ -2231,7 +2244,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Team",
 				obj: team,
 				url: team.webUrl,
@@ -2355,7 +2368,7 @@ export class Microsoft365Integration {
 		];
 
 		return {
-			key: `${this._moduleDefinition?.id}-${channel.id}`,
+			key: `${this._definition?.id}-${channel.id}`,
 			score: this.objectTypeToOrder("Channel"),
 			title: channel.displayName ?? "Untitled Channel",
 			label: "Channel",
@@ -2367,7 +2380,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "Channel",
 				obj: channel,
 				url: channel.webUrl,
@@ -2481,7 +2494,7 @@ export class Microsoft365Integration {
 		const typeName = isFolder ? "Folder" : "File";
 
 		return {
-			key: `${this._moduleDefinition?.id}-${driveItem.id}`,
+			key: `${this._definition?.id}-${driveItem.id}`,
 			score: this.objectTypeToOrder("File"),
 			title: driveItem.name ?? `Untitled ${typeName}`,
 			label: typeName,
@@ -2493,7 +2506,7 @@ export class Microsoft365Integration {
 				}
 			],
 			data: {
-				providerId: this._moduleDefinition?.id,
+				providerId: this._definition?.id,
 				objType: "File",
 				obj: driveItem,
 				url: driveItem.webUrl,
@@ -2877,16 +2890,18 @@ export class Microsoft365Integration {
 	 */
 	private objectTypeToOrder(objType: Microsoft365ObjectTypes): number {
 		const objTypeOrder: { [key in Microsoft365ObjectTypes]: number } = {
-			User: 1,
-			Contact: 2,
-			Message: 3,
-			ChatMessage: 4,
-			Event: 5,
-			Team: 6,
-			Channel: 7,
-			File: 8
+			User: 100,
+			Contact: 200,
+			Message: 300,
+			ChatMessage: 400,
+			Event: 500,
+			Team: 600,
+			Channel: 700,
+			File: 800
 		};
-		return objTypeOrder[objType] * 1000;
+		return (
+			(this._definition?.baseScore ?? Microsoft365Integration._DEFAULT_BASE_SCORE) + objTypeOrder[objType]
+		);
 	}
 
 	/**
@@ -3011,7 +3026,7 @@ export class Microsoft365Integration {
 		} else if (this.driveItemIsImage(driveItem)) {
 			if (driveItem.thumbnails && Array.isArray(driveItem.thumbnails) && driveItem.thumbnails.length > 0) {
 				const thumbnailSet = driveItem.thumbnails[0];
-				if (thumbnailSet?.small || thumbnailSet.medium) {
+				if (thumbnailSet?.small ?? thumbnailSet.medium) {
 					return thumbnailSet.small?.url ?? thumbnailSet.medium?.url;
 				}
 			}

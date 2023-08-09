@@ -63,7 +63,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter - v13.0.0",
+		"name": "Workspace Platform Starter - v13.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -541,7 +541,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						},
 						"dark": {
 							"brandPrimary": "#0A76D3",
@@ -569,7 +571,9 @@
 							"contentBackground2": "#000000",
 							"contentBackground3": "#000000",
 							"contentBackground4": "#000000",
-							"contentBackground5": "#000000"
+							"contentBackground5": "#000000",
+							"linkDefault": "#6CADE5",
+							"linkHover": "#0A76D3"
 						}
 					}
 				}
@@ -916,20 +920,26 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/js/preload.js",
+						"enableLibLogging": true,
 						"iconMap": {
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.0.0/integrate-with-salesforce/images/task.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
@@ -1130,7 +1140,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "13.0.0"
+				"workspace": "13.1.5"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -1183,6 +1193,28 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
 					"data": {}
+				}
+			]
+		},
+		"lowCodeIntegrationProvider": {
+			"modules": [
+				{
+					"id": "ms365",
+					"title": "Microsoft 365 Low Code Integration",
+					"type": "ms365",
+					"enabled": false,
+					"data": {
+						"connect": {
+							"clientId": "",
+							"tenantId": "",
+							"redirectUri": ""
+						},
+						"workflows": {
+							"search": {
+								"disableAutoInitialize": true
+							}
+						}
+					}
 				}
 			]
 		}

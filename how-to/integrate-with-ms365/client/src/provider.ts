@@ -135,12 +135,13 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 								icon: app.icons[0]?.src,
 								data: app,
 								label: "View",
+								score: 0,
 								actions: [{ name: "Launch View", hotkey: "enter" }],
 								description: app.description,
 								shortDescription: app.description,
 								template: CLITemplate.SimpleText,
 								templateContent: app.description
-							} as HomeSearchResult)
+							}) as HomeSearchResult
 					)
 				);
 			}

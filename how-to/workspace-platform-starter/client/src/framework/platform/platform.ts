@@ -22,6 +22,7 @@ import * as shareProvider from "../share";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { isEmpty, randomUUID } from "../utils";
 import * as versionProvider from "../version";
+import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
@@ -124,6 +125,9 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	const customActions = await actionsProvider.getActions();
 	const theme = await getThemes();
 
+	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
+	const integrations = await lowCodeIntegrationProvider.register();
+
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {
 		logger.info("Platform API Ready");
@@ -136,7 +140,13 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 		theme,
 		customActions,
 		interopOverride,
-		overrideCallback
+		overrideCallback: async (platformConstructor) =>
+			overrideCallback(
+				platformConstructor,
+				customSettings?.platformProvider,
+				await versionProvider.getVersionInfo()
+			),
+		integrations
 	});
 	return true;
 }

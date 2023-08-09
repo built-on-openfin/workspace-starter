@@ -20,11 +20,10 @@
 			"dest": "./common"
 		},
 		{
-			"id": "manager-portal",
-			"sourceRoot": "./public/common/views/manager-portal",
-			"sources": ["images/**/*", "data/**/*"],
-			"dest": "./common/views/manager-portal",
-			"dependsOn": "manager-portal/manager-portal.snapshot.fin.json"
+			"id": "schemas",
+			"sourceRoot": "./public/schemas",
+			"sources": ["**"],
+			"dest": "./schemas"
 		},
 		{
 			"id": "schemas",

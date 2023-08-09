@@ -12,7 +12,7 @@ export class ExampleConditionsProvider implements Conditions<ExampleConditionsPr
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition?: ModuleDefinition<ExampleConditionsProviderOptions>;
+	private _definition: ModuleDefinition<ExampleConditionsProviderOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -24,7 +24,7 @@ export class ExampleConditionsProvider implements Conditions<ExampleConditionsPr
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers?: ModuleHelpers;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * Initialize the module.
