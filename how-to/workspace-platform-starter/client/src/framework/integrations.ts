@@ -4,7 +4,6 @@ import {
 	CLITemplate,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
-	type HomeRegistration,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult
@@ -23,6 +22,7 @@ import {
 	loadModules
 } from "./modules";
 import { launchPage, launchView } from "./platform/browser";
+import * as PlatformSplash from "./platform/platform-splash";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -36,10 +36,6 @@ import { createButton, createContainer, createHelp, createImage, createText, cre
 import { isEmpty } from "./utils";
 
 const logger = createLogger("Integrations");
-
-let isQueriedBeforeInit = false;
-let isInitialized = false;
-let queryBeforeInit: string;
 
 let integrationProviderOptions: IntegrationProviderOptions;
 let integrationModules: ModuleEntry<
@@ -56,12 +52,12 @@ const POPULATE_QUERY = "Populate Query";
  * Initialize all the integrations.
  * @param options The integration provider settings.
  * @param helpers Module helpers to pass to any loaded modules.
- * @param homeRegistration The home registration to use for setSearchQuery method.
+ * @param setSearchQuery The set search query for the home component.
  */
 export async function init(
 	options: IntegrationProviderOptions | undefined,
 	helpers: ModuleHelpers,
-	homeRegistration: HomeRegistration | undefined
+	setSearchQuery: (query: string) => Promise<void>
 ): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
@@ -84,9 +80,7 @@ export async function init(
 				return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
 			},
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery: homeRegistration?.setSearchQuery
-				? async (query): Promise<void> => homeRegistration.setSearchQuery(query)
-				: undefined,
+			setSearchQuery,
 			condition: async (conditionId): Promise<boolean> => {
 				const platform = getCurrentSync();
 				return checkCondition(platform, conditionId);
@@ -123,25 +117,9 @@ export async function init(
 		}
 
 		// Initialize just the auto start modules
-		await initializeModules(initModules, integrationHelpers);
-		isInitialized = true;
-
-		if (homeRegistration && isQueriedBeforeInit) {
-			try {
-				logger.info("A query was passed before integrations was initialized. Resending the last query.");
-				const refreshQuery: string = `${queryBeforeInit} `;
-				// send a query different from initial query as resending the initial query does clear the cache
-				await homeRegistration.setSearchQuery(refreshQuery);
-				// resend the initial query
-				await homeRegistration.setSearchQuery(queryBeforeInit);
-				logger.info("Last query has been resent.");
-			} catch (error) {
-				logger.error(
-					"There was an error while trying to set the last query that was set before initialization.",
-					error
-				);
-			}
-		}
+		await initializeModules(initModules, integrationHelpers, async (def) => {
+			await PlatformSplash.updateProgress(`${def.title} Integration`);
+		});
 		logger.info("Integrations has been initialized.");
 	}
 }
@@ -181,13 +159,6 @@ export async function getSearchResults(
 		},
 		sourceFilters: []
 	};
-
-	if (!isInitialized) {
-		isQueriedBeforeInit = true;
-		queryBeforeInit = query;
-		logger.warn(`We received a query: ${query} before being initialized.`);
-		return homeResponse;
-	}
 
 	if (
 		integrationProviderOptions.isManagementEnabled &&

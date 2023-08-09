@@ -52,7 +52,7 @@ export async function register(
 			...buildDockConfiguration()
 		});
 		console.log(registration);
-		console.log("Dock provider initialised.");
+		console.log("Dock provider initialized.");
 		return registration;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content dock provider", err);
@@ -88,6 +88,30 @@ export function dockGetCustomActions(): CustomActionsMap {
 			// The favorite remove is triggered from the button at the top of the browser window
 			if (payload.callerType === CustomActionCallerType.CustomButton && currentView) {
 				await removeFromFavorites();
+			}
+		},
+		"custom-menu": async (payload): Promise<void> => {
+			// The custom-menu is triggered from the dock
+			if (payload.callerType === CustomActionCallerType.CustomButton) {
+				const res = await showCustomMenu({ x: payload.x, y: payload.y }, payload.windowIdentity, [
+					{
+						label: "Chart 1",
+						id: "chart-1",
+						icon: "http://localhost:8080/assets/menu/chart1.svg"
+					},
+					{
+						label: "Chart 2",
+						id: "chart-2",
+						icon: "http://localhost:8080/assets/menu/chart2.svg"
+					},
+					{
+						label: "Chart 3",
+						id: "chart-3",
+						icon: "http://localhost:8080/assets/menu/chart3.svg"
+					}
+				]);
+
+				console.log("The user selected", res);
 			}
 		}
 	};
@@ -129,6 +153,13 @@ function buildDockConfiguration(): DockProviderConfig {
 								}
 							}
 					  ]
+		},
+		{
+			tooltip: "Custom Menu",
+			iconUrl: "http://localhost:8080/assets/custom-menu.svg",
+			action: {
+				id: "custom-menu"
+			}
 		}
 	];
 
@@ -356,4 +387,81 @@ export async function loadDockConfig(config: DockProviderConfigWithIdentity): Pr
  */
 export async function saveDockConfig(config: DockProviderConfigWithIdentity): Promise<void> {
 	console.log("Save dock config", config);
+}
+
+/**
+ * Show a custom menu.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ * @param parentIdentity The identity of the parent window.
+ * @param menuEntries The menu entries to display.
+ * @returns The menu entry.
+ */
+async function showCustomMenu(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	menuEntries: { label: string; id: string; icon: string }[]
+): Promise<string | undefined> {
+	console.log("Position", position);
+
+	const dockWindow = fin.Window.wrapSync(parentIdentity);
+	const dockBounds = await dockWindow.getBounds();
+	console.log(dockBounds);
+
+	const platformWindow = fin.Window.wrapSync(fin.me.identity);
+
+	const menuPos = Math.floor((position.x + 20) / 40) * 40;
+
+	const id = randomUUID();
+	const result = await platformWindow.showPopupWindow({
+		name: id,
+		initialOptions: {
+			showTaskbarIcon: false,
+			backgroundColor: "#1e1f23",
+			customData: {
+				menuEntries
+			}
+		},
+		url: "http://localhost:8080/html/custom-menu.html",
+		x: dockBounds.left + menuPos - 20,
+		y: dockBounds.top + 34,
+		width: 100,
+		height: menuEntries.length * 32
+	});
+
+	if (result.result === "dismissed") {
+		console.log("Popup dismissed");
+	} else if (result.result === "clicked") {
+		console.log("Popup clicked", result.data);
+		return result.data as string;
+	}
+}
+
+/**
+ * Polyfills randomUUID if running in a non-secure context.
+ * @returns The random UUID.
+ */
+function randomUUID(): string {
+	if ("randomUUID" in window.crypto) {
+		// eslint-disable-next-line no-restricted-syntax
+		return window.crypto.randomUUID();
+	}
+	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
+	// we are still using window.crypto.getRandomValues which is always available
+	// https://stackoverflow.com/a/2117523/2800218
+	/**
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
+	 */
+	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		return (
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
+		);
+	}
+	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }

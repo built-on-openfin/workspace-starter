@@ -146,6 +146,28 @@ function getCustomActions(): CustomActionsMap {
 				}
 			}
 		},
+		announce: async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.CustomButton) {
+				console.info("Announce called with payload:", payload);
+				await showPopup(
+					{ width: 400, height: 300 },
+					payload.windowIdentity,
+					"Announce",
+					"Announce the application to anyone listening ?",
+					[
+						{
+							id: "yes",
+							label: "Yes",
+							default: true
+						},
+						{
+							id: "no",
+							label: "No"
+						}
+					]
+				);
+			}
+		},
 		"custom-print": async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
 				console.info("Print called with payload:", payload);
@@ -153,6 +175,67 @@ function getCustomActions(): CustomActionsMap {
 			}
 		}
 	};
+}
+
+/**
+ * Show a popup window.
+ * @param dimensions The dimensions of the popup window.
+ * @param dimensions.width The window width.
+ * @param dimensions.height The window height.
+ * @param parentIdentity The parent window to be relative to.
+ * @param title The title of the window.
+ * @param instructions The instructions for the window.
+ * @param buttons The buttons for the window.
+ * @returns The result of the window.
+ */
+async function showPopup(
+	dimensions: { width: number; height: number },
+	parentIdentity: OpenFin.Identity,
+	title: string,
+	instructions: string,
+	buttons: {
+		id: string;
+		label: string;
+		default?: boolean;
+	}[]
+): Promise<string | undefined> {
+	console.log("Parent Identity", parentIdentity);
+
+	const browserWindow = fin.Window.wrapSync(parentIdentity);
+	const parentBounds = await browserWindow.getBounds();
+
+	console.log("Parent Bounds", parentBounds);
+
+	const halfParentWidth = parentBounds.width / 2;
+	const halfParentHeight = parentBounds.height / 2;
+	const halfWidth = dimensions.width / 2;
+	const halfHeight = dimensions.height / 2;
+
+	const result = await browserWindow.showPopupWindow({
+		name: randomUUID(),
+		initialOptions: {
+			modalParentIdentity: parentIdentity
+		},
+		additionalOptions: {
+			customData: {
+				title,
+				instructions,
+				buttons
+			}
+		},
+		url: "http://localhost:8080/html/popup.html",
+		x: halfParentWidth - halfWidth,
+		y: halfParentHeight - halfHeight,
+		width: dimensions.width,
+		height: dimensions.height
+	});
+
+	if (result.result === "dismissed") {
+		console.log("Popup dismissed");
+	} else if (result.result === "clicked") {
+		console.log("Popup clicked", result.data);
+		return result.data as string;
+	}
 }
 
 /**
@@ -419,4 +502,32 @@ async function showPrintMenu(position: { x: number; y: number }): Promise<void> 
 			content: "screenshot"
 		});
 	}
+}
+
+/**
+ * Polyfills randomUUID if running in a non-secure context.
+ * @returns The random UUID.
+ */
+function randomUUID(): string {
+	if ("randomUUID" in window.crypto) {
+		// eslint-disable-next-line no-restricted-syntax
+		return window.crypto.randomUUID();
+	}
+	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
+	// we are still using window.crypto.getRandomValues which is always available
+	// https://stackoverflow.com/a/2117523/2800218
+	/**
+	 * Get random hex value.
+	 * @param c The number to base the random value on.
+	 * @returns The random value.
+	 */
+	function getRandomHex(c: string): string {
+		// eslint-disable-next-line no-bitwise
+		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		return (
+			// eslint-disable-next-line no-bitwise
+			(Number(c) ^ rnd).toString(16)
+		);
+	}
+	return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }

@@ -12,12 +12,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-intents-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-intents-fdc3.png",
 					"label": "Intents using FDC3"
 				}
 			],
@@ -75,7 +75,7 @@
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/intent/2-0/fdc3-intent-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
 				}
 			}
 		},
@@ -90,12 +90,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/images/previews/view-context-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-context-fdc3.png",
 					"label": "Contexts using FDC3"
 				}
 			],
@@ -104,13 +104,13 @@
 			"publisher": "OpenFin",
 			"type": "other",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
 				}
 			}
 		},

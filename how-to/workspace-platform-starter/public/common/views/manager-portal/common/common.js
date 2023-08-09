@@ -1,5 +1,3 @@
-export const MANAGER_PORTAL_CHANNEL = 'manager-portal-channel';
-
 /**
  * Build a url.
  * @param folder The folder to include.
@@ -26,23 +24,33 @@ export async function loadData(filename) {
 }
 
 /**
- * Load the team data.
+ * Use the user data to create a team list.
+ * @param users The user data.
  * @returns The team data.
  */
-export async function loadTeamData() {
-	const teamData = await loadData('team.json');
-	const updatedTeamMembers = [];
+export async function addUserDates(users) {
 	// For each teamMember, randomize some dates for them.
-	for (const member of teamData) {
-		const updated = member;
-		const approvedDays = member.leave.approved;
-		const awaitingDays = member.leave.awaitingApproval;
-		updated.leave.approved = modifyDates(approvedDays);
-		updated.leave.awaitingApproval = modifyDates(awaitingDays);
-		updated.leave.lastUpdated = new Date();
-		updatedTeamMembers.push(updated);
+	for (const user of users) {
+		user.leave = {
+			alloted: 20,
+			approved: [
+				'2022-10-01',
+				'2022-10-02',
+				'2022-11-09',
+				'2022-11-10',
+				'2022-11-11',
+				'2022-12-28',
+				'2022-12-29'
+			],
+			awaitingApproval: ['2023-01-01'],
+			lastUpdated: 1651155329598
+		};
+		user.role = 'CFA';
+
+		user.leave.approved = modifyDates(user.leave.approved);
+		user.leave.awaitingApproval = modifyDates(user.leave.awaitingApproval);
+		user.leave.lastUpdated = Date.now();
 	}
-	return updatedTeamMembers;
 }
 
 /**
@@ -107,11 +115,8 @@ export async function loadCompanyComms() {
  */
 export async function initFdc3Listener(contextHandler) {
 	if (window.fdc3 !== undefined) {
-		// create application specific channel that works across views
-		const appChannel = await window.fdc3.getOrCreateChannel(MANAGER_PORTAL_CHANNEL);
-
 		// add a listener
-		appChannel.addContextListener(null, contextHandler);
+		window.fdc3.addContextListener(contextHandler);
 	}
 }
 
@@ -121,7 +126,6 @@ export async function initFdc3Listener(contextHandler) {
  */
 export async function broadcastFdc3(context) {
 	if (window.fdc3 !== undefined) {
-		const appChannel = await window.fdc3.getOrCreateChannel(MANAGER_PORTAL_CHANNEL);
-		appChannel.broadcast(context);
+		window.fdc3.broadcast(context);
 	}
 }

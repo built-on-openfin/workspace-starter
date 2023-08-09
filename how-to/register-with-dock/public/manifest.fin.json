@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Register With Dock - vnext",
+		"name": "Register With Dock - v14.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
