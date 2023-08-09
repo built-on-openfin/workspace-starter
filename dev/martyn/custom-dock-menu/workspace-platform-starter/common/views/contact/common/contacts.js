@@ -38,7 +38,7 @@ export function findUserByEmail(email) {
  * @returns The user object if found.
  */
 export function findUserByContext(context) {
-	return users.find((u) => u.name === context.name);
+	return context ? users.find((u) => u.name === context.name) : undefined;
 }
 
 /**
