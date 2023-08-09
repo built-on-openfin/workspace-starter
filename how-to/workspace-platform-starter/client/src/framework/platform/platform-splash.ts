@@ -18,7 +18,7 @@ export async function open(): Promise<void> {
 	if (!disabled) {
 		win = await fin.Window.create({
 			name: "platform-splash",
-			uuid: "platform-splash",
+			uuid: fin.me.identity.uuid,
 			url: `${window.location.href.replace("provider.html", "splash.html")}`,
 			alwaysOnTop: true,
 			maximizable: false,

@@ -71,6 +71,8 @@ export async function init(): Promise<boolean> {
 	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
 		if (homeRegistration?.setSearchQuery) {
 			await homeRegistration?.setSearchQuery(query);
+		} else {
+			logger.warn("Home registration setSearchQuery called by integration, but it is not available");
 		}
 	});
 
