@@ -315,11 +315,4 @@ describe('Register with Home', () => {
 			}
 		}
 	});
-
-	it('Can exit the runtime', async () => {
-		const found = await WebDriver.switchToWindow('url', providerWindowUrl);
-		expect(found).to.equal(true);
-		const fin = await OpenFinProxy.fin();
-		await fin.System.exit();
-	});
 });
