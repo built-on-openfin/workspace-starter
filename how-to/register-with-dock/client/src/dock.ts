@@ -93,20 +93,25 @@ export function dockGetCustomActions(): CustomActionsMap {
 		"custom-menu": async (payload): Promise<void> => {
 			// The custom-menu is triggered from the dock
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
-				await showCustomMenu({ x: payload.x, y: payload.y }, payload.windowIdentity, [
+				const res = await showCustomMenu({ x: 330, y: 34 }, payload.windowIdentity, [
 					{
-						label: "Entry 1",
-						id: "entry-1"
+						label: "Chart 1",
+						id: "chart-1",
+						icon: "http://localhost:8080/assets/menu/chart1.svg"
 					},
 					{
-						label: "Entry 2",
-						id: "entry-2"
+						label: "Chart 2",
+						id: "chart-2",
+						icon: "http://localhost:8080/assets/menu/chart2.svg"
 					},
 					{
-						label: "Entry 3",
-						id: "entry-3"
+						label: "Chart 3",
+						id: "chart-3",
+						icon: "http://localhost:8080/assets/menu/chart3.svg"
 					}
 				]);
+
+				console.log("The user selected", res);
 			}
 		}
 	};
@@ -396,7 +401,7 @@ export async function saveDockConfig(config: DockProviderConfigWithIdentity): Pr
 async function showCustomMenu(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
-	menuEntries: { label: string; id: string }[]
+	menuEntries: { label: string; id: string; icon: string }[]
 ): Promise<string | undefined> {
 	console.log("Position", position);
 
@@ -406,20 +411,19 @@ async function showCustomMenu(
 
 	const platformWindow = fin.Window.wrapSync(fin.me.identity);
 
-	const menuPos = Math.floor((position.x + 20) / 40) * 40;
-
+	const id = randomUUID();
 	const result = await platformWindow.showPopupWindow({
-		name: randomUUID(),
+		name: id,
 		initialOptions: {
 			showTaskbarIcon: false,
+			backgroundColor: "#1e1f23",
 			customData: {
 				menuEntries
-			},
-			backgroundColor: "#1e1f23"
+			}
 		},
 		url: "http://localhost:8080/html/custom-menu.html",
-		x: dockBounds.left + menuPos - 20,
-		y: dockBounds.top + 32,
+		x: dockBounds.left + position.x,
+		y: dockBounds.top + position.y,
 		width: 100,
 		height: menuEntries.length * 32
 	});
