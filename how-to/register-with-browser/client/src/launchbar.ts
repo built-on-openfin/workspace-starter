@@ -181,6 +181,14 @@ async function createCustomToolbarWindow(): Promise<BrowserWindowModule> {
 				}
 			},
 			{
+				type: BrowserButtonType.Custom,
+				tooltip: "Print",
+				iconUrl: "http://localhost:8080/icons/print.svg",
+				action: {
+					id: "custom-print"
+				}
+			},
+			{
 				type: BrowserButtonType.ShowHideTabs
 			},
 			{

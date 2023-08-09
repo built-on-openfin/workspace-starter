@@ -145,6 +145,12 @@ function getCustomActions(): CustomActionsMap {
 					});
 				}
 			}
+		},
+		"custom-print": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.CustomButton) {
+				console.info("Print called with payload:", payload);
+				await showPrintMenu({ x: payload.x, y: payload.y });
+			}
 		}
 	};
 }
@@ -371,4 +377,46 @@ function overrideCallback(
 		}
 	}
 	return new Override();
+}
+
+/**
+ * Display the print options menu.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ */
+async function showPrintMenu(position: { x: number; y: number }): Promise<void> {
+	const platform = getCurrentSync();
+	const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+	const browserWindow = platform.Browser.wrapSync({ uuid, name });
+
+	const template: OpenFin.MenuItemTemplate[] = [
+		{
+			label: "Print All",
+			data: { type: "views" }
+		},
+		{
+			label: "Print Screen",
+			data: { type: "window" }
+		}
+	];
+
+	const r = await browserWindow.openfinWindow.showPopupMenu({
+		template,
+		x: position.x,
+		y: position.y
+	});
+
+	if (r.result === "closed") {
+		console.log("Menu dismissed");
+	} else if (r.data.type === "views") {
+		await browserWindow.openfinWindow.print({
+			content: "views",
+			includeSelf: false
+		});
+	} else if (r.data.type === "window") {
+		await browserWindow.openfinWindow.print({
+			content: "screenshot"
+		});
+	}
 }
