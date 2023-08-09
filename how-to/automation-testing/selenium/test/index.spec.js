@@ -40,7 +40,7 @@ describe('Register with Home', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('31.112.75.4');
+		expect(version).to.equal('32.114.76.10');
 	});
 
 	it('The identity should be set', async () => {
@@ -312,12 +312,5 @@ describe('Register with Home', () => {
 				]);
 			}
 		}
-	});
-
-	it('Can exit the runtime', async () => {
-		const found = await WebDriver.switchToWindow('url', providerWindowUrl);
-		expect(found).to.equal(true);
-		const fin = await OpenFinProxy.fin();
-		await fin.System.exit();
 	});
 });

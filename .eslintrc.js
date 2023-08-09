@@ -91,10 +91,10 @@ module.exports = {
 		'import/export': ['error'],
 		'import/named': ['off'],
 		'import/namespace': ['error'],
-		'import/no-duplicates': ['warn'],
+		'import/no-duplicates': ['error'],
 		'import/no-extraneous-dependencies': ['off'],
-		'import/no-named-as-default': ['warn'],
-		'import/no-named-as-default-member': ['warn'],
+		'import/no-named-as-default': ['error'],
+		'import/no-named-as-default-member': ['error'],
 		'import/no-unresolved': ['off'],
 		'import/no-unused-modules': ['off'],
 		'import/order': [

@@ -3148,6 +3148,7 @@
                 },
                 "palettes": {
                     "additionalProperties": false,
+                    "description": "The palette for this theme.\n\nWhen a user selects a color scheme, the palette will be updated to match the selected scheme.\n\nIf `system` is selected, the palette will be updated to match the user's system color scheme.",
                     "properties": {
                         "dark": {
                             "$ref": "#/definitions/CustomPaletteSet"
@@ -4093,7 +4094,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
@@ -4526,7 +4527,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
@@ -5082,6 +5083,9 @@
         "__type_18": {
             "additionalProperties": false,
             "properties": {
+                "getFileDownloadLocation": {
+                    "type": "boolean"
+                },
                 "setFileDownloadLocation": {
                     "type": "boolean"
                 }
@@ -6455,7 +6459,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
