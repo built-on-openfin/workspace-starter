@@ -93,7 +93,7 @@ export function dockGetCustomActions(): CustomActionsMap {
 		"custom-menu": async (payload): Promise<void> => {
 			// The custom-menu is triggered from the dock
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
-				const res = await showCustomMenu({ x: 330, y: 34 }, payload.windowIdentity, [
+				const res = await showCustomMenu({ x: payload.x, y: payload.y }, payload.windowIdentity, [
 					{
 						label: "Chart 1",
 						id: "chart-1",
@@ -411,6 +411,8 @@ async function showCustomMenu(
 
 	const platformWindow = fin.Window.wrapSync(fin.me.identity);
 
+	const menuPos = Math.floor((position.x + 20) / 40) * 40;
+
 	const id = randomUUID();
 	const result = await platformWindow.showPopupWindow({
 		name: id,
@@ -422,8 +424,8 @@ async function showCustomMenu(
 			}
 		},
 		url: "http://localhost:8080/html/custom-menu.html",
-		x: dockBounds.left + position.x,
-		y: dockBounds.top + position.y,
+		x: dockBounds.left + menuPos - 20,
+		y: dockBounds.top + 34,
 		width: 100,
 		height: menuEntries.length * 32
 	});
