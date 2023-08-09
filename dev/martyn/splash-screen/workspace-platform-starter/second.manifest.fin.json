@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=second-workspace-starter-how-to-workspace-platform-starter",
-		"version": "31.112.75.4"
+		"version": "32.114.76.10"
 	},
 	"startup_app": {
 		"name": "second-workspace-starter-how-to-workspace-platform-starter"
