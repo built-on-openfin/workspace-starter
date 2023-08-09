@@ -82,6 +82,12 @@ npm run client
 
 ![Dock Preview](./assets/dock-preview.gif)
 
+## Custom Menu
+
+This example also demonstrates how to add a custom menu entry to the dock.
+
+![Custom Menu](./assets/custom-menu.png)
+
 ### Note About This Example
 
 This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
