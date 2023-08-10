@@ -185,6 +185,8 @@ async function getEntries(): Promise<PlatformApp[]> {
 			if (getEntriesResolvers) {
 				logger.info("Storing getEntry resolver");
 				getEntriesResolvers.push(resolve);
+			} else {
+				resolve(cachedApps);
 			}
 		});
 	}
