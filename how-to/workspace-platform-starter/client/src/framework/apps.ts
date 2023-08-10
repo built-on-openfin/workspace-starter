@@ -174,8 +174,8 @@ async function getEntries(): Promise<PlatformApp[]> {
 		if (getEntriesResolvers.length > 0) {
 			logger.info("Resolving getEntry promises");
 
-			for (const getEntriesPromise of getEntriesResolvers) {
-				getEntriesPromise(cachedApps);
+			for (const getEntriesResolver of getEntriesResolvers) {
+				getEntriesResolver(cachedApps);
 			}
 		}
 
