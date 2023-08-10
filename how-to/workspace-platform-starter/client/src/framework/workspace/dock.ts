@@ -98,7 +98,9 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 					!registeredBootstrapOptions?.notifications ||
 					dockProviderOptions.workspaceComponents?.hideNotificationsButton
 			},
-			buttons
+			buttons,
+			skipSavedDockProviderConfig: true,
+			disableUserRearrangement: true
 		};
 	}
 }
