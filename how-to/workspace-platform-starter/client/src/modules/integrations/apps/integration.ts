@@ -139,6 +139,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -148,6 +149,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		const queryLower = query.toLowerCase();
@@ -189,6 +191,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param options The query options.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @param cachedApps The cached apps.
 	 * @returns The search response.
 	 */
@@ -198,6 +201,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		},
 		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {

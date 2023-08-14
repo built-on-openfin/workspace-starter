@@ -142,12 +142,17 @@ export class TreeQuerySource {
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
 	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the get search results.
+	 * @param options.isSuggestion Is the query a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
 		query: string,
 		filters: CLIFilter[],
-		lastResponse: HomeSearchListenerResponse
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			isSuggestion: boolean;
+		}
 	): Promise<HomeSearchResponse> {
 		let results: HomeSearchResult[] = [];
 

@@ -80,7 +80,9 @@ export async function register(id: string, title: string, icon: string): Promise
 			};
 		}
 
-		return getSearchResults(request.query, [], lastResponse);
+		return getSearchResults(request.query, [], lastResponse, {
+			isSuggestion: request.context?.isSuggestion ?? false
+		});
 	}
 
 	/**
@@ -128,8 +130,6 @@ export async function register(id: string, title: string, icon: string): Promise
 			if (!handled) {
 				await itemSelection(result, lastResponse);
 			}
-		} else {
-			console.warn("Unable to execute result without data being passed");
 		}
 	}
 

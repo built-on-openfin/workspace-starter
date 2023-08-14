@@ -105,6 +105,8 @@ The contacts commands demonstrate different approaches to retrieving data.
 
 - **/error** Demonstrates how to use the built-in error template to show an error result with a reload button, and then replace the result when it is no longer needed or reloaded.
 
+- **desserts** Demonstrates using returning suggestions and handling the isSuggestion flag.
+
 e.g.
 
 ```shell
@@ -121,6 +123,7 @@ chad
 dock
 /loading
 /error
+desserts
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
