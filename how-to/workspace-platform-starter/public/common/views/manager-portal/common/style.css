@@ -401,3 +401,19 @@ p {
 	cursor: pointer;
 	text-decoration: none;
 }
+
+.scroll {
+	overflow: auto;
+}
+
+.scroll-vertical {
+	overflow-y: auto;
+}
+
+.scroll-horizontal {
+	overflow-x: auto;
+}
+
+.full-height {
+	height: 100%;
+}

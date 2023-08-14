@@ -14,6 +14,7 @@ let cachedApps: PlatformApp[] = [];
 let cacheDuration = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
+let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
 
 /**
  * Initialize the application provider.
@@ -140,29 +141,54 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  * @returns The app entries.
  */
 async function getEntries(): Promise<PlatformApp[]> {
-	const now = Date.now();
-	if (now - lastCacheUpdate > cacheDuration) {
-		lastCacheUpdate = now;
+	if (isEmpty(getEntriesResolvers)) {
+		const now = Date.now();
 
-		const apps: PlatformApp[] = [];
-		try {
-			logger.info("Getting directory apps.");
-			const directoryApps = await getPlatformApps();
-			apps.push(...directoryApps);
+		getEntriesResolvers = [];
 
-			logger.info("Getting connected apps.");
-			const connectedApps = await getConnectedApps();
-			if (connectedApps.length > 0) {
-				logger.info(
-					`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
-				);
-				apps.push(...connectedApps);
+		if (now - lastCacheUpdate > cacheDuration) {
+			logger.info("Apps cache expired refreshing");
+			lastCacheUpdate = now;
+
+			const apps: PlatformApp[] = [];
+			try {
+				logger.info("Getting directory apps.");
+				const directoryApps = await getPlatformApps();
+				apps.push(...directoryApps);
+
+				logger.info("Getting connected apps.");
+				const connectedApps = await getConnectedApps();
+				if (connectedApps.length > 0) {
+					logger.info(
+						`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
+					);
+					apps.push(...connectedApps);
+				}
+			} catch (error) {
+				logger.error("Error fetching apps.", error);
 			}
-		} catch (error) {
-			logger.error("Error fetching apps.", error);
+
+			cachedApps = await validateEntries(apps);
 		}
 
-		cachedApps = await validateEntries(apps);
+		if (getEntriesResolvers.length > 0) {
+			logger.info("Resolving getEntry promises");
+
+			for (const getEntriesResolver of getEntriesResolvers) {
+				getEntriesResolver(cachedApps);
+			}
+		}
+
+		getEntriesResolvers = undefined;
+	} else {
+		return new Promise<PlatformApp[]>((resolve) => {
+			if (getEntriesResolvers) {
+				logger.info("Storing getEntry resolver");
+				getEntriesResolvers.push(resolve);
+			} else {
+				resolve(cachedApps);
+			}
+		});
 	}
 
 	return cachedApps;
