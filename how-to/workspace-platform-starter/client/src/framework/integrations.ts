@@ -140,6 +140,7 @@ export async function closedown(): Promise<void> {
  * @param options Options for the search query.
  * @param options.queryMinLength The minimum length before a query is actioned.
  * @param options.queryAgainst The fields in the data to query against.
+ * @param options.isSuggestion Is the query from a suggestion.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
@@ -150,6 +151,7 @@ export async function getSearchResults(
 	options: {
 		queryMinLength: number;
 		queryAgainst: string[];
+		isSuggestion?: boolean;
 	}
 ): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
 	const homeResponse: HomeSearchResponse & { sourceFilters?: string[] } = {

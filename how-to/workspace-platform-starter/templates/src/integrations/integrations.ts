@@ -97,6 +97,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -106,6 +107,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		const results: HomeSearchResult[] = [];

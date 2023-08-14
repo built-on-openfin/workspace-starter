@@ -150,7 +150,8 @@ async function onUserInput(
 			selectedSourceFilterOptions,
 			{
 				queryMinLength: homeProviderOptions?.queryMinLength ?? 3,
-				queryAgainst: homeProviderOptions?.queryAgainst ?? ["title"]
+				queryAgainst: homeProviderOptions?.queryAgainst ?? ["title"],
+				isSuggestion: request.context?.isSuggestion ?? false
 			}
 		);
 

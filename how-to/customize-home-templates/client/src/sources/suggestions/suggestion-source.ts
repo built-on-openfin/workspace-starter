@@ -118,8 +118,6 @@ export class SuggestionSource {
 			}
 		}
 
-		console.log("Return results", results);
-
 		return {
 			results
 		};

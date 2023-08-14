@@ -141,6 +141,7 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
@@ -150,6 +151,7 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse>;
 
