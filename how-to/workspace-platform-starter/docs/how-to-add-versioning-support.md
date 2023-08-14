@@ -30,7 +30,7 @@ By default the Version Provider will initialize even without configuration but y
 "versionProvider": {
    "appVersion": "1.0.0",
    "minimumVersion": {
-    "workspace": "14.0.18"
+    "workspace": "14.0.19"
    },
    "maximumVersion": {
    },
