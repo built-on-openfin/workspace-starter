@@ -30,10 +30,12 @@ export async function open(): Promise<void> {
 			includeInSnapshots: false,
 			resizable: false,
 			saveWindowState: false,
-			showTaskbarIcon: false
+			showTaskbarIcon: true
 		});
 
 		if (win) {
+			await win.updateOptions({ alwaysOnTop: false });
+
 			const webWin = win.getWebWindow();
 			if (webWin) {
 				const title = customSettings.splashScreenProvider?.title ?? manifest.shortcut?.name ?? "OpenFin";
