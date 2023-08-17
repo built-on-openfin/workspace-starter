@@ -86,6 +86,21 @@
 		"tags": ["page", "developer"]
 	},
 	{
+		"appId": "getting-started",
+		"name": "getting-started",
+		"title": "Getting Started Guide",
+		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.1.0/common/snapshots/snapshot-getting-started.json",
+		"manifestType": "snapshot",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v13.1.0/workspace-platform-starter/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "snapshot", "tools"]
+	},
+	{
 		"appId": "analytics-viewer",
 		"name": "analytics-viewer",
 		"title": "Analytics Viewer",
