@@ -90,7 +90,7 @@
 		"name": "getting-started",
 		"title": "Getting Started Guide",
 		"description": "A collection of information and tools that help you get started with OpenFin Workspace.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v13.0.0/common/snapshots/snapshot-getting-started.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
 		"icons": [{ "src": "http://localhost:8080/common/images/icon-blue.png" }],
 		"contactEmail": "contact@example.com",
