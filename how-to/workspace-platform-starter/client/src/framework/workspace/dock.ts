@@ -22,7 +22,8 @@ const logger = createLogger("Dock");
 let registrationInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
 let registeredBootstrapOptions: BootstrapOptions | undefined;
-let lifeCycleSubscriptionId: string | undefined;
+let themeChangedSubscriptionId: string | undefined;
+let appsChangedSubscriptionId: string | undefined;
 let registeredButtons: DockButton[];
 
 /**
@@ -50,7 +51,8 @@ export async function register(
 			logger.info("Version:", registrationInfo);
 			logger.info("Dock provider initialized");
 
-			lifeCycleSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => updateDockColorScheme());
+			themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refreshDock());
+			appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refreshDock());
 		}
 	}
 
@@ -63,10 +65,14 @@ export async function register(
  */
 export async function deregister(): Promise<void> {
 	if (registrationInfo) {
-		if (lifeCycleSubscriptionId) {
-			unsubscribeLifecycleEvent(lifeCycleSubscriptionId, "theme-changed");
+		if (themeChangedSubscriptionId) {
+			unsubscribeLifecycleEvent(themeChangedSubscriptionId, "theme-changed");
 		}
-		lifeCycleSubscriptionId = undefined;
+		themeChangedSubscriptionId = undefined;
+		if (appsChangedSubscriptionId) {
+			unsubscribeLifecycleEvent(appsChangedSubscriptionId, "apps-changed");
+		}
+		appsChangedSubscriptionId = undefined;
 		registrationInfo = undefined;
 		dockProviderOptions = undefined;
 		logger.info("Dock deregister about to be called.");
@@ -279,9 +285,9 @@ export async function minimize(): Promise<void> {
 }
 
 /**
- * Update the dock because the color scheme has changed.
+ * Refresh the dock because the color scheme or apps have changed.
  */
-async function updateDockColorScheme(): Promise<void> {
+async function refreshDock(): Promise<void> {
 	if (!isEmpty(registrationInfo)) {
 		const newButtons = await buildButtons();
 
