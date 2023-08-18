@@ -20,7 +20,7 @@
 		"thirdclient": "node ./scripts/launch.mjs http://localhost:8080/third.manifest.fin.json",
 		"fourthclient": "node ./scripts/launch.mjs http://localhost:8080/fourth.manifest.fin.json",
 		"server": "node ./server/build/index.js",
-		"setup": "cd ../../ && npm install && cd how-to/workspace-platform-starter && npm run build",
+		"setup": "npm install && npm run build",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
 		"generate-schema": "npm run generate-settings-schema && npm run generate-fdc3v2-schema && npm run generate-fdc3v1-schema && npm run generate-platform-apps-schema && npm run generate-view-options-schema && npm run generate-window-options-schema && npm run generate-snapshot-options-schema",
 		"generate-settings-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",

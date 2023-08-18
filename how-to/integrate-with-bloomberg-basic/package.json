@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-bloomberg-basic && npm run build"
+		"setup": "npm install && npm run build"
 	},
 	"keywords": [
 		"bloomberg",
@@ -19,7 +19,7 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/bloomberg": "^1.1.0",
+		"@openfin/bloomberg": "^1.2.0",
 		"@openfin/core": "32.76.10",
 		"@openfin/workspace": "14.0.19",
 		"@openfin/workspace-platform": "14.0.19"
