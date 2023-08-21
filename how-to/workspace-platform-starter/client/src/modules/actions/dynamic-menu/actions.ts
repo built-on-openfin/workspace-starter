@@ -62,7 +62,7 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 					pages.map((p) => ({
 						label: p.title,
 						id: p.pageId
-					}))
+					})).sort((a, b) => a.label.localeCompare(b.label))
 				);
 
 				if (!isEmpty(res) && this._helpers?.launchPage) {
