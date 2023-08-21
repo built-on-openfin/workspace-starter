@@ -65,7 +65,7 @@ if (launchArgs.length < 2) {
 	console.log();
 	console.log('Module Type:', argModuleType);
 
-	argModuleName = argModuleName.replace(/[^\da-z]/gi, " ");
+	argModuleName = argModuleName.replace(/[^\da-z]/gi, ' ');
 
 	console.log('Module Name:', argModuleName);
 
