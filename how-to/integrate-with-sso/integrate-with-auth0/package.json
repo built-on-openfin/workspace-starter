@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../../ && npm install && cd how-to/integrate-with-sso/integrate-with-auth0 && npm run build"
+		"setup": "npm install && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",

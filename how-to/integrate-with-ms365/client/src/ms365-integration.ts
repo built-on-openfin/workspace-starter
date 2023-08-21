@@ -2931,9 +2931,8 @@ export class Microsoft365Integration {
 		if (this._ms365Connection && this._cacheCounter % 6 === 0) {
 			// Update every 3 minutes
 			try {
-				const response = await this._ms365Connection.executeApiRequest<GraphListResponse<Team>>(
-					"/v1.0/me/joinedTeams"
-				);
+				const response =
+					await this._ms365Connection.executeApiRequest<GraphListResponse<Team>>("/v1.0/me/joinedTeams");
 
 				const joinedTeams = response.data?.value ?? [];
 				const channelsForTeam: { [id: string]: Channel[] } = {};

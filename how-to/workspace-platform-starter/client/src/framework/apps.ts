@@ -473,9 +473,8 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 	let canDownloadAppAssets = false;
 
 	try {
-		const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.downloadAsset"
-		);
+		const canDownloadAppAssetsResponse =
+			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
 		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 	} catch (error) {
 		logger.error("Error while querying for System.downloadAsset permission", error);

@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../ && npm install && cd how-to/workspace-native-window-integration && npm run build"
+		"setup": "npm install && npm run build"
 	},
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",

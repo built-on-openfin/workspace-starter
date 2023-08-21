@@ -11,7 +11,7 @@
 		"build-server": "tsc --project ./server",
 		"build": "npm run build-server && npm run build-client",
 		"start": "node ./server/build/index.js",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-rss && npm run build"
+		"setup": "npm install && npm run build"
 	},
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
