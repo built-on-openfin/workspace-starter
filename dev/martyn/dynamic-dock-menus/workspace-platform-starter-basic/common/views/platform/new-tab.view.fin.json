@@ -1,8 +1,0 @@
-{
-	"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/dynamic-dock-menus/workspace-platform-starter-basic/common/views/platform/new-tab/new-tab.html",
-	"preloadScripts": [
-		{
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/dynamic-dock-menus/workspace-platform-starter-basic/common/style/style-changed-preload.js"
-		}
-	]
-}
