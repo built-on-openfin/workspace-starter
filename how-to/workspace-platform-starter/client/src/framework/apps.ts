@@ -1,5 +1,7 @@
+import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
 import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, AppsForIntent, PlatformApp } from "./shapes/app-shapes";
@@ -9,7 +11,6 @@ import { isEmpty, isNumber, randomUUID } from "./utils";
 
 const logger = createLogger("Apps");
 
-let lastCacheUpdate: number = 0;
 let cachedApps: PlatformApp[] = [];
 let cacheDuration = 0;
 let isInitialized: boolean = false;
@@ -88,6 +89,20 @@ export async function init(
 			cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
+
+		if (cacheDuration > 0) {
+			let updateInProgress = false;
+			window.setInterval(async () => {
+				if (!updateInProgress) {
+					updateInProgress = true;
+					try {
+						await getEntries();
+					} finally {
+						updateInProgress = false;
+					}
+				}
+			}, cacheDuration);
+		}
 	}
 }
 
@@ -142,34 +157,31 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  */
 async function getEntries(): Promise<PlatformApp[]> {
 	if (isEmpty(getEntriesResolvers)) {
-		const now = Date.now();
-
 		getEntriesResolvers = [];
 
-		if (now - lastCacheUpdate > cacheDuration) {
-			logger.info("Apps cache expired refreshing");
-			lastCacheUpdate = now;
+		logger.info("Apps cache expired refreshing");
 
-			const apps: PlatformApp[] = [];
-			try {
-				logger.info("Getting directory apps.");
-				const directoryApps = await getPlatformApps();
-				apps.push(...directoryApps);
+		const apps: PlatformApp[] = [];
+		try {
+			logger.info("Getting directory apps.");
+			const directoryApps = await getPlatformApps();
+			apps.push(...directoryApps);
 
-				logger.info("Getting connected apps.");
-				const connectedApps = await getConnectedApps();
-				if (connectedApps.length > 0) {
-					logger.info(
-						`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
-					);
-					apps.push(...connectedApps);
-				}
-			} catch (error) {
-				logger.error("Error fetching apps.", error);
+			logger.info("Getting connected apps.");
+			const connectedApps = await getConnectedApps();
+			if (connectedApps.length > 0) {
+				logger.info(
+					`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
+				);
+				apps.push(...connectedApps);
 			}
-
-			cachedApps = await validateEntries(apps);
+		} catch (error) {
+			logger.error("Error fetching apps.", error);
 		}
+
+		const lastCachedAppsJson = JSON.stringify(cachedApps);
+
+		cachedApps = await validateEntries(apps);
 
 		if (getEntriesResolvers.length > 0) {
 			logger.info("Resolving getEntry promises");
@@ -180,18 +192,25 @@ async function getEntries(): Promise<PlatformApp[]> {
 		}
 
 		getEntriesResolvers = undefined;
-	} else {
-		return new Promise<PlatformApp[]>((resolve) => {
-			if (getEntriesResolvers) {
-				logger.info("Storing getEntry resolver");
-				getEntriesResolvers.push(resolve);
-			} else {
-				resolve(cachedApps);
-			}
-		});
+
+		const cachedAppJson = JSON.stringify(cachedApps);
+
+		if (cachedAppJson !== lastCachedAppsJson) {
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "apps-changed");
+		}
+
+		return cachedApps;
 	}
 
-	return cachedApps;
+	return new Promise<PlatformApp[]>((resolve) => {
+		if (getEntriesResolvers) {
+			logger.info("Storing getEntry resolver");
+			getEntriesResolvers.push(resolve);
+		} else {
+			resolve(cachedApps);
+		}
+	});
 }
 
 /**

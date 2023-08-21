@@ -13,7 +13,8 @@ export type LifecycleEvents =
 	| "before-quit"
 	| "theme-changed"
 	| "workspace-changed"
-	| "page-changed";
+	| "page-changed"
+	| "apps-changed";
 
 /**
  * The type for a lifecycle event handler.
