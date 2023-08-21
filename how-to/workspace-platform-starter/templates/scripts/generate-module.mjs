@@ -38,7 +38,7 @@ const MANIFEST_TYPE_MAPPING = {
 const launchArgs = process.argv.slice(2);
 
 const argModuleType = launchArgs[0];
-const argModuleName = launchArgs[1];
+let argModuleName = launchArgs[1];
 const invalidModuleType = argModuleType && !MODULE_TYPES.includes(argModuleType);
 
 if (launchArgs.length < 2 || launchArgs[0] === '--help' || invalidModuleType) {
@@ -64,6 +64,9 @@ if (launchArgs.length < 2) {
 	console.log('Manifest:', MANIFEST_FILE);
 	console.log();
 	console.log('Module Type:', argModuleType);
+
+	argModuleName = argModuleName.replace(/[^\da-z]/gi, " ");
+
 	console.log('Module Name:', argModuleName);
 
 	generateModule(argModuleType, argModuleName).catch((err) => console.error(err));
