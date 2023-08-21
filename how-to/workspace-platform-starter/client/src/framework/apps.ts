@@ -90,8 +90,16 @@ export async function init(
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
 
+		let updateInProgress = false;
 		window.setInterval(async () => {
-			await getEntries();
+			if (!updateInProgress) {
+				updateInProgress = true;
+				try {
+					await getEntries();
+				} finally {
+					updateInProgress = false;
+				}
+			}
 		}, cacheDuration);
 	}
 }
