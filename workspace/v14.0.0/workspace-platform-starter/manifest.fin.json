@@ -758,6 +758,14 @@
 			],
 			"buttons": [
 				{
+					"tooltip": "Pages",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/icons/{scheme}/page.svg",
+					"action": {
+						"id": "pages-menu",
+						"customData": {}
+					}
+				},
+				{
 					"tooltip": "Google",
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
@@ -1058,6 +1066,17 @@
 					"id": "window-actions",
 					"title": "Window Actions",
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/composite/windows.bundle.js"
+				},
+				{
+					"id": "dynamic-menu",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/favicon.ico",
+					"title": "Dynamic Menu",
+					"description": "Dynamic Menu",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/actions/dynamic-menu.bundle.js",
+					"data": {
+						"popupHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/common/popups/dynamic-menu/index.html"
+					}
 				}
 			]
 		},
