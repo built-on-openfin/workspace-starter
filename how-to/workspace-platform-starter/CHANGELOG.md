@@ -3,6 +3,15 @@
 ## v14
 
 - Added customizable splash screen
+- Apps are refreshed based on the cache interval, if they change then the lifecycle event `apps-changed` is fired
+- Dock component subscribes to `apps-changed` lifecycle event and updates any dock based on their tagged apps
+- LaunchPage helper logic centralized for home, menus, dynamic dock and share
+- LaunchPage helper will always activate page if it already exists, unless `createCopyIfExists` is set
+- Added dynamic dock menu module which shows pages, this example module demonstrates how to use the `showPopupWindow` API
+- Added additional option for integration getSearchEntries `isSuggestion` to notify when the query was from a suggestion
+- Composite module for pages the `page-show` action has been removed, as this is now handled by the centralized launchPage logic
+- Composite module for pages now sorts the page name in the menu
+- BREAKING CHANGE: LaunchPage helper second parameter has changed from bounds to options containing bounds
 
 ## v13.1
 

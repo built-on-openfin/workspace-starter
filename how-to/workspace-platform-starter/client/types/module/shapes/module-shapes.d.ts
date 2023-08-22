@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
-import type { LoggerCreator } from "./logger-shapes";
+import type { Logger, LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 /**
@@ -112,10 +112,22 @@ export interface ModuleHelpers {
 	/**
 	 * Launch a page in the workspace.
 	 * @param page The page to launch.
-	 * @param bounds The optional bounds for the page.
+	 * @param options The options for the launch.
+	 * @param options.bounds The optional bounds for the page.
+	 * @param options.targetWindowIdentity The optional target window for the page.
+	 * @param options.createCopyIfExists Create a copy of the page if it exists.
+	 * @param logger Log output from the operation.
 	 * @returns The window created.
 	 */
-	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+	launchPage?(
+		page: Page,
+		options?: {
+			bounds?: OpenFin.Bounds;
+			targetWindowIdentity?: OpenFin.Identity;
+			createCopyIfExists?: boolean;
+		},
+		logger?: Logger
+	): Promise<BrowserWindowModule>;
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.

@@ -211,7 +211,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 					if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
 						const platform = this._integrationHelpers.getPlatform();
 						const pageToLaunch = await platform.Storage.getPage(data.pageId);
-						await this._integrationHelpers.launchPage(pageToLaunch);
+						await this._integrationHelpers.launchPage(pageToLaunch, undefined, this._logger);
 					}
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
 					if (this._integrationHelpers?.getPlatform) {

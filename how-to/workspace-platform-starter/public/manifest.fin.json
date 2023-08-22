@@ -758,6 +758,14 @@
 			],
 			"buttons": [
 				{
+					"tooltip": "Pages",
+					"iconUrl": "http://localhost:8080/icons/{scheme}/page.svg",
+					"action": {
+						"id": "pages-menu",
+						"customData": {}
+					}
+				},
+				{
 					"tooltip": "Google",
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
@@ -1058,6 +1066,17 @@
 					"id": "window-actions",
 					"title": "Window Actions",
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
+				},
+				{
+					"id": "dynamic-menu",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Dynamic Menu",
+					"description": "Dynamic Menu",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/actions/dynamic-menu.bundle.js",
+					"data": {
+						"popupHtml": "http://localhost:8080/common/popups/dynamic-menu/index.html"
+					}
 				}
 			]
 		},
