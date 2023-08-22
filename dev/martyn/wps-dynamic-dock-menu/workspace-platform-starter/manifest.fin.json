@@ -1075,7 +1075,7 @@
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/wps-dynamic-dock-menu/workspace-platform-starter/js/modules/actions/dynamic-menu.bundle.js",
 					"data": {
-						"exampleProp": "value"
+						"popupHtml": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/wps-dynamic-dock-menu/workspace-platform-starter/common/popups/dynamic-menu/index.html"
 					}
 				}
 			]
