@@ -3,6 +3,8 @@
 ## v14
 
 - Added customizable splash screen
+- Apps are refreshed based on the cache interval, if they change then the lifecycle event `apps-changed` is fired
+- Dock component subscribes to `apps-changed` lifecycle event and updates any dock based on their tagged apps
 - LaunchPage helper logic centralized for home, menus, dynamic dock and share
 - LaunchPage helper will always activate page if it already exists, unless `createCopyIfExists` is set
 - Added dynamic dock menu module which shows pages
