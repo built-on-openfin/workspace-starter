@@ -1075,7 +1075,7 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/actions/dynamic-menu.bundle.js",
 					"data": {
-						"exampleProp": "value"
+						"popupHtml": "http://localhost:8080/common/popups/dynamic-menu/index.html"
 					}
 				}
 			]

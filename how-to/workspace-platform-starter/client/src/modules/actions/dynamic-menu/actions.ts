@@ -17,6 +17,12 @@ import type { DynamicMenuProviderOptions } from "./shapes";
  */
 export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> {
 	/**
+	 * The module definition including settings.
+	 * @internal
+	 */
+	private _definition: ModuleDefinition<DynamicMenuProviderOptions> | undefined;
+
+	/**
 	 * The logger for displaying information from the module.
 	 * @internal
 	 */
@@ -41,6 +47,7 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._logger = loggerCreator("DynamicMenuProvider");
+		this._definition = definition;
 		this._helpers = helpers;
 	}
 
@@ -118,7 +125,7 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 					}
 				}
 			},
-			url: "http://localhost:8080/common/popups/dynamic-menu/index.html",
+			url: this._definition?.data?.popupHtml,
 			x: dockBounds.left + menuPos - 20,
 			y: dockBounds.top + 34,
 			width: 200,
