@@ -76,7 +76,7 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 
 				if (!isEmpty(res) && this._helpers?.launchPage) {
 					const pageToLaunch = await platform.Storage.getPage(res);
-					await this._helpers.launchPage(pageToLaunch);
+					await this._helpers.launchPage(pageToLaunch, undefined, this._logger);
 				}
 			}
 		};
