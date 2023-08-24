@@ -1,0 +1,8 @@
+{
+	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-validate-hosts-logic/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fix-validate-hosts-logic/workspace-platform-starter/common/style/style-changed-preload.js"
+		}
+	]
+}
