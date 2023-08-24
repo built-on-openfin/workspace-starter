@@ -75,8 +75,9 @@ export async function isValidHostForManifest(): Promise<boolean> {
 	const manifestUrl = info.manifestUrl;
 	logger.info(`Source of initial settings: ${manifestUrl}`);
 
-	const sourceUrlHostName = matchUrl(location.href, validHosts);
-	if (sourceUrlHostName) {
+	let sourceUrlHostName = matchUrl(location.href, validHosts);
+	if (isEmpty(sourceUrlHostName)) {
+		sourceUrlHostName = location.hostname;
 		logger.info("Adding current host to the list of valid hosts:", sourceUrlHostName);
 		validHosts.push(sourceUrlHostName);
 	}
