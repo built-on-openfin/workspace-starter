@@ -12,6 +12,7 @@
 - Composite module for pages the `page-show` action has been removed, as this is now handled by the centralized launchPage logic
 - Composite module for pages now sorts the page name in the menu
 - BREAKING CHANGE: LaunchPage helper second parameter has changed from bounds to options containing bounds
+- FIX: If the manifest comes from the same hostname as the provider.html/shell.html (the main entry page for the platform) then it is an acceptable host. If the manifest is coming from a different host then the manifest-hosts.json file needs to include it.
 
 ## v13.1
 
