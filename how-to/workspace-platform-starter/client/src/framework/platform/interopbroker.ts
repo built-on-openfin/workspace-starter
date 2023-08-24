@@ -553,8 +553,8 @@ export function interopOverride(
 						try {
 							if (connectedClient.entityType === "window") {
 								const instanceWindow = fin.Window.wrapSync(identity);
-								const isUserWindow = await instanceWindow.isShowing();
-								if (isUserWindow) {
+								const isVisibleUserWindow = await instanceWindow.isShowing();
+								if (isVisibleUserWindow) {
 									const windowInfo = await instanceWindow.getInfo();
 									title = windowInfo.title;
 									preview = await this.getPreviewImage(instanceWindow);

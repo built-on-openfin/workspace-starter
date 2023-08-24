@@ -8,7 +8,7 @@ import type {
 } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "../../../framework/utils";
-import { getAllVisibleWindows } from "./helper";
+import { getAllUserWindows } from "./helper";
 import type { WindowMenuSettings } from "./shapes";
 
 /**
@@ -62,12 +62,12 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 			const includeHideOtherWindows =
 				isEmpty(this._settings?.hideOtherWindows?.include) || this._settings?.hideOtherWindows?.include;
 
-			const availableWindows = await getAllVisibleWindows();
+			const userWindows = await getAllUserWindows();
 
 			const showAllWindowsEntry: MenuEntry = {
 				label: this._settings?.showAllWindows?.menuLabel ?? "Show All Windows",
 				icon: this._settings?.showAllWindows?.menuIcon,
-				enabled: availableWindows.length > 1,
+				enabled: userWindows.length > 1,
 				position: {
 					type: "CloseWindow",
 					operation: "before",
@@ -100,7 +100,7 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 			const hideOtherWindowsEntry: MenuEntry = {
 				label: this._settings?.hideOtherWindows?.menuLabel ?? "Hide Other Windows",
 				icon: this._settings?.hideOtherWindows?.menuIcon,
-				enabled: availableWindows.length > 1,
+				enabled: userWindows.length > 1,
 				position: {
 					type: "CloseWindow",
 					operation: "before",
