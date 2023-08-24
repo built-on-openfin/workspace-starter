@@ -20,7 +20,7 @@
 	"dependencies": {
 		"@openfin/workspace": "13.1.5",
 		"@openfin/workspace-platform": "13.1.5",
-		"@openfin/openid-connect": "^1.0.0-beta.1"
+		"@openfin/openid-connect": "^1.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
