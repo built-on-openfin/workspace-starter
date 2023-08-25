@@ -1,25 +1,24 @@
-import { broadcastFdc3, buildUrl, initFdc3Listener, loadTeamData } from '../common/common.js';
+import { addUserDates, broadcastFdc3, initFdc3Listener } from '../common/common.js';
+import * as usersModule from '../common/contacts.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-	init();
+document.addEventListener('DOMContentLoaded', async () => {
+	try {
+		await usersModule.initialize();
+		await addUserDates(usersModule.getUsers());
+		await initDom();
+		await initFdc3Listener(handleContext);
+	} catch (err) {
+		console.error(err);
+	}
 });
-
-let teamData;
-
-/**
- * Initialize the view.
- */
-async function init() {
-	teamData = await loadTeamData();
-	await initDom();
-	await initFdc3Listener(handleContext);
-}
 
 /**
  * Initialize the DOM components.
  */
 async function initDom() {
 	const memberListElem = document.querySelector('.team-member-list');
+
+	const teamData = usersModule.getUsers();
 
 	for (const teamMember of teamData) {
 		const memberElem = document.createElement('div');
@@ -30,7 +29,7 @@ async function initDom() {
 
 		const memberImageElem = document.createElement('img');
 		memberImageElem.classList.add('team-member-avatar');
-		memberImageElem.src = buildUrl('images/avatars', `avatar-${teamMember.id}.jpg`);
+		memberImageElem.src = usersModule.getProfilePic(teamMember);
 
 		const memberInfoElem = document.createElement('div');
 		memberInfoElem.classList.add('col');
@@ -78,16 +77,7 @@ async function initDom() {
  */
 async function selectTeamMember(member) {
 	if (window.fdc3) {
-		const fdc3Contact = {
-			type: 'fdc3.contact',
-			name: member.name,
-			id: {
-				FDS_ID: member.id,
-				email: member.email
-			}
-		};
-
-		await broadcastFdc3(fdc3Contact);
+		await broadcastFdc3(usersModule.userToFdc3Context(member));
 	}
 }
 
@@ -119,10 +109,11 @@ function handleContext(ctx) {
  * @param fcd3Contact The contact to update.
  */
 function updateMember(fcd3Contact) {
-	const teamMemberIndex = fcd3Contact ? teamData.findIndex((m) => m.id === fcd3Contact.id.FDS_ID) : -1;
+	const teamMember = usersModule.findUserByContext(fcd3Contact);
 
-	if (teamMemberIndex >= 0) {
+	if (teamMember) {
+		const teamData = usersModule.getUsers();
 		const memberListElem = document.querySelector('.team-member-list');
-		visualSelectMemberElem(memberListElem.childNodes[teamMemberIndex]);
+		visualSelectMemberElem(memberListElem.childNodes[teamData.indexOf(teamMember)]);
 	}
 }
