@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import type { InteropClient } from "@openfin/core/src/api/interop";
 import type {
 	AnalyticsModule,
 	PlatformAnalyticsEvent
@@ -15,7 +14,7 @@ import type { DevAnalyticsOptions } from "./shapes";
 export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> {
 	private _logger?: Logger;
 
-	private _interopClient: InteropClient | undefined;
+	private _interopClient: OpenFin.InteropClient | undefined;
 
 	private _channel?: OpenFin.SessionContextGroup;
 

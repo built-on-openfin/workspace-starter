@@ -1,6 +1,11 @@
 import type OpenFin from "@openfin/core";
-import type { App, PageLayout } from "@openfin/workspace";
-import { type AppIntent, type BrowserSnapshot, getCurrentSync } from "@openfin/workspace-platform";
+import type { App } from "@openfin/workspace";
+import {
+	getCurrentSync,
+	type AppIntent,
+	type BrowserSnapshot,
+	type PageLayout
+} from "@openfin/workspace-platform";
 import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "./apps";
 import type { CustomSettings } from "./shapes";
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## v14
+
+- Added customizable splash screen
+- Apps are refreshed based on the cache interval, if they change then the lifecycle event `apps-changed` is fired
+- Dock component subscribes to `apps-changed` lifecycle event and updates any dock based on their tagged apps
+- LaunchPage helper logic centralized for home, menus, dynamic dock and share
+- LaunchPage helper will always activate page if it already exists, unless `createCopyIfExists` is set
+- Added dynamic dock menu module which shows pages, this example module demonstrates how to use the `showPopupWindow` API
+- Added additional option for integration getSearchEntries `isSuggestion` to notify when the query was from a suggestion
+- Composite module for pages the `page-show` action has been removed, as this is now handled by the centralized launchPage logic
+- Composite module for pages now sorts the page name in the menu
+- BREAKING CHANGE: LaunchPage helper second parameter has changed from bounds to options containing bounds
+- Fix If the manifest comes from the same hostname as the provider.html/shell.html (the main entry page for the platform) then it is an acceptable host. If the manifest is coming from a different host then the manifest-hosts.json file needs to include it.
+- Fix: Composite Windows Module update. The Show All Windows, Hide All Windows, Hide Other Windows function update. From v32 of the OpenFin runtime the window isShowing() function returns true if it is on a desktop but false if a window is minimized (for consistency with Electron's approach). This means that our check to see if there are windows to minimize or show in the main browser menu and dock window needs to check isShowing() and if it isn't showing it checks the window state to see if it is minimized. Other places where isShowing is used (broker for taking screenshots of a window/view for an intent instance picker) and the platform override for places launched windows work against currently visible windows (so minimized and hidden windows should not be considered).
+
 ## v13.1
 
 - BREAKING CHANGE: Removed the logic that supported saving page window bounds into local storage or a defined endpoint (so if you created custom endpoints for saving this information please note that it is now in the page data). This was used when saving a page or sharing a page. It now uses the new customData property on the PageObject to append windowBounds. We also now capture the page bounds when Save Page AND Save Page As is called.

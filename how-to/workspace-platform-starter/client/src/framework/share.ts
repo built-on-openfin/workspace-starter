@@ -446,7 +446,7 @@ async function loadSharedEntry(id: string): Promise<void> {
 		const shareEntry = await requestResponse<{ id: string }, ShareStoreEntry>("share-get", { id });
 		if (!isEmpty(shareEntry)) {
 			if (shareEntry.type === "page") {
-				await launchPage(shareEntry.data.page);
+				await launchPage(shareEntry.data.page, undefined, logger);
 			} else if (shareEntry.type === "workspace") {
 				const platform = getCurrentSync();
 				await platform.applySnapshot(shareEntry.data.snapshot);

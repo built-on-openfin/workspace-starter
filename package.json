@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "13.1.5",
+	"version": "14.0.19",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "npm run build --workspaces",
@@ -50,12 +50,12 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"eslint": "8.46.0",
+		"eslint": "8.47.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.1.0",
 		"eslint-config-prettier": "9.0.0",
 		"eslint-plugin-import": "2.26.0",
-		"eslint-plugin-jsdoc": "46.4.6",
+		"eslint-plugin-jsdoc": "46.5.0",
 		"eslint-plugin-prettier": "5.0.0",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
@@ -64,7 +64,7 @@
 		"fast-glob": "3.3.1",
 		"fs-extra": "11.1.1",
 		"markdownlint-cli": "0.35.0",
-		"prettier": "3.0.1",
+		"prettier": "3.0.2",
 		"replace-in-file": "7.0.1",
 		"yargs": "17.7.2"
 	},

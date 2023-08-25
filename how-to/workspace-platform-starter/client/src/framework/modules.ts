@@ -155,6 +155,7 @@ export async function loadModule<
  * Initialize modules of the given type.
  * @param moduleEntries The type of modules to initialize.
  * @param helpers Helper methods to pass to all the modules.
+ * @param progress Progress callback for monitor module initialization.
  * @returns The list of initialized modules.
  */
 export async function initializeModules<
@@ -162,8 +163,15 @@ export async function initializeModules<
 	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
->(moduleEntries: ModuleEntry<M, H, O, D>[], helpers: H): Promise<void> {
+>(
+	moduleEntries: ModuleEntry<M, H, O, D>[],
+	helpers: H,
+	progress?: (definition: ModuleDefinition) => Promise<void>
+): Promise<void> {
 	for (const moduleEntry of moduleEntries) {
+		if (progress) {
+			await progress(moduleEntry.definition);
+		}
 		await initializeModule<M, H, O, D>(moduleEntry, helpers);
 	}
 }

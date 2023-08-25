@@ -56,6 +56,7 @@ export class PageMenus implements Menus<PageMenuSettings> {
 		if (menuType === "global" && !isEmpty(relatedMenuId?.windowIdentity)) {
 			// you can customize the browser main menu here
 			const pages: Page[] = await platform.Storage.getPages();
+			pages.sort((a, b) => a.title.localeCompare(b.title));
 			const includeDeletePage =
 				isEmpty(this._settings?.deletePage?.include) || this._settings?.deletePage?.include;
 			const includeShowPage = isEmpty(this._settings?.showPage?.include) || this._settings?.showPage?.include;
@@ -116,10 +117,10 @@ export class PageMenus implements Menus<PageMenuSettings> {
 						data: {
 							type: "Custom" as GlobalContextMenuOptionType.Custom,
 							action: {
-								id: !isEmpty(existing) ? "page-show" : "page-open",
+								id: "page-open",
 								customData: {
 									pageId: page.pageId,
-									windowIdentity: !isEmpty(existing) ? existing.parentIdentity : browserWindowIdentity
+									windowIdentity: browserWindowIdentity
 								}
 							}
 						}

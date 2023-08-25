@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import type { ClientIdentity } from "@openfin/core/src/OpenFin";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { Endpoint, EndpointDefinition } from "./endpoint-shapes";
@@ -49,7 +48,7 @@ export interface IntentRegistrationEntry {
 	/**
 	 * The identity of the client.
 	 */
-	clientIdentity: ClientIdentity;
+	clientIdentity: OpenFin.ClientIdentity;
 	/**
 	 * The identity of the application.
 	 */

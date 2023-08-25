@@ -55,44 +55,19 @@ export class PageActions implements Actions {
 				if (!isEmpty(pageId)) {
 					const page = await platform.Storage.getPage(pageId);
 
-					if (!isEmpty(page)) {
-						if (!isEmpty(targetWindowIdentity)) {
-							this._logger?.info(
-								`Adding page with id: ${pageId} to the current window with name: ${targetWindowIdentity.name}`
-							);
-							const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
-							await targetWindow.addPage(page);
-							await targetWindow.setActivePage(pageId);
-						} else if (this._helpers?.launchPage) {
-							this._logger?.info(
-								`Adding page with id: ${pageId} to a new window as no window identity was provided (likely unable to add a page to the window)`
-							);
-							await this._helpers.launchPage(page);
-						} else {
-							this._logger?.error(
-								"We are unable to launch a page as this module has not been passed the launchPage function."
-							);
-						}
+					if (this._helpers?.launchPage) {
+						await this._helpers.launchPage(
+							page,
+							{
+								targetWindowIdentity
+							},
+							this._logger
+						);
+					} else {
+						this._logger?.error(
+							"We are unable to launch a page as this module has not been passed the launchPage function."
+						);
 					}
-				}
-			}
-		};
-
-		actionMap["page-show"] = async (payload: CustomActionPayload): Promise<void> => {
-			if (payload.callerType !== CustomActionCallerType.API) {
-				const pageId: string = payload?.customData?.pageId;
-				const parentIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
-				if (!isEmpty(pageId) && !isEmpty(parentIdentity)) {
-					this._logger?.info(
-						`Showing page with id: ${pageId} by bringing window with name: ${parentIdentity.name} to the foreground.`
-					);
-					const pageWindow = platform.Browser.wrapSync(parentIdentity);
-					const windowState = await pageWindow.openfinWindow.getState();
-					if (windowState === "minimized") {
-						await pageWindow.openfinWindow.restore();
-					}
-					await pageWindow.openfinWindow.setAsForeground();
-					await pageWindow.setActivePage(pageId);
 				}
 			}
 		};

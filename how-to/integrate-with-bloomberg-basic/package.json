@@ -1,6 +1,6 @@
 {
 	"name": "integrate-with-bloomberg-basic",
-	"version": "13.1.5",
+	"version": "14.0.19",
 	"description": "OpenFin Workspace - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
 	"main": "index.js",
 	"scripts": {
@@ -10,7 +10,7 @@
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
-		"setup": "cd ../../ && npm install && cd how-to/integrate-with-bloomberg-basic && npm run build"
+		"setup": "npm install && npm run build"
 	},
 	"keywords": [
 		"bloomberg",
@@ -19,15 +19,15 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/bloomberg": "^1.1.0",
-		"@openfin/core": "31.75.4",
-		"@openfin/workspace": "13.1.5",
-		"@openfin/workspace-platform": "13.1.5"
+		"@openfin/bloomberg": "^1.2.0",
+		"@openfin/core": "32.76.10",
+		"@openfin/workspace": "14.0.19",
+		"@openfin/workspace-platform": "14.0.19"
 	},
 	"devDependencies": {
-		"openfin-adapter": "31.75.4",
+		"openfin-adapter": "32.76.10",
 		"ts-loader": "^9.4.4",
-		"typescript": "^5.1.6",
+		"typescript": "^5.2.2",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}

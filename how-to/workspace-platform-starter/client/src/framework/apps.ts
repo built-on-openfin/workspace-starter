@@ -1,5 +1,7 @@
+import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
 import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, AppsForIntent, PlatformApp } from "./shapes/app-shapes";
@@ -9,11 +11,11 @@ import { isEmpty, isNumber, randomUUID } from "./utils";
 
 const logger = createLogger("Apps");
 
-let lastCacheUpdate: number = 0;
 let cachedApps: PlatformApp[] = [];
 let cacheDuration = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
+let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
 
 /**
  * Initialize the application provider.
@@ -87,6 +89,20 @@ export async function init(
 			cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
+
+		if (cacheDuration > 0) {
+			let updateInProgress = false;
+			window.setInterval(async () => {
+				if (!updateInProgress) {
+					updateInProgress = true;
+					try {
+						await getEntries();
+					} finally {
+						updateInProgress = false;
+					}
+				}
+			}, cacheDuration);
+		}
 	}
 }
 
@@ -140,9 +156,10 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  * @returns The app entries.
  */
 async function getEntries(): Promise<PlatformApp[]> {
-	const now = Date.now();
-	if (now - lastCacheUpdate > cacheDuration) {
-		lastCacheUpdate = now;
+	if (isEmpty(getEntriesResolvers)) {
+		getEntriesResolvers = [];
+
+		logger.info("Apps cache expired refreshing");
 
 		const apps: PlatformApp[] = [];
 		try {
@@ -162,10 +179,38 @@ async function getEntries(): Promise<PlatformApp[]> {
 			logger.error("Error fetching apps.", error);
 		}
 
+		const lastCachedAppsJson = JSON.stringify(cachedApps);
+
 		cachedApps = await validateEntries(apps);
+
+		if (getEntriesResolvers.length > 0) {
+			logger.info("Resolving getEntry promises");
+
+			for (const getEntriesResolver of getEntriesResolvers) {
+				getEntriesResolver(cachedApps);
+			}
+		}
+
+		getEntriesResolvers = undefined;
+
+		const cachedAppJson = JSON.stringify(cachedApps);
+
+		if (cachedAppJson !== lastCachedAppsJson) {
+			const platform = getCurrentSync();
+			await fireLifecycleEvent(platform, "apps-changed");
+		}
+
+		return cachedApps;
 	}
 
-	return cachedApps;
+	return new Promise<PlatformApp[]>((resolve) => {
+		if (getEntriesResolvers) {
+			logger.info("Storing getEntry resolver");
+			getEntriesResolvers.push(resolve);
+		} else {
+			resolve(cachedApps);
+		}
+	});
 }
 
 /**
@@ -447,9 +492,8 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 	let canDownloadAppAssets = false;
 
 	try {
-		const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.downloadAsset"
-		);
+		const canDownloadAppAssetsResponse =
+			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
 		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 	} catch (error) {
 		logger.error("Error while querying for System.downloadAsset permission", error);

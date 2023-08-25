@@ -7,7 +7,7 @@ import {
 	type Page,
 	type PageLayout
 } from "@openfin/workspace-platform";
-import type { BrowserProviderOptions } from "workspace-platform-starter/shapes";
+import type { BrowserProviderOptions, Logger } from "workspace-platform-starter/shapes";
 import { getDefaultToolbarButtons } from "../buttons";
 import { isEmpty, isStringValue } from "../utils";
 
@@ -328,19 +328,105 @@ export async function getPageBounds(
 }
 
 /**
- * Launch a page.
+ * Launch a page in the workspace.
  * @param page The page to launch.
- * @param bounds The bound to launch the page with.
- * @returns The window that the page was launched with.
+ * @param options The options for the launch.
+ * @param options.bounds The optional bounds for the page.
+ * @param options.targetWindowIdentity The optional target window for the page.
+ * @param options.createCopyIfExists Create a copy of the page if it exists.
+ * @param logger Log output from the operation.
+ * @returns The window created.
  */
-export async function launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule> {
-	let customBounds = bounds;
+export async function launchPage(
+	page: Page,
+	options?: {
+		bounds?: OpenFin.Bounds;
+		targetWindowIdentity?: OpenFin.Identity;
+		createCopyIfExists?: boolean;
+	},
+	logger?: Logger
+): Promise<BrowserWindowModule> {
+	if (isEmpty(page)) {
+		logger?.error("Page is empty and cannot be attached to a window.");
+	}
+
+	const platform = getCurrentSync();
+
+	// First find out if the page is already attached to a browser window
+	const attachedPages = await platform.Browser.getAllAttachedPages();
+	const attachedWindowId: OpenFin.Identity | undefined = attachedPages.find((pg) => pg.pageId === page.pageId)
+		?.parentIdentity;
+
+	const targetWindowIdentity = options?.targetWindowIdentity;
+	if (!isEmpty(targetWindowIdentity)) {
+		// If we have a target window identity and its not the same as attached window id
+		// then activate the existing window, unless the createCopy flag is set
+		if (
+			!isEmpty(attachedWindowId) &&
+			attachedWindowId.name !== targetWindowIdentity.name &&
+			!options?.createCopyIfExists
+		) {
+			const attachedWindow = platform.Browser.wrapSync(attachedWindowId);
+			await attachedWindow.setActivePage(page.pageId);
+			logger?.warn("Activating page in window which is not the specified target window", {
+				pageId: page.pageId,
+				attachedWindowId: attachedWindowId.name,
+				targetWindowIdentity: targetWindowIdentity.name
+			});
+			await bringWindowToFront({ identity: attachedWindow.identity });
+			return attachedWindow;
+		}
+
+		const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
+
+		const pages = await targetWindow.getPages();
+		const hasPage = pages.find((pg) => pg.pageId === page.pageId);
+
+		// The target window either does not already have the page, or we are creating
+		// a copy even it it does exist
+		if (!hasPage || options?.createCopyIfExists) {
+			if (!hasPage) {
+				logger?.info("Page does not exist in target window, adding", {
+					pageId: page.pageId,
+					targetWindowIdentity: targetWindowIdentity.name
+				});
+			} else {
+				logger?.info("Page exists in target window, but createCopyIfExists flag is set, adding", {
+					pageId: page.pageId,
+					targetWindowIdentity: targetWindowIdentity.name
+				});
+			}
+			await targetWindow.addPage(page);
+		} else {
+			logger?.info("Page exists in target window, activating", {
+				pageId: page.pageId,
+				targetWindowIdentity: targetWindowIdentity.name
+			});
+		}
+		await targetWindow.setActivePage(page.pageId);
+		await bringWindowToFront({ identity: targetWindow.identity });
+		return targetWindow;
+	}
+
+	// There was no target specified so if its already attached to a window
+	// we just activate it, unless the create copy flag is set
+	if (!isEmpty(attachedWindowId) && !options?.createCopyIfExists) {
+		const attachedWindow = platform.Browser.wrapSync(attachedWindowId);
+		logger?.info("Page exists in target window, activating", {
+			pageId: page.pageId,
+			attachedWindowId: attachedWindowId.name
+		});
+		await attachedWindow.setActivePage(page.pageId);
+		await bringWindowToFront({ identity: attachedWindow.identity });
+		return attachedWindow;
+	}
+
+	let customBounds = options?.bounds;
 	if (isEmpty(customBounds) && !isEmpty(page.customData?.windowBounds)) {
 		customBounds = page.customData.windowBounds;
 	}
 
-	const platform = getCurrentSync();
-	const newWindow: BrowserCreateWindowRequest = {
+	const newWindowRequest: BrowserCreateWindowRequest = {
 		workspacePlatform: {
 			pages: [page]
 		}
@@ -349,25 +435,32 @@ export async function launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<B
 	if (!isEmpty(customBounds)) {
 		const monitors = await fin.System.getMonitorInfo();
 
-		newWindow.height = customBounds.height;
-		newWindow.width = customBounds.width;
-		newWindow.defaultHeight = customBounds.height;
-		newWindow.defaultWidth = customBounds.width;
+		newWindowRequest.height = customBounds.height;
+		newWindowRequest.width = customBounds.width;
+		newWindowRequest.defaultHeight = customBounds.height;
+		newWindowRequest.defaultWidth = customBounds.width;
 
 		if (!isEmpty(monitors.virtualScreen)) {
 			if (!isEmpty(monitors.virtualScreen.left) && customBounds.left >= monitors.virtualScreen.left) {
-				newWindow.x = customBounds.left;
-				newWindow.defaultLeft = customBounds.left;
+				newWindowRequest.x = customBounds.left;
+				newWindowRequest.defaultLeft = customBounds.left;
 			}
 
 			if (!isEmpty(monitors.virtualScreen.top) && customBounds.top >= monitors.virtualScreen.top) {
-				newWindow.y = customBounds.top;
-				newWindow.defaultTop = customBounds.top;
+				newWindowRequest.y = customBounds.top;
+				newWindowRequest.defaultTop = customBounds.top;
 			}
 		}
 	}
 
-	return platform.Browser.createWindow(newWindow);
+	const newWindow = await platform.Browser.createWindow(newWindowRequest);
+
+	logger?.info("Page does not exist, creating new window and adding page", {
+		pageId: page.pageId,
+		newWindowId: newWindow.identity.name
+	});
+
+	return newWindow;
 }
 
 /**

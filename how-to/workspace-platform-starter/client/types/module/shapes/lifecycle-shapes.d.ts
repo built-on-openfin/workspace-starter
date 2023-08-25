@@ -1,5 +1,5 @@
-import type { Page, Workspace } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Workspace } from "@openfin/workspace";
+import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 /**
  * Events that can be triggered through the lifecycle.
@@ -12,7 +12,8 @@ export type LifecycleEvents =
 	| "before-quit"
 	| "theme-changed"
 	| "workspace-changed"
-	| "page-changed";
+	| "page-changed"
+	| "apps-changed";
 /**
  * The type for a lifecycle event handler.
  */

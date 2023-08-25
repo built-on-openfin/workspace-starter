@@ -1,5 +1,6 @@
 import * as authProvider from "./auth";
 import { getDefaultHelpers } from "./modules";
+import * as PlatformSplash from "./platform/platform-splash";
 import { isValidHostForManifest } from "./settings";
 import type { AuthProviderOptions, Logger, ModuleHelpers } from "./shapes";
 
@@ -34,6 +35,8 @@ export async function init(
 	await authProvider.init(options, moduleHelpers);
 
 	if (authProvider.isAuthenticationEnabled()) {
+		await PlatformSplash.updateProgress("Authentication");
+
 		const authenticationRequired = await authProvider.isAuthenticationRequired();
 		if (listenForAuthChanges) {
 			// check for session expiry
