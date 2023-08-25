@@ -9,7 +9,7 @@ import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/a
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "../../../framework/utils";
-import { getAllVisibleWindows } from "./helper";
+import { getAllUserWindows } from "./helper";
 
 /**
  * Implement the actions.
@@ -54,9 +54,9 @@ export class WindowActions implements Actions {
 				payload.callerType !== CustomActionCallerType.API &&
 				payload.callerType !== CustomActionCallerType.SaveButtonContextMenu
 			) {
-				const visibleWindows = await getAllVisibleWindows();
+				const userWindows = await getAllUserWindows();
 				let windowInitiator: OpenFin.Window | undefined;
-				for (const visibleWindow of visibleWindows) {
+				for (const visibleWindow of userWindows) {
 					if (
 						visibleWindow.identity.name === payload.windowIdentity.name &&
 						visibleWindow.identity.uuid === payload.windowIdentity.uuid
@@ -77,9 +77,9 @@ export class WindowActions implements Actions {
 		};
 
 		actionMap["window-hide-all"] = async (payload: CustomActionPayload): Promise<void> => {
-			const visibleWindows = await getAllVisibleWindows();
-			for (const visibleWindow of visibleWindows) {
-				await visibleWindow.minimize();
+			const userWindows = await getAllUserWindows();
+			for (const userWindow of userWindows) {
+				await userWindow.minimize();
 			}
 		};
 
@@ -88,10 +88,10 @@ export class WindowActions implements Actions {
 				payload.callerType !== CustomActionCallerType.API &&
 				payload.callerType !== CustomActionCallerType.SaveButtonContextMenu
 			) {
-				const visibleWindows = await getAllVisibleWindows();
-				for (const visibleWindow of visibleWindows) {
-					if (visibleWindow.identity.name !== payload.windowIdentity.name) {
-						await visibleWindow.minimize();
+				const userWindows = await getAllUserWindows();
+				for (const userWindow of userWindows) {
+					if (userWindow.identity.name !== payload.windowIdentity.name) {
+						await userWindow.minimize();
 					}
 				}
 			}
