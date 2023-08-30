@@ -1,0 +1,282 @@
+[
+	{
+		"id": "9dc22077a0c3103131179fc5a86af269",
+		"name": "Grace Pruitt",
+		"role": "CFA",
+		"email": "grace.pruitt@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-10-01",
+				"2022-10-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "69e914359dfd27f2a7b5f95d351348fe",
+		"name": "Roy Harris",
+		"role": "CFA",
+		"email": "roy.harris@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-09-01",
+				"2022-09-02",
+				"2022-12-09",
+				"2022-12-10",
+				"2022-12-11",
+				"2023-01-28",
+				"2023-01-29"
+			],
+			"awaitingApproval": ["2023-02-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "650e316028004054e2d160bb2a39862d",
+		"name": "Louis Miller",
+		"role": "CFA",
+		"email": "louis.miller@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-10-01",
+				"2022-10-02",
+				"2023-01-09",
+				"2023-01-10",
+				"2023-01-11",
+				"2023-02-28",
+				"2023-02-29"
+			],
+			"awaitingApproval": ["2023-03-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "703c89f645f916c122746ca6393bce4a",
+		"name": "Amy Cotton",
+		"role": "CFA",
+		"email": "amy.cotton@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "3030f9745f5e95924401262ea20ca28f",
+		"name": "Ilana Thompson",
+		"role": "CFA",
+		"email": "illana.thompson@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "53427388e87b6f3b141a459ca1c523e6",
+		"name": "Daniel Deaton",
+		"role": "CFA",
+		"email": "daniel.deaton@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "a124fee0041eb85f26a82a2838ac0ffc",
+		"name": "Justin Oliver",
+		"role": "CFA",
+		"email": "justin.oliver@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "a393d231465fcb3d3b8e93ec46654cd5",
+		"name": "Benjamin Hill",
+		"role": "CFA",
+		"email": "benjamin.hill@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "a501c3464c6965310a96ea956d31e15c",
+		"name": "Richard Silvey",
+		"role": "CFA",
+		"email": "richard.silver@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "a13469d52779e1b7f6782b56906e5752",
+		"name": "Gregory Kraus",
+		"role": "CFA",
+		"email": "gregory.kraus@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "ac228d5d2a8f8c64b124a8627cd01036",
+		"name": "Nathan Dipalma",
+		"role": "CFA",
+		"email": "nathan.dipalma@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "b672a1e5c6e758500b8713034776582b",
+		"name": "Christine Lee",
+		"role": "CFA",
+		"email": "christine.lee@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "ca91510e719f20f5424356b786e1cc89",
+		"name": "Robert Leake",
+		"role": "CFA",
+		"email": "robert.leake@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	},
+	{
+		"id": "d6fd01c5398b18ca4bcf905d80b2e8b6",
+		"name": "Yvette Wilson",
+		"role": "CFA",
+		"email": "yvette.wilson@openfin.co",
+		"leave": {
+			"alloted": 20,
+			"approved": [
+				"2022-08-01",
+				"2022-08-02",
+				"2022-11-09",
+				"2022-11-10",
+				"2022-11-11",
+				"2022-12-28",
+				"2022-12-29"
+			],
+			"awaitingApproval": ["2023-01-01"],
+			"lastUpdated": 1651155329598
+		}
+	}
+]
