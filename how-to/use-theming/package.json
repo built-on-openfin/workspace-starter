@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-theming",
-	"version": "13.1.5",
+	"version": "13.1.7",
 	"description": "OpenFin Workspace -- Use Theming",
 	"main": "index.js",
 	"scripts": {
@@ -16,13 +16,13 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "13.1.5"
+		"@openfin/workspace": "13.1.7"
 	},
 	"devDependencies": {
 		"@openfin/core": "31.75.4",
 		"openfin-adapter": "31.75.4",
 		"ts-loader": "^9.4.4",
-		"typescript": "^5.1.6",
+		"typescript": "^5.2.2",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}
