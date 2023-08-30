@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-rss",
-	"version": "13.1.5",
+	"version": "13.1.7",
 	"description": "OpenFin Workspace -- Integrate with RSS",
 	"main": "index.js",
 	"scripts": {
@@ -16,8 +16,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "13.1.5",
-		"@openfin/workspace-platform": "13.1.5",
+		"@openfin/workspace": "13.1.7",
+		"@openfin/workspace-platform": "13.1.7",
 		"fast-xml-parser": "4.2.7"
 	},
 	"devDependencies": {
@@ -28,7 +28,7 @@
 		"openfin-adapter": "31.75.4",
 		"node-fetch": "cjs",
 		"ts-loader": "^9.4.4",
-		"typescript": "^5.1.6",
+		"typescript": "^5.2.2",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	}
