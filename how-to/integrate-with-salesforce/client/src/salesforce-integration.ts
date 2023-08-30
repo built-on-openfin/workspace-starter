@@ -1051,9 +1051,8 @@ export class SalesforceIntegration {
 		}
 
 		if (batch.length > 0) {
-			const batchedResults = await this.getBatchedResults<
-				SalesforceRestApiQueryResult<SalesforceSearchResult>
-			>(batch);
+			const batchedResults =
+				await this.getBatchedResults<SalesforceRestApiQueryResult<SalesforceSearchResult>>(batch);
 			for (let i = 0; i < referenceMappings.length; i++) {
 				if (batchedResults[i].records?.length > 0) {
 					const result = batchedResults[i].records[0];
