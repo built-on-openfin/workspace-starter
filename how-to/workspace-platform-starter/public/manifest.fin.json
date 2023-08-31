@@ -1236,6 +1236,25 @@
 					}
 				}
 			]
+		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "openid-connect",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "OpenId Connect",
+					"description": "OpenId Connect",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/auth/openid-connect.bundle.js",
+					"data": {
+						"providerUrl": "",
+						"clientId": "",
+						"loginRedirectUrl": "http://localhost:8080/oidc_login.html",
+						"logoutRedirectUrl": "http://localhost:8080/oidc_logout.html",
+						"checkSessionValidityInSeconds": 30
+					}
+				}
+			]
 		}
 	}
 }
