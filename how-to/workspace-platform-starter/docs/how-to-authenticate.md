@@ -59,6 +59,34 @@ This example module is there for you to test different auth flows (e.g. autoLogi
 | loginHeight                   | How tall should the login window be (default is 250px)                                                                   |
 | loginWidth                    | How wide should the login window be (default is 400px)                                                                   |
 
+### OpenID Connect Example Module
+
+OpenFin provider an OpenID Connect (OIDC) auth package [https://www.npmjs.com/package/@openfin/openid-connect](https://www.npmjs.com/package/@openfin/openid-connect) which performs the standard OIDC authentication handshake process.
+
+We have provided an implementation of an auth module which uses the OIDC package, see [../client/src/modules/auth/openid-connect/auth.ts](../client/src/modules/auth/openid-connect/auth.ts)
+
+This module is already added into the configuration for `authProvider` in [../public/manifest.fin.json](../public/manifest.fin.json), but it is not enabled by default. To enable the module set the `enabled` flag to true and complete the `providerUrl` and `clientId` properties for your OIDC provider.
+
+```json
+{
+  "id": "openid-connect",
+  "icon": "http://localhost:8080/favicon.ico",
+  "title": "OpenId Connect",
+  "description": "OpenId Connect",
+  "enabled": true,
+  "url": "http://localhost:8080/js/modules/auth/openid-connect.bundle.js",
+  "data": {
+    "providerUrl": "<PROVIDER_ID>",
+    "clientId": "<CLIENT_ID>",
+    "loginRedirectUrl": "http://localhost:8080/oidc_login.html",
+    "logoutRedirectUrl": "http://localhost:8080/oidc_logout.html",
+    "checkSessionValidityInSeconds": 30
+  }
+}
+```
+
+For a more in depth look at using the OIDC package you can take a look at the individual sample [How To Integrate With OpenID Connect (OIDC)](../../integrate-with-openid-connect/README.md)
+
 ### Implementing Your Own Auth Module
 
 To implement your own auth module you just need to follow the following interface defined in [auth-shapes](../client/src/framework/shapes/auth-shapes.ts):
@@ -113,7 +141,7 @@ This would present the Log Out and Quit App menu option underneath the Quit menu
 
 We also have a few other examples if you would like to know more about authentication and OpenFin in general:
 
-- [How To Integrate With SSO](../../integrate-with-sso/README.md)
+- [How To Integrate With OpenID Connect (OIDC)](../../integrate-with-openid-connect/README.md)
 - [How To Integrate Server Authentication](../../integrate-server-authentication/README.md)
 
 [<- Back to Table Of Contents](../README.md)
