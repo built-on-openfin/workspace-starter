@@ -1236,6 +1236,25 @@
 					}
 				}
 			]
+		},
+		"authProvider": {
+			"modules": [
+				{
+					"id": "openid-connect",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/favicon.ico",
+					"title": "OpenId Connect",
+					"description": "OpenId Connect",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/auth/openid-connect.bundle.js",
+					"data": {
+						"providerUrl": "",
+						"clientId": "",
+						"loginRedirectUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/oidc_login.html",
+						"logoutRedirectUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/oidc_logout.html",
+						"checkSessionValidityInSeconds": 30
+					}
+				}
+			]
 		}
 	}
 }
