@@ -18,8 +18,8 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "14.0.19",
-		"@openfin/workspace-platform": "14.0.19",
+		"@openfin/workspace": "14.0.20",
+		"@openfin/workspace-platform": "14.0.20",
 		"@openfin/openid-connect": "^1.0.0"
 	},
 	"devDependencies": {
