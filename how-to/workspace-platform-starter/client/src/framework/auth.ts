@@ -1,5 +1,5 @@
 import { createLogger } from "./logger-provider";
-import { initializeModules, loadModules } from "./modules";
+import { initializeModule, loadModules } from "./modules";
 import type { ModuleHelpers } from "./shapes";
 import type { AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
 import { isEmpty } from "./utils";
@@ -8,6 +8,7 @@ const logger = createLogger("Auth");
 
 let authOptions: AuthProviderOptions | undefined;
 let authProvider: AuthProvider;
+let isInitialized: boolean = false;
 let authEnabled = false;
 
 /**
@@ -24,16 +25,19 @@ export async function init(options: AuthProviderOptions | undefined, helpers: Mo
 		return;
 	}
 
-	if (isEmpty(authProvider)) {
+	if (!isInitialized) {
+		isInitialized = true;
+
 		const authModules = await loadModules<AuthProvider>(authOptions, "auth");
-		await initializeModules<AuthProvider>(authModules, helpers);
+		if (authModules.length > 0) {
+			if (authModules.length > 1) {
+				logger.warn("You have more than one auth module enabled, only the first will be used");
+			}
 
-		if (authModules.length > 1) {
-			logger.warn("You have more than one auth module enabled, only the first will be used");
+			await initializeModule<AuthProvider>(authModules[0], helpers);
+			authProvider = authModules[0].implementation;
+			authEnabled = true;
 		}
-
-		authProvider = authModules[0].implementation;
-		authEnabled = true;
 	} else {
 		logger.warn("The auth provider has already been initialized");
 	}
