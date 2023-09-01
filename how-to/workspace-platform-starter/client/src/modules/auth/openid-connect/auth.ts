@@ -71,7 +71,6 @@ export class OpenIdConnectProvider implements AuthProvider<OpenIdConnectProvider
 	): Promise<void> {
 		this._definition = definition;
 		this._logger = loggerCreator("OpenIdConnectProvider");
-		this._helpers = helpers;
 
 		this._logger.info("Initializing");
 
