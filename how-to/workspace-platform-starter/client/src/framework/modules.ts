@@ -1,11 +1,14 @@
 import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
+import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { launchPage } from "./platform/browser";
 import type { PlatformApp } from "./shapes";
+import type { FavoriteClient } from "./shapes/favorite-shapes";
+
 import type {
 	Module,
 	ModuleDefinition,
@@ -262,6 +265,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getCurrentColorSchemeMode,
 		getVersionInfo,
 		getInteropClient,
+		getFavoriteClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -292,5 +296,26 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
 	// otherwise returned undefined as they should be calling after the bootstrapped lifecycle event
 	logger.warn(
 		"A request was made for the interop client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
+	);
+}
+
+/**
+ * Get the favorite client to use with the modules.
+ * @returns The favorite client.
+ */
+async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
+	if (bootstrapped) {
+		if (favoriteProvider.getInfo().isInitialized) {
+			logger.warn(
+				"A request was made for the favorite client but favorites is not configured for this platform."
+			);
+			return undefined;
+		}
+		// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
+		return favoriteProvider;
+	}
+	// otherwise returned undefined as they should be calling after the bootstrapped lifecycle event
+	logger.warn(
+		"A request was made for the favorite client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
 	);
 }

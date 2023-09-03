@@ -8,6 +8,7 @@ import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { DockProviderOptions } from "./dock-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
+import type { FavoriteProviderOptions } from "./favorite-shapes";
 import type { HomeProviderOptions } from "./home-shapes";
 import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
@@ -121,4 +122,8 @@ export interface CustomSettings {
 	 * The splash screen provider options.
 	 */
 	splashScreenProvider?: SplashScreenProviderOptions;
+	/**
+	 * The settings you need to set if you want to indicate this platform supports favorites
+	 */
+	favoriteProvider?: FavoriteProviderOptions;
 }
