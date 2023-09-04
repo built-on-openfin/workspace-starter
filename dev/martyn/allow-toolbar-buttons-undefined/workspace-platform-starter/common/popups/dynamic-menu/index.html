@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dock Menu</title>
+		<link rel="stylesheet" href="/common/style/app.css" />
+		<script src="./dynamic-menu.js"></script>
+		<style>
+			body {
+				background-color: var(--background-primary);
+			}
+			.menu-item {
+				background-color: var(--background-primary);
+				color: var(--text-default);
+				display: flex;
+				flex-direction: row;
+				gap: 10px;
+				align-items: center;
+				justify-content: flex-start;
+				padding: 10px 10px;
+				border-radius: 0;
+				height: 32px;
+				font-size: 12px;
+				cursor: pointer;
+			}
+
+			.menu-item > span {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.menu-item:hover {
+				background-color: var(--input-background);
+			}
+
+			.menu-item-none {
+				display: flex;
+				background-color: var(--background-primary);
+				font-style: italic;
+				color: var(--text-default);
+				align-items: flex-start;
+				justify-content: flex-start;
+				padding: 10px 10px;
+				height: 32px;
+				font-size: 12px;
+			}
+		</style>
+	</head>
+
+	<body class="col fill pad0" id="menuContainer"></body>
+</html>
