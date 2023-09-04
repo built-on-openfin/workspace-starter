@@ -227,6 +227,14 @@
                     "description": "Once all apps are fetched and processed from the one or more sources specified, how long should the result be\ncached for in seconds (can be used on it's own or in addition to the minutes setting).",
                     "type": "number"
                 },
+                "cacheRetrievalStrategy": {
+                    "description": "The cache strategy determines when the cache should be checked for expiry.\non-demand means that the cache expiry is checked every time apps are requested in code, this strategy\nreduces the overhead of app requests, but may take longer for app lists to update from dynamic endpoints\ninterval means that the cache expiry is checked by an interval timer, this mode will increase the amount\napp requested performed, but the app lists will be updated more quickly\nThe default is on-demand",
+                    "enum": [
+                        "interval",
+                        "on-demand"
+                    ],
+                    "type": "string"
+                },
                 "endpointIds": {
                     "description": "An array of endpoints that should be used to request a list of apps. The array entry can be a string\n(representing the array id) or an object with an inputId that maps to an endpoint id and gets passed to the\nendpoint specified using the outputId (this is useful for mapping apps from one format to another)",
                     "items": {

@@ -160,8 +160,6 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  */
 async function getEntries(): Promise<PlatformApp[]> {
 	if (isEmpty(getEntriesResolvers)) {
-		getEntriesResolvers = [];
-
 		let performRequest = true;
 		if (cacheRetrievalStrategy === "on-demand") {
 			performRequest = false;
@@ -174,6 +172,8 @@ async function getEntries(): Promise<PlatformApp[]> {
 		}
 
 		if (performRequest) {
+			getEntriesResolvers = [];
+
 			logger.info("Apps cache expired refreshing");
 
 			const apps: PlatformApp[] = [];
