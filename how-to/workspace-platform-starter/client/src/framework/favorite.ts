@@ -61,9 +61,9 @@ export async function init(
 /**
  * Lets you get favorites that have been saved.
  * @param byType do you wish to filter so it only returns a particular type of favorite
- * @returns FavoriteEntry[]
+ * @returns an array of favorites or undefined if the endpoint is not configured.
  */
-export async function getSavedFavorites(byType?: FavoriteTypeNames): Promise<FavoriteEntry[]> {
+export async function getSavedFavorites(byType?: FavoriteTypeNames): Promise<FavoriteEntry[] | undefined> {
 	if (endpoints.hasEndpoint(FAVORITE_ENDPOINT_ID_LIST)) {
 		const favorites = await endpoints.requestResponse<
 			EndpointFavoriteListRequest,
@@ -72,20 +72,20 @@ export async function getSavedFavorites(byType?: FavoriteTypeNames): Promise<Fav
 			favoriteType: byType,
 			platform: fin.me.identity.uuid
 		});
-		if (favorites) {
+		if (!isEmpty(favorites) && Array.isArray(favorites?.entries)) {
 			if (!isEmpty(byType)) {
 				logger.info(`Returning saved favorites by type ${byType} from custom storage`);
 			} else {
 				logger.info("Returning saved favorites from custom storage");
 			}
-			return Object.values(favorites).map((fav) => fav.payload);
+			return favorites.entries.map((fav) => fav.payload);
 		}
 		logger.warn("No response getting saved favorites from custom storage");
 		return [];
 	}
 	logger.warn(`There has been a request for a list of favorites but no endpoint with the 
     id: ${FAVORITE_ENDPOINT_ID_LIST} is listed in your endpoint configuration.`);
-	return [];
+	return undefined;
 }
 
 /**
@@ -127,7 +127,7 @@ export async function setSavedFavorite(favorite: FavoriteEntry): Promise<boolean
 		return false;
 	}
 	logger.info("Setting timestamp.");
-	favorite.timestamp = new Date(Date.now());
+	favorite.timestamp = new Date();
 	if (endpoints.hasEndpoint(FAVORITE_ENDPOINT_ID_SET)) {
 		const success = await endpoints.action<EndpointFavoriteSetRequest>(FAVORITE_ENDPOINT_ID_SET, {
 			id: favorite.id,
