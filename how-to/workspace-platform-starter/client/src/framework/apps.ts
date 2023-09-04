@@ -12,7 +12,9 @@ import { isEmpty, isNumber, randomUUID } from "./utils";
 const logger = createLogger("Apps");
 
 let cachedApps: PlatformApp[] = [];
-let cacheDuration = 0;
+let cacheDuration: number = 0;
+let cacheRetrievalStrategy: "on-demand" | "interval" = "on-demand";
+let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
@@ -90,7 +92,8 @@ export async function init(
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
 
-		if (cacheDuration > 0) {
+		cacheRetrievalStrategy = options?.cacheRetrievalStrategy ?? cacheRetrievalStrategy;
+		if (cacheDuration > 0 && cacheRetrievalStrategy === "interval") {
 			let updateInProgress = false;
 			window.setInterval(async () => {
 				if (!updateInProgress) {
@@ -157,47 +160,60 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  */
 async function getEntries(): Promise<PlatformApp[]> {
 	if (isEmpty(getEntriesResolvers)) {
-		getEntriesResolvers = [];
+		let performRequest = true;
+		if (cacheRetrievalStrategy === "on-demand") {
+			performRequest = false;
 
-		logger.info("Apps cache expired refreshing");
-
-		const apps: PlatformApp[] = [];
-		try {
-			logger.info("Getting directory apps.");
-			const directoryApps = await getPlatformApps();
-			apps.push(...directoryApps);
-
-			logger.info("Getting connected apps.");
-			const connectedApps = await getConnectedApps();
-			if (connectedApps.length > 0) {
-				logger.info(
-					`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
-				);
-				apps.push(...connectedApps);
-			}
-		} catch (error) {
-			logger.error("Error fetching apps.", error);
-		}
-
-		const lastCachedAppsJson = JSON.stringify(cachedApps);
-
-		cachedApps = await validateEntries(apps);
-
-		if (getEntriesResolvers.length > 0) {
-			logger.info("Resolving getEntry promises");
-
-			for (const getEntriesResolver of getEntriesResolvers) {
-				getEntriesResolver(cachedApps);
+			const now = Date.now();
+			if (now - lastCacheUpdate > cacheDuration) {
+				lastCacheUpdate = now;
+				performRequest = true;
 			}
 		}
 
-		getEntriesResolvers = undefined;
+		if (performRequest) {
+			getEntriesResolvers = [];
 
-		const cachedAppJson = JSON.stringify(cachedApps);
+			logger.info("Apps cache expired refreshing");
 
-		if (cachedAppJson !== lastCachedAppsJson) {
-			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "apps-changed");
+			const apps: PlatformApp[] = [];
+			try {
+				logger.info("Getting directory apps.");
+				const directoryApps = await getPlatformApps();
+				apps.push(...directoryApps);
+
+				logger.info("Getting connected apps.");
+				const connectedApps = await getConnectedApps();
+				if (connectedApps.length > 0) {
+					logger.info(
+						`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
+					);
+					apps.push(...connectedApps);
+				}
+			} catch (error) {
+				logger.error("Error fetching apps.", error);
+			}
+
+			const lastCachedAppsJson = JSON.stringify(cachedApps);
+
+			cachedApps = await validateEntries(apps);
+
+			if (getEntriesResolvers.length > 0) {
+				logger.info("Resolving getEntry promises");
+
+				for (const getEntriesResolver of getEntriesResolvers) {
+					getEntriesResolver(cachedApps);
+				}
+			}
+
+			getEntriesResolvers = undefined;
+
+			const cachedAppJson = JSON.stringify(cachedApps);
+
+			if (cachedAppJson !== lastCachedAppsJson) {
+				const platform = getCurrentSync();
+				await fireLifecycleEvent(platform, "apps-changed");
+			}
 		}
 
 		return cachedApps;

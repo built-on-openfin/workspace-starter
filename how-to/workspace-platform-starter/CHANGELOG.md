@@ -18,6 +18,9 @@
 - Fixed: Auth modules initialized only if at least one is enabled
 - Fixed: When Toolbar buttons in browserProvider are undefined we maintain this state instead of returning empty array, so that default platform buttons are used.
 - Added framework support for the concept of favorites. The introduction of a favoriteProvider has been added to the settings which let you specify settings that aid in support of favorites (if not provided it is assumed that favorites is not enabled for the platform). This provider needs 4 endpoints to be defined: favorite-list, favorite-get, favorite-set and favorite-remove. The generated favorite shapes type provides types starting with Endpoint to help build the endpoint module and know the expected shape.
+- Added appProviderOptions `cacheRetrievalStrategy`, defaults to `on-demand`
+  - `on-demand` validates/updates the cache every time the list of apps is requested (will reduce requests to app endpoints when app is idle)
+  - `interval` validates/updates the cache on a timer based on the cache duration (will make more requests to app endpoints)
 
 ## v13.1
 
