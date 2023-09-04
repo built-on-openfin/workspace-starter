@@ -197,11 +197,11 @@ export function getInfo(): FavoriteInfo {
 	if (isEmpty(favoriteOptions)) {
 		logger.warn("The options for favorites has not been set yet.");
 		return {
-			isInitialized: false
+			isEnabled: false
 		};
 	}
 	return {
-		isInitialized,
+		isEnabled: isInitialized,
 		favoriteIcon: favoriteOptions?.favoriteIcon,
 		unfavoriteIcon: favoriteOptions?.unfavoriteIcon,
 		command: favoriteOptions?.favoriteCommand,

@@ -305,7 +305,7 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
  */
 async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
 	if (bootstrapped) {
-		if (favoriteProvider.getInfo().isInitialized) {
+		if (!favoriteProvider.getInfo().isEnabled) {
 			logger.warn(
 				"A request was made for the favorite client but favorites is not configured for this platform."
 			);
