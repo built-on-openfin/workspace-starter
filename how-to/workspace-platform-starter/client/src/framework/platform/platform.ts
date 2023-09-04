@@ -26,7 +26,7 @@ import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations"
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
-import * as PlatformSplash from "./platform-splash";
+import * as platformSplashProvider from "./platform-splash";
 import { PLATFORM_VERSION } from "./platform-version";
 
 const logger = loggerProvider.createLogger("Platform");
@@ -36,7 +36,7 @@ const logger = loggerProvider.createLogger("Platform");
  * @returns True if the platform was initialized.
  */
 export async function init(): Promise<boolean> {
-	await PlatformSplash.updateProgress("Platform");
+	await platformSplashProvider.updateProgress("Platform");
 
 	const customSettings = await getManifestCustomSettings();
 
@@ -66,7 +66,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	// and notify any actions with the after auth lifecycle
 	await modules.init(randomUUID());
 
-	await PlatformSplash.updateProgress("Init Options");
+	await platformSplashProvider.updateProgress("Init Options");
 
 	const helpers: ModuleHelpers = modules.getDefaultHelpers();
 
@@ -75,17 +75,17 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	// We reload the settings now that endpoints have been configured.
 	const customSettings: CustomSettings = await getSettings();
 
-	await PlatformSplash.updateProgress("Logger");
+	await platformSplashProvider.updateProgress("Logger");
 
 	await loggerProvider.init(customSettings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
 
-	await PlatformSplash.updateProgress("Endpoints");
+	await platformSplashProvider.updateProgress("Endpoints");
 
 	await endpointProvider.init(customSettings?.endpointProvider, helpers);
 
-	await PlatformSplash.updateProgress("Versioning");
+	await platformSplashProvider.updateProgress("Versioning");
 
 	const runtimeVersion = await fin.System.getVersion();
 
@@ -99,19 +99,19 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	}
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
-	await PlatformSplash.updateProgress("Connections");
+	await platformSplashProvider.updateProgress("Connections");
 	await connectionProvider.init(customSettings?.connectionProvider);
 
-	await PlatformSplash.updateProgress("Menus");
+	await platformSplashProvider.updateProgress("Menus");
 	await menusProvider.init(customSettings?.menusProvider, helpers);
 
-	await PlatformSplash.updateProgress("Analytics");
+	await platformSplashProvider.updateProgress("Analytics");
 	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);
 
-	await PlatformSplash.updateProgress("Apps");
+	await platformSplashProvider.updateProgress("Apps");
 	await appProvider.init(customSettings?.appProvider, endpointProvider);
 
-	await PlatformSplash.updateProgress("Conditions");
+	await platformSplashProvider.updateProgress("Conditions");
 	await conditionsProvider.init(customSettings?.conditionsProvider, helpers);
 	conditionsProvider.registerCondition(
 		"authenticated",
@@ -121,10 +121,10 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	conditionsProvider.registerCondition("sharing", async () => shareProvider.isShareEnabled(), false);
 	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
 
-	await PlatformSplash.updateProgress("Lifecycles");
+	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	await PlatformSplash.updateProgress("Sharing");
+	await platformSplashProvider.updateProgress("Sharing");
 	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
 
 	logger.info("Initializing platform");
