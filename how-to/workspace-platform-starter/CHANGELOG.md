@@ -2,7 +2,7 @@
 
 ## v14
 
-- Added customizable splash screen
+- Added customizable splash screen (splashScreenProvider in settings)
 - Apps are refreshed based on the cache interval, if they change then the lifecycle event `apps-changed` is fired
 - Dock component subscribes to `apps-changed` lifecycle event and updates any dock based on their tagged apps
 - LaunchPage helper logic centralized for home, menus, dynamic dock and share
@@ -17,6 +17,7 @@
 - Added: OIDC Auth provider example module
 - Fixed: Auth modules initialized only if at least one is enabled
 - Fixed: When Toolbar buttons in browserProvider are undefined we maintain this state instead of returning empty array, so that default platform buttons are used.
+- Added framework support for the concept of favorites. The introduction of a favoriteProvider has been added to the settings which let you specify settings that aid in support of favorites (if not provided it is assumed that favorites is not enabled for the platform). This provider needs 4 endpoints to be defined: favorite-list, favorite-get, favorite-set and favorite-remove. The generated favorite shapes type provides types starting with Endpoint to help build the endpoint module and know the expected shape.
 
 ## v13.1
 

@@ -13,7 +13,8 @@ export type LifecycleEvents =
 	| "theme-changed"
 	| "workspace-changed"
 	| "page-changed"
-	| "apps-changed";
+	| "apps-changed"
+	| "favorite-changed";
 /**
  * The type for a lifecycle event handler.
  */

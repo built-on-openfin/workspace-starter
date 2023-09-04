@@ -1,6 +1,7 @@
 import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
@@ -102,6 +103,13 @@ export interface ModuleHelpers {
 	 * @returns The interop client.
 	 */
 	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
+	/**
+	 * If this platform has been configured to support favorites and you are able to receive favorites
+	 * then you will receive a client that will provide you with a number of functions (if supported).
+	 * This can let a module add additional support for favorites if they support the supported favorite types.
+	 * @returns the favorite client.
+	 */
+	getFavoriteClient?(): Promise<FavoriteClient | undefined>;
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.

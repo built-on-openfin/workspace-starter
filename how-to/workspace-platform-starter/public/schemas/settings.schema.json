@@ -14,10 +14,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "actions",
                     "description": "The actions connection type allows connections to execute a list of actions that the platform will carry out e.g.\nshow-home",
-                    "enum": [
-                        "actions"
-                    ],
                     "type": "string"
                 }
             },
@@ -267,10 +265,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "appSource",
                     "description": "The appSource connection type allows connections to provide a list of apps that can show up in home and the\nstore. Apps with manifest type id connection will be send back to the connection on selection (e.g. a child view)",
-                    "enum": [
-                        "appSource"
-                    ],
                     "type": "string"
                 }
             },
@@ -388,10 +384,8 @@
             "description": "Specific type for a broker connection.",
             "properties": {
                 "type": {
+                    "const": "broker",
                     "description": "The broker connection type allows connections to connect to our broker in order to react to context sharing.",
-                    "enum": [
-                        "broker"
-                    ],
                     "type": "string"
                 }
             },
@@ -417,21 +411,15 @@
             "type": "string"
         },
         "BrowserButtonType.Custom": {
-            "enum": [
-                "Custom"
-            ],
+            "const": "Custom",
             "type": "string"
         },
         "BrowserButtonType.LockUnlockPage": {
-            "enum": [
-                "LockUnlockPage"
-            ],
+            "const": "LockUnlockPage",
             "type": "string"
         },
         "BrowserButtonType.ShowHideTabs": {
-            "enum": [
-                "ShowHideTabs"
-            ],
+            "const": "ShowHideTabs",
             "type": "string"
         },
         "BrowserProviderOptions": {
@@ -935,6 +923,10 @@
                     "$ref": "#/definitions/EndpointProviderOptions",
                     "description": "The endpoint provider options."
                 },
+                "favoriteProvider": {
+                    "$ref": "#/definitions/FavoriteProviderOptions",
+                    "description": "The settings you need to set if you want to indicate this platform supports favorites"
+                },
                 "homeProvider": {
                     "$ref": "#/definitions/HomeProviderOptions",
                     "description": "The home provider options."
@@ -1208,6 +1200,46 @@
         "ExternalProcessRequestType": {
             "$ref": "#/definitions/__type_39"
         },
+        "FavoriteProviderOptions": {
+            "additionalProperties": false,
+            "description": "Options for the favorite provider.",
+            "properties": {
+                "favoriteCommand": {
+                    "description": "What commands should integrations check for if they intent to support the display of favorites",
+                    "type": "string"
+                },
+                "favoriteIcon": {
+                    "description": "The icon that should be used if you want to indicate this is a favorite action",
+                    "type": "string"
+                },
+                "supportedFavoriteTypes": {
+                    "description": "The connection provider can have actions registered against it from the platform. This provides a default list of\nactions that connections should be able to use if actions are enabled for that connection.",
+                    "items": {
+                        "$ref": "#/definitions/FavoriteTypeNames"
+                    },
+                    "type": "array"
+                },
+                "unfavoriteIcon": {
+                    "description": "The icon to use to indicate that this favorite can be unset",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "favoriteIcon",
+                "unfavoriteIcon"
+            ],
+            "type": "object"
+        },
+        "FavoriteTypeNames": {
+            "description": "Names for all the favorite types.",
+            "enum": [
+                "app",
+                "page",
+                "query",
+                "workspace"
+            ],
+            "type": "string"
+        },
         "FetchEndpointDefinition": {
             "additionalProperties": false,
             "description": "Specific endpoint type for fetching.",
@@ -1221,10 +1253,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "fetch",
                     "description": "This uses the built in support for fetch and the options will be the fetch options",
-                    "enum": [
-                        "fetch"
-                    ],
                     "type": "string"
                 }
             },
@@ -1628,10 +1658,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "column",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "column"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1647,9 +1675,7 @@
             "additionalProperties": false,
             "properties": {
                 "componentName": {
-                    "enum": [
-                        "view"
-                    ],
+                    "const": "view",
                     "type": "string"
                 },
                 "componentState": {
@@ -1731,10 +1757,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "row",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "row"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1790,10 +1814,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "ms365",
                     "description": "The types of supported Low Code Integration",
-                    "enum": [
-                        "ms365"
-                    ],
                     "type": "string"
                 }
             },
@@ -2436,10 +2458,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "module",
                     "description": "This indicates that this endpoint depends on a module that needs to be loaded in order for it to work",
-                    "enum": [
-                        "module"
-                    ],
                     "type": "string"
                 },
                 "typeId": {
@@ -3331,10 +3351,8 @@
             "description": "Specific type for a snapshot source connection.",
             "properties": {
                 "type": {
+                    "const": "snapshotSource",
                     "description": "The snapshotSource connection type allows connections to be accepted as a snapshot source",
-                    "enum": [
-                        "snapshotSource"
-                    ],
                     "type": "string"
                 }
             },
