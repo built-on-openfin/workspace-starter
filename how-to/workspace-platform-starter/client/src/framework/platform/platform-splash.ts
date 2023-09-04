@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import { getManifestCustomSettings } from "../settings";
-import { isStringValue } from "../utils";
+import { formatError, isStringValue } from "../utils";
 
 let win: OpenFin.Window | undefined;
 
@@ -16,22 +16,26 @@ export async function open(): Promise<void> {
 	const disabled = customSettings?.splashScreenProvider?.disabled ?? false;
 
 	if (!disabled) {
-		win = await fin.Window.create({
-			name: "platform-splash",
-			url: `${window.location.href.replace("provider.html", "splash.html")}`,
-			alwaysOnTop: true,
-			maximizable: false,
-			minimizable: false,
-			frame: false,
-			autoShow: false,
-			defaultCentered: true,
-			defaultWidth: customSettings?.splashScreenProvider?.width ?? 400,
-			defaultHeight: customSettings?.splashScreenProvider?.height ?? 130,
-			includeInSnapshots: false,
-			resizable: false,
-			saveWindowState: false,
-			showTaskbarIcon: true
-		});
+		try {
+			win = await fin.Window.create({
+				name: "platform-splash",
+				url: `${window.location.href.replace("provider.html", "splash.html")}`,
+				alwaysOnTop: true,
+				maximizable: false,
+				minimizable: false,
+				frame: false,
+				autoShow: false,
+				defaultCentered: true,
+				defaultWidth: customSettings?.splashScreenProvider?.width ?? 400,
+				defaultHeight: customSettings?.splashScreenProvider?.height ?? 130,
+				includeInSnapshots: false,
+				resizable: false,
+				saveWindowState: false,
+				showTaskbarIcon: true
+			});
+		} catch (err) {
+			console.error("Unable to display splash screen", formatError(err));
+		}
 
 		if (win) {
 			await win.updateOptions({ alwaysOnTop: false });

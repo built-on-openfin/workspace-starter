@@ -58,11 +58,12 @@ export async function getDefaultWindowOptions(
 		}
 		// end backwards compatibility
 
-		if (Array.isArray(browserProvider?.toolbarButtons)) {
-			// we are going to override the ones specified at the workspace platform level
-			// as this is our more flexible extension with conditions
+		// we are going to override the ones specified at the workspace platform level
+		// as this is our more flexible extension with conditions
+		const buttons = await getDefaultToolbarButtons();
+		if (!isEmpty(buttons)) {
 			wsPlatform.toolbarOptions = {
-				buttons: await getDefaultToolbarButtons()
+				buttons
 			};
 		}
 

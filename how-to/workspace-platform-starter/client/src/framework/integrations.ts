@@ -22,7 +22,7 @@ import {
 	loadModules
 } from "./modules";
 import { launchPage, launchView } from "./platform/browser";
-import * as PlatformSplash from "./platform/platform-splash";
+import * as platformSplashProvider from "./platform/platform-splash";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -118,7 +118,7 @@ export async function init(
 
 		// Initialize just the auto start modules
 		await initializeModules(initModules, integrationHelpers, async (def) => {
-			await PlatformSplash.updateProgress(`${def.title} Integration`);
+			await platformSplashProvider.updateProgress(`${def.title} Integration`);
 		});
 		logger.info("Integrations has been initialized.");
 	}

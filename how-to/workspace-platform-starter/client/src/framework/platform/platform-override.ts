@@ -706,7 +706,10 @@ export function overrideCallback(
 				// buttons which are theme aware
 				options.workspacePlatform = options.workspacePlatform ?? {};
 				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-				options.workspacePlatform.toolbarOptions.buttons = await getDefaultToolbarButtons();
+				const buttons = await getDefaultToolbarButtons();
+				if (!isEmpty(buttons)) {
+					options.workspacePlatform.toolbarOptions.buttons = buttons;
+				}
 			}
 
 			const window = await super.createWindow(options, identity);

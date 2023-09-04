@@ -13,32 +13,37 @@ import { getSettings } from "./settings";
 import type { WorkspacePlatformToolbarButton } from "./shapes/browser-shapes";
 import type { ColorSchemeMode } from "./shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder } from "./themes";
-import { objectClone } from "./utils";
+import { isEmpty, objectClone } from "./utils";
 
 let configToolbarButtons: WorkspacePlatformToolbarButton[] | undefined;
+let configButtonsRetrieved: boolean = false;
 let defaultToolbarButtons: ToolbarButton[] | undefined;
+let defaultButtonsBuilt: boolean = false;
 
 /**
  * Get the default toolbar buttons to show on a browser window.
  * @returns The list of buttons to show.
  */
-export async function getDefaultToolbarButtons(): Promise<ToolbarButton[]> {
-	// If we have already calculated the buttons just return them
-	if (Array.isArray(defaultToolbarButtons)) {
+export async function getDefaultToolbarButtons(): Promise<ToolbarButton[] | undefined> {
+	// If we have already built the buttons just return them
+	if (defaultButtonsBuilt) {
 		return defaultToolbarButtons;
 	}
 
 	const allToolbarButtons = await getConfigToolbarButtons();
 
-	const iconFolder = await getCurrentIconFolder();
-	const colorSchemeMode = await getCurrentColorSchemeMode();
+	if (!isEmpty(allToolbarButtons)) {
+		const iconFolder = await getCurrentIconFolder();
+		const colorSchemeMode = await getCurrentColorSchemeMode();
 
-	const platform = getCurrentSync();
+		const platform = getCurrentSync();
 
-	defaultToolbarButtons = [];
-	for (const entry of allToolbarButtons) {
-		if (entry.include && (await checkConditions(platform, entry.conditions))) {
-			defaultToolbarButtons.push(themeButton(entry.button, iconFolder, colorSchemeMode));
+		defaultToolbarButtons = [];
+		defaultButtonsBuilt = true;
+		for (const entry of allToolbarButtons) {
+			if (entry.include && (await checkConditions(platform, entry.conditions))) {
+				defaultToolbarButtons.push(themeButton(entry.button, iconFolder, colorSchemeMode));
+			}
 		}
 	}
 
@@ -69,19 +74,21 @@ export async function updateToolbarButtons(
 
 	if (index !== -1) {
 		const availableToolbarButtons = await getConfigToolbarButtons();
-		const replacement = availableToolbarButtons.find((entry) => {
-			if (entry.button.type === BrowserButtonType.Custom) {
-				const customButton = entry.button as CustomBrowserButtonConfig;
-				return customButton?.action?.customData?.sourceId === replacementButtonId;
+		if (!isEmpty(availableToolbarButtons)) {
+			const replacement = availableToolbarButtons.find((entry) => {
+				if (entry.button.type === BrowserButtonType.Custom) {
+					const customButton = entry.button as CustomBrowserButtonConfig;
+					return customButton?.action?.customData?.sourceId === replacementButtonId;
+				}
+				return false;
+			});
+			if (replacement) {
+				const iconFolder = await getCurrentIconFolder();
+				const colorSchemeMode = await getCurrentColorSchemeMode();
+				buttons[index] = themeButton(replacement.button, iconFolder, colorSchemeMode);
 			}
-			return false;
-		});
-		if (replacement) {
-			const iconFolder = await getCurrentIconFolder();
-			const colorSchemeMode = await getCurrentColorSchemeMode();
-			buttons[index] = themeButton(replacement.button, iconFolder, colorSchemeMode);
+			return buttons;
 		}
-		return buttons;
 	}
 
 	return buttons;
@@ -131,16 +138,19 @@ export async function updateBrowserWindowButtonsColorScheme(
  * Get the list of buttons as they are defined in the configuration.
  * @returns The list of configuration buttons.
  */
-async function getConfigToolbarButtons(): Promise<WorkspacePlatformToolbarButton[]> {
-	if (Array.isArray(configToolbarButtons)) {
+async function getConfigToolbarButtons(): Promise<WorkspacePlatformToolbarButton[] | undefined> {
+	if (configButtonsRetrieved) {
 		return configToolbarButtons;
 	}
+
 	const settings = await getSettings();
-	configToolbarButtons = settings?.browserProvider?.toolbarButtons ?? [];
+	configToolbarButtons = settings?.browserProvider?.toolbarButtons;
+	configButtonsRetrieved = true;
 
 	subscribeLifecycleEvent("theme-changed", async () => {
 		// Reset the default toolbar buttons as the icon might have changed
 		defaultToolbarButtons = undefined;
+		defaultButtonsBuilt = false;
 
 		// Get the toolbar buttons again with the new theme
 		await getDefaultToolbarButtons();
