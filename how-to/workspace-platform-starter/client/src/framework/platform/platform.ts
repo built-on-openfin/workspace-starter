@@ -11,6 +11,7 @@ import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
+import * as favoriteProvider from "../favorite";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import * as loggerProvider from "../logger-provider";
@@ -126,6 +127,13 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	await PlatformSplash.updateProgress("Sharing");
 	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
+
+	await PlatformSplash.updateProgress("Favorites");
+	await favoriteProvider.init(
+		customSettings?.favoriteProvider,
+		await versionProvider.getVersionInfo(),
+		endpointProvider
+	);
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
