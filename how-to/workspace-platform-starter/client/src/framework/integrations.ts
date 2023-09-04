@@ -24,6 +24,9 @@ import {
 import { launchPage, launchView } from "./platform/browser";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type {
+	EndpointIntegrationsPreferencesGetRequest,
+	EndpointIntegrationsPreferencesGetResponse,
+	EndpointIntegrationsPreferencesSetRequest,
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition,
@@ -47,6 +50,9 @@ let integrationModules: ModuleEntry<
 let integrationHelpers: IntegrationHelpers;
 
 const POPULATE_QUERY = "Populate Query";
+
+const INTEGRATIONS_PREFERENCE_ENDPOINT_SET = "integration-preferences-set";
+const INTEGRATIONS_PREFERENCE_ENDPOINT_GET = "integration-preferences-get";
 
 /**
  * Initialize all the integrations.
@@ -364,10 +370,9 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
  * @param preferences.autoStart The autoStart preference.
  */
 async function setPreferences(integrationId: string, preferences: { autoStart: boolean }): Promise<void> {
-	const integrationPreferenceEndpointId = "integration-preferences-set";
-	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		const success = await endpointProvider.action<{ id: string; payload: { autoStart: boolean } }>(
-			integrationPreferenceEndpointId,
+	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_SET)) {
+		const success = await endpointProvider.action<EndpointIntegrationsPreferencesSetRequest>(
+			INTEGRATIONS_PREFERENCE_ENDPOINT_SET,
 			{ id: integrationId, payload: preferences }
 		);
 		if (success) {
@@ -386,12 +391,11 @@ async function setPreferences(integrationId: string, preferences: { autoStart: b
  * @returns The preferences if they exist.
  */
 async function getPreferences(integrationId: string): Promise<{ autoStart: boolean } | undefined> {
-	const integrationPreferenceEndpointId = "integration-preferences-get";
-	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		const preferences = await endpointProvider.requestResponse<{ id: string }, { autoStart: boolean }>(
-			integrationPreferenceEndpointId,
-			{ id: integrationId }
-		);
+	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_GET)) {
+		const preferences = await endpointProvider.requestResponse<
+			EndpointIntegrationsPreferencesGetRequest,
+			EndpointIntegrationsPreferencesGetResponse
+		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, { id: integrationId });
 		if (!isEmpty(preferences)) {
 			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
