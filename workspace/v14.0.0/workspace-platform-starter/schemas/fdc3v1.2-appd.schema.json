@@ -182,11 +182,11 @@
 					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been\nreceived.",
 					"properties": {
 						"type": {
-							"enum": ["fdc3"],
+							"const": "fdc3",
 							"type": "string"
 						},
 						"version": {
-							"enum": ["1.2"],
+							"const": "1.2",
 							"type": "string"
 						}
 					},
