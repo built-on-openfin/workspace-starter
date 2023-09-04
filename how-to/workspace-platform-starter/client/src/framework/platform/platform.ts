@@ -128,7 +128,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await platformSplashProvider.updateProgress("Sharing");
 	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
 
-	await PlatformSplash.updateProgress("Favorites");
+	await platformSplashProvider.updateProgress("Favorites");
 	await favoriteProvider.init(
 		customSettings?.favoriteProvider,
 		await versionProvider.getVersionInfo(),
