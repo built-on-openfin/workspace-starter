@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import type { CustomActionSpecifier } from "@openfin/workspace";
 import { CustomActionCallerType } from "@openfin/workspace-platform";
 import { getActions } from "./actions";
 import { createLogger } from "./logger-provider";
@@ -28,21 +29,28 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 		await app.setTrayIcon(icon);
 
 		const menuEntries = options?.menuEntries;
-		if (isEmpty(menuEntries)) {
-			logger.warn("You have no menu entries defined for the tray");
+		const defaultAction = options?.defaultAction;
+		if (isEmpty(defaultAction) && isEmpty(menuEntries)) {
+			logger.warn("You have no default action or menu entries defined for the tray");
+		} else if (!isEmpty(defaultAction) && !isEmpty(menuEntries)) {
+			logger.warn("You cannot define a default action and menu entries for the tray");
 		} else {
 			await app.addListener("tray-icon-clicked", async (trayInfo: OpenFin.TrayInfo & { button?: number }) => {
 				logger.info("Tray Clicked", trayInfo);
 
-				if (!isEmpty(menuEntries)) {
-					const activateButton = options?.activateButton ?? "any";
-					const clickedButton = trayInfo.button ?? 0;
+				const activateButton = options?.activateButton ?? "any";
+				const clickedButton = trayInfo.button ?? 0;
 
-					if (
-						activateButton === "any" ||
-						(clickedButton === 0 && activateButton === "left") ||
-						(clickedButton === 2 && activateButton === "right")
-					) {
+				if (
+					activateButton === "any" ||
+					(clickedButton === 0 && activateButton === "left") ||
+					(clickedButton === 2 && activateButton === "right")
+				) {
+					let actionToTrigger: CustomActionSpecifier | undefined;
+
+					if (!isEmpty(defaultAction)) {
+						actionToTrigger = defaultAction;
+					} else if (!isEmpty(menuEntries)) {
 						let win;
 						try {
 							// Create a dummy invisible always on top window that we can use
@@ -75,24 +83,25 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 
 							if (r.result === "clicked") {
 								logger.info("Tray Item Selected", r.data);
-								const actionId = r.data?.action?.id;
-								if (isStringValue(actionId)) {
-									const actions = getActions();
-									if (!isEmpty(actions) && actions[actionId]) {
-										await actions[actionId]({
-											callerType: CustomActionCallerType.CustomButton,
-											x: trayInfo.x,
-											y: trayInfo.y,
-											windowIdentity: { uuid: fin.me.uuid, name: "tray-menu" },
-											customData: r.data?.action?.customData
-										});
-									}
-								}
+								actionToTrigger = r.data.action;
 							}
 						} finally {
 							if (win) {
 								await win.close();
 							}
+						}
+					}
+
+					if (!isEmpty(actionToTrigger) && isStringValue(actionToTrigger.id)) {
+						const actions = getActions();
+						if (!isEmpty(actions) && actions[actionToTrigger.id]) {
+							await actions[actionToTrigger.id]({
+								callerType: CustomActionCallerType.CustomButton,
+								x: trayInfo.x,
+								y: trayInfo.y,
+								windowIdentity: fin.me.identity,
+								customData: actionToTrigger.customData
+							});
 						}
 					}
 				}

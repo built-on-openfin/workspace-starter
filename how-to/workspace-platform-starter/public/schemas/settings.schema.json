@@ -3934,6 +3934,10 @@
                     ],
                     "type": "string"
                 },
+                "defaultAction": {
+                    "$ref": "#/definitions/CustomActionSpecifier_1",
+                    "description": "Default action if no menu entries provided."
+                },
                 "enabled": {
                     "description": "Is the tray option enabled.",
                     "type": "boolean"

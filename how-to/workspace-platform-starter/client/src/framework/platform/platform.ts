@@ -125,15 +125,20 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	await platformSplashProvider.updateProgress("Sharing");
-	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
+	const sharingEnabled = customSettings.platformProvider?.sharing ?? true;
+	if (sharingEnabled) {
+		await platformSplashProvider.updateProgress("Sharing");
+		await shareProvider.init({ enabled: sharingEnabled });
+	}
 
-	await platformSplashProvider.updateProgress("Favorites");
-	await favoriteProvider.init(
-		customSettings?.favoriteProvider,
-		await versionProvider.getVersionInfo(),
-		endpointProvider
-	);
+	if (!isEmpty(customSettings?.favoriteProvider)) {
+		await platformSplashProvider.updateProgress("Favorites");
+		await favoriteProvider.init(
+			customSettings?.favoriteProvider,
+			await versionProvider.getVersionInfo(),
+			endpointProvider
+		);
+	}
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};

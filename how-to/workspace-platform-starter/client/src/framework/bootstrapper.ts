@@ -187,8 +187,10 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
-	await platformSplashProvider.updateProgress("Tray");
-	await trayProvider.init(customSettings?.trayProvider);
+	if (!isEmpty(customSettings?.trayProvider)) {
+		await platformSplashProvider.updateProgress("Tray");
+		await trayProvider.init(customSettings?.trayProvider);
+	}
 
 	const platform = getCurrentSync();
 

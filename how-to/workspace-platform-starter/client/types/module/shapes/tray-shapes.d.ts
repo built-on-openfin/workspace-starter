@@ -1,3 +1,4 @@
+import type { CustomActionSpecifier } from "@openfin/workspace";
 import type { MenuEntry, TrayMenuOptionType } from "./menu-shapes";
 /**
  * Tray Provider Options to provide settings for the tray provider
@@ -15,6 +16,10 @@ export interface TrayProviderOptions {
 	 * The icon to display in the tray, if not supplied default to platform icon.
 	 */
 	icon?: string;
+	/**
+	 * Default action if no menu entries provided.
+	 */
+	defaultAction?: CustomActionSpecifier;
 	/**
 	 * The menu entries to display.
 	 */
