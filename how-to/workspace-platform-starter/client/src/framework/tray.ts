@@ -57,10 +57,13 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 								defaultHeight: 0,
 								url: "about:blank",
 								frame: false,
-								alwaysOnTop: true
+								alwaysOnTop: true,
+								smallWindow: true,
+								opacity: 0
 							};
 
 							win = await fin.Window.create(winOption);
+							await win.focus();
 
 							const template = await buildMenu(undefined, menuEntries);
 
