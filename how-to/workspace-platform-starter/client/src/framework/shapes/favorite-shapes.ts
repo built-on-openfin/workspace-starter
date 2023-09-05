@@ -180,16 +180,7 @@ export interface EndpointFavoriteGetRequest {
 /**
  * The response after the request for a specific favorite was fulfilled
  */
-export interface EndpointFavoriteGetResponse {
-	/**
-	 * The platform versions the favorite was saved against
-	 */
-	metaData: PlatformStorageMetadata;
-	/**
-	 * The favorite that was requested
-	 */
-	payload: FavoriteEntry;
-}
+export type EndpointFavoriteGetResponse = EndpointFavoriteEntry;
 
 /**
  * The request for getting a specific favorite entry

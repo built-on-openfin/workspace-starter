@@ -34,7 +34,18 @@ export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
 	 */
 	private _helpers: ModuleHelpers | undefined;
 
-	private readonly _favoritesKey: string = `${fin.me.identity.uuid}-favorites`;
+	/**
+	 * The id to use for storing the favorites.
+	 * @internal
+	 */
+	private readonly _favoritesKey: string;
+
+	/**
+	 * Sets up the favorite endpoint.
+	 */
+	constructor() {
+		this._favoritesKey = `${fin.me.identity.uuid}-favorites`;
+	}
 
 	/**
 	 * Initialize the module.
@@ -51,7 +62,6 @@ export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
 		this._definition = definition;
 		this._logger = loggerCreator("FavoriteLocalStorageProvider");
 		this._helpers = helpers;
-
 		this._logger.info("Initializing");
 	}
 
@@ -188,7 +198,7 @@ export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
 	private getFavorites(): EndpointFavoriteEntry[] {
 		const favorites = localStorage.getItem(this._favoritesKey);
 
-		if (favorites === null) {
+		if (isEmpty(favorites)) {
 			return [];
 		}
 
