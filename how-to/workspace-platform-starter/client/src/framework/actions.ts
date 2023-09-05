@@ -50,11 +50,12 @@ export const PLATFORM_ACTION_IDS = {
  * Initialize the actions provider.
  * @param options Options for the actions provider.
  * @param helpers Module helpers to pass to any loaded modules.
+ * @returns The platform action map.
  */
 export async function init(
 	options: ActionsProviderOptions | undefined,
 	helpers: ModuleHelpers
-): Promise<void> {
+): Promise<CustomActionsMap | undefined> {
 	if (isInitialized) {
 		logger.error("The actions can only be used once when configuring the platform");
 		return;
@@ -76,6 +77,8 @@ export async function init(
 
 		await buildActions();
 	}
+
+	return platformActionMap;
 }
 
 /**
@@ -86,11 +89,17 @@ export async function closedown(): Promise<void> {
 }
 
 /**
- * Get all the actions for the platform.
- * @returns The map of all the actions.
+ * Call an action.
+ * @param id The id of the action to call.
+ * @param payload The payload for the action.
+ * @returns True if the action exists.
  */
-export function getActions(): CustomActionsMap | undefined {
-	return platformActionMap;
+export async function callAction(id: string, payload: CustomActionPayload): Promise<boolean> {
+	if (!isEmpty(platformActionMap) && platformActionMap[id]) {
+		await platformActionMap[id](payload);
+		return true;
+	}
+	return false;
 }
 
 /**

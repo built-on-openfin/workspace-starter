@@ -155,9 +155,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	logger.info("Specifying following browser options", browser);
 
-	await actionsProvider.init(customSettings?.actionsProvider, helpers);
-
-	const customActions = actionsProvider.getActions();
+	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
 	const theme = await getThemes();
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);

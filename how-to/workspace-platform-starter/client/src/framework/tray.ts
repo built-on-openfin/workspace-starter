@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import type { CustomActionSpecifier } from "@openfin/workspace";
 import { CustomActionCallerType } from "@openfin/workspace-platform";
-import { getActions } from "./actions";
+import { callAction } from "./actions";
 import { createLogger } from "./logger-provider";
 import { buildMenu } from "./menu";
 import type { TrayProviderOptions } from "./shapes";
@@ -93,16 +93,13 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 					}
 
 					if (!isEmpty(actionToTrigger) && isStringValue(actionToTrigger.id)) {
-						const actions = getActions();
-						if (!isEmpty(actions) && actions[actionToTrigger.id]) {
-							await actions[actionToTrigger.id]({
-								callerType: CustomActionCallerType.CustomButton,
-								x: trayInfo.x,
-								y: trayInfo.y,
-								windowIdentity: fin.me.identity,
-								customData: actionToTrigger.customData
-							});
-						}
+						await callAction(actionToTrigger.id, {
+							callerType: CustomActionCallerType.CustomButton,
+							x: trayInfo.x,
+							y: trayInfo.y,
+							windowIdentity: fin.me.identity,
+							customData: actionToTrigger.customData
+						});
 					}
 				}
 			});
