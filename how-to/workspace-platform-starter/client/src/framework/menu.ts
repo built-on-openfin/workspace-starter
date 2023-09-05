@@ -198,7 +198,11 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 			);
 
 			if (entryIndex === -1) {
-				logger.warn(`Unable to find menu with entry type: ${positionType} and customId: ${positionCustomId}`);
+				logger.warn(
+					`Unable to find menu with entry type: ${JSON.stringify(
+						positionType
+					)} and customId: ${positionCustomId}`
+				);
 			}
 		} else {
 			entryIndex = menuEntries.findIndex((menuEntry) => menuEntry.data?.type === positionType);

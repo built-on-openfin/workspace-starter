@@ -1359,6 +1359,38 @@
 					}
 				}
 			]
+		},
+		"trayProvider": {
+			"enabled": true,
+			"menuEntries": [
+				{
+					"include": true,
+					"label": "Quit App",
+					"position": {
+						"operation": "end"
+					},
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "quit"
+						}
+					}
+				},
+				{
+					"include": true,
+					"label": "Log Out and Quit App",
+					"data": {
+						"type": "Custom",
+						"action": {
+							"id": "logout-and-quit"
+						}
+					},
+					"position": {
+						"operation": "end"
+					},
+					"conditions": ["authenticated"]
+				}
+			]
 		}
 	}
 }

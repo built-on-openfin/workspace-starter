@@ -21,6 +21,7 @@
 - Added appProviderOptions `cacheRetrievalStrategy`, defaults to `on-demand`
   - `on-demand` validates/updates the cache every time the list of apps is requested (will reduce requests to app endpoints when app is idle)
   - `interval` validates/updates the cache on a timer based on the cache duration (will make more requests to app endpoints)
+- Added trayProvider which will show a tray icon, lets you customize the icon, activation button and menu entries
 
 ## v13.1
 
