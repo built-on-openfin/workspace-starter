@@ -23,11 +23,7 @@
 				"downloadAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
-					"protocols": [
-						"mailto",
-						"msteams",
-						"tel"
-					]
+					"protocols": ["mailto", "msteams", "tel"]
 				}
 			}
 		},
@@ -36,11 +32,7 @@
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": [
-							"mailto",
-							"msteams",
-							"tel"
-						]
+						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
 			},
@@ -61,11 +53,7 @@
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": [
-							"mailto",
-							"msteams",
-							"tel"
-						]
+						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
 			}
@@ -76,10 +64,7 @@
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Workspace Platform Starter - v14.0.0",
-		"target": [
-			"desktop",
-			"start-menu"
-		]
+		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "OpenFin",
@@ -93,10 +78,7 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"autoShow": [
-				"dock",
-				"home"
-			]
+			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
@@ -123,42 +105,27 @@
 						{
 							"name": "StartCall",
 							"displayName": "Start a Call",
-							"contexts": [
-								"fdc3.contact",
-								"fdc3.contactList"
-							]
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
 						},
 						{
 							"name": "StartChat",
 							"displayName": "Start a Chat",
-							"contexts": [
-								"fdc3.contact",
-								"fdc3.contactList"
-							]
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
 						},
 						{
 							"name": "ViewChart",
 							"displayName": "View Chart",
-							"contexts": [
-								"fdc3.instrument",
-								"fdc3.instrumentList",
-								"fdc3.portfolio",
-								"fdc3.position"
-							]
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
 						},
 						{
 							"name": "ViewContact",
 							"displayName": "View Contact Details",
-							"contexts": [
-								"fdc3.contact"
-							]
+							"contexts": ["fdc3.contact"]
 						},
 						{
 							"name": "ViewQuote",
 							"displayName": "View Quote",
-							"contexts": [
-								"fdc3.instrument"
-							]
+							"contexts": ["fdc3.instrument"]
 						},
 						{
 							"name": "ViewNews",
@@ -174,18 +141,12 @@
 						{
 							"name": "ViewAnalysis",
 							"displayName": "View Analysis",
-							"contexts": [
-								"fdc3.instrument",
-								"fdc3.organization",
-								"fdc3.portfolio"
-							]
+							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
 						},
 						{
 							"name": "ViewInstrument",
 							"displayName": "View Instrument Details",
-							"contexts": [
-								"fdc3.instrument"
-							]
+							"contexts": ["fdc3.instrument"]
 						}
 					]
 				}
@@ -237,17 +198,6 @@
 					"enabled": true,
 					"id": "context-processor",
 					"url": "http://localhost:8080/js/modules/endpoint/example.context.processor.bundle.js"
-				},
-				{
-					"id": "favorite-local-storage",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Favorite Local Storage",
-					"description": "Favorite Local Storage",
-					"enabled": true,
-					"url": "http://localhost:8080/js/modules/endpoint/favorite-local-storage.bundle.js",
-					"data": {
-						"exampleProp": "value"
-					}
 				}
 			],
 			"endpoints": [
@@ -358,9 +308,7 @@
 						"type": "Quit",
 						"operation": "after"
 					},
-					"conditions": [
-						"authenticated"
-					]
+					"conditions": ["authenticated"]
 				}
 			],
 			"pageMenu": [
@@ -443,9 +391,7 @@
 							"customData": {}
 						}
 					},
-					"conditions": [
-						"themed"
-					]
+					"conditions": ["themed"]
 				},
 				{
 					"include": false,
@@ -550,9 +496,7 @@
 							"customData": {}
 						}
 					},
-					"conditions": [
-						"sharing"
-					]
+					"conditions": ["sharing"]
 				},
 				{
 					"include": true,
@@ -640,9 +584,7 @@
 			"title": "Workspace Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
-			"queryAgainst": [
-				"title"
-			]
+			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
@@ -654,9 +596,7 @@
 					"description": "This is a demonstration of the hero section that you can configure for your store.",
 					"cta": {
 						"title": "Hero Apps!",
-						"tags": [
-							"hero"
-						]
+						"tags": ["hero"]
 					},
 					"image": {
 						"src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
@@ -671,9 +611,7 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
 							},
-							"tags": [
-								"expero"
-							],
+							"tags": ["expero"],
 							"buttonTitle": "View"
 						},
 						{
@@ -682,9 +620,7 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
-							"tags": [
-								"tools"
-							],
+							"tags": ["tools"],
 							"buttonTitle": "View"
 						},
 						{
@@ -693,19 +629,14 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
 							},
-							"tags": [
-								"page"
-							],
+							"tags": ["page"],
 							"buttonTitle": "View"
 						}
 					]
 				},
 				"middleRow": {
 					"title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-					"tags": [
-						"fdc3",
-						"interop"
-					]
+					"tags": ["fdc3", "interop"]
 				},
 				"bottomRow": {
 					"title": "Quick Access",
@@ -716,9 +647,7 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
 							},
-							"tags": [
-								"view"
-							],
+							"tags": ["view"],
 							"buttonTitle": "View"
 						},
 						{
@@ -727,9 +656,7 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
 							},
-							"tags": [
-								"manifest"
-							],
+							"tags": ["manifest"],
 							"buttonTitle": "View"
 						},
 						{
@@ -738,9 +665,7 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
 							},
-							"tags": [
-								"native"
-							],
+							"tags": ["native"],
 							"buttonTitle": "View"
 						}
 					]
@@ -752,37 +677,23 @@
 					"items": [
 						{
 							"title": "All Apps",
-							"tags": [
-								"view",
-								"page",
-								"manifest",
-								"native",
-								"desktop-browser"
-							]
+							"tags": ["view", "page", "manifest", "native", "desktop-browser"]
 						},
 						{
 							"title": "Views",
-							"tags": [
-								"view"
-							]
+							"tags": ["view"]
 						},
 						{
 							"title": "Pages",
-							"tags": [
-								"page"
-							]
+							"tags": ["page"]
 						},
 						{
 							"title": "Manifest",
-							"tags": [
-								"manifest"
-							]
+							"tags": ["manifest"]
 						},
 						{
 							"title": "Native",
-							"tags": [
-								"native"
-							]
+							"tags": ["native"]
 						}
 					]
 				},
@@ -791,15 +702,11 @@
 					"items": [
 						{
 							"title": "FDC3 API",
-							"tags": [
-								"fdc3"
-							]
+							"tags": ["fdc3"]
 						},
 						{
 							"title": "Interop API",
-							"tags": [
-								"interop"
-							]
+							"tags": ["interop"]
 						}
 					]
 				}
@@ -835,24 +742,18 @@
 			"apps": [
 				{
 					"display": "individual",
-					"tags": [
-						"dock"
-					]
+					"tags": ["dock"]
 				},
 				{
 					"display": "group",
 					"tooltip": "FDC3",
-					"tags": [
-						"fdc3"
-					]
+					"tags": ["fdc3"]
 				},
 				{
 					"display": "group",
 					"tooltip": "Manager",
 					"iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
-					"tags": [
-						"manager"
-					]
+					"tags": ["manager"]
 				}
 			],
 			"buttons": [
@@ -1088,10 +989,7 @@
 					"title": "Init Options Interop",
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
-						"supportedActions": [
-							"raise-intent",
-							"share-context"
-						]
+						"supportedActions": ["raise-intent", "share-context"]
 					}
 				},
 				{
@@ -1100,9 +998,7 @@
 					"title": "Init Options Launch App",
 					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
 					"data": {
-						"supportedActions": [
-							"launch-app"
-						],
+						"supportedActions": ["launch-app"],
 						"supportedManifestTypes": [
 							"view",
 							"inline-view",
