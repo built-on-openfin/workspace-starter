@@ -22,6 +22,7 @@
   - `on-demand` validates/updates the cache every time the list of apps is requested (will reduce requests to app endpoints when app is idle)
   - `interval` validates/updates the cache on a timer based on the cache duration (will make more requests to app endpoints)
 - Added trayProvider which will show a tray icon, lets you customize the icon, activation button and menu entries
+- Added an example endpoint module: favorites-local-storage with a README showing how it can be wired up if you wanted to looking at using he favoriteClient from a module you are building.
 
 ## v13.1
 

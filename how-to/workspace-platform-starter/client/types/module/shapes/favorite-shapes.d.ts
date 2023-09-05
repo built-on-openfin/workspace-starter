@@ -112,6 +112,19 @@ export interface FavoriteClient {
 	deleteSavedFavorite?(id: string): Promise<boolean>;
 }
 /**
+ * An object that represents a favorite and meta data related to it
+ */
+export interface EndpointFavoriteEntry {
+	/**
+	 * Information related to the platform providing the payload.
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The favorite entry
+	 */
+	payload: FavoriteEntry;
+}
+/**
  * A request type for the FavoriteEndpoint that gets all saved favorite entries
  */
 export interface EndpointFavoriteListRequest {
@@ -131,10 +144,7 @@ export interface EndpointFavoriteListResponse {
 	/**
 	 * The list of favorite entries with information of what platform versions they were originally saved against
 	 */
-	entries: {
-		metaData: PlatformStorageMetadata;
-		payload: FavoriteEntry;
-	}[];
+	entries: EndpointFavoriteEntry[];
 }
 /**
  * The request for getting a specific favorite entry
@@ -152,20 +162,11 @@ export interface EndpointFavoriteGetRequest {
 /**
  * The response after the request for a specific favorite was fulfilled
  */
-export interface EndpointFavoriteGetResponse {
-	/**
-	 * The platform versions the favorite was saved against
-	 */
-	metaData: PlatformStorageMetadata;
-	/**
-	 * The favorite that was requested
-	 */
-	payload: FavoriteEntry;
-}
+export type EndpointFavoriteGetResponse = EndpointFavoriteEntry;
 /**
  * The request for getting a specific favorite entry
  */
-export interface EndpointFavoriteSetRequest {
+export interface EndpointFavoriteSetRequest extends EndpointFavoriteEntry {
 	/**
 	 * The id of the platform making the request
 	 */
@@ -174,14 +175,6 @@ export interface EndpointFavoriteSetRequest {
 	 * The id of the specific entry that is to be set
 	 */
 	id: string;
-	/**
-	 * The meta data related with this save
-	 */
-	metaData: PlatformStorageMetadata;
-	/**
-	 * The favorite entry
-	 */
-	payload: FavoriteEntry;
 }
 /**
  * The request for removing a specific favorite entry
