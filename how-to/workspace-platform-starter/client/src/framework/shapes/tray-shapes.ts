@@ -28,5 +28,5 @@ export interface TrayProviderOptions {
 	/**
 	 * The menu entries to display.
 	 */
-	menuEntries: MenuEntry<TrayMenuOptionType>[];
+	menuEntries?: MenuEntry<TrayMenuOptionType>[];
 }

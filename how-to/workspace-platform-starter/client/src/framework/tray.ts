@@ -71,6 +71,8 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 							};
 
 							win = await fin.Window.create(winOption);
+							// Setting the focus to the invisible window makes sure that
+							// the context menu is dismissed when clicked away from
 							await win.focus();
 
 							const template = await buildMenu(undefined, menuEntries);

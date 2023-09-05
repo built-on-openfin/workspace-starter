@@ -3954,9 +3954,6 @@
                     "type": "array"
                 }
             },
-            "required": [
-                "menuEntries"
-            ],
             "type": "object"
         },
         "VersionInfo": {
