@@ -1,5 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type {
+	ContextMenuItemData,
 	CustomActionSpecifier,
 	GlobalContextMenuItemTemplate,
 	GlobalContextMenuOptionType,
@@ -129,12 +130,43 @@ export interface MenuEntry<T = unknown> extends MenuEntryDynamic<T> {
 }
 
 /**
+ * Custom menu type for tray menus.
+ */
+export interface TrayMenuData extends ContextMenuItemData {
+	/**
+	 * Option types for tray.
+	 */
+	type: TrayMenuOptionType;
+}
+
+/**
+ * Tray context menu types.
+ */
+export declare enum TrayMenuOptionType {
+	/**
+	 * Custom tray menu entry item.
+	 */
+	Custom = "Custom"
+}
+
+/**
+ * Custom menu template for tray menus.
+ */
+export interface TrayContextMenuTemplate extends OpenFin.MenuItemTemplate {
+	/**
+	 * The tray item data.
+	 */
+	data?: TrayMenuData;
+}
+
+/**
  * All the types of menu template.
  */
 export type MenuTemplateType =
 	| GlobalContextMenuItemTemplate
 	| PageTabContextMenuItemTemplate
-	| ViewTabContextMenuTemplate;
+	| ViewTabContextMenuTemplate
+	| TrayContextMenuTemplate;
 
 /**
  * Which options belong to each menu type.
@@ -143,4 +175,6 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	? GlobalContextMenuOptionType
 	: T extends PageTabContextMenuItemTemplate
 	? PageTabContextMenuOptionType
-	: ViewTabMenuOptionType;
+	: T extends ViewTabContextMenuTemplate
+	? ViewTabMenuOptionType
+	: TrayMenuOptionType;
