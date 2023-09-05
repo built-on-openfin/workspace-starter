@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import type { CustomActionSpecifier } from "@openfin/workspace";
 import { CustomActionCallerType } from "@openfin/workspace-platform";
 import { callAction } from "./actions";
@@ -35,7 +34,7 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 		} else if (!isEmpty(defaultAction) && !isEmpty(menuEntries)) {
 			logger.warn("You cannot define a default action and menu entries for the tray");
 		} else {
-			await app.addListener("tray-icon-clicked", async (trayInfo: OpenFin.TrayInfo & { button?: number }) => {
+			await app.addListener("tray-icon-clicked", async (trayInfo) => {
 				logger.info("Tray Clicked", trayInfo);
 
 				const activateButton = options?.activateButton ?? "any";
