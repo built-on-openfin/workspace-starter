@@ -187,7 +187,7 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
-	if (!isEmpty(customSettings?.trayProvider)) {
+	if (!isEmpty(customSettings?.trayProvider) && customSettings.trayProvider.enabled) {
 		await platformSplashProvider.updateProgress("Tray");
 		await trayProvider.init(customSettings?.trayProvider);
 	}
