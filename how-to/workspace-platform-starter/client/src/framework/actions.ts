@@ -25,6 +25,7 @@ const logger = createLogger("Actions");
 
 let modules: ModuleEntry<Actions>[] = [];
 const customActionMap: CustomActionsMap = {};
+let platformActionMap: CustomActionsMap | undefined;
 let isInitialized: boolean = false;
 
 /**
@@ -38,6 +39,7 @@ export const PLATFORM_ACTION_IDS = {
 	homeShow: "home-show",
 	notificationToggle: "notification-toggle",
 	share: "share",
+	quit: "quit",
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
 	launchView: "launch-view",
@@ -53,7 +55,14 @@ export async function init(
 	options: ActionsProviderOptions | undefined,
 	helpers: ModuleHelpers
 ): Promise<void> {
+	if (isInitialized) {
+		logger.error("The actions can only be used once when configuring the platform");
+		return;
+	}
+
 	if (options) {
+		isInitialized = true;
+
 		logger.info("Initializing with options", options);
 
 		// Load any modules that have an actions endpoint
@@ -64,6 +73,8 @@ export async function init(
 			...helpers,
 			updateToolbarButtons
 		});
+
+		await buildActions();
 	}
 }
 
@@ -75,18 +86,20 @@ export async function closedown(): Promise<void> {
 }
 
 /**
+ * Get all the actions for the platform.
+ * @returns The map of all the actions.
+ */
+export function getActions(): CustomActionsMap | undefined {
+	return platformActionMap;
+}
+
+/**
  * Get all the actions we want to register with the platform.
  * @returns The map of all the custom actions.
  */
-export async function getActions(): Promise<CustomActionsMap | undefined> {
-	if (isInitialized) {
-		logger.error("The actions can only be used once when configuring the platform");
-		return;
-	}
-	isInitialized = true;
-
+async function buildActions(): Promise<void> {
 	// Get the platform actions
-	let platformActionMap: CustomActionsMap = await getPlatformActions();
+	platformActionMap = await getPlatformActions();
 
 	// Merge in any custom actions registered with registerAction
 	platformActionMap = { ...platformActionMap, ...customActionMap };
@@ -102,8 +115,6 @@ export async function getActions(): Promise<CustomActionsMap | undefined> {
 	}
 
 	logger.info("Action Ids", Object.keys(platformActionMap));
-
-	return platformActionMap;
 }
 
 /**
@@ -250,6 +261,10 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		if (payload.callerType === CustomActionCallerType.CustomButton) {
 			await showShareOptions(payload);
 		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.quit] = async (): Promise<void> => {
+		await fin.Platform.getCurrentSync().quit();
 	};
 
 	actionMap[PLATFORM_ACTION_IDS.logoutAndQuit] = async (): Promise<void> => {

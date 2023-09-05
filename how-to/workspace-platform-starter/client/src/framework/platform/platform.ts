@@ -152,7 +152,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	await actionsProvider.init(customSettings?.actionsProvider, helpers);
 
-	const customActions = await actionsProvider.getActions();
+	const customActions = actionsProvider.getActions();
 	const theme = await getThemes();
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);

@@ -16,6 +16,7 @@ import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import * as trayProvider from "./tray";
 import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
@@ -28,18 +29,6 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
-
-/**
- * Used to register home related actions.
- */
-function registerHomeSupportedActions(): void {
-	registerAction("show-home", async () => {
-		await homeComponent.show();
-	});
-	registerAction("hide-home", async () => {
-		await homeComponent.hide();
-	});
-}
 
 /**
  * Bootstrap the workspace components.
@@ -100,12 +89,7 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = storeRegistration;
 			}
 			registeredComponents.push("store");
-			registerAction("show-store", async () => {
-				await storeComponent.show();
-			});
-			registerAction("hide-store", async () => {
-				await storeComponent.hide();
-			});
+			registerStoreSupportedActions();
 		}
 	}
 
@@ -118,12 +102,7 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = dockRegistration;
 			}
 			registeredComponents.push("dock");
-			registerAction("show-dock", async () => {
-				await dockComponent.show();
-			});
-			registerAction("minimize-dock", async () => {
-				await dockComponent.minimize();
-			});
+			registerDockSupportedActions();
 		}
 	}
 
@@ -138,12 +117,7 @@ export async function init(): Promise<boolean> {
 		await platformSplashProvider.updateProgress("Notifications");
 
 		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
-		registerAction("show-notifications", async () => {
-			await notificationsComponent.show();
-		});
-		registerAction("hide-notifications", async () => {
-			await notificationsComponent.hide();
-		});
+		registerNotificationSupportedActions();
 	}
 
 	if (!isEmpty(notificationMetaInfo)) {
@@ -212,6 +186,9 @@ export async function init(): Promise<boolean> {
 			await dockComponent.show();
 		}
 	}
+
+	await platformSplashProvider.updateProgress("Tray");
+	await trayProvider.init(customSettings?.trayProvider);
 
 	const platform = getCurrentSync();
 
@@ -306,4 +283,52 @@ async function deregister(): Promise<void> {
 		logger.info("Finished deregister.");
 		deregistered = true;
 	}
+}
+
+/**
+ * Used to register home related actions.
+ */
+function registerHomeSupportedActions(): void {
+	registerAction("show-home", async () => {
+		await homeComponent.show();
+	});
+	registerAction("hide-home", async () => {
+		await homeComponent.hide();
+	});
+}
+
+/**
+ * Used to register store related actions.
+ */
+function registerStoreSupportedActions(): void {
+	registerAction("show-store", async () => {
+		await storeComponent.show();
+	});
+	registerAction("hide-store", async () => {
+		await storeComponent.hide();
+	});
+}
+
+/**
+ * Used to register dock related actions.
+ */
+function registerDockSupportedActions(): void {
+	registerAction("show-dock", async () => {
+		await dockComponent.show();
+	});
+	registerAction("minimize-dock", async () => {
+		await dockComponent.minimize();
+	});
+}
+
+/**
+ * Used to register notification related actions.
+ */
+function registerNotificationSupportedActions(): void {
+	registerAction("show-notifications", async () => {
+		await notificationsComponent.show();
+	});
+	registerAction("hide-notifications", async () => {
+		await notificationsComponent.hide();
+	});
 }

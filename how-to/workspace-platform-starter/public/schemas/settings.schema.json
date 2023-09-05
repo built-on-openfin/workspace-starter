@@ -983,6 +983,10 @@
                     "$ref": "#/definitions/ThemeProviderOptions",
                     "description": "The theme provider options."
                 },
+                "trayProvider": {
+                    "$ref": "#/definitions/TrayProviderOptions",
+                    "description": "The settings you need to set if you want to include a tray icon with menu"
+                },
                 "versionProvider": {
                     "$ref": "#/definitions/VersionProviderOptions",
                     "description": "The version provider options."
@@ -1888,6 +1892,10 @@
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
         },
+        "MenuEntry.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
+        },
         "MenuEntry<GlobalContextMenuOptionType>": {
             "additionalProperties": false,
             "description": "How to position a menu.",
@@ -2014,6 +2022,84 @@
                 },
                 "position": {
                     "$ref": "#/definitions/MenuPosition_1",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "MenuEntry<TrayMenuOptionType>": {
+            "additionalProperties": false,
+            "description": "How to position a menu.",
+            "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T_3"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition_3",
                     "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
@@ -2211,6 +2297,10 @@
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
         },
+        "MenuPosition.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
+        },
         "MenuPositionOperation": {
             "description": "Operations that can be performed on menus when they are being updated.",
             "enum": [
@@ -2259,6 +2349,28 @@
                 },
                 "type": {
                     "$ref": "#/definitions/MenuPosition.T_2",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
+        "MenuPosition_3": {
+            "additionalProperties": false,
+            "description": "The position for a menu entry.",
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_3",
                     "description": "The type of Menu entry this is"
                 }
             },
@@ -3801,6 +3913,45 @@
             },
             "required": [
                 "buttons"
+            ],
+            "type": "object"
+        },
+        "TrayMenuOptionType.Custom": {
+            "const": "Custom",
+            "description": "Custom tray menu entry item.",
+            "type": "string"
+        },
+        "TrayProviderOptions": {
+            "additionalProperties": false,
+            "description": "Tray Provider Options to provide settings for the tray provider",
+            "properties": {
+                "activateButton": {
+                    "description": "Should the menu activate on a left click, right click or any, default to any.",
+                    "enum": [
+                        "any",
+                        "left",
+                        "right"
+                    ],
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Is the tray option enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon to display in the tray, if not supplied default to platform icon.",
+                    "type": "string"
+                },
+                "menuEntries": {
+                    "description": "The menu entries to display.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "menuEntries"
             ],
             "type": "object"
         },
