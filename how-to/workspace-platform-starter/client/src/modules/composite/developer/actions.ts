@@ -8,8 +8,8 @@ import {
 import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import { isStringValue } from "workspace-platform-starter/utils";
 import { MANIFEST_TYPES } from "../../../framework/manifest-types";
-import { isStringValue } from "../../../framework/utils";
 
 /**
  * Implement the actions.

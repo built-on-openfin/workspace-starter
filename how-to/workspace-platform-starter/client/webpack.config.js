@@ -1,6 +1,7 @@
 const path = require('path');
 
 const alias = {
+	'workspace-platform-starter': path.resolve(__dirname, '../client/src/framework'),
 	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
 };
 

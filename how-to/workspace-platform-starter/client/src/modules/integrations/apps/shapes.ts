@@ -8,11 +8,16 @@ export interface AppSettings {
 	 * The manifest type mappings.
 	 */
 	manifestTypeMapping: AppManifestTypeMapping;
+
+	/**
+	 * Enable favorites, defaults to true.
+	 */
+	favoritesEnabled?: boolean;
 }
 
 /**
  * Manifest type mapping.
  */
-type AppManifestTypeMapping = {
+export type AppManifestTypeMapping = {
 	[key in ManifestTypeId]: { actionName?: string; entryLabel?: string };
 };

@@ -23,6 +23,7 @@
   - `interval` validates/updates the cache on a timer based on the cache duration (will make more requests to app endpoints)
 - Added trayProvider which will show a tray icon, lets you customize the icon, activation button and menu entries
 - Added an example endpoint module: favorites-local-storage with a README showing how it can be wired up if you wanted to looking at using he favoriteClient from a module you are building.
+- Added apps in Home can now be favorited, you can see all your favorite apps with the `/fav` command
 
 ## v13.1
 

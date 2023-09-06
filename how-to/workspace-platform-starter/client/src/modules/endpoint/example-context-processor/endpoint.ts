@@ -6,7 +6,7 @@ import type {
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue, objectClone } from "../../../framework/utils";
+import { isEmpty, isStringValue, objectClone } from "workspace-platform-starter/utils";
 import type { ContextProcessorSettings } from "./shapes";
 
 /**
