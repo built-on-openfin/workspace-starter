@@ -1,9 +1,33 @@
 import type { PlatformStorageMetadata } from "./platform-shapes";
 
 /**
+ * Favorite type for App.
+ */
+export const FAVORITE_TYPE_NAME_APP = "app";
+
+/**
+ * Favorite type for Workspace.
+ */
+export const FAVORITE_TYPE_NAME_WORKSPACE = "workspace";
+
+/**
+ * Favorite type for Page.
+ */
+export const FAVORITE_TYPE_NAME_PAGE = "page";
+
+/**
+ * Favorite type for Query.
+ */
+export const FAVORITE_TYPE_NAME_QUERY = "query";
+
+/**
  * Names for all the favorite types.
  */
-export type FavoriteTypeNames = "app" | "workspace" | "page" | "query";
+export type FavoriteTypeNames =
+	| typeof FAVORITE_TYPE_NAME_APP
+	| typeof FAVORITE_TYPE_NAME_WORKSPACE
+	| typeof FAVORITE_TYPE_NAME_PAGE
+	| typeof FAVORITE_TYPE_NAME_QUERY;
 
 /**
  * Options for the favorite provider.

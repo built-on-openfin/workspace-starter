@@ -8,10 +8,11 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
-import type {
-	FavoriteClient,
-	FavoriteEntry,
-	FavoriteInfo
+import {
+	FAVORITE_TYPE_NAME_APP,
+	type FavoriteClient,
+	type FavoriteEntry,
+	type FavoriteInfo
 } from "workspace-platform-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
@@ -196,7 +197,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 								favoriteId = randomUUID();
 								await favClient.setSavedFavorite({
 									id: randomUUID(),
-									type: "app",
+									type: FAVORITE_TYPE_NAME_APP,
 									typeId: result.key,
 									label: result.title,
 									icon: result.icon
@@ -273,9 +274,10 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (favClient) {
 					const info = favClient.getInfo();
 					if (info.isEnabled && isStringValue(info.command)) {
-						const isSupported = isEmpty(info.enabledTypes) || info.enabledTypes.includes("app");
+						const isSupported =
+							isEmpty(info.enabledTypes) || info.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
 						if (isSupported && queryLower === info.command) {
-							const favoriteApps = await favClient.getSavedFavorites("app");
+							const favoriteApps = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
 							const favIds = favoriteApps?.map((f) => f.typeId) ?? [];
 							apps = apps.filter((a) => favIds.includes(a.appId));
 							matchQuery = "";
@@ -446,9 +448,10 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (favClient) {
 					favInfo = favClient.getInfo();
 					if (favInfo.isEnabled) {
-						const isSupported = isEmpty(favInfo.enabledTypes) || favInfo.enabledTypes.includes("app");
+						const isSupported =
+							isEmpty(favInfo.enabledTypes) || favInfo.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
 						if (isSupported) {
-							savedFavorites = await favClient.getSavedFavorites("app");
+							savedFavorites = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
 						} else {
 							favInfo = undefined;
 						}
