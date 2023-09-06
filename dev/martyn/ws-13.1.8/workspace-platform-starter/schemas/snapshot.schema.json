@@ -1,0 +1,1678 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"additionalProperties": false,
+	"definitions": {
+		"Api": {
+			"$ref": "#/definitions/__type_8"
+		},
+		"Array": {
+			"items": {
+				"$ref": "#/definitions/PrebuiltContextMenuItem"
+			},
+			"type": "array"
+		},
+		"AutoResizeOptions": {
+			"$ref": "#/definitions/__type_21"
+		},
+		"AutoplayPolicyOptions": {
+			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
+			"enum": ["document-user-activation-required", "no-user-gesture-required", "user-gesture-required"],
+			"type": "string"
+		},
+		"Bounds": {
+			"$ref": "#/definitions/__type_20"
+		},
+		"ContentCreationOptions": {
+			"$ref": "#/definitions/__type_9"
+		},
+		"ContentCreationRule<ContentCreationBehaviorNames>": {
+			"additionalProperties": false,
+			"description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled.",
+			"properties": {
+				"behavior": {
+					"$ref": "#/definitions/T",
+					"description": "Behavior to use when opening matched content."
+				},
+				"match": {
+					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"options": {
+					"anyOf": [
+						{
+							"$ref": "#/definitions/Partial_2"
+						},
+						{
+							"$ref": "#/definitions/Partial_7"
+						}
+					],
+					"description": "Options for newly-created view or window (if applicable)."
+				}
+			},
+			"required": ["behavior", "match"],
+			"type": "object"
+		},
+		"ContentNavigation": {
+			"$ref": "#/definitions/__type_11"
+		},
+		"ContextGroupStates": {
+			"$ref": "#/definitions/__type_27"
+		},
+		"ContextMenuOptions": {
+			"$ref": "#/definitions/__type_2"
+		},
+		"ContextMenuSettings": {
+			"$ref": "#/definitions/__type_1"
+		},
+		"DipRect": {
+			"additionalProperties": false,
+			"properties": {
+				"dipRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
+				"scaledRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				}
+			},
+			"required": ["dipRect", "scaledRect"],
+			"type": "object"
+		},
+		"DipScaleRects": {
+			"$ref": "#/definitions/__type_24"
+		},
+		"Identity": {
+			"$ref": "#/definitions/__type_13"
+		},
+		"InteropConfig": {
+			"$ref": "#/definitions/__type_5"
+		},
+		"MonitorDetails": {
+			"$ref": "#/definitions/__type_26"
+		},
+		"MonitorInfo": {
+			"$ref": "#/definitions/__type_22"
+		},
+		"Partial": {
+			"$ref": "#/definitions/__type_3"
+		},
+		"Partial_1": {
+			"$ref": "#/definitions/__type_7"
+		},
+		"Partial_2": {
+			"$ref": "#/definitions/__type_10"
+		},
+		"Partial_3": {
+			"$ref": "#/definitions/__type_12"
+		},
+		"Partial_4": {
+			"$ref": "#/definitions/__type_14"
+		},
+		"Partial_5": {
+			"$ref": "#/definitions/__type_15"
+		},
+		"Partial_6": {
+			"$ref": "#/definitions/__type_16"
+		},
+		"Partial_7": {
+			"$ref": "#/definitions/__type_19"
+		},
+		"Point": {
+			"$ref": "#/definitions/__type_23"
+		},
+		"PrebuiltContextMenuItem": {
+			"description": "Context menu item with an implementation provided by OpenFin.",
+			"enum": [
+				"copy",
+				"cut",
+				"inspect",
+				"navigateBack",
+				"navigateForward",
+				"paste",
+				"print",
+				"redo",
+				"reload",
+				"selectAll",
+				"separator",
+				"spellCheck",
+				"undo"
+			],
+			"type": "string"
+		},
+		"RGB": {
+			"$ref": "#/definitions/__type"
+		},
+		"RectangleByEdgePositions": {
+			"$ref": "#/definitions/__type_25"
+		},
+		"ResizeRegion": {
+			"$ref": "#/definitions/__type_4"
+		},
+		"ShowViewOnWindowResizeOptions": {
+			"additionalProperties": false,
+			"description": "_Platform Windows Only_. Enables views to be shown when a Platform Window is being resized by the user.",
+			"properties": {
+				"enabled": {
+					"type": "boolean"
+				},
+				"paintIntervalMs": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"T": {
+			"enum": ["block", "browser", "view", "window"],
+			"type": "string"
+		},
+		"TaskBar": {
+			"additionalProperties": false,
+			"properties": {
+				"edge": {
+					"description": "Which edge of a monitor the taskbar is on",
+					"type": "string"
+				},
+				"rect": {
+					"$ref": "#/definitions/RectangleByEdgePositions",
+					"description": "The taskbar coordinates."
+				}
+			},
+			"required": ["edge", "rect"],
+			"type": "object"
+		},
+		"ViewVisibilityOption": {
+			"$ref": "#/definitions/__type_18"
+		},
+		"ViewVisibilityOptions": {
+			"$ref": "#/definitions/__type_17"
+		},
+		"WebPermission": {
+			"enum": [
+				"audio",
+				"clipboard-read",
+				"clipboard-sanitized-write",
+				"fullscreen",
+				"geolocation",
+				"midiSysex",
+				"notifications",
+				"openExternal",
+				"pointerLock",
+				"video"
+			],
+			"type": "string"
+		},
+		"WindowCreationOptions": {
+			"additionalProperties": false,
+			"description": "Options required to create a new window with {@link Window.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_1",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"alphaMask": {
+					"$ref": "#/definitions/RGB",
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+				},
+				"alwaysOnTop": {
+					"type": "boolean"
+				},
+				"api": {
+					"$ref": "#/definitions/Api",
+					"description": "Configurations for API injection."
+				},
+				"applicationIcon": {
+					"type": "string"
+				},
+				"aspectRatio": {
+					"type": "number"
+				},
+				"autoShow": {
+					"description": "Automatically show the window when it is created.",
+					"type": "boolean"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"closeOnLastViewRemoved": {
+					"type": "boolean"
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/Partial_3",
+					"description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"cornerRounding": {
+					"$ref": "#/definitions/Partial",
+					"description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the window.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"defaultCentered": {
+					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+					"type": "boolean"
+				},
+				"defaultHeight": {
+					"type": "number"
+				},
+				"defaultLeft": {
+					"type": "number"
+				},
+				"defaultTop": {
+					"type": "number"
+				},
+				"defaultWidth": {
+					"type": "number"
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"frame": {
+					"type": "boolean"
+				},
+				"height": {
+					"type": "number"
+				},
+				"hideOnClose": {
+					"type": "boolean"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"icon": {
+					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+					"type": "string"
+				},
+				"ignoreSavedWindowState": {
+					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
+					"type": "boolean"
+				},
+				"includeInSnapshots": {
+					"type": "boolean"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"layout": {},
+				"maxHeight": {
+					"type": "number"
+				},
+				"maxWidth": {
+					"type": "number"
+				},
+				"maximizable": {
+					"type": "boolean"
+				},
+				"minHeight": {
+					"type": "number"
+				},
+				"minWidth": {
+					"type": "number"
+				},
+				"minimizable": {
+					"type": "boolean"
+				},
+				"modalParentIdentity": {
+					"$ref": "#/definitions/Identity",
+					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
+				},
+				"name": {
+					"type": "string"
+				},
+				"opacity": {
+					"type": "number"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_4"
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"type": "string"
+				},
+				"resizable": {
+					"type": "boolean"
+				},
+				"resizeRegion": {
+					"$ref": "#/definitions/ResizeRegion",
+					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
+				},
+				"saveWindowState": {
+					"type": "boolean"
+				},
+				"shadow": {
+					"type": "boolean"
+				},
+				"showBackgroundImages": {
+					"type": "boolean"
+				},
+				"showTaskbarIcon": {
+					"type": "boolean"
+				},
+				"smallWindow": {
+					"type": "boolean"
+				},
+				"state": {
+					"$ref": "#/definitions/WindowState"
+				},
+				"taskbarIcon": {
+					"type": "string"
+				},
+				"taskbarIconGroup": {
+					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"viewVisibility": {
+					"$ref": "#/definitions/ViewVisibilityOptions",
+					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
+				},
+				"waitForPageLoad": {
+					"type": "boolean"
+				},
+				"width": {
+					"type": "number"
+				},
+				"workspacePlatform": {
+					"$ref": "#/definitions/WorkspacePlatformOptions"
+				},
+				"x": {
+					"type": "number"
+				},
+				"y": {
+					"type": "number"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"WindowState": {
+			"description": "Visibility state of a window.",
+			"enum": ["maximized", "minimized", "normal"],
+			"type": "string"
+		},
+		"WorkspacePlatformOptions": {
+			"$ref": "#/definitions/__type_6"
+		},
+		"__type": {
+			"additionalProperties": false,
+			"properties": {
+				"blue": {
+					"type": "number"
+				},
+				"green": {
+					"type": "number"
+				},
+				"red": {
+					"type": "number"
+				}
+			},
+			"required": ["blue", "green", "red"],
+			"type": "object"
+		},
+		"__type_1": {
+			"additionalProperties": false,
+			"properties": {
+				"devtools": {
+					"description": "Should the context menu contain a button for opening devtools.",
+					"type": "boolean"
+				},
+				"enable": {
+					"description": "Should the context menu display on right click.",
+					"type": "boolean"
+				},
+				"reload": {
+					"description": "Should the context menu contain a button for reloading the page.",
+					"type": "boolean"
+				}
+			},
+			"required": ["enable"],
+			"type": "object"
+		},
+		"__type_10": {
+			"additionalProperties": false,
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_1",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"alphaMask": {
+					"$ref": "#/definitions/RGB",
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+				},
+				"alwaysOnTop": {
+					"type": "boolean"
+				},
+				"api": {
+					"$ref": "#/definitions/Api",
+					"description": "Configurations for API injection."
+				},
+				"applicationIcon": {
+					"type": "string"
+				},
+				"aspectRatio": {
+					"type": "number"
+				},
+				"autoShow": {
+					"description": "Automatically show the window when it is created.",
+					"type": "boolean"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"closeOnLastViewRemoved": {
+					"type": "boolean"
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/Partial_3",
+					"description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"cornerRounding": {
+					"$ref": "#/definitions/Partial",
+					"description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the window.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"defaultCentered": {
+					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+					"type": "boolean"
+				},
+				"defaultHeight": {
+					"type": "number"
+				},
+				"defaultLeft": {
+					"type": "number"
+				},
+				"defaultTop": {
+					"type": "number"
+				},
+				"defaultWidth": {
+					"type": "number"
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"frame": {
+					"type": "boolean"
+				},
+				"height": {
+					"type": "number"
+				},
+				"hideOnClose": {
+					"type": "boolean"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"icon": {
+					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+					"type": "string"
+				},
+				"ignoreSavedWindowState": {
+					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
+					"type": "boolean"
+				},
+				"includeInSnapshots": {
+					"type": "boolean"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"layout": {},
+				"maxHeight": {
+					"type": "number"
+				},
+				"maxWidth": {
+					"type": "number"
+				},
+				"maximizable": {
+					"type": "boolean"
+				},
+				"minHeight": {
+					"type": "number"
+				},
+				"minWidth": {
+					"type": "number"
+				},
+				"minimizable": {
+					"type": "boolean"
+				},
+				"modalParentIdentity": {
+					"$ref": "#/definitions/Identity",
+					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
+				},
+				"name": {
+					"description": "The name of the window.",
+					"type": "string"
+				},
+				"opacity": {
+					"type": "number"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_4"
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"type": "string"
+				},
+				"resizable": {
+					"type": "boolean"
+				},
+				"resizeRegion": {
+					"$ref": "#/definitions/ResizeRegion",
+					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
+				},
+				"saveWindowState": {
+					"type": "boolean"
+				},
+				"shadow": {
+					"type": "boolean"
+				},
+				"showBackgroundImages": {
+					"type": "boolean"
+				},
+				"showTaskbarIcon": {
+					"type": "boolean"
+				},
+				"smallWindow": {
+					"type": "boolean"
+				},
+				"state": {
+					"$ref": "#/definitions/WindowState"
+				},
+				"taskbarIcon": {
+					"type": "string"
+				},
+				"taskbarIconGroup": {
+					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"viewVisibility": {
+					"$ref": "#/definitions/ViewVisibilityOptions",
+					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
+				},
+				"waitForPageLoad": {
+					"type": "boolean"
+				},
+				"width": {
+					"type": "number"
+				},
+				"workspacePlatform": {
+					"$ref": "#/definitions/WorkspacePlatformOptions"
+				},
+				"x": {
+					"type": "number"
+				},
+				"y": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_11": {
+			"additionalProperties": false,
+			"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details.",
+			"properties": {
+				"blacklist": {
+					"description": "Forbidden URLs for navigation.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"whitelist": {
+					"description": "Allowed URLs for navigation.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				}
+			},
+			"type": "object"
+		},
+		"__type_12": {
+			"additionalProperties": false,
+			"properties": {
+				"blacklist": {
+					"description": "Forbidden URLs for redirects.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"whitelist": {
+					"description": "Allowed URLs for redirects.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				}
+			},
+			"type": "object"
+		},
+		"__type_13": {
+			"additionalProperties": false,
+			"properties": {
+				"name": {
+					"description": "The name of the component",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the compenent",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_14": {
+			"additionalProperties": false,
+			"properties": {
+				"Application": {
+					"$ref": "#/definitions/Partial_5"
+				},
+				"System": {
+					"$ref": "#/definitions/Partial_6"
+				},
+				"webAPIs": {
+					"items": {
+						"$ref": "#/definitions/WebPermission"
+					},
+					"type": "array"
+				}
+			},
+			"type": "object"
+		},
+		"__type_15": {
+			"additionalProperties": false,
+			"properties": {
+				"setFileDownloadLocation": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_16": {
+			"additionalProperties": false,
+			"properties": {
+				"getAllExternalWindows": {
+					"type": "boolean"
+				},
+				"launchExternalProcess": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"assets": {
+									"additionalProperties": false,
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"srcRules": {
+											"items": {
+												"additionalProperties": false,
+												"properties": {
+													"behavior": {
+														"enum": ["allow", "block"],
+														"type": "string"
+													},
+													"match": {
+														"items": {
+															"type": "string"
+														},
+														"type": "array"
+													}
+												},
+												"required": ["behavior", "match"],
+												"type": "object"
+											},
+											"type": "array"
+										}
+									},
+									"required": ["enabled"],
+									"type": "object"
+								},
+								"downloads": {
+									"additionalProperties": false,
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										}
+									},
+									"required": ["enabled"],
+									"type": "object"
+								},
+								"enabled": {
+									"type": "boolean"
+								},
+								"executables": {
+									"additionalProperties": false,
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"pathRules": {
+											"items": {
+												"additionalProperties": false,
+												"properties": {
+													"behavior": {
+														"enum": ["allow", "block"],
+														"type": "string"
+													},
+													"match": {
+														"items": {
+															"type": "string"
+														},
+														"type": "array"
+													}
+												},
+												"required": ["behavior", "match"],
+												"type": "object"
+											},
+											"type": "array"
+										}
+									},
+									"required": ["enabled"],
+									"type": "object"
+								}
+							},
+							"required": ["enabled"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					]
+				},
+				"openUrlWithBrowser": {
+					"additionalProperties": false,
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"protocols": {
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					"required": ["enabled", "protocols"],
+					"type": "object"
+				},
+				"readRegistryValue": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"enabled": {
+									"type": "boolean"
+								},
+								"registryKeys": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								}
+							},
+							"required": ["enabled", "registryKeys"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					]
+				},
+				"terminateExternalProcess": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_17": {
+			"additionalProperties": false,
+			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
+			"properties": {
+				"showViewsOnSplitterDrag": {
+					"$ref": "#/definitions/ViewVisibilityOption",
+					"description": "Allows views to be shown when they are resized by the user dragging the splitter between layout stacks."
+				},
+				"showViewsOnTabDrag": {
+					"$ref": "#/definitions/ViewVisibilityOption",
+					"description": "_Supported on Windows Operating Systems only_. Allows views to be shown when the user is dragging a tab around a layout."
+				},
+				"showViewsOnWindowResize": {
+					"$ref": "#/definitions/ShowViewOnWindowResizeOptions",
+					"description": "Enables views to be shown when a Platform Window is being resized by the user."
+				}
+			},
+			"type": "object"
+		},
+		"__type_18": {
+			"additionalProperties": false,
+			"description": "Configuration for view visibility settings",
+			"properties": {
+				"enabled": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_19": {
+			"additionalProperties": false,
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_1",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"api": {
+					"$ref": "#/definitions/Api",
+					"description": "Configurations for API injection."
+				},
+				"autoResize": {
+					"$ref": "#/definitions/AutoResizeOptions"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"bounds": {
+					"$ref": "#/definitions/Bounds",
+					"description": "Initial bounds given relative to the window."
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the view.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"detachOnClose": {
+					"type": "boolean"
+				},
+				"enableBeforeUnload": {
+					"type": "boolean"
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"isClosable": {
+					"type": "boolean"
+				},
+				"manifestUrl": {
+					"description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the view.",
+					"type": "string"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_4"
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"preventDragOut": {
+					"type": "boolean"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"type": "string"
+				},
+				"target": {
+					"$ref": "#/definitions/Identity",
+					"description": "The identity of the window this view should be attached to."
+				},
+				"url": {
+					"type": "string"
+				},
+				"zoomLevel": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_2": {
+			"additionalProperties": false,
+			"description": "Configure the context menu when right-clicking on a window.",
+			"properties": {
+				"enabled": {
+					"description": "Displays the context menu on right click.",
+					"type": "boolean"
+				},
+				"template": {
+					"$ref": "#/definitions/Array",
+					"description": "Context menu items to display on right-click."
+				}
+			},
+			"type": "object"
+		},
+		"__type_20": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"required": ["height", "left", "top", "width"],
+			"type": "object"
+		},
+		"__type_21": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
+				},
+				"horizontal": {
+					"description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"vertical": {
+					"description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"width": {
+					"description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_22": {
+			"additionalProperties": false,
+			"properties": {
+				"deviceScaleFactor": {
+					"description": "The device scale factor.",
+					"type": "number"
+				},
+				"dpi": {
+					"$ref": "#/definitions/Point"
+				},
+				"nonPrimaryMonitors": {
+					"items": {
+						"additionalProperties": false,
+						"properties": {
+							"available": {
+								"$ref": "#/definitions/DipScaleRects",
+								"description": "The available DIP scale coordinates."
+							},
+							"availableRect": {
+								"$ref": "#/definitions/RectangleByEdgePositions",
+								"description": "The available monitor coordinates."
+							},
+							"deviceId": {
+								"description": "The device id of the display.",
+								"type": ["string", "number"]
+							},
+							"deviceScaleFactor": {
+								"description": "The device scale factor.",
+								"type": "number"
+							},
+							"displayDeviceActive": {
+								"description": "True if the display is active.",
+								"type": "boolean"
+							},
+							"dpi": {
+								"$ref": "#/definitions/Point"
+							},
+							"monitor": {
+								"$ref": "#/definitions/DipScaleRects",
+								"description": "The monitor coordinates."
+							},
+							"monitorRect": {
+								"$ref": "#/definitions/RectangleByEdgePositions",
+								"description": "The monitor coordinates."
+							},
+							"name": {
+								"description": "The name of the display.",
+								"type": ["string", "number"]
+							}
+						},
+						"required": [
+							"available",
+							"availableRect",
+							"deviceId",
+							"deviceScaleFactor",
+							"displayDeviceActive",
+							"dpi",
+							"monitor",
+							"monitorRect",
+							"name"
+						],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"primaryMonitor": {
+					"$ref": "#/definitions/MonitorDetails"
+				},
+				"reason": {
+					"description": "Always \"api-query\".",
+					"type": "string"
+				},
+				"taskbar": {
+					"$ref": "#/definitions/TaskBar"
+				},
+				"virtualScreen": {
+					"$ref": "#/definitions/DipRect",
+					"description": "The virtual display screen coordinates."
+				}
+			},
+			"required": [
+				"deviceScaleFactor",
+				"dpi",
+				"nonPrimaryMonitors",
+				"primaryMonitor",
+				"reason",
+				"taskbar",
+				"virtualScreen"
+			],
+			"type": "object"
+		},
+		"__type_23": {
+			"additionalProperties": false,
+			"properties": {
+				"x": {
+					"description": "The mouse x position",
+					"type": "number"
+				},
+				"y": {
+					"description": "The mouse y position",
+					"type": "number"
+				}
+			},
+			"required": ["x", "y"],
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
+			"properties": {
+				"dipRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
+				"scaledRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				}
+			},
+			"required": ["dipRect", "scaledRect"],
+			"type": "object"
+		},
+		"__type_25": {
+			"additionalProperties": false,
+			"properties": {
+				"bottom": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"right": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				}
+			},
+			"required": ["bottom", "left", "right", "top"],
+			"type": "object"
+		},
+		"__type_26": {
+			"additionalProperties": false,
+			"properties": {
+				"available": {
+					"$ref": "#/definitions/DipScaleRects",
+					"description": "The available DIP scale coordinates."
+				},
+				"availableRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions",
+					"description": "The available monitor coordinates."
+				},
+				"deviceId": {
+					"description": "The device id of the display.",
+					"type": ["string", "number"]
+				},
+				"deviceScaleFactor": {
+					"description": "The device scale factor.",
+					"type": "number"
+				},
+				"displayDeviceActive": {
+					"description": "True if the display is active.",
+					"type": "boolean"
+				},
+				"dpi": {
+					"$ref": "#/definitions/Point"
+				},
+				"monitor": {
+					"$ref": "#/definitions/DipScaleRects",
+					"description": "The monitor coordinates."
+				},
+				"monitorRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions",
+					"description": "The monitor coordinates."
+				},
+				"name": {
+					"description": "The name of the display.",
+					"type": ["string", "number"]
+				}
+			},
+			"required": [
+				"available",
+				"availableRect",
+				"deviceId",
+				"deviceScaleFactor",
+				"displayDeviceActive",
+				"dpi",
+				"monitor",
+				"monitorRect",
+				"name"
+			],
+			"type": "object"
+		},
+		"__type_27": {
+			"additionalProperties": {
+				"additionalProperties": {
+					"additionalProperties": false,
+					"description": "Data passed between entities and applications.",
+					"properties": {
+						"id": {
+							"additionalProperties": {
+								"type": "string"
+							},
+							"description": "An object containing string key-value pairs for the bulk of the data for the context. Differs between context types.",
+							"type": "object"
+						},
+						"name": {
+							"description": "User-readable name for the incoming context.",
+							"type": "string"
+						},
+						"type": {
+							"description": "Conserved type for the context (e.g. `instrument` or `country`).",
+							"type": "string"
+						}
+					},
+					"required": ["type"],
+					"type": "object"
+				},
+				"type": "object"
+			},
+			"type": "object"
+		},
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
+			"properties": {
+				"bottomRightCorner": {
+					"type": "number"
+				},
+				"sides": {
+					"additionalProperties": false,
+					"description": "Enables resizing interaction for each side of the window.",
+					"properties": {
+						"bottom": {
+							"type": "boolean"
+						},
+						"left": {
+							"type": "boolean"
+						},
+						"right": {
+							"type": "boolean"
+						},
+						"top": {
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				},
+				"size": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_5": {
+			"additionalProperties": false,
+			"properties": {
+				"currentContextGroup": {
+					"description": "Context Group for the client. (green, yellow, red, etc.).",
+					"type": "string"
+				},
+				"providerId": {
+					"description": "When provided, automatically connects the client to the specified provider uuid.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_6": {
+			"additionalProperties": {},
+			"type": "object"
+		},
+		"__type_7": {
+			"additionalProperties": false,
+			"properties": {
+				"devtools": {
+					"description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
+					"type": "boolean"
+				},
+				"reload": {
+					"description": "If `true`, enables the reload keyboard shortcuts:<br>\n`Ctrl` + `R` _(Windows)_<br>\n`F5` _(Windows)_<br>\n`Command` + `R` _(Mac)_",
+					"type": "boolean"
+				},
+				"reloadIgnoringCache": {
+					"description": "If `true`, enables the reload-from-source keyboard shortcuts:<br>\n`Ctrl` + `Shift` + `R` _(Windows)_<br>\n`Shift` + `F5` _(Windows)_<br>\n`Command` + `Shift` + `R` _(Mac)_",
+					"type": "boolean"
+				},
+				"zoom": {
+					"description": "NOTE: It is not recommended to set this value to true for Windows in Platforms as that may lead to unexpected visual shifts in layout.\nIf `true`, enables the zoom keyboard shortcuts:<br>\n`Ctrl` + `+` _(Zoom In)_<br>\n`Ctrl` + `Shift` + `+` _(Zoom In)_<br>\n`Ctrl` + `NumPad+` _(Zoom In)_<br>\n`Ctrl` + `-` _(Zoom Out)_<br>\n`Ctrl` + `Shift` + `-` _(Zoom Out)_<br>\n`Ctrl` + `NumPad-` _(Zoom Out)_<br>\n`Ctrl` + `Scroll` _(Zoom In & Out)_<br>\n`Ctrl` + `0` _(Restore to 100%)_",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_8": {
+			"additionalProperties": false,
+			"description": "Configurations for API injection.",
+			"properties": {
+				"iframe": {
+					"additionalProperties": false,
+					"description": "Configure injection of OpenFin API into iframes based on domain",
+					"properties": {
+						"crossOriginInjection": {
+							"description": "Inject OpenFin API into cross-origin iframes",
+							"type": "boolean"
+						},
+						"enableDeprecatedSharedName": {
+							"type": "boolean"
+						},
+						"sameOriginInjection": {
+							"description": "Inject OpenFin API into same-origin iframes",
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"__type_9": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+						"description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		}
+	},
+	"properties": {
+		"interopSnapshotDetails": {
+			"additionalProperties": false,
+			"properties": {
+				"contextGroupStates": {
+					"$ref": "#/definitions/ContextGroupStates"
+				}
+			},
+			"required": ["contextGroupStates"],
+			"type": "object"
+		},
+		"snapshotDetails": {
+			"additionalProperties": false,
+			"properties": {
+				"monitorInfo": {
+					"$ref": "#/definitions/MonitorInfo"
+				},
+				"runtimeVersion": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				}
+			},
+			"required": ["monitorInfo", "runtimeVersion", "timestamp"],
+			"type": "object"
+		},
+		"windows": {
+			"items": {
+				"$ref": "#/definitions/WindowCreationOptions"
+			},
+			"type": "array"
+		}
+	},
+	"required": ["windows"],
+	"type": "object"
+}
