@@ -28,6 +28,19 @@
             "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
+        "AnalyticsConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "sendToOpenFin": {
+                    "description": "Enable sending of Analytics data to OpenFin",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "sendToOpenFin"
+            ],
+            "type": "object"
+        },
         "AnalyticsProviderOptions": {
             "$ref": "#/definitions/ModuleList_6",
             "description": "List of modules."
@@ -3341,6 +3354,10 @@
             "additionalProperties": false,
             "description": "Platform provider options.",
             "properties": {
+                "analytics": {
+                    "$ref": "#/definitions/AnalyticsConfig",
+                    "description": "Config for Workspace Platform analytics."
+                },
                 "disableStorageMapping": {
                     "description": "When storing page/workspace data using endpoints disable the mapping which reduces the payload size.",
                     "type": "boolean"

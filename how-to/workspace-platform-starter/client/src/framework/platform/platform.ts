@@ -179,7 +179,8 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 				customSettings?.platformProvider,
 				await versionProvider.getVersionInfo()
 			),
-		integrations
+		integrations,
+		analytics: customSettings?.platformProvider?.analytics
 	});
 	return true;
 }
