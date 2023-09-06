@@ -21,7 +21,7 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isObject, isStringValue, randomUUID } from "../../../framework/utils";
+import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import type { AppManifestTypeMapping, AppSettings } from "./shapes";
 
 /**

@@ -15,24 +15,12 @@ import { isEmpty } from "workspace-platform-starter/utils";
 /**
  * Implementation for the favorite local storage endpoint provider.
  */
-export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
-	/**
-	 * The module definition including settings.
-	 * @internal
-	 */
-	private _definition: ModuleDefinition<unknown> | undefined;
-
+export class FavoriteLocalStorageProvider implements Endpoint {
 	/**
 	 * The logger for displaying information from the module.
 	 * @internal
 	 */
 	private _logger?: Logger;
-
-	/**
-	 * Helper methods for the module.
-	 * @internal
-	 */
-	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * The id to use for storing the favorites.
@@ -59,9 +47,7 @@ export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._definition = definition;
 		this._logger = loggerCreator("FavoriteLocalStorageProvider");
-		this._helpers = helpers;
 		this._logger.info("Initializing");
 	}
 

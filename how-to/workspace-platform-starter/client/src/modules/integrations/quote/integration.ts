@@ -28,7 +28,7 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "../../../framework/utils";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 
 /**
