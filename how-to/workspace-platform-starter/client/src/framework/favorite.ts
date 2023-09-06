@@ -126,8 +126,10 @@ export async function setSavedFavorite(favorite: FavoriteEntry): Promise<boolean
 		);
 		return false;
 	}
-	logger.info("Setting timestamp.");
-	favorite.timestamp = new Date();
+	if (isEmpty(favorite.timestamp)) {
+		logger.info("Setting timestamp.");
+		favorite.timestamp = new Date();
+	}
 	if (endpoints.hasEndpoint(FAVORITE_ENDPOINT_ID_SET)) {
 		const success = await endpoints.action<EndpointFavoriteSetRequest>(FAVORITE_ENDPOINT_ID_SET, {
 			id: favorite.id,
@@ -201,7 +203,7 @@ export function getInfo(): FavoriteInfo {
 		};
 	}
 	return {
-		isEnabled: isInitialized,
+		isEnabled: favoriteOptions?.enabled ?? true,
 		favoriteIcon: favoriteOptions?.favoriteIcon,
 		unfavoriteIcon: favoriteOptions?.unfavoriteIcon,
 		command: favoriteOptions?.favoriteCommand,

@@ -8,10 +8,16 @@ export type FavoriteTypeNames = "app" | "workspace" | "page" | "query";
  */
 export interface FavoriteProviderOptions {
 	/**
+	 * Is the provider enabled, defaults to true.
+	 */
+	enabled?: boolean;
+	/**
 	 * The icon that should be used if you want to indicate this is a favorite action
 	 */
 	favoriteIcon: string;
-	/** The icon to use to indicate that this favorite can be unset */
+	/**
+	 * The icon to use to indicate that this favorite can be unset
+	 */
 	unfavoriteIcon: string;
 	/**
 	 * What commands should integrations check for if they intent to support the display of favorites
@@ -42,7 +48,7 @@ export interface FavoriteEntry {
 	/**
 	 * The timestamp for the entry.
 	 */
-	timestamp: Date;
+	timestamp?: Date;
 	/**
 	 * Does this favorite have a suggested label that can be used to avoid a lookup
 	 */
@@ -91,7 +97,7 @@ export interface FavoriteClient {
 	 * @param byType the type of saved favorite you are looking for
 	 * @returns An array of saved favorites or an empty array if it was unable to get any back
 	 */
-	getSavedFavorites(byType: FavoriteTypeNames): Promise<FavoriteEntry[] | undefined>;
+	getSavedFavorites(byType?: FavoriteTypeNames): Promise<FavoriteEntry[] | undefined>;
 	/**
 	 * The ability to request a particular saved favorite.
 	 * @param id the id of the favorite you are looking for

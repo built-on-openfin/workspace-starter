@@ -131,7 +131,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 		await shareProvider.init({ enabled: sharingEnabled });
 	}
 
-	if (!isEmpty(customSettings?.favoriteProvider)) {
+	if (!isEmpty(customSettings?.favoriteProvider) && (customSettings?.favoriteProvider.enabled ?? true)) {
 		await platformSplashProvider.updateProgress("Favorites");
 		await favoriteProvider.init(
 			customSettings?.favoriteProvider,

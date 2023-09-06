@@ -184,7 +184,7 @@ export class FavoriteLocalStorageProvider implements Endpoint<unknown> {
 			if (existingEntryIndex === -1) {
 				return false;
 			}
-			delete favorites[existingEntryIndex];
+			favorites.splice(existingEntryIndex, 1);
 			this.saveFavorites(favorites);
 			return true;
 		}

@@ -304,18 +304,12 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
  * @returns The favorite client.
  */
 async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
-	if (bootstrapped) {
-		if (!favoriteProvider.getInfo().isEnabled) {
-			logger.warn(
-				"A request was made for the favorite client but favorites is not configured for this platform."
-			);
-			return undefined;
-		}
-		// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
-		return favoriteProvider;
+	if (!favoriteProvider.getInfo().isEnabled) {
+		logger.warn(
+			"A request was made for the favorite client but favorites is not configured for this platform."
+		);
+		return undefined;
 	}
-	// otherwise returned undefined as they should be calling after the bootstrapped lifecycle event
-	logger.warn(
-		"A request was made for the favorite client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
-	);
+	// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
+	return favoriteProvider;
 }

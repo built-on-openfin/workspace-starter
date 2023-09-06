@@ -194,6 +194,12 @@
 					"url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
 				},
 				{
+					"title": "Favorite Local Storage",
+					"enabled": true,
+					"id": "favorite-local-storage",
+					"url": "http://localhost:8080/js/modules/endpoint/favorite-local-storage.bundle.js"
+				},
+				{
 					"title": "Context Processor",
 					"enabled": true,
 					"id": "context-processor",
@@ -243,6 +249,26 @@
 						"logContext": true,
 						"logProcessedContext": true
 					}
+				},
+				{
+					"id": "favorite-list",
+					"type": "module",
+					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "favorite-get",
+					"type": "module",
+					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "favorite-set",
+					"type": "module",
+					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "favorite-remove",
+					"type": "module",
+					"typeId": "favorite-local-storage"
 				}
 			]
 		},
@@ -1287,6 +1313,13 @@
 					"conditions": ["authenticated"]
 				}
 			]
+		},
+		"favoriteProvider": {
+			"enabled": false,
+			"favoriteIcon": "http://localhost:8080/icons/{scheme}/favorite.svg",
+			"unfavoriteIcon": "http://localhost:8080/icons/{scheme}/unfavorite.svg",
+			"favoriteCommand": "/fav",
+			"supportedFavoriteTypes": ["app"]
 		}
 	}
 }
