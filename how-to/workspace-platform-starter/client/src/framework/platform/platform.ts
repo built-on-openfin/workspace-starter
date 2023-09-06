@@ -180,7 +180,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 				await versionProvider.getVersionInfo()
 			),
 		integrations,
-		analytics: customSettings?.platformProvider?.analytics
+		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});
 	return true;
 }

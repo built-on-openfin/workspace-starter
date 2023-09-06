@@ -1,4 +1,4 @@
-import type { AnalyticsConfig, Page, Workspace } from "@openfin/workspace-platform";
+import type { Page, Workspace } from "@openfin/workspace-platform";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 
 /**
@@ -38,11 +38,6 @@ export interface PlatformProviderOptions {
 	 * When storing page/workspace data using endpoints disable the mapping which reduces the payload size.
 	 */
 	disableStorageMapping?: boolean;
-
-	/**
-	 * Config for Workspace Platform analytics.
-	 */
-	analytics?: AnalyticsConfig;
 }
 
 /**

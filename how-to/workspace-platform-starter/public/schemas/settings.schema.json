@@ -28,22 +28,23 @@
             "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
-        "AnalyticsConfig": {
+        "AnalyticsProviderOptions": {
             "additionalProperties": false,
+            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
             "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
                 "sendToOpenFin": {
-                    "description": "Enable sending of Analytics data to OpenFin",
+                    "description": "Send analytics to OpenFin.",
                     "type": "boolean"
                 }
             },
-            "required": [
-                "sendToOpenFin"
-            ],
             "type": "object"
-        },
-        "AnalyticsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
-            "description": "List of modules."
         },
         "Api": {
             "$ref": "#/definitions/__type_14"
@@ -2401,7 +2402,7 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_7",
+            "$ref": "#/definitions/ModuleList_6",
             "description": "List of modules."
         },
         "Microsoft365ConnectionConfig": {
@@ -2693,20 +2694,6 @@
             "type": "object"
         },
         "ModuleList_6": {
-            "additionalProperties": false,
-            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_7": {
             "additionalProperties": false,
             "description": "A list of modules that provide menu for different locations.",
             "properties": {
@@ -3354,10 +3341,6 @@
             "additionalProperties": false,
             "description": "Platform provider options.",
             "properties": {
-                "analytics": {
-                    "$ref": "#/definitions/AnalyticsConfig",
-                    "description": "Config for Workspace Platform analytics."
-                },
                 "disableStorageMapping": {
                     "description": "When storing page/workspace data using endpoints disable the mapping which reduces the payload size.",
                     "type": "boolean"
