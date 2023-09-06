@@ -1230,6 +1230,10 @@
             "additionalProperties": false,
             "description": "Options for the favorite provider.",
             "properties": {
+                "enabled": {
+                    "description": "Is the provider enabled, defaults to true.",
+                    "type": "boolean"
+                },
                 "favoriteCommand": {
                     "description": "What commands should integrations check for if they intent to support the display of favorites",
                     "type": "string"
