@@ -75,7 +75,8 @@ export async function init(
 			`favorites-${type}`,
 			async () =>
 				(options?.enabled ?? false) &&
-				(options?.supportedFavoriteTypes ?? []).includes(type as FavoriteTypeNames)
+				(isEmpty(options?.supportedFavoriteTypes) ||
+					(options?.supportedFavoriteTypes ?? []).includes(type as FavoriteTypeNames))
 		);
 	}
 }
