@@ -598,7 +598,7 @@ function calculateButtons(
 			configPrimaryButton ?? {
 				title: "Launch",
 				action: {
-					id: "launch-app",
+					id: PLATFORM_ACTION_IDS.launchApp,
 					customData: app
 				}
 			},
