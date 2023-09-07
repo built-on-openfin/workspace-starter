@@ -1,18 +1,23 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
+import * as conditionsProvider from "./conditions";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import type {
-	EndpointFavoriteGetRequest,
-	EndpointFavoriteGetResponse,
-	EndpointFavoriteListRequest,
-	EndpointFavoriteListResponse,
-	EndpointFavoriteRemoveRequest,
-	EndpointFavoriteSetRequest,
-	FavoriteEntry,
-	FavoriteInfo,
-	FavoriteProviderOptions,
-	FavoriteTypeNames
+import {
+	FAVORITE_TYPE_NAME_APP,
+	FAVORITE_TYPE_NAME_PAGE,
+	FAVORITE_TYPE_NAME_QUERY,
+	FAVORITE_TYPE_NAME_WORKSPACE,
+	type EndpointFavoriteGetRequest,
+	type EndpointFavoriteGetResponse,
+	type EndpointFavoriteListRequest,
+	type EndpointFavoriteListResponse,
+	type EndpointFavoriteRemoveRequest,
+	type EndpointFavoriteSetRequest,
+	type FavoriteEntry,
+	type FavoriteInfo,
+	type FavoriteProviderOptions,
+	type FavoriteTypeNames
 } from "./shapes/favorite-shapes";
 import type { FavoriteChangedLifecyclePayload } from "./shapes/lifecycle-shapes";
 import type { VersionInfo } from "./shapes/version-shapes";
@@ -56,6 +61,22 @@ export async function init(
 		favoriteOptions = options;
 	} else {
 		logger.warn("Options were not passed to the favorite provider so it cannot be initialized.");
+	}
+
+	conditionsProvider.registerCondition("favorites", async () => options?.enabled ?? false);
+
+	for (const type of [
+		FAVORITE_TYPE_NAME_APP,
+		FAVORITE_TYPE_NAME_WORKSPACE,
+		FAVORITE_TYPE_NAME_PAGE,
+		FAVORITE_TYPE_NAME_QUERY
+	]) {
+		conditionsProvider.registerCondition(
+			`favorites-${type}`,
+			async () =>
+				(options?.enabled ?? false) &&
+				(options?.supportedFavoriteTypes ?? []).includes(type as FavoriteTypeNames)
+		);
 	}
 }
 
