@@ -1,7 +1,7 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
-import type { EndpointProvider } from "./shapes";
+import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import type {
 	EndpointFavoriteGetRequest,
 	EndpointFavoriteGetResponse,
@@ -14,6 +14,7 @@ import type {
 	FavoriteProviderOptions,
 	FavoriteTypeNames
 } from "./shapes/favorite-shapes";
+import type { FavoriteChangedLifecyclePayload } from "./shapes/lifecycle-shapes";
 import type { VersionInfo } from "./shapes/version-shapes";
 import { isEmpty } from "./utils";
 
@@ -72,7 +73,7 @@ export async function getSavedFavorites(byType?: FavoriteTypeNames): Promise<Fav
 			favoriteType: byType,
 			platform: fin.me.identity.uuid
 		});
-		if (!isEmpty(favorites) && Array.isArray(favorites?.entries)) {
+		if (!isEmpty(favorites) && Array.isArray(favorites.entries)) {
 			if (!isEmpty(byType)) {
 				logger.info(`Returning saved favorites by type ${byType} from custom storage`);
 			} else {
@@ -120,7 +121,7 @@ export async function getSavedFavorite(id: string): Promise<FavoriteEntry | unde
  * @returns boolean was it a successful save
  */
 export async function setSavedFavorite(favorite: FavoriteEntry): Promise<boolean> {
-	if (isEmpty(favorite?.id)) {
+	if (isEmpty(favorite.id)) {
 		logger.warn(
 			"No id was passed for the favorite to save so we are unable to save it. If it is a new entry please generate a guid."
 		);
@@ -145,9 +146,9 @@ export async function setSavedFavorite(favorite: FavoriteEntry): Promise<boolean
 		if (success) {
 			logger.info(`Saved favorite with id: ${favorite.id} to custom storage`);
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "favorite-changed", {
+			await fireLifecycleEvent<FavoriteChangedLifecyclePayload>(platform, "favorite-changed", {
 				action: "set",
-				id: favorite.id
+				favorite
 			});
 		} else {
 			logger.info(`Unable to save favorite with id: ${favorite.id} to custom storage`);
@@ -170,19 +171,26 @@ export async function deleteSavedFavorite(id: string): Promise<boolean> {
 		return false;
 	}
 	if (endpoints.hasEndpoint(FAVORITE_ENDPOINT_ID_REMOVE)) {
-		const success = await endpoints.action<EndpointFavoriteRemoveRequest>(FAVORITE_ENDPOINT_ID_REMOVE, {
-			id,
-			platform: fin.me.identity.uuid
-		});
-		if (success) {
-			logger.info(`Saved favorite with id: ${id} was deleted from custom storage`);
-			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "favorite-changed", {
-				action: "delete",
-				id
-			});
+		const favorite = await getSavedFavorite(id);
+
+		let success = false;
+		if (isEmpty(favorite)) {
+			logger.warn(`Unable to delete favorite with id: ${id} from custom storage as it does not exist`);
 		} else {
-			logger.info(`Unable to delete favorite with id: ${id} from custom storage`);
+			success = await endpoints.action<EndpointFavoriteRemoveRequest>(FAVORITE_ENDPOINT_ID_REMOVE, {
+				id,
+				platform: fin.me.identity.uuid
+			});
+			if (success) {
+				logger.info(`Saved favorite with id: ${id} was deleted from custom storage`);
+				const platform = getCurrentSync();
+				await fireLifecycleEvent<FavoriteChangedLifecyclePayload>(platform, "favorite-changed", {
+					action: "delete",
+					favorite
+				});
+			} else {
+				logger.warn(`Unable to delete favorite with id: ${id} from custom storage`);
+			}
 		}
 		return success;
 	}
@@ -203,10 +211,10 @@ export function getInfo(): FavoriteInfo {
 		};
 	}
 	return {
-		isEnabled: favoriteOptions?.enabled ?? true,
-		favoriteIcon: favoriteOptions?.favoriteIcon,
-		unfavoriteIcon: favoriteOptions?.unfavoriteIcon,
-		command: favoriteOptions?.favoriteCommand,
-		enabledTypes: favoriteOptions?.supportedFavoriteTypes
+		isEnabled: favoriteOptions.enabled ?? true,
+		favoriteIcon: favoriteOptions.favoriteIcon,
+		unfavoriteIcon: favoriteOptions.unfavoriteIcon,
+		command: favoriteOptions.favoriteCommand,
+		enabledTypes: favoriteOptions.supportedFavoriteTypes
 	};
 }

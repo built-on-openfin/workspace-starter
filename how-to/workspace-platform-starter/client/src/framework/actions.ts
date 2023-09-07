@@ -10,12 +10,14 @@ import { toggleNotificationCenter } from "@openfin/workspace/notifications";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
 import { updateToolbarButtons } from "./buttons";
+import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import { launchView } from "./platform/browser";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
+import type { FavoriteEntry } from "./shapes/favorite-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { showShareOptions } from "./share";
 import { toggleScheme } from "./themes";
 import { isEmpty, isStringValue } from "./utils";
@@ -43,7 +45,9 @@ export const PLATFORM_ACTION_IDS = {
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
 	launchView: "launch-view",
-	toggleScheme: "toggle-scheme"
+	toggleScheme: "toggle-scheme",
+	favoriteAdd: "favorite-add",
+	favoriteRemove: "favorite-remove"
 };
 
 /**
@@ -283,7 +287,8 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 	actionMap[PLATFORM_ACTION_IDS.launchApp] = async (payload: CustomActionPayload): Promise<void> => {
 		if (
 			payload.callerType === CustomActionCallerType.CustomButton ||
-			payload.callerType === CustomActionCallerType.CustomDropdownItem
+			payload.callerType === CustomActionCallerType.CustomDropdownItem ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
 		) {
 			if (payload.customData?.appId) {
 				const app = await getApp(payload.customData.appId as string);
@@ -321,6 +326,34 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			payload.callerType === CustomActionCallerType.CustomDropdownItem
 		) {
 			await toggleScheme();
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.favoriteAdd] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only add to favorites if favorite data is provided in customData");
+			} else {
+				await favoriteProvider.setSavedFavorite(favorite);
+			}
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.favoriteRemove] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only remove from favorites if favorite data is provided in customData");
+			} else {
+				await favoriteProvider.deleteSavedFavorite(favorite.id);
+			}
 		}
 	};
 

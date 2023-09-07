@@ -109,22 +109,24 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._definition = definition;
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent(
+			this._integrationHelpers.subscribeLifecycleEvent<PageChangedLifecyclePayload>(
 				"page-changed",
-				async (platform: WorkspacePlatformModule, unknownPayload: unknown): Promise<void> => {
-					const payload = unknownPayload as PageChangedLifecyclePayload;
-					if (payload.action === "create") {
+				async (
+					platform: WorkspacePlatformModule,
+					customData?: PageChangedLifecyclePayload
+				): Promise<void> => {
+					if (customData?.action === "create") {
 						await this.rebuildResults(platform);
-					} else if (payload.action === "update") {
-						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
-						if (lastResult && payload.page) {
-							lastResult.title = payload.page.title;
-							lastResult.data.workspaceTitle = payload.page.title;
-							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
+					} else if (customData?.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === customData.id);
+						if (lastResult && customData.page) {
+							lastResult.title = customData.page.title;
+							lastResult.data.workspaceTitle = customData.page.title;
+							(lastResult.templateContent as CustomTemplate).data.title = customData.page.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (payload.action === "delete") {
-						this.resultRemove(payload.id);
+					} else if (customData?.action === "delete") {
+						this.resultRemove(customData.id);
 					}
 				}
 			);

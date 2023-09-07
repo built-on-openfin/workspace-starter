@@ -142,7 +142,10 @@ export interface ModuleHelpers {
 	 * @param lifecycleHandler The handle for the event.
 	 * @returns A subscription id to be used with unsubscribe.
 	 */
-	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+	subscribeLifecycleEvent?<T = unknown>(
+		lifecycleEvent: LifecycleEvents,
+		lifecycleHandler: LifecycleHandler<T>
+	): string;
 	/**
 	 * Unsubscribe from lifecycle events.
 	 * @param subscriptionId The id of the subscription.

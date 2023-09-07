@@ -121,24 +121,26 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		this._logger = loggerCreator("WorkspacesProvider");
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent(
+			this._integrationHelpers.subscribeLifecycleEvent<WorkspaceChangedLifecyclePayload>(
 				"workspace-changed",
-				async (platform: WorkspacePlatformModule, payload: unknown): Promise<void> => {
-					const wsPayload = payload as WorkspaceChangedLifecyclePayload;
-					if (wsPayload.action === "create") {
+				async (
+					platform: WorkspacePlatformModule,
+					customData?: WorkspaceChangedLifecyclePayload
+				): Promise<void> => {
+					if (customData?.action === "create") {
 						if (!isEmpty(this._lastQuery) && !this._lastQuery.startsWith("/w ")) {
 							await this.rebuildResults(platform);
 						}
-					} else if (wsPayload.action === "update") {
-						const lastResult = this._lastResults?.find((res) => res.key === wsPayload.id);
-						if (lastResult && wsPayload.workspace) {
-							lastResult.title = wsPayload.workspace.title;
-							lastResult.data.workspaceTitle = wsPayload.workspace.title;
-							(lastResult.templateContent as CustomTemplate).data.title = wsPayload.workspace.title;
+					} else if (customData?.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === customData.id);
+						if (lastResult && customData.workspace) {
+							lastResult.title = customData.workspace.title;
+							lastResult.data.workspaceTitle = customData.workspace.title;
+							(lastResult.templateContent as CustomTemplate).data.title = customData.workspace.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (wsPayload.action === "delete") {
-						this.resultRemove(wsPayload.id);
+					} else if (customData?.action === "delete") {
+						this.resultRemove(customData.id);
 					}
 				}
 			);

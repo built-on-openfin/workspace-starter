@@ -52,10 +52,10 @@ export async function init(
  * @param lifecycleEvent The event to fire.
  * @param customData Any custom data to pass to the handlers.
  */
-export async function fireLifecycleEvent(
+export async function fireLifecycleEvent<T = unknown>(
 	platform: WorkspacePlatformModule,
 	lifecycleEvent: LifecycleEvents,
-	customData?: unknown
+	customData?: T
 ): Promise<void> {
 	logger.info(`Request to fire lifecycle event ${lifecycleEvent} received`);
 	const eventHandlers = allLifecycleEvents[lifecycleEvent];
@@ -75,15 +75,15 @@ export async function fireLifecycleEvent(
  * @param lifecycleHandler The handler to call for the event.
  * @returns The subscription id which can be used to unsubscribe.
  */
-export function subscribeLifecycleEvent(
+export function subscribeLifecycleEvent<T = unknown>(
 	lifecycleEvent: LifecycleEvents,
-	lifecycleHandler: LifecycleHandler
+	lifecycleHandler: LifecycleHandler<T>
 ): string {
 	const subscriptionId = randomUUID();
 	const handlers = allLifecycleEvents[lifecycleEvent] ?? [];
 	handlers.push({
 		id: subscriptionId,
-		handler: lifecycleHandler
+		handler: lifecycleHandler as LifecycleHandler
 	});
 	allLifecycleEvents[lifecycleEvent] = handlers;
 	logger.info(
