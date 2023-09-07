@@ -7,6 +7,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
+import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
@@ -105,6 +106,16 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private _lastResultIds?: string[];
 
 	/**
+	 * Subscription id for theme-changed lifecycle event.
+	 */
+	private _themeChangedSubscriptionId: string | undefined;
+
+	/**
+	 * Subscription id for favorite-changed lifecycle event.
+	 */
+	private _favChangedSubscriptionId: string | undefined;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -123,9 +134,43 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		this._providerId = definition.id;
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
-				await this.rebuildResults();
-			});
+			this._themeChangedSubscriptionId = this._integrationHelpers.subscribeLifecycleEvent(
+				"theme-changed",
+				async () => {
+					await this.rebuildResults();
+				}
+			);
+
+			this._favChangedSubscriptionId =
+				this._integrationHelpers.subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
+					"favorite-changed",
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await this.updateAppFavoriteButtons(payload);
+						}
+					}
+				);
+		}
+	}
+
+	/**
+	 * Close down any resources being used by the module.
+	 * @returns Nothing.
+	 */
+	public async closedown(): Promise<void> {
+		if (this._integrationHelpers?.unsubscribeLifecycleEvent) {
+			if (isStringValue(this._themeChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(this._themeChangedSubscriptionId, "theme-changed");
+				this._themeChangedSubscriptionId = undefined;
+			}
+
+			if (isStringValue(this._favChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(
+					this._favChangedSubscriptionId,
+					"favorite-changed"
+				);
+				this._favChangedSubscriptionId = undefined;
+			}
 		}
 	}
 
@@ -185,43 +230,21 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (this._integrationHelpers?.getFavoriteClient) {
 					const favClient = await this._integrationHelpers.getFavoriteClient();
 					if (favClient) {
-						const favInfo = favClient.getInfo();
-						if (favInfo) {
-							let favoriteId: string | undefined = result.data?.favouriteId;
-							if (result.action.name.startsWith("un")) {
-								if (!isEmpty(favoriteId) && favClient.deleteSavedFavorite) {
-									await favClient.deleteSavedFavorite(favoriteId);
-									favoriteId = undefined;
-								}
-							} else if (favClient.setSavedFavorite) {
-								favoriteId = randomUUID();
-								await favClient.setSavedFavorite({
-									id: randomUUID(),
-									type: FAVORITE_TYPE_NAME_APP,
-									typeId: result.key,
-									label: result.title,
-									icon: result.icon
-								});
+						if (result.action.name.startsWith("un")) {
+							if (!isEmpty(result.data?.favoriteId) && favClient.deleteSavedFavorite) {
+								await favClient.deleteSavedFavorite(result.data.favoriteId);
 							}
-							const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
-
-							if (this._lastQuery === favInfo.command && isEmpty(favoriteId)) {
-								lastResponse.revoke(result.key);
-							} else {
-								const rebuilt = await this.mapAppEntryToSearchEntry(
-									result.data.app,
-									this._settings?.manifestTypeMapping,
-									favInfo,
-									favoriteId,
-									colorScheme
-								);
-
-								if (rebuilt) {
-									lastResponse.respond([rebuilt]);
-								}
-							}
-							handled = true;
+						} else if (favClient.setSavedFavorite) {
+							await favClient.setSavedFavorite({
+								id: randomUUID(),
+								type: FAVORITE_TYPE_NAME_APP,
+								typeId: result.key,
+								label: result.title,
+								icon: result.icon
+							});
 						}
+
+						handled = true;
 					}
 				}
 			} else if (this._integrationHelpers?.launchApp) {
@@ -586,6 +609,55 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			}
 			this._lastResponse.respond(appResponse.results);
 			this._logger?.info("Results rebuilt.");
+		}
+	}
+
+	/**
+	 * Update the app buttons if the favorites have changed.
+	 * @param payload The payload of the favorite change.
+	 */
+	private async updateAppFavoriteButtons(payload: FavoriteChangedLifecyclePayload): Promise<void> {
+		const favorite: FavoriteEntry = payload.favorite;
+
+		if (
+			!isEmpty(this._lastResponse) &&
+			this._integrationHelpers?.getFavoriteClient &&
+			(payload.action === "set" || payload.action === "delete") &&
+			!isEmpty(favorite) &&
+			favorite.type === FAVORITE_TYPE_NAME_APP &&
+			this._lastAppResults
+		) {
+			const favClient = await this._integrationHelpers.getFavoriteClient();
+			if (favClient) {
+				const favInfo = favClient.getInfo();
+				if (favInfo) {
+					const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
+
+					if (this._lastQuery === favInfo.command && payload.action === "delete") {
+						this._lastResponse.revoke(favorite.typeId);
+					} else if (this._lastAppResults) {
+						let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
+
+						if (!lastApp && this._integrationHelpers.getApp) {
+							lastApp = await this._integrationHelpers.getApp(favorite.typeId);
+						}
+
+						if (!isEmpty(lastApp)) {
+							const rebuilt = await this.mapAppEntryToSearchEntry(
+								lastApp,
+								this._settings?.manifestTypeMapping,
+								favInfo,
+								payload.action === "set" ? favorite.id : undefined,
+								colorScheme
+							);
+
+							if (rebuilt) {
+								this._lastResponse.respond([rebuilt]);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -2,22 +2,29 @@ import {
 	Storefront,
 	StorefrontTemplate,
 	type RegistrationMetaInfo,
+	type StoreButtonConfig,
+	type StoreRegistration,
 	type StorefrontDetailedNavigationItem,
 	type StorefrontFooter,
 	type StorefrontLandingPage,
 	type StorefrontNavigationItem,
 	type StorefrontNavigationSection
 } from "@openfin/workspace";
-import { getApps, getAppsByTag } from "../apps";
+import { PLATFORM_ACTION_IDS } from "../actions";
+import { getApp, getApps, getAppsByTag } from "../apps";
+import * as favoriteProvider from "../favorite";
 import { launch } from "../launch";
+import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
+import type { PlatformApp } from "../shapes/app-shapes";
+import { FAVORITE_TYPE_NAME_APP, type FavoriteEntry } from "../shapes/favorite-shapes";
+import type { FavoriteChangedLifecyclePayload } from "../shapes/lifecycle-shapes";
 import type {
 	StorefrontProviderOptions,
 	StorefrontSettingsLandingPageRow,
 	StorefrontSettingsNavigationItem
-} from "../shapes";
-import type { PlatformApp } from "../shapes/app-shapes";
-import { isEmpty } from "../utils";
+} from "../shapes/store-shapes";
+import { isEmpty, isStringValue, randomUUID } from "../utils";
 
 const TOP_ROW_LIMIT = 4;
 const MIDDLE_ROW_LIMIT = 6;
@@ -26,7 +33,8 @@ const BOTTOM_ROW_LIMIT = 3;
 const logger = createLogger("Store");
 
 let storeProviderOptions: StorefrontProviderOptions | undefined;
-let registrationInfo: RegistrationMetaInfo | undefined;
+let registrationInfo: StoreRegistration | undefined;
+let favChangedSubscriptionId: string | undefined;
 
 /**
  * Register the store component.
@@ -54,6 +62,16 @@ export async function register(
 						await launch(app as PlatformApp);
 					}
 				});
+
+				favChangedSubscriptionId = subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
+					"favorite-changed",
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await updateAppFavoriteButtons(payload);
+						}
+					}
+				);
+
 				logger.info("Version:", registrationInfo);
 				logger.info("Storefront provider initialized");
 			} catch (err) {
@@ -72,8 +90,13 @@ export async function register(
 export async function deregister(): Promise<void> {
 	if (registrationInfo) {
 		logger.info("About to deregister Store.");
+		if (isStringValue(favChangedSubscriptionId)) {
+			unsubscribeLifecycleEvent(favChangedSubscriptionId, "favorite-changed");
+			favChangedSubscriptionId = undefined;
+		}
 		if (storeProviderOptions) {
 			await Storefront.deregister(storeProviderOptions.id);
+			registrationInfo = undefined;
 		}
 	} else {
 		logger.warn(
@@ -342,7 +365,7 @@ async function getLandingPage(): Promise<StorefrontLandingPage> {
 				)}. Only ${MIDDLE_ROW_LIMIT} will be shown.`
 			);
 		}
-		const validatedMiddleRowApps = addButtons(middleRowApps.slice(0, MIDDLE_ROW_LIMIT)) as [
+		const validatedMiddleRowApps = (await addButtons(middleRowApps.slice(0, MIDDLE_ROW_LIMIT))) as [
 			PlatformApp?,
 			PlatformApp?,
 			PlatformApp?,
@@ -493,26 +516,136 @@ async function getLandingPageRow(
  * @param apps The list of apps to add the buttons to.
  * @returns The list of augmented apps.
  */
-function addButtons(apps: PlatformApp[]): PlatformApp[] {
+async function addButtons(apps: PlatformApp[]): Promise<PlatformApp[]> {
 	const primaryButton = storeProviderOptions?.primaryButton;
 	const secondaryButtons = storeProviderOptions?.secondaryButtons;
+
+	const favInfo = favoriteProvider.getInfo();
+	const favoriteApps: { [typeId: string]: FavoriteEntry } = {};
+	let showFavorites = false;
+
+	if (
+		(storeProviderOptions?.favoritesEnabled ?? true) &&
+		favInfo.isEnabled &&
+		(isEmpty(favInfo.enabledTypes) || favInfo.enabledTypes.includes(FAVORITE_TYPE_NAME_APP))
+	) {
+		showFavorites = true;
+		const favorites = await favoriteProvider.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
+		if (favorites) {
+			for (const fav of favorites) {
+				favoriteApps[fav.typeId] = fav;
+			}
+		}
+	}
+
 	const isArray = !isEmpty(secondaryButtons) && Array.isArray(secondaryButtons);
-	if (!isEmpty(primaryButton) || isArray) {
+	if (!isEmpty(primaryButton) || isArray || showFavorites) {
 		return apps.map((app) => ({
 			...app,
-			primaryButton: app.primaryButton ?? primaryButton,
-			secondaryButtons:
-				app.secondaryButtons ?? isArray
-					? secondaryButtons?.map((secondary) => ({
-							title: secondary.title,
-							action: {
-								id: secondary.action.id,
-								customData: secondary.action.customData ?? app
-							}
-					  }))
-					: undefined
+			...calculateButtons(app, primaryButton, secondaryButtons, showFavorites, favoriteApps[app.appId])
 		}));
 	}
 
 	return apps;
+}
+
+/**
+ * Add the buttons to the application.
+ * @param app The app to add the buttons to.
+ * @param configPrimaryButton The primary button config.
+ * @param configSecondaryButtons The secondary button config.
+ * @param showFavorites Show favorites buttons.
+ * @param favoriteEntry The favorite details.
+ * @returns The update app with buttons.
+ */
+function calculateButtons(
+	app: PlatformApp,
+	configPrimaryButton: StoreButtonConfig | undefined,
+	configSecondaryButtons: StoreButtonConfig[] | undefined,
+	showFavorites: boolean,
+	favoriteEntry?: FavoriteEntry
+): {
+	primaryButton: StoreButtonConfig;
+	secondaryButtons: StoreButtonConfig[];
+} {
+	const appSecondaryButtons =
+		configSecondaryButtons?.map((secondary) => ({
+			title: secondary.title,
+			action: {
+				id: secondary.action.id,
+				customData: secondary.action.customData ?? app
+			}
+		})) ?? [];
+
+	if (showFavorites) {
+		appSecondaryButtons.push({
+			title: favoriteEntry ? "Remove Favorite" : "Add Favorite",
+			action: {
+				id: favoriteEntry ? PLATFORM_ACTION_IDS.favoriteRemove : PLATFORM_ACTION_IDS.favoriteAdd,
+				customData: favoriteEntry ?? {
+					id: randomUUID(),
+					type: FAVORITE_TYPE_NAME_APP,
+					typeId: app.appId,
+					label: app.title,
+					icon: getAppIcon(app)
+				}
+			}
+		});
+	}
+
+	return {
+		primaryButton: app.primaryButton ??
+			configPrimaryButton ?? {
+				title: "Launch",
+				action: {
+					id: PLATFORM_ACTION_IDS.launchApp,
+					customData: app
+				}
+			},
+		secondaryButtons: appSecondaryButtons
+	};
+}
+
+/**
+ * Get the icon for an application.
+ * @param app The application to get the icon for.
+ * @returns The icon.
+ */
+function getAppIcon(app: PlatformApp): string | undefined {
+	if (Array.isArray(app.icons) && app.icons.length > 0) {
+		return app.icons[0].src;
+	}
+}
+
+/**
+ * Update the app buttons if the favorites have changed.
+ * @param payload The payload of the favorite change.
+ */
+async function updateAppFavoriteButtons(payload: FavoriteChangedLifecyclePayload): Promise<void> {
+	const favorite: FavoriteEntry = payload.favorite;
+
+	if (
+		(storeProviderOptions?.favoritesEnabled ?? true) &&
+		!isEmpty(registrationInfo) &&
+		!isEmpty(favorite) &&
+		(payload.action === "set" || payload.action === "delete") &&
+		favorite.type === FAVORITE_TYPE_NAME_APP
+	) {
+		const app = await getApp(favorite.typeId);
+
+		if (!isEmpty(app)) {
+			await registrationInfo.updateAppCardButtons({
+				appId: favorite.typeId,
+				...calculateButtons(
+					app,
+					storeProviderOptions?.primaryButton,
+					storeProviderOptions?.secondaryButtons,
+					true,
+					favorite
+				)
+			});
+		} else {
+			logger.warn(`Favorite update for appId ${favorite.typeId} which does not exist`);
+		}
+	}
 }

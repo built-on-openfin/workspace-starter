@@ -79,6 +79,13 @@ export interface ModuleHelpers {
 	getApps?(): Promise<PlatformApp[]>;
 
 	/**
+	 * Get the app by id.
+	 * @param id The id of the app to get.
+	 * @returns The app id it exists.
+	 */
+	getApp?(id: string): Promise<PlatformApp | undefined>;
+
+	/**
 	 * Get the current theme id.
 	 * @returns The current theme id.
 	 */
@@ -163,7 +170,10 @@ export interface ModuleHelpers {
 	 * @param lifecycleHandler The handle for the event.
 	 * @returns A subscription id to be used with unsubscribe.
 	 */
-	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+	subscribeLifecycleEvent?<T = unknown>(
+		lifecycleEvent: LifecycleEvents,
+		lifecycleHandler: LifecycleHandler<T>
+	): string;
 
 	/**
 	 * Unsubscribe from lifecycle events.

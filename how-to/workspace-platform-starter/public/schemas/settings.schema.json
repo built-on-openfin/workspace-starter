@@ -3604,6 +3604,10 @@
             "additionalProperties": false,
             "description": "Store Provider Options",
             "properties": {
+                "favoritesEnabled": {
+                    "description": "Enable favorites, defaults to true.",
+                    "type": "boolean"
+                },
                 "footer": {
                     "$ref": "#/definitions/StorefrontFooter",
                     "description": "The configuration of the footer for the store"

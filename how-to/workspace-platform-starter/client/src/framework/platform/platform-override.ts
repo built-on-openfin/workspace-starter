@@ -207,11 +207,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "create",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -255,11 +255,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "update",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -286,10 +286,10 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "delete",
 				id
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -406,11 +406,11 @@ export function overrideCallback(
 				logger.info(`Saved page with id: ${req.page.pageId} to default storage`);
 			}
 
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "create",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -453,11 +453,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "update",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -482,10 +482,10 @@ export function overrideCallback(
 				logger.info(`Removed page with id: ${id} from custom storage`);
 			}
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "delete",
 				id
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**

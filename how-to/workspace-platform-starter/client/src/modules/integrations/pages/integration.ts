@@ -109,13 +109,12 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._definition = definition;
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent(
+			this._integrationHelpers.subscribeLifecycleEvent<PageChangedLifecyclePayload>(
 				"page-changed",
-				async (platform: WorkspacePlatformModule, unknownPayload: unknown): Promise<void> => {
-					const payload = unknownPayload as PageChangedLifecyclePayload;
-					if (payload.action === "create") {
+				async (platform: WorkspacePlatformModule, payload?: PageChangedLifecyclePayload): Promise<void> => {
+					if (payload?.action === "create") {
 						await this.rebuildResults(platform);
-					} else if (payload.action === "update") {
+					} else if (payload?.action === "update") {
 						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
 						if (lastResult && payload.page) {
 							lastResult.title = payload.page.title;
@@ -123,7 +122,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (payload.action === "delete") {
+					} else if (payload?.action === "delete") {
 						this.resultRemove(payload.id);
 					}
 				}
