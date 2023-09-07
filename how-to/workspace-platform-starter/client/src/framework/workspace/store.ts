@@ -65,9 +65,9 @@ export async function register(
 
 				favChangedSubscriptionId = subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
 					"favorite-changed",
-					async (_: unknown, customData?: FavoriteChangedLifecyclePayload) => {
-						if (!isEmpty(customData)) {
-							await updateAppFavoriteButtons(customData);
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await updateAppFavoriteButtons(payload);
 						}
 					}
 				);

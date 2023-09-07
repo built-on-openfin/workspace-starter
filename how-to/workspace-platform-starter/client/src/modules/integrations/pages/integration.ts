@@ -111,22 +111,19 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
 			this._integrationHelpers.subscribeLifecycleEvent<PageChangedLifecyclePayload>(
 				"page-changed",
-				async (
-					platform: WorkspacePlatformModule,
-					customData?: PageChangedLifecyclePayload
-				): Promise<void> => {
-					if (customData?.action === "create") {
+				async (platform: WorkspacePlatformModule, payload?: PageChangedLifecyclePayload): Promise<void> => {
+					if (payload?.action === "create") {
 						await this.rebuildResults(platform);
-					} else if (customData?.action === "update") {
-						const lastResult = this._lastResults?.find((res) => res.key === customData.id);
-						if (lastResult && customData.page) {
-							lastResult.title = customData.page.title;
-							lastResult.data.workspaceTitle = customData.page.title;
-							(lastResult.templateContent as CustomTemplate).data.title = customData.page.title;
+					} else if (payload?.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+						if (lastResult && payload.page) {
+							lastResult.title = payload.page.title;
+							lastResult.data.workspaceTitle = payload.page.title;
+							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (customData?.action === "delete") {
-						this.resultRemove(customData.id);
+					} else if (payload?.action === "delete") {
+						this.resultRemove(payload.id);
 					}
 				}
 			);

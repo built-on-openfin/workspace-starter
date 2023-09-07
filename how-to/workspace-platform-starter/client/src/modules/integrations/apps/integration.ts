@@ -144,9 +144,9 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			this._favChangedSubscriptionId =
 				this._integrationHelpers.subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
 					"favorite-changed",
-					async (_: unknown, customData?: FavoriteChangedLifecyclePayload) => {
-						if (!isEmpty(customData)) {
-							await this.updateAppFavoriteButtons(customData);
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await this.updateAppFavoriteButtons(payload);
 						}
 					}
 				);

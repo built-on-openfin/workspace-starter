@@ -125,22 +125,22 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				"workspace-changed",
 				async (
 					platform: WorkspacePlatformModule,
-					customData?: WorkspaceChangedLifecyclePayload
+					payload?: WorkspaceChangedLifecyclePayload
 				): Promise<void> => {
-					if (customData?.action === "create") {
+					if (payload?.action === "create") {
 						if (!isEmpty(this._lastQuery) && !this._lastQuery.startsWith("/w ")) {
 							await this.rebuildResults(platform);
 						}
-					} else if (customData?.action === "update") {
-						const lastResult = this._lastResults?.find((res) => res.key === customData.id);
-						if (lastResult && customData.workspace) {
-							lastResult.title = customData.workspace.title;
-							lastResult.data.workspaceTitle = customData.workspace.title;
-							(lastResult.templateContent as CustomTemplate).data.title = customData.workspace.title;
+					} else if (payload?.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+						if (lastResult && payload.workspace) {
+							lastResult.title = payload.workspace.title;
+							lastResult.data.workspaceTitle = payload.workspace.title;
+							(lastResult.templateContent as CustomTemplate).data.title = payload.workspace.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (customData?.action === "delete") {
-						this.resultRemove(customData.id);
+					} else if (payload?.action === "delete") {
+						this.resultRemove(payload.id);
 					}
 				}
 			);

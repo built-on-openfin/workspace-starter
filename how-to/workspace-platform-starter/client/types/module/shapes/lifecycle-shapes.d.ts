@@ -19,10 +19,7 @@ export type LifecycleEvents =
 /**
  * The type for a lifecycle event handler.
  */
-export type LifecycleHandler<T = unknown> = (
-	platform: WorkspacePlatformModule,
-	customData?: T
-) => Promise<void>;
+export type LifecycleHandler<T = unknown> = (platform: WorkspacePlatformModule, payload?: T) => Promise<void>;
 /**
  * Map of the lifecycle event handlers.
  */
