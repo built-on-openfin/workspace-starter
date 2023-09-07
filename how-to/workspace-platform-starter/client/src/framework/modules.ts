@@ -259,6 +259,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
 		},
+		getApp,
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,

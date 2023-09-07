@@ -67,6 +67,12 @@ export interface ModuleHelpers {
 	 */
 	getApps?(): Promise<PlatformApp[]>;
 	/**
+	 * Get the app by id.
+	 * @param id The id of the app to get.
+	 * @returns The app id it exists.
+	 */
+	getApp?(id: string): Promise<PlatformApp | undefined>;
+	/**
 	 * Get the current theme id.
 	 * @returns The current theme id.
 	 */

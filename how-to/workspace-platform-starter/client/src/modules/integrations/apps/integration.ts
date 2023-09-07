@@ -622,9 +622,10 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		if (
 			!isEmpty(this._lastResponse) &&
 			this._integrationHelpers?.getFavoriteClient &&
-			!isEmpty(favorite) &&
 			(payload.action === "set" || payload.action === "delete") &&
-			favorite.type === FAVORITE_TYPE_NAME_APP
+			!isEmpty(favorite) &&
+			favorite.type === FAVORITE_TYPE_NAME_APP &&
+			this._lastAppResults
 		) {
 			const favClient = await this._integrationHelpers.getFavoriteClient();
 			if (favClient) {
@@ -635,7 +636,11 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					if (this._lastQuery === favInfo.command && payload.action === "delete") {
 						this._lastResponse.revoke(favorite.typeId);
 					} else if (this._lastAppResults) {
-						const lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
+						let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
+
+						if (!lastApp && this._integrationHelpers.getApp) {
+							lastApp = await this._integrationHelpers.getApp(favorite.typeId);
+						}
 
 						if (!isEmpty(lastApp)) {
 							const rebuilt = await this.mapAppEntryToSearchEntry(
