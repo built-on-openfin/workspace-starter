@@ -51,6 +51,11 @@ export interface DockButtonBase {
 	 * The icon to use to distinguish this entry from others
 	 */
 	iconUrl?: string;
+
+	/**
+	 * Condition to determine if the item should be shown.
+	 */
+	conditions?: string[];
 }
 
 /**
@@ -89,7 +94,7 @@ export interface DockButtonAction extends DockButtonBase {
 		/**
 		 * data that should be passed to the action
 		 */
-		customData: unknown;
+		customData?: unknown;
 	};
 }
 

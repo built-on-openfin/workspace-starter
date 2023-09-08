@@ -1047,7 +1047,6 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
@@ -1055,6 +1054,13 @@
                 "appId": {
                     "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
                     "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
@@ -1071,6 +1077,13 @@
             "additionalProperties": false,
             "description": "A single app or a list of apps",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the button should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "display": {
                     "description": "Should this entry show a single app or a group of apps.",
                     "enum": [
@@ -1104,6 +1117,13 @@
             "additionalProperties": false,
             "description": "Button type which shows a drop down.",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the button should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
@@ -2790,7 +2810,6 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
@@ -2798,6 +2817,13 @@
                 "appId": {
                     "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
                     "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the button should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",

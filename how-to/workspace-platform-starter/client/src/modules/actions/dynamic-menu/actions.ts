@@ -100,12 +100,10 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 		noEntryText: string,
 		menuEntries: { label: string; id: string; icon?: string }[]
 	): Promise<string | undefined> {
-		const dockWindow = fin.Window.wrapSync(parentIdentity);
-		const dockBounds = await dockWindow.getBounds();
+		const parentWindow = fin.Window.wrapSync(parentIdentity);
+		const parentBounds = await parentWindow.getBounds();
 
 		const platformWindow = fin.Window.wrapSync(fin.me.identity);
-
-		const menuPos = Math.floor((position.x + 20) / 40) * 40;
 
 		const currentPalette = await this._helpers?.getCurrentPalette();
 
@@ -126,8 +124,8 @@ export class DynamicMenuProvider implements Actions<DynamicMenuProviderOptions> 
 				}
 			},
 			url: this._definition?.data?.popupHtml,
-			x: dockBounds.left + menuPos - 20,
-			y: dockBounds.top + 34,
+			x: parentBounds.left + position.x - 16,
+			y: parentBounds.top + 36,
 			width: 200,
 			height: menuEntries.length * 32
 		});
