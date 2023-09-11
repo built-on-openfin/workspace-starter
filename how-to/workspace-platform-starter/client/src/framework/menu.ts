@@ -29,14 +29,21 @@ import { isBoolean, isEmpty, randomUUID } from "./utils";
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
 let menuProviderOptions: MenusProviderOptions | undefined;
+let platformRootUrl: string | undefined;
 
 /**
  * Initialize the menu provider.
  * @param options Options for the menu provider.
  * @param helpers Module helpers to pass to any loaded modules.
+ * @param rootUrl The root url for loading content.
  */
-export async function init(options: MenusProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: MenusProviderOptions | undefined,
+	helpers: ModuleHelpers,
+	rootUrl: string | undefined
+): Promise<void> {
 	if (!isEmpty(options)) {
+		platformRootUrl = rootUrl;
 		menuProviderOptions = options;
 		modules = await loadModules<Menus>(options, "menus");
 		await initializeModules<Menus>(modules, helpers);
@@ -348,7 +355,7 @@ export async function showHtmlPopupMenu<T = unknown>(
 				}
 			}
 		},
-		url: menuProviderOptions?.popupHtml ?? "http://localhost:8080/common/popups/menu/index.html",
+		url: menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`,
 		x: parentBounds.left + position.x,
 		y: parentBounds.top + position.y,
 		width: menuProviderOptions?.menuWidth ?? 200,
