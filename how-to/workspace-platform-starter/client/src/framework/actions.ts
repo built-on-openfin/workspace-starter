@@ -25,7 +25,7 @@ import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
 
-let modules: ModuleEntry<Actions>[] = [];
+let modules: ModuleEntry<Actions>[] | undefined;
 const customActionMap: CustomActionsMap = {};
 let platformActionMap: CustomActionsMap | undefined;
 let isInitialized: boolean = false;
@@ -65,9 +65,9 @@ export async function init(
 		return;
 	}
 
-	if (options) {
-		isInitialized = true;
+	isInitialized = true;
 
+	if (options) {
 		logger.info("Initializing with options", options);
 
 		// Load any modules that have an actions endpoint
@@ -78,9 +78,9 @@ export async function init(
 			...helpers,
 			updateToolbarButtons
 		});
-
-		await buildActions();
 	}
+
+	await buildActions();
 
 	return platformActionMap;
 }
@@ -117,14 +117,16 @@ async function buildActions(): Promise<void> {
 	// Merge in any custom actions registered with registerAction
 	platformActionMap = { ...platformActionMap, ...customActionMap };
 
-	// Merge the module actions
-	const platform = getCurrentSync();
-	for (const actionModule of modules) {
-		const modActions = await actionModule.implementation.get(platform);
-		platformActionMap = {
-			...platformActionMap,
-			...modActions
-		};
+	if (!isEmpty(modules)) {
+		// Merge the module actions
+		const platform = getCurrentSync();
+		for (const actionModule of modules) {
+			const modActions = await actionModule.implementation.get(platform);
+			platformActionMap = {
+				...platformActionMap,
+				...modActions
+			};
+		}
 	}
 
 	logger.info("Action Ids", Object.keys(platformActionMap));
