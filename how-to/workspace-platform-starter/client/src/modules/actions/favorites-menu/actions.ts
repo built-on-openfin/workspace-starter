@@ -95,8 +95,12 @@ export class FavoritesMenuProvider implements Actions {
 							} else {
 								this._logger?.info("Favorites Menu Item Selected", result);
 
-								if (result.type === FAVORITE_TYPE_NAME_APP && !isEmpty(this._helpers?.launchApp)) {
-									await this._helpers?.launchApp(result.typeId);
+								if (result.type === FAVORITE_TYPE_NAME_APP) {
+									if (!isEmpty(this._helpers?.launchApp)) {
+										await this._helpers?.launchApp(result.typeId);
+									}
+								} else {
+									this._logger?.info(`Favorites Type ${result.type} no yet supported`, result);
 								}
 							}
 						}
