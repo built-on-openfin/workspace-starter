@@ -5,6 +5,7 @@ import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
+import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
 import type { PlatformApp } from "./shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
@@ -280,7 +281,8 @@ export function getDefaultHelpers(): ModuleHelpers {
 		},
 		launchPage,
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent
+		unsubscribeLifecycleEvent,
+		showPopupMenu
 	};
 }
 

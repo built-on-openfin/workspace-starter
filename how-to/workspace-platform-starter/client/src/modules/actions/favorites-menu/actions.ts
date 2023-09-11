@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import {
 	CustomActionCallerType,
 	type CustomActionPayload,
@@ -67,85 +66,45 @@ export class FavoritesMenuProvider implements Actions {
 			FAVORITE_TYPE_NAME_QUERY
 		]) {
 			actionMap[`favorites-menu-${type}`] = async (payload: CustomActionPayload): Promise<void> => {
-				if (payload.callerType === CustomActionCallerType.CustomButton) {
-					const favorite = await this.showPopupMenu(
-						{ x: payload.x, y: payload.y },
-						payload.windowIdentity,
-						`There are no favorite ${type}s`,
-						type as FavoriteTypeNames
-					);
+				if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers?.showPopupMenu) {
+					const getClient = this._helpers?.getFavoriteClient;
+					if (!isEmpty(getClient)) {
+						const client = await getClient();
+						if (!isEmpty(client)) {
+							const favorites = await client.getSavedFavorites(type as FavoriteTypeNames);
 
-					if (
-						!isEmpty(favorite) &&
-						favorite.type === FAVORITE_TYPE_NAME_APP &&
-						!isEmpty(this._helpers?.launchApp)
-					) {
-						await this._helpers?.launchApp(favorite.typeId);
+							const menuEntries =
+								favorites?.map((f) => ({
+									label: f.label ?? "",
+									icon: f.icon,
+									customData: f
+								})) ?? [];
+
+							const result = await this._helpers.showPopupMenu<FavoriteEntry>(
+								{ x: payload.x, y: 48 },
+								payload.windowIdentity,
+								`There are no favorite ${type}s`,
+								menuEntries,
+								{
+									mode: "native"
+								}
+							);
+
+							if (isEmpty(result)) {
+								this._logger?.info("Favorites Menu Dismissed");
+							} else {
+								this._logger?.info("Favorites Menu Item Selected", result);
+
+								if (result.type === FAVORITE_TYPE_NAME_APP && !isEmpty(this._helpers?.launchApp)) {
+									await this._helpers?.launchApp(result.typeId);
+								}
+							}
+						}
 					}
 				}
 			};
 		}
 
 		return actionMap;
-	}
-
-	/**
-	 * Show the popup menu.
-	 * @param position The position to display the menu.
-	 * @param position.x The x position to display the menu.
-	 * @param position.y The y position to display the menu.
-	 * @param windowIdentity The identity of the window to use for showing the popup.
-	 * @param noEntryText The text to display if there are no entries.
-	 * @param type The type of the menu to show.
-	 * @returns The selected entry or undefined if menu was dismissed.
-	 */
-	private async showPopupMenu(
-		position: { x: number; y: number },
-		windowIdentity: OpenFin.Identity,
-		noEntryText: string,
-		type: FavoriteTypeNames
-	): Promise<FavoriteEntry | undefined> {
-		const getClient = this._helpers?.getFavoriteClient;
-		if (!isEmpty(getClient)) {
-			const client = await getClient();
-			if (!isEmpty(client)) {
-				const info = client.getInfo();
-				if (info.isEnabled) {
-					const parentWindow = fin.Window.wrapSync(windowIdentity);
-
-					const favorites = await client.getSavedFavorites(type);
-
-					const template: OpenFin.MenuItemTemplate[] = [];
-
-					if (isEmpty(favorites) || favorites.length === 0) {
-						template.push({
-							label: noEntryText,
-							enabled: false
-						});
-					} else {
-						for (const favorite of favorites) {
-							template.push({
-								label: favorite.label,
-								icon: favorite.icon,
-								data: favorite
-							});
-						}
-					}
-
-					const r = await parentWindow.showPopupMenu({
-						template,
-						x: position.x,
-						y: 48
-					});
-
-					if (r.result === "closed") {
-						this._logger?.info("Favorites Menu Dismissed");
-					} else if (r.result === "clicked") {
-						this._logger?.info("Favorites Menu Item Selected", r.data);
-						return r.data;
-					}
-				}
-			}
-		}
 	}
 }

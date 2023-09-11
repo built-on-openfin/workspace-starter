@@ -651,7 +651,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/actions/dynamic-menu/index.ts',
+		entry: './client/src/modules/actions/custom-menu/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -668,7 +668,7 @@ const configs = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'dynamic-menu.bundle.js',
+			filename: 'custom-menu.bundle.js',
 			library: {
 				type: 'module'
 			},

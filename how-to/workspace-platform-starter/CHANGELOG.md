@@ -29,6 +29,7 @@
 - Added dock buttons now support conditions to determine if they should be shown
 - Added example favorites actions module which shows a popup menu
 - Fixed checking condition triggered exception when condition did not exist
+- Added Module helpers showPopupMenu for common functionality
 
 ## v13.1
 

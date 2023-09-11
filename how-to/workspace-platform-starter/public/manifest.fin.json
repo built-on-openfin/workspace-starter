@@ -1099,15 +1099,12 @@
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				},
 				{
-					"id": "dynamic-menu",
+					"id": "custom-menu",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Dynamic Menu",
-					"description": "Dynamic Menu",
+					"title": "Custom Menu",
+					"description": "Custom Menu",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/actions/dynamic-menu.bundle.js",
-					"data": {
-						"popupHtml": "http://localhost:8080/common/popups/dynamic-menu/index.html"
-					}
+					"url": "http://localhost:8080/js/modules/actions/custom-menu.bundle.js"
 				},
 				{
 					"id": "favorites-menu",
@@ -1217,6 +1214,9 @@
 			"versionCheckIntervalInSeconds": 30
 		},
 		"menusProvider": {
+			"popupHtml": "http://localhost:8080/common/popups/menu/index.html",
+			"menuWidth": 200,
+			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,

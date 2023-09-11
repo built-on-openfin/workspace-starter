@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	type GlobalContextMenuItemTemplate,
@@ -22,10 +23,12 @@ import type {
 	MenuType,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
-import { isBoolean, isEmpty } from "./utils";
+import { getCurrentPalette } from "./themes";
+import { isBoolean, isEmpty, randomUUID } from "./utils";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
+let menuProviderOptions: MenusProviderOptions | undefined;
 
 /**
  * Initialize the menu provider.
@@ -33,7 +36,8 @@ let modules: ModuleEntry<Menus>[] = [];
  * @param helpers Module helpers to pass to any loaded modules.
  */
 export async function init(options: MenusProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
-	if (options) {
+	if (!isEmpty(options)) {
+		menuProviderOptions = options;
 		modules = await loadModules<Menus>(options, "menus");
 		await initializeModules<Menus>(modules, helpers);
 	}
@@ -276,4 +280,124 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
 		}
 	}
 	return menuEntries;
+}
+
+/**
+ * Show a custom menu.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ * @param parentIdentity The identity of the parent window.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @param options The options for displaying the menu.
+ * @param options.mode Display as native menu or custom popup.
+ * @returns The menu entry.
+ */
+export async function showPopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: { label: string; customData: T; icon?: string }[],
+	options?: {
+		mode?: "native" | "custom";
+	}
+): Promise<T | undefined> {
+	if ((options?.mode ?? "native") === "native") {
+		return showNativePopupMenu(position, parentIdentity, noEntryText, menuEntries);
+	}
+
+	return showHtmlPopupMenu(position, parentIdentity, noEntryText, menuEntries);
+}
+
+/**
+ * Show a custom menu using popup window.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ * @param parentIdentity The identity of the parent window.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @returns The menu entry.
+ */
+export async function showHtmlPopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: { label: string; customData: T; icon?: string }[]
+): Promise<T | undefined> {
+	const parentWindow = fin.Window.wrapSync(parentIdentity);
+	const parentBounds = await parentWindow.getBounds();
+
+	const platformWindow = fin.Window.wrapSync(fin.me.identity);
+
+	const currentPalette = await getCurrentPalette();
+
+	const result = await platformWindow.showPopupWindow({
+		name: randomUUID(),
+		initialOptions: {
+			showTaskbarIcon: false,
+			backgroundColor: currentPalette?.backgroundPrimary,
+			customData: {
+				noEntryText,
+				menuEntries,
+				palette: {
+					backgroundPrimary: currentPalette?.backgroundPrimary,
+					textDefault: currentPalette?.textDefault,
+					inputBackground: currentPalette?.inputBackground
+				}
+			}
+		},
+		url: menuProviderOptions?.popupHtml ?? "http://localhost:8080/common/popups/menu/index.html",
+		x: parentBounds.left + position.x,
+		y: parentBounds.top + position.y,
+		width: menuProviderOptions?.menuWidth ?? 200,
+		height: menuEntries.length * (menuProviderOptions?.menuItemHeight ?? 32)
+	});
+
+	if (result.result === "clicked") {
+		return result.data as T;
+	}
+}
+
+/**
+ * Show the popup menu.
+ * @param position The position to display the menu.
+ * @param position.x The x position to display the menu.
+ * @param position.y The y position to display the menu.
+ * @param parentIdentity The identity of the window to use for showing the popup.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @returns The selected entry or undefined if menu was dismissed.
+ */
+export async function showNativePopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: { label: string; customData: T; icon?: string }[]
+): Promise<T | undefined> {
+	const parentWindow = fin.Window.wrapSync(parentIdentity);
+
+	const template: OpenFin.MenuItemTemplate[] = menuEntries.map((m) => ({
+		label: m.label,
+		icon: m.icon,
+		data: m.customData
+	}));
+
+	if (isEmpty(template) || template.length === 0) {
+		template.push({
+			label: noEntryText,
+			enabled: false
+		});
+	}
+
+	const r = await parentWindow.showPopupMenu({
+		template,
+		x: position.x,
+		y: position.y
+	});
+
+	if (r.result === "clicked") {
+		return r.data as T;
+	}
 }

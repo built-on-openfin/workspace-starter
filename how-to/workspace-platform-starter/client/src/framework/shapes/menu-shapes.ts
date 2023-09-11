@@ -15,7 +15,25 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
 /**
  * A list of modules that provide menu for different locations.
  */
-export type MenusProviderOptions = ModuleList;
+export interface MenusProviderOptions extends ModuleList {
+	/**
+	 * The location of the HTML to use for custom popup page.
+	 * defaults to http://localhost:8080/common/popups/menu/index.html
+	 */
+	popupHtml?: string;
+
+	/**
+	 * The width to display the custom popup menu.
+	 * defaults to 200
+	 */
+	menuWidth?: number;
+
+	/**
+	 * The height of an item in the custom popup menu.
+	 * defaults to 32.
+	 */
+	menuItemHeight?: number;
+}
 
 /**
  * The module definition for menus.
