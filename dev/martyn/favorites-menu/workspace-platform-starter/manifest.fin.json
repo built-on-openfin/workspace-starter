@@ -1099,15 +1099,12 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/js/modules/composite/windows.bundle.js"
 				},
 				{
-					"id": "dynamic-menu",
+					"id": "custom-menu",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/favicon.ico",
-					"title": "Dynamic Menu",
-					"description": "Dynamic Menu",
+					"title": "Custom Menu",
+					"description": "Custom Menu",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/js/modules/actions/dynamic-menu.bundle.js",
-					"data": {
-						"popupHtml": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/common/popups/dynamic-menu/index.html"
-					}
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js"
 				},
 				{
 					"id": "favorites-menu",
@@ -1217,6 +1214,9 @@
 			"versionCheckIntervalInSeconds": 30
 		},
 		"menusProvider": {
+			"popupHtml": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/favorites-menu/workspace-platform-starter/common/popups/menu/index.html",
+			"menuWidth": 200,
+			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,
