@@ -651,7 +651,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/actions/dynamic-menu/index.ts',
+		entry: './client/src/modules/actions/custom-menu/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -668,7 +668,7 @@ const configs = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'dynamic-menu.bundle.js',
+			filename: 'custom-menu.bundle.js',
 			library: {
 				type: 'module'
 			},
@@ -729,6 +729,34 @@ const configs = [
 				type: 'module'
 			},
 			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/actions/favorites-menu/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'favorites-menu.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
 		},
 		experiments: {
 			outputModule: true

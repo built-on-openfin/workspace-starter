@@ -25,7 +25,7 @@ async function initDOM() {
 				const menuEntryButton = document.createElement('div');
 				menuEntryButton.classList.add('menu-item');
 				menuEntryButton.addEventListener('click', async () => {
-					await fin.me.dispatchPopupResult(menuEntry.id);
+					await fin.me.dispatchPopupResult(menuEntry.customData);
 				});
 				menuContainer.append(menuEntryButton);
 

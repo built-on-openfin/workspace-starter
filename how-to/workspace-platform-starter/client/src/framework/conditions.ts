@@ -95,5 +95,8 @@ export async function checkCondition(
 	platform: WorkspacePlatformModule,
 	conditionId: string
 ): Promise<boolean> {
-	return allConditions[conditionId](platform) ?? true;
+	if (isEmpty(allConditions[conditionId])) {
+		return false;
+	}
+	return allConditions[conditionId](platform);
 }

@@ -26,6 +26,10 @@
 - Added apps in Home can now be favorited, you can see all your favorite apps with the `/fav` command
 - Added Store also supports the favorites functionality with secondary app buttons, this can be disabled for store by setting `StorefrontProviderOptions.favoritesEnabled` to false
 - Added Favorites conditions for `favorites`, `favorites-app`, `favorites-workspace`, `favorites-page`, `favorites-query`
+- Added dock buttons now support conditions to determine if they should be shown
+- Added example favorites actions module which shows a popup menu
+- Fixed checking condition triggered exception when condition did not exist
+- Added Module helpers showPopupMenu for common functionality
 
 ## v13.1
 

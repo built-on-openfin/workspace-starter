@@ -104,7 +104,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await connectionProvider.init(customSettings?.connectionProvider);
 
 	await platformSplashProvider.updateProgress("Menus");
-	await menusProvider.init(customSettings?.menusProvider, helpers);
+	await menusProvider.init(customSettings?.menusProvider, helpers, customSettings?.platformProvider?.rootUrl);
 
 	await platformSplashProvider.updateProgress("Analytics");
 	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);

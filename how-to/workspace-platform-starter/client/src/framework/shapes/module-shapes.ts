@@ -181,6 +181,28 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
+
+	/**
+	 * Show a custom menu.
+	 * @param position The position to show the menu.
+	 * @param position.x The x position to show the menu.
+	 * @param position.y The y position to show the menu.
+	 * @param parentIdentity The identity of the parent window.
+	 * @param noEntryText The text to display if there are no entries.
+	 * @param menuEntries The menu entries to display.
+	 * @param options The options for displaying the menu.
+	 * @param options.mode Display as native menu or custom popup.
+	 * @returns The menu entry.
+	 */
+	showPopupMenu?<T = unknown>(
+		position: { x: number; y: number },
+		parentIdentity: OpenFin.Identity,
+		noEntryText: string,
+		menuEntries: { label: string; customData: T; icon?: string }[],
+		options?: {
+			mode?: "native" | "custom";
+		}
+	): Promise<T | undefined>;
 }
 
 /**
