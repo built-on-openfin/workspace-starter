@@ -1047,7 +1047,6 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
@@ -1055,6 +1054,13 @@
                 "appId": {
                     "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
                     "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
@@ -1071,6 +1077,13 @@
             "additionalProperties": false,
             "description": "A single app or a list of apps",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "display": {
                     "description": "Should this entry show a single app or a group of apps.",
                     "enum": [
@@ -1104,6 +1117,13 @@
             "additionalProperties": false,
             "description": "Button type which shows a drop down.",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
@@ -2406,8 +2426,30 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "A list of modules that provide menu for different locations.",
+            "properties": {
+                "menuItemHeight": {
+                    "description": "The height of an item in the custom popup menu.\ndefaults to 32.",
+                    "type": "number"
+                },
+                "menuWidth": {
+                    "description": "The width to display the custom popup menu.\ndefaults to 200",
+                    "type": "number"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "popupHtml": {
+                    "description": "The location of the HTML to use for custom popup page.\ndefaults to https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/common/popups/menu/index.html",
+                    "type": "string"
+                }
+            },
+            "type": "object"
         },
         "Microsoft365ConnectionConfig": {
             "additionalProperties": false,
@@ -2697,20 +2739,6 @@
             },
             "type": "object"
         },
-        "ModuleList_6": {
-            "additionalProperties": false,
-            "description": "A list of modules that provide menu for different locations.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
         "MonitorDetails": {
             "$ref": "#/definitions/__type_37"
         },
@@ -2790,7 +2818,6 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
@@ -2798,6 +2825,13 @@
                 "appId": {
                     "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
                     "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
