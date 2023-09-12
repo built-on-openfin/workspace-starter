@@ -638,7 +638,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					} else if (this._lastAppResults) {
 						let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
 
-						if (!lastApp && this._integrationHelpers.getApp) {
+						// If it wasn't in the last results add it, but only if we are in fav command
+						if (!lastApp && this._integrationHelpers.getApp && this._lastQuery === favInfo.command) {
 							lastApp = await this._integrationHelpers.getApp(favorite.typeId);
 						}
 
