@@ -449,6 +449,42 @@
 				},
 				{
 					"include": true,
+					"id": "include-in-snapshot",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Include in Snapshot",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/icons/{scheme}/snapshot-removed.svg",
+						"action": {
+							"id": "include-in-snapshot",
+							"customData": {
+								"sourceId": "include-in-snapshot",
+								"replacementId": "remove-from-snapshot"
+							}
+						}
+					},
+					"conditions": ["removed-from-snapshot"]
+				},
+				{
+					"include": true,
+					"id": "remove-from-snapshot",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Remove from snapshot",
+						"disabled": false,
+						"iconUrl": "http://localhost:8080/icons/{scheme}/snapshot-included.svg",
+						"action": {
+							"id": "remove-from-snapshot",
+							"customData": {
+								"sourceId": "remove-from-snapshot",
+								"replacementId": "include-in-snapshot"
+							}
+						}
+					},
+					"conditions": ["included-in-snapshot"]
+				},
+				{
+					"include": true,
 					"id": "pin-window",
 					"button": {
 						"type": "Custom",
@@ -1113,6 +1149,14 @@
 					"description": "Favorites Menu",
 					"enabled": false,
 					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js"
+				},
+				{
+					"id": "include-in-snapshot",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Include In Snapshot",
+					"description": "Include In Snapshot",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/composite/include-in-snapshot.bundle.js"
 				}
 			]
 		},
@@ -1123,6 +1167,14 @@
 					"id": "about-conditions",
 					"title": "About Conditions",
 					"url": "http://localhost:8080/js/modules/composite/about.bundle.js"
+				},
+				{
+					"id": "include-in-snapshot",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Include In Snapshot",
+					"description": "Include In Snapshot",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/composite/include-in-snapshot.bundle.js"
 				}
 			]
 		},

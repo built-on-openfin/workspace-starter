@@ -19,8 +19,19 @@ export interface Conditions<O = unknown, H = ModuleHelpers> extends ModuleImplem
 export type ConditionsProviderOptions = ModuleList;
 
 /**
+ * Callback that a condition must implement.
+ */
+export type ConditionCallback = (
+	platform: WorkspacePlatformModule,
+	context?: {
+		callerType?: string;
+		customData?: unknown;
+	}
+) => Promise<boolean>;
+
+/**
  * Map containing conditions from the module.
  */
 export interface ConditionMap {
-	[id: string]: (platform: WorkspacePlatformModule) => Promise<boolean>;
+	[id: string]: ConditionCallback;
 }
