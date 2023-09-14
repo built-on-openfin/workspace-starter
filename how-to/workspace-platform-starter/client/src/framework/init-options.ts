@@ -72,7 +72,10 @@ export async function init(
 					if (
 						await checkConditions(platform, initOptionsModule.definition.data?.conditions, {
 							callerType: "init-options",
-							customData: supportedAction
+							customData: {
+								module: initOptionsModule,
+								supportedAction
+							}
 						})
 					) {
 						logger.info(

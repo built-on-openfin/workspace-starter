@@ -1,6 +1,9 @@
-import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
+import type {
+	ConditionContextTypes,
+	ConditionMap,
+	Conditions
+} from "workspace-platform-starter/shapes/conditions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
@@ -39,14 +42,10 @@ export class IncludeInSnapshotConditionsProvider implements Conditions {
 
 		conditionsMap["included-in-snapshot"] = async (
 			platform: WorkspacePlatformModule,
-			context?: {
-				callerType?: string;
-				customData?: unknown;
-			}
+			context?: ConditionContextTypes
 		): Promise<boolean> => {
 			if (context?.callerType === "browser" && !isEmpty(context?.customData)) {
-				const windowCreateOptions = context.customData as OpenFin.PlatformWindowCreationOptions;
-				const includeInSnapshots = windowCreateOptions.includeInSnapshots ?? true;
+				const includeInSnapshots = context.customData.includeInSnapshots ?? true;
 				this._logger?.info("Included in snapshot", includeInSnapshots);
 				return includeInSnapshots;
 			}
@@ -55,14 +54,10 @@ export class IncludeInSnapshotConditionsProvider implements Conditions {
 
 		conditionsMap["removed-from-snapshot"] = async (
 			platform: WorkspacePlatformModule,
-			context?: {
-				callerType?: string;
-				customData?: unknown;
-			}
+			context?: ConditionContextTypes
 		): Promise<boolean> => {
 			if (context?.callerType === "browser" && !isEmpty(context?.customData)) {
-				const windowCreateOptions = context.customData as OpenFin.PlatformWindowCreationOptions;
-				const includeInSnapshots = windowCreateOptions.includeInSnapshots ?? true;
+				const includeInSnapshots = context.customData.includeInSnapshots ?? true;
 				this._logger?.info("Removed from snapshot", !includeInSnapshots);
 				return !includeInSnapshots;
 			}

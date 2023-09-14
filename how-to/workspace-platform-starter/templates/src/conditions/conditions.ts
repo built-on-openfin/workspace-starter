@@ -1,5 +1,9 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { ConditionMap, Conditions } from "workspace-platform-starter/shapes/conditions-shapes";
+import type {
+	ConditionContextTypes,
+	ConditionMap,
+	Conditions
+} from "workspace-platform-starter/shapes/conditions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleConditionsProviderOptions } from "./shapes";
@@ -67,7 +71,10 @@ export class ExampleConditionsProvider implements Conditions<ExampleConditionsPr
 
 		// TODO: Add entries to the conditions map
 		// TODO: Perform some logic to calculate the condition
-		conditionsMap["my-condition"] = async (platform: WorkspacePlatformModule): Promise<boolean> => true;
+		conditionsMap["my-condition"] = async (
+			platform: WorkspacePlatformModule,
+			context?: ConditionContextTypes
+		): Promise<boolean> => true;
 
 		return conditionsMap;
 	}

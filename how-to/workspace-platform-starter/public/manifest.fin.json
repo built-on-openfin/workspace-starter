@@ -448,7 +448,7 @@
 					}
 				},
 				{
-					"include": true,
+					"include": false,
 					"id": "include-in-snapshot",
 					"button": {
 						"type": "Custom",
@@ -466,7 +466,7 @@
 					"conditions": ["removed-from-snapshot"]
 				},
 				{
-					"include": true,
+					"include": false,
 					"id": "remove-from-snapshot",
 					"button": {
 						"type": "Custom",
