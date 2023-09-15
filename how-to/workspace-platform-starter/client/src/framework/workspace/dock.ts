@@ -125,21 +125,30 @@ async function buildButtons(): Promise<DockButton[]> {
 		const colorSchemeMode = await getCurrentColorSchemeMode();
 		const platform = getCurrentSync();
 
+		const entries = dockProviderOptions.entries ?? [];
 		if (Array.isArray(dockProviderOptions.apps)) {
-			for (const appButton of dockProviderOptions.apps) {
-				if (
-					await checkConditions(platform, appButton.conditions, { callerType: "dock", customData: appButton })
-				) {
-					if (!Array.isArray(appButton.tags)) {
-						logger.error("You must specify an array for the tags parameter for an DockAppButton");
-					} else {
-						const dockApps = await getAppsByTag(appButton.tags, false, { private: false });
+			entries.push(...dockProviderOptions.apps);
+		}
+		if (Array.isArray(dockProviderOptions.buttons)) {
+			entries.push(...dockProviderOptions.buttons);
+		}
 
-						if (appButton.display === "individual") {
+		for (const entry of entries) {
+			if (await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry })) {
+				if ("tags" in entry) {
+					if (!Array.isArray(entry.tags)) {
+						logger.error("You must specify an array for the tags parameter for an DockButtonAppsByTag");
+					} else {
+						// If there are tags then this could be a group of apps we then display separate
+						// buttons or a drop down based on the display property
+						const dockApps = await getAppsByTag(entry.tags, false, { private: false });
+
+						if (entry.display === "individual") {
+							// Individual so show a button for each app
 							for (const dockApp of dockApps) {
-								const icon = appButton.iconUrl ?? getAppIcon(dockApp);
+								const icon = entry.iconUrl ?? getAppIcon(dockApp);
 								buttons.push({
-									tooltip: appButton.tooltip ?? dockApp.title,
+									tooltip: entry.tooltip ?? dockApp.title,
 									iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
 									action: {
 										id: PLATFORM_ACTION_IDS.launchApp,
@@ -150,11 +159,12 @@ async function buildButtons(): Promise<DockButton[]> {
 									}
 								});
 							}
-						} else if (appButton.display === "group") {
-							if (!appButton.tooltip) {
-								logger.error("You must specify the tooltip for a grouped DockAppButton");
+						} else if (entry.display === "group") {
+							// Group so show a drop down with all the entries in
+							if (!entry.tooltip) {
+								logger.error("You must specify the tooltip for a grouped DockButtonAppsByTag");
 							}
-							let iconUrl = appButton.iconUrl;
+							let iconUrl = entry.iconUrl;
 							const opts = [];
 
 							for (const dockApp of dockApps) {
@@ -177,102 +187,98 @@ async function buildButtons(): Promise<DockButton[]> {
 
 							buttons.push({
 								type: DockButtonNames.DropdownButton,
-								tooltip: appButton.tooltip ?? "",
+								tooltip: entry.tooltip ?? "",
 								iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
 								options: opts
 							});
 						}
 					}
-				}
-			}
-		}
+				} else if ("options" in entry) {
+					// Options are present so this is a drop down
+					// The items in the drop down can be an appId or a custom action
+					if (!entry.tooltip || !entry.iconUrl) {
+						logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+					} else {
+						const opts = [];
 
-		// Now add the custom buttons
-		if (Array.isArray(dockProviderOptions?.buttons)) {
-			for (const dockButton of dockProviderOptions.buttons) {
-				if (
-					await checkConditions(platform, dockButton.conditions, {
-						callerType: "dock",
-						customData: dockButton
-					})
-				) {
-					// Is this a dock drop down
-					if ("options" in dockButton) {
-						if (!dockButton.tooltip || !dockButton.iconUrl) {
-							logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
-						} else {
-							const opts = [];
+						for (const option of entry.options) {
+							let optionTooltip = option.tooltip;
+							let action: CustomActionSpecifier;
 
-							for (const option of dockButton.options) {
-								let optionTooltip = option.tooltip;
-
-								// If the options has an appId we are going to launch that
-								// but the config can override the tooltip
-								if (option.appId && !optionTooltip) {
+							// If the options has an appId we are going to launch that
+							// otherwise we use the custom action.
+							if ("appId" in option) {
+								if (!optionTooltip) {
+									// If the tooltip is not set we can use the app title
 									const app = await getApp(option.appId);
 									optionTooltip = app?.title ?? "";
 								}
-
-								// If we have an appId do the default dock launch action
-								// otherwise we just perform a custom action and this
-								// must be handled in actions.ts
-								opts.push({
-									tooltip: optionTooltip ?? "",
-									action: option.appId
-										? {
-												id: PLATFORM_ACTION_IDS.launchApp,
-												customData: {
-													source: "dock",
-													appId: option.appId
-												}
-										  }
-										: (option.action as CustomActionSpecifier)
-								});
+								action = {
+									id: PLATFORM_ACTION_IDS.launchApp,
+									customData: {
+										source: "dock",
+										appId: option.appId
+									}
+								};
+							} else {
+								action = option.action;
 							}
 
-							buttons.push({
-								type: DockButtonNames.DropdownButton,
-								tooltip: dockButton.tooltip,
-								iconUrl: themeUrl(dockButton.iconUrl, iconFolder, colorSchemeMode),
-								options: opts
+							opts.push({
+								tooltip: optionTooltip ?? "",
+								action
 							});
 						}
-					} else {
-						let tooltip = dockButton.tooltip;
-						let iconUrl = dockButton.iconUrl;
 
-						// If the button has an appId we are going to launch that
-						// but the config can override the tooltip or icon
-						if (dockButton.appId && (!tooltip || !iconUrl)) {
-							const app = await getApp(dockButton.appId);
-							if (app) {
-								if (!tooltip) {
-									tooltip = app.title;
-								}
-								if (!iconUrl) {
-									iconUrl = getAppIcon(app);
-								}
-							}
-						}
-
-						// This is just a button with no dropdown
-						// it might be launching an app or a custom action
-						// which we must define in actions.ts
 						buttons.push({
-							type: DockButtonNames.ActionButton,
-							tooltip: tooltip ?? "",
-							iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
-							action: dockButton.appId
-								? {
-										id: PLATFORM_ACTION_IDS.launchApp,
-										customData: {
-											source: "dock",
-											appId: dockButton.appId
-										}
-								  }
-								: (dockButton.action as CustomActionSpecifier)
+							type: DockButtonNames.DropdownButton,
+							tooltip: entry.tooltip,
+							iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+							options: opts
 						});
 					}
+				} else if ("appId" in entry) {
+					// If the button has an appId we are going to launch that
+					// but the config can override the tooltip or icon
+					let tooltip = entry.tooltip;
+					let iconUrl = entry.iconUrl;
+
+					if (!tooltip || !iconUrl) {
+						// No tooltip of icon set, so use the values from the app
+						const app = await getApp(entry.appId);
+						if (app) {
+							if (!tooltip) {
+								tooltip = app.title;
+							}
+							if (!iconUrl) {
+								iconUrl = getAppIcon(app);
+							}
+						}
+					}
+
+					buttons.push({
+						type: DockButtonNames.ActionButton,
+						tooltip: tooltip ?? "",
+						iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
+						action: {
+							id: PLATFORM_ACTION_IDS.launchApp,
+							customData: {
+								source: "dock",
+								appId: entry.appId
+							}
+						}
+					});
+				} else if ("action" in entry) {
+					if (!entry.tooltip || !entry.iconUrl) {
+						logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
+					}
+
+					buttons.push({
+						type: DockButtonNames.ActionButton,
+						tooltip: entry.tooltip ?? "",
+						iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+						action: entry.action
+					});
 				}
 			}
 		}

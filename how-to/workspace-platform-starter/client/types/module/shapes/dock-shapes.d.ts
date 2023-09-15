@@ -24,13 +24,19 @@ export interface DockProviderOptions {
 		hideStorefrontButton?: boolean;
 	};
 	/**
-	 * What apps should be made available via the dock
+	 * What apps, actions or drop downs should be made available via the dock.
 	 */
-	apps?: DockButtonApp[];
+	entries?: DockButtonTypes[];
 	/**
-	 * What custom actions should be made available via the dock
+	 * What apps should be made available via the dock, this property is deprecated, use entries.
+	 * @deprecated
 	 */
-	buttons?: (DockButtonAction | DockButtonDropdown)[];
+	apps?: DockButtonAppsByTag[];
+	/**
+	 * What custom actions should be made available via the dock, this property is deprecated, use entries.
+	 * @deprecated
+	 */
+	buttons?: (DockButtonApp | DockButtonAction | DockButtonDropdown)[];
 }
 /**
  * Shared properties for dock buttons.
@@ -50,9 +56,9 @@ export interface DockButtonBase {
 	conditions?: string[];
 }
 /**
- * A single app or a list of apps
+ * A single app or a list of apps that are defined by the tags in the app definitions.
  */
-export interface DockButtonApp extends DockButtonBase {
+export interface DockButtonAppsByTag extends DockButtonBase {
 	/**
 	 * Should this entry show a single app or a group of apps.
 	 */
@@ -64,17 +70,22 @@ export interface DockButtonApp extends DockButtonBase {
 	tags?: string[];
 }
 /**
- * A button which launched an app or action.
+ * A button which launches an app by it's or or a custom action.
+ */
+export interface DockButtonApp extends DockButtonBase {
+	/**
+	 * Launch an app by it's id.
+	 */
+	appId: string;
+}
+/**
+ * A button which launches an app by it's or or a custom action.
  */
 export interface DockButtonAction extends DockButtonBase {
 	/**
-	 * Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)
+	 * Launch an action.
 	 */
-	appId?: string;
-	/**
-	 * If an appId isn't provided then provide details related to the action
-	 */
-	action?: {
+	action: {
 		/**
 		 * The id of the action to fire
 		 */
@@ -92,5 +103,9 @@ export interface DockButtonDropdown extends DockButtonBase {
 	/**
 	 * List of button options
 	 */
-	options: Omit<DockButtonAction, "iconUrl">[];
+	options: (Omit<DockButtonApp, "iconUrl"> | Omit<DockButtonAction, "iconUrl">)[];
 }
+/**
+ * All of the button types for the dock.
+ */
+export type DockButtonTypes = DockButtonAppsByTag | DockButtonApp | DockButtonAction | DockButtonDropdown;

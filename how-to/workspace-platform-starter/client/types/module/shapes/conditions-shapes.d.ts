@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { DockButtonAction, DockButtonApp, DockButtonDropdown } from "./dock-shapes";
+import type { DockButtonTypes } from "./dock-shapes";
 import type { InitOptionsHandler, InitOptionsHandlerOptions } from "./init-options-shapes";
 import type { MenuEntry } from "./menu-shapes";
 import type { ModuleEntry, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
@@ -47,7 +47,7 @@ export interface ConditionContextDock extends ConditionContext {
 	/**
 	 * Data from the caller.
 	 */
-	customData?: DockButtonApp | DockButtonAction | DockButtonDropdown;
+	customData?: DockButtonTypes;
 }
 /**
  * Type for the browser context in condition callbacks.
