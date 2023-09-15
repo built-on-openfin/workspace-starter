@@ -69,7 +69,10 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
 
 			if (include ?? isEmpty(include)) {
-				const canShow = await checkConditions(platform, conditions);
+				const canShow = await checkConditions(platform, conditions, {
+					callerType: "menu",
+					customData: menuItem
+				});
 
 				if (canShow) {
 					const insertedIndex = updateMenuEntries(

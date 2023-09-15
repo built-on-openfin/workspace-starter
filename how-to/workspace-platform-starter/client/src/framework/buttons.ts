@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { CustomButtonConfig } from "@openfin/workspace";
 import {
 	BrowserButtonType,
@@ -17,18 +18,16 @@ import { isEmpty, objectClone } from "./utils";
 
 let configToolbarButtons: WorkspacePlatformToolbarButton[] | undefined;
 let configButtonsRetrieved: boolean = false;
-let defaultToolbarButtons: ToolbarButton[] | undefined;
-let defaultButtonsBuilt: boolean = false;
 
 /**
- * Get the default toolbar buttons to show on a browser window.
+ * Get the toolbar buttons to show on a browser window.
+ * @param windowCreateOptions The options the window will be created with.
  * @returns The list of buttons to show.
  */
-export async function getDefaultToolbarButtons(): Promise<ToolbarButton[] | undefined> {
-	// If we have already built the buttons just return them
-	if (defaultButtonsBuilt) {
-		return defaultToolbarButtons;
-	}
+export async function getToolbarButtons(
+	windowCreateOptions?: OpenFin.PlatformWindowCreationOptions
+): Promise<ToolbarButton[] | undefined> {
+	let toolbarButtons: ToolbarButton[] | undefined;
 
 	const allToolbarButtons = await getConfigToolbarButtons();
 
@@ -38,16 +37,21 @@ export async function getDefaultToolbarButtons(): Promise<ToolbarButton[] | unde
 
 		const platform = getCurrentSync();
 
-		defaultToolbarButtons = [];
-		defaultButtonsBuilt = true;
+		toolbarButtons = [];
 		for (const entry of allToolbarButtons) {
-			if (entry.include && (await checkConditions(platform, entry.conditions))) {
-				defaultToolbarButtons.push(themeButton(entry.button, iconFolder, colorSchemeMode));
+			if (
+				entry.include &&
+				(await checkConditions(platform, entry.conditions, {
+					callerType: "browser",
+					customData: windowCreateOptions
+				}))
+			) {
+				toolbarButtons.push(themeButton(entry.button, iconFolder, colorSchemeMode));
 			}
 		}
 	}
 
-	return defaultToolbarButtons;
+	return toolbarButtons;
 }
 
 /**
@@ -148,13 +152,6 @@ async function getConfigToolbarButtons(): Promise<WorkspacePlatformToolbarButton
 	configButtonsRetrieved = true;
 
 	subscribeLifecycleEvent("theme-changed", async () => {
-		// Reset the default toolbar buttons as the icon might have changed
-		defaultToolbarButtons = undefined;
-		defaultButtonsBuilt = false;
-
-		// Get the toolbar buttons again with the new theme
-		await getDefaultToolbarButtons();
-
 		// Update all the browser windows with the new buttons.
 		const platform = getCurrentSync();
 		const browserWindows = await platform.Browser.getAllWindows();

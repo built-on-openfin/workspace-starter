@@ -15,7 +15,7 @@ import {
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import * as analyticsProvider from "../analytics";
-import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
+import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
@@ -683,10 +683,10 @@ export function overrideCallback(
 				// so we assume we are using the workspace defaults
 				// Since the defaults were created using the theme at startup
 				// we need to replace them with the current set of default
-				// buttons which are theme aware
+				// buttons which are theme and condition aware
 				options.workspacePlatform = options.workspacePlatform ?? {};
 				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-				const buttons = await getDefaultToolbarButtons();
+				const buttons = await getToolbarButtons(options);
 				if (!isEmpty(buttons)) {
 					options.workspacePlatform.toolbarOptions.buttons = buttons;
 				}

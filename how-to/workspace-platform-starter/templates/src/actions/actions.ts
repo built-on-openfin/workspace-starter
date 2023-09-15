@@ -3,9 +3,9 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleActionsProviderOptions } from "./shapes";
 
 /**
@@ -28,7 +28,7 @@ export class ExampleActionsProvider implements Actions<ExampleActionsProviderOpt
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers: ActionHelpers | undefined;
 
 	/**
 	 * Initialize the module.
@@ -40,7 +40,7 @@ export class ExampleActionsProvider implements Actions<ExampleActionsProviderOpt
 	public async initialize(
 		definition: ModuleDefinition<ExampleActionsProviderOptions>,
 		loggerCreator: LoggerCreator,
-		helpers: ModuleHelpers
+		helpers: ActionHelpers
 	): Promise<void> {
 		this._definition = definition;
 		this._logger = loggerCreator("ExampleActionsProvider");
@@ -71,7 +71,13 @@ export class ExampleActionsProvider implements Actions<ExampleActionsProviderOpt
 		const actionMap: CustomActionsMap = {};
 
 		// TODO: Add entries to the actions map
-		actionMap["my-action"] = async (payload: CustomActionPayload): Promise<void> => {
+		actionMap["my-action"] = async (
+			payload: CustomActionPayload,
+			context?: {
+				callerType?: string;
+				customData?: unknown;
+			}
+		): Promise<void> => {
 			// Perform your action
 		};
 

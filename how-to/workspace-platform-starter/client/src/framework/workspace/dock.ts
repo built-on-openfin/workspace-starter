@@ -127,7 +127,9 @@ async function buildButtons(): Promise<DockButton[]> {
 
 		if (Array.isArray(dockProviderOptions.apps)) {
 			for (const appButton of dockProviderOptions.apps) {
-				if (await checkConditions(platform, appButton.conditions)) {
+				if (
+					await checkConditions(platform, appButton.conditions, { callerType: "dock", customData: appButton })
+				) {
 					if (!Array.isArray(appButton.tags)) {
 						logger.error("You must specify an array for the tags parameter for an DockAppButton");
 					} else {
@@ -188,7 +190,12 @@ async function buildButtons(): Promise<DockButton[]> {
 		// Now add the custom buttons
 		if (Array.isArray(dockProviderOptions?.buttons)) {
 			for (const dockButton of dockProviderOptions.buttons) {
-				if (await checkConditions(platform, dockButton.conditions)) {
+				if (
+					await checkConditions(platform, dockButton.conditions, {
+						callerType: "dock",
+						customData: dockButton
+					})
+				) {
 					// Is this a dock drop down
 					if ("options" in dockButton) {
 						if (!dockButton.tooltip || !dockButton.iconUrl) {

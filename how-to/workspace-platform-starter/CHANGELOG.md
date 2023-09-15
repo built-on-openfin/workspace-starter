@@ -30,6 +30,8 @@
 - Added example favorites actions module which shows a popup menu
 - Fixed checking condition triggered exception when condition did not exist
 - Added Module helpers showPopupMenu for common functionality
+- Added conditions now support passing `callerType`and `context`
+- Added `include-in-snapshot` composite module which has both actions and conditions to display browser toolbar buttons which can control if a window is included in a snapshot, disabled by default
 
 ## v13.1
 

@@ -8,7 +8,7 @@ import {
 	type PageLayout
 } from "@openfin/workspace-platform";
 import type { BrowserProviderOptions, Logger } from "workspace-platform-starter/shapes";
-import { getDefaultToolbarButtons } from "../buttons";
+import { getToolbarButtons } from "../buttons";
 import { isEmpty, isStringValue } from "../utils";
 
 /**
@@ -60,7 +60,7 @@ export async function getDefaultWindowOptions(
 
 		// we are going to override the ones specified at the workspace platform level
 		// as this is our more flexible extension with conditions
-		const buttons = await getDefaultToolbarButtons();
+		const buttons = await getToolbarButtons();
 		if (!isEmpty(buttons)) {
 			wsPlatform.toolbarOptions = {
 				buttons
