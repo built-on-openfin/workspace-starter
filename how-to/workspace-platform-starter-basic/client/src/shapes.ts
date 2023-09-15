@@ -5,6 +5,11 @@ import type { App } from "@openfin/workspace";
  */
 export interface CustomSettings {
 	/**
+	 * Url of JSON file to load apps from, can be combined the the apps property.
+	 */
+	appsUrl?: string;
+
+	/**
 	 * The applications to populate in the platform.
 	 */
 	apps?: App[];
