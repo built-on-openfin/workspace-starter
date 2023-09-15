@@ -448,6 +448,42 @@
 					}
 				},
 				{
+					"include": false,
+					"id": "include-in-snapshot",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Include in Snapshot",
+						"disabled": false,
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/icons/{scheme}/snapshot-removed.svg",
+						"action": {
+							"id": "include-in-snapshot",
+							"customData": {
+								"sourceId": "include-in-snapshot",
+								"replacementId": "remove-from-snapshot"
+							}
+						}
+					},
+					"conditions": ["removed-from-snapshot"]
+				},
+				{
+					"include": false,
+					"id": "remove-from-snapshot",
+					"button": {
+						"type": "Custom",
+						"tooltip": "Remove from snapshot",
+						"disabled": false,
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/icons/{scheme}/snapshot-included.svg",
+						"action": {
+							"id": "remove-from-snapshot",
+							"customData": {
+								"sourceId": "remove-from-snapshot",
+								"replacementId": "include-in-snapshot"
+							}
+						}
+					},
+					"conditions": ["included-in-snapshot"]
+				},
+				{
 					"include": true,
 					"id": "pin-window",
 					"button": {
@@ -1113,6 +1149,14 @@
 					"description": "Favorites Menu",
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js"
+				},
+				{
+					"id": "include-in-snapshot",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/favicon.ico",
+					"title": "Include In Snapshot",
+					"description": "Include In Snapshot",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/composite/include-in-snapshot.bundle.js"
 				}
 			]
 		},
@@ -1123,6 +1167,14 @@
 					"id": "about-conditions",
 					"title": "About Conditions",
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/composite/about.bundle.js"
+				},
+				{
+					"id": "include-in-snapshot",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/favicon.ico",
+					"title": "Include In Snapshot",
+					"description": "Include In Snapshot",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/js/modules/composite/include-in-snapshot.bundle.js"
 				}
 			]
 		},
