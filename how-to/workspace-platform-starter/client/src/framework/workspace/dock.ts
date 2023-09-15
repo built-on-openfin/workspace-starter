@@ -176,14 +176,14 @@ async function addEntryAsApp(
 	let tooltip = entry.tooltip;
 	let iconUrl = entry.iconUrl;
 
-	if (!tooltip || !iconUrl) {
+	if (!isStringValue(tooltip) || !isStringValue(iconUrl)) {
 		// No tooltip or icon set, so use the values from the app
 		const app = await getApp(entry.appId);
 		if (app) {
-			if (!tooltip) {
+			if (!isStringValue(tooltip)) {
 				tooltip = app.title;
 			}
-			if (!iconUrl) {
+			if (!isStringValue(iconUrl)) {
 				iconUrl = getAppIcon(app);
 			}
 		}
@@ -341,7 +341,7 @@ async function addEntriesByAppTag(
 			}
 		} else if (entry.display === "group") {
 			// Group display so show a drop down with all the entries in it
-			if (!entry.tooltip) {
+			if (!isStringValue(entry.tooltip)) {
 				logger.error("You must specify the tooltip for a grouped DockButtonAppsByTag");
 			} else {
 				let iconUrl = entry.iconUrl;
@@ -349,7 +349,7 @@ async function addEntriesByAppTag(
 
 				for (const dockApp of dockApps) {
 					// If the config doesn't specify an icon, just use the icon from the first entry
-					if (!iconUrl) {
+					if (!isStringValue(iconUrl)) {
 						iconUrl = getAppIcon(dockApp);
 					}
 
