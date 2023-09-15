@@ -2,11 +2,12 @@ import {
 	Dock,
 	DockButtonNames,
 	type CustomActionSpecifier,
+	type CustomButtonConfig,
 	type DockButton,
 	type DockProvider,
 	type DockProviderRegistration
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
+import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { checkConditions } from "workspace-platform-starter/conditions";
 import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
@@ -14,10 +15,16 @@ import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle
 import { createLogger } from "../logger-provider";
 import type { PlatformApp } from "../shapes/app-shapes";
 import type { BootstrapOptions } from "../shapes/bootstrap-shapes";
-import type { DockProviderOptions } from "../shapes/dock-shapes";
+import type {
+	DockButtonAction,
+	DockButtonApp,
+	DockButtonAppsByTag,
+	DockButtonDropdown,
+	DockProviderOptions
+} from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder } from "../themes";
-import { isEmpty } from "../utils";
+import { isEmpty, isStringValue } from "../utils";
 
 const logger = createLogger("Dock");
 
@@ -135,156 +142,248 @@ async function buildButtons(): Promise<DockButton[]> {
 
 		for (const entry of entries) {
 			if (await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry })) {
-				if ("tags" in entry) {
-					if (!Array.isArray(entry.tags)) {
-						logger.error("You must specify an array for the tags parameter for an DockButtonAppsByTag");
-					} else {
-						// If there are tags then this could be a group of apps we then display separate
-						// buttons or a drop down based on the display property
-						const dockApps = await getAppsByTag(entry.tags, false, { private: false });
-
-						if (entry.display === "individual") {
-							// Individual so show a button for each app
-							for (const dockApp of dockApps) {
-								const icon = entry.iconUrl ?? getAppIcon(dockApp);
-								buttons.push({
-									tooltip: entry.tooltip ?? dockApp.title,
-									iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
-									action: {
-										id: PLATFORM_ACTION_IDS.launchApp,
-										customData: {
-											source: "dock",
-											appId: dockApp.appId
-										}
-									}
-								});
-							}
-						} else if (entry.display === "group") {
-							// Group so show a drop down with all the entries in
-							if (!entry.tooltip) {
-								logger.error("You must specify the tooltip for a grouped DockButtonAppsByTag");
-							}
-							let iconUrl = entry.iconUrl;
-							const opts = [];
-
-							for (const dockApp of dockApps) {
-								// If the config doesn't specify an icon, just use the icon from the first entry
-								if (!iconUrl) {
-									iconUrl = getAppIcon(dockApp);
-								}
-
-								opts.push({
-									tooltip: dockApp.title,
-									action: {
-										id: PLATFORM_ACTION_IDS.launchApp,
-										customData: {
-											source: "dock",
-											appId: dockApp.appId
-										}
-									}
-								});
-							}
-
-							buttons.push({
-								type: DockButtonNames.DropdownButton,
-								tooltip: entry.tooltip ?? "",
-								iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
-								options: opts
-							});
-						}
-					}
-				} else if ("options" in entry) {
-					// Options are present so this is a drop down
-					// The items in the drop down can be an appId or a custom action
-					if (!entry.tooltip || !entry.iconUrl) {
-						logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
-					} else {
-						const opts = [];
-
-						for (const option of entry.options) {
-							let optionTooltip = option.tooltip;
-							let action: CustomActionSpecifier;
-
-							// If the options has an appId we are going to launch that
-							// otherwise we use the custom action.
-							if ("appId" in option) {
-								if (!optionTooltip) {
-									// If the tooltip is not set we can use the app title
-									const app = await getApp(option.appId);
-									optionTooltip = app?.title ?? "";
-								}
-								action = {
-									id: PLATFORM_ACTION_IDS.launchApp,
-									customData: {
-										source: "dock",
-										appId: option.appId
-									}
-								};
-							} else {
-								action = option.action;
-							}
-
-							opts.push({
-								tooltip: optionTooltip ?? "",
-								action
-							});
-						}
-
-						buttons.push({
-							type: DockButtonNames.DropdownButton,
-							tooltip: entry.tooltip,
-							iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
-							options: opts
-						});
-					}
-				} else if ("appId" in entry) {
-					// If the button has an appId we are going to launch that
-					// but the config can override the tooltip or icon
-					let tooltip = entry.tooltip;
-					let iconUrl = entry.iconUrl;
-
-					if (!tooltip || !iconUrl) {
-						// No tooltip of icon set, so use the values from the app
-						const app = await getApp(entry.appId);
-						if (app) {
-							if (!tooltip) {
-								tooltip = app.title;
-							}
-							if (!iconUrl) {
-								iconUrl = getAppIcon(app);
-							}
-						}
-					}
-
-					buttons.push({
-						type: DockButtonNames.ActionButton,
-						tooltip: tooltip ?? "",
-						iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
-						action: {
-							id: PLATFORM_ACTION_IDS.launchApp,
-							customData: {
-								source: "dock",
-								appId: entry.appId
-							}
-						}
-					});
+				if ("appId" in entry) {
+					await addEntryAsApp(buttons, entry, iconFolder, colorSchemeMode);
 				} else if ("action" in entry) {
-					if (!entry.tooltip || !entry.iconUrl) {
-						logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
-					}
-
-					buttons.push({
-						type: DockButtonNames.ActionButton,
-						tooltip: entry.tooltip ?? "",
-						iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
-						action: entry.action
-					});
+					await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode);
+				} else if ("options" in entry) {
+					await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
+				} else if ("tags" in entry) {
+					await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
 				}
 			}
 		}
 	}
 
 	return buttons;
+}
+
+/**
+ * Add an entry to the dock as an app
+ * @param buttons The list of buttons to add to.
+ * @param entry The entry details.
+ * @param iconFolder The folder for icons.
+ * @param colorSchemeMode The color scheme
+ */
+async function addEntryAsApp(
+	buttons: DockButton[],
+	entry: DockButtonApp,
+	iconFolder: string,
+	colorSchemeMode: ColorSchemeMode
+): Promise<void> {
+	// If the button has an appId we are going to launch that
+	// but the config can override the tooltip or icon
+	let tooltip = entry.tooltip;
+	let iconUrl = entry.iconUrl;
+
+	if (!tooltip || !iconUrl) {
+		// No tooltip or icon set, so use the values from the app
+		const app = await getApp(entry.appId);
+		if (app) {
+			if (!tooltip) {
+				tooltip = app.title;
+			}
+			if (!iconUrl) {
+				iconUrl = getAppIcon(app);
+			}
+		}
+	}
+
+	buttons.push({
+		type: DockButtonNames.ActionButton,
+		tooltip: tooltip ?? "",
+		iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
+		action: {
+			id: PLATFORM_ACTION_IDS.launchApp,
+			customData: {
+				source: "dock",
+				appId: entry.appId
+			}
+		}
+	});
+}
+
+/**
+ * Add an entry to the dock as an action
+ * @param buttons The list of buttons to add to.
+ * @param entry The entry details.
+ * @param iconFolder The folder for icons.
+ * @param colorSchemeMode The color scheme
+ */
+async function addEntryAsAction(
+	buttons: DockButton[],
+	entry: DockButtonAction,
+	iconFolder: string,
+	colorSchemeMode: ColorSchemeMode
+): Promise<void> {
+	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
+		logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
+	} else {
+		buttons.push({
+			type: DockButtonNames.ActionButton,
+			tooltip: entry.tooltip,
+			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+			action: entry.action
+		});
+	}
+}
+
+/**
+ * Add an entry to the dock as an drop down
+ * @param buttons The list of buttons to add to.
+ * @param entry The entry details.
+ * @param iconFolder The folder for icons.
+ * @param colorSchemeMode The color scheme
+ */
+async function addEntriesAsDropdown(
+	buttons: DockButton[],
+	entry: DockButtonDropdown,
+	iconFolder: string,
+	colorSchemeMode: ColorSchemeMode,
+	platform: WorkspacePlatformModule
+): Promise<void> {
+	// Options are present so this is a drop down
+	// The items in the drop down can be an appId or a custom action
+	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
+		logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+	} else {
+		const opts: CustomButtonConfig[] = [];
+
+		for (const option of entry.options) {
+			if (await checkConditions(platform, option.conditions, { callerType: "dock", customData: option })) {
+				let optionTooltip = option.tooltip;
+				let action: CustomActionSpecifier | undefined;
+
+				// If the options has an appId we are going to launch that
+				// otherwise we use the custom action.
+				if ("appId" in option) {
+					if (!isStringValue(optionTooltip)) {
+						// If the tooltip is not set we can use the app title
+						const app = await getApp(option.appId);
+						optionTooltip = app?.title ?? "";
+					}
+					action = {
+						id: PLATFORM_ACTION_IDS.launchApp,
+						customData: {
+							source: "dock",
+							appId: option.appId
+						}
+					};
+				} else if (!isStringValue(optionTooltip)) {
+					logger.error("You must specify the tooltip for a DockButtonAction in a DockButtonDropdown");
+				} else {
+					action = option.action;
+				}
+
+				if (!isEmpty(action)) {
+					opts.push({
+						tooltip: optionTooltip ?? "",
+						action
+					});
+				}
+			}
+		}
+
+		if (opts.length === 0) {
+			opts.push({
+				tooltip: entry.noEntries ?? "There are no entries",
+				disabled: true,
+				action: {
+					id: "noop"
+				}
+			});
+		}
+
+		buttons.push({
+			type: DockButtonNames.DropdownButton,
+			tooltip: entry.tooltip,
+			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+			options: opts
+		});
+	}
+}
+
+/**
+ * Add entries to the dock based on their app tags as either multiple buttons or a drop down.
+ * @param buttons The list of buttons to add to.
+ * @param entry The entry details.
+ * @param iconFolder The folder for icons.
+ * @param colorSchemeMode The color scheme
+ */
+async function addEntriesByAppTag(
+	buttons: DockButton[],
+	entry: DockButtonAppsByTag,
+	iconFolder: string,
+	colorSchemeMode: ColorSchemeMode
+): Promise<void> {
+	if (!Array.isArray(entry.tags)) {
+		logger.error("You must specify an array for the tags parameter for an DockButtonAppsByTag");
+	} else {
+		// If there are tags then this could be a group of apps we then display separate
+		// buttons or a drop down based on the display property
+		const dockApps = await getAppsByTag(entry.tags, false, { private: false });
+
+		if (entry.display === "individual") {
+			// Individual so show a button for each app
+			for (const dockApp of dockApps) {
+				const icon = entry.iconUrl ?? getAppIcon(dockApp);
+				buttons.push({
+					tooltip: entry.tooltip ?? dockApp.title,
+					iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
+					action: {
+						id: PLATFORM_ACTION_IDS.launchApp,
+						customData: {
+							source: "dock",
+							appId: dockApp.appId
+						}
+					}
+				});
+			}
+		} else if (entry.display === "group") {
+			// Group display so show a drop down with all the entries in it
+			if (!entry.tooltip) {
+				logger.error("You must specify the tooltip for a grouped DockButtonAppsByTag");
+			} else {
+				let iconUrl = entry.iconUrl;
+				const opts = [];
+
+				for (const dockApp of dockApps) {
+					// If the config doesn't specify an icon, just use the icon from the first entry
+					if (!iconUrl) {
+						iconUrl = getAppIcon(dockApp);
+					}
+
+					opts.push({
+						tooltip: dockApp.title,
+						action: {
+							id: PLATFORM_ACTION_IDS.launchApp,
+							customData: {
+								source: "dock",
+								appId: dockApp.appId
+							}
+						}
+					});
+				}
+
+				if (opts.length === 0) {
+					opts.push({
+						tooltip: entry.noEntries ?? "There are no entries",
+						disabled: true,
+						action: {
+							id: "noop"
+						}
+					});
+				}
+
+				buttons.push({
+					type: DockButtonNames.DropdownButton,
+					tooltip: entry.tooltip ?? "",
+					iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
+					options: opts
+				});
+			}
+		}
+	}
 }
 
 /**

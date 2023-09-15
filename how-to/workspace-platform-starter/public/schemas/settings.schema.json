@@ -1124,6 +1124,10 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because there are no tagged apps.",
+                    "type": "string"
+                },
                 "tags": {
                     "description": "The tags to use to find the single app or a collection of apps that need to be listed. This will be compared\nagainst the tags associated with apps returned from the app data sources.",
                     "items": {
@@ -1154,6 +1158,10 @@
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because conditions have excluded options.",
                     "type": "string"
                 },
                 "options": {

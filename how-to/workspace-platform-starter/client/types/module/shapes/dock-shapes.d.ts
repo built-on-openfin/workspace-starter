@@ -68,6 +68,10 @@ export interface DockButtonAppsByTag extends DockButtonBase {
 	 * against the tags associated with apps returned from the app data sources.
 	 */
 	tags?: string[];
+	/**
+	 * Text to display if there are no entries because there are no tagged apps.
+	 */
+	noEntries?: string;
 }
 /**
  * A button which launches an app by it's or or a custom action.
@@ -104,6 +108,10 @@ export interface DockButtonDropdown extends DockButtonBase {
 	 * List of button options
 	 */
 	options: (Omit<DockButtonApp, "iconUrl"> | Omit<DockButtonAction, "iconUrl">)[];
+	/**
+	 * Text to display if there are no entries because conditions have excluded options.
+	 */
+	noEntries?: string;
 }
 /**
  * All of the button types for the dock.
