@@ -159,7 +159,7 @@ async function buildButtons(): Promise<DockButton[]> {
 }
 
 /**
- * Add an entry to the dock as an app
+ * Add an entry to the dock as an app.
  * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
@@ -204,7 +204,7 @@ async function addEntryAsApp(
 }
 
 /**
- * Add an entry to the dock as an action
+ * Add an entry to the dock as an action.
  * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
@@ -229,11 +229,12 @@ async function addEntryAsAction(
 }
 
 /**
- * Add an entry to the dock as an drop down
+ * Add an entry to the dock as an drop down.
  * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @param platform The workspace platform for checking conditions.
  */
 async function addEntriesAsDropdown(
 	buttons: DockButton[],
