@@ -32,7 +32,7 @@
 - Added Module helpers showPopupMenu for common functionality
 - Added conditions now support passing `callerType`and `context`
 - Added `include-in-snapshot` composite module which has both actions and conditions to display browser toolbar buttons which can control if a window is included in a snapshot, disabled by default
-- Change `apps` and `buttons` in the dock config have been deprecated and replaced with `entries` which can contain the combined data from the old properties, the old properties will be read for now.
+- FUTURE BREAKING CHANGE `apps` and `buttons` in the dock config have been deprecated and replaced with `entries` which can contain the combined data from the old properties, the old properties will be read for now.
 
 ## v13.1
 
