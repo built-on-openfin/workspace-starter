@@ -134,13 +134,13 @@ If you already have this version of the app asset then the RVM will not re-fetch
 
 App assets are downloaded and extracted within your OpenFin application's folder. Using **myApp** as an example it would end up in the following location:
 
-> C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\4.12.8
+> C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\4.12.8
 
 #### Things to consider with App Assets
 
 There are a few things to consider with app assets:
 
-- Does your app need to write any files locally. If it does please note that the RVM will replace the versioned folder with a brand new versioned folder with the extracted zip contents. Locally written files will be removed. If you wish to persist files across installs then consider creating a directory one level above the exe e.g. C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\4.12.8 would store it's data in C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\data. Multiple versions could then check look for the data directory after an upgrade/install.
+- Does your app need to write any files locally. If it does please note that the RVM will replace the versioned folder with a brand new versioned folder with the extracted zip contents. Locally written files will be removed. If you wish to persist files across installs then consider creating a directory one level above the exe e.g. C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\4.12.8 would store it's data in C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\data. Multiple versions could then check look for the data directory after an upgrade/install.
 - Portable applications work best in this scenario. Applications that do not need Admin rights or installation would mean they run without additional steps.
 - You may need to check with your client to see if they block zip files that contain binaries. If they do then you will need to ask to see if your site/domain can be added to an allow list.
 - Permissions - to be able to download an app asset you will need to request the downloadAsset permission details below.
