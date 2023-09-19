@@ -30,7 +30,7 @@ graph TD
 
 In the example above we have a developer who has created a simple OpenFin Application. They have a .NET app that they wish to use with the OpenFin application. They have zipped up the app as exe.zip and placed it on their server. They have created a manifest.json file to specify the app asset they need, the version of OpenFin they wish to use, the permissions required and the url to load when launched (which launches the .NET app). The index.html page and manifest are uploaded to the server alongside the exe.zip.
 
-An end user installs the OpenFin Application and clicks on the desktop shortcut. The OpenFin installation has added the OpenFin RVM to the user's desktop. The desktop shortcut points to the RVM and passes the url to the manifest hosted on the developer's server. The RVM notes that the manifest lists an app asset and that it doesn't exist on disk. The RVM downloads and extracts the app asset into a versioned folder under the OpenFin Application's directory.
+An end user installs the OpenFin Application and clicks on the desktop shortcut. The OpenFin installation has added the OpenFin RVM to the user's machine. The desktop shortcut points to the RVM and passes the url to the manifest hosted on the developer's server. The RVM notes that the manifest lists an app asset and that it doesn't exist on disk. The RVM downloads and extracts the app asset into a versioned folder under the OpenFin Application's directory.
 
 When the index.html page is loaded and requests the launch of the .NET app it already exists on disk and is launched.
 
@@ -57,7 +57,7 @@ The general recommendation is to only use app assets and launch external process
 
 Some companies have native applications that have been used for a number of years. These applications are rich in functionality but the goal is to move to HTML. How do you move to the Web while keeping a native experience in a manageable amount of time?
 
-If your application is portable then it can be packaged and versioned using app assets. With an app asset you can setup an OpenFin application that gets installed and when launched brings down and launches the native application. You can then migrate content to the web in a phased approach and have it loaded into OpenFin. Existing features are still available through the native app that was launched and any data/services that are required can be exposed to the OpenFin Application from the native app using the [Channel API](https://developers.openfin.co/of-docs/docs/channels) (you might decide to migrate the client side features first and expose your backend through your native application until you are ready to also move the backend). You can then chip away and move more and more of the UI to the web until the native app can become headless and kept around for any remaining services that are required. Eventually you may be able to remove the dependency on the app asset and have a pure OpenFin application.
+If your application can be copied to another machine and run without installation then it can be packaged and versioned using app assets. With an app asset you can setup an OpenFin application that gets installed and when launched downloads and launches the native application. You can then migrate content to the web in a phased approach and have it loaded into OpenFin. Existing features are still available through the native app that was launched and any data/services that are required can be exposed to the OpenFin Application from the native app using the [Channel API](https://developers.openfin.co/of-docs/docs/channels) (you might decide to migrate the client side features first and expose your backend through your native application until you are ready to also move the backend). You can then chip away and move more and more of the UI to the web until the native app can become headless and kept around for any remaining services that are required. Eventually you may be able to remove the dependency on the app asset and have a pure OpenFin application.
 
 ### SideCar / Helper Application
 
@@ -118,13 +118,13 @@ try {
    args: "a b c d"
   };
 
-  await fin.System.downloadAsset(appAsset, (progress => {
+  await fin.System.downloadAsset(appAsset, (progress) => {
    const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
    console.log(`Downloaded ${downloadedPercent}% of app asset.`);
-  }));
+  });
   console.log("App Asset is downloaded.");
  } catch(err) {
-  console.error("There has been an error when trying to fetch the app asset.". err);
+  console.error("There has been an error when trying to fetch the app asset.", err);
  }
 ```
 
@@ -134,14 +134,14 @@ If you already have this version of the app asset then the RVM will not re-fetch
 
 App assets are downloaded and extracted within your OpenFin application's folder. Using **myApp** as an example it would end up in the following location:
 
-> C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\4.12.8
+> `C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\4.12.8`
 
 #### Things to consider with App Assets
 
 There are a few things to consider with app assets:
 
-- Does your app need to write any files locally. If it does please note that the RVM will replace the versioned folder with a brand new versioned folder with the extracted zip contents. Locally written files will be removed. If you wish to persist files across installs then consider creating a directory one level above the exe e.g. C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\4.12.8 would store it's data in C:\Users\\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\\{YOUR_APPLICATION}\assets\myApp\data. Multiple versions could then check look for the data directory after an upgrade/install.
-- Portable applications work best in this scenario. Applications that do not need Admin rights or installation would mean they run without additional steps.
+- Does your app need to write any files locally. If it does please note that the RVM will replace the versioned folder with a brand new versioned folder with the extracted zip contents. Locally written files will be removed. If you wish to persist files across installs then consider creating a directory one level above the exe e.g. `C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\4.12.8` would store it's data in `C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\data`. Multiple versions could then check look for the data directory after an upgrade/install.
+- Applications that can be copied to a machine and run without installation work best in this scenario. Applications that do not need Admin rights or installation would mean they run without additional steps.
 - You may need to check with your client to see if they block zip files that contain binaries. If they do then you will need to ask to see if your site/domain can be added to an allow list.
 - Permissions - to be able to download an app asset you will need to request the downloadAsset permission details below.
 
@@ -191,7 +191,7 @@ There are additional settings you can specify when launching an app asset: [Open
 
 There are a few things to consider with launch external process and app assets:
 
-- Is the app asset portable/executable?
+- Is the app asset portable (can easily be copied to a machine and run without needing admin rights or requiring an install)?
 - What should be the lifetime of the asset you are launching? By specifying a lifetime, an external process can live as long the window/application that launched it or persist after the application exits. The default value is null, which is equivalent to 'persist', meaning the process lives on after the application exits. The alternatives are: 'application', 'window', 'persist'. Note: A process that exits when the window/application exits cannot be released via [fin.System.releaseExternalProcess](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.System.html#releaseExternalProcess).
 - You will need to add the relevant permissions and have those permissions accepted by the client (OpenFin have updated the permission model around launch external process so that you can make it a lot more granular and specific to your app assets).
 
@@ -276,4 +276,4 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 
 ## Examples
 
-We have aim to have examples that can be cloned and run locally and one example that covers the use case of a C# sidecar/helper app is required by an OpenFin application can be found here: [how to use a sidecar application - basic](https://github.com/built-on-openfin/csharp-starter/tree/main/how-to.v2/use-a-sidecar-app-basic).
+One example that covers the use case of a C# sidecar/helper app that is required by an OpenFin application can be found on our csharp-starter repo here: [how to use a sidecar application - basic](https://github.com/built-on-openfin/csharp-starter/tree/main/how-to.v2/use-a-sidecar-app-basic).
