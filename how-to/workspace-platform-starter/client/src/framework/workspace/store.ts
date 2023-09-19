@@ -641,7 +641,7 @@ async function updateAppFavoriteButtons(payload: FavoriteChangedLifecyclePayload
 					storeProviderOptions?.primaryButton,
 					storeProviderOptions?.secondaryButtons,
 					true,
-					favorite
+					payload.action === "set" ? favorite : undefined
 				)
 			});
 		} else {

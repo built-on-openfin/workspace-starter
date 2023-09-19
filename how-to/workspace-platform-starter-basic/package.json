@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter-basic",
-	"version": "14.0.21",
+	"version": "14.0.22",
 	"description": "OpenFin Workspace -- Workspace Platform Starter Basic",
 	"main": "index.js",
 	"scripts": {
@@ -15,8 +15,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "14.0.21",
-		"@openfin/workspace-platform": "14.0.21"
+		"@openfin/workspace": "14.0.22",
+		"@openfin/workspace-platform": "14.0.22"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",
