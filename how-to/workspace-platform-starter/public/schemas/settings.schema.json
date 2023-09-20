@@ -50,7 +50,7 @@
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_44"
+            "$ref": "#/definitions/__type_43"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -297,9 +297,6 @@
             ],
             "type": "object"
         },
-        "ApplicationIdentity": {
-            "$ref": "#/definitions/__type_33"
-        },
         "Array": {
             "items": {
                 "anyOf": [
@@ -458,7 +455,7 @@
                 },
                 "defaultWindowOptions": {
                     "$ref": "#/definitions/Partial",
-                    "description": "Default options for creating a new browser window. Any option not included in WorkspacePlatform.getCurrentSync().Browser.createWindow(options) call will default to the value provided in this field."
+                    "description": "Default options for creating a new Browser window. These options are not applied on any non-Browser windows that get created.  These default options will take precedence over\ndefaultWindowOptions included in the manifest.  Any option not included in WorkspacePlatform.getCurrentSync().Browser.createWindow(options) call will default to the value provided in this field."
                 },
                 "globalMenu": {
                     "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
@@ -544,6 +541,72 @@
             },
             "type": "object"
         },
+        "BrowserWorkspacePlatformWindowOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "disableMultiplePages": {
+                    "description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
+                    "type": "boolean"
+                },
+                "favicon": {
+                    "description": "The favicon to display on the top left of the created browser window.",
+                    "type": "string"
+                },
+                "isLocked": {
+                    "description": "When true, disables the ability to close pages, drag pages within the window,\nand drag pages into/out of the window. False by default.",
+                    "type": "boolean"
+                },
+                "newPageUrl": {
+                    "description": "Landing page that shows up when you add a new page from the plus button that exists in the window frame where the page selector is shown.\nIf you do not provide a newPageUrl, then the new Page plus button will not be shown and you cannot create a new empty Page or Window.",
+                    "type": "string"
+                },
+                "newTabUrl": {
+                    "description": "Landing page that shows up when you add a new tab from the plus button that exists in the tabstrip.\nIf you do not provide a newTabUrl, then the plus button in the tabstrip will not be shown and users cannot create a new empty tab.",
+                    "type": "string"
+                },
+                "pages": {
+                    "description": "The initial set of pages to add to the created browser window.",
+                    "items": {
+                        "$ref": "#/definitions/Page"
+                    },
+                    "type": "array"
+                },
+                "preventPageClose": {
+                    "description": "When true, disables the ability to close pages in the window. False by default.",
+                    "type": "boolean"
+                },
+                "preventPageDrag": {
+                    "description": "When true, page tabs in the window will not be draggable.\nThis includes reordering pages and dragging them out of the window.\nFalse by default.",
+                    "type": "boolean"
+                },
+                "preventPageDragIn": {
+                    "description": "When true, disables the ability to drag pages into the window. False by default.",
+                    "type": "boolean"
+                },
+                "preventPageDragOut": {
+                    "description": "When true, disables the ability to drag pages out of a window. False by default.",
+                    "type": "boolean"
+                },
+                "title": {
+                    "description": "A UI friendly title for the created browser window.",
+                    "type": "string"
+                },
+                "toolbarOptions": {
+                    "$ref": "#/definitions/ToolbarOptions"
+                },
+                "windowStateButtonOptions": {
+                    "$ref": "#/definitions/WindowStateButtonOptions"
+                },
+                "windowType": {
+                    "$ref": "#/definitions/WindowType",
+                    "description": "For internal usage.  Defaults to 'browser' when Browser is enabled when the WorkspacePlatform is initialized.  In order to use\nnon-Browser layout windows ('platform' windows) in a Browser-enabled workspace platform, set windowType to `platform`. In that instance, the other properties\nin the workspacePlatform object are not relevant."
+                }
+            },
+            "required": [
+                "pages"
+            ],
+            "type": "object"
+        },
         "CascadingWindowOffsetStrategy": {
             "additionalProperties": false,
             "description": "The cascading window strategy for positioning new windows.",
@@ -564,15 +627,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_43"
-        },
-        "ColorSchemeOption": {
-            "enum": [
-                "dark",
-                "light",
-                "system"
-            ],
-            "type": "string"
+            "$ref": "#/definitions/__type_42"
         },
         "ConditionsProviderOptions": {
             "$ref": "#/definitions/ModuleList_4",
@@ -695,7 +750,7 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_39"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_8"
@@ -1028,7 +1083,7 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_36"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1314,7 +1369,7 @@
             "type": "object"
         },
         "ExternalProcessRequestType": {
-            "$ref": "#/definitions/__type_41"
+            "$ref": "#/definitions/__type_40"
         },
         "FavoriteProviderOptions": {
             "additionalProperties": false,
@@ -1477,6 +1532,7 @@
                 "CloseWindow",
                 "Custom",
                 "DeleteWorkspace",
+                "Downloads",
                 "NewPage",
                 "NewWindow",
                 "OpenStorefront",
@@ -1746,7 +1802,7 @@
             "$ref": "#/definitions/__type_11"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_41"
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -2810,10 +2866,10 @@
             "type": "object"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_38"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_34"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -2827,39 +2883,9 @@
                     "description": "Unique identifier of the platform.",
                     "type": "string"
                 },
-                "scheme": {
-                    "$ref": "#/definitions/ColorSchemeOption",
-                    "description": "This is the scheme associated with this platform."
-                },
                 "title": {
                     "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",
                     "type": "string"
-                },
-                "workspacePlatform": {
-                    "additionalProperties": false,
-                    "description": "Workspace platform that registers this platform",
-                    "properties": {
-                        "analytics": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "isSupported": {
-                                    "type": "boolean"
-                                }
-                            },
-                            "required": [
-                                "isSupported"
-                            ],
-                            "type": "object"
-                        },
-                        "identity": {
-                            "$ref": "#/definitions/ApplicationIdentity"
-                        }
-                    },
-                    "required": [
-                        "analytics",
-                        "identity"
-                    ],
-                    "type": "object"
                 }
             },
             "required": [
@@ -3449,7 +3475,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_35"
         },
         "PreDefinedButtonConfig": {
             "additionalProperties": false,
@@ -3502,7 +3528,7 @@
             "$ref": "#/definitions/__type_6"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_37"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_10"
@@ -3540,7 +3566,7 @@
             "type": "object"
         },
         "Snapshot": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_33"
         },
         "SnapshotSourceConnection": {
             "additionalProperties": false,
@@ -4784,6 +4810,17 @@
             ],
             "type": "object"
         },
+        "WindowType": {
+            "enum": [
+                "browser",
+                "platform"
+            ],
+            "type": "string"
+        },
+        "WindowType.Platform": {
+            "const": "platform",
+            "type": "string"
+        },
         "WorkspacePlatformOptions": {
             "$ref": "#/definitions/__type_12"
         },
@@ -5111,67 +5148,25 @@
                     "type": "number"
                 },
                 "workspacePlatform": {
-                    "additionalProperties": false,
-                    "description": "WorkspacePlatform specific window options. These options will not work unless a workspace platform has been initialized.",
-                    "properties": {
-                        "disableMultiplePages": {
-                            "description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
-                            "type": "boolean"
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/BrowserWorkspacePlatformWindowOptions"
                         },
-                        "favicon": {
-                            "description": "The favicon to display on the top left of the created browser window.",
-                            "type": "string"
-                        },
-                        "isLocked": {
-                            "description": "When true, disables the ability to close pages, drag pages within the window,\nand drag pages into/out of the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "newPageUrl": {
-                            "description": "Landing page that shows up when you add a new page from the plus button that exists in the window frame where the page selector is shown.\nIf you do not provide a newPageUrl, then the new Page plus button will not be shown and you cannot create a new empty Page or Window.",
-                            "type": "string"
-                        },
-                        "newTabUrl": {
-                            "description": "Landing page that shows up when you add a new tab from the plus button that exists in the tabstrip.\nIf you do not provide a newTabUrl, then the plus button in the tabstrip will not be shown and users cannot create a new empty tab.",
-                            "type": "string"
-                        },
-                        "pages": {
-                            "description": "The initial set of pages to add to the created browser window.",
-                            "items": {
-                                "$ref": "#/definitions/Page"
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "windowType": {
+                                    "$ref": "#/definitions/WindowType.Platform",
+                                    "description": "For internal usage.  Defaults to 'browser' when Browser is enabled when the WorkspacePlatform is initialized.  In order to use\nnon-Browser layout windows ('platform' windows) in a Browser-enabled workspace platform, set windowType to `platform`. In that instance, the other properties\nin the workspacePlatform object are not relevant."
+                                }
                             },
-                            "type": "array"
-                        },
-                        "preventPageClose": {
-                            "description": "When true, disables the ability to close pages in the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDrag": {
-                            "description": "When true, page tabs in the window will not be draggable.\nThis includes reordering pages and dragging them out of the window.\nFalse by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDragIn": {
-                            "description": "When true, disables the ability to drag pages into the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDragOut": {
-                            "description": "When true, disables the ability to drag pages out of a window. False by default.",
-                            "type": "boolean"
-                        },
-                        "title": {
-                            "description": "A UI friendly title for the created browser window.",
-                            "type": "string"
-                        },
-                        "toolbarOptions": {
-                            "$ref": "#/definitions/ToolbarOptions"
-                        },
-                        "windowStateButtonOptions": {
-                            "$ref": "#/definitions/WindowStateButtonOptions"
+                            "required": [
+                                "windowType"
+                            ],
+                            "type": "object"
                         }
-                    },
-                    "required": [
-                        "pages"
                     ],
-                    "type": "object"
+                    "description": "WorkspacePlatform specific window options. These options will not work unless a workspace platform has been initialized."
                 },
                 "x": {
                     "type": "number"
@@ -6396,18 +6391,6 @@
         "__type_33": {
             "additionalProperties": false,
             "properties": {
-                "uuid": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "uuid"
-            ],
-            "type": "object"
-        },
-        "__type_34": {
-            "additionalProperties": false,
-            "properties": {
                 "interopSnapshotDetails": {
                     "additionalProperties": false,
                     "properties": {
@@ -6452,7 +6435,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -6549,7 +6532,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_35": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -6567,7 +6550,7 @@
             ],
             "type": "object"
         },
-        "__type_37": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -6583,7 +6566,7 @@
             ],
             "type": "object"
         },
-        "__type_38": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -6607,7 +6590,7 @@
             ],
             "type": "object"
         },
-        "__type_39": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -6665,25 +6648,7 @@
             ],
             "type": "object"
         },
-        "__type_4": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
-                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_40": {
+        "__type_39": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -6714,7 +6679,25 @@
             },
             "type": "object"
         },
-        "__type_41": {
+        "__type_4": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_40": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -6751,11 +6734,11 @@
             },
             "type": "object"
         },
-        "__type_42": {
+        "__type_41": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_43": {
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -6776,7 +6759,7 @@
             },
             "type": "object"
         },
-        "__type_44": {
+        "__type_43": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

@@ -1,2 +1,2 @@
 // Generated from package.json version at build time. Do not modify directly.
-export const PLATFORM_VERSION = "14.0.22";
+export const PLATFORM_VERSION = "14.1.1";

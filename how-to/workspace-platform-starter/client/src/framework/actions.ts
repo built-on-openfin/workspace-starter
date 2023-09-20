@@ -217,15 +217,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (currentToolbarOptions) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (currentToolbarOptions) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 
@@ -233,15 +236,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};
@@ -251,15 +257,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};

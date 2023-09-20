@@ -107,33 +107,35 @@ export async function updateBrowserWindowButtonsColorScheme(
 ): Promise<void> {
 	if (configToolbarButtons) {
 		const options = await browserWindow.openfinWindow.getOptions();
-		const currentToolbarButtons = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions
-			?.buttons;
+		const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+		if (createRequest.workspacePlatform.windowType !== "platform") {
+			const currentToolbarButtons = createRequest.workspacePlatform.toolbarOptions?.buttons;
 
-		if (Array.isArray(currentToolbarButtons)) {
-			const updatedButtons = [];
-			const iconFolder = await getCurrentIconFolder();
-			const colorSchemeMode = await getCurrentColorSchemeMode();
+			if (Array.isArray(currentToolbarButtons)) {
+				const updatedButtons = [];
+				const iconFolder = await getCurrentIconFolder();
+				const colorSchemeMode = await getCurrentColorSchemeMode();
 
-			for (const button of currentToolbarButtons) {
-				if (button.type === BrowserButtonType.Custom) {
-					const buttonId = (button as CustomBrowserButtonConfig).action?.id;
-					if (buttonId) {
-						// Find the original button from config so that we can use the original
-						// iconUrl with any schema placeholders
-						const originalButton = configToolbarButtons.find(
-							(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
-						);
-						const btn = originalButton?.button as CustomButtonConfig;
-						if (btn?.iconUrl) {
-							button.iconUrl = themeUrl(btn.iconUrl, iconFolder, colorSchemeMode);
+				for (const button of currentToolbarButtons) {
+					if (button.type === BrowserButtonType.Custom) {
+						const buttonId = (button as CustomBrowserButtonConfig).action?.id;
+						if (buttonId) {
+							// Find the original button from config so that we can use the original
+							// iconUrl with any schema placeholders
+							const originalButton = configToolbarButtons.find(
+								(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
+							);
+							const btn = originalButton?.button as CustomButtonConfig;
+							if (btn?.iconUrl) {
+								button.iconUrl = themeUrl(btn.iconUrl, iconFolder, colorSchemeMode);
+							}
 						}
 					}
+					updatedButtons.push(button);
 				}
-				updatedButtons.push(button);
-			}
 
-			await browserWindow.replaceToolbarOptions({ buttons: updatedButtons });
+				await browserWindow.replaceToolbarOptions({ buttons: updatedButtons });
+			}
 		}
 	}
 }

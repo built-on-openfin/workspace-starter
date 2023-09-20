@@ -54,16 +54,18 @@ export class IncludeInSnapshotActionsProvider implements Actions {
 				this._logger?.info("Including in snapshot", payload.windowIdentity);
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
-				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
-					.toolbarOptions;
-				await browserWindow.openfinWindow.updateOptions({ includeInSnapshots: true });
-				if (!isEmpty(currentToolbarOptions) && this._helpers?.updateToolbarButtons) {
-					const newButtons = await this._helpers.updateToolbarButtons(
-						currentToolbarOptions.buttons,
-						payload.customData.sourceId as string,
-						payload.customData.replacementId as string
-					);
-					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+				if (createRequest.workspacePlatform.windowType !== "platform") {
+					const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+					await browserWindow.openfinWindow.updateOptions({ includeInSnapshots: true });
+					if (!isEmpty(currentToolbarOptions) && this._helpers?.updateToolbarButtons) {
+						const newButtons = await this._helpers.updateToolbarButtons(
+							currentToolbarOptions.buttons,
+							payload.customData.sourceId as string,
+							payload.customData.replacementId as string
+						);
+						await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+					}
 				}
 			}
 		};
@@ -73,16 +75,18 @@ export class IncludeInSnapshotActionsProvider implements Actions {
 				this._logger?.info("Removing from snapshot", payload.windowIdentity);
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
-				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
-					.toolbarOptions;
-				await browserWindow.openfinWindow.updateOptions({ includeInSnapshots: false });
-				if (!isEmpty(currentToolbarOptions) && this._helpers?.updateToolbarButtons) {
-					const newButtons = await this._helpers.updateToolbarButtons(
-						currentToolbarOptions.buttons,
-						payload.customData.sourceId as string,
-						payload.customData.replacementId as string
-					);
-					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+				if (createRequest.workspacePlatform.windowType !== "platform") {
+					const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+					await browserWindow.openfinWindow.updateOptions({ includeInSnapshots: false });
+					if (!isEmpty(currentToolbarOptions) && this._helpers?.updateToolbarButtons) {
+						const newButtons = await this._helpers.updateToolbarButtons(
+							currentToolbarOptions.buttons,
+							payload.customData.sourceId as string,
+							payload.customData.replacementId as string
+						);
+						await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+					}
 				}
 			}
 		};

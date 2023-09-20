@@ -1,13 +1,5 @@
 import type { RegistrationMetaInfo } from "@openfin/workspace";
-import {
-	VERSION,
-	deregister as deregisterPlatform,
-	hide as hideNotifications,
-	provider,
-	register as registerPlatform,
-	show as showNotifications,
-	type ShowOptions
-} from "@openfin/workspace/notifications";
+import * as Notifications from "@openfin/workspace/notifications";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
 import type { NotificationProviderOptions } from "../shapes/notification-shapes";
@@ -31,10 +23,10 @@ export async function register(
 		notificationsProviderOptions = options;
 		logger.info("Gathering notification center status and version.");
 
-		const providerStatus = await provider.getStatus();
+		const providerStatus = await Notifications.provider.getStatus();
 		metaInfo = {
 			workspaceVersion: providerStatus.version ?? "",
-			clientAPIVersion: VERSION
+			clientAPIVersion: Notifications.VERSION
 		};
 
 		logger.info("Versioning information collected.", metaInfo);
@@ -45,7 +37,7 @@ export async function register(
 			const notificationPlatformSettings = settings?.notificationProvider;
 			if (!isEmpty(notificationPlatformSettings)) {
 				// use a promise.then instead of await as we do not want to delay the start up of the platform
-				registerPlatform(notificationPlatformSettings)
+				Notifications.register({ notificationsPlatformOptions: notificationPlatformSettings })
 					.then(() => {
 						notificationsRegistered = true;
 						logger.info("Registered notifications");
@@ -76,7 +68,7 @@ export async function deregister(): Promise<void> {
 		if (!isEmpty(notificationsProviderOptions)) {
 			logger.info("Deregister platform from notifications");
 			try {
-				await deregisterPlatform(notificationsProviderOptions.id);
+				await Notifications.deregister(notificationsProviderOptions.id);
 			} catch (error) {
 				logger.error("Unable to deregister platform from notifications.", error);
 			}
@@ -94,9 +86,9 @@ export async function deregister(): Promise<void> {
  * @param options The options for showing.
  * @returns Nothing.
  */
-export async function show(options?: ShowOptions): Promise<void> {
+export async function show(options?: Notifications.ShowOptions): Promise<void> {
 	logger.info("Show Notifications called.");
-	return showNotifications(options);
+	return Notifications.show(options);
 }
 
 /**
@@ -105,5 +97,5 @@ export async function show(options?: ShowOptions): Promise<void> {
  */
 export async function hide(): Promise<void> {
 	logger.info("Hide Notifications called.");
-	return hideNotifications();
+	return Notifications.hide();
 }

@@ -13,11 +13,7 @@ import {
 	type BrowserWindowModule,
 	type Page
 } from "@openfin/workspace-platform";
-import {
-	addEventListener as addNotificationEventListener,
-	create as createNotification,
-	type NotificationActionEvent
-} from "@openfin/workspace/notifications";
+import * as Notifications from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
 import {
 	CHANNEL_ACTIONS,
@@ -105,15 +101,18 @@ export class RssIntegration {
 			);
 			await this.updateFeeds();
 
-			addNotificationEventListener("notification-action", async (event: NotificationActionEvent) => {
-				if (event?.result.action === "view-entry") {
-					const payload: {
-						feed: Omit<RssFeedCache, "entries">;
-						entry: RssFeedCacheEntry;
-					} = event.result.payload;
-					await this.launchFeedOrEntry(payload.feed, payload.entry);
+			await Notifications.addEventListener(
+				"notification-action",
+				async (event: Notifications.NotificationActionEvent) => {
+					if (event?.result.action === "view-entry") {
+						const payload: {
+							feed: Omit<RssFeedCache, "entries">;
+							entry: RssFeedCacheEntry;
+						} = event.result.payload;
+						await this.launchFeedOrEntry(payload.feed, payload.entry);
+					}
 				}
-			});
+			);
 
 			this._channelProvider = await fin.InterApplicationBus.Channel.create(RSS_APP_CHANNEL_NAME);
 
@@ -356,7 +355,7 @@ export class RssIntegration {
 		feed: RssFeedCache,
 		feedEntry: RssFeedCacheEntry
 	): Promise<void> {
-		await createNotification({
+		await Notifications.create({
 			title: feed.title,
 			body:
 				type === "update"

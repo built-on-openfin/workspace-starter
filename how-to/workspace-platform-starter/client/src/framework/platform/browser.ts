@@ -32,7 +32,7 @@ export async function getDefaultWindowOptions(
 		};
 	}
 
-	if (wsPlatform) {
+	if (wsPlatform && wsPlatform.windowType !== "platform") {
 		// start backwards compatibility
 		if (isStringValue(legacyWindowOptions.title) && !isStringValue(wsPlatform.title)) {
 			wsPlatform.title = legacyWindowOptions.title;
@@ -51,6 +51,7 @@ export async function getDefaultWindowOptions(
 		}
 
 		if (
+			defaultWindowOptions?.workspacePlatform?.windowType !== "platform" &&
 			isStringValue(defaultWindowOptions?.icon) &&
 			!isStringValue(defaultWindowOptions?.workspacePlatform?.favicon)
 		) {

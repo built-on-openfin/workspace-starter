@@ -1,4 +1,4 @@
-import { registerPlatform, type RegistrationMetaInfo } from "@openfin/workspace/notifications";
+import * as Notifications from "@openfin/workspace/notifications";
 import type { PlatformSettings } from "./shapes";
 
 /**
@@ -8,12 +8,12 @@ import type { PlatformSettings } from "./shapes";
  */
 export async function register(
 	platformSettings: PlatformSettings
-): Promise<RegistrationMetaInfo | undefined> {
+): Promise<Notifications.NotificationsRegistration | undefined> {
 	console.log("Initializing the notification provider.");
 
 	try {
-		const metaInfo = await registerPlatform({
-			...platformSettings
+		const metaInfo = await Notifications.register({
+			notificationsPlatformOptions: platformSettings
 		});
 		console.log(metaInfo);
 		console.log("Notification provider initialized.");
