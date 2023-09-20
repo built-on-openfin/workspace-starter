@@ -1,11 +1,15 @@
 import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
+import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
+import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
 import type { PlatformApp } from "./shapes";
+import type { FavoriteClient } from "./shapes/favorite-shapes";
+
 import type {
 	Module,
 	ModuleDefinition,
@@ -155,6 +159,7 @@ export async function loadModule<
  * Initialize modules of the given type.
  * @param moduleEntries The type of modules to initialize.
  * @param helpers Helper methods to pass to all the modules.
+ * @param progress Progress callback for monitor module initialization.
  * @returns The list of initialized modules.
  */
 export async function initializeModules<
@@ -162,8 +167,15 @@ export async function initializeModules<
 	H = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
->(moduleEntries: ModuleEntry<M, H, O, D>[], helpers: H): Promise<void> {
+>(
+	moduleEntries: ModuleEntry<M, H, O, D>[],
+	helpers: H,
+	progress?: (definition: ModuleDefinition) => Promise<void>
+): Promise<void> {
 	for (const moduleEntry of moduleEntries) {
+		if (progress) {
+			await progress(moduleEntry.definition);
+		}
 		await initializeModule<M, H, O, D>(moduleEntry, helpers);
 	}
 }
@@ -248,12 +260,14 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
 		},
+		getApp,
 		getCurrentThemeId,
 		getCurrentIconFolder,
 		getCurrentPalette,
 		getCurrentColorSchemeMode,
 		getVersionInfo,
 		getInteropClient,
+		getFavoriteClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -267,7 +281,8 @@ export function getDefaultHelpers(): ModuleHelpers {
 		},
 		launchPage,
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent
+		unsubscribeLifecycleEvent,
+		showPopupMenu
 	};
 }
 
@@ -285,4 +300,19 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
 	logger.warn(
 		"A request was made for the interop client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
 	);
+}
+
+/**
+ * Get the favorite client to use with the modules.
+ * @returns The favorite client.
+ */
+async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
+	if (!favoriteProvider.getInfo().isEnabled) {
+		logger.warn(
+			"A request was made for the favorite client but favorites is not configured for this platform."
+		);
+		return undefined;
+	}
+	// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
+	return favoriteProvider;
 }

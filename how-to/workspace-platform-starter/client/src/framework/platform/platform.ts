@@ -11,6 +11,7 @@ import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as endpointProvider from "../endpoint";
+import * as favoriteProvider from "../favorite";
 import * as initOptionsProvider from "../init-options";
 import * as lifecycleProvider from "../lifecycle";
 import * as loggerProvider from "../logger-provider";
@@ -26,6 +27,7 @@ import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations"
 import { getDefaultWindowOptions } from "./browser";
 import { interopOverride } from "./interopbroker";
 import { overrideCallback } from "./platform-override";
+import * as platformSplashProvider from "./platform-splash";
 import { PLATFORM_VERSION } from "./platform-version";
 
 const logger = loggerProvider.createLogger("Platform");
@@ -35,6 +37,8 @@ const logger = loggerProvider.createLogger("Platform");
  * @returns True if the platform was initialized.
  */
 export async function init(): Promise<boolean> {
+	await platformSplashProvider.updateProgress("Platform");
+
 	const customSettings = await getManifestCustomSettings();
 
 	const isValid = await authFlow.init(
@@ -63,6 +67,8 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	// and notify any actions with the after auth lifecycle
 	await modules.init(randomUUID());
 
+	await platformSplashProvider.updateProgress("Init Options");
+
 	const helpers: ModuleHelpers = modules.getDefaultHelpers();
 
 	await initOptionsProvider.init(manifestSettings?.initOptionsProvider, helpers, "after-auth");
@@ -70,11 +76,17 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	// We reload the settings now that endpoints have been configured.
 	const customSettings: CustomSettings = await getSettings();
 
+	await platformSplashProvider.updateProgress("Logger");
+
 	await loggerProvider.init(customSettings?.loggerProvider, helpers);
 
 	logger.info("Initializing Core Services");
 
+	await platformSplashProvider.updateProgress("Endpoints");
+
 	await endpointProvider.init(customSettings?.endpointProvider, helpers);
+
+	await platformSplashProvider.updateProgress("Versioning");
 
 	const runtimeVersion = await fin.System.getVersion();
 
@@ -88,10 +100,19 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	}
 	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
+	await platformSplashProvider.updateProgress("Connections");
 	await connectionProvider.init(customSettings?.connectionProvider);
-	await menusProvider.init(customSettings?.menusProvider, helpers);
+
+	await platformSplashProvider.updateProgress("Menus");
+	await menusProvider.init(customSettings?.menusProvider, helpers, customSettings?.platformProvider?.rootUrl);
+
+	await platformSplashProvider.updateProgress("Analytics");
 	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);
+
+	await platformSplashProvider.updateProgress("Apps");
 	await appProvider.init(customSettings?.appProvider, endpointProvider);
+
+	await platformSplashProvider.updateProgress("Conditions");
 	await conditionsProvider.init(customSettings?.conditionsProvider, helpers);
 	conditionsProvider.registerCondition(
 		"authenticated",
@@ -101,9 +122,23 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	conditionsProvider.registerCondition("sharing", async () => shareProvider.isShareEnabled(), false);
 	conditionsProvider.registerCondition("themed", async () => supportsColorSchemes(), false);
 
+	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	await shareProvider.init({ enabled: customSettings.platformProvider?.sharing ?? true });
+	const sharingEnabled = customSettings.platformProvider?.sharing ?? true;
+	if (sharingEnabled) {
+		await platformSplashProvider.updateProgress("Sharing");
+		await shareProvider.init({ enabled: sharingEnabled });
+	}
+
+	if (!isEmpty(customSettings?.favoriteProvider) && (customSettings?.favoriteProvider.enabled ?? true)) {
+		await platformSplashProvider.updateProgress("Favorites");
+		await favoriteProvider.init(
+			customSettings?.favoriteProvider,
+			await versionProvider.getVersionInfo(),
+			endpointProvider
+		);
+	}
 
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
@@ -120,9 +155,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	logger.info("Specifying following browser options", browser);
 
-	await actionsProvider.init(customSettings?.actionsProvider, helpers);
-
-	const customActions = await actionsProvider.getActions();
+	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
 	const theme = await getThemes();
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
@@ -146,7 +179,8 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 				customSettings?.platformProvider,
 				await versionProvider.getVersionInfo()
 			),
-		integrations
+		integrations,
+		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});
 	return true;
 }

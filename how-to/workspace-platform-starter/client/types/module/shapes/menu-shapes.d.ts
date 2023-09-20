@@ -1,5 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type {
+	ContextMenuItemData,
 	CustomActionSpecifier,
 	GlobalContextMenuItemTemplate,
 	GlobalContextMenuOptionType,
@@ -13,7 +14,23 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
 /**
  * A list of modules that provide menu for different locations.
  */
-export type MenusProviderOptions = ModuleList;
+export interface MenusProviderOptions extends ModuleList {
+	/**
+	 * The location of the HTML to use for custom popup page.
+	 * defaults to http://localhost:8080/common/popups/menu/index.html
+	 */
+	popupHtml?: string;
+	/**
+	 * The width to display the custom popup menu.
+	 * defaults to 200
+	 */
+	menuWidth?: number;
+	/**
+	 * The height of an item in the custom popup menu.
+	 * defaults to 32.
+	 */
+	menuItemHeight?: number;
+}
 /**
  * The module definition for menus.
  */
@@ -112,12 +129,40 @@ export interface MenuEntry<T = unknown> extends MenuEntryDynamic<T> {
 	separator?: MenuSeparatorPosition;
 }
 /**
+ * Custom menu type for tray menus.
+ */
+export interface TrayMenuData extends ContextMenuItemData {
+	/**
+	 * Option types for tray.
+	 */
+	type: TrayMenuOptionType;
+}
+/**
+ * Tray context menu types.
+ */
+export declare enum TrayMenuOptionType {
+	/**
+	 * Custom tray menu entry item.
+	 */
+	Custom = "Custom"
+}
+/**
+ * Custom menu template for tray menus.
+ */
+export interface TrayContextMenuTemplate extends OpenFin.MenuItemTemplate {
+	/**
+	 * The tray item data.
+	 */
+	data?: TrayMenuData;
+}
+/**
  * All the types of menu template.
  */
 export type MenuTemplateType =
 	| GlobalContextMenuItemTemplate
 	| PageTabContextMenuItemTemplate
-	| ViewTabContextMenuTemplate;
+	| ViewTabContextMenuTemplate
+	| TrayContextMenuTemplate;
 /**
  * Which options belong to each menu type.
  */
@@ -125,4 +170,6 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	? GlobalContextMenuOptionType
 	: T extends PageTabContextMenuItemTemplate
 	? PageTabContextMenuOptionType
-	: ViewTabMenuOptionType;
+	: T extends ViewTabContextMenuTemplate
+	? ViewTabMenuOptionType
+	: TrayMenuOptionType;

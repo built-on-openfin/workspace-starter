@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RELEASE_BRANCH_PREFIX: 'workspace/'
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,8 +21,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
 
       - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
       - name: Build packages

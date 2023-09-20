@@ -11,10 +11,12 @@ import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
+import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
 import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import * as trayProvider from "./tray";
 import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
@@ -27,18 +29,6 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
-
-/**
- * Used to register home related actions.
- */
-function registerHomeSupportedActions(): void {
-	registerAction("show-home", async () => {
-		await homeComponent.show();
-	});
-	registerAction("hide-home", async () => {
-		await homeComponent.hide();
-	});
-}
 
 /**
  * Bootstrap the workspace components.
@@ -65,7 +55,19 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo | undefined;
 	let notificationMetaInfo: RegistrationMetaInfo | undefined;
 
+	await platformSplashProvider.updateProgress("Integrations");
+	logger.info("Registering integrations");
+	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
+		if (homeRegistration?.setSearchQuery) {
+			await homeRegistration?.setSearchQuery(query);
+		} else {
+			logger.warn("Home registration setSearchQuery called by integration, but it is not available");
+		}
+	});
+
 	if (bootstrapOptions.home) {
+		await platformSplashProvider.updateProgress("Home");
+
 		// only register search logic once workspace is running
 		homeRegistration = await homeComponent.register(customSettings.homeProvider);
 		if (homeRegistration) {
@@ -78,38 +80,29 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
-	logger.info("Registering integrations");
-	await registerIntegration(customSettings.integrationProvider, moduleHelpers, homeRegistration);
-
 	if (bootstrapOptions.store) {
+		await platformSplashProvider.updateProgress("Store");
+
 		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
 		if (storeRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = storeRegistration;
 			}
 			registeredComponents.push("store");
-			registerAction("show-store", async () => {
-				await storeComponent.show();
-			});
-			registerAction("hide-store", async () => {
-				await storeComponent.hide();
-			});
+			registerStoreSupportedActions();
 		}
 	}
 
 	if (bootstrapOptions.dock) {
+		await platformSplashProvider.updateProgress("Dock");
+
 		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
 		if (dockRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = dockRegistration;
 			}
 			registeredComponents.push("dock");
-			registerAction("show-dock", async () => {
-				await dockComponent.show();
-			});
-			registerAction("minimize-dock", async () => {
-				await dockComponent.minimize();
-			});
+			registerDockSupportedActions();
 		}
 	}
 
@@ -121,13 +114,10 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.notifications) {
+		await platformSplashProvider.updateProgress("Notifications");
+
 		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
-		registerAction("show-notifications", async () => {
-			await notificationsComponent.show();
-		});
-		registerAction("hide-notifications", async () => {
-			await notificationsComponent.hide();
-		});
+		registerNotificationSupportedActions();
 	}
 
 	if (!isEmpty(notificationMetaInfo)) {
@@ -150,6 +140,8 @@ export async function init(): Promise<boolean> {
 		await analyticsProvider.handleAnalytics([analyticsEvent]);
 	}
 
+	await platformSplashProvider.updateProgress("Versions");
+
 	logger.info("Checking to see if version management is required.");
 	if (await versionProvider.manageVersionStatus(versionStatus)) {
 		// version status had to be managed so it couldn't just continue. Stop initialization.
@@ -160,6 +152,8 @@ export async function init(): Promise<boolean> {
 
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
+
+	await platformSplashProvider.updateProgress("Low Code Integrations");
 
 	// register any instantiated low code integrations that require registering
 	await lowCodeIntegrationProvider.initializeWorkflows();
@@ -191,6 +185,11 @@ export async function init(): Promise<boolean> {
 		} else if (autoShow === "dock") {
 			await dockComponent.show();
 		}
+	}
+
+	if (!isEmpty(customSettings?.trayProvider) && customSettings.trayProvider.enabled) {
+		await platformSplashProvider.updateProgress("Tray");
+		await trayProvider.init(customSettings?.trayProvider);
 	}
 
 	const platform = getCurrentSync();
@@ -244,6 +243,7 @@ export async function init(): Promise<boolean> {
 async function autoStartApps(): Promise<void> {
 	const apps = await getApps({ autostart: true });
 	if (Array.isArray(apps) && apps.length > 0) {
+		await platformSplashProvider.updateProgress("Auto Start Apps");
 		logger.info(
 			`Apps have been marked that they should autostart after the bootstrapping process and the platform has not set autostartApps to false in the bootstrapping options. ${apps.length} app(s) will be launched.`
 		);
@@ -285,4 +285,52 @@ async function deregister(): Promise<void> {
 		logger.info("Finished deregister.");
 		deregistered = true;
 	}
+}
+
+/**
+ * Used to register home related actions.
+ */
+function registerHomeSupportedActions(): void {
+	registerAction("show-home", async () => {
+		await homeComponent.show();
+	});
+	registerAction("hide-home", async () => {
+		await homeComponent.hide();
+	});
+}
+
+/**
+ * Used to register store related actions.
+ */
+function registerStoreSupportedActions(): void {
+	registerAction("show-store", async () => {
+		await storeComponent.show();
+	});
+	registerAction("hide-store", async () => {
+		await storeComponent.hide();
+	});
+}
+
+/**
+ * Used to register dock related actions.
+ */
+function registerDockSupportedActions(): void {
+	registerAction("show-dock", async () => {
+		await dockComponent.show();
+	});
+	registerAction("minimize-dock", async () => {
+		await dockComponent.minimize();
+	});
+}
+
+/**
+ * Used to register notification related actions.
+ */
+function registerNotificationSupportedActions(): void {
+	registerAction("show-notifications", async () => {
+		await notificationsComponent.show();
+	});
+	registerAction("hide-notifications", async () => {
+		await notificationsComponent.hide();
+	});
 }

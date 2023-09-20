@@ -1,7 +1,6 @@
 ![OpenFin Workspace Example Application -- Customizing Home Search Result Templates Via API](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-> OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 # Customize Home Templates
 
@@ -16,7 +15,7 @@ To run this sample you can:
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 - Launch the Github hosted version of this sample to interact with it by going to the following link:
 
-[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv13.1.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
+[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv14.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -26,7 +25,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 13.1.8 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 14.0.22 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -105,6 +104,8 @@ The contacts commands demonstrate different approaches to retrieving data.
 
 - **/error** Demonstrates how to use the built-in error template to show an error result with a reload button, and then replace the result when it is no longer needed or reloaded.
 
+- **desserts** Demonstrates using returning suggestions and handling the isSuggestion flag.
+
 e.g.
 
 ```shell
@@ -121,6 +122,7 @@ chad
 dock
 /loading
 /error
+desserts
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)

@@ -5,10 +5,9 @@ import type {
 	HomeDispatchedSearchResult,
 	HomeSearchListenerResponse,
 	HomeSearchResponse,
-	HomeSearchResult,
-	Page
+	HomeSearchResult
 } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -110,13 +109,12 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		this._definition = definition;
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent(
+			this._integrationHelpers.subscribeLifecycleEvent<PageChangedLifecyclePayload>(
 				"page-changed",
-				async (platform: WorkspacePlatformModule, unknownPayload: unknown): Promise<void> => {
-					const payload = unknownPayload as PageChangedLifecyclePayload;
-					if (payload.action === "create") {
+				async (platform: WorkspacePlatformModule, payload?: PageChangedLifecyclePayload): Promise<void> => {
+					if (payload?.action === "create") {
 						await this.rebuildResults(platform);
-					} else if (payload.action === "update") {
+					} else if (payload?.action === "update") {
 						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
 						if (lastResult && payload.page) {
 							lastResult.title = payload.page.title;
@@ -124,7 +122,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (payload.action === "delete") {
+					} else if (payload?.action === "delete") {
 						this.resultRemove(payload.id);
 					}
 				}
@@ -154,6 +152,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -163,6 +162,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		let pageResults: HomeSearchResult[] = [];
@@ -210,7 +210,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 					if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
 						const platform = this._integrationHelpers.getPlatform();
 						const pageToLaunch = await platform.Storage.getPage(data.pageId);
-						await this._integrationHelpers.launchPage(pageToLaunch);
+						await this._integrationHelpers.launchPage(pageToLaunch, undefined, this._logger);
 					}
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
 					if (this._integrationHelpers?.getPlatform) {

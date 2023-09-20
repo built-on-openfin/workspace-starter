@@ -75,15 +75,35 @@ async function initializeWorkspaceComponents(
 ): Promise<void> {
 	console.log("Initializing the bootstrapper");
 
+	const apps: App[] = [];
+
+	if (customSettings?.appsUrl) {
+		try {
+			const urlAppsResponse = await fetch(customSettings?.appsUrl);
+			if (urlAppsResponse.ok) {
+				const urlAppsJson = await urlAppsResponse.json();
+				if (Array.isArray(urlAppsJson)) {
+					apps.push(...urlAppsJson);
+				}
+			}
+		} catch (err) {
+			console.error(`Failed loading apps from ${customSettings?.appsUrl}`, err);
+		}
+	}
+
+	if (customSettings?.apps && Array.isArray(customSettings.apps)) {
+		apps.push(...customSettings.apps);
+	}
+
 	// Register with home and show it
-	await registerHome(platformSettings, customSettings?.apps);
+	await registerHome(platformSettings, apps);
 	await Home.show();
 
 	// Register with store
-	await registerStore(platformSettings, customSettings?.apps);
+	await registerStore(platformSettings, apps);
 
 	// Register with dock
-	await registerDock(platformSettings, customSettings?.apps);
+	await registerDock(platformSettings, apps);
 
 	// Register with notifications
 	await registerNotifications(platformSettings);

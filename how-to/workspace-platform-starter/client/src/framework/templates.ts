@@ -324,13 +324,15 @@ export async function createLink(
  * @param icon The icon for the template.
  * @param bodyFragments The fragments to go in the body.
  * @param buttons The buttons for the footer.
+ * @param headerButtons Icons buttons which can be display in the title.
  * @returns The layout fragment.
  */
 export async function createLayout(
 	title: string,
 	icon: string | undefined,
 	bodyFragments: TemplateFragment[],
-	buttons?: { title: string; action: string }[]
+	buttons?: { title: string; action: string }[],
+	headerButtons?: { icon: string; action: string }[]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
 	const palette = await getCurrentPalette();
@@ -348,7 +350,31 @@ export async function createLayout(
 		);
 		additionalData.icon = icon;
 	}
-	header.push(await createTitle("title"));
+	header.push(await createTitle("title", undefined, undefined, { flex: "1" }));
+
+	if (Array.isArray(headerButtons)) {
+		for (let i = 0; i < headerButtons.length; i++) {
+			header.push(
+				await createButton(
+					ButtonStyle.Primary,
+					"",
+					headerButtons[i].action,
+					{
+						background: "none",
+						border: 0,
+						padding: 0
+					},
+					[
+						await createImage(`headerButtonIcon${i}`, "", {
+							width: "16px",
+							height: "16px"
+						})
+					]
+				)
+			);
+			additionalData[`headerButtonIcon${i}`] = headerButtons[i].icon;
+		}
+	}
 
 	const buttonsFragments: TemplateFragment[] = [];
 	if (Array.isArray(buttons)) {
@@ -392,12 +418,14 @@ export async function createLayout(
  * @param app The app to create the template for.
  * @param appIcon The icon for the app.
  * @param action The action to launch the app.
+ * @param headerButtons Icons buttons which can be display in the title.
  * @returns The app fragment.
  */
 export async function createApp(
 	app: PlatformApp,
 	appIcon: string,
-	action: string
+	action: string,
+	headerButtons?: { icon: string; action: string }[]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ layout: PlainContainerTemplateFragment; data: any }> {
 	const palette = await getCurrentPalette();
@@ -418,7 +446,7 @@ export async function createApp(
 		additionalData.screenshot = app.images[0].src;
 	}
 
-	const layoutData = await createLayout(app.title, appIcon, body, [{ title: action, action }]);
+	const layoutData = await createLayout(app.title, appIcon, body, [{ title: action, action }], headerButtons);
 
 	return {
 		layout: layoutData.layout,

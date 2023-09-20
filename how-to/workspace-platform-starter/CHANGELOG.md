@@ -1,5 +1,39 @@
 # Changelog
 
+## v14
+
+- Added customizable splash screen (splashScreenProvider in settings)
+- Apps are refreshed based on the cache interval, if they change then the lifecycle event `apps-changed` is fired
+- Dock component subscribes to `apps-changed` lifecycle event and updates any dock based on their tagged apps
+- LaunchPage helper logic centralized for home, menus, dynamic dock and share
+- LaunchPage helper will always activate page if it already exists, unless `createCopyIfExists` is set
+- Added dynamic dock menu module which shows pages, this example module demonstrates how to use the `showPopupWindow` API
+- Added additional option for integration getSearchEntries `isSuggestion` to notify when the query was from a suggestion
+- Composite module for pages the `page-show` action has been removed, as this is now handled by the centralized launchPage logic
+- Composite module for pages now sorts the page name in the menu
+- BREAKING CHANGE: LaunchPage helper second parameter has changed from bounds to options containing bounds
+- Fix If the manifest comes from the same hostname as the provider.html/shell.html (the main entry page for the platform) then it is an acceptable host. If the manifest is coming from a different host then the manifest-hosts.json file needs to include it.
+- Fix: Composite Windows Module update. The Show All Windows, Hide All Windows, Hide Other Windows function update. From v32 of the OpenFin runtime the window isShowing() function returns true if it is on a desktop but false if a window is minimized (for consistency with Electron's approach). This means that our check to see if there are windows to minimize or show in the main browser menu and dock window needs to check isShowing() and if it isn't showing it checks the window state to see if it is minimized. Other places where isShowing is used (broker for taking screenshots of a window/view for an intent instance picker) and the platform override for places launched windows work against currently visible windows (so minimized and hidden windows should not be considered).
+- Added: OIDC Auth provider example module
+- Fixed: Auth modules initialized only if at least one is enabled
+- Fixed: When Toolbar buttons in browserProvider are undefined we maintain this state instead of returning empty array, so that default platform buttons are used.
+- Added framework support for the concept of favorites. The introduction of a favoriteProvider has been added to the settings which let you specify settings that aid in support of favorites (if not provided it is assumed that favorites is not enabled for the platform). This provider needs 4 endpoints to be defined: favorite-list, favorite-get, favorite-set and favorite-remove. The generated favorite shapes type provides types starting with Endpoint to help build the endpoint module and know the expected shape.
+- Added appProviderOptions `cacheRetrievalStrategy`, defaults to `on-demand`
+  - `on-demand` validates/updates the cache every time the list of apps is requested (will reduce requests to app endpoints when app is idle)
+  - `interval` validates/updates the cache on a timer based on the cache duration (will make more requests to app endpoints)
+- Added trayProvider which will show a tray icon, lets you customize the icon, activation button and menu entries
+- Added an example endpoint module: favorites-local-storage with a README showing how it can be wired up if you wanted to looking at using he favoriteClient from a module you are building.
+- Added apps in Home can now be favorited, you can see all your favorite apps with the `/fav` command
+- Added Store also supports the favorites functionality with secondary app buttons, this can be disabled for store by setting `StorefrontProviderOptions.favoritesEnabled` to false
+- Added Favorites conditions for `favorites`, `favorites-app`, `favorites-workspace`, `favorites-page`, `favorites-query`
+- Added dock buttons now support conditions to determine if they should be shown
+- Added example favorites actions module which shows a popup menu
+- Fixed checking condition triggered exception when condition did not exist
+- Added Module helpers showPopupMenu for common functionality
+- Added conditions now support passing `callerType`and `context`
+- Added `include-in-snapshot` composite module which has both actions and conditions to display browser toolbar buttons which can control if a window is included in a snapshot, disabled by default
+- FUTURE BREAKING CHANGE `apps` and `buttons` in the dock config have been deprecated and replaced with `entries` which can contain the combined data from the old properties, the old properties will be read for now.
+
 ## v13.1
 
 - BREAKING CHANGE: Removed the logic that supported saving page window bounds into local storage or a defined endpoint (so if you created custom endpoints for saving this information please note that it is now in the page data). This was used when saving a page or sharing a page. It now uses the new customData property on the PageObject to append windowBounds. We also now capture the page bounds when Save Page AND Save Page As is called.

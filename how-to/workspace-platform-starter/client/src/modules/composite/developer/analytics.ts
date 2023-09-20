@@ -1,12 +1,11 @@
 import type OpenFin from "@openfin/core";
-import type { InteropClient } from "@openfin/core/src/api/interop";
 import type {
 	AnalyticsModule,
 	PlatformAnalyticsEvent
 } from "workspace-platform-starter/shapes/analytics-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "../../../framework/utils";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { DevAnalyticsOptions } from "./shapes";
 
 /**
@@ -15,7 +14,7 @@ import type { DevAnalyticsOptions } from "./shapes";
 export class DevAnalyticsModule implements AnalyticsModule<DevAnalyticsOptions> {
 	private _logger?: Logger;
 
-	private _interopClient: InteropClient | undefined;
+	private _interopClient: OpenFin.InteropClient | undefined;
 
 	private _channel?: OpenFin.SessionContextGroup;
 

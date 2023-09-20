@@ -69,7 +69,15 @@ export async function init(
 				supportedAction,
 				initOptionsModule.definition.data?.lifecycle ?? "after-bootstrap",
 				async (requestedAction: string, payload?: unknown) => {
-					if (await checkConditions(platform, initOptionsModule.definition.data?.conditions)) {
+					if (
+						await checkConditions(platform, initOptionsModule.definition.data?.conditions, {
+							callerType: "init-options",
+							customData: {
+								module: initOptionsModule,
+								supportedAction
+							}
+						})
+					) {
 						logger.info(
 							`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`
 						);

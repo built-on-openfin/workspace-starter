@@ -227,6 +227,16 @@ export interface AppProviderOptions {
 	includeCredentialOnSourceRequest?: "omit" | "same-origin" | "include";
 
 	/**
+	 * The cache strategy determines when the cache should be checked for expiry.
+	 * on-demand means that the cache expiry is checked every time apps are requested in code, this strategy
+	 * reduces the overhead of app requests, but may take longer for app lists to update from dynamic endpoints
+	 * interval means that the cache expiry is checked by an interval timer, this mode will increase the amount
+	 * app requested performed, but the app lists will be updated more quickly
+	 * The default is on-demand
+	 */
+	cacheRetrievalStrategy?: "on-demand" | "interval";
+
+	/**
 	 * Once all apps are fetched and processed from the one or more sources specified, how long should the result be
 	 * cached for in minutes (can be used with the seconds setting).
 	 */

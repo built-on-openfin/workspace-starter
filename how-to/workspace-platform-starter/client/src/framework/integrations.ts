@@ -4,7 +4,6 @@ import {
 	CLITemplate,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
-	type HomeRegistration,
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult
@@ -23,7 +22,11 @@ import {
 	loadModules
 } from "./modules";
 import { launchPage, launchView } from "./platform/browser";
+import * as platformSplashProvider from "./platform/platform-splash";
 import type {
+	EndpointIntegrationsPreferencesGetRequest,
+	EndpointIntegrationsPreferencesGetResponse,
+	EndpointIntegrationsPreferencesSetRequest,
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition,
@@ -37,10 +40,6 @@ import { isEmpty } from "./utils";
 
 const logger = createLogger("Integrations");
 
-let isQueriedBeforeInit = false;
-let isInitialized = false;
-let queryBeforeInit: string;
-
 let integrationProviderOptions: IntegrationProviderOptions;
 let integrationModules: ModuleEntry<
 	IntegrationModule,
@@ -52,16 +51,19 @@ let integrationHelpers: IntegrationHelpers;
 
 const POPULATE_QUERY = "Populate Query";
 
+const INTEGRATIONS_PREFERENCE_ENDPOINT_SET = "integration-preferences-set";
+const INTEGRATIONS_PREFERENCE_ENDPOINT_GET = "integration-preferences-get";
+
 /**
  * Initialize all the integrations.
  * @param options The integration provider settings.
  * @param helpers Module helpers to pass to any loaded modules.
- * @param homeRegistration The home registration to use for setSearchQuery method.
+ * @param setSearchQuery The set search query for the home component.
  */
 export async function init(
 	options: IntegrationProviderOptions | undefined,
 	helpers: ModuleHelpers,
-	homeRegistration: HomeRegistration | undefined
+	setSearchQuery: (query: string) => Promise<void>
 ): Promise<void> {
 	if (options) {
 		options.modules = options.modules ?? options.integrations;
@@ -84,9 +86,7 @@ export async function init(
 				return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
 			},
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery: homeRegistration?.setSearchQuery
-				? async (query): Promise<void> => homeRegistration.setSearchQuery(query)
-				: undefined,
+			setSearchQuery,
 			condition: async (conditionId): Promise<boolean> => {
 				const platform = getCurrentSync();
 				return checkCondition(platform, conditionId);
@@ -123,25 +123,9 @@ export async function init(
 		}
 
 		// Initialize just the auto start modules
-		await initializeModules(initModules, integrationHelpers);
-		isInitialized = true;
-
-		if (homeRegistration && isQueriedBeforeInit) {
-			try {
-				logger.info("A query was passed before integrations was initialized. Resending the last query.");
-				const refreshQuery: string = `${queryBeforeInit} `;
-				// send a query different from initial query as resending the initial query does clear the cache
-				await homeRegistration.setSearchQuery(refreshQuery);
-				// resend the initial query
-				await homeRegistration.setSearchQuery(queryBeforeInit);
-				logger.info("Last query has been resent.");
-			} catch (error) {
-				logger.error(
-					"There was an error while trying to set the last query that was set before initialization.",
-					error
-				);
-			}
-		}
+		await initializeModules(initModules, integrationHelpers, async (def) => {
+			await platformSplashProvider.updateProgress(`${def.title} Integration`);
+		});
 		logger.info("Integrations has been initialized.");
 	}
 }
@@ -162,6 +146,7 @@ export async function closedown(): Promise<void> {
  * @param options Options for the search query.
  * @param options.queryMinLength The minimum length before a query is actioned.
  * @param options.queryAgainst The fields in the data to query against.
+ * @param options.isSuggestion Is the query from a suggestion.
  * @returns The search results and new filters.
  */
 export async function getSearchResults(
@@ -172,6 +157,7 @@ export async function getSearchResults(
 	options: {
 		queryMinLength: number;
 		queryAgainst: string[];
+		isSuggestion?: boolean;
 	}
 ): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
 	const homeResponse: HomeSearchResponse & { sourceFilters?: string[] } = {
@@ -181,13 +167,6 @@ export async function getSearchResults(
 		},
 		sourceFilters: []
 	};
-
-	if (!isInitialized) {
-		isQueriedBeforeInit = true;
-		queryBeforeInit = query;
-		logger.warn(`We received a query: ${query} before being initialized.`);
-		return homeResponse;
-	}
 
 	if (
 		integrationProviderOptions.isManagementEnabled &&
@@ -391,10 +370,9 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
  * @param preferences.autoStart The autoStart preference.
  */
 async function setPreferences(integrationId: string, preferences: { autoStart: boolean }): Promise<void> {
-	const integrationPreferenceEndpointId = "integration-preferences-set";
-	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		const success = await endpointProvider.action<{ id: string; payload: { autoStart: boolean } }>(
-			integrationPreferenceEndpointId,
+	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_SET)) {
+		const success = await endpointProvider.action<EndpointIntegrationsPreferencesSetRequest>(
+			INTEGRATIONS_PREFERENCE_ENDPOINT_SET,
 			{ id: integrationId, payload: preferences }
 		);
 		if (success) {
@@ -413,12 +391,11 @@ async function setPreferences(integrationId: string, preferences: { autoStart: b
  * @returns The preferences if they exist.
  */
 async function getPreferences(integrationId: string): Promise<{ autoStart: boolean } | undefined> {
-	const integrationPreferenceEndpointId = "integration-preferences-get";
-	if (endpointProvider.hasEndpoint(integrationPreferenceEndpointId)) {
-		const preferences = await endpointProvider.requestResponse<{ id: string }, { autoStart: boolean }>(
-			integrationPreferenceEndpointId,
-			{ id: integrationId }
-		);
+	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_GET)) {
+		const preferences = await endpointProvider.requestResponse<
+			EndpointIntegrationsPreferencesGetRequest,
+			EndpointIntegrationsPreferencesGetResponse
+		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, { id: integrationId });
 		if (!isEmpty(preferences)) {
 			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {

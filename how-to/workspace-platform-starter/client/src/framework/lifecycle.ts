@@ -50,12 +50,12 @@ export async function init(
  * Fire a lifecycle event.
  * @param platform The platform.
  * @param lifecycleEvent The event to fire.
- * @param customData Any custom data to pass to the handlers.
+ * @param payload Any custom data to pass to the handlers.
  */
-export async function fireLifecycleEvent(
+export async function fireLifecycleEvent<T = unknown>(
 	platform: WorkspacePlatformModule,
 	lifecycleEvent: LifecycleEvents,
-	customData?: unknown
+	payload?: T
 ): Promise<void> {
 	logger.info(`Request to fire lifecycle event ${lifecycleEvent} received`);
 	const eventHandlers = allLifecycleEvents[lifecycleEvent];
@@ -64,7 +64,7 @@ export async function fireLifecycleEvent(
 		logger.info(`Notifying ${subscribers.length} subscribers of lifecycle event ${lifecycleEvent}`);
 		for (const idHandler of subscribers) {
 			logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
-			await idHandler.handler(platform, customData);
+			await idHandler.handler(platform, payload);
 		}
 	}
 }
@@ -75,15 +75,15 @@ export async function fireLifecycleEvent(
  * @param lifecycleHandler The handler to call for the event.
  * @returns The subscription id which can be used to unsubscribe.
  */
-export function subscribeLifecycleEvent(
+export function subscribeLifecycleEvent<T = unknown>(
 	lifecycleEvent: LifecycleEvents,
-	lifecycleHandler: LifecycleHandler
+	lifecycleHandler: LifecycleHandler<T>
 ): string {
 	const subscriptionId = randomUUID();
 	const handlers = allLifecycleEvents[lifecycleEvent] ?? [];
 	handlers.push({
 		id: subscriptionId,
-		handler: lifecycleHandler
+		handler: lifecycleHandler as LifecycleHandler
 	});
 	allLifecycleEvents[lifecycleEvent] = handlers;
 	logger.info(

@@ -1,25 +1,24 @@
 import { Calendar } from '../common/calendar.js';
-import { initFdc3Listener, loadTeamData } from '../common/common.js';
+import { initFdc3Listener, addUserDates } from '../common/common.js';
+import * as usersModule from '../common/contacts.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-	init();
+document.addEventListener('DOMContentLoaded', async () => {
+	try {
+		await usersModule.initialize();
+		const users = usersModule.getUsers();
+		await addUserDates(users);
+		await initDom();
+		// Select the first team member by default, this will get overridden
+		// by any context update
+		updateMember(usersModule.userToFdc3Context(users[0]));
+		await initFdc3Listener(handleContext);
+	} catch (err) {
+		console.error(err);
+	}
 });
 
-let teamData;
 const smallCalendar = new Calendar('smallCalendar', 'small');
 const largeCalendar = new Calendar('largeCalendar', 'large');
-
-/**
- * Initialize the view.
- */
-async function init() {
-	teamData = await loadTeamData();
-
-	await initDom();
-	await initFdc3Listener(handleContext);
-
-	updateMember();
-}
 
 /**
  * Initialize the DOM.
@@ -55,7 +54,7 @@ function handleContext(ctx) {
  * @param fcd3Contact The contact to update.
  */
 function updateMember(fcd3Contact) {
-	const teamMember = fcd3Contact ? teamData.find((m) => m.id === fcd3Contact.id.FDS_ID) : undefined;
+	const teamMember = usersModule.findUserByContext(fcd3Contact);
 
 	smallCalendar.setDayStates(teamMember?.leave?.approved, teamMember?.leave?.awaitingApproval);
 	largeCalendar.setDayStates(teamMember?.leave?.approved, teamMember?.leave?.awaitingApproval);

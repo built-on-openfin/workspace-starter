@@ -7,7 +7,14 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
+import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import {
+	FAVORITE_TYPE_NAME_APP,
+	type FavoriteClient,
+	type FavoriteEntry,
+	type FavoriteInfo
+} from "workspace-platform-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -15,8 +22,8 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isObject, isStringValue } from "../../../framework/utils";
-import type { AppSettings } from "./shapes";
+import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+import type { AppManifestTypeMapping, AppSettings } from "./shapes";
 
 /**
  * Implement the integration provider for apps.
@@ -99,6 +106,16 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private _lastResultIds?: string[];
 
 	/**
+	 * Subscription id for theme-changed lifecycle event.
+	 */
+	private _themeChangedSubscriptionId: string | undefined;
+
+	/**
+	 * Subscription id for favorite-changed lifecycle event.
+	 */
+	private _favChangedSubscriptionId: string | undefined;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -117,9 +134,43 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		this._providerId = definition.id;
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
-				await this.rebuildResults();
-			});
+			this._themeChangedSubscriptionId = this._integrationHelpers.subscribeLifecycleEvent(
+				"theme-changed",
+				async () => {
+					await this.rebuildResults();
+				}
+			);
+
+			this._favChangedSubscriptionId =
+				this._integrationHelpers.subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
+					"favorite-changed",
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await this.updateAppFavoriteButtons(payload);
+						}
+					}
+				);
+		}
+	}
+
+	/**
+	 * Close down any resources being used by the module.
+	 * @returns Nothing.
+	 */
+	public async closedown(): Promise<void> {
+		if (this._integrationHelpers?.unsubscribeLifecycleEvent) {
+			if (isStringValue(this._themeChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(this._themeChangedSubscriptionId, "theme-changed");
+				this._themeChangedSubscriptionId = undefined;
+			}
+
+			if (isStringValue(this._favChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(
+					this._favChangedSubscriptionId,
+					"favorite-changed"
+				);
+				this._favChangedSubscriptionId = undefined;
+			}
 		}
 	}
 
@@ -139,6 +190,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -148,6 +200,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		const queryLower = query.toLowerCase();
@@ -168,14 +221,41 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean> {
 		let handled = false;
-		if (result.action.trigger === "user-action" && this._integrationHelpers?.launchApp) {
-			const data: {
-				app: { appId?: string };
-			} = result.data;
+		if (result.action.trigger === "user-action") {
+			if (
+				(this._definition?.data?.favoritesEnabled ?? true) &&
+				result.action.name.endsWith("favorite") &&
+				result.data?.app
+			) {
+				if (this._integrationHelpers?.getFavoriteClient) {
+					const favClient = await this._integrationHelpers.getFavoriteClient();
+					if (favClient) {
+						if (result.action.name.startsWith("un")) {
+							if (!isEmpty(result.data?.favoriteId) && favClient.deleteSavedFavorite) {
+								await favClient.deleteSavedFavorite(result.data.favoriteId);
+							}
+						} else if (favClient.setSavedFavorite) {
+							await favClient.setSavedFavorite({
+								id: randomUUID(),
+								type: FAVORITE_TYPE_NAME_APP,
+								typeId: result.key,
+								label: result.title,
+								icon: result.icon
+							});
+						}
 
-			if (data?.app?.appId) {
-				handled = true;
-				await this._integrationHelpers.launchApp(data.app.appId);
+						handled = true;
+					}
+				}
+			} else if (this._integrationHelpers?.launchApp) {
+				const data: {
+					app: { appId?: string };
+				} = result.data;
+
+				if (data?.app?.appId) {
+					handled = true;
+					await this._integrationHelpers.launchApp(data.app.appId);
+				}
 			}
 		}
 
@@ -189,6 +269,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param options The query options.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @param cachedApps The cached apps.
 	 * @returns The search response.
 	 */
@@ -198,17 +279,37 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		},
 		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {
 		if (this._integrationHelpers?.getApps) {
-			const apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
-
-			this._lastAppResults = apps;
 			this._lastQuery = queryLower;
 			this._lastQueryMinLength = options?.queryMinLength;
 			this._lastQueryAgainst = options?.queryAgainst;
 			this._lastCLIFilters = filters;
+
+			let apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
+			let matchQuery = queryLower;
+
+			if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers.getFavoriteClient) {
+				const favClient = await this._integrationHelpers.getFavoriteClient();
+				if (favClient) {
+					const info = favClient.getInfo();
+					if (info.isEnabled && isStringValue(info.command)) {
+						const isSupported =
+							isEmpty(info.enabledTypes) || info.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
+						if (isSupported && queryLower === info.command) {
+							const favoriteApps = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
+							const favIds = favoriteApps?.map((f) => f.typeId) ?? [];
+							apps = apps.filter((a) => favIds.includes(a.appId));
+							matchQuery = "";
+						}
+					}
+				}
+			}
+
+			this._lastAppResults = apps;
 			const appSearchEntries = await this.mapAppEntriesToSearchEntries(apps);
 
 			const tags: string[] = [];
@@ -218,9 +319,9 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					let textMatchFound = true;
 					let filterMatchFound = true;
 
-					const isCommand = queryLower.startsWith("/");
+					const isCommand = matchQuery.startsWith("/");
 
-					if (queryLower.length >= options.queryMinLength || isCommand) {
+					if (matchQuery.length >= options.queryMinLength || isCommand) {
 						textMatchFound = options.queryAgainst.some((target) => {
 							const entryObject = entry as unknown as {
 								[id: string]: string | string[] | { [id: string]: string | string[] };
@@ -233,9 +334,9 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 								if (isStringValue(targetValue)) {
 									const lowerTarget = targetValue.toLowerCase();
 									if (isCommand) {
-										return lowerTarget.startsWith(queryLower);
+										return lowerTarget.startsWith(matchQuery);
 									}
-									return lowerTarget.includes(queryLower);
+									return lowerTarget.includes(matchQuery);
 								}
 							} else if (path.length === 2) {
 								const specifiedTarget = entryObject[path[0]] as { [id: string]: string | string[] };
@@ -249,16 +350,16 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 									if (isStringValue(targetValue)) {
 										const lowerTarget = targetValue.toLowerCase();
 										if (isCommand) {
-											return lowerTarget.startsWith(queryLower);
+											return lowerTarget.startsWith(matchQuery);
 										}
-										return lowerTarget.includes(queryLower);
+										return lowerTarget.includes(matchQuery);
 									}
 
 									if (Array.isArray(targetValue)) {
 										if (
 											targetValue.length > 0 &&
 											isStringValue(targetValue[0]) &&
-											targetValue.some((mt) => mt.toLowerCase().startsWith(queryLower))
+											targetValue.some((mt) => mt.toLowerCase().startsWith(matchQuery))
 										) {
 											return true;
 										}
@@ -360,52 +461,114 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private async mapAppEntriesToSearchEntries(apps: PlatformApp[]): Promise<HomeSearchResult[]> {
 		const appResults: HomeSearchResult[] = [];
 		if (Array.isArray(apps)) {
-			const typeMapping = this._settings?.manifestTypeMapping;
+			let favInfo: FavoriteInfo | undefined;
+			let favClient: FavoriteClient | undefined;
+			let savedFavorites: FavoriteEntry[] | undefined;
+			const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
 
-			for (const app of apps) {
-				const manifestType = app.manifestType;
-				if (isStringValue(manifestType)) {
-					const action = { name: "Launch View", hotkey: "enter" };
-					const entry: Partial<HomeSearchResult> = {
-						key: app.appId,
-						score: this._definition?.baseScore ?? AppProvider._DEFAULT_BASE_SCORE,
-						title: app.title,
-						data: { app, providerId: this._providerId }
-					};
-
-					if (!isEmpty(typeMapping)) {
-						const manifestTypeMapping = typeMapping[manifestType as ManifestTypeId];
-
-						if (!isEmpty(manifestTypeMapping)) {
-							if (isStringValue(manifestTypeMapping.entryLabel)) {
-								entry.label = manifestTypeMapping.entryLabel;
-							}
-							if (isStringValue(manifestTypeMapping.actionName)) {
-								action.name = manifestTypeMapping.actionName;
-							}
+			if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers?.getFavoriteClient) {
+				favClient = await this._integrationHelpers.getFavoriteClient();
+				if (favClient) {
+					favInfo = favClient.getInfo();
+					if (favInfo.isEnabled) {
+						const isSupported =
+							isEmpty(favInfo.enabledTypes) || favInfo.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
+						if (isSupported) {
+							savedFavorites = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
+						} else {
+							favInfo = undefined;
 						}
 					}
+				}
+			}
 
-					entry.actions = [action];
-					entry.icon = this.getAppIcon(app);
-
-					if (!isEmpty(app.description)) {
-						entry.description = app.description;
-						entry.shortDescription = app.description;
-					}
-
-					entry.template = "Custom" as CLITemplate.Custom;
-					entry.templateContent = await this._integrationHelpers?.templateHelpers.createApp(
-						app,
-						entry.icon ?? "",
-						action.name
-					);
-
-					appResults.push(entry as HomeSearchResult);
+			for (const app of apps) {
+				const favoriteId = savedFavorites?.find((f) => f.typeId === app.appId)?.id;
+				const res = await this.mapAppEntryToSearchEntry(
+					app,
+					this._settings?.manifestTypeMapping,
+					favInfo,
+					favoriteId,
+					colorScheme
+				);
+				if (res) {
+					appResults.push(res);
 				}
 			}
 		}
 		return appResults;
+	}
+
+	/**
+	 * Map a single app to a search result.
+	 * @param app The app to map.
+	 * @param typeMapping The type mappings to include.
+	 * @param favInfo The favorites info if it is enabled.
+	 * @param favoriteId The id of the favorite.
+	 * @param colorScheme The color scheme.
+	 * @returns The search result.
+	 */
+	private async mapAppEntryToSearchEntry(
+		app: PlatformApp,
+		typeMapping: AppManifestTypeMapping | undefined,
+		favInfo: FavoriteInfo | undefined,
+		favoriteId: string | undefined,
+		colorScheme: string
+	): Promise<HomeSearchResult | undefined> {
+		const manifestType = app.manifestType;
+		if (isStringValue(manifestType)) {
+			const action = { name: "Launch View", hotkey: "enter" };
+			const entry: Partial<HomeSearchResult> = {
+				key: app.appId,
+				score: this._definition?.baseScore ?? AppProvider._DEFAULT_BASE_SCORE,
+				title: app.title,
+				data: { app, providerId: this._providerId, favoriteId }
+			};
+
+			if (!isEmpty(typeMapping)) {
+				const manifestTypeMapping = typeMapping[manifestType as ManifestTypeId];
+
+				if (!isEmpty(manifestTypeMapping)) {
+					if (isStringValue(manifestTypeMapping.entryLabel)) {
+						entry.label = manifestTypeMapping.entryLabel;
+					}
+					if (isStringValue(manifestTypeMapping.actionName)) {
+						action.name = manifestTypeMapping.actionName;
+					}
+				}
+			}
+
+			entry.actions = [action];
+			entry.icon = this.getAppIcon(app);
+
+			if (!isEmpty(app.description)) {
+				entry.description = app.description;
+				entry.shortDescription = app.description;
+			}
+
+			const headerButtons: { icon: string; action: string }[] = [];
+
+			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon) {
+				const icon = (!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon).replace(
+					"{scheme}",
+					colorScheme
+				);
+				headerButtons.push({
+					icon,
+					action: !isEmpty(favoriteId) ? "unfavorite" : "favorite"
+				});
+			}
+
+			entry.template = "Custom" as CLITemplate.Custom;
+			entry.templateContent = await this._integrationHelpers?.templateHelpers.createApp(
+				app,
+				entry.icon ?? "",
+				action.name,
+				headerButtons
+			);
+
+			return entry as HomeSearchResult;
+		}
 	}
 
 	/**
@@ -446,6 +609,56 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			}
 			this._lastResponse.respond(appResponse.results);
 			this._logger?.info("Results rebuilt.");
+		}
+	}
+
+	/**
+	 * Update the app buttons if the favorites have changed.
+	 * @param payload The payload of the favorite change.
+	 */
+	private async updateAppFavoriteButtons(payload: FavoriteChangedLifecyclePayload): Promise<void> {
+		const favorite: FavoriteEntry = payload.favorite;
+
+		if (
+			!isEmpty(this._lastResponse) &&
+			this._integrationHelpers?.getFavoriteClient &&
+			(payload.action === "set" || payload.action === "delete") &&
+			!isEmpty(favorite) &&
+			favorite.type === FAVORITE_TYPE_NAME_APP &&
+			this._lastAppResults
+		) {
+			const favClient = await this._integrationHelpers.getFavoriteClient();
+			if (favClient) {
+				const favInfo = favClient.getInfo();
+				if (favInfo) {
+					const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
+
+					if (this._lastQuery === favInfo.command && payload.action === "delete") {
+						this._lastResponse.revoke(favorite.typeId);
+					} else if (this._lastAppResults) {
+						let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
+
+						// If it wasn't in the last results add it, but only if we are in fav command
+						if (!lastApp && this._integrationHelpers.getApp && this._lastQuery === favInfo.command) {
+							lastApp = await this._integrationHelpers.getApp(favorite.typeId);
+						}
+
+						if (!isEmpty(lastApp)) {
+							const rebuilt = await this.mapAppEntryToSearchEntry(
+								lastApp,
+								this._settings?.manifestTypeMapping,
+								favInfo,
+								payload.action === "set" ? favorite.id : undefined,
+								colorScheme
+							);
+
+							if (rebuilt) {
+								this._lastResponse.respond([rebuilt]);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -17,7 +17,7 @@ import type { WorkspaceChangedLifecyclePayload } from "workspace-platform-starte
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
-import { isEmpty, randomUUID } from "../../../framework/utils";
+import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
 import type { WorkspacesSettings } from "./shapes";
 
 /**
@@ -121,24 +121,26 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		this._logger = loggerCreator("WorkspacesProvider");
 
 		if (this._integrationHelpers.subscribeLifecycleEvent) {
-			this._integrationHelpers.subscribeLifecycleEvent(
+			this._integrationHelpers.subscribeLifecycleEvent<WorkspaceChangedLifecyclePayload>(
 				"workspace-changed",
-				async (platform: WorkspacePlatformModule, payload: unknown): Promise<void> => {
-					const wsPayload = payload as WorkspaceChangedLifecyclePayload;
-					if (wsPayload.action === "create") {
+				async (
+					platform: WorkspacePlatformModule,
+					payload?: WorkspaceChangedLifecyclePayload
+				): Promise<void> => {
+					if (payload?.action === "create") {
 						if (!isEmpty(this._lastQuery) && !this._lastQuery.startsWith("/w ")) {
 							await this.rebuildResults(platform);
 						}
-					} else if (wsPayload.action === "update") {
-						const lastResult = this._lastResults?.find((res) => res.key === wsPayload.id);
-						if (lastResult && wsPayload.workspace) {
-							lastResult.title = wsPayload.workspace.title;
-							lastResult.data.workspaceTitle = wsPayload.workspace.title;
-							(lastResult.templateContent as CustomTemplate).data.title = wsPayload.workspace.title;
+					} else if (payload?.action === "update") {
+						const lastResult = this._lastResults?.find((res) => res.key === payload.id);
+						if (lastResult && payload.workspace) {
+							lastResult.title = payload.workspace.title;
+							lastResult.data.workspaceTitle = payload.workspace.title;
+							(lastResult.templateContent as CustomTemplate).data.title = payload.workspace.title;
 							this.resultAddUpdate([lastResult]);
 						}
-					} else if (wsPayload.action === "delete") {
-						this.resultRemove(wsPayload.id);
+					} else if (payload?.action === "delete") {
+						this.resultRemove(payload.id);
 					}
 				}
 			);
@@ -190,6 +192,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -199,6 +202,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		if (this._integrationHelpers?.getPlatform && this._settings) {

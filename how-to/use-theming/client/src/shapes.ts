@@ -1,4 +1,4 @@
-import type { CustomPaletteSet } from "@openfin/workspace/common/src/api/theming";
+import type { CustomPaletteSet } from "@openfin/workspace-platform";
 
 /**
  * Options to decide which components to show on startup.

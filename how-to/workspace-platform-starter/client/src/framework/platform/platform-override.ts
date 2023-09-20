@@ -1,6 +1,7 @@
 import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
+	type AnalyticsEvent,
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
@@ -13,9 +14,8 @@ import {
 	type Workspace,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
-import type { AnalyticsEvent } from "@openfin/workspace/common/src/utils/usage-register";
 import * as analyticsProvider from "../analytics";
-import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
+import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
@@ -27,7 +27,21 @@ import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
 } from "../shapes/lifecycle-shapes";
-import type { PlatformProviderOptions, PlatformStorageMetadata } from "../shapes/platform-shapes";
+import type {
+	EndpointPageGetRequest,
+	EndpointPageGetResponse,
+	EndpointPageListRequest,
+	EndpointPageListResponse,
+	EndpointPageRemoveRequest,
+	EndpointPageSetRequest,
+	EndpointWorkspaceGetRequest,
+	EndpointWorkspaceGetResponse,
+	EndpointWorkspaceListRequest,
+	EndpointWorkspaceListResponse,
+	EndpointWorkspaceRemoveRequest,
+	EndpointWorkspaceSetRequest,
+	PlatformProviderOptions
+} from "../shapes/platform-shapes";
 import type { VersionInfo } from "../shapes/version-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
@@ -113,13 +127,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_LIST)) {
 				logger.info("Requesting saved workspaces from custom storage");
 				const workspacesResponse = await endpointProvider.requestResponse<
-					{ platform: string; query?: string },
-					{
-						[key: string]: {
-							metaData: PlatformStorageMetadata;
-							payload: Workspace;
-						};
-					}
+					EndpointWorkspaceListRequest,
+					EndpointWorkspaceListResponse
 				>(WORKSPACE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 
 				if (workspacesResponse) {
@@ -147,11 +156,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
 				logger.info(`Requesting saved workspace from custom storage for workspace id: ${id}`);
 				const workspaceResponse = await endpointProvider.requestResponse<
-					{ platform: string; id: string },
-					{
-						metaData: PlatformStorageMetadata;
-						payload: Workspace;
-					}
+					EndpointWorkspaceGetRequest,
+					EndpointWorkspaceGetResponse
 				>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
 				if (workspaceResponse) {
 					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
@@ -175,22 +181,20 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Workspace;
-				}>(WORKSPACE_ENDPOINT_ID_SET, {
-					platform: fin.me.identity.uuid,
-					id: req.workspace.workspaceId,
-					metaData: {
-						version: {
-							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							platformClient: versionInfo.platformClient
-						}
-					},
-					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
-				});
+				const success = await endpointProvider.action<EndpointWorkspaceSetRequest>(
+					WORKSPACE_ENDPOINT_ID_SET,
+					{
+						platform: fin.me.identity.uuid,
+						id: req.workspace.workspaceId,
+						metaData: {
+							version: {
+								workspacePlatformClient: versionInfo.workspacePlatformClient,
+								platformClient: versionInfo.platformClient
+							}
+						},
+						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+					}
+				);
 				if (success) {
 					logger.info(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				} else {
@@ -203,11 +207,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "create",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -219,22 +223,20 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Workspace;
-				}>(WORKSPACE_ENDPOINT_ID_SET, {
-					platform: fin.me.identity.uuid,
-					id: req.workspace.workspaceId,
-					metaData: {
-						version: {
-							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							platformClient: versionInfo.platformClient
-						}
-					},
-					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
-				});
+				const success = await endpointProvider.action<EndpointWorkspaceSetRequest>(
+					WORKSPACE_ENDPOINT_ID_SET,
+					{
+						platform: fin.me.identity.uuid,
+						id: req.workspace.workspaceId,
+						metaData: {
+							version: {
+								workspacePlatformClient: versionInfo.workspacePlatformClient,
+								platformClient: versionInfo.platformClient
+							}
+						},
+						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+					}
+				);
 				if (success) {
 					logger.info(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
 				} else {
@@ -253,11 +255,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "update",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -269,9 +271,8 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_REMOVE)) {
-				const success = await endpointProvider.action<{ platform: string; id: string }>(
-					WORKSPACE_ENDPOINT_ID_REMOVE,
-					{ platform: fin.me.identity.uuid, id }
+				const success = await endpointProvider.action<EndpointWorkspaceRemoveRequest>(
+					WORKSPACE_ENDPOINT_ID_REMOVE
 				);
 				if (success) {
 					logger.info(`Removed workspace with id: ${id} from custom storage`);
@@ -285,10 +286,10 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "delete",
 				id
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -306,13 +307,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_LIST)) {
 				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
-					{ platform: string; query?: string },
-					{
-						[key: string]: {
-							metaData: PlatformStorageMetadata;
-							payload: Page;
-						};
-					}
+					EndpointPageListRequest,
+					EndpointPageListResponse
 				>(PAGE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 				if (pagesResponse) {
 					logger.info("Returning saved pages from custom storage");
@@ -339,11 +335,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 				logger.info(`Getting saved page from custom storage for page id: ${id}`);
 				const pageResponse = await endpointProvider.requestResponse<
-					{ platform: string; id: string },
-					{
-						metaData: PlatformStorageMetadata;
-						payload: Page;
-					}
+					EndpointPageGetRequest,
+					EndpointPageGetResponse
 				>(PAGE_ENDPOINT_ID_GET, {
 					platform: fin.me.identity.uuid,
 					id
@@ -391,12 +384,7 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Saving page with id: ${req.page.pageId} to custom storage`);
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Page;
-				}>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<EndpointPageSetRequest>(PAGE_ENDPOINT_ID_SET, {
 					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
 					metaData: {
@@ -418,11 +406,11 @@ export function overrideCallback(
 				logger.info(`Saved page with id: ${req.page.pageId} to default storage`);
 			}
 
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "create",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -442,12 +430,7 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Updating saved page and saving to custom storage with page id: ${req.page.pageId}`);
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Page;
-				}>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<EndpointPageSetRequest>(PAGE_ENDPOINT_ID_SET, {
 					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
 					metaData: {
@@ -470,11 +453,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "update",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -487,10 +470,7 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_REMOVE)) {
 				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
-				const success = await endpointProvider.action<{ platform: string; id: string }>(
-					PAGE_ENDPOINT_ID_REMOVE,
-					{ platform: fin.me.identity.uuid, id }
-				);
+				const success = await endpointProvider.action<EndpointPageRemoveRequest>(PAGE_ENDPOINT_ID_REMOVE);
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {
@@ -502,10 +482,10 @@ export function overrideCallback(
 				logger.info(`Removed page with id: ${id} from custom storage`);
 			}
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "delete",
 				id
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -703,10 +683,13 @@ export function overrideCallback(
 				// so we assume we are using the workspace defaults
 				// Since the defaults were created using the theme at startup
 				// we need to replace them with the current set of default
-				// buttons which are theme aware
+				// buttons which are theme and condition aware
 				options.workspacePlatform = options.workspacePlatform ?? {};
 				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-				options.workspacePlatform.toolbarOptions.buttons = await getDefaultToolbarButtons();
+				const buttons = await getToolbarButtons(options);
+				if (!isEmpty(buttons)) {
+					options.workspacePlatform.toolbarOptions.buttons = buttons;
+				}
 			}
 
 			const window = await super.createWindow(options, identity);
