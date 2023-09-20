@@ -14,10 +14,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "actions",
                     "description": "The actions connection type allows connections to execute a list of actions that the platform will carry out e.g.\nshow-home",
-                    "enum": [
-                        "actions"
-                    ],
                     "type": "string"
                 }
             },
@@ -31,14 +29,28 @@
             "description": "List of modules."
         },
         "AnalyticsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "sendToOpenFin": {
+                    "description": "Send analytics to OpenFin.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
         },
         "Api": {
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_44"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -229,6 +241,14 @@
                     "description": "Once all apps are fetched and processed from the one or more sources specified, how long should the result be\ncached for in seconds (can be used on it's own or in addition to the minutes setting).",
                     "type": "number"
                 },
+                "cacheRetrievalStrategy": {
+                    "description": "The cache strategy determines when the cache should be checked for expiry.\non-demand means that the cache expiry is checked every time apps are requested in code, this strategy\nreduces the overhead of app requests, but may take longer for app lists to update from dynamic endpoints\ninterval means that the cache expiry is checked by an interval timer, this mode will increase the amount\napp requested performed, but the app lists will be updated more quickly\nThe default is on-demand",
+                    "enum": [
+                        "interval",
+                        "on-demand"
+                    ],
+                    "type": "string"
+                },
                 "endpointIds": {
                     "description": "An array of endpoints that should be used to request a list of apps. The array entry can be a string\n(representing the array id) or an object with an inputId that maps to an endpoint id and gets passed to the\nendpoint specified using the outputId (this is useful for mapping apps from one format to another)",
                     "items": {
@@ -267,10 +287,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "appSource",
                     "description": "The appSource connection type allows connections to provide a list of apps that can show up in home and the\nstore. Apps with manifest type id connection will be send back to the connection on selection (e.g. a child view)",
-                    "enum": [
-                        "appSource"
-                    ],
                     "type": "string"
                 }
             },
@@ -280,7 +298,7 @@
             "type": "object"
         },
         "ApplicationIdentity": {
-            "$ref": "#/definitions/__type_31"
+            "$ref": "#/definitions/__type_33"
         },
         "Array": {
             "items": {
@@ -388,10 +406,8 @@
             "description": "Specific type for a broker connection.",
             "properties": {
                 "type": {
+                    "const": "broker",
                     "description": "The broker connection type allows connections to connect to our broker in order to react to context sharing.",
-                    "enum": [
-                        "broker"
-                    ],
                     "type": "string"
                 }
             },
@@ -417,21 +433,15 @@
             "type": "string"
         },
         "BrowserButtonType.Custom": {
-            "enum": [
-                "Custom"
-            ],
+            "const": "Custom",
             "type": "string"
         },
         "BrowserButtonType.LockUnlockPage": {
-            "enum": [
-                "LockUnlockPage"
-            ],
+            "const": "LockUnlockPage",
             "type": "string"
         },
         "BrowserButtonType.ShowHideTabs": {
-            "enum": [
-                "ShowHideTabs"
-            ],
+            "const": "ShowHideTabs",
             "type": "string"
         },
         "BrowserProviderOptions": {
@@ -554,7 +564,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_41"
+            "$ref": "#/definitions/__type_43"
         },
         "ColorSchemeOption": {
             "enum": [
@@ -685,7 +695,7 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_40"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_8"
@@ -935,6 +945,10 @@
                     "$ref": "#/definitions/EndpointProviderOptions",
                     "description": "The endpoint provider options."
                 },
+                "favoriteProvider": {
+                    "$ref": "#/definitions/FavoriteProviderOptions",
+                    "description": "The settings you need to set if you want to indicate this platform supports favorites"
+                },
                 "homeProvider": {
                     "$ref": "#/definitions/HomeProviderOptions",
                     "description": "The home provider options."
@@ -971,6 +985,10 @@
                     "$ref": "#/definitions/PlatformProviderOptions",
                     "description": "The platform provider options."
                 },
+                "splashScreenProvider": {
+                    "$ref": "#/definitions/SplashScreenProviderOptions",
+                    "description": "The splash screen provider options."
+                },
                 "storefrontProvider": {
                     "$ref": "#/definitions/StorefrontProviderOptions",
                     "description": "The storefront provider options."
@@ -978,6 +996,10 @@
                 "themeProvider": {
                     "$ref": "#/definitions/ThemeProviderOptions",
                     "description": "The theme provider options."
+                },
+                "trayProvider": {
+                    "$ref": "#/definitions/TrayProviderOptions",
+                    "description": "The settings you need to set if you want to include a tray icon with menu"
                 },
                 "versionProvider": {
                     "$ref": "#/definitions/VersionProviderOptions",
@@ -987,7 +1009,7 @@
             "type": "object"
         },
         "DeepPartial": {
-            "$ref": "#/definitions/__type_29"
+            "$ref": "#/definitions/__type_31"
         },
         "DipRect": {
             "additionalProperties": false,
@@ -1006,15 +1028,15 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_37"
         },
         "DockButtonAction": {
             "additionalProperties": false,
-            "description": "A button which launched an app or action.",
+            "description": "A button which launches an app by it's or or a custom action.",
             "properties": {
                 "action": {
                     "additionalProperties": false,
-                    "description": "If an appId isn't provided then provide details related to the action",
+                    "description": "Launch an action.",
                     "properties": {
                         "customData": {
                             "description": "data that should be passed to the action"
@@ -1025,14 +1047,16 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
                 },
-                "appId": {
-                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
-                    "type": "string"
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
@@ -1043,12 +1067,51 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "action"
+            ],
             "type": "object"
         },
         "DockButtonApp": {
             "additionalProperties": false,
-            "description": "A single app or a list of apps",
+            "description": "A button which launches an app by it's or or a custom action.",
             "properties": {
+                "appId": {
+                    "description": "Launch an app by it's id.",
+                    "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appId"
+            ],
+            "type": "object"
+        },
+        "DockButtonAppsByTag": {
+            "additionalProperties": false,
+            "description": "A single app or a list of apps that are defined by the tags in the app definitions.",
+            "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "display": {
                     "description": "Should this entry show a single app or a group of apps.",
                     "enum": [
@@ -1059,6 +1122,10 @@
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because there are no tagged apps.",
                     "type": "string"
                 },
                 "tags": {
@@ -1082,14 +1149,32 @@
             "additionalProperties": false,
             "description": "Button type which shows a drop down.",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because conditions have excluded options.",
                     "type": "string"
                 },
                 "options": {
                     "description": "List of button options",
                     "items": {
-                        "$ref": "#/definitions/Omit<DockButtonAction,\"iconUrl\">"
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/Omit_1"
+                            },
+                            {
+                                "$ref": "#/definitions/Omit_2"
+                            }
+                        ]
                     },
                     "type": "array"
                 },
@@ -1103,21 +1188,41 @@
             ],
             "type": "object"
         },
+        "DockButtonTypes": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/DockButtonAppsByTag"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonApp"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonAction"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonDropdown"
+                }
+            ],
+            "description": "All of the button types for the dock."
+        },
         "DockProviderOptions": {
             "additionalProperties": false,
             "description": "Options for the dock provider.",
             "properties": {
                 "apps": {
-                    "description": "What apps should be made available via the dock",
+                    "description": "What apps should be made available via the dock, this property is deprecated, use entries.",
                     "items": {
-                        "$ref": "#/definitions/DockButtonApp"
+                        "$ref": "#/definitions/DockButtonAppsByTag"
                     },
                     "type": "array"
                 },
                 "buttons": {
-                    "description": "What custom actions should be made available via the dock",
+                    "description": "What custom actions should be made available via the dock, this property is deprecated, use entries.",
                     "items": {
                         "anyOf": [
+                            {
+                                "$ref": "#/definitions/DockButtonApp"
+                            },
                             {
                                 "$ref": "#/definitions/DockButtonAction"
                             },
@@ -1125,6 +1230,13 @@
                                 "$ref": "#/definitions/DockButtonDropdown"
                             }
                         ]
+                    },
+                    "type": "array"
+                },
+                "entries": {
+                    "description": "What apps, actions or drop downs should be made available via the dock.",
+                    "items": {
+                        "$ref": "#/definitions/DockButtonTypes"
                     },
                     "type": "array"
                 },
@@ -1202,7 +1314,51 @@
             "type": "object"
         },
         "ExternalProcessRequestType": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_41"
+        },
+        "FavoriteProviderOptions": {
+            "additionalProperties": false,
+            "description": "Options for the favorite provider.",
+            "properties": {
+                "enabled": {
+                    "description": "Is the provider enabled, defaults to true.",
+                    "type": "boolean"
+                },
+                "favoriteCommand": {
+                    "description": "What commands should integrations check for if they intent to support the display of favorites",
+                    "type": "string"
+                },
+                "favoriteIcon": {
+                    "description": "The icon that should be used if you want to indicate this is a favorite action",
+                    "type": "string"
+                },
+                "supportedFavoriteTypes": {
+                    "description": "The connection provider can have actions registered against it from the platform. This provides a default list of\nactions that connections should be able to use if actions are enabled for that connection.",
+                    "items": {
+                        "$ref": "#/definitions/FavoriteTypeNames"
+                    },
+                    "type": "array"
+                },
+                "unfavoriteIcon": {
+                    "description": "The icon to use to indicate that this favorite can be unset",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "favoriteIcon",
+                "unfavoriteIcon"
+            ],
+            "type": "object"
+        },
+        "FavoriteTypeNames": {
+            "description": "Names for all the favorite types.",
+            "enum": [
+                "app",
+                "page",
+                "query",
+                "workspace"
+            ],
+            "type": "string"
         },
         "FetchEndpointDefinition": {
             "additionalProperties": false,
@@ -1217,10 +1373,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "fetch",
                     "description": "This uses the built in support for fetch and the options will be the fetch options",
-                    "enum": [
-                        "fetch"
-                    ],
                     "type": "string"
                 }
             },
@@ -1422,7 +1576,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "Identity_1": {
-            "$ref": "#/definitions/__type_30"
+            "$ref": "#/definitions/__type_32"
         },
         "Image": {
             "additionalProperties": false,
@@ -1592,7 +1746,7 @@
             "$ref": "#/definitions/__type_11"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_42"
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -1624,10 +1778,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "column",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "column"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1643,9 +1795,7 @@
             "additionalProperties": false,
             "properties": {
                 "componentName": {
-                    "enum": [
-                        "view"
-                    ],
+                    "const": "view",
                     "type": "string"
                 },
                 "componentState": {
@@ -1727,10 +1877,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "row",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "row"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1786,10 +1934,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "ms365",
                     "description": "The types of supported Low Code Integration",
-                    "enum": [
-                        "ms365"
-                    ],
                     "type": "string"
                 }
             },
@@ -1853,6 +1999,10 @@
         "MenuEntry.T_2": {
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
+        },
+        "MenuEntry.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
         },
         "MenuEntry<GlobalContextMenuOptionType>": {
             "additionalProperties": false,
@@ -1980,6 +2130,84 @@
                 },
                 "position": {
                     "$ref": "#/definitions/MenuPosition_1",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "MenuEntry<TrayMenuOptionType>": {
+            "additionalProperties": false,
+            "description": "How to position a menu.",
+            "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T_3"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition_3",
                     "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
@@ -2177,6 +2405,10 @@
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
         },
+        "MenuPosition.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
+        },
         "MenuPositionOperation": {
             "description": "Operations that can be performed on menus when they are being updated.",
             "enum": [
@@ -2233,6 +2465,28 @@
             ],
             "type": "object"
         },
+        "MenuPosition_3": {
+            "additionalProperties": false,
+            "description": "The position for a menu entry.",
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_3",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
         "MenuSeparatorPosition": {
             "description": "Position for adding separators during update operations.",
             "enum": [
@@ -2242,8 +2496,30 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_7",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "A list of modules that provide menu for different locations.",
+            "properties": {
+                "menuItemHeight": {
+                    "description": "The height of an item in the custom popup menu.\ndefaults to 32.",
+                    "type": "number"
+                },
+                "menuWidth": {
+                    "description": "The width to display the custom popup menu.\ndefaults to 200",
+                    "type": "number"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "popupHtml": {
+                    "description": "The location of the HTML to use for custom popup page.\ndefaults to https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/popups/menu/index.html",
+                    "type": "string"
+                }
+            },
+            "type": "object"
         },
         "Microsoft365ConnectionConfig": {
             "additionalProperties": false,
@@ -2432,10 +2708,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "module",
                     "description": "This indicates that this endpoint depends on a module that needs to be loaded in order for it to work",
-                    "enum": [
-                        "module"
-                    ],
                     "type": "string"
                 },
                 "typeId": {
@@ -2535,39 +2809,11 @@
             },
             "type": "object"
         },
-        "ModuleList_6": {
-            "additionalProperties": false,
-            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_7": {
-            "additionalProperties": false,
-            "description": "A list of modules that provide menu for different locations.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_39"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_33"
+            "$ref": "#/definitions/__type_35"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -2626,37 +2872,11 @@
         "Omit": {
             "$ref": "#/definitions/__type_25"
         },
-        "Omit<DockButtonAction,\"iconUrl\">": {
-            "additionalProperties": false,
-            "properties": {
-                "action": {
-                    "additionalProperties": false,
-                    "description": "If an appId isn't provided then provide details related to the action",
-                    "properties": {
-                        "customData": {
-                            "description": "data that should be passed to the action"
-                        },
-                        "id": {
-                            "description": "The id of the action to fire",
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "customData",
-                        "id"
-                    ],
-                    "type": "object"
-                },
-                "appId": {
-                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
-                    "type": "string"
-                },
-                "tooltip": {
-                    "description": "The tooltip to be shown for this button/entry",
-                    "type": "string"
-                }
-            },
-            "type": "object"
+        "Omit_1": {
+            "$ref": "#/definitions/__type_29"
+        },
+        "Omit_2": {
+            "$ref": "#/definitions/__type_30"
         },
         "Page": {
             "additionalProperties": false,
@@ -3148,6 +3368,7 @@
                 },
                 "palettes": {
                     "additionalProperties": false,
+                    "description": "The palette for this theme.\n\nWhen a user selects a color scheme, the palette will be updated to match the selected scheme.\n\nIf `system` is selected, the palette will be updated to match the user's system color scheme.",
                     "properties": {
                         "dark": {
                             "$ref": "#/definitions/CustomPaletteSet"
@@ -3228,7 +3449,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_36"
         },
         "PreDefinedButtonConfig": {
             "additionalProperties": false,
@@ -3281,7 +3502,7 @@
             "$ref": "#/definitions/__type_6"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_38"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_10"
@@ -3319,23 +3540,60 @@
             "type": "object"
         },
         "Snapshot": {
-            "$ref": "#/definitions/__type_32"
+            "$ref": "#/definitions/__type_34"
         },
         "SnapshotSourceConnection": {
             "additionalProperties": false,
             "description": "Specific type for a snapshot source connection.",
             "properties": {
                 "type": {
+                    "const": "snapshotSource",
                     "description": "The snapshotSource connection type allows connections to be accepted as a snapshot source",
-                    "enum": [
-                        "snapshotSource"
-                    ],
                     "type": "string"
                 }
             },
             "required": [
                 "type"
             ],
+            "type": "object"
+        },
+        "SplashScreenProviderOptions": {
+            "additionalProperties": false,
+            "description": "The manifest settings for splash screen.",
+            "properties": {
+                "backgroundColor": {
+                    "description": "The background color, defaults to theme background.",
+                    "type": "string"
+                },
+                "borderColor": {
+                    "description": "The border color, defaults to theme border.",
+                    "type": "string"
+                },
+                "disabled": {
+                    "description": "If the disabled flag is set the splash screen will not be shown.",
+                    "type": "boolean"
+                },
+                "height": {
+                    "description": "The height for the splash screen, defaults to 130.",
+                    "type": "number"
+                },
+                "icon": {
+                    "description": "This defaults to manifest.platform.icon if not provided.",
+                    "type": "string"
+                },
+                "textColor": {
+                    "description": "The text color, defaults to theme text.",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "This defaults to manifest.shortcut.name if not provided.",
+                    "type": "string"
+                },
+                "width": {
+                    "description": "The width for the splash screen, defaults to 400.",
+                    "type": "number"
+                }
+            },
             "type": "object"
         },
         "StoreButtonConfig": {
@@ -3418,6 +3676,10 @@
             "additionalProperties": false,
             "description": "Store Provider Options",
             "properties": {
+                "favoritesEnabled": {
+                    "description": "Enable favorites, defaults to true.",
+                    "type": "boolean"
+                },
                 "footer": {
                     "$ref": "#/definitions/StorefrontFooter",
                     "description": "The configuration of the footer for the store"
@@ -3732,6 +3994,46 @@
             "required": [
                 "buttons"
             ],
+            "type": "object"
+        },
+        "TrayMenuOptionType.Custom": {
+            "const": "Custom",
+            "description": "Custom tray menu entry item.",
+            "type": "string"
+        },
+        "TrayProviderOptions": {
+            "additionalProperties": false,
+            "description": "Tray Provider Options to provide settings for the tray provider",
+            "properties": {
+                "activateButton": {
+                    "description": "Should the menu activate on a left click, right click or any, default to any.",
+                    "enum": [
+                        "any",
+                        "left",
+                        "right"
+                    ],
+                    "type": "string"
+                },
+                "defaultAction": {
+                    "$ref": "#/definitions/CustomActionSpecifier_1",
+                    "description": "Default action if no menu entries provided."
+                },
+                "enabled": {
+                    "description": "Is the tray option enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon to display in the tray, if not supplied default to platform icon.",
+                    "type": "string"
+                },
+                "menuEntries": {
+                    "description": "The menu entries to display.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+                    },
+                    "type": "array"
+                }
+            },
             "type": "object"
         },
         "VersionInfo": {
@@ -4093,7 +4395,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
@@ -4526,7 +4828,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
@@ -5082,6 +5384,9 @@
         "__type_18": {
             "additionalProperties": false,
             "properties": {
+                "getFileDownloadLocation": {
+                    "type": "boolean"
+                },
                 "setFileDownloadLocation": {
                     "type": "boolean"
                 }
@@ -5940,6 +6245,85 @@
         "__type_29": {
             "additionalProperties": false,
             "properties": {
+                "appId": {
+                    "description": "Launch an app by it's id.",
+                    "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appId"
+            ],
+            "type": "object"
+        },
+        "__type_3": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_30": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "additionalProperties": false,
+                    "description": "Launch an action.",
+                    "properties": {
+                        "customData": {
+                            "description": "data that should be passed to the action"
+                        },
+                        "id": {
+                            "description": "The id of the action to fire",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ],
+                    "type": "object"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "action"
+            ],
+            "type": "object"
+        },
+        "__type_31": {
+            "additionalProperties": false,
+            "properties": {
                 "clientAPIVersion": {
                     "description": "version of client SDK,  set by the API",
                     "type": "string"
@@ -5995,51 +6379,33 @@
             },
             "type": "object"
         },
-        "__type_3": {
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "description": "The name of the component",
-                    "type": "string"
-                },
-                "uuid": {
-                    "description": "Universally unique identifier of the compenent",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name",
-                "uuid"
-            ],
-            "type": "object"
-        },
-        "__type_30": {
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "description": "The name of the component",
-                    "type": "string"
-                },
-                "uuid": {
-                    "description": "Universally unique identifier of the compenent",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "__type_31": {
-            "additionalProperties": false,
-            "properties": {
-                "uuid": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "uuid"
-            ],
-            "type": "object"
-        },
         "__type_32": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_33": {
+            "additionalProperties": false,
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -6086,7 +6452,7 @@
             ],
             "type": "object"
         },
-        "__type_33": {
+        "__type_35": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -6183,7 +6549,7 @@
             ],
             "type": "object"
         },
-        "__type_34": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -6201,7 +6567,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -6217,7 +6583,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -6241,7 +6607,7 @@
             ],
             "type": "object"
         },
-        "__type_37": {
+        "__type_39": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -6299,7 +6665,25 @@
             ],
             "type": "object"
         },
-        "__type_38": {
+        "__type_4": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_40": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -6330,7 +6714,7 @@
             },
             "type": "object"
         },
-        "__type_39": {
+        "__type_41": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -6367,29 +6751,11 @@
             },
             "type": "object"
         },
-        "__type_4": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
-                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_40": {
+        "__type_42": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_41": {
+        "__type_43": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -6410,7 +6776,7 @@
             },
             "type": "object"
         },
-        "__type_42": {
+        "__type_44": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -6455,7 +6821,7 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
                     "type": "boolean"
