@@ -31,6 +31,16 @@
 			<hr />
 			<div class="row gap10">
 				<button id="btnNativeTestApp">Open Native Test App</button>
+				<fieldset class="row">
+					<label for="attachPosition">Attach to</label>
+					<select id="attachPosition" style="min-width: 140px; width: auto">
+						<option value="right" selected>Right</option>
+						<option value="left">Left</option>
+						<option value="top">Top</option>
+						<option value="bottom">Bottom</option>
+					</select>
+				</fieldset>
+				<button id="btnAttachToWindow">Attach To Window</button>
 			</div>
 			<hr />
 			<pre id="logging" class="fill scroll-vertical"></pre>
