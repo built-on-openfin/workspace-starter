@@ -24,6 +24,10 @@
 		<main class="col fill gap10 scroll-vertical">
 			<p>Clicking the start button will connect and start the AWM server.</p>
 			<div class="row gap10 middle">
+				<fieldset class="row">
+					<label for="chkShowDebugWindow">Show Debug Window</label>
+					<input type="checkbox" id="chkShowDebugWindow" />
+				</fieldset>
 				<button id="btnStart">Start the AWM Server</button>
 				<button id="btnStop">Stop the AWM Server</button>
 				<p id="serverStatus"></p>
@@ -32,8 +36,8 @@
 			<div class="row gap10">
 				<button id="btnNativeTestApp">Open Native Test App</button>
 				<fieldset class="row">
-					<label for="attachPosition">Attach to</label>
-					<select id="attachPosition" style="min-width: 140px; width: auto">
+					<label for="selAttachPosition">Attach to</label>
+					<select id="selAttachPosition" style="min-width: 140px; width: auto">
 						<option value="right" selected>Right</option>
 						<option value="left">Left</option>
 						<option value="top">Top</option>
@@ -41,8 +45,13 @@
 					</select>
 				</fieldset>
 				<button id="btnAttachToWindow">Attach To Window</button>
+				<button id="btnDetachFromWindow">Detach From Window</button>
 			</div>
 			<hr />
+			<div class="row gap10">
+				<button id="btnGetLayout">Get Layout</button>
+				<button id="btnGetAttached">Get Attached</button>
+			</div>
 			<pre id="logging" class="fill scroll-vertical"></pre>
 			<div class="row right">
 				<button id="btnClearLog">Clear</button>
