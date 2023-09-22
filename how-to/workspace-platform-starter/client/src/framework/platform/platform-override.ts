@@ -272,7 +272,8 @@ export function overrideCallback(
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_REMOVE)) {
 				const success = await endpointProvider.action<EndpointWorkspaceRemoveRequest>(
-					WORKSPACE_ENDPOINT_ID_REMOVE
+					WORKSPACE_ENDPOINT_ID_REMOVE,
+					{ platform: fin.me.identity.uuid, id }
 				);
 				if (success) {
 					logger.info(`Removed workspace with id: ${id} from custom storage`);
@@ -470,7 +471,10 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_REMOVE)) {
 				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
-				const success = await endpointProvider.action<EndpointPageRemoveRequest>(PAGE_ENDPOINT_ID_REMOVE);
+				const success = await endpointProvider.action<EndpointPageRemoveRequest>(PAGE_ENDPOINT_ID_REMOVE, {
+					platform: fin.me.identity.uuid,
+					id
+				});
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {
