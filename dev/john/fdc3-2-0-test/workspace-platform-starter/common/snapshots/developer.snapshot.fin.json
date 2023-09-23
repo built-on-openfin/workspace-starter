@@ -1,0 +1,76 @@
+{
+	"windows": [
+		{
+			"defaultHeight": 900,
+			"defaultWidth": 1200,
+			"center": true,
+			"layout": {
+				"content": [
+					{
+						"type": "row",
+						"content": [
+							{
+								"type": "column",
+								"width": 100,
+								"content": [
+									{
+										"type": "row",
+										"height": 50,
+										"content": [
+											{
+												"type": "stack",
+												"width": 100,
+												"height": 100,
+												"content": [
+													{
+														"type": "component",
+														"componentName": "view",
+														"componentState": {
+															"url": "https://developers.openfin.co/of-docs/docs/workspace-overview",
+															"componentName": "view",
+															"interop": {}
+														},
+														"title": "Workspace Docs"
+													}
+												]
+											}
+										]
+									},
+									{
+										"type": "row",
+										"height": 50,
+										"content": [
+											{
+												"type": "column",
+												"width": 100,
+												"content": [
+													{
+														"type": "stack",
+														"width": 100,
+														"height": 100,
+														"content": [
+															{
+																"type": "component",
+																"componentName": "view",
+																"componentState": {
+																	"url": "https://developer.openfin.co/docs/javascript/stable/index.html",
+																	"componentName": "view",
+																	"interop": {}
+																},
+																"title": "OpenFin API Docs"
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
