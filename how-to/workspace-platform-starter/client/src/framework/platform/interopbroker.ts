@@ -24,12 +24,14 @@ import type {
 	CaptureApiPayload,
 	ContextToProcess,
 	IntentOptions,
+	OpenOptions,
 	IntentPickerResponse,
 	IntentRegistrationEntry,
 	IntentRegistrationPayload,
 	IntentResolverOptions,
 	IntentTargetMetaData,
-	ProcessedContext
+	ProcessedContext,
+	ContextRegistrationEntry
 } from "../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue } from "../utils";
 
@@ -49,6 +51,8 @@ export function interopOverride(
 	class InteropOverride extends InteropBroker {
 		private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] } = {};
 
+		private readonly _trackedContextHandlers: { [key: string]: ContextRegistrationEntry[] } = {};
+
 		private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
 
 		private readonly _trackedClientConnections: { [key: string]: ApiMetadata } = {};
@@ -56,6 +60,8 @@ export function interopOverride(
 		private _intentResolverOptions?: IntentResolverOptions;
 
 		private _intentOptions?: IntentOptions;
+
+		private _openOptions?: OpenOptions;
 
 		private _unregisteredApp: PlatformApp | undefined;
 
@@ -89,8 +95,12 @@ export function interopOverride(
 							...intentResolverOptions
 						};
 						this._intentOptions = {
-							intentTimeout: 5000,
+							intentTimeout: 15000,
 							...customSettings?.platformProvider?.interop?.intentOptions
+						};
+						this._openOptions = {
+							openStrategy: "FDC3",
+							...customSettings?.platformProvider?.interop?.openOptions
 						};
 						this._unregisteredApp = customSettings?.platformProvider?.interop?.unregisteredApp;
 						if (!isEmpty(this._unregisteredApp)) {
@@ -461,26 +471,78 @@ export function interopOverride(
 				fdc3OpenOptions.context
 			);
 			try {
+				const isOpenByIntent = this._openOptions?.openStrategy === "INTENT";
+				let appId: string | undefined;
+				let instanceId: string | undefined;
+
 				const requestedApp = await getApp(requestedId);
 				if (isEmpty(requestedApp)) {
 					throw new Error(OpenError.AppNotFound);
 				}
-				const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
-				let appId: string;
-				let instanceId: string | undefined;
-				if (typeof result.source === "string") {
-					appId = result.source;
+
+				if (isOpenByIntent) {
+					const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
+					if (typeof result.source === "string") {
+						appId = result.source;
+					} else {
+						appId = result.source.appId;
+						instanceId = result.source.instanceId;
+					}
 				} else {
-					appId = result.source.appId;
-					instanceId = result.source.instanceId;
+					const platformIdentities = await launch(requestedApp);
+					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
+						appId = platformIdentities[0].appId;
+						instanceId = platformIdentities[0].appId;
+						if (platformIdentities.length > 1) {
+							logger.warn(
+								"Open can only return one app and instance id and multiple instances were launched as a result. Returning the first instance. Returned instances: ",
+								platformIdentities
+							);
+						}
+						if (!isEmpty(fdc3OpenOptions?.context)) {
+							const contextTimeout: number | undefined = this._intentOptions?.intentTimeout;
+							const contextTypeName = fdc3OpenOptions.context.type;
+							// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+							const clientReadyInstanceId = await this.onContextClientReady(
+								platformIdentities[0],
+								contextTypeName,
+								contextTimeout
+							);
+
+							const trackedHandler = this._trackedContextHandlers[contextTypeName].find(
+								(entry) => entry.clientIdentity.endpointId === clientReadyInstanceId
+							);
+							if (!isEmpty(trackedHandler)) {
+								await super.invokeContextHandler(
+									trackedHandler.clientIdentity,
+									trackedHandler.handlerId,
+									fdc3OpenOptions.context
+								);
+							} else {
+								logger.warn(
+									`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler.`
+								);
+							}
+						}
+					}
 				}
-				return { appId, instanceId };
-			} catch (intentError) {
-				const error = formatError(intentError);
-				if (error === ResolveError.TargetInstanceUnavailable || error === ResolveError.IntentDeliveryFailed) {
+
+				if (!isEmpty(appId)) {
+					return { appId, instanceId };
+				}
+
+				// if no id returned then the likelihood is that there was a problem launching the application as a result of the open request.
+				throw new Error(OpenError.ErrorOnLaunch);
+			} catch (openError) {
+				const error = formatError(openError);
+				if (
+					error === ResolveError.TargetInstanceUnavailable ||
+					error === ResolveError.IntentDeliveryFailed ||
+					error === OpenError.AppTimeout
+				) {
 					throw new Error(OpenError.AppTimeout);
 				}
-				throw intentError;
+				throw openError;
 			}
 		}
 
@@ -493,6 +555,12 @@ export function interopOverride(
 
 			for (const [key, value] of Object.entries(this._trackedIntentHandlers)) {
 				this._trackedIntentHandlers[key] = value.filter(
+					(entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId
+				);
+			}
+
+			for (const [key, value] of Object.entries(this._trackedContextHandlers)) {
+				this._trackedContextHandlers[key] = value.filter(
 					(entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId
 				);
 			}
@@ -673,6 +741,63 @@ export function interopOverride(
 		}
 
 		/**
+		 * A context handler has been registered against the broker.
+		 * @param payload The payload from a context listener registration.
+		 * @param payload.contextType The context type that the client is listening for.
+		 * @param payload.handlerId The handler Id for this listener.
+		 * @param clientIdentity The identity of the application that is adding the context handler.
+		 */
+		public async contextHandlerRegistered(
+			payload: { contextType: string | undefined; handlerId: string },
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<void> {
+			logger.info("contextHandlerRegistered:", payload, clientIdentity);
+			if (!isEmpty(payload) && !isEmpty(payload.contextType) && !isEmpty(payload.handlerId)) {
+				const contextTypeName: string = payload?.contextType;
+				const handlerId = payload.handlerId;
+				let trackedContextHandler = this._trackedContextHandlers[contextTypeName];
+
+				if (isEmpty(trackedContextHandler)) {
+					trackedContextHandler = [];
+					this._trackedContextHandlers[contextTypeName] = trackedContextHandler;
+				}
+
+				const trackedHandler = this._trackedContextHandlers[contextTypeName].find(
+					(entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId
+				);
+
+				if (isEmpty(trackedHandler)) {
+					logger.info(
+						`contextHandler endpoint not registered. Registering ${clientIdentity.endpointId} against context handler for context type ${contextTypeName} and looking up app name.`
+					);
+					const appId = await this.lookupAppId(clientIdentity);
+
+					if (isEmpty(appId)) {
+						logger.warn(
+							"Unable to determine app id based on name. This app will not be tracked via context handler registration."
+						);
+						return;
+					}
+					this._trackedContextHandlers[contextTypeName].push({
+						clientIdentity,
+						appId,
+						handlerId
+					});
+					logger.info(
+						`contextHandler endpoint: ${clientIdentity.endpointId} registered against context type: ${contextTypeName} and app Id: ${appId}.`
+					);
+				}
+
+				const clientReadyKey = this.getClientReadyKey(clientIdentity, contextTypeName);
+				if (!isEmpty(this._clientReadyRequests[clientReadyKey])) {
+					logger.info("Resolving client ready request.");
+					this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
+				}
+			}
+			super.contextHandlerRegistered(payload, clientIdentity);
+		}
+
+		/**
 		 * Launch an app with intent.
 		 * @param app The application to launch.
 		 * @param intent The intent to open it with.
@@ -721,7 +846,7 @@ export function interopOverride(
 				if (platformIdentities.length === 1) {
 					const intentTimeout: number | undefined = this._intentOptions?.intentTimeout;
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-					instanceId = await this.onClientReady(platformIdentities[0], intent.name, intentTimeout);
+					instanceId = await this.onIntentClientReady(platformIdentities[0], intent.name, intentTimeout);
 				}
 			}
 
@@ -1111,24 +1236,24 @@ export function interopOverride(
 		/**
 		 * Get a key that can be used for an identity and client.
 		 * @param identity The identity to use in the key.
-		 * @param intentName The intent to use in the key
+		 * @param name The intent to use in the key
 		 * @returns The key.
 		 */
-		private getClientReadyKey(identity: OpenFin.Identity, intentName: string): string {
-			return `${identity.uuid}/${identity.name}/${intentName}`;
+		private getClientReadyKey(identity: OpenFin.Identity, name: string): string {
+			return `${identity.uuid}/${identity.name}/${name}`;
 		}
 
 		/**
-		 * Handle client ready event.
+		 * Handle client ready event for intent handling.
 		 * @param identity The identity of the client.
 		 * @param intentName The intent name.
 		 * @param timeout The timeout to wait for the client.
 		 * @returns The instance id.
 		 */
-		private async onClientReady(
+		private async onIntentClientReady(
 			identity: OpenFin.Identity,
 			intentName: string,
-			timeout: number = 5000
+			timeout: number = 15000
 		): Promise<string> {
 			return new Promise<string>((resolve, reject) => {
 				const registeredHandlers = this._trackedIntentHandlers[intentName];
@@ -1152,6 +1277,51 @@ export function interopOverride(
 					if (!isEmpty(this._clientReadyRequests[key])) {
 						delete this._clientReadyRequests[key];
 						reject(ResolveError.IntentDeliveryFailed);
+					}
+				}, timeout);
+				this._clientReadyRequests[key] = (instanceId: string): void => {
+					clearTimeout(timerId);
+					// clear the callback asynchronously
+					delete this._clientReadyRequests[key];
+					resolve(instanceId);
+				};
+			});
+		}
+
+		/**
+		 * Handle client ready event for context handling.
+		 * @param identity The identity of the client.
+		 * @param contextTypeName The contextType name.
+		 * @param timeout The timeout to wait for the client.
+		 * @returns The instance id.
+		 */
+		private async onContextClientReady(
+			identity: OpenFin.Identity,
+			contextTypeName: string,
+			timeout: number = 15000
+		): Promise<string> {
+			return new Promise<string>((resolve, reject) => {
+				const registeredHandlers = this._trackedContextHandlers[contextTypeName];
+				let existingInstanceId: string | undefined;
+				if (!isEmpty(registeredHandlers)) {
+					for (const handler of registeredHandlers) {
+						if (
+							handler.clientIdentity.uuid === identity.uuid &&
+							handler.clientIdentity.name === identity.name
+						) {
+							existingInstanceId = handler.clientIdentity.endpointId;
+							break;
+						}
+					}
+				}
+				if (!isEmpty(existingInstanceId)) {
+					resolve(existingInstanceId);
+				}
+				const key = this.getClientReadyKey(identity, contextTypeName);
+				const timerId = setTimeout(() => {
+					if (!isEmpty(this._clientReadyRequests[key])) {
+						delete this._clientReadyRequests[key];
+						reject(OpenError.AppTimeout);
 					}
 				}, timeout);
 				this._clientReadyRequests[key] = (instanceId: string): void => {

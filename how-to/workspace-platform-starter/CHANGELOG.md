@@ -1,5 +1,10 @@
 # Changelog
 
+## v14.1
+
+- Added fdc3 approach to fdc3.open to the interop broker.
+- Change: Default fdc3.open approach has moved from opinionated intent based approach to fdc3 standard based approach. platformProvider interop setting now has openOptions where you can specify openStrategy. Set it to INTENT if you want the opinionated behavior back.
+
 ## v14
 
 - Added customizable splash screen (splashScreenProvider in settings)
