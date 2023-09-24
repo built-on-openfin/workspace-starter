@@ -91,6 +91,7 @@
 					"fdc3InteropApi": "2.0"
 				},
 				"intentOptions": {},
+				"openOptions": {},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
@@ -153,20 +154,7 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": [
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-contact.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-expero.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-interop.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-manager.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-native.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-dev-extensions.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-preload.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-tools.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps-fdc3-2-0.json"
-			],
+			"endpointIds": ["https://directory.fdc3.finos.org/conformance_2_0/v2/apps/"],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
