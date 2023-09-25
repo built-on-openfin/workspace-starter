@@ -170,6 +170,21 @@ export interface ApiMetadata {
 }
 
 /**
+ * API Metadata.
+ */
+export interface BrokerClientConnection {
+	/**
+	 * The client identity of the connection.
+	 */
+	clientIdentity: OpenFin.ClientIdentity;
+
+	/**
+	 * The api meta data if available.
+	 */
+	apiMetadata?: ApiMetadata;
+}
+
+/**
  * The context request to augment with a context processor.
  */
 export interface ContextToProcess<T extends OpenFin.Context = OpenFin.Context> {
@@ -230,4 +245,10 @@ export interface OpenOptions {
 	 * is 15000 (15 seconds)
 	 */
 	contextTimeout?: number;
+
+	/**
+	 * How long should the broker wait after launching a view/window for it to connect to the broker. The default
+	 * is 15000 (15 seconds).
+	 */
+	connectionTimeout?: number;
 }

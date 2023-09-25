@@ -31,7 +31,8 @@ import type {
 	IntentResolverOptions,
 	IntentTargetMetaData,
 	ProcessedContext,
-	ContextRegistrationEntry
+	ContextRegistrationEntry,
+	BrokerClientConnection
 } from "../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue } from "../utils";
 
@@ -55,7 +56,7 @@ export function interopOverride(
 
 		private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
 
-		private readonly _trackedClientConnections: { [key: string]: ApiMetadata } = {};
+		private readonly _trackedClientConnections: { [key: string]: BrokerClientConnection } = {};
 
 		private _intentResolverOptions?: IntentResolverOptions;
 
@@ -133,7 +134,7 @@ export function interopOverride(
 				}
 			}
 			if (response.isValid) {
-				await this.captureApiVersion(id, payload as CaptureApiPayload);
+				await this.trackClientConnection(id, payload as CaptureApiPayload);
 			}
 			return response.isValid;
 		}
@@ -187,7 +188,7 @@ export function interopOverride(
 			let requestedContextType: string;
 			let requestedResultType: string | undefined;
 			let request: { context: { type: string }; metadata: { resultType: string } };
-			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
+			const apiVersion: ApiMetadata | undefined = this.getApiVersion(clientIdentity);
 
 			if ("type" in contextOptions) {
 				requestedContextType = contextOptions.type;
@@ -233,7 +234,7 @@ export function interopOverride(
 			intent: { name: string; displayName?: string };
 			apps: (AppMetadataV1Point2 | AppMetadata)[];
 		}> {
-			const apiVersion: ApiMetadata = this.getApiVersion(clientIdentity);
+			const apiVersion: ApiMetadata | undefined = this.getApiVersion(clientIdentity);
 			let contextType: string | undefined;
 
 			const optContextType = intentOptions?.context?.type;
@@ -492,7 +493,9 @@ export function interopOverride(
 					const platformIdentities = await launch(requestedApp);
 					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 						appId = platformIdentities[0].appId;
-						instanceId = platformIdentities[0].appId;
+						const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
+						// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+						instanceId = await this.onConnectionClientReady(platformIdentities[0], openTimeout);
 						if (platformIdentities.length > 1) {
 							logger.warn(
 								"Open can only return one app and instance id and multiple instances were launched as a result. Returning the first instance. Returned instances: ",
@@ -519,6 +522,7 @@ export function interopOverride(
 									fdc3OpenOptions.context
 								);
 							} else {
+								// TODO CAPTURE SUBSCRIBERS WHO SUBSCRIBE TO ALL CONTEXTS
 								logger.warn(
 									`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler.`
 								);
@@ -538,6 +542,7 @@ export function interopOverride(
 				if (
 					error === ResolveError.TargetInstanceUnavailable ||
 					error === ResolveError.IntentDeliveryFailed ||
+					error === ResolveError.TargetInstanceUnavailable ||
 					error === OpenError.AppTimeout
 				) {
 					throw new Error(OpenError.AppTimeout);
@@ -564,7 +569,7 @@ export function interopOverride(
 					(entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId
 				);
 			}
-			this.removeApiVersion(clientIdentity);
+			this.removeTrackedClientConnection(clientIdentity);
 			await super.clientDisconnected(clientIdentity);
 		}
 
@@ -731,7 +736,7 @@ export function interopOverride(
 					);
 				}
 
-				const clientReadyKey = this.getClientReadyKey(clientIdentity, intentName);
+				const clientReadyKey = this.getClientReadyKey(clientIdentity, "INTENT", intentName);
 				if (!isEmpty(this._clientReadyRequests[clientReadyKey])) {
 					logger.info("Resolving client ready request.");
 					this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
@@ -788,7 +793,7 @@ export function interopOverride(
 					);
 				}
 
-				const clientReadyKey = this.getClientReadyKey(clientIdentity, contextTypeName);
+				const clientReadyKey = this.getClientReadyKey(clientIdentity, "CONTEXT", contextTypeName);
 				if (!isEmpty(this._clientReadyRequests[clientReadyKey])) {
 					logger.info("Resolving client ready request.");
 					this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
@@ -1159,11 +1164,11 @@ export function interopOverride(
 		}
 
 		/**
-		 * Capture the API version.
+		 * Capture the connection and API version.
 		 * @param id The client identity to capture from.
 		 * @param payload The payload.
 		 */
-		private async captureApiVersion(
+		private async trackClientConnection(
 			id: OpenFin.ClientIdentity & { connectionUrl?: string; entityType?: string },
 			payload?: CaptureApiPayload
 		): Promise<void> {
@@ -1173,13 +1178,13 @@ export function interopOverride(
 				if (id.uuid !== fin.me.identity.uuid) {
 					const payloadApiVersion = payload?.apiVersion;
 					if (!isEmpty(payloadApiVersion) && !isEmpty(payloadApiVersion?.type)) {
-						this._trackedClientConnections[key] = payloadApiVersion;
+						apiVersion = payloadApiVersion;
 					} else if (!isEmpty(id.connectionUrl)) {
 						// if they haven't specified apiVersion meta data and it is external and has a url then we will assume fdc3 2.0
-						this._trackedClientConnections[key] = { type: "fdc3", version: "2.0" };
+						apiVersion = { type: "fdc3", version: "2.0" };
 					} else {
 						// if a native app has specified a preference through apiVersion then we assume interop
-						this._trackedClientConnections[key] = { type: "interop" };
+						apiVersion = { type: "interop" };
 					}
 				} else {
 					const entityType = id.entityType;
@@ -1207,9 +1212,17 @@ export function interopOverride(
 						}
 					}
 				}
-			}
-			if (!isEmpty(apiVersion)) {
-				this._trackedClientConnections[key] = apiVersion;
+				const brokerClientConnection: BrokerClientConnection = {
+					clientIdentity: id,
+					apiMetadata: apiVersion
+				};
+
+				this._trackedClientConnections[key] = brokerClientConnection;
+				const clientReadyKey = this.getClientReadyKey(id, "CONNECTION");
+				if (!isEmpty(this._clientReadyRequests[clientReadyKey])) {
+					logger.info("Resolving client ready request.");
+					this._clientReadyRequests[clientReadyKey](id.endpointId);
+				}
 			}
 		}
 
@@ -1218,17 +1231,29 @@ export function interopOverride(
 		 * @param id The identity to get the api version for.
 		 * @returns The api metadata.
 		 */
-		private getApiVersion(id: OpenFin.Identity): ApiMetadata {
+		private getApiVersion(id: OpenFin.Identity): ApiMetadata | undefined {
 			const key = `${id.uuid}-${id.name}`;
-			const apiVersion: ApiMetadata = this._trackedClientConnections[key];
+			const apiVersion: ApiMetadata | undefined = this._trackedClientConnections[key]?.apiMetadata;
 			return apiVersion;
 		}
 
 		/**
-		 * Remove the api version for the identity.
-		 * @param id The identity to remove the api version for.
+		 * Get the client identity given a standard identity.
+		 * @param id The identity to get the client identity for.
+		 * @returns The client identity if available.
 		 */
-		private removeApiVersion(id: OpenFin.Identity): void {
+		private getClientIdentity(id: OpenFin.Identity): OpenFin.ClientIdentity | undefined {
+			const key = `${id.uuid}-${id.name}`;
+			const clientIdentity: OpenFin.ClientIdentity | undefined =
+				this._trackedClientConnections[key]?.clientIdentity;
+			return clientIdentity;
+		}
+
+		/**
+		 * Remove the tracking for the identity.
+		 * @param id The identity to remove the connection information for.
+		 */
+		private removeTrackedClientConnection(id: OpenFin.Identity): void {
 			const key = `${id.uuid}-${id.name}`;
 			delete this._trackedClientConnections[key];
 		}
@@ -1236,11 +1261,50 @@ export function interopOverride(
 		/**
 		 * Get a key that can be used for an identity and client.
 		 * @param identity The identity to use in the key.
-		 * @param name The intent to use in the key
+		 * @param type The type of ready event you are looking for
+		 * @param name The name of the type if required to use in the key
 		 * @returns The key.
 		 */
-		private getClientReadyKey(identity: OpenFin.Identity, name: string): string {
-			return `${identity.uuid}/${identity.name}/${name}`;
+		private getClientReadyKey(
+			identity: OpenFin.Identity,
+			type: "CONNECTION" | "CONTEXT" | "INTENT",
+			name?: string
+		): string {
+			if (isEmpty(name)) {
+				return `${identity.uuid}/${identity.name}/${type}`;
+			}
+			return `${identity.uuid}/${identity.name}/${type}/${name}`;
+		}
+
+		/**
+		 * Handle client ready event for opening and awaiting a connection to the broker.
+		 * @param identity The identity of the client.
+		 * @param timeout The timeout to wait for the client.
+		 * @returns The instance id.
+		 */
+		private async onConnectionClientReady(
+			identity: OpenFin.Identity,
+			timeout: number = 15000
+		): Promise<string> {
+			return new Promise<string>((resolve, reject) => {
+				const clientIdentity = this.getClientIdentity(identity);
+				if (!isEmpty(clientIdentity)) {
+					resolve(clientIdentity.endpointId);
+				}
+				const key = this.getClientReadyKey(identity, "CONNECTION");
+				const timerId = setTimeout(() => {
+					if (!isEmpty(this._clientReadyRequests[key])) {
+						delete this._clientReadyRequests[key];
+						reject(ResolveError.TargetInstanceUnavailable);
+					}
+				}, timeout);
+				this._clientReadyRequests[key] = (instanceId: string): void => {
+					clearTimeout(timerId);
+					// clear the callback asynchronously
+					delete this._clientReadyRequests[key];
+					resolve(instanceId);
+				};
+			});
 		}
 
 		/**
@@ -1272,7 +1336,7 @@ export function interopOverride(
 				if (!isEmpty(existingInstanceId)) {
 					resolve(existingInstanceId);
 				}
-				const key = this.getClientReadyKey(identity, intentName);
+				const key = this.getClientReadyKey(identity, "INTENT", intentName);
 				const timerId = setTimeout(() => {
 					if (!isEmpty(this._clientReadyRequests[key])) {
 						delete this._clientReadyRequests[key];
@@ -1317,7 +1381,7 @@ export function interopOverride(
 				if (!isEmpty(existingInstanceId)) {
 					resolve(existingInstanceId);
 				}
-				const key = this.getClientReadyKey(identity, contextTypeName);
+				const key = this.getClientReadyKey(identity, "CONTEXT", contextTypeName);
 				const timerId = setTimeout(() => {
 					if (!isEmpty(this._clientReadyRequests[key])) {
 						delete this._clientReadyRequests[key];

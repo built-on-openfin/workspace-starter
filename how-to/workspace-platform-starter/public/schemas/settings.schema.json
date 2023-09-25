@@ -2908,6 +2908,10 @@
             "additionalProperties": false,
             "description": "Options related to the fdc3 open api",
             "properties": {
+                "connectionTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to connect to the broker. The default\nis 15000 (15 seconds).",
+                    "type": "number"
+                },
                 "contextTimeout": {
                     "description": "How long should the broker wait after launching a view/window for it to register a context handler. The default\nis 15000 (15 seconds)",
                     "type": "number"
