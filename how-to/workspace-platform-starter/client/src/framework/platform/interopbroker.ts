@@ -341,7 +341,7 @@ export function interopOverride(
 				intent.displayName = intentForSelection.intent.displayName;
 
 				if (intentForSelection.apps.length === 1) {
-					const appInstances = await this.fdc3HandleFindInstances(intentForSelection.apps[0], clientIdentity);
+					const appInstances = await this.findAppInstances(intentForSelection.apps[0], clientIdentity, "INTENT");
 					// if there are no instances launch a new one otherwise present the choice to the user
 					// by falling through to the next code block
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
@@ -410,7 +410,7 @@ export function interopOverride(
 
 			if (intentApps.length === 1) {
 				// handle single entry
-				const appInstances = await this.fdc3HandleFindInstances(intentApps[0], clientIdentity);
+				const appInstances = await this.findAppInstances(intentApps[0], clientIdentity, "INTENT");
 				// if there are no instances launch a new one otherwise present the choice to the user
 				// by falling through to the next code block
 				let appInstanceId: string | undefined;
@@ -583,19 +583,7 @@ export function interopOverride(
 			app: AppIdentifier,
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<AppIdentifier[]> {
-			const endpointApps: { [key: string]: AppIdentifier } = {};
-
-			for (const [, value] of Object.entries(this._trackedIntentHandlers)) {
-				const entries = value.filter((entry) => entry.appId === app.appId);
-				for (const entry of entries) {
-					endpointApps[entry.clientIdentity.endpointId] = {
-						appId: entry.appId ?? "",
-						instanceId: entry.clientIdentity.endpointId
-					};
-				}
-			}
-
-			return Object.values(endpointApps);
+			return this.findAppInstances(app, clientIdentity);
 		}
 
 		/**
@@ -993,7 +981,7 @@ export function interopOverride(
 			}
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
 			if (!isEmpty(targetAppIdentifier.instanceId)) {
-				const availableAppInstances = await this.fdc3HandleFindInstances(targetAppIdentifier, clientIdentity);
+				const availableAppInstances = await this.findAppInstances(targetAppIdentifier, clientIdentity, "INTENT");
 				if (
 					availableAppInstances.length === 0 ||
 					!availableAppInstances.some(
@@ -1043,7 +1031,7 @@ export function interopOverride(
 					);
 					return intentResolver;
 				}
-				const specifiedAppInstances = await this.fdc3HandleFindInstances(targetApp, clientIdentity);
+				const specifiedAppInstances = await this.findAppInstances(targetApp, clientIdentity, "INTENT");
 				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
 					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
 					if (isEmpty(intentResolver)) {
@@ -1476,9 +1464,10 @@ export function interopOverride(
 			) {
 				return false;
 			}
-			const instances = await this.fdc3HandleFindInstances(
+			const instances = await this.findAppInstances(
 				{ appId: this._unregisteredApp.appId },
-				clientIdentity
+				clientIdentity,
+				"INTENT"
 			);
 			return instances.length > 0;
 		}
@@ -1577,6 +1566,46 @@ export function interopOverride(
 				}
 			}
 			return context;
+		}
+
+		/**
+		 * Handle FDC3 find instances for app instances that have registered for an intent.
+		 * @param app The app identifier to find.
+		 * @param clientIdentity The client identity.
+		 * @param type the type of app instances you are after. CONNECTED = anything that has connected to the broker and INTENT means an APP that has registered an Intent Handler.
+		 * @returns The instance of the app.
+		 */
+		private async findAppInstances(
+			app: AppIdentifier,
+			clientIdentity: OpenFin.ClientIdentity,
+			type: "CONNECTED"|"INTENT" = "CONNECTED"
+		): Promise<AppIdentifier[]> {
+			const endpointApps: { [key: string]: AppIdentifier } = {};
+
+			if(type === "INTENT") {
+				for (const [, value] of Object.entries(this._trackedIntentHandlers)) {
+					const entries = value.filter((entry) => entry.appId === app.appId);
+					for (const entry of entries) {
+						endpointApps[entry.clientIdentity.endpointId] = {
+							appId: entry.appId ?? "",
+							instanceId: entry.clientIdentity.endpointId
+						};
+					}
+				}
+				return Object.values(endpointApps);
+			}
+
+			for (const [, value] of Object.entries(this._trackedClientConnections)) {
+				const trackedAppId = await this.lookupAppId(value.clientIdentity);
+				if(trackedAppId === app.appId && isEmpty(endpointApps[value.clientIdentity.endpointId])) {
+					endpointApps[value.clientIdentity.endpointId] = {
+						appId: app.appId ?? "",
+						instanceId: value.clientIdentity.endpointId
+					};
+				}
+			}
+
+			return Object.values(endpointApps);
 		}
 	}
 
