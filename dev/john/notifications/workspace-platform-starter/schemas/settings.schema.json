@@ -2871,6 +2871,81 @@
         "MonitorInfo": {
             "$ref": "#/definitions/__type_34"
         },
+        "NotificationClientDefaultOptions": {
+            "additionalProperties": false,
+            "description": "A set of default options that will apply against all notification clients unless they\nhave a setting of their own.",
+            "properties": {
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "NotificationClientOptions": {
+            "additionalProperties": false,
+            "description": "Options that allow you to influence the behavior of the notification client.",
+            "properties": {
+                "enabled": {
+                    "description": "Should this module have a notification client. Default is true.",
+                    "type": "boolean"
+                },
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "An icon to enforce at the top of all of the notifications from this client",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id that acts as the reference to a module id",
+                    "type": "string"
+                },
+                "idPrefix": {
+                    "description": "The prefix to assign to all notification ids for this client. It means you can \nhave an id shared across different module ids as they may come from the same tea.\nId is used by default if no prefix is provided.",
+                    "type": "string"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                },
+                "streamIcon": {
+                    "description": "An icon to enforce for all streams from this from this client",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "NotificationClients": {
+            "additionalProperties": false,
+            "description": "A collection of rules and settings for notification clients that fall under this platform.",
+            "properties": {
+                "clientOptions": {
+                    "description": "If restricted to listed is true then an entry needs to exist for each module id\nthat should be provided with a notification client. Otherwise all modules\nwill be provided with a notification client using the default rules if provided. \nIf restrictToListed is false the clients list can still be used to disable \nspecific modules by specifying their id and enabled: false. It also allows you \nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "items": {
+                        "$ref": "#/definitions/NotificationClientOptions"
+                    },
+                    "type": "array"
+                },
+                "defaults": {
+                    "$ref": "#/definitions/NotificationClientDefaultOptions",
+                    "description": "What default options should be applied against this platform"
+                },
+                "restrictToListed": {
+                    "description": "Should the notification client be passed only to those\nlisted or should all modules receive it but the list acts\nas an override. Default is false.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "NotificationProviderOptions": {
             "additionalProperties": false,
             "description": "Notification Provider Options. Providing settings in order to register your platform against the notification center.",
@@ -2883,6 +2958,10 @@
                     "description": "Unique identifier of the platform.",
                     "type": "string"
                 },
+                "notificationClients": {
+                    "$ref": "#/definitions/NotificationClients",
+                    "description": "A collection of rules and settings for notification clients that fall under this platform."
+                },
                 "title": {
                     "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",
                     "type": "string"
@@ -2891,6 +2970,7 @@
             "required": [
                 "icon",
                 "id",
+                "notificationClients",
                 "title"
             ],
             "type": "object"
