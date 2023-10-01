@@ -8,6 +8,7 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { NotificationOptions } from "@openfin/workspace/notifications";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -16,7 +17,9 @@ import type {
 import type { PageChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import type { NotificationClient } from "workspace-platform-starter/shapes/notification-shapes";
 import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { PagesSettings } from "./shapes";
 
 /**
@@ -92,6 +95,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	private _lastResults?: HomeSearchResult[];
 
 	/**
+	 * Notification client if available.
+	 */
+	private _notificationClient: NotificationClient | undefined;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -133,6 +141,19 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 					await this.rebuildResults(platform);
 				}
 			});
+
+			if (!isEmpty(this._integrationHelpers.getNotificationClient)) {
+				this._integrationHelpers.subscribeLifecycleEvent("after-bootstrap", async () => {
+					if (!isEmpty(this._integrationHelpers?.getNotificationClient)) {
+						this._notificationClient = await this._integrationHelpers?.getNotificationClient();
+						this._notificationClient?.addEventListener("notification-created", (event) => {
+							this._logger?.info(
+								`Notification Created by Page: type: ${event.type} notification id: ${event.notification.id}`
+							);
+						});
+					}
+				});
+			}
 		}
 	}
 
@@ -206,11 +227,32 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 			if (data?.pageId) {
 				handled = true;
 
+				if (!isEmpty(this._notificationClient)) {
+					const notification: NotificationOptions = {
+						title: `page id: ${data?.pageId}`,
+						body: "This is a page simple notification",
+						toast: "transient",
+						category: "default",
+						template: "markdown"
+					};
+					await this._notificationClient.create(notification);
+				}
 				if (result.action.name === PagesProvider._ACTION_LAUNCH_PAGE) {
 					if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
 						const platform = this._integrationHelpers.getPlatform();
 						const pageToLaunch = await platform.Storage.getPage(data.pageId);
 						await this._integrationHelpers.launchPage(pageToLaunch, undefined, this._logger);
+					}
+					if (!isEmpty(this._notificationClient)) {
+						const allNotifications = await this._notificationClient.getAll();
+						const notification: NotificationOptions = {
+							title: `page. notification count: ${allNotifications.length}`,
+							body: "This is a page notification count",
+							toast: "transient",
+							category: "default",
+							template: "markdown"
+						};
+						await this._notificationClient.create(notification);
 					}
 				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
 					if (this._integrationHelpers?.getPlatform) {

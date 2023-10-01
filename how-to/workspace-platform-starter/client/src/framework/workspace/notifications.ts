@@ -2,14 +2,24 @@ import type { RegistrationMetaInfo } from "@openfin/workspace";
 import * as Notifications from "@openfin/workspace/notifications";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
-import type { NotificationProviderOptions } from "../shapes/notification-shapes";
+import type {
+	NotificationClientDefaultOptions,
+	NotificationClientOptions,
+	NotificationProviderOptions
+} from "../shapes/notification-shapes";
 import { isEmpty } from "../utils";
+import { NotificationClient } from "./notification-client";
 
 const logger = createLogger("Notifications");
 
 let notificationsProviderOptions: NotificationProviderOptions | undefined;
 let notificationsRegistered = false;
 let metaInfo: RegistrationMetaInfo;
+let allowNotificationClientCreation = true;
+let restrictNotificationClientCreationToListed = false;
+let notificationClientOptions: NotificationClientOptions[];
+let notificationClientDefaults: NotificationClientDefaultOptions;
+let notificationPlatformId: string;
 
 /**
  * Register the home component.
@@ -36,16 +46,33 @@ export async function register(
 			const settings = await getSettings();
 			const notificationPlatformSettings = settings?.notificationProvider;
 			if (!isEmpty(notificationPlatformSettings)) {
-				// use a promise.then instead of await as we do not want to delay the start up of the platform
-				Notifications.register({ notificationsPlatformOptions: notificationPlatformSettings })
-					.then(() => {
-						notificationsRegistered = true;
-						logger.info("Registered notifications");
-						return true;
-					})
-					.catch((reason) => {
-						logger.error("We were unable to register with Notification Center", reason);
-					});
+				notificationPlatformId = notificationPlatformSettings?.id ?? fin.me.identity.uuid;
+				notificationPlatformSettings.id = notificationPlatformId;
+				try {
+					await Notifications.register({ notificationsPlatformOptions: notificationPlatformSettings });
+					notificationsRegistered = true;
+					restrictNotificationClientCreationToListed =
+						notificationPlatformSettings?.notificationClients?.restrictToListed ?? false;
+					notificationClientOptions = notificationPlatformSettings?.notificationClients?.clientOptions ?? [];
+					notificationClientDefaults = {
+						enforceIcon: false,
+						includeInPlatform: true,
+						...notificationPlatformSettings?.notificationClients?.defaults
+					};
+					if (restrictNotificationClientCreationToListed) {
+						if (!Array.isArray(notificationPlatformSettings.notificationClients.clientOptions)) {
+							logger.warn(
+								"You have specified that only listed clients should receive a notification client but the clientOptions setting is undefined. Please set to an empty array if you want no one to have clients or add the clients you wish to enable."
+							);
+							allowNotificationClientCreation = false;
+						} else if (notificationPlatformSettings.notificationClients.clientOptions.length === 0) {
+							allowNotificationClientCreation = false;
+						}
+					}
+					logger.info("Registered notifications");
+				} catch (error) {
+					logger.error("We were unable to register with Notification Center", error);
+				}
 			} else {
 				logger.warn(
 					"Unable to register notifications platform as we do not have it defined as part of settings"
@@ -98,4 +125,49 @@ export async function show(options?: Notifications.ShowOptions): Promise<void> {
 export async function hide(): Promise<void> {
 	logger.info("Hide Notifications called.");
 	return Notifications.hide();
+}
+
+/**
+ * Returns a restricted notification client that helps isolate the notifications that
+ * can be read, updated and cleared by a client inside of a platform.
+ * @param options The options to help with the client restriction.
+ * @returns The notification client.
+ */
+export async function getNotificationClient(
+	options: NotificationClientOptions
+): Promise<NotificationClient | undefined> {
+	if (!notificationsRegistered) {
+		logger.warn(
+			"A notification client was requested before the notification provider was registered.",
+			options
+		);
+		return undefined;
+	}
+
+	if (!allowNotificationClientCreation) {
+		logger.warn(
+			"Notification client creation is disabled. If you this is not expected please check you Notification Provider -> Notification Clients settings."
+		);
+		return undefined;
+	}
+
+	const listedClientOptions = notificationClientOptions.find((optionEntry) => optionEntry.id === options.id);
+
+	if (restrictNotificationClientCreationToListed && isEmpty(listedClientOptions)) {
+		logger.warn(
+			`Notification client creation is limited to those listed in the notification clients section of the notification provider. We have been unable to find an entry with the id: ${options.id}. `
+		);
+		return undefined;
+	}
+
+	if (!isEmpty(listedClientOptions) && listedClientOptions.enabled === false) {
+		logger.warn(
+			`The options passed to create a notification client was a listed entry and it's enabled setting is set to false so a notification client will not be created. Id: ${options.id}`
+		);
+		return undefined;
+	}
+
+	const clientOptions = Object.assign(options, notificationClientDefaults, listedClientOptions ?? {});
+
+	return new NotificationClient(clientOptions, notificationPlatformId);
 }

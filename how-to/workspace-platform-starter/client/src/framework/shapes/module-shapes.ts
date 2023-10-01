@@ -4,6 +4,7 @@ import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
+import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 
@@ -135,6 +136,12 @@ export interface ModuleHelpers {
 	 * @returns the favorite client.
 	 */
 	getFavoriteClient?(): Promise<FavoriteClient | undefined>;
+
+	/**
+	 * If this platform has been configured to support notification client then it will provide it.
+	 * @returns notification client.
+	 */
+	getNotificationClient?(): Promise<NotificationClient | undefined>;
 
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
