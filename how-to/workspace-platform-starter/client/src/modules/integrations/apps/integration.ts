@@ -7,7 +7,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { NotificationCreatedEvent, NotificationOptions } from "@openfin/workspace/notifications";
+import type { NotificationCreatedEvent, NotificationOptions, NotificationsCountChanged } from "@openfin/workspace/notifications";
 import type { FavoriteChangedLifecyclePayload, NotificationClient } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import {
@@ -167,14 +167,21 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 								`Notification Created by App: type: ${event.type} notification id: ${event.notification.id}`
 							);
 						};
+
+						const countEventListener = (event: NotificationsCountChanged) => {
+							this._logger?.info(
+								`Notification Created by App: type: ${event.type} notification id: ${event.count}`
+							);
+						};
 						this._notificationClient?.addEventListener("notification-created", eventListener);
 						this._notificationClient?.addEventListener("notification-closed", () => this._logger?.info("Notification by app closed."));
 						this._notificationClient?.addEventListener("notification-toast-dismissed", () => this._logger?.info("Notification by app toast dismissed."));
-						this._notificationClient?.addEventListener("notifications-count-changed", (event) => this._logger?.info("Notification by app count changed.", event.count));
+						this._notificationClient?.addEventListener("notifications-count-changed", countEventListener);
 						
 						setTimeout(() => {
 							this._notificationClient?.removeEventListener("notification-created", eventListener);
-						}, 90000);
+							this._notificationClient?.removeEventListener("notifications-count-changed", countEventListener);
+						}, 60000);
 					}
 				});
 			}

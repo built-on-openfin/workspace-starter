@@ -27,108 +27,108 @@ import type { VersionProviderOptions } from "./version-shapes";
  * The custom settings section defined in the manifest.
  */
 export interface CustomSettings {
-	/**
-	 * The schema for the settings.
-	 */
-	$schema?: string;
-	/**
-	 * The app provider options.
-	 */
-	appProvider?: AppProviderOptions;
-	/**
-	 * The auth provider options.
-	 */
-	authProvider?: AuthProviderOptions;
-	/**
-	 * The bootstrap options.
-	 */
-	bootstrap?: BootstrapOptions;
-	/**
-	 * The browser provider options.
-	 */
-	browserProvider?: BrowserProviderOptions;
-	/**
-	 * The connection provider options.
-	 */
-	connectionProvider?: ConnectionProviderOptions;
-	/**
-	 * The dock provider options.
-	 */
-	dockProvider?: DockProviderOptions;
-	/**
-	 * The endpoint provider options.
-	 */
-	endpointProvider?: EndpointProviderOptions;
-	/**
-	 * The home provider options.
-	 */
-	homeProvider?: HomeProviderOptions;
-	/**
-	 * The init options provider options.
-	 */
-	initOptionsProvider?: InitOptionsProviderOptions;
-	/**
-	 * The integration provider options.
-	 */
-	integrationProvider?: IntegrationProviderOptions;
-	/**
-	 * The low code integration provider options.
-	 */
-	lowCodeIntegrationProvider?: LowCodeIntegrationProviderOptions;
-	/**
-	 * The notification provider options.
-	 */
-	notificationProvider?: NotificationProviderOptions;
-	/**
-	 * The platform provider options.
-	 */
-	platformProvider?: PlatformProviderOptions;
-	/**
-	 * The storefront provider options.
-	 */
-	storefrontProvider?: StorefrontProviderOptions;
-	/**
-	 * The theme provider options.
-	 */
-	themeProvider?: ThemeProviderOptions;
-	/**
-	 * The logger provider options.
-	 */
-	loggerProvider?: LoggerProviderOptions;
-	/**
-	 * The actions provider options.
-	 */
-	actionsProvider?: ActionsProviderOptions;
-	/**
-	 * The conditions provider options.
-	 */
-	conditionsProvider?: ConditionsProviderOptions;
-	/**
-	 * The lifecycle provider options.
-	 */
-	lifecycleProvider?: LifecycleProviderOptions;
-	/**
-	 * The analytics provider options.
-	 */
-	analyticsProvider?: AnalyticsProviderOptions;
-	/**
-	 * The version provider options.
-	 */
-	versionProvider?: VersionProviderOptions;
-	/**
-	 * The menus provider options.
-	 */
-	menusProvider?: MenusProviderOptions;
-	/**
-	 * The splash screen provider options.
-	 */
-	splashScreenProvider?: SplashScreenProviderOptions;
-	/**
-	 * The settings you need to set if you want to indicate this platform supports favorites
-	 */
-	favoriteProvider?: FavoriteProviderOptions;
-	/**
-	 * The settings you need to set if you want to include a tray icon with menu
-	 */
-	trayProvider?: TrayProviderOptions;
+    /**
+     * The schema for the settings.
+     */
+    $schema?: string;
+    /**
+     * The app provider options.
+     */
+    appProvider?: AppProviderOptions;
+    /**
+     * The auth provider options.
+     */
+    authProvider?: AuthProviderOptions;
+    /**
+     * The bootstrap options.
+     */
+    bootstrap?: BootstrapOptions;
+    /**
+     * The browser provider options.
+     */
+    browserProvider?: BrowserProviderOptions;
+    /**
+     * The connection provider options.
+     */
+    connectionProvider?: ConnectionProviderOptions;
+    /**
+     * The dock provider options.
+     */
+    dockProvider?: DockProviderOptions;
+    /**
+     * The endpoint provider options.
+     */
+    endpointProvider?: EndpointProviderOptions;
+    /**
+     * The home provider options.
+     */
+    homeProvider?: HomeProviderOptions;
+    /**
+     * The init options provider options.
+     */
+    initOptionsProvider?: InitOptionsProviderOptions;
+    /**
+     * The integration provider options.
+     */
+    integrationProvider?: IntegrationProviderOptions;
+    /**
+     * The low code integration provider options.
+     */
+    lowCodeIntegrationProvider?: LowCodeIntegrationProviderOptions;
+    /**
+     * The notification provider options.
+     */
+    notificationProvider?: NotificationProviderOptions;
+    /**
+     * The platform provider options.
+     */
+    platformProvider?: PlatformProviderOptions;
+    /**
+     * The storefront provider options.
+     */
+    storefrontProvider?: StorefrontProviderOptions;
+    /**
+     * The theme provider options.
+     */
+    themeProvider?: ThemeProviderOptions;
+    /**
+     * The logger provider options.
+     */
+    loggerProvider?: LoggerProviderOptions;
+    /**
+     * The actions provider options.
+     */
+    actionsProvider?: ActionsProviderOptions;
+    /**
+     * The conditions provider options.
+     */
+    conditionsProvider?: ConditionsProviderOptions;
+    /**
+     * The lifecycle provider options.
+     */
+    lifecycleProvider?: LifecycleProviderOptions;
+    /**
+     * The analytics provider options.
+     */
+    analyticsProvider?: AnalyticsProviderOptions;
+    /**
+     * The version provider options.
+     */
+    versionProvider?: VersionProviderOptions;
+    /**
+     * The menus provider options.
+     */
+    menusProvider?: MenusProviderOptions;
+    /**
+     * The splash screen provider options.
+     */
+    splashScreenProvider?: SplashScreenProviderOptions;
+    /**
+     * The settings you need to set if you want to indicate this platform supports favorites
+     */
+    favoriteProvider?: FavoriteProviderOptions;
+    /**
+     * The settings you need to set if you want to include a tray icon with menu
+     */
+    trayProvider?: TrayProviderOptions;
 }

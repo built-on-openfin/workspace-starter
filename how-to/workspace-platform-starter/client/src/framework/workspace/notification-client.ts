@@ -32,10 +32,13 @@ export class NotificationClient implements NotificationClientInterface {
 
     private _currentCount: number;
 
+    private _isCountTracked: boolean;
+
     private readonly _logger;
 
 	private _listenerRegister: {
 		id: string;
+        eventType: string;
 		listener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
 		wrappedListener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
 	}[] = [];
@@ -51,14 +54,8 @@ export class NotificationClient implements NotificationClientInterface {
 		this._platformId = platformId;
 		this._listenerRegister = [];
         this._currentCount = 0;
+        this._isCountTracked = false;
         this._logger = createLogger(`Notification Client (${this._idPrefix})`);
-        this.trackCount().then(() => {
-            this._logger.info(`Tracking started for this notification client. Starting number of notifications: ${this._currentCount}`);
-            return true;
-        })
-        .catch((reason) => {
-            this._logger.error("Error getting current count of notifications.", reason);
-        });
 	}
 
 	/**
@@ -160,12 +157,18 @@ export class NotificationClient implements NotificationClientInterface {
 		eventType: K,
 		listener: (event: NotificationsEventMap[K]) => void
 	): Promise<void> {
+        if(eventType === "notifications-count-changed" && !this._isCountTracked) {
+            this._isCountTracked = true;
+            await this.trackCount();
+        }
 		const mappedListener: {
 			id: string;
+            eventType: string;
 			listener: (event: NotificationsEventMap[K]) => void;
 			wrappedListener: (event: NotificationsEventMap[K]) => void;
 		} = {
 			id: randomUUID(),
+            eventType,
 			listener,
 			wrappedListener: (event: NotificationsEventMap[K]) => {
 				if ("notification" in event && this.hasId(event.notification.id)) {
@@ -179,6 +182,7 @@ export class NotificationClient implements NotificationClientInterface {
 		this._listenerRegister.push(
 			mappedListener as {
 				id: string;
+                eventType: string;
 				listener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
 				wrappedListener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
 			}
@@ -200,7 +204,15 @@ export class NotificationClient implements NotificationClientInterface {
 		if (!isEmpty(mappedListener)) {
 			await notificationRemoveEventListener(eventType as never, mappedListener.wrappedListener);
 			this._listenerRegister = this._listenerRegister.filter((entry) => entry.id !== mappedListener.id);
-		}
+            if(eventType === "notifications-count-changed") {
+                const countListeners = this._listenerRegister.filter((entry) => entry.eventType === eventType);
+                if(countListeners.length === 1) {
+                    this._logger.info("Removing the count tracking as there are no more listeners for notification count.");
+                    await this.removeEventListener(eventType, countListeners[0].listener);
+                    this._isCountTracked = false;
+                }
+            }
+        }
 	}
 
 	/**
@@ -230,9 +242,13 @@ export class NotificationClient implements NotificationClientInterface {
     private async trackCount(): Promise<void> {
         const notifications = await this.getAll();
         this._currentCount = notifications.length;
-        await this.addEventListener("notifications-count-changed", async (_) => {
-            const latestNotifications = await this.getAll();
-            this._currentCount = latestNotifications.length;
-        });
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        await this.addEventListener("notifications-count-changed", this._updateTrackedCount);
     }
+
+    private readonly _updateTrackedCount: () => Promise<void> = async () => {
+        this._logger.info("Updating local count.");
+        const latestNotifications = await this.getAll();
+        this._currentCount = latestNotifications.length;
+    };
 }
