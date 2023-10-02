@@ -116,7 +116,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.notifications) {
 		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
+		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
 		registerNotificationSupportedActions();
 	}
 

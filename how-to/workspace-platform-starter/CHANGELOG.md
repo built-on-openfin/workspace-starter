@@ -1,5 +1,7 @@
 # Changelog
 
+## v15
+
 ## v14
 
 - Added customizable splash screen (splashScreenProvider in settings)
