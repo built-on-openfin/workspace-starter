@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-browser",
-	"version": "14.1.1",
+	"version": "15.0.0",
 	"description": "OpenFin Workspace -- Register with browser",
 	"main": "index.js",
 	"scripts": {
@@ -15,8 +15,8 @@
 	"author": "adam.saland@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "14.1.1",
-		"@openfin/workspace-platform": "14.1.1"
+		"@openfin/workspace": "15.0.0",
+		"@openfin/workspace-platform": "15.0.0"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",

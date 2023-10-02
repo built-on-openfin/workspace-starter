@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce",
-	"version": "14.1.1",
+	"version": "15.0.0",
 	"description": "OpenFin Workspace -- Integrate with Salesforce",
 	"main": "index.js",
 	"scripts": {
@@ -20,8 +20,8 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.2.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "14.1.1",
-		"@openfin/workspace-platform": "14.1.1"
+		"@openfin/workspace": "15.0.0",
+		"@openfin/workspace-platform": "15.0.0"
 	},
 	"devDependencies": {
 		"@openfin/core": "32.76.10",
