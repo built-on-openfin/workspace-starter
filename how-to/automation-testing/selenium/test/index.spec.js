@@ -299,17 +299,17 @@ describe('Register with Home', () => {
 
 				// Do down arrow * 7 to select the close, you should see the confirmation popup
 				await NativeDriver.actions([
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "pause", duration: 1000 },
-					{ type: "keyPress", key: NativeDriverKeys.Enter },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'keyPress', key: NativeDriverKeys.Down },
+					{ type: 'pause', duration: 1000 },
+					{ type: 'keyPress', key: NativeDriverKeys.Enter },
 					// Pause to see the confirmation
-					{ type: "pause", duration: 2000 }
+					{ type: 'pause', duration: 2000 }
 				]);
 			}
 		}
