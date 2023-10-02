@@ -4,7 +4,6 @@ import {
 	type ShowOptions,
 	type Notification,
 	type UpdatableNotificationOptions,
-	type NotificationCreatedEvent,
 	create as notificationCreate,
 	update as notificationUpdate,
 	getAll as notificationGetAll,
@@ -14,10 +13,12 @@ import {
 	addEventListener as notificationAddEventListener,
 	removeEventListener as notificationRemoveEventListener
 } from "@openfin/workspace/notifications";
+import { createLogger } from "workspace-platform-starter/logger-provider";
 import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
 import type {
 	NotificationClient as NotificationClientInterface,
-	NotificationClientOptions
+	NotificationClientOptions,
+	NotificationsEventMap
 } from "../shapes/notification-shapes";
 /**
  *
@@ -29,7 +30,15 @@ export class NotificationClient implements NotificationClientInterface {
 
 	private readonly _platformId: string;
 
-	private _listenerRegister: { id: string; listener: never; wrappedListener: never }[] = [];
+    private _currentCount: number;
+
+    private readonly _logger;
+
+	private _listenerRegister: {
+		id: string;
+		listener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
+		wrappedListener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
+	}[] = [];
 
 	/**
 	 * Notification options.
@@ -40,6 +49,16 @@ export class NotificationClient implements NotificationClientInterface {
 		this._options = options;
 		this._idPrefix = options.idPrefix ?? `${options.id}-`;
 		this._platformId = platformId;
+		this._listenerRegister = [];
+        this._currentCount = 0;
+        this._logger = createLogger(`Notification Client (${this._idPrefix})`);
+        this.trackCount().then(() => {
+            this._logger.info(`Tracking started for this notification client. Starting number of notifications: ${this._currentCount}`);
+            return true;
+        })
+        .catch((reason) => {
+            this._logger.error("Error getting current count of notifications.", reason);
+        });
 	}
 
 	/**
@@ -120,7 +139,7 @@ export class NotificationClient implements NotificationClientInterface {
 	 * Shows the notification center.
 	 * @param options the options to show.
 	 */
-	public async show(options?: ShowOptions | undefined): Promise<void> {
+	public async show(options?: ShowOptions): Promise<void> {
 		await notificationShow(options);
 	}
 
@@ -131,35 +150,40 @@ export class NotificationClient implements NotificationClientInterface {
 		await notificationHide();
 	}
 
-	// public async addEventListener(eventType: "notification-form-submitted", listener: (event: NotificationFormSubmittedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-action", listener: (event: NotificationActionEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-created", listener: (event: NotificationCreatedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-toast-dismissed", listener: (event: NotificationToastDismissedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-closed", listener: (event: NotificationClosedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-reminder-created", listener: (event: NotificationReminderCreatedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-reminder-removed", listener: (event: NotificationReminderRemovedEvent) => void): Promise<void>;
-	// public async addEventListener(eventType: "notification-count-changed", listener: (event: NotificationsCountChanged) => void): Promise<void>;
 	/**
-	 * Tells you when a notification was created.
-	 * @param eventType the type of event to listen to
-	 * @param listener the listener.
+	 * The ability to add an event listener.
+	 * @param eventType The event to listen to.
+	 * @param listener The listener that should receive the event.
+	 * @returns nothing.
 	 */
-	public async addEventListener(
-		eventType: "notification-created",
-		listener: (event: NotificationCreatedEvent) => void
+	public async addEventListener<K extends keyof NotificationsEventMap>(
+		eventType: K,
+		listener: (event: NotificationsEventMap[K]) => void
 	): Promise<void> {
-		// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-		const mappedListener = {
+		const mappedListener: {
+			id: string;
+			listener: (event: NotificationsEventMap[K]) => void;
+			wrappedListener: (event: NotificationsEventMap[K]) => void;
+		} = {
 			id: randomUUID(),
 			listener,
-			// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-			wrappedListener: (event: NotificationCreatedEvent) => {
-				if (this.hasId(event.notification.id)) {
+			wrappedListener: (event: NotificationsEventMap[K]) => {
+				if ("notification" in event && this.hasId(event.notification.id)) {
 					listener(event);
+				} else if(event.type === "notifications-count-changed") {
+                    event.count = this._currentCount;
+                    listener(event);
 				}
 			}
 		};
-		await notificationAddEventListener(eventType, mappedListener.wrappedListener);
+		this._listenerRegister.push(
+			mappedListener as {
+				id: string;
+				listener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
+				wrappedListener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
+			}
+		);
+		await notificationAddEventListener(eventType as never, mappedListener.wrappedListener as never);
 	}
 
 	/**
@@ -167,14 +191,14 @@ export class NotificationClient implements NotificationClientInterface {
 	 * @param eventType the type of event to listen to
 	 * @param listener the listener.
 	 */
-	public async removeEventListener(
-		eventType: "notification-created",
-		listener: (event: NotificationCreatedEvent) => void
+	public async removeEventListener<K extends keyof NotificationsEventMap>(
+		eventType: K,
+		listener: (event: NotificationsEventMap[K]) => void
 	): Promise<void> {
 		// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 		const mappedListener = this._listenerRegister.find((entry) => entry.listener === listener);
 		if (!isEmpty(mappedListener)) {
-			await notificationRemoveEventListener(eventType, mappedListener.wrappedListener);
+			await notificationRemoveEventListener(eventType as never, mappedListener.wrappedListener);
 			this._listenerRegister = this._listenerRegister.filter((entry) => entry.id !== mappedListener.id);
 		}
 	}
@@ -200,12 +224,15 @@ export class NotificationClient implements NotificationClientInterface {
 		return id;
 	}
 
-	//     export declare function removeEventListener(eventType: 'notification-form-submitted', listener: (event: NotificationFormSubmittedEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-action', listener: (event: NotificationActionEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-created', listener: (event: NotificationCreatedEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-toast-dismissed', listener: (event: NotificationToastDismissedEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-closed', listener: (event: NotificationClosedEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notifications-count-changed', listener: (event: NotificationsCountChanged) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-reminder-created', listener: (event: NotificationReminderCreatedEvent) => void): Promise<void>;
-	// export declare function removeEventListener(eventType: 'notification-reminder-removed', listener: (event: NotificationReminderRemovedEvent) => void): Promise<void>;
+    /**
+     * Sets up the relevant listeners to try and have a correct count for this notification client.
+     */
+    private async trackCount(): Promise<void> {
+        const notifications = await this.getAll();
+        this._currentCount = notifications.length;
+        await this.addEventListener("notifications-count-changed", async (_) => {
+            const latestNotifications = await this.getAll();
+            this._currentCount = latestNotifications.length;
+        });
+    }
 }

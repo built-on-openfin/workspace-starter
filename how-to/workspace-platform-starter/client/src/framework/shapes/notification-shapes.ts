@@ -7,7 +7,14 @@ import type {
 	update,
 	show,
 	hide,
-	NotificationCreatedEvent
+	NotificationCreatedEvent,
+	NotificationActionEvent,
+	NotificationFormSubmittedEvent,
+	NotificationToastDismissedEvent,
+	NotificationClosedEvent,
+	NotificationReminderCreatedEvent,
+	NotificationReminderRemovedEvent,
+	NotificationsCountChanged
 } from "@openfin/workspace/notifications";
 
 /**
@@ -18,7 +25,7 @@ export interface NotificationProviderOptions extends NotificationsPlatform {
 	/**
 	 * A collection of rules and settings for notification clients that fall under this platform.
 	 */
-	notificationClients: NotificationClients;
+	notificationClients?: NotificationClients;
 }
 
 /**
@@ -77,7 +84,7 @@ export interface NotificationClientOptions extends NotificationClientDefaultOpti
 
 	/**
 	 * The prefix to assign to all notification ids for this client. It means you can
-	 * have an id shared across different module ids as they may come from the same tea.
+	 * have an id shared across different module ids as they may come from the same team.
 	 * Id is used by default if no prefix is provided.
 	 */
 	idPrefix?: string;
@@ -99,6 +106,43 @@ export interface NotificationClientOptions extends NotificationClientDefaultOpti
 }
 
 /**
+ * Mapping of all notification events.
+ */
+export interface NotificationsEventMap {
+	/**
+	 * The event to listen to if you want to know when your notification was created.
+	 */
+	"notification-created": NotificationCreatedEvent;
+	/**
+	 * The event to listen to if you have added buttons to any of your notifications.
+	 */
+	"notification-action": NotificationActionEvent;
+	/**
+	 * The event to listen to if any of your notifications include form elements.
+	 */
+	"notification-form-submitted": NotificationFormSubmittedEvent;
+	/**
+	 * The event to listen to if you want to know when your notification was dismissed.
+	 */
+	"notification-toast-dismissed": NotificationToastDismissedEvent;
+	/**
+	 * The event to listen to if you want to know when a notification was closed.
+	 */
+	"notification-closed": NotificationClosedEvent;
+	/**
+	 * The event to listen to if you want to know if your notification was snoozed and set with a reminder.
+	 */
+	"notification-reminder-created": NotificationReminderCreatedEvent;
+	/**
+	 * The event to listen to if you want to know when a reminder has been removed.
+	 */
+	"notification-reminder-removed": NotificationReminderRemovedEvent;
+	/**
+	 * The event to listen to if you want to know when the count of notifications has changed.
+	 */
+	"notifications-count-changed": NotificationsCountChanged;
+}
+/**
  * The notification client that provides the openfin notification client apis
  */
 export interface NotificationClient {
@@ -111,23 +155,6 @@ export interface NotificationClient {
 	 * The ability to update notifications.
 	 */
 	update: typeof update;
-
-	/**
-	 *
-	 */
-	addEventListener: (
-		eventType: "notification-created",
-		listener: (event: NotificationCreatedEvent) => void
-	) => Promise<void>;
-
-	/**
-	 *
-	 */
-	removeEventListener: (
-		eventType: "notification-created",
-		listener: (event: NotificationCreatedEvent) => void
-	) => Promise<void>;
-	// removeEventListener: typeof removeEventListener;
 
 	/**
 	 * Get all notifications from this notification client.
@@ -153,4 +180,26 @@ export interface NotificationClient {
 	 * Hide the notification center.
 	 */
 	hide: typeof hide;
+
+	/**
+	 * The ability to add an event listener.
+	 * @param eventType The event to listen to.
+	 * @param listener The listener that should receive the event.
+	 * @returns nothing.
+	 */
+	addEventListener<K extends keyof NotificationsEventMap>(
+		eventType: K,
+		listener: (event: NotificationsEventMap[K]) => void
+	): Promise<void>;
+
+	/**
+	 * The ability to remove an event listener.
+	 * @param eventType The event to listen to.
+	 * @param listener The listener that should receive the event.
+	 * @returns nothing.
+	 */
+	removeEventListener<K extends keyof NotificationsEventMap>(
+		eventType: K,
+		listener: (event: NotificationsEventMap[K]) => void
+	): Promise<void>;
 }

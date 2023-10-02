@@ -60,12 +60,12 @@ export async function register(
 						...notificationPlatformSettings?.notificationClients?.defaults
 					};
 					if (restrictNotificationClientCreationToListed) {
-						if (!Array.isArray(notificationPlatformSettings.notificationClients.clientOptions)) {
+						if (!Array.isArray(notificationClientOptions)) {
 							logger.warn(
 								"You have specified that only listed clients should receive a notification client but the clientOptions setting is undefined. Please set to an empty array if you want no one to have clients or add the clients you wish to enable."
 							);
 							allowNotificationClientCreation = false;
-						} else if (notificationPlatformSettings.notificationClients.clientOptions.length === 0) {
+						} else if (notificationClientOptions.length === 0) {
 							allowNotificationClientCreation = false;
 						}
 					}

@@ -168,9 +168,13 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 							);
 						};
 						this._notificationClient?.addEventListener("notification-created", eventListener);
+						this._notificationClient?.addEventListener("notification-closed", () => this._logger?.info("Notification by app closed."));
+						this._notificationClient?.addEventListener("notification-toast-dismissed", () => this._logger?.info("Notification by app toast dismissed."));
+						this._notificationClient?.addEventListener("notifications-count-changed", (event) => this._logger?.info("Notification by app count changed.", event.count));
+						
 						setTimeout(() => {
 							this._notificationClient?.removeEventListener("notification-created", eventListener);
-						}, 15000);
+						}, 90000);
 					}
 				});
 			}
