@@ -2907,7 +2907,7 @@
                     "type": "string"
                 },
                 "idPrefix": {
-                    "description": "The prefix to assign to all notification ids for this client. It means you can \nhave an id shared across different module ids as they may come from the same tea.\nId is used by default if no prefix is provided.",
+                    "description": "The prefix to assign to all notification ids for this client. It means you can\nhave an id shared across different module ids as they may come from the same team.\nId is used by default if no prefix is provided.",
                     "type": "string"
                 },
                 "includeInPlatform": {
@@ -2929,7 +2929,7 @@
             "description": "A collection of rules and settings for notification clients that fall under this platform.",
             "properties": {
                 "clientOptions": {
-                    "description": "If restricted to listed is true then an entry needs to exist for each module id\nthat should be provided with a notification client. Otherwise all modules\nwill be provided with a notification client using the default rules if provided. \nIf restrictToListed is false the clients list can still be used to disable \nspecific modules by specifying their id and enabled: false. It also allows you \nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "description": "If restricted to listed is true then an entry needs to exist for each module id\nthat should be provided with a notification client. Otherwise all modules\nwill be provided with a notification client using the default rules if provided.\nIf restrictToListed is false the clients list can still be used to disable\nspecific modules by specifying their id and enabled: false. It also allows you\nto specify overrides for specific modules regardless of the restrictToListed setting.",
                     "items": {
                         "$ref": "#/definitions/NotificationClientOptions"
                     },
@@ -2970,7 +2970,6 @@
             "required": [
                 "icon",
                 "id",
-                "notificationClients",
                 "title"
             ],
             "type": "object"
