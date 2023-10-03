@@ -30,44 +30,45 @@ In this scenario you might have:
 
 1. A backend that provides notifications to your platform through e.g. server sent events or a websocket connection.
 2. A [lifecycle module](./how-to-use-lifecycle-events.md) that is instantiated after the platform is bootstrapped.
-3. Platform Applications that need to publish notifications (these might be local notifications or server routed notifications).
+3. Platform applications that need to publish notifications (these might be local notifications or server routed notifications).
 
 ##### Point 1
 
-We are not going to specify any particular server technology or approach. The idea is that a server acts a source of notifications and these notifications are fetched via some TypeScript/JavaScript code.
+We are not going to specify any particular server technology or approach. The idea is that a server acts as a source of notifications and these notifications are fetched via some TypeScript/JavaScript code.
 
 ##### Point 2
 
 A [lifecycle module](./how-to-use-lifecycle-events.md) is instantiated when the platform is bootstrapped.
 
-In the initialize function of your module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [ExampleNotificationService](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events.
+In the initialize function of your lifecycle module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [ExampleNotificationService](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events.
 
 ##### Point 3
 
-The lifecycle module can use the notification client to add an event listener to confirm interactions with a notification. Notifications could be informational (just display information and allow the user to dismiss) or it may have a call to action or a form to capture additional information:
+The lifecycle module can use the notification client to add an event listener to react to interactions with a notification. Notifications can be informational (just display information and allow the user to dismiss) or it may have a call to action or a form to capture additional information:
 
-Remote notifications:
+Remote notifications (notifications coming from the server to the client and being pushed to the notification center):
 
-- For informational notifications your module might not need to do anything more (although you may want to allow the backend to specify that a notification should be revoked)
-- For Call To Action notifications your module might have a contract where actions are mapped to intents and on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification. Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app channel or user channel.
-- For Form Based Notifications you might pass the captured data to the back end.
+- For informational notifications your module might just publish it using the notification client (although you may want to allow the backend to specify that a notification should be revoked)
+- For Call To Action notifications your module might have a contract where actions are mapped to intents (e.g. on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification). Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app or user channel.
+- For form based notifications you might pass the captured data to the backend.
 
-Local notifications:
+Local notifications (notifications submitted by apps running on the desktop):
 
-Notifications that are triggered when the platform is closed will result in the platform being launched and an the notification passed to the relevant event listener. As a view, popup or window is not guaranteed to be launched when a platform starts up the logic should be instantiated through the platform's bootstrapping process. That is why we are using a lifecycle module as it will be instantiated when the platform is ready.
+- Allow Views/Windows/Popups to connect to the notification service (in the lifecycle module) through a custom Channel API service that exposes a createNotification function. Responses to the notification will be handled by the lifecycle module.
+- Expose a backend http service that will be called by Views/Windows/Popups for the publication of notifications. The message will be captured and audited by the server and then pushed down to all relevant clients (such as the notification service lifecycle module).
 
-To support this flow we would suggest having the same logic as above but:
+Why not add notification event listeners directly to a View/Popup/Window?
 
-- Allow Views/Windows/Popups to connect to the notification service module through a custom Channel API service that exposes a createNotification function. Responses to the notification will be handled by the module.
-- Expose a backend http service that will be called by Views/Windows/Popups for the publication of notifications. The message will be captured and audited by the server and then pushed down to all relevant clients (such as the notification service module).
+- They are generally temporary (a user will dismiss or close a popup, close a view or close a window).
+- If the platform is closed and a user interacts with a notification in the notification center it will trigger the relaunch of a platform. You will want the event listeners to get registered on startup (e.g. like through a lifecycle module) instead of needing a view to be launched in order to react to the interaction with the notification.
 
 #### 1 Platform and multiple sources of notifications
 
-If you have more than one team or division under your platform then they may want to control their own logic for notifications. The pattern shown above could be applied by multiple teams. Each team could own their own notification service module and follow the rules above (or have their own). The notification client returned by the helper would isolate the notifications so each module would only get events related to notifications they published.
+If you have more than one team or division under your platform then they may want to control their own logic for notifications. The pattern shown above could be applied by multiple teams. Each team could own their own notification service module and follow the rules above. The notification client returned by the helper will isolate the notifications so each module would only get events related to notifications they published (unless you wish to link them).
 
 ## Configuring the Notifications Provider
 
-The notificationsProvider lets you specify settings that are passed onto the workspace notification registration (id, title and icon) but it also includes additional settings specific to the workspace platform starter.
+The notificationsProvider settings lets you specify settings that are passed onto the workspace notification registration (id, title and icon). It also includes additional settings specific to the workspace platform starter i.e. notificationClients.
 
 ```json
 "notificationProvider": {

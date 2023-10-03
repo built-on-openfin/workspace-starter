@@ -26,6 +26,24 @@ You can add this to the lifecycleProvider modules list:
         "favoriteChanged": true
        }
      }
+    },
+    {
+     "id": "second-example-notification-service",
+     "icon": "http://localhost:8080/favicon.ico",
+     "title": "second example notification service",
+     "description": "second example notification service",
+     "enabled": true,
+     "url": "http://localhost:8080/js/modules/lifecycle/example-notification-service.bundle.js",
+     "data": {
+      "exampleServerUrl": "http://secondfake/notifications",
+      "notifyOn": {
+        "pageChanged": false,
+        "workspaceChanged": false,
+        "appsChanged": false,
+        "themeChanged": true,
+        "favoriteChanged": false
+       }
+     }
     }
    ]
   }
@@ -68,3 +86,9 @@ The example module has a few settings to allow for experimentation (you might ha
   - favoriteChanged - if a favorite has been added/removed
 
 The notifyOn events depend on how your platform is configured (favorites might be disabled for example).
+
+## Logging Notification Events & Interactions
+
+The example module also shows the different event listeners you can use (which is why we publish different types of notification including a form based notification). See the different notifications by triggering the different lifecycle events and then experiment with dismissing toasts, closing notifications, asking to be reminded of a notification and using the call to action buttons. If you look at the developer tools for the provider of the platform and filter by: ExampleNotificationService then you will see the events fire.
+
+The main manifest [manifest.fin.json](../../../../../public/manifest.fin.json) includes the two lifecycleProvider entries (although they are disabled by default) and provides custom settings in the notificationProvider to isolate the two instances of the module and change their behavior from a platform level.
