@@ -891,7 +891,24 @@
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
 			"title": "Workspace Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
+			"notificationClients": {
+				"defaults": {
+					"enforceIcon": false,
+					"includeInPlatform": true
+				},
+				"restrictToListed": false,
+				"clientOptions": [
+					{
+						"enabled": true,
+						"enforceIcon": true,
+						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
+						"id": "example-notification-service",
+						"idPrefix": "openfin-example-notifications",
+						"includeInPlatform": true
+					}
+				]
+			}
 		},
 		"integrationProvider": {
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
@@ -1385,6 +1402,28 @@
 			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
 			"supportedFavoriteTypes": ["app"]
+		},
+		"lifecycleProvider": {
+			"modules": [
+				{
+					"id": "example-notification-service",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
+					"title": "example notification service",
+					"description": "example notification service",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/js/modules/lifecycle/example-notification-service.bundle.js",
+					"data": {
+						"exampleServerUrl": "http://fake/notifications",
+						"notifyOn": {
+							"pageChanged": true,
+							"workspaceChanged": true,
+							"appsChanged": true,
+							"themeChanged": true,
+							"favoriteChanged": true
+						}
+					}
+				}
+			]
 		}
 	}
 }

@@ -2913,10 +2913,6 @@
                 "includeInPlatform": {
                     "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
                     "type": "boolean"
-                },
-                "streamIcon": {
-                    "description": "An icon to enforce for all streams from this from this client",
-                    "type": "string"
                 }
             },
             "required": [
