@@ -4,10 +4,94 @@
 
 # How To Use Notifications
 
-This document will be enhanced in the future.
+This section is going to be broken down into two sections.
 
-For now please see the following starter to get a better understanding of the notification api:
+- Getting to know the Notifications API
+- Patterns for Notification Usage
 
-- [how-to/use-notifications](../../use-notifications/README.md)
+## Getting to know the Notifications API
+
+If you are looking to learn how to use the notifications API please use the following two sources:
+
+- [Notification Center Documentation](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center) at developers.openfin.co.
+- Example: [how-to/use-notifications](../../use-notifications/README.md)
+
+These sources will let you explore what Notifications are capable of.
+
+## Patterns for Notification Usage
+
+This is an example of how you can use Notifications in our workspace platform starter example.
+
+### Scenarios
+
+#### 1 Platform and 1 source of notifications
+
+In this scenario you might have:
+
+1. A backend that provides notifications to your platform through e.g. server sent events or a websocket connection.
+2. A [lifecycle module](./how-to-use-lifecycle-events.md) that is instantiated after the platform is bootstrapped.
+3. Platform Applications that need to publish notifications (these might be local notifications or server routed notifications).
+
+##### Point 1
+
+We are not going to specify any particular server technology or approach. The idea is that a server acts a source of notifications and these notifications are fetched via some TypeScript/JavaScript code.
+
+##### Point 2
+
+A [lifecycle module](./how-to-use-lifecycle-events.md) is instantiated when the platform is bootstrapped.
+
+In the initialize function of your module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [ExampleNotificationService](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events.
+
+##### Point 3
+
+The lifecycle module can use the notification client to add an event listener to confirm interactions with a notification. Notifications could be informational (just display information and allow the user to dismiss) or it may have a call to action or a form to capture additional information:
+
+Remote notifications:
+
+- For informational notifications your module might not need to do anything more (although you may want to allow the backend to specify that a notification should be revoked)
+- For Call To Action notifications your module might have a contract where actions are mapped to intents and on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification. Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app channel or user channel.
+- For Form Based Notifications you might pass the captured data to the back end.
+
+Local notifications:
+
+Notifications that are triggered when the platform is closed will result in the platform being launched and an the notification passed to the relevant event listener. As a view, popup or window is not guaranteed to be launched when a platform starts up the logic should be instantiated through the platform's bootstrapping process. That is why we are using a lifecycle module as it will be instantiated when the platform is ready.
+
+To support this flow we would suggest having the same logic as above but:
+
+- Allow Views/Windows/Popups to connect to the notification service module through a custom Channel API service that exposes a createNotification function. Responses to the notification will be handled by the module.
+- Expose a backend http service that will be called by Views/Windows/Popups for the publication of notifications. The message will be captured and audited by the server and then pushed down to all relevant clients (such as the notification service module).
+
+#### 1 Platform and multiple sources of notifications
+
+If you have more than one team or division under your platform then they may want to control their own logic for notifications. The pattern shown above could be applied by multiple teams. Each team could own their own notification service module and follow the rules above (or have their own). The notification client returned by the helper would isolate the notifications so each module would only get events related to notifications they published.
+
+## Configuring the Notifications Provider
+
+The notificationsProvider lets you specify settings that are passed onto the workspace notification registration (id, title and icon) but it also includes additional settings specific to the workspace platform starter.
+
+```json
+"notificationProvider": {
+   "id": "workspace-platform-starter",
+   "title": "Workspace Platform Starter",
+   "icon": "http://localhost:8080/favicon.ico",
+   "notificationClients": {
+    "defaults": {
+     "enforceIcon": false,
+     "includeInPlatform": true
+    },
+    "restrictToListed": false,
+    "clientOptions": [
+     {
+      "enabled": true,
+      "enforceIcon": true,
+      "icon": "http://localhost:8080/favicon.ico",
+      "id": "example-notification-service",
+      "idPrefix": "openfin-example-notifications",
+      "includeInPlatform": true
+     }
+    ]
+   }
+  }
+```
 
 [<- Back to Table Of Contents](../README.md)

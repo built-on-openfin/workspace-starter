@@ -7,12 +7,7 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type {
-	NotificationCreatedEvent,
-	NotificationOptions,
-	NotificationsCountChanged
-} from "@openfin/workspace/notifications";
-import type { FavoriteChangedLifecyclePayload, NotificationClient } from "workspace-platform-starter/shapes";
+import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
@@ -121,11 +116,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private _favChangedSubscriptionId: string | undefined;
 
 	/**
-	 * Notification client if available.
-	 */
-	private _notificationClient: NotificationClient | undefined;
-
-	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -160,45 +150,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 						}
 					}
 				);
-
-			if (!isEmpty(this._integrationHelpers.getNotificationClient)) {
-				this._integrationHelpers.subscribeLifecycleEvent("after-bootstrap", async () => {
-					if (!isEmpty(this._integrationHelpers?.getNotificationClient)) {
-						this._notificationClient = await this._integrationHelpers?.getNotificationClient();
-						// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-						const eventListener = (event: NotificationCreatedEvent) => {
-							this._logger?.info(
-								`Notification Created by App: type: ${event.type} notification id: ${event.notification.id}`
-							);
-						};
-
-						// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-						const countEventListener = (event: NotificationsCountChanged) => {
-							this._logger?.info(
-								`Notification Created by App: type: ${event.type} notification id: ${event.count}`
-							);
-						};
-						this._notificationClient?.addEventListener("notification-created", eventListener);
-						this._notificationClient?.addEventListener(
-							"notification-closed",
-							() => this._logger?.info("Notification by app closed.")
-						);
-						this._notificationClient?.addEventListener(
-							"notification-toast-dismissed",
-							() => this._logger?.info("Notification by app toast dismissed.")
-						);
-						this._notificationClient?.addEventListener("notifications-count-changed", countEventListener);
-
-						setTimeout(() => {
-							this._notificationClient?.removeEventListener("notification-created", eventListener);
-							this._notificationClient?.removeEventListener(
-								"notifications-count-changed",
-								countEventListener
-							);
-						}, 60000);
-					}
-				});
-			}
 		}
 	}
 
@@ -304,27 +255,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (data?.app?.appId) {
 					handled = true;
 					await this._integrationHelpers.launchApp(data.app.appId);
-				}
-
-				if (!isEmpty(this._notificationClient)) {
-					const notification: NotificationOptions = {
-						title: `app id: ${data?.app?.appId}`,
-						body: "This is a simple notification",
-						toast: "transient",
-						category: "default",
-						template: "markdown",
-						id: randomUUID()
-					};
-					await this._notificationClient.create(notification);
-					const allNotifications = await this._notificationClient.getAll();
-					const notificationCount: NotificationOptions = {
-						title: `app. notification count: ${allNotifications.length}`,
-						body: "This is a app notification count",
-						toast: "transient",
-						category: "default",
-						template: "markdown"
-					};
-					await this._notificationClient.create(notificationCount);
 				}
 			}
 		}

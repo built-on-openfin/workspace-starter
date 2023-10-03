@@ -50,7 +50,7 @@ export class NotificationClient implements NotificationClientInterface {
 	 */
 	constructor(options: NotificationClientOptions, platformId: string) {
 		this._options = options;
-		this._idPrefix = options.idPrefix ?? `${options.id}-`;
+		this._idPrefix = options.idPrefix ?? `${options.id}`;
 		this._platformId = platformId;
 		this._listenerRegister = [];
 		this._currentCount = 0;
@@ -248,8 +248,10 @@ export class NotificationClient implements NotificationClientInterface {
 		await this.addEventListener("notifications-count-changed", this._updateTrackedCount);
 	}
 
+	/**
+	 * Update the locally stored count of all outstanding notifications to be shared by all event listeners.
+	 */
 	private readonly _updateTrackedCount: () => Promise<void> = async () => {
-		this._logger.info("Updating local count.");
 		const latestNotifications = await this.getAll();
 		this._currentCount = latestNotifications.length;
 	};

@@ -95,11 +95,6 @@ export interface NotificationClientOptions extends NotificationClientDefaultOpti
 	icon?: string;
 
 	/**
-	 * An icon to enforce for all streams from this from this client
-	 */
-	streamIcon?: string;
-
-	/**
 	 * Should this module have a notification client. Default is true.
 	 */
 	enabled?: boolean;

@@ -33,53 +33,48 @@ export async function register(
 		notificationsProviderOptions = options;
 		logger.info("Gathering notification center status and version.");
 
-		const providerStatus = await Notifications.provider.getStatus();
-		metaInfo = {
-			workspaceVersion: providerStatus.version ?? "",
-			clientAPIVersion: Notifications.VERSION
-		};
+		logger.info("Registering platform with Notification Center.");
+		const settings = await getSettings();
+		if (!isEmpty(settings?.notificationProvider)) {
+			const { notificationClients, ...notificationsPlatformOptions } = settings.notificationProvider;
+			notificationPlatformId = notificationsPlatformOptions?.id ?? fin.me.identity.uuid;
+			notificationsPlatformOptions.id = notificationPlatformId;
+			try {
+				const registrationResponse = await Notifications.register({ notificationsPlatformOptions });
 
-		logger.info("Versioning information collected.", metaInfo);
+				metaInfo = {
+					workspaceVersion: registrationResponse.notificationsVersion ?? "",
+					clientAPIVersion: registrationResponse.clientAPIVersion
+				};
 
-		if (providerStatus.connected) {
-			logger.info("Connected to the Notification Center. Registering platform with Notification Center.");
-			const settings = await getSettings();
-			const notificationPlatformSettings = settings?.notificationProvider;
-			if (!isEmpty(notificationPlatformSettings)) {
-				notificationPlatformId = notificationPlatformSettings?.id ?? fin.me.identity.uuid;
-				notificationPlatformSettings.id = notificationPlatformId;
-				try {
-					await Notifications.register({ notificationsPlatformOptions: notificationPlatformSettings });
-					notificationsRegistered = true;
-					restrictNotificationClientCreationToListed =
-						notificationPlatformSettings?.notificationClients?.restrictToListed ?? false;
-					notificationClientOptions = notificationPlatformSettings?.notificationClients?.clientOptions ?? [];
-					notificationClientDefaults = {
-						enforceIcon: false,
-						includeInPlatform: true,
-						...notificationPlatformSettings?.notificationClients?.defaults
-					};
-					if (restrictNotificationClientCreationToListed) {
-						if (!Array.isArray(notificationClientOptions)) {
-							logger.warn(
-								"You have specified that only listed clients should receive a notification client but the clientOptions setting is undefined. Please set to an empty array if you want no one to have clients or add the clients you wish to enable."
-							);
-							allowNotificationClientCreation = false;
-						} else if (notificationClientOptions.length === 0) {
-							allowNotificationClientCreation = false;
-						}
+				logger.info("Notifications registered and Versioning information collected.", metaInfo);
+
+				notificationsRegistered = true;
+				restrictNotificationClientCreationToListed = notificationClients?.restrictToListed ?? false;
+				notificationClientOptions = notificationClients?.clientOptions ?? [];
+				notificationClientDefaults = {
+					enforceIcon: false,
+					includeInPlatform: true,
+					...notificationClients?.defaults
+				};
+				if (restrictNotificationClientCreationToListed) {
+					if (!Array.isArray(notificationClientOptions)) {
+						logger.warn(
+							"You have specified that only listed clients should receive a notification client but the clientOptions setting is undefined. Please set to an empty array if you want no one to have clients or add the clients you wish to enable."
+						);
+						allowNotificationClientCreation = false;
+					} else if (notificationClientOptions.length === 0) {
+						allowNotificationClientCreation = false;
 					}
-					logger.info("Registered notifications");
-				} catch (error) {
-					logger.error("We were unable to register with Notification Center", error);
 				}
-			} else {
-				logger.warn(
-					"Unable to register notifications platform as we do not have it defined as part of settings"
-				);
+				logger.info("Registered notifications");
+			} catch (error) {
+				logger.error("We were unable to register with Notification Center", error);
 			}
 		} else {
-			logger.info("Unable to register against notification center as the center wasn't connected.");
+			logger.warn(
+				"Unable to register notifications platform as we do not have it defined as part of settings"
+			);
 		}
 	}
 	return metaInfo;
