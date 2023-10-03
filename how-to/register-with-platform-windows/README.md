@@ -60,6 +60,27 @@ The behavior is the same as the [Register With Home Basic Sample](../register-wi
 The platform api specific code:
 
 - [platform.ts](client/src/platform.ts) - historically specifying null for browser when initializing your platform would mean that generated windows were platform windows, however you could then not create browser windows. Now you can mix window types, create the default browser windows by providing the browser property during initialization, and also using the new `windowType` property when creating windows allows you to create platform windows.
+
+If you would like to use only platform windows you can specify `null` for browser property in the platform init options e.g.
+
+```js
+async function initializeWorkspacePlatform(): Promise<void> {
+   console.log("Initializing workspace platform");
+   await init({
+      browser: null,
+      ...
+   });
+}
+```
+
+You can then specify the `defaultWindowOptions` in the manifest for the platform window location.
+
+```json
+"defaultWindowOptions": {
+   "url": "http://localhost:8080/windows/platform-window.html"
+}
+```
+
 - [app.ts](client/src/app.ts) - if you look at the **platform-window** case in the `launchApp` method you will see that the `windowType` is specified as `platform` and the url is specified as `http://localhost:8080/windows/platform-window.html`. These two properties will ensure that our custom platform window is launched instead of the default browser window.
 - [platform-window.html](public/windows/platform-window.html) - this is the html template where you specify your custom html. It is important to include a hook for our layout system (see layout-container within the html). You can see that it brings in two scripts.
   - [platform-window.ts](client/src/platform-window.ts) - this file binds to the buttons for closing, minimizing and maximizing your custom window
