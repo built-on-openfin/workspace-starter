@@ -11,6 +11,13 @@ export async function open(): Promise<void> {
 	const app = await fin.Application.getCurrent();
 	const manifest = await app.getManifest();
 
+	if (manifest?.platform?.preventQuitOnLastWindowClosed !== true) {
+		console.warn(
+			"The manifest does not contain the platform.preventQuitOnLastWindowClosed flag set to true, the splash screen can not be shown without this flag set"
+		);
+		return;
+	}
+
 	const customSettings = await getManifestCustomSettings();
 
 	const disabled = customSettings?.splashScreenProvider?.disabled ?? false;
