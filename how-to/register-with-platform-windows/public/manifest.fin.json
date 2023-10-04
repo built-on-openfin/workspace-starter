@@ -20,17 +20,6 @@
 					"protocols": ["mailto"]
 				}
 			}
-		},
-		"defaultWindowOptions": {
-			"url": "http://localhost:8080/windows/platform-window.html",
-			"permissions": {
-				"System": {
-					"openUrlWithBrowser": {
-						"enabled": true,
-						"protocols": ["mailto"]
-					}
-				}
-			}
 		}
 	},
 	"shortcut": {

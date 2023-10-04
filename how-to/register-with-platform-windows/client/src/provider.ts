@@ -26,10 +26,17 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initializing workspace platform");
-	// We set the browser configuration to null to tell the platform we will
-	// be using platform api windows
 	await init({
-		browser: null as unknown as undefined,
+		browser: {
+			title: PLATFORM_TITLE,
+			defaultWindowOptions: {
+				icon: PLATFORM_ICON,
+				workspacePlatform: {
+					pages: [],
+					favicon: PLATFORM_ICON
+				}
+			}
+		},
 		theme: [
 			{
 				label: "Default",
@@ -61,8 +68,13 @@ async function initializeWorkspaceComponents(): Promise<void> {
 				title: app.title,
 				icon: app.icons[0]?.src,
 				data: app,
-				label: "View",
-				actions: [{ name: "Launch View", hotkey: "enter" }],
+				label: app.manifestType === "platform-window" ? "Platform Window" : "View",
+				actions: [
+					{
+						name: `Launch ${app.manifestType === "platform-window" ? "Platform Window" : "View"}`,
+						hotkey: "enter"
+					}
+				],
 				description: app.description,
 				shortDescription: app.description,
 				template: CLITemplate.SimpleText,

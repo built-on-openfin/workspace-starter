@@ -59,8 +59,29 @@ The behavior is the same as the [Register With Home Basic Sample](../register-wi
 
 The platform api specific code:
 
-- [platform.ts](client/src/platform.ts) - specifying null for browser when initialing your platform against workspace so that the default workspace browser component is not used.
-- [manifest.fin.json](public/manifest.fin.json) - if you look at the **defaultWindowOptions** within the platform configuration you will see that the url is specified as: `"url": "http://localhost:8080/windows/platform-window.html"`. This is how an existing platform app would define a custom template to use to host the layout system. This page is used every time you launch a view from home or the store component. **This is optional. If you do not want a custom template then you can remove this url setting from the defaultWindowOptions setting**.
+- [platform.ts](client/src/platform.ts) - historically specifying null for browser when initializing your platform would mean that generated windows were platform windows, however you could then not create browser windows. Now you can mix window types, create the default browser windows by providing the browser property during initialization, and also using the new `windowType` property when creating windows allows you to create platform windows.
+
+If you would like to use only platform windows you can specify `null` for browser property in the platform init options e.g.
+
+```js
+async function initializeWorkspacePlatform(): Promise<void> {
+   console.log("Initializing workspace platform");
+   await init({
+      browser: null,
+      ...
+   });
+}
+```
+
+You can then specify the `defaultWindowOptions` in the manifest for the platform window location.
+
+```json
+"defaultWindowOptions": {
+   "url": "http://localhost:8080/windows/platform-window.html"
+}
+```
+
+- [app.ts](client/src/app.ts) - if you look at the **platform-window** case in the `launchApp` method you will see that the `windowType` is specified as `platform` and the url is specified as `http://localhost:8080/windows/platform-window.html`. These two properties will ensure that our custom platform window is launched instead of the default browser window.
 - [platform-window.html](public/windows/platform-window.html) - this is the html template where you specify your custom html. It is important to include a hook for our layout system (see layout-container within the html). You can see that it brings in two scripts.
   - [platform-window.ts](client/src/platform-window.ts) - this file binds to the buttons for closing, minimizing and maximizing your custom window
   - [public/common/lib/wc-fin/wc-fin.esm.js](public/common/lib/wc-fin/wc-fin.esm.js) - this is a script that registers a web component that is used in the html template: `<fin-context-group-picker show-list-on-click="false" ></fin-context-group-picker>`. The web component is an example of a context group picker that will assign a context group to every view in the window. The picker is an example which can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin) and the settings for this particular component can be found here: [https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker](https://github.com/built-on-openfin/interop-api/tree/main/js/components/wc-fin/src/components/context-group-picker)
