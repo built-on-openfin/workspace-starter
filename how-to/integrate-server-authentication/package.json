@@ -16,8 +16,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "15.0.0",
-		"@openfin/workspace-platform": "15.0.0",
+		"@openfin/workspace": "15.0.3",
+		"@openfin/workspace-platform": "15.0.3",
 		"cookie-parser": "^1.4.6"
 	},
 	"devDependencies": {
