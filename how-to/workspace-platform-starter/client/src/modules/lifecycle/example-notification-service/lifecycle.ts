@@ -12,7 +12,6 @@ import type {
 	NotificationsCountChanged,
 	NotificationOptions
 } from "@openfin/workspace/notifications";
-import type { NotificationClient, NotificationsEventMap } from "workspace-platform-starter/shapes";
 import type {
 	Lifecycle,
 	LifecycleEventMap,
@@ -20,6 +19,10 @@ import type {
 } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type {
+	NotificationClient,
+	NotificationsEventMap
+} from "workspace-platform-starter/shapes/notification-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 import type { ExampleNotificationServiceProviderOptions } from "./shapes";
 
@@ -57,7 +60,9 @@ export class ExampleNotificationServiceProvider
 	 * An object containing current subscriptions.
 	 * @internal
 	 */
-	private _notificationSubscriptions: { [key: string]: unknown } | undefined;
+	private _notificationSubscriptions:
+		| { [key in keyof NotificationsEventMap]?: (event: NotificationsEventMap[key]) => void }
+		| undefined;
 
 	/**
 	 * A notification client if available.

@@ -7,7 +7,6 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
@@ -20,6 +19,7 @@ import type {
 	IntegrationModule,
 	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
+import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";

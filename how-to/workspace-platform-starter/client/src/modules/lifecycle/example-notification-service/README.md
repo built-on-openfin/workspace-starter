@@ -26,24 +26,6 @@ You can add this to the lifecycleProvider modules list:
         "favoriteChanged": true
        }
      }
-    },
-    {
-     "id": "second-example-notification-service",
-     "icon": "http://localhost:8080/favicon.ico",
-     "title": "second example notification service",
-     "description": "second example notification service",
-     "enabled": true,
-     "url": "http://localhost:8080/js/modules/lifecycle/example-notification-service.bundle.js",
-     "data": {
-      "exampleServerUrl": "http://secondfake/notifications",
-      "notifyOn": {
-        "pageChanged": false,
-        "workspaceChanged": false,
-        "appsChanged": false,
-        "themeChanged": true,
-        "favoriteChanged": false
-       }
-     }
     }
    ]
   }
@@ -73,7 +55,7 @@ The list will be read of started and each module can specify what lifecycle even
 
 This example lifecycle module shows fetching the notification client (to listen to and publish notifications) and it listens to a number of lifecycle events to simulate receiving data from a backend that requires a notification.
 
-The example module has a few settings to allow for experimentation (you might have two instances with different ids, listening to different lifecycle events) and to show how options can be passed:
+The example module has a few settings to allow for experimentation and to show how options can be passed:
 
 ## Module Settings
 
@@ -91,4 +73,4 @@ The notifyOn events depend on how your platform is configured (favorites might b
 
 The example module also shows the different event listeners you can use (which is why we publish different types of notification including a form based notification). See the different notifications by triggering the different lifecycle events and then experiment with dismissing toasts, closing notifications, asking to be reminded of a notification and using the call to action buttons. If you look at the developer tools for the provider of the platform and filter by: ExampleNotificationService then you will see the events fire.
 
-The main manifest [manifest.fin.json](../../../../../public/manifest.fin.json) includes the two lifecycleProvider entries (although they are disabled by default) and provides custom settings in the notificationProvider to isolate the two instances of the module and change their behavior from a platform level.
+The main manifest [manifest.fin.json](../../../../../public/manifest.fin.json) includes a lifecycleProvider entry (although they are disabled by default) and provides custom settings in the notificationProvider to isolate the two instances of the module and change their behavior from a platform level.
