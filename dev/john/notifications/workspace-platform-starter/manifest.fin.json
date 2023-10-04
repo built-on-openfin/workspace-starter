@@ -902,14 +902,10 @@
 					{
 						"enabled": true,
 						"id": "example-notification-service",
-						"idPrefix": "openfin-example-notifications"
-					},
-					{
-						"enabled": true,
+						"idPrefix": "openfin-example-notifications",
 						"enforceIcon": true,
 						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/common/favicon-32x32.png",
-						"id": "second-example-notification-service",
-						"includeInPlatform": false
+						"includeInPlatform": true
 					}
 				]
 			}
@@ -1414,7 +1410,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
 					"title": "example notification service",
 					"description": "example notification service",
-					"enabled": true,
+					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/js/modules/lifecycle/example-notification-service.bundle.js",
 					"data": {
 						"exampleServerUrl": "http://fake/notifications",
@@ -1424,24 +1420,6 @@
 							"appsChanged": true,
 							"themeChanged": true,
 							"favoriteChanged": true
-						}
-					}
-				},
-				{
-					"id": "second-example-notification-service",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/favicon.ico",
-					"title": "second example notification service",
-					"description": "second example notification service",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/workspace-platform-starter/js/modules/lifecycle/example-notification-service.bundle.js",
-					"data": {
-						"exampleServerUrl": "http://secondfake/notifications",
-						"notifyOn": {
-							"pageChanged": false,
-							"workspaceChanged": false,
-							"appsChanged": false,
-							"themeChanged": true,
-							"favoriteChanged": false
 						}
 					}
 				}
