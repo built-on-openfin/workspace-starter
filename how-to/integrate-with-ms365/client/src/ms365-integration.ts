@@ -807,7 +807,7 @@ export class Microsoft365Integration {
 	 * @returns True if it was handled.
 	 */
 	private async handleTeamsChat(actionData: ActionData): Promise<boolean> {
-		if (this._ms365Connection?.currentUser?.mail && actionData.emails) {
+		if (this._ms365Connection?.currentUser?.mail) {
 			this._logger?.info(
 				"Teams Chat",
 				this._ms365Connection.currentUser.mail,
@@ -823,7 +823,7 @@ export class Microsoft365Integration {
 				);
 			} else if (actionData.teamId) {
 				await teamsConnection.startChat({ teamId: actionData.teamId, channelId: actionData.channelId });
-			} else {
+			} else if (actionData.emails) {
 				await teamsConnection.startChat({
 					emailAddresses: [this._ms365Connection.currentUser.mail, ...actionData.emails]
 				});
@@ -913,24 +913,22 @@ export class Microsoft365Integration {
 	 * @returns True if the url was opened.
 	 */
 	private async handleOpen(actionName: string, actionData: ActionData): Promise<boolean> {
-		if (actionData.urls) {
-			const linkIndex = actionName.indexOf("_");
-			const u = linkIndex < 0 ? actionData.url : actionData.urls[actionName.slice(linkIndex + 1)];
+		const linkIndex = actionName.indexOf("_");
+		const u = linkIndex < 0 ? actionData.url : actionData.urls?.[actionName.slice(linkIndex + 1)];
 
-			if (u) {
-				this._logger?.info("Open", u);
+		if (u) {
+			this._logger?.info("Open", u);
 
-				if (u.startsWith(Microsoft365Integration._TEAMS_URL)) {
-					await fin.System.openUrlWithBrowser(
-						u.replace(Microsoft365Integration._TEAMS_URL, Microsoft365Integration._TEAMS_PROTOCOL)
-					);
-				} else if (this._integrationHelpers) {
-					await this._integrationHelpers.launchView({ url: u });
-				}
-				return true;
+			if (u.startsWith(Microsoft365Integration._TEAMS_URL)) {
+				await fin.System.openUrlWithBrowser(
+					u.replace(Microsoft365Integration._TEAMS_URL, Microsoft365Integration._TEAMS_PROTOCOL)
+				);
+			} else if (this._integrationHelpers) {
+				await this._integrationHelpers.launchView({ url: u });
 			}
-			this._logger?.error(`Url no found in actionData, linkIndex ${linkIndex}`);
+			return true;
 		}
+		this._logger?.error(`Url not found in actionData, linkIndex ${linkIndex}`);
 		return false;
 	}
 
@@ -2121,7 +2119,7 @@ export class Microsoft365Integration {
 			],
 			data: {
 				providerId: this._definition?.id,
-				objType: "Event",
+				objType: "ChatMessage",
 				obj: chatMessage,
 				url: chatMessage.webUrl,
 				chatId: chatMessage.chatId,
