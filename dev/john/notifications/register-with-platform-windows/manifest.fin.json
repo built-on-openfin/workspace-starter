@@ -20,17 +20,6 @@
 					"protocols": ["mailto"]
 				}
 			}
-		},
-		"defaultWindowOptions": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/notifications/register-with-platform-windows/windows/platform-window.html",
-			"permissions": {
-				"System": {
-					"openUrlWithBrowser": {
-						"enabled": true,
-						"protocols": ["mailto"]
-					}
-				}
-			}
 		}
 	},
 	"shortcut": {
