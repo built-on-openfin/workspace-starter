@@ -1,7 +1,8 @@
 import type { Workspace } from "@openfin/workspace";
-import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { CustomPaletteSet, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { FavoriteEntry } from "./favorite-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ColorSchemeMode } from "./theme-shapes";
 
 /**
  * Events that can be triggered through the lifecycle.
@@ -110,4 +111,19 @@ export interface LoggedInLifecyclePayload {
 	 * The user details.
 	 */
 	user?: unknown;
+}
+
+/**
+ * Theme changed in event payload.
+ */
+export interface ThemeChangedLifecyclePayload {
+	/**
+	 * The theme mode.
+	 */
+	schemeType?: ColorSchemeMode;
+
+	/**
+	 * The payload.
+	 */
+	payload?: CustomPaletteSet;
 }

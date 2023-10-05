@@ -5,7 +5,7 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
  */
 export interface AuthProviderOptions extends ModuleList {
 	/**
-	 * Include the user information when the logged in event is called, defaults to true
+	 * Include the user information when the logged in event is called
 	 */
 	includeLoggedInUserInfo?: boolean;
 }
