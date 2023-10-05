@@ -13,9 +13,10 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
-import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import type { LoggedInLifecyclePayload } from "./shapes/lifecycle-shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
 import * as trayProvider from "./tray";
 import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
@@ -116,7 +117,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.notifications) {
 		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
+		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
 		registerNotificationSupportedActions();
 	}
 
@@ -201,8 +202,22 @@ export async function init(): Promise<boolean> {
 		authProvider.subscribe("logged-in", async () => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
-			await fireLifecycleEvent(platform, "auth-logged-in");
+			await fireLifecycleEvent(platform, "auth-logged-in", {
+				user: await authProvider.getUserInfo()
+			} as LoggedInLifecyclePayload);
 		});
+
+		// If the user is already logged in then we must fire the lifecycle event immediately
+		const isAuthenticationRequired = await authProvider.isAuthenticationRequired();
+		if (!isAuthenticationRequired) {
+			// Fire the event on the next cycle to allow the bootstrapping process to complete
+			setTimeout(async () => {
+				await fireLifecycleEvent(platform, "auth-logged-in", {
+					user: await authProvider.getUserInfo()
+				} as LoggedInLifecyclePayload);
+			}, 0);
+		}
+
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");

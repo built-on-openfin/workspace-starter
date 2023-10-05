@@ -101,3 +101,13 @@ export interface FavoriteChangedLifecyclePayload {
 	 */
 	favorite: FavoriteEntry;
 }
+
+/**
+ * Logged in event payload.
+ */
+export interface LoggedInLifecyclePayload {
+	/**
+	 * The user details.
+	 */
+	user: unknown;
+}
