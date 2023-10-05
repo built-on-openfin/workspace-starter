@@ -891,7 +891,24 @@
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
 			"title": "Workspace Platform Starter",
-			"icon": "http://localhost:8080/favicon.ico"
+			"icon": "http://localhost:8080/favicon.ico",
+			"notificationClients": {
+				"defaults": {
+					"enforceIcon": false,
+					"includeInPlatform": true
+				},
+				"restrictToListed": false,
+				"clientOptions": [
+					{
+						"enabled": true,
+						"id": "example-notification-service",
+						"idPrefix": "openfin-example-notifications",
+						"enforceIcon": true,
+						"icon": "http://localhost:8080/common/favicon-32x32.png",
+						"includeInPlatform": true
+					}
+				]
+			}
 		},
 		"integrationProvider": {
 			"icon": "http://localhost:8080/favicon.ico",
@@ -1385,6 +1402,28 @@
 			"unfavoriteIcon": "http://localhost:8080/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
 			"supportedFavoriteTypes": ["app"]
+		},
+		"lifecycleProvider": {
+			"modules": [
+				{
+					"id": "example-notification-service",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "example notification service",
+					"description": "example notification service",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/lifecycle/example-notification-service.bundle.js",
+					"data": {
+						"exampleServerUrl": "http://fake/notifications",
+						"notifyOn": {
+							"pageChanged": true,
+							"workspaceChanged": true,
+							"appsChanged": true,
+							"themeChanged": true,
+							"favoriteChanged": true
+						}
+					}
+				}
+			]
 		}
 	}
 }

@@ -2,14 +2,24 @@ import type { RegistrationMetaInfo } from "@openfin/workspace";
 import * as Notifications from "@openfin/workspace/notifications";
 import { createLogger } from "../logger-provider";
 import { getSettings } from "../settings";
-import type { NotificationProviderOptions } from "../shapes/notification-shapes";
+import type {
+	NotificationClientDefaultOptions,
+	NotificationClientOptions,
+	NotificationProviderOptions
+} from "../shapes/notification-shapes";
 import { isEmpty } from "../utils";
+import { NotificationClient } from "./notification-client";
 
 const logger = createLogger("Notifications");
 
 let notificationsProviderOptions: NotificationProviderOptions | undefined;
 let notificationsRegistered = false;
 let metaInfo: RegistrationMetaInfo;
+let allowNotificationClientCreation = true;
+let restrictNotificationClientCreationToListed = false;
+let notificationClientOptions: NotificationClientOptions[];
+let notificationClientDefaults: NotificationClientDefaultOptions;
+let notificationPlatformId: string;
 
 /**
  * Register the home component.
@@ -23,36 +33,48 @@ export async function register(
 		notificationsProviderOptions = options;
 		logger.info("Gathering notification center status and version.");
 
-		const providerStatus = await Notifications.provider.getStatus();
-		metaInfo = {
-			workspaceVersion: providerStatus.version ?? "",
-			clientAPIVersion: Notifications.VERSION
-		};
+		logger.info("Registering platform with Notification Center.");
+		const settings = await getSettings();
+		if (!isEmpty(settings?.notificationProvider)) {
+			const { notificationClients, ...notificationsPlatformOptions } = settings.notificationProvider;
+			notificationPlatformId = notificationsPlatformOptions?.id ?? fin.me.identity.uuid;
+			notificationsPlatformOptions.id = notificationPlatformId;
+			try {
+				const registrationResponse = await Notifications.register({ notificationsPlatformOptions });
 
-		logger.info("Versioning information collected.", metaInfo);
+				metaInfo = {
+					workspaceVersion: registrationResponse.notificationsVersion ?? "",
+					clientAPIVersion: registrationResponse.clientAPIVersion
+				};
 
-		if (providerStatus.connected) {
-			logger.info("Connected to the Notification Center. Registering platform with Notification Center.");
-			const settings = await getSettings();
-			const notificationPlatformSettings = settings?.notificationProvider;
-			if (!isEmpty(notificationPlatformSettings)) {
-				// use a promise.then instead of await as we do not want to delay the start up of the platform
-				Notifications.register({ notificationsPlatformOptions: notificationPlatformSettings })
-					.then(() => {
-						notificationsRegistered = true;
-						logger.info("Registered notifications");
-						return true;
-					})
-					.catch((reason) => {
-						logger.error("We were unable to register with Notification Center", reason);
-					});
-			} else {
-				logger.warn(
-					"Unable to register notifications platform as we do not have it defined as part of settings"
-				);
+				logger.info("Notifications registered and Versioning information collected.", metaInfo);
+
+				notificationsRegistered = true;
+				restrictNotificationClientCreationToListed = notificationClients?.restrictToListed ?? false;
+				notificationClientOptions = notificationClients?.clientOptions ?? [];
+				notificationClientDefaults = {
+					enforceIcon: false,
+					includeInPlatform: true,
+					...notificationClients?.defaults
+				};
+				if (restrictNotificationClientCreationToListed) {
+					if (!Array.isArray(notificationClientOptions)) {
+						logger.warn(
+							"You have specified that only listed clients should receive a notification client but the clientOptions setting is undefined. Please set to an empty array if you want no one to have clients or add the clients you wish to enable."
+						);
+						allowNotificationClientCreation = false;
+					} else if (notificationClientOptions.length === 0) {
+						allowNotificationClientCreation = false;
+					}
+				}
+				logger.info("Registered notifications");
+			} catch (error) {
+				logger.error("We were unable to register with Notification Center", error);
 			}
 		} else {
-			logger.info("Unable to register against notification center as the center wasn't connected.");
+			logger.warn(
+				"Unable to register notifications platform as we do not have it defined as part of settings"
+			);
 		}
 	}
 	return metaInfo;
@@ -98,4 +120,55 @@ export async function show(options?: Notifications.ShowOptions): Promise<void> {
 export async function hide(): Promise<void> {
 	logger.info("Hide Notifications called.");
 	return Notifications.hide();
+}
+
+/**
+ * Returns a restricted notification client that helps isolate the notifications that
+ * can be read, updated and cleared by a client inside of a platform.
+ * @param options The options to help with the client restriction.
+ * @returns The notification client.
+ */
+export async function getNotificationClient(
+	options: NotificationClientOptions
+): Promise<NotificationClient | undefined> {
+	if (!notificationsRegistered) {
+		logger.warn(
+			"A notification client was requested before the notification provider was registered.",
+			options
+		);
+		return undefined;
+	}
+
+	if (!allowNotificationClientCreation) {
+		logger.warn(
+			"Notification client creation is disabled. If you this is not expected please check you Notification Provider -> Notification Clients settings."
+		);
+		return undefined;
+	}
+
+	const listedClientOptions = notificationClientOptions.find((optionEntry) => optionEntry.id === options.id);
+
+	if (restrictNotificationClientCreationToListed && isEmpty(listedClientOptions)) {
+		logger.warn(
+			`Notification client creation is limited to those listed in the notification clients section of the notification provider. We have been unable to find an entry with the id: ${options.id}. `
+		);
+		return undefined;
+	}
+
+	if (!isEmpty(listedClientOptions) && listedClientOptions.enabled === false) {
+		logger.warn(
+			`The options passed to create a notification client was a listed entry and it's enabled setting is set to false so a notification client will not be created. Id: ${options.id}`
+		);
+		return undefined;
+	}
+
+	const clientOptions = Object.assign(options, notificationClientDefaults, listedClientOptions ?? {});
+
+	if (isEmpty(clientOptions.icon)) {
+		logger.info(
+			`No default icon was specified for ${options.id}, providing notification platform default icon of: ${notificationsProviderOptions?.icon} for cases where an icon was not provided.`
+		);
+		clientOptions.icon = notificationsProviderOptions?.icon;
+	}
+	return new NotificationClient(clientOptions, notificationPlatformId);
 }

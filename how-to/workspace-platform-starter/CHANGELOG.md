@@ -2,6 +2,10 @@
 
 ## v15
 
+- Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.
+- Added an example lifecycle module ExampleNotificationService ([see README.md](./client/src/modules/lifecycle/example-notification-service/README.md)) to the modules folder and added it (enabled:false) to the lifecycleProvider section of the main manifest ([manifest.fin.json](./public/manifest.fin.json)).
+- Updated the way the [notification.ts](./client/src/framework/workspace/notifications.ts) registers against the workspace notification center (The notification center is no longer automatically started and that now happens upon registration which resulted removing the check to see if the notification center was running before registering).
+
 ## v14
 
 - Added customizable splash screen (splashScreenProvider in settings)
