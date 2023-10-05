@@ -114,7 +114,7 @@ export interface LoggedInLifecyclePayload {
 }
 
 /**
- * Theme changed in event payload.
+ * Theme changed event payload.
  */
 export interface ThemeChangedLifecyclePayload {
 	/**

@@ -99,7 +99,7 @@ export interface LoggedInLifecyclePayload {
 	user?: unknown;
 }
 /**
- * Theme changed in event payload.
+ * Theme changed event payload.
  */
 export interface ThemeChangedLifecyclePayload {
 	/**
