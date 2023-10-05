@@ -95,5 +95,5 @@ export interface LoggedInLifecyclePayload {
 	/**
 	 * The user details.
 	 */
-	user: unknown;
+	user?: unknown;
 }

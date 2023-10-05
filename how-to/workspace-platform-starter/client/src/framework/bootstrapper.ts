@@ -199,29 +199,19 @@ export async function init(): Promise<boolean> {
 		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		authProvider.subscribe("logged-in", async () => {
+		authProvider.subscribe("logged-in", async (user: unknown) => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
 			await fireLifecycleEvent(platform, "auth-logged-in", {
-				user: await authProvider.getUserInfo()
+				user
 			} as LoggedInLifecyclePayload);
 		});
-
-		// If the user is already logged in then we must fire the lifecycle event immediately
-		const isAuthenticationRequired = await authProvider.isAuthenticationRequired();
-		if (!isAuthenticationRequired) {
-			// Fire the event on the next cycle to allow the bootstrapping process to complete
-			setTimeout(async () => {
-				await fireLifecycleEvent(platform, "auth-logged-in", {
-					user: await authProvider.getUserInfo()
-				} as LoggedInLifecyclePayload);
-			}, 0);
-		}
 
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");
 		});
+
 		authProvider.subscribe("before-logged-out", async () => {
 			// what behavior do you want to do when someone logs in
 			// do you want to save anything before they log themselves out
