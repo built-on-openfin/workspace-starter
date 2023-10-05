@@ -59,13 +59,36 @@ export function isAuthenticationEnabled(): boolean {
  */
 export function subscribe(
 	to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
-	callback: () => Promise<void>
+	callback: (payload?: unknown) => Promise<void>
 ): string | undefined {
 	if (isEmpty(authProvider)) {
 		logger.warn("Please initialize auth before trying to use subscribe");
 		return;
 	}
-	return authProvider.subscribe(to, callback);
+
+	// If the subscription is for logged-in event then we wrap the callback
+	// so that we can optionally pass the user info back to subscribers
+	let wrappedCallback: (() => Promise<void>) | undefined;
+	if (to === "logged-in") {
+		wrappedCallback = async (): Promise<void> => {
+			setTimeout(async () => {
+				await callback(authOptions?.includeLoggedInUserInfo ?? true ? await getUserInfo() : undefined);
+			}, 0);
+		};
+	}
+
+	const subscriptionId = authProvider.subscribe(to, wrappedCallback ?? callback);
+
+	// If we are already logged in then call the method immediately on the next refresh cycle
+	if (to === "logged-in") {
+		setTimeout(async () => {
+			if (wrappedCallback && !(await isAuthenticationRequired())) {
+				await wrappedCallback();
+			}
+		}, 0);
+	}
+
+	return subscriptionId;
 }
 
 /**

@@ -1,10 +1,11 @@
 import type OpenFin from "@openfin/core";
-import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
 import type { CustomPaletteSet } from "@openfin/workspace-platform";
+import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
 import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
+import type { ThemeChangedLifecyclePayload } from "./shapes/lifecycle-shapes";
 import { ColorSchemeMode, type PlatformCustomTheme, type PlatformCustomThemes } from "./shapes/theme-shapes";
 import { isEmpty, isStringValue } from "./utils";
 
@@ -149,7 +150,13 @@ export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
 	const settings = await getSettings();
 
-	await fireLifecycleEvent(platform, "theme-changed");
+	const schemeType = await getCurrentColorSchemeMode();
+	const palette = await getCurrentPalette();
+
+	await fireLifecycleEvent(platform, "theme-changed", {
+		schemeType,
+		palette
+	} as ThemeChangedLifecyclePayload);
 
 	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
@@ -157,8 +164,8 @@ export async function notifyColorScheme(): Promise<void> {
 		type: "platform.theme",
 		prefix: settings?.themeProvider?.cssVarPrefix,
 		schemeNames: settings?.themeProvider?.schemaNames,
-		schemeType: await getCurrentColorSchemeMode(),
-		palette: await getCurrentPalette()
+		schemeType,
+		palette
 	} as OpenFin.Context);
 }
 

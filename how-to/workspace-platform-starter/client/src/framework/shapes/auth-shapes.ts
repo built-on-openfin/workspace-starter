@@ -4,7 +4,12 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
  * Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the
  * user to use the platform.
  */
-export type AuthProviderOptions = ModuleList;
+export interface AuthProviderOptions extends ModuleList {
+	/**
+	 * Include the user information when the logged in event is called
+	 */
+	includeLoggedInUserInfo?: boolean;
+}
 
 /**
  * Definition for module which provides authentication features.
