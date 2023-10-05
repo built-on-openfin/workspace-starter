@@ -13,9 +13,10 @@ import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
 import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
-import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import type { LoggedInLifecyclePayload } from "./shapes/lifecycle-shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
 import * as trayProvider from "./tray";
 import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
@@ -116,7 +117,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.notifications) {
 		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
+		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
 		registerNotificationSupportedActions();
 	}
 
@@ -198,15 +199,19 @@ export async function init(): Promise<boolean> {
 		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		authProvider.subscribe("logged-in", async () => {
+		authProvider.subscribe("logged-in", async (user?: unknown) => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
-			await fireLifecycleEvent(platform, "auth-logged-in");
+			await fireLifecycleEvent(platform, "auth-logged-in", {
+				user
+			} as LoggedInLifecyclePayload);
 		});
+
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");
 		});
+
 		authProvider.subscribe("before-logged-out", async () => {
 			// what behavior do you want to do when someone logs in
 			// do you want to save anything before they log themselves out

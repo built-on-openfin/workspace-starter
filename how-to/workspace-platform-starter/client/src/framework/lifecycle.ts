@@ -8,15 +8,19 @@ import type {
 	LifecycleProviderOptions
 } from "./shapes/lifecycle-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import { randomUUID } from "./utils";
+import { isEmpty, randomUUID } from "./utils";
 
 let modules: ModuleEntry<Lifecycle, unknown, unknown, ModuleDefinition>[] = [];
 const logger = createLogger("Lifecycle");
 const allLifecycleEvents: {
 	[key in LifecycleEvents]?: {
-		id: string;
-		handler: LifecycleHandler;
-	}[];
+		subscribers: {
+			id: string;
+			handler: LifecycleHandler;
+		}[];
+		platform?: WorkspacePlatformModule;
+		lastPayload?: unknown;
+	};
 } = {};
 
 /**
@@ -59,10 +63,13 @@ export async function fireLifecycleEvent<T = unknown>(
 ): Promise<void> {
 	logger.info(`Request to fire lifecycle event ${lifecycleEvent} received`);
 	const eventHandlers = allLifecycleEvents[lifecycleEvent];
-	if (Array.isArray(eventHandlers)) {
-		const subscribers = [...eventHandlers];
-		logger.info(`Notifying ${subscribers.length} subscribers of lifecycle event ${lifecycleEvent}`);
-		for (const idHandler of subscribers) {
+	if (!isEmpty(eventHandlers)) {
+		eventHandlers.platform = platform;
+		eventHandlers.lastPayload = payload;
+		logger.info(
+			`Notifying ${eventHandlers.subscribers.length} subscribers of lifecycle event ${lifecycleEvent}`
+		);
+		for (const idHandler of eventHandlers.subscribers) {
 			logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
 			await idHandler.handler(platform, payload);
 		}
@@ -80,8 +87,15 @@ export function subscribeLifecycleEvent<T = unknown>(
 	lifecycleHandler: LifecycleHandler<T>
 ): string {
 	const subscriptionId = randomUUID();
-	const handlers = allLifecycleEvents[lifecycleEvent] ?? [];
-	handlers.push({
+	const handlers: {
+		subscribers: {
+			id: string;
+			handler: LifecycleHandler;
+		}[];
+		lastPayload?: unknown;
+		platform?: WorkspacePlatformModule;
+	} = allLifecycleEvents[lifecycleEvent] ?? { subscribers: [] };
+	handlers.subscribers.push({
 		id: subscriptionId,
 		handler: lifecycleHandler as LifecycleHandler
 	});
@@ -89,6 +103,17 @@ export function subscribeLifecycleEvent<T = unknown>(
 	logger.info(
 		`Subscription for lifecycle event ${lifecycleEvent} received. Subscription id: ${subscriptionId} returned`
 	);
+
+	// Call the lifecycle handler immediately on the next cycle with the last payload
+	// If the platform is set then fireLifecycleEvent has been called at least once
+	if (!isEmpty(handlers.platform)) {
+		setTimeout(async () => {
+			if (!isEmpty(handlers.platform)) {
+				await lifecycleHandler(handlers.platform, handlers.lastPayload as T);
+			}
+		}, 0);
+	}
+
 	return subscriptionId;
 }
 
@@ -99,11 +124,12 @@ export function subscribeLifecycleEvent<T = unknown>(
  */
 export function unsubscribeLifecycleEvent(subscriptionId: string, lifecycleEvent: LifecycleEvents): void {
 	logger.info(`Request to unsubscribe from lifecycle event ${lifecycleEvent} with id: ${subscriptionId}`);
-	const handlers = allLifecycleEvents[lifecycleEvent];
-	if (handlers) {
-		const idx = handlers.findIndex((l) => l.id === subscriptionId);
+	const eventHandlers = allLifecycleEvents[lifecycleEvent];
+	if (!isEmpty(eventHandlers)) {
+		const subscribers = eventHandlers.subscribers;
+		const idx = subscribers.findIndex((l) => l.id === subscriptionId);
 		if (idx >= 0) {
-			handlers.splice(idx, 1);
+			subscribers.splice(idx, 1);
 		}
 	}
 }
