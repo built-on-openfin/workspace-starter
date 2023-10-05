@@ -108,7 +108,7 @@ export function subscribeLifecycleEvent<T = unknown>(
 	// If the platform is set then fireLifecycleEvent has been called at least once
 	if (!isEmpty(handlers.platform)) {
 		setTimeout(async () => {
-			if (!isEmpty(handlers.platform) && !isEmpty(handlers.lastPayload)) {
+			if (!isEmpty(handlers.platform)) {
 				await lifecycleHandler(handlers.platform, handlers.lastPayload as T);
 			}
 		}, 0);
