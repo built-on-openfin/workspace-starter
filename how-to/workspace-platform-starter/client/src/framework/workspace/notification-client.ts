@@ -71,7 +71,7 @@ export class NotificationClient implements NotificationClientInterface {
 		if (!this.hasId(options.id)) {
 			options.id = this.createId(options.id);
 		}
-		if (this._options.enforceIcon && !isEmpty(this._options.icon)) {
+		if ((this._options.enforceIcon === true || isEmpty(options.icon)) && !isEmpty(this._options.icon)) {
 			options.icon = this._options.icon;
 		}
 

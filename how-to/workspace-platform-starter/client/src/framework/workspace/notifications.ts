@@ -164,5 +164,11 @@ export async function getNotificationClient(
 
 	const clientOptions = Object.assign(options, notificationClientDefaults, listedClientOptions ?? {});
 
+	if (isEmpty(clientOptions.icon)) {
+		logger.info(
+			`No default icon was specified for ${options.id}, providing notification platform default icon of: ${notificationsProviderOptions?.icon} for cases where an icon was not provided.`
+		);
+		clientOptions.icon = notificationsProviderOptions?.icon;
+	}
 	return new NotificationClient(clientOptions, notificationPlatformId);
 }
