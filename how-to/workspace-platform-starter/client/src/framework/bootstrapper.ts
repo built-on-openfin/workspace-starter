@@ -199,7 +199,7 @@ export async function init(): Promise<boolean> {
 		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		authProvider.subscribe("logged-in", async (user: unknown) => {
+		authProvider.subscribe("logged-in", async (user?: unknown) => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
 			await fireLifecycleEvent(platform, "auth-logged-in", {
