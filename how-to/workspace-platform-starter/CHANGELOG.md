@@ -39,6 +39,10 @@
 - Added conditions now support passing `callerType`and `context`
 - Added `include-in-snapshot` composite module which has both actions and conditions to display browser toolbar buttons which can control if a window is included in a snapshot, disabled by default
 - FUTURE BREAKING CHANGE `apps` and `buttons` in the dock config have been deprecated and replaced with `entries` which can contain the combined data from the old properties, the old properties will be read for now.
+- Change Auth `logged-in` and lifecycle `auth-logged-in` events are now passed the logged in user, if you don't want this to be passed set `authProvider.includeLoggedInUserInfo` to false
+- Change Lifecycle events can now be lazy subscribed so a late subscriber will get called with the last payload
+- Change Auth `logged-in` events can now be lazy subscribed so a late subscriber when you are already logged in will still receive the current user
+- Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as closing the splash screen will exit the platform, a warning will be logged in this scenario
 
 ## v13.1
 
