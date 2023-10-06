@@ -36,7 +36,7 @@
 - Change Auth `logged-in` event and lifecycle `auth-logged-in` events now contain the logged in user, if you don't want this to be passed set `authProvider.includeLoggedInUserInfo` to false
 - Change Lifecycle events can now be lazy subscribed so a late subscriber will get called with the last payload
 - Change Auth `logged-in` events can now be lazy subscribed so a late subscriber when you are already logged in will still receive the current user
-- Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as the closing the splash screen will exit the platform, a warning will be logged in this scenario
+- Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as closing the splash screen will exit the platform, a warning will be logged in this scenario
 
 ## v13.1
 
