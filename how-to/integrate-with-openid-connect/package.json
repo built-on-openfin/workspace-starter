@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-openid-connect",
-	"version": "14.1.1",
+	"version": "15.0.0",
 	"description": "OpenFin Workspace -- Integrate with OpenId Connect",
 	"main": "index.js",
 	"scripts": {
@@ -18,8 +18,8 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "14.1.1",
-		"@openfin/workspace-platform": "14.1.1",
+		"@openfin/workspace": "15.0.3",
+		"@openfin/workspace-platform": "15.0.3",
 		"@openfin/openid-connect": "^1.0.0"
 	},
 	"devDependencies": {

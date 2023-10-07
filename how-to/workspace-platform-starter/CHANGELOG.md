@@ -1,9 +1,10 @@
 # Changelog
 
-## v14.1
+## v15
 
-- Added fdc3 approach to fdc3.open to the interop broker.
-- Change: Default fdc3.open approach has moved from opinionated intent based approach to fdc3 standard based approach. platformProvider interop setting now has openOptions where you can specify openStrategy. Set it to INTENT if you want the opinionated behavior back.
+- Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.
+- Added an example lifecycle module ExampleNotificationService ([see README.md](./client/src/modules/lifecycle/example-notification-service/README.md)) to the modules folder and added it (enabled:false) to the lifecycleProvider section of the main manifest ([manifest.fin.json](./public/manifest.fin.json)).
+- Updated the way the [notification.ts](./client/src/framework/workspace/notifications.ts) registers against the workspace notification center (The notification center is no longer automatically started and that now happens upon registration which resulted removing the check to see if the notification center was running before registering).
 
 ## v14
 
@@ -38,6 +39,10 @@
 - Added conditions now support passing `callerType`and `context`
 - Added `include-in-snapshot` composite module which has both actions and conditions to display browser toolbar buttons which can control if a window is included in a snapshot, disabled by default
 - FUTURE BREAKING CHANGE `apps` and `buttons` in the dock config have been deprecated and replaced with `entries` which can contain the combined data from the old properties, the old properties will be read for now.
+- Change Auth `logged-in` and lifecycle `auth-logged-in` events are now passed the logged in user, if you don't want this to be passed set `authProvider.includeLoggedInUserInfo` to false
+- Change Lifecycle events can now be lazy subscribed so a late subscriber will get called with the last payload
+- Change Auth `logged-in` events can now be lazy subscribed so a late subscriber when you are already logged in will still receive the current user
+- Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as closing the splash screen will exit the platform, a warning will be logged in this scenario
 
 ## v13.1
 

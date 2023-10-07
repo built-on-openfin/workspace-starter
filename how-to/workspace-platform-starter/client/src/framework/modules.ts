@@ -7,7 +7,7 @@ import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle"
 import { createLogger } from "./logger-provider";
 import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
-import type { PlatformApp } from "./shapes";
+import type { NotificationClient, PlatformApp } from "./shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 
 import type {
@@ -26,8 +26,9 @@ import {
 	getCurrentPalette,
 	getCurrentThemeId
 } from "./themes";
-import { isEmpty } from "./utils";
+import { isEmpty, objectClone } from "./utils";
 import { getVersionInfo } from "./version";
+import { getNotificationClient } from "./workspace/notifications";
 
 const logger = createLogger("Modules");
 let passedSessionId: string;
@@ -164,7 +165,7 @@ export async function loadModule<
  */
 export async function initializeModules<
 	M extends ModuleImplementation<O, H>,
-	H = ModuleHelpers,
+	H extends ModuleHelpers = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(
@@ -188,7 +189,7 @@ export async function initializeModules<
  */
 export async function initializeModule<
 	M extends ModuleImplementation<O, H>,
-	H = ModuleHelpers,
+	H extends ModuleHelpers = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>, helpers: H): Promise<M | undefined> {
@@ -196,7 +197,11 @@ export async function initializeModule<
 		if (moduleEntry.implementation?.initialize) {
 			try {
 				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
-				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
+				const moduleHelpers = {
+					...helpers,
+					getNotificationClient: getNotificationClientProxy(moduleEntry.definition)
+				};
+				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, moduleHelpers);
 				moduleEntry.isInitialized = true;
 			} catch (err) {
 				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
@@ -315,4 +320,16 @@ async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
 	}
 	// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
 	return favoriteProvider;
+}
+
+/**
+ * Returns a function that generates a notification client lazily using a module definition.
+ * @param definition module definition to use when requesting a notification client
+ * @returns a function that calls the getNotificationClient function using an enclosed module definition.
+ */
+function getNotificationClientProxy(
+	definition: ModuleDefinition
+): () => Promise<NotificationClient | undefined> {
+	const options = objectClone(definition);
+	return async () => getNotificationClient(options);
 }

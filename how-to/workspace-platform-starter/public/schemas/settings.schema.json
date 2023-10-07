@@ -25,7 +25,7 @@
             "type": "object"
         },
         "ActionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_3",
+            "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
         "AnalyticsProviderOptions": {
@@ -331,8 +331,22 @@
             "type": "array"
         },
         "AuthProviderOptions": {
-            "$ref": "#/definitions/ModuleList",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the\nuser to use the platform.",
+            "properties": {
+                "includeLoggedInUserInfo": {
+                    "description": "Include the user information when the logged in event is called",
+                    "type": "boolean"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
         },
         "AutoResizeOptions": {
             "$ref": "#/definitions/__type_24"
@@ -630,7 +644,7 @@
             "$ref": "#/definitions/__type_42"
         },
         "ConditionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_4",
+            "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
         "Connection": {
@@ -1657,7 +1671,7 @@
             "type": "object"
         },
         "InitOptionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_1",
+            "$ref": "#/definitions/ModuleList",
             "description": "List of modules."
         },
         "IntegrationModuleDefinition<unknown>": {
@@ -1947,14 +1961,14 @@
             "type": "object"
         },
         "LifecycleProviderOptions": {
-            "$ref": "#/definitions/ModuleList_5",
+            "$ref": "#/definitions/ModuleList_4",
             "description": "List of modules."
         },
         "LockUnlockPageConfig": {
             "$ref": "#/definitions/__type_27"
         },
         "LoggerProviderOptions": {
-            "$ref": "#/definitions/ModuleList_2",
+            "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
         "LowCodeIntegrationDefinition": {
@@ -2783,7 +2797,7 @@
         },
         "ModuleList": {
             "additionalProperties": false,
-            "description": "Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the\nuser to use the platform.",
+            "description": "InitOptions Provider Options. This is a list of modules that will be loaded and used to handle init params (similar\nto query strings). The module data setting needs to specify \"supportedActions\" and this should be an array of strings\nof the actions this module supports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed a payload (this should be a\nbase64 encoded object when passed via init params).",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2797,7 +2811,7 @@
         },
         "ModuleList_1": {
             "additionalProperties": false,
-            "description": "InitOptions Provider Options. This is a list of modules that will be loaded and used to handle init params (similar\nto query strings). The module data setting needs to specify \"supportedActions\" and this should be an array of strings\nof the actions this module supports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed a payload (this should be a\nbase64 encoded object when passed via init params).",
+            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the\nplatform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2811,7 +2825,7 @@
         },
         "ModuleList_2": {
             "additionalProperties": false,
-            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the\nplatform",
+            "description": "A list of modules that provide actions that can be used by the platform.",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2825,20 +2839,6 @@
         },
         "ModuleList_3": {
             "additionalProperties": false,
-            "description": "A list of modules that provide actions that can be used by the platform.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_4": {
-            "additionalProperties": false,
             "description": "A list of modules that provide a set of conditions. The function for this condition will return true or false to\nindicate if the condition is met. Conditions are used in a number of places (for example menu options)",
             "properties": {
                 "modules": {
@@ -2851,7 +2851,7 @@
             },
             "type": "object"
         },
-        "ModuleList_5": {
+        "ModuleList_4": {
             "additionalProperties": false,
             "description": "This is a list of modules that allow you to hook into the lifecycle events exposed by the platform. A good example\nmight be you wish to register a module that is called when an authenticated session is expired",
             "properties": {
@@ -2871,6 +2871,77 @@
         "MonitorInfo": {
             "$ref": "#/definitions/__type_34"
         },
+        "NotificationClientDefaultOptions": {
+            "additionalProperties": false,
+            "description": "A set of default options that will apply against all notification clients unless they\nhave a setting of their own.",
+            "properties": {
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "NotificationClientOptions": {
+            "additionalProperties": false,
+            "description": "Options that allow you to influence the behavior of the notification client.",
+            "properties": {
+                "enabled": {
+                    "description": "Should this module have a notification client. Default is true.",
+                    "type": "boolean"
+                },
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "An icon to enforce at the top of all of the notifications from this client",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id that acts as the reference to a module id",
+                    "type": "string"
+                },
+                "idPrefix": {
+                    "description": "The prefix to assign to all notification ids for this client. It means you can\nhave an id shared across different module ids as they may come from the same team.\nId is used by default if no prefix is provided.",
+                    "type": "string"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "NotificationClients": {
+            "additionalProperties": false,
+            "description": "A collection of rules and settings for notification clients that fall under this platform.",
+            "properties": {
+                "clientOptions": {
+                    "description": "If restricted to listed is true then an entry needs to exist for each module id\nthat should be provided with a notification client. Otherwise all modules\nwill be provided with a notification client using the default rules if provided.\nIf restrictToListed is false the clients list can still be used to disable\nspecific modules by specifying their id and enabled: false. It also allows you\nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "items": {
+                        "$ref": "#/definitions/NotificationClientOptions"
+                    },
+                    "type": "array"
+                },
+                "defaults": {
+                    "$ref": "#/definitions/NotificationClientDefaultOptions",
+                    "description": "What default options should be applied against this platform"
+                },
+                "restrictToListed": {
+                    "description": "Should the notification client be passed only to those\nlisted or should all modules receive it but the list acts\nas an override. Default is false.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "NotificationProviderOptions": {
             "additionalProperties": false,
             "description": "Notification Provider Options. Providing settings in order to register your platform against the notification center.",
@@ -2882,6 +2953,10 @@
                 "id": {
                     "description": "Unique identifier of the platform.",
                     "type": "string"
+                },
+                "notificationClients": {
+                    "$ref": "#/definitions/NotificationClients",
+                    "description": "A collection of rules and settings for notification clients that fall under this platform."
                 },
                 "title": {
                     "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",

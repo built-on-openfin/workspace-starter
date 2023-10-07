@@ -7,16 +7,16 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP];
+	return [OPENFIN_INFORMATION_APP_PLATFORM_WINDOW, OPENFIN_INFORMATION_APP_BROWSER_VIEW];
 }
 
 /**
  * App definition to use for demonstration which show OpenFin environment information.
  */
-const OPENFIN_INFORMATION_APP: App = {
-	appId: "openfin-information",
-	title: "OpenFin Information",
-	description: "Display information about the OpenFin environment",
+const OPENFIN_INFORMATION_APP_BROWSER_VIEW: App = {
+	appId: "openfin-information-browser-view",
+	title: "OpenFin Information Browser View",
+	description: "Display information about the OpenFin environment in a browser view",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
@@ -34,6 +34,32 @@ const OPENFIN_INFORMATION_APP: App = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
+};
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_PLATFORM_WINDOW: App = {
+	appId: "openfin-information-platform-window",
+	title: "OpenFin Information Platform Window",
+	description: "Display information about the OpenFin environment in a platform window",
+	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+	manifestType: "platform-window",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["platform-window", "openfin", "versions"]
 };
 
 /**
@@ -68,6 +94,33 @@ export async function launchApp(
 
 		case AppManifestType.External: {
 			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
+			break;
+		}
+
+		case "platform-window": {
+			const viewManifestResponse = await fetch(app.manifest);
+
+			const platform = getCurrentSync();
+			ret = await platform.createWindow({
+				workspacePlatform: {
+					windowType: "platform"
+				},
+				url: "http://localhost:8080/windows/platform-window.html",
+				layout: {
+					content: [
+						{
+							type: "stack",
+							content: [
+								{
+									type: "component",
+									componentName: "view",
+									componentState: await viewManifestResponse.json()
+								}
+							]
+						}
+					]
+				}
+			});
 			break;
 		}
 
