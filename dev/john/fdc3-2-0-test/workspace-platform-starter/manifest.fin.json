@@ -56,7 +56,12 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
-			}
+			},
+			"preloadScripts": [
+				{
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/js/preload/fdc3.js"
+				}
+			]
 		}
 	},
 	"shortcut": {
