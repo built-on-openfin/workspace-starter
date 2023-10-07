@@ -8,7 +8,7 @@ import {
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
-import { getApp, getAppsByIntent, getIntent, getIntentsByContext } from "../apps";
+import { getApp, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
 import { mapToAppMetaData as mapTo12AppMetaData } from "../fdc3/1.2/mapper";
@@ -283,8 +283,23 @@ export function interopOverride(
 				context: contextForIntent
 			};
 
+			const intentsForSelection: AppsForIntent[] = await getIntentsByContext(contextForIntent.type);
+
 			// app specified flow
 			if (!isEmpty(targetAppIdentifier)) {
+				const targetApp = await getApp(targetAppIdentifier.appId);
+
+				if (isEmpty(targetApp)) {
+					throw new Error(ResolveError.TargetAppUnavailable);
+				}
+				if (
+					!targetApp?.interop?.intents?.listensFor ||
+					!Object.values(targetApp.interop.intents.listensFor).some((listenedForIntent) =>
+						listenedForIntent.contexts.includes(contextForIntent.type)
+					)
+				) {
+					throw new Error(ResolveError.NoAppsFound);
+				}
 				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent as OpenFin.Intent,
@@ -293,8 +308,6 @@ export function interopOverride(
 				);
 				return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 			}
-
-			const intentsForSelection: AppsForIntent[] = await getIntentsByContext(contextForIntent.type);
 
 			// check for unregistered app intent handlers (if enabled)
 			const unregisteredAppIntents = await this.getUnregisteredAppIntentByContext(
@@ -327,11 +340,6 @@ export function interopOverride(
 				}
 			}
 
-			if (intentsForSelection.length === 0) {
-				// no available intents for the context
-				throw new Error(ResolveError.NoAppsFound);
-			}
-
 			let userSelection: IntentPickerResponse;
 
 			if (intentsForSelection.length === 1) {
@@ -341,7 +349,11 @@ export function interopOverride(
 				intent.displayName = intentForSelection.intent.displayName;
 
 				if (intentForSelection.apps.length === 1) {
-					const appInstances = await this.findAppInstances(intentForSelection.apps[0], clientIdentity, "INTENT");
+					const appInstances = await this.findAppInstances(
+						intentForSelection.apps[0],
+						clientIdentity,
+						"INTENT"
+					);
 					// if there are no instances launch a new one otherwise present the choice to the user
 					// by falling through to the next code block
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
@@ -386,7 +398,21 @@ export function interopOverride(
 			const targetAppIdentifier = this.getApplicationIdentity(intent.metadata);
 			const usesAppIdentifier = this.usesApplicationIdentity(clientIdentity);
 
+			const matchedIntents = await getIntent(intent.name, intent?.context?.type);
+			const intentApps: PlatformApp[] = [];
+
+			if (!isEmpty(matchedIntents)) {
+				intentApps.push(...matchedIntents.apps);
+			}
 			if (!isEmpty(targetAppIdentifier)) {
+				const targetApp = await getApp(targetAppIdentifier.appId);
+				if (isEmpty(targetApp)) {
+					throw new Error(ResolveError.TargetAppUnavailable);
+				}
+				// ensure that the specified app is one of the intent apps
+				if (!intentApps.some((app) => app.appId === targetAppIdentifier.appId)) {
+					throw new Error(ResolveError.NoAppsFound);
+				}
 				const intentResolver = await this.handleTargetedIntent(
 					targetAppIdentifier,
 					intent,
@@ -396,9 +422,10 @@ export function interopOverride(
 				return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 			}
 
-			const intentApps = await getAppsByIntent(intent.name);
-
-			if (this._unregisteredApp && (await this.canAddUnregisteredApp(clientIdentity, intent.name))) {
+			if (
+				this._unregisteredApp &&
+				(await this.canAddUnregisteredApp(clientIdentity, intent.name, intent?.context?.type))
+			) {
 				// We have unregistered app instances that support this intent and support for unregistered instances is enabled
 				intentApps.push(this._unregisteredApp);
 			}
@@ -791,6 +818,25 @@ export function interopOverride(
 		}
 
 		/**
+		 * Validates the connection to the session context group.
+		 * @param options The options for joining/creating a session context group.
+		 * @param options.sessionContextGroupId the context id that is being joined/created
+		 * @param clientIdentity The identity of the client making the request
+		 * @returns hasConflict
+		 * @throws Error with message AccessDenied if you try creating a session context group with a private channel naming convention.
+		 */
+		public handleJoinSessionContextGroup(
+			options: {
+				sessionContextGroupId: string;
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		): {
+			hasConflict: boolean;
+		} {
+			return super.handleJoinSessionContextGroup(options, clientIdentity);
+		}
+
+		/**
 		 * Launch an app with intent.
 		 * @param app The application to launch.
 		 * @param intent The intent to open it with.
@@ -839,7 +885,15 @@ export function interopOverride(
 				if (platformIdentities.length === 1) {
 					const intentTimeout: number | undefined = this._intentOptions?.intentTimeout;
 					// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-					instanceId = await this.onIntentClientReady(platformIdentities[0], intent.name, intentTimeout);
+					try {
+						instanceId = await this.onIntentClientReady(platformIdentities[0], intent.name, intentTimeout);
+					} catch (intentReadyError) {
+						logger.warn(
+							"An error occurred while getting a instance to target an intent at.",
+							intentReadyError
+						);
+						throw new Error(ResolveError.IntentDeliveryFailed);
+					}
 				}
 			}
 
@@ -981,7 +1035,11 @@ export function interopOverride(
 			}
 			// if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
 			if (!isEmpty(targetAppIdentifier.instanceId)) {
-				const availableAppInstances = await this.findAppInstances(targetAppIdentifier, clientIdentity, "INTENT");
+				const availableAppInstances = await this.findAppInstances(
+					targetAppIdentifier,
+					clientIdentity,
+					"INTENT"
+				);
 				if (
 					availableAppInstances.length === 0 ||
 					!availableAppInstances.some(
@@ -1449,27 +1507,42 @@ export function interopOverride(
 		 * Can we add an unregistered app.
 		 * @param clientIdentity The client identity.
 		 * @param intentName The intent name.
+		 * @param contextType The context type.
 		 * @returns True if we can add the app.
 		 */
 		private async canAddUnregisteredApp(
 			clientIdentity: OpenFin.ClientIdentity,
-			intentName?: string
+			intentName?: string,
+			contextType?: string
 		): Promise<boolean> {
+			let canAdd = false;
+
 			if (isEmpty(this?._unregisteredApp)) {
-				return false;
+				return canAdd;
 			}
+
+			const listensFor = this._unregisteredApp?.interop?.intents?.listensFor;
+
+			if (!isEmpty(intentName) && (isEmpty(listensFor) || isEmpty(listensFor[intentName]))) {
+				return canAdd;
+			}
+
 			if (
+				!isEmpty(contextType) &&
+				!isEmpty(listensFor) &&
 				!isEmpty(intentName) &&
-				this._unregisteredApp.intents?.findIndex((intent) => intent.name === intentName) === -1
+				!listensFor[intentName].contexts.includes(contextType)
 			) {
-				return false;
+				return canAdd;
 			}
+
 			const instances = await this.findAppInstances(
 				{ appId: this._unregisteredApp.appId },
 				clientIdentity,
 				"INTENT"
 			);
-			return instances.length > 0;
+			canAdd = instances.length > 0;
+			return canAdd;
 		}
 
 		/**
@@ -1578,11 +1651,11 @@ export function interopOverride(
 		private async findAppInstances(
 			app: AppIdentifier,
 			clientIdentity: OpenFin.ClientIdentity,
-			type: "CONNECTED"|"INTENT" = "CONNECTED"
+			type: "CONNECTED" | "INTENT" = "CONNECTED"
 		): Promise<AppIdentifier[]> {
 			const endpointApps: { [key: string]: AppIdentifier } = {};
 
-			if(type === "INTENT") {
+			if (type === "INTENT") {
 				for (const [, value] of Object.entries(this._trackedIntentHandlers)) {
 					const entries = value.filter((entry) => entry.appId === app.appId);
 					for (const entry of entries) {
@@ -1597,7 +1670,7 @@ export function interopOverride(
 
 			for (const [, value] of Object.entries(this._trackedClientConnections)) {
 				const trackedAppId = await this.lookupAppId(value.clientIdentity);
-				if(trackedAppId === app.appId && isEmpty(endpointApps[value.clientIdentity.endpointId])) {
+				if (trackedAppId === app.appId && isEmpty(endpointApps[value.clientIdentity.endpointId])) {
 					endpointApps[value.clientIdentity.endpointId] = {
 						appId: app.appId ?? "",
 						instanceId: value.clientIdentity.endpointId

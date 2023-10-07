@@ -56,7 +56,12 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
-			}
+			},
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/js/preload/fdc3.js"
+				}
+			]
 		}
 	},
 	"shortcut": {

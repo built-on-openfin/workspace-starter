@@ -391,14 +391,12 @@ export async function getIntent(
 	const intentsMap: { [key: string]: AppsForIntent } = {};
 
 	for (const app of apps) {
-		if (app.interop?.intents?.listensFor) {
-			const supportedIntents = Object.keys(app.interop.intents.listensFor);
-			for (const supportedIntent of supportedIntents) {
-				const appIntent = app.interop.intents.listensFor[supportedIntent];
-				const include = appIntentContains(appIntent, contextType, resultType);
-				if (include) {
-					updateAppIntentsMap(intentsMap, supportedIntent, appIntent.displayName, app);
-				}
+		if (app.interop?.intents?.listensFor && !isEmpty(app.interop.intents.listensFor[intent])) {
+			const appIntent = app.interop.intents.listensFor[intent];
+			const include = appIntentContains(appIntent, contextType, resultType);
+			if (include) {
+				// re-use approach used by getting intents by context for the context map although this will only have one
+				updateAppIntentsMap(intentsMap, intent, appIntent.displayName, app);
 			}
 		}
 	}
