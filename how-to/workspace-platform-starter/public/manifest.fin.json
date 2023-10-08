@@ -56,12 +56,7 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
-			},
-			"preloadScripts": [
-				{
-					"url": "http://localhost:8080/js/preload/fdc3.js"
-				}
-			]
+			}
 		}
 	},
 	"shortcut": {
@@ -159,7 +154,20 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["https://directory.fdc3.finos.org/conformance_2_0/v2/apps/"],
+			"endpointIds": [
+				"http://localhost:8080/common/apps-contact.json",
+				"http://localhost:8080/common/apps.json",
+				"http://localhost:8080/common/apps-expero.json",
+				"http://localhost:8080/common/apps-interop.json",
+				"http://localhost:8080/common/apps-manager.json",
+				"http://localhost:8080/common/apps-native.json",
+				"http://localhost:8080/common/apps-dev-extensions.json",
+				"http://localhost:8080/common/apps-preload.json",
+				"http://localhost:8080/common/apps-tools.json",
+				"http://localhost:8080/apps.json",
+				"http://localhost:8080/apps-fdc3-1-2.json",
+				"http://localhost:8080/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
