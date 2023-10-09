@@ -539,9 +539,29 @@ export function interopOverride(
 								contextTimeout
 							);
 
-							const trackedHandler = this._trackedContextHandlers[contextTypeName].find(
-								(entry) => entry.clientIdentity.endpointId === clientReadyInstanceId
-							);
+							let trackedHandler: ContextRegistrationEntry | undefined;
+
+							const trackedContextHandlers = this._trackedContextHandlers[contextTypeName];
+							if (Array.isArray(trackedContextHandlers)) {
+								const trackedContextHandler = trackedContextHandlers.find(
+									(entry) => entry.clientIdentity.endpointId === clientReadyInstanceId
+								);
+								if (!isEmpty(trackedContextHandler)) {
+									trackedHandler = trackedContextHandler;
+								}
+							}
+							if (isEmpty(trackedHandler)) {
+								const trackedGlobalHandlers = this._trackedContextHandlers["*"];
+								if (Array.isArray(trackedGlobalHandlers)) {
+									const trackedGlobalHandler = trackedGlobalHandlers.find(
+										(entry) => entry.clientIdentity.endpointId === clientReadyInstanceId
+									);
+									if (!isEmpty(trackedGlobalHandler)) {
+										trackedHandler = trackedGlobalHandler;
+									}
+								}
+							}
+
 							if (!isEmpty(trackedHandler)) {
 								await super.invokeContextHandler(
 									trackedHandler.clientIdentity,
@@ -549,7 +569,6 @@ export function interopOverride(
 									fdc3OpenOptions.context
 								);
 							} else {
-								// TODO CAPTURE SUBSCRIBERS WHO SUBSCRIBE TO ALL CONTEXTS
 								logger.warn(
 									`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler.`
 								);
@@ -772,8 +791,8 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<void> {
 			logger.info("contextHandlerRegistered:", payload, clientIdentity);
-			if (!isEmpty(payload) && !isEmpty(payload.contextType) && !isEmpty(payload.handlerId)) {
-				const contextTypeName: string = payload?.contextType;
+			if (!isEmpty(payload?.handlerId)) {
+				const contextTypeName: string = payload?.contextType ?? "*";
 				const handlerId = payload.handlerId;
 				let trackedContextHandler = this._trackedContextHandlers[contextTypeName];
 
@@ -1411,34 +1430,70 @@ export function interopOverride(
 			timeout: number = 15000
 		): Promise<string> {
 			return new Promise<string>((resolve, reject) => {
-				const registeredHandlers = this._trackedContextHandlers[contextTypeName];
-				let existingInstanceId: string | undefined;
-				if (!isEmpty(registeredHandlers)) {
-					for (const handler of registeredHandlers) {
+				const contextRegisteredHandlers = this._trackedContextHandlers[contextTypeName];
+				const globalRegisteredHandlers = this._trackedContextHandlers["*"];
+				let existingContextHandlerInstanceId: string | undefined;
+
+				if (!isEmpty(contextRegisteredHandlers)) {
+					for (const handler of contextRegisteredHandlers) {
 						if (
 							handler.clientIdentity.uuid === identity.uuid &&
 							handler.clientIdentity.name === identity.name
 						) {
-							existingInstanceId = handler.clientIdentity.endpointId;
+							existingContextHandlerInstanceId = handler.clientIdentity.endpointId;
 							break;
 						}
 					}
 				}
-				if (!isEmpty(existingInstanceId)) {
-					resolve(existingInstanceId);
+
+				if (!isEmpty(globalRegisteredHandlers) && isEmpty(existingContextHandlerInstanceId)) {
+					for (const handler of globalRegisteredHandlers) {
+						if (
+							handler.clientIdentity.uuid === identity.uuid &&
+							handler.clientIdentity.name === identity.name
+						) {
+							existingContextHandlerInstanceId = handler.clientIdentity.endpointId;
+							break;
+						}
+					}
 				}
-				const key = this.getClientReadyKey(identity, "CONTEXT", contextTypeName);
+				if (!isEmpty(existingContextHandlerInstanceId)) {
+					resolve(existingContextHandlerInstanceId);
+					return;
+				}
+
+				const contextKey = this.getClientReadyKey(identity, "CONTEXT", contextTypeName);
+				const globalKey = this.getClientReadyKey(identity, "CONTEXT", "*");
 				const timerId = setTimeout(() => {
-					if (!isEmpty(this._clientReadyRequests[key])) {
-						delete this._clientReadyRequests[key];
+					const hasContextRequest = !isEmpty(this._clientReadyRequests[contextKey]);
+					const hasGlobalRequest = !isEmpty(this._clientReadyRequests[globalKey]);
+
+					if (hasContextRequest || hasGlobalRequest) {
+						delete this._clientReadyRequests[contextKey];
+						delete this._clientReadyRequests[globalKey];
 						reject(OpenError.AppTimeout);
 					}
 				}, timeout);
-				this._clientReadyRequests[key] = (instanceId: string): void => {
+				let isResolved = false;
+				this._clientReadyRequests[contextKey] = (instanceId: string): void => {
 					clearTimeout(timerId);
-					// clear the callback asynchronously
-					delete this._clientReadyRequests[key];
-					resolve(instanceId);
+					if (!isResolved) {
+						isResolved = true;
+						// clear the callback asynchronously
+						delete this._clientReadyRequests[contextKey];
+						delete this._clientReadyRequests[globalKey];
+						resolve(instanceId);
+					}
+				};
+				this._clientReadyRequests[globalKey] = (instanceId: string): void => {
+					clearTimeout(timerId);
+					if (!isResolved) {
+						isResolved = true;
+						// clear the callback asynchronously
+						delete this._clientReadyRequests[contextKey];
+						delete this._clientReadyRequests[globalKey];
+						resolve(instanceId);
+					}
 				};
 			});
 		}
