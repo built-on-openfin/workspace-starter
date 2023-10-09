@@ -153,93 +153,9 @@
 		"browserProvider": {
 			"windowOptions": {
 				"title": "Browser Starter",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/favicon.ico",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/favicon.ico"
 			},
-			"windowPositioningStrategy": {
-				"x": 30,
-				"y": 30,
-				"maxIncrements": 8
-			},
-			"disableWindowPositioningStrategy": true,
-			"globalMenu": [
-				{
-					"include": true,
-					"label": "Open Home",
-					"data": {
-						"type": "Custom",
-						"action": {
-							"id": "home-show"
-						}
-					},
-					"position": {
-						"type": "OpenStorefront",
-						"operation": "after"
-					}
-				},
-				{
-					"include": true,
-					"label": "Quit App",
-					"position": {
-						"type": "Quit",
-						"operation": "replaceLabel"
-					}
-				}
-			],
-			"pageMenu": [],
-			"viewMenu": [],
-			"toolbarButtons": [
-				{
-					"include": true,
-					"id": "home-show",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Show Home",
-						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/common/icons/{theme}/{scheme}/search.svg",
-						"action": {
-							"id": "home-show",
-							"customData": {}
-						}
-					}
-				},
-				{
-					"include": true,
-					"id": "lock-unlock",
-					"button": {
-						"type": "LockUnlockPage"
-					}
-				},
-				{
-					"include": true,
-					"id": "show-hide-tabs",
-					"button": {
-						"type": "ShowHideTabs"
-					}
-				},
-				{
-					"include": true,
-					"id": "color-linking",
-					"button": {
-						"type": "ColorLinking"
-					}
-				},
-				{
-					"include": true,
-					"id": "preset-layouts",
-					"button": {
-						"type": "PresetLayouts"
-					}
-				},
-				{
-					"include": true,
-					"id": "save-menu",
-					"button": {
-						"type": "SaveMenu"
-					}
-				}
-			]
+			"disableWindowPositioningStrategy": true
 		},
 		"themeProvider": {
 			"themes": [
@@ -398,20 +314,7 @@
 			]
 		},
 		"actionsProvider": {
-			"modules": [
-				{
-					"enabled": true,
-					"id": "page-actions",
-					"title": "Page Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/js/modules/composite/pages.bundle.js"
-				},
-				{
-					"enabled": true,
-					"id": "window-actions",
-					"title": "Window Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/js/modules/composite/windows.bundle.js"
-				}
-			]
+			"modules": []
 		},
 		"conditionsProvider": {
 			"modules": []
@@ -449,31 +352,6 @@
 			},
 			"endpointId": "version",
 			"versionCheckIntervalInSeconds": 30
-		},
-		"menusProvider": {
-			"popupHtml": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/common/popups/menu/index.html",
-			"menuWidth": 200,
-			"menuItemHeight": 32,
-			"modules": [
-				{
-					"id": "pages",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/favicon.ico",
-					"title": "Pages",
-					"description": "Provides additional menu options for pages.",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/js/modules/composite/pages.bundle.js",
-					"data": {}
-				},
-				{
-					"id": "windows",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/favicon.ico",
-					"title": "Windows",
-					"description": "Provides additional menu options for windows.",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/js/modules/composite/windows.bundle.js",
-					"data": {}
-				}
-			]
 		}
 	}
 }
