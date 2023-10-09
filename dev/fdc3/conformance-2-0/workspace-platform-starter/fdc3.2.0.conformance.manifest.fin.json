@@ -155,7 +155,7 @@
 				"title": "Browser Starter",
 				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/fdc3/conformance-2-0/workspace-platform-starter/favicon.ico"
 			},
-			"disableWindowPositioningStrategy": true
+			"disableWindowPositioningStrategy": false
 		},
 		"themeProvider": {
 			"themes": [
