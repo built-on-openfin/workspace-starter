@@ -1,9 +1,10 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, CustomPaletteSet, Page, Workspace } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
+import type { PopupMenuEntry } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
@@ -172,6 +173,14 @@ export interface ModuleHelpers {
 	): Promise<BrowserWindowModule>;
 
 	/**
+	 * Launch a workspace.
+	 * @param workspace The workspace to launch.
+	 * @param logger Log output from the operation.
+	 * @returns Was the workspace opened.
+	 */
+	launchWorkspace?(workspace: Workspace, logger?: Logger): Promise<boolean>;
+
+	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
@@ -205,7 +214,7 @@ export interface ModuleHelpers {
 		position: { x: number; y: number },
 		parentIdentity: OpenFin.Identity,
 		noEntryText: string,
-		menuEntries: { label: string; customData: T; icon?: string }[],
+		menuEntries: PopupMenuEntry<T>[],
 		options?: {
 			mode?: "native" | "custom";
 		}

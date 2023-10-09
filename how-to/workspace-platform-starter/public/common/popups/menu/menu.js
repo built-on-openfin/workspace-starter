@@ -22,28 +22,36 @@ async function initDOM() {
 	if (menuContainer) {
 		if (Array.isArray(options.customData?.menuEntries) && options.customData.menuEntries.length > 0) {
 			for (const menuEntry of options.customData.menuEntries) {
-				const menuEntryButton = document.createElement('div');
-				menuEntryButton.classList.add('menu-item');
-				menuEntryButton.addEventListener('click', async () => {
-					await fin.me.dispatchPopupResult(menuEntry.customData);
-				});
-				menuContainer.append(menuEntryButton);
+				const menuEntryItem = document.createElement('div');
+				menuContainer.append(menuEntryItem);
 
-				let icon;
-				if (menuEntry.icon) {
-					icon = document.createElement('img');
-					icon.src = menuEntry.icon;
-					icon.width = 16;
-					icon.height = 16;
+				if (menuEntry.type === 'separator') {
+					menuEntryItem.classList.add('menu-item-separator');
+
+					const sep = document.createElement('hr');
+					menuEntryItem.append(sep);
+				} else {
+					menuEntryItem.classList.add('menu-item');
+					menuEntryItem.addEventListener('click', async () => {
+						await fin.me.dispatchPopupResult(menuEntry.customData);
+					});
+
+					let icon;
+					if (menuEntry.icon) {
+						icon = document.createElement('img');
+						icon.src = menuEntry.icon;
+						icon.width = 16;
+						icon.height = 16;
+					}
+
+					const text = document.createElement('span');
+					text.textContent = menuEntry.label;
+
+					if (icon) {
+						menuEntryItem.append(icon);
+					}
+					menuEntryItem.append(text);
 				}
-
-				const text = document.createElement('span');
-				text.textContent = menuEntry.label;
-
-				if (icon) {
-					menuEntryButton.append(icon);
-				}
-				menuEntryButton.append(text);
 			}
 		} else {
 			const noEntries = document.createElement('div');

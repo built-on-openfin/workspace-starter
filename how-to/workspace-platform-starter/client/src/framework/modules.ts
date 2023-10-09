@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
@@ -285,6 +285,10 @@ export function getDefaultHelpers(): ModuleHelpers {
 			}
 		},
 		launchPage,
+		launchWorkspace: async (workspace): Promise<boolean> => {
+			const platform = getCurrentSync();
+			return platform.applyWorkspace(workspace);
+		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
 		showPopupMenu

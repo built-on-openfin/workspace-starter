@@ -12,7 +12,6 @@ import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import { getSettings } from "./settings";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type {
 	MenuEntry,
 	MenuOptionType,
@@ -21,8 +20,10 @@ import type {
 	MenusProviderOptions,
 	MenuTemplateType,
 	MenuType,
+	PopupMenuEntry,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { getCurrentPalette } from "./themes";
 import { isBoolean, isEmpty, randomUUID } from "./utils";
 
@@ -308,7 +309,7 @@ export async function showPopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[],
+	menuEntries: PopupMenuEntry<T>[],
 	options?: {
 		mode?: "native" | "custom";
 	}
@@ -334,7 +335,7 @@ export async function showHtmlPopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[]
+	menuEntries: PopupMenuEntry<T>[]
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 	const parentBounds = await parentWindow.getBounds();
@@ -342,6 +343,19 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const platformWindow = fin.Window.wrapSync(fin.me.identity);
 
 	const currentPalette = await getCurrentPalette();
+
+	let numItems = 0;
+	let numSeparators = 0;
+	for (const menuEntry of menuEntries) {
+		if (menuEntry.type === "separator") {
+			numSeparators++;
+		} else {
+			numItems++;
+		}
+	}
+
+	const itemsHeight = numItems * (menuProviderOptions?.menuItemHeight ?? 32);
+	const separatorsHeight = numSeparators * (menuProviderOptions?.menuItemSeparatorHeight ?? 16);
 
 	const result = await platformWindow.showPopupWindow({
 		name: randomUUID(),
@@ -362,7 +376,7 @@ export async function showHtmlPopupMenu<T = unknown>(
 		x: parentBounds.left + position.x,
 		y: parentBounds.top + position.y,
 		width: menuProviderOptions?.menuWidth ?? 200,
-		height: menuEntries.length * (menuProviderOptions?.menuItemHeight ?? 32)
+		height: itemsHeight + separatorsHeight
 	});
 
 	if (result.result === "clicked") {
@@ -384,13 +398,14 @@ export async function showNativePopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[]
+	menuEntries: PopupMenuEntry<T>[]
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 
 	const template: OpenFin.MenuItemTemplate[] = menuEntries.map((m) => ({
 		label: m.label,
 		icon: m.icon,
+		type: m.type,
 		data: m.customData
 	}));
 

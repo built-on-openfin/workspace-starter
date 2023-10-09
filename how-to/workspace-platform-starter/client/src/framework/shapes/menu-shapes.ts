@@ -33,6 +33,12 @@ export interface MenusProviderOptions extends ModuleList {
 	 * defaults to 32.
 	 */
 	menuItemHeight?: number;
+
+	/**
+	 * The height of a separator in the custom popup menu.
+	 * defaults to 16.
+	 */
+	menuItemSeparatorHeight?: number;
 }
 
 /**
@@ -196,3 +202,28 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	: T extends ViewTabContextMenuTemplate
 	? ViewTabMenuOptionType
 	: TrayMenuOptionType;
+
+/**
+ * Entry for a popup menu.
+ */
+export interface PopupMenuEntry<T = unknown> {
+	/**
+	 * Type of the menu entry.
+	 */
+	type?: "normal" | "separator";
+
+	/**
+	 * Label to show in the menu.
+	 */
+	label?: string;
+
+	/**
+	 * Icon to show in the menu.
+	 */
+	icon?: string;
+
+	/**
+	 * Custom data to associate with the entry.
+	 */
+	customData?: T;
+}

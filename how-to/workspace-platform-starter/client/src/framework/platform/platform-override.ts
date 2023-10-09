@@ -563,7 +563,7 @@ export function overrideCallback(
 
 		/**
 		 * Closes the current Platform and all child windows and views.
-		 * @param payload Undefined unless you have implemented a custom quite protocol.
+		 * @param payload Undefined unless you have implemented a custom quit protocol.
 		 * @param callerIdentity Identity of the entity that called quit.
 		 * @returns Nothing.
 		 */

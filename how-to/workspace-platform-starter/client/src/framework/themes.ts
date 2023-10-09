@@ -351,3 +351,18 @@ function getSystemPreferredColorScheme(): ColorSchemeMode {
 	}
 	return ColorSchemeMode.Light;
 }
+
+/**
+ * Apply theming to an icon url.
+ * @param url The url to theme.
+ * @param iconFolder The icon folder.
+ * @param colorScheme The color scheme.
+ * @returns The themed url.
+ */
+export function themeUrl(
+	url: string | undefined,
+	iconFolder: string,
+	colorScheme: ColorSchemeMode
+): string | undefined {
+	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorScheme as string) : undefined;
+}
