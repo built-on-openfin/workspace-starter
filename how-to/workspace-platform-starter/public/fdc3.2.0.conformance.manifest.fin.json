@@ -155,7 +155,7 @@
 				"title": "Browser Starter",
 				"icon": "http://localhost:8080/favicon.ico"
 			},
-			"disableWindowPositioningStrategy": true
+			"disableWindowPositioningStrategy": false
 		},
 		"themeProvider": {
 			"themes": [
