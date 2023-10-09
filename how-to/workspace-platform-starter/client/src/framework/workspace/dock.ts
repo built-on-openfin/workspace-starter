@@ -132,7 +132,7 @@ async function buildButtons(): Promise<DockButton[]> {
 		const colorSchemeMode = await getCurrentColorSchemeMode();
 		const platform = getCurrentSync();
 
-		const entries = dockProviderOptions.entries ?? [];
+		const entries = Array.isArray(dockProviderOptions.entries) ? [...dockProviderOptions.entries] : [];
 		if (Array.isArray(dockProviderOptions.apps)) {
 			entries.push(...dockProviderOptions.apps);
 		}
