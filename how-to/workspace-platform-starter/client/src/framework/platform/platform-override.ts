@@ -712,7 +712,12 @@ export function overrideCallback(
 
 			const window = await super.createWindow(options, identity);
 
-			logger.info("After Create Window", await window.getOptions());
+			try {
+				logger.info("After Create Window", await window.getOptions());
+			} catch {
+				// the logging is for informational purposes during debugging. If it fails
+				// the window may have closed straight after opening (e.g. automation testing)
+			}
 
 			// If the default buttons were overwritten then hopefully the creator
 			// used correctly themed versions, but in case they didn't we send
