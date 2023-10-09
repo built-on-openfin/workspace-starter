@@ -471,6 +471,10 @@
                     "$ref": "#/definitions/Partial",
                     "description": "Default options for creating a new Browser window. These options are not applied on any non-Browser windows that get created.  These default options will take precedence over\ndefaultWindowOptions included in the manifest.  Any option not included in WorkspacePlatform.getCurrentSync().Browser.createWindow(options) call will default to the value provided in this field."
                 },
+                "disableWindowPositioningStrategy": {
+                    "description": "By default we implement a Window Positioning Strategy that will try and position launched windows with an\noffset. The way the windows are offset can be configured by specifying windowPositioningStrategy.\nIf you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you\ncan set this value to true.",
+                    "type": "boolean"
+                },
                 "globalMenu": {
                     "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
                     "items": {
@@ -2992,10 +2996,10 @@
                     "type": "number"
                 },
                 "openStrategy": {
-                    "description": "When fdc3.open is raised will it only apply to applications that support the intent \"OpenApp\" (context if passed is sent to the intent handler for OpenApp)\nor will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.\nThe default is FDC3. The previous behavior was \"INTENT\" and you can set this setting in order to have fdc3 open only apply to apps that say they support the\nintent \"OpenApp\". This setting is here to let you keep the previous behavior.",
+                    "description": "When fdc3.open is raised will it only apply to applications that support the intent \"OpenApp\" (context if passed is sent to the intent handler for OpenApp)\nor will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.\nThe default is fdc3. The previous behavior was \"intent\" and you can set this setting in order to have fdc3 open only apply to apps that say they support the\nintent \"OpenApp\". This setting is here to let you keep the previous behavior.",
                     "enum": [
-                        "FDC3",
-                        "INTENT"
+                        "fdc3",
+                        "intent"
                     ],
                     "type": "string"
                 }
