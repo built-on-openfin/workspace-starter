@@ -235,10 +235,10 @@ export interface OpenOptions {
 	/**
 	 * When fdc3.open is raised will it only apply to applications that support the intent "OpenApp" (context if passed is sent to the intent handler for OpenApp)
 	 * or will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.
-	 * The default is FDC3. The previous behavior was "INTENT" and you can set this setting in order to have fdc3 open only apply to apps that say they support the
+	 * The default is FDC3. The previous behavior was "intent" and you can set this setting in order to have fdc3 open only apply to apps that say they support the
 	 * intent "OpenApp". This setting is here to let you keep the previous behavior.
 	 */
-	openStrategy?: "INTENT" | "FDC3";
+	openStrategy?: "intent" | "fdc3";
 
 	/**
 	 * How long should the broker wait after launching a view/window for it to register a context handler. The default

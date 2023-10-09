@@ -38,7 +38,7 @@ There are options you can configure for the workspace platform starter's behavio
    "interop": {
     ...
     "openOptions": {
-     "openStrategy": "INTENT",
+     "openStrategy": "intent",
      "connectionTimeout": 15000,
      "contextTimeout": 15000
     }
@@ -46,7 +46,7 @@ There are options you can configure for the workspace platform starter's behavio
   }
 ```
 
-openOptions are optional and you can see here we have specified INTENT as the open strategy instead of the default FDC3 (in the example we also specified custom timeouts).
+openOptions are optional and you can see here we have specified intent as the open strategy instead of the default fdc3 (in the example we also specified custom timeouts).
 
 #### INTENT OPEN STRATEGY
 
