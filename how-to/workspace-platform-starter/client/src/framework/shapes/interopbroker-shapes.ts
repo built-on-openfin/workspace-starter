@@ -235,7 +235,7 @@ export interface OpenOptions {
 	/**
 	 * When fdc3.open is raised will it only apply to applications that support the intent "OpenApp" (context if passed is sent to the intent handler for OpenApp)
 	 * or will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.
-	 * The default is FDC3. The previous behavior was "intent" and you can set this setting in order to have fdc3 open only apply to apps that say they support the
+	 * The default is fdc3. The previous behavior was "intent" and you can set this setting in order to have fdc3 open only apply to apps that say they support the
 	 * intent "OpenApp". This setting is here to let you keep the previous behavior.
 	 */
 	openStrategy?: "intent" | "fdc3";
