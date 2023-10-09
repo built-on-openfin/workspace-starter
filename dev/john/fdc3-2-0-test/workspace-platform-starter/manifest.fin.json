@@ -56,12 +56,7 @@
 						"protocols": ["mailto", "msteams", "tel"]
 					}
 				}
-			},
-			"preloadScripts": [
-				{
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/js/preload/fdc3.js"
-				}
-			]
+			}
 		}
 	},
 	"shortcut": {
@@ -159,7 +154,20 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["https://directory.fdc3.finos.org/conformance_2_0/v2/apps/"],
+			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-expero.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-manager.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-dev-extensions.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-preload.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/common/apps-tools.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-0-test/workspace-platform-starter/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
