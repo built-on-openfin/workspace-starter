@@ -162,6 +162,7 @@
 				"y": 30,
 				"maxIncrements": 8
 			},
+			"disableWindowPositioningStrategy": true,
 			"globalMenu": [
 				{
 					"include": true,
