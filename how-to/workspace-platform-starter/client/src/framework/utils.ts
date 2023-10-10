@@ -117,3 +117,34 @@ export function formatError(err: unknown): string {
 	}
 	return JSON.stringify(err);
 }
+
+/**
+ * Load an image to a data url containing base64 image data.
+ * @param url The url of the image to load.
+ * @param dimensions The dimensions to resize the image to.
+ * @returns The data url containing base64 data for the image.
+ */
+export async function imageUrlToDataUrl(url: string, dimensions: number): Promise<string | undefined> {
+	return new Promise<string | undefined>((resolve) => {
+		try {
+			const img = document.createElement("img");
+
+			img.addEventListener("load", () => {
+				const canvas = document.createElement("canvas");
+				canvas.width = dimensions;
+				canvas.height = dimensions;
+
+				const ctx = canvas.getContext("2d");
+
+				if (ctx) {
+					ctx.drawImage(img, 0, 0, dimensions, dimensions);
+					resolve(canvas.toDataURL("image/png", 1));
+				} else {
+					// eslint-disable-next-line unicorn/no-useless-undefined
+					resolve(undefined);
+				}
+			});
+			img.src = url;
+		} catch {}
+	});
+}

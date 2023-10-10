@@ -118,6 +118,14 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 }
 
 /**
+ * Get the current native color scheme mode.
+ * @returns The native color scheme mode.
+ */
+export async function getNativeColorSchemeMode(): Promise<ColorSchemeMode> {
+	return getSystemPreferredColorScheme();
+}
+
+/**
  * Get the id of the current theme.
  * @returns The current theme id.
  */
@@ -345,7 +353,7 @@ function hasScheme(theme: PlatformCustomTheme, scheme: string): boolean {
  * Get the system preferred color scheme.
  * @returns The system color scheme.
  */
-function getSystemPreferredColorScheme(): ColorSchemeMode {
+export function getSystemPreferredColorScheme(): ColorSchemeMode {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
 		return ColorSchemeMode.Dark;
 	}

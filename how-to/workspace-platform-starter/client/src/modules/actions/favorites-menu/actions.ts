@@ -75,8 +75,6 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 						const favInfo = await client.getInfo();
 						const menuEntries: PopupMenuEntry<FavoriteEntry>[] = [];
 
-						const themeClient = await this._helpers.getThemeClient();
-
 						if (favInfo.enabledTypes) {
 							let hadEntries = false;
 							for (const type of favInfo.enabledTypes) {
@@ -91,7 +89,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 									)) {
 										menuEntries.push({
 											label: entry.label ?? "",
-											icon: await themeClient.themeUrl(entry.icon),
+											icon: entry.icon,
 											customData: entry
 										});
 									}

@@ -24,8 +24,14 @@ import type {
 	RelatedMenuId
 } from "./shapes/menu-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import { getCurrentPalette } from "./themes";
-import { isBoolean, isEmpty, randomUUID } from "./utils";
+import {
+	getCurrentColorSchemeMode,
+	getCurrentIconFolder,
+	getCurrentPalette,
+	getNativeColorSchemeMode,
+	themeUrl
+} from "./themes";
+import { imageUrlToDataUrl, isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
@@ -343,10 +349,15 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const platformWindow = fin.Window.wrapSync(fin.me.identity);
 
 	const currentPalette = await getCurrentPalette();
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getCurrentColorSchemeMode();
 
 	let numItems = 0;
 	let numSeparators = 0;
 	for (const menuEntry of menuEntries) {
+		if (isStringValue(menuEntry.icon)) {
+			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		}
 		if (menuEntry.type === "separator") {
 			numSeparators++;
 		} else {
@@ -416,12 +427,23 @@ export async function showNativePopupMenu<T = unknown>(
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 
-	const template: OpenFin.MenuItemTemplate[] = menuEntries.map((m) => ({
-		label: m.label,
-		icon: m.icon,
-		type: m.type,
-		data: m.customData
-	}));
+	const template: OpenFin.MenuItemTemplate[] = [];
+
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getNativeColorSchemeMode();
+
+	for (const menuEntry of menuEntries) {
+		let iconBase64: string | undefined = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		if (isStringValue(iconBase64)) {
+			iconBase64 = await imageUrlToDataUrl(iconBase64, 20);
+		}
+		template.push({
+			label: menuEntry.label,
+			icon: iconBase64,
+			type: menuEntry.type,
+			data: menuEntry.customData
+		});
+	}
 
 	if (isEmpty(template) || template.length === 0) {
 		template.push({
