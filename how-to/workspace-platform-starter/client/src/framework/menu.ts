@@ -12,7 +12,6 @@ import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import { getSettings } from "./settings";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type {
 	MenuEntry,
 	MenuOptionType,
@@ -21,10 +20,18 @@ import type {
 	MenusProviderOptions,
 	MenuTemplateType,
 	MenuType,
+	PopupMenuEntry,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
-import { getCurrentPalette } from "./themes";
-import { isBoolean, isEmpty, randomUUID } from "./utils";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import {
+	getCurrentColorSchemeMode,
+	getCurrentIconFolder,
+	getCurrentPalette,
+	getNativeColorSchemeMode,
+	themeUrl
+} from "./themes";
+import { imageUrlToDataUrl, isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
@@ -308,7 +315,7 @@ export async function showPopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[],
+	menuEntries: PopupMenuEntry<T>[],
 	options?: {
 		mode?: "native" | "custom";
 	}
@@ -334,7 +341,7 @@ export async function showHtmlPopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[]
+	menuEntries: PopupMenuEntry<T>[]
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 	const parentBounds = await parentWindow.getBounds();
@@ -342,6 +349,38 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const platformWindow = fin.Window.wrapSync(fin.me.identity);
 
 	const currentPalette = await getCurrentPalette();
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getCurrentColorSchemeMode();
+
+	let numItems = 0;
+	let numSeparators = 0;
+	for (const menuEntry of menuEntries) {
+		if (isStringValue(menuEntry.icon)) {
+			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		}
+		if (menuEntry.type === "separator") {
+			numSeparators++;
+		} else {
+			numItems++;
+		}
+	}
+
+	const itemsHeight = numItems * (menuProviderOptions?.menuItemHeight ?? 32);
+	const separatorsHeight = numSeparators * (menuProviderOptions?.menuItemSeparatorHeight ?? 16);
+
+	let x = parentBounds.left + position.x;
+	let y = parentBounds.top + position.y;
+	const width = menuProviderOptions?.menuWidth ?? 200;
+	const height = itemsHeight + separatorsHeight;
+
+	const monitorInfo = await fin.System.getMonitorInfo();
+
+	if (x + width > monitorInfo.primaryMonitor.availableRect.right) {
+		x = monitorInfo.primaryMonitor.availableRect.right - width - 20;
+	}
+	if (y + height > monitorInfo.primaryMonitor.availableRect.bottom) {
+		y = monitorInfo.primaryMonitor.availableRect.bottom - height - 20;
+	}
 
 	const result = await platformWindow.showPopupWindow({
 		name: randomUUID(),
@@ -359,10 +398,10 @@ export async function showHtmlPopupMenu<T = unknown>(
 			}
 		},
 		url: menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`,
-		x: parentBounds.left + position.x,
-		y: parentBounds.top + position.y,
-		width: menuProviderOptions?.menuWidth ?? 200,
-		height: menuEntries.length * (menuProviderOptions?.menuItemHeight ?? 32)
+		x,
+		y,
+		width,
+		height
 	});
 
 	if (result.result === "clicked") {
@@ -384,15 +423,28 @@ export async function showNativePopupMenu<T = unknown>(
 	position: { x: number; y: number },
 	parentIdentity: OpenFin.Identity,
 	noEntryText: string,
-	menuEntries: { label: string; customData: T; icon?: string }[]
+	menuEntries: PopupMenuEntry<T>[]
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 
-	const template: OpenFin.MenuItemTemplate[] = menuEntries.map((m) => ({
-		label: m.label,
-		icon: m.icon,
-		data: m.customData
-	}));
+	const template: OpenFin.MenuItemTemplate[] = [];
+
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getNativeColorSchemeMode();
+
+	for (const menuEntry of menuEntries) {
+		let iconBase64: string | undefined = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		if (isStringValue(iconBase64)) {
+			iconBase64 = await imageUrlToDataUrl(iconBase64, 20);
+		}
+		template.push({
+			label: menuEntry.label,
+			icon: iconBase64,
+			type: menuEntry.type,
+			data: menuEntry.customData,
+			enabled: menuEntry.enabled
+		});
+	}
 
 	if (isEmpty(template) || template.length === 0) {
 		template.push({

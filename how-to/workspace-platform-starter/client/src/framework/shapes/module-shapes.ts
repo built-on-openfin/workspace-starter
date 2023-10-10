@@ -4,8 +4,9 @@ import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
+import type { PopupMenuEntry } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
-import type { ColorSchemeMode } from "./theme-shapes";
+import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 
 /**
@@ -87,6 +88,25 @@ export interface ModuleHelpers {
 	getApp?(id: string): Promise<PlatformApp | undefined>;
 
 	/**
+	 * Get the version information related to the platform you are running in. If you request the version info on
+	 * initialization or you execute early you might not receive all of the version related information as you may be
+	 * early. Subscribe to the life cycle event 'after-bootstrap' to ensure you have all the related versioning
+	 * information.
+	 * @returns The version info.
+	 */
+	getVersionInfo?(): Promise<VersionInfo>;
+
+	/**
+	 * Returns an interop client that can be used to broadcast context and raise intents. The function could be
+	 * undefined if you are not allowed to use the function or the returned InteropClient could be undefined if you try
+	 * to fetch it before the broker is fully initialized. Please listen for the life cycle event 'after-bootstrap'
+	 * before trying to call this function. If you need to handle data before bootstrapping is complete then you can
+	 * cache it and use it once the application is bootstrapped and ready.
+	 * @returns The interop client.
+	 */
+	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
+
+	/**
 	 * Get the current theme id.
 	 * @returns The current theme id.
 	 */
@@ -111,23 +131,10 @@ export interface ModuleHelpers {
 	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 
 	/**
-	 * Get the version information related to the platform you are running in. If you request the version info on
-	 * initialization or you execute early you might not receive all of the version related information as you may be
-	 * early. Subscribe to the life cycle event 'after-bootstrap' to ensure you have all the related versioning
-	 * information.
-	 * @returns The version info.
+	 * If this platform has been configured to support theming it will provide it.
+	 * @returns the theme client.
 	 */
-	getVersionInfo?(): Promise<VersionInfo>;
-
-	/**
-	 * Returns an interop client that can be used to broadcast context and raise intents. The function could be
-	 * undefined if you are not allowed to use the function or the returned InteropClient could be undefined if you try
-	 * to fetch it before the broker is fully initialized. Please listen for the life cycle event 'after-bootstrap'
-	 * before trying to call this function. If you need to handle data before bootstrapping is complete then you can
-	 * cache it and use it once the application is bootstrapped and ready.
-	 * @returns The interop client.
-	 */
-	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
+	getThemeClient(): Promise<ThemeClient>;
 
 	/**
 	 * If this platform has been configured to support favorites and you are able to receive favorites
@@ -172,6 +179,14 @@ export interface ModuleHelpers {
 	): Promise<BrowserWindowModule>;
 
 	/**
+	 * Launch a workspace.
+	 * @param workspaceId The id of the workspace to launch.
+	 * @param logger Log output from the operation.
+	 * @returns Was the workspace opened.
+	 */
+	launchWorkspace?(workspaceId: string, logger?: Logger): Promise<boolean>;
+
+	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
@@ -205,7 +220,7 @@ export interface ModuleHelpers {
 		position: { x: number; y: number },
 		parentIdentity: OpenFin.Identity,
 		noEntryText: string,
-		menuEntries: { label: string; customData: T; icon?: string }[],
+		menuEntries: PopupMenuEntry<T>[],
 		options?: {
 			mode?: "native" | "custom";
 		}

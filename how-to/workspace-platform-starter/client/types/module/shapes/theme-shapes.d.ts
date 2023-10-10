@@ -1,4 +1,8 @@
-import type { CustomThemeOptions, CustomThemeOptionsWithScheme } from "@openfin/workspace-platform";
+import type {
+	CustomPaletteSet,
+	CustomThemeOptions,
+	CustomThemeOptionsWithScheme
+} from "@openfin/workspace-platform";
 /**
  * Platform theme configuration
  */
@@ -64,3 +68,34 @@ export type PlatformCustomTheme = PlatformCustomThemeOptions | PlatformCustomThe
  * List of extended custom themes.
  */
 export type PlatformCustomThemes = PlatformCustomTheme[];
+/**
+ * The client providing theming methods
+ */
+export interface ThemeClient {
+	/**
+	 * Get the current theme id.
+	 * @returns The current theme id.
+	 */
+	getThemeId(): Promise<string>;
+	/**
+	 * Get the current icon folder.
+	 * @returns the platform icon folder.
+	 */
+	getIconFolder(): Promise<string>;
+	/**
+	 * Get the current palette.
+	 * @returns The current palette.
+	 */
+	getPalette(): Promise<CustomPaletteSet>;
+	/**
+	 * Get the current color scheme.
+	 * @returns The current color scheme.
+	 */
+	getColorSchemeMode(): Promise<ColorSchemeMode>;
+	/**
+	 * Apply theming to an icon url.
+	 * @param url The url to theme.
+	 * @returns The themed url.
+	 */
+	themeUrl(url: string | undefined): Promise<string | undefined>;
+}

@@ -824,9 +824,9 @@
 					"tooltip": "Favorites",
 					"iconUrl": "http://localhost:8080/icons/{scheme}/favorite.svg",
 					"action": {
-						"id": "favorites-menu-app"
+						"id": "favorites-menu"
 					},
-					"conditions": ["favorites-app"]
+					"conditions": ["favorites"]
 				},
 				{
 					"tooltip": "Pages",
@@ -1166,7 +1166,10 @@
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
 					"enabled": false,
-					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js"
+					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js",
+					"data": {
+						"menuType": "custom"
+					}
 				},
 				{
 					"id": "include-in-snapshot",
@@ -1402,7 +1405,7 @@
 			"favoriteIcon": "http://localhost:8080/icons/{scheme}/favorite.svg",
 			"unfavoriteIcon": "http://localhost:8080/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
-			"supportedFavoriteTypes": ["app"]
+			"supportedFavoriteTypes": ["workspace", "page", "app"]
 		},
 		"lifecycleProvider": {
 			"modules": [

@@ -10,6 +10,16 @@
 - Added improvements to the Interop Broker to improve support for FDC3 2.0 conformance.
 - Window Positioning Strategy - Added additional defensive coding for instances where windows may be opened and closed quickly asynchronously (e.g. during automation testing). This additional defensiveness is for situations where a reference to a window may no longer exist if it was closed before the check for whether the window is showing or what it's current bounds are.
 - Window Positioning Strategy - Added the option to turn window positioning strategy completely off if it is not required e.g. automation testing via the disableWindowPositioningStrategy in the browserProvider settings.
+- Added favorites support for Workspaces
+- Added favorites support for Pages
+- Change Favorites icons are theme aware
+- Change Favorites menu has option `menuType` to switch between `native` and `custom`
+- Fixed Pages and Workspace not appearing in home results as soon as they are created
+- Fixed Apps template not updating text color on theme-changed
+- Added module helpers `launchWorkspace` method
+- Added Native popup menus to support separators, icons
+- Added Custom popup menus to support separators, disabled, aria labelling and off-screen positioning
+- BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods will still exist until the next release, but will log a warning about their removal
 
 ## v14
 

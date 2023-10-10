@@ -13,7 +13,7 @@ import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
 import type { WorkspacePlatformToolbarButton } from "./shapes/browser-shapes";
 import type { ColorSchemeMode } from "./shapes/theme-shapes";
-import { getCurrentColorSchemeMode, getCurrentIconFolder } from "./themes";
+import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "./themes";
 import { isEmpty, objectClone } from "./utils";
 
 let configToolbarButtons: WorkspacePlatformToolbarButton[] | undefined;
@@ -184,19 +184,4 @@ function themeButton(
 	buttonCopy.iconUrl = themeUrl(buttonCopy.iconUrl, iconFolder, colorSchemeMode);
 
 	return buttonCopy;
-}
-
-/**
- * Apply a theme to a url.
- * @param url The url to apply the theme to.
- * @param iconFolder The folder where the icons are located.
- * @param colorSchemeMode The color scheme for the theme.
- * @returns The themed url.
- */
-function themeUrl(
-	url: string | undefined,
-	iconFolder: string,
-	colorSchemeMode: ColorSchemeMode
-): string | undefined {
-	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode) : undefined;
 }

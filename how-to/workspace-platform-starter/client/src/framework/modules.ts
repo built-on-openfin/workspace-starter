@@ -1,5 +1,9 @@
 import type OpenFin from "@openfin/core";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type CustomPaletteSet,
+	type WorkspacePlatformModule
+} from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
@@ -9,7 +13,6 @@ import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
 import type { NotificationClient, PlatformApp } from "./shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
-
 import type {
 	Module,
 	ModuleDefinition,
@@ -20,11 +23,13 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
+import type { ColorSchemeMode, ThemeClient } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
 	getCurrentPalette,
-	getCurrentThemeId
+	getCurrentThemeId,
+	themeUrl
 } from "./themes";
 import { isEmpty, objectClone } from "./utils";
 import { getVersionInfo } from "./version";
@@ -266,13 +271,34 @@ export function getDefaultHelpers(): ModuleHelpers {
 			return getApps({ private: false });
 		},
 		getApp,
-		getCurrentThemeId,
-		getCurrentIconFolder,
-		getCurrentPalette,
-		getCurrentColorSchemeMode,
 		getVersionInfo,
 		getInteropClient,
 		getFavoriteClient,
+		getCurrentThemeId: async (): Promise<string> => {
+			logger.warn(
+				"getCurrentThemeId will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentThemeId();
+		},
+		getCurrentIconFolder: async (): Promise<string> => {
+			logger.warn(
+				"getCurrentIconFolder will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentIconFolder();
+		},
+		getCurrentPalette: async (): Promise<CustomPaletteSet> => {
+			logger.warn(
+				"getPalette will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentPalette();
+		},
+		getCurrentColorSchemeMode: async (): Promise<ColorSchemeMode> => {
+			logger.warn(
+				"getCurrentColorSchemeMode will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentColorSchemeMode();
+		},
+		getThemeClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -285,6 +311,16 @@ export function getDefaultHelpers(): ModuleHelpers {
 			}
 		},
 		launchPage,
+		launchWorkspace: async (workspaceId): Promise<boolean> => {
+			const platform = getCurrentSync();
+			const workspace = await platform.Storage.getWorkspace(workspaceId);
+			if (workspace) {
+				return platform.applyWorkspace(workspace);
+			}
+
+			logger.warn(`Unable to launch workspace with id ${workspaceId} as it does not exist`);
+			return false;
+		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
 		showPopupMenu
@@ -332,4 +368,22 @@ function getNotificationClientProxy(
 ): () => Promise<NotificationClient | undefined> {
 	const options = objectClone(definition);
 	return async () => getNotificationClient(options);
+}
+
+/**
+ * Get the theme client to use with the modules.
+ * @returns The theme client.
+ */
+async function getThemeClient(): Promise<ThemeClient> {
+	return {
+		getThemeId: getCurrentThemeId,
+		getIconFolder: getCurrentIconFolder,
+		getPalette: getCurrentPalette,
+		getColorSchemeMode: getCurrentColorSchemeMode,
+		themeUrl: async (url): Promise<string | undefined> => {
+			const iconFolder = await getCurrentIconFolder();
+			const colorScheme = await getCurrentColorSchemeMode();
+			return themeUrl(url, iconFolder, colorScheme);
+		}
+	};
 }

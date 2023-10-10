@@ -167,7 +167,8 @@ export class EmojiIntegrationProvider implements IntegrationModule {
 			if (key.length > 0) {
 				key = key.toLowerCase();
 
-				const palette = await this._integrationHelpers.getCurrentPalette();
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 
 				// Find exact match first if there is one
 				const matchEmoji = emoji.get(key);

@@ -23,7 +23,7 @@ import type {
 	DockProviderOptions
 } from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
-import { getCurrentColorSchemeMode, getCurrentIconFolder } from "../themes";
+import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "../themes";
 import { isEmpty, isStringValue } from "../utils";
 
 const logger = createLogger("Dock");
@@ -428,23 +428,6 @@ async function refreshDock(): Promise<void> {
 			}
 		}
 	}
-}
-
-/**
- * Apply theming to an icon url.
- * @param url The url to theme.
- * @param iconFolder The icon folder.
- * @param colorSchemeMode The color scheme.
- * @returns The themed url.
- */
-function themeUrl(
-	url: string | undefined,
-	iconFolder: string,
-	colorSchemeMode: ColorSchemeMode
-): string | undefined {
-	return url
-		? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode as string)
-		: undefined;
 }
 
 /**
