@@ -824,9 +824,9 @@
 					"tooltip": "Favorites",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/favorite.svg",
 					"action": {
-						"id": "favorites-menu-app"
+						"id": "favorites-menu"
 					},
-					"conditions": ["favorites-app"]
+					"conditions": ["favorites"]
 				},
 				{
 					"tooltip": "Pages",
@@ -1166,7 +1166,10 @@
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js",
+					"data": {
+						"menuType": "custom"
+					}
 				},
 				{
 					"id": "include-in-snapshot",
@@ -1402,7 +1405,7 @@
 			"favoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/favorite.svg",
 			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
-			"supportedFavoriteTypes": ["app"]
+			"supportedFavoriteTypes": ["workspace", "page", "app"]
 		},
 		"lifecycleProvider": {
 			"modules": [

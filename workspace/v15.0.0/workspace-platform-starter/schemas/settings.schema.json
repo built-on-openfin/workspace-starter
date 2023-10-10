@@ -2577,6 +2577,10 @@
                     "description": "The height of an item in the custom popup menu.\ndefaults to 32.",
                     "type": "number"
                 },
+                "menuItemSeparatorHeight": {
+                    "description": "The height of a separator in the custom popup menu.\ndefaults to 16.",
+                    "type": "number"
+                },
                 "menuWidth": {
                     "description": "The width to display the custom popup menu.\ndefaults to 200",
                     "type": "number"
