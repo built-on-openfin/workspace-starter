@@ -5,6 +5,11 @@
 - Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.
 - Added an example lifecycle module ExampleNotificationService ([see README.md](./client/src/modules/lifecycle/example-notification-service/README.md)) to the modules folder and added it (enabled:false) to the lifecycleProvider section of the main manifest ([manifest.fin.json](./public/manifest.fin.json)).
 - Updated the way the [notification.ts](./client/src/framework/workspace/notifications.ts) registers against the workspace notification center (The notification center is no longer automatically started and that now happens upon registration which resulted removing the check to see if the notification center was running before registering).
+- Added fdc3 approach to fdc3.open to the interop broker.
+- Change: Default fdc3.open approach has moved from opinionated intent based approach to fdc3 standard based approach. platformProvider interop setting now has openOptions where you can specify openStrategy. Set it to 'intent' if you want the opinionated behavior back.
+- Added improvements to the Interop Broker to improve support for FDC3 2.0 conformance.
+- Window Positioning Strategy - Added additional defensive coding for instances where windows may be opened and closed quickly asynchronously (e.g. during automation testing). This additional defensiveness is for situations where a reference to a window may no longer exist if it was closed before the check for whether the window is showing or what it's current bounds are.
+- Window Positioning Strategy - Added the option to turn window positioning strategy completely off if it is not required e.g. automation testing via the disableWindowPositioningStrategy in the browserProvider settings.
 - Added favorites support for Workspaces
 - Added favorites support for Pages
 - Change Favorites icons are theme aware

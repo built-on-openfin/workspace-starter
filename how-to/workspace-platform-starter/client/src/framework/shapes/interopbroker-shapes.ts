@@ -19,6 +19,11 @@ export interface PlatformInteropBrokerOptions {
 	intentOptions?: IntentOptions;
 
 	/**
+	 * When fdc3.open is used what settings should be applied?
+	 */
+	openOptions?: OpenOptions;
+
+	/**
 	 * If an unregistered app is included here then it indicates you wish to support selecting views/windows that are
 	 * not linked to an app from an intent picker that supports instances. The intents and contexts in this app specify
 	 * which you support for unregistered instances. Do not specify a manifest or manifestType for this entry (we don't
@@ -64,6 +69,26 @@ export interface IntentRegistrationEntry {
 }
 
 /**
+ * An entry in the context registry.
+ */
+export interface ContextRegistrationEntry {
+	/**
+	 * The handlerId for the particular context listener registration.
+	 */
+	handlerId: string;
+
+	/**
+	 * The identity of the client.
+	 */
+	clientIdentity: OpenFin.ClientIdentity;
+
+	/**
+	 * The identity of the application.
+	 */
+	appId?: string;
+}
+
+/**
  * Intent target metadata.
  */
 export type IntentTargetMetaData = string | { appId: string; instanceId?: string };
@@ -94,7 +119,7 @@ export interface IntentPickerResponse {
 export interface IntentOptions {
 	/**
 	 * How long should the broker wait after launching a view/window for it to register an intent handler. The default
-	 * is 5000 (5 seconds)
+	 * is 15000 (15 seconds)
 	 */
 	intentTimeout?: number;
 }
@@ -145,6 +170,21 @@ export interface ApiMetadata {
 }
 
 /**
+ * API Metadata.
+ */
+export interface BrokerClientConnection {
+	/**
+	 * The client identity of the connection.
+	 */
+	clientIdentity: OpenFin.ClientIdentity;
+
+	/**
+	 * The api meta data if available.
+	 */
+	apiMetadata?: ApiMetadata;
+}
+
+/**
  * The context request to augment with a context processor.
  */
 export interface ContextToProcess<T extends OpenFin.Context = OpenFin.Context> {
@@ -188,4 +228,27 @@ export interface CaptureApiPayload {
 	 * The api version.
 	 */
 	apiVersion?: ApiMetadata;
+}
+
+/** Options related to the fdc3 open api */
+export interface OpenOptions {
+	/**
+	 * When fdc3.open is raised will it only apply to applications that support the intent "OpenApp" (context if passed is sent to the intent handler for OpenApp)
+	 * or will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.
+	 * The default is fdc3. The previous behavior was "intent" and you can set this setting in order to have fdc3 open only apply to apps that say they support the
+	 * intent "OpenApp". This setting is here to let you keep the previous behavior.
+	 */
+	openStrategy?: "intent" | "fdc3";
+
+	/**
+	 * How long should the broker wait after launching a view/window for it to register a context handler. The default
+	 * is 15000 (15 seconds)
+	 */
+	contextTimeout?: number;
+
+	/**
+	 * How long should the broker wait after launching a view/window for it to connect to the broker. The default
+	 * is 15000 (15 seconds).
+	 */
+	connectionTimeout?: number;
 }
