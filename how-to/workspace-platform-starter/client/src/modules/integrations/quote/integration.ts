@@ -182,6 +182,9 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					const graphImage = await this.renderGraph(data);
 
 					if (this._integrationHelpers?.templateHelpers) {
+						const themeClient = await this._integrationHelpers.getThemeClient();
+						const palette = await themeClient.getPalette();
+
 						const quoteResult: HomeSearchResult = {
 							key: `quote-${symbol}`,
 							score: this._definition?.baseScore ?? QuoteIntegrationProvider._DEFAULT_BASE_SCORE,
@@ -199,10 +202,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 							},
 							template: "Custom" as CLITemplate.Custom,
 							templateContent: {
-								layout: await this.getQuoteTemplate(
-									this._integrationHelpers.templateHelpers,
-									await this._integrationHelpers.getCurrentPalette()
-								),
+								layout: await this.getQuoteTemplate(this._integrationHelpers.templateHelpers, palette),
 								data: {
 									symbol,
 									priceTitle: "Price",

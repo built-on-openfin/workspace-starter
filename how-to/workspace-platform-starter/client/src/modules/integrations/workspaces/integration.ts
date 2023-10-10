@@ -26,7 +26,6 @@ import type {
 } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
 import { isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import type { WorkspacesSettings } from "./shapes";
 
@@ -232,16 +231,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 */
 	public async getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 		if (this._integrationHelpers && this._settings) {
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-
+			const themeClient = await this._integrationHelpers.getThemeClient();
 			return [
 				{
 					key: `${this._definition?.id}-help1`,
 					score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 					title: "Workspaces",
 					label: "Help",
-					icon: this.themeUrl(this._settings.images.workspace, iconFolder, colorScheme),
+					icon: await themeClient.themeUrl(this._settings.images.workspace),
 					actions: [],
 					data: {
 						providerId: this._definition?.id
@@ -280,9 +277,8 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		}
 	): Promise<HomeSearchResponse> {
 		if (this._integrationHelpers?.getPlatform && this._settings) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
 			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 			const queryLower = query.toLowerCase();
 
 			let workspaces: Workspace[] = await platform.Storage.getWorkspaces();
@@ -303,7 +299,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 								key: WorkspacesProvider._ACTION_EXISTS_WORKSPACE,
 								score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 								title: `Workspace ${foundMatch.title} already exists.`,
-								icon: this.themeUrl(this._settings.images.workspace, iconFolder, colorScheme),
+								icon: await themeClient.themeUrl(this._settings.images.workspace),
 								actions: [],
 								data: {
 									providerId: this._definition?.id,
@@ -322,7 +318,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 							key: WorkspacesProvider._ACTION_SAVE_WORKSPACE,
 							score: this._definition?.baseScore ?? WorkspacesProvider._DEFAULT_BASE_SCORE,
 							title: `Save Current Workspace as ${title}`,
-							icon: this.themeUrl(this._settings.images.workspace, iconFolder, colorScheme),
+							icon: await themeClient.themeUrl(this._settings.images.workspace),
 							label: "Suggestion",
 							actions: [{ name: "Save Workspace", hotkey: "Enter" }],
 							data: {
@@ -356,9 +352,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				platform,
 				workspaces,
 				matchQuery,
-				options.queryMinLength,
-				iconFolder,
-				colorScheme
+				options.queryMinLength
 			);
 
 			this._lastResults = workspaceResults;
@@ -435,8 +429,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						if (this._integrationHelpers.condition) {
 							shareEnabled = await this._integrationHelpers.condition("sharing");
 						}
-						const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-						const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 
 						const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_WORKSPACE);
 
@@ -445,8 +437,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 							workspace.title,
 							shareEnabled,
 							true,
-							iconFolder,
-							colorScheme,
 							favoriteInfo
 						);
 
@@ -489,8 +479,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 * @param title The title of the workspace.
 	 * @param shareEnabled Is sharing enabled.
 	 * @param isCurrent Is this the current workspace.
-	 * @param iconFolder The folder for storing icons.
-	 * @param colorScheme The current color scheme.
 	 * @param favInfo The favorites info if it is enabled.
 	 * @param favoriteId The id of the favorite.
 	 * @returns The home result.
@@ -500,8 +488,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		title: string,
 		shareEnabled: boolean,
 		isCurrent: boolean,
-		iconFolder: string,
-		colorScheme: ColorSchemeMode,
 		favInfo: FavoriteInfo | undefined,
 		favoriteId?: string
 	): Promise<HomeSearchResult> {
@@ -546,15 +532,15 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				});
 			}
 
-			const icon = this.themeUrl(this._settings.images.workspace, iconFolder, colorScheme);
+			const themeClient = await this._integrationHelpers.getThemeClient();
+
+			const icon = await themeClient.themeUrl(this._settings.images.workspace);
 
 			const headerButtons: { icon: string; action: string }[] = [];
 
 			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon) {
-				const favoriteIcon = this.themeUrl(
-					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon,
-					iconFolder,
-					colorScheme
+				const favoriteIcon = await themeClient.themeUrl(
+					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon
 				);
 				if (favoriteIcon) {
 					headerButtons.push({
@@ -619,17 +605,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 */
 	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
 		if (this._integrationHelpers && !isEmpty(this._lastQuery) && !isEmpty(this._lastQueryMinLength)) {
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-
 			const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
 			const results = await this.buildResults(
 				platform,
 				workspaces,
 				this._lastQuery,
-				this._lastQueryMinLength,
-				iconFolder,
-				colorScheme
+				this._lastQueryMinLength
 			);
 			this.resultAddUpdate(results);
 		}
@@ -641,17 +622,13 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 	 * @param workspaces The list of workspaces to build the results for.
 	 * @param query The query.
 	 * @param queryMinLength The min query length.
-	 * @param iconFolder The folder for storing icons.
-	 * @param colorScheme The color scheme.
 	 * @returns The list of home search results.
 	 */
 	private async buildResults(
 		platform: WorkspacePlatformModule,
 		workspaces: Workspace[],
 		query: string,
-		queryMinLength: number,
-		iconFolder: string,
-		colorScheme: ColorSchemeMode
+		queryMinLength: number
 	): Promise<HomeSearchResult[]> {
 		let results: HomeSearchResult[] = [];
 
@@ -684,8 +661,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						ws.title,
 						shareEnabled,
 						currentWorkspaceId === ws.workspaceId,
-						iconFolder,
-						colorScheme,
 						favoriteInfo,
 						favoriteId
 					);
@@ -748,8 +723,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			this._lastResults
 		) {
 			const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_WORKSPACE);
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 
 			if (this._lastQuery === favoriteInfo?.command && payload.action === "delete") {
 				this._lastResponse.revoke(favorite.typeId);
@@ -771,8 +744,6 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						lastWorkspace.title,
 						shareEnabled,
 						currentWorkspaceId === lastWorkspace.key,
-						iconFolder,
-						colorScheme,
 						favoriteInfo,
 						payload.action === "set" ? favorite.id : undefined
 					);
@@ -813,22 +784,5 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			favoriteClient,
 			favoriteInfo
 		};
-	}
-
-	/**
-	 * Apply theming to an icon url.
-	 * @param url The url to theme.
-	 * @param iconFolder The icon folder.
-	 * @param colorSchemeMode The color scheme.
-	 * @returns The themed url.
-	 */
-	private themeUrl(
-		url: string | undefined,
-		iconFolder: string,
-		colorSchemeMode: ColorSchemeMode
-	): string | undefined {
-		return url
-			? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode as string)
-			: undefined;
 	}
 }

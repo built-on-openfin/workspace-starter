@@ -361,10 +361,10 @@ export interface IntegrationHelpers {
 	templateHelpers: TemplateHelpers;
 
 	/**
-	 * Get the current palette.
-	 * @returns The current palette.
+	 * If this platform has been configured to support theming it will provide it.
+	 * @returns the theme client.
 	 */
-	getCurrentPalette(): Promise<CustomPaletteSet>;
+	getThemeClient(): Promise<ThemeClient>;
 
 	/**
 	 * Launch a view in the workspace.
@@ -479,4 +479,15 @@ export interface TemplateHelpers {
 		fontWeight?: string,
 		style?: CSS.Properties
 	): Promise<TextTemplateFragment>;
+}
+
+/**
+ * The client providing theming methods
+ */
+export interface ThemeClient {
+	/**
+	 * Get the current palette.
+	 * @returns The current palette.
+	 */
+	getPalette(): Promise<CustomPaletteSet>;
 }

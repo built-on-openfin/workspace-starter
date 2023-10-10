@@ -22,15 +22,19 @@ async function initDOM() {
 	if (menuContainer) {
 		if (Array.isArray(options.customData?.menuEntries) && options.customData.menuEntries.length > 0) {
 			for (const menuEntry of options.customData.menuEntries) {
-				const menuEntryItem = document.createElement('div');
-				menuContainer.append(menuEntryItem);
-
 				if (menuEntry.type === 'separator') {
+					const menuEntryItem = document.createElement('div');
+					menuContainer.append(menuEntryItem);
+
 					menuEntryItem.classList.add('menu-item-separator');
 
 					const sep = document.createElement('hr');
 					menuEntryItem.append(sep);
 				} else {
+					const menuEntryItem = document.createElement('button');
+					menuEntryItem.ariaLabel = menuEntry.label;
+					menuContainer.append(menuEntryItem);
+
 					menuEntryItem.classList.add('menu-item');
 					menuEntryItem.addEventListener('click', async () => {
 						await fin.me.dispatchPopupResult(menuEntry.customData);

@@ -9,7 +9,6 @@ import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
 import type { NotificationClient, PlatformApp } from "./shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
-
 import type {
 	Module,
 	ModuleDefinition,
@@ -20,11 +19,13 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
+import type { ThemeClient } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
 	getCurrentPalette,
-	getCurrentThemeId
+	getCurrentThemeId,
+	themeUrl
 } from "./themes";
 import { isEmpty, objectClone } from "./utils";
 import { getVersionInfo } from "./version";
@@ -266,13 +267,10 @@ export function getDefaultHelpers(): ModuleHelpers {
 			return getApps({ private: false });
 		},
 		getApp,
-		getCurrentThemeId,
-		getCurrentIconFolder,
-		getCurrentPalette,
-		getCurrentColorSchemeMode,
 		getVersionInfo,
 		getInteropClient,
 		getFavoriteClient,
+		getThemeClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -285,9 +283,15 @@ export function getDefaultHelpers(): ModuleHelpers {
 			}
 		},
 		launchPage,
-		launchWorkspace: async (workspace): Promise<boolean> => {
+		launchWorkspace: async (workspaceId): Promise<boolean> => {
 			const platform = getCurrentSync();
-			return platform.applyWorkspace(workspace);
+			const workspace = await platform.Storage.getWorkspace(workspaceId);
+			if (workspace) {
+				return platform.applyWorkspace(workspace);
+			}
+
+			logger.warn(`Unable to launch workspace with id ${workspaceId} as it does not exist`);
+			return false;
 		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
@@ -336,4 +340,22 @@ function getNotificationClientProxy(
 ): () => Promise<NotificationClient | undefined> {
 	const options = objectClone(definition);
 	return async () => getNotificationClient(options);
+}
+
+/**
+ * Get the theme client to use with the modules.
+ * @returns The theme client.
+ */
+async function getThemeClient(): Promise<ThemeClient> {
+	return {
+		getThemeId: getCurrentThemeId,
+		getIconFolder: getCurrentIconFolder,
+		getPalette: getCurrentPalette,
+		getColorSchemeMode: getCurrentColorSchemeMode,
+		themeUrl: async (url): Promise<string | undefined> => {
+			const iconFolder = await getCurrentIconFolder();
+			const colorScheme = await getCurrentColorSchemeMode();
+			return themeUrl(url, iconFolder, colorScheme);
+		}
+	};
 }

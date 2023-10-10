@@ -23,7 +23,6 @@ import type {
 import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
 import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import type { AppManifestTypeMapping, AppSettings } from "./shapes";
 
@@ -455,9 +454,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		const appResults: HomeSearchResult[] = [];
 		if (Array.isArray(apps) && this._integrationHelpers) {
 			let savedFavorites: FavoriteEntry[] | undefined;
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-
 			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
 
 			if (favoriteClient) {
@@ -469,8 +465,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				const res = await this.mapAppEntryToSearchEntry(
 					app,
 					this._settings?.manifestTypeMapping,
-					iconFolder,
-					colorScheme,
 					favoriteInfo,
 					favoriteId
 				);
@@ -486,8 +480,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * Map a single app to a search result.
 	 * @param app The app to map.
 	 * @param typeMapping The type mappings to include.
-	 * @param iconFolder The default folder for icons.
-	 * @param colorScheme The color scheme.
 	 * @param favInfo The favorites info if it is enabled.
 	 * @param favoriteId The id of the favorite.
 	 * @returns The search result.
@@ -495,8 +487,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	private async mapAppEntryToSearchEntry(
 		app: PlatformApp,
 		typeMapping: AppManifestTypeMapping | undefined,
-		iconFolder: string,
-		colorScheme: ColorSchemeMode,
 		favInfo: FavoriteInfo | undefined,
 		favoriteId: string | undefined
 	): Promise<HomeSearchResult | undefined> {
@@ -533,11 +523,11 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 			const headerButtons: { icon: string; action: string }[] = [];
 
-			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon) {
-				const favoriteIcon = this.themeUrl(
-					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon,
-					iconFolder,
-					colorScheme
+			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon && this._integrationHelpers) {
+				const themeClient = await this._integrationHelpers.getThemeClient();
+
+				const favoriteIcon = await themeClient.themeUrl(
+					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon
 				);
 				if (favoriteIcon) {
 					headerButtons.push({
@@ -617,9 +607,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		) {
 			const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
 
-			const iconFolder = await this._integrationHelpers.getCurrentIconFolder();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-
 			if (this._lastQuery === favoriteInfo?.command && payload.action === "delete") {
 				this._lastResponse.revoke(favorite.typeId);
 			} else if (this._lastAppResults) {
@@ -634,8 +621,6 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 					const rebuilt = await this.mapAppEntryToSearchEntry(
 						lastApp,
 						this._settings?.manifestTypeMapping,
-						iconFolder,
-						colorScheme,
 						favoriteInfo,
 						payload.action === "set" ? favorite.id : undefined
 					);
@@ -678,22 +663,5 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			favoriteClient,
 			favoriteInfo
 		};
-	}
-
-	/**
-	 * Apply theming to an icon url.
-	 * @param url The url to theme.
-	 * @param iconFolder The icon folder.
-	 * @param colorSchemeMode The color scheme.
-	 * @returns The themed url.
-	 */
-	private themeUrl(
-		url: string | undefined,
-		iconFolder: string,
-		colorSchemeMode: ColorSchemeMode
-	): string | undefined {
-		return url
-			? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode as string)
-			: undefined;
 	}
 }

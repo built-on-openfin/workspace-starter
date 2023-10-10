@@ -11,8 +11,10 @@
 - Change Favorites menu has option `menuType` to switch between `native` and `custom`
 - Fixed Pages and Workspace not appearing in home results as soon as they are created
 - Fixed Apps template not updating text color on theme-changed
-- Added module helpers launchWorkspace method
-- Added Popup menus support separators
+- Added module helpers `launchWorkspace` method
+- Added Native popup menus support separators
+- Added Custom popup menus support separators, aria labelling and off-screen positioning
+- BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method
 
 ## v14
 

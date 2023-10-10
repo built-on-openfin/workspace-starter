@@ -1,11 +1,12 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
+import type { PopupMenuEntry } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
-import type { ColorSchemeMode } from "./theme-shapes";
+import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 /**
  * List of modules.
@@ -74,26 +75,6 @@ export interface ModuleHelpers {
 	 */
 	getApp?(id: string): Promise<PlatformApp | undefined>;
 	/**
-	 * Get the current theme id.
-	 * @returns The current theme id.
-	 */
-	getCurrentThemeId(): Promise<string>;
-	/**
-	 * Get the current icon folder.
-	 * @returns the platform icon folder.
-	 */
-	getCurrentIconFolder(): Promise<string>;
-	/**
-	 * Get the current palette.
-	 * @returns The current palette.
-	 */
-	getCurrentPalette(): Promise<CustomPaletteSet>;
-	/**
-	 * Get the current color scheme.
-	 * @returns The current color scheme.
-	 */
-	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
-	/**
 	 * Get the version information related to the platform you are running in. If you request the version info on
 	 * initialization or you execute early you might not receive all of the version related information as you may be
 	 * early. Subscribe to the life cycle event 'after-bootstrap' to ensure you have all the related versioning
@@ -110,6 +91,11 @@ export interface ModuleHelpers {
 	 * @returns The interop client.
 	 */
 	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
+	/**
+	 * If this platform has been configured to support theming it will provide it.
+	 * @returns the theme client.
+	 */
+	getThemeClient(): Promise<ThemeClient>;
 	/**
 	 * If this platform has been configured to support favorites and you are able to receive favorites
 	 * then you will receive a client that will provide you with a number of functions (if supported).
@@ -149,6 +135,13 @@ export interface ModuleHelpers {
 		logger?: Logger
 	): Promise<BrowserWindowModule>;
 	/**
+	 * Launch a workspace.
+	 * @param workspaceId The id of the workspace to launch.
+	 * @param logger Log output from the operation.
+	 * @returns Was the workspace opened.
+	 */
+	launchWorkspace?(workspaceId: string, logger?: Logger): Promise<boolean>;
+	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
@@ -183,11 +176,7 @@ export interface ModuleHelpers {
 		},
 		parentIdentity: OpenFin.Identity,
 		noEntryText: string,
-		menuEntries: {
-			label: string;
-			customData: T;
-			icon?: string;
-		}[],
+		menuEntries: PopupMenuEntry<T>[],
 		options?: {
 			mode?: "native" | "custom";
 		}

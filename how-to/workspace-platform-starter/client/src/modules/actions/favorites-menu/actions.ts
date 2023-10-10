@@ -14,7 +14,6 @@ import {
 import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 import type { FavoritesMenuSettings } from "./shapes";
 
@@ -76,8 +75,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 						const favInfo = await client.getInfo();
 						const menuEntries: PopupMenuEntry<FavoriteEntry>[] = [];
 
-						const iconFolder = await this._helpers.getCurrentIconFolder();
-						const colorScheme = await this._helpers.getCurrentColorSchemeMode();
+						const themeClient = await this._helpers.getThemeClient();
 
 						if (favInfo.enabledTypes) {
 							let hadEntries = false;
@@ -87,15 +85,16 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 									if (hadEntries) {
 										menuEntries.push({ type: "separator" });
 									}
-									menuEntries.push(
-										...saved
-											.sort((f1, f2) => (f1.label ?? "").localeCompare(f2.label ?? ""))
-											.map((f) => ({
-												label: f.label ?? "",
-												icon: this.themeUrl(f.icon, iconFolder, colorScheme),
-												customData: f
-											}))
-									);
+
+									for (const entry of saved.sort((f1, f2) =>
+										(f1.label ?? "").localeCompare(f2.label ?? "")
+									)) {
+										menuEntries.push({
+											label: entry.label ?? "",
+											icon: await themeClient.themeUrl(entry.icon),
+											customData: entry
+										});
+									}
 									hadEntries = true;
 								}
 							}
@@ -127,8 +126,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 								}
 							} else if (result.type === FAVORITE_TYPE_NAME_WORKSPACE) {
 								if (!isEmpty(this._helpers?.launchWorkspace)) {
-									const workspace = await platform.Storage.getWorkspace(result.typeId);
-									await this._helpers?.launchWorkspace(workspace);
+									await this._helpers?.launchWorkspace(result.typeId);
 								}
 							} else {
 								this._logger?.info(`Favorites Type ${result.type} no yet supported`, result);
@@ -140,22 +138,5 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 		};
 
 		return actionMap;
-	}
-
-	/**
-	 * Apply theming to an icon url.
-	 * @param url The url to theme.
-	 * @param iconFolder The icon folder.
-	 * @param colorSchemeMode The color scheme.
-	 * @returns The themed url.
-	 */
-	private themeUrl(
-		url: string | undefined,
-		iconFolder: string,
-		colorSchemeMode: ColorSchemeMode
-	): string | undefined {
-		return url
-			? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode as string)
-			: undefined;
 	}
 }

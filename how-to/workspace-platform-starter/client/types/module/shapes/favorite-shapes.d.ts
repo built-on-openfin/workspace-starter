@@ -95,7 +95,7 @@ export interface FavoriteInfo {
 	 */
 	command?: string;
 	/**
-	 * What types of favorite item are supported on this platform
+	 * What types of favorite item are supported on this platform, this also determines the ordering in the dock menu.
 	 */
 	enabledTypes?: FavoriteTypeNames[];
 	/**

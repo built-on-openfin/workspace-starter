@@ -357,6 +357,20 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const itemsHeight = numItems * (menuProviderOptions?.menuItemHeight ?? 32);
 	const separatorsHeight = numSeparators * (menuProviderOptions?.menuItemSeparatorHeight ?? 16);
 
+	let x = parentBounds.left + position.x;
+	let y = parentBounds.top + position.y;
+	const width = menuProviderOptions?.menuWidth ?? 200;
+	const height = itemsHeight + separatorsHeight;
+
+	const monitorInfo = await fin.System.getMonitorInfo();
+
+	if (x + width > monitorInfo.primaryMonitor.availableRect.right) {
+		x = monitorInfo.primaryMonitor.availableRect.right - width - 20;
+	}
+	if (y + height > monitorInfo.primaryMonitor.availableRect.bottom) {
+		y = monitorInfo.primaryMonitor.availableRect.bottom - height - 20;
+	}
+
 	const result = await platformWindow.showPopupWindow({
 		name: randomUUID(),
 		initialOptions: {
@@ -373,10 +387,10 @@ export async function showHtmlPopupMenu<T = unknown>(
 			}
 		},
 		url: menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`,
-		x: parentBounds.left + position.x,
-		y: parentBounds.top + position.y,
-		width: menuProviderOptions?.menuWidth ?? 200,
-		height: itemsHeight + separatorsHeight
+		x,
+		y,
+		width,
+		height
 	});
 
 	if (result.result === "clicked") {
