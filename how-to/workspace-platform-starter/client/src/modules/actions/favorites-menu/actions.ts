@@ -100,13 +100,15 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 							}
 						}
 
+						const menuType = this._settings?.menuType ?? "native";
+
 						const result = await this._helpers.showPopupMenu<FavoriteEntry>(
-							{ x: payload.x - 16, y: 40 },
+							menuType === "custom" ? { x: payload.x - 16, y: 40 } : { x: payload.x, y: 48 },
 							payload.windowIdentity,
 							"There are no favorites",
 							menuEntries,
 							{
-								mode: this._settings?.menuType ?? "native"
+								mode: menuType
 							}
 						);
 
