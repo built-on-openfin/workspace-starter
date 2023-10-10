@@ -65,6 +65,7 @@ const logger = createLogger("PlatformOverride");
 let windowDefaultLeft: number | undefined;
 let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
+let disableWindowPositioningStrategy: boolean | undefined;
 let disableStorageMapping: boolean | undefined;
 
 /**
@@ -596,90 +597,103 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
-				const app = await fin.Application.getCurrent();
-				const platformManifest: OpenFin.Manifest = await app.getManifest();
-				logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
+			if (!disableWindowPositioningStrategy) {
+				if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
+					const settings = await getSettings();
+					disableWindowPositioningStrategy =
+						settings?.browserProvider?.disableWindowPositioningStrategy ?? false;
+					if (disableWindowPositioningStrategy) {
+						logger.info("Window Positioning Strategy is disabled.");
+					} else {
+						const app = await fin.Application.getCurrent();
+						const platformManifest: OpenFin.Manifest = await app.getManifest();
+						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
+						windowDefaultLeft =
+							settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
+							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
+							0;
+						windowDefaultTop =
+							settings.browserProvider?.defaultWindowOptions?.defaultTop ??
+							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
+							0;
 
-				const settings = await getSettings();
-
-				windowDefaultLeft =
-					settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
-					platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
-					0;
-				windowDefaultTop =
-					settings.browserProvider?.defaultWindowOptions?.defaultTop ??
-					platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
-					0;
-
-				windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
-			}
-
-			logger.info("Create Window", options);
-
-			const hasLeft = !isEmpty(options?.defaultLeft);
-			const hasTop = !isEmpty(options?.defaultTop);
-
-			if (!hasLeft || !hasTop) {
-				// Get the available rect for the display so we can take in to account
-				// OS menus, task bar etc
-				const monitorInfo = await fin.System.getMonitorInfo();
-				const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
-				const availableTop = monitorInfo.primaryMonitor.availableRect.top;
-
-				const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
-				const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
-				const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
-
-				const visibleWindows = await getAllVisibleWindows();
-
-				// Get the top left bounds for all the visible windows
-				const topLeftBounds = await Promise.all(
-					visibleWindows.map(async (win) => {
-						const bounds = await win.getBounds();
-						return {
-							left: bounds.left,
-							top: bounds.top,
-							right: bounds.left + windowOffsetsX,
-							bottom: bounds.top + windowOffsetsY
-						};
-					})
-				);
-
-				let minCountVal: number = 1000;
-				let minCountIndex = windowOffsetsMaxIncrements;
-
-				// Now see how many windows appear in each increment slot
-				for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
-					const xPos = i * windowOffsetsX;
-					const yPos = i * windowOffsetsY;
-					const leftPos = windowDefaultLeft + xPos;
-					const topPos = windowDefaultTop + yPos;
-					const foundWins = topLeftBounds.filter(
-						(topLeftWinBounds) =>
-							topLeftWinBounds.left >= leftPos &&
-							topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
-							topLeftWinBounds.top >= topPos &&
-							topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
-					);
-
-					// If this slot has less than the current minimum use this slot
-					if (foundWins.length < minCountVal) {
-						minCountVal = foundWins.length;
-						minCountIndex = i;
+						windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
 					}
 				}
 
-				if (!hasLeft) {
-					const xOffset = minCountIndex * windowOffsetsX;
-					options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
-				}
-				if (!hasTop) {
-					const yOffset = minCountIndex * windowOffsetsY;
-					options.defaultTop = windowDefaultTop + yOffset + availableTop;
+				if (!isEmpty(windowDefaultLeft) && !isEmpty(windowDefaultTop)) {
+					logger.info("Create Window", options);
+
+					const hasLeft = !isEmpty(options?.defaultLeft);
+					const hasTop = !isEmpty(options?.defaultTop);
+
+					if (!hasLeft || !hasTop) {
+						// Get the available rect for the display so we can take in to account
+						// OS menus, task bar etc
+						const monitorInfo = await fin.System.getMonitorInfo();
+						const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
+						const availableTop = monitorInfo.primaryMonitor.availableRect.top;
+						const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
+						const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
+						const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
+						const visibleWindows = await getAllVisibleWindows();
+						// Get the top left bounds for all the visible windows
+						const topLeftBounds = await Promise.all(
+							visibleWindows.map(async (win) => {
+								try {
+									const bounds = await win.getBounds();
+									return {
+										left: bounds.left,
+										top: bounds.top,
+										right: bounds.left + windowOffsetsX,
+										bottom: bounds.top + windowOffsetsY
+									};
+								} catch {
+									// return a dummy entry.
+									return {
+										left: 0,
+										top: 0,
+										right: 0,
+										bottom: 0
+									};
+								}
+							})
+						);
+
+						let minCountVal: number = 1000;
+						let minCountIndex = windowOffsetsMaxIncrements;
+
+						// Now see how many windows appear in each increment slot
+						for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
+							const xPos = i * windowOffsetsX;
+							const yPos = i * windowOffsetsY;
+							const leftPos = windowDefaultLeft + xPos;
+							const topPos = windowDefaultTop + yPos;
+							const foundWins = topLeftBounds.filter(
+								(topLeftWinBounds) =>
+									topLeftWinBounds.left >= leftPos &&
+									topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
+									topLeftWinBounds.top >= topPos &&
+									topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
+							);
+							// If this slot has less than the current minimum use this slot
+							if (foundWins.length < minCountVal) {
+								minCountVal = foundWins.length;
+								minCountIndex = i;
+							}
+						}
+
+						if (!hasLeft) {
+							const xOffset = minCountIndex * windowOffsetsX;
+							options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
+						}
+						if (!hasTop) {
+							const yOffset = minCountIndex * windowOffsetsY;
+							options.defaultTop = windowDefaultTop + yOffset + availableTop;
+						}
+					}
 				}
 			}
-
 			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
 
 			if (!overrideDefaultButtons) {
@@ -698,7 +712,12 @@ export function overrideCallback(
 
 			const window = await super.createWindow(options, identity);
 
-			logger.info("After Create Window", await window.getOptions());
+			try {
+				logger.info("After Create Window", await window.getOptions());
+			} catch {
+				// the logging is for informational purposes during debugging. If it fails
+				// the window may have closed straight after opening (e.g. automation testing)
+			}
 
 			// If the default buttons were overwritten then hopefully the creator
 			// used correctly themed versions, but in case they didn't we send

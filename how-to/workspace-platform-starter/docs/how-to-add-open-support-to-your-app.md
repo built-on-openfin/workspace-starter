@@ -21,9 +21,38 @@ You don't need to reference an npm module for the API as we inject the API into 
 
 ## How Do I Open An App?
 
-Now a note on the fdc3.open API as this platform does have an opinionated implementation.
+### Workspace Platform Starter has two modes for supporting fdc3.open
 
-These are two quotes from the official FDC3 site:
+- [fdc3](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open)
+- intent
+
+#### FDC3 OPEN STRATEGY
+
+The default mode is FDC3. This is the behavior specified by the [FDC3 spec](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open) (an application that supports fdc3, exists in an app directory and optionally adds a context handler).
+
+There are options you can configure for the workspace platform starter's behavior when it comes to fdc3.open. This is configured in the platform provider in your customSettings.
+
+```json
+"platformProvider": {
+   ...
+   "interop": {
+    ...
+    "openOptions": {
+     "openStrategy": "intent",
+     "connectionTimeout": 15000,
+     "contextTimeout": 15000
+    }
+   }
+  }
+```
+
+openOptions are optional and you can see here we have specified intent as the open strategy instead of the default fdc3 (in the example we also specified custom timeouts).
+
+#### INTENT OPEN STRATEGY
+
+'intent' is the original strategy the workspace platform starter had and was originally the default behavior.
+
+These are two quotes from the official FDC3 site with regards to FDC3 Open:
 
 "Generally, it should be used when the target application is known but there is no specific intent."
 
@@ -68,25 +97,25 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-There is another note on the FDC3 website:
+There is another note on the FDC3 website with regards to FDC3 Open:
 
 "Note, if both the intent and target app name are known, it is recommended to instead use raiseIntent with the app argument."
 
-This seems to indicate that intents are preferred and here are some of the advantages intents have over open.
+This seems to indicate that intents are preferred and here are some of the advantages intents have over the standard open.
 
-### Intents give the following advantages
+##### Intents give the following advantages
 
 - An app has to opt into an intent (what if an app doesn't mind being opened by Home or via the Store or Dock but doesn't want another app to be able to open it). fdc3.open can be interpreted as it allows the opening of anything in the app directory which might not be what every app owner wants.
 - If context is provided then the app has opted into that specific context. The app will add an intent listener and specify that specific intent name. When context comes through it knows why it received it. The fdc3.open api says that context can be passed but it is passed to the contextListener. When you have an app (e.g. a view) that might be a multi instance or single instance view, it might be pre-bound to a system channel (e.g. green) or a system channel (green) may have been selected by the user. The targeted app may have already received a general context (fdc3.contact) that it has synced with all the other views that are also on the green channel. If the app is launched and passed a new context that isn't through broadcast then it may cause confusion.
 - There is an api to easily find the apps that are happy to support an intent and if there is a context object you can find all the intents that support that context object.
 
-### Why has the advantages of Intents been raised?
+##### Why has the advantages of Intents been raised?
 
-We know that the convenience of fdc3.open is good and we want to expose that, but we also want to retain the advantages listed above. So our implementation is opinionated when it comes to having your app indicate it's support for fdc3.open (rather than not having a choice).
+We know that the convenience of fdc3.open is good and we want to expose that, but we also want to retain the advantages listed above. So our 'intent'' strategy implementation is opinionated when it comes to having your app indicate it's support for fdc3.open (rather than not having a choice).
 
-## How do I Listen for Context Passed by fdc3.open?
+##### How do I Listen for Context Passed by fdc3.open?
 
-Adding a contextListener will receive context that is broadcast but it will not receive context passed by fdc3.open in our implementation. For this implementation you need to register an intentListener for a specific intent: **OpenApp**. If your view is opened in multiple platforms with differing implementations then you can still have a context listener that receives **broadcast** and **open** based context and add an intent listener for **OpenApp** that will not be called by other platforms unless you indicate support for the intent **OpenApp** on that platform through your app meta data.
+Adding a contextListener will receive context that is broadcast but it will not receive context passed by fdc3.open when using the 'intent'' strategy. For this implementation you need to register an intentListener for a specific intent: **OpenApp**. If your view is opened in multiple platforms with differing implementations then you can still have a context listener that receives **broadcast** and **open** based context and add an intent listener for **OpenApp** that will not be called by other platforms unless you indicate support for the intent **OpenApp** on that platform through your app meta data.
 
 The code would be as follows (and would allow you to differentiate between broadcast and open calls):
 
@@ -102,25 +131,29 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-## How Do I Flag that My App Supports fdc3.open?
+##### How Do I Flag that My App Supports fdc3.open if I use the 'intent' strategy?
 
 This would be done in your app definition. See [how to define an app](./how-to-define-apps.md). An app definition supports an array of intents and our App Definition Builder helps you select from the official list of intents when defining your app. As this is a custom intent you would need to add the intent name of **OpenApp** and then list the contexts that you support if any.
 
-## Test Harnesses
+##### Test Harnesses
 
 It is useful to be able to test your app against something. When you reference the common apps feed in your instance of workspace platform starter you get a number of useful utilities. We provide two entries related to intent raising in FDC3 (which can also be used to test fdc3.open support):
 
-### Intents Using FDC3
+##### Intents Using FDC3
 
 This app supports FDC3 raiseIntent and raiseIntentByContext, it lists all the supported intent and context types and generates a code preview for you to copy or simply test against. We provide a similar tool for our Interop API which is compatible with the FDC3 API as well. In this case you would raise a custom intent and specify the intent name: **OpenApp** (or you can use fdc3.open from the console. We may introduce an test harness that just lets you launch apps that support the intent OpenApp using the fdc3.open API if there is interest):
 
 ![Intents Using FDC3](./assets/view-intents-fdc3.png)
 
-### FDC3 Workbench
+##### FDC3 Workbench
 
 This is the FinOS test harness to show our compatibility. It doesn't have an fdc3.open button (at the time of this writing) but you can use raiseIntent **OpenApp** as well:
 
 ![FDC3 Workbench](./assets/fdc3-workbench.png)
+
+### Conclusion
+
+Workspace Platform Starter is an example but we have shown how having control over your InteropBroker gives you options. We let you use the default FDC3 Open Approach or you can see an opinionated approach that supports the ease of use of fdc3.open but ties it to intents to make it an opt-in choice rather than a default as far as applications are concerned.
 
 ## More Resources
 
