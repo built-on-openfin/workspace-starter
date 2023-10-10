@@ -226,4 +226,9 @@ export interface PopupMenuEntry<T = unknown> {
 	 * Custom data to associate with the entry.
 	 */
 	customData?: T;
+
+	/**
+	 * Is the menu entry enabled.
+	 */
+	enabled?: boolean;
 }

@@ -441,7 +441,8 @@ export async function showNativePopupMenu<T = unknown>(
 			label: menuEntry.label,
 			icon: iconBase64,
 			type: menuEntry.type,
-			data: menuEntry.customData
+			data: menuEntry.customData,
+			enabled: menuEntry.enabled
 		});
 	}
 

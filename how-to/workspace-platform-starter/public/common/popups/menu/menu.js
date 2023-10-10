@@ -24,21 +24,28 @@ async function initDOM() {
 			for (const menuEntry of options.customData.menuEntries) {
 				if (menuEntry.type === 'separator') {
 					const menuEntryItem = document.createElement('div');
-					menuContainer.append(menuEntryItem);
 
 					menuEntryItem.classList.add('menu-item-separator');
+					if (!(menuEntry.enabled ?? true)) {
+						menuEntryItem.classList.add('menu-item-disabled');
+					}
 
 					const sep = document.createElement('hr');
 					menuEntryItem.append(sep);
+
+					menuContainer.append(menuEntryItem);
 				} else {
 					const menuEntryItem = document.createElement('button');
 					menuEntryItem.ariaLabel = menuEntry.label;
-					menuContainer.append(menuEntryItem);
 
 					menuEntryItem.classList.add('menu-item');
-					menuEntryItem.addEventListener('click', async () => {
-						await fin.me.dispatchPopupResult(menuEntry.customData);
-					});
+					if (!(menuEntry.enabled ?? true)) {
+						menuEntryItem.classList.add('menu-item-disabled');
+					} else {
+						menuEntryItem.addEventListener('click', async () => {
+							await fin.me.dispatchPopupResult(menuEntry.customData);
+						});
+					}
 
 					let icon;
 					if (menuEntry.icon) {
@@ -55,6 +62,7 @@ async function initDOM() {
 						menuEntryItem.append(icon);
 					}
 					menuEntryItem.append(text);
+					menuContainer.append(menuEntryItem);
 				}
 			}
 		} else {
