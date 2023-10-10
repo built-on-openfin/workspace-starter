@@ -1,12 +1,12 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
 import type { PopupMenuEntry } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
-import type { ThemeClient } from "./theme-shapes";
+import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 /**
  * List of modules.
@@ -91,6 +91,26 @@ export interface ModuleHelpers {
 	 * @returns The interop client.
 	 */
 	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
+	/**
+	 * Get the current theme id.
+	 * @returns The current theme id.
+	 */
+	getCurrentThemeId(): Promise<string>;
+	/**
+	 * Get the current icon folder.
+	 * @returns the platform icon folder.
+	 */
+	getCurrentIconFolder(): Promise<string>;
+	/**
+	 * Get the current palette.
+	 * @returns The current palette.
+	 */
+	getCurrentPalette(): Promise<CustomPaletteSet>;
+	/**
+	 * Get the current color scheme.
+	 * @returns The current color scheme.
+	 */
+	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 	/**
 	 * If this platform has been configured to support theming it will provide it.
 	 * @returns the theme client.

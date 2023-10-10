@@ -14,7 +14,7 @@
 - Added module helpers `launchWorkspace` method
 - Added Native popup menus support separators
 - Added Custom popup menus support separators, aria labelling and off-screen positioning
-- BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method
+- BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods will still exist until the next release, but will log a warning about their removal
 
 ## v14
 

@@ -1,5 +1,9 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type CustomPaletteSet,
+	type WorkspacePlatformModule
+} from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
@@ -19,7 +23,7 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
-import type { ThemeClient } from "./shapes/theme-shapes";
+import type { ColorSchemeMode, ThemeClient } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
@@ -270,6 +274,30 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getVersionInfo,
 		getInteropClient,
 		getFavoriteClient,
+		getCurrentThemeId: async (): Promise<string> => {
+			logger.warn(
+				"getCurrentThemeId will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentThemeId();
+		},
+		getCurrentIconFolder: async (): Promise<string> => {
+			logger.warn(
+				"getCurrentIconFolder will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentIconFolder();
+		},
+		getCurrentPalette: async (): Promise<CustomPaletteSet> => {
+			logger.warn(
+				"getPalette will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentPalette();
+		},
+		getCurrentColorSchemeMode: async (): Promise<ColorSchemeMode> => {
+			logger.warn(
+				"getCurrentColorSchemeMode will be removed from moduleHelpers after this release, please switch to using getThemeClient"
+			);
+			return getCurrentColorSchemeMode();
+		},
 		getThemeClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
