@@ -76,6 +76,7 @@
 					"fdc3InteropApi": "2.0"
 				},
 				"intentOptions": {},
+				"openOptions": {},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
