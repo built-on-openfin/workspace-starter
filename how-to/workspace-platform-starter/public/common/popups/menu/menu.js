@@ -59,7 +59,9 @@ async function initDOM() {
 			}
 		} else {
 			const noEntries = document.createElement('div');
-			noEntries.textContent = options.customData?.noEntryText ?? 'No entries';
+			const content = options.customData?.noEntryText ?? 'No entries';
+			noEntries.textContent = content;
+			noEntries.ariaLabel = content;
 			noEntries.classList.add('menu-item-none');
 			menuContainer.append(noEntries);
 		}
