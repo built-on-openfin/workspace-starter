@@ -23,8 +23,8 @@ You don't need to reference an npm module for the API as we inject the API into 
 
 ### Workspace Platform Starter has two modes for supporting fdc3.open
 
-- [FDC3](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open)
-- INTENT
+- [fdc3](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open)
+- intent
 
 #### FDC3 OPEN STRATEGY
 
@@ -50,7 +50,7 @@ openOptions are optional and you can see here we have specified intent as the op
 
 #### INTENT OPEN STRATEGY
 
-INTENT is the original strategy the workspace platform starter had and was originally the default behavior.
+'intent' is the original strategy the workspace platform starter had and was originally the default behavior.
 
 These are two quotes from the official FDC3 site with regards to FDC3 Open:
 
@@ -111,11 +111,11 @@ This seems to indicate that intents are preferred and here are some of the advan
 
 ##### Why has the advantages of Intents been raised?
 
-We know that the convenience of fdc3.open is good and we want to expose that, but we also want to retain the advantages listed above. So our INTENT strategy implementation is opinionated when it comes to having your app indicate it's support for fdc3.open (rather than not having a choice).
+We know that the convenience of fdc3.open is good and we want to expose that, but we also want to retain the advantages listed above. So our 'intent'' strategy implementation is opinionated when it comes to having your app indicate it's support for fdc3.open (rather than not having a choice).
 
 ##### How do I Listen for Context Passed by fdc3.open?
 
-Adding a contextListener will receive context that is broadcast but it will not receive context passed by fdc3.open when using the INTENT strategy. For this implementation you need to register an intentListener for a specific intent: **OpenApp**. If your view is opened in multiple platforms with differing implementations then you can still have a context listener that receives **broadcast** and **open** based context and add an intent listener for **OpenApp** that will not be called by other platforms unless you indicate support for the intent **OpenApp** on that platform through your app meta data.
+Adding a contextListener will receive context that is broadcast but it will not receive context passed by fdc3.open when using the 'intent'' strategy. For this implementation you need to register an intentListener for a specific intent: **OpenApp**. If your view is opened in multiple platforms with differing implementations then you can still have a context listener that receives **broadcast** and **open** based context and add an intent listener for **OpenApp** that will not be called by other platforms unless you indicate support for the intent **OpenApp** on that platform through your app meta data.
 
 The code would be as follows (and would allow you to differentiate between broadcast and open calls):
 
@@ -131,7 +131,7 @@ if (window.fdc3 !== undefined) {
 }
 ```
 
-##### How Do I Flag that My App Supports fdc3.open if I use the INTENT strategy?
+##### How Do I Flag that My App Supports fdc3.open if I use the 'intent' strategy?
 
 This would be done in your app definition. See [how to define an app](./how-to-define-apps.md). An app definition supports an array of intents and our App Definition Builder helps you select from the official list of intents when defining your app. As this is a custom intent you would need to add the intent name of **OpenApp** and then list the contexts that you support if any.
 
