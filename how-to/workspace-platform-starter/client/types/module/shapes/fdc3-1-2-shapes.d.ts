@@ -1,3 +1,4 @@
+import type { LaunchPreference } from "./app-shapes";
 /**
  * Definition for an FDC3 1.2 Application.
  */
@@ -143,6 +144,10 @@ export interface CustomConfig {
 	 * it will always launch a new instance
 	 */
 	instanceMode?: "multi" | "single" | "new";
+	/**
+	 * Contains additional information related to the launch of an application.
+	 */
+	launchPreference?: LaunchPreference;
 }
 /**
  * The application metadata.

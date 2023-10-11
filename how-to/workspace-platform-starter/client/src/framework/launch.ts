@@ -307,6 +307,14 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	if (!windowExists) {
 		try {
 			const platform = getCurrentSync();
+			if (!isEmpty(windowApp?.launchPreference?.bounds)) {
+				manifest.defaultHeight = windowApp?.launchPreference?.bounds.height ?? manifest.defaultHeight;
+				manifest.height = windowApp?.launchPreference?.bounds.height ?? manifest.height;
+				manifest.defaultWidth = windowApp?.launchPreference?.bounds.width ?? manifest.defaultWidth;
+				manifest.width = windowApp?.launchPreference?.bounds.width ?? manifest.width;
+			}
+			manifest.defaultCentered = windowApp.launchPreference?.defaultCentered ?? manifest.defaultCentered;
+
 			const createdWindow = await platform.createWindow(manifest);
 			identity = createdWindow.identity;
 			await bringWindowToFront({ window: createdWindow });
@@ -377,8 +385,39 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 	if (!viewExists) {
 		try {
 			const platform = getCurrentSync();
-			const createdView = await platform.createView(manifest);
-			identity = createdView.identity;
+
+			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
+				await platform.createWindow({
+					workspacePlatform: !isEmpty(viewApp.launchPreference?.options?.view?.hostUrl)
+						? {
+								windowType: "platform"
+						  }
+						: undefined,
+					url: viewApp.launchPreference?.options?.view?.hostUrl,
+					height: viewApp.launchPreference?.bounds?.height,
+					defaultHeight: viewApp.launchPreference?.bounds?.height,
+					defaultWidth: viewApp.launchPreference?.bounds?.width,
+					width: viewApp.launchPreference?.bounds?.width,
+					defaultCentered: viewApp.launchPreference?.defaultCentered,
+					layout: {
+						content: [
+							{
+								type: "stack",
+								content: [
+									{
+										type: "component",
+										componentName: "view",
+										componentState: manifest
+									}
+								]
+							}
+						]
+					}
+				});
+			} else {
+				const createdView = await platform.createView(manifest);
+				identity = createdView.identity;
+			}
 		} catch (err) {
 			logger.error("Error launching view", err);
 			return;

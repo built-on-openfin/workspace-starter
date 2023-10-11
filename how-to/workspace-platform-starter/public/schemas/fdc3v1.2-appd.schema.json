@@ -151,6 +151,10 @@
 					"enum": ["multi", "new", "single"],
 					"type": "string"
 				},
+				"launchPreference": {
+					"$ref": "#/definitions/LaunchPreference",
+					"description": "Contains additional information related to the launch of an application."
+				},
 				"private": {
 					"description": "Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may\nbe that this app entry is mainly for responding to intent requests and shouldn't be launched directly.",
 					"type": ["string", "boolean"]
@@ -195,6 +199,50 @@
 				}
 			},
 			"required": ["$schema", "applications"],
+			"type": "object"
+		},
+		"LaunchPreference": {
+			"additionalProperties": false,
+			"properties": {
+				"bounds": {
+					"additionalProperties": false,
+					"properties": {
+						"height": {
+							"type": "number"
+						},
+						"width": {
+							"type": "number"
+						}
+					},
+					"required": ["height", "width"],
+					"type": "object"
+				},
+				"defaultCentered": {
+					"description": "Should the launched UI be positioned in the center of the screen?",
+					"type": "boolean"
+				},
+				"options": {
+					"additionalProperties": false,
+					"properties": {
+						"view": {
+							"$ref": "#/definitions/ViewLaunchPreference"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"ViewLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to a view",
+			"properties": {
+				"hostUrl": {
+					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+					"type": "string"
+				}
+			},
+			"required": ["hostUrl"],
 			"type": "object"
 		}
 	}

@@ -1822,6 +1822,41 @@
         "LaunchExternalProcessListener": {
             "$ref": "#/definitions/__type_41"
         },
+        "LaunchPreference": {
+            "additionalProperties": false,
+            "properties": {
+                "bounds": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "height": {
+                            "type": "number"
+                        },
+                        "width": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "height",
+                        "width"
+                    ],
+                    "type": "object"
+                },
+                "defaultCentered": {
+                    "description": "Should the launched UI be positioned in the center of the screen?",
+                    "type": "boolean"
+                },
+                "options": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "view": {
+                            "$ref": "#/definitions/ViewLaunchPreference"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
         "LayoutColumn": {
             "additionalProperties": false,
             "properties": {
@@ -3334,6 +3369,10 @@
                     "$ref": "#/definitions/PlatformAppInterop",
                     "description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
                 },
+                "launchPreference": {
+                    "$ref": "#/definitions/LaunchPreference",
+                    "description": "When launching this defined application are there additional preferences the platform\nshould consider?"
+                },
                 "manifest": {
                     "anyOf": [
                         {
@@ -4240,6 +4279,20 @@
                     "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has\nnot been met. This window will be shown to the user and the bootstrapping process will be stopped."
                 }
             },
+            "type": "object"
+        },
+        "ViewLaunchPreference": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to a view",
+            "properties": {
+                "hostUrl": {
+                    "description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "hostUrl"
+            ],
             "type": "object"
         },
         "ViewOptions": {
