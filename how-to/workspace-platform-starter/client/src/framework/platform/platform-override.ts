@@ -14,6 +14,7 @@ import {
 	type Workspace,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -46,6 +47,7 @@ import type { VersionInfo } from "../shapes/version-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
+import { loadConfig, saveConfig } from "../workspace/dock";
 import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 import { mapPlatformPageToStorage, mapPlatformWorkspaceToStorage } from "./platform-mapper";
@@ -763,6 +765,24 @@ export function overrideCallback(
 			}
 
 			return super.handleAnalytics(events);
+		}
+
+		/**
+		 * Implementation for getting the dock provider from persistent storage.
+		 * @param id The id of the dock provider to get.
+		 * @returns The loaded dock provider config.
+		 */
+		public async getDockProviderConfig(id: string): Promise<DockProviderConfigWithIdentity | undefined> {
+			return loadConfig(id, async (providerId) => super.getDockProviderConfig(providerId));
+		}
+
+		/**
+		 * Implementation for saving a dock provider config to persistent storage.
+		 * @param config The new dock config to save to persistent storage.
+		 * @returns Nothing.
+		 */
+		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
+			return saveConfig(config, async (providerConfig) => super.saveDockProviderConfig(providerConfig));
 		}
 	}
 	return new Override();

@@ -20,6 +20,9 @@
 - Added Native popup menus to support separators, icons
 - Added Custom popup menus to support separators, disabled, aria labelling and off-screen positioning
 - BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods will still exist until the next release, but will log a warning about their removal
+- Added Dock re-ordering is now enabled by default (it can be disabled by setting `dockProvider.disableUserRearrangement` to true)
+- Added Dock provider entries now require an `id` field so that they can be identified when re-ordering is enabled
+- Added Dock supports endpoints for storage of their config `dock-get` and `dock-set`, if you provide your own endpoints you must handle the adding/removing/ordering of buttons based on the available buttons
 
 ## v14
 
