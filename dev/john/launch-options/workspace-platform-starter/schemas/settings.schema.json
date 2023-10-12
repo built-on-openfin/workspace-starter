@@ -1135,13 +1135,18 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
                 }
             },
             "required": [
-                "action"
+                "action",
+                "id"
             ],
             "type": "object"
         },
@@ -1164,13 +1169,18 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
                 }
             },
             "required": [
-                "appId"
+                "appId",
+                "id"
             ],
             "type": "object"
         },
@@ -1197,6 +1207,10 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "noEntries": {
                     "description": "Text to display if there are no entries because there are no tagged apps.",
                     "type": "string"
@@ -1214,7 +1228,8 @@
                 }
             },
             "required": [
-                "display"
+                "display",
+                "id"
             ],
             "type": "object"
         },
@@ -1231,6 +1246,10 @@
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id for the dock entry.",
                     "type": "string"
                 },
                 "noEntries": {
@@ -1257,6 +1276,7 @@
                 }
             },
             "required": [
+                "id",
                 "options"
             ],
             "type": "object"
@@ -1305,6 +1325,10 @@
                         ]
                     },
                     "type": "array"
+                },
+                "disableUserRearrangement": {
+                    "description": "Disallow rearrangement of dock icons by setting this flag.",
+                    "type": "boolean"
                 },
                 "entries": {
                     "description": "What apps, actions or drop downs should be made available via the dock.",
@@ -1821,6 +1845,44 @@
         },
         "LaunchExternalProcessListener": {
             "$ref": "#/definitions/__type_41"
+        },
+        "LaunchPreference": {
+            "additionalProperties": false,
+            "description": "Are there any preferences you would like to apply when launching this application?",
+            "properties": {
+                "bounds": {
+                    "additionalProperties": false,
+                    "description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
+                    "properties": {
+                        "height": {
+                            "type": "number"
+                        },
+                        "width": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "height",
+                        "width"
+                    ],
+                    "type": "object"
+                },
+                "defaultCentered": {
+                    "description": "Should the launched UI be positioned in the center of the screen?",
+                    "type": "boolean"
+                },
+                "options": {
+                    "additionalProperties": false,
+                    "description": "Are there any app type specific options you would like to apply?",
+                    "properties": {
+                        "view": {
+                            "$ref": "#/definitions/ViewLaunchPreference"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -3334,6 +3396,10 @@
                     "$ref": "#/definitions/PlatformAppInterop",
                     "description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
                 },
+                "launchPreference": {
+                    "$ref": "#/definitions/LaunchPreference",
+                    "description": "When launching this defined application are there additional preferences the platform\nshould consider?"
+                },
                 "manifest": {
                     "anyOf": [
                         {
@@ -4238,6 +4304,17 @@
                 "versionWindow": {
                     "$ref": "#/definitions/Partial_2",
                     "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has\nnot been met. This window will be shown to the user and the bootstrapping process will be stopped."
+                }
+            },
+            "type": "object"
+        },
+        "ViewLaunchPreference": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to a view",
+            "properties": {
+                "hostUrl": {
+                    "description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+                    "type": "string"
                 }
             },
             "type": "object"
