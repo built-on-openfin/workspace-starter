@@ -72,7 +72,43 @@ export type PlatformApp = App & {
 	 * is used as name. Internally we use appId
 	 */
 	name?: string;
+	/**
+	 * When launching this defined application are there additional preferences the platform
+	 * should consider?
+	 */
+	launchPreference?: LaunchPreference;
 };
+/**
+ * Are there any preferences you would like to apply when launching this application?
+ */
+export interface LaunchPreference {
+	/**
+	 * Do you wish to specify a custom height/width that should be used when this application is launched?
+	 */
+	bounds?: {
+		width: number;
+		height: number;
+	};
+	/**
+	 * Should the launched UI be positioned in the center of the screen?
+	 */
+	defaultCentered?: boolean | undefined;
+	/**
+	 * Are there any app type specific options you would like to apply?
+	 */
+	options?: {
+		view?: ViewLaunchPreference;
+	};
+}
+/**
+ * Additional options that apply to a view
+ */
+export interface ViewLaunchPreference {
+	/**
+	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
+	 */
+	hostUrl?: string;
+}
 /**
  * We define the app interop app for the platform in case we want to extend its
  * properties.

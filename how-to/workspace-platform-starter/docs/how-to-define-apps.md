@@ -58,7 +58,15 @@ An app exists within an array that is returned as part of request.
         "src": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
       }
     ],
-    "tags": ["view", "interop", "fdc3", "contact", "instrument"]
+    "tags": ["view", "interop", "fdc3", "contact", "instrument"],
+    "launchPreference": {
+      "bounds": {
+        "height": 500,
+        "width": 500
+      },
+      "defaultCentered": false,
+      "options": {}
+    }
   }
 ]
 ```
@@ -81,6 +89,11 @@ The following field is custom to this platform and is optional:
 - tooltip - to match fdc3 1.2 and 2.0 definitions
 - moreInfo - to match additional information provided by fdc3 2.0 apps
 - name - not actively used (more as a fallback) but supported for fdc3 1.2 or 2.0 mappings.
+- launchPreference - This is an optional and new setting added to v15 of workspace-platform-starter. This lets the directory owner or the app owner specify a preference that should apply to the application when launching.
+  - bounds - Bounds can optionally be specified. A view is something that exists in a platform/browser window so this allows a preference for height/width to be specified. A classic window can already specify a height and width in it's manifest but you may want a custom height/width for this app entry (especially if the window is defined as an external manifest as opposed to an inline one).
+  - defaultCentered - a particular view/classic window might need to be centered on launch. This allows the app/directory owner to specify that preference.
+  - options - Optional options that are specific to the app/manifest type. Only view/inline-view has supported settings at this time.
+    - view - hostUrl lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
 
 The rest of the fields are self explanatory but the intents array deserves more detail.
 

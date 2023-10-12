@@ -1,3 +1,4 @@
+import type { LaunchPreference } from "./app-shapes";
 /**
  * Definition for an FDC3 2.0 Application.
  */
@@ -157,6 +158,10 @@ export interface HostManifests {
 			 * an intent is raised and just the id of the app is specified it will always launch a new instance
 			 */
 			instanceMode?: "multi" | "single" | "new";
+			/**
+			 * Contains additional information related to the launch of an application.
+			 */
+			launchPreference?: LaunchPreference;
 		};
 	};
 }
