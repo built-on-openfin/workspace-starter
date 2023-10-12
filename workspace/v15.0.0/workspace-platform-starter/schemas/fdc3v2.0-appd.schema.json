@@ -336,6 +336,10 @@
 									"enum": ["multi", "new", "single"],
 									"type": "string"
 								},
+								"launchPreference": {
+									"$ref": "#/definitions/LaunchPreference",
+									"description": "Contains additional information related to the launch of an application."
+								},
 								"private": {
 									"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
 									"type": "boolean"
@@ -355,6 +359,41 @@
 				}
 			},
 			"required": ["OpenFin"],
+			"type": "object"
+		},
+		"LaunchPreference": {
+			"additionalProperties": false,
+			"description": "Are there any preferences you would like to apply when launching this application?",
+			"properties": {
+				"bounds": {
+					"additionalProperties": false,
+					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
+					"properties": {
+						"height": {
+							"type": "number"
+						},
+						"width": {
+							"type": "number"
+						}
+					},
+					"required": ["height", "width"],
+					"type": "object"
+				},
+				"defaultCentered": {
+					"description": "Should the launched UI be positioned in the center of the screen?",
+					"type": "boolean"
+				},
+				"options": {
+					"additionalProperties": false,
+					"description": "Are there any app type specific options you would like to apply?",
+					"properties": {
+						"view": {
+							"$ref": "#/definitions/ViewLaunchPreference"
+						}
+					},
+					"type": "object"
+				}
+			},
 			"type": "object"
 		},
 		"NativeAppDetails": {
@@ -412,6 +451,17 @@
 				}
 			},
 			"required": ["src"],
+			"type": "object"
+		},
+		"ViewLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to a view",
+			"properties": {
+				"hostUrl": {
+					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"WebAppDetails": {
