@@ -23,6 +23,10 @@
 - Added Dock re-ordering is now enabled by default (it can be disabled by setting `dockProvider.disableUserRearrangement` to true)
 - Added Dock provider entries now require an `id` field so that they can be identified when re-ordering is enabled
 - Added Dock supports endpoints for storage of their config `dock-get` and `dock-set`, if you provide your own endpoints you must handle the adding/removing/ordering of buttons based on the available buttons
+- Added ability to specify a preference for a custom view or window height and width for an app through a new setting called launchPreference that can be added to an app definition (this metadata could be used for other types of app in the future but right now only views and classic windows are supported).
+- Added ability to specify whether the launched view/window should be autoCentered when launched via the launchPreference setting that can be added to an app definition.
+- Added ability to specify a custom Platform API window should be used for a view/inline-view instead of the default browser window through the options setting of launchPreference which can be added to an app definition. The ability to support Platform API Windows and Browser windows was added to v15 of the @openfin/workspace-platform package.
+- Updated [how-to-define-apps.md](./docs/how-to-define-apps.md), [how-to-define-apps-fdc3-1-2.md](./docs/how-to-define-apps-fdc3-1-2.md) and [how-to-define-apps-fdc3-2-0.md](./docs/how-to-define-apps-fdc3-2-0.md) to reflect the new launchPreference option.
 
 ## v14
 

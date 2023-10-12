@@ -79,11 +79,11 @@ export type PlatformApp = App & {
 	launchPreference?: LaunchPreference;
 };
 /**
- *
+ * Are there any preferences you would like to apply when launching this application?
  */
 export interface LaunchPreference {
 	/**
-	 *
+	 * Do you wish to specify a custom height/width that should be used when this application is launched?
 	 */
 	bounds?: {
 		width: number;
@@ -94,7 +94,7 @@ export interface LaunchPreference {
 	 */
 	defaultCentered?: boolean | undefined;
 	/**
-	 *
+	 * Are there any app type specific options you would like to apply?
 	 */
 	options?: {
 		view?: ViewLaunchPreference;
@@ -107,7 +107,7 @@ export interface ViewLaunchPreference {
 	/**
 	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
 	 */
-	hostUrl: string;
+	hostUrl?: string;
 }
 /**
  * We define the app interop app for the platform in case we want to extend its

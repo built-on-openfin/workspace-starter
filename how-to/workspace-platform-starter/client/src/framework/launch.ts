@@ -307,12 +307,10 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	if (!windowExists) {
 		try {
 			const platform = getCurrentSync();
-			if (!isEmpty(windowApp?.launchPreference?.bounds)) {
-				manifest.defaultHeight = windowApp?.launchPreference?.bounds.height ?? manifest.defaultHeight;
-				manifest.height = windowApp?.launchPreference?.bounds.height ?? manifest.height;
-				manifest.defaultWidth = windowApp?.launchPreference?.bounds.width ?? manifest.defaultWidth;
-				manifest.width = windowApp?.launchPreference?.bounds.width ?? manifest.width;
-			}
+			manifest.defaultHeight = windowApp?.launchPreference?.bounds?.height ?? manifest.defaultHeight;
+			manifest.height = windowApp?.launchPreference?.bounds?.height ?? manifest.height;
+			manifest.defaultWidth = windowApp?.launchPreference?.bounds?.width ?? manifest.defaultWidth;
+			manifest.width = windowApp?.launchPreference?.bounds?.width ?? manifest.width;
 			manifest.defaultCentered = windowApp.launchPreference?.defaultCentered ?? manifest.defaultCentered;
 
 			const createdWindow = await platform.createWindow(manifest);
@@ -387,7 +385,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 			const platform = getCurrentSync();
 
 			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
-				await platform.createWindow({
+				const preferenceWindow = await platform.createWindow({
 					workspacePlatform: !isEmpty(viewApp.launchPreference?.options?.view?.hostUrl)
 						? {
 								windowType: "platform"
@@ -414,6 +412,29 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 						]
 					}
 				});
+				const createdViews = await preferenceWindow.getCurrentViews();
+				if (createdViews.length === 1) {
+					if (createdViews[0].identity.name === identity.name) {
+						identity = createdViews[0].identity;
+					} else {
+						logger.warn(
+							`The specified view id: ${identity.name} was not found in the returned view so we will be returning undefined as we cannot confirm the view was created.`
+						);
+						return;
+					}
+				} else {
+					logger.warn(
+						`We expected to create a single view with identity ${identity.name} but a preference was specified and the created window had more than the requested view ${createdViews.length}`
+					);
+					const matchedView = createdViews.find((view) => view.identity.name === identity.name);
+					if (isEmpty(matchedView)) {
+						logger.warn(
+							`The specified view id: ${identity.name} was not found in the list of returned views so we will be returning undefined as we cannot confirm the view was created.`
+						);
+						return;
+					}
+					identity = matchedView.identity;
+				}
 			} else {
 				const createdView = await platform.createView(manifest);
 				identity = createdView.identity;

@@ -1848,9 +1848,11 @@
         },
         "LaunchPreference": {
             "additionalProperties": false,
+            "description": "Are there any preferences you would like to apply when launching this application?",
             "properties": {
                 "bounds": {
                     "additionalProperties": false,
+                    "description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
                     "properties": {
                         "height": {
                             "type": "number"
@@ -1871,6 +1873,7 @@
                 },
                 "options": {
                     "additionalProperties": false,
+                    "description": "Are there any app type specific options you would like to apply?",
                     "properties": {
                         "view": {
                             "$ref": "#/definitions/ViewLaunchPreference"
@@ -4314,9 +4317,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "hostUrl"
-            ],
             "type": "object"
         },
         "ViewOptions": {
