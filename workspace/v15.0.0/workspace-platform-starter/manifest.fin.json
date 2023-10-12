@@ -802,25 +802,27 @@
 				"hideNotificationsButton": false,
 				"hideStorefrontButton": false
 			},
-			"apps": [
+			"entries": [
 				{
+					"id": "dock-apps",
 					"display": "individual",
 					"tags": ["dock"]
 				},
 				{
+					"id": "fdc3-apps",
 					"display": "group",
 					"tooltip": "FDC3",
 					"tags": ["fdc3"]
 				},
 				{
+					"id": "manager-apps",
 					"display": "group",
 					"tooltip": "Manager",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/common/images/icon-gradient.png",
 					"tags": ["manager"]
-				}
-			],
-			"buttons": [
+				},
 				{
+					"id": "favorites",
 					"tooltip": "Favorites",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/favorite.svg",
 					"action": {
@@ -829,6 +831,7 @@
 					"conditions": ["favorites"]
 				},
 				{
+					"id": "pages",
 					"tooltip": "Pages",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/page.svg",
 					"action": {
@@ -836,6 +839,7 @@
 					}
 				},
 				{
+					"id": "google",
 					"tooltip": "Google",
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
@@ -846,6 +850,7 @@
 					}
 				},
 				{
+					"id": "social",
 					"tooltip": "Social",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/share.svg",
 					"options": [
@@ -870,6 +875,7 @@
 					]
 				},
 				{
+					"id": "windows",
 					"tooltip": "Window Visibility",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/windows.svg",
 					"options": [
