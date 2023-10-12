@@ -24,6 +24,10 @@ export interface DockProviderOptions {
 		hideStorefrontButton?: boolean;
 	};
 	/**
+	 * Disallow rearrangement of dock icons by setting this flag.
+	 */
+	disableUserRearrangement?: boolean;
+	/**
 	 * What apps, actions or drop downs should be made available via the dock.
 	 */
 	entries?: DockButtonTypes[];
@@ -42,6 +46,10 @@ export interface DockProviderOptions {
  * Shared properties for dock buttons.
  */
 export interface DockButtonBase {
+	/**
+	 * The id for the dock entry.
+	 */
+	id: string;
 	/**
 	 * The tooltip to be shown for this button/entry
 	 */
@@ -107,7 +115,7 @@ export interface DockButtonDropdown extends DockButtonBase {
 	/**
 	 * List of button options
 	 */
-	options: (Omit<DockButtonApp, "iconUrl"> | Omit<DockButtonAction, "iconUrl">)[];
+	options: (Omit<DockButtonApp, "iconUrl" | "id"> | Omit<DockButtonAction, "iconUrl" | "id">)[];
 	/**
 	 * Text to display if there are no entries because conditions have excluded options.
 	 */

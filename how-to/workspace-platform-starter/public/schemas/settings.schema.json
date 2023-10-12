@@ -1135,13 +1135,18 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
                 }
             },
             "required": [
-                "action"
+                "action",
+                "id"
             ],
             "type": "object"
         },
@@ -1164,13 +1169,18 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
                 }
             },
             "required": [
-                "appId"
+                "appId",
+                "id"
             ],
             "type": "object"
         },
@@ -1197,6 +1207,10 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "noEntries": {
                     "description": "Text to display if there are no entries because there are no tagged apps.",
                     "type": "string"
@@ -1214,7 +1228,8 @@
                 }
             },
             "required": [
-                "display"
+                "display",
+                "id"
             ],
             "type": "object"
         },
@@ -1231,6 +1246,10 @@
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id for the dock entry.",
                     "type": "string"
                 },
                 "noEntries": {
@@ -1257,6 +1276,7 @@
                 }
             },
             "required": [
+                "id",
                 "options"
             ],
             "type": "object"
@@ -1305,6 +1325,10 @@
                         ]
                     },
                     "type": "array"
+                },
+                "disableUserRearrangement": {
+                    "description": "Disallow rearrangement of dock icons by setting this flag.",
+                    "type": "boolean"
                 },
                 "entries": {
                     "description": "What apps, actions or drop downs should be made available via the dock.",
