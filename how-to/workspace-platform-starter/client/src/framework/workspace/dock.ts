@@ -8,9 +8,19 @@ import {
 	type DockProviderRegistration
 } from "@openfin/workspace";
 import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type {
+	DockProviderConfigWithIdentity,
+	DockButton as PlatformDockButton
+} from "@openfin/workspace-platform/client-api/src";
 import { checkConditions } from "workspace-platform-starter/conditions";
+import type {
+	EndpointDockGetRequest,
+	EndpointDockGetResponse,
+	EndpointDockSetRequest
+} from "workspace-platform-starter/shapes/platform-shapes";
 import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
+import * as endpointProvider from "../endpoint";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import type { PlatformApp } from "../shapes/app-shapes";
@@ -28,6 +38,10 @@ import { isEmpty, isStringValue } from "../utils";
 
 const logger = createLogger("Dock");
 
+const DOCK_ENDPOINT_ID_GET = "dock-get";
+const DOCK_ENDPOINT_ID_SET = "dock-set";
+
+let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
 let registeredBootstrapOptions: BootstrapOptions | undefined;
@@ -52,7 +66,7 @@ export async function register(
 		const buttons = await buildButtons();
 		logger.info("Dock register about to be called.");
 
-		const registration = await buildDockProvider(buttons);
+		registration = await buildDockProvider(buttons);
 
 		if (registration) {
 			registrationInfo = await Dock.register(registration);
@@ -113,9 +127,8 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 					!registeredBootstrapOptions?.notifications ||
 					dockProviderOptions.workspaceComponents?.hideNotificationsButton
 			},
-			buttons,
-			skipSavedDockProviderConfig: true,
-			disableUserRearrangement: true
+			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
+			buttons
 		};
 	}
 }
@@ -190,6 +203,7 @@ async function addEntryAsApp(
 	}
 
 	buttons.push({
+		id: entry.id,
 		type: DockButtonNames.ActionButton,
 		tooltip: tooltip ?? "",
 		iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
@@ -220,6 +234,7 @@ async function addEntryAsAction(
 		logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
 	} else {
 		buttons.push({
+			id: entry.id,
 			type: DockButtonNames.ActionButton,
 			tooltip: entry.tooltip,
 			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
@@ -251,7 +266,12 @@ async function addEntriesAsDropdown(
 		const opts: CustomButtonConfig[] = [];
 
 		for (const option of entry.options) {
-			if (await checkConditions(platform, option.conditions, { callerType: "dock", customData: option })) {
+			if (
+				await checkConditions(platform, option.conditions, {
+					callerType: "dock",
+					customData: { ...option, id: "" }
+				})
+			) {
 				let optionTooltip = option.tooltip;
 				let action: CustomActionSpecifier | undefined;
 
@@ -296,6 +316,7 @@ async function addEntriesAsDropdown(
 		}
 
 		buttons.push({
+			id: entry.id,
 			type: DockButtonNames.DropdownButton,
 			tooltip: entry.tooltip,
 			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
@@ -329,6 +350,7 @@ async function addEntriesByAppTag(
 			for (const dockApp of dockApps) {
 				const icon = entry.iconUrl ?? getAppIcon(dockApp);
 				buttons.push({
+					id: `${entry.id}-${dockApp.appId}`,
 					tooltip: entry.tooltip ?? dockApp.title,
 					iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
 					action: {
@@ -377,6 +399,7 @@ async function addEntriesByAppTag(
 				}
 
 				buttons.push({
+					id: entry.id,
 					type: DockButtonNames.DropdownButton,
 					tooltip: entry.tooltip ?? "",
 					iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
@@ -403,6 +426,103 @@ export async function show(): Promise<void> {
 export async function minimize(): Promise<void> {
 	logger.info("Dock minimize called.");
 	return Dock.minimize();
+}
+
+/**
+ * Implementation for getting the dock provider from persistent storage.
+ * @param id The id of the dock provider to get.
+ * @param defaultStorage The default method for storage.
+ * @returns The loaded config.
+ */
+export async function loadConfig(
+	id: string,
+	defaultStorage: (id: string) => Promise<DockProviderConfigWithIdentity | undefined>
+): Promise<DockProviderConfigWithIdentity | undefined> {
+	logger.info(`Checking for custom dock storage with endpoint id: ${DOCK_ENDPOINT_ID_GET}`);
+	let config: DockProviderConfigWithIdentity | undefined;
+
+	// All the available buttons based on the configuration settings
+	const availableButtons = [...(registration?.buttons ?? [])];
+
+	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_GET)) {
+		// No ordering is done for an endpoint, it is the responsibility of the endpoint
+		// the availableButtons are passed in the request for config so that the endpoint
+		// knows all the buttons available and can perform a sorting operation like
+		// we do for the default storage case
+		logger.info("Requesting dock config from custom storage");
+		const dockResponse = await endpointProvider.requestResponse<
+			EndpointDockGetRequest,
+			EndpointDockGetResponse
+		>(DOCK_ENDPOINT_ID_GET, {
+			platform: fin.me.identity.uuid,
+			id,
+			availableButtons
+		});
+		if (dockResponse) {
+			logger.info("Returning dock config from custom storage");
+			config = dockResponse.config;
+		} else {
+			logger.warn("No response getting dock config from custom storage");
+		}
+	} else {
+		logger.info("Requesting dock config from default storage");
+		config = await defaultStorage(id);
+
+		// We are using default storage so we can order the default buttons based on the stored config
+		if (!isEmpty(config) && !isEmpty(config.buttons)) {
+			const orderedButtons = [];
+
+			// The order the buttons are in the config is the order we want to display them
+			// So find them in the available buttons and add them, removing them from the
+			// available list
+			for (const button of config.buttons) {
+				if (isStringValue(button.id)) {
+					const foundIndex = availableButtons.findIndex((b) => b.id === button.id);
+					if (foundIndex >= 0) {
+						orderedButtons.push(button);
+						availableButtons.splice(foundIndex, 1);
+					}
+				}
+			}
+
+			// All remaining available buttons we haven't used get added to the end of the list
+			orderedButtons.push(...availableButtons);
+
+			// We need to cast this because there is a conflict between DockButtonNames enum
+			// between workspace and workspace-platform even though they are essentially the same type
+			config.buttons = orderedButtons as PlatformDockButton[];
+		}
+	}
+
+	return config;
+}
+
+/**
+ * Implementation for saving a dock provider config to persistent storage.
+ * @param config The new dock config to save to persistent storage.
+ * @param defaultStorage The default method for storage.
+ */
+export async function saveConfig(
+	config: DockProviderConfigWithIdentity,
+	defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
+): Promise<void> {
+	logger.info(`Checking for custom dock storage with endpoint id: ${DOCK_ENDPOINT_ID_SET}`);
+
+	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
+		logger.info("Storing dock config in custom storage");
+		const success = await endpointProvider.action<EndpointDockSetRequest>(DOCK_ENDPOINT_ID_SET, {
+			platform: fin.me.identity.uuid,
+			config
+		});
+		if (success) {
+			logger.info(`Saved dock config with id: ${config.id} to custom storage`);
+		} else {
+			logger.info(`Unable to save dock config with id: ${config.id} to custom storage`);
+		}
+	} else {
+		logger.info("Storing dock config in default storage");
+		await defaultStorage(config);
+	}
 }
 
 /**

@@ -780,25 +780,27 @@
 			"hideNotificationsButton": false,
 			"hideStorefrontButton": false
 		},
-		"apps": [
+		"entries": [
 			{
+				"id": "dock-apps",
 				"display": "individual",
 				"tags": ["dock"]
 			},
 			{
+				"id": "fdc3-apps",
 				"display": "group",
 				"tooltip": "FDC3",
 				"tags": ["fdc3"]
 			},
 			{
+				"id": "manager-apps",
 				"display": "group",
 				"tooltip": "Manager",
 				"iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
 				"tags": ["manager"]
-			}
-		],
-		"buttons": [
+			},
 			{
+				"id": "google",
 				"tooltip": "Google",
 				"iconUrl": "https://www.google.com/favicon.ico",
 				"action": {
@@ -809,6 +811,7 @@
 				}
 			},
 			{
+				"id": "social",
 				"tooltip": "Social",
 				"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
 				"options": [
@@ -833,6 +836,7 @@
 				]
 			},
 			{
+				"id": "windows",
 				"tooltip": "Window Visibility",
 				"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/windows.svg",
 				"options": [
