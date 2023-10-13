@@ -18,7 +18,7 @@ async function initDOM() {
 			// We delay this so that the blur event has time to complete
 			setTimeout(async () => {
 				await fin.me.dispatchPopupResult();
-			}, 100);
+			}, 200);
 		}
 	});
 
