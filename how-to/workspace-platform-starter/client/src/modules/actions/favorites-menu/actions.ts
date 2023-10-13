@@ -4,15 +4,15 @@ import {
 	type CustomActionsMap,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	FAVORITE_TYPE_NAME_PAGE,
 	FAVORITE_TYPE_NAME_WORKSPACE,
-	type FavoriteEntry,
-	type PopupMenuEntry
-} from "workspace-platform-starter/shapes";
-import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+	type FavoriteEntry
+} from "workspace-platform-starter/shapes/favorite-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { PopupMenuEntry } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 import type { FavoritesMenuSettings } from "./shapes";
@@ -90,7 +90,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 										menuEntries.push({
 											label: entry.label ?? "",
 											icon: entry.icon,
-											customData: entry
+											data: entry
 										});
 									}
 									hadEntries = true;
@@ -98,15 +98,15 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 							}
 						}
 
-						const menuType = this._settings?.menuType ?? "native";
+						const menuStyle = this._settings?.menuStyle ?? "native";
 
 						const result = await this._helpers.showPopupMenu<FavoriteEntry>(
-							menuType === "custom" ? { x: payload.x - 16, y: 40 } : { x: payload.x, y: 48 },
+							menuStyle === "custom" ? { x: payload.x - 16, y: 40 } : { x: payload.x, y: 48 },
 							payload.windowIdentity,
 							"There are no favorites",
 							menuEntries,
 							{
-								mode: menuType
+								style: menuStyle
 							}
 						);
 

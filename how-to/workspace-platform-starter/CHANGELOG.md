@@ -13,12 +13,12 @@
 - Added favorites support for Workspaces
 - Added favorites support for Pages
 - Change Favorites icons are theme aware
-- Change Favorites menu has option `menuType` to switch between `native` and `custom`
+- Change Favorites menu has option `menuStyle` to switch between `native` and `custom`
 - Fixed Pages and Workspace not appearing in home results as soon as they are created
 - Fixed Apps template not updating text color on theme-changed
 - Added module helpers `launchWorkspace` method
-- Added Native popup menus to support separators, icons
-- Added Custom popup menus to support separators, disabled, aria labelling and off-screen positioning
+- Added Native popup menus now support separators, icons
+- Added Custom popup menus now support separators, disabled, submenu, checkbox, aria labelling and off-screen positioning
 - BREAKING CHANGE The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods will still exist until the next release, but will log a warning about their removal
 - Added Dock re-ordering is now enabled by default (it can be disabled by setting `dockProvider.disableUserRearrangement` to true)
 - Added Dock provider entries now require an `id` field so that they can be identified when re-ordering is enabled
@@ -27,6 +27,9 @@
 - Added ability to specify whether the launched view/window should be autoCentered when launched via the launchPreference setting that can be added to an app definition.
 - Added ability to specify a custom Platform API window should be used for a view/inline-view instead of the default browser window through the options setting of launchPreference which can be added to an app definition. The ability to support Platform API Windows and Browser windows was added to v15 of the @openfin/workspace-platform package.
 - Updated [how-to-define-apps.md](./docs/how-to-define-apps.md), [how-to-define-apps-fdc3-1-2.md](./docs/how-to-define-apps-fdc3-1-2.md) and [how-to-define-apps-fdc3-2-0.md](./docs/how-to-define-apps-fdc3-2-0.md) to reflect the new launchPreference option.
+- Change Platform override for `openGlobalContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.globalMenu` to `native` or `custom`
+- Change Platform override for `openViewTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.viewMenu` to `native` or `custom`
+- Change Platform override for `openPageTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.pageMenu` to `native` or `custom`
 
 ## v14
 

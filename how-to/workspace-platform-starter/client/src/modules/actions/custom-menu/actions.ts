@@ -67,11 +67,11 @@ export class DynamicMenuProvider implements Actions {
 					pages
 						.map((p) => ({
 							label: p.title,
-							customData: p.pageId
+							data: p.pageId
 						}))
 						.sort((a, b) => a.label.localeCompare(b.label)),
 					{
-						mode: "custom"
+						style: "custom"
 					}
 				);
 

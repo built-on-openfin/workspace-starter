@@ -568,7 +568,14 @@
 						"type": "SaveMenu"
 					}
 				}
-			]
+			],
+			"menuOptions": {
+				"styles": {
+					"globalMenu": "custom",
+					"pageMenu": "custom",
+					"viewMenu": "custom"
+				}
+			}
 		},
 		"themeProvider": {
 			"themes": [
@@ -609,34 +616,15 @@
 							"linkHover": "#0A76D3"
 						},
 						"dark": {
-							"brandPrimary": "#0A76D3",
-							"brandSecondary": "#383A40",
-							"backgroundPrimary": "#1E1F23",
-							"background1": "#111214",
-							"background2": "#1E1F23",
-							"background3": "#24262B",
-							"background4": "#2F3136",
-							"background5": "#383A40",
-							"background6": "#53565F",
-							"statusSuccess": "#35C759",
-							"statusWarning": "#F48F00",
-							"statusCritical": "#BE1D1F",
-							"statusActive": "#0498FB",
-							"inputBackground": "#53565F",
-							"inputColor": "#FFFFFF",
-							"inputPlaceholder": "#C9CBD2",
-							"inputDisabled": "#7D808A",
-							"inputFocused": "#C9CBD2",
-							"textDefault": "#FFFFFF",
-							"textHelp": "#C9CBD2",
-							"textInactive": "#7D808A",
-							"contentBackground1": "#0A76D3",
-							"contentBackground2": "#000000",
-							"contentBackground3": "#000000",
-							"contentBackground4": "#000000",
-							"contentBackground5": "#000000",
-							"linkDefault": "#6CADE5",
-							"linkHover": "#0A76D3"
+							"brandPrimary": "#0070D2",
+							"brandSecondary": "#0070D2",
+							"backgroundPrimary": "#265A78",
+							"background1": "#0C4362",
+							"background2": "#105998",
+							"background3": "#265A78",
+							"background4": "#0070D2",
+							"background5": "#0070D2",
+							"background6": "#0070D2"
 						}
 					}
 				}
@@ -1171,10 +1159,10 @@
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
-					"enabled": false,
+					"enabled": true,
 					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js",
 					"data": {
-						"menuType": "native"
+						"menuStyle": "custom"
 					}
 				},
 				{
@@ -1294,8 +1282,6 @@
 		},
 		"menusProvider": {
 			"popupHtml": "http://localhost:8080/common/popups/menu/index.html",
-			"menuWidth": 200,
-			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,
@@ -1407,7 +1393,7 @@
 			]
 		},
 		"favoriteProvider": {
-			"enabled": false,
+			"enabled": true,
 			"favoriteIcon": "http://localhost:8080/icons/{scheme}/favorite.svg",
 			"unfavoriteIcon": "http://localhost:8080/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",

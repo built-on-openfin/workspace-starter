@@ -504,6 +504,25 @@
                                 }
                             },
                             "type": "object"
+                        },
+                        "styles": {
+                            "additionalProperties": false,
+                            "description": "Style the menus, if no options are provided it will use the build in version.",
+                            "properties": {
+                                "globalMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the global menu (top left icon)"
+                                },
+                                "pageMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the page menu (right click on page tab)"
+                                },
+                                "viewMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the view menu (right click on view tab)"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "type": "object"
@@ -2635,6 +2654,10 @@
             "additionalProperties": false,
             "description": "A list of modules that provide menu for different locations.",
             "properties": {
+                "menuFontSize": {
+                    "description": "The font size used in the custom popup menu.\ndefaults to 12",
+                    "type": "number"
+                },
                 "menuItemHeight": {
                     "description": "The height of an item in the custom popup menu.\ndefaults to 32.",
                     "type": "number"
@@ -3652,6 +3675,14 @@
         },
         "Point": {
             "$ref": "#/definitions/__type_35"
+        },
+        "PopupMenuStyles": {
+            "description": "The styles that can be used to display the popup menus.",
+            "enum": [
+                "custom",
+                "native"
+            ],
+            "type": "string"
         },
         "PreDefinedButtonConfig": {
             "additionalProperties": false,

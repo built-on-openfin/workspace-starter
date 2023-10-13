@@ -5,7 +5,7 @@ import type {
 	ToolbarButton,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
-import type { MenuEntry } from "./menu-shapes";
+import type { MenuEntry, PopupMenuStyles } from "./menu-shapes";
 
 /**
  * Browser Provider Options includes the default window/page and view options.
@@ -85,6 +85,24 @@ export type BrowserProviderOptions = Pick<
 			 * Should we include all the default options for the view menu? Default is true.
 			 */
 			viewMenu?: boolean;
+		};
+
+		/**
+		 * Style the menus, if no options are provided it will use the build in version.
+		 */
+		styles?: {
+			/**
+			 * Override the style for the global menu (top left icon)
+			 */
+			globalMenu?: PopupMenuStyles;
+			/**
+			 * Override the style for the page menu (right click on page tab)
+			 */
+			pageMenu?: PopupMenuStyles;
+			/**
+			 * Override the style for the view menu (right click on view tab)
+			 */
+			viewMenu?: PopupMenuStyles;
 		};
 	};
 

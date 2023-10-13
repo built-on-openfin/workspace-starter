@@ -4,7 +4,7 @@ import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
-import type { PopupMenuEntry } from "./menu-shapes";
+import type { PopupMenuEntry, PopupMenuStyles } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
@@ -186,7 +186,7 @@ export interface ModuleHelpers {
 	 * @param noEntryText The text to display if there are no entries.
 	 * @param menuEntries The menu entries to display.
 	 * @param options The options for displaying the menu.
-	 * @param options.mode Display as native menu or custom popup.
+	 * @param options.style Display as native menu or custom popup.
 	 * @returns The menu entry.
 	 */
 	showPopupMenu?<T = unknown>(
@@ -198,7 +198,7 @@ export interface ModuleHelpers {
 		noEntryText: string,
 		menuEntries: PopupMenuEntry<T>[],
 		options?: {
-			mode?: "native" | "custom";
+			style?: PopupMenuStyles;
 		}
 	): Promise<T | undefined>;
 }
