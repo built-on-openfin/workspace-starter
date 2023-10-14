@@ -41,11 +41,11 @@ async function minimizeWindow() {
 /**
  * Setup the title bar for the window and it's button click handlers.
  */
-function setupTitleBar() {
+async function setupTitleBar() {
 	const minBtn = document.querySelector('#minimize-button');
 	const maxBtn = document.querySelector('#expand-button');
 	const closeBtn = document.querySelector('#close-button');
-
+	const title = document.querySelector('#title');
 	if (minBtn) {
 		minBtn.addEventListener('click', minimizeWindow);
 	}
@@ -54,5 +54,12 @@ function setupTitleBar() {
 	}
 	if (closeBtn) {
 		closeBtn.addEventListener('click', closeWindow);
+	}
+
+	const options = await fin.me.getOptions();
+
+	if (options?.workspacePlatform?.title !== undefined) {
+		title.textContent = options.workspacePlatform.title;
+		document.title = options.workspacePlatform.title;
 	}
 }
