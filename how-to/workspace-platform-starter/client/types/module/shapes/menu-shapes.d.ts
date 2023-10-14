@@ -21,6 +21,11 @@ export interface MenusProviderOptions extends ModuleList {
 	 */
 	popupHtml?: string;
 	/**
+	 * The font size used in the custom popup menu.
+	 * defaults to 12
+	 */
+	menuFontSize?: number;
+	/**
 	 * The width to display the custom popup menu.
 	 * defaults to 200
 	 */
@@ -179,27 +184,12 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	? ViewTabMenuOptionType
 	: TrayMenuOptionType;
 /**
- * Entry for a popup menu.
+ * The styles that can be used to display the popup menus.
  */
-export interface PopupMenuEntry<T = unknown> {
-	/**
-	 * Type of the menu entry.
-	 */
-	type?: "normal" | "separator";
-	/**
-	 * Label to show in the menu.
-	 */
-	label?: string;
-	/**
-	 * Icon to show in the menu.
-	 */
-	icon?: string;
-	/**
-	 * Custom data to associate with the entry.
-	 */
-	customData?: T;
-	/**
-	 * Is the menu entry enabled.
-	 */
-	enabled?: boolean;
-}
+export type PopupMenuStyles = "native" | "custom";
+/**
+ * Specialized version of the menu item template with generic data.
+ */
+export type PopupMenuEntry<T = unknown> = Omit<OpenFin.MenuItemTemplate, "data"> & {
+	data?: T;
+};

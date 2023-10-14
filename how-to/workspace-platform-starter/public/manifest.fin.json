@@ -1174,7 +1174,7 @@
 					"enabled": false,
 					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js",
 					"data": {
-						"menuType": "native"
+						"menuStyle": "native"
 					}
 				},
 				{
@@ -1294,8 +1294,6 @@
 		},
 		"menusProvider": {
 			"popupHtml": "http://localhost:8080/common/popups/menu/index.html",
-			"menuWidth": 200,
-			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,

@@ -21,9 +21,11 @@ import type {
 	MenuTemplateType,
 	MenuType,
 	PopupMenuEntry,
+	PopupMenuStyles,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import type { ColorSchemeMode } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
@@ -308,7 +310,7 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
  * @param noEntryText The text to display if there are no entries.
  * @param menuEntries The menu entries to display.
  * @param options The options for displaying the menu.
- * @param options.mode Display as native menu or custom popup.
+ * @param options.style Display as native menu or custom popup.
  * @returns The menu entry.
  */
 export async function showPopupMenu<T = unknown>(
@@ -317,10 +319,10 @@ export async function showPopupMenu<T = unknown>(
 	noEntryText: string,
 	menuEntries: PopupMenuEntry<T>[],
 	options?: {
-		mode?: "native" | "custom";
+		style?: PopupMenuStyles;
 	}
 ): Promise<T | undefined> {
-	if ((options?.mode ?? "native") === "native") {
+	if ((options?.style ?? "native") === "native") {
 		return showNativePopupMenu(position, parentIdentity, noEntryText, menuEntries);
 	}
 
@@ -352,56 +354,48 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const iconFolder = await getCurrentIconFolder();
 	const colorScheme = await getCurrentColorSchemeMode();
 
-	let numItems = 0;
-	let numSeparators = 0;
-	for (const menuEntry of menuEntries) {
-		if (isStringValue(menuEntry.icon)) {
-			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
-		}
-		if (menuEntry.type === "separator") {
-			numSeparators++;
-		} else {
-			numItems++;
-		}
+	const menuDimensions = calculateDimensions(iconFolder, colorScheme, menuEntries, noEntryText);
+
+	let x = Math.floor(parentBounds.left + position.x);
+	let y = Math.floor(parentBounds.top + position.y);
+	const width = menuDimensions.width;
+	const height = menuDimensions.height;
+
+	const monitorRect = await findMonitorAvailableRect(x, y);
+
+	if (x + width > monitorRect.right) {
+		x = monitorRect.right - width - 20;
+	}
+	if (y + height > monitorRect.bottom) {
+		y = monitorRect.bottom - height - 20;
 	}
 
-	const itemsHeight = numItems * (menuProviderOptions?.menuItemHeight ?? 32);
-	const separatorsHeight = numSeparators * (menuProviderOptions?.menuItemSeparatorHeight ?? 16);
+	const bounds = { x, y, width, height };
 
-	let x = parentBounds.left + position.x;
-	let y = parentBounds.top + position.y;
-	const width = menuProviderOptions?.menuWidth ?? 200;
-	const height = itemsHeight + separatorsHeight;
+	const popupUrl = menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`;
 
-	const monitorInfo = await fin.System.getMonitorInfo();
-
-	if (x + width > monitorInfo.primaryMonitor.availableRect.right) {
-		x = monitorInfo.primaryMonitor.availableRect.right - width - 20;
-	}
-	if (y + height > monitorInfo.primaryMonitor.availableRect.bottom) {
-		y = monitorInfo.primaryMonitor.availableRect.bottom - height - 20;
-	}
-
+	const popupId = randomUUID();
 	const result = await platformWindow.showPopupWindow({
-		name: randomUUID(),
+		name: popupId,
 		initialOptions: {
 			showTaskbarIcon: false,
+			smallWindow: true,
+			contextMenu: false,
 			backgroundColor: currentPalette?.backgroundPrimary,
 			customData: {
 				noEntryText,
-				menuEntries,
-				palette: {
-					backgroundPrimary: currentPalette?.backgroundPrimary,
-					textDefault: currentPalette?.textDefault,
-					inputBackground: currentPalette?.inputBackground
-				}
+				menuEntries: menuDimensions.entries,
+				palette: currentPalette,
+				colorScheme,
+				menuProviderOptions,
+				popupUrl,
+				monitorRect,
+				bounds
 			}
 		},
-		url: menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`,
-		x,
-		y,
-		width,
-		height
+		url: popupUrl,
+		...bounds,
+		blurBehavior: "modal"
 	});
 
 	if (result.result === "clicked") {
@@ -427,34 +421,31 @@ export async function showNativePopupMenu<T = unknown>(
 ): Promise<T | undefined> {
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 
-	const template: OpenFin.MenuItemTemplate[] = [];
+	const finalEntries: PopupMenuEntry<T>[] = [];
 
 	const iconFolder = await getCurrentIconFolder();
 	const colorScheme = await getNativeColorSchemeMode();
 
-	for (const menuEntry of menuEntries) {
+	for (const menuEntry of menuEntries.filter((m) => m.visible ?? true)) {
 		let iconBase64: string | undefined = themeUrl(menuEntry.icon, iconFolder, colorScheme);
 		if (isStringValue(iconBase64)) {
 			iconBase64 = await imageUrlToDataUrl(iconBase64, 20);
 		}
-		template.push({
-			label: menuEntry.label,
-			icon: iconBase64,
-			type: menuEntry.type,
-			data: menuEntry.customData,
-			enabled: menuEntry.enabled
+		finalEntries.push({
+			...menuEntry,
+			icon: iconBase64
 		});
 	}
 
-	if (isEmpty(template) || template.length === 0) {
-		template.push({
+	if (isEmpty(finalEntries) || finalEntries.length === 0) {
+		finalEntries.push({
 			label: noEntryText,
 			enabled: false
 		});
 	}
 
 	const r = await parentWindow.showPopupMenu({
-		template,
+		template: finalEntries,
 		x: position.x,
 		y: position.y
 	});
@@ -462,4 +453,139 @@ export async function showNativePopupMenu<T = unknown>(
 	if (r.result === "clicked") {
 		return r.data as T;
 	}
+}
+
+/**
+ * Calculate the dimensions of a menu.
+ * @param iconFolder The folder for substituting icons.
+ * @param colorScheme The color scheme for icons.
+ * @param entries The entries to measure.
+ * @param noEntryText The text to display if there are no entries.
+ * @returns The calculated dimensions and finalized entries.
+ */
+function calculateDimensions<T>(
+	iconFolder: string,
+	colorScheme: ColorSchemeMode,
+	entries: (PopupMenuEntry<T> & { y?: number; submenuDimensions?: { width: number; height: number } })[],
+	noEntryText: string
+): {
+	entries: (PopupMenuEntry<T> & { y?: number; submenuDimensions?: { width: number; height: number } })[];
+	width: number;
+	height: number;
+} {
+	const finalEntries: (PopupMenuEntry<T> & {
+		y?: number;
+		submenuDimensions?: { width: number; height: number };
+	})[] = [];
+	let longestLabel = "";
+	const itemHeight = menuProviderOptions?.menuItemHeight ?? 24;
+	const separatorHeight = menuProviderOptions?.menuItemSeparatorHeight ?? 12;
+
+	let currentTop = 0;
+
+	for (const menuEntry of entries.filter((m) => m.visible ?? true)) {
+		menuEntry.y = currentTop;
+
+		if (isStringValue(menuEntry.icon)) {
+			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		}
+		if (menuEntry.type === "separator") {
+			currentTop += separatorHeight;
+		} else {
+			currentTop += itemHeight;
+		}
+
+		if (Array.isArray(menuEntry.submenu)) {
+			const submenuDimensions = calculateDimensions(iconFolder, colorScheme, menuEntry.submenu, noEntryText);
+			menuEntry.submenu = submenuDimensions.entries;
+			menuEntry.submenuDimensions = {
+				width: submenuDimensions.width,
+				height: submenuDimensions.height
+			};
+		}
+
+		if (menuEntry.label && menuEntry.label?.length > longestLabel.length) {
+			longestLabel = menuEntry.label;
+		}
+
+		finalEntries.push(menuEntry);
+	}
+
+	if (longestLabel.length === 0) {
+		longestLabel = noEntryText;
+	}
+
+	const menuFontSize = menuProviderOptions?.menuFontSize ?? 12;
+
+	// Use dummy first calculation
+	let calculatedWidth = (longestLabel.length * menuFontSize) / 1.6;
+
+	const canvas = document.createElement("canvas");
+	canvas.width = 1000;
+	document.body.append(canvas);
+	const context = canvas.getContext("2d");
+	if (context) {
+		context.font = `${menuFontSize}px Inter`;
+		calculatedWidth = context.measureText(longestLabel).width;
+		canvas.remove();
+	}
+
+	const width = Math.floor(menuProviderOptions?.menuWidth ?? calculatedWidth + 60); // extra is for icons and spacing
+	const height = Math.floor(currentTop + separatorHeight); // There is space at top and bottom equivalent to separator height
+
+	return {
+		entries: finalEntries,
+		width,
+		height
+	};
+}
+
+/**
+ * Find the monitor which contains the point and returns its usable area.
+ * @param x The x coord
+ * @param y The y coord
+ * @returns The rect
+ */
+async function findMonitorAvailableRect(
+	x: number,
+	y: number
+): Promise<{
+	top: number;
+	left: number;
+	bottom: number;
+	right: number;
+}> {
+	const monitorInfo = await fin.System.getMonitorInfo();
+
+	for (const monitor of monitorInfo.nonPrimaryMonitors) {
+		if (pointInRect(x, y, monitor.monitorRect)) {
+			return monitor.availableRect;
+		}
+	}
+
+	return monitorInfo.primaryMonitor.availableRect;
+}
+
+/**
+ * Is the point in the rectangle.
+ * @param x The x coord
+ * @param y The y coord
+ * @param rect The rect
+ * @param rect.top The rect top
+ * @param rect.left The rect left
+ * @param rect.bottom The rect bottom
+ * @param rect.right The rect right
+ * @returns True if the point is in the rect.
+ */
+function pointInRect(
+	x: number,
+	y: number,
+	rect: {
+		top: number;
+		left: number;
+		bottom: number;
+		right: number;
+	}
+): boolean {
+	return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }

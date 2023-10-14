@@ -5,25 +5,29 @@ import {
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
+	type GlobalContextMenuItemData,
 	type OpenGlobalContextMenuPayload,
 	type OpenPageTabContextMenuPayload,
 	type OpenViewTabContextMenuPayload,
 	type Page,
+	type PageTabContextMenuItemData,
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
+	type ViewTabMenuData,
 	type Workspace,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
-import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
 import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
+import type { BrowserProviderOptions, CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
@@ -69,20 +73,28 @@ let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
 let disableWindowPositioningStrategy: boolean | undefined;
 let disableStorageMapping: boolean | undefined;
+let globalMenuStyle: PopupMenuStyles | undefined;
+let pageMenuStyle: PopupMenuStyles | undefined;
+let viewMenuStyle: PopupMenuStyles | undefined;
 
 /**
  * Override methods in the platform.
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @param platformProviderSettings The settings for the platform provider.
+ * @param browserProviderSettings The settings for the browser provider.
  * @param versionInfo The app version info.
  * @returns The overridden class.
  */
 export function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
 	platformProviderSettings: PlatformProviderOptions | undefined,
+	browserProviderSettings: BrowserProviderOptions | undefined,
 	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
 	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
+	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
+	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
+	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
 
 	/**
 	 * Create a class which overrides the platform provider.
@@ -500,20 +512,32 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openGlobalContextMenu(
 			req: OpenGlobalContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getGlobalMenu(req.template, { windowIdentity: req.identity });
-			if (template?.length > 0) {
-				await super.openGlobalContextMenu(
+			if (isEmpty(globalMenuStyle)) {
+				return super.openGlobalContextMenu(
 					{
 						...req,
 						template
 					},
 					callerIdentity
 				);
+			}
+
+			const result = await showPopupMenu<GlobalContextMenuItemData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ style: globalMenuStyle }
+			);
+			if (result) {
+				req.callback(result, req);
 			}
 		}
 
@@ -522,6 +546,7 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openViewTabContextMenu(
 			req: OpenViewTabContextMenuPayload,
@@ -531,14 +556,25 @@ export function overrideCallback(
 				windowIdentity: req.identity,
 				views: req.selectedViews
 			});
-			if (template?.length > 0) {
-				await super.openViewTabContextMenu(
+			if (isEmpty(viewMenuStyle)) {
+				return super.openViewTabContextMenu(
 					{
 						...req,
 						template
 					},
 					callerIdentity
 				);
+			}
+
+			const result = await showPopupMenu<ViewTabMenuData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ style: "custom" }
+			);
+			if (result) {
+				req.callback(result, req);
 			}
 		}
 
@@ -547,20 +583,32 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openPageTabContextMenu(
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getPageMenu(req.template, { windowIdentity: req.identity, pageId: req.pageId });
-			if (template?.length > 0) {
-				await super.openPageTabContextMenu(
+			if (isEmpty(pageMenuStyle)) {
+				return super.openPageTabContextMenu(
 					{
 						...req,
 						template
 					},
 					callerIdentity
 				);
+			}
+
+			const result = await showPopupMenu<PageTabContextMenuItemData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ style: "custom" }
+			);
+			if (result) {
+				req.callback(result, req);
 			}
 		}
 

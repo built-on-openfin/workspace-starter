@@ -177,6 +177,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 			overrideCallback(
 				platformConstructor,
 				customSettings?.platformProvider,
+				customSettings?.browserProvider,
 				await versionProvider.getVersionInfo()
 			),
 		integrations,
