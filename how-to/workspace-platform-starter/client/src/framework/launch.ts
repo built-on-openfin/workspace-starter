@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, type BrowserSnapshot } from "@openfin/workspace-platform";
+import { getCurrentSync, type BrowserSnapshot, WindowType } from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
@@ -385,33 +385,80 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 			const platform = getCurrentSync();
 
 			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
-				const preferenceWindow = await platform.createWindow({
-					workspacePlatform: !isEmpty(viewApp.launchPreference?.options?.view?.hostUrl)
-						? {
-								windowType: "platform"
-						  }
+				let workspacePlatform:
+					| {
+							disableMultiplePages?: boolean;
+							windowType?: WindowType;
+							favicon?: string | undefined;
+							title?: string;
+							pages?: [
+								{
+									title?: string;
+									iconUrl?: string;
+									layout?: unknown;
+								}
+							];
+							toolbarOptions?: { buttons: [] } | undefined;
+					  }
+					| undefined = {};
+
+				const layout = {
+					content: [
+						{
+							type: "stack",
+							content: [
+								{
+									type: "component",
+									componentName: "view",
+									componentState: manifest
+								}
+							]
+						}
+					],
+					settings: {
+						hasHeaders: viewApp.launchPreference?.options?.view?.host?.hasHeader
+					}
+				};
+
+				workspacePlatform = {
+					windowType: !isEmpty(viewApp.launchPreference?.options?.view?.host?.url)
+						? WindowType.Platform
 						: undefined,
-					url: viewApp.launchPreference?.options?.view?.hostUrl,
+					disableMultiplePages: viewApp.launchPreference?.options?.view?.host?.disableMultiplePages,
+					title: viewApp.launchPreference?.options?.view?.host?.title,
+					favicon: viewApp.launchPreference?.options?.view?.host?.icon
+				};
+				if (
+					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageTitle) ||
+					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageIcon)
+				) {
+					workspacePlatform.pages = [
+						{
+							title: viewApp.launchPreference?.options?.view?.host?.pageTitle,
+							iconUrl: viewApp.launchPreference?.options?.view?.host?.pageIcon,
+							layout
+						}
+					];
+				}
+				if (viewApp.launchPreference?.options?.view?.host?.disableToolbarOptions === true) {
+					workspacePlatform.toolbarOptions = { buttons: [] };
+				}
+
+				if (Object.keys(workspacePlatform).length === 0) {
+					workspacePlatform = undefined;
+				}
+
+				const preferenceWindow = await platform.createWindow({
+					workspacePlatform,
+					url: viewApp.launchPreference?.options?.view?.host?.url,
 					height: viewApp.launchPreference?.bounds?.height,
 					defaultHeight: viewApp.launchPreference?.bounds?.height,
 					defaultWidth: viewApp.launchPreference?.bounds?.width,
 					width: viewApp.launchPreference?.bounds?.width,
 					defaultCentered: viewApp.launchPreference?.defaultCentered,
-					layout: {
-						content: [
-							{
-								type: "stack",
-								content: [
-									{
-										type: "component",
-										componentName: "view",
-										componentState: manifest
-									}
-								]
-							}
-						]
-					}
+					layout
 				});
+
 				const createdViews = await preferenceWindow.getCurrentViews();
 				if (createdViews.length === 1) {
 					if (createdViews[0].identity.name === identity.name) {

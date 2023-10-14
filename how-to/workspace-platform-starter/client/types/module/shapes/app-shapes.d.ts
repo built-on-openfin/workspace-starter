@@ -105,9 +105,44 @@ export interface LaunchPreference {
  */
 export interface ViewLaunchPreference {
 	/**
+	 * If specified it indicates wish to specify specific host settings for this content.
+	 */
+	host?: HostLaunchPreference;
+}
+/**
+ * Additional options that apply to the host of the content
+ */
+export interface HostLaunchPreference {
+	/**
 	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
 	 */
-	hostUrl?: string;
+	url?: string | undefined;
+	/**
+	 * If specified it indicates a preference to be used by this type of host.
+	 */
+	title?: string | undefined;
+	/** The Icon you would prefer the window shows. */
+	icon?: string;
+	/**
+	 * Should the header for the content be hidden
+	 */
+	hasHeader?: boolean | undefined;
+	/**
+	 * Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.
+	 */
+	disableMultiplePages?: boolean | undefined;
+	/**
+	 * Should the toolbar options of a window be hidden if they are available?
+	 */
+	disableToolbarOptions?: boolean | undefined;
+	/**
+	 * If this host supports multiple layouts what should the layout (e.g page) title be?
+	 */
+	pageTitle?: string | undefined;
+	/**
+	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
+	 */
+	pageIcon?: string | undefined;
 }
 /**
  * We define the app interop app for the platform in case we want to extend its

@@ -430,16 +430,16 @@
         "BrowserButtonType": {
             "description": "Types of buttons on browser windows",
             "enum": [
-                "Close",
+                "ShowHideTabs",
                 "ColorLinking",
-                "Custom",
-                "LockUnlockPage",
-                "Maximise",
-                "Minimise",
                 "PresetLayouts",
+                "LockUnlockPage",
                 "SaveMenu",
                 "SavePage",
-                "ShowHideTabs"
+                "Minimise",
+                "Maximise",
+                "Close",
+                "Custom"
             ],
             "type": "string"
         },
@@ -1589,25 +1589,25 @@
         "GlobalContextMenuOptionType": {
             "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
             "enum": [
-                "Appearance",
-                "CloseWindow",
-                "Custom",
-                "DeleteWorkspace",
-                "Downloads",
-                "NewPage",
                 "NewWindow",
-                "OpenStorefront",
+                "NewPage",
+                "SavePage",
+                "SavePageAs",
                 "Print",
                 "PrintAll",
                 "PrintScreen",
-                "Quit",
-                "RenameWorkspace",
+                "CloseWindow",
                 "RestoreChanges",
-                "SavePage",
-                "SavePageAs",
                 "SaveWorkspace",
                 "SaveWorkspaceAs",
-                "SwitchWorkspace"
+                "RenameWorkspace",
+                "SwitchWorkspace",
+                "DeleteWorkspace",
+                "Downloads",
+                "OpenStorefront",
+                "Appearance",
+                "Quit",
+                "Custom"
             ],
             "type": "string"
         },
@@ -1687,6 +1687,45 @@
                 "id",
                 "title"
             ],
+            "type": "object"
+        },
+        "HostLaunchPreference": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to the host of the content",
+            "properties": {
+                "disableMultiplePages": {
+                    "description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
+                    "type": "boolean"
+                },
+                "disableToolbarOptions": {
+                    "description": "Should the toolbar options of a window be hidden if they are available?",
+                    "type": "boolean"
+                },
+                "hasHeader": {
+                    "description": "Should the header for the content be hidden",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The Icon you would prefer the window shows.",
+                    "type": "string"
+                },
+                "pageIcon": {
+                    "description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
+                    "type": "string"
+                },
+                "pageTitle": {
+                    "description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "If specified it indicates a preference to be used by this type of host.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "Identity": {
@@ -3254,11 +3293,11 @@
             "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
             "enum": [
                 "Close",
-                "Custom",
                 "Duplicate",
                 "Rename",
                 "Save",
-                "Save As"
+                "Save As",
+                "Custom"
             ],
             "type": "string"
         },
@@ -4343,9 +4382,9 @@
             "additionalProperties": false,
             "description": "Additional options that apply to a view",
             "properties": {
-                "hostUrl": {
-                    "description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
-                    "type": "string"
+                "host": {
+                    "$ref": "#/definitions/HostLaunchPreference",
+                    "description": "If specified it indicates wish to specify specific host settings for this content."
                 }
             },
             "type": "object"
@@ -4568,19 +4607,19 @@
         "ViewTabMenuOptionType": {
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
             "enum": [
-                "AddToChannel",
-                "Back",
-                "CloseTab",
-                "Custom",
-                "DuplicateView",
-                "Forward",
                 "NewView",
+                "DuplicateView",
                 "OpenWithDefaultBrowser",
+                "ReloadTab",
+                "CloseTab",
+                "AddToChannel",
+                "RemoveFromChannel",
+                "Back",
+                "Forward",
                 "Print",
                 "PrintAll",
                 "PrintScreen",
-                "ReloadTab",
-                "RemoveFromChannel"
+                "Custom"
             ],
             "type": "string"
         },
