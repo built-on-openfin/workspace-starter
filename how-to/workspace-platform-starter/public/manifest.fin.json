@@ -1174,7 +1174,7 @@
 					"enabled": false,
 					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js",
 					"data": {
-						"menuStyle": "custom"
+						"menuStyle": "native"
 					}
 				},
 				{
