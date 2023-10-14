@@ -1174,7 +1174,7 @@
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js",
 					"data": {
-						"menuType": "native"
+						"menuStyle": "native"
 					}
 				},
 				{
@@ -1294,8 +1294,6 @@
 		},
 		"menusProvider": {
 			"popupHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/common/popups/menu/index.html",
-			"menuWidth": 200,
-			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,
