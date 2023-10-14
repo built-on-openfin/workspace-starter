@@ -1174,7 +1174,7 @@
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/override-popup-menus/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js",
 					"data": {
-						"menuStyle": "custom"
+						"menuStyle": "native"
 					}
 				},
 				{
