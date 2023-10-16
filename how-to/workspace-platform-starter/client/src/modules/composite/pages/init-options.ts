@@ -2,17 +2,17 @@ import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
-import type { LaunchPageOptions, LaunchPagePayload } from "./shapes";
+import type { ShowPageOptions, ShowPagePayload } from "./shapes";
 
 /**
- * Init options launch handler.
+ * Init options show page handler.
  */
-export class InitOptionsLaunchPageHandler implements InitOptionsHandler<LaunchPageOptions> {
+export class InitOptionsShowPageHandler implements InitOptionsHandler<ShowPageOptions> {
 	private _logger?: Logger;
 
 	private _helpers?: ModuleHelpers;
 
-	private _definition?: ModuleDefinition<LaunchPageOptions>;
+	private _definition?: ModuleDefinition<ShowPageOptions>;
 
 	/**
 	 * Initialize the module.
@@ -22,11 +22,11 @@ export class InitOptionsLaunchPageHandler implements InitOptionsHandler<LaunchPa
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<LaunchPageOptions>,
+		definition: ModuleDefinition<ShowPageOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = loggerCreator("InitOptionsLaunchPageHandler");
+		this._logger = loggerCreator("InitOptionsShowPageHandler");
 		this._helpers = helpers;
 		this._definition = definition;
 		this._logger.info("The handler has been loaded");
@@ -37,7 +37,7 @@ export class InitOptionsLaunchPageHandler implements InitOptionsHandler<LaunchPa
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
 	 */
-	public async action(requestedAction: string, payload?: LaunchPagePayload): Promise<void> {
+	public async action(requestedAction: string, payload?: ShowPagePayload): Promise<void> {
 		if (isEmpty(payload)) {
 			this._logger?.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
@@ -45,27 +45,27 @@ export class InitOptionsLaunchPageHandler implements InitOptionsHandler<LaunchPa
 			return;
 		}
 		try {
-			if (requestedAction === "launch-page") {
+			if (requestedAction === "show-page") {
 				const pageId = payload?.pageId;
-				this._logger?.info(`The following pageId was passed and requested to launch: ${pageId}`);
+				this._logger?.info(`The following pageId was passed and requested to show: ${pageId}`);
 
 				if (!isStringValue(pageId)) {
 					this._logger?.error(
-						"The init handler received an pageId in the wrong format and is unable to launch it"
+						"The init handler received an pageId in the wrong format and is unable to show it"
 					);
 					return;
 				}
 
 				if (isEmpty(this._helpers?.launchPage) || isEmpty(this._helpers?.launchPage)) {
 					this._logger?.warn(
-						`Unable to launch page with pageId: ${pageId} as a launchPage function was not passed to this module via the module helpers.`
+						`Unable to show page with pageId: ${pageId} as a launchPage function was not passed to this module via the module helpers.`
 					);
 					return;
 				}
 
 				const resultingWindow = await this._helpers?.launchPage(pageId);
 				if (isEmpty(resultingWindow)) {
-					this._logger?.error(`We have been unable to find and launch the provided pageId: ${pageId}`);
+					this._logger?.error(`We have been unable to find and show the provided pageId: ${pageId}`);
 				}
 			}
 		} catch (error) {

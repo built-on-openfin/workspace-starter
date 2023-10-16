@@ -1,6 +1,7 @@
 import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, CustomPaletteSet } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { ConditionContextTypes } from "./conditions-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
@@ -8,7 +9,6 @@ import type { PopupMenuEntry, PopupMenuStyles } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
-import { ConditionContextTypes } from "./conditions-shapes";
 /**
  * List of modules.
  */

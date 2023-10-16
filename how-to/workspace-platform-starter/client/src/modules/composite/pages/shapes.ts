@@ -45,7 +45,7 @@ export interface PageMenuEntry {
 /**
  * The payload for launching a page.
  */
-export interface LaunchPagePayload {
+export interface ShowPagePayload {
 	/**
 	 * The page id.
 	 */
@@ -55,4 +55,4 @@ export interface LaunchPagePayload {
 /**
  * Options for the launch page init options.
  */
-export type LaunchPageOptions = InitOptionsHandlerOptions;
+export type ShowPageOptions = InitOptionsHandlerOptions;

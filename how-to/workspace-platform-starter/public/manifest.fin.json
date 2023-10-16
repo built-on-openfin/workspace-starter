@@ -1099,6 +1099,15 @@
 							"inline-snapshot"
 						]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "show-page",
+					"title": "Init Options Show Page",
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
+					"data": {
+						"supportedActions": ["show-page"]
+					}
 				}
 			]
 		},
