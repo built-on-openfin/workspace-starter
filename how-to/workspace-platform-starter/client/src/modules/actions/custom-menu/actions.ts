@@ -79,8 +79,7 @@ export class DynamicMenuProvider implements Actions {
 					this._logger?.info("Menu dismissed");
 				} else if (this._helpers?.launchPage) {
 					this._logger?.info("Menu clicked", result);
-					const pageToLaunch = await platform.Storage.getPage(result);
-					await this._helpers.launchPage(pageToLaunch, undefined, this._logger);
+					await this._helpers.launchPage(result, undefined, this._logger);
 				}
 			}
 		};

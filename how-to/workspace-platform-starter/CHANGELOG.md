@@ -31,6 +31,7 @@
 - Change Platform override for `openViewTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.viewMenu` to `native` or `custom`
 - Change Platform override for `openPageTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.pageMenu` to `native` or `custom`
 - Updated launchPreferences to provide a wider range of host options for views. Updated example platform api page to read the title from workspace platform title.
+- Breaking Change: `ModuleHelpers launchPage` helper function now takes a pageId (and it has to be a valid pageId) instead of asking modules to get the platform, use the storage apis and then send a page. This reduces code and also ensures that only valid pages are launched.
 
 ## v14
 

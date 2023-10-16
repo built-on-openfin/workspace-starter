@@ -9,7 +9,6 @@ import {
 	type HomeSearchResult
 } from "@openfin/workspace";
 import { getCurrentSync } from "@openfin/workspace-platform";
-import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
@@ -21,7 +20,7 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
-import { launchPage, launchView } from "./platform/browser";
+import { launchView } from "./platform/browser";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type {
 	EndpointIntegrationsPreferencesGetRequest,
@@ -73,7 +72,6 @@ export async function init(
 			...helpers,
 			templateHelpers,
 			launchView,
-			launchPage,
 			launchSnapshot: async (manifestUrl): Promise<OpenFin.Identity[]> => {
 				const identities = await launch({
 					manifestType: MANIFEST_TYPES.Snapshot.id,
@@ -87,10 +85,6 @@ export async function init(
 			},
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 			setSearchQuery,
-			condition: async (conditionId): Promise<boolean> => {
-				const platform = getCurrentSync();
-				return checkCondition(platform, conditionId);
-			},
 			share,
 			getPlatform: getCurrentSync
 		};

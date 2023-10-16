@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, CustomPaletteSet } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
@@ -8,6 +8,7 @@ import type { PopupMenuEntry, PopupMenuStyles } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
+import { ConditionContextTypes } from "./conditions-shapes";
 /**
  * List of modules.
  */
@@ -137,23 +138,23 @@ export interface ModuleHelpers {
 	launchApp?(appId: string): Promise<void>;
 	/**
 	 * Launch a page in the workspace.
-	 * @param page The page to launch.
+	 * @param pageId The page to launch.
 	 * @param options The options for the launch.
 	 * @param options.bounds The optional bounds for the page.
 	 * @param options.targetWindowIdentity The optional target window for the page.
 	 * @param options.createCopyIfExists Create a copy of the page if it exists.
 	 * @param logger Log output from the operation.
-	 * @returns The window created.
+	 * @returns The window created or undefined if the page did not exist.
 	 */
 	launchPage?(
-		page: Page,
+		pageId: string,
 		options?: {
 			bounds?: OpenFin.Bounds;
 			targetWindowIdentity?: OpenFin.Identity;
 			createCopyIfExists?: boolean;
 		},
 		logger?: Logger
-	): Promise<BrowserWindowModule>;
+	): Promise<BrowserWindowModule | undefined>;
 	/**
 	 * Launch a workspace.
 	 * @param workspaceId The id of the workspace to launch.
@@ -201,6 +202,13 @@ export interface ModuleHelpers {
 			style?: PopupMenuStyles;
 		}
 	): Promise<T | undefined>;
+	/**
+	 * Lets you check to see if a defined condition is true or false.
+	 * @param conditionId The condition to check for.
+	 * @param contextType What is the context for checking this condition.
+	 * @returns whether the condition is true or false
+	 */
+	condition(conditionId: string, contextType?: ConditionContextTypes): Promise<boolean>;
 }
 /**
  * The implementation of the module with generic options and helpers.
