@@ -30,6 +30,7 @@
 - Change Platform override for `openGlobalContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.globalMenu` to `native` or `custom`
 - Change Platform override for `openViewTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.viewMenu` to `native` or `custom`
 - Change Platform override for `openPageTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.pageMenu` to `native` or `custom`
+- Updated launchPreferences to provide a wider range of host options for views. Updated example platform api page to read the title from workspace platform title.
 
 ## v14
 

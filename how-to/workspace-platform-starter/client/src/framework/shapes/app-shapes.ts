@@ -102,7 +102,7 @@ export interface LaunchPreference {
 	/**
 	 * Should the launched UI be positioned in the center of the screen?
 	 */
-	defaultCentered?: boolean | undefined;
+	defaultCentered?: boolean;
 
 	/**
 	 * Are there any app type specific options you would like to apply?
@@ -117,9 +117,52 @@ export interface LaunchPreference {
  */
 export interface ViewLaunchPreference {
 	/**
+	 * If specified it indicates wish to specify specific host settings for this content.
+	 */
+	host?: HostLaunchPreference;
+}
+
+/**
+ * Additional options that apply to the host of the content
+ */
+export interface HostLaunchPreference {
+	/**
 	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
 	 */
-	hostUrl?: string;
+	url?: string;
+
+	/**
+	 * If specified it indicates a preference to be used by this type of host.
+	 */
+	title?: string;
+
+	/** The Icon you would prefer the window shows. */
+	icon?: string;
+
+	/**
+	 * Should the header for the content be hidden
+	 */
+	hasHeaders?: boolean;
+
+	/**
+	 * Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.
+	 */
+	disableMultiplePages?: boolean;
+
+	/**
+	 * Should the toolbar options of a window be hidden if they are available?
+	 */
+	disableToolbarOptions?: boolean;
+
+	/**
+	 * If this host supports multiple layouts what should the layout (e.g page) title be?
+	 */
+	pageTitle?: string;
+
+	/**
+	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
+	 */
+	pageIcon?: string;
 }
 
 /**

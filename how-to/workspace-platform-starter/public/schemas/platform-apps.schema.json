@@ -238,6 +238,45 @@
 		"ExternalProcessRequestType": {
 			"$ref": "#/definitions/__type_29"
 		},
+		"HostLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to the host of the content",
+			"properties": {
+				"disableMultiplePages": {
+					"description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
+					"type": "boolean"
+				},
+				"disableToolbarOptions": {
+					"description": "Should the toolbar options of a window be hidden if they are available?",
+					"type": "boolean"
+				},
+				"hasHeaders": {
+					"description": "Should the header for the content be hidden",
+					"type": "boolean"
+				},
+				"icon": {
+					"description": "The Icon you would prefer the window shows.",
+					"type": "string"
+				},
+				"pageIcon": {
+					"description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
+					"type": "string"
+				},
+				"pageTitle": {
+					"description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
+					"type": "string"
+				},
+				"title": {
+					"description": "If specified it indicates a preference to be used by this type of host.",
+					"type": "string"
+				},
+				"url": {
+					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
 		"Identity": {
 			"$ref": "#/definitions/__type"
 		},
@@ -560,9 +599,9 @@
 			"additionalProperties": false,
 			"description": "Additional options that apply to a view",
 			"properties": {
-				"hostUrl": {
-					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
-					"type": "string"
+				"host": {
+					"$ref": "#/definitions/HostLaunchPreference",
+					"description": "If specified it indicates wish to specify specific host settings for this content."
 				}
 			},
 			"type": "object"
