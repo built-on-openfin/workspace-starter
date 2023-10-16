@@ -1099,6 +1099,15 @@
 							"inline-snapshot"
 						]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "show-page",
+					"title": "Init Options Show Page",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/page-extensions/workspace-platform-starter/js/modules/composite/pages.bundle.js",
+					"data": {
+						"supportedActions": ["show-page"]
+					}
 				}
 			]
 		},
