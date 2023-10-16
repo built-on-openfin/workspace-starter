@@ -153,7 +153,7 @@
 								"width": 775
 							},
 							"options": {
-								"view": { "hostUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/windows/platform/platform-window.html" }
+								"view": { "host": { "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/windows/platform/platform-window.html" } }
 							}
 						}
 					}
