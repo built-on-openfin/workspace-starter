@@ -327,7 +327,7 @@
 					"description": "Should the toolbar options of a window be hidden if they are available?",
 					"type": "boolean"
 				},
-				"hasHeader": {
+				"hasHeaders": {
 					"description": "Should the header for the content be hidden",
 					"type": "boolean"
 				},
