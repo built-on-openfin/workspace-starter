@@ -59,7 +59,9 @@ async function setupTitleBar() {
 	const options = await fin.me.getOptions();
 
 	if (options?.workspacePlatform?.title !== undefined) {
-		title.textContent = options.workspacePlatform.title;
+		if (title !== null) {
+			title.textContent = options.workspacePlatform.title;
+		}
 		document.title = options.workspacePlatform.title;
 	}
 }

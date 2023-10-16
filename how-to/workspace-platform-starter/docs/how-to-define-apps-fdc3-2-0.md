@@ -116,7 +116,7 @@ The following field is custom to this platform and is optional:
         - url - lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
         - title - the title to set on the window and this title is shown if pages are disabled on a browser window
         - icon - used to replace the menu icon on a browser window (can be used by a platform window if you use the setting)
-        - hasHeader - specify if you wish to have the view tab in a browser or platform api window
+        - hasHeaders - specify if you wish to have the view tab in a browser or platform api window
         - disableMultiplePages - Disable multiple pages in a browser window.
         - disableToolbarOptions - Remove toolbar buttons from browser window.
         - pageTitle - provide a custom title (instead of undefined) to the launched page hosting the view if you haven't turned off pages.

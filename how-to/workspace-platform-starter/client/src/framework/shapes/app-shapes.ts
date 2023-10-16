@@ -142,7 +142,7 @@ export interface HostLaunchPreference {
 	/**
 	 * Should the header for the content be hidden
 	 */
-	hasHeader?: boolean;
+	hasHeaders?: boolean;
 
 	/**
 	 * Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.

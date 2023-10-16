@@ -92,7 +92,7 @@ export interface LaunchPreference {
 	/**
 	 * Should the launched UI be positioned in the center of the screen?
 	 */
-	defaultCentered?: boolean | undefined;
+	defaultCentered?: boolean;
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
@@ -116,33 +116,33 @@ export interface HostLaunchPreference {
 	/**
 	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
 	 */
-	url?: string | undefined;
+	url?: string;
 	/**
 	 * If specified it indicates a preference to be used by this type of host.
 	 */
-	title?: string | undefined;
+	title?: string;
 	/** The Icon you would prefer the window shows. */
 	icon?: string;
 	/**
 	 * Should the header for the content be hidden
 	 */
-	hasHeader?: boolean | undefined;
+	hasHeaders?: boolean;
 	/**
 	 * Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.
 	 */
-	disableMultiplePages?: boolean | undefined;
+	disableMultiplePages?: boolean;
 	/**
 	 * Should the toolbar options of a window be hidden if they are available?
 	 */
-	disableToolbarOptions?: boolean | undefined;
+	disableToolbarOptions?: boolean;
 	/**
 	 * If this host supports multiple layouts what should the layout (e.g page) title be?
 	 */
-	pageTitle?: string | undefined;
+	pageTitle?: string;
 	/**
 	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
 	 */
-	pageIcon?: string | undefined;
+	pageIcon?: string;
 }
 /**
  * We define the app interop app for the platform in case we want to extend its

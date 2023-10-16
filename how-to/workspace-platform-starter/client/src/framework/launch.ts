@@ -1,5 +1,11 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, type BrowserSnapshot, WindowType } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type BrowserSnapshot,
+	WindowType,
+	type BrowserWorkspacePlatformWindowOptions,
+	type Page
+} from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
@@ -386,20 +392,8 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 
 			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
 				let workspacePlatform:
-					| {
-							disableMultiplePages?: boolean;
-							windowType?: WindowType;
-							favicon?: string | undefined;
-							title?: string;
-							pages?: [
-								{
-									title?: string;
-									iconUrl?: string;
-									layout?: unknown;
-								}
-							];
-							toolbarOptions?: { buttons: [] } | undefined;
-					  }
+					| Partial<BrowserWorkspacePlatformWindowOptions>
+					| { windowType: WindowType.Platform }
 					| undefined = {};
 
 				const layout = {
@@ -416,7 +410,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 						}
 					],
 					settings: {
-						hasHeaders: viewApp.launchPreference?.options?.view?.host?.hasHeader
+						hasHeaders: viewApp.launchPreference?.options?.view?.host?.hasHeaders
 					}
 				};
 
@@ -432,13 +426,15 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageTitle) ||
 					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageIcon)
 				) {
-					workspacePlatform.pages = [
-						{
-							title: viewApp.launchPreference?.options?.view?.host?.pageTitle,
-							iconUrl: viewApp.launchPreference?.options?.view?.host?.pageIcon,
-							layout
-						}
-					];
+					const page: Page = {
+						pageId: `page-${randomUUID()}`,
+						iconUrl: viewApp.launchPreference?.options?.view?.host?.pageIcon,
+						title: await platform.Browser.getUniquePageTitle(
+							viewApp.launchPreference?.options?.view?.host?.pageTitle
+						),
+						layout
+					};
+					workspacePlatform.pages = [page];
 				}
 				if (viewApp.launchPreference?.options?.view?.host?.disableToolbarOptions === true) {
 					workspacePlatform.toolbarOptions = { buttons: [] };
