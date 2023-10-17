@@ -804,6 +804,15 @@
 			},
 			"entries": [
 				{
+					"id": "workspaces",
+					"tooltip": "Workspaces",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg",
+					"action": {
+						"id": "workspaces-menu"
+					},
+					"visible": false
+				},
+				{
 					"id": "dock-apps",
 					"display": "individual",
 					"tags": ["dock"]
@@ -988,7 +997,8 @@
 								"entryLabel": "Connected App",
 								"actionName": "Launch Connected App"
 							}
-						}
+						},
+						"favoritesEnabled": false
 					}
 				},
 				{
@@ -999,6 +1009,7 @@
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg"
 						}
@@ -1012,6 +1023,7 @@
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/page.svg"
 						}
@@ -1099,6 +1111,15 @@
 							"inline-snapshot"
 						]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "show-page",
+					"title": "Init Options Show Page",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/composite/pages.bundle.js",
+					"data": {
+						"supportedActions": ["show-page"]
+					}
 				}
 			]
 		},
@@ -1164,7 +1185,13 @@
 					"title": "Custom Menu",
 					"description": "Custom Menu",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js",
+					"data": {
+						"images": {
+							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/page.svg",
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg"
+						}
+					}
 				},
 				{
 					"id": "favorites-menu",
@@ -1172,10 +1199,7 @@
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js",
-					"data": {
-						"menuStyle": "native"
-					}
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js"
 				},
 				{
 					"id": "include-in-snapshot",
