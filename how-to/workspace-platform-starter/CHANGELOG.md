@@ -33,6 +33,10 @@
 - Updated launchPreferences to provide a wider range of host options for views. Updated example platform api page to read the title from workspace platform title.
 - Breaking Change: `ModuleHelpers launchPage` helper function now takes a pageId (and it has to be a valid pageId) instead of asking modules to get the platform, use the storage apis and then send a page. This reduces code and also ensures that only valid pages are launched.
 - New Feature - Updated the page composite module so that you can enable an [init options](./client/src/modules/composite/pages/init-options.ts) module that lets you launch a specific page using init params. Example fins link: fin://localhost:8080/manifest.fin.json?$$action=show-page&$$payload=eyAicGFnZUlkIjogImIwY2UxNTg3LTM2ZDAtNGRlZC05ZGU3LTlmNmQyYjc1OGYyNyIgfQ== the payload is a base64 encoded string of { "pageId": "the-id-of-the-page" }
+- Added MenusProvider.popupMenuStyle which sets a global style for popup menus which can be inherited by other components, default to `platform`, but can also be `native` or `custom`
+- Added ModuleHelpers now contain MenuClient which can be use to show a popup menu or get the global setting for menu style
+- Added Workspaces menu in custom menu module, visibility is disabled by default on the dock
+- Added platform action `popup-menu` which can be passed menu options in the payload to display a context menu, it then call the platform action for the result.
 
 ## v14
 

@@ -1,9 +1,9 @@
 import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
+	type BrowserWindowModule,
 	type CustomPaletteSet,
-	type WorkspacePlatformModule,
-	type BrowserWindowModule
+	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import { checkCondition } from "./conditions";
@@ -11,10 +11,13 @@ import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
-import { showPopupMenu } from "./menu";
+import * as Menu from "./menu";
 import { launchPage } from "./platform/browser";
-import type { ConditionContextTypes, Logger, NotificationClient, PlatformApp } from "./shapes";
+import type { PlatformApp } from "./shapes/app-shapes";
+import type { ConditionContextTypes } from "./shapes/conditions-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
+import type { Logger } from "./shapes/logger-shapes";
+import type { MenuClient } from "./shapes/menu-shapes";
 import type {
 	Module,
 	ModuleDefinition,
@@ -25,6 +28,7 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
+import type { NotificationClient } from "./shapes/notification-shapes";
 import type { ColorSchemeMode, ThemeClient } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
@@ -301,6 +305,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			return getCurrentColorSchemeMode();
 		},
 		getThemeClient,
+		getMenuClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -344,7 +349,6 @@ export function getDefaultHelpers(): ModuleHelpers {
 		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
-		showPopupMenu,
 		condition: async (conditionId: string, contextType?: ConditionContextTypes): Promise<boolean> => {
 			const platform = getCurrentSync();
 			return checkCondition(platform, conditionId, contextType);
@@ -374,9 +378,6 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
  */
 async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
 	if (!favoriteProvider.getInfo().isEnabled) {
-		logger.warn(
-			"A request was made for the favorite client but favorites is not configured for this platform."
-		);
 		return undefined;
 	}
 	// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
@@ -410,5 +411,16 @@ async function getThemeClient(): Promise<ThemeClient> {
 			const colorScheme = await getCurrentColorSchemeMode();
 			return themeUrl(url, iconFolder, colorScheme);
 		}
+	};
+}
+
+/**
+ * Get the menu client to use with the modules.
+ * @returns The menu client.
+ */
+async function getMenuClient(): Promise<MenuClient> {
+	return {
+		getPopupMenuStyle: Menu.getPopupMenuStyle,
+		showPopupMenu: Menu.showPopupMenu
 	};
 }

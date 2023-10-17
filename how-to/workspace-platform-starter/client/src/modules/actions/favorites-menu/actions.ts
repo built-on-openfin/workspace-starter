@@ -67,7 +67,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 		const actionMap: CustomActionsMap = {};
 
 		actionMap["favorites-menu"] = async (payload: CustomActionPayload): Promise<void> => {
-			if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers?.showPopupMenu) {
+			if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers) {
 				const getClient = this._helpers?.getFavoriteClient;
 				if (!isEmpty(getClient)) {
 					const client = await getClient();
@@ -98,15 +98,16 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 							}
 						}
 
-						const menuStyle = this._settings?.menuStyle ?? "native";
+						const menuClient = await this._helpers.getMenuClient();
+						const popupMenuStyle = this._settings?.popupMenuStyle ?? menuClient.getPopupMenuStyle();
 
-						const result = await this._helpers.showPopupMenu<FavoriteEntry>(
-							menuStyle === "custom" ? { x: payload.x - 16, y: 40 } : { x: payload.x, y: 48 },
+						const result = await menuClient.showPopupMenu<FavoriteEntry>(
+							{ x: payload.x, y: 48 },
 							payload.windowIdentity,
 							"There are no favorites",
 							menuEntries,
 							{
-								style: menuStyle
+								popupMenuStyle
 							}
 						);
 

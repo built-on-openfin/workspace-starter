@@ -24,6 +24,7 @@ import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../but
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
+import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
 import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
@@ -519,7 +520,10 @@ export function overrideCallback(
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getGlobalMenu(req.template, { windowIdentity: req.identity });
-			if (isEmpty(globalMenuStyle)) {
+
+			const popupMenuStyle = globalMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
 				return super.openGlobalContextMenu(
 					{
 						...req,
@@ -534,7 +538,7 @@ export function overrideCallback(
 				req.identity,
 				"",
 				template,
-				{ style: globalMenuStyle }
+				{ popupMenuStyle }
 			);
 			if (result) {
 				req.callback(result, req);
@@ -556,7 +560,10 @@ export function overrideCallback(
 				windowIdentity: req.identity,
 				views: req.selectedViews
 			});
-			if (isEmpty(viewMenuStyle)) {
+
+			const popupMenuStyle = viewMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
 				return super.openViewTabContextMenu(
 					{
 						...req,
@@ -571,7 +578,7 @@ export function overrideCallback(
 				req.identity,
 				"",
 				template,
-				{ style: "custom" }
+				{ popupMenuStyle }
 			);
 			if (result) {
 				req.callback(result, req);
@@ -590,7 +597,10 @@ export function overrideCallback(
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getPageMenu(req.template, { windowIdentity: req.identity, pageId: req.pageId });
-			if (isEmpty(pageMenuStyle)) {
+
+			const popupMenuStyle = pageMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
 				return super.openPageTabContextMenu(
 					{
 						...req,
@@ -605,7 +615,7 @@ export function overrideCallback(
 				req.identity,
 				"",
 				template,
-				{ style: "custom" }
+				{ popupMenuStyle }
 			);
 			if (result) {
 				req.callback(result, req);
