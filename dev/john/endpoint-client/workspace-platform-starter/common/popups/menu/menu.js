@@ -72,8 +72,8 @@ async function initDOM() {
 					} else if (menuEntry.icon) {
 						icon = document.createElement('img');
 						icon.src = menuEntry.icon;
-						icon.style.maxWidth = '16px';
-						icon.style.maxHeight = '16px';
+						icon.style.maxWidth = '20px';
+						icon.style.maxHeight = '20px';
 					}
 
 					const text = document.createElement('span');
@@ -83,8 +83,8 @@ async function initDOM() {
 					iconContainer.style.display = 'flex';
 					iconContainer.style.justifyContent = 'center';
 					iconContainer.style.alignItems = 'center';
-					iconContainer.style.width = '16px';
-					iconContainer.style.height = '16px';
+					iconContainer.style.width = '20px';
+					iconContainer.style.height = '20px';
 					if (icon) {
 						iconContainer.append(icon);
 					}

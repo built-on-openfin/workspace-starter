@@ -1124,7 +1124,7 @@
         },
         "DockButtonAction": {
             "additionalProperties": false,
-            "description": "A button which launches an app by it's or or a custom action.",
+            "description": "A button which launches an app by it's custom action.",
             "properties": {
                 "action": {
                     "additionalProperties": false,
@@ -1161,6 +1161,10 @@
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
@@ -1171,7 +1175,7 @@
         },
         "DockButtonApp": {
             "additionalProperties": false,
-            "description": "A button which launches an app by it's or or a custom action.",
+            "description": "A button which launches an app by it's id.",
             "properties": {
                 "appId": {
                     "description": "Launch an app by it's id.",
@@ -1195,6 +1199,10 @@
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
@@ -1244,6 +1252,10 @@
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
@@ -1292,6 +1304,10 @@
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
@@ -1363,6 +1379,10 @@
                 "id": {
                     "description": "The id to use when registering against the dock component",
                     "type": "string"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a default for the popup menu style, defaults to platform."
                 },
                 "title": {
                     "description": "The title for your dock registration",
@@ -2784,6 +2804,10 @@
                 "popupHtml": {
                     "description": "The location of the HTML to use for custom popup page.\ndefaults to https://built-on-openfin.github.io/workspace-starter/dev/john/endpoint-client/workspace-platform-starter/common/popups/menu/index.html",
                     "type": "string"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a global default for the popup menu style."
                 }
             },
             "type": "object"
@@ -3784,7 +3808,8 @@
             "description": "The styles that can be used to display the popup menus.",
             "enum": [
                 "custom",
-                "native"
+                "native",
+                "platform"
             ],
             "type": "string"
         },
@@ -6573,9 +6598,17 @@
                     },
                     "type": "array"
                 },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
@@ -6628,9 +6661,17 @@
                     },
                     "type": "array"
                 },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
