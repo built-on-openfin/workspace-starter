@@ -2,16 +2,18 @@ import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	type CustomPaletteSet,
-	type WorkspacePlatformModule
+	type WorkspacePlatformModule,
+	type BrowserWindowModule
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
+import { checkCondition } from "./conditions";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { showPopupMenu } from "./menu";
 import { launchPage } from "./platform/browser";
-import type { NotificationClient, PlatformApp } from "./shapes";
+import type { ConditionContextTypes, Logger, NotificationClient, PlatformApp } from "./shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type {
 	Module,
@@ -310,7 +312,26 @@ export function getDefaultHelpers(): ModuleHelpers {
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 		},
-		launchPage,
+		launchPage: async (
+			pageId: string,
+			options?: {
+				bounds?: OpenFin.Bounds;
+				targetWindowIdentity?: OpenFin.Identity;
+				createCopyIfExists?: boolean;
+			},
+			providedLogger?: Logger
+		): Promise<BrowserWindowModule | undefined> => {
+			const platform = getCurrentSync();
+			const page = await platform.Storage.getPage(pageId);
+			if (page) {
+				return launchPage(page, options, providedLogger);
+			}
+			if (!isEmpty(providedLogger)) {
+				providedLogger.error(`The passed pageId: ${pageId} does not exist`);
+			} else {
+				logger.error(`The passed pageId: ${pageId} does not exist`);
+			}
+		},
 		launchWorkspace: async (workspaceId): Promise<boolean> => {
 			const platform = getCurrentSync();
 			const workspace = await platform.Storage.getWorkspace(workspaceId);
@@ -323,7 +344,11 @@ export function getDefaultHelpers(): ModuleHelpers {
 		},
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
-		showPopupMenu
+		showPopupMenu,
+		condition: async (conditionId: string, contextType?: ConditionContextTypes): Promise<boolean> => {
+			const platform = getCurrentSync();
+			return checkCondition(platform, conditionId, contextType);
+		}
 	};
 }
 

@@ -53,13 +53,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	setSearchQuery?(query: string): Promise<void>;
 
 	/**
-	 * Get the value of a condition.
-	 * @param conditionId The id of the condition.
-	 * @returns True if the condition is set.
-	 */
-	condition?(conditionId: string): Promise<boolean>;
-
-	/**
 	 * Share data.
 	 * @param options The sharing options.
 	 * @returns Nothing.
