@@ -1,3 +1,4 @@
+import type { PopupMenuStyles } from "./menu-shapes";
 /**
  * Options for the dock provider.
  */
@@ -41,6 +42,10 @@ export interface DockProviderOptions {
 	 * @deprecated
 	 */
 	buttons?: (DockButtonApp | DockButtonAction | DockButtonDropdown)[];
+	/**
+	 * Configured a default for the popup menu style, defaults to platform.
+	 */
+	popupMenuStyle?: PopupMenuStyles;
 }
 /**
  * Shared properties for dock buttons.
@@ -50,6 +55,10 @@ export interface DockButtonBase {
 	 * The id for the dock entry.
 	 */
 	id: string;
+	/**
+	 * Is the dock entry visible.
+	 */
+	visible?: boolean;
 	/**
 	 * The tooltip to be shown for this button/entry
 	 */
@@ -82,7 +91,7 @@ export interface DockButtonAppsByTag extends DockButtonBase {
 	noEntries?: string;
 }
 /**
- * A button which launches an app by it's or or a custom action.
+ * A button which launches an app by it's id.
  */
 export interface DockButtonApp extends DockButtonBase {
 	/**
@@ -91,7 +100,7 @@ export interface DockButtonApp extends DockButtonBase {
 	appId: string;
 }
 /**
- * A button which launches an app by it's or or a custom action.
+ * A button which launches an app by it's custom action.
  */
 export interface DockButtonAction extends DockButtonBase {
 	/**
@@ -115,7 +124,7 @@ export interface DockButtonDropdown extends DockButtonBase {
 	/**
 	 * List of button options
 	 */
-	options: (Omit<DockButtonApp, "iconUrl" | "id"> | Omit<DockButtonAction, "iconUrl" | "id">)[];
+	options: (Omit<DockButtonApp, "id"> | Omit<DockButtonAction, "id">)[];
 	/**
 	 * Text to display if there are no entries because conditions have excluded options.
 	 */

@@ -5,7 +5,7 @@ import type { ConditionContextTypes } from "./conditions-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
-import type { PopupMenuEntry, PopupMenuStyles } from "./menu-shapes";
+import type { MenuClient } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ColorSchemeMode, ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
@@ -138,6 +138,12 @@ export interface ModuleHelpers {
 	getThemeClient(): Promise<ThemeClient>;
 
 	/**
+	 * If this platform has been configured to support menus it will provide it.
+	 * @returns the menu client.
+	 */
+	getMenuClient(): Promise<MenuClient>;
+
+	/**
 	 * If this platform has been configured to support favorites and you are able to receive favorites
 	 * then you will receive a client that will provide you with a number of functions (if supported).
 	 * This can let a module add additional support for favorites if they support the supported favorite types.
@@ -204,28 +210,6 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
-
-	/**
-	 * Show a custom menu.
-	 * @param position The position to show the menu.
-	 * @param position.x The x position to show the menu.
-	 * @param position.y The y position to show the menu.
-	 * @param parentIdentity The identity of the parent window.
-	 * @param noEntryText The text to display if there are no entries.
-	 * @param menuEntries The menu entries to display.
-	 * @param options The options for displaying the menu.
-	 * @param options.style Display as native menu or custom popup.
-	 * @returns The menu entry.
-	 */
-	showPopupMenu?<T = unknown>(
-		position: { x: number; y: number },
-		parentIdentity: OpenFin.Identity,
-		noEntryText: string,
-		menuEntries: PopupMenuEntry<T>[],
-		options?: {
-			style?: PopupMenuStyles;
-		}
-	): Promise<T | undefined>;
 
 	/**
 	 * Lets you check to see if a defined condition is true or false.
