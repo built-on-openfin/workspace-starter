@@ -1,4 +1,4 @@
-import type { InitOptionsHandlerOptions } from "workspace-platform-starter/shapes";
+import type { InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
 import type { MenuPosition } from "workspace-platform-starter/shapes/menu-shapes";
 
 /**

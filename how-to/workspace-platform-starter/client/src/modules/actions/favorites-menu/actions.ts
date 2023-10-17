@@ -121,7 +121,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 								}
 							} else if (result.type === FAVORITE_TYPE_NAME_PAGE) {
 								if (!isEmpty(this._helpers?.launchPage)) {
-									await this._helpers?.launchPage(result.typeId);
+									await this._helpers?.launchPage(result.typeId, undefined, this._logger);
 								}
 							} else if (result.type === FAVORITE_TYPE_NAME_WORKSPACE) {
 								if (!isEmpty(this._helpers?.launchWorkspace)) {
