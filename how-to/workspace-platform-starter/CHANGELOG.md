@@ -36,6 +36,7 @@
 - Added MenusProvider.popupMenuStyle which sets a global style for popup menus which can be inherited by other components, default to `platform`, but can also be `native` or `custom`
 - Added ModuleHelpers now contain MenuClient which can be use to show a popup menu or get the global setting for menu style
 - Added Workspaces menu in custom menu module, visibility is disabled by default on the dock
+- Added platform action `popup-menu` which can be passed menu options in the payload to display a context menu, it then call the platform action for the result.
 
 ## v14
 
