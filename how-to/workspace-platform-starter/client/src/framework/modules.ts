@@ -7,6 +7,8 @@ import {
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import { checkCondition } from "./conditions";
+import { getEndpointClient } from "./endpoint";
+import type { EndpointClient } from "./endpoint-client";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
@@ -210,7 +212,8 @@ export async function initializeModule<
 				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
 				const moduleHelpers = {
 					...helpers,
-					getNotificationClient: getNotificationClientProxy(moduleEntry.definition)
+					getNotificationClient: getNotificationClientProxy(moduleEntry.definition),
+					getEndpointClient: getEndpointClientProxy(moduleEntry.definition)
 				};
 				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, moduleHelpers);
 				moduleEntry.isInitialized = true;
@@ -394,6 +397,16 @@ function getNotificationClientProxy(
 ): () => Promise<NotificationClient | undefined> {
 	const options = objectClone(definition);
 	return async () => getNotificationClient(options);
+}
+
+/**
+ * Returns a function that generates a endpoint client lazily using a module definition.
+ * @param definition module definition to use when requesting a endpoint client
+ * @returns a function that calls the getEndpointClient function using an enclosed module definition.
+ */
+function getEndpointClientProxy(definition: ModuleDefinition): () => Promise<EndpointClient | undefined> {
+	const options = objectClone(definition);
+	return async () => getEndpointClient(options);
 }
 
 /**

@@ -21,7 +21,7 @@ import type {
 	NotificationsEventMap
 } from "../shapes/notification-shapes";
 /**
- *
+ * Notification client for use by modules to be able to create, remove and update notifications against a platform.
  */
 export class NotificationClient implements NotificationClientInterface {
 	private readonly _options: NotificationClientOptions;
@@ -55,7 +55,7 @@ export class NotificationClient implements NotificationClientInterface {
 		this._listenerRegister = [];
 		this._currentCount = 0;
 		this._isCountTracked = false;
-		this._logger = createLogger(`Notification Client (${this._idPrefix})`);
+		this._logger = createLogger(`Notification Client:${this._idPrefix}`);
 	}
 
 	/**

@@ -1415,6 +1415,67 @@
             ],
             "type": "object"
         },
+        "EndpointClientDefaultOptions": {
+            "additionalProperties": false,
+            "description": "A set of default options that will apply against all endpoint clients unless they\nhave a setting of their own.",
+            "properties": {
+                "endpointIds": {
+                    "description": "The list of specific endpoint Ids that clients should be able to access. * = access to all endpoints. We would recommend being restrictive and only provide * if needed to specific modules.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "EndpointClientOptions": {
+            "additionalProperties": false,
+            "description": "Options that allow you to influence the behavior of the notification client.",
+            "properties": {
+                "enabled": {
+                    "description": "Should this module have a endpoint client. Default is true.",
+                    "type": "boolean"
+                },
+                "endpointIds": {
+                    "description": "The list of specific endpoint Ids that clients should be able to access. * = access to all endpoints. We would recommend being restrictive and only provide * if needed to specific modules.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "description": "The id that acts as the reference to a module id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "EndpointClients": {
+            "additionalProperties": false,
+            "description": "A collection of rules and settings for endpoint clients that fall under this platform.",
+            "properties": {
+                "clientOptions": {
+                    "description": "If restricted to listed is true (the default) then an entry needs to exist for each module id\nthat should be provided with a endpoint client. Otherwise all modules\nwill be provided with a endpoint client using the default rules if provided.\nIf restrictToListed is false the clients list can still be used to disable\nspecific modules by specifying their id and enabled: false. It also allows you\nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "items": {
+                        "$ref": "#/definitions/EndpointClientOptions"
+                    },
+                    "type": "array"
+                },
+                "defaults": {
+                    "$ref": "#/definitions/EndpointClientDefaultOptions",
+                    "description": "What default options should be applied against this platform"
+                },
+                "restrictToListed": {
+                    "description": "Should the notification client be passed only to those\nlisted or should all modules receive it but the list acts\nas an override. Default is true.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "EndpointDefinition<unknown>": {
             "anyOf": [
                 {
@@ -1432,6 +1493,10 @@
             "additionalProperties": false,
             "description": "Endpoint provider options",
             "properties": {
+                "endpointClients": {
+                    "$ref": "#/definitions/EndpointClients",
+                    "description": "A collection of rules and settings for endpoint clients that fall under this platform."
+                },
                 "endpoints": {
                     "description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
                     "items": {

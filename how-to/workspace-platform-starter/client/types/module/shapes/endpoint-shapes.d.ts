@@ -8,6 +8,10 @@ export interface EndpointProviderOptions extends ModuleList {
 	 * different implementations for executing actions or performing request/response actions
 	 */
 	endpoints?: EndpointDefinition[];
+	/**
+	 * A collection of rules and settings for endpoint clients that fall under this platform.
+	 */
+	endpointClients?: EndpointClients;
 }
 /**
  * Definition for an endpoint provider module.
@@ -59,6 +63,10 @@ export interface EndpointProvider {
 	 */
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | undefined>;
 }
+/**
+ * A client to access controlled access to endpoints using the endpoint provider for guidance.
+ */
+export type EndpointClient = Omit<EndpointProvider, "init">;
 /**
  * Shared properties for endpoints.
  */
@@ -157,5 +165,52 @@ export interface FetchOptions {
 	headers?: {
 		[key: string]: string;
 	};
+}
+/**
+ * A collection of rules and settings for endpoint clients that fall under this platform.
+ */
+export interface EndpointClients {
+	/**
+	 * Should the notification client be passed only to those
+	 * listed or should all modules receive it but the list acts
+	 * as an override. Default is true.
+	 */
+	restrictToListed?: boolean;
+	/**
+	 * What default options should be applied against this platform
+	 */
+	defaults?: EndpointClientDefaultOptions;
+	/**
+	 * If restricted to listed is true (the default) then an entry needs to exist for each module id
+	 * that should be provided with a endpoint client. Otherwise all modules
+	 * will be provided with a endpoint client using the default rules if provided.
+	 * If restrictToListed is false the clients list can still be used to disable
+	 * specific modules by specifying their id and enabled: false. It also allows you
+	 * to specify overrides for specific modules regardless of the restrictToListed setting.
+	 */
+	clientOptions?: EndpointClientOptions[];
+}
+/**
+ * A set of default options that will apply against all endpoint clients unless they
+ * have a setting of their own.
+ */
+export interface EndpointClientDefaultOptions {
+	/**
+	 * The list of specific endpoint Ids that clients should be able to access. * = access to all endpoints. We would recommend being restrictive and only provide * if needed to specific modules.
+	 */
+	endpointIds?: string[];
+}
+/**
+ * Options that allow you to influence the behavior of the notification client.
+ */
+export interface EndpointClientOptions extends EndpointClientDefaultOptions {
+	/**
+	 * The id that acts as the reference to a module id
+	 */
+	id: string;
+	/**
+	 * Should this module have a endpoint client. Default is true.
+	 */
+	enabled?: boolean;
 }
 export {};
