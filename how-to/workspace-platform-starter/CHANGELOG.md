@@ -37,6 +37,7 @@
 - Added ModuleHelpers now contain MenuClient which can be use to show a popup menu or get the global setting for menu style
 - Added Workspaces menu in custom menu module, visibility is disabled by default on the dock
 - Added platform action `popup-menu` which can be passed menu options in the payload to display a context menu, it then call the platform action for the result.
+- Added ModuleHelpers now contain getEndpointClient. This will give module developers access to endpoints so that useful endpoints can be exposed to teams building modules. Whether the endpoint client is made available to a module and which endpoints are accessible is controlled by the platform owner. See [How to define endpoints](./docs/how-to-define-endpoints.md)
 
 ## v14
 
