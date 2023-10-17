@@ -6,9 +6,9 @@ import type {
 	EndpointClientDefaultOptions,
 	EndpointClientOptions,
 	EndpointDefinition,
-	EndpointProvider,
 	EndpointProviderOptions,
-	FetchOptions
+	FetchOptions,
+	EndpointClient as EndpointClientInterface
 } from "./shapes/endpoint-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty, isStringValue, objectClone } from "./utils";
@@ -23,7 +23,7 @@ let allowEndpointClientCreation: boolean = true;
 let restrictEndpointClientCreationToListed = true;
 let endpointClientOptions: EndpointClientOptions[];
 let endpointClientDefaults: EndpointClientDefaultOptions;
-let endpointProvider: Omit<EndpointProvider, "init">;
+let endpointProvider: EndpointClientInterface;
 
 /**
  * Initialize the endpoint provider.
