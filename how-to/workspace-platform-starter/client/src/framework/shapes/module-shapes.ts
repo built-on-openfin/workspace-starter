@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, CustomPaletteSet } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
 import type { ConditionContextTypes } from "./conditions-shapes";
+import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
@@ -150,6 +151,12 @@ export interface ModuleHelpers {
 	 * @returns notification client.
 	 */
 	getNotificationClient?(): Promise<NotificationClient | undefined>;
+
+	/**
+	 * If this platform has been configured to support endpoint client then it will provide it.
+	 * @returns endpoint client.
+	 */
+	getEndpointClient?(): Promise<EndpointClient | undefined>;
 
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and

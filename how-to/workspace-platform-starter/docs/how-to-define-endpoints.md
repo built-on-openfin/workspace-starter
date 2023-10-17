@@ -66,7 +66,7 @@ As you can see from the snippet above, we have built in fetch support (type: "fe
 
 To learn more about how to modules see [How To Add A Module](./how-to-add-a-module.md).
 
-We include examples of endpoint modules in the modules folder:
+We include examples of endpoint modules in the modules folder (this is a small subset):
 
 - local-storage - shows how you can have an endpoint that can save and fetch from local storage
 - channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel
