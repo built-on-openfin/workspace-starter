@@ -804,6 +804,15 @@
 			},
 			"entries": [
 				{
+					"id": "workspaces",
+					"tooltip": "Workspaces",
+					"iconUrl": "http://localhost:8080/icons/{scheme}/workspace.svg",
+					"action": {
+						"id": "workspaces-menu"
+					},
+					"visible": false
+				},
+				{
 					"id": "dock-apps",
 					"display": "individual",
 					"tags": ["dock"]
@@ -988,7 +997,8 @@
 								"entryLabel": "Connected App",
 								"actionName": "Launch Connected App"
 							}
-						}
+						},
+						"favoritesEnabled": false
 					}
 				},
 				{
@@ -999,6 +1009,7 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
 						}
@@ -1012,6 +1023,7 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"page": "http://localhost:8080/icons/{scheme}/page.svg"
 						}
@@ -1173,7 +1185,13 @@
 					"title": "Custom Menu",
 					"description": "Custom Menu",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/actions/custom-menu.bundle.js"
+					"url": "http://localhost:8080/js/modules/actions/custom-menu.bundle.js",
+					"data": {
+						"images": {
+							"page": "http://localhost:8080/icons/{scheme}/page.svg",
+							"workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+						}
+					}
 				},
 				{
 					"id": "favorites-menu",
@@ -1181,10 +1199,7 @@
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
 					"enabled": false,
-					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js",
-					"data": {
-						"menuStyle": "native"
-					}
+					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js"
 				},
 				{
 					"id": "include-in-snapshot",

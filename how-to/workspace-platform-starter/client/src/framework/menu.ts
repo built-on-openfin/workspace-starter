@@ -33,12 +33,14 @@ import {
 	getNativeColorSchemeMode,
 	themeUrl
 } from "./themes";
-import { imageUrlToDataUrl, isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
+import { isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
+import { imageUrlToDataUrl } from "./utils-img";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
 let menuProviderOptions: MenusProviderOptions | undefined;
 let platformRootUrl: string | undefined;
+let activePopupMenuId: string | undefined;
 
 /**
  * Initialize the menu provider.
@@ -302,6 +304,14 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
 }
 
 /**
+ * Get the popup menu style.
+ * @returns The popup menu style.
+ */
+export function getPopupMenuStyle(): PopupMenuStyles {
+	return menuProviderOptions?.popupMenuStyle ?? "platform";
+}
+
+/**
  * Show a custom menu.
  * @param position The position to show the menu.
  * @param position.x The x position to show the menu.
@@ -310,7 +320,7 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
  * @param noEntryText The text to display if there are no entries.
  * @param menuEntries The menu entries to display.
  * @param options The options for displaying the menu.
- * @param options.style Display as native menu or custom popup.
+ * @param options.popupMenuStyle Display as native menu or custom popup.
  * @returns The menu entry.
  */
 export async function showPopupMenu<T = unknown>(
@@ -319,14 +329,22 @@ export async function showPopupMenu<T = unknown>(
 	noEntryText: string,
 	menuEntries: PopupMenuEntry<T>[],
 	options?: {
-		style?: PopupMenuStyles;
+		popupMenuStyle?: PopupMenuStyles;
 	}
 ): Promise<T | undefined> {
-	if ((options?.style ?? "native") === "native") {
+	const defaultMenuStyle = getPopupMenuStyle();
+	const popupMenuStyle = options?.popupMenuStyle ?? defaultMenuStyle;
+
+	if (popupMenuStyle === "platform" || popupMenuStyle === "native") {
 		return showNativePopupMenu(position, parentIdentity, noEntryText, menuEntries);
 	}
 
-	return showHtmlPopupMenu(position, parentIdentity, noEntryText, menuEntries);
+	return showHtmlPopupMenu(
+		{ x: position.x - 16, y: position.y - 8 },
+		parentIdentity,
+		noEntryText,
+		menuEntries
+	);
 }
 
 /**
@@ -345,6 +363,16 @@ export async function showHtmlPopupMenu<T = unknown>(
 	noEntryText: string,
 	menuEntries: PopupMenuEntry<T>[]
 ): Promise<T | undefined> {
+	if (activePopupMenuId) {
+		try {
+			const win = fin.Window.wrapSync({ uuid: fin.me.uuid, name: activePopupMenuId });
+			await win.close();
+		} catch {
+		} finally {
+			activePopupMenuId = undefined;
+		}
+	}
+
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 	const parentBounds = await parentWindow.getBounds();
 
@@ -374,9 +402,9 @@ export async function showHtmlPopupMenu<T = unknown>(
 
 	const popupUrl = menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`;
 
-	const popupId = randomUUID();
+	activePopupMenuId = randomUUID();
 	const result = await platformWindow.showPopupWindow({
-		name: popupId,
+		name: activePopupMenuId,
 		initialOptions: {
 			showTaskbarIcon: false,
 			smallWindow: true,
@@ -397,6 +425,8 @@ export async function showHtmlPopupMenu<T = unknown>(
 		...bounds,
 		blurBehavior: "modal"
 	});
+
+	activePopupMenuId = undefined;
 
 	if (result.result === "clicked") {
 		return result.data as T;

@@ -18,11 +18,13 @@ import type {
 	EndpointDockGetResponse,
 	EndpointDockSetRequest
 } from "workspace-platform-starter/shapes/platform-shapes";
+import { imageUrlToDataUrl } from "workspace-platform-starter/utils-img";
 import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
 import * as endpointProvider from "../endpoint";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
+import * as Menu from "../menu";
 import type { PlatformApp } from "../shapes/app-shapes";
 import type { BootstrapOptions } from "../shapes/bootstrap-shapes";
 import type {
@@ -30,6 +32,7 @@ import type {
 	DockButtonApp,
 	DockButtonAppsByTag,
 	DockButtonDropdown,
+	DockButtonTypes,
 	DockProviderOptions
 } from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
@@ -138,13 +141,7 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
  * @returns The dock buttons to display.
  */
 async function buildButtons(): Promise<DockButton[]> {
-	const buttons: DockButton[] = [];
-
 	if (dockProviderOptions) {
-		const iconFolder = await getCurrentIconFolder();
-		const colorSchemeMode = await getCurrentColorSchemeMode();
-		const platform = getCurrentSync();
-
 		const entries = Array.isArray(dockProviderOptions.entries) ? [...dockProviderOptions.entries] : [];
 		if (Array.isArray(dockProviderOptions.apps)) {
 			entries.push(...dockProviderOptions.apps);
@@ -153,17 +150,38 @@ async function buildButtons(): Promise<DockButton[]> {
 			entries.push(...dockProviderOptions.buttons);
 		}
 
-		for (const entry of entries) {
-			if (await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry })) {
-				if ("appId" in entry) {
-					await addEntryAsApp(buttons, entry, iconFolder, colorSchemeMode);
-				} else if ("action" in entry) {
-					await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode);
-				} else if ("options" in entry) {
-					await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
-				} else if ("tags" in entry) {
-					await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
-				}
+		return buildButtonsFromEntries(entries);
+	}
+
+	return [];
+}
+
+/**
+ * Build the buttons to display on the dock from config.
+ * @param entries The entries to build the buttons from
+ * @returns The dock buttons to display.
+ */
+async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<DockButton[]> {
+	const buttons: DockButton[] = [];
+
+	const iconFolder = await getCurrentIconFolder();
+	const colorSchemeMode = await getCurrentColorSchemeMode();
+	const platform = getCurrentSync();
+
+	for (const entry of entries) {
+		const visible = entry.visible ?? true;
+		if (
+			visible &&
+			(await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry }))
+		) {
+			if ("appId" in entry) {
+				await addEntryAsApp(buttons, entry, iconFolder, colorSchemeMode);
+			} else if ("action" in entry) {
+				await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode);
+			} else if ("options" in entry) {
+				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
+			} else if ("tags" in entry) {
+				await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
 			}
 		}
 	}
@@ -274,13 +292,18 @@ async function addEntriesAsDropdown(
 			) {
 				let optionTooltip = option.tooltip;
 				let action: CustomActionSpecifier | undefined;
+				let iconUrl;
 
 				// If the options has an appId we are going to launch that
 				// otherwise we use the custom action.
 				if ("appId" in option) {
+					const app = await getApp(option.appId);
+					if (!isStringValue(option.iconUrl) && app) {
+						iconUrl = getAppIcon(app);
+					}
+
+					// If the tooltip is not set we can use the app title
 					if (!isStringValue(optionTooltip)) {
-						// If the tooltip is not set we can use the app title
-						const app = await getApp(option.appId);
 						optionTooltip = app?.title ?? "";
 					}
 					action = {
@@ -294,12 +317,14 @@ async function addEntriesAsDropdown(
 					logger.error("You must specify the tooltip for a DockButtonAction in a DockButtonDropdown");
 				} else {
 					action = option.action;
+					iconUrl = option.iconUrl;
 				}
 
 				if (!isEmpty(action)) {
 					opts.push({
 						tooltip: optionTooltip ?? "",
-						action
+						action,
+						iconUrl
 					});
 				}
 			}
@@ -315,13 +340,14 @@ async function addEntriesAsDropdown(
 			});
 		}
 
-		buttons.push({
-			id: entry.id,
-			type: DockButtonNames.DropdownButton,
-			tooltip: entry.tooltip,
-			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
-			options: opts
-		});
+		buttons.push(
+			await addDropdownOrMenu(
+				entry.id,
+				entry.tooltip ?? "",
+				themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+				opts
+			)
+		);
 	}
 }
 
@@ -368,12 +394,13 @@ async function addEntriesByAppTag(
 				logger.error("You must specify the tooltip for a grouped DockButtonAppsByTag");
 			} else {
 				let iconUrl = entry.iconUrl;
-				const opts = [];
+				const opts: CustomButtonConfig[] = [];
 
 				for (const dockApp of dockApps) {
+					const optionIconUrl = getAppIcon(dockApp);
 					// If the config doesn't specify an icon, just use the icon from the first entry
 					if (!isStringValue(iconUrl)) {
-						iconUrl = getAppIcon(dockApp);
+						iconUrl = optionIconUrl;
 					}
 
 					opts.push({
@@ -384,7 +411,8 @@ async function addEntriesByAppTag(
 								source: "dock",
 								appId: dockApp.appId
 							}
-						}
+						},
+						iconUrl
 					});
 				}
 
@@ -398,13 +426,14 @@ async function addEntriesByAppTag(
 					});
 				}
 
-				buttons.push({
-					id: entry.id,
-					type: DockButtonNames.DropdownButton,
-					tooltip: entry.tooltip ?? "",
-					iconUrl: themeUrl(iconUrl, iconFolder, colorSchemeMode),
-					options: opts
-				});
+				buttons.push(
+					await addDropdownOrMenu(
+						entry.id,
+						entry.tooltip ?? "",
+						themeUrl(iconUrl, iconFolder, colorSchemeMode),
+						opts
+					)
+				);
 			}
 		}
 	}
@@ -559,4 +588,57 @@ function getAppIcon(app: PlatformApp): string | undefined {
 	if (Array.isArray(app.icons) && app.icons.length > 0) {
 		return app.icons[0].src;
 	}
+}
+
+/**
+ * Add a dropdown or custom menu depending on options.
+ * @param id The id of the entry.
+ * @param tooltip The tooltip of the entry.
+ * @param iconUrl The icon for the entry.
+ * @param options The sub options.
+ * @returns The dock entry.
+ */
+async function addDropdownOrMenu(
+	id: string,
+	tooltip: string,
+	iconUrl: string | undefined,
+	options: CustomButtonConfig[]
+): Promise<DockButton> {
+	const popupMenuStyle = dockProviderOptions?.popupMenuStyle ?? Menu.getPopupMenuStyle();
+
+	if (popupMenuStyle === "platform") {
+		// Built-in native dock menus require the entry icons as base64, so convert them
+		for (const opt of options) {
+			opt.iconUrl = await imageUrlToDataUrl(opt.iconUrl, 20);
+		}
+		return {
+			id,
+			type: DockButtonNames.DropdownButton,
+			tooltip,
+			iconUrl,
+			options
+		};
+	}
+	return {
+		id,
+		type: DockButtonNames.ActionButton,
+		tooltip,
+		iconUrl,
+		action: {
+			id: PLATFORM_ACTION_IDS.popupMenu,
+			customData: {
+				source: "dock",
+				noEntryText: "No Entries",
+				menuEntries: options.map((o) => ({
+					label: o.tooltip,
+					enabled: !(o.disabled ?? false),
+					icon: o.iconUrl,
+					data: o.action
+				})),
+				options: {
+					popupMenuStyle
+				}
+			}
+		}
+	};
 }

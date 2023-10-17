@@ -40,6 +40,10 @@ export interface MenusProviderOptions extends ModuleList {
 	 * defaults to 16.
 	 */
 	menuItemSeparatorHeight?: number;
+	/**
+	 * Configured a global default for the popup menu style.
+	 */
+	popupMenuStyle?: PopupMenuStyles;
 }
 /**
  * The module definition for menus.
@@ -186,10 +190,44 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 /**
  * The styles that can be used to display the popup menus.
  */
-export type PopupMenuStyles = "native" | "custom";
+export type PopupMenuStyles = "platform" | "native" | "custom";
 /**
  * Specialized version of the menu item template with generic data.
  */
 export type PopupMenuEntry<T = unknown> = Omit<OpenFin.MenuItemTemplate, "data"> & {
 	data?: T;
 };
+/**
+ * The client providing menu methods
+ */
+export interface MenuClient {
+	/**
+	 * Get the centrally configured popup menu style.
+	 * @returns The popup menu style.
+	 */
+	getPopupMenuStyle(): PopupMenuStyles;
+	/**
+	 * Show a custom menu.
+	 * @param position The position to show the menu.
+	 * @param position.x The x position to show the menu.
+	 * @param position.y The y position to show the menu.
+	 * @param parentIdentity The identity of the parent window.
+	 * @param noEntryText The text to display if there are no entries.
+	 * @param menuEntries The menu entries to display.
+	 * @param options The options for displaying the menu.
+	 * @param options.popupMenuStyle Display as native menu or custom popup.
+	 * @returns The menu entry.
+	 */
+	showPopupMenu<T = unknown>(
+		position: {
+			x: number;
+			y: number;
+		},
+		parentIdentity: OpenFin.Identity,
+		noEntryText: string,
+		menuEntries: PopupMenuEntry<T>[],
+		options?: {
+			popupMenuStyle?: PopupMenuStyles;
+		}
+	): Promise<T | undefined>;
+}
