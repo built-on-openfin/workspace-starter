@@ -952,63 +952,68 @@ export function interopOverride(
 			},
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<IntentPickerResponse> {
-			// launch a new window and optionally pass the available intents as customData.apps as part of the window
-			// options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
-			// the provider so we are using it as a way of determining the root (so it works with root hosting and
-			// subdirectory based hosting if a url is not provided)
-			try {
-				// eslint-disable-next-line @typescript-eslint/dot-notation, @typescript-eslint/no-explicit-any
-				const position = await getCenterPosition(clientIdentity, {
-					height: this._intentResolverOptions?.height ?? DEFAULT_INTENT_RESOLVER_HEIGHT,
-					width: this._intentResolverOptions?.width ?? DEFAULT_INTENT_RESOLVER_WIDTH
-				});
+			return new Promise<IntentPickerResponse>((resolve, reject) => {
+				setTimeout(async () => {
+				// launch a new window and optionally pass the available intents as customData.apps as part of the window
+				// options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
+				// the provider so we are using it as a way of determining the root (so it works with root hosting and
+				// subdirectory based hosting if a url is not provided)
+				try {
+					const position = await getCenterPosition(clientIdentity, {
+						height: this._intentResolverOptions?.height ?? DEFAULT_INTENT_RESOLVER_HEIGHT,
+						width: this._intentResolverOptions?.width ?? DEFAULT_INTENT_RESOLVER_WIDTH
+					});
 
-				const intentPickerResponse: OpenFin.PopupResult<IntentPickerResponse> = await fin.me.showPopupWindow({
-					additionalOptions: {
-						customData: {
-							title: this._intentResolverOptions?.title,
-							apps: launchOptions.apps,
-							intent: launchOptions.intent,
-							intents: launchOptions.intents,
-							unregisteredAppId: this._unregisteredApp?.appId
-						}
-					},
-					initialOptions: {
-						frame: false,
-						autoShow: true,
-						alwaysOnTop: true,
-						fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
-						defaultWidth: this._intentResolverOptions?.width,
-						defaultHeight: this._intentResolverOptions?.height,
-						showTaskbarIcon: false,
-						saveWindowState: false,
-						defaultCentered: true
-					},
-					url: this._intentResolverOptions?.url,
-					resultDispatchBehavior: "close",
-					blurBehavior: "modal",
-					focus: true,
-					height: this._intentResolverOptions?.height,
-					width: this._intentResolverOptions?.width,
-					name: "intent-picker",
-					x: position?.x,
-					y: position?.y
-				});
-				if (isEmpty(intentPickerResponse.data)) {
-					logger.info("App for intent not selected/launched by user", launchOptions.intent);
-					throw new Error(ResolveError.UserCancelled);
-				}
-				return intentPickerResponse.data;
-			} catch (error) {
-				const message = formatError(error);
+					const intentPickerResponse: OpenFin.PopupResult<IntentPickerResponse> =
+					await fin.me.showPopupWindow({
+						additionalOptions: {
+							customData: {
+								title: this._intentResolverOptions?.title,
+								apps: launchOptions.apps,
+								intent: launchOptions.intent,
+								intents: launchOptions.intents,
+								unregisteredAppId: this._unregisteredApp?.appId
+							}
+						},
+						initialOptions: {
+							frame: false,
+							autoShow: true,
+							alwaysOnTop: true,
+							fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
+							defaultWidth: this._intentResolverOptions?.width,
+							defaultHeight: this._intentResolverOptions?.height,
+							showTaskbarIcon: false,
+							saveWindowState: false,
+							defaultCentered: true
+						},
+						url: this._intentResolverOptions?.url,
+						resultDispatchBehavior: "close",
+						blurBehavior: "modal",
+						focus: true,
+						height: this._intentResolverOptions?.height,
+						width: this._intentResolverOptions?.width,
+						name: "intent-picker",
+						x: position?.x,
+						y: position?.y
+					});
+					if (isEmpty(intentPickerResponse.data)) {
+						logger.info("App for intent not selected/launched by user", launchOptions.intent);
+						reject(ResolveError.UserCancelled);
+					} else {
+						return resolve(intentPickerResponse.data);
+					}
+				} catch (error) {
+					const message = formatError(error);
 
-				if (message?.includes(ResolveError.UserCancelled)) {
-					logger.info("App for intent not selected/launched by user", launchOptions.intent);
-					throw new Error(message);
+					if (message?.includes(ResolveError.UserCancelled)) {
+						logger.info("App for intent not selected/launched by user", launchOptions.intent);
+						reject(message);
+					}
+					logger.error("Unexpected error from intent picker/resolver for intent", launchOptions.intent);
+					reject(ResolveError.ResolverUnavailable);
 				}
-				logger.error("Unexpected error from intent picker/resolver for intent", launchOptions.intent);
-				throw new Error(ResolveError.ResolverUnavailable);
-			}
+				});
+			});
 		}
 
 		/**
