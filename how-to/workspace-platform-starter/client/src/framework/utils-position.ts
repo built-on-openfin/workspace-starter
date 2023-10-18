@@ -18,9 +18,9 @@ export async function getCenterPosition(
 	const width = monitorInfo.availableRect.right - monitorInfo.availableRect.left;
 
 	// eslint-disable-next-line no-mixed-operators
-	const x = (monitorInfo.availableRect.left + width) / 2 - dimensions.width / 2;
+	const x = monitorInfo.availableRect.left + width / 2 - dimensions.width / 2;
 	// eslint-disable-next-line no-mixed-operators
-	const y = (monitorInfo.availableRect.top + height) / 2 - dimensions.height / 2;
+	const y = monitorInfo.availableRect.top + height / 2 - dimensions.height / 2;
 
 	return { x, y };
 }

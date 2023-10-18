@@ -38,6 +38,8 @@
 - Added Workspaces menu in custom menu module, visibility is disabled by default on the dock
 - Added platform action `popup-menu` which can be passed menu options in the payload to display a context menu, it then call the platform action for the result.
 - Added ModuleHelpers now contain getEndpointClient. This will give module developers access to endpoints so that useful endpoints can be exposed to teams building modules. Whether the endpoint client is made available to a module and which endpoints are accessible is controlled by the platform owner. See [How to define endpoints](./docs/how-to-define-endpoints.md)
+- Breaking Change - We have updated the way an interop broker communicates with an intent picker window. We were using a reference to the WebWindow to add a function from the broker to the intent picker window. This works but would not work cross domain. OpenFin also introduced the showPopupWindow API since this approach was used so we have now switched to using the showPopupWindow which works cross domain. This means that you can not build you own intent window that receives the list of applications and intent/context via customData passed to the window and it can return the selection using await fin.me.dispatchPopupResult({ appId, instanceId, intent }); if a selection is made or await fin.me.dispatchPopupResult(); if the user cancelled the intent selection. Our example intent pickers have been updated: [instance-picker.html](./public/common/windows/intents/instance-picker.html) and [picker.html](./public/common/windows/intents/picker.html)
+- New Feature - The intent picker now tries to appear in the center of the monitor from where the intent was raised (rather than always showing up on the main monitor).
 
 ## v14
 

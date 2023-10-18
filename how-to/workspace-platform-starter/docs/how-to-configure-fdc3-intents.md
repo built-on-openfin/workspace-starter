@@ -66,18 +66,14 @@ Your window can then use this information to build a list for your user to engag
 
 ### How Can I Tell The Platform That A User Has Selected An Application Or Cancelled The Selection?
 
-Your window needs to expose a function that can be called by the platform:
+Your window needs to use the OpenFin Popup Window API:
 
 ```javascript
-// this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
-window['getIntentSelection'] = async () => {
-  return new Promise((resolve, reject) => {
-    // resolveAppSelection and rejectAppSelection can be called anything. They just represent the function names
-    // used in the default intent picker
-    resolveAppSelection = resolve;
-    rejectAppSelection = reject;
-  });
-};
+// to pass back the selected app, the instanceId that should be targeted and the intent that was raised
+await fin.me.dispatchPopupResult({ appId, instanceId, intent });
+
+// to indicate that the selection has been cancelled
+await fin.me.dispatchPopupResult();
 ```
 
 ## Source Reference
