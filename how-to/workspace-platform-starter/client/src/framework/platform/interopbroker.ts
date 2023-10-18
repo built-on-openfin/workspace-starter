@@ -8,7 +8,6 @@ import {
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
-import { getCenterPosition } from "workspace-platform-starter/utils-position";
 import { getApp, getIntent, getIntentsByContext } from "../apps";
 import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
@@ -36,6 +35,7 @@ import type {
 	BrokerClientConnection
 } from "../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue } from "../utils";
+import { getCenterPosition } from "../utils-position";
 
 const logger = createLogger("InteropBroker");
 const DEFAULT_INTENT_RESOLVER_HEIGHT = 715;
