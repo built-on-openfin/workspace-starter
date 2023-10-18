@@ -35,8 +35,11 @@ import type {
 	BrokerClientConnection
 } from "../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue } from "../utils";
+import { getCenterPosition } from "../utils-position";
 
 const logger = createLogger("InteropBroker");
+const DEFAULT_INTENT_RESOLVER_HEIGHT = 715;
+const DEFAULT_INTENT_RESOLVER_WIDTH = 665;
 
 /**
  * Override the platform interop.
@@ -88,8 +91,8 @@ export function interopOverride(
 							intentResolverOptions = customSettings?.platformProvider?.interop?.intentResolver;
 						}
 						this._intentResolverOptions = {
-							height: 715,
-							width: 665,
+							height: DEFAULT_INTENT_RESOLVER_HEIGHT,
+							width: DEFAULT_INTENT_RESOLVER_WIDTH,
 							fdc3InteropApi: "2.0",
 							url: `${customSettings?.platformProvider?.rootUrl}/common/windows/intents/instance-picker.html`,
 							title: "Intent Resolver",
@@ -367,15 +370,21 @@ export function interopOverride(
 						return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 					}
 				}
-				userSelection = await this.launchIntentPicker({
-					apps: intentsForSelection[0].apps,
-					intent
-				});
+				userSelection = await this.launchIntentPicker(
+					{
+						apps: intentsForSelection[0].apps,
+						intent
+					},
+					clientIdentity
+				);
 			} else {
-				userSelection = await this.launchIntentPicker({
-					intent,
-					intents: intentsForSelection
-				});
+				userSelection = await this.launchIntentPicker(
+					{
+						intent,
+						intents: intentsForSelection
+					},
+					clientIdentity
+				);
 			}
 			// update intent with user selection
 			intent.displayName = userSelection.intent.displayName;
@@ -457,10 +466,13 @@ export function interopOverride(
 				}
 			}
 
-			const userSelection = await this.launchIntentPicker({
-				apps: intentApps,
-				intent
-			});
+			const userSelection = await this.launchIntentPicker(
+				{
+					apps: intentApps,
+					intent
+				},
+				clientIdentity
+			);
 
 			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
@@ -929,49 +941,63 @@ export function interopOverride(
 		 * @param launchOptions.apps The apps to pick from.
 		 * @param launchOptions.intent The intent to pick.
 		 * @param launchOptions.intents The intents to pick from.
+		 * @param clientIdentity The client that triggered this request.
 		 * @returns The response from the intent picker.
 		 */
-		private async launchIntentPicker(launchOptions: {
-			apps?: PlatformApp[];
-			intent?: Partial<AppIntent>;
-			intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
-		}): Promise<IntentPickerResponse> {
+		private async launchIntentPicker(
+			launchOptions: {
+				apps?: PlatformApp[];
+				intent?: Partial<AppIntent>;
+				intents?: { intent: Partial<AppIntent>; apps: PlatformApp[] }[];
+			},
+			clientIdentity: OpenFin.ClientIdentity
+		): Promise<IntentPickerResponse> {
 			// launch a new window and optionally pass the available intents as customData.apps as part of the window
 			// options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
 			// the provider so we are using it as a way of determining the root (so it works with root hosting and
 			// subdirectory based hosting if a url is not provided)
-			const winOption = {
-				name: "intent-picker",
-				includeInSnapshot: false,
-				fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
-				defaultWidth: this._intentResolverOptions?.width,
-				defaultHeight: this._intentResolverOptions?.height,
-				showTaskbarIcon: false,
-				saveWindowState: false,
-				defaultCentered: true,
-				customData: {
-					title: this._intentResolverOptions?.title,
-					apps: launchOptions.apps,
-					intent: launchOptions.intent,
-					intents: launchOptions.intents,
-					unregisteredAppId: this._unregisteredApp?.appId
-				},
-				url: this._intentResolverOptions?.url,
-				frame: false,
-				autoShow: true,
-				alwaysOnTop: true
-			};
-
-			const win = await fin.Window.create(winOption);
-			const webWindow = win.getWebWindow();
 			try {
-				// eslint-disable-next-line @typescript-eslint/dot-notation, @typescript-eslint/no-explicit-any
-				const selectedAppId = await (webWindow as unknown as any)["getIntentSelection"]();
-				return selectedAppId as {
-					appId: string;
-					instanceId?: string;
-					intent: AppIntent;
-				};
+				const position = await getCenterPosition(clientIdentity, {
+					height: this._intentResolverOptions?.height ?? DEFAULT_INTENT_RESOLVER_HEIGHT,
+					width: this._intentResolverOptions?.width ?? DEFAULT_INTENT_RESOLVER_WIDTH
+				});
+
+				// TODO: Remove the following when the runtime is updated.
+				// The popped up window currently does not support interop if running under localhost.
+				// this is being fixed in a future runtime and in the interim we swap localhost for 127.0.0.1.
+				// other addresses work fine.
+				const intentPickerUrl = this._intentResolverOptions?.url.replace("://localhost", "://127.0.0.1");
+
+				const intentPickerResponse: OpenFin.PopupResult<IntentPickerResponse> = await fin.me.showPopupWindow({
+					additionalOptions: {
+						customData: {
+							title: this._intentResolverOptions?.title,
+							apps: launchOptions.apps,
+							intent: launchOptions.intent,
+							intents: launchOptions.intents,
+							unregisteredAppId: this._unregisteredApp?.appId
+						}
+					},
+					initialOptions: {
+						fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
+						defaultWidth: this._intentResolverOptions?.width,
+						defaultHeight: this._intentResolverOptions?.height,
+						showTaskbarIcon: false
+					},
+					url: intentPickerUrl,
+					resultDispatchBehavior: "close",
+					blurBehavior: "modal",
+					height: this._intentResolverOptions?.height,
+					width: this._intentResolverOptions?.width,
+					name: "intent-picker",
+					x: position?.x,
+					y: position?.y
+				});
+				if (isEmpty(intentPickerResponse.data)) {
+					logger.info("App for intent not selected/launched by user", launchOptions.intent);
+					throw new Error(ResolveError.UserCancelled);
+				}
+				return intentPickerResponse.data;
 			} catch (error) {
 				const message = formatError(error);
 
@@ -1124,15 +1150,21 @@ export function interopOverride(
 					);
 					intent.name = intentsForSelection[0]?.intent?.name;
 				}
-				userSelection = await this.launchIntentPicker({
-					apps: intentsForSelection[0].apps,
-					intent
-				});
+				userSelection = await this.launchIntentPicker(
+					{
+						apps: intentsForSelection[0].apps,
+						intent
+					},
+					clientIdentity
+				);
 			} else {
-				userSelection = await this.launchIntentPicker({
-					intent,
-					intents: intentsForSelection
-				});
+				userSelection = await this.launchIntentPicker(
+					{
+						intent,
+						intents: intentsForSelection
+					},
+					clientIdentity
+				);
 				if (!isStringValue(intent.name) && !isEmpty(userSelection?.intent?.name)) {
 					logger.info(
 						`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
