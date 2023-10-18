@@ -16,11 +16,12 @@ export async function getCenterPosition(
 	const monitorInfo = await getMonitorInfo(clientIdentity);
 	const height = monitorInfo.availableRect.bottom - monitorInfo.availableRect.top;
 	const width = monitorInfo.availableRect.right - monitorInfo.availableRect.left;
-
-	// eslint-disable-next-line no-mixed-operators
-	const x = monitorInfo.availableRect.left + width / 2 - dimensions.width / 2;
-	// eslint-disable-next-line no-mixed-operators
-	const y = monitorInfo.availableRect.top + height / 2 - dimensions.height / 2;
+	const dividedRectWidth = width / 2;
+	const dividedRectHeight = height / 2;
+	const dividedDimensionWidth = dimensions.width / 2;
+	const dividedDimensionHeight = dimensions.height / 2;
+	const x = monitorInfo.availableRect.left + dividedRectWidth - dividedDimensionWidth;
+	const y = monitorInfo.availableRect.top + dividedRectHeight - dividedDimensionHeight;
 
 	return { x, y };
 }
