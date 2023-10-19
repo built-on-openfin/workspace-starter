@@ -37,7 +37,7 @@ import type {
 } from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "../themes";
-import { isEmpty, isStringValue } from "../utils";
+import { isEmpty, isStringValue, objectClone } from "../utils";
 
 const logger = createLogger("Dock");
 
@@ -131,7 +131,7 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 					dockProviderOptions.workspaceComponents?.hideNotificationsButton
 			},
 			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
-			buttons
+			buttons: objectClone(registeredButtons)
 		};
 	}
 }
@@ -471,7 +471,7 @@ export async function loadConfig(
 	let config: DockProviderConfigWithIdentity | undefined;
 
 	// All the available buttons based on the configuration settings
-	const availableButtons = [...(registration?.buttons ?? [])];
+	const availableButtons = objectClone(registeredButtons ?? []);
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_GET)) {
 		// No ordering is done for an endpoint, it is the responsibility of the endpoint
@@ -508,7 +508,7 @@ export async function loadConfig(
 				if (isStringValue(button.id)) {
 					const foundIndex = availableButtons.findIndex((b) => b.id === button.id);
 					if (foundIndex >= 0) {
-						orderedButtons.push(button);
+						orderedButtons.push(availableButtons[foundIndex]);
 						availableButtons.splice(foundIndex, 1);
 					}
 				}

@@ -2,8 +2,9 @@ import type { CustomActionSpecifier } from "@openfin/workspace";
 import { CustomActionCallerType } from "@openfin/workspace-platform";
 import { callAction } from "./actions";
 import { createLogger } from "./logger-provider";
-import { buildMenu } from "./menu";
-import type { TrayProviderOptions } from "./shapes";
+import { buildMenu, getPopupMenuStyle, showPopupMenu } from "./menu";
+import type { MenuOptionType, TrayContextMenuTemplate } from "./shapes/menu-shapes";
+import type { TrayProviderOptions } from "./shapes/tray-shapes";
 import { isEmpty, isStringValue, randomUUID } from "./utils";
 
 const logger = createLogger("Tray");
@@ -74,17 +75,22 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 							// the context menu is dismissed when clicked away from
 							await win.focus();
 
-							const template = await buildMenu(undefined, menuEntries);
-
-							const r = await win.showPopupMenu({
+							const popupMenuStyle = options?.popupMenuStyle ?? getPopupMenuStyle();
+							const template = await buildMenu<
+								TrayContextMenuTemplate,
+								MenuOptionType<TrayContextMenuTemplate>
+							>(undefined, menuEntries);
+							const selected = await showPopupMenu(
+								{ x: trayInfo.x - 20, y: trayInfo.y - 20 },
+								{ uuid: fin.me.identity.uuid, name: winOption.name },
+								"",
 								template,
-								x: trayInfo.x - 20,
-								y: trayInfo.y - 20
-							});
-
-							if (r.result === "clicked") {
-								logger.info("Tray Item Selected", r.data);
-								actionToTrigger = r.data.action;
+								{
+									popupMenuStyle
+								}
+							);
+							if (selected) {
+								actionToTrigger = selected.action;
 							}
 						} finally {
 							if (win) {

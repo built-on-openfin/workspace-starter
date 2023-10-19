@@ -35,7 +35,7 @@ import type {
 	BrokerClientConnection
 } from "../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue } from "../utils";
-import { getCenterPosition } from "../utils-position";
+import { centerContentInIdentity } from "../utils-position";
 
 const logger = createLogger("InteropBroker");
 const DEFAULT_INTENT_RESOLVER_HEIGHT = 715;
@@ -957,7 +957,7 @@ export function interopOverride(
 			// the provider so we are using it as a way of determining the root (so it works with root hosting and
 			// subdirectory based hosting if a url is not provided)
 			try {
-				const position = await getCenterPosition(clientIdentity, {
+				const position = await centerContentInIdentity(clientIdentity, {
 					height: this._intentResolverOptions?.height ?? DEFAULT_INTENT_RESOLVER_HEIGHT,
 					width: this._intentResolverOptions?.width ?? DEFAULT_INTENT_RESOLVER_WIDTH
 				});

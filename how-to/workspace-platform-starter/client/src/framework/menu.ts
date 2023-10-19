@@ -35,12 +35,14 @@ import {
 } from "./themes";
 import { isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
 import { imageUrlToDataUrl } from "./utils-img";
+import { findMonitorContainingPoint } from "./utils-position";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
 let menuProviderOptions: MenusProviderOptions | undefined;
 let platformRootUrl: string | undefined;
 let activePopupMenuId: string | undefined;
+let activePopupMenuTimerId: number | undefined;
 
 /**
  * Initialize the menu provider.
@@ -372,6 +374,10 @@ export async function showHtmlPopupMenu<T = unknown>(
 			activePopupMenuId = undefined;
 		}
 	}
+	if (activePopupMenuTimerId) {
+		window.clearInterval(activePopupMenuTimerId);
+		activePopupMenuTimerId = undefined;
+	}
 
 	const parentWindow = fin.Window.wrapSync(parentIdentity);
 	const parentBounds = await parentWindow.getBounds();
@@ -382,20 +388,20 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const iconFolder = await getCurrentIconFolder();
 	const colorScheme = await getCurrentColorSchemeMode();
 
-	const menuDimensions = calculateDimensions(iconFolder, colorScheme, menuEntries, noEntryText);
+	const menuDimensions = calculateMenuInfo(iconFolder, colorScheme, menuEntries, noEntryText);
 
 	let x = Math.floor(parentBounds.left + position.x);
 	let y = Math.floor(parentBounds.top + position.y);
 	const width = menuDimensions.width;
 	const height = menuDimensions.height;
 
-	const monitorRect = await findMonitorAvailableRect(x, y);
+	const monitorInfo = await findMonitorContainingPoint({ x, y });
 
-	if (x + width > monitorRect.right) {
-		x = monitorRect.right - width - 20;
+	if (x + width > monitorInfo.availableRect.right) {
+		x = monitorInfo.availableRect.right - width - 20;
 	}
-	if (y + height > monitorRect.bottom) {
-		y = monitorRect.bottom - height - 20;
+	if (y + height > monitorInfo.availableRect.bottom) {
+		y = monitorInfo.availableRect.bottom - height - 20;
 	}
 
 	const bounds = { x, y, width, height };
@@ -403,34 +409,67 @@ export async function showHtmlPopupMenu<T = unknown>(
 	const popupUrl = menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`;
 
 	activePopupMenuId = randomUUID();
-	const result = await platformWindow.showPopupWindow({
-		name: activePopupMenuId,
-		initialOptions: {
-			showTaskbarIcon: false,
-			smallWindow: true,
-			contextMenu: false,
-			backgroundColor: currentPalette?.backgroundPrimary,
-			customData: {
-				noEntryText,
-				menuEntries: menuDimensions.entries,
-				palette: currentPalette,
-				colorScheme,
-				menuProviderOptions,
-				popupUrl,
-				monitorRect,
-				bounds
+	// Keep track of the window, so if it closes by a mechanism we don't monitor
+	// we can cleanup the active id.
+	activePopupMenuTimerId = window.setInterval(async () => {
+		try {
+			if (activePopupMenuId) {
+				const win = fin.Window.wrapSync({ uuid: fin.me.identity.uuid, name: activePopupMenuId });
+				const state = await win.getState();
+				if (state !== "normal") {
+					activePopupMenuId = undefined;
+					window.clearInterval(activePopupMenuTimerId);
+					activePopupMenuTimerId = undefined;
+				}
 			}
-		},
-		url: popupUrl,
-		...bounds,
-		blurBehavior: "modal"
+		} catch {
+			activePopupMenuId = undefined;
+			window.clearInterval(activePopupMenuTimerId);
+			activePopupMenuTimerId = undefined;
+		}
+	}, 1000);
+
+	return new Promise<T | undefined>((resolve) => {
+		// Do this as a background task so that current events are not held up
+		window.setTimeout(async () => {
+			let ret: T | undefined;
+
+			try {
+				const result = await platformWindow.showPopupWindow({
+					name: activePopupMenuId,
+					initialOptions: {
+						showTaskbarIcon: false,
+						smallWindow: true,
+						contextMenu: false,
+						backgroundColor: currentPalette?.backgroundPrimary,
+						customData: {
+							noEntryText,
+							menuEntries: menuDimensions.entries,
+							palette: currentPalette,
+							colorScheme,
+							menuProviderOptions,
+							popupUrl,
+							monitorRect: monitorInfo,
+							bounds
+						}
+					},
+					url: popupUrl,
+					...bounds,
+					blurBehavior: "modal"
+				});
+
+				activePopupMenuId = undefined;
+				window.clearInterval(activePopupMenuTimerId);
+				activePopupMenuTimerId = undefined;
+
+				if (result.result === "clicked") {
+					ret = result.data as T;
+				}
+			} catch {}
+
+			resolve(ret);
+		}, 100);
 	});
-
-	activePopupMenuId = undefined;
-
-	if (result.result === "clicked") {
-		return result.data as T;
-	}
 }
 
 /**
@@ -486,14 +525,14 @@ export async function showNativePopupMenu<T = unknown>(
 }
 
 /**
- * Calculate the dimensions of a menu.
+ * Calculate the info for a menu.
  * @param iconFolder The folder for substituting icons.
  * @param colorScheme The color scheme for icons.
  * @param entries The entries to measure.
  * @param noEntryText The text to display if there are no entries.
  * @returns The calculated dimensions and finalized entries.
  */
-function calculateDimensions<T>(
+function calculateMenuInfo<T>(
 	iconFolder: string,
 	colorScheme: ColorSchemeMode,
 	entries: (PopupMenuEntry<T> & { y?: number; submenuDimensions?: { width: number; height: number } })[],
@@ -512,21 +551,34 @@ function calculateDimensions<T>(
 	const separatorHeight = menuProviderOptions?.menuItemSeparatorHeight ?? 12;
 
 	let currentTop = 0;
+	let iconCount = 0;
+	let subMenuCount = 0;
 
 	for (const menuEntry of entries.filter((m) => m.visible ?? true)) {
 		menuEntry.y = currentTop;
 
 		if (isStringValue(menuEntry.icon)) {
 			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+			iconCount++;
 		}
+		if (menuEntry.type === "checkbox" || !isEmpty(menuEntry.checked)) {
+			iconCount++;
+		}
+
 		if (menuEntry.type === "separator") {
 			currentTop += separatorHeight;
 		} else {
 			currentTop += itemHeight;
 		}
 
-		if (Array.isArray(menuEntry.submenu)) {
-			const submenuDimensions = calculateDimensions(iconFolder, colorScheme, menuEntry.submenu, noEntryText);
+		if (menuEntry.type === "submenu" || Array.isArray(menuEntry.submenu)) {
+			subMenuCount++;
+			const submenuDimensions = calculateMenuInfo(
+				iconFolder,
+				colorScheme,
+				menuEntry.submenu ?? [],
+				noEntryText
+			);
 			menuEntry.submenu = submenuDimensions.entries;
 			menuEntry.submenuDimensions = {
 				width: submenuDimensions.width,
@@ -560,7 +612,15 @@ function calculateDimensions<T>(
 		canvas.remove();
 	}
 
-	const width = Math.floor(menuProviderOptions?.menuWidth ?? calculatedWidth + 60); // extra is for icons and spacing
+	let extraSpace = 40;
+	if (iconCount > 0) {
+		extraSpace += 28;
+	}
+	if (subMenuCount > 0) {
+		extraSpace += 18;
+	}
+
+	const width = Math.floor(menuProviderOptions?.menuWidth ?? calculatedWidth + extraSpace);
 	const height = Math.floor(currentTop + separatorHeight); // There is space at top and bottom equivalent to separator height
 
 	return {
@@ -568,54 +628,4 @@ function calculateDimensions<T>(
 		width,
 		height
 	};
-}
-
-/**
- * Find the monitor which contains the point and returns its usable area.
- * @param x The x coord
- * @param y The y coord
- * @returns The rect
- */
-async function findMonitorAvailableRect(
-	x: number,
-	y: number
-): Promise<{
-	top: number;
-	left: number;
-	bottom: number;
-	right: number;
-}> {
-	const monitorInfo = await fin.System.getMonitorInfo();
-
-	for (const monitor of monitorInfo.nonPrimaryMonitors) {
-		if (pointInRect(x, y, monitor.monitorRect)) {
-			return monitor.availableRect;
-		}
-	}
-
-	return monitorInfo.primaryMonitor.availableRect;
-}
-
-/**
- * Is the point in the rectangle.
- * @param x The x coord
- * @param y The y coord
- * @param rect The rect
- * @param rect.top The rect top
- * @param rect.left The rect left
- * @param rect.bottom The rect bottom
- * @param rect.right The rect right
- * @returns True if the point is in the rect.
- */
-function pointInRect(
-	x: number,
-	y: number,
-	rect: {
-		top: number;
-		left: number;
-		bottom: number;
-		right: number;
-	}
-): boolean {
-	return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
