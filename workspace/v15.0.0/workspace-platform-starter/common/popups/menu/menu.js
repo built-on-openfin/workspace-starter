@@ -33,6 +33,16 @@ async function initDOM() {
 
 	if (menuContainer) {
 		if (Array.isArray(menuData?.menuEntries) && menuData.menuEntries.length > 0) {
+			let iconCount = 0;
+			for (const menuEntry of menuData.menuEntries) {
+				if (
+					menuEntry.type === 'checkbox' ||
+					menuEntry.checked !== undefined ||
+					menuEntry.icon !== undefined
+				) {
+					iconCount++;
+				}
+			}
 			for (const menuEntry of menuData.menuEntries) {
 				let menuEntryItem;
 				const hasSubMenu = menuEntry.type === 'submenu' || Array.isArray(menuEntry.submenu);
@@ -79,17 +89,19 @@ async function initDOM() {
 					const text = document.createElement('span');
 					text.textContent = menuEntry.label;
 
-					const iconContainer = document.createElement('div');
-					iconContainer.style.display = 'flex';
-					iconContainer.style.justifyContent = 'center';
-					iconContainer.style.alignItems = 'center';
-					iconContainer.style.width = '20px';
-					iconContainer.style.height = '20px';
-					if (icon) {
-						iconContainer.append(icon);
-					}
+					if (iconCount > 0) {
+						const iconContainer = document.createElement('div');
+						iconContainer.style.display = 'flex';
+						iconContainer.style.justifyContent = 'center';
+						iconContainer.style.alignItems = 'center';
+						iconContainer.style.width = '20px';
+						iconContainer.style.height = '20px';
+						if (icon) {
+							iconContainer.append(icon);
+						}
 
-					menuEntryItem.append(iconContainer);
+						menuEntryItem.append(iconContainer);
+					}
 					menuEntryItem.append(text);
 					if (hasSubMenu) {
 						menuEntryItem.append(
@@ -116,7 +128,7 @@ async function initDOM() {
 						// Debounce
 						setTimeout(async () => {
 							if (menuEntry === mouseOverEntry) {
-								await createSubMenu(options?.customData, menuEntry);
+								await createSubMenu(menuData, menuEntry);
 							}
 						}, 200);
 					}
