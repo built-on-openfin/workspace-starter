@@ -20,7 +20,7 @@
 		"@openfin/automation-cli": "^1.1.8",
 		"@openfin/automation-helpers": "^1.1.8",
 		"@openfin/automation-native": "^1.1.8",
-		"@types/chai": "4.3.7",
+		"@types/chai": "4.3.9",
 		"chai": "4.3.10"
 	}
 }
