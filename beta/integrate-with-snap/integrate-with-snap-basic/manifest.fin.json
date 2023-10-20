@@ -44,7 +44,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "OpenFin Snap is still in BETA. Please ask OpenFin for the Snap Asset Url in order to get access to the beta.",
+			"src": "SNAP_ASSET_URL",
 			"alias": "openfin-snap",
 			"version": "0.2.0-beta.1",
 			"target": "OpenFinSnap.exe",
