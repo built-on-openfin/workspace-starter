@@ -1,5 +1,5 @@
 import type { CustomActionSpecifier } from "@openfin/workspace";
-import type { MenuEntry, TrayMenuOptionType } from "./menu-shapes";
+import type { MenuEntry, PopupMenuStyles, TrayMenuOptionType } from "./menu-shapes";
 /**
  * Tray Provider Options to provide settings for the tray provider
  */
@@ -24,4 +24,8 @@ export interface TrayProviderOptions {
 	 * The menu entries to display.
 	 */
 	menuEntries?: MenuEntry<TrayMenuOptionType>[];
+	/**
+	 * Configured a default for the popup menu style, defaults to platform.
+	 */
+	popupMenuStyle?: PopupMenuStyles;
 }

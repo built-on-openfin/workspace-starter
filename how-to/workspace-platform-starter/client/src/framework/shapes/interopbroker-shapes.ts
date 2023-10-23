@@ -94,9 +94,9 @@ export interface ContextRegistrationEntry {
 export type IntentTargetMetaData = string | { appId: string; instanceId?: string };
 
 /**
- * The response from the intent picker.
+ * The response from the intent resolver.
  */
-export interface IntentPickerResponse {
+export interface IntentResolverResponse {
 	/**
 	 * The appId that was selected.
 	 */
