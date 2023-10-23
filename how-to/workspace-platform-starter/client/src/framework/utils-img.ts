@@ -27,20 +27,23 @@ export async function imageUrlToDataUrl(
 			const img = document.createElement("img");
 			img.width = dimensions;
 			img.height = dimensions;
+			img.crossOrigin = "anonymous";
 
 			img.addEventListener("load", () => {
-				const canvas = document.createElement("canvas");
-				canvas.width = dimensions;
-				canvas.height = dimensions;
-
-				const ctx = canvas.getContext("2d");
-
 				let dataUri;
-				if (ctx) {
-					ctx.drawImage(img, 0, 0, dimensions, dimensions);
-					dataUri = canvas.toDataURL("image/png", 1);
-					IMAGE_CACHE[key] = dataUri;
-				}
+				try {
+					const canvas = document.createElement("canvas");
+					canvas.width = dimensions;
+					canvas.height = dimensions;
+
+					const ctx = canvas.getContext("2d");
+
+					if (ctx) {
+						ctx.drawImage(img, 0, 0, dimensions, dimensions);
+						dataUri = canvas.toDataURL("image/png", 1);
+						IMAGE_CACHE[key] = dataUri;
+					}
+				} catch { }
 				resolve(dataUri);
 			});
 			img.addEventListener("error", () => {
