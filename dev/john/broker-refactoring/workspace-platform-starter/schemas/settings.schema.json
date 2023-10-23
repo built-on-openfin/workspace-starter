@@ -4394,6 +4394,10 @@
                         "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
                     },
                     "type": "array"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a default for the popup menu style, defaults to platform."
                 }
             },
             "type": "object"
