@@ -43,7 +43,7 @@ export async function imageUrlToDataUrl(
 						dataUri = canvas.toDataURL("image/png", 1);
 						IMAGE_CACHE[key] = dataUri;
 					}
-				} catch { }
+				} catch {}
 				resolve(dataUri);
 			});
 			img.addEventListener("error", () => {
