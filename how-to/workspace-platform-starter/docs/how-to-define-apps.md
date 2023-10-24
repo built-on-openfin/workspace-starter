@@ -268,6 +268,16 @@ Our guides show how to:
 - [Configure Home](./how-to-customize-home.md)
 - [Configure Store](./how-to-customize-store.md)
 
+## I don't control the servers that host the app manifest (urls specified in manifest setting). What can I do?
+
+By default we use the built in fetch API to fetch the url specified as `manifest` e.g. a view manifest.
+
+We check to see if the platform has custom behavior when fetching a manifest by running through the following checks:
+
+- Is there a app specific endpoint available? E.g. if a view app has an id of `my-view-app` then we check for `manifest-get-my-view-app`. If the endpoint exists then we will call the request/response function against that endpoint and pass { url: string; appId: string} as the request. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+- Is there a platform specific endpoint available - `manifest-get` is specified. This gives platform owners the option of providing a hook where they want to manage the fetching of manifests for their platform. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+- If none of the above endpoints exist we fall back to the default `await fetch(manifestUrl)` behavior.
+
 ## Source Reference
 
 - [apps.ts](../client/src/framework/apps.ts)
