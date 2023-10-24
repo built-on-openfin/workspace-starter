@@ -19,13 +19,13 @@ export class ClientRegistrationHelper {
 
 	private readonly _lookupAppId: (clientIdentity: OpenFin.ClientIdentity) => Promise<string | undefined>;
 
-	private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] } = {};
+	private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void };
 
-	private readonly _trackedContextHandlers: { [key: string]: ContextRegistrationEntry[] } = {};
+	private readonly _trackedClientConnections: { [key: string]: BrokerClientConnection };
 
-	private readonly _clientReadyRequests: { [key: string]: (instanceId: string) => void } = {};
+	private readonly _trackedContextHandlers: { [key: string]: ContextRegistrationEntry[] };
 
-	private readonly _trackedClientConnections: { [key: string]: BrokerClientConnection } = {};
+	private readonly _trackedIntentHandlers: { [key: string]: IntentRegistrationEntry[] };
 
 	/**
 	 * Create an instance of the Client Registration Helper.
@@ -38,6 +38,10 @@ export class ClientRegistrationHelper {
 	) {
 		this._logger = logger;
 		this._lookupAppId = lookupAppId;
+		this._clientReadyRequests = {};
+		this._trackedClientConnections = {};
+		this._trackedContextHandlers = {};
+		this._trackedIntentHandlers = {};
 	}
 
 	/**

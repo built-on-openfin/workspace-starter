@@ -68,7 +68,10 @@ export function interopOverride(
 			super();
 			logger.info("Interop Broker Constructor fetching settings.");
 			this._appIntentHelper = new AppIntentHelper(getApps, logger);
-			this._clientRegistrationHelper = new ClientRegistrationHelper(this.lookupAppId.bind(this), logger);
+			this._clientRegistrationHelper = new ClientRegistrationHelper(
+				async (clientIdentity: OpenFin.ClientIdentity) => this.lookupAppId(clientIdentity),
+				logger
+			);
 			getSettings()
 				.then((customSettings) => {
 					if (!isEmpty(customSettings?.platformProvider)) {

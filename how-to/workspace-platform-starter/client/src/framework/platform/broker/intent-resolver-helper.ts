@@ -7,8 +7,6 @@ import type { Logger } from "../../shapes/logger-shapes";
 import { formatError, isEmpty } from "../../utils";
 import { centerContentInIdentity } from "../../utils-position";
 
-const DEFAULT_INTENT_RESOLVER_HEIGHT = 715;
-const DEFAULT_INTENT_RESOLVER_WIDTH = 665;
 /**
  * An Intent Resolver Used for resolving intent selection.
  */
@@ -19,6 +17,10 @@ export class IntentResolverHelper {
 
 	private readonly _unregisteredAppId?: string;
 
+	private readonly _defaultIntentResolverHeight: number;
+
+	private readonly _defaultIntentResolverWidth: number;
+
 	/**
 	 * Create an instance of the Intent Resolver Helper.
 	 * @param intentResolverOptions options for the helper
@@ -26,9 +28,11 @@ export class IntentResolverHelper {
 	 * @param unregisteredAppId if you support unregistered apps what Id should they be assigned against.
 	 */
 	constructor(intentResolverOptions: IntentResolverOptions, logger: Logger, unregisteredAppId?: string) {
+		this._defaultIntentResolverHeight = 715;
+		this._defaultIntentResolverWidth = 665;
 		this._intentResolverOptions = {
-			height: DEFAULT_INTENT_RESOLVER_HEIGHT,
-			width: DEFAULT_INTENT_RESOLVER_WIDTH,
+			height: this._defaultIntentResolverHeight,
+			width: this._defaultIntentResolverWidth,
 			fdc3InteropApi: "2.0",
 			title: "Intent Resolver",
 			...intentResolverOptions
@@ -59,8 +63,8 @@ export class IntentResolverHelper {
 		// subdirectory based hosting if a url is not provided)
 		try {
 			const position = await centerContentInIdentity(clientIdentity, {
-				height: this._intentResolverOptions?.height ?? DEFAULT_INTENT_RESOLVER_HEIGHT,
-				width: this._intentResolverOptions?.width ?? DEFAULT_INTENT_RESOLVER_WIDTH
+				height: this._intentResolverOptions?.height ?? this._defaultIntentResolverHeight,
+				width: this._intentResolverOptions?.width ?? this._defaultIntentResolverWidth
 			});
 
 			// TODO: Remove the following when the runtime is updated.
