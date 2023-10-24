@@ -231,13 +231,14 @@ export class ServiceNowIntegration {
 			queryAgainst?: string[];
 		}
 	): Promise<HomeSearchResponse> {
+		const palette = await this.getCurrentPalette();
 		if (!this._serviceNowConnection && this._integrationHelpers) {
 			this._connectLastResponse = lastResponse;
 			const results = [];
-			if (this._connectionError) {
+			if (this._connectionError && palette) {
 				const connectResult = await this.createConnectResult(
 					this._integrationHelpers.templateHelpers,
-					await this._integrationHelpers.getCurrentPalette()
+					palette
 				);
 				if (connectResult) {
 					results.push(connectResult);
@@ -259,13 +260,12 @@ export class ServiceNowIntegration {
 
 		const apps: HomeSearchResult[] = [];
 
-		if ((query.length === 0 || "servicenow".startsWith(query.toLowerCase())) && this._integrationHelpers) {
-			apps.push(
-				await this.createAppResult(
-					this._integrationHelpers?.templateHelpers,
-					await this._integrationHelpers.getCurrentPalette()
-				)
-			);
+		if (
+			(query.length === 0 || "servicenow".startsWith(query.toLowerCase())) &&
+			this._integrationHelpers &&
+			palette
+		) {
+			apps.push(await this.createAppResult(this._integrationHelpers?.templateHelpers, palette));
 		}
 
 		this._debounceTimerId = window.setTimeout(async () => {
@@ -441,57 +441,67 @@ export class ServiceNowIntegration {
 	): Promise<boolean> {
 		if (result.action.trigger === "focus-change") {
 			if (result.data?.state === "loading" && this._serviceNowConnection && this._integrationHelpers) {
-				const palette = await this._integrationHelpers.getCurrentPalette();
+				const currentPalette = await this.getCurrentPalette();
 				const templateHelpers = this._integrationHelpers.templateHelpers;
 				const actionData = result.data as ActionLoadingData;
 				const objType = actionData.objType;
 
-				try {
-					// Load the full expanded version of the object with display values
-					const response = await this._serviceNowConnection.executeApiRequest(
-						`/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES[objType]}/${actionData.obj.sys_id}?sysparm_display_value=true`,
-						"GET"
-					);
+				if (currentPalette) {
+					try {
+						// Load the full expanded version of the object with display values
+						const response = await this._serviceNowConnection.executeApiRequest(
+							`/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES[objType]}/${actionData.obj.sys_id}?sysparm_display_value=true`,
+							"GET"
+						);
 
-					if (response.data) {
-						actionData.obj = response.data;
+						if (response.data) {
+							actionData.obj = response.data;
+						}
+					} catch (err) {
+						this._logger?.error(this.formatError(err));
 					}
-				} catch (err) {
-					this._logger?.error(this.formatError(err));
-				}
 
-				const resultHandlers: {
-					[key in ServiceNowObjectTypes]?: () => Promise<HomeSearchResult>;
-				} = {
-					Contact: async () =>
-						this.createContactResult(
-							templateHelpers,
-							palette,
-							actionData.obj as ServiceNowEntities.Core.Contact
-						),
-					Account: async () =>
-						this.createAccountResult(
-							templateHelpers,
-							palette,
-							actionData.obj as ServiceNowEntities.CSM.Account
-						),
-					Case: async () =>
-						this.createCaseResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Case),
-					Task: async () =>
-						this.createTaskResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Task),
-					Incident: async () =>
-						this.createIncidentResult(
-							templateHelpers,
-							palette,
-							actionData.obj as ServiceNowEntities.Core.Incident
-						)
-				};
+					const resultHandlers: {
+						[key in ServiceNowObjectTypes]?: () => Promise<HomeSearchResult>;
+					} = {
+						Contact: async () =>
+							this.createContactResult(
+								templateHelpers,
+								currentPalette,
+								actionData.obj as ServiceNowEntities.Core.Contact
+							),
+						Account: async () =>
+							this.createAccountResult(
+								templateHelpers,
+								currentPalette,
+								actionData.obj as ServiceNowEntities.CSM.Account
+							),
+						Case: async () =>
+							this.createCaseResult(
+								templateHelpers,
+								currentPalette,
+								actionData.obj as ServiceNowEntities.CSM.Case
+							),
+						Task: async () =>
+							this.createTaskResult(
+								templateHelpers,
+								currentPalette,
+								actionData.obj as ServiceNowEntities.CSM.Task
+							),
+						Incident: async () =>
+							this.createIncidentResult(
+								templateHelpers,
+								currentPalette,
+								actionData.obj as ServiceNowEntities.Core.Incident
+							)
+					};
 
-				const typeHandler = resultHandlers[objType];
-				if (typeHandler) {
-					const res = await typeHandler();
-					if (res) {
-						lastResponse.respond([res]);
+					const typeHandler = resultHandlers[objType];
+					if (typeHandler) {
+						const res = await typeHandler();
+						if (res) {
+							lastResponse.respond([res]);
+						}
 					}
 				}
 			}
@@ -568,12 +578,11 @@ export class ServiceNowIntegration {
 			this._connectionError = this.formatError(err);
 			this._logger?.error("Connecting to ServiceNow failed", err);
 			if (this._connectLastResponse && this._integrationHelpers) {
-				this._connectLastResponse.respond([
-					await this.createConnectResult(
-						this._integrationHelpers.templateHelpers,
-						await this._integrationHelpers.getCurrentPalette()
-					)
-				]);
+				const palette = await this.getCurrentPalette();
+				if (palette) {
+					const res = await this.createConnectResult(this._integrationHelpers.templateHelpers, palette);
+					this._connectLastResponse.respond([res]);
+				}
 			}
 		}
 	}
@@ -1631,5 +1640,21 @@ export class ServiceNowIntegration {
 			return new Date(date).toLocaleString();
 		}
 		return "";
+	}
+
+	/**
+	 * Get the current palette from either of the integration helper methods.
+	 * This is to retain compatibility with old helper structure.
+	 * @returns The pallete if one of the methods is available.
+	 */
+	private async getCurrentPalette(): Promise<CustomPaletteSet | undefined> {
+		if (this._integrationHelpers?.getCurrentPalette) {
+			return this._integrationHelpers.getCurrentPalette();
+		} else if (this._integrationHelpers?.getThemeClient) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			if (themeClient.getPalette) {
+				return themeClient.getPalette();
+			}
+		}
 	}
 }
