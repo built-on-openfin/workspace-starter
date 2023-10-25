@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import type { CustomActionSpecifier } from "@openfin/workspace";
 import { CustomActionCallerType } from "@openfin/workspace-platform";
 import { callAction } from "./actions";
@@ -56,7 +57,7 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 							// Create a dummy invisible always on top window that we can use
 							// to show the popup menu, this way the menu will always appear
 							// on top of other windows
-							const winOption = {
+							const winOption: OpenFin.WindowCreationOptions = {
 								name: randomUUID(),
 								includeInSnapshots: false,
 								showTaskbarIcon: false,
