@@ -1,5 +1,7 @@
 import { createOptionEntry, setElementVisibility } from './helper.js';
 
+let rejectAppSelection;
+let resolveAppSelection;
 let launchBtn;
 let cancelSelectionBtn;
 let intentsContainer;
@@ -75,7 +77,10 @@ async function init() {
 	await setupIntentView(intents);
 
 	cancelSelectionBtn.addEventListener('click', async () => {
-		await fin.me.dispatchPopupResult();
+		if (rejectAppSelection !== undefined) {
+			rejectAppSelection('UserCancelledResolution');
+		}
+		fin.me.close(true);
 	});
 
 	launchBtn.addEventListener('click', async () => {
@@ -85,7 +90,8 @@ async function init() {
 		}
 		const appId = appsContainer.value;
 
-		await fin.me.dispatchPopupResult({ appId, instanceId, intent });
+		resolveAppSelection({ appId, instanceId, intent });
+		fin.me.close(true);
 	});
 
 	if (Array.isArray(apps)) {
@@ -281,3 +287,12 @@ function setupAppMetadata(appId) {
 		setElementVisibility(appSummaryContainer, false);
 	}
 }
+
+// this function is called by the interop broker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
+window['getIntentSelection'] = async () => {
+	launchBtn.disabled = false;
+	return new Promise((resolve, reject) => {
+		resolveAppSelection = resolve;
+		rejectAppSelection = reject;
+	});
+};

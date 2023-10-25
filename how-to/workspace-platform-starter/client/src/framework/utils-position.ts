@@ -44,7 +44,7 @@ export function centerContentInRect(
 	const x = availableRect.left + dividedRectWidth - dividedDimensionWidth;
 	const y = availableRect.top + dividedRectHeight - dividedDimensionHeight;
 
-	return { x, y };
+	return { x: Math.round(x), y: Math.round(y) };
 }
 
 /**
@@ -140,18 +140,19 @@ export function pointInRect(
  * @param bounds The rect
  * @param bounds.top The rect top
  * @param bounds.left The rect left
- * @param bounds.width The rect bottom
- * @param bounds.hgith The rect right
- * @returns True if the point is in the rect.
+ * @param bounds.width The rect width
+ * @param bounds.height The rect height
+ * @returns the x and y of the bounds center or an object not containing x or y.
  */
 export function getBoundsCenter(bounds?: OpenFin.Bounds): { x?: number; y?: number } {
-	let boundsCenterX;
-	let boundsCenterY;
+	let boundsCenterX: number | undefined;
+	let boundsCenterY: number | undefined;
 	if (!isEmpty(bounds)) {
 		const halfWidth = bounds.width / 2;
-		const halfHeght = bounds.height / 2;
+		const halfHeight = bounds.height / 2;
 		boundsCenterX = bounds.left + halfWidth;
-		boundsCenterY = bounds.top + halfHeght;
+		boundsCenterY = bounds.top + halfHeight;
+		return { x: Math.round(boundsCenterX), y: Math.round(boundsCenterY) };
 	}
-	return { x: boundsCenterX, y: boundsCenterY };
+	return {};
 }

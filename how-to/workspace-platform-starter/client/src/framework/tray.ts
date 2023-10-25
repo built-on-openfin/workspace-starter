@@ -58,7 +58,7 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 							// on top of other windows
 							const winOption = {
 								name: randomUUID(),
-								includeInSnapshot: false,
+								includeInSnapshots: false,
 								showTaskbarIcon: false,
 								saveWindowState: false,
 								defaultWidth: 0,
