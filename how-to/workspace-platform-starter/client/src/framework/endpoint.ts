@@ -173,8 +173,14 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 	// currently only fetch is supported but you could load different implementations of this intent based on type
 	if (endpointType === "fetch") {
 		const { url, ...options } = endpoint.options;
-		if (url) {
-			const req = getRequestOptions(url, options, request);
+		let targetUrl = url;
+		if (isEmpty(targetUrl)) {
+			const requestClone = objectClone(request) as { [id: string]: string };
+			// was we passed a url in the request?
+			targetUrl = requestClone.url;
+		}
+		if (targetUrl) {
+			const req = getRequestOptions(targetUrl, options, request);
 			if (!isStringValue(req.options.method) || !SUPPORTED_HTTP_METHODS.includes(req.options.method)) {
 				logger.warn(
 					`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`
