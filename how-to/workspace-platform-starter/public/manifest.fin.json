@@ -274,11 +274,43 @@
 			]
 		},
 		"browserProvider": {
-			"windowOptions": {
-				"title": "Browser Starter",
-				"icon": "http://localhost:8080/favicon.ico",
-				"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+			"defaultWindowOptions": {
+				"permissions": {
+					"System": {
+						"openUrlWithBrowser": {
+							"enabled": true,
+							"protocols": ["mailto", "msteams", "tel"]
+						}
+					}
+				},
+				"viewVisibility": {
+					"showViewsOnTabDrag": {
+						"enabled": true
+					},
+					"showViewsOnSplitterDrag": {
+						"enabled": true
+					},
+					"showViewsOnWindowResize": {
+						"enabled": true
+					}
+				},
+				"workspacePlatform": {
+					"pages": [],
+					"title": "Browser Starter",
+					"favicon": "http://localhost:8080/favicon.ico",
+					"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+				}
+			},
+			"defaultViewOptions": {
+				"permissions": {
+					"System": {
+						"openUrlWithBrowser": {
+							"enabled": true,
+							"protocols": ["mailto", "msteams", "tel"]
+						}
+					}
+				}
 			},
 			"windowPositioningStrategy": {
 				"x": 30,

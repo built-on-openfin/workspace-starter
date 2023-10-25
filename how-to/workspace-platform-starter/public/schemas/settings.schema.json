@@ -548,29 +548,6 @@
                     },
                     "type": "array"
                 },
-                "windowOptions": {
-                    "additionalProperties": false,
-                    "description": "deprecated use `defaultWindowOptions` instead to specify settings that will apply to all workspace browser\nwindows",
-                    "properties": {
-                        "icon": {
-                            "description": "deprecated use `defaultWindowOptions.icon` instead.",
-                            "type": "string"
-                        },
-                        "newPageUrl": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.",
-                            "type": "string"
-                        },
-                        "newTabUrl": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.",
-                            "type": "string"
-                        },
-                        "title": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.title` instead.",
-                            "type": "string"
-                        }
-                    },
-                    "type": "object"
-                },
                 "windowPositioningStrategy": {
                     "$ref": "#/definitions/CascadingWindowOffsetStrategy",
                     "description": "The strategy for window positioning."
