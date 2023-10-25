@@ -67,42 +67,40 @@ export class IntentResolverHelper {
 				width: this._intentResolverOptions?.width ?? this._defaultIntentResolverWidth
 			});
 
-			// TODO: Remove the following when the runtime is updated.
-			// The popped up window currently does not support interop if running under localhost.
-			// this is being fixed in a future runtime and in the interim we swap localhost for 127.0.0.1.
-			// other addresses work fine.
-			const intentPickerUrl = this._intentResolverOptions?.url.replace("://localhost", "://127.0.0.1");
-
-			const intentPickerResponse: OpenFin.PopupResult<IntentResolverResponse> = await fin.me.showPopupWindow({
-				additionalOptions: {
-					customData: {
-						title: this._intentResolverOptions?.title,
-						apps: launchOptions.apps,
-						intent: launchOptions.intent,
-						intents: launchOptions.intents,
-						unregisteredAppId: this._unregisteredAppId
-					}
-				},
-				initialOptions: {
-					fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
-					defaultWidth: this._intentResolverOptions?.width,
-					defaultHeight: this._intentResolverOptions?.height,
-					showTaskbarIcon: false
-				},
-				url: intentPickerUrl,
-				resultDispatchBehavior: "close",
-				blurBehavior: "modal",
-				height: this._intentResolverOptions?.height,
-				width: this._intentResolverOptions?.width,
+			const winOption: OpenFin.WindowCreationOptions = {
 				name: "intent-picker",
-				x: position?.x,
-				y: position?.y
-			});
-			if (isEmpty(intentPickerResponse.data)) {
-				this._logger.info("App for intent not selected/launched by user", launchOptions.intent);
-				throw new Error(ResolveError.UserCancelled);
+				includeInSnapshots: false,
+				fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
+				defaultWidth: this._intentResolverOptions?.width,
+				defaultHeight: this._intentResolverOptions?.height,
+				showTaskbarIcon: false,
+				saveWindowState: false,
+				customData: {
+					title: this._intentResolverOptions?.title,
+					apps: launchOptions.apps,
+					intent: launchOptions.intent,
+					intents: launchOptions.intents,
+					unregisteredAppId: this._unregisteredAppId
+				},
+				url: this._intentResolverOptions?.url,
+				frame: false,
+				autoShow: true,
+				alwaysOnTop: true
+			};
+			if (!isEmpty(position)) {
+				winOption.defaultLeft = position.x;
+				winOption.defaultTop = position.y;
+			} else {
+				winOption.defaultCentered = true;
 			}
-			return intentPickerResponse.data;
+
+			const win = await fin.Window.create(winOption);
+			const webWindow = win.getWebWindow();
+			const webWindowResolver = webWindow as unknown as {
+				getIntentSelection: () => Promise<IntentResolverResponse>;
+			};
+			const selectedAppId: IntentResolverResponse = await webWindowResolver.getIntentSelection();
+			return selectedAppId;
 		} catch (error) {
 			const message = formatError(error);
 
