@@ -88,6 +88,7 @@
 - Change Lifecycle events can now be lazy subscribed so a late subscriber will get called with the last payload
 - Change Auth `logged-in` events can now be lazy subscribed so a late subscriber when you are already logged in will still receive the current user
 - Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as closing the splash screen will exit the platform, a warning will be logged in this scenario
+- Added extra check of view/window title when building a list of intent handler instances.
 
 ## v13.1
 
