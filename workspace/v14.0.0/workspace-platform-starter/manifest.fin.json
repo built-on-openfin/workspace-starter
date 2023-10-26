@@ -279,6 +279,19 @@
 				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
 			},
+			"defaultWindowOptions": {
+				"viewVisibility": {
+					"showViewsOnTabDrag": {
+						"enabled": true
+					},
+					"showViewsOnSplitterDrag": {
+						"enabled": true
+					},
+					"showViewsOnWindowResize": {
+						"enabled": true
+					}
+				}
+			},
 			"windowPositioningStrategy": {
 				"x": 30,
 				"y": 30,
