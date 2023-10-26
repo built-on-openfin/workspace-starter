@@ -19,8 +19,20 @@ import { isEmpty, isStringValue } from "../utils";
 export async function getDefaultWindowOptions(
 	browserProvider: BrowserProviderOptions | undefined
 ): Promise<Partial<BrowserCreateWindowRequest>> {
-	const legacyWindowOptions = browserProvider?.windowOptions ?? {};
-	const defaultWindowOptions = browserProvider?.defaultWindowOptions ?? {};
+	if (isEmpty(browserProvider)) {
+		return {};
+	}
+	const defaultWindowOptions = browserProvider.defaultWindowOptions ?? {};
+	const legacyOptions = browserProvider as unknown as {
+		windowOptions?: {
+			title?: string;
+			icon?: string;
+			newTabUrl?: string;
+			newPageUrl?: string;
+		};
+	};
+
+	const legacyWindowOptions = legacyOptions.windowOptions ?? {};
 
 	let wsPlatform = defaultWindowOptions.workspacePlatform;
 

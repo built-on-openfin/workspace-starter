@@ -14,33 +14,6 @@ export type BrowserProviderOptions = Pick<
 	"defaultWindowOptions" | "defaultPageOptions" | "defaultViewOptions"
 > & {
 	/**
-	 * deprecated use `defaultWindowOptions` instead to specify settings that will apply to all workspace browser
-	 * windows
-	 * @deprecated use `defaultWindowOptions` instead.
-	 */
-	windowOptions?: {
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.title` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.title` instead.
-		 */
-		title?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.icon` instead.
-		 * @deprecated use `defaultWindowOptions.icon` instead.
-		 */
-		icon?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.
-		 */
-		newTabUrl?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.
-		 */
-		newPageUrl?: string;
-	};
-	/**
 	 * This setting lets you override the default workspace browser buttons and specify your own.
 	 */
 	toolbarButtons?: WorkspacePlatformToolbarButton[];

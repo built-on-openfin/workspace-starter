@@ -2,6 +2,7 @@
 
 ## v15
 
+- BREAKING CHANGE: BrowserProvider windowOptions. A number of versions ago we indicated that you should use defaultWindowOptions in the BrowserProvider configuration instead of the old windowOptions setting. We have removed the type from the schema and type and we have updated the main manifest to use defaultWindowOptions(like we did in our other examples as seen in settings.json). Please update your manifest/settings (we will maintain support for window options for the browser configuration for this release but then that backwards compatibility will be removed).
 - BREAKING CHANGE: `ModuleHelpers launchPage` helper function now takes a pageId (and it has to be a valid pageId) instead of asking modules to get the platform, use the storage apis and then send a page. This reduces code and also ensures that only valid pages are launched.
 - BREAKING CHANGE: The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods `getCurrentThemeId`, `getCurrentIconFolder`, `getCurrentPalette`and `getCurrentColorSchemeMode` have been removed but equivalent functions are available by using `getThemeClient`.
 - Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.

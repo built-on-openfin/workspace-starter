@@ -25,18 +25,23 @@
 			}
 		},
 		"defaultWindowOptions": {
-			"experimental": {
-				"showViewsOnResize": {
-					"enabled": true,
-					"delayMs": 0
-				}
-			},
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
 						"protocols": ["mailto"]
 					}
+				}
+			},
+			"viewVisibility": {
+				"showViewsOnTabDrag": {
+					"enabled": true
+				},
+				"showViewsOnSplitterDrag": {
+					"enabled": true
+				},
+				"showViewsOnWindowResize": {
+					"enabled": true
 				}
 			}
 		},
@@ -162,6 +167,17 @@
 		"browserProvider": {
 			"defaultWindowOptions": {
 				"icon": "http://localhost:8080/common/favicon-32x32.png",
+				"viewVisibility": {
+					"showViewsOnTabDrag": {
+						"enabled": true
+					},
+					"showViewsOnSplitterDrag": {
+						"enabled": true
+					},
+					"showViewsOnWindowResize": {
+						"enabled": true
+					}
+				},
 				"workspacePlatform": {
 					"pages": [],
 					"title": "FDC3 Workspace",
