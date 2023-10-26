@@ -35,6 +35,17 @@
 						"protocols": ["mailto"]
 					}
 				}
+			},
+			"viewVisibility": {
+				"showViewsOnTabDrag": {
+					"enabled": true
+				},
+				"showViewsOnSplitterDrag": {
+					"enabled": true
+				},
+				"showViewsOnWindowResize": {
+					"enabled": true
+				}
 			}
 		},
 		"defaultViewOptions": {}
