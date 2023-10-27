@@ -48,7 +48,17 @@
 				}
 			}
 		},
-		"defaultViewOptions": {}
+		"defaultViewOptions": {},
+		"interopBrokerConfiguration": {
+			"logging": {
+				"beforeAction": {
+					"enabled": true
+				},
+				"afterAction": {
+					"enabled": true
+				}
+			}
+		}
 	},
 	"appAssets": [],
 	"supportInformation": {

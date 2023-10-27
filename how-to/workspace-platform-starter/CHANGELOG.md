@@ -48,6 +48,8 @@
   - Is there a app specific endpoint available? E.g. if a view app has an id of `my-view-app` then we check for `manifest-get-my-view-app`. If the endpoint exists then we will call the request/response function against that endpoint and pass { url: string; appId: string} as the request. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
   - Is there a platform specific endpoint available - `manifest-get` is specified. This gives platform owners the option of providing a hook where they want to manage the fetching of manifests for their platform. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
   - If none of the above endpoints exist we fall back to the default `await fetch(manifestUrl)` behavior.
+  - Added example of how to enable/disable console logging of built in interop broker messages to manifests.
+  - Added extra check of view/window title when building a list of intent handler instances.
 
 ## v14
 
@@ -86,6 +88,7 @@
 - Change Lifecycle events can now be lazy subscribed so a late subscriber will get called with the last payload
 - Change Auth `logged-in` events can now be lazy subscribed so a late subscriber when you are already logged in will still receive the current user
 - Change Splash screen will now not show if `platform.preventQuitOnLastWindowClosed` is not set as closing the splash screen will exit the platform, a warning will be logged in this scenario
+- Added extra check of view/window title when building a list of intent handler instances.
 
 ## v13.1
 

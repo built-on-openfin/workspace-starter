@@ -46,6 +46,16 @@
 					}
 				}
 			}
+		},
+		"interopBrokerConfiguration": {
+			"logging": {
+				"beforeAction": {
+					"enabled": true
+				},
+				"afterAction": {
+					"enabled": true
+				}
+			}
 		}
 	},
 	"supportInformation": {
