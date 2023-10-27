@@ -47,6 +47,16 @@
 		},
 		"defaultViewOptions": {
 			"fdc3InteropApi": "2.0"
+		},
+		"interopBrokerConfiguration": {
+			"logging": {
+				"beforeAction": {
+					"enabled": true
+				},
+				"afterAction": {
+					"enabled": true
+				}
+			}
 		}
 	},
 	"shortcut": {
