@@ -1162,6 +1162,15 @@
 					"data": {
 						"supportedActions": ["show-page"]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-workspace",
+					"title": "Init Options Launch Workspace",
+					"url": "http://localhost:8080/js/modules/init-options/launch-workspace.bundle.js",
+					"data": {
+						"supportedActions": ["launch-workspace"]
+					}
 				}
 			]
 		},
