@@ -30,7 +30,7 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext
 } from "../shapes/interopbroker-shapes";
-import { formatError, isEmpty, isString, isStringValue } from "../utils";
+import { formatError, isEmpty, isString, isStringValue, sanitizeString } from "../utils";
 import { AppIntentHelper } from "./broker/app-intent-helper";
 import { ClientRegistrationHelper } from "./broker/client-registration-helper";
 import { IntentResolverHelper } from "./broker/intent-resolver-helper";
@@ -669,7 +669,7 @@ export function interopOverride(
 							// ensure no element tags are provided in the title
 							// we don't know how this information will be used
 							// and title hasn't come from the app directory
-							title = title.replace(/<[^>]*>?/gm, "");
+							title = sanitizeString(title);
 						}
 						const instanceAppMeta: AppMetadata = {
 							...appMetaData,
