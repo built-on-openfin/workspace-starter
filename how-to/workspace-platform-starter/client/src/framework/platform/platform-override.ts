@@ -86,6 +86,18 @@ export function overrideCallback(
 	 */
 	class Override extends WorkspacePlatformProvider {
 		/**
+		 * Supports launching a manifest into a platform.
+		 * @param payload The manifest to load into the platform
+		 * @returns nothing.
+		 */
+		public async launchIntoPlatform(payload: OpenFin.LaunchIntoPlatformPayload): Promise<void> {
+			logger.warn(
+				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform.",
+				payload
+			);
+		}
+
+		/**
 		 * Gets the current state of windows and their views and returns a snapshot object containing that info.
 		 * @param payload Undefined unless you've defined a custom `getSnapshot` protocol.
 		 * @param identity Identity of the entity that called getSnapshot.
