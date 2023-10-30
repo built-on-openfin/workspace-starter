@@ -1162,6 +1162,15 @@
 					"data": {
 						"supportedActions": ["show-page"]
 					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-workspace",
+					"title": "Init Options Launch Workspace",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/workspace-platform-starter/js/modules/init-options/launch-workspace.bundle.js",
+					"data": {
+						"supportedActions": ["launch-workspace"]
+					}
 				}
 			]
 		},
