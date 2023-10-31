@@ -51,6 +51,7 @@
   - If none of the above endpoints exist we fall back to the default `await fetch(manifestUrl)` behavior.
   - Added example of how to enable/disable console logging of built in interop broker messages to manifests.
   - Added extra check of view/window title when building a list of intent handler instances.
+- Encourage the use of the initOptionsProvider for loading content into the platform.
 
 ## v14
 
