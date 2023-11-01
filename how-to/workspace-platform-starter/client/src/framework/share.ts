@@ -92,19 +92,19 @@ export async function showShareOptions(payload: {
 			}
 		}
 
-		const template: OpenFin.MenuItemTemplate[] = [
+		const template: OpenFin.MenuItemTemplate<SharePageData|ShareWorkspaceData>[] = [
 			{
 				label: "Share Page",
-				data: { identity: { windowIdentity, pageId }, type: "page" }
+				data: { windowIdentity, pageId: pageId ?? "", type: "page" }
 			},
-			{ type: "separator", data: {} },
+			{ type: "separator" },
 			{
 				label: "Share Workspace",
-				data: { identity: {}, type: "workspace" }
+				data: { type: "workspace" }
 			}
 		];
 
-		const r = await currentWindow.openfinWindow.showPopupMenu({
+		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData|ShareWorkspaceData>({
 			template,
 			x: payload.x,
 			y: payload.y
@@ -113,7 +113,7 @@ export async function showShareOptions(payload: {
 		if (r.result === "closed") {
 			logger.info("share menu dismissed.");
 		} else if (r.data.type === "page") {
-			await saveSharedPage(r.data.identity);
+			await saveSharedPage(r.data);
 		} else if (r.data.type === "workspace") {
 			await saveSharedWorkspace();
 		}
